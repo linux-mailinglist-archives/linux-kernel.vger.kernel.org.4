@@ -2,190 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6646671F57A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF9571F57D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjFAWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S230220AbjFAWCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjFAWAd (ORCPT
+        with ESMTP id S229724AbjFAWCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:00:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D42180
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685656830; x=1717192830;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=YvCLEOu5q5uUgOHzr2nIya4PmkYw4Z20jLsc93UtEtA=;
-  b=G20tpVVcyvM4QVkUVqrA1PLOQd9Koroh3hLLDgPzZvceIY1nbyh2mKYt
-   bbCaZrMDRWFxYfOVuX0kLYCORy+sl3hdm9i+NVQSD0NDVKu1RDGHAvU1A
-   8mid6uwV1e7L5yJuLmOxeZ9sTYkn1yvEcsmXAzt4svQHoM78AKDDaCj2P
-   tezazIQ3N2uidS3LSUj6owpMNEZxc1O8nUWhLg4iLHjooklhZj2SHiIPh
-   0/9wk1XYELKIeUKqLSCfOca17kBh1/PIjg7DCLFLpkLQ27Z/nsczO2ctU
-   qOTHf0g8h8P1LGaR45CdOxHmbqBoSAU0tqSg7SusIcMUtQ9n7foJbhoe3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="355713499"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="355713499"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 15:00:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="777387326"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="777387326"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Jun 2023 15:00:30 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 15:00:30 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 15:00:29 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 1 Jun 2023 15:00:29 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 1 Jun 2023 15:00:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fiOXrqcznDTjkwyiFPQHk5YSDkQLrFjRNpXdi5WxfzWqhb986bCQYhcH8jEH24hkj4DhQ+KVMkgT8AcjfpYp4LcmftUqbwl5G448HPf3KcCKXVBrYe1YsvODpF00VIlI50ATuADepdrpRIwQXzo4kGFQm8uc13ycnk0EWP4W8YT4Q+eR2L+vKX+5aMY0n0hiZZL2ktb6FUqP11YBTBNzdDgpTo+VodqplArmGVpzWzeACQI1E4Ud3Ua9DYNTV4o117UnHZ9elyEPtwGaOwXTkU7QRpWIcdNp0MXES0sx8btLsIS1c/bEi0TFaBn6UGgBbJjMcOr2r2PMYgZNXH8hCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YvCLEOu5q5uUgOHzr2nIya4PmkYw4Z20jLsc93UtEtA=;
- b=W/zfP4G2kqs8OB7XEiE7CESKPGu+l0/SwBh7klK7P/IPQKrlQFZWsKFoUBm/QqLSp1DihcH9467uUDgC4mYaWIz+30KnAR9jp2VxCrapBQubhWebWq3PT6qvJGx7v8cb35d7Cv1k+DGzw7MAhFVhVMSyivwD5JghoIUm61kr5+omjOKn7JptnwSJJBO/z33H2Z3vyOPVWptPX8plHzLDR3OniEK5AIPKYM33c14fdIMAWU7qkSuxQY3RYeA9v7fvwVmx1NX7MSv6Aers2tInxjxSbqbN1KvGM2QMGUbAIYkA9RMZ97TyT+TagnlKG/8th9EnWNH4FuN+Lxo2HKUTXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM8PR11MB5751.namprd11.prod.outlook.com (2603:10b6:8:12::16) by
- BN9PR11MB5388.namprd11.prod.outlook.com (2603:10b6:408:11d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23; Thu, 1 Jun
- 2023 22:00:27 +0000
-Received: from DM8PR11MB5751.namprd11.prod.outlook.com
- ([fe80::11d1:e192:b174:e851]) by DM8PR11MB5751.namprd11.prod.outlook.com
- ([fe80::11d1:e192:b174:e851%4]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 22:00:27 +0000
-From:   "Teres Alexis, Alan Previn" <alan.previn.teres.alexis@intel.com>
-To:     "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "arnd@kernel.org" <arnd@kernel.org>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "airlied@gmail.com" <airlied@gmail.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/pxp: use correct format string for
- size_t
-Thread-Topic: [Intel-gfx] [PATCH] drm/i915/pxp: use correct format string for
- size_t
-Thread-Index: AQHZlNErgcp0owLrw0GI/n494DzXCq92f02A
-Date:   Thu, 1 Jun 2023 22:00:27 +0000
-Message-ID: <a97c3bbb260587a352a6d8d228e65cc6ae8fd59e.camel@intel.com>
-References: <20230601213624.3510244-1-arnd@kernel.org>
-In-Reply-To: <20230601213624.3510244-1-arnd@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.1-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR11MB5751:EE_|BN9PR11MB5388:EE_
-x-ms-office365-filtering-correlation-id: 90448e6c-f3f5-4832-c496-08db62eb9bc7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zi4XE2ZCsLOXM3lcdbMR6a+FNX3Ib91Sk3miS5QvGKArOgdUOCPeHOu18tnRIKbYsO9gH8vp10LqIa0olkFH8CSJ6n4i0tdmBIi+F60532WWiV4KRN9BYgFq1PLXSA1nxeH8eE/JrK2emmUBZPdehPMAoJ38HTD1n5cRSFCoIvOnhvECYdA/1XnzWm7e7M0Gsf09hs7Kr+mkMRJ+2w7UceJaKPoLgYoZ+EMx2Tc/iqY3fh147nwtC7Ci+V/6lUvHEuSoj8bzrt/qIJpakP8l74CmiAjiPMrsNd8WIJ3F8qZj2eK9T6w8ooQfqFFctMXysI4H8hjtO7P3iIOfyGT7bUeQ1A7VUX36vk1QfQPXxhh1+rmGhKIaRZR7LVJrspXrdI50u+8iXCII67MlGK974Exsj+JuzVStZbtBiEiE9mJYNp50EB4zdGN42v0XDxS7DSiNeEv1zRBB8a2eVp62vZDsnOq8tms/VSOvIw0JwNToHBat5xyfqtcphTDXQP0MmL+aLQIXzLiubPS7QXda7eGw2vS2KBZ5Xh/nUxN98tvdzRL1ERC9k6mWVn8OiftVa3shBaXiJ5yPTstdh+zpB8NKfSt2hvR3CVI0r1xq1wM0Y3eJwCqgsKMVu2zjLg/t
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5751.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199021)(36756003)(82960400001)(38100700002)(122000001)(86362001)(38070700005)(8936002)(4744005)(7416002)(41300700001)(6512007)(5660300002)(26005)(6506007)(8676002)(66446008)(186003)(2906002)(2616005)(83380400001)(66476007)(66556008)(316002)(6486002)(66946007)(76116006)(91956017)(71200400001)(110136005)(478600001)(54906003)(4326008)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ckk3dzNudnROOEx4bjRDb0R6ZCs5c3c3NUNlcG1KS0dsbkpwQmp4WlhpMlBp?=
- =?utf-8?B?RVdOWU5PLzU5dkVXNmQySUY4eXpGV21nMUxLWjE1Qk11REc0ZElhRmdvTG1z?=
- =?utf-8?B?Nit2YUZjdWd0L2NXNFNIY3p5dDd5RkRoM1A1SmQ2VXdKYmNmMmg0QlVlUTJ4?=
- =?utf-8?B?azBlKzROeENDcWtCaHZPanh3SUpqdk1GemxkZmh4M1d3SU5Eb3RNYnFEZ2Ja?=
- =?utf-8?B?VHBmVkhNK1hRcVVDZGw1akp6c1d3SFN6Ymo5ZE1VNVlpcUpQaVpscWlSdnQr?=
- =?utf-8?B?QldnbGNVL1p1ZEpaUDgzNWlWMmVoQ2c5d21mSjFLNUtkUlUrdW9PWkp3eXk4?=
- =?utf-8?B?RXpIWWRZa1hzSzZSMGVNYkdXSnRJOWZYNExEdkozanl2VEhhNXU3cm1iK3N0?=
- =?utf-8?B?b2dFc2xRQm9jZEpSdlFYWkI5OHlYMkhCYlFyRUFkSnBLZ3lXc3crY1JJQjIw?=
- =?utf-8?B?aE5wWVRPc3VacFh1Ri9VQ1JiWWtIRk1jS2JGRWVIUE8xTThhcElZdFVLcGJV?=
- =?utf-8?B?eFI0cUl1dHZ5dmk5V3ExNHJRZllTYTNnck9Dc3hhZ2hhWVpGMHhCbzEyWHoy?=
- =?utf-8?B?dloyMFREVXRuSlA0L0d1VFVlODZhelVtZmFUS2U1NlRwRDZ1Zk91S0oyUGcv?=
- =?utf-8?B?YXI0U25DejIwR3VCUDVkVjBpdlI0Vi9sMUdqZHFaekNnREphWTd5QzRsZ0x1?=
- =?utf-8?B?V0ZOVDN0SmxXR2k0MldKK2pNNjNDb3lyVmd5ODZVM1J3VmJWaDVLU09rL21p?=
- =?utf-8?B?SXI4dFlGUlJiNVJHWDUybW9XSlN0UjdSNFRQRU15LzgvT0RtbkpEUmVqSXdx?=
- =?utf-8?B?ZVNab1dpMWpMejBlL1dQbTF4cnMrbEpDQ3l0dFhLd01kSUVRWE5FZGIxa0JU?=
- =?utf-8?B?WE53OGsycnlFTWh5U2VDUWVwTHhCZGdnNHhjZHk0UTFOWFpDR0kxTmFtN2RL?=
- =?utf-8?B?VVlkdHVlRU5od0ZsN3lvR01aWnlXVWFwTmFkb011TlVnSThBcmVSSlFNMkE0?=
- =?utf-8?B?bHZiTVNweCtReHFEbXRicWFjVDNaaGJoNXpoWVZIZE13K2RpVmNleXNUQ0p3?=
- =?utf-8?B?SGpYakZXOWdQL2dWRHNZSUtGRERZK2pkS001cUJyS0h6WFZKTmMrMTlZdnFj?=
- =?utf-8?B?KzdmUlA2NUU1TzQ1emtla3k2cEJhLzhGanppS29rWlZpTURZaDFyRGYvbWxW?=
- =?utf-8?B?V2lDNlJNQzRlbWdsWEllVllPQ0VabVpDbE14bE1EL3djMDFic2NjYkYxQzlT?=
- =?utf-8?B?S09tN3BjeG1CSXVKK3ZLei9kVVM0MnJLU1dDeTVXdTdxdXB0ZTU4QVp3Nkpz?=
- =?utf-8?B?RUxWLzhJZlRyS09nU2syKzA3dm4wbHpDZi9lRDUvK2lFTG1Xa1lNYWYrWWFZ?=
- =?utf-8?B?U1l6alVUaWJpWEczSE1oRExXVk1QZUN3alhaaDJjYytsRzZZY0RjSFEyM1VY?=
- =?utf-8?B?eEhTTjZxWlBGcjdrWW8zRkRhdjdrbCtTSGdiUFNpeEtEL1RUa2g0SWV3c3Vs?=
- =?utf-8?B?TDVoUDEyWTcwTUFWeUZ2MHh6V1VGaDNKb2VyRFNLTS83UndVNUdMdk5kUDh0?=
- =?utf-8?B?YzhnWStGaHJXSlkwNVc0dENPY1Fwd21WcXRJM2ZXZWY0cG9waWxYQ1J5Kyto?=
- =?utf-8?B?MEZqZ3lUY2crc1pQVzVSSmNEd2Z6S09yYjUvZzdlRlJGb2M4ODNUYzNWUG9L?=
- =?utf-8?B?S21iMEtkMVVTbUEycnUyaEJDeWRGOWVKTW5GMW9ET09zeGlQekF1RFRiWEtr?=
- =?utf-8?B?Z3RkdWpWNXhzdUtRakdVVGg5VHcybnBMcjFvYXlWZkpUbnNGTEZ4K1VRdTNq?=
- =?utf-8?B?eTFlOEFvd1g3QkJ2K0lTZThibzFrd1VSSDQzN2dmS08rMk1UaVRMVjBpdnZn?=
- =?utf-8?B?RkhJelYwa1hlRnpYTWZwNEZYckhxU01IN3h2cExQWjdZNGtFZTQ0cWdVdHUx?=
- =?utf-8?B?ZWxIQ3ZxdzJ5YmV4RTVhRmlQUU9BNlBxMDVDRFliREltQ0FLNmhQdkc0K2dG?=
- =?utf-8?B?S1VyRHNzbzRCRlJrbG5zMmV0VW1yNENiUVVKRjhxVHhocGFzU0xXVHlpRUxW?=
- =?utf-8?B?TzczRHBMQUE1MkJObU13SEViank5T1JnZHZuOGJycXF0V0JhZmtPbENra3FK?=
- =?utf-8?B?S2hIOVJDRHNVTWh5NXBSb1AwdkZqRzNpcmFaZTdjbTdVRlpYZEtFVTA2d0NC?=
- =?utf-8?Q?rcjqXgnitvPdh2QP3N1jpBc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1CDB40787BA4694AA3B6EFDB8EA4D5E3@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 1 Jun 2023 18:02:02 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFD418C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:02:00 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230601220157euoutp01e948b2ab24d7e583d1c4d6b617b4a015~kqAkFZb-n2943129431euoutp01i
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 22:01:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230601220157euoutp01e948b2ab24d7e583d1c4d6b617b4a015~kqAkFZb-n2943129431euoutp01i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685656917;
+        bh=3WrzPlGJEtUHzBKCdYc00TeSvSfBzqLWzwawyBbA3wE=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=aqCmWAmLskG8ygGerKJvAebj5GGH/XmcRcd/IAkajZGacxD0nENOwAyqE+XoHwzV6
+         q3zBp8omBnHxhEEcxIuUnFdFmLr5oVW21k29W7nV6EYDBgkD9uH7oYKKKZBPLrXRNC
+         muXcPn7I1ZpUfJSn81ksdBMeX0AnyfPYGzgKPZYI=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230601220156eucas1p13086dbb1e50c6b3636b227b01192b79a~kqAjtZP2h2463824638eucas1p10;
+        Thu,  1 Jun 2023 22:01:56 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 11.2A.42423.45519746; Thu,  1
+        Jun 2023 23:01:56 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230601220156eucas1p21caabcf02509fce7eb26f973704980f9~kqAjbK75X2908229082eucas1p2d;
+        Thu,  1 Jun 2023 22:01:56 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230601220156eusmtrp20c88fe638cfc3c841284c69853b6d229~kqAjanaEr1406014060eusmtrp2d;
+        Thu,  1 Jun 2023 22:01:56 +0000 (GMT)
+X-AuditID: cbfec7f2-a51ff7000002a5b7-93-647915548c7e
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id EE.EA.14344.45519746; Thu,  1
+        Jun 2023 23:01:56 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230601220156eusmtip261d66749e5ad25ba0b01fc271cda08ce~kqAjAvrDF2825028250eusmtip2z;
+        Thu,  1 Jun 2023 22:01:56 +0000 (GMT)
+Message-ID: <ecef83c8-497f-4011-607b-a63c24764867@samsung.com>
+Date:   Fri, 2 Jun 2023 00:01:55 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5751.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90448e6c-f3f5-4832-c496-08db62eb9bc7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 22:00:27.3419
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XnVsNHx5a6lmhzR1+QhJ9COWCewRSoRsxkudiSE2pu/tGbMQRAV9NAbotnZH/SecY98eikHQhIHNKsl7sIUsT95natWm+A+ltoOV+KJtJ4rEPnTNoExKuh55qchw5VsQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5388
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH RESEND 2/2] Bluetooth: fix use-bdaddr-property quirk
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230531090424.3187-3-johan+linaro@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsWy7djPc7ohopUpBh936FqsqLTYNfUYs8Wc
+        a33MFpd3zWGzePp5CqvFt0+/GC0+b3jM6MDuMbvhIovHzll32T3W717O7rFpVSebx+dNcgGs
+        UVw2Kak5mWWpRfp2CVwZTXsWMhfskK54ufo2UwPjU7EuRk4OCQETibdL/rJ1MXJxCAmsYJS4
+        tmYBM4TzhVGipXc3E4TzmVFi89JbzDAtc5beZoFILGeU6Dl2lRHC+cgo8XPdMhaQKl4BO4mP
+        nY9ZQWwWARWJg/dvsULEBSVOznwCViMqkCrxbe4OsLiwgIfEy7NrwGxmAXGJW0/mM4HYIgJr
+        GSUOL9GGiGdKHDm+HuwKNgFDia63XWwgNqeAjcTi/21MEDXyEs1bZ0NdeodD4v3nOAjbRWLN
+        k4lMELawxKvjW9ghbBmJ/zvng70pIdDOKLHg930oZwKjRMPzW4wQVdYSd879AtrGAbRBU2L9
+        Ln2IsKPE/btzmUHCEgJ8EjfeCkLcwCcxadt0qDCvREebEES1msSs4+vg1h68cIl5AqPSLKRQ
+        mYXk+1lIvpmFsHcBI8sqRvHU0uLc9NRiw7zUcr3ixNzi0rx0veT83E2MwAR0+t/xTzsY5776
+        qHeIkYmD8RCjBAezkgivUFh5ihBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFebduTyUIC6Yklqdmp
+        qQWpRTBZJg5OqQamKvNenyjbB4a/Lx3xqlx8d67DHeMXiq0JKp80uUq7VHkNz5WWh/ls/Gt0
+        LdK9yniq/NEC8SNKB1xzufNWr9jW+iSb4YTV+5uvp60t59HfoFXk9EFig71dv135psuHHu/p
+        PKiSXfIm4F0qv8aH56zLdh5S7XTNXta1Y+X9tM3XZ37t9f/SslZ4vdua5n8qgg9uiny8redr
+        GHNnRv+P/pWNs3J9Iozrp55ISEtJEkwQXH736iaDJTfVnqbf7Sk5FLS9Ne/y2wleL312WN+4
+        HeixbFXhnOnysVMOhNU4q/I35G4Jf3pxtZXgsYebzG39Z9qZpbfNz7QtWfH4rr2gAL//8+V6
+        9wyM/dntWSYrxd1SYinOSDTUYi4qTgQA9cCZo68DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsVy+t/xe7ohopUpBls7ZS1WVFrsmnqM2WLO
+        tT5mi8u75rBZPP08hdXi26dfjBafNzxmdGD3mN1wkcVj56y77B7rdy9n99i0qpPN4/MmuQDW
+        KD2bovzSklSFjPziElulaEMLIz1DSws9IxNLPUNj81grI1MlfTublNSczLLUIn27BL2Mpj0L
+        mQt2SFe8XH2bqYHxqVgXIyeHhICJxJylt1m6GLk4hASWMkoceT2XHSIhI3FyWgMrhC0s8eda
+        FxuILSTwnlHi/AlvEJtXwE7iY+djsBoWARWJg/dvsULEBSVOznzCAmKLCqRK9H5ZwQhiCwt4
+        SLw8uwashllAXOLWk/lMIItFBNYzSiz69haogQMokSlxuUMbYleuxIJFm5hAbDYBQ4mutxA3
+        cArYSCz+38YEMcdMomtrFyOELS/RvHU28wRGoVlIzpiFZN0sJC2zkLQsYGRZxSiSWlqcm55b
+        bKRXnJhbXJqXrpecn7uJERhv24793LKDceWrj3qHGJk4GA8xSnAwK4nwCoWVpwjxpiRWVqUW
+        5ccXleakFh9iNAWGxURmKdHkfGDE55XEG5oZmBqamFkamFqaGSuJ83oWdCQKCaQnlqRmp6YW
+        pBbB9DFxcEo1MO1LVjUQ3L3z12rm087JKZF33iYcNzIqn3j3HKfks41q5tvP87Y+vdn8Svik
+        cU5aqU/DOb6W82ml65+vjfr3Wrb0aeup/dK9M2oy3u/9eD9pyd6HDvMt/FMN/pjkLG5gMZBq
+        u6QtfWLy0b9rziRNj34sUcB0Qnxda33N2209TwPq5BlUdGIC27+sy5926NAuwwdPnAStzIJm
+        LA2axvWPvWv9/H3qijtc928oLBT/7Lh34cuNudfk/6vu+T733TG/wz6eXAadu3xOHHxn9JLf
+        ++zdNTJCR31nXDv2W3iudHzOuSlil2vYeO7vDT6ZaPmlQlThSiTXtKehbqoXru7QF5q09Fnz
+        Ma3IujduOfGr+xyVWIozEg21mIuKEwG8+g2VQAMAAA==
+X-CMS-MailID: 20230601220156eucas1p21caabcf02509fce7eb26f973704980f9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230601220156eucas1p21caabcf02509fce7eb26f973704980f9
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230601220156eucas1p21caabcf02509fce7eb26f973704980f9
+References: <20230531090424.3187-1-johan+linaro@kernel.org>
+        <20230531090424.3187-3-johan+linaro@kernel.org>
+        <CGME20230601220156eucas1p21caabcf02509fce7eb26f973704980f9@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA2LTAxIGF0IDIzOjM2ICswMjAwLCBBcm5kIEJlcmdtYW5uIHdyb3RlOg0K
-PiBGcm9tOiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiANCj4gV2hpbGUgJ3Vuc2ln
-bmVkIGxvbmcnIG5lZWRzIHRoZSAlbGQgZm9ybWF0IHN0cmluZywgc2l6ZV90IG5lZWRzIHRoZSAl
-eg0KPiBtb2RpZmllcjoNCg0KYWxhbjpzbmlwDQoNCg0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
-aTkxNS9weHAvaW50ZWxfcHhwX2dzY2NzLmMNCj4gQEAgLTE0Myw3ICsxNDMsNyBAQCBnc2Njc19z
-ZW5kX21lc3NhZ2Uoc3RydWN0IGludGVsX3B4cCAqcHhwLA0KPiAgDQo+ICAJcmVwbHlfc2l6ZSA9
-IGhlYWRlci0+bWVzc2FnZV9zaXplIC0gc2l6ZW9mKCpoZWFkZXIpOw0KPiAgCWlmIChyZXBseV9z
-aXplID4gbXNnX291dF9zaXplX21heCkgew0KPiAtCQlkcm1fd2FybigmaTkxNS0+ZHJtLCAiY2Fs
-bGVyIHdpdGggaW5zdWZmaWNpZW50IFBYUCByZXBseSBzaXplICV1ICglbGQpXG4iLA0KPiArCQlk
-cm1fd2FybigmaTkxNS0+ZHJtLCAiY2FsbGVyIHdpdGggaW5zdWZmaWNpZW50IFBYUCByZXBseSBz
-aXplICV1ICglemQpXG4iLA0KPiAgCQkJIHJlcGx5X3NpemUsIG1zZ19vdXRfc2l6ZV9tYXgpOw0K
-PiAgCQlyZXBseV9zaXplID0gbXNnX291dF9zaXplX21heDsNCj4gIAl9DQpUaGFua3MgQXJuZCBm
-b3IgY2F0Y2hpbmcgdGhpcywgYWx0aG91Z2ggaSBiZWxpZXZlIE5hdGhhbiBzdW1ibWl0dGVkIGEg
-cGF0Y2ggZm9yIHRoZSBzYW1lIGZpeCB5ZXN0ZXJkYXkgYW5kIHJlY2VpdmVkIGFuIFJCIGZyb20g
-QW5kaS4NCg==
+On 31.05.2023 11:04, Johan Hovold wrote:
+> Devices that lack persistent storage for the device address can indicate
+> this by setting the HCI_QUIRK_INVALID_BDADDR which causes the controller
+> to be marked as unconfigured until user space has set a valid address.
+>
+> The related HCI_QUIRK_USE_BDADDR_PROPERTY was later added to similarly
+> indicate that the device lacks a valid address but that one may be
+> specified in the devicetree.
+>
+> As is clear from commit 7a0e5b15ca45 ("Bluetooth: Add quirk for reading
+> BD_ADDR from fwnode property") that added and documented this quirk and
+> commits like de79a9df1692 ("Bluetooth: btqcomsmd: use
+> HCI_QUIRK_USE_BDADDR_PROPERTY"), the device address of controllers with
+> this flag should be treated as invalid until user space has had a chance
+> to configure the controller in case the devicetree property is missing.
+>
+> As it does not make sense to allow controllers with invalid addresses,
+> restore the original semantics, which also makes sure that the
+> implementation is consistent (e.g. get_missing_options() indicates that
+> the address must be set) and matches the documentation (including
+> comments in the code, such as, "In case any of them is set, the
+> controller has to start up as unconfigured.").
+>
+> Fixes: e668eb1e1578 ("Bluetooth: hci_core: Don't stop BT if the BD address missing in dts")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+This patch has been recently merged to linux-next as commit 6ac517d8cf8b 
+("Bluetooth: fix use-bdaddr-property quirk"). Unfortunately it breaks 
+bluetooth operation on my Raspberry Pi 3b+, 4b+ and Khadas VIM3 based 
+test systems.
+
+Before this patch on Raspberry Pi 4b+:
+
+root@target:~# dmesg | grep hci0
+[   14.459292] Bluetooth: hci0: BCM: chip id 107
+[   14.464283] Bluetooth: hci0: BCM: features 0x2f
+[   14.470632] Bluetooth: hci0: BCM4345C0
+[   14.474483] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
+[   14.487275] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
+[   15.347542] Bluetooth: hci0: BCM: features 0x2f
+[   15.354588] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+-0159
+[   15.361076] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0290
+root@target:~# hcitool dev
+Devices:
+         hci0    DC:A6:32:12:38:D1
+root@target:~#
+root@target:~# hcitool scan
+Scanning ...
+         88:57:1D:AB:19:B2    Samsung Family Hub
+root@target:~# hcitool | head -n1
+hcitool - HCI Tool ver 5.50
+root@target:~#
+
+
+After this patch:
+
+root@target:~# dmesg | grep hci0
+[   13.979860] Bluetooth: hci0: BCM: chip id 107
+[   13.984969] Bluetooth: hci0: BCM: features 0x2f
+[   13.991444] Bluetooth: hci0: BCM4345C0
+[   13.995300] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
+[   14.005131] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
+[   14.839465] Bluetooth: hci0: BCM: features 0x2f
+[   14.846047] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+-0159
+[   14.859859] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0290
+root@target:~# hcitool dev
+Devices:
+root@target:~# hcitool scan
+Device is not available: No such device
+root@target:~# hcitool | head -n1
+hcitool - HCI Tool ver 5.50
+root@target:~#
+
+Reverting $subject on top of linux-next fixes this 'issue'.
+
+Let me know if you need more information about my test systems or to 
+make some other tests.
+
+ > ...
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
