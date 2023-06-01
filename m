@@ -2,205 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE787196EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF607196F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjFAJ3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S232855AbjFAJaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjFAJ3c (ORCPT
+        with ESMTP id S232876AbjFAJ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:29:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DFA97
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:29:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 1 Jun 2023 05:29:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62D197;
+        Thu,  1 Jun 2023 02:29:51 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CAFF82197D;
-        Thu,  1 Jun 2023 09:29:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685611768; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1q6Hag9Y9ezJD8WEei7X14aEA4bHQczpGjzWdaBKt1E=;
-        b=EhqEWofQI4QLdklr7UjXb+QxTzRMSjgtTj/rX90Wcb9urlnkjzRJYwQ0ehWySAul1TMUY3
-        ZVa+wO3K2bCjIITy2JJHB7EQClqAfXq3hJ0vXM0Xjxo9MX55tUC1EeEb7MHxUd2/oLFqVp
-        wdYFV+lFV+2IA48wNgfrnJW28P439co=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 402AB13441;
-        Thu,  1 Jun 2023 09:29:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id A9PfDfhkeGT5JgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 01 Jun 2023 09:29:28 +0000
-Message-ID: <44e2fb4d-151c-dba9-9cb8-0d99c3668a6f@suse.com>
-Date:   Thu, 1 Jun 2023 11:29:27 +0200
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A80E76606EBB;
+        Thu,  1 Jun 2023 10:29:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685611790;
+        bh=/99L0yDyxfKpGTLUsUvuTBXH57FzSAVPgswDfaicft0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Iz7Hpv/WW0Zq2RNh0iuM8jxPoqgrnBjPTKgILgEJD/MnGgAIULj4oLw/FYWaumWXj
+         hAhmvW2hVxoGcwVLbyyRnSvtDqVsDGjC7w4g+0VqDiCNdXdHiZ5bE0saUfhs+pJ3z5
+         I/Eiz3zVh2ha/ZtRsqMP3C81OvKxyhKiWqomw6tkdjrQebytlKpdv4wKHtp8Dqm3Aw
+         gH3zrZ8zlIlCRBKXRfDBjCQkSI9D49FlPxXeIHfHMn0XQFMmPdGiCW4PnACyfO7WIM
+         MbN7tn2pghUa4JuR5gSJII2OIhbq1gLT/MvpekRI6MqQNhZxGDVa1lV6iMOTiM0R+V
+         xXKWkcmfGyFLw==
+Message-ID: <ef3aaee1-e6ca-a89d-e002-42bf918736f4@collabora.com>
+Date:   Thu, 1 Jun 2023 11:29:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 4/8] mediatek: vcodec: remove the dependency of debug log
 Content-Language: en-US
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Garnier <thgarnie@chromium.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <song@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        virtualization@lists.linux-foundation.org
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <d0e601438f4d140c0c383c6ad09483b34c7c572e.1682673543.git.houwenlong.hwl@antgroup.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH RFC 13/43] x86/paravirt: Use relative reference for
- original instruction
-In-Reply-To: <d0e601438f4d140c0c383c6ad09483b34c7c572e.1682673543.git.houwenlong.hwl@antgroup.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pSEiQCQ0mMm06Gdi70dae9uE"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230601030256.29875-1-yunfei.dong@mediatek.com>
+ <20230601030256.29875-5-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230601030256.29875-5-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pSEiQCQ0mMm06Gdi70dae9uE
-Content-Type: multipart/mixed; boundary="------------g4h39aBPOJ2gKFz0pWZiXEwc";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Hou Wenlong <houwenlong.hwl@antgroup.com>, linux-kernel@vger.kernel.org
-Cc: Thomas Garnier <thgarnie@chromium.org>,
- Lai Jiangshan <jiangshan.ljs@antgroup.com>, Kees Cook
- <keescook@chromium.org>, "Srivatsa S. Bhat (VMware)"
- <srivatsa@csail.mit.edu>, Alexey Makhalov <amakhalov@vmware.com>,
- VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
- Nadav Amit <namit@vmware.com>, Arnd Bergmann <arnd@arndb.de>,
- virtualization@lists.linux-foundation.org
-Message-ID: <44e2fb4d-151c-dba9-9cb8-0d99c3668a6f@suse.com>
-Subject: Re: [PATCH RFC 13/43] x86/paravirt: Use relative reference for
- original instruction
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <d0e601438f4d140c0c383c6ad09483b34c7c572e.1682673543.git.houwenlong.hwl@antgroup.com>
-In-Reply-To: <d0e601438f4d140c0c383c6ad09483b34c7c572e.1682673543.git.houwenlong.hwl@antgroup.com>
+Il 01/06/23 05:02, Yunfei Dong ha scritto:
+> 'mtk_vcodec_debug' and 'mtk_vcodec_err' depends on 'mtk_vcodec_ctx'
+> to get the index of each instance, using the index directly instead
+> of with 'mtk_vcodec_ctx'.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>   .../mediatek/vcodec/mtk_vcodec_util.h         |  36 +++--
+>   .../vcodec/vdec/vdec_av1_req_lat_if.c         |  78 +++++------
+>   .../mediatek/vcodec/vdec/vdec_h264_if.c       |  46 +++----
+>   .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  32 ++---
+>   .../vcodec/vdec/vdec_h264_req_multi_if.c      |  62 ++++-----
+>   .../vcodec/vdec/vdec_hevc_req_multi_if.c      |  54 ++++----
+>   .../mediatek/vcodec/vdec/vdec_vp8_if.c        |  38 +++---
+>   .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  36 ++---
+>   .../mediatek/vcodec/vdec/vdec_vp9_if.c        | 128 +++++++++---------
+>   .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  67 ++++-----
+>   .../platform/mediatek/vcodec/vdec_vpu_if.c    |  48 +++----
+>   .../mediatek/vcodec/venc/venc_h264_if.c       |  74 +++++-----
+>   .../mediatek/vcodec/venc/venc_vp8_if.c        |  44 +++---
+>   .../platform/mediatek/vcodec/venc_vpu_if.c    |  54 ++++----
+>   14 files changed, 399 insertions(+), 398 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+> index ecb0bdf3a4f4..f018af38b39d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+> @@ -31,42 +31,38 @@ struct mtk_vcodec_dev;
+>   #define mtk_v4l2_err(fmt, args...)                \
+>   	pr_err("[MTK_V4L2][ERROR] " fmt "\n", ##args)
+>   
+> -#define mtk_vcodec_err(h, fmt, args...)				\
+> -	pr_err("[MTK_VCODEC][ERROR][%d]: " fmt "\n",		\
+> -	       ((struct mtk_vcodec_ctx *)(h)->ctx)->id, ##args)
+> +#define mtk_vcodec_err(inst_id, fmt, args...)                          \
+> +	pr_err("[MTK_VCODEC][ERROR][%d]: " fmt "\n", inst_id, ##args)
+>   
 
---------------g4h39aBPOJ2gKFz0pWZiXEwc
-Content-Type: multipart/mixed; boundary="------------BHnx6M1xJVQ0UkCaAd7kFyC8"
+This *huge* cleanup (congrats btw!) would be a great occasion to change those
+pr_err() to dev_err(). Can we do that?
 
---------------BHnx6M1xJVQ0UkCaAd7kFyC8
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Regards,
+Angelo
 
-T24gMjguMDQuMjMgMTE6NTAsIEhvdSBXZW5sb25nIHdyb3RlOg0KPiBTaW1pbGFyIHRvIHRo
-ZSBhbHRlcm5hdGl2ZSBwYXRjaGluZywgdXNlIHJlbGF0aXZlIHJlZmVyZW5jZSBmb3Igb3Jp
-Z2luYWwNCj4gaW5zdHJ1Y3Rpb24gcmF0aGVyIHRoYW4gYWJzb2x1dGUgb25lLCB3aGljaCBz
-YXZlcyA4IGJ5dGVzIGZvciBvbmUgZW50cnkNCj4gb24geDg2XzY0LiAgQW5kIGl0IGNvdWxk
-IGdlbmVyYXRlIFJfWDg2XzY0X1BDMzIgcmVsb2NhdGlvbiBpbnN0ZWFkIG9mDQo+IFJfWDg2
-XzY0XzY0IHJlbG9jYXRpb24sIHdoaWNoIGFsc28gcmVkdWNlcyByZWxvY2F0aW9uIG1ldGFk
-YXRhIG9uDQo+IHJlbG9jYXRhYmxlIGJ1aWxkcy4gQW5kIHRoZSBhbGlnbm1lbnQgY291bGQg
-YmUgaGFyZCBjb2RlZCB0byBiZSA0IG5vdy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEhvdSBX
-ZW5sb25nIDxob3V3ZW5sb25nLmh3bEBhbnRncm91cC5jb20+DQo+IENjOiBUaG9tYXMgR2Fy
-bmllciA8dGhnYXJuaWVAY2hyb21pdW0ub3JnPg0KPiBDYzogTGFpIEppYW5nc2hhbiA8amlh
-bmdzaGFuLmxqc0BhbnRncm91cC5jb20+DQo+IENjOiBLZWVzIENvb2sgPGtlZXNjb29rQGNo
-cm9taXVtLm9yZz4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNl
-LmNvbT4NCg0KSSB0aGluayB0aGlzIHBhdGNoIHNob3VsZCBiZSB0YWtlbiBldmVuIHdpdGhv
-dXQgdGhlIHNlcmllcy4NCg0KDQpKdWVyZ2VuDQo=
---------------BHnx6M1xJVQ0UkCaAd7kFyC8
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------BHnx6M1xJVQ0UkCaAd7kFyC8--
-
---------------g4h39aBPOJ2gKFz0pWZiXEwc--
-
---------------pSEiQCQ0mMm06Gdi70dae9uE
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmR4ZPcFAwAAAAAACgkQsN6d1ii/Ey/L
-xQf+LbM8IPP3DJKBcK6W3cCmFt4AlrbDw8VTxSwHOvNCtQz3E4QuAIjEuUeXndxbiUJZCKpf1uAj
-3qwWfYeUrvvUL06TnpQ5ElyG6fLV+Qwb5Iny3U49bXUt0zslh7AGWq4wfIlILBK/292MYyfok8jl
-bAn/LbOX5TUK8Sf3mTjY45wqPaD8X0/8GQhHm1nRuMCxqHfoSmeWWoFvYiacqwRmLP0CHDF9f8iH
-BMRmfHWOxHUj+68AbsyZcG9QFif4f4L90EegSgSCNSuDZrAarS8FlHWPEGftSlgeGLGRy3+xhd5v
-vV/1A9ovHy0PA8xWaveXsXf5JzhTJxp78tklG0jdPA==
-=PHGb
------END PGP SIGNATURE-----
-
---------------pSEiQCQ0mMm06Gdi70dae9uE--
