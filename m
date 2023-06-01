@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D56718FA0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24791718FAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjFAAnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 20:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S229731AbjFAAr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 20:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbjFAAns (ORCPT
+        with ESMTP id S229476AbjFAArZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 20:43:48 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B4213E;
-        Wed, 31 May 2023 17:43:45 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VJqsqI023425;
-        Thu, 1 Jun 2023 00:43:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=QmtHVEbSQeEd5HAXMSbTKWQp7aWIqyHo+SoSvmX/oIo=;
- b=lQW+FNZwMjsXj3NLSh2wqK7bkF/rmS1/YKSCAKrzdU9WrkBRqM2jFqRYVc1349vWXcrE
- vy48lqATSqvcSHr0sAWTYeuPj0VGaDTYDzQTlee+2x6OXVg1pkm9P9c6q4a8Vo2Dw5qe
- qScD708fSQC/PgQP3wnbSFkxOtGr52CmU4J7y0/nGjnfvpYUBBVkusxsrhGhpjwItMYE
- 0SCzxXiUEheeq9v7tsohbxHNM2dbCwhctI0+NhkPog4L51aAgSXHfDr3TUESk2VHudEp
- 84Brj/8qNgR51IyzCRO+D0E4J1jxvXrHEO29BjemnYhBL7f+OPfipXailItwP28GXOmN Ig== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhd9yhpj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Jun 2023 00:43:35 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34VN5cKm003733;
-        Thu, 1 Jun 2023 00:43:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qv4ye2eb7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Jun 2023 00:43:34 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3510hV9P008516;
-        Thu, 1 Jun 2023 00:43:34 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3qv4ye2e6s-5;
-        Thu, 01 Jun 2023 00:43:34 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Adam Radford <aradford@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Yuchen Yang <u202114568@hust.edu.cn>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: scsi: 3w-xxxx: Add error handling for initialization failure in `tw_probe`
-Date:   Wed, 31 May 2023 20:43:14 -0400
-Message-Id: <168558000056.2461197.15799717979637584727.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230505141259.7730-1-u202114568@hust.edu.cn>
-References: <20230505141259.7730-1-u202114568@hust.edu.cn>
+        Wed, 31 May 2023 20:47:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E0A124;
+        Wed, 31 May 2023 17:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685580445; x=1717116445;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KuKxlPpFKGkuw94zyPg91+OeFgR1NnDh94+/fmldi64=;
+  b=TaGmaCme1t9gZjdAlTFcyXkGCy+UUGojJA0DGLNpa15u5Sqmj+x31/xS
+   e0vtK4JhpfuexNd4IgTHUcGvPWZHqxunPgwW0uWKJvc9Y+NRIW44EHX7t
+   wPUxhWvxJI/aoXsIUdDQ0+T0s7S5PlSPM9UiAvENkHscPujm3dJ86G+gA
+   zRKLQuWb2JBN++cz6Lzg8ci+Jm1SkMEV3AgT7oOtgZlTg6ZUXNbB4nzAb
+   a44I8KMKUbT2/xhnubni7aFqyLMNSp43LbqT/sKQPMOPF/qcdajLx+g74
+   0dYa9/rDSnsENAFjGUJ/XNxrnTd+Md24N9l8KmRw3ykvAJU1ndpem9cVN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="335032782"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="335032782"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 17:47:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736871987"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="736871987"
+Received: from mawhitso-mobl1.amr.corp.intel.com (HELO xpardee-test1.hsd1.or.comcast.net) ([10.212.230.213])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 17:47:24 -0700
+From:   Xi Pardee <xi.pardee@intel.com>
+To:     hdegoede@redhat.com
+Cc:     xi.pardee@intel.com, irenic.rajneesh@gmail.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        rajvi.jingar@intel.com, david.e.box@linux.intel.com
+Subject: [PATCH] platform/x86:intel/pmc: Remove Meteor Lake S platform support
+Date:   Wed, 31 May 2023 17:47:06 -0700
+Message-Id: <20230601004706.871528-1-xi.pardee@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_18,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=617
- adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010004
-X-Proofpoint-GUID: Y8u0jIA-KJ22owMxzJLVjnGV84gxiRR7
-X-Proofpoint-ORIG-GUID: Y8u0jIA-KJ22owMxzJLVjnGV84gxiRR7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 05 May 2023 22:12:55 +0800, Yuchen Yang wrote:
+commit c5ad454a12c6 ("platform/x86: intel/pmc/core: Add Meteor Lake
+support to pmc core driver") was supposed to add support for Meter
+Lake P/M and mistakenly added support for Meteor Lake S instead. Meteor
+Lake P/M support was added later and MTL-S support needs to be removed
+since its currently assigned to the wrong register maps.
 
-> Smatch complains that:
-> tw_probe() warn: missing error code 'retval'
-> 
-> This patch adds error checking to `tw_probe` function to handle
-> initialization failure. If `tw_reset_sequence` function returns a
-> non-zero value, the function will return an `-EINVAL` error code
-> to indicate the initialization failure.
-> 
-> [...]
+Fixes: c5ad454a12c6 ("platform/x86: intel/pmc/core: Add Meteor Lake support to pmc core driver")
+Signed-off-by: Xi Pardee <xi.pardee@intel.com>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+---
+ drivers/platform/x86/intel/pmc/core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Applied to 6.5/scsi-queue, thanks!
-
-[1/1] drivers: scsi: 3w-xxxx: Add error handling for initialization failure in `tw_probe`
-      https://git.kernel.org/mkp/scsi/c/2e2fe5ac695a
-
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index da6e7206d38b..b8711330e411 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -1039,7 +1039,6 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        tgl_core_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		adl_core_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	adl_core_init),
+-	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,          mtl_core_init),
+ 	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	mtl_core_init),
+ 	{}
+ };
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.25.1
+
