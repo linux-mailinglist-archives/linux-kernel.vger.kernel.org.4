@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340C8719335
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5B171932E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjFAG0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S231514AbjFAGZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjFAG0P (ORCPT
+        with ESMTP id S229689AbjFAGZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:26:15 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A61101;
-        Wed, 31 May 2023 23:26:13 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QWx3N2KSxz4f3v6b;
-        Thu,  1 Jun 2023 14:26:08 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbH_OXhko4G0Kg--.24198S6;
-        Thu, 01 Jun 2023 14:26:10 +0800 (CST)
-From:   linan666@huaweicloud.com
-To:     song@kernel.org, neilb@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
-        houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v5 2/2] md/raid10: fix io loss while replacement replace rdev
-Date:   Thu,  1 Jun 2023 14:24:24 +0800
-Message-Id: <20230601062424.3613218-3-linan666@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230601062424.3613218-1-linan666@huaweicloud.com>
-References: <20230601062424.3613218-1-linan666@huaweicloud.com>
+        Thu, 1 Jun 2023 02:25:27 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68EDD188;
+        Wed, 31 May 2023 23:24:54 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(767:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Thu, 01 Jun 2023 14:24:38 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 1 Jun
+ 2023 14:24:37 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Thu, 1 Jun 2023 14:24:37 +0800
+From:   <cy_huang@richtek.com>
+To:     <sre@kernel.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <cy_huang@richtek.com>,
+        <chiaen_wu@richtek.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: rt9467: Make charger-enable control as logic level
+Date:   Thu, 1 Jun 2023 14:24:36 +0800
+Message-ID: <1685600676-25124-1-git-send-email-cy_huang@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbH_OXhko4G0Kg--.24198S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWfAF4fWF1DArWrGF17Wrg_yoW5Jr1fpF
-        4Dt3Z5ZryUAwsrKFs8JF4UJa4SvrWxtF4rJry3W345ua15trWUAay7G3y3Zrs8ZFZ5Xry5
-        Xa13Kws5Ca429FDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBGb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
-        ACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWU
-        JVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcV
-        C2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYHqcUUUUU=
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Nan <linan122@huawei.com>
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-When removing a disk with replacement, the replacement will be used to
-replace rdev. During this process, there is a brief window in which both
-rdev and replacement are read as NULL in raid10_write_request(). This
-will result in io not being submitted but it should be.
+The current coding make 'charger-enable-gpio' control as real hardware
+level. This conflicts with the default binding example. For driver
+behavior, no need to use real hardware level, just logic level is
+enough. This change can make this flexibility keep in dts gpio active
+level about this pin.
 
-  //remove				//write
-  raid10_remove_disk			raid10_write_request
-   mirror->rdev = NULL
-					 read rdev -> NULL
-   mirror->rdev = mirror->replacement
-   mirror->replacement = NULL
-					 read replacement -> NULL
-
-Fix it by reading replacement first and rdev later, meanwhile, use smp_mb()
-to prevent memory reordering.
-
-Fixes: 475b0321a4df ("md/raid10: writes should get directed to replacement as well as original.")
-Signed-off-by: Li Nan <linan122@huawei.com>
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
- drivers/md/raid10.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 3ba1516ea160..a7830d2c7477 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -779,8 +779,16 @@ static struct md_rdev *read_balance(struct r10conf *conf,
- 		disk = r10_bio->devs[slot].devnum;
- 		rdev = rcu_dereference(conf->mirrors[disk].replacement);
- 		if (rdev == NULL || test_bit(Faulty, &rdev->flags) ||
--		    r10_bio->devs[slot].addr + sectors > rdev->recovery_offset)
-+		    r10_bio->devs[slot].addr + sectors >
-+		    rdev->recovery_offset) {
-+			/*
-+			 * Read replacement first to prevent reading both rdev
-+			 * and replacement as NULL during replacement replace
-+			 * rdev.
-+			 */
-+			smp_mb();
- 			rdev = rcu_dereference(conf->mirrors[disk].rdev);
-+		}
- 		if (rdev == NULL ||
- 		    test_bit(Faulty, &rdev->flags))
- 			continue;
-@@ -1479,9 +1487,15 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
+  This change is from our customer. They use the default binding
+example as the dts config. By default, this configurethe
+charger-enable-gpio to real harware level high and disable battery charging
+with external hardware pin.
+
+The last patch I sent is to fix the binding example. But refer to the
+discussion, the correct way is to change the gpio control coding as logic level,
+not real hardware level.
+https://lore.kernel.org/lkml/1685522813-14481-1-git-send-email-cy_huang@richtek.com/
+---
+ drivers/power/supply/rt9467-charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
+index ea33693..b0b9ff8 100644
+--- a/drivers/power/supply/rt9467-charger.c
++++ b/drivers/power/supply/rt9467-charger.c
+@@ -1192,7 +1192,7 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
+ 	i2c_set_clientdata(i2c, data);
  
- 	for (i = 0;  i < conf->copies; i++) {
- 		int d = r10_bio->devs[i].devnum;
--		struct md_rdev *rdev = rcu_dereference(conf->mirrors[d].rdev);
--		struct md_rdev *rrdev = rcu_dereference(
--			conf->mirrors[d].replacement);
-+		struct md_rdev *rdev, *rrdev;
-+
-+		rrdev = rcu_dereference(conf->mirrors[d].replacement);
-+		/*
-+		 * Read replacement first to Prevent reading both rdev and
-+		 * replacement as NULL during replacement replace rdev.
-+		 */
-+		smp_mb();
-+		rdev = rcu_dereference(conf->mirrors[d].rdev);
- 		if (rdev == rrdev)
- 			rrdev = NULL;
- 		if (rdev && (test_bit(Faulty, &rdev->flags)))
+ 	/* Default pull charge enable gpio to make 'CHG_EN' by SW control only */
+-	ceb_gpio = devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_LOW);
++	ceb_gpio = devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(ceb_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(ceb_gpio),
+ 				     "Failed to config charge enable gpio\n");
 -- 
-2.31.1
+2.7.4
 
