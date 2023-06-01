@@ -2,316 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DFD71F659
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437B671F65C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbjFAXEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S230467AbjFAXFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 19:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjFAXEG (ORCPT
+        with ESMTP id S229800AbjFAXFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:04:06 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADACB193;
-        Thu,  1 Jun 2023 16:04:04 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351MeofL024064;
-        Thu, 1 Jun 2023 23:04:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VBMZ/RX80laZZEUsfa+joAPX4pXl7gMwT6HeOaZg3eE=;
- b=km/UbMrJR7oLxLucygrIyEIhvY96ZKuGHsLOkDjvHnq4H+IKTYGeJl2YgxTdo+iYyliP
- tAsqJCgUDaBFpg550HSWnfrbJsmOSLYq5ufLHkjNrHGpKQXbvnM1IUWagDWRq6kHzQD1
- HbMakFDIRGbXN1dSGcRcrZfRY5ardBErDuJCZv5aVHIwHgo1UOW/xfi2uq6vmRmqvXve
- AbfuL9JzxnPQU58uUny1QsJOilgBhKeYxIROmPVwV7whG+ua+3m07GHRUVG9kMsuZvQh
- wosvvBzBgCWNAMMZ096McLjszGaS/9LwC+O5jrn9L8ZqI798K8OMIO+bzXbphW1DTf8S aA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxqyda03r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 23:04:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351N41sv019264
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 23:04:01 GMT
-Received: from [10.71.113.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 16:04:00 -0700
-Message-ID: <11a60626-2363-e743-8136-3233acf5b85e@quicinc.com>
-Date:   Thu, 1 Jun 2023 16:04:00 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/2] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1685141140-26228-1-git-send-email-quic_eserrao@quicinc.com>
- <1685141140-26228-3-git-send-email-quic_eserrao@quicinc.com>
- <20230530225100.wkeai3arwg6cmjjw@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230530225100.wkeai3arwg6cmjjw@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: T7Ik_VDj5goUWLQNBEUXEi9Jr0vbI0i2
-X-Proofpoint-GUID: T7Ik_VDj5goUWLQNBEUXEi9Jr0vbI0i2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=822 phishscore=0 mlxscore=0 bulkscore=0 spamscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306010198
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 19:05:19 -0400
+Received: from mail-vk1-xa4a.google.com (mail-vk1-xa4a.google.com [IPv6:2607:f8b0:4864:20::a4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC22313D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 16:05:17 -0700 (PDT)
+Received: by mail-vk1-xa4a.google.com with SMTP id 71dfb90a1353d-456fe20f7f4so412355e0c.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 16:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685660717; x=1688252717;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IlZFrfrzvRhOMg42VULn4bk5PFVF4CJM9Ngh05xbmjc=;
+        b=fqywCEnGD6JPUqK6MFZ5TP/gVQOIrLigQrvef9KWQCk0jkChdZ1KOQWfL9L4oKlHzd
+         X4qH3HDa3dHAm/S0Sfme5N8EgMavnlVnXGTw/PXjoseyGY2b35XRqL9Ejo9/K7Mox8or
+         kbgCDspX/mN22zRmldWz2ckmhqLEZpV2AHzLT/VdzXGDNUDfH9A0SpvRYhHVxikKl3he
+         guum/8tG4uHxdahIEHaCThgY4aZ2vINq5S5LcTlM2b0gD598MwLSeEoEKwaDd9xCtEB0
+         mySOSqTJMY2fs7WTClhBaRsCb81wWc4OIsQFZGYFJBaQ75c/jLMzt8YFr/0qB3d+O6L4
+         3bCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685660717; x=1688252717;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IlZFrfrzvRhOMg42VULn4bk5PFVF4CJM9Ngh05xbmjc=;
+        b=CN0Z41jd+r4jstqBtJPtWW1uo/PUQPuL3Jm6PU/be8WrAtsnjNYFP64BlKJiyIoFgS
+         ExR7inC3FqwsGU7qtppyuVd68A5Fi3nDOny88rpuP8DLC9OAtZ+bp+xuUJm1eFxsx20M
+         jJJB+DPJbThkfsVzYz8dMIbu9YS8xfErtHeX1pAm3JehYwRaa8tVM/yNvdiUjoX6pdQe
+         QvqNacmT3BMFc/h1jVMlefKOWNmSZOntffbDpm/cDKtaxVNEAuaSCPwAZF0N+GCb/Kti
+         wmLeoo25RRUbGWlz1waF3gICspD+aJ1nKK+b298LX9mzCQwO4PSgPZ0lJ7e/QQbD21Yd
+         XOCA==
+X-Gm-Message-State: AC+VfDwRJO5Mvb3EisJPVB1m+bSMFFZGHxFCAbzBA4DDJpk0MQUcgeMC
+        zgGYFSiDSO7VEHn+2X/2HvrYNLoD0jM=
+X-Google-Smtp-Source: ACHHUZ6r0REYWwNVEIeWkcA9KLEIXn7432kDW+8BWdi+qz3ed4Sm4iJ/Gec/hG+D4Kk+hsvcLXQdl6Pq3d4=
+X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
+ (user=royluo job=sendgmr) by 2002:a1f:2f90:0:b0:440:5dee:5712 with SMTP id
+ v138-20020a1f2f90000000b004405dee5712mr2298808vkv.1.1685660717011; Thu, 01
+ Jun 2023 16:05:17 -0700 (PDT)
+Date:   Thu,  1 Jun 2023 23:04:56 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230601230456.2234972-1-royluo@google.com>
+Subject: [PATCH v1] usb: core: add sysfs entry for usb device state
+From:   Roy Luo <royluo@google.com>
+To:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Roy Luo <royluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Expose usb device state to userland as the information is useful in
+detecting non-compliant setups and diagnosing enumeration failures.
+For example:
+- End-to-end signal integrity issues: the device would fail port reset
+  repeatedly and thus be stuck in POWERED state.
+- Charge-only cables (missing D+/D- lines): the device would never enter
+  POWERED state as the HC would not see any pullup.
 
+What's the status quo?
+We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
+to flag potential setup issues, but there's no good way to expose them to
+userspace.
 
-On 5/30/2023 3:51 PM, Thinh Nguyen wrote:
-> Hi,
-> 
-> On Fri, May 26, 2023, Elson Roy Serrao wrote:
->> For bus suspend scenario we should skip controller halt
->> as we still have the usb cable connected. So modify the
-> 
-> How can you know when the host requests for resume to wakeup the device?
-> We haven't implemented hibernation to handle that. If it's communicated
-> through the glue layer specific via the phy's event, then how do you
-> plan to make it generic and not specific to your platform?
-> 
+Why add a sysfs entry in struct usb_port instead of struct usb_device?
+The struct usb_device is not device_add() to the system until it's in
+ADDRESS state hence we would miss the first two states. The struct
+usb_port is a better place to keep the information because its life
+cycle is longer than the struct usb_device that is attached to the port.
 
-The wakeup/resume path is platform dependent and is handled by phy 
-sideband signalling through an external interrupt. This patch handles 
-the dwc3 RT resume once the glue driver resume is triggered for bus 
-resume scenario.
-According to the dwc3 data book (Section7.2) hibernation is an optional 
-feature. So we may not be able to make it generic?
-Adding a dt node (say snps,external-wakeup) to distinguish the wakeup 
-path and having a check against that flag in the dwc3 RT pm ops to 
-handle bus suspend/resume, would that be an acceptable solution ?
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+This patch comes directly from RFC v2 after being reviewed by Alan Stern
+Link: https://lore.kernel.org/all/20230531010134.1092942-1-royluo@google.com/
+More discussion about implementation options is in RFC v1
+Link: https://lore.kernel.org/all/20230525173818.219633-1-royluo@google.com/
+---
+ Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++++
+ drivers/usb/core/hub.c                  | 19 +++++++++++++++++++
+ drivers/usb/core/hub.h                  |  2 ++
+ drivers/usb/core/port.c                 | 11 +++++++++++
+ 4 files changed, 41 insertions(+)
 
-Regards
-Elson
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index cb172db41b34..155770f18f9c 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -292,6 +292,15 @@ Description:
+ 		which is marked with early_stop has failed to initialize, it will ignore
+ 		all future connections until this attribute is clear.
+ 
++What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/state
++Date:		May 2023
++Contact:	Roy Luo <royluo@google.com>
++Description:
++		Indicates current state of the USB device attached to the port. Valid
++		states are: 'not-attached', 'attached', 'powered',
++		'reconnecting', 'unauthenticated', 'default', 'addressed',
++		'configured', and 'suspended'.
++
+ What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+ Date:		May 2013
+ Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..35d94288726b 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2018,6 +2018,23 @@ bool usb_device_is_owned(struct usb_device *udev)
+ 	return !!hub->ports[udev->portnum - 1]->port_owner;
+ }
+ 
++static void update_port_device_state(struct usb_device *udev)
++{
++	struct usb_port *port_dev = NULL;
++	struct usb_hub *hub = NULL;
++	struct kernfs_node *state_node = NULL;
++
++	if (udev->parent) {
++		hub = usb_hub_to_struct_hub(udev->parent);
++		port_dev = hub->ports[udev->portnum - 1];
++		WRITE_ONCE(port_dev->state, udev->state);
++		state_node = sysfs_get_dirent(port_dev->dev.kobj.sd, "state");
++		if (state_node) {
++			sysfs_notify_dirent(state_node);
++		}
++	}
++}
++
+ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+ {
+ 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+@@ -2030,6 +2047,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+ 	if (udev->state == USB_STATE_SUSPENDED)
+ 		udev->active_duration -= jiffies;
+ 	udev->state = USB_STATE_NOTATTACHED;
++	update_port_device_state(udev);
+ }
+ 
+ /**
+@@ -2086,6 +2104,7 @@ void usb_set_device_state(struct usb_device *udev,
+ 				udev->state != USB_STATE_SUSPENDED)
+ 			udev->active_duration += jiffies;
+ 		udev->state = new_state;
++		update_port_device_state(udev);
+ 	} else
+ 		recursively_mark_NOTATTACHED(udev);
+ 	spin_unlock_irqrestore(&device_state_lock, flags);
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index e23833562e4f..cd13fe189726 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -84,6 +84,7 @@ struct usb_hub {
+  * @peer: related usb2 and usb3 ports (share the same connector)
+  * @req: default pm qos request for hubs without port power control
+  * @connect_type: port's connect type
++ * @state: device state of the usb device attached to the port
+  * @location: opaque representation of platform connector location
+  * @status_lock: synchronize port_event() vs usb_port_{suspend|resume}
+  * @portnum: port index num based one
+@@ -100,6 +101,7 @@ struct usb_port {
+ 	struct usb_port *peer;
+ 	struct dev_pm_qos_request *req;
+ 	enum usb_port_connect_type connect_type;
++	enum usb_device_state state;
+ 	usb_port_location_t location;
+ 	struct mutex status_lock;
+ 	u32 over_current_count;
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 06a8f1f84f6f..745f2a3aafba 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -160,6 +160,16 @@ static ssize_t connect_type_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RO(connect_type);
+ 
++static ssize_t state_show(struct device *dev,
++			  struct device_attribute *attr, char *buf)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	enum usb_device_state state = READ_ONCE(port_dev->state);
++
++	return sprintf(buf, "%s\n", usb_state_string(state));
++}
++static DEVICE_ATTR_RO(state);
++
+ static ssize_t over_current_count_show(struct device *dev,
+ 				       struct device_attribute *attr, char *buf)
+ {
+@@ -259,6 +269,7 @@ static DEVICE_ATTR_RW(usb3_lpm_permit);
+ 
+ static struct attribute *port_dev_attrs[] = {
+ 	&dev_attr_connect_type.attr,
++	&dev_attr_state.attr,
+ 	&dev_attr_location.attr,
+ 	&dev_attr_quirks.attr,
+ 	&dev_attr_over_current_count.attr,
 
-> The reason we halt the controller and force a soft-disconnect is because
-> we don't have a handle for this yet. Perhaps I'm missing something here
-> because I don't see you handle it here either.
-> 
->> runtime pm ops to handle bus suspend scenario. Also invoke
->> autosuspend when device receives U3 notification so that
->> controller can enter runtime suspended state. Ensure that
->> the controller is brought out of runtime suspend before
->> triggering remote wakeup.
->>
->> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->> ---
->>   drivers/usb/dwc3/core.c   | 19 +++++++++++++++++++
->>   drivers/usb/dwc3/gadget.c | 40 +++++++++++++++++++++++++++++++++-------
->>   2 files changed, 52 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 278cd1c..7787805 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -2119,6 +2119,12 @@ static int dwc3_runtime_suspend(struct device *dev)
->>   {
->>   	struct dwc3     *dwc = dev_get_drvdata(dev);
->>   	int		ret;
->> +	u32		reg;
->> +
->> +	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-> 
-> This function isn't device mode specific, but you're checking device
-> mode specific status here.
-> 
-Will move this under DEVICE role.
+base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
-Thanks
-Elson
->> +	/* For bus suspend case do not halt the controller */
->> +	if (dwc->connected && (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U3))
->> +		return 0;
->>   
->>   	if (dwc3_runtime_checks(dwc))
->>   		return -EBUSY;
->> @@ -2135,6 +2141,12 @@ static int dwc3_runtime_resume(struct device *dev)
->>   	struct dwc3     *dwc = dev_get_drvdata(dev);
->>   	int		ret;
->>   
->> +	/* resume from bus suspend */
->> +	if (dwc->connected) {
->> +		dwc3_gadget_process_pending_events(dwc);
->> +		goto resume;
->> +	}
->> +
->>   	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
->>   	if (ret)
->>   		return ret;
->> @@ -2149,6 +2161,7 @@ static int dwc3_runtime_resume(struct device *dev)
->>   		break;
->>   	}
->>   
->> +resume:
->>   	pm_runtime_mark_last_busy(dev);
->>   
->>   	return 0;
->> @@ -2157,9 +2170,14 @@ static int dwc3_runtime_resume(struct device *dev)
->>   static int dwc3_runtime_idle(struct device *dev)
->>   {
->>   	struct dwc3     *dwc = dev_get_drvdata(dev);
->> +	u32		reg;
->>   
->>   	switch (dwc->current_dr_role) {
->>   	case DWC3_GCTL_PRTCAP_DEVICE:
->> +		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->> +		/* for bus suspend case return success */
->> +		if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U3 && dwc->connected)
->> +			goto autosuspend;
->>   		if (dwc3_runtime_checks(dwc))
->>   			return -EBUSY;
->>   		break;
->> @@ -2169,6 +2187,7 @@ static int dwc3_runtime_idle(struct device *dev)
->>   		break;
->>   	}
->>   
->> +autosuspend:
->>   	pm_runtime_mark_last_busy(dev);
->>   	pm_runtime_autosuspend(dev);
->>   
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 5965796..7587912 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2400,15 +2400,21 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
->>   		return -EINVAL;
->>   	}
->>   
->> -	spin_lock_irqsave(&dwc->lock, flags);
->>   	if (!dwc->gadget->wakeup_armed) {
->>   		dev_err(dwc->dev, "not armed for remote wakeup\n");
->> -		spin_unlock_irqrestore(&dwc->lock, flags);
->>   		return -EINVAL;
->>   	}
->> -	ret = __dwc3_gadget_wakeup(dwc, true);
->>   
->> +	ret = pm_runtime_resume_and_get(dwc->dev);
->> +	if (ret < 0) {
->> +		pm_runtime_set_suspended(dwc->dev);
->> +		return ret;
->> +	}
->> +
->> +	spin_lock_irqsave(&dwc->lock, flags);
->> +	ret = __dwc3_gadget_wakeup(dwc, true);
->>   	spin_unlock_irqrestore(&dwc->lock, flags);
->> +	pm_runtime_put_noidle(dwc->dev);
->>   
->>   	return ret;
->>   }
->> @@ -2427,6 +2433,12 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>   		return -EINVAL;
->>   	}
->>   
->> +	ret = pm_runtime_resume_and_get(dwc->dev);
->> +	if (ret < 0) {
->> +		pm_runtime_set_suspended(dwc->dev);
->> +		return ret;
->> +	}
->> +
->>   	spin_lock_irqsave(&dwc->lock, flags);
->>   	/*
->>   	 * If the link is in U3, signal for remote wakeup and wait for the
->> @@ -2437,6 +2449,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>   		ret = __dwc3_gadget_wakeup(dwc, false);
->>   		if (ret) {
->>   			spin_unlock_irqrestore(&dwc->lock, flags);
->> +			pm_runtime_put_noidle(dwc->dev);
->>   			return -EINVAL;
->>   		}
->>   		dwc3_resume_gadget(dwc);
->> @@ -2450,6 +2463,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>   		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
->>   
->>   	spin_unlock_irqrestore(&dwc->lock, flags);
->> +	pm_runtime_put_noidle(dwc->dev);
->>   
->>   	return ret;
->>   }
->> @@ -2711,21 +2725,23 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>   	/*
->>   	 * Avoid issuing a runtime resume if the device is already in the
->>   	 * suspended state during gadget disconnect.  DWC3 gadget was already
->> -	 * halted/stopped during runtime suspend.
->> +	 * halted/stopped during runtime suspend except for bus suspend case
->> +	 * where we would have skipped the controller halt.
->>   	 */
->>   	if (!is_on) {
->>   		pm_runtime_barrier(dwc->dev);
->> -		if (pm_runtime_suspended(dwc->dev))
->> +		if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
->>   			return 0;
->>   	}
->>   
->>   	/*
->>   	 * Check the return value for successful resume, or error.  For a
->>   	 * successful resume, the DWC3 runtime PM resume routine will handle
->> -	 * the run stop sequence, so avoid duplicate operations here.
->> +	 * the run stop sequence except for bus resume case, so avoid
->> +	 * duplicate operations here.
->>   	 */
->>   	ret = pm_runtime_get_sync(dwc->dev);
->> -	if (!ret || ret < 0) {
->> +	if ((!ret && !dwc->connected) || ret < 0) {
->>   		pm_runtime_put(dwc->dev);
->>   		return 0;
->>   	}
->> @@ -4313,6 +4329,8 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
->>   		dwc3_suspend_gadget(dwc);
->>   
->>   	dwc->link_state = next;
->> +	pm_runtime_mark_last_busy(dwc->dev);
->> +	pm_request_autosuspend(dwc->dev);
->>   }
->>   
->>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
->> @@ -4703,7 +4721,15 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
->>   {
->>   	if (dwc->pending_events) {
->>   		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
->> +		pm_runtime_put(dwc->dev);
->>   		dwc->pending_events = false;
->>   		enable_irq(dwc->irq_gadget);
->> +		/*
->> +		 * We have only stored the pending events as part
->> +		 * of dwc3_interrupt() above, but those events are
->> +		 * not yet handled. So explicitly invoke the
->> +		 * interrupt handler for handling those events.
->> +		 */
->> +		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
->>   	}
->>   }
->> -- 
->> 2.7.4
->>
-> 
-> BR,
-> Thinh
