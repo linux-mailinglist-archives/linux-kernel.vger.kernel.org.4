@@ -2,183 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7B471EECE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8195971EEDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjFAQ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S231517AbjFAQ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFAQ0D (ORCPT
+        with ESMTP id S231544AbjFAQ1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:26:03 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32CE133;
-        Thu,  1 Jun 2023 09:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685636761; x=1717172761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q1NNNfNs1qkINp4+7F0o+S22gLPh78FVwhQOR7EmNDk=;
-  b=WCtBTXEMjhLetcnNCW8dM0WRYV9m75ZwDYcIkIzNBmDYp418uTMxcnyX
-   ixHaZrWvHUQ4NWCr8XHHm6wrzxSmwGKONUYrhenI6M6JJkFtWLTfeK00C
-   Cq/xP/g4Vh7pm5Frre0W0BOYLBymxLz9S8jphH2UZz9UsrvurU81Fk388
-   Ko73DFYhoNunjoXKzN+RX6yJncDjQLoJ/TTkMdsZXBMoDBdCqDjUxluHG
-   XmwPrY3aJ2YA6dtN7G8PxzJGtx7uaFK5eRLVM/PsGRQ7oqSLGH2iwbfVE
-   IkHQwYvozsuEGYGct7dUGUyXkoV4EnOQO+dZNBh3SuEBR2zEFjGuflSrn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353103077"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="353103077"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:26:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="740424758"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="740424758"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2023 09:25:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q4l7S-000SYH-2G;
-        Thu, 01 Jun 2023 19:25:46 +0300
-Date:   Thu, 1 Jun 2023 19:25:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Andrew Lunn <andrew@lunn.ch>, sparclinux@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        xen-devel@lists.xenproject.org, Matt Turner <mattst88@gmail.com>,
-        Anatolij Gustschin <agust@denx.de>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-mips@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-alpha@vger.kernel.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <ZHjGik12vSFgi1eO@smile.fi.intel.com>
-References: <ZF6YIezraETr9iNM@bhelgaas>
- <ZHZpcli2UmdzHgme@bhelgaas>
- <CAOiHx==5YWhDiZP2PyHZiJrmtqRzvqCqoSO59RwuYuR85BezBg@mail.gmail.com>
+        Thu, 1 Jun 2023 12:27:00 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FF418D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:26:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b1806264e9so5464145ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1685636817; x=1688228817;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nziXaIgwJ/5heFWqluluHQ82ERFUdGM6TmjJraDSTks=;
+        b=ES7I+iTe/v1lSnNrJYYaIzF7qH+PXEowpeFSRu7jvFOzX6UYcw7nNlu5gpBUHEgb3Z
+         KPJaRvZYNmqKFsjy5Qmr2pwZvg1wRcSpIyThhnRgN2ny6Gw0UsYWa0r6Owuaw020lOMt
+         Ko/4uP5G/cCnoZIuoocAIxmii+QLeZRrH8bn69pMv1D2VeRTYBvQm/e70cGC1lNBrY+J
+         UUXffw3Hq0FJOrA2oGTrQ6Nl/1Q+oCbI9+sFTiU88RT9F7o/Uz/9+ma6aOKYx0p8/p7P
+         iBtPzDg/CAuxvEvNTF+aOzDsojTE9nRze5lDlFveFMsLtOcJ0mVrkAQ+u9sPgmETIGPq
+         cCZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685636817; x=1688228817;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nziXaIgwJ/5heFWqluluHQ82ERFUdGM6TmjJraDSTks=;
+        b=BKK1BPgOkkLtdwcuCMtp1F4buzSSFn5EatIYRDePF7sfI9rufRu7mof8d8InQIXzpi
+         1IX6J4gi8MTUSpg4291ThPuO+OIr79ROJ0bA5dllIZ0HtpyQW85G+2fWfvoG7KwoJ7JP
+         +0cKfbPa1kdGZePji6WCdImuOM66bMYtxINKXnJySMhEE4AFJ2nylA6z24bEWgE36T07
+         +c2vIZ2syoCNx6/qBAmum6IpWGs83jzOjF2Tg86QZM1srNFTe6UrY6S2gFBmRA6NRftX
+         b1709NcJaKRqN8C3vZo1bvh+j1wIS/phvht21f3wwZmFRMtxaUf91YJn+8PfUJG/tNxU
+         +yNg==
+X-Gm-Message-State: AC+VfDx1TsLct0JNclgZgyTQH5dnRN/ocoyurzOH7UNIbfPuag79LEim
+        FKvNbokAyDdgsxt6RZj9bHe4mQ==
+X-Google-Smtp-Source: ACHHUZ56Lbux4cPw2Lf7EpeSv2aJodEmoCdmuIv0dKl7yhbW+3eGIDVr/H42xGKGSmCkv0LyHn1Fzg==
+X-Received: by 2002:a17:902:b18f:b0:1ab:7c4:eb24 with SMTP id s15-20020a170902b18f00b001ab07c4eb24mr5837438plr.22.1685636816818;
+        Thu, 01 Jun 2023 09:26:56 -0700 (PDT)
+Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b001acaf7e26bbsm3750487plk.53.2023.06.01.09.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 09:26:56 -0700 (PDT)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     david@redhat.com
+Cc:     osalvador@suse.de, rppt@kernel.org, mhocko@kernel.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [PATCH 1/2] mm/memory_hotplug: remove reset_node_managed_pages() in hotadd_init_pgdat()
+Date:   Thu,  1 Jun 2023 16:26:25 +0000
+Message-Id: <20230601162626.1030-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOiHx==5YWhDiZP2PyHZiJrmtqRzvqCqoSO59RwuYuR85BezBg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 08:48:35PM +0200, Jonas Gorski wrote:
-> On Tue, 30 May 2023 at 23:34, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, May 12, 2023 at 02:48:51PM -0500, Bjorn Helgaas wrote:
-> > > On Fri, May 12, 2023 at 01:56:29PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, May 09, 2023 at 01:21:22PM -0500, Bjorn Helgaas wrote:
-> > > > > On Tue, Apr 04, 2023 at 11:11:01AM -0500, Bjorn Helgaas wrote:
-> > > > > > On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
-> > > > > > > Provide two new helper macros to iterate over PCI device resources and
-> > > > > > > convert users.
-> > > > >
-> > > > > > Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
-> > > > >
-> > > > > This is 09cc90063240 ("PCI: Introduce pci_dev_for_each_resource()")
-> > > > > upstream now.
-> > > > >
-> > > > > Coverity complains about each use,
-> > > >
-> > > > It needs more clarification here. Use of reduced variant of the
-> > > > macro or all of them? If the former one, then I can speculate that
-> > > > Coverity (famous for false positives) simply doesn't understand `for
-> > > > (type var; var ...)` code.
-> > >
-> > > True, Coverity finds false positives.  It flagged every use in
-> > > drivers/pci and drivers/pnp.  It didn't mention the arch/alpha, arm,
-> > > mips, powerpc, sh, or sparc uses, but I think it just didn't look at
-> > > those.
-> > >
-> > > It flagged both:
-> > >
-> > >   pbus_size_io    pci_dev_for_each_resource(dev, r)
-> > >   pbus_size_mem   pci_dev_for_each_resource(dev, r, i)
-> > >
-> > > Here's a spreadsheet with a few more details (unfortunately I don't
-> > > know how to make it dump the actual line numbers or analysis like I
-> > > pasted below, so "pci_dev_for_each_resource" doesn't appear).  These
-> > > are mostly in the "Drivers-PCI" component.
-> > >
-> > > https://docs.google.com/spreadsheets/d/1ohOJwxqXXoDUA0gwopgk-z-6ArLvhN7AZn4mIlDkHhQ/edit?usp=sharing
-> > >
-> > > These particular reports are in the "High Impact Outstanding" tab.
-> >
-> > Where are we at?  Are we going to ignore this because some Coverity
-> > reports are false positives?
-> 
-> Looking at the code I understand where coverity is coming from:
-> 
-> #define __pci_dev_for_each_res0(dev, res, ...)                         \
->        for (unsigned int __b = 0;                                      \
->             res = pci_resource_n(dev, __b), __b < PCI_NUM_RESOURCES;   \
->             __b++)
-> 
->  res will be assigned before __b is checked for being less than
-> PCI_NUM_RESOURCES, making it point to behind the array at the end of
-> the last loop iteration.
+managed pages has already been set to 0 in free_area_init_core_hotplug(),
+so it's pointless to reset again.
 
-Which is fine and you stumbled over the same mistake I made, that's why the
-documentation has been added to describe why the heck this macro is written
-the way it's written.
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+---
+ mm/memory_hotplug.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Coverity sucks.
-
-> Rewriting the test expression as
-> 
-> __b < PCI_NUM_RESOURCES && (res = pci_resource_n(dev, __b));
-> 
-> should avoid the (coverity) warning by making use of lazy evaluation.
-
-Obviously NAK.
-
-> It probably makes the code slightly less performant as res will now be
-> checked for being not NULL (which will always be true), but I doubt it
-> will be significant (or in any hot paths).
-
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 8e0fa209d533..65e385f34679 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1210,7 +1210,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
+ 	 * online_pages() and offline_pages().
+ 	 * TODO: should be in free_area_init_core_hotplug?
+ 	 */
+-	reset_node_managed_pages(pgdat);
+ 	reset_node_present_pages(pgdat);
+ 
+ 	return pgdat;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
