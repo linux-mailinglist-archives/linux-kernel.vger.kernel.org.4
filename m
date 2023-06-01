@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABF57192D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A4F7192DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjFAF7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 01:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S231767AbjFAF7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 01:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjFAF7X (ORCPT
+        with ESMTP id S231667AbjFAF7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 01:59:23 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EDC134
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:05 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53f6f7d1881so501768a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:05 -0700 (PDT)
+        Thu, 1 Jun 2023 01:59:24 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C658C18D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:07 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-65026629c1eso57925b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685599145; x=1688191145;
+        d=google.com; s=20221208; t=1685599147; x=1688191147;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tA6ilenfOVCfqFhRPW4Q4OY0y2aBdfOYBjx4iLdDwxg=;
-        b=uu0J52T7qkJscVOK+7yZFuNHChkY0GtIR0E7rv/znylDY1txNu0fcXPhTO3RrOWXiH
-         FKxkrh91Okg9+vhSl4s6hK0g7sxWjwUOuoSnDNp1ksWF3GZHI6YIe9I75iVdNFRkBMKV
-         TjthkIwJBICMU6e+6kEjpZtvjrpby4RjpYFomTkPjtvEXSTcYCgbkssqnnc9K0WSdk25
-         To3zQQA3qhG4TFEZ9mLaeIkm1c5yg2XoLH9wLDcT1afc/SPsa8xBnnH/cs6IRsspfWld
-         d0p4zy53AgJD8flnmHvJeQTkCs1U2bUkPEKyAvupVLtFulrEnhz4aPytEsS+GgLkJNrM
-         5c4g==
+        bh=luB7F5gyV9IZ2t1qXPs5v7WDUVowNcPRs+IYymLmMxo=;
+        b=QiR19i8UT0lRAkiXRHp/mtsGysuaM5y0+5Li2juqrCj7QwZFqTGE0tSLYCC/CH2ZTf
+         0BQ13MyrxFE1ZjENkdwczkQgmxgU8paPsfNvIeT5Z4yLbMpF8m0tbk1zXXgK3nPt+6/M
+         3HVpz3U8ONs4a9eA5wu+5ckQanQ/QsYAUX9RfQNZfZm/4qvXcBZMlohVif/DbeORT/1x
+         4zSmw161pXVGJgmAMQsEbNrBBj+HtaAmoea6XGvI88x2VU7KO1SCvYEtF39qzq3BrafH
+         QpEd/FONUUUp9pXDcE1d+odQZ4JTJtT9a5VTKOqCWluLZz40eX+YTV+Z3Ig6YOipIxm6
+         eJzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685599145; x=1688191145;
+        d=1e100.net; s=20221208; t=1685599147; x=1688191147;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tA6ilenfOVCfqFhRPW4Q4OY0y2aBdfOYBjx4iLdDwxg=;
-        b=WnZK6N45JutQ4DCcaNtt4m3HZyzeILuPTNap3rYK39BAVFENl+2M+EWvex55/VUFVD
-         3WVIfORQS5gUqimZxji+t8y9wqUmtRrg54Hj/6dt34VgLdLWUvCgq45eny9Zr0k1XFRr
-         JUMwaArwmD1NXL8vAkuMSm1ca7842VlIWiwczBeJ3tNxVYyZuextf/mWiqozh8VBmxrN
-         4pmjK+jcUltQ5oredebpFMjMCaeeEUKppzl/R12zcHaCqnXnpKYQ4PuXpmFPRdQ223NI
-         XtNk6rj3uvPW3X48g1o/HS4zwnqmHnv1QqrAxren49o8obM59c2yVdn/cx/QY4uQYcpn
-         6TJg==
-X-Gm-Message-State: AC+VfDz0ZdQrC4cNYvdlvgOYnx4tjQ8FOmJzZAnCbndT+GeUdkv/RZHo
-        cit17ox73ctB2Qz95j1ttu0imazbGqtKY1UtSru+qHu8Uo9+wBEM5GB1fAqyNdx37BGVF82Kxac
-        qhuZ3jYS4e1RyuRTmwoot7qtKY5culOnyV3+nrGrIZgOXG8pCNMYSl+vl5bRNbeDTEcH3O4o=
-X-Google-Smtp-Source: ACHHUZ54FztApJjDueu0/LmkVbt/bJ5UP2ez5eKigt0JjhWe9SE6G5UjKN5mHPKh6fQgPYF9BRaL94HcaKhd
+        bh=luB7F5gyV9IZ2t1qXPs5v7WDUVowNcPRs+IYymLmMxo=;
+        b=eoYr6ZFiCFefppcFBFZlKPItM95QtmMIpeSRorCQhDjluiLMQxhn0shjIZgp4sMGcq
+         ag0gHAxB5McX0o99ikoUxoCSq9cqdSjDQu89Y4FJNsdjr07PlY14RTuAyUQOMbTSgeS0
+         S5IIMVBu2hVm62iu+W5Om286ERIxTA7+AocnnTqDZSyzXuUf5IGSyKn4Y7TUyPKQ/4d+
+         Nl9U01beDI+eT02ETp+XqZLEKFnS3bghL1Y/5Blzo7i1zGmidYfx44osMlIJlvOQJ/f9
+         EKNz6BbTLxN9IoRnFNldLQoDwhiS+pVWPSVUaiRMDhdzpKSOdTKxkdDHuxQdvBf9/khm
+         56lw==
+X-Gm-Message-State: AC+VfDxB2Djr2VnLHQ4MDzBi/ql7Qriyh+co1930kEJlf15lE6XM1DsV
+        LQmk1QWdwSSeKUKvHzLqBfw/nHloPt8dxelRktL2Ik3+f93OHGvKrhbKSB53Ho5CdjvoC/hHb7A
+        X3O8L3EgIRD+JlsQkweV6efVD+yVRUa3bKcJDPlNMoerOMYwg0wD5F/h9SkH+8TpaN/UbK0M=
+X-Google-Smtp-Source: ACHHUZ61YsxzFzSxcLzENguWBQp0dZzIVWTE0JbN+5zJJ9MrISL/JuQrZx+VuQGk4OEWb4hVbUjg+xFalI4D
 X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a63:d044:0:b0:53f:32cf:bcd1 with SMTP id
- s4-20020a63d044000000b0053f32cfbcd1mr1588583pgi.5.1685599144613; Wed, 31 May
- 2023 22:59:04 -0700 (PDT)
-Date:   Thu,  1 Jun 2023 05:58:08 +0000
+ (user=jstultz job=sendgmr) by 2002:a63:914b:0:b0:51b:3c11:fb17 with SMTP id
+ l72-20020a63914b000000b0051b3c11fb17mr1594380pge.12.1685599146627; Wed, 31
+ May 2023 22:59:06 -0700 (PDT)
+Date:   Thu,  1 Jun 2023 05:58:09 +0000
 In-Reply-To: <20230601055846.2349566-1-jstultz@google.com>
 Mime-Version: 1.0
 References: <20230601055846.2349566-1-jstultz@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230601055846.2349566-6-jstultz@google.com>
-Subject: [PATCH v4 05/13] locking/mutex: Add task_struct::blocked_lock to
- serialize changes to the blocked_on state
+Message-ID: <20230601055846.2349566-7-jstultz@google.com>
+Subject: [PATCH v4 06/13] locking/mutex: Expose __mutex_owner()
 From:   John Stultz <jstultz@google.com>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
         Joel Fernandes <joelaf@google.com>,
         Qais Yousef <qyousef@google.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Valentin Schneider <vschneid@redhat.com>,
@@ -89,17 +88,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Juri Lelli <juri.lelli@redhat.com>
 
-This patch was split out from the later "sched: Add proxy
-execution" patch.
-
-Adds blocked_lock to the task_struct so we can safely keep track
-of which tasks are blocked on us.
-
-This will be used for tracking blocked-task/mutex chains with
-the prox-execution patch in a similar fashion to how priority
-inheritence is done with rt_mutexes.
+Implementing proxy execution requires that scheduler code be able to
+identify the current owner of a mutex. Expose __mutex_owner() for
+this purpose (alone!).
 
 Cc: Joel Fernandes <joelaf@google.com>
 Cc: Qais Yousef <qyousef@google.com>
@@ -120,179 +113,95 @@ Cc: Waiman Long <longman@redhat.com>
 Cc: Boqun Feng <boqun.feng@gmail.com>
 Cc: "Paul E . McKenney" <paulmck@kernel.org>
 Cc: kernel-team@android.com
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-[rebased, added comments and changelog]
 Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-[Fixed rebase conflicts]
-[squashed sched: Ensure blocked_on is always guarded by blocked_lock]
+[Removed the EXPORT_SYMBOL]
 Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-[fix rebase conflicts, various fixes & tweaks commented inline]
-[squashed sched: Use rq->curr vs rq->proxy checks]
 Signed-off-by: Connor O'Brien <connoro@google.com>
-[jstultz: Split out from bigger patch]
+[jstultz: Reworked per Peter's suggestions]
 Signed-off-by: John Stultz <jstultz@google.com>
 ---
-v2:
-* Split out into its own patch
 v4:
-* Remove verbose comments/questions to avoid review
-  distractions, as suggested by Dietmar
-* Fixed nested block_on locking for ww_mutex access
+* Move __mutex_owner() to kernel/locking/mutex.h instead of
+  adding a new globally available accessor function to keep
+  the exposure of this low, along with keeping it an inline
+  function, as suggested by PeterZ
 ---
- include/linux/sched.h     |  1 +
- init/init_task.c          |  1 +
- kernel/fork.c             |  1 +
- kernel/locking/mutex.c    | 22 ++++++++++++++++++----
- kernel/locking/ww_mutex.h |  6 ++++++
- 5 files changed, 27 insertions(+), 4 deletions(-)
+ kernel/locking/mutex.c | 25 -------------------------
+ kernel/locking/mutex.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index a312a2ff47bf..6b0d4b398b31 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1142,6 +1142,7 @@ struct task_struct {
- #endif
- 
- 	struct mutex			*blocked_on;	/* lock we're blocked on */
-+	raw_spinlock_t			blocked_lock;
- 
- #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
- 	int				non_block_count;
-diff --git a/init/init_task.c b/init/init_task.c
-index ff6c4b9bfe6b..189ce67e9704 100644
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -130,6 +130,7 @@ struct task_struct init_task
- 	.journal_info	= NULL,
- 	INIT_CPU_TIMERS(init_task)
- 	.pi_lock	= __RAW_SPIN_LOCK_UNLOCKED(init_task.pi_lock),
-+	.blocked_lock	= __RAW_SPIN_LOCK_UNLOCKED(init_task.blocked_lock),
- 	.timer_slack_ns = 50000, /* 50 usec default slack */
- 	.thread_pid	= &init_struct_pid,
- 	.thread_group	= LIST_HEAD_INIT(init_task.thread_group),
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9244c540bb13..1ea1b2d527bb 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2359,6 +2359,7 @@ __latent_entropy struct task_struct *copy_process(
- 	ftrace_graph_init_task(p);
- 
- 	rt_mutex_init_task(p);
-+	raw_spin_lock_init(&p->blocked_lock);
- 
- 	lockdep_assert_irqs_enabled();
- #ifdef CONFIG_PROVE_LOCKING
 diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index d7a202c35ebe..ac3d2e350fac 100644
+index ac3d2e350fac..8c9f9dffe473 100644
 --- a/kernel/locking/mutex.c
 +++ b/kernel/locking/mutex.c
-@@ -616,6 +616,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	}
+@@ -56,31 +56,6 @@ __mutex_init(struct mutex *lock, const char *name, struct lock_class_key *key)
+ }
+ EXPORT_SYMBOL(__mutex_init);
  
- 	raw_spin_lock_irqsave(&lock->wait_lock, flags);
-+	raw_spin_lock(&current->blocked_lock);
- 	/*
- 	 * After waiting to acquire the wait_lock, try again.
- 	 */
-@@ -677,6 +678,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 				goto err;
- 		}
- 
-+		raw_spin_unlock(&current->blocked_lock);
- 		raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
- 		if (ww_ctx)
- 			ww_ctx_wake(ww_ctx);
-@@ -684,6 +686,8 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 
- 		first = __mutex_waiter_is_first(lock, &waiter);
- 
-+		raw_spin_lock_irqsave(&lock->wait_lock, flags);
-+		raw_spin_lock(&current->blocked_lock);
- 		/*
- 		 * Gets reset by ttwu_runnable().
- 		 */
-@@ -698,15 +702,23 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 			break;
- 
- 		if (first) {
-+			bool acquired;
-+
-+			/*
-+			 * mutex_optimistic_spin() can schedule, so  we need to
-+			 * release these locks before calling it.
-+			 */
-+			raw_spin_unlock(&current->blocked_lock);
-+			raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
- 			trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
--			if (mutex_optimistic_spin(lock, ww_ctx, &waiter))
-+			acquired = mutex_optimistic_spin(lock, ww_ctx, &waiter);
-+			raw_spin_lock_irqsave(&lock->wait_lock, flags);
-+			raw_spin_lock(&current->blocked_lock);
-+			if (acquired)
- 				break;
- 			trace_contention_begin(lock, LCB_F_MUTEX);
- 		}
+-/*
+- * @owner: contains: 'struct task_struct *' to the current lock owner,
+- * NULL means not owned. Since task_struct pointers are aligned at
+- * at least L1_CACHE_BYTES, we have low bits to store extra state.
+- *
+- * Bit0 indicates a non-empty waiter list; unlock must issue a wakeup.
+- * Bit1 indicates unlock needs to hand the lock to the top-waiter
+- * Bit2 indicates handoff has been done and we're waiting for pickup.
+- */
+-#define MUTEX_FLAG_WAITERS	0x01
+-#define MUTEX_FLAG_HANDOFF	0x02
+-#define MUTEX_FLAG_PICKUP	0x04
 -
--		raw_spin_lock_irqsave(&lock->wait_lock, flags);
- 	}
--	raw_spin_lock_irqsave(&lock->wait_lock, flags);
- acquired:
- 	__set_current_state(TASK_RUNNING);
- 
-@@ -733,6 +745,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	if (ww_ctx)
- 		ww_mutex_lock_acquired(ww, ww_ctx);
- 
-+	raw_spin_unlock(&current->blocked_lock);
- 	raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
- 	if (ww_ctx)
- 		ww_ctx_wake(ww_ctx);
-@@ -745,6 +758,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	__mutex_remove_waiter(lock, &waiter);
- err_early_kill:
- 	trace_contention_end(lock, ret);
-+	raw_spin_unlock(&current->blocked_lock);
- 	raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
- 	debug_mutex_free_waiter(&waiter);
- 	mutex_release(&lock->dep_map, ip);
-diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
-index 7d623417b496..8378b533bb1e 100644
---- a/kernel/locking/ww_mutex.h
-+++ b/kernel/locking/ww_mutex.h
-@@ -287,6 +287,8 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
- 		return false;
- 
- 	if (waiter->ww_ctx->acquired > 0 && __ww_ctx_less(waiter->ww_ctx, ww_ctx)) {
-+		/* nested as we should hold current->blocked_lock already */
-+		raw_spin_lock_nested(&waiter->task->blocked_lock, SINGLE_DEPTH_NESTING);
- #ifndef WW_RT
- 		debug_mutex_wake_waiter(lock, waiter);
+-#define MUTEX_FLAGS		0x07
+-
+-/*
+- * Internal helper function; C doesn't allow us to hide it :/
+- *
+- * DO NOT USE (outside of mutex code).
+- */
+-static inline struct task_struct *__mutex_owner(struct mutex *lock)
+-{
+-	return (struct task_struct *)(atomic_long_read(&lock->owner) & ~MUTEX_FLAGS);
+-}
+-
+ static inline struct task_struct *__owner_task(unsigned long owner)
+ {
+ 	return (struct task_struct *)(owner & ~MUTEX_FLAGS);
+diff --git a/kernel/locking/mutex.h b/kernel/locking/mutex.h
+index 0b2a79c4013b..1c7d3d32def8 100644
+--- a/kernel/locking/mutex.h
++++ b/kernel/locking/mutex.h
+@@ -20,6 +20,31 @@ struct mutex_waiter {
  #endif
-@@ -297,6 +299,7 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
- 		 * blocked_on relationships that can't resolve.
- 		 */
- 		waiter->task->blocked_on = NULL;
-+		raw_spin_unlock(&waiter->task->blocked_lock);
- 	}
+ };
  
- 	return true;
-@@ -343,6 +346,8 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
- 		 * wakeup pending to re-read the wounded state.
- 		 */
- 		if (owner != current) {
-+			/* nested as we should hold current->blocked_lock already */
-+			raw_spin_lock_nested(&owner->blocked_lock, SINGLE_DEPTH_NESTING);
- 			wake_q_add(&ww_ctx->wake_q, owner);
- 			/*
- 			 * When waking up the task to wound, be sure to clear the
-@@ -350,6 +355,7 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
- 			 * blocked_on relationships that can't resolve.
- 			 */
- 			owner->blocked_on = NULL;
-+			raw_spin_unlock(&owner->blocked_lock);
- 		}
- 		return true;
- 	}
++/*
++ * @owner: contains: 'struct task_struct *' to the current lock owner,
++ * NULL means not owned. Since task_struct pointers are aligned at
++ * at least L1_CACHE_BYTES, we have low bits to store extra state.
++ *
++ * Bit0 indicates a non-empty waiter list; unlock must issue a wakeup.
++ * Bit1 indicates unlock needs to hand the lock to the top-waiter
++ * Bit2 indicates handoff has been done and we're waiting for pickup.
++ */
++#define MUTEX_FLAG_WAITERS	0x01
++#define MUTEX_FLAG_HANDOFF	0x02
++#define MUTEX_FLAG_PICKUP	0x04
++
++#define MUTEX_FLAGS		0x07
++
++/*
++ * Internal helper function; C doesn't allow us to hide it :/
++ *
++ * DO NOT USE (outside of mutex & scheduler code).
++ */
++static inline struct task_struct *__mutex_owner(struct mutex *lock)
++{
++	return (struct task_struct *)(atomic_long_read(&lock->owner) & ~MUTEX_FLAGS);
++}
++
+ #ifdef CONFIG_DEBUG_MUTEXES
+ extern void debug_mutex_lock_common(struct mutex *lock,
+ 				    struct mutex_waiter *waiter);
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
