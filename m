@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7093719134
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B18C719135
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjFADQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S231231AbjFADQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjFADPt (ORCPT
+        with ESMTP id S231325AbjFADPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 23:15:49 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132E7133;
-        Wed, 31 May 2023 20:15:46 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-77493b3d18cso24539439f.0;
-        Wed, 31 May 2023 20:15:46 -0700 (PDT)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577FB136;
+        Wed, 31 May 2023 20:15:47 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-7748d634a70so18800239f.2;
+        Wed, 31 May 2023 20:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685589345; x=1688181345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D4/gO6XzfXDIrnN6Za2h18cWQCzN5ROHDvFmtwAmudE=;
-        b=aMxcq21jtx1Z9prFEVIcVdMpob4QsBzi6pEUBVw+8fc0YVcDo9cQDOEZEYirQ/o0vh
-         3P+6XoiatoFBbtW7m+JGCcg6mVN8Uw7jgRNjzb90Fgw+oFcdyAQLiDWlTlnzckzYaBwe
-         bLU5g75Qdw/j05ZHf/Oe/aVSW4tJtWSJmE9ZgMbcK4HdzJEINvrQTNgjPrLgKt1Nq06y
-         Pu2zZzudls6QVpMbBD6V++JVip7n38ym/0xxAJDzf2OvmzVbJMAziWLqc0UawuM+cSOc
-         f3EFDu2y4EYrEXzSYyrVpWxGtPTEa7fJcHqWm64jePSrPrM1IGPw64Y8OvZic3mN6HSS
-         7jLQ==
+        d=gmail.com; s=20221208; t=1685589346; x=1688181346;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IaYUh6udDd9THZST3S1u3zp6I5I+YG9NsVc6tO6Kw5Y=;
+        b=pay7dN0xJANz/ygkmPegA/Ili85G+ez6kBMmt/EmI9wIzQnQ7+W0n16H1W+ZMow4se
+         DOqJobuP5JEYgGbIpK/KufS3Y+3/bUZvpCPUzC2CvIL0fP0J895w6OrIWyHe9WERV9Se
+         iCASxRE3MCHyFcZL/FDcO3NVkZ2LvDr7ngzN2bd1guhWun1xzUGw27emNrf7sapazJ0d
+         yszhPPxZfbyw2YpKNORuQhzpTUNkxBP1V/cflsqTGfPETttAUTOSCVHVdlq4c58x+yRE
+         BO82SYVdMR2xcaOML1g1C1aiPK0XenXBIRu7POYJ3OtoJSuwozCxT5S2oA4GL8uGZvkC
+         FHeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685589345; x=1688181345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D4/gO6XzfXDIrnN6Za2h18cWQCzN5ROHDvFmtwAmudE=;
-        b=GdeBk8LcBRExz69rbtOicceuyWzaXFneC1F9sCyKg4fLQWjMQQ/NNdHGlArUDr36e/
-         ZRUTf6nBa8BnvrRj6jTa5sPU/ntUxVIN20vH3CDXwPlnkeB6/a631i45+EoVp83vUmVU
-         sIp6X5zKRc+AKKf7/YtRw/cdIFPTdrzmVua06xaVLzRWr/8BzINO6T3KI6kXYVMsWg2T
-         2z3jMbUO5WvYvlrO81BIltmvUa4cPcwrLsKBjHq/xVYK1P1L/cSLVYETIcxXiEpG8mXu
-         8PCuzRAEfL7swM4XqAt0XXMzpaU7JQDeXv2MrCeu6zl8S9pLbIXW3P5Z+btU6f69npxv
-         QuHw==
-X-Gm-Message-State: AC+VfDzefNcgyWIneRNfwwY80E8OdPCEXDQDZEm4nWyJkE6FfbcAZNiK
-        k/uCeVcYXRFjUI1wQxx//vE=
-X-Google-Smtp-Source: ACHHUZ59Cs+/Q8eganB2/dKEb/mwwnRZnRrFojpciU475H4QwR8u+eQ9hw+kNCWMEK/u7RMYtoYEbw==
-X-Received: by 2002:a5e:a914:0:b0:775:5f74:f4c7 with SMTP id c20-20020a5ea914000000b007755f74f4c7mr7696453iod.17.1685589345144;
-        Wed, 31 May 2023 20:15:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685589346; x=1688181346;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IaYUh6udDd9THZST3S1u3zp6I5I+YG9NsVc6tO6Kw5Y=;
+        b=RDSrIVrU1n0gMFq/yOjmWC0cZFSTHfUahCloI6HVUm8g2+uZZ/jIVKf29LhKZFG6dE
+         22hK0Dy3ixymt97K6XYPnCcUqLhXUcxD/1xsMOLm8KZm1X27jkGEprrF6feHyhlETXTw
+         DWSw+Drt2hZEyasNzC5ZfRmiiI6DRq6za0OlNmREkjIJULizBTJMCMTxOnQbdQVr6bOB
+         Bh7TWYT5lrw89dYzTp7s6HZg2Ny69+kKfD0jglI74OdTgWSA/bsZOI3K5w6Wxwahdoc8
+         YUgNBrMCTCZ+bKJeRHYw59gw5hnftGUI8x24o26mseSSRn9CrUi+qstSoRXg3JgS84fX
+         NitA==
+X-Gm-Message-State: AC+VfDxUiOJa9Zxqeoe3Sw+ZRTWViVFunaddS8/qMV/O3KKBbG002LGR
+        r5d8K/nriZy2xDeC4+1f2o/Pi+GWKwM=
+X-Google-Smtp-Source: ACHHUZ6V1l4xu9iSeqWvUgoLjkIMd+VSckIxbEigJYZTda/nMbEHr1PQqiQP95OFcl2XPXbbqIdaaQ==
+X-Received: by 2002:a5e:8f44:0:b0:775:8241:724a with SMTP id x4-20020a5e8f44000000b007758241724amr6092806iop.16.1685589346525;
+        Wed, 31 May 2023 20:15:46 -0700 (PDT)
 Received: from aford-B741.lan ([2601:447:d001:897f:6ae0:d0f8:5d79:f782])
-        by smtp.gmail.com with ESMTPSA id b66-20020a0295c8000000b004165d7d6711sm1852590jai.71.2023.05.31.20.15.43
+        by smtp.gmail.com with ESMTPSA id b66-20020a0295c8000000b004165d7d6711sm1852590jai.71.2023.05.31.20.15.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 20:15:44 -0700 (PDT)
+        Wed, 31 May 2023 20:15:46 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
@@ -61,10 +62,12 @@ Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] arm64: dts: imx8mn/imx8mm-beacon:  Add HDMI
-Date:   Wed, 31 May 2023 22:15:24 -0500
-Message-Id: <20230601031527.271232-1-aford173@gmail.com>
+Subject: [PATCH 1/2] arm64: dts: imx8mn-beacon: Add HDMI video with sound
+Date:   Wed, 31 May 2023 22:15:25 -0500
+Message-Id: <20230601031527.271232-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230601031527.271232-1-aford173@gmail.com>
+References: <20230601031527.271232-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,18 +80,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DSI updates are in the DRM tree and Linux next with some updates
-that now allow the DSI to connect to an HDMI bridge and successfully
-sync displays at various resolutions and refresh rates.
+The Beacon Embedded imx8mn development kit has a DSI
+to HDMI bridge chip.  The bridge supports stereo audio
+and hot-plugging.
 
-Adam Ford (2):
-  arm64: dts: imx8mn-beacon: Add HDMI video with sound
-  arm64: dts: imx8mm-beacon: Add HDMI video with sound
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
- .../boot/dts/freescale/imx8mm-beacon-kit.dts  | 132 +++++++++++++++++
- .../boot/dts/freescale/imx8mn-beacon-kit.dts  | 134 ++++++++++++++++++
- 2 files changed, 266 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts b/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+index 1392ce02587b..3758c46c7162 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+@@ -16,4 +16,138 @@ / {
+ 	chosen {
+ 		stdout-path = &uart2;
+ 	};
++
++	connector {
++		compatible = "hdmi-connector";
++		type = "a";
++
++		port {
++			hdmi_connector_in: endpoint {
++				remote-endpoint = <&adv7535_out>;
++			};
++		};
++	};
++
++	reg_hdmi: regulator-hdmi-dvdd {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_hdmi>;
++		compatible = "regulator-fixed";
++		regulator-name = "hdmi_pwr_en";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		startup-delay-us = <70000>;
++		regulator-always-on;
++	};
++
++	sound-hdmi {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "sound-hdmi";
++		simple-audio-card,format = "i2s";
++
++		simple-audio-card,cpu {
++			sound-dai = <&sai5 0>;
++			system-clock-direction-out;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&adv_bridge>;
++		};
++	};
++};
++
++&i2c2 {
++	adv_bridge: hdmi@3d {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_hdmi_bridge>;
++		compatible = "adi,adv7535";
++		reg = <0x3d>, <0x3b>;
++		reg-names = "main", "cec";
++		adi,dsi-lanes = <4>;
++		adi,fixed-lanes;
++		dvdd-supply = <&reg_hdmi>;
++		v3p3-supply = <&reg_hdmi>;
++		v1p2-supply = <&reg_hdmi>;
++		a2vdd-supply = <&reg_hdmi>;
++		avdd-supply = <&reg_hdmi>;
++		pvdd-supply = <&reg_hdmi>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++		#sound-dai-cells = <0>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				adv7535_in: endpoint {
++					remote-endpoint = <&dsi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				adv7535_out: endpoint {
++					remote-endpoint = <&hdmi_connector_in>;
++				};
++			};
++		};
++	};
++};
++
++&lcdif {
++	assigned-clocks = <&clk IMX8MN_VIDEO_PLL1>;
++	assigned-clock-rates = <594000000>;
++	status = "okay";
++};
++
++&mipi_dsi {
++	samsung,esc-clock-frequency = <20000000>;
++	status = "okay";
++
++	ports {
++		port@1 {
++			reg = <1>;
++
++			dsi_out: endpoint {
++				remote-endpoint = <&adv7535_in>;
++			};
++		};
++	};
++};
++
++&sai5 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_sai5>;
++	assigned-clocks = <&clk IMX8MN_CLK_SAI5>;
++	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
++	assigned-clock-rates = <24576000>;
++	#sound-dai-cells = <0>;
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl_hdmi_bridge: hdmibridgegrp {
++		fsl,pins = <
++			MX8MN_IOMUXC_GPIO1_IO09_GPIO1_IO9		0x19
++		>;
++	};
++
++	pinctrl_reg_hdmi: reghdmigrp {
++		fsl,pins = <
++			MX8MN_IOMUXC_SD1_STROBE_GPIO2_IO11              0x16
++		>;
++	};
++
++	pinctrl_sai5: sai5grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0	0xd6
++			MX8MN_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK	0xd6
++			MX8MN_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC	0xd6
++		>;
++	};
+ };
 -- 
 2.39.2
 
