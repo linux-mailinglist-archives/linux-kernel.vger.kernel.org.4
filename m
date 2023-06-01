@@ -2,79 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCB4719C07
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547BC719C2C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbjFAMYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S232592AbjFAMbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbjFAMYL (ORCPT
+        with ESMTP id S232009AbjFAMbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:24:11 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AAA189
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:23:59 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4f757d575so1094023e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 05:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685622238; x=1688214238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P67fxYh16dgbQUiAm6gB3BGUEV32rhaHVBpwn9EGqXg=;
-        b=FEnRVtv2DVhHhckgL4vgzCtY5fx6oEh4knfrh0rjqapjLM88a1Cj3YDq63ciYL4v/B
-         oLzrg7Rnzld+aelFR3ogw0iZWQ0Qnt6EHeq4lfcPHZjK6uF/XnwjL672iAW7MCSdstY6
-         tQ0D/PdSPMNiF0wc6EGgTDAAfh5lxmq9BZxIKNZSJLWLo1ySOf5zQiOmDyJjw3hwrQIa
-         mPeW8uBKs9WD6z+DjCwOiP/oNc/NFPQllD7OeVsNRtoEO2abWffGyj6snfamRfq+YzJu
-         5TLkPxzdVkd8OUgl4ysnMX9uSBN4Vu2ORhEZrK7MZfGR4VzRi2jDMdWk5VVDlQWA+mKw
-         eV0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685622238; x=1688214238;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P67fxYh16dgbQUiAm6gB3BGUEV32rhaHVBpwn9EGqXg=;
-        b=E5RQdVmXb2Ds4iyZpADRrVpf6GQt7h3mFfd9LGUEcXzFYP6hboPNziWTYm+erDx+7M
-         R+ufUo+zozrL4NLIm5vZL/H+p5wDnur/nFXBOctRsVK+ljdnyu2qRaC6xNbSstC+Ek0H
-         OhZZ8q3kO7BXTbbZOn2z5jfAftxnjEz4nHBsyODeCN+n9+uBju2Q9nXvk3fxOVgegEE3
-         HfX3HTQ4yt0bibka2pmHKJ+GmEGfyTw2HawpplfgGzBbicHcm4m8UPZA7jxOfqCvjqs1
-         BoVDN3ULO4287cXvDzmegoP2hXP2ZbYQDYWonNp0fD8Ph9WXTV76+uQSeh3DeUm4/thh
-         c0SQ==
-X-Gm-Message-State: AC+VfDyC3BbHhox9nk5hgXRRb35RwwnK52VePkfhN3YI5ohi+J47wKrw
-        DjKJI+mpqs26OMnuj9oqN3KgCg==
-X-Google-Smtp-Source: ACHHUZ53kUb/xNUNDuY8xov+Zw9RDnOfqdZlvePBoAPgBkVlJX1AuVgsQ6dH0lepObpBNUrDLuUY2A==
-X-Received: by 2002:ac2:4552:0:b0:4ac:b7bf:697a with SMTP id j18-20020ac24552000000b004acb7bf697amr681634lfm.4.1685622237812;
-        Thu, 01 Jun 2023 05:23:57 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id q1-20020ac25101000000b004f001b0eda2sm1073931lfb.56.2023.06.01.05.23.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 05:23:57 -0700 (PDT)
-Message-ID: <e03833b4-896d-f8e2-c622-2f36c94b4f2e@linaro.org>
-Date:   Thu, 1 Jun 2023 14:23:56 +0200
+        Thu, 1 Jun 2023 08:31:43 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B25119
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1vckG8mEOEEQ6TigMiJbDqHyq0tn1H72eSApMQSUAks=;
+ b=eXhjHQPJh+r/sSSSzi2sNITWoF5ry6miXjC7YwkOutPglvVCK8fvChpOhiryj4K/194uv2rUorvKgRFddmYYesJsw15b10w9m/u7cUGkELYN0jTZd6zbn0y4YlFxoPLs0CBRKG0G+SM47J1J5IHvq1gb+Eiz3genG51Ny5DT1R7wlI1bITNmib3eDkaN9aY5E6wRFiIUNX4QSpJTMdAabbBguZpauP34ZI3YXkNz153RhGpGUCJKm0GYlVZdO4Xny8Fev8VTSRL+o36TM0QhtOoTdnGqdwcfEqIhzMgXxXeHqPS8YaZt37bJ4V3rqxCKeuIaR9PUyK2cyNH0lDgu6Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by MW3PR12MB4555.namprd12.prod.outlook.com (2603:10b6:303:59::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23; Thu, 1 Jun
+ 2023 12:31:39 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::d13:d49e:d598:833b]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::d13:d49e:d598:833b%3]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
+ 12:31:39 +0000
+References: <20230531044018.17893-1-mpenttil@redhat.com>
+ <87wn0pt13j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Alistair Popple <apopple@nvidia.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     mpenttil@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: Re: [PATCH v2] mm/migrate_device: Try to handle swapcache pages
+Date:   Thu, 01 Jun 2023 22:25:35 +1000
+In-reply-to: <87wn0pt13j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Message-ID: <87wn0npdnc.fsf@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BYAPR02CA0063.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::40) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8450: Add missing interconnect
- paths to USB HC
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230601120029.38859-1-abel.vesa@linaro.org>
- <20230601120029.38859-4-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230601120029.38859-4-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|MW3PR12MB4555:EE_
+X-MS-Office365-Filtering-Correlation-Id: 945e0ea7-7eb0-406e-35fa-08db629c258f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /wELuVA3A0z84TuTnznju1EOHoJS1nvU0Vsci6b0nolQIBVBPaGBH02LvAhvzOQ14ZvPoNJ0jQnOiDT6+WknY0yTq2i+uxQWxB4Eu4X3YTJszkMhDfP70GNEvnCkPbATtVzFFcNtHRapdgZaHiRC4dxat1fAjkU0w+OeR8lqiTZTSoDGyFa1hep2ALPXMwSdWfecy83HllwwZYNqIjtz6ZwPE9n+yrTLhR+wBWdnwI2FPcy5bQNGk9DUUfhSiyVwuf+Pg/RzdigueE9Qyks+GHs6nLzQrjTRqfh0vg47l4WviAmDXnrXNJIfJTH+l29TR69nh7L6qGdZ08yh16HvzRBe/Dt88pGA/GRg4uaFlrotbZa5otN1Q3D+bBgpa/QQHDopYdumis+H56AdaXPGDNbjo1V5MUaev6iDky3fqDvhlyajOWwm91VxqATXDNS7lldlub1L0F3Hj/R9xFLxdOh6/RdUrQ/7uswhdAcN1EzP8PCl1KFHlri2AxtFFrGG4Fa3Tbh09Sw/CO/u2S1fQheKTH2FT2C5ZWAfvGhE8VH/Yc25rmgNMdJ4yfB22LA1
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199021)(6666004)(6486002)(478600001)(186003)(36756003)(26005)(6506007)(6512007)(83380400001)(2616005)(38100700002)(86362001)(107886003)(316002)(6916009)(4326008)(41300700001)(66946007)(66556008)(66476007)(2906002)(8936002)(8676002)(5660300002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?andtV3BvNGxIS2hSV1BDbjNxTzRCVkR0NktJZ3I3bHdHanJ3V0dINXdBOS9M?=
+ =?utf-8?B?MXdOWEN2bXNHKzNCTmt4ZU1laGhieTZNUmdlQkdDWi9DUlVFNjAyRjdQa0wz?=
+ =?utf-8?B?RHNBV0tKRzZVVjFqMnlSQkR6YWVaRDc5c3NMV1hSbnZ6UmR6VE5RSTkrcE1F?=
+ =?utf-8?B?ekxOTC9lNTdUd0JzWHMwdWx2dmZRNUJIY3FXNk5lZkdDTEpJWXRwclJRVHFa?=
+ =?utf-8?B?ZU83RFRFOEhrcXB4MG1YUDZnVjJFc1Rwd2c3ZW9ENFU1QmdSSGZVR0IxbjJL?=
+ =?utf-8?B?MnN0OU1ya3dHRFE1UTNseXRVME9sbVV2R1ZUL2F4akR2bEttZG96NzEzdml4?=
+ =?utf-8?B?ZjBkVklOTXhsbXV3WXFGSjVaZ09kZnUwYWR5NE1UMUdQSFoxdnkwd3pmUmoy?=
+ =?utf-8?B?UU1nVU9nMGY1VTZ1eGRDdzRUR0xxUlBKOE05NEt6RGN3TzBTcFpTYkwzWHJ0?=
+ =?utf-8?B?NlFjamI0RHA2UElHbGJ2djZuT0RCbC9TTHk2Q0NwOUJISWN4MG1ObHpheE9I?=
+ =?utf-8?B?STlpMmFtSURBUWlhUUZrcE9OU2NwblZjR2p1Yk80ejdVbURTbkM0WnhnZERK?=
+ =?utf-8?B?UWpwaUVoa2MyWTJiVFBkTmVNOGp2Z2NDa1hCcEVJbm01emZVVmtnWU0zd0d6?=
+ =?utf-8?B?Nm41OEIzK25welFjcW1YYmY4NjR5MXE2NTJNTndQSExvaVo3Z2FQM1VOUEps?=
+ =?utf-8?B?cnNVWk9MYUZKYVFkdGlmcllrZitOcERJVTh5aHhpajVtUmpaQUpmbVUwbHBS?=
+ =?utf-8?B?bnhYZWNWKytRWUMvQ2ZqWTFxUTk4TDMvRy9PdlAwSHNkSkczM2xvTkptb25G?=
+ =?utf-8?B?ZGFKNHY2MDMzWHJEUWVwWWlwQ2dGSzFwMkxPVjJ6RkplMTY4aENJTFNPZ09i?=
+ =?utf-8?B?Vk5rWU1wNnZJWStibnJRdnNEbStxR1RWVEhEa3ZzV3I1RFVPelB2enBsc3Vn?=
+ =?utf-8?B?WE50VFhnUjk0ZTlYTHFOSmd5MzF5M0VmK1pPenBSMzZSQ0VXWnh0WityUHov?=
+ =?utf-8?B?Mk01WmFqTHdQR0tSM2pFdmwxa244MmQyckhQRGdGazJEenEyWnMvSTdldHVx?=
+ =?utf-8?B?RHR4SFFCaGprbU5Tb1ptSDJTdWNvcDc3WWpRNFN1OW80K0ZtZ3l2cWhoMWJj?=
+ =?utf-8?B?THdIWk01K3d1ZnpaVzlYWDczbnp5K1JRUFdmWlY1RUFqWVJHSk41R3IzRCtO?=
+ =?utf-8?B?bWx2UndMNXk0blBVMHk0VE5YQ0FSUG1kNWc0akErY1pCSWNWTEFodU1ZNVBQ?=
+ =?utf-8?B?RVc1eEdVTjl3L3Q4RGMwcGd5ZkdqYWx4NFBFdUdiZDFHSnNOM29zVCtVcWV2?=
+ =?utf-8?B?ekVIYzlWb0Q3ZHpsNmYrM0hmUjdVU25GSURXMGttM05oRnZLS1YxWk1rU3pw?=
+ =?utf-8?B?U1NieWRBRTdreXIwMmRidzZIR2pLdDgrejhyYzBVRU1mZC83bW5pL1F3Q3FV?=
+ =?utf-8?B?UWFlTVFNUWxWV2RFV3djY3loakFHT1hJVzFPcWtjc0ZGYk96Rkl3Z3dMRHNv?=
+ =?utf-8?B?TmtnbGltOFJuaUlHd3lRZlB3QUlnK1RjZ29DdGZmc3pRdnlGVWZBNGUvUUhk?=
+ =?utf-8?B?Z2NOOTBVYnJlbDZUZ2d2NWd3b1NxcW5sYk9rQTJrMFVlMzZCQzQ4bW9BSUNM?=
+ =?utf-8?B?czNCbWUwMVUxTlRvRG43OWhwSWgxdW8xaDFPY25wV0dteDdwMU9WM1JSSVZh?=
+ =?utf-8?B?Y3RhMHoyT2VCRmpsaUx3NmxTK0dZVW80V0VuUkRiTmNzbDA1VE1veGtzaUhq?=
+ =?utf-8?B?dWI1VGRsd2MyMi8yQmdUZmR2RkkyaUlZSDJma2tSQzlvd1QrU3RwTzlSMUN2?=
+ =?utf-8?B?Rm5QWk5yZ3FlZklkbUkvNnRVcFBXd2FCbzZlOWZEWHI0UWZQSkllUFd3TmZ3?=
+ =?utf-8?B?eko3T25seXdIRm54TDFqeWVEQkJKeDZiakd0Z05sZWEzMnpDenkwR1pwejNY?=
+ =?utf-8?B?YUZRZGdWWGNUVXdTYjlGMnJDN2RPNERPUXovWjV2L2llMENmanFvN0ZSTE1H?=
+ =?utf-8?B?aXJBZCtyV3ExdjMyaytaVjJ1dEVNbHBrdnFIWW1FOVRkQXNiaFc3dTlHZ0dI?=
+ =?utf-8?B?aGxNSzBFZHJmNlVUTmJzY2twS2xxZEhnME1uMmZUUkRld0xUbDQ4VG5UQ05p?=
+ =?utf-8?Q?YAGZZWxnfGpB0w4Qeu5h1sOKo?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 945e0ea7-7eb0-406e-35fa-08db629c258f
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 12:31:38.9947
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jzc4akFt//a+xVtpY6YwbWow2eMVL3ifjzJpZH+poRHYyubis/Cl0wxD+nnqFyy82de4C/h37Zn/TzH6Z4fs9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4555
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,30 +116,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+"Huang, Ying" <ying.huang@intel.com> writes:
 
-On 1.06.2023 14:00, Abel Vesa wrote:
-> The USB HC node is missing the interconnect paths, so add them.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> mpenttil@redhat.com writes:
+>
+>> From: Mika Penttil=C3=A4 <mpenttil@redhat.com>
+>>
+>> Migrating file pages and swapcache pages into device memory is not suppo=
+rted.
+>> The decision is done based on page_mapping(). For now, swapcache pages a=
+re not migrated.
+>>
+>> Things can however be improved, for swapcache pages. Try to get rid of t=
+he swap cache,
+>> and if successful, go ahead as with other anonymous pages.
+>>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> Cc: John Hubbard <jhubbard@nvidia.com>
+>> Cc: Ralph Campbell <rcampbell@nvidia.com>
+>> Cc: Huang Ying <ying.huang@intel.com>
+>> Signed-off-by: Mika Penttil=C3=A4 <mpenttil@redhat.com>
+>> ---
+>>
+>> v2:
+>>   - use folio_test_anon() (Huang, Ying)
+>>
+>> =20
+>>  mm/migrate_device.c | 24 ++++++++++++++++++------
+>>  1 file changed, 18 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+>> index d30c9de60b0d..829bbc526758 100644
+>> --- a/mm/migrate_device.c
+>> +++ b/mm/migrate_device.c
+>> @@ -747,13 +747,25 @@ static void __migrate_device_pages(unsigned long *=
+src_pfns,
+>> =20
+>>  		if (is_device_private_page(newpage) ||
+>>  		    is_device_coherent_page(newpage)) {
+>> -			/*
+>> -			 * For now only support anonymous memory migrating to
+>> -			 * device private or coherent memory.
+>> -			 */
+>> +
+>>  			if (mapping) {
+>> -				src_pfns[i] &=3D ~MIGRATE_PFN_MIGRATE;
+>> -				continue;
+>> +				struct folio *folio;
+>> +
+>> +				folio =3D page_folio(page);
+>> +
+>> +				/*
+>> +				 * For now only support anonymous memory migrating to
+>> +				 * device private or coherent memory.
+>> +				 *
+>> +				 * Try to get rid of swap cache if possible.
+>
+> I think we can delete the following 2 lines of comments.  They add
+> nothing except what code says already.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 11560ec9f182..5cd7296c7660 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -4306,6 +4306,10 @@ usb_1: usb@a6f8800 {
->  
->  			resets = <&gcc GCC_USB30_PRIM_BCR>;
->  
-> +			interconnects = <&aggre1_noc MASTER_USB3_0 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
-> +			interconnect-names = "usb-ddr", "apps-usb";
-> +
->  			usb_1_dwc3: usb@a600000 {
->  				compatible = "snps,dwc3";
->  				reg = <0 0x0a600000 0 0xcd00>;
+They are also a bit confusing, because a private file-backed mapping is
+treated as anonymous so folio_test_anon() won't filter those
+out.=20
+
+I will test this tomorrow but the change looks good so please add:
+
+Reviewed-by: Alistair Popple <apopple@nvidia.com>
+
+> Otherwise looks good to me.
+>
+> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+>
+>> +				 * page is here file or swapcache page, could be shmem also
+>> +				 * folio_test_anon() filters out file and shmem
+>> +				 *
+>> +				 */
+>> +				if (!folio_test_anon(folio) || !folio_free_swap(folio)) {
+>> +					src_pfns[i] &=3D ~MIGRATE_PFN_MIGRATE;
+>> +					continue;
+>> +				}
+>>  			}
+>>  		} else if (is_zone_device_page(newpage)) {
+>>  			/*
+
