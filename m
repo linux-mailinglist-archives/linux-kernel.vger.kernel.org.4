@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6096A718F96
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB79718F9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjFAAmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 20:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S230380AbjFAAnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 20:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjFAAmH (ORCPT
+        with ESMTP id S230358AbjFAAnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 20:42:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24427123;
-        Wed, 31 May 2023 17:42:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B546C63B8E;
-        Thu,  1 Jun 2023 00:42:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77374C433EF;
-        Thu,  1 Jun 2023 00:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685580125;
-        bh=QkqbhcDF+pePoD2TNskyYwxfYiTvfX92sxcQEnCW/OQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Iq745KawOqer46I4sbFStKnkH553BxrLo/IZbhCWXZ7S4L5zSYWeO8Q0Rg5Bm4rk3
-         kB0/A9X9I0mxk3O1Wc3wFiM+7GzvyRVmuvYR/BWi4nTc6kGqsZVMCCeUPVDQiOiPsc
-         TLL/eJ+g0AJctxcsP4SMeFIab6k4a1ojYhCGH2PceqDPXrgeVI0abfb0Pc5qNadw2b
-         QdCNPUA2i9rEAwj6zME8FxYJ8boKpMUlsfJDqipm3/3NK0yEYRw+5zEvhqIV/BM5HP
-         qdUsOi0z9GI9Q2KCdu59IbgH/heA9cIOBDTv+JigOBDsC07z/GYz/L38N2SHP9rLpO
-         r12AdJxg9vS2w==
-Date:   Wed, 31 May 2023 17:42:02 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH] KVM: VMX: remove LFENCE in vmx_spec_ctrl_restore_host()
-Message-ID: <20230601004202.63yulqs73kuh3ep6@treble>
-References: <20230531150112.76156-1-jon@nutanix.com>
- <20230531231820.trrs2uugc24gegj4@treble>
- <F4BEBCAF-CBFC-4C3E-8B01-2ED84CF2E13A@nutanix.com>
+        Wed, 31 May 2023 20:43:37 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2DE123;
+        Wed, 31 May 2023 17:43:36 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VKIEYi032508;
+        Thu, 1 Jun 2023 00:43:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=kgrZrmMdCGW4zNKNzukArbvw+ik9UIZSCqtlU1iZmRg=;
+ b=T3PYg3ayunKdr2RiVkSN1BMAWYP5BdMOj8j7+pzk5JRXGwyxzexwmaBoiypOM/3guJ8t
+ p+2uL/bTOQMVEpCP7S9PhPShXEfWVCQJa3zWu6zvesDWySrrWvKmWB+irU6eawNz9Y3B
+ l6hTUJ1AJwTy2r9xSmyv/nBT/j6KXi/UyJogS+fNlpkMQwGfM8RCmrPrn3RDyK+8x9B3
+ 7NRMu6REUD/ei05YGcZ8jxinyJIvz9NYfEIR8ed6qzvudEvWvWPWkipIfjm2py07PQLm
+ o0EjVT/Rsj4iCqT4Izmf6datyYfUyJiF0QzdbJ2/DtKomNnJJgyo8t1kXEDTuvR/sl9j FA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhb97d72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 00:43:33 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34VMsRoS003775;
+        Thu, 1 Jun 2023 00:43:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qv4ye2ea6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 00:43:32 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3510hV9H008516;
+        Thu, 1 Jun 2023 00:43:32 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3qv4ye2e6s-1;
+        Thu, 01 Jun 2023 00:43:31 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: mpi3mr: Fix the type used for pointers to bitmap
+Date:   Wed, 31 May 2023 20:43:10 -0400
+Message-Id: <168558000059.2461197.2174919171880641930.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <8bdf9148ce1a5d01aac11c46c8617b477813457e.1683473011.git.christophe.jaillet@wanadoo.fr>
+References: <8bdf9148ce1a5d01aac11c46c8617b477813457e.1683473011.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <F4BEBCAF-CBFC-4C3E-8B01-2ED84CF2E13A@nutanix.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_18,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=824
+ adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010004
+X-Proofpoint-GUID: T0gnqpk8oTm01hYHDRNJBwves-_unOzd
+X-Proofpoint-ORIG-GUID: T0gnqpk8oTm01hYHDRNJBwves-_unOzd
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:58:12PM +0000, Jon Kohler wrote:
-> > The goal of this barrier_nospec() is to prevent speculative execution
-> > from bypassing the SPEC_CTRL write (due to misprediction of the
-> > conditional branch, Spectre v1 style).  Otherwise the next indirect
-> > branch or unbalanced RET could be an attack target.
-> > 
-> > So any previous LFENCEs before that conditional branch won't help here.
+On Sun, 07 May 2023 17:23:49 +0200, Christophe JAILLET wrote:
+
+> Bitmaps are "unsigned long[]", so better use "unsigned long *" instead of
+> a plain "void *" when dealing with pointers to bitmaps.
 > 
-> Ah interesting. Ok, to be clear, thats a guest -> host attack, correct? And such
-> an attack would not at all be thwarted by the first CALL retire + LFENCE that
-> was added on commit 2b1299322016 ("x86/speculation: Add RSB VM Exit 
-> protections”)?
-
-Right.
-
-> Sorry to be long winded, just wanting to triple check because
-> the aforementioned commit was added slightly after the original one, and I 
-> want to make extra sure that they aren’t solving the same thing.
+> This is more informative.
 > 
-> If that is indeed the case, does that commit need to be revisited at all?
 > 
-> Or are we saying that this Intel vulnerability needs *two* LFENCE’s to keep
-> the host secure?
 
-The first LFENCE (FILL_RETURN_BUFFER) forces the CALL to retire so the
-RSB stuff is guaranteed to take effect before the next unbalanced RET
-can be speculatively executed.
+Applied to 6.5/scsi-queue, thanks!
 
-The second LFENCE (vmx_spec_ctrl_restore_host) forces the conditional
-branch to retire so the SPEC_CTRL write (potential IBRS/eIBRS
-enablement) is guaranteed to take effect before the next indirect branch
-and/or unbalanced RET can be speculatively executed.
-
-So each LFENCE has a distinct purpose.  That said, there are no indirect
-branches or unbalanced RETs between them.  So it should be fine to
-combine them into a single LFENCE after both.
-
-You could for example just remove the first LFENCE.  But only for that
-usage site, i.e. not for other users of FILL_RETURN_BUFFER.
-
-Or, remove them both and add an LFENCE in vmx_vmexit() right after the
-call to vmx_spec_ctrl_restore_host().  That might be clearer.  Then it
-could have a comment describing its dual purposes.
+[1/1] scsi: mpi3mr: Fix the type used for pointers to bitmap
+      https://git.kernel.org/mkp/scsi/c/144679dfb584
 
 -- 
-Josh
+Martin K. Petersen	Oracle Linux Engineering
