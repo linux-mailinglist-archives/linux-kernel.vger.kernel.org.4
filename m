@@ -2,207 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B206719962
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D5771998E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbjFAKSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S233540AbjFAKVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbjFAKSG (ORCPT
+        with ESMTP id S233615AbjFAKTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:18:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF58A1FDB;
-        Thu,  1 Jun 2023 03:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=G1trJdY7ybtDfb34YzOEZVtQJ+4O7zYES3kMJ7sRdCU=; b=pytfcabSQbAioNogqcJyIjWxkb
-        I3OIRz0nPyGAHQCouHiezAZ3WYDnbr+0H5ASElPr4+OfQuPcqSEVXUzQNdmNT0vDCq0lYth70hxc+
-        nIxwWeL5rSBkZoelbLSxxySFndCPqg76D3wq86BEGZ1gkD10CrGs9NABCiAJPJkEv81csRGvvoVja
-        EaBwzktB36vi1XtuFtdCEjY2KE+yJjTGMIB4mjx3jEx3iBh0aM1LDhfieu9IZABiemcJgKbkPFNuq
-        /6ksBvE3iaE68Sn2CQ4733UmzPnTQKsAKE8EvFRBt0Ej6Ani+wvx452hsmvy64dZ4tGLH+6z41/Rs
-        43i6i9qw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q4fJv-008GIu-Pp; Thu, 01 Jun 2023 10:14:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66A3C3002F0;
-        Thu,  1 Jun 2023 12:14:09 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 374AA21484A8B; Thu,  1 Jun 2023 12:14:09 +0200 (CEST)
-Date:   Thu, 1 Jun 2023 12:14:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-Subject: [PATCH v2 07/12] parisc/percpu: Work around the lack of
- __SIZEOF_INT128__
-Message-ID: <20230601101409.GS4253@hirez.programming.kicks-ass.net>
-References: <20230531130833.635651916@infradead.org>
- <20230531132323.722039569@infradead.org>
- <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
+        Thu, 1 Jun 2023 06:19:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7057171B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685614464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NYR/VkMk/voOznqHepF47pBoY++iUIp7AId3uEofiiU=;
+        b=dQ13meQ+T7sQL3wVuwWT2ZUA3kKoLFA6bHqrGSYSSRor7sVCOs7zpdc0jroU60vwMpiHP0
+        I1Elb1O7UTu25UN3oShWFT0lKS0vwu9Ak9S9jx+ICwmEYkYO1r36GYCdgtvkswjmqKioBM
+        kHt6qcAsTqij3glOsP/ubFiknpdJP/k=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-472-ytuUihfwPVqZ3Hv7Vw7bag-1; Thu, 01 Jun 2023 06:14:22 -0400
+X-MC-Unique: ytuUihfwPVqZ3Hv7Vw7bag-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f6f58e269eso4276605e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685614462; x=1688206462;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NYR/VkMk/voOznqHepF47pBoY++iUIp7AId3uEofiiU=;
+        b=gNWwK9bAnfGKFHwAdZ+PGB4BojO5pmGFqNi95rBkgzhNKXnlj0rpXpZzBl4dQpVA1q
+         SKurp+qFn1OBGwWqGY9xn2fEdy/ywr3wvlOaHUFnbhzVqHDnRRA3q9jG8YLJbpfMAxzx
+         7QB1b03EoUfce1C+jdFE91gFdB5Ba2WxRRT0XehGMTGOq5CnL0i38H4C25H/kjCg7pi0
+         jEs2Ix3IO0rYe9mH4AA3MF1Czlsgk3M/NKoIriMIMbNVsFKM8xdPB/kwLIbl41hWdVRx
+         GUxDjz3rZ9zNgsbJQ/q/wt+LbZ0I+o7VA+FpF6mybJs25rONfCCbXEWNpEUVZmrN0agz
+         94aQ==
+X-Gm-Message-State: AC+VfDzdgCqAG2BDfyUAU4VqD/oJ9afa/m9XO6YQ1rK+y2z+XyuZtX6g
+        ZeJhXlrqUZLRfrBATfFJShqJOPuxZ0PphcyyC2jnIc8v+ax1glGohS6PRmDK72dfnjllcbotM2v
+        e2fWOCMEWJ0HxpNU9PPDC2O5F
+X-Received: by 2002:a1c:4b04:0:b0:3f6:1508:950d with SMTP id y4-20020a1c4b04000000b003f61508950dmr1560164wma.8.1685614461792;
+        Thu, 01 Jun 2023 03:14:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7VnsEBhESdjXdiQFg74eikZktRK8TAGK3ABpDAi6e4ScCG4i4Ww4wsGLH4CWPzX8JVUMeRXg==
+X-Received: by 2002:a1c:4b04:0:b0:3f6:1508:950d with SMTP id y4-20020a1c4b04000000b003f61508950dmr1560131wma.8.1685614461274;
+        Thu, 01 Jun 2023 03:14:21 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id e25-20020a05600c219900b003f42314832fsm1766220wme.18.2023.06.01.03.14.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 03:14:20 -0700 (PDT)
+Message-ID: <73befe4b-b9cc-72ee-872e-29efc16539ca@redhat.com>
+Date:   Thu, 1 Jun 2023 12:14:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <492558dc-1377-fc4b-126f-c358bb000ff7@redhat.com>
+ <cbd39f94-407a-03b6-9c43-8144d0efc8bb@redhat.com>
+ <20230526214142.958751-1-dhowells@redhat.com>
+ <20230526214142.958751-2-dhowells@redhat.com>
+ <510965.1685522152@warthog.procyon.org.uk>
+ <703628.1685541335@warthog.procyon.org.uk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
+In-Reply-To: <703628.1685541335@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 04:21:22PM +0200, Arnd Bergmann wrote:
+On 31.05.23 15:55, David Howells wrote:
+> David Hildenbrand <david@redhat.com> wrote:
+> 
+>> Yes, it would be clearer if we would be using "pinned" now only for FOLL_PIN
+> 
+> You're not likely to get that.  "To pin" is too useful a verb that gets used
+> in other contexts too.  For that reason, I think FOLL_PIN was a poor choice of
+> name:-/.  I guess the English language has got somewhat overloaded.  Maybe
+> FOLL_PEG? ;-)
 
-> It would be nice to have the hack more localized to parisc
-> and guarded with a CONFIG_GCC_VERSION check so we can kill
-> it off in the future, once we drop either gcc-10 or parisc
-> support.
+You're probably right. FOLL_PIN and all around that is "get me an 
+additional reference on the page and make sure I can DMA it without any 
+undesired side-effects".
 
-I vote for dropping parisc -- it's the only 64bit arch that doesn't have
-sane atomics.
+FOLL_PIN_DMA would have been clearer (and matches 
+folio_maybe_dma_pinned() ) ... but then, there are some use cases where 
+want the same semantics but not actually perform DMA, but simply 
+read/write via the directmap (e.g., vmsplice, some io_uring cases). 
+Sure, one could say that they behave like DMA: access page content at 
+any time.
 
-Anyway, the below seems to work -- build tested with GCC-10.1
+Saying a page is pinned (additional refcount) and having a pincount of 0 
+or does indeed cause confusion.
 
----
-Subject: parisc/percpu: Work around the lack of __SIZEOF_INT128__
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue May 30 22:27:40 CEST 2023
+... but once we start renaming FOLL_PIN, pincount, ... we also have to 
+rename pin_user_pages() and friends, and things get nasty.
 
-HPPA64 is unique in not providing __SIZEOF_INT128__ across all
-supported compilers, specifically it only started doing this with
-GCC-11.
+> 
+>> and everything else is simply "taking a temporary reference on the page".
+> 
+> Excluding refs taken with pins, many refs are more permanent than pins as, so
+> far as I'm aware, pins only last for the duration of an I/O operation.
 
-Since the per-cpu ops are universally availably, and
-this_cpu_{,try_}cmpxchg128() is expected to be available on all 64bit
-architectures a wee bodge is in order.
+I was more thinking along the lines of FOLL_GET vs. FOLL_PIN. Once we 
+consider any references we might have on a page, things get more tricky 
+indeed.
 
-Sadly, while C reverts to memcpy() for assignment of POD types, it does
-not revert to memcmp() for for equality. Therefore frob that manually.
+> 
+>>>> "Note that the refcount of any zero_pages returned among the pinned pages will
+>>>> not be incremented, and unpin_user_page() will similarly not decrement it."
+>>> That's not really right (although it happens to be true), because we're
+>>> talking primarily about the pin counter, not the refcount - and they may be
+>>> separate.
+>>
+>> In any case (FOLL_PIN/FOLL_GET) you increment/decrement the refcount. If we
+>> have a separate pincount, we increment/decrement the refcount by 1 when
+>> (un)pinning.
+> 
+> FOLL_GET isn't relevant here - only FOLL_PIN.  Yes, as it happens, we count a
+> ref if we count a pin, but that's kind of irrelevant; what matters is that the
+> effect must be undone with un-PUP.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/parisc/include/asm/percpu.h |   77 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+The point I was trying to make is that we always modify the refcount, 
+and in some cases (FOLL_PIN on order > 0) also the pincount.
 
---- /dev/null
-+++ b/arch/parisc/include/asm/percpu.h
-@@ -0,0 +1,77 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_PARISC_PERCPU_H
-+#define _ASM_PARISC_PERCPU_H
-+
-+#include <linux/types.h>
-+
-+#if defined(CONFIG_64BIT) && CONFIG_GCC_VERSION < 1100000
-+
-+/*
-+ * GCC prior to 11 does not provide __SIZEOF_INT128__ on HPPA64
-+ * as such we need to provide an alternative implementation of
-+ * {raw,this}_cpu_{,try_}cmpxchg128().
-+ *
-+ * This obviously doesn't function as u128 should, but for the purpose
-+ * of per-cpu cmpxchg128 it might just do.
-+ */
-+typedef struct {
-+	u64 a, b;
-+} u128 __attribute__((aligned(16)));
-+
-+#define raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-+({									\
-+	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
-+	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-+	bool __ret;							\
-+	if (!__builtin_memcmp(&__val, &__old, sizeof(pcp))) {		\
-+		*__p = nval;						\
-+		__ret = true;						\
-+	} else {							\
-+		*(ovalp) = __val;					\
-+		__ret = false;						\
-+	}								\
-+	__ret;								\
-+})
-+
-+#define raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)			\
-+({									\
-+	typeof(pcp) __old = (oval);					\
-+	raw_cpu_generic_try_cmpxchg_memcpy(pcp, &__old, nval);		\
-+	__old;								\
-+})
-+
-+#define raw_cpu_cmpxchg128(pcp, oval, nval) \
-+	raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
-+#define raw_cpu_try_cmpxchg128(pcp, ovalp, nval) \
-+	raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
-+
-+#define this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
-+({									\
-+	bool __ret;							\
-+	unsigned long __flags;						\
-+	raw_local_irq_save(__flags);					\
-+	__ret = raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval);	\
-+	raw_local_irq_restore(__flags);					\
-+	__ret;								\
-+})
-+
-+#define this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)		\
-+({									\
-+	typeof(pcp) __ret;						\
-+	unsigned long __flags;						\
-+	raw_local_irq_save(__flags);					\
-+	__ret = raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval);	\
-+	raw_local_irq_restore(__flags);					\
-+	__ret;								\
-+})
-+
-+#define this_cpu_cmpxchg128(pcp, oval, nval) \
-+	this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
-+#define this_cpu_try_cmpxchg128(pcp, ovalp, nval) \
-+	this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
-+
-+#endif /* !__SIZEOF_INT128__ */
-+
-+#include <asm-generic/percpu.h>
-+
-+#endif /* _ASM_PARISC_PERCPU_H */
+But if you define "pins" as "additional reference", we're on the same page.
+
+> 
+> It would be nice not to get a ref on the zero page in FOLL_GET, but I don't
+> think we can do that yet.  Too many places assume that GUP will give them a
+> ref they can release later via ordinary methods.
+
+No we can't I'm afraid.
+
+-- 
+Thanks,
+
+David / dhildenb
+
