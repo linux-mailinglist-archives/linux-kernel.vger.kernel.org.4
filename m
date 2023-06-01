@@ -2,92 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B0971A040
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5029171A050
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbjFAOfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S233577AbjFAOhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjFAOfm (ORCPT
+        with ESMTP id S233793AbjFAOg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:35:42 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EFCE42
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:35:17 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f3b9755961so1165427e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1685630115; x=1688222115;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSfNwowBIrXwCmy959sjHFBtcspDeGLD1tqwKKW+7Ys=;
-        b=dYbtu3UYUAEitxKc2CkYIYDng/Qda8jQs5za7qbAiCkvL9Nd2Ob+7VHS49pYO2NoVt
-         yg2kKmMl53HdnezRVuhHaUmZvwnffiuGV4GU08wGa0LTm0dWKZZ/0niXyBQJqeS1NOze
-         V/KEMob2jOiZpbcfAOwOXHWpZT+qSIAqZiARx6QwTfYmosmSFTC0GcvGda7i8Znh17zz
-         9BOPd/jDC3YviQI0T5alCHX8eK1sNiKmEWyirAAHRINW6nnGmEj3PwNGDnKTgMBvEZjq
-         tasIt+U/qWOilP0SgQzXnCr1cpizRP9b9SvmF344OpjWylhrvJUxx+8adpmrKPjgG0v0
-         cwHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685630115; x=1688222115;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qSfNwowBIrXwCmy959sjHFBtcspDeGLD1tqwKKW+7Ys=;
-        b=FO9lAMbrtN6p//ikClBjqiksnwpjN7ZH8J9ZylX1B+GFauRTIvjyd/1NJw34P/DbyW
-         gyl25d4TLfKoqQ1K2/7PQoTt8ivqJgZ0M4m9wxbZZjkNT4TlXnjHycKjwxYZKVwXTO/Q
-         EjLHaPpqV/aVDDnHcrkE8go+XNVGqG7yXLtXmAsojKTm+pjpiDDTnACUavT8g0jfGkQ1
-         6vaYaa9J24UmOkUAx4pcrtnVPxOchtwUww5DHYll/WBGKolxvLpKFMWWl5wLmau1fgqn
-         38W7RtnRCW8wQBep0J6Anqca5xK50BrnYaR05PWs50K/85GCEVFvXV6aJNOqczxXEGDd
-         DGAQ==
-X-Gm-Message-State: AC+VfDwu8aGfG6WLwIMavLUZhJx3bbSnNvDljzU7s9lXiN+7Z/wRgDtc
-        QbiJDOSfbU6aolqFLTBldNAG/g==
-X-Google-Smtp-Source: ACHHUZ5kdMccQkoAlUzkaLwGRekQ/edux8f3fBn82uOO1QxrlGZsoZc+1Dp/R9dx8AQTzWnym2JCQQ==
-X-Received: by 2002:ac2:5479:0:b0:4f4:c30f:fafd with SMTP id e25-20020ac25479000000b004f4c30ffafdmr73943lfn.28.1685630115372;
-        Thu, 01 Jun 2023 07:35:15 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id bg22-20020a05600c3c9600b003f4283f5c1bsm9709927wmb.2.2023.06.01.07.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 07:35:15 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 01 Jun 2023 16:34:36 +0200
-Subject: [PATCH net-next RFC] net: skip printing "link become ready" v6 msg
+        Thu, 1 Jun 2023 10:36:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBDCE7A;
+        Thu,  1 Jun 2023 07:36:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12BDE645AE;
+        Thu,  1 Jun 2023 14:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766AFC433D2;
+        Thu,  1 Jun 2023 14:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685630184;
+        bh=q1nm3XJmvtIncOu+ub6wBefta37W073Fq2RfF3BrwDA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LE40csoZczJkWldp40THH+Zdkrug4V3qCiiGTMCHovAP5L53U7rCfGoH7brYaYPLu
+         pTRgmznANKlibPSIjoOc3ePcv+AkSLvEVMmo/FOFoTuvkABUbt2wzvU0LhJbaTpyjR
+         8wdfk6GFIFQhzdvOJa3Kxwwzz22Y316Quw8oQpqbw4ipd4wfm+yNJNVFZe/eUIX0gO
+         pr/hpnjSsK5wCd5ECoe4WviYL0qA9D2kItgny4/NOxbl1/lWlM93zGuQq/LBndfqsS
+         1ZyYaOW92/x4Rs5pHszq/9XGftSXTnv/h47DPhD34prD2ih8aUE6eWeHZZ9F2FPiaz
+         x7d/oDSVI0SJA==
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-39810ce3e13so736485b6e.2;
+        Thu, 01 Jun 2023 07:36:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzfHNJzVLMjQ+LMGQIq6X4beW5hEeZ6V0uf/WBwxqydozoBhkNE
+        T91+Jm2LN3bt35J8WBs5EK7KpqxhJvCjoTohFEo=
+X-Google-Smtp-Source: ACHHUZ5pUe+/Kf89/ly7ZacrZOuVJ/6VUnojFj9HTrAI35BR4gk4B4HGEQvavxSygBDSsGq2RMFOP/CbSCp/LJOlihI=
+X-Received: by 2002:a05:6808:150a:b0:398:34b9:5200 with SMTP id
+ u10-20020a056808150a00b0039834b95200mr9477506oiw.51.1685630183791; Thu, 01
+ Jun 2023 07:36:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-net-next-skip_print_link_becomes_ready-v1-1-c13e64c14095@tessares.net>
-X-B4-Tracking: v=1; b=H4sIAHuseGQC/z2OywrCMBBFf6XM2kAaTRduBT/AbZGQx2iH6jQkQ
- Sql/24q6OIuDgcOd4GMiTDDsVkg4YsyTVyh3TXgB8t3FBQqg5JqLzvZCsZSNxeRR4omJuJiHsS
- jceinJ2aT0Ia30M6rTutgrTpAjTmbUbhk2Q9b7lfZVEx4o/n7of+L5nI+wXVdP68tdLChAAAA
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Mat Martineau <martineau@kernel.org>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4914;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=GLrbycqPqRupQVxPfBAeQV/Ty59syypaKHGw+itKRJo=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkeKyisVl+FfDll7sOFg0z9Ac39h4Ccw6u+9lvs
- 3VxxxUncW2JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZHisogAKCRD2t4JPQmmg
- c/RaD/4o4Tn8sDVthZGvm2tBUx2KGQVHkcZAGGzkIo8G00uzwSysWhWPO15W/bJqvfl/QUk1PQu
- SNTv/14k1MprVsFlAaNnopYSG6wYUdSRDFXx9ysTX/htPfX/8fg0FMgLklW8Yxcetc7mTnab9mn
- 1Qgs0YKoXG8WNwTbu8OdkTd0tRJhl2UhxHM8tjRSn7tgP3awKIzDDkjIpV+TcwfmtvrwGOEVwix
- AdreqRACDHd/Y1JjsQ+GNKolWzl89DqRKpqXFIRgGteWKBjZ4rKlUnK2XR8t4MrcivwN61slPWs
- 77svn4X/Y9OF7s4xd51iWjFPZBXeG+q8iJH/5pOmad5WMGZN8/B1ror5bObph/Ay3drNx8flRW3
- B19Lde6Tf1rQQHPi9vYl1D9ZnHnfp/Iyux3jgAtvTtlGJVJ3S/m7ri+Kj9PI8OnOCvCTwP1r3PF
- HGepXXBrTfMCovEZ4hsuHVURyIrHMibgS62aFCs+T9eGDChpk9Ivuyn16vScF8O8JGL2veaL4wn
- yhd9KDfvXZbedG9i5bxEz1IO8BKTh08QVj6m6lZB8q88Hf26nfJZmZpkJiKQLo7gZExmY95Wdgc
- gTv9WfPjkgj9dyCwsQpkzNdvIJabpAc6c+RarJIkReU3YvzkYEIU6RIUi7R+IiXwDBkndJjOlbn
- 86H63IHi/QwtbSQ==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230601121001.1071533-1-masahiroy@kernel.org>
+ <20230601121001.1071533-8-masahiroy@kernel.org> <CAMj1kXFJOHsgopUOR7+jvC8s6bvSCZ3XAkQM1FbnZ8Qj6azvQA@mail.gmail.com>
+In-Reply-To: <CAMj1kXFJOHsgopUOR7+jvC8s6bvSCZ3XAkQM1FbnZ8Qj6azvQA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 1 Jun 2023 23:35:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATDJmh1aas86YW4yrG_8Rqgz7r82NwaPj1x5c7tg-d-jg@mail.gmail.com>
+Message-ID: <CAK7LNATDJmh1aas86YW4yrG_8Rqgz7r82NwaPj1x5c7tg-d-jg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] modpost: detect section mismatch for R_ARM_REL32
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,124 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This following message is printed in the console each time a network
-device configured with an IPv6 addresses is ready to be used:
+On Thu, Jun 1, 2023 at 9:40=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wro=
+te:
+>
+> On Thu, 1 Jun 2023 at 14:10, Masahiro Yamada <masahiroy@kernel.org> wrote=
+:
+> >
+> > For ARM, modpost fails to detect some types of section mismatches.
+> >
+> >   [test code]
+> >
+> >     .section .init.data,"aw"
+> >     bar:
+> >             .long 0
+> >
+> >     .section .data,"aw"
+> >     .globl foo
+> >     foo:
+> >             .long bar - .
+> >
+> > It is apparently a bad reference, but modpost does not report anything.
+> >
+> > The test code above produces the following relocations.
+> >
+> >   Relocation section '.rel.data' at offset 0xe8 contains 1 entry:
+> >    Offset     Info    Type            Sym.Value  Sym. Name
+> >   00000000  00000403 R_ARM_REL32       00000000   .init.data
+> >
+> > Currently, R_ARM_REL32 is just skipped.
+> >
+> > Handle it like R_ARM_ABS32.
+>
+> OK, so the reason we can handle these in the same way is because we
+> never calculate the resulting value, right? Because that value would
+> be different for these cases.
 
-  ADDRCONF(NETDEV_CHANGE): <iface>: link becomes ready
+Right.
 
-When netns are being extensively used -- e.g. by re-creating netns with
-veth to discuss with each other for testing purposes like mptcp_join.sh
-selftest does -- it generates a lot of messages: more than 700 when
-executing mptcp_join.sh with the latest version.
+'- loc' is unnecessary here because modpost never calculates the
+resulting instruction.
 
-=========
-== RFC ==
-=========
+modpost wants to know the location of the referenced symbol.
+(the offset from the start of the section).
 
-TL;DR: can we move this message to the debug level? Or is it better with
-a sysctl knob? Or something else?
+For the same reason, I omitted '- loc' for
+PC-relative ones such as R_ARM_CALL, R_ARM_JUMP24, etc.
 
-When looking at commit 3c21edbd1137 ("[IPV6]: Defer IPv6 device
-initialization until the link becomes ready.") which introduces this new
-message, it seems it had been added to verify that the new feature was
-working as expected. It could have then used a lower level than "info".
 
-It is unclear if this message can be useful. Maybe it can be used as a
-sign to know if there is something wrong, e.g. if a device is being
-regularly reconfigured by accident? But even then, I don't think that
-was its goal at the first place and clearly there are better ways to
-monitor and diagnose such issues. Do you see any usages?
 
-If this message is not that useful, it is probably better to simply
-lower its level, similar to commit 7c62b8dd5ca8 ("net/ipv6: lower the
-level of "link is not ready" messages"). If we can take this direction,
-we will just need to switch from pr_info() to pr_debug().
 
-If this message can be useful in many situations, it would be good to
-have a way to turn it off because in some other situations, it floods
-the logs without providing any useful input. The proposition here is to
-have a new per netns sysctl knob to easily skip this specific message
-when needed. If we prefer to take this direction, we will still need to
-document the new knob and the modification in the MPTCP selftest should
-be done in a separated commit.
 
-Adding a new sysctl entry just for that seems a bit "heavy", maybe there
-are better ways that are still easy to put in place?
 
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- include/net/netns/ipv6.h                        | 1 +
- net/ipv6/addrconf.c                             | 5 +++--
- net/ipv6/sysctl_net_ipv6.c                      | 9 +++++++++
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 1 +
- 4 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/netns/ipv6.h b/include/net/netns/ipv6.h
-index 3cceb3e9320b..721abf86052f 100644
---- a/include/net/netns/ipv6.h
-+++ b/include/net/netns/ipv6.h
-@@ -56,6 +56,7 @@ struct netns_sysctl_ipv6 {
- 	bool skip_notify_on_dev_down;
- 	u8 fib_notify_on_flag_change;
- 	u8 icmpv6_error_anycast_as_unicast;
-+	bool skip_print_link_becomes_ready;
- };
- 
- struct netns_ipv6 {
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 3797917237d0..9cf7b4932309 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3633,8 +3633,9 @@ static int addrconf_notify(struct notifier_block *this, unsigned long event,
- 				idev->if_flags |= IF_READY;
- 			}
- 
--			pr_info("ADDRCONF(NETDEV_CHANGE): %s: link becomes ready\n",
--				dev->name);
-+			if (!net->ipv6.sysctl.skip_print_link_becomes_ready)
-+				pr_info("ADDRCONF(NETDEV_CHANGE): %s: link becomes ready\n",
-+					dev->name);
- 
- 			run_pending = 1;
- 		}
-diff --git a/net/ipv6/sysctl_net_ipv6.c b/net/ipv6/sysctl_net_ipv6.c
-index 94a0a294c6a1..c9e82377a8fa 100644
---- a/net/ipv6/sysctl_net_ipv6.c
-+++ b/net/ipv6/sysctl_net_ipv6.c
-@@ -213,6 +213,15 @@ static struct ctl_table ipv6_table_template[] = {
- 		.proc_handler	= proc_doulongvec_minmax,
- 		.extra2		= &ioam6_id_wide_max,
- 	},
-+	{
-+		.procname	= "skip_print_link_becomes_ready",
-+		.data		= &init_net.ipv6.sysctl.skip_print_link_becomes_ready,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
- 	{ }
- };
- 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index e74d3074ef90..ec7d66a0a57e 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -83,6 +83,7 @@ init_partial()
- 		ip netns exec $netns sysctl -q net.mptcp.pm_type=0
- 		ip netns exec $netns sysctl -q net.ipv4.conf.all.rp_filter=0
- 		ip netns exec $netns sysctl -q net.ipv4.conf.default.rp_filter=0
-+		ip netns exec $netns sysctl -q net.ipv6.skip_print_link_becomes_ready=1
- 		if [ $checksum -eq 1 ]; then
- 			ip netns exec $netns sysctl -q net.mptcp.checksum_enabled=1
- 		fi
+--
+Best Regards
 
----
-base-commit: 6f4b98147b8dfcabacb19b5c6abd087af66d0049
-change-id: 20230601-net-next-skip_print_link_becomes_ready-5bc2655daa24
-
-Best regards,
--- 
-Matthieu Baerts <matthieu.baerts@tessares.net>
-
+Masahiro Yamada
