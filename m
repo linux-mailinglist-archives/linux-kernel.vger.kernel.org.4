@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E20B71F0FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313BD71F100
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbjFARkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S233017AbjFARlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbjFARjp (ORCPT
+        with ESMTP id S233007AbjFARlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:39:45 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB98136;
-        Thu,  1 Jun 2023 10:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685641184; x=1717177184;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=T10NFGdSOn3kZ70NkVkGG3eMfGwDT3os3Zr2NIy+93g=;
-  b=ZuD627PUfZaFsEtHe7IPsdmeTmtY6K8pYCC57eOGS6EdUJZDGnxrgmoR
-   HtSNgSJP35SBx96J7W3WVBPX0Tyz7FlsIQweH+xxMOTQ8Ey3wkFMK9Bll
-   N+ZtgIWx9nzO48T1YJszHvXnT+LACxiA4jrfTwlBDy4A/fg7jGnF8EVDz
-   azk7m9IOC2dGI3gE+Xd15SjQCMxoZGijbOp2VpNDwA2rC0bsEdJRebEJQ
-   afj1AThRpGd2NLfvc+02fcnN9q3VKYf/hVmhqcY8/BjemOAc5LXdrpwZH
-   PXj1xwUWY8nSXnQ0gwZy8QQdOp5Zndf2MCFctLGMB5Fz4Wy73GGqc4yUX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="335253627"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="335253627"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 10:39:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737197106"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="737197106"
-Received: from rcelisco-mobl.amr.corp.intel.com (HELO [10.212.207.82]) ([10.212.207.82])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 10:39:42 -0700
-Message-ID: <2720a80a-4496-0ba9-e545-046ed2529f7d@linux.intel.com>
-Date:   Thu, 1 Jun 2023 12:39:42 -0500
+        Thu, 1 Jun 2023 13:41:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60A519D;
+        Thu,  1 Jun 2023 10:41:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C8A615F6;
+        Thu,  1 Jun 2023 17:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3FAC433EF;
+        Thu,  1 Jun 2023 17:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685641276;
+        bh=CRB7AMcp8uSqjPgC16U5Gj7d6x7dEv+JFT/7ZjpPCXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IEhDo82S8U8HTCuNuscTnYHQ8mIRPYGtk5eQ6Q9Yukyl3SSlZYhaMZE659XNE4UpD
+         LTQ9JVuH3QpkfblUGNxHDGHR7ulTmtFskpPQRB+DFtWgZKqTmsOSiQzRLFyYBndSWj
+         jEXHPmH6aB1dtqIZMOmemzZiUGoIe6x7+vszTkVY=
+Date:   Thu, 1 Jun 2023 18:41:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/42] 6.1.32-rc1 review
+Message-ID: <2023060155-angles-baggy-78e5@gregkh>
+References: <20230601131939.051934720@linuxfoundation.org>
+ <CA+G9fYuHjNhe-5TboAbrOeZrL3xL-CYYSaEnL=8onebLUqDt8g@mail.gmail.com>
+ <2023060101-coconut-smugness-4c7a@gregkh>
+ <e7f9cbd1-f19d-2f08-8876-45163910ad93@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH] ASoC: SOF: ipc4-topology: Use size_t for variable passed
- to kzalloc()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
-References: <a311e4ae83406f714c9d1f7f2f857284265e581c.1685640591.git.christophe.jaillet@wanadoo.fr>
-Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <a311e4ae83406f714c9d1f7f2f857284265e581c.1685640591.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7f9cbd1-f19d-2f08-8876-45163910ad93@roeck-us.net>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,49 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/1/23 12:30, Christophe JAILLET wrote:
-> struct_size() checks for overflow, but assigning its result to just a u32
-> may still overflow after a successful check.
+On Thu, Jun 01, 2023 at 07:39:54AM -0700, Guenter Roeck wrote:
+> On 6/1/23 07:26, Greg Kroah-Hartman wrote:
+> > On Thu, Jun 01, 2023 at 07:41:08PM +0530, Naresh Kamboju wrote:
+> > > On Thu, 1 Jun 2023 at 18:57, Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > > 
+> > > > This is the start of the stable review cycle for the 6.1.32 release.
+> > > > There are 42 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > > 
+> > > > Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
+> > > > Anything received after that time might be too late.
+> > > > 
+> > > > The whole patch series can be found in one patch at:
+> > > >          https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc1.gz
+> > > > or in the git tree and branch at:
+> > > >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > > > and the diffstat can be found below.
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > 
+> > > 
+> > > Following build errors noticed on 6.1 and 5.15.
+> > > 
+> > > drivers/dma/at_xdmac.c: In function 'atmel_xdmac_resume':
+> > > drivers/dma/at_xdmac.c:2049:9: error: implicit declaration of function
+> > > 'pm_runtime_get_noresume' [-Werror=implicit-function-declaration]
+> > >   2049 |         pm_runtime_get_noresume(atxdmac->dev);
+> > >        |         ^~~~~~~~~~~~~~~~~~~~~~~
+> > > drivers/dma/at_xdmac.c:2049:40: error: 'struct at_xdmac' has no member
+> > > named 'dev'
+> > >   2049 |         pm_runtime_get_noresume(atxdmac->dev);
+> > >        |                                        ^~
+> > > cc1: some warnings being treated as errors
+> > > 
+> > > reported link:
+> > > https://lore.kernel.org/stable/CA+G9fYswtPyrYJbwcGFhc5o7mkRmWZEWCCeSjmR64M+N-odQhQ@mail.gmail.com/
+> > > 
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > 
+> > Ah, the .h file was added by 650b0e990cbd ("dmaengine: at_xdmac: add
+> > runtime pm support"), which isn't needed here.  I'll go add it by hand
 > 
-> Use a size_t instead in order to be cleaner.
+> Really ? Some of the dma patches seem to fix runtime pm support, and
+> "dmaengine: at_xdmac: disable/enable clock directly on suspend/resume"
+> is even tagged with
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Based on analysis from Dan Carpenter on another patch (see [1]).
+> Fixes: 650b0e990cbd ("dmaengine: at_xdmac: add runtime pm support")
 > 
-> [1]: https://lore.kernel.org/all/00e84595-e2c9-48ea-8737-18da34eaafbf@kili.mountain/
+> Why do we need to fix code which isn't present in 6.1.y ?
 
-looks like there are similar cases of struct_size -> u32 conversions in
-other places:
+We don't, I've dropped all of the patches for this driver from 5.15.y
+and 6.1.y as something went wrong here.
 
-struct snd_sof_control {
-    u32 size;	/* cdata size */
+thanks,
 
-ipc3-topology.c:        scontrol->size = struct_size(cdata, chanv,
-scontrol->num_channels);
-ipc3-topology.c:        scontrol->size = struct_size(cdata, chanv,
-scontrol->num_channels);
-ipc4-topology.c:        scontrol->size = struct_size(control_data,
-chanv, scontrol->num_channels);
-
-not sure how much of an issue this really is though?
-
-> ---
->  sound/soc/sof/ipc4-topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-> index db64e0cb8663..50faa4c88b97 100644
-> --- a/sound/soc/sof/ipc4-topology.c
-> +++ b/sound/soc/sof/ipc4-topology.c
-> @@ -881,7 +881,7 @@ static int sof_ipc4_widget_setup_comp_process(struct snd_sof_widget *swidget)
->  	/* allocate memory for base config extension if needed */
->  	if (process->init_config == SOF_IPC4_MODULE_INIT_CONFIG_TYPE_BASE_CFG_WITH_EXT) {
->  		struct sof_ipc4_base_module_cfg_ext *base_cfg_ext;
-> -		u32 ext_size = struct_size(base_cfg_ext, pin_formats,
-> +		size_t ext_size = struct_size(base_cfg_ext, pin_formats,
->  						swidget->num_input_pins + swidget->num_output_pins);
->  
->  		base_cfg_ext = kzalloc(ext_size, GFP_KERNEL);
+greg k-h
