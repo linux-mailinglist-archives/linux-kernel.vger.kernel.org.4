@@ -2,208 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F82719740
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB9471973E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbjFAJkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S232905AbjFAJk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbjFAJkZ (ORCPT
+        with ESMTP id S232230AbjFAJkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:40:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA01818C;
-        Thu,  1 Jun 2023 02:40:05 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3517cRGl015717;
-        Thu, 1 Jun 2023 09:39:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4niwuDJfbdAZvAjkQw3lg4yiatiTUKprN86ccKm4Fog=;
- b=FMbUWxR0T2BqriEfede7MR2VNnZfECZcpQq96CQ6I1230bBrZuhZXHgMsB18qauEtpg+
- vd4EhjphtMhayZYh6wNgs9DpG8zwlLYa5dO3swzENvkjxNPROg0WVMGZjDuweEM3ZGeN
- wjAczfeK0kW7O5PsCSw9SWpcCYLWqis0srD6XKgV+n7hvJDmEBwbVzVKaK+2IUbRbxVq
- v4MrIt77PwpQ5jt8Wg5GAjrD35E1NpbiLp6Oi4C61H6Qp2Y/xykGLhMotz36tSE3L1BI
- 156SpNNCuU2zsI5+qQTaGNffv7/bcK4uBaEYcihMq5UK13v7So5CZlGPQVyQNl9ZUUN6 KA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwx8qbknp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 09:39:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3519dUUD008114
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 09:39:30 GMT
-Received: from [10.50.56.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 02:39:25 -0700
-Message-ID: <574f6333-80b3-b54d-ef3c-12ba12114f5a@quicinc.com>
-Date:   Thu, 1 Jun 2023 15:09:21 +0530
+        Thu, 1 Jun 2023 05:40:24 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32841A5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:40:02 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30af0aa4812so640030f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685612401; x=1688204401;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NL+L8/FHuQ9uoVL4kapbhTgx7Wz/4aJPIXjWIUTJPys=;
+        b=rfbu5MhI5SJZwGwmZefMjuQjN/CX6szJh8v9cQK/UNCJkjr71G9quJFz0CBT8ZXeWl
+         zJFST8MT4Oehem4q3mr1xsmkONJ5X4rKjexmOOW049sg2EMe03tzPs57uDMeNxckgwfu
+         pShInDs5KvDgiufZG1gOGYs5KjdW6J9o7eFI1lBK2ebWOnUEnQylLHa3iP+aMlOwTxMA
+         7iuidBzaMZ3gJWtxOeBhIS+70O678j/xNbu/PEewDzEU+827IbndmbBZa0OX2CS9HqTr
+         yJzouPqHI/U7rcwVfgxlBvdrpC8mSygmbnIXdVS5QQUUgzKKJ/PZHavxItmuq34tBTLE
+         6oww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685612401; x=1688204401;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NL+L8/FHuQ9uoVL4kapbhTgx7Wz/4aJPIXjWIUTJPys=;
+        b=FqFvzUU+Sn+vbE0qoUsMG2F5K5nPhGsYUs5tgD60sR7rWUJO0hZI2vcN7d7t8h/9yy
+         sdSmeLZhFm73eOg8E9l39WfhQ0NGJuPabcKO+6fnq5U65bR54kXFnqOrzhOYDHVL3U1X
+         mRpqyKFqQ+sL0aZz1vEBS5A1BV2K+4Hru1WJ0gBWG+ZFNJGo9VMMOOFv4A065Q0MwHqO
+         13oPVSSe5SgKMmD85a4/FEwSezYCO/V1/8HwpkpGjD7fgaD445fzR8StaUDLMl+2dl8S
+         yWQKc7KcnoqJ1Ok4qFRouMk/ptg8HHjZ+0RKXZcT+SnO2/VfUjos1XeGB7m8CmvCbXHs
+         aTRw==
+X-Gm-Message-State: AC+VfDwCtJb502YYGryapAHVVH1lU7kyCMIwHJM9uTTVTcXDcLmIwMPW
+        TyuLzvOixN0ajWyKEMYm1xRQz9Ll7JPm5edw0PeeLA==
+X-Google-Smtp-Source: ACHHUZ6oDSwh4UKC2VFRKtNmzJ0AnUIjBft+jmlUJMYwT/NMeAoTW0C7brp4PnU10K+KDmWVN2jLUw==
+X-Received: by 2002:a5d:44c9:0:b0:2f6:c5bd:ba13 with SMTP id z9-20020a5d44c9000000b002f6c5bdba13mr1367257wrr.42.1685612400757;
+        Thu, 01 Jun 2023 02:40:00 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id e16-20020adfe390000000b003048477729asm9686685wrm.81.2023.06.01.02.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 02:40:00 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Thu, 01 Jun 2023 11:39:58 +0200
+Subject: [PATCH] phy: qcom: qmp-combo: fix Display Port PHY configuration
+ for SM8550
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 16/17] media: venus: Use newly-introduced
- hfi_buffer_requirements accessors
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>
-CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>
-References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
- <20230228-topic-venus-v4-16-feebb2f6e9b8@linaro.org>
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <20230228-topic-venus-v4-16-feebb2f6e9b8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -2CHr1l1NRWBfypP9JzVhzuS2X_aqMrM
-X-Proofpoint-GUID: -2CHr1l1NRWBfypP9JzVhzuS2X_aqMrM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_06,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0 clxscore=1015
- spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010085
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20230601-topic-sm8550-upstream-dp-phy-init-fix-v1-1-4e9da9f97991@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAG1neGQC/x2NQQrCMBBFr1Jm7cAkErFeRVykyWgG2jRkUlFK7
+ 25w+R6f93dQrsIKt2GHym9RWXMHcxogJJ9fjBI7gyV7pgsZbGuRgLpcnSPcirbKfsFYsKQvSpa
+ GT/kgx5ECkXGjjdBbk1fGqfocUq/lbZ67LJX79n9+fxzHD/ALUGqMAAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2612;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=qUJ8E0K7Mcd3JCfr2Hf0q0TxIPEtiZBh2c1pXDlK3Tw=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkeGdvJi88UieHqnjwJzuk4VwsotiJLMMxCu1Z4H7Z
+ raTeUXCJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHhnbwAKCRB33NvayMhJ0d2FEA
+ DPaE1VPiQY0zVef3F6SGiREhgpocDIT1nW7BxbtcL0BVh1w+oZMO0Svt8luh72cBmV7G8luzUbaB71
+ vVzoFs0aSaiMCUoGqMWKwavC5J3xFwfZUdeQuQF40+RYhecbE1hO7o5QMXGZHx+nS9CLdXhHzf+xsR
+ 1B5rgO+IIakhmlaIgWZUSnqHasr/+3NUYGk5aEoGcabpbcJgo8KxCx9BmPGrb11/ITbAg09yQnQX5u
+ 2TfWY1HJoMHFYAuIbB+0ikX6frdeMWYJ7nSAVXn72tZNbf4JV6Q7Mpiwidt5GpDOQ24mamHeloefhL
+ 13a/xRJwRkVBNh9t6JswucwQmYdRBN/+XNp+LM+9cbDHmiFcFXV3AI8v7a1euIrX8si4SaoakGCYFF
+ tYCQN3PM4WKT5vpl2/e6B7m5Ti8YOt34KdXCw7+7aXP2aCFUx8m77ET5FORkATwpEC++1ZaDr2zqvm
+ C3LRxxY3I4BIeqbm/WffeNtAiqhk/soIHrCZrhevxN6gX1j7iSfdoakMYFkjOl03tyK9ru7dHgFgVj
+ lIDr4P/oXtLmepVvZPPvRkadebXk98ISH/Fd718G0Dv9rPe+DFaxUEh0hwRa0PWTFW7Uv6eS4CWxcH
+ 9CzU7Ko3daNIW8QTRGcDAdYDmkFg21SxJs8Kt56LlziB9KOSNDxf4nD2qSYg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The SM8550 PHY also uses a different offset for the CMN_STATUS reg,
+use the right one for the v6 Display Port configuration.
 
+Fixes: 49742e9edab3 ("phy: qcom-qmp-combo: Add support for SM8550")
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-On 5/30/2023 6:00 PM, Konrad Dybcio wrote:
-> Now that we have a way which is independent of the HFI version to set
-> the correct fields in hfi_buffer_requirements, use it!
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index 33cc99d9c77d..bebce8c591a3 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -2151,6 +2151,7 @@ static void qmp_v4_configure_dp_tx(struct qmp_combo *qmp)
+ static int qmp_v456_configure_dp_phy(struct qmp_combo *qmp,
+ 				     unsigned int com_resetm_ctrl_reg,
+ 				     unsigned int com_c_ready_status_reg,
++				     unsigned int com_cmn_status_reg,
+ 				     unsigned int dp_phy_status_reg)
+ {
+ 	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+@@ -2207,14 +2208,14 @@ static int qmp_v456_configure_dp_phy(struct qmp_combo *qmp,
+ 			10000))
+ 		return -ETIMEDOUT;
+ 
+-	if (readl_poll_timeout(qmp->dp_serdes + QSERDES_V4_COM_CMN_STATUS,
++	if (readl_poll_timeout(qmp->dp_serdes + com_cmn_status_reg,
+ 			status,
+ 			((status & BIT(0)) > 0),
+ 			500,
+ 			10000))
+ 		return -ETIMEDOUT;
+ 
+-	if (readl_poll_timeout(qmp->dp_serdes + QSERDES_V4_COM_CMN_STATUS,
++	if (readl_poll_timeout(qmp->dp_serdes + com_cmn_status_reg,
+ 			status,
+ 			((status & BIT(1)) > 0),
+ 			500,
+@@ -2250,6 +2251,7 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
+ 
+ 	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V4_COM_RESETSM_CNTRL,
+ 					QSERDES_V4_COM_C_READY_STATUS,
++					QSERDES_V4_COM_CMN_STATUS,
+ 					QSERDES_V4_DP_PHY_STATUS);
+ 	if (ret < 0)
+ 		return ret;
+@@ -2314,6 +2316,7 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
+ 
+ 	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V4_COM_RESETSM_CNTRL,
+ 					QSERDES_V4_COM_C_READY_STATUS,
++					QSERDES_V4_COM_CMN_STATUS,
+ 					QSERDES_V4_DP_PHY_STATUS);
+ 	if (ret < 0)
+ 		return ret;
+@@ -2373,6 +2376,7 @@ static int qmp_v6_configure_dp_phy(struct qmp_combo *qmp)
+ 
+ 	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V6_COM_RESETSM_CNTRL,
+ 					QSERDES_V6_COM_C_READY_STATUS,
++					QSERDES_V6_COM_CMN_STATUS,
+ 					QSERDES_V6_DP_PHY_STATUS);
+ 	if (ret < 0)
+ 		return ret;
 
-Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+---
+base-commit: d4cee89031c80066ec461bb77b5e13a4f37d5fd2
+change-id: 20230601-topic-sm8550-upstream-dp-phy-init-fix-ed90c001592d
 
-> ---
->  drivers/media/platform/qcom/venus/helpers.c        |  5 +++--
->  .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   | 22 +++++++++++-----------
->  2 files changed, 14 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-> index b70bd3dac4df..8295542e1a7c 100644
-> --- a/drivers/media/platform/qcom/venus/helpers.c
-> +++ b/drivers/media/platform/qcom/venus/helpers.c
-> @@ -668,6 +668,7 @@ int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
->  			    struct hfi_buffer_requirements *req)
->  {
->  	u32 ptype = HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS;
-> +	enum hfi_version ver = inst->core->res->hfi_version;
->  	union hfi_get_property hprop;
->  	unsigned int i;
->  	int ret;
-> @@ -675,12 +676,12 @@ int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
->  	memset(req, 0, sizeof(*req));
->  
->  	if (type == HFI_BUFFER_OUTPUT || type == HFI_BUFFER_OUTPUT2)
-> -		req->count_min = inst->fw_min_cnt;
-> +		hfi_bufreq_set_count_min(req, ver, inst->fw_min_cnt);
->  
->  	ret = platform_get_bufreq(inst, type, req);
->  	if (!ret) {
->  		if (type == HFI_BUFFER_OUTPUT || type == HFI_BUFFER_OUTPUT2)
-> -			inst->fw_min_cnt = req->count_min;
-> +			inst->fw_min_cnt = hfi_bufreq_get_count_min(req, ver);
->  		return 0;
->  	}
->  
-> diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-> index e97ff8cf6d64..f5a655973c08 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-> @@ -1215,24 +1215,24 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
->  
->  	out_min_count = output_buffer_count(VIDC_SESSION_TYPE_DEC, codec);
->  	/* Max of driver and FW count */
-> -	out_min_count = max(out_min_count, bufreq->count_min);
-> +	out_min_count = max(out_min_count, hfi_bufreq_get_count_min(bufreq, version));
->  
->  	bufreq->type = buftype;
->  	bufreq->region_size = 0;
-> -	bufreq->count_min = 1;
->  	bufreq->count_actual = 1;
-> -	bufreq->hold_count = 1;
-> +	hfi_bufreq_set_count_min(bufreq, version, 1);
-> +	hfi_bufreq_set_hold_count(bufreq, version, 1);
->  	bufreq->contiguous = 1;
->  	bufreq->alignment = 256;
->  
->  	if (buftype == HFI_BUFFER_INPUT) {
-> -		bufreq->count_min = MIN_INPUT_BUFFERS;
-> +		hfi_bufreq_set_count_min(bufreq, version, MIN_INPUT_BUFFERS);
->  		bufreq->size =
->  			calculate_dec_input_frame_size(width, height, codec,
->  						       max_mbs_per_frame,
->  						       buffer_size_limit);
->  	} else if (buftype == HFI_BUFFER_OUTPUT || buftype == HFI_BUFFER_OUTPUT2) {
-> -		bufreq->count_min = out_min_count;
-> +		hfi_bufreq_set_count_min(bufreq, version, out_min_count);
->  		bufreq->size =
->  			venus_helper_get_framesz_raw(params->hfi_color_fmt,
->  						     out_width, out_height);
-> @@ -1269,7 +1269,7 @@ static int bufreq_enc(struct hfi_plat_buffers_params *params, u32 buftype,
->  	u32 work_mode = params->enc.work_mode;
->  	u32 rc_type = params->enc.rc_type;
->  	u32 num_vpp_pipes = params->num_vpp_pipes;
-> -	u32 num_ref;
-> +	u32 num_ref, count_min;
->  
->  	switch (codec) {
->  	case V4L2_PIX_FMT_H264:
-> @@ -1289,21 +1289,21 @@ static int bufreq_enc(struct hfi_plat_buffers_params *params, u32 buftype,
->  
->  	bufreq->type = buftype;
->  	bufreq->region_size = 0;
-> -	bufreq->count_min = 1;
->  	bufreq->count_actual = 1;
-> -	bufreq->hold_count = 1;
-> +	hfi_bufreq_set_count_min(bufreq, version, 1);
-> +	hfi_bufreq_set_hold_count(bufreq, version, 1);
->  	bufreq->contiguous = 1;
->  	bufreq->alignment = 256;
->  
->  	if (buftype == HFI_BUFFER_INPUT) {
-> -		bufreq->count_min = MIN_INPUT_BUFFERS;
-> +		hfi_bufreq_set_count_min(bufreq, version, MIN_INPUT_BUFFERS);
->  		bufreq->size =
->  			venus_helper_get_framesz_raw(params->hfi_color_fmt,
->  						     width, height);
->  	} else if (buftype == HFI_BUFFER_OUTPUT ||
->  		   buftype == HFI_BUFFER_OUTPUT2) {
-> -		bufreq->count_min =
-> -			output_buffer_count(VIDC_SESSION_TYPE_ENC, codec);
-> +		count_min = output_buffer_count(VIDC_SESSION_TYPE_ENC, codec);
-> +		hfi_bufreq_set_count_min(bufreq, version, count_min);
->  		bufreq->size = calculate_enc_output_frame_size(width, height,
->  							       rc_type);
->  	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH(version)) {
-> 
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
