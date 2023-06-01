@@ -2,212 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0013471F3C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A504A71F3C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjFAUXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S232249AbjFAUXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjFAUX2 (ORCPT
+        with ESMTP id S231926AbjFAUXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:23:28 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEF6134;
-        Thu,  1 Jun 2023 13:22:57 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.72.8) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 1 Jun 2023
- 23:22:18 +0300
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v6] sh: avoid using IRQ0 on SH3/4
-To:     Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        <linux-sh@vger.kernel.org>
-CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        <linux-kernel@vger.kernel.org>
-Organization: Open Mobile Platform
-Message-ID: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
-Date:   Thu, 1 Jun 2023 23:22:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 1 Jun 2023 16:23:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399AE79;
+        Thu,  1 Jun 2023 13:23:14 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351JeNJH015302;
+        Thu, 1 Jun 2023 20:23:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=W+jeNyPb1+d2e3DhT9PLjOuuWFn2hh9XeemreQjMQG8=;
+ b=DOCEkTgW1Zg8E3jan8UeaLT4XFcpLTluhT7jzinR3yeKnNu+LTzKmY9HZM8hvCnNR2ll
+ ph5XI3jvhZhqA8hjgX9hXWAq4vrZ7XypiEmal3ps72U7NsjCX8h+wmFBqmdQ+SDBFab6
+ XD4KBYek/G9BbhURcX+1jGeuuPm5LM/Mz4Q2huDRpNF4CLNQd7GhyOv0LUSKyn2sEWHy
+ gsWfL+C9jxJnJkvzeSpN3IZhwmfV/WQLPgTR+j9ZJxrfG3AsoJEqRSf6Qg7J2yn4Qhr5
+ fl6MLXT4cA8iMVFbE2IV5B8hIEwEltZJMAo/xiJhWAPLb6wipqbNNRDbaBz87fN8aOo5 Hw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qy1bcg3g1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 20:23:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351KN67u031675
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 20:23:06 GMT
+Received: from [10.71.113.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 13:23:06 -0700
+Message-ID: <cb090bfb-6ff5-7200-076d-b99dc13a6b71@quicinc.com>
+Date:   Thu, 1 Jun 2023 13:23:05 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: Skip TRBs while removing requests in
+ disconnect path
 Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1685562871-17024-1-git-send-email-quic_eserrao@quicinc.com>
+ <20230531231951.vg7x2w7gnnm77alq@synopsys.com>
+ <38255534-f242-dc06-9216-1568da9b0285@quicinc.com>
+ <20230601012953.47xh7meyr2woowpc@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230601012953.47xh7meyr2woowpc@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.72.8]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 06/01/2023 19:59:41
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 177803 [Jun 01 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 515 515 1b17fc6ab778ab3730d780f30d802773a7d822ac
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_no_received}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: 178.176.72.8:7.4.1,7.7.3,7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.8
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/01/2023 20:06:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 6/1/2023 4:24:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: uP_S7e7dcVMFuaE97Hvf1fIGSCoDkGWC
+X-Proofpoint-GUID: uP_S7e7dcVMFuaE97Hvf1fIGSCoDkGWC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=807 adultscore=0 clxscore=1011 priorityscore=1501 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306010175
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
-return -EINVAL instead.  However, the kernel code supporting SH3/4 based
-SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
-IRQ #s from 16 instead.
 
-The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-indeed are using IRQ0 for the SMSC911x compatible Ethernet chip...
 
-Fixes: ce753ad1549c ("platform: finally disallow IRQ0 in platform_get_irq() and its ilk")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+On 5/31/2023 6:30 PM, Thinh Nguyen wrote:
+> On Wed, May 31, 2023, Elson Serrao wrote:
+>>
+>>
+>> On 5/31/2023 4:20 PM, Thinh Nguyen wrote:
+>>> On Wed, May 31, 2023, Elson Roy Serrao wrote:
+>>>> Consider a scenario where cable disconnect happens when there is an active
+>>>> usb reqest queued to the UDC. As part of the disconnect we would issue an
+>>>> end transfer with no interrupt-on-completion before giving back this
+>>>> request. Since we are giving back the request without skipping TRBs the
+>>>> num_trbs field of dwc3_request still holds the stale value previously used.
+>>>> Function drivers re-use same request for a given bind-unbind session and
+>>>> hence their dwc3_request context gets preserved across cable
+>>>> disconnect/connect. When such a request gets re-queued after cable connect,
+>>>
+>>> Why would we preserve the request after a disconnect? The request is
+>>> associated with an endpoint, and after disconnect, the endpoint is no
+>>> longer valid. Shouldn't the request be freed then?
+>>>
+>>
+>>
+>> Function drivers generally allocate usb requests during bind when an
+>> endpoint is allocated to it (through usb_ep_autoconfig). These requests are
+>> freed when an unbind is called as the function is no longer associated with
+>> any end point. The function driver is free to re-use these requests
+>> throughout this bind-unbind session. The only restriction is that the
+>> function drivers wont be able to queue any requests as long as the endpoint
+> 
+>> is disabled. But that doesn't enforce function drivers to free the requests
+>> with ep_disable(). Even though the endpoint is disabled with cable
+>> disconnect, that endpoint is still associated with that particular function
+>> driver until that function is unbound.
+>>
+>> As an example below is how f_ncm driver allocates and frees the requests
+>> during bind/unbind
+>>
+>> Bind()
+>> ...
+>> ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_notify_desc);
+>> if (!ep)
+>> 	goto fail;
+>> ncm->notify = ep;
+>>
+>> status = -ENOMEM;
+>>
+>> /* allocate notification request and buffer */
+>> ncm->notify_req = usb_ep_alloc_request(ep, GFP_KERNEL);
+>> ...
+>>
+>> The endpoint is enabled later when set_alt is received and disabled in
+>> ncm_disable when the connection goes down (cable disconnect scenario)
+>>
+>>
+>> Unbind()
+>> ....
+>> kfree(ncm->notify_req->buf);
+>> usb_ep_free_request(ncm->notify, ncm->notify_req);
+>>
+>> I see similar implementation in other function drivers as well. That is,
+>> keep the usb requests allocated throughout the bind-unbind session and
+>> independent of ep_enable/ep_disable .
+>>
+>> Thanks
+>> Elson
+>>
+> 
+> Thanks for the clarification. Then you just need to reset the num_trbs
+> count when giving back the request. Can we do that in
+> dwc3_gadget_del_and_unmap_request()?
+> 
+> Please add a fix tag.
 
----
-The patch is against Linus Torvalds' 'linux.git' repo.
 
-Changes in version 6:
-- fixed up inconsistencies and did some rewording in the patch description.
+Yes we can just reset num_trbs in dwc3_gadget_del_and_unmap_request. I 
+had used skip trb function so that the trb_dequeue pointer and HWO field 
+also gets modified accordingly. But we dont really care about it in the 
+disconnect path as we reset that in the subsequent ep enable.
+Thanks for this suggestion!
+I will add a fix tag and re-upload the patch with above modification.
 
-Changes in version 5:
-- updated the patch description and the "Fixes:" tag as the patch disallowing
-  the use of IRQ0 was merged meanwhile.
-
-Changes in version 4:
-- fixed up the off-chip base IRQ #s for the Dreamcast/Highlander/R2D/SE7724
-  boards.
-
-Changes in version 3:
-- added an appropriate Fixes: tag and added a passage about it to the patch
-  description;
-- added actual cases of the boards using IRQ0 to the patch description;
-- added Geert Uytterhoeven's and John Paul Adrian Glaubitz's tags;
-- updated the link to point to the version 2 of the patch.
-
-Changes in version 2:
-- changed cmp/ge to cmp/hs in the assembly code.
-
- arch/sh/include/mach-common/mach/highlander.h |    2 +-
- arch/sh/include/mach-common/mach/r2d.h        |    2 +-
- arch/sh/include/mach-dreamcast/mach/sysasic.h |    2 +-
- arch/sh/include/mach-se/mach/se7724.h         |    2 +-
- arch/sh/kernel/cpu/sh3/entry.S                |    4 ++--
- include/linux/sh_intc.h                       |    6 +++---
- 6 files changed, 9 insertions(+), 9 deletions(-)
-
-Index: linux/arch/sh/include/mach-common/mach/highlander.h
-===================================================================
---- linux.orig/arch/sh/include/mach-common/mach/highlander.h
-+++ linux/arch/sh/include/mach-common/mach/highlander.h
-@@ -176,7 +176,7 @@
- #define IVDR_CK_ON	4		/* iVDR Clock ON */
- #endif
- 
--#define HL_FPGA_IRQ_BASE	200
-+#define HL_FPGA_IRQ_BASE	(200 + 16)
- #define HL_NR_IRL		15
- 
- #define IRQ_AX88796		(HL_FPGA_IRQ_BASE + 0)
-Index: linux/arch/sh/include/mach-common/mach/r2d.h
-===================================================================
---- linux.orig/arch/sh/include/mach-common/mach/r2d.h
-+++ linux/arch/sh/include/mach-common/mach/r2d.h
-@@ -47,7 +47,7 @@
- 
- #define IRLCNTR1	(PA_BCR + 0)	/* Interrupt Control Register1 */
- 
--#define R2D_FPGA_IRQ_BASE	100
-+#define R2D_FPGA_IRQ_BASE	(100 + 16)
- 
- #define IRQ_VOYAGER		(R2D_FPGA_IRQ_BASE + 0)
- #define IRQ_EXT			(R2D_FPGA_IRQ_BASE + 1)
-Index: linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
-===================================================================
---- linux.orig/arch/sh/include/mach-dreamcast/mach/sysasic.h
-+++ linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
-@@ -22,7 +22,7 @@
-    takes.
- */
- 
--#define HW_EVENT_IRQ_BASE  48
-+#define HW_EVENT_IRQ_BASE  (48 + 16)
- 
- /* IRQ 13 */
- #define HW_EVENT_VSYNC     (HW_EVENT_IRQ_BASE +  5) /* VSync */
-Index: linux/arch/sh/include/mach-se/mach/se7724.h
-===================================================================
---- linux.orig/arch/sh/include/mach-se/mach/se7724.h
-+++ linux/arch/sh/include/mach-se/mach/se7724.h
-@@ -37,7 +37,7 @@
- #define IRQ2_IRQ        evt2irq(0x640)
- 
- /* Bits in IRQ012 registers */
--#define SE7724_FPGA_IRQ_BASE	220
-+#define SE7724_FPGA_IRQ_BASE	(220 + 16)
- 
- /* IRQ0 */
- #define IRQ0_BASE	SE7724_FPGA_IRQ_BASE
-Index: linux/arch/sh/kernel/cpu/sh3/entry.S
-===================================================================
---- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
-+++ linux/arch/sh/kernel/cpu/sh3/entry.S
-@@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
- 	mov	r4, r0		! save vector->jmp table offset for later
- 
- 	shlr2	r4		! vector to IRQ# conversion
--	add	#-0x10, r4
- 
--	cmp/pz	r4		! is it a valid IRQ?
-+	mov	#0x10, r5
-+	cmp/hs	r5, r4		! is it a valid IRQ?
- 	bt	10f
- 
- 	/*
-Index: linux/include/linux/sh_intc.h
-===================================================================
---- linux.orig/include/linux/sh_intc.h
-+++ linux/include/linux/sh_intc.h
-@@ -13,9 +13,9 @@
- /*
-  * Convert back and forth between INTEVT and IRQ values.
-  */
--#ifdef CONFIG_CPU_HAS_INTEVT
--#define evt2irq(evt)		(((evt) >> 5) - 16)
--#define irq2evt(irq)		(((irq) + 16) << 5)
-+#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
-+#define evt2irq(evt)		((evt) >> 5)
-+#define irq2evt(irq)		((irq) << 5)
- #else
- #define evt2irq(evt)		(evt)
- #define irq2evt(irq)		(irq)
+Thanks
+Elson
