@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C824671A02D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D210471A029
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbjFAOf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S234229AbjFAOeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjFAOfO (ORCPT
+        with ESMTP id S234250AbjFAOeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:35:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A091A8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685630065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5cWnXN2OJgEdtvyQPWdKWzOTqRw1rxRQiL55xfvSEwM=;
-        b=GJ8PJH6sfa0yK5hdH6QMqnNQiCqVt0IsVDmOpm+e11OD/pI/LvUVvROtCLtfGvYpUxDjrD
-        nCrisSTeH7V9ZxKQR5VNvyjjH+nAgLwPbTPwu0KqDbILME7iWaMpT1rZ6X8doiHCITKRTW
-        t023m/Z+uPF0WWNC+z4Wu9xP6c18q1o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-B2F83YmsP2aeqexs1ttJDQ-1; Thu, 01 Jun 2023 10:34:18 -0400
-X-MC-Unique: B2F83YmsP2aeqexs1ttJDQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 1 Jun 2023 10:34:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2762118C;
+        Thu,  1 Jun 2023 07:34:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B28721C01719;
-        Thu,  1 Jun 2023 14:34:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A3ABE48205E;
-        Thu,  1 Jun 2023 14:34:14 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com>
-References: <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com> <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com> <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk> <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: Bug in short splice to socket?
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7E3AE1FDA9;
+        Thu,  1 Jun 2023 14:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685630053; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IAdeXSJabeGGKNsb03xa8D/XXWlEFIu9Z5QHMJ3Opgk=;
+        b=l4JdkqJy5rwpZ4iwWO860llEQcsNzfi4rq7KMSN0F1HOElNFVvZVe1lV5acQkScEgI6Lde
+        d/cFhvOEOQvfjpvkylifiq2H5Qt7MX+fUQuhOsTNnD9mkd2NL2kSPlT+0oKRTx7yZdUS8u
+        cXVtkt0ACT13nDjOcVUmV3ew2A5DNEU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 676AA139B7;
+        Thu,  1 Jun 2023 14:34:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id g+NjF2SseGTjTwAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 01 Jun 2023 14:34:12 +0000
+Message-ID: <57f6c455-4e62-963e-aae5-49abf7461d27@suse.com>
+Date:   Thu, 1 Jun 2023 16:34:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 01 Jun 2023 15:34:08 +0100
-Message-ID: <832277.1685630048@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
+ <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+ <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
+ <20230530152825.GAZHYWGXAp8PHgN/w0@fat_crate.local>
+ <888f860d-4307-54eb-01da-11f9adf65559@suse.com>
+ <20230531083508.GAZHcGvB68PUAH7f+a@fat_crate.local>
+ <efe79c9e-1e31-adb9-8f93-962249bf01bb@suse.com>
+ <20230531174857.GDZHeIib57h5lT5Vh1@fat_crate.local>
+ <fe33476d-0ec1-16f1-5874-8a5ff1650c3f@suse.com>
+ <20230601132233.GCZHibmemkxYxvTjSu@fat_crate.local>
+ <20230601143310.GDZHisJlbH5myXGQ8d@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230601143310.GDZHisJlbH5myXGQ8d@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------C1TJCTAVxCUY0FrAmz00Gqqp"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,216 +86,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------C1TJCTAVxCUY0FrAmz00Gqqp
+Content-Type: multipart/mixed; boundary="------------NDYxO4taDq5YOM91RgNBPax0";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+ mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+ Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Message-ID: <57f6c455-4e62-963e-aae5-49abf7461d27@suse.com>
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+References: <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
+ <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+ <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
+ <20230530152825.GAZHYWGXAp8PHgN/w0@fat_crate.local>
+ <888f860d-4307-54eb-01da-11f9adf65559@suse.com>
+ <20230531083508.GAZHcGvB68PUAH7f+a@fat_crate.local>
+ <efe79c9e-1e31-adb9-8f93-962249bf01bb@suse.com>
+ <20230531174857.GDZHeIib57h5lT5Vh1@fat_crate.local>
+ <fe33476d-0ec1-16f1-5874-8a5ff1650c3f@suse.com>
+ <20230601132233.GCZHibmemkxYxvTjSu@fat_crate.local>
+ <20230601143310.GDZHisJlbH5myXGQ8d@fat_crate.local>
+In-Reply-To: <20230601143310.GDZHisJlbH5myXGQ8d@fat_crate.local>
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+--------------NDYxO4taDq5YOM91RgNBPax0
+Content-Type: multipart/mixed; boundary="------------02vIfnJHs0QvCdX0zN9z7j9g"
 
-> On Thu, Jun 1, 2023 at 9:09=E2=80=AFAM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > The reason the old code is garbage is that it sets SPLICE_F_MORE
-> > entirely in the wrong place. It sets it *after* it has done the
-> > splice(). That's just crazy.
->=20
-> Clarification, because there are two splice's (from and to): by "after
-> the splice" I mean after the splice source, of course. It's still set
-> before the splice _to_ the network.
->=20
-> (But it is still true that I hope the networking code itself then sets
-> MSG_MORE even if SPLICE_F_MORE wasn't set, if it gets a buffer that is
-> bigger than what it can handle right now - so there are two
-> *different* reasons for "more data" - either the source knows it has
-> more to give, or the destination knows it didn't use everything it
-> got).
+--------------02vIfnJHs0QvCdX0zN9z7j9g
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I'm in the process of changing things so that ->sendpage() is removed and
-replaced with sendmsg() with MSG_SPLICE_PAGES.  The aim is to end up with a
-splice_to_socket() function (see attached) that transcribes a chunk of the
-pipe into a BVEC iterator and does a single sendmsg() that pushes a whole
-chunk of data to the socket in one go.
+T24gMDEuMDYuMjMgMTY6MzMsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBK
+dW4gMDEsIDIwMjMgYXQgMDM6MjI6MzNQTSArMDIwMCwgQm9yaXNsYXYgUGV0a292IHdyb3Rl
+Og0KPj4gTm93IGxlbW1lIHJlc3RhcnQgdGVzdGluZy4NCj4gDQo+IFRoaXMgaXMgZnJvbSBh
+bm90aGVyIGJveCwgd2l0aCB0aGUgbGF0ZXN0IGNoYW5nZXMgaW5jb3Jwb3JhdGVkOg0KPiAN
+Cj4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvYnAv
+YnAuZ2l0L2xvZy8/aD1yYzEtbXRycg0KPiANCj4gLS0tIHByb2MtbXRyci5iZWZvcmUgICAg
+MjAxMS0wMy0wNCAwMTowMzozNS4yNDM5OTQ3MzMgKzAxMDANCj4gKysrIHByb2MtbXRyci5h
+ZnRlciAgICAgMjAyMy0wNi0wMSAxNjoyODo1NC45NTk5OTk0NTYgKzAyMDANCj4gQEAgLTEs
+MyArMSwzIEBADQo+ICAgcmVnMDA6IGJhc2U9MHgwMDAwMDAwMDAgKCAgICAwTUIpLCBzaXpl
+PSAyMDQ4TUIsIGNvdW50PTE6IHdyaXRlLWJhY2sNCj4gICByZWcwMTogYmFzZT0weDA4MDAw
+MDAwMCAoIDIwNDhNQiksIHNpemU9IDEwMjRNQiwgY291bnQ9MTogd3JpdGUtYmFjaw0KPiAt
+cmVnMDI6IGJhc2U9MHgwYzAwMDAwMDAgKCAzMDcyTUIpLCBzaXplPSAgMjU2TUIsIGNvdW50
+PTE6IHdyaXRlLWJhY2sNCj4gK3JlZzAyOiBiYXNlPTB4MGMwMDAwMDAwICggMzA3Mk1CKSwg
+c2l6ZT0gIDEyOE1CLCBjb3VudD0xOiB3cml0ZS1iYWNrDQo+IA0KPiBXYW50IG10cnI9ZGVi
+dWcgb3V0cHV0IGFnYWluPw0KPiANCg0KWWVzLCBwbGVhc2UNCg0KDQpKdWVyZ2VuDQo=
+--------------02vIfnJHs0QvCdX0zN9z7j9g
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-In the network protocol, the loop inside sendmsg splices those pages into
-socket buffers, sleeping as necessary to gain sufficient memory to transcri=
-be
-all of them.  It can return partly done and the fully consumed pages will be
-consumed and then it'll return to gain more data.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-At the moment, it transcribes 16 pages at a time.  I could make it set
-MSG_MORE only if (a) SPLICE_F_MORE was passed into the splice() syscall or =
-(b)
-there's yet more data in the buffer.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-However, this might well cause a malfunction in UDP, for example.  MSG_MORE
-corks the current packet, so if I ask sendfile() say shove 32K into a packe=
-t,
-if, say, 16K is read from the source and entirely transcribed into the pack=
-et,
-if I understand what you're proposing, MSG_MORE wouldn't get set and the
-packet would be transmitted early.  A similar issue might exist for AF_TLS,
-where the lack of MSG_MORE triggers an end-of-record.
+--------------02vIfnJHs0QvCdX0zN9z7j9g--
 
-The problem isn't that the buffer supplied is bigger than the protocol could
-handle in one go, it's that what we read was less than the amount that the
-user requested - but we don't know if there will be more data.
+--------------NDYxO4taDq5YOM91RgNBPax0--
 
-One solution might be to pass MSG_MORE regardless, and then follow up with a
-null sendmsg() if we then hit a zero-length read (ie. EOF) or -ENODATA (ie.=
- a
-hole).
+--------------C1TJCTAVxCUY0FrAmz00Gqqp
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> The point is that the splice *source* knows whether there is more data
-> to be had, and that's where the "there is more" should be set.
+-----BEGIN PGP SIGNATURE-----
 
-Actually, that's not necessarily true.  If the source is a pipe or a socket,
-there may not be more, but we don't know that until the far end is closed -
-but for a file it probably is (we could be racing with a writer).  And then
-there's seqfile-based things like the trace buffer or procfiles which are
-really a class of their own.
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmR4rGQFAwAAAAAACgkQsN6d1ii/Ey/x
+MAf9GZ/T8pb6wAxfvYqCDNKdUzl3D1fXrPkS3u6l/Vj2NHKre0u1b+cUNHDlwF3PwoAkI43OLQ1S
+GhTaKIrbEKqIdXStfbMez5F8zpNJa6bBhEDzYUsKaDSK4iq2imLXTLQ9oUS33kq+79R/ip1A27ih
+J7hZcr6JQyD8QHDqHDzDc6av271b7Tpk90qt53PJqGoWlkmiLEEMT4r4Q5QBGsyKMORH24VRS0Pl
+d/sS68BzaWwaNt78wizf5lhac0Ldtn79b9yM5BlxFJmD9x1PiRrJxo9B1aD1tQxj3qMLYGgZ9jxz
+t8pFc/216+o3O43qws6x+s2kTVoDFDJskjtcg/tGBQ==
+=lKYI
+-----END PGP SIGNATURE-----
 
-> Basically my argument is that the whole "there is more data" should be
-> set by "->splice_read()" not by some hack in some generic
-> splice_direct_to_actor() function that is absolutely not supposed to
-> know about the internals of the source or the destination.
->=20
-> Do we have a good interface for that? No. I get the feeling that to
-> actually fix this, we'd have to pass in the 'struct splice_desc"
-> pointer to ->splice_read().
-
-That might become more feasible, actually.  In Jens's tree are the patches =
-to
-clean up splice_read a lot and get rid of ITER_PIPE.  Most of the
-->splice_reads are going to be direct calls to copy_splice_read() and
-filemap_splice_read() or wrappers around filemap_splice_read().  The latter,
-at least, might be in a good position to note EOF, perhaps by marking a pipe
-buffer as "no more".
-
-copy_splice_read() is more problematic because ->read_iter() doesn't indica=
-te
-if it hit EOF (or hit a hole).
-
-David
----
-ssize_t splice_to_socket(struct pipe_inode_info *pipe, struct file *out,
-			 loff_t *ppos, size_t len, unsigned int flags)
-{
-	struct socket *sock =3D sock_from_file(out);
-	struct bio_vec bvec[16];
-	struct msghdr msg =3D {};
-	ssize_t ret;
-	size_t spliced =3D 0;
-	bool need_wakeup =3D false;
-
-	pipe_lock(pipe);
-
-	while (len > 0) {
-		unsigned int head, tail, mask, bc =3D 0;
-		size_t remain =3D len;
-
-		/*
-		 * Check for signal early to make process killable when there
-		 * are always buffers available
-		 */
-		ret =3D -ERESTARTSYS;
-		if (signal_pending(current))
-			break;
-
-		while (pipe_empty(pipe->head, pipe->tail)) {
-			ret =3D 0;
-			if (!pipe->writers)
-				goto out;
-
-			if (spliced)
-				goto out;
-
-			ret =3D -EAGAIN;
-			if (flags & SPLICE_F_NONBLOCK)
-				goto out;
-
-			ret =3D -ERESTARTSYS;
-			if (signal_pending(current))
-				goto out;
-
-			if (need_wakeup) {
-				wakeup_pipe_writers(pipe);
-				need_wakeup =3D false;
-			}
-
-			pipe_wait_readable(pipe);
-		}
-
-		head =3D pipe->head;
-		tail =3D pipe->tail;
-		mask =3D pipe->ring_size - 1;
-
-		while (!pipe_empty(head, tail)) {
-			struct pipe_buffer *buf =3D &pipe->bufs[tail & mask];
-			size_t seg;
-
-			if (!buf->len) {
-				tail++;
-				continue;
-			}
-
-			seg =3D min_t(size_t, remain, buf->len);
-			seg =3D min_t(size_t, seg, PAGE_SIZE);
-
-			ret =3D pipe_buf_confirm(pipe, buf);
-			if (unlikely(ret)) {
-				if (ret =3D=3D -ENODATA)
-					ret =3D 0;
-				break;
-			}
-
-			bvec_set_page(&bvec[bc++], buf->page, seg, buf->offset);
-			remain -=3D seg;
-			if (seg >=3D buf->len)
-				tail++;
-			if (bc >=3D ARRAY_SIZE(bvec))
-				break;
-		}
-
-		if (!bc)
-			break;
-
-		msg.msg_flags =3D 0;
-		if (flags & SPLICE_F_MORE)
-			msg.msg_flags =3D MSG_MORE;
-		if (remain && pipe_occupancy(pipe->head, tail) > 0)
-			msg.msg_flags =3D MSG_MORE;
-		msg.msg_flags |=3D MSG_SPLICE_PAGES;
-
-		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, bvec, bc, len - remain);
-		ret =3D sock_sendmsg(sock, &msg);
-		if (ret <=3D 0)
-			break;
-
-		spliced +=3D ret;
-		len -=3D ret;
-		tail =3D pipe->tail;
-		while (ret > 0) {
-			struct pipe_buffer *buf =3D &pipe->bufs[tail & mask];
-			size_t seg =3D min_t(size_t, ret, buf->len);
-
-			buf->offset +=3D seg;
-			buf->len -=3D seg;
-			ret -=3D seg;
-
-			if (!buf->len) {
-				pipe_buf_release(pipe, buf);
-				tail++;
-			}
-		}
-
-		if (tail !=3D pipe->tail) {
-			pipe->tail =3D tail;
-			if (pipe->files)
-				need_wakeup =3D true;
-		}
-	}
-
-out:
-	pipe_unlock(pipe);
-	if (need_wakeup)
-		wakeup_pipe_writers(pipe);
-	return spliced ?: ret;
-}
-
+--------------C1TJCTAVxCUY0FrAmz00Gqqp--
