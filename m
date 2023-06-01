@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C767719735
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53CF719736
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjFAJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S232085AbjFAJjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbjFAJjb (ORCPT
+        with ESMTP id S232934AbjFAJjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Jun 2023 05:39:31 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6615E71
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:39:13 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f4f757d575so907674e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:39:13 -0700 (PDT)
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113D2E76
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:39:14 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f50a8f6dd7so696462e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685612351; x=1688204351;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRvNGrsibEvu6jhRJBq1cBQ4kF2HTrS/VOtbw4oxVa0=;
-        b=oJPY1B0tSvI82MXYYsTcHjaCd69oP8/C2oPLYL9IUuIiHqI97BuOG6qIrAR9hYgIXD
-         LHSp/oMeX5OSTSqjvwgU8UWvU91sUqzidwpeKEC/1A3cw+cCK0T/34coH7nQDgiGt7mW
-         Z2lnNzMFh+nNRBtjNDJvDRhrH2rRn59XpPzqzwzz+N1/TpmU8o6AGhS78klDJ8L+GIto
-         tiFPKi6K5gVwAYoNCV/6oEkTI7aEt77KujZLxh9nZCOJzl8XlDBTxUH5yiATR/M03T/9
-         Uz+Lgote1m/ev2mBXpLE++WvRRrvdbzEJjYHsX0c52q0TOmDD2vlcFZP85HuUlTKlIny
-         lX1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685612351; x=1688204351;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1685612352; x=1688204352;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kRvNGrsibEvu6jhRJBq1cBQ4kF2HTrS/VOtbw4oxVa0=;
-        b=fZAn/wQQuMQVUTChbQI/+MttBGNu+F0vhabjlqgVZ6E4Zu5R98juLjPeyjVieP+LTN
-         xMCgSf0Mcmha4RawErK4R8MZAucGAVOKZUfeog12++PrjVyAiWM5cV2YgHSfARXZMCh1
-         w8GeAJzbMulRUREAkylpNkUmg7WKv8vcY91XAZ3iD9QmXM1jirqbGnpg33S299f+vhwe
-         qyWv0D/OeZ2vVDbGBl8E0UkvS6NiMaX0eq7TSjwUvxqe/la7pMW8NLJ32NOmDCSMy8Oy
-         VxPxbT9Ixzd9exOWW61Eg4OROyBDEWIFybtkCAkq8tixJ+/c0WYhD+qrwiHxAf1yTMig
-         13qg==
-X-Gm-Message-State: AC+VfDwIdFtzCAyneeTqvPyRtH+/LZZMKIy3/QakavSki5i6icStr4bj
-        ELRKRRAESp6roEKLTD44gr2nnbECURVNJJu1Tts=
-X-Google-Smtp-Source: ACHHUZ4wl5eRmVoSl9UH26pnAgkcofTJ38V9G+G3IT8dqT7qVyiM/5Nvy+pDD+XL//satwDo0Gcydw==
-X-Received: by 2002:a05:6512:4018:b0:4f3:a763:ccb7 with SMTP id br24-20020a056512401800b004f3a763ccb7mr356822lfb.2.1685612351343;
-        Thu, 01 Jun 2023 02:39:11 -0700 (PDT)
+        bh=g6Zyh9SS/ay5C8X6ZpDqvKWzoRMQVLw0+Knzztfmr6U=;
+        b=vUFRGvUBj2vao0+xRbhI2W6IhVqThUUSAMyyU7+vepX6BqoSt4CRtAMpukhCjRGnDk
+         0JMSv2JhoZF0E2jAFmYsr0Vf8sWnMa66EDczESM3rYqSGwOODIVZGNAcFbmw3sWflmGB
+         wYI9Xn2UeEmcSi005tL9M57VqpDuM50QUAykyKJRz7sYOp+P5qw1PNsNVKPqX5WTxBbq
+         92z0qxSNksuMEvePSoQ0i2GVDUeklGy2Wg0UmEZ71GdgIQMQ0qAKRG+1Rp5FGHcQmNe1
+         QGbHm5v9/Rsqe6i8LPWeOeLCcKKm+c2Rra5v9+6oRv5Jjcy5DHtnK8VYKSHcwFHrfpq0
+         kC3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685612352; x=1688204352;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g6Zyh9SS/ay5C8X6ZpDqvKWzoRMQVLw0+Knzztfmr6U=;
+        b=MbOp39fkzKG+YwauAW4Oj7RBK1wn28Rgt8W7Bx3FU3kT+xfLZukJZSejIjuK9SvB4X
+         xubZjsjTXdWFgBMmHzUDZ1flhwcTO4l8ITEj1k/KgsxBdIpL8nnr8+JJt2Tvy6IVeuz9
+         z1KiOlTPs30QfDfD370mXJtlgPCVR4Wb/G5gyeJKiaos8OxzaCHrexjQrjr41xpWWDTU
+         MO3Rp8tDf+/ZPSgoMeWoZXLvFLGbkgZzLeC8A3iQaoWGAlXGM/vbnkeVgtL56HdYQ7ft
+         WqXLdLjQxEoOmrfKJhy1DFWS0x9B3X6ypB35YLPfE/e7+JDoHHNdmYN8kA1WK7Po1RKL
+         hroA==
+X-Gm-Message-State: AC+VfDy/vIqd6+iJ9jq4MxVyaNMiXPVo9fUuxGtmbMVVksxO653sG4sX
+        FV32ujTz9wOwBogoGLBUPBxbGdMAIy1LkszlNc4=
+X-Google-Smtp-Source: ACHHUZ5Y8h+x8Wx9jb6ZilqY5aQZXMqvnwtKWR/FNfO0LQraJ01cwVW2QLzUT3WGsDUlYRN8qI4TIQ==
+X-Received: by 2002:ac2:5deb:0:b0:4f2:40dd:e2cf with SMTP id z11-20020ac25deb000000b004f240dde2cfmr1006787lfq.55.1685612352392;
+        Thu, 01 Jun 2023 02:39:12 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id v3-20020a056512048300b004f3b258feefsm1031119lfq.179.2023.06.01.02.39.10
+        by smtp.gmail.com with ESMTPSA id v3-20020a056512048300b004f3b258feefsm1031119lfq.179.2023.06.01.02.39.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 02:39:11 -0700 (PDT)
+        Thu, 01 Jun 2023 02:39:12 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH 0/2] Update parts of PLL_TEST_CTL(_U) if required
-Date:   Thu, 01 Jun 2023 11:39:06 +0200
-Message-Id: <20230601-topic-alpha_ctl-v1-0-b6a932dfcf68@linaro.org>
+Date:   Thu, 01 Jun 2023 11:39:07 +0200
+Subject: [PATCH 1/2] clk: qcom: clk-alpha-pll: Add a way to update some
+ bits of test_ctl(_hi)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADpneGQC/x2N0QrCMAwAf2Xk2UC26R78FRFJ02gDpSvtFGHs3
- w0+3sFxO3Rtph2uww5NP9ZtLQ7jaQBJXF6KFp1hommmhUbc1mqCnGvih2wZOVAU4jgvlzN4Fbg
- rhsZFknflnbPL2vRp3//mdj+OHyl+21d2AAAA
+Message-Id: <20230601-topic-alpha_ctl-v1-1-b6a932dfcf68@linaro.org>
+References: <20230601-topic-alpha_ctl-v1-0-b6a932dfcf68@linaro.org>
+In-Reply-To: <20230601-topic-alpha_ctl-v1-0-b6a932dfcf68@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -69,11 +70,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685612350; l=944;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685612350; l=2006;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=IIHix1miPp0qtL4poKUvHfug4CBiAQj5S40QUBQ09Oc=;
- b=5RhikQiQfI+zL877J08QzRcusiyGzh3STK6XsgsBunSmpZG/FRrazcjiVqijI8nlRuz9Zkql3
- OzKofyptzZZCCYboY2jT4W2Tlc/vEDd2w48En2F4F3MvUXB/BdFZoI8
+ bh=wYVC8kdHJdhvnMuMnLKibz47EG2aGZVDSm2mijcxJhM=;
+ b=H/wQbdL0OfMcmYF31Muucv9e8Y7m1Ku/adaUr5wH7HSFZoLNywx+S3xNliNCQmZmE65dFR5at
+ ocJiQSpxaKuAZx85XvQwtUbafzOoFp3gs9IprHtdFk9jb61DJK6kTHD
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,27 +87,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some recent-ish clock drivers touching on the "standard" Alpha PLLs
-have been specifying the values that should be written into the CTL
-registers as mask-value combos, but that wasn't always reflected
-properly (or at all). This series tries to fix that without affecitng
-the drivers that actually provide the full register values.
+The "vanilla" Alpha PLL configs are sometimes provided with an intention
+to only update certain bits of th register.
+
+Do so if a mask is found.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (2):
-      clk: qcom: clk-alpha-pll: Add a way to update some bits of test_ctl(_hi)
-      clk: qcom: gcc-sm6115: Add missing PLL config properties
-
  drivers/clk/qcom/clk-alpha-pll.c | 19 +++++++++++++++----
  drivers/clk/qcom/clk-alpha-pll.h |  2 ++
- drivers/clk/qcom/gcc-sm6115.c    |  8 ++++++++
- 3 files changed, 25 insertions(+), 4 deletions(-)
----
-base-commit: 571d71e886a5edc89b4ea6d0fe6f445282938320
-change-id: 20230601-topic-alpha_ctl-ab0dc0ad3654
+ 2 files changed, 17 insertions(+), 4 deletions(-)
 
-Best regards,
+diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+index f81c7c561352..e4ef645f65d1 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.c
++++ b/drivers/clk/qcom/clk-alpha-pll.c
+@@ -384,10 +384,21 @@ void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 
+ 	regmap_update_bits(regmap, PLL_USER_CTL(pll), mask, val);
+ 
+-	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL(pll),
+-						config->test_ctl_val);
+-	clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U(pll),
+-						config->test_ctl_hi_val);
++	if (config->test_ctl_mask)
++		regmap_update_bits(regmap, PLL_TEST_CTL(pll),
++				   config->test_ctl_mask,
++				   config->test_ctl_val);
++	else
++		clk_alpha_pll_write_config(regmap, PLL_TEST_CTL(pll),
++					   config->test_ctl_val);
++
++	if (config->test_ctl_hi_mask)
++		regmap_update_bits(regmap, PLL_TEST_CTL_U(pll),
++				   config->test_ctl_hi_mask,
++				   config->test_ctl_hi_val);
++	else
++		clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U(pll),
++					   config->test_ctl_hi_val);
+ 
+ 	if (pll->flags & SUPPORTS_FSM_MODE)
+ 		qcom_pll_set_fsm_mode(regmap, PLL_MODE(pll), 6, 0);
+diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+index 6ff0d08eb938..e4bd863027ab 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.h
++++ b/drivers/clk/qcom/clk-alpha-pll.h
+@@ -123,7 +123,9 @@ struct alpha_pll_config {
+ 	u32 user_ctl_hi_val;
+ 	u32 user_ctl_hi1_val;
+ 	u32 test_ctl_val;
++	u32 test_ctl_mask;
+ 	u32 test_ctl_hi_val;
++	u32 test_ctl_hi_mask;
+ 	u32 test_ctl_hi1_val;
+ 	u32 test_ctl_hi2_val;
+ 	u32 main_output_mask;
+
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.40.1
 
