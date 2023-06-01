@@ -2,56 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0A47198DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C8D7198D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjFAKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S232789AbjFAKPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbjFAKPG (ORCPT
+        with ESMTP id S233393AbjFAKOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:15:06 -0400
-Received: from forward500a.mail.yandex.net (forward500a.mail.yandex.net [178.154.239.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28998E6F;
-        Thu,  1 Jun 2023 03:12:52 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:3487:0:640:5432:0])
-        by forward500a.mail.yandex.net (Yandex) with ESMTP id 6C3D15ECD9;
-        Thu,  1 Jun 2023 13:12:09 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 8CLA8e0DYuQ0-ISJWthyb;
-        Thu, 01 Jun 2023 13:12:08 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685614328;
-        bh=mKkVNkgkXY6MNVho2Qm6KsUuypPCjCch512PkoPBmg4=;
-        h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-        b=aH7v70ehGwAeeDJStZ0281Nf5k6pbQlE+puD8q8C/MMZsdFJLGbRx79WQz4z+WPiH
-         FzFtGnSHeAUGM4E4FdfDER76nRKAVn9ssGfz+OK9tzSLmWW4+0tkD9XxGqiWhQPoV/
-         NAuo1VdmEkiLZaHxpqFHRkWrOBUigMalwP7afqX0=
-Authentication-Results: mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Date:   Thu, 1 Jun 2023 13:12:08 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 16/43] pwm: ep93xx: add DT support for Cirrus EP93xx
-Message-ID: <20230601131208.7ee17749@redslave.neermore.group>
-In-Reply-To: <20230601070128.ejvigvxwm6cg4izf@pengutronix.de>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-        <20230601053546.9574-17-nikita.shubin@maquefel.me>
-        <20230601070128.ejvigvxwm6cg4izf@pengutronix.de>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Thu, 1 Jun 2023 06:14:53 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6131D1BC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:12:31 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5147aee9d7cso999481a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685614349; x=1688206349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lzBh9mt20nfbX1HPDV7qUtSParf3lregFrOcYZNJYTg=;
+        b=RaRPkC6VX2Q/BjwDKUPe+k/HHA2K3PeWdWSAlQMRdEG/tnmTVrcItIo7UYOv/QMizh
+         fXun4KbthwnGlMhHwbgtd1oo0pSD4tiWSV8j6L+PqAHjUoVQCnLEH1tSQLXECiMPP5v6
+         bgZKjutzE6DvR4vNMNFNrJxz+V+Ag7u9SgM08zR4S7s0q2pXk03J6eaL6GcmetjkLuDG
+         7xJkZdck6h+X2pSZdQWxMjsKNExIzpLdVou7k01rUwpL9J1GZ4IJHi0UJ8BEy/5/Bixs
+         vM/7MUOZaU7XwYyyYoDTTz41nXYpYF8yiasDYOtkzXoJQisFzrA35rh9BfkblJBmsXhr
+         6aFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685614349; x=1688206349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lzBh9mt20nfbX1HPDV7qUtSParf3lregFrOcYZNJYTg=;
+        b=hniqPQr0aQpkdF5/nmHzYxjAarnO9cDrmFQimfA0j1h62t8qqHN+wlhf5GJvMrm8vO
+         JobtFG+yJhdNMklHvtGIH1jU8JQ/7CBxDRjGTrgBP0Tj+k/+kVc6043JDWuqLS1B0a7V
+         /PN4TsH7Svgz3G+r+Q6PuFHTITYr1aO7mUwxhc+vWEasOhBCHjsXiyaQ6v49mIPZdG2f
+         rzESLpp7x4ohb591DZxq3+U8quOuyQZQjElz9kYfvBqozxYxm7afJk3m2pBRNvfeMmKa
+         J5VQ/VJmOpKP0tqCSkA1e+YhghB+NjlmnflMTaLW3WXENHZbk/u4VF6ZG24zXzyGzFfv
+         Aytw==
+X-Gm-Message-State: AC+VfDxlITomSdYWDdb/M2XrpCcEpUKxkdcUobEKSl7j9ENmV1dUhNaO
+        OVFPh77AThTdPO2/SJERZlp9i2wDi5JWKIvoyQ0=
+X-Google-Smtp-Source: ACHHUZ6Nyi5zWDsnRjCwCJM1Qxx+HYhDiHldJG4dN+0BYNHIkTDm05bT22FK85uiKCYBn46fmDiSdQ==
+X-Received: by 2002:aa7:c390:0:b0:514:9eae:b0a7 with SMTP id k16-20020aa7c390000000b005149eaeb0a7mr5187743edq.17.1685614348806;
+        Thu, 01 Jun 2023 03:12:28 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id l18-20020aa7c3d2000000b0051499320435sm5620034edr.14.2023.06.01.03.12.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 03:12:28 -0700 (PDT)
+Message-ID: <608f0c96-e01e-20e7-6227-1d2066223aac@linaro.org>
+Date:   Thu, 1 Jun 2023 12:12:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] dt-bindings: serial: 8250_omap: add
+ rs485-rts-active-high
+Content-Language: en-US
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        linux-kernel@vger.kernel.org
+References: <20230531111038.6302-1-francesco@dolcini.it>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230531111038.6302-1-francesco@dolcini.it>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +82,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Uwe!
+On 31/05/2023 13:10, Francesco Dolcini wrote:
+> From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> 
+> Add rs485-rts-active-high property, this was removed by mistake.
+> In general we just use rs485-rts-active-low property, however the OMAP
+> UART for legacy reason uses the -high one.
+> 
+> Fixes: 767d3467eb60 ("dt-bindings: serial: 8250_omap: drop rs485 properties")
+> Closes: https://lore.kernel.org/all/ZGefR4mTHHo1iQ7H@francesco-nb.int.toradex.com/
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-On Thu, 1 Jun 2023 09:01:28 +0200
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
 
-> Hello,
->=20
-> On Thu, Jun 01, 2023 at 08:34:07AM +0300, Nikita Shubin wrote:
-> > - find register range from the device tree
-> > - provide clock access via of
-> >=20
-> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me> =20
->=20
-> Looks good to me,
->=20
-> Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thank you.
-
->=20
-> There don't seem to be dependencies interdependencies to other patches
-> in this series?! What is the merge plan here. Should this patch go in
-> via the PWM tree, or will the whole series go in via armsoc?
-
-We are hoping to get it merged as a whole, and not in pieces.
-
-So we are trying to get Ack for all patches in series.
-
->=20
-> Best regards
-> Uwe
->=20
+Best regards,
+Krzysztof
 
