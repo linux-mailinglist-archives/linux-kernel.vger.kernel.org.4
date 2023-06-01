@@ -2,138 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30E3719DF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCCD719E11
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbjFAN14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S234068AbjFAN2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233799AbjFAN1r (ORCPT
+        with ESMTP id S233982AbjFAN2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:27:47 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F60B1B9
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:27:29 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so1310160a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 06:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685626045; x=1688218045;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0Bh0NwcmQVDulBJjQlFxoXeFk9v1DzA4S7ePzbUk4+w=;
-        b=q1iotZxbLy8szFOTeC5e/G0VQdDeibKUxN1V13zopsKDoRyLSyc6Z3+4NCEAYIHRcr
-         0Y+SOKRkc0h/8PrlcU2NIUN1lDLPBiHpGdDNpR2mlagpo/gvLvFSQS3CValEhaAtjE+2
-         RE+eVynh/sqxFzs+LL8qvlWKtlmi6qvz/TKHDm0/IH+D5aOrdEusPcJwXPMYNre/ulBW
-         FI9QWATMBhOQi00g1fzNaUT9uFmVOiAy+PvM5ML4OmjN50l9Q4JqXau5CjGGmBr819kT
-         fq1kDhA1u4fUCbzvrfZF+RjuYK9zU0Wo40z60SZLVIhSRl3FKihyEIC7AAk5scS9W995
-         Kp9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685626045; x=1688218045;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Bh0NwcmQVDulBJjQlFxoXeFk9v1DzA4S7ePzbUk4+w=;
-        b=ZjN8i5L6VMsgGmru/SykL2wbzXHW6tH724SVWj/23cOnAMy+y4FmSMS0Q18ZbcauCb
-         GHJi7PwAApluZJcE8NmiFXNojcJN9HqzT0MTfcKwj7NH+7LfMoLQsfGOQ7asCGtSUEqY
-         r9/Dj1k7vIdkZYJ0c8lL5vioaL1mnSlt9ebAHzPrJA1KFQGWeuUnXBxMK37fQT4u/9et
-         oNM9a8rXJRQDDC72ubnL1zNa0fRo7qdVq9uY9maY1qM+OreweFFsn6uLIOCm7iIEcsQn
-         OMKJHZXKsXhqfWm5OjBCfkElxxoE3sns7oY0RT8lvXt3gNSFU0JRyz+tOwo2W0uF6Stn
-         WuLg==
-X-Gm-Message-State: AC+VfDyDrN60zF3Krecb9UPEELaXKFRMs0OuMxtf9ZPf8RN+YoE9VVRe
-        S+X3ALmgGuv05mkfyzB774D6fg==
-X-Google-Smtp-Source: ACHHUZ56vTDQLpgZcsfUFAD+UPccMtNn7lITWkhbfSA78O9BcUWWDHiZ5WDLxtlvxFtNO3fcz/01mw==
-X-Received: by 2002:a05:6402:12ce:b0:514:938a:67cd with SMTP id k14-20020a05640212ce00b00514938a67cdmr5009231edx.38.1685626045251;
-        Thu, 01 Jun 2023 06:27:25 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id y1-20020aa7c241000000b0050bfeb15049sm7070997edo.60.2023.06.01.06.27.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 06:27:24 -0700 (PDT)
-Message-ID: <33979417-2c0c-5474-23e0-7e72add99873@linaro.org>
-Date:   Thu, 1 Jun 2023 15:27:22 +0200
+        Thu, 1 Jun 2023 09:28:23 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C84E6D;
+        Thu,  1 Jun 2023 06:28:07 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351DDUYp018739;
+        Thu, 1 Jun 2023 13:27:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=bPE9AxXhG80C4torBNp1dgqNJL9dzxzABLAPHZlRU4c=;
+ b=ZtVj7QfP7IaRKJkngAiqZPkdIdLpxo3dz9kg7bawD1r3/JUrkOoKmNZEAY6ztjsFWXjb
+ Wzn+DNiWS9M9E3rhsdi32yPUbVTol70R/IVUPnTKmt2p0XGjXQCjbLanQFXwhNsO1CSX
+ IytfDJRa+qAIHhkfdsFuAnOimhf1BSOu3dnsW1p6GIjGXlT8hrp3trb8UbfoiezhStlk
+ rFQo/bqSV5X1i8u2Ka88dctnU8GImgNpK38EgNBjyT+zKak6AB0qvRbLvlsk9B7S+ctp
+ B/XuUUulM9tRXQ74eBP6SMWxwAu/tZ8NZHcGWLrx8nFY791bKcvacMZSVNUQv58zhxbO NQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxv1a8ksv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 13:27:36 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351DE17r022544;
+        Thu, 1 Jun 2023 13:27:36 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxv1a8krq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 13:27:35 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3510vbWW006682;
+        Thu, 1 Jun 2023 13:27:34 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qu94e2hyt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 13:27:33 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351DRV6j32113240
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Jun 2023 13:27:31 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97E5C2004B;
+        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A4AC20043;
+        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
+Received: from [9.144.159.119] (unknown [9.144.159.119])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
+Message-ID: <5752a488-be54-61a0-6d18-647456abc4ee@linux.ibm.com>
+Date:   Thu, 1 Jun 2023 15:27:30 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V7 4/8] pinctrl: qcom: Add IPQ5018 pinctrl driver
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        andy.shevchenko@gmail.com
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robimarko@gmail.com
-References: <20230519125409.497439-1-quic_srichara@quicinc.com>
- <20230519125409.497439-5-quic_srichara@quicinc.com>
- <CAHp75VfVx+oGYKcija3h9-eWc6jggMx8p5SAQTEHTBEbjTaJKw@mail.gmail.com>
- <1823419a-6bb4-03f7-d5ae-e32204c5e598@quicinc.com>
- <ZHTK7uEzO7kcx_cV@surfacebook>
- <aefd0df1-8dfb-1b69-589b-974dea312845@quicinc.com>
- <664940c3-9ec1-b4bd-9db5-fa3529e3d1ff@linaro.org>
- <8146f367-c539-bea5-12b6-424213018488@quicinc.com>
- <eb109116-94eb-5b6d-0049-7bb31feada36@linaro.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH 8/9] powerpc: Add HOTPLUG_SMT support
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        mingo@redhat.com, x86@kernel.org
+References: <20230524155630.794584-1-mpe@ellerman.id.au>
+ <20230524155630.794584-8-mpe@ellerman.id.au>
 Content-Language: en-US
-In-Reply-To: <eb109116-94eb-5b6d-0049-7bb31feada36@linaro.org>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <20230524155630.794584-8-mpe@ellerman.id.au>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eTDF-zGZ2zA_y9IcYigGwfomNzbW0tV5
+X-Proofpoint-ORIG-GUID: dun_0TqE2rOk885f52-ndoe6QkF9Vmkk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 phishscore=0
+ clxscore=1011 malwarescore=0 adultscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010115
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 13:53, Krzysztof Kozlowski wrote:
-> On 01/06/2023 13:41, Sricharan Ramabadhran wrote:
->>
->>
->> On 6/1/2023 3:21 PM, Krzysztof Kozlowski wrote:
->>> On 01/06/2023 11:50, Sricharan Ramabadhran wrote:
->>>>
->>>>
->>>> On 5/29/2023 9:25 PM, andy.shevchenko@gmail.com wrote:
->>>>> Mon, May 29, 2023 at 03:58:09PM +0530, Sricharan Ramabadhran kirjoitti:
->>>>>> On 5/20/2023 12:17 AM, Andy Shevchenko wrote:
->>>>>>> On Fri, May 19, 2023 at 3:55 PM Sricharan Ramabadhran
->>>>>>> <quic_srichara@quicinc.com> wrote:
->>>>>
->>>>> ...
->>>>>
->>>>>>>      depends on OF || COMPILE_TEST
->>>>>>
->>>>>>    Yeah sure. COMPILE_TEST could be standalone. Will fix it and repost.
->>>>>
->>>>> Standalone COMPILE_TEST will give you definitely NOT what you want.
->>>>> And actually it's strange to have it standalone.
->>>>>
->>>>
->>>>    Ho ok, i meant like this, "depends on ARM64 || COMPILE_TEST"
->>>
->>> Don't do it differently than all other drivers. Open the Kconfig and
->>> look at existing entries.
->>>
->>    The latest added has this below, will use this
->>
->> 	depends on OF || COMPILE_TEST
-> 
-> I would even drop this... Lemme check, it looks odd. We depend on
-> ARCH_QCOM which uses OF. We have few drivers which depend on ACPI, but
-> that also seems wrong. These are platform drivers so they should expect
-> platform select proper firmware interface. I think none of other
-> platform drivers do like this (neither Samsung pinctrl nor other
-> Qualcomm drivers)).
-> 
-> I will fix this. For your patch I would just skip OF entirely.
+On 24/05/2023 17:56:29, Michael Ellerman wrote:
+> Add support for HOTPLUG_SMT, which enables the generic sysfs SMT support
+> files in /sys/devices/system/cpu/smt, as well as the "nosmt" boot
+> parameter.
 
-Correction: you need OF :(
+Hi Michael,
 
-Best regards,
-Krzysztof
+It seems that there is now a conflict between with the PPC 'smt-enabled'
+boot option.
+
+Booting the patched kernel with 'smt-enabled=4', later, change to the SMT
+level (for instance to 6) done through /sys/devices/system/cpu/smt/control
+are not applied. Nothing happens.
+Based on my early debug, I think the reasons is that cpu_smt_num_threads=8
+when entering __store_smt_control(). But I need to dig further.
+
+BTW, should the 'smt-enabled' PPC specific option remain?
+
+Cheers,
+Laurent.
+
+> Implement the recently added hooks to allow partial SMT states, allow
+> any number of threads per core.
+> 
+> Tie the config symbol to HOTPLUG_CPU, which enables it on the major
+> platforms that support SMT. If there are other platforms that want the
+> SMT support that can be tweaked in future.
+> 
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> ---
+>  arch/powerpc/Kconfig                |  1 +
+>  arch/powerpc/include/asm/topology.h | 25 +++++++++++++++++++++++++
+>  arch/powerpc/kernel/smp.c           |  3 +++
+>  3 files changed, 29 insertions(+)
+> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 539d1f03ff42..5cf87ca10a9c 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -273,6 +273,7 @@ config PPC
+>  	select HAVE_SYSCALL_TRACEPOINTS
+>  	select HAVE_VIRT_CPU_ACCOUNTING
+>  	select HAVE_VIRT_CPU_ACCOUNTING_GEN
+> +	select HOTPLUG_SMT			if HOTPLUG_CPU
+>  	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
+>  	select IOMMU_HELPER			if PPC64
+>  	select IRQ_DOMAIN
+> diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
+> index 8a4d4f4d9749..1e9117a22d14 100644
+> --- a/arch/powerpc/include/asm/topology.h
+> +++ b/arch/powerpc/include/asm/topology.h
+> @@ -143,5 +143,30 @@ static inline int cpu_to_coregroup_id(int cpu)
+>  #endif
+>  #endif
+>  
+> +#ifdef CONFIG_HOTPLUG_SMT
+> +#include <linux/cpu_smt.h>
+> +#include <asm/cputhreads.h>
+> +
+> +static inline bool topology_smt_supported(void)
+> +{
+> +	return threads_per_core > 1;
+> +}
+> +
+> +static inline bool topology_smt_threads_supported(unsigned int num_threads)
+> +{
+> +	return num_threads <= threads_per_core;
+> +}
+> +
+> +static inline bool topology_is_primary_thread(unsigned int cpu)
+> +{
+> +	return cpu == cpu_first_thread_sibling(cpu);
+> +}
+> +
+> +static inline bool topology_smt_thread_allowed(unsigned int cpu)
+> +{
+> +	return cpu_thread_in_core(cpu) < cpu_smt_num_threads;
+> +}
+> +#endif
+> +
+>  #endif /* __KERNEL__ */
+>  #endif	/* _ASM_POWERPC_TOPOLOGY_H */
+> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+> index 265801a3e94c..eed20b9253b7 100644
+> --- a/arch/powerpc/kernel/smp.c
+> +++ b/arch/powerpc/kernel/smp.c
+> @@ -1154,6 +1154,9 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+>  
+>  	if (smp_ops && smp_ops->probe)
+>  		smp_ops->probe();
+> +
+> +	// Initalise the generic SMT topology support
+> +	cpu_smt_check_topology(threads_per_core);
+>  }
+>  
+>  void smp_prepare_boot_cpu(void)
 
