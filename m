@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01471719F4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9999719F4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbjFAOMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S233883AbjFAOMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjFAOM0 (ORCPT
+        with ESMTP id S233831AbjFAOMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:12:26 -0400
+        Thu, 1 Jun 2023 10:12:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0121A7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:12:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E97FC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:12:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8A864584
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F065C433EF;
-        Thu,  1 Jun 2023 14:12:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D205A63A3A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E41C4339B;
+        Thu,  1 Jun 2023 14:12:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685628745;
-        bh=7JEOY5KQdqPCrKUkJxJKMsT5SEyQBEO158XALTuHM6o=;
+        s=k20201202; t=1685628749;
+        bh=dtgREO1rMn6LkUwpPKQhnN0y9K6Zffo816EVEew9pHQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MTrqJnI3vhI7DcD8S3xAI1nzE2botnX1sofoFfnJ5M6kI/E5atSt67JlRoxUC2+gy
-         EFjmkv8jwlN8eKpO5VpVSVNQwY1KJcvfT1V4bbLHlW0VwpEc0DIGElaWsZMLDd8AUQ
-         3vz8Hw52ztEfBoIbH3DtBYzb4SFTUMccExtZ5DaxVMMe1ncbIXQyvnA9tQe4hQfSpz
-         y3XgBs3rMsWn0m9rNNyUWKvGIivJvjXeDxTezgZQRR0rgJscOEMRmu67dYvVCbbbDd
-         EEuqvAbcaL1tAt/JF7Ktwdein5Xja1c+Gfse8ERcYWyFGLXRg7I+T6oPj1bsK33eea
-         ZNaa66r4e53oQ==
+        b=Fb3putoiBUseFxJkwI+s9QSkuvasX8/A5gDmxQ/w+TyYMG/Llp8B7QBEANUoL3TVf
+         3KTFmwfVkMp6gdOD6qu/yIyW3otXaK3GSmzcZHIZ78D22dYUBZiyvVbvhYNwQBB+Q8
+         /7LFB3TfGtd6w2fCNPxg0sDfgWxq8xY/eXxGHZwvLeJhCbxj5YUwdFLfeVCFG8q6SP
+         rqQJ6mQoJkHMx9+ciFXdNxltmvar6WyiIO2K/rfAdIHwWLYJksfL7pOmDow5tH5Pmp
+         L7OqQZXGNbn/AW1Pzsu/79pnsKVx93OBf/Z1fDVMLaS6vtL++NK14gemju4XYvG1SB
+         XhNTl8argwSCA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-In-Reply-To: <20230531170158.2744700-1-rf@opensource.cirrus.com>
-References: <20230531170158.2744700-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH] firmware: cs_dsp: Log that a bin file was loaded
-Message-Id: <168562874389.66708.18316483706903232896.b4-ty@kernel.org>
-Date:   Thu, 01 Jun 2023 15:12:23 +0100
+To:     pierre-louis.bossart@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, lgirdwood@gmail.com, tiwai@suse.com,
+        perex@perex.cz, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        Trevor Wu <trevor.wu@mediatek.com>
+Cc:     yc.hung@mediatek.com, tinghan.shen@mediatek.com,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230601034939.15802-1-trevor.wu@mediatek.com>
+References: <20230601034939.15802-1-trevor.wu@mediatek.com>
+Subject: Re: [PATCH v3 0/1] ASoC: SOF: add mt8188 audio support
+Message-Id: <168562874539.66708.811919351455149149.b4-ty@kernel.org>
+Date:   Thu, 01 Jun 2023 15:12:25 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -55,13 +63,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 18:01:58 +0100, Richard Fitzgerald wrote:
-> Change the message at the start of bin file loading from
-> cs_dsp_dbg() to cs_dsp_info() so that there is confirmation
-> in the kernel log that a bin file was loaded, and the name
-> of the file.
+On Thu, 01 Jun 2023 11:49:38 +0800, Trevor Wu wrote:
+> This series adds mt8188 audio support and dbg_dump callback for
+> mt8186 and mt8188.
 > 
+> Changes since v2:
+>   - resend the correct patch for adsp debug dump
 > 
+> Changes since v1:
+>   - fix typo
+>   - adopt reviewer's suggestion
+> 
+> [...]
 
 Applied to
 
@@ -69,8 +82,8 @@ Applied to
 
 Thanks!
 
-[1/1] firmware: cs_dsp: Log that a bin file was loaded
-      commit: 8f4007e87ef9637aa557340762d6c3bbcbbd5669
+[1/1] ASoC: SOF: mediatek: add adsp debug dump
+      commit: 089adf33701426869dd50d1b8b8a4abd25ae39ae
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
