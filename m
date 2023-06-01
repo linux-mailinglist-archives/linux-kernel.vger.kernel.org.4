@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAC771964D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCF271964F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbjFAJCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        id S232531AbjFAJDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbjFAJCn (ORCPT
+        with ESMTP id S232519AbjFAJDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:02:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065E9E40;
-        Thu,  1 Jun 2023 02:02:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A124864221;
-        Thu,  1 Jun 2023 09:01:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F326EC433D2;
-        Thu,  1 Jun 2023 09:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685610115;
-        bh=4qQydQYRMrUOcNRnymjEdMYj9KOx6NIt5j1b1rQ06po=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SHPCH/armNDPorE+cc3Xb3TXoWoApNaKS29MS+NEXf6sQ/2Mz8KZnELAt6eo0JkFI
-         vHBkYpsSVnV5qsc0rMP3PF5pfX7oUL4Sfp9fguKwNwff4N5gBx4XOB+fpR37F7VWEI
-         h/3NZIwevah72IbNwlMfIC4R/Uwma5mW+3xUZYQ67/9WKX78D/AJ/NZYs/6PXnohCa
-         dLsDaKPh6+A3FgQUiZh3lngNpdPts4aiXMMvaM5cUb5Xb028NhIneDbyKjdQXmPq3k
-         2JNyFfB1YzWXNVxBn4xbmVN+b0BifFzs70E0o30zjeC6VMTHBZO8doYnpQXnrLw+u1
-         QFoHrgiDb3iAg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q4eC0-0007BU-Sj; Thu, 01 Jun 2023 11:02:00 +0200
-Date:   Thu, 1 Jun 2023 11:02:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     'Johan Hovold <johan+linaro@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/a6xx: fix uninitialised lock in init error path
-Message-ID: <ZHheiJfdp7-597XT@hovoldconsulting.com>
-References: <20230531075854.703-1-johan+linaro@kernel.org>
- <CAD=FV=UtyMSekPYfamMkswC=mSRnBpQUygMxZ+Wgf6Y2dB2Qhw@mail.gmail.com>
+        Thu, 1 Jun 2023 05:03:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5C710C4;
+        Thu,  1 Jun 2023 02:02:47 -0700 (PDT)
+X-UUID: fa776718005a11eeb20a276fd37b9834-20230601
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=nmPyA18HFmF7VUllxvu4R1sfBOHplruxD5sH3Nf1XfU=;
+        b=T4VwWdLz80+UY+bVAR/884z6xR3v5RyxEqyBCAx6U44Xxvo6810pdCMdrXBIZOdfIv69Iz7MIHbo7/a0sAFEdEaDJupYxOywrweEyJvKClH6SBWXS6qeBVWfMg5LOZhp1dIbpu5SSG6w02CTcmlnWUTlMjsnBRC8oVcVYURhNYU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:dc36925c-7000-461f-b339-20e579be72b6,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.25,REQID:dc36925c-7000-461f-b339-20e579be72b6,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:f6dc0e3d-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:230601170207E6QTFJR0,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: fa776718005a11eeb20a276fd37b9834-20230601
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1831319348; Thu, 01 Jun 2023 17:02:04 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 17:02:03 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 1 Jun 2023 17:02:03 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <stanley.chu@mediatek.com>
+Subject: [PATCH v1] ufs: core: Remove the nolock version of ufshcd_mcq_poll_cqe()
+Date:   Thu, 1 Jun 2023 17:02:02 +0800
+Message-ID: <20230601090202.27035-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=UtyMSekPYfamMkswC=mSRnBpQUygMxZ+Wgf6Y2dB2Qhw@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,41 +67,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 07:22:49AM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, May 31, 2023 at 1:00 AM Johan Hovold <johan+linaro@kernel.org> wrote:
-> >
-> > A recent commit started taking the GMU lock in the GPU destroy path,
-> > which on GPU initialisation failure is called before the GMU and its
-> > lock have been initialised.
-> >
-> > Make sure that the GMU has been initialised before taking the lock in
-> > a6xx_destroy() and drop the now redundant check from a6xx_gmu_remove().
-> >
-> > Fixes: 4cd15a3e8b36 ("drm/msm/a6xx: Make GPU destroy a bit safer")
-> > Cc: stable@vger.kernel.org      # 6.3
-> > Cc: Douglas Anderson <dianders@chromium.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 3 ---
-> >  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 9 ++++++---
-> >  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> I think Dmitry already posted a patch 1.5 months ago to fix this.
-> 
-> https://lore.kernel.org/r/20230410165908.3094626-1-dmitry.baryshkov@linaro.org
+Since ufshcd_mcq_poll_cqe_nolock() is no longer used by any users,
+it should be removed.
 
-Bah, I checked if Bjorn had hit this with his recent A690 v3 series and
-posted a fix, but did not look further than that.
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/ufs/core/ufs-mcq.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-> Can you confirm that works for you?
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 920eb954f594..785fc9762cad 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -307,11 +307,13 @@ void ufshcd_mcq_compl_all_cqes_lock(struct ufs_hba *hba,
+ 	spin_unlock_irqrestore(&hwq->cq_lock, flags);
+ }
+ 
+-static unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
+-						struct ufs_hw_queue *hwq)
++unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
++				       struct ufs_hw_queue *hwq)
+ {
+ 	unsigned long completed_reqs = 0;
++	unsigned long flags;
+ 
++	spin_lock_irqsave(&hwq->cq_lock, flags);
+ 	ufshcd_mcq_update_cq_tail_slot(hwq);
+ 	while (!ufshcd_mcq_is_cq_empty(hwq)) {
+ 		ufshcd_mcq_process_cqe(hba, hwq);
+@@ -321,17 +323,6 @@ static unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
+ 
+ 	if (completed_reqs)
+ 		ufshcd_mcq_update_cq_head(hwq);
+-
+-	return completed_reqs;
+-}
+-
+-unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+-				       struct ufs_hw_queue *hwq)
+-{
+-	unsigned long completed_reqs, flags;
+-
+-	spin_lock_irqsave(&hwq->cq_lock, flags);
+-	completed_reqs = ufshcd_mcq_poll_cqe_nolock(hba, hwq);
+ 	spin_unlock_irqrestore(&hwq->cq_lock, flags);
+ 
+ 	return completed_reqs;
+-- 
+2.18.0
 
-That looks like it would work too, but I think I prefer my version which
-keeps the initialisation of the GMU struct in a6xx_gmu_init().
-
-Dmitry or Rob, could you see to that either version gets merged soon so
-that we don't end up with even more people having to debug and fix the
-same issue?
-
-Johan
