@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CB971F581
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E819671F58E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbjFAWE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
+        id S232214AbjFAWFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjFAWE1 (ORCPT
+        with ESMTP id S229800AbjFAWFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:04:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5264B180;
-        Thu,  1 Jun 2023 15:04:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E394C64A49;
-        Thu,  1 Jun 2023 22:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54181C433D2;
-        Thu,  1 Jun 2023 22:04:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685657065;
-        bh=7YTN2WfTPgVZX2vsLyH6XjyAXtEu2bLhn1YBxDETeF8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NFtAwIsl3zebHiP/Bb+9qu5LrE9rxaomMpHZ/ELkmCUh70/eEpMVWJzF+0HBsIqC5
-         KqhhdZ3xe6fJtWxTC/zTsb/NPXugHtCs83aWE7O42jyHbDEAYfvDCQOtrkzLCNaTvd
-         If23d5NZf2hYb+mh10jUS/JnOUH2e9enCNVghEZkrsXzmp9HQW0IsC6nuQFwDOnBFd
-         bfn12Rv0UjcdgCevxq6nqbHAuItpb9qFDPdIPGN8rh8Sa7srXyUKdeniuMhg6z9D0S
-         MpPlxzEq8CHXZD4pl7pcKpvhz82qvhBHHIz5hFpGEEhkgw8A5e2W0xdoncDX4oI4D1
-         2LfZ4QEdv0r0A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41D25E52C02;
-        Thu,  1 Jun 2023 22:04:25 +0000 (UTC)
-Subject: Re: [GIT PULL] fbdev fixes for v6.4-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZHjxWNRjTIk6HyT5@ls3530>
-References: <ZHjxWNRjTIk6HyT5@ls3530>
-X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
- <dri-devel.lists.freedesktop.org>
-X-PR-Tracked-Message-Id: <ZHjxWNRjTIk6HyT5@ls3530>
-X-PR-Tracked-Remote: http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.4-rc5
-X-PR-Tracked-Commit-Id: d19663edc91de65ae85eea9902addc9d04b0ceb6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9e87b63ed37e202c77aa17d4112da6ae0c7c097c
-Message-Id: <168565706526.29061.17436079990405893976.pr-tracker-bot@kernel.org>
-Date:   Thu, 01 Jun 2023 22:04:25 +0000
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 18:05:46 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D32180;
+        Thu,  1 Jun 2023 15:05:42 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-256e1d87998so1118210a91.3;
+        Thu, 01 Jun 2023 15:05:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685657142; x=1688249142;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r6m06uJZ1FcfQQQ+zQbt4FBMdkqZwEjZRMbiHdQiMhk=;
+        b=MVRjfvzuQmigtaIpnBg868k8EJAvZXM6L0PhCAaZrPI8Yqi/CeUJlFgroYi+DdS3PB
+         MLZGiK3HIgyG6uxdk0K7CafGbmBWwyCnwYJzBO6Mp2pfD6tgUFJq+J3DPvTyFnyxQaYl
+         2aYbS9pPxD352nvrEboI7bMwf6wdOwWoelqQh1+m19Djq/glMR0pYoKXxXYcSFAZ716A
+         UhlxfJ6IVGRHQel0p28pi5FxFGzbgK6gtpvJr4DAX3wJoOlDQ7aTiUvfd0trNr0upJs4
+         H4UIerjjHqGWr0ColesVFer1vJO5kR+8IqZADcfGClvKuXiqwszWmMaBTzfmpJr/5XUx
+         4Xhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685657142; x=1688249142;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r6m06uJZ1FcfQQQ+zQbt4FBMdkqZwEjZRMbiHdQiMhk=;
+        b=iWaYFBeX0fVnj1XtiKBX3brIpz2/0xa4lUdWiOaQYD6QVHZg3p2Ed2VtXqrK0FE7U9
+         R0myr2O8PyVGwa62YdcjwXp31GRuNdHAsmdP/AaaQnCyjlF2YOpwzeAzrQWIP3Nr0qEh
+         BTVG3zZBQnIp7rNoFchD22+sqo9+T5/RQOgUw73pwFG6e8zJ6ofoAxYTSXcDItXGh4B3
+         WFMTJuqksokEuhIqV5EGmviRftFpw41aAmBpRJdkCz9ecigI1eRpxCnjRZquL1ahyPIc
+         fwsogpSKgxbLu2qW0cjfbdhZECb0XTkS8TinWPr97LskytbVOXyloa6HY5Uv6+XwRi2O
+         VYmQ==
+X-Gm-Message-State: AC+VfDw+4PKp9xS/KSyYZ/KCBsQ1RScwhRxltDgcVsjZd5/JM7UQF5Gd
+        pWRDD6laaFv1hyLxo6iRvRsxQjsLfTXXk9Uo/Ik=
+X-Google-Smtp-Source: ACHHUZ4gT9Uz11PX2It9sJbwkqfOByKhOKQcVu6O4hJx58nfJehfCdmwKcEoYgo5RwTms1ghyvToylm8obOwqw9fgmU=
+X-Received: by 2002:a17:90b:fc9:b0:24d:f59a:d331 with SMTP id
+ gd9-20020a17090b0fc900b0024df59ad331mr611951pjb.26.1685657142032; Thu, 01 Jun
+ 2023 15:05:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230601213416.3373599-1-arnd@kernel.org>
+In-Reply-To: <20230601213416.3373599-1-arnd@kernel.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Fri, 2 Jun 2023 00:05:30 +0200
+Message-ID: <CAOX2RU7mQgwVV=aNXxMQKd4Xrf6iHi8gBCzccE0gz-3_UwW6jQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: gcc-ipq6018: remove duplicate initializers
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Mantas Pucka <mantas@8devices.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 1 Jun 2023 21:28:24 +0200:
+On Thu, 1 Jun 2023 at 23:34, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A recent change added new initializers for .config_ctl_val and
+> .config_ctl_hi_val but left the old values in place:
+>
+> drivers/clk/qcom/gcc-ipq6018.c:4155:27: error: initialized field overwritten [-Werror=override-init]
+>  4155 |         .config_ctl_val = 0x240d4828,
+>       |                           ^~~~~~~~~~
+> drivers/clk/qcom/gcc-ipq6018.c:4156:30: error: initialized field overwritten [-Werror=override-init]
+>  4156 |         .config_ctl_hi_val = 0x6,
+>       |                              ^~~
+>
+> Remove the unused ones now to avoid confusion.
+>
+> Fixes: f4f0c8acee0e4 ("clk: qcom: gcc-ipq6018: update UBI32 PLL")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-for-6.4-rc5
+Thanks for fixing my mess up.
+Reviewed-by: Robert Marko <robimarko@gmail.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9e87b63ed37e202c77aa17d4112da6ae0c7c097c
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards,
+Robert
+> ---
+>  drivers/clk/qcom/gcc-ipq6018.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/gcc-ipq6018.c b/drivers/clk/qcom/gcc-ipq6018.c
+> index 48f9bff7c80fb..86b43175b0422 100644
+> --- a/drivers/clk/qcom/gcc-ipq6018.c
+> +++ b/drivers/clk/qcom/gcc-ipq6018.c
+> @@ -4150,8 +4150,6 @@ static struct clk_branch gcc_dcc_clk = {
+>  static const struct alpha_pll_config ubi32_pll_config = {
+>         .l = 0x3e,
+>         .alpha = 0x6667,
+> -       .config_ctl_val = 0x240d6aa8,
+> -       .config_ctl_hi_val = 0x3c2,
+>         .config_ctl_val = 0x240d4828,
+>         .config_ctl_hi_val = 0x6,
+>         .main_output_mask = BIT(0),
+> --
+> 2.39.2
+>
