@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC9E7195A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C777195A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjFAIav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S232149AbjFAIbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjFAIaa (ORCPT
+        with ESMTP id S232225AbjFAIaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:30:30 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00629136
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:30:15 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bacfa4eefcbso1632507276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:30:15 -0700 (PDT)
+        Thu, 1 Jun 2023 04:30:35 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB701BB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:30:18 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5655d99da53so16941627b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685608215; x=1688200215;
+        d=google.com; s=20221208; t=1685608217; x=1688200217;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wurxTZMR4W9bTkdZ76nTitTE2haDL5hMwJafmdPt+XU=;
-        b=1Nb90uGX28SiglpD6/hWe0rJqlSKDtEC1Ca+e2T8imvVmOoD5KtJENUTdDaePyGvrD
-         TEfoCfGl7UAbVFjyzSINDSEoKXLbx1lgt3bfxxe1jAtjlNhLDm1hvbbMwSTxEMczjrAe
-         ZhzHidQIFwLFzNQ0ou8njAMKSpxxldWdFxDLkKSZrsRSR/JVDM462FP/aYUFDIn1KUvz
-         oMGtCwZrlDh/ILqbPJGXZpfB3ng8DKWDS8s0cjkkK8r5RO+Zn+UG9rKRLK2q5PPyTnt3
-         LH4MEhGEatGsJT7+W9Ksw1zMKuAeMvHtI7/MvTF8t3NcusJK4Q13apiRTrlSgorFOXG+
-         BNWg==
+        bh=uYv2/QogVthwJS3CciRPFzYudxjLtShAgk+9HPnqfKY=;
+        b=GprwQcjnt3Q9HqPaKVHhVAeOmhNWdVIjyAgsdcsOyKC8zn1824rL5zhpnqN2fs84mA
+         T+cgvKMoxeufMHlSlybfsGhW9LlzlCP+SuhsCIg8x2b4ME1DaZFxNvU1MG6uTjxzKmkK
+         e0crguWoMLc96GZECrIvbMVmbZ4AKx2KhIg2o3vNZzsKfRwfVztdamYGGlmgb/YV/AOg
+         gu9Dk/b7aIO7gYHgl5dPChTbZiJ2v7s6fA3dYE/6BLt6SQqei/VlV0xVTVsI0zcLJom0
+         DZT52m9qmzPC9ieH668YNR/0iFyFkCQj1opVIbag9ElPP8Dx0QexM5hnXxM235RgB1Ax
+         li5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685608215; x=1688200215;
+        d=1e100.net; s=20221208; t=1685608217; x=1688200217;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wurxTZMR4W9bTkdZ76nTitTE2haDL5hMwJafmdPt+XU=;
-        b=iKaPETXmi+nCITYbQj4ry8YQrNk2ZdzPlwRPSb9TmMTQAcN4kqe+7CHe4ousJTjfOo
-         0NiVFYbPaWFNeSOMyfbl/jel/66IVhgp+5CYnddvtTu/Z7vJL3qwmAsxWF4MCR8UQxVf
-         SnJV8nwn+cw84kg3W04FRDaZ9BlZK6TzEDA2H27tud6KMjGXOC5bmxAxZ5CxLJQI6g/Z
-         /Y1eQq0KcDSa59WT+M1NcRo+PlKzIOxoCOJ6QpT8qEOUISR3shsOmTmJVW2XuMdpMrGk
-         VxSryJeny9PZ4SZtOV6KL2seVXXFkKGettAJqrL8q+7P3ggh5gSqzz9xcuy77cOS4zsy
-         eQSA==
-X-Gm-Message-State: AC+VfDwEYFcNdnuATNp4Rm6wZYuY3AEoQAZP8OYVTJ3SxKNHY6Te5j3B
-        Kainal/kQp4Bhy5mESFgny+hRYC4310f
-X-Google-Smtp-Source: ACHHUZ6vjlbU1JOgJ5lIyMLX1Xx1uW7RznI2TiBom37rF7u2vwQWRJZPo2Sm3VSmNyTT7eFLCxeDklvptbFB
+        bh=uYv2/QogVthwJS3CciRPFzYudxjLtShAgk+9HPnqfKY=;
+        b=HGHCHrl6FAcg8RnnZPe52dvdT4bi43Rabt578QmUBsBK0l3jdESEnuBfGbNCwW73KV
+         zpCFcxp0vAmgJS9g3a5yMQw2UdW8SEP5r+FVxRMuCam8AUp4Ddz1ZObqMxvCX0kg+DoF
+         9c2AI4fzhIn/jBVqhmmpC51Uf+CdBePZkkM/CT5esSEW8w16Kj13kDgNsLx/KroftYok
+         PPmDMHxm9q07DsbtsmVaz61K5IYV9deT21l/ZlQ3IJVUda5I4gmN/OmNk7kuWDOyqHUW
+         rDYNf0Yd8mKB98UINDoct2Ssw+zu5FwgTBXK01yGYvlTqkmihPUmHkvO2qifOB0y1hHe
+         738Q==
+X-Gm-Message-State: AC+VfDxs1uUGyH9M0VgHgm2sNjxe/+VVTknyoL9vqH7g3769ao0U3ZaZ
+        pYGIWe3qRoFWLzKCNOygpNuSeuSYcsdb
+X-Google-Smtp-Source: ACHHUZ6pIBd5sLNTgc7MNEBXHw2j9otr4E4F7+BYAICh8dH7TYmV5KFeUrhHqOgp4VXHcoi/paVYUW/n+laP
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a344:94b4:9b8d:a089])
- (user=irogers job=sendgmr) by 2002:a05:6902:1024:b0:ba8:1e5f:8514 with SMTP
- id x4-20020a056902102400b00ba81e5f8514mr841811ybt.5.1685608214029; Thu, 01
- Jun 2023 01:30:14 -0700 (PDT)
-Date:   Thu,  1 Jun 2023 01:29:53 -0700
+ (user=irogers job=sendgmr) by 2002:a81:414b:0:b0:568:ed75:8b2f with SMTP id
+ f11-20020a81414b000000b00568ed758b2fmr721124ywk.0.1685608217631; Thu, 01 Jun
+ 2023 01:30:17 -0700 (PDT)
+Date:   Thu,  1 Jun 2023 01:29:54 -0700
 In-Reply-To: <20230601082954.754318-1-irogers@google.com>
-Message-Id: <20230601082954.754318-4-irogers@google.com>
+Message-Id: <20230601082954.754318-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20230601082954.754318-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 3/4] perf parse-events: Wildcard most "numeric" events
+Subject: [PATCH v2 4/4] perf test: Update parse-events expectations
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -73,340 +73,1281 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Numeric events are either raw events or those with ABI defined numbers
-matched by the lexer. PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events
-should wildcard match on hybrid systems. So "cycles" should match each
-PMU type with an extended type, not just PERF_TYPE_HARDWARE.
+With PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events opening on
+multiple PMUs, the test expectations need updating to test for
+multiple events. TODOs are added to document existing hybrid perf
+bugs.
 
-Change wildcard matching to add the event even if wildcard PMU
-scanning fails, there will be no extended type but this best matches
-previous behavior.
+Tested on hybrid alderlake and non-hybrid tigerlake.
 
-Only set the extended type when the event type supports it and when
-perf_pmus__supports_extended_type is true. This new function returns
-true if >1 core PMU and avoids potential errors on older kernels.
-
-Modify evsel__compute_group_pmu_name using a helper
-perf_pmu__is_software to determine when grouping should occur. Try to
-use PMUs, and evsel__find_pmu, as being more dependable than
-evsel->pmu_name.
-
-Set a parse events error if a hardware term's PMU lookup fails, to
-provide extra diagnostics.
-
-Reported-by: Kan Liang <kan.liang@linux.intel.com>
-Fixes: 8bc75f699c14 ("perf parse-events: Support wildcards on raw events")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.c | 104 +++++++++++++++++++++++----------
- tools/perf/util/parse-events.y |  10 ++--
- tools/perf/util/pmu.c          |  16 +++++
- tools/perf/util/pmu.h          |   5 ++
- tools/perf/util/pmus.c         |   5 ++
- tools/perf/util/pmus.h         |   1 +
- 6 files changed, 106 insertions(+), 35 deletions(-)
+ tools/perf/tests/parse-events.c | 1108 ++++++++++++++++---------------
+ 1 file changed, 590 insertions(+), 518 deletions(-)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 7f047ac11168..26979a47f4ac 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -372,7 +372,7 @@ static int config_attr(struct perf_event_attr *attr,
-  *                                     contain hyphens and the longest name
-  *                                     should always be selected.
-  */
--int parse_events__decode_legacy_cache(const char *name, int pmu_type, __u64 *config)
-+int parse_events__decode_legacy_cache(const char *name, int extended_pmu_type, __u64 *config)
- {
- 	int len, cache_type = -1, cache_op = -1, cache_result = -1;
- 	const char *name_end = &name[strlen(name) + 1];
-@@ -423,8 +423,9 @@ int parse_events__decode_legacy_cache(const char *name, int pmu_type, __u64 *con
- 	if (cache_result == -1)
- 		cache_result = PERF_COUNT_HW_CACHE_RESULT_ACCESS;
+diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
+index 9d05bc551791..bba1cd655a1d 100644
+--- a/tools/perf/tests/parse-events.c
++++ b/tools/perf/tests/parse-events.c
+@@ -324,13 +324,17 @@ static int test__checkevent_numeric_modifier(struct evlist *evlist)
  
--	*config = ((__u64)pmu_type << PERF_PMU_TYPE_SHIFT) |
--		cache_type | (cache_op << 8) | (cache_result << 16);
-+	*config = cache_type | (cache_op << 8) | (cache_result << 16);
-+	if (perf_pmus__supports_extended_type())
-+		*config |= (__u64)extended_pmu_type << PERF_PMU_TYPE_SHIFT;
- 	return 0;
+ static int test__checkevent_symbolic_name_modifier(struct evlist *evlist)
+ {
+-	struct evsel *evsel = evlist__first(evlist);
++	struct perf_evsel *evsel;
+ 
+-	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == perf_pmus__num_core_pmus());
+ 
++	perf_evlist__for_each_entry(&evlist->core, evsel) {
++		TEST_ASSERT_VAL("wrong exclude_user", evsel->attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->attr.precise_ip);
++	}
+ 	return test__checkevent_symbolic_name(evlist);
  }
  
-@@ -1204,11 +1205,17 @@ static int config_term_pmu(struct perf_event_attr *attr,
- 		const struct perf_pmu *pmu = perf_pmus__find_by_type(attr->type);
+@@ -620,24 +624,28 @@ static int test__checkevent_pmu_events(struct evlist *evlist)
  
- 		if (!pmu) {
--			pr_debug("Failed to find PMU for type %d", attr->type);
-+			char *err_str;
-+
-+			if (asprintf(&err_str, "Failed to find PMU for type %d", attr->type) >= 0)
-+				parse_events_error__handle(err, term->err_term,
-+							   err_str, /*help=*/NULL);
- 			return -EINVAL;
- 		}
- 		attr->type = PERF_TYPE_HARDWARE;
--		attr->config = ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT) | term->val.num;
-+		attr->config = term->val.num;
-+		if (perf_pmus__supports_extended_type())
-+			attr->config |= (__u64)pmu->type << PERF_PMU_TYPE_SHIFT;
- 		return 0;
- 	}
- 	if (term->type_term == PARSE_EVENTS__TERM_TYPE_USER ||
-@@ -1435,8 +1442,8 @@ int parse_events_add_tracepoint(struct list_head *list, int *idx,
- 
- static int __parse_events_add_numeric(struct parse_events_state *parse_state,
- 				struct list_head *list,
--				struct perf_pmu *pmu, u32 type, u64 config,
--				struct list_head *head_config)
-+				struct perf_pmu *pmu, u32 type, u32 extended_type,
-+				u64 config, struct list_head *head_config)
+ static int test__checkevent_pmu_events_mix(struct evlist *evlist)
  {
- 	struct perf_event_attr attr;
- 	LIST_HEAD(config_terms);
-@@ -1446,6 +1453,10 @@ static int __parse_events_add_numeric(struct parse_events_state *parse_state,
- 	memset(&attr, 0, sizeof(attr));
- 	attr.type = type;
- 	attr.config = config;
-+	if (extended_type && (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE)) {
-+		assert(perf_pmus__supports_extended_type());
-+		attr.config |= (u64)extended_type << PERF_PMU_TYPE_SHIFT;
-+	};
- 
- 	if (head_config) {
- 		if (config_attr(&attr, head_config, parse_state->error,
-@@ -1474,24 +1485,26 @@ int parse_events_add_numeric(struct parse_events_state *parse_state,
- 	struct perf_pmu *pmu = NULL;
- 	bool found_supported = false;
- 
--	if (!wildcard)
--		return __parse_events_add_numeric(parse_state, list, /*pmu=*/NULL,
--						  type, config, head_config);
+-	struct evsel *evsel = evlist__first(evlist);
 -
- 	/* Wildcards on numeric values are only supported by core PMUs. */
--	while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
--		int ret;
-+	if (wildcard && perf_pmus__supports_extended_type()) {
-+		while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
-+			int ret;
+-	/* pmu-event:u */
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong exclude_user",
+-			!evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel",
+-			evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong pinned", !evsel->core.attr.pinned);
+-	TEST_ASSERT_VAL("wrong exclusive", !evsel->core.attr.exclusive);
++	struct evsel *evsel = NULL;
  
--		if (parse_events__filter_pmu(parse_state, pmu))
--			continue;
-+			found_supported = true;
-+			if (parse_events__filter_pmu(parse_state, pmu))
-+				continue;
++	/*
++	 * The wild card event will be opened at least once, but it may be
++	 * opened on each core PMU.
++	 */
++	TEST_ASSERT_VAL("wrong number of entries", evlist->core.nr_entries >= 2);
++	for (int i = 0; i < evlist->core.nr_entries - 1; i++) {
++		evsel = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		/* pmu-event:u */
++		TEST_ASSERT_VAL("wrong exclude_user",
++				!evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel",
++				evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong pinned", !evsel->core.attr.pinned);
++		TEST_ASSERT_VAL("wrong exclusive", !evsel->core.attr.exclusive);
++	}
+ 	/* cpu/pmu-event/u*/
+ 	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type ||
+-				      strcmp(evsel->pmu_name, "cpu"));
++	TEST_ASSERT_VAL("wrong type", evsel__find_pmu(evsel)->is_core);
+ 	TEST_ASSERT_VAL("wrong exclude_user",
+ 			!evsel->core.attr.exclude_user);
+ 	TEST_ASSERT_VAL("wrong exclude_kernel",
+@@ -734,181 +742,207 @@ static int test__group1(struct evlist *evlist)
+ {
+ 	struct evsel *evsel, *leader;
  
--		found_supported = true;
--		ret = __parse_events_add_numeric(parse_state, list, pmu, pmu->type,
--						 config, head_config);
--		if (ret)
--			return ret;
-+			ret = __parse_events_add_numeric(parse_state, list, pmu,
-+							 type, pmu->type,
-+							 config, head_config);
-+			if (ret)
-+				return ret;
-+		}
-+		if (found_supported)
-+			return 0;
- 	}
--	return found_supported ? 0 : -EINVAL;
-+	return __parse_events_add_numeric(parse_state, list, perf_pmus__find_by_type(type),
-+					type, /*extended_type=*/0, config, head_config);
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
+-
+-	/* instructions:k */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
+-	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* cycles:upp */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	/* use of precise requires exclude_guest */
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 2);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (perf_pmus__num_core_pmus() * 2));
++	TEST_ASSERT_VAL("wrong number of groups",
++			evlist__nr_groups(evlist) == perf_pmus__num_core_pmus());
++
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* instructions:k */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
++		TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+ 
++		/* cycles:upp */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		/* use of precise requires exclude_guest */
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 2);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	}
+ 	return TEST_OK;
  }
  
- int parse_events_add_tool(struct parse_events_state *parse_state,
-@@ -1989,8 +2002,22 @@ static int evsel__compute_group_pmu_name(struct evsel *evsel,
+ static int test__group2(struct evlist *evlist)
  {
- 	struct evsel *leader = evsel__leader(evsel);
- 	struct evsel *pos;
--	const char *group_pmu_name = evsel->pmu_name ?: "cpu";
-+	const char *group_pmu_name;
-+	struct perf_pmu *pmu = evsel__find_pmu(evsel);
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel, *leader = NULL;
  
-+	if (!pmu) {
-+		/*
-+		 * For PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE types the PMU
-+		 * is a core PMU, but in heterogeneous systems this is
-+		 * unknown. For now pick the first core PMU.
-+		 */
-+		pmu = perf_pmus__scan_core(NULL);
-+	}
-+	if (!pmu) {
-+		pr_debug("No PMU found for '%s'", evsel__name(evsel));
-+		return -EINVAL;
-+	}
-+	group_pmu_name = pmu->name;
- 	/*
- 	 * Software events may be in a group with other uncore PMU events. Use
- 	 * the pmu_name of the first non-software event to avoid breaking the
-@@ -1999,24 +2026,41 @@ static int evsel__compute_group_pmu_name(struct evsel *evsel,
- 	 * Aux event leaders, like intel_pt, expect a group with events from
- 	 * other PMUs, so substitute the AUX event's PMU in this case.
- 	 */
--	if (evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) {
-+	if (perf_pmu__is_software(pmu) || evsel__is_aux_event(leader)) {
-+		struct perf_pmu *leader_pmu = evsel__find_pmu(leader);
-+
-+		if (!leader_pmu) {
-+			/* As with determining pmu above. */
-+			leader_pmu = perf_pmus__scan_core(NULL);
+-	TEST_ASSERT_VAL("wrong number of entries", 3 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (2 * perf_pmus__num_core_pmus() + 1));
++	/*
++	 * TODO: Currently the software event won't be grouped with the hardware
++	 * event except for 1 PMU.
++	 */
+ 	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
+ 
+-	/* faults + :ku modifier */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_SW_PAGE_FAULTS));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* cache-references + :u modifier */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_REFERENCES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* cycles:k */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
++	evlist__for_each_entry(evlist, evsel) {
++		if (evsel->core.attr.type == PERF_TYPE_SOFTWARE) {
++			/* faults + :ku modifier */
++			leader = evsel;
++			TEST_ASSERT_VAL("wrong config",
++					test_config(evsel, PERF_COUNT_SW_PAGE_FAULTS));
++			TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++			TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++			TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++			TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++			TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++			TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++			TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++			TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++			TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++			TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++			continue;
 +		}
- 		/*
- 		 * Starting with the leader, find the first event with a named
--		 * PMU. for_each_group_(member|evsel) isn't used as the list
--		 * isn't yet sorted putting evsel's in the same group together.
-+		 * non-software PMU. for_each_group_(member|evsel) isn't used as
-+		 * the list isn't yet sorted putting evsel's in the same group
-+		 * together.
- 		 */
--		if (leader->pmu_name) {
--			group_pmu_name = leader->pmu_name;
-+		if (leader_pmu && !perf_pmu__is_software(leader_pmu)) {
-+			group_pmu_name = leader_pmu->name;
- 		} else if (leader->core.nr_members > 1) {
- 			list_for_each_entry(pos, head, core.node) {
--				if (evsel__leader(pos) == leader && pos->pmu_name) {
--					group_pmu_name = pos->pmu_name;
-+				struct perf_pmu *pos_pmu;
-+
-+				if (pos == leader || evsel__leader(pos) != leader)
-+					continue;
-+				pos_pmu = evsel__find_pmu(pos);
-+				if (!pos_pmu) {
-+					/* As with determining pmu above. */
-+					pos_pmu = perf_pmus__scan_core(NULL);
++		if (evsel->core.attr.type == PERF_TYPE_HARDWARE &&
++		    test_config(evsel, PERF_COUNT_HW_CACHE_REFERENCES)) {
++			/* cache-references + :u modifier */
++			TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++			TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++			TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++			TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++			TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++			TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++			if (evsel__has_leader(evsel, leader))
++				TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++			TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++			continue;
++		}
++		/* cycles:k */
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	}
+ 	return TEST_OK;
+ }
+ 
+ #ifdef HAVE_LIBTRACEEVENT
+ static int test__group3(struct evlist *evlist __maybe_unused)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel, *group1_leader = NULL, *group2_leader = NULL;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 5 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (3 * perf_pmus__num_core_pmus() + 2));
++	/*
++	 * Currently the software event won't be grouped with the hardware event
++	 * except for 1 PMU. This means there are always just 2 groups
++	 * regardless of the number of core PMUs.
++	 */
+ 	TEST_ASSERT_VAL("wrong number of groups", 2 == evlist__nr_groups(evlist));
+ 
+-	/* group1 syscalls:sys_enter_openat:H */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_TRACEPOINT == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong sample_type",
+-		PERF_TP_SAMPLE_TYPE == evsel->core.attr.sample_type);
+-	TEST_ASSERT_VAL("wrong sample_period", 1 == evsel->core.attr.sample_period);
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong group name",
+-		!strcmp(leader->group_name, "group1"));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* group1 cycles:kppp */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	/* use of precise requires exclude_guest */
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 3);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* group2 cycles + G modifier */
+-	evsel = leader = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong group name",
+-		!strcmp(leader->group_name, "group2"));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* group2 1:3 + G modifier */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", 1 == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 3));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* instructions:u */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
++	evlist__for_each_entry(evlist, evsel) {
++		if (evsel->core.attr.type == PERF_TYPE_TRACEPOINT) {
++			/* group1 syscalls:sys_enter_openat:H */
++			group1_leader = evsel;
++			TEST_ASSERT_VAL("wrong sample_type",
++					evsel->core.attr.sample_type == PERF_TP_SAMPLE_TYPE);
++			TEST_ASSERT_VAL("wrong sample_period", 1 == evsel->core.attr.sample_period);
++			TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++			TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++			TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++			TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++			TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++			TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++			TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++			TEST_ASSERT_VAL("wrong group name", !strcmp(evsel->group_name, "group1"));
++			TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++			TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++			TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++			continue;
++		}
++		if (evsel->core.attr.type == PERF_TYPE_HARDWARE &&
++		    test_config(evsel, PERF_COUNT_HW_CPU_CYCLES)) {
++			if (evsel->core.attr.exclude_user) {
++				/* group1 cycles:kppp */
++				TEST_ASSERT_VAL("wrong exclude_user",
++						evsel->core.attr.exclude_user);
++				TEST_ASSERT_VAL("wrong exclude_kernel",
++						!evsel->core.attr.exclude_kernel);
++				TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++				/* use of precise requires exclude_guest */
++				TEST_ASSERT_VAL("wrong exclude guest",
++						evsel->core.attr.exclude_guest);
++				TEST_ASSERT_VAL("wrong exclude host",
++						!evsel->core.attr.exclude_host);
++				TEST_ASSERT_VAL("wrong precise_ip",
++						evsel->core.attr.precise_ip == 3);
++				if (evsel__has_leader(evsel, group1_leader)) {
++					TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++					TEST_ASSERT_VAL("wrong group_idx",
++							evsel__group_idx(evsel) == 1);
 +				}
-+				if (pos_pmu && !perf_pmu__is_software(pos_pmu)) {
-+					group_pmu_name = pos_pmu->name;
- 					break;
- 				}
- 			}
- 		}
- 	}
--	evsel->group_pmu_name = strdup(group_pmu_name);
-+	/* Assign the actual name taking care that the fake PMU lacks a name. */
-+	evsel->group_pmu_name = strdup(group_pmu_name ?: "fake");
- 	return evsel->group_pmu_name ? 0 : -ENOMEM;
- }
- 
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index abd6ab460e12..f96afb0edd0c 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -445,11 +445,11 @@ value_sym '/' event_config '/'
- 	int type = $1 >> 16;
- 	int config = $1 & 255;
- 	int err;
-+	bool wildcard = (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE);
- 
- 	list = alloc_list();
- 	ABORT_ON(!list);
--	err = parse_events_add_numeric(_parse_state, list, type, config, $3,
--				       /*wildcard=*/false);
-+	err = parse_events_add_numeric(_parse_state, list, type, config, $3, wildcard);
- 	parse_events_terms__delete($3);
- 	if (err) {
- 		free_list_evsel(list);
-@@ -463,12 +463,12 @@ value_sym sep_slash_slash_dc
- 	struct list_head *list;
- 	int type = $1 >> 16;
- 	int config = $1 & 255;
-+	bool wildcard = (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE);
- 
- 	list = alloc_list();
- 	ABORT_ON(!list);
- 	ABORT_ON(parse_events_add_numeric(_parse_state, list, type, config,
--					  /*head_config=*/NULL,
--					  /*wildcard=*/false));
-+					  /*head_config=*/NULL, wildcard));
- 	$$ = list;
- }
- |
-@@ -635,7 +635,7 @@ PE_RAW opt_event_config
- 	ABORT_ON(errno);
- 	free($1);
- 	err = parse_events_add_numeric(_parse_state, list, PERF_TYPE_RAW, num, $2,
--				       /*wildcard=*/true);
-+				       /*wildcard=*/false);
- 	parse_events_terms__delete($2);
- 	if (err) {
- 		free(list);
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 36e163f38368..1dd44b2f73f3 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -1438,6 +1438,22 @@ bool perf_pmu__have_event(const struct perf_pmu *pmu, const char *name)
- 	return false;
- }
- 
-+bool perf_pmu__is_software(const struct perf_pmu *pmu)
-+{
-+	if (pmu->is_core || pmu->is_uncore || pmu->auxtrace)
-+		return false;
-+	switch (pmu->type) {
-+	case PERF_TYPE_HARDWARE:	return false;
-+	case PERF_TYPE_SOFTWARE:	return true;
-+	case PERF_TYPE_TRACEPOINT:	return true;
-+	case PERF_TYPE_HW_CACHE:	return false;
-+	case PERF_TYPE_RAW:		return false;
-+	case PERF_TYPE_BREAKPOINT:	return true;
-+	default: break;
++				TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++			} else {
++				/* group2 cycles + G modifier */
++				group2_leader = evsel;
++				TEST_ASSERT_VAL("wrong exclude_kernel",
++						!evsel->core.attr.exclude_kernel);
++				TEST_ASSERT_VAL("wrong exclude_hv",
++						!evsel->core.attr.exclude_hv);
++				TEST_ASSERT_VAL("wrong exclude guest",
++						!evsel->core.attr.exclude_guest);
++				TEST_ASSERT_VAL("wrong exclude host",
++						evsel->core.attr.exclude_host);
++				TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++				TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++				if (evsel->core.nr_members == 2) {
++					TEST_ASSERT_VAL("wrong group_idx",
++							evsel__group_idx(evsel) == 0);
++				}
++				TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++			}
++			continue;
++		}
++		if (evsel->core.attr.type == 1) {
++			/* group2 1:3 + G modifier */
++			TEST_ASSERT_VAL("wrong config", test_config(evsel, 3));
++			TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++			TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++			TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++			TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++			TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++			TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++			if (evsel__has_leader(evsel, group2_leader))
++				TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++			TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++			continue;
++		}
++		/* instructions:u */
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
 +	}
-+	return !strcmp(pmu->name, "kprobe") || !strcmp(pmu->name, "uprobe");
-+}
-+
- FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name)
+ 	return TEST_OK;
+ }
+ #endif
+@@ -917,402 +951,435 @@ static int test__group4(struct evlist *evlist __maybe_unused)
  {
- 	char path[PATH_MAX];
-diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index 287f593b15c7..13a9a893e665 100644
---- a/tools/perf/util/pmu.h
-+++ b/tools/perf/util/pmu.h
-@@ -224,6 +224,11 @@ bool is_pmu_core(const char *name);
- bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu);
- bool perf_pmu__auto_merge_stats(const struct perf_pmu *pmu);
- bool perf_pmu__have_event(const struct perf_pmu *pmu, const char *name);
-+/**
-+ * perf_pmu_is_software - is the PMU a software PMU as in it uses the
-+ *                        perf_sw_context in the kernel?
-+ */
-+bool perf_pmu__is_software(const struct perf_pmu *pmu);
+ 	struct evsel *evsel, *leader;
  
- FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name);
- FILE *perf_pmu__open_file_at(struct perf_pmu *pmu, int dirfd, const char *name);
-diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-index 53f11f6ce878..e1d0a93147e5 100644
---- a/tools/perf/util/pmus.c
-+++ b/tools/perf/util/pmus.c
-@@ -477,6 +477,11 @@ int perf_pmus__num_core_pmus(void)
- 	return count;
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
+-
+-	/* cycles:u + p */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	/* use of precise requires exclude_guest */
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 1);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* instructions:kp + p */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
+-	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	/* use of precise requires exclude_guest */
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 2);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (perf_pmus__num_core_pmus() * 2));
++	TEST_ASSERT_VAL("wrong number of groups",
++			perf_pmus__num_core_pmus() == evlist__nr_groups(evlist));
+ 
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles:u + p */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		/* use of precise requires exclude_guest */
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 1);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++
++		/* instructions:kp + p */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
++		TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		/* use of precise requires exclude_guest */
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip == 2);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	}
+ 	return TEST_OK;
  }
  
-+bool perf_pmus__supports_extended_type(void)
-+{
-+	return perf_pmus__num_core_pmus() > 1;
-+}
-+
- struct perf_pmu *evsel__find_pmu(const struct evsel *evsel)
+ static int test__group5(struct evlist *evlist __maybe_unused)
  {
- 	struct perf_pmu *pmu = evsel->pmu;
-diff --git a/tools/perf/util/pmus.h b/tools/perf/util/pmus.h
-index 1e710720aec7..d02ffea5d3a4 100644
---- a/tools/perf/util/pmus.h
-+++ b/tools/perf/util/pmus.h
-@@ -19,5 +19,6 @@ int perf_pmus__num_mem_pmus(void);
- void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *print_state);
- bool perf_pmus__have_event(const char *pname, const char *name);
- int perf_pmus__num_core_pmus(void);
-+bool perf_pmus__supports_extended_type(void);
+-	struct evsel *evsel, *leader;
+-
+-	TEST_ASSERT_VAL("wrong number of entries", 5 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 2 == evlist__nr_groups(evlist));
+-
+-	/* cycles + G */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	struct evsel *evsel = NULL, *leader;
  
- #endif /* __PMUS_H */
+-	/* instructions + G */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (5 * perf_pmus__num_core_pmus()));
++	TEST_ASSERT_VAL("wrong number of groups",
++			evlist__nr_groups(evlist) == (2 * perf_pmus__num_core_pmus()));
+ 
+-	/* cycles:G */
+-	evsel = leader = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-	TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+-
+-	/* instructions:G */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles + G */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+ 
+-	/* cycles */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		/* instructions + G */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
++	}
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles:G */
++		evsel = leader = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++		TEST_ASSERT_VAL("wrong sample_read", !evsel->sample_read);
+ 
++		/* instructions:G */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	}
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__group_gh1(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (2 * perf_pmus__num_core_pmus()));
++	TEST_ASSERT_VAL("wrong number of groups",
++			evlist__nr_groups(evlist) == perf_pmus__num_core_pmus());
+ 
+-	/* cycles + :H group modifier */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-
+-	/* cache-misses:G + :H group modifier */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles + :H group modifier */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+ 
++		/* cache-misses:G + :H group modifier */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__group_gh2(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
+-
+-	/* cycles + :G group modifier */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (2 * perf_pmus__num_core_pmus()));
++	TEST_ASSERT_VAL("wrong number of groups",
++			evlist__nr_groups(evlist) == perf_pmus__num_core_pmus());
+ 
+-	/* cache-misses:H + :G group modifier */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles + :G group modifier */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+ 
++		/* cache-misses:H + :G group modifier */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__group_gh3(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (2 * perf_pmus__num_core_pmus()));
++	TEST_ASSERT_VAL("wrong number of groups",
++			evlist__nr_groups(evlist) == perf_pmus__num_core_pmus());
+ 
+-	/* cycles:G + :u group modifier */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-
+-	/* cache-misses:H + :u group modifier */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles:G + :u group modifier */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+ 
++		/* cache-misses:H + :u group modifier */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__group_gh4(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong number of groups", 1 == evlist__nr_groups(evlist));
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (2 * perf_pmus__num_core_pmus()));
++	TEST_ASSERT_VAL("wrong number of groups",
++			evlist__nr_groups(evlist) == perf_pmus__num_core_pmus());
+ 
+-	/* cycles:G + :uG group modifier */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
+-	TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+-
+-	/* cache-misses:H + :uG group modifier */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles:G + :uG group modifier */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__is_group_leader(evsel));
++		TEST_ASSERT_VAL("wrong core.nr_members", evsel->core.nr_members == 2);
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 0);
+ 
++		/* cache-misses:H + :uG group modifier */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong group_idx", evsel__group_idx(evsel) == 1);
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__leader_sample1(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 3 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (3 * perf_pmus__num_core_pmus()));
+ 
+-	/* cycles - sampling group leader */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
+-
+-	/* cache-misses - not sampling */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles - sampling group leader */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
+ 
+-	/* branch-misses - not sampling */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
++		/* cache-misses - not sampling */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
+ 
++		/* branch-misses - not sampling */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__leader_sample2(struct evlist *evlist __maybe_unused)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (2 * perf_pmus__num_core_pmus()));
+ 
+-	/* instructions - sampling group leader */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
+-
+-	/* branch-misses - not sampling */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
+-	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
+-	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* instructions - sampling group leader */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
+ 
++		/* branch-misses - not sampling */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
++		TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
++		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		TEST_ASSERT_VAL("wrong sample_read", evsel->sample_read);
++	}
+ 	return TEST_OK;
+ }
+ 
+ static int test__checkevent_pinned_modifier(struct evlist *evlist)
+ {
+-	struct evsel *evsel = evlist__first(evlist);
++	struct evsel *evsel = NULL;
+ 
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
+-	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip);
+-	TEST_ASSERT_VAL("wrong pinned", evsel->core.attr.pinned);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == perf_pmus__num_core_pmus());
+ 
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		evsel = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
++		TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip);
++		TEST_ASSERT_VAL("wrong pinned", evsel->core.attr.pinned);
++	}
+ 	return test__checkevent_symbolic_name(evlist);
+ }
+ 
+ static int test__pinned_group(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
++	struct evsel *evsel = NULL, *leader;
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 3 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (3 * perf_pmus__num_core_pmus()));
+ 
+-	/* cycles - group leader */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong pinned", evsel->core.attr.pinned);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles - group leader */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		/* TODO: The group modifier is not copied to the split group leader. */
++		if (perf_pmus__num_core_pmus() == 1)
++			TEST_ASSERT_VAL("wrong pinned", evsel->core.attr.pinned);
+ 
+-	/* cache-misses - can not be pinned, but will go on with the leader */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong pinned", !evsel->core.attr.pinned);
+-
+-	/* branch-misses - ditto */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
+-	TEST_ASSERT_VAL("wrong pinned", !evsel->core.attr.pinned);
++		/* cache-misses - can not be pinned, but will go on with the leader */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong pinned", !evsel->core.attr.pinned);
+ 
++		/* branch-misses - ditto */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
++		TEST_ASSERT_VAL("wrong pinned", !evsel->core.attr.pinned);
++	}
+ 	return TEST_OK;
+ }
+ 
+@@ -1331,29 +1398,33 @@ static int test__checkevent_exclusive_modifier(struct evlist *evlist)
+ 
+ static int test__exclusive_group(struct evlist *evlist)
+ {
+-	struct evsel *evsel, *leader;
+-
+-	TEST_ASSERT_VAL("wrong number of entries", 3 == evlist->core.nr_entries);
++	struct evsel *evsel = NULL, *leader;
+ 
+-	/* cycles - group leader */
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
+-	TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong exclusive", evsel->core.attr.exclusive);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (3 * perf_pmus__num_core_pmus()));
+ 
+-	/* cache-misses - can not be pinned, but will go on with the leader */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
+-	TEST_ASSERT_VAL("wrong exclusive", !evsel->core.attr.exclusive);
++	for (int i = 0; i < perf_pmus__num_core_pmus(); i++) {
++		/* cycles - group leader */
++		evsel = leader = (i == 0 ? evlist__first(evlist) : evsel__next(evsel));
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
++		TEST_ASSERT_VAL("wrong group name", !evsel->group_name);
++		TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++		/* TODO: The group modifier is not copied to the split group leader. */
++		if (perf_pmus__num_core_pmus() == 1)
++			TEST_ASSERT_VAL("wrong exclusive", evsel->core.attr.exclusive);
+ 
+-	/* branch-misses - ditto */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
+-	TEST_ASSERT_VAL("wrong exclusive", !evsel->core.attr.exclusive);
++		/* cache-misses - can not be pinned, but will go on with the leader */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CACHE_MISSES));
++		TEST_ASSERT_VAL("wrong exclusive", !evsel->core.attr.exclusive);
+ 
++		/* branch-misses - ditto */
++		evsel = evsel__next(evsel);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_BRANCH_MISSES));
++		TEST_ASSERT_VAL("wrong exclusive", !evsel->core.attr.exclusive);
++	}
+ 	return TEST_OK;
+ }
+ static int test__checkevent_breakpoint_len(struct evlist *evlist)
+@@ -1403,7 +1474,8 @@ static int test__checkevent_precise_max_modifier(struct evlist *evlist)
+ {
+ 	struct evsel *evsel = evlist__first(evlist);
+ 
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong number of entries",
++			evlist->core.nr_entries == (1 + perf_pmus__num_core_pmus()));
+ 	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
+ 	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_SW_TASK_CLOCK));
+ 	return TEST_OK;
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
