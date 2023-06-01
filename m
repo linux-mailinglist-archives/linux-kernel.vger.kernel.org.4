@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EF671A2F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F5471A2FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbjFAPpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S234239AbjFAPqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjFAPpk (ORCPT
+        with ESMTP id S233127AbjFAPqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:45:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4435C1B1;
-        Thu,  1 Jun 2023 08:45:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB596646DA;
-        Thu,  1 Jun 2023 15:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF67FC4339C;
-        Thu,  1 Jun 2023 15:45:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685634316;
-        bh=gjO1MCUCeIzEOnaU6zEAMUbqNxHQQE+ZMiTvcgTF7Us=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wY4BUtRNsJTSA4kH+jay3APwtzy4GXwATc4zev1EVNVanv+Sjq495beoT8MiBJdcU
-         qPAllT0XuSrAELA3ldYNGAD5uUYwdtFiqh8S9XXOuHc7ly/hvWQ7I/5GuFWgq1iER8
-         cku0tHFBeVVt6O8uj2/cQeK7JRMGAyVltGKGnPIY=
-Date:   Thu, 1 Jun 2023 16:45:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: core: Fix probing serial_base_bus devices
-Message-ID: <2023060137-nuzzle-cadet-6fd4@gregkh>
-References: <20230601141445.11321-1-tony@atomide.com>
- <2023060112-onion-disparate-8ce8@gregkh>
- <20230601150706.GD14287@atomide.com>
+        Thu, 1 Jun 2023 11:46:16 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3018D;
+        Thu,  1 Jun 2023 08:46:06 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96f5685f902so135929266b.2;
+        Thu, 01 Jun 2023 08:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685634365; x=1688226365;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IklIgLnDv67Hj1MMNmzU2HBbBaSNxYen7DB/Lbq+r38=;
+        b=Db3slDYbs6+0atRzy1FP9c6+k/n4PieWOJfpRxPPfOlhlhRN9/EVb6OgpebC5tm+qU
+         /1kNIqDBQJwn+/yA0YSSMMYinmdUsWYR7YEFJp7C7jScE0DAKIdiJXu/t2D7IRrRsKro
+         dwJoe8OMBCq2SKX+1VMlXybrPj9+uS8skJTpu570ZKFrDjL/Y9JRbvio3+9uw33GkE0P
+         eX43X/9n3T23Gbqfor5bUNgE23DERuOJdC/h58WcCUNwsTnASMuGXWJRBx1RsEt83Suy
+         hiLYFUIC5l8E4JQT4SwX8OnJBBYVJdCUhLyXoWcz/qmJJ3PC5emlc11Fd5Q4pMja9jO+
+         6TkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685634365; x=1688226365;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IklIgLnDv67Hj1MMNmzU2HBbBaSNxYen7DB/Lbq+r38=;
+        b=GiT+6YPSewvYQ/vRL2fmPtkm4/uQdeM5V9I4IUO6Uu/LtSjRhEuwB3Q3p/Ax9yQQ3W
+         7J9+qxLGDlKDFSDG6Std08n3K1R7LX4R6lJInM+MpKJ/7tuVxusG6mJz8su4Q416+tE8
+         zbRf0kZSUt3UkYPqvjfF9iTA3gqwoTPZcF3WDqAU7og5z/Uk0ouMSsOtSnF/HXHXh+9E
+         pt4DT8c9lsHgMN1he/0Y6cvC2zqUIrKFotWIewhdZ9lLIg6hu5T7ysv5fc4Ep4mfaJdV
+         fJMe51QyycZygsNvZP77EWoJgafzMCfNDj4iefG8sUxZ2ru7ZfWk7ThhX2kcf5wSXdX9
+         g4Pw==
+X-Gm-Message-State: AC+VfDxEUFWa4ixGxQohjtJzASbD32qWQvCcrihjDdVSAGKPeTR98EVD
+        O/4OFXQfJy1YFxgGs8ouEr4=
+X-Google-Smtp-Source: ACHHUZ7Fbw9B2kY3i0cLSoiipzTsYASE2XF2iggqBNdNQITA9VLCljQ7MOgpw4SU2+Gba0EnHRO3hg==
+X-Received: by 2002:a17:907:7b85:b0:971:5a46:8ac8 with SMTP id ne5-20020a1709077b8500b009715a468ac8mr10300665ejc.27.1685634364702;
+        Thu, 01 Jun 2023 08:46:04 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id a8-20020a1709062b0800b00970f0e2dab2sm10601105ejg.112.2023.06.01.08.46.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 08:46:04 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/3] spi: dt-bindings: allwinner: simplify with
+ unevaluatedProperties
+Date:   Thu, 01 Jun 2023 17:46:02 +0200
+Message-ID: <2226283.iZASKD2KPV@jernej-laptop>
+In-Reply-To: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
+References: <20230601095908.563865-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601150706.GD14287@atomide.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 06:07:06PM +0300, Tony Lindgren wrote:
-> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [230601 14:21]:
-> > On Thu, Jun 01, 2023 at 05:14:44PM +0300, Tony Lindgren wrote:
-> > > If a physical serial port device driver uses arch_initcall() we fail to
-> > > probe the serial_base_bus devices and the serial port tx fails. This is
-> > > because as serial_base_bus uses module_initcall().
-> > > 
-> > > Let's fix the issue by changing serial_base_bus to use arch_initcall().
-> > 
-> > This will only work if the linking order is such that this will always
-> > come before the drivers.  Is that the case here?
-> 
-> I guess based on Makefile. And also if serial drivers are modules as we
-> export uart_add_one_port() from serial_base.ko. But yeah this is pretty
-> fragile potentially.
+Dne =C4=8Detrtek, 01. junij 2023 ob 11:59:06 CEST je Krzysztof Kozlowski na=
+pisal(a):
+> Remove properties already mentioned by common spi-controller.yaml and
+> switch to unevaluatedProperties:false to achieve same functional effect.
+> This makes the binding a bit smaller.  Similarly there is no need to
+> allow additionalProperties for children, because spi-controller.yaml
+> already does it.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-It's fine, and normal, the Makefile is the ordering here so all is good.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-> Hmm maybe we could keep module_init() and then also call serial_base_init()
-> on uart_add_one_port() path if not yet initialized?
-> 
-> Probably the module_init() should be still there for case when no serial
-> port device drivers are loaded and serial_base is unloaded..
+Best regards,
+Jernej
 
-I'll leave this as-is, it looks correct, and I'll queue it up now,
-thanks.
 
-greg k-h
