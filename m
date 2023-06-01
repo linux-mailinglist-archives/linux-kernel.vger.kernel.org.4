@@ -2,225 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F37271A2CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6110971A2DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbjFAPfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S231348AbjFAPkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbjFAPfa (ORCPT
+        with ESMTP id S234509AbjFAPkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:35:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC67E2;
-        Thu,  1 Jun 2023 08:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8vJ4jlCm4JD8b0ZAMYbvLnh/K4gBTRR2bBXIOF5Psy0=; b=QTM/cHOqB+YcXdVBx7OlggjqiI
-        0EkVjfTdNqGcQT0H567Fuok29BdUBMqJGwXo4wGoanaW9ZZXBdxqLgiUuftBp/VfDCch3mpasAUUV
-        RbFYjrRk7yzG5pYPYddz8N+Y27JJ9WNfBBlxfvYTGL7XyGEKvsy1/P/vP/9nLEbh+00q5Zq17VqEF
-        LfuQJkw/yZA+1eEGt/xsKqLj8FGY6JAQFJrakT51np/+atAYKGV8JCbTvD8T7zWlJo1rHb7bAbbqX
-        XW4/ft899LcfgOG1X8gvP+RVoACKe6/abe6O1NnhIWYrN0av/1tWlHjVj5wLOa9DcXyto5RfnlqHJ
-        1ik7hUtw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q4kKh-008UUb-CF; Thu, 01 Jun 2023 15:35:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D5D943002A9;
-        Thu,  1 Jun 2023 17:35:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B2FBD202BDCAD; Thu,  1 Jun 2023 17:35:22 +0200 (CEST)
-Date:   Thu, 1 Jun 2023 17:35:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, x86@kernel.org,
-        Gautham Shenoy <gautham.shenoy@amd.com>
-Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
-Message-ID: <20230601153522.GB559993@hirez.programming.kicks-ass.net>
-References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
- <3de5c24f-6437-f21b-ed61-76b86a199e8c@amd.com>
- <20230601111326.GV4253@hirez.programming.kicks-ass.net>
- <20230601115643.GX4253@hirez.programming.kicks-ass.net>
- <20230601120001.GJ38236@hirez.programming.kicks-ass.net>
- <20230601144706.GA559454@hirez.programming.kicks-ass.net>
+        Thu, 1 Jun 2023 11:40:40 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13594F2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:40:39 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-77700d5a176so123639f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685634036; x=1688226036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vZ+EiS+GQTo9AhoMTu3o3MEzgb5CpypJEioCqg0kvwY=;
+        b=mUwKms3MQB40gOnUj9w/LsDIifBL4E72NvbbTbjieV6RnMe6YUevOcGljDQCmBbIHG
+         YjPASne2HN0sCyaEnoemFzJIl/ednz3wIoiwjjsnz/mhfBabJT7Zp4lRzyP7Z/LCmxB1
+         61ecMUlvEEtsSEQ0YfsJGo3VNd6MAqHYVNUUY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685634036; x=1688226036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vZ+EiS+GQTo9AhoMTu3o3MEzgb5CpypJEioCqg0kvwY=;
+        b=Ur0kFnr8QpMSV4WdJY6R4UGiIBdmGOiCleJZhrk92XyaHlOjnxW8ZcH7C3ym2vPYkc
+         xXRYjKCyDGew3R+dmnwtQjsNKqv/ualwEPSL8mPSBpp49dKAXGOVWuKLvrQnBPjp7888
+         IS0cK0HKRLuXIkvcGPVYwn07z1hDaKz+UcruKb24t5VESxruHZbTxAHcmcdjSbziJ0vv
+         QNt6x2DnWn5aAhWnDDTV78yVfE5TNcO7xbiKssvr3ID9PUnYYsifh9+VI9R696jBZ5fk
+         Ict5HpWvKvdabvhcgfXIcWAnEt3577CgjkMgMRGhrUs7o6qDOf0ojPpWTtM1mSw1LAKV
+         6NqQ==
+X-Gm-Message-State: AC+VfDyjm5FM7fKjc1suhXz+0N7h2p3LKD3tXz5cWb4Xsv5CDMMBy+oc
+        T7YTbDzy5Ul0DGRFHi8WGIBEFTrRvLQLxV+s3CM=
+X-Google-Smtp-Source: ACHHUZ4xguYEObOx6CGxZ+n2zaXYPoMo8//NhrmZyhqrq4iJBa7WlXdlnIAcgMWz//gRQ6NUISEhwg==
+X-Received: by 2002:a6b:6216:0:b0:776:feaf:8cef with SMTP id f22-20020a6b6216000000b00776feaf8cefmr7499898iog.2.1685634036257;
+        Thu, 01 Jun 2023 08:40:36 -0700 (PDT)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id x5-20020a056638248500b003c4f35c21absm2184936jat.137.2023.06.01.08.40.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 08:40:35 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so128405ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:40:35 -0700 (PDT)
+X-Received: by 2002:a05:6e02:180c:b0:33b:3d94:afb5 with SMTP id
+ a12-20020a056e02180c00b0033b3d94afb5mr191613ilv.25.1685634034756; Thu, 01 Jun
+ 2023 08:40:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601144706.GA559454@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAD=FV=VYfPSwar2AXBxB3vX0dV1kjQ5bZMxsEBFhUnMNRXbBCw@mail.gmail.com>
+ <20230520050649.2494497-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230520050649.2494497-3-yangcong5@huaqin.corp-partner.google.com>
+ <CAD=FV=Wm_SK0V6WJUkuvu8yFfiP60JBuOdw9cy=0Ck2Jbn-X2A@mail.gmail.com>
+ <bd19f71b-59ee-80e7-9ff1-1cc26ecc49a7@kernel.org> <CAD=FV=WaVXUr8=4MrZQgA7t=yUBDt-iMvOFSeWhsKZ8XHJAREA@mail.gmail.com>
+ <CAHwB_N+ZpCAYftCLRwyNo2wCca+JHfGJc0_rJ=jwJcU0mbG=Dw@mail.gmail.com>
+In-Reply-To: <CAHwB_N+ZpCAYftCLRwyNo2wCca+JHfGJc0_rJ=jwJcU0mbG=Dw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 1 Jun 2023 08:40:23 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XBwZmJUVKqX5XOrgJB-VYPgJP=HKr+DoFRFu3C3tGq2w@mail.gmail.com>
+Message-ID: <CAD=FV=XBwZmJUVKqX5XOrgJB-VYPgJP=HKr+DoFRFu3C3tGq2w@mail.gmail.com>
+Subject: Re: [v2 2/2] dt-bindings: input: touchscreen: Add ilitek 9882T
+ touchscreen chip
+To:     cong yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
+        dmitry.torokhov@gmail.com, hsinyi@google.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 04:47:06PM +0200, Peter Zijlstra wrote:
+Hi,
 
-> One way to fix all this would be by having arch/x86/kernel/smpboot.c set
-> an AMD specific set_sched_topology() that has a CCD domain above the MC
-> and below the DIE domain that groups 'near' CCDs together based on some
-> AMD specific topology information.
-> 
-> Then for small systems that will probably be just a single CCD domain
-> and the degenerate code will make it go away, but for these large
-> systems it will do what is right for their respective configuration.
-> 
-> Then, since this new multi-llc code uses MC->parent it will end up on
-> the fancy new CCD domain and not scan the *entire* socket.
-> 
-> Hmm?
+On Wed, May 31, 2023 at 8:06=E2=80=AFPM cong yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> Thanks, I'll keep an eye on that next time. This patch can be discarded,.=
+After adding this series https://lore.kernel.org/r/20230523193017.4109557-1=
+-dianders@chromium.org=EF=BC=8C
 
-Something like the (untested) below might be a nice base to go from.
+Thanks! I'll see if I can give that series a spin soon and then see
+how we can make progress to getting it landed.
 
-Then all you have to do is add something like:
 
-	if (x86_has_ccd_topology) {
-		x86_topology[i++] = (struct sched_domain_topology_level){
-			cpu_ccd_mask, SD_INIT_NAME(CCD)
-		};
-	}
+> using ekth6915  also can meet my needs.
 
-(and construct cpu_ccd_mask obviously...)
+Even if using ekth6915 can meet your needs, it's still better to
+actually add the right compatible string. Putting in the device tree
+that you have an "elan6915" and that you're providing "vcc33" isn't
+the best when you actually have a different touchscreen and are
+providing a very different voltage. Adding the proper bindings is
+definitely preferred.
 
----
- arch/x86/kernel/smpboot.c | 94 ++++++++++++++++++++++-------------------------
- 1 file changed, 43 insertions(+), 51 deletions(-)
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 34066f6735dd..0a22d719b6b6 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -563,50 +563,57 @@ static int x86_cluster_flags(void)
- #endif
- #endif
- 
--static struct sched_domain_topology_level x86_numa_in_package_topology[] = {
--#ifdef CONFIG_SCHED_SMT
--	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
--#endif
--#ifdef CONFIG_SCHED_CLUSTER
--	{ cpu_clustergroup_mask, x86_cluster_flags, SD_INIT_NAME(CLS) },
--#endif
--#ifdef CONFIG_SCHED_MC
--	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
--#endif
--	{ NULL, },
--};
-+/*
-+ * Set if a package/die has multiple NUMA nodes inside.
-+ * AMD Magny-Cours, Intel Cluster-on-Die, and Intel
-+ * Sub-NUMA Clustering have this.
-+ */
-+static bool x86_has_numa_in_package;
- 
--static struct sched_domain_topology_level x86_hybrid_topology[] = {
--#ifdef CONFIG_SCHED_SMT
--	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
--#endif
--#ifdef CONFIG_SCHED_MC
--	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
--#endif
--	{ cpu_cpu_mask, x86_sched_itmt_flags, SD_INIT_NAME(DIE) },
--	{ NULL, },
--};
-+static struct sched_domain_topology_level x86_topology[6];
-+
-+static void __init build_sched_topology(void)
-+{
-+	int i = 0;
- 
--static struct sched_domain_topology_level x86_topology[] = {
- #ifdef CONFIG_SCHED_SMT
--	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
-+	x86_topology[i++] = (struct sched_domain_topology_level){
-+		cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT)
-+	};
- #endif
- #ifdef CONFIG_SCHED_CLUSTER
--	{ cpu_clustergroup_mask, x86_cluster_flags, SD_INIT_NAME(CLS) },
-+	/*
-+	 * For now, skip the cluster domain on Hybrid.
-+	 */
-+	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) {
-+		x86_topology[i++] = (struct sched_domain_topology_level){
-+			cpu_clustergroup_mask, x86_cluster_flags, SD_INIT_NAME(CLS)
-+		};
-+	}
- #endif
- #ifdef CONFIG_SCHED_MC
--	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
-+	x86_topology[i++] = (struct sched_domain_topology_level){
-+		cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC)
-+	};
- #endif
--	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
--	{ NULL, },
--};
-+	/*
-+	 * When there is NUMA topology inside the package skip the DIE domain
-+	 * since the NUMA domains will auto-magically create the right spanning
-+	 * domains based on the SLIT.
-+	 */
-+	if (!x86_has_numa_in_package) {
-+		x86_topology[i++] = (struct sched_domain_topology_level){
-+			cpu_cpu_mask, SD_INIT_NAME(DIE)
-+		};
-+	}
- 
--/*
-- * Set if a package/die has multiple NUMA nodes inside.
-- * AMD Magny-Cours, Intel Cluster-on-Die, and Intel
-- * Sub-NUMA Clustering have this.
-- */
--static bool x86_has_numa_in_package;
-+	/*
-+	 * There must be one trailing NULL entry left.
-+	 */
-+	BUG_ON(i >= ARRAY_SIZE(x86_topology)-1);
-+
-+	set_sched_topology(x86_topology);
-+}
- 
- void set_cpu_sibling_map(int cpu)
- {
-@@ -1390,15 +1397,6 @@ void __init smp_prepare_cpus_common(void)
- 		zalloc_cpumask_var(&per_cpu(cpu_l2c_shared_map, i), GFP_KERNEL);
- 	}
- 
--	/*
--	 * Set 'default' x86 topology, this matches default_topology() in that
--	 * it has NUMA nodes as a topology level. See also
--	 * native_smp_cpus_done().
--	 *
--	 * Must be done before set_cpus_sibling_map() is ran.
--	 */
--	set_sched_topology(x86_topology);
--
- 	set_cpu_sibling_map(0);
- }
- 
-@@ -1490,13 +1488,7 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- 	pr_debug("Boot done\n");
- 
- 	calculate_max_logical_packages();
--
--	/* XXX for now assume numa-in-package and hybrid don't overlap */
--	if (x86_has_numa_in_package)
--		set_sched_topology(x86_numa_in_package_topology);
--	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
--		set_sched_topology(x86_hybrid_topology);
--
-+	build_sched_topology();
- 	nmi_selftest();
- 	impress_friends();
- 	cache_aps_init();
+> On Wed, May 31, 2023 at 12:58=E2=80=AFAM Doug Anderson <dianders@chromium=
+.org> wrote:
+>>
+>> Hi,
+>>
+>> On Tue, May 30, 2023 at 4:56=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel=
+.org> wrote:
+>> >
+>> > On 22/05/2023 17:33, Doug Anderson wrote:
+>> > > Hi,
+>> > >
+>> > > On Fri, May 19, 2023 at 10:07=E2=80=AFPM Cong Yang
+>> > > <yangcong5@huaqin.corp-partner.google.com> wrote:
+>> > >>
+>> > >> Add an ilitek touch screen chip ili9882t.
+>> > >>
+>> > >> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+>> > >> ---
+>> > >>  .../devicetree/bindings/input/elan,ekth6915.yaml         | 9 +++++=
+++--
+>> > >>  1 file changed, 7 insertions(+), 2 deletions(-)
+>> > >
+>> > > I'm curious about the DT maintainers opinion here. Should this be a
+>> > > new bindings file, or should it be together in the elan file. If
+>> > > nothing else, I think the secondary voltage rail name is wrong. I to=
+ok
+>> > > a quick peek at a datasheet I found and I don't even see a 3.3V rail
+>> > > going to the ili9882t. That makes it weird to reuse "vcc33-supply" f=
+or
+>> > > a second supply...
+>> >
+>> > It's easier if they are CCed...
+>>
+>> Crud. I just assumed and didn't check the CC list. Cong: can you
+>> resend and make sure you're CCing the people that get_maintainers
+>> points at. One way to find that would be:
+>>
+>> ./scripts/get_maintainer.pl -f
+>> Documentation/devicetree/bindings/input/elan,ekth6915.yaml
