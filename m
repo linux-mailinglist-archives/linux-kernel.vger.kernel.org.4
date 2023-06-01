@@ -2,123 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955EB719CEF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE90719CF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjFANHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S231737AbjFANIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbjFANHJ (ORCPT
+        with ESMTP id S233077AbjFANIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:07:09 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C411297;
-        Thu,  1 Jun 2023 06:07:07 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX5vW5Rbkz682sP;
-        Thu,  1 Jun 2023 21:04:55 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
- 2023 14:07:02 +0100
-Date:   Thu, 1 Jun 2023 14:07:01 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Terry Bowman <terry.bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: Re: [PATCH v4 11/23] cxl/port: Store the downstream port's
- Component Register mappings in struct cxl_dport
-Message-ID: <20230601140701.00005e78@Huawei.com>
-In-Reply-To: <20230523232214.55282-12-terry.bowman@amd.com>
-References: <20230523232214.55282-1-terry.bowman@amd.com>
-        <20230523232214.55282-12-terry.bowman@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Jun 2023 09:08:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6458134
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:08:07 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351B76ot005631;
+        Thu, 1 Jun 2023 13:07:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=fQe9MehXV0ulPXCHX/rX7G2MaM1cOz0o68h7fshOjbo=;
+ b=crvucs/Z8eopExN8l9OkmdiVejZTExmfwOGL5Cf2Ukvd6HNjJmxiUstNKLmtfR6XA7Km
+ nIGLXGz5bk04j57Xvs9cHdDvS9ws4meqCRUGz6oNgynmu8lmumPuLcrY/PVtL1by7Two
+ IqbFfQ3tsxTaIm/xGJM87T7IjQkGoIwYOB1KJO3ZaIO3G+/tI+o9LzgMxJ0JdFCVU39H
+ xdlv/NPawYH3aSB4f8ixtt1IlZW5v8dkR/4yWDImgzv1bru4c0SDqWTFGP8ERkz6Wtvs
+ yKgUqZdAhkadJp+pDYmRMHrA10s9VLLO7b/BRanPMm1iZ5xmBvOmTvIbXCD6iJ3uaQ2B dw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxqyd8qpr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 13:07:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351D7uXa001793
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 13:07:56 GMT
+Received: from [10.50.22.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 06:07:54 -0700
+Message-ID: <230e45e8-8cd8-3668-bbfa-a95212b4cb99@quicinc.com>
+Date:   Thu, 1 Jun 2023 18:37:50 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] mm: madvise: fix uneven accounting of psi
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+CC:     <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+References: <1685531374-6091-1-git-send-email-quic_charante@quicinc.com>
+ <20230531221955.GD102494@cmpxchg.org>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <20230531221955.GD102494@cmpxchg.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: NJkcenynQeXaDPvryPhOSJdjvvamnHaF
+X-Proofpoint-GUID: NJkcenynQeXaDPvryPhOSJdjvvamnHaF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=773 phishscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306010115
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 18:22:02 -0500
-Terry Bowman <terry.bowman@amd.com> wrote:
+Thanks Johannes for taking a look at it..
 
-> From: Robert Richter <rrichter@amd.com>
+On 6/1/2023 3:49 AM, Johannes Weiner wrote:
+> On Wed, May 31, 2023 at 04:39:34PM +0530, Charan Teja Kalla wrote:
+>> This patch is tested on Android, Snapdragon SoC with 8Gb RAM, 4GB swap
+>> mounted on zram which has 2GB of backingdev. The test case involved
+>> launching some memory hungry apps in an order and do the proactive
+>> reclaim for the app that went to background using madvise(MADV_PAGEOUT).
+>> We are seeing ~40% less total values of psi mem some and full when this
+>> patch is combined with [1].
+> Does that mean those pages are thrashing, but because you clear their
+> workingset it isn't detected and reported via psi?
 > 
-> Same as for ports, also store the downstream port's Component Register
-> mappings, use struct cxl_dport for that.
-> 
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Seems reasonable to me.
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> ---
->  drivers/cxl/core/port.c | 11 +++++++++++
->  drivers/cxl/cxl.h       |  2 ++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> index 34e929f1723b..db2ba0c886e2 100644
-> --- a/drivers/cxl/core/port.c
-> +++ b/drivers/cxl/core/port.c
-> @@ -708,6 +708,13 @@ static inline int cxl_port_setup_regs(struct cxl_port *port,
->  				   component_reg_phys);
->  }
->  
-> +static inline int cxl_dport_setup_regs(struct cxl_dport *dport,
-> +				       resource_size_t component_reg_phys)
-> +{
-> +	return cxl_setup_comp_regs(dport->dev, &dport->comp_map,
-> +				   component_reg_phys);
-> +}
-> +
->  static struct cxl_port *__devm_cxl_add_port(struct device *host,
->  					    struct device *uport,
->  					    resource_size_t component_reg_phys,
-> @@ -986,6 +993,10 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
->  	dport->port = port;
->  	dport->rcrb.base = rcrb;
->  
-> +	rc = cxl_dport_setup_regs(dport, component_reg_phys);
-> +	if (rc && rc != -ENODEV)
-> +		return ERR_PTR(rc);
-> +
->  	cond_cxl_root_lock(port);
->  	rc = add_dport(port, dport);
->  	cond_cxl_root_unlock(port);
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index c76e1f84ba61..dc83c1d0396e 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -601,6 +601,7 @@ struct cxl_rcrb_info {
->   * struct cxl_dport - CXL downstream port
->   * @dev: PCI bridge or firmware device representing the downstream link
->   * @port: reference to cxl_port that contains this downstream port
-> + * @comp_map: component register capability mappings
->   * @port_id: unique hardware identifier for dport in decoder target list
->   * @component_reg_phys: downstream port component registers
->   * @rch: Indicate whether this dport was enumerated in RCH or VH mode
-> @@ -609,6 +610,7 @@ struct cxl_rcrb_info {
->  struct cxl_dport {
->  	struct device *dev;
->  	struct cxl_port *port;
-> +	struct cxl_register_map comp_map;
->  	int port_id;
->  	resource_size_t component_reg_phys;
->  	bool rch;
+Seems I didn't mention the usecase clearly and let me correct it. Say we
+have the Android apps A, B, C, ... H and launching of these apps goes
+like below.
 
+1) Launch app A.
+2) Launch app B.
+3) Launch app C. At this time, we consider the memory used by app A is
+no more in active use thus proactively reclaim them where we do issue
+MADV_PAGEOUT on anon regions only thus these pages goes to swap mounted
+on zram and subsequently into the backing dev attached to the zram.
+4) Launch app D.. Proactively reclaim the anon regions of App B into
+swap and through to backing dev.
+5) Now make the app A to foreground. This can read the pages from the
+swap + backing dev (because of the step 3)) that belongs to app A and
+also proactively reclaim anon regions of app C.
+6) Launch E --> proactive reclaim of app D to zram swap + backing dev.
+7) Make App B to foreground --> Read memory of app B from swap +
+backingdev and as well reclaim the anon regions of app A.
+8) Like wise launches of apps F, C, G, D, H, E .....
+
+If we look at steps 5, 7,..., we are just making the apps foreground
+which folios (if were marked as workingset) can contribute to PSI events
+through swap_readpage(). But in reality, these are not the real
+workingset folios (I think it is safe to say this), because it is the
+user who decided the reclaim of these pages by issuing the MADV_PAGEOUT
+which he knows that these are not going to be needed in the near future
+thus reclaim them.
+
+I think the other way to look at the problem is the user can write a
+simple application where he can do  MADV_PAGEOUT and read them back in a
+loop. If at any point, folios user working on turns out to be a
+workingset( he can just be probabilistic here), the PSI events will be
+triggered though there may not be real memory pressure in the system.
+
+
+> I don't rally get why silencing the thrashing is an improvement.
+> 
+Agree that we shouldn't be really silence the thrashing. My point is we
+shouldn't be  considering the folios as thrashing If those were getting
+reclaim by the user him self through MADV_PAGEOUT under the assumption
+that __user knows they are not real working set__.  Please let me know
+if I am not making sense here.
+
+>> [1]https://lore.kernel.org/all/20220214214921.419687-1-hannes@cmpxchg.org/T/#u
+>>
+>> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
