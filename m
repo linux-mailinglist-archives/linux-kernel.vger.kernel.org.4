@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECC371949C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641B271949E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjFAHou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S231617AbjFAHpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjFAHmh (ORCPT
+        with ESMTP id S232159AbjFAHmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:42:37 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0053010CA;
-        Thu,  1 Jun 2023 00:40:15 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685605214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mCdgs2ZY0Qmc8wOXyCbJFq17brRZ1eICKOVPf7KfY74=;
-        b=GhliR3CFcGqyKvO9Be0KLUU18LziFPSA3gWRYzfkfkxTtoRGNRQQ9KiITjQUd9LNCvf/bN
-        dLWtSU271I3ei3B9VjvDY4DngI2pg+yMFY7sBSksuAP5kr/HRolrc8Cp1j47Qv+JgKqEg0
-        M57yjvo2UM4Mu6prfeHwEoAmy9+Geg9mfpXrlmf2CRxqS88Ejxe7szZFnJzYWGhwKdyyWn
-        dQBAVgHBaosZQrQenv/x+9h58ExbFku8HfMjN3l7cX4sdwAOeQc19VLjXlWeYaej0O01pj
-        NrbkRjziy6ZjKCPkwFgtiY5aWt/j9GjtXWU0kQoolKCVQp/HPw8UfTKVLh8J3g==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 61260C0004;
-        Thu,  1 Jun 2023 07:40:10 +0000 (UTC)
-Date:   Thu, 1 Jun 2023 09:40:09 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Message-ID: <20230601094009.1eca5dbb@xps-13>
-In-Reply-To: <40bb4ad8-2bec-4eae-d0c8-c9aa31e03f32@alliedtelesis.co.nz>
-References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
-        <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
-        <40bb4ad8-2bec-4eae-d0c8-c9aa31e03f32@alliedtelesis.co.nz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 1 Jun 2023 03:42:40 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C801B0;
+        Thu,  1 Jun 2023 00:41:16 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3517eqx17005447, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3517eqx17005447
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 1 Jun 2023 15:40:52 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 1 Jun 2023 15:41:06 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 1 Jun 2023 15:41:06 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 1 Jun 2023 15:41:06 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Minjie Du <duminjie@vivo.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1] drivers: fix the parameter bin reference preceded by free
+Thread-Topic: [PATCH v1] drivers: fix the parameter bin reference preceded by
+ free
+Thread-Index: AQHZlFoEAnA/cNUtV0e2xvXQ6x93g691jvsw
+Date:   Thu, 1 Jun 2023 07:41:05 +0000
+Message-ID: <ef245c4f59f8419da9011d1b3d522e6e@realtek.com>
+References: <20230601072322.486-1-duminjie@vivo.com>
+In-Reply-To: <20230601072322.486-1-duminjie@vivo.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,74 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris,
-
-Chris.Packham@alliedtelesis.co.nz wrote on Wed, 31 May 2023 22:43:46
-+0000:
-
-> Hi Miquel,
->=20
-> On 31/05/23 11:54, Chris Packham wrote:
-> > From: Vadym Kochan <vadym.kochan@plvision.eu>
-> >
-> > Switch the DT binding to a YAML schema to enable the DT validation.
-> >
-> > Dropped deprecated compatibles and properties described in txt file.
-> >
-> > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > --- =20
-> <snip>
-> > diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-control=
-ler.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.ya=
-ml
-> > new file mode 100644
-> > index 000000000000..7cd4a2e99343
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> > @@ -0,0 +1,221 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Marvell NAND Flash Controller (NFC)
-> > +
-> > +maintainers:
-> > +  - Miquel Raynal <miquel.raynal@bootlin.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - const: marvell,armada-8k-nand-controller
-> > +          - const: marvell,armada370-nand-controller =20
->=20
-> On this specific point. Was your intention to allow just the=20
-> "marvell,armada-8k-nand-controller" compatible?
->=20
-> I made it a list as the existing usage is `compatible =3D=20
-> "marvell,armada-8k-nand-controller",=20
-> "marvell,armada370-nand-controller";` but an earlier comment you made=20
-> suggested that your intention was to allow just the 8k compatible on=20
-> it's own.
-
-To be honest I don't recall. Sometimes it's best to consider a version
-of a controller to be a superset of another, in this case both
-compatibles are welcome. I suggest you keep the description as it is.
-
-> Looking at the driver it doesn't do any is_compatible() checks=20
-> so I don't think it cares (currently).
->=20
-> > +      - enum:
-> > +          - marvell,armada370-nand-controller
-> > +          - marvell,pxa3xx-nand-controller
-> > +          - marvell,armada-8k-nand
-> > +          - marvell,armada370-nand
-> > +          - marvell,pxa3xx-nand
-> >  =20
-
-
-Thanks,
-Miqu=C3=A8l
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWluamllIER1IDxkdW1p
+bmppZUB2aXZvLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIEp1bmUgMSwgMjAyMyAzOjIzIFBNDQo+
+IFRvOiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT47IGt2YWxvQGtlcm5lbC5vcmcN
+Cj4gQ2M6IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZzsgTWluamllIER1IDxkdW1pbmppZUB2aXZvLmNvbT4NCj4gU3ViamVjdDogW1BB
+VENIIHYxXSBkcml2ZXJzOiBmaXggdGhlIHBhcmFtZXRlciBiaW4gcmVmZXJlbmNlIHByZWNlZGVk
+IGJ5IGZyZWUNCg0Kc3ViamVjdCBwcmVmaXggc2hvdWxkIGJlICJ3aWZpOiBydHc4OTogZml4IC4u
+LiAiDQoNCj4gDQo+IFdlIGFzc2lnbiB0aGUgdmFyaWFibGUgYmluIHRvIE5VTEwsDQo+IGZpeCB2
+YXJpYWJsZSBiaW4gcmVmZXJlbmNlIHByZWNlZGVkIGJ5IGZyZWUuDQo+IA0KPiBTaWduZWQtb2Zm
+LWJ5OiBNaW5qaWUgRHUgPGR1bWluamllQHZpdm8uY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0
+L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODkvZGVidWcuYyB8IDEgKw0KPiAgMSBmaWxlIGNoYW5nZWQs
+IDEgaW5zZXJ0aW9uKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+cmVhbHRlay9ydHc4OS9kZWJ1Zy5jIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4
+OS9kZWJ1Zy5jDQo+IGluZGV4IDZmNDE4ZjE0ZWMzZi4uNDU0MWI0ZDQ4ZTY5IDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg5L2RlYnVnLmMNCj4gKysrIGIv
+ZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9kZWJ1Zy5jDQo+IEBAIC0yOTgyLDYg
+KzI5ODIsNyBAQCBzdGF0aWMgdTggKnJ0dzg5X2hleDJiaW5fdXNlcihzdHJ1Y3QgcnR3ODlfZGV2
+ICpydHdkZXYsDQo+ICAgICAgICAgaWYgKGhleDJiaW4oYmluLCBidWYsIG51bSkpIHsNCj4gICAg
+ICAgICAgICAgICAgIHJ0dzg5X2luZm8ocnR3ZGV2LCAidmFsaWQgZm9ybWF0OiBIMUgySDMuLi5c
+biIpOw0KPiAgICAgICAgICAgICAgICAga2ZyZWUoYmluKTsNCj4gKyAgICAgICAgICAgICAgIGJp
+biA9IE5VTEw7DQo+ICAgICAgICAgICAgICAgICBlcnIgPSAtRUlOVkFMOw0KPiAgICAgICAgIH0N
+Cg0KDQpEbyB5b3UgbWVldCByZWFsIHByb2JsZW0/IG9yIGNvZGUgY2hlY2tlciBmaW5kcyB0aGlz
+PyANCg0KV2hlbiAnZXJyJyBpcyBzZXQsIHdlIGRvbid0IHRvdWNoICdiaW4nIGFueW1vcmUuIA0K
+DQpQaW5nLUtlDQoNCg==
