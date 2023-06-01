@@ -2,116 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680F471F639
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1D071F632
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjFAWsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S231718AbjFAWo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjFAWsu (ORCPT
+        with ESMTP id S229498AbjFAWo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:48:50 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F22133
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:48:47 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 31F6C5FD02;
-        Fri,  2 Jun 2023 01:48:45 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685659725;
-        bh=VFidQvl3y3zrfaQQyb5A6bOTwv1n+pl8gYzCSMq0tZc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=FS5h0aamVGhHwetjkii0tUR+hbLjg73z7zFfXQlLo/OpJBiu7G/MtEI0/iaSq4JB2
-         SQQf9eKnTP+OytF8lMuTnAcLoXhIFl9W9Q+ys+agut3gcLDBRNMHK/7nuwYqiIq8vH
-         A9V8JTsry+C99zNvqM/at4z5o0FKP0VBvS3AD5Gs+1txf6FXtx5bqNco5+KyqB5i8i
-         Mr5N6hLknC/h8ATutHtWkYBNOVulF6egVpICdP8SWOLtjAwKfe4lxLbs2RZpuocZPo
-         zFR/pUXqM2cGSXn+Y2HVZH2y2ocNSe1PJsbiMSTB6FxgpHpktoaOjz1EfVqNrQT/Yw
-         /ooU8aGmJomFQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Jun 2023 01:48:43 +0300 (MSK)
-Message-ID: <1ede0f53-8513-e346-b5a8-fc8a804cfa8d@sberdevices.ru>
-Date:   Fri, 2 Jun 2023 01:44:01 +0300
+        Thu, 1 Jun 2023 18:44:26 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CB012C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:44:25 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5344d45bfb0so48660a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 15:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685659465; x=1688251465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UxHkwiqKdxLfYQYbwK7RXIfy2i2RSaxPzUwPry0EypI=;
+        b=DhuuK1awpWZ+E3TBfFc1XXnS0izUJlS5HCoilkUp8uhyNdrIUsUNnSi5PXFLKLyOQ5
+         PBw9sJYYI/79wtGUvklbPmJZdVJai3uH8yxxL7+A4lkSyycuGhXBpnCwUUkt1Gx5vvfn
+         EVBzg27fkC5VvfPgzFWqOitlwLyTeuN5YHWqt4eGo2hMIT4kNGnGaeY/hYoj5FKkmUfc
+         bXJzmlaBlJ2gpj48botGTNd3HcC9BkPNjYfZPHr6w1+Bd5Wd75YRiWGxlx03+VBtSyj9
+         TVYhi5kFi+XO49sR/CmfgTk9QhIMbJovpaBWCJnT8drBA/UTpCSIUxxKt03epkaqIwKK
+         oBkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685659465; x=1688251465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UxHkwiqKdxLfYQYbwK7RXIfy2i2RSaxPzUwPry0EypI=;
+        b=c/ezc7oE6BRnMh3w0Uu3dlAfa9M7+8KLUCMBWTmBrCycdWYSxuVZQxvCAUOlYdg/n1
+         QmEE6tl/1GvN5Fh514dABIMx1TrN3Ecv/Cg7Z5jF/7UfPvVQnUTanG4Izdm+a+alyB58
+         /+BKwQxwAs8o9E+JneJmYAVvVA097woThremZf+uc2P+rB5PiV6O0IDAF6K9X4BbH6hU
+         GN0vwwsM5fKDvOvh5bua5A2UYvAiMxHW60zX4xBIWk1lDVIl3E3/phy5sxYTypLurEqH
+         RgyGzYIbA3fHocoeJsy9wRqtmLoRyfzEzGfypTPVEhCIdRnnYlCs0iInWVT18uB5sbXm
+         NTPQ==
+X-Gm-Message-State: AC+VfDw6OZ62DRecqnOa2fjEeDBFRotmh1UcNtWOcoD5hsWxqdbW3Uh+
+        UXPEAUxL3vD72UFvEUd406pWuac8o8D3hA==
+X-Google-Smtp-Source: ACHHUZ4rd6kVpQK8pfQmSVfOt8wBFkHWquxBu5ssRKjUzszOFtIfV6X/57VGphUe48U8aNQg5aEIuw==
+X-Received: by 2002:a17:902:e852:b0:1b0:3cda:6351 with SMTP id t18-20020a170902e85200b001b03cda6351mr10628056plg.0.1685659464812;
+        Thu, 01 Jun 2023 15:44:24 -0700 (PDT)
+Received: from olv-ct-22.c.googlers.com.com (217.108.125.34.bc.googleusercontent.com. [34.125.108.217])
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c24600b001ac84f5559csm4024979plg.126.2023.06.01.15.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 15:44:24 -0700 (PDT)
+From:   Chia-I Wu <olvaffe@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mukul Joshi <mukul.joshi@amd.com>,
+        Danijel Slivka <danijel.slivka@amd.com>,
+        Lang Yu <Lang.Yu@amd.com>,
+        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>,
+        Jammy Zhou <Jammy.Zhou@amd.com>, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] amdgpu: validate offset_in_bo of drm_amdgpu_gem_va
+Date:   Thu,  1 Jun 2023 15:44:12 -0700
+Message-ID: <20230601224419.2392422-1-olvaffe@gmail.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 1/6] mtd: rawnand: meson: fix ready/busy command
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
- <20230601061850.3907800-2-AVKrasnov@sberdevices.ru>
- <20230601095142.3a611b5a@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230601095142.3a611b5a@xps-13>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/01 16:24:00 #21397712
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Miquel!
+This is motivated by OOB access in amdgpu_vm_update_range when
+offset_in_bo+map_size overflows.
 
-May be I can exclude this patch from this patchset and send it as a single patch
-as it is fix and not related with other patches?
+v2: keep the validations in amdgpu_vm_bo_map
+v3: add the validations to amdgpu_vm_bo_map/amdgpu_vm_bo_replace_map
+    rather than to amdgpu_gem_va_ioctl
 
-Thanks, Arseniy
+Fixes: 9f7eb5367d00 ("drm/amdgpu: actually use the VM map parameters")
+Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-On 01.06.2023 10:51, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> AVKrasnov@sberdevices.ru wrote on Thu, 1 Jun 2023 09:18:44 +0300:
-> 
->> This fixes ready/busy command value.
-> 
-> nit: "Fix the ready/busy command value."
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->>  drivers/mtd/nand/raw/meson_nand.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->> index 074e14225c06..9dd4a676497b 100644
->> --- a/drivers/mtd/nand/raw/meson_nand.c
->> +++ b/drivers/mtd/nand/raw/meson_nand.c
->> @@ -37,7 +37,7 @@
->>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
->>  #define NFC_CMD_SCRAMBLER_DISABLE	0
->>  #define NFC_CMD_SHORTMODE_DISABLE	0
->> -#define NFC_CMD_RB_INT		BIT(14)
->> +#define NFC_CMD_RB_INT		((0xb << 10) | BIT(18) | BIT(16))
->>  
->>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
->>  
-> 
-> 
-> Thanks,
-> Miquèl
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+index 22f9a65ca0fc7..76d57bc7ac620 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+@@ -1434,14 +1434,14 @@ int amdgpu_vm_bo_map(struct amdgpu_device *adev,
+ 	uint64_t eaddr;
+ 
+ 	/* validate the parameters */
+-	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK ||
+-	    size == 0 || size & ~PAGE_MASK)
++	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK || size & ~PAGE_MASK)
++		return -EINVAL;
++	if (saddr + size <= saddr || offset + size <= offset)
+ 		return -EINVAL;
+ 
+ 	/* make sure object fit at this offset */
+ 	eaddr = saddr + size - 1;
+-	if (saddr >= eaddr ||
+-	    (bo && offset + size > amdgpu_bo_size(bo)) ||
++	if ((bo && offset + size > amdgpu_bo_size(bo)) ||
+ 	    (eaddr >= adev->vm_manager.max_pfn << AMDGPU_GPU_PAGE_SHIFT))
+ 		return -EINVAL;
+ 
+@@ -1500,14 +1500,14 @@ int amdgpu_vm_bo_replace_map(struct amdgpu_device *adev,
+ 	int r;
+ 
+ 	/* validate the parameters */
+-	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK ||
+-	    size == 0 || size & ~PAGE_MASK)
++	if (saddr & ~PAGE_MASK || offset & ~PAGE_MASK || size & ~PAGE_MASK)
++		return -EINVAL;
++	if (saddr + size <= saddr || offset + size <= offset)
+ 		return -EINVAL;
+ 
+ 	/* make sure object fit at this offset */
+ 	eaddr = saddr + size - 1;
+-	if (saddr >= eaddr ||
+-	    (bo && offset + size > amdgpu_bo_size(bo)) ||
++	if ((bo && offset + size > amdgpu_bo_size(bo)) ||
+ 	    (eaddr >= adev->vm_manager.max_pfn << AMDGPU_GPU_PAGE_SHIFT))
+ 		return -EINVAL;
+ 
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
