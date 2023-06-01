@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01208719FDF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA340719FDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbjFAO0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
+        id S233352AbjFAO0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbjFAO0J (ORCPT
+        with ESMTP id S234252AbjFAO0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:26:09 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7170FC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:26:05 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id DBC7B3200928;
-        Thu,  1 Jun 2023 10:26:03 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 01 Jun 2023 10:26:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1685629563; x=1685715963; bh=KWRLPe4QiP
-        /istjgW6FING88PTnKvxe+DScyuXcEQH4=; b=Bm9NHy0h2tv+fDEdVSncH3u7Ei
-        lq/ISO1ts6DMNa1zO7cjqYl+aPzdhRjRJACmkqnnMyHbRmjs65TmkEmlqd1ooGud
-        XMr7g+PZLlFv4pKae9V/QL/gqgNgyMJFPNkadUpINIw9tpPmVAy7zW18zbHH1B17
-        LjHCHStQU7heUssAWl7stZsDa7tD6yX29MB42t+NNvvWj1nZ8wlrrEvtE37anw06
-        FsCDroc/LkxyM9lwHcbUeFHpfO6fmycM53N4uQy0T8OmqpkuFuiB+1aRJ/Lv97Ns
-        pbssx+QYaIYMyllxpU9/1ibFHh4WiLUArENyoMV/uuRxmHMypEVBwl5s+QQA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1685629563; x=1685715963; bh=KWRLPe4QiP/istjgW6FING88PTnKvxe+DSc
-        yuXcEQH4=; b=EiRGnA04fIvKknuLwujsjqRy74164umqmdPX/lPNGfslk8syuT4
-        w40tBkAawjcG2Fd+eM857wu3HflKEJwaX3dAwzfDcfPhbzLxI/VartOkrpPFFm6s
-        W3c9c3uYwiNfLP170bHF3NfcCazO8vlvC2Tkstr69MtQzhQ5LG1Uz3WpPGsuNH0i
-        0sFoPzlSksvL0xpqqq0msII/hiIz/mFcGD98IHdG/cbHwFz9/jyFats437ECdOpk
-        LDQi8I45k83QoyBA6GFuP8osQB6seGxfRxQFnMuuIp2aNfamkHiwU62ChRkATSrX
-        1gX35j4BFc/yTsjSQYOLJmooMaI5o1fACEg==
-X-ME-Sender: <xms:eqp4ZG7Um7vkC5J0TfqVL5Ib5elUIi6bGdmx1lljwYS9EdwadegvQw>
-    <xme:eqp4ZP5ikmOm7qlhJDE_WXplGOgivY37H0jN7FTQ1OHWi4nfgdDAm19cxTJ1RME0v
-    4uPur2QqC4ADKihk4g>
-X-ME-Received: <xmr:eqp4ZFeyzGdJhbUsKa0kNgdIxiIOI_3Odf2J0b2Rkzj2tYjhyYJqH7Id6BcIsVxSdoCFqC1xP62YyctU1rky11eCFHTuWZHlaQI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfggtggusehttdertd
-    dttddvnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghs
-    hhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeetfeeiteefve
-    egvdfggeffheetleejkeekleeugeffffdtgfdtteetkeevvddvgfenucffohhmrghinhep
-    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:eqp4ZDKFeTmJghD_O2-EowoPyNDqtau24DDtSpkb76-7tRGpAFufIQ>
-    <xmx:eqp4ZKJmxAhe5a6rb2Cwy2DYDfnNQ3_O6tg9IMcN51-axPZILNkUew>
-    <xmx:eqp4ZEzbE8pyqnP2SguyfQ_kCb9XUsPyH1eu7-cqP3v8TERE_7GXPg>
-    <xmx:e6p4ZEwjB3wefIijXVXN3-obITkLnhhtyobdjW3Kn47OeR4XYzFl6A>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 10:26:01 -0400 (EDT)
-Date:   Thu, 1 Jun 2023 23:25:59 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: firewire fixes for 6.4-rc4
-Message-ID: <20230601142559.GA118570@workstation.local>
-Mail-Followup-To: Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org
+        Thu, 1 Jun 2023 10:26:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5BBFC;
+        Thu,  1 Jun 2023 07:26:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB10F645BF;
+        Thu,  1 Jun 2023 14:26:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4EC7C433D2;
+        Thu,  1 Jun 2023 14:26:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685629590;
+        bh=LONUfoM6zYh7zB03i9qk5MT1AVj55WLEaOknk51EKVg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h6YlsJQoHZz/v2rrpK9OUxo6itcXgfTzCrqQs4rgAZNlCUSldbRaTKto5jI/RItUX
+         hnjP90WKu3jsy7qZlTAMCDc7Slx5Bf2a1gt7bTwEtnqzJIeaoiskW8b35zgx4g/AFL
+         A0ZhiRNp5JLKcIpBByQdvjN3+roLb4Chi08Gtsbg=
+Date:   Thu, 1 Jun 2023 15:26:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/42] 6.1.32-rc1 review
+Message-ID: <2023060101-coconut-smugness-4c7a@gregkh>
+References: <20230601131939.051934720@linuxfoundation.org>
+ <CA+G9fYuHjNhe-5TboAbrOeZrL3xL-CYYSaEnL=8onebLUqDt8g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CA+G9fYuHjNhe-5TboAbrOeZrL3xL-CYYSaEnL=8onebLUqDt8g@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Jun 01, 2023 at 07:41:08PM +0530, Naresh Kamboju wrote:
+> On Thu, 1 Jun 2023 at 18:57, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 6.1.32 release.
+> > There are 42 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> 
+> Following build errors noticed on 6.1 and 5.15.
+> 
+> drivers/dma/at_xdmac.c: In function 'atmel_xdmac_resume':
+> drivers/dma/at_xdmac.c:2049:9: error: implicit declaration of function
+> 'pm_runtime_get_noresume' [-Werror=implicit-function-declaration]
+>  2049 |         pm_runtime_get_noresume(atxdmac->dev);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~
+> drivers/dma/at_xdmac.c:2049:40: error: 'struct at_xdmac' has no member
+> named 'dev'
+>  2049 |         pm_runtime_get_noresume(atxdmac->dev);
+>       |                                        ^~
+> cc1: some warnings being treated as errors
+> 
+> reported link:
+> https://lore.kernel.org/stable/CA+G9fYswtPyrYJbwcGFhc5o7mkRmWZEWCCeSjmR64M+N-odQhQ@mail.gmail.com/
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
+Ah, the .h file was added by 650b0e990cbd ("dmaengine: at_xdmac: add
+runtime pm support"), which isn't needed here.  I'll go add it by hand
+and push out some -rc2 releases for this and 5.15.y, thanks!
 
-  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git tags/firewire-fixes-6.4-rc4
-
-for you to fetch changes up to 4420528254153189c70b6267593e445dc8654e37:
-
-  firewire: Replace zero-length array with flexible-array member (2023-06-01 22:41:14 +0900)
-
-----------------------------------------------------------------
-firewire fixes for 6.4-rc4
-
-This pull request includes a single patch from the project for consecutive
-effort of memory safety array. It brings no change to user space, thus it
-is worth to apply it as a fix.
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (1):
-      firewire: Replace zero-length array with flexible-array member
-
- include/linux/firewire.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-
-Regards
-
-Takashi Sakamoto
+greg k-h
