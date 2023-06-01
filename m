@@ -2,108 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7F371F219
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D5C71F1E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjFAS3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S231534AbjFAS2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbjFAS3E (ORCPT
+        with ESMTP id S231373AbjFAS2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:29:04 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229DBE47;
-        Thu,  1 Jun 2023 11:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=AQcVgfW3AF1zATJmxtuE2HxXTPlWoZL81qZFjeP/IXs=; b=d5L7zlnF/YekEEl7dOGnWtNyPB
-        PC8uMiqJm2kA+DBOkGFwx9e8tCYL03larfOOKItCGkhhKojr0c0x6HZIZN5gEqajQX4NTJ9arBqzr
-        ARv5gbuiklV6Z36f643DMS4660Jdshy8HerXvQNxoguhp3qkCliV4yCSFdtdqSNhwx70=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:42688 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q4n1B-0004uN-JV; Thu, 01 Jun 2023 14:27:26 -0400
-Date:   Thu, 1 Jun 2023 14:27:24 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     m.brock@vanmierlo.com
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org, Lech Perczak <lech.perczak@camlingroup.com>
-Message-Id: <20230601142724.4fb197fd315e6d360c0d0457@hugovil.com>
-In-Reply-To: <c5c2879e55102a6d517245e6d251290d@vanmierlo.com>
-References: <20230601163113.2785657-1-hugo@hugovil.com>
-        <20230601163113.2785657-4-hugo@hugovil.com>
-        <c5c2879e55102a6d517245e6d251290d@vanmierlo.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 1 Jun 2023 14:28:15 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0501123
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:27:46 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-75b2a2bf757so110162585a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 11:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685644063; x=1688236063;
+        h=in-reply-to:references:cc:to:from:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xTvzwitBcKlLx6+80P3s60W9cmwlQPDAjEYaDbxMtkY=;
+        b=TbwuDe42auONO0juj0nV18JjxU0qVt5RajILx88nh9jQiGxS0n4n2KCUuUhfspvOtP
+         kMh0GrlFf9oPjbtp3ZKNRi3DvAKrG/DXomUOrVNxBL+prXp9zg0bztfwFVtlqtAP6Nwb
+         eUlXa/cky9WxL7IRC44ttqFeDoF32Aa1++UQI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685644063; x=1688236063;
+        h=in-reply-to:references:cc:to:from:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xTvzwitBcKlLx6+80P3s60W9cmwlQPDAjEYaDbxMtkY=;
+        b=gm6+KdSx1qLy81XOLnY4xyRsYBwnbrMbpBXxZqEnn4+MDqE7XWunegInS+SsEPE0qT
+         29bmkoKxuSxf4zi59abmu2qiUFs2cIIEYOPzRLUPGqMYkgIjNdd9stfb52Nx7uIuSsq8
+         JGUUsfoGeNTJu6yTB78g9mw6QZeN5WuctgwqLFDEDFpf1F8Tw+olISMjmvn1gEUHUwSS
+         O87FfxnSHp+YJHWqP0mM/uNfoAeB2IF73BouHjGHVhe58atdlTyFGLaHdsLtLD7wRj+7
+         BK8Q8kN5LqESLhNMBwT1pqNBrPncEHhscpYZDn2P+2TV+vdP3nksjPhsVilZHc5KY5YR
+         Ilnw==
+X-Gm-Message-State: AC+VfDyN5v463zTE9Jss74Ptf5meo4DUZgnAgn4n8D6Y7E3y1bLd3D6m
+        TqSKWM441eShtpvLGFlvaZPk5Q==
+X-Google-Smtp-Source: ACHHUZ4q0JrWFaaixNQ3ZCit5evtbtbloWX4ACpBjuMoBjbBEyb3ABY3fWH/gK2pmlafVg9AX2UAlQ==
+X-Received: by 2002:a05:620a:3e87:b0:75b:23a1:3659 with SMTP id tv7-20020a05620a3e8700b0075b23a13659mr9099461qkn.26.1685644063183;
+        Thu, 01 Jun 2023 11:27:43 -0700 (PDT)
+Received: from [10.67.50.169] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id v15-20020ae9e30f000000b007594229600csm6946622qkf.81.2023.06.01.11.27.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 11:27:42 -0700 (PDT)
+Message-ID: <eda87740-669c-a6e1-9c71-a9a92d3b173a@broadcom.com>
+Date:   Thu, 1 Jun 2023 11:27:40 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH net-next] ethtool: ioctl: improve error checking for
+ set_wol
+From:   Justin Chen <justin.chen@broadcom.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com,
+        Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <1685566429-2869-1-git-send-email-justin.chen@broadcom.com>
+ <ZHi/aT6vxpdOryD8@corigine.com>
+ <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
+In-Reply-To: <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009f765b05fd159771"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v5 3/9] serial: sc16is7xx: refactor GPIO controller
- registration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Jun 2023 19:28:01 +0200
-m.brock@vanmierlo.com wrote:
+--0000000000009f765b05fd159771
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> Hugo Villeneuve schreef op 2023-06-01 18:31:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > In preparation for upcoming patch "fix regression with GPIO
-> > configuration". To facilitate review and make code more modular.
-> > 
-> > Cc: <stable@vger.kernel.org> # 6.1.x
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
-> > Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
-> > ---
-> >  drivers/tty/serial/sc16is7xx.c | 39 ++++++++++++++++++++--------------
-> >  1 file changed, 23 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serial/sc16is7xx.c 
-> > b/drivers/tty/serial/sc16is7xx.c
-> > index 0c903d44429c..279d7dcb1447 100644
-> > --- a/drivers/tty/serial/sc16is7xx.c
-> > +++ b/drivers/tty/serial/sc16is7xx.c
-> > @@ -1349,6 +1349,26 @@ static int
-> > sc16is7xx_gpio_direction_output(struct gpio_chip *chip,
-> > 
-> >  	return 0;
-> >  }
-> > +
-> > +static int sc16is7xx_setup_gpio_chip(struct device *dev)
+
+
+On 6/1/23 9:22 AM, Justin Chen wrote:
 > 
-> Only one parameter, but...
 > 
-> > +	ret = sc16is7xx_setup_gpio_chip(dev, mctrl_mask);
+> On 6/1/2023 8:55 AM, Simon Horman wrote:
+>> + Daniil Tatianin <d-tatianin@yandex-team.ru>, Andrew Lunn 
+>> <andrew@lunn.ch>
+>>    as per ./scripts/get_maintainer.pl --git-min-percent 25 
+>> net/ethtool/ioctl.c
+>>
+>> On Wed, May 31, 2023 at 01:53:49PM -0700, Justin Chen wrote:
+>>> The netlink version of set_wol checks for not supported wolopts and 
+>>> avoids
+>>> setting wol when the correct wolopt is already set. If we do the same 
+>>> with
+>>> the ioctl version then we can remove these checks from the driver layer.
+>>
+>> Hi Justin,
+>>
+>> Are you planning follow-up patches for the driver layer?
+>>
 > 
-> called with two.
+> I was planning to for the Broadcom drivers since those I can test. But I 
+> could do it across the board if that is preferred.
+> 
+>>> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+>>> ---
+>>>   net/ethtool/ioctl.c | 14 ++++++++++++--
+>>>   1 file changed, 12 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+>>> index 6bb778e10461..80f456f83db0 100644
+>>> --- a/net/ethtool/ioctl.c
+>>> +++ b/net/ethtool/ioctl.c
+>>> @@ -1436,15 +1436,25 @@ static int ethtool_get_wol(struct net_device 
+>>> *dev, char __user *useraddr)
+>>>   static int ethtool_set_wol(struct net_device *dev, char __user 
+>>> *useraddr)
+>>>   {
+>>> -    struct ethtool_wolinfo wol;
+>>> +    struct ethtool_wolinfo wol, cur_wol;
+>>>       int ret;
+>>> -    if (!dev->ethtool_ops->set_wol)
+>>> +    if (!dev->ethtool_ops->get_wol || !dev->ethtool_ops->set_wol)
+>>>           return -EOPNOTSUPP;
+>>
+>> Are there cases where (in-tree) drivers provide set_wol byt not get_wol?
+>> If so, does this break their set_wol support?
+>>
+> 
+> My original thought was to match netlink set wol behavior. So drivers 
+> that do that won't work with netlink set_wol right now. I'll skim around 
+> to see if any drivers do this. But I would reckon this should be a 
+> driver fix.
+> 
+> Thanks,
+> Justin
+> 
 
-Hi Maarten,
-sorry about that, I will fix this for V6.
+I see a driver at drivers/net/phy/microchip.c. But this is a phy driver 
+set_wol hook.
 
-Somehow my automated compile script tested each patch separately, including this one, but the defconfig didn't enable the module sc6is7xx, so the error went unnoticed. I wrongly assumed that "make alldefconfig" enabled all modules, I will instead use "make allyesconfig".
+Justin
 
-Hugo.
+>>> +    memset(&cur_wol, 0, sizeof(struct ethtool_wolinfo));
+>>> +    cur_wol.cmd = ETHTOOL_GWOL;
+>>> +    dev->ethtool_ops->get_wol(dev, &cur_wol);
+>>> +
+>>>       if (copy_from_user(&wol, useraddr, sizeof(wol)))
+>>>           return -EFAULT;
+>>> +    if (wol.wolopts & ~cur_wol.supported)
+>>> +        return -EOPNOTSUPP;
+>>> +
+>>> +    if (wol.wolopts == cur_wol.wolopts)
+>>> +        return 0;
+>>> +
+>>>       ret = dev->ethtool_ops->set_wol(dev, &wol);
+>>>       if (ret)
+>>>           return ret;
+
+--0000000000009f765b05fd159771
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
+4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
+BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
+NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
+A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
+aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
+cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
+MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
+GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
+DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
+dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
+xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
+sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
+VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
+ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
+bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJjqqTOWcaDpNk2fYHTJDwT3UomhpBtQMTLF
+h+bWQAQxMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYwMTE4
+Mjc0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
+BgkqhkiG9w0BAQEFAASCAQBM7R6Ie09AZLEbZ+AcbRCQHprJChEJxTJZsRAbTrlSEyO+9DZJ2Qfk
+1jS1wCHe+1m67REEVRzIzPUkfS6kCqEy4LxzsDc+GXnOBeB/LSrHJZM7nFLqLa9GaeseA1e3Jr2g
+c6tYrgojeo9/k60RH8ttHohLF0SF7gJEX6lROIHOY6lBfBVryrHE05Y5kZP3YFXeSspBu6DnDQqC
+fkh4Ey4TAmmUALv4DLbefpIRdfwnQV/py/MboM07xGmk6B4JdVHkJQrRotjHGyW7NC+EZwuMvvhv
+1aw0EDFWoYWqUD4JiY/N5NfrUYzDHrZ2eLqwRuhxUtkdMRp1QrNQettYR71R
+--0000000000009f765b05fd159771--
