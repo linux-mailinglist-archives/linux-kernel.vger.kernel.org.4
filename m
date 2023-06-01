@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D1871EF4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0DE71EFB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjFAQk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S232195AbjFAQwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbjFAQkH (ORCPT
+        with ESMTP id S230154AbjFAQw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:40:07 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F4AE5A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:39:47 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d30ab1f89so758972b3a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685637587; x=1688229587;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BAHgbKUGLDFGyzp+XWYZ2sseIunYBsYQIO/Xldf05CU=;
-        b=ryx0q2tgrm1ZKWtwvRMJ9C4j+popyHn3lXSPJE9WeKkQ8kOC7HrJjfKFRmCDgLK4jz
-         G+xHfxxcaoeujui+lcZ6sPSDA/hrnRZY37AoAlRfbMdJ0mKBg9o1d/Ht6SWrWKvI+/Ob
-         3AqIkXmgLW7Ow0C11PK9HJ73XCF3XNb3nZKClbX6cAkDj7N8NY4UfuQ1+r1widBM4GBD
-         nlCUvtrR1tVC/L+3NG4elw/3ZxlvASHGYNmD9LVnt2zDOWfuvYnoinrYnEBboea7Stsb
-         AmdQgtgKGiCeC/Ov1oHeEioCI7ba3+dxWO6sZhmjzpca5UywJn/3+LNXabcEui4aSGPM
-         tpOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685637587; x=1688229587;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BAHgbKUGLDFGyzp+XWYZ2sseIunYBsYQIO/Xldf05CU=;
-        b=D1jMIibExBsp1AFGSjwRZ930L5CBaoFlPQndh1Zt2i/h5KqwP+7vmBReP9idd75+cy
-         Xu+dWbfFsDiDfSG+7xcfdnQ4MA2wvfxzuSanNAbOHs1aFPJGHWqQSeAlX3BqyCv1z9PZ
-         04fM2LCfYQUIDC/B1YT6SikB1c/1NXh/Jp0YACjeFaAIsoadO4yRw3kCJQQwxBMgIzdv
-         JLq5hYG843B/vi080fcJneVIOEIJK+d2fleOsxFJmC3Ol9GmRhOftW3liTHVaLQFDPzr
-         msv54YVHwkozyYfhZUJWQpQY5YmMUBEs1Lph2F2kTDCK2QcnxrLBR3NWzR3tZfMVf64M
-         Dv6g==
-X-Gm-Message-State: AC+VfDwrkbtAx42jhuxFsKEcK5tMPqvz9i5CuYezKQedx0Wy5lQhX1oK
-        lk1GH/ShUAg8Y6v6XBgF7ovo
-X-Google-Smtp-Source: ACHHUZ77Hvcyy/LhNWPZBGSZ2qUN6+7BPRkk03iorDwp2wOt2Mtg1w9NrwyWpOHSK+Sam8bl4ZhCTw==
-X-Received: by 2002:a05:6a00:2184:b0:64a:2dd6:4f18 with SMTP id h4-20020a056a00218400b0064a2dd64f18mr7536124pfi.13.1685637586895;
-        Thu, 01 Jun 2023 09:39:46 -0700 (PDT)
-Received: from localhost.localdomain ([117.217.186.123])
-        by smtp.gmail.com with ESMTPSA id a9-20020aa78649000000b0064f83595bbcsm5273630pfo.58.2023.06.01.09.39.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 09:39:46 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
-Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, steev@kali.org,
-        quic_srichara@quicinc.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 8/8] PCI: qcom: Do not advertise hotplug capability for IP v2.1.0
-Date:   Thu,  1 Jun 2023 22:09:00 +0530
-Message-Id: <20230601163900.15500-9-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230601163900.15500-1-manivannan.sadhasivam@linaro.org>
-References: <20230601163900.15500-1-manivannan.sadhasivam@linaro.org>
+        Thu, 1 Jun 2023 12:52:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113411AB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685638321; x=1717174321;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pm4VUQyubQxYWLZEuh6qnK28OPDj9UxOI+MeZtmOfaI=;
+  b=FxxQv6iWb+LfUv3Lj7pouwAPRgAh8X9n82AktTBH5ZzoufI3S2Ok2Z+5
+   kpnvI1J/3kkBuHkVzun4NlO/MZ85ThwpFL+rme0vsuzXPY1FqATeMw67Z
+   8YJjdsJ6jM0z++R8h/8ElaCQYLrhM2yEbTAUiQMA3fw4FDcpdc4Etv5iB
+   fHBkCOsdfYRLzX+fTvbJHU4z3dliWfQzbDaKe1AOjpYfcBTQBBte2ZyFl
+   0+qr8yc5/nsDF4F6yKPoQIxHYptM4uUtgdNiu3Vvvek8/NDWI7hQSG68J
+   OMGGEm8McpnVSRB9PaqXiLyo/425nWdAB/LAzZ1ZYuuiEH+x+BwYTOrZg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="421426880"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="421426880"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:51:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="777283282"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="777283282"
+Received: from rcelisco-mobl.amr.corp.intel.com (HELO [10.212.207.82]) ([10.212.207.82])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:51:56 -0700
+Message-ID: <d9bbf549-7ee3-1f8f-ad66-75350a5baf52@linux.intel.com>
+Date:   Thu, 1 Jun 2023 11:39:38 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 2/4] soundwire: bandwidth allocation: Remove pointless
+ variable
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230601161622.1808135-1-ckeepax@opensource.cirrus.com>
+ <20230601161622.1808135-2-ckeepax@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230601161622.1808135-2-ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,40 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SoCs making use of Qcom PCIe controller IP v2.1.0 do not support hotplug
-functionality. But the hotplug capability bit is set by default in the
-hardware. This causes the kernel PCI core to register hotplug service for
-the controller and send hotplug commands to it. But those commands will
-timeout generating messages as below during boot and suspend/resume.
 
-[    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-[    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
-[    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
-[    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
 
-This not only spams the console output but also induces a delay of a
-couple of seconds. To fix this issue, let's clear the HPC bit in
-PCI_EXP_SLTCAP register as a part of the post init sequence to not
-advertise the hotplug capability for the controller.
+On 6/1/23 11:16, Charles Keepax wrote:
+> The block_offset variable in _sdw_compute_port_params adds nothing
+> either functionally or in terms of code clarity, remove it.
+> 
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 2 ++
- 1 file changed, 2 insertions(+)
+This one is easy enough, thanks!
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 612266fb849a..7a87a47eb7ed 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -438,6 +438,8 @@ static int qcom_pcie_post_init_2_1_0(struct qcom_pcie *pcie)
- 	writel(CFG_BRIDGE_SB_INIT,
- 	       pci->dbi_base + AXI_MSTR_RESP_COMP_CTRL1);
- 
-+	qcom_pcie_clear_hpc(pcie->pci);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
+> ---
+>  drivers/soundwire/generic_bandwidth_allocation.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/soundwire/generic_bandwidth_allocation.c b/drivers/soundwire/generic_bandwidth_allocation.c
+> index 325c475b6a66d..31162f2b56381 100644
+> --- a/drivers/soundwire/generic_bandwidth_allocation.c
+> +++ b/drivers/soundwire/generic_bandwidth_allocation.c
+> @@ -139,20 +139,16 @@ static void _sdw_compute_port_params(struct sdw_bus *bus,
+>  {
+>  	struct sdw_master_runtime *m_rt;
+>  	int hstop = bus->params.col - 1;
+> -	int block_offset, port_bo, i;
+> +	int port_bo, i;
+>  
+>  	/* Run loop for all groups to compute transport parameters */
+>  	for (i = 0; i < count; i++) {
+>  		port_bo = 1;
+> -		block_offset = 1;
+>  
+>  		list_for_each_entry(m_rt, &bus->m_rt_list, bus_node) {
+> -			sdw_compute_master_ports(m_rt, &params[i],
+> -						 port_bo, hstop);
+> +			sdw_compute_master_ports(m_rt, &params[i], port_bo, hstop);
+>  
+> -			block_offset += m_rt->ch_count *
+> -					m_rt->stream->params.bps;
+> -			port_bo = block_offset;
+> +			port_bo += m_rt->ch_count * m_rt->stream->params.bps;
+>  		}
+>  
+>  		hstop = hstop - params[i].hwidth;
