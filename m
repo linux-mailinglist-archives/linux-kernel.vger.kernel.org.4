@@ -2,262 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0066471F0D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A068971F0D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbjFARcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S232693AbjFARdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFARcQ (ORCPT
+        with ESMTP id S231315AbjFARdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:32:16 -0400
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2092.outbound.protection.outlook.com [40.107.10.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A634E4;
-        Thu,  1 Jun 2023 10:32:14 -0700 (PDT)
+        Thu, 1 Jun 2023 13:33:10 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5B7134;
+        Thu,  1 Jun 2023 10:33:08 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CI2QuGcPVlUkSkqzWy39ykBXkeDsX9TQkmWm29NiGt/dlba3TQmp/QDV+q481h763qurdy+GdKZvlQTxtCJGJwpTZ1z2wnNNotGHXX46TUneHvQoxyNkaIofuRMG8aH/wMLDk/eVE3e8BwtXndCB1IyucClT5w1Phazz7b433FbVa/PNEmofsQ2E7zgLRNQleCIdNlGeIADNTZHL96TcWU5QCsBku9h7tcVIY11N6W6LrxeckVkx2tTyYKK1Oa/3xztDiPASuybjNiF742D+hP4RFKvjLJ1yIWTEpX3xW2bqUjtAph1EIcNyXAjFQfbH9JuqC+9hLv6Shh9xeYx5XQ==
+ b=GcZVE0/j5rW172lYkaZYvlLsbObIbtNFUHRZPcockM7oVjJp8x8FyLoGck3l3IhmeLkmgCuy7LFzTtksPOMCALeAzFM/v8ZyFSuqdAYpH60fnO+QRWh1xkaLq1tgGoLCPJnuxAvcACkwPI+0H3n+EQ8OliIBX9hdJD4K017xT6l3m7kN6YvYe1Az5OnHxy6+4goxWancoWUxQWGVTfeRe/q+B5VGTag8BL0ycOoF4lvvhFE/6EToIFwsHPrrhGJxXMFt5MM/tSXdsHSNskz8mgS/tvsfsTmABDOiORWPS/ysvl1OxRa2kc4k9ekfD/4yGLpBhhu3tTzMIUPgixp68w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oFbj3xbAxkuFVUlJS7R2ul3JZ+NTfOsPahmTvZnxJbg=;
- b=CRBe/K3SZnDW0nE2w8yWt1HqXfg0OSa1Ri6QqnmefCmWWN6spt52MakUYspyfdwrHKJ/IdYs9Rlw3fCqwYg7UsQu3B1N8KoxmjvJ7nuhcIHISla8rMYQLvkAadSyx9m6wJauBdsQhdR5CGxwiJ4PgcroG7t3uyhGCf/v9DhZk1F69Hl79HBip3Wfmq3qcUx9obzz+j7qAjWLEYUBGsQgHRPCdf2wyywKW33K+F0eMQmadUB4/rXZ446kzUq2MpQjTI8tZiKF3zlvM/L5yzsUugRqVHRhigD9EmMNeo+dyuZxZJSY2qPpRAqF2EiCoBuG694LcCkq57fvrxYgWI3AbQ==
+ bh=F1kYD0+rHW23MPEdimxsHzdxyle2+HxNGyw9SxMpee8=;
+ b=hwFmHus/Cm7/QRGxHjc+E+Ahs7bMP6gru/nwmnNGTHwZTlCGPfnsScIVwmQof3+fvedvghsTCp38sDAp3E7lKdPjF6h22LoIbHRz8VlcjVQ5cuZ5/aZi0D/jZuCyuF1P3RWmyQPX/IEE265Zbel7hhqHmJvOz7RnUN4YPSCEP39mOv2RJYrZYK3H/NKTqMhMdU3DxE8NDMQsk62XmctfGJ+YrRnGMAhFp58H8OK6Ti938q48CWsr+lei4sM4U0MEKYfwOcgX+5VI3OyOxyHK/aaJfZsZ4NG7sfWOe3xPWKw5cxdt61l9ff0Gv57iwA40Mm3mSxfnygGtlNDlg8UNuQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oFbj3xbAxkuFVUlJS7R2ul3JZ+NTfOsPahmTvZnxJbg=;
- b=zyXzkP2ITyMqj1l+yNjAmWtVIhBSfvdgZ3GNfGvWIWyFEBwf4J6SnfRCxvng90ffJmzIo5iwxDitbPDXbvCVu1M9aH0q9KivT5zm00kDn6aoA82aE8HBzz8hRJDc5MqHPj0/zUPXaPxtslkDDX9dEJbcZLBbPHbEpTBCLx1Kg18=
+ bh=F1kYD0+rHW23MPEdimxsHzdxyle2+HxNGyw9SxMpee8=;
+ b=MpeG1XhWrkdFDltBm6EpbfpzdlFI6UYAMpQ/rZT2ejhoOrZsaOucrlat3pE18uWjLyz5ztjWYUOChiT1Hq7dFSvDWDdyIxebAcobqZt/kS0Urs45lu2cXj+DJa7Z6OzwCb3agloUyLYh2Lqsn3AJsPi3L5Ne5FIqUHp1d+IuYQo/TsFjTbt5azRlMEEwGnMF6i87Oa1ATO1Os0KV3RzO5wrtt9ao+WVwmEKBDhm7LlbYoQ77gF+jwXzEYKyXevwJjPEIcTMm711thlZ/40lpRDEfjSAueyP3YOtTW6u2WC30AOM3TmZHclKs+RVhF1loQ9OOuw6YcJY9RX71VnnXsQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO6P265MB6987.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:321::11) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB7201.namprd12.prod.outlook.com (2603:10b6:806:2a8::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.9; Thu, 1 Jun
- 2023 17:32:11 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2e6d:c339:6006:9013]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2e6d:c339:6006:9013%5]) with mapi id 15.20.6477.008; Thu, 1 Jun 2023
- 17:32:11 +0000
-Date:   Thu, 1 Jun 2023 18:32:09 +0100
-From:   Gary Guo <gary@garyguo.net>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "=?UTF-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2 8/8] rust: workqueue: add examples
-Message-ID: <20230601183209.371fd898.gary@garyguo.net>
-In-Reply-To: <20230601134946.3887870-9-aliceryhl@google.com>
-References: <20230601134946.3887870-1-aliceryhl@google.com>
-        <20230601134946.3887870-9-aliceryhl@google.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P123CA0106.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:139::21) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
+ 2023 17:33:06 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
+ 17:33:06 +0000
+Date:   Thu, 1 Jun 2023 14:33:03 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     haris.iqbal@ionos.com, jinpu.wang@ionos.com,
+        linux-rdma@vger.kernel.org, leon@kernel.org,
+        guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-next v3 3/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
+Message-ID: <ZHjWTyW3our+RTCw@nvidia.com>
+References: <1682384563-2-1-git-send-email-lizhijian@fujitsu.com>
+ <1682384563-2-4-git-send-email-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1682384563-2-4-git-send-email-lizhijian@fujitsu.com>
+X-ClientProxiedBy: SJ0PR13CA0036.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::11) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB6987:EE_
-X-MS-Office365-Filtering-Correlation-Id: 865f09ee-a4ea-46f4-9555-08db62c621d7
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7201:EE_
+X-MS-Office365-Filtering-Correlation-Id: 977373ee-6855-45b1-e2b0-08db62c64278
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vaWdJOI/sU27OMgZGMU6Ykvh4MtttAmeA/OUfCScw89vV4mV6/adgQuSNUVI0a7jI8PBQuNNmfva4s+Wy0QKQc7IbG7nx0+1+mIf+mh6tHrdhoZEnXLAanHfq77g5ZfY1N/KkzTQ5ow6hsD0ZJ7DSZBLSmkjWE7qiFppYcDJcDyt9utikK9QCY4bP9BsnuNDwcIa5eIy4FQyTbFfV0tkbHfFg9O9n9R7jdkh0kY+HCDoIF8HI6eur8Ht2Dbv+++LCn4ZOz+yoW8pBVWzsMnC6gEPaN69xm08EtKOnxUdb9V3UfhrbN4AYQLb4XtG+jUTqdIgM5JuFb4ggfYnM36lnsrHDzKpxC7emJ8wf9cDjx1v8KZxsxkhxnSafSK7So/2YKRQyITQUayrITTgAd9AbukVnvPlDVKJ+zjI6zw5Kv1XrVOQDaHsrXmAM95qwuZdpC41uaXbEMoeH00aauGIFpIfALM3z08HVgcucEkOiJvhwCjU/VjytCTLa+sBYfotoB9iz2F0kIEyCcYKFh5NTqOpYuIprrCUzeQ+YyiOtf1Lcv3hrr+oIl8aSMvfRIe4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(346002)(39830400003)(376002)(366004)(136003)(396003)(451199021)(38100700002)(7416002)(2906002)(41300700001)(316002)(8676002)(8936002)(83380400001)(5660300002)(6486002)(6916009)(66946007)(66556008)(4326008)(66476007)(2616005)(36756003)(86362001)(186003)(1076003)(54906003)(26005)(6512007)(478600001)(6506007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: dhEW8Z3uyX7iBbbuk/AI2WeFIUd/SwdEMrqrW4TpIAoELdAqgo2j+nGVb2CWgiNocfa/BDZ6888IK7gp8glarPR9mu3wZjxyzC3Zi9cWSObfTgvceJlG89hWSb6VEFBjYbNyUMERpfzL3zxz7Crbj6kUsj0kEzgStW4P44xrfUKt88A4vo09w0MIPPyHipKIfBx0RSo4OyP/WzmNsOcSU8Oei+NRMSSr/3ENwRRlnAH3jspoKzjyTPhwcl7YJo+zXOWDiN+S8QIcbDBJfQvfzE+UpT4UUewCTekvLwPQPcq33P0XodT0hx6MkSCchZ/lEGJ9jAcHKpEaFNQs0uRNtnfzgowNDKDDGMXRZh30HOomeMxxXIE75rn/HD2GZODkKhEpH1e+KkKUIvmyRvrr93T8wD90zxWQk1Fah2/EZt4hY3+ufhRyhy0WqI4doUaGvyWhHo3c3OTHqC6jqCl3+wdBqTXlJK7Y+JEz4el7esLRnZ8qmS71k5D6PJiN1JiSSsBsv5/clTGMaDqyBdNLv6OJ7ay92oSaP+u94aquPv4LmiYv8imVN1jjbL1Rg74R5J2rL6ng8c1v1Kt3OuP1OaVhMGpeLAr6IfjS0cZRAiY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199021)(45080400002)(316002)(66556008)(478600001)(6666004)(66946007)(66899021)(6916009)(4326008)(66476007)(6512007)(26005)(6506007)(2616005)(8676002)(41300700001)(8936002)(2906002)(5660300002)(186003)(83380400001)(86362001)(38100700002)(36756003)(6486002)(67856001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Vql5g18yLzlwT1NnvyKg39vjKwd75rxvg2p5PCKYXcXFt/QuyFPOs8pye2dd?=
- =?us-ascii?Q?qAwYJi/wnVDkn2wbP/g2SxfTI+iD+GP8GJJS2SKKod0RdipDylCsyzb1B1cz?=
- =?us-ascii?Q?bVeObPOPuPJ4RQ2VKL7YXiHU9wKvAiZXg+XKUN+qWw6b3IXOyUpgwC7lx/5k?=
- =?us-ascii?Q?h4pTNdNlP1IJq/i+w1iiE2ZXK0hl+JRc6Wt8Kn3LRwZC9GBmLrm5qqqL9hXp?=
- =?us-ascii?Q?W6Yek+Mz8hAeO5tpVAISc9kZN1uTGHGzlSGgxsutvVOGlaHXNibW/QzYcxiC?=
- =?us-ascii?Q?xEBCIIlRbh07KGqGw4NATiHo3g+jtcA/JHahFNYaA+7U1HUYCVB5Jks+anUa?=
- =?us-ascii?Q?+grgPbGhfaPOPUWSzbNo0/XAUDqUKCayR3ySF0HQVXQ2MbrgxvPX4vtJcB+l?=
- =?us-ascii?Q?UAHllB24KV4VyE0EKZdD6OTtTz8feFKf0dmI9oHh9xri4keoiJG2j7gjSQ+E?=
- =?us-ascii?Q?PBlGRUtxMbuvdJ0+pr6u7VENF129GyiOsDARQZe9ES1SezWjkXQ3PZ5x0mBl?=
- =?us-ascii?Q?gVvpTW10TZknWG9KEvI6L3JHZojmFMtMe3i5InUsYWGscalrcZujow/EM4Y5?=
- =?us-ascii?Q?NCAxlqzTKRv6ma7yu/m1AAFmEn77eh6BouY76OHJDqlgJyjOqOwtabf+LkhK?=
- =?us-ascii?Q?PfqtHFpz0GEK8baUO0JWbUalfpJ/k018RGI+qs0lhHnu0GnE//gxi4122RSp?=
- =?us-ascii?Q?MiKe899R5MOJtyaeOioaZukNBlfcAiktsn9QP1eepp7w6HuhdJ0iGsp8zCdt?=
- =?us-ascii?Q?f1RKHNkyKDqoxnMjHCpeGwacZdoQ9ltvSoXuUC7YP2E56Hamfvf4qRYQEo7e?=
- =?us-ascii?Q?cME7G2XF4mZJWhtqmIll9Q3UVxoWuCwtV5ZazSv4FOfjQNRrCmFbt8vFo6cR?=
- =?us-ascii?Q?flKlqWhttvgM5mSgUAD8CDRGWgLu8qs+e5LGK4/AbHLbGKzy+FbOPejXEJrB?=
- =?us-ascii?Q?XtPssoqEq4Qol9ipUVeDleMXcuJa1ZnUJ1hs288CNHXHlU+HfE3Pm3Pnw1YE?=
- =?us-ascii?Q?MzjKfXF5fMwDq2qU3RKu48bn9PZJ0pIdfefKHOIa5+2n9VhzQHFrZ+BMJdbx?=
- =?us-ascii?Q?4W9f+MQHneamLudccixZNlXdIhFW0nWrqcabkXPO+Ddfu05kzCuPKcp50814?=
- =?us-ascii?Q?SywqEiUqB18k4QMoQpUxhTLgcgeroB8jghZcWwIP/Z4hlIgiXg3RFfzGhJQX?=
- =?us-ascii?Q?exKc/KLT6v+1abDVDNojA82SwHmBbbhU97gU27tVlCgM337GHJAwB9+2tdWg?=
- =?us-ascii?Q?n+qHZL81T1BQqE7RycZs8UYOWpLlcefMOobpPW4CZrOqKnttY9piTh2PfCch?=
- =?us-ascii?Q?1yxVMngrkUgNaLXMCmf/zXDBxf1+hulmTfHGDRjyPzlpOey5DcKOAWiEP5bS?=
- =?us-ascii?Q?gDz/XVPjLv9eshYnmrCTLGkN9WDaVTqP1lmq+lT4Sfx4r08nU18wEg844ZAq?=
- =?us-ascii?Q?HNqHkinqqe8uzs8VFzwtQqlfD99X7RTtg3o2lZFmV+GNGRj07QTMu0WiwJHL?=
- =?us-ascii?Q?xk88l+kwXAMtrWrqlVvWZI5odMYz5bbsWRbZaYtsFUeLzHiqnFMkL10BczAR?=
- =?us-ascii?Q?fkIzhGkNsyuuTtttnWOzuWGnLmJy6bpEcxaS2uDN?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 865f09ee-a4ea-46f4-9555-08db62c621d7
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mWXurYmlaKFZ5nur14KfaAXlZANx2nEqJAF91CDQwQs87t2m3us83FrcXWNy?=
+ =?us-ascii?Q?9+b2v+V1cHdb/qwaZ7giOnWQ9jBA8wSq+9zX8IhOBqPFNsbN1VvId+X54OND?=
+ =?us-ascii?Q?R0pDPL7gARhIP8WfrQgseG1vEVV9zTaYNGHQp6syg3A8zvdHLzqhy5tPBGaD?=
+ =?us-ascii?Q?2JzzVc0hIID3Q2DOxK3NiK3bad25UVeM7aHVm94TV26HYcT0Pv+JrpcqYkZq?=
+ =?us-ascii?Q?raJiLpcmsS7CZnUwALOSKYYQd/7Ob81Y1ksLYV2yEQ7o/kn4WsjooTJmLTMt?=
+ =?us-ascii?Q?AmRn8mCgePsyRr7U4VcMNMnKLxaDl4J38wKJfZmx/A9Py2qwmY4J0sSHwLkW?=
+ =?us-ascii?Q?OIYGN3jqXD1scHtf8dpT3Hsu7hTUOIvHzUvulaICh4sZOG5U3FjzRvUCkgBA?=
+ =?us-ascii?Q?BqmRW6tS0JekLsuQC1G2vgjVfqDzPdEscLEgmzJ2CuzkfiwK3MNL9z+TnUu5?=
+ =?us-ascii?Q?xryjKkWHgsP18FctfY6w3BGpd6GX4fiVX5brYai9Mmg9N1lf9GmN8v41WC0p?=
+ =?us-ascii?Q?edsh0sSqpc6tLyCCkw4kakFW9UWxD5QZ0OsWGO+TiTUPLql8gh2RBroUPmCK?=
+ =?us-ascii?Q?pqB/9go5Oz6PtKErOgLxuWzPbZIfLNdN535n4hyMR8MLytOxmdeim62XkNAm?=
+ =?us-ascii?Q?cYdzJtU4OweAHAnm3gXGv6xZoqp6p18iM4s8f9eofqkOsMIpuVH6XAy51sgh?=
+ =?us-ascii?Q?aJqwR2JXul9tcTZLHGjCIjIbjdIE8es0/rfX+juJ+huwF2QeYWJlSY1UDKou?=
+ =?us-ascii?Q?HpSLra04Qm9VrFhJbowAVcxtnvTlrQy6W7W7Jnf8mEL/7k6GCdoGTyWYamFr?=
+ =?us-ascii?Q?3YTdzIGsVIOnQMNqlBlb6rHRqFkA4ONrP8n1aKcRObrbUk6cwS4qYOUgvGpo?=
+ =?us-ascii?Q?VV1Rl/9b7Y77bZnG7uihMWNVnm5mAMC9sv9ojU/YtoUTsYOFdMXCZHKeTp39?=
+ =?us-ascii?Q?uzmOx/xIEoIZ5Ecu36C53U1nOQVgPwclqHBPmlUwEY+3+TtnxkjeQ+68L6az?=
+ =?us-ascii?Q?8TfdYwXgPIQQy25TAr+F4VHQydK00P8dahHVgPVzpBK2OkG5VLECBiuaR3cX?=
+ =?us-ascii?Q?gp9YDGJG4RrpOcVN3d48qI/9iCxGHCU8xFhFTLjpDj5mbkpFHajrUr/D+cWg?=
+ =?us-ascii?Q?oslFXUcqi+usyYj5PtVUlHZO4y7F8AGilytBwF0UXYDm3FbfNWzA8quNFQNg?=
+ =?us-ascii?Q?Tw48caqsLBCtNsqUOGI0v/2k9Dd7zY0vCaiR6UAdTAM1wnjYd1Cl9bhmmlmM?=
+ =?us-ascii?Q?jTZ9nATAwKciY/RW9vExHrbUoYJV3B+4emZoM8lx6p2ZF+Y63cDGhyitbOPM?=
+ =?us-ascii?Q?W416mGaAO+Yd46Av0niznz0Wu9h97iqL8PzMHoWJqHC3Z/FsgmR1Z2Q8ll/s?=
+ =?us-ascii?Q?ZezLJfdvTgp/RuUVaemGWherd+xWd9EqCZt/xpW7WD1E1JtDVfKUbSHn6fLw?=
+ =?us-ascii?Q?jzh5aDej2a7NNT75AS63OIF8KyJLyepuzHL4Tb33oOWurVo3MFUknVoKggMq?=
+ =?us-ascii?Q?Yp6G5OgKDH7nTJ7VTJHU9bJKMs+NOWzilD7df5Er0gYrgnSd8k82gJxGZNVD?=
+ =?us-ascii?Q?LueJH0kNVNnowbGueEquSPI6DzxmarwqHdIlFff7?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 977373ee-6855-45b1-e2b0-08db62c64278
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 17:32:11.5029
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 17:33:06.3529
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J0e4Tq0uQzSFp2I8DOTwLaXB4veMBLLKBDWBrSo2Lzj6Hg1Xa+Hx2Y7JjcXjiu47MTj62VipT+unTVMYoFjoXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6987
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: YBvmIk2pv9f7EQP+TVB8HthSxQRslCYK9fo4oISddUaXJhrMVXNuABQGQyClYD1e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7201
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  1 Jun 2023 13:49:46 +0000
-Alice Ryhl <aliceryhl@google.com> wrote:
-
-> This adds two examples of how to use the workqueue. The first example
-> shows how to use it when you only have one `work_struct` field, and the
-> second example shows how to use it when you have multiple `work_struct`
-> fields.
+On Tue, Apr 25, 2023 at 01:02:43AM +0000, Li Zhijian wrote:
+> In current design:
+> 1. PD and clt_path->s.dev are shared among connections.
+> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
+> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), and
+>    when clt_path->s.dev become zero, it will destroy PD.
+> 4. when con[1] failed to create, con[1] will not take clt_path->s.dev,
+>    but it try to decreased clt_path->s.dev
 > 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/kernel/workqueue.rs | 104 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 104 insertions(+)
+> So, in case create_cm(con[0]) succeeds but create_cm(con[1])
+> fails, destroy_con_cq_qp(con[1]) will be called first which will destory
+> the PD while this PD is still taken by con[0].
 > 
-> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index c302e8b8624b..cefcf43ff40e 100644
-> --- a/rust/kernel/workqueue.rs
-> +++ b/rust/kernel/workqueue.rs
-> @@ -26,6 +26,110 @@
->  //!  * The `WorkItemPointer` trait is implemented for the pointer type that points at a something
->  //!    that implements `WorkItem`.
->  //!
-> +//! ## Example
-> +//!
-> +//! This example defines a struct that holds an integer and can be scheduled on the workqueue. When
-> +//! the struct is executed, it will print the integer. Since there is only one `work_struct` field,
-> +//! we do not need to specify ids for the fields.
-> +//!
-> +//! ```
-> +//! use kernel::prelude::*;
-> +//! use kernel::sync::Arc;
-> +//! use kernel::workqueue::{self, Work, WorkItem};
-> +//!
-> +//! #[pin_data]
-> +//! struct MyStruct {
-> +//!     value: i32,
-> +//!     #[pin]
-> +//!     work: Work<MyStruct>,
-> +//! }
-> +//!
-> +//! impl_has_work! {
-> +//!     impl HasWork<Self> for MyStruct { self.work }
-> +//! }
-> +//!
-> +//! impl MyStruct {
-> +//!     fn new(value: i32) -> Result<Arc<Self>> {
-> +//!         Arc::pin_init(pin_init!(MyStruct {
-> +//!             value,
-> +//!             work <- Work::new(),
-> +//!         }))
-> +//!     }
-> +//! }
-> +//!
-> +//! impl WorkItem for MyStruct {
-> +//!     type Pointer = Arc<MyStruct>;
-> +//!
-> +//!     fn run(this: Arc<MyStruct>) {
-> +//!         pr_info!("The value is: {}", this.value);
-> +//!     }
-> +//! }
-> +//!
-> +//! /// This method will enqueue the struct for execution on the system workqueue, where its value
-> +//! /// will be printed.
-> +//! fn print_later(val: Arc<MyStruct>) {
-> +//!     let _ = workqueue::system().enqueue(val);
-> +//! }
-> +//! ```
-> +//!
-> +//! The following example shows how multiple `work_struct` fields can be used:
-> +//!
-> +//! ```
-> +//! use kernel::prelude::*;
-> +//! use kernel::sync::Arc;
-> +//! use kernel::workqueue::{self, Work, WorkItem};
-> +//!
-> +//! #[pin_data]
-> +//! struct MyStruct {
-> +//!     value_1: i32,
-> +//!     value_2: i32,
-> +//!     #[pin]
-> +//!     work_1: Work<MyStruct, 1>,
-> +//!     #[pin]
-> +//!     work_2: Work<MyStruct, 2>,
-> +//! }
-> +//!
-> +//! impl_has_work! {
-> +//!     impl HasWork<Self, 1> for MyStruct { self.work_1 }
-> +//!     impl HasWork<Self, 2> for MyStruct { self.work_2 }
-> +//! }
-> +//!
-> +//! impl MyStruct {
-> +//!     fn new(value_1: i32, value_2: i32) -> Result<Arc<Self>> {
-> +//!         Arc::pin_init(pin_init!(MyStruct {
-> +//!             value_1,
-> +//!             value_2,
-> +//!             work_1 <- Work::new(),
-> +//!             work_2 <- Work::new(),
-> +//!         }))
-> +//!     }
-> +//! }
-> +//!
-> +//! impl WorkItem<1> for MyStruct {
-> +//!     type Pointer = Arc<MyStruct>;
-> +//!
-> +//!     fn run(this: Arc<MyStruct>) {
-> +//!         pr_info!("The value is: {}", this.value_1);
-> +//!     }
-> +//! }
-> +//!
-> +//! impl WorkItem<2> for MyStruct {
-> +//!     type Pointer = Arc<MyStruct>;
-> +//!
-> +//!     fn run(this: Arc<MyStruct>) {
-> +//!         pr_info!("The second value is: {}", this.value_2);
-> +//!     }
-> +//! }
-> +//!
-> +//! fn print_1_later(val: Arc<MyStruct>) {
-> +//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 1>(val);
+> Here, we refactor the error path of create_cm() and init_conns(), so that
+> we do the cleanup in the order they are created.
+> 
+> The warning occurs when destroying RXE PD whose reference count is not
+> zero.
+> -----------------------------------------------
+>  rnbd_client L597: Mapping device /dev/nvme0n1 on session client, (access_mode: rw, nr_poll_queues: 0)
+>  ------------[ cut here ]------------
+>  WARNING: CPU: 0 PID: 26407 at drivers/infiniband/sw/rxe/rxe_pool.c:256 __rxe_cleanup+0x13a/0x170 [rdma_rxe]
+>  Modules linked in: rpcrdma rdma_ucm ib_iser rnbd_client libiscsi rtrs_client scsi_transport_iscsi rtrs_core rdma_cm iw_cm ib_cm crc32_generic rdma_rxe udp_tunnel ib_uverbs ib_core kmem device_dax nd_pmem dax_pmem nd_
+> vme crc32c_intel fuse nvme_core nfit libnvdimm dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log dm_mod
+>  CPU: 0 PID: 26407 Comm: rnbd-client.sh Kdump: loaded Not tainted 6.2.0-rc6-roce-flush+ #53
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+>  RIP: 0010:__rxe_cleanup+0x13a/0x170 [rdma_rxe]
+>  Code: 45 84 e4 0f 84 5a ff ff ff 48 89 ef e8 5f 18 71 f9 84 c0 75 90 be c8 00 00 00 48 89 ef e8 be 89 1f fa 85 c0 0f 85 7b ff ff ff <0f> 0b 41 bc ea ff ff ff e9 71 ff ff ff e8 84 7f 1f fa e9 d0 fe ff
+>  RSP: 0018:ffffb09880b6f5f0 EFLAGS: 00010246
+>  RAX: 0000000000000000 RBX: ffff99401f15d6a8 RCX: 0000000000000000
+>  RDX: 0000000000000001 RSI: ffffffffbac8234b RDI: 00000000ffffffff
+>  RBP: ffff99401f15d6d0 R08: 0000000000000001 R09: 0000000000000001
+>  R10: 0000000000002d82 R11: 0000000000000000 R12: 0000000000000001
+>  R13: ffff994101eff208 R14: ffffb09880b6f6a0 R15: 00000000fffffe00
+>  FS:  00007fe113904740(0000) GS:ffff99413bc00000(0000) knlGS:0000000000000000
+>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  CR2: 00007ff6cde656c8 CR3: 000000001f108004 CR4: 00000000001706f0
+>  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>  Call Trace:
+>   <TASK>
+>   rxe_dealloc_pd+0x16/0x20 [rdma_rxe]
+>   ib_dealloc_pd_user+0x4b/0x80 [ib_core]
+>   rtrs_ib_dev_put+0x79/0xd0 [rtrs_core]
+>   destroy_con_cq_qp+0x8a/0xa0 [rtrs_client]
+>   init_path+0x1e7/0x9a0 [rtrs_client]
+>   ? __pfx_autoremove_wake_function+0x10/0x10
+>   ? lock_is_held_type+0xd7/0x130
+>   ? rcu_read_lock_sched_held+0x43/0x80
+>   ? pcpu_alloc+0x3dd/0x7d0
+>   ? rtrs_clt_init_stats+0x18/0x40 [rtrs_client]
+>   rtrs_clt_open+0x24f/0x5a0 [rtrs_client]
+>   ? __pfx_rnbd_clt_link_ev+0x10/0x10 [rnbd_client]
+>   rnbd_clt_map_device+0x6a5/0xe10 [rnbd_client]
+> 
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> Acked-by: Jack Wang <jinpu.wang@ionos.com>
+> Tested-by: Jack Wang <jinpu.wang@ionos.com>
 
-Nothing bad about explicit, but I just want to confirm that you could
-write
+It would be good to have a fixes line for this?
 
-	let _ = workqueue::system().enqueue::<_, 1>(val);
-
-here, right?
-
-Reviewed-by: Gary Guo <gary@garyguo.net>
-
-> +//! }
-> +//!
-> +//! fn print_2_later(val: Arc<MyStruct>) {
-> +//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 2>(val);
-> +//! }
-> +//! ```
-> +//!
->  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
->  
->  use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
-
+Jason
