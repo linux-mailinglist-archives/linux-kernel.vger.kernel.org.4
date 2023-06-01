@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98407719369
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA76719333
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjFAGkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S231760AbjFAG01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbjFAGkN (ORCPT
+        with ESMTP id S231224AbjFAG0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:40:13 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 23:40:11 PDT
-Received: from mail.nearlyone.de (mail.nearlyone.de [IPv6:2a01:4f8:1c1e:abde::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E02132;
-        Wed, 31 May 2023 23:40:11 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 48D45DE51F;
-        Thu,  1 Jun 2023 08:23:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
-        t=1685600607; h=from:subject:date:message-id:to:mime-version:content-type;
-        bh=/r2qOvwy7YwQkvhXgOWsW1l/k3p5jbFHmPHTU/r1Law=;
-        b=gsgZvIF91urmloPkdUEH4/hzKPcggbK1UqsUt108UgvEGX2TwBz3o15hDWTK/dGYo393AR
-        eT3kabeU6J7TbxDTTTUtmofaAtF1GBnwumUjpXnDt0KkD/88SVc5MuTzOScsmhNha2hskQ
-        5U6p7spuzXVBM3WuAJqarMwveDEhKaLLUsC96THfBJlUxrs73WNXLlIbXYGe0n3uVVpUX7
-        7UGIh/Y6iTNBDmpsyc54YnoZSM7gYcHYXJOYWSr4MSAetwXwIfsnItr/EYOvX15s3HUbZu
-        3Ag+CiPPQFm4vYiq/f4eUV7WsVT+z+JGqHvbBHs7TvmCJzRvfPU0SvVQU7dFAg==
-Date:   Thu, 1 Jun 2023 08:23:25 +0200
-From:   Daniel Wagner <wagi@monom.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org, stable-rt@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 4.19.284-rt125
-Message-ID: <168560053367.8134.6051252603215600719@beryllium.lan>
+        Thu, 1 Jun 2023 02:26:15 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31F1E2;
+        Wed, 31 May 2023 23:26:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWx3N1jR0z4f3prK;
+        Thu,  1 Jun 2023 14:26:08 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbH_OXhko4G0Kg--.24198S4;
+        Thu, 01 Jun 2023 14:26:09 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     song@kernel.org, neilb@suse.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+        houtao1@huawei.com, yangerkun@huawei.com
+Subject: [PATCH v5 0/2] raid10 bugfix
+Date:   Thu,  1 Jun 2023 14:24:22 +0800
+Message-Id: <20230601062424.3613218-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnHbH_OXhko4G0Kg--.24198S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYz7kC6x804xWl14x267AKxVW8JVW5JwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr
+        0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0E
+        wIxGrwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUwc_TUUUUU
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+From: Li Nan <linan122@huawei.com>
 
-I'm pleased to announce the 4.19.284-rt125 stable release.
+Changes in v5:
+ - v4 send wrong patch, correct and resend.
 
-This is just an update to the latest stable release. No RT specific
-changes.
+Changes in v4:
+ - improve commit log
+ - removed applied patches
 
-You can get this release via the git tree at:
+Li Nan (2):
+  md/raid10: fix incorrect done of recovery
+  md/raid10: fix io loss while replacement replace rdev
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+ drivers/md/raid10.c | 40 +++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 35 insertions(+), 5 deletions(-)
 
-  branch: v4.19-rt
-  Head SHA1: 667d7f30ea873d10dc49365c95a387018da5961a
-
-Or to build 4.19.284-rt125 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.284.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.284-rt125.patch.xz
-
-Signing key fingerprint:
-
-  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Daniel
+-- 
+2.31.1
 
