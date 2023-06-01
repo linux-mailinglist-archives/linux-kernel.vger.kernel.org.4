@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991DB7196BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9A47196C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbjFAJVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S232762AbjFAJVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbjFAJVe (ORCPT
+        with ESMTP id S232744AbjFAJVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:21:34 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E491011F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:21:31 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1a6777dd8so1181371fa.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:21:31 -0700 (PDT)
+        Thu, 1 Jun 2023 05:21:36 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC48899
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:21:32 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f60b3f32b4so5923145e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685611290; x=1688203290;
+        d=linaro.org; s=google; t=1685611291; x=1688203291;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZwGK0qoDjGX0JH8bcYXPEvdmm3zCPiYfNZofJMi9QKI=;
-        b=rAFWauAF17PGOXMAq/kd+bXYCQ1iwep6dFR8vGPz2mHFudp2idnj7HWqxSIhF9ksmc
-         qNkXWboTdiNuoJGNSipQbprbEHLZ5t6AHT5f8UqseLKTp92f33v4ovXk7Cqs3qZpC6MW
-         PV9NRNIn/7Ap0ZyWW9+RuJ9S0jsgnGZl8B5bwLfZUF6kceKOfkTT7/NjjezCKTHVJM6i
-         bSmwJg1ZebZxSLFmJBP8HSIg0Fv566triJH3OBccOERv6HVR5kwp84iDOyDJ46C3YLcC
-         K7mRT+L3x/Lf+7mIYwC7l4HlOOzPoHveIfJAwBudH+lWafvZiaBZYRz72MywxQLpnOEv
-         99mw==
+        bh=HcLwB2KpV1ri4w95xBDRWeuJKZR2x70XYf56+LryApk=;
+        b=puAV+j54HYFTw4BkCT2+mqxq4Rfv3dZD0gJDd2W8NxeEmJTZOJeWKuPxxN7YYstTkI
+         XrE3hDnpdpghabPI0u4rkOf16c1p2JuW4/q5g16/4ww3WOQ7+QtP9+FMJFp5heYIDJVE
+         2bfL5Z1ogxQO+SmFJ+CkP68Fa/5z06e9x/1jXxc8KtZMopA+LmLJ+TvvgX1YAWrJHwmB
+         OqqaCImOG9OiBMTrkL9TnImk594hRL8zBkltjhoOpTBtCjp1cWv231tn6BohFpiVCPOs
+         2pT6XxjFr2eSpA/HEH2t89uL+JnTz2tv2SLi8d+5pCPViGzjHPAMZsDJugvNFOsn5tcr
+         LDfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685611290; x=1688203290;
+        d=1e100.net; s=20221208; t=1685611291; x=1688203291;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZwGK0qoDjGX0JH8bcYXPEvdmm3zCPiYfNZofJMi9QKI=;
-        b=M7rPucpAlzaI5khvaeYLu+xmv1DSn7LtAisvUicNCCSKyxW7PG7pMcSjVTwgFbiuiU
-         Gt54VoOEmXxn8X0aIDNCLq40ed/CwwfXDe+wbrjdbdxb5KjVPHiTmXNioVcBXyRYfRxo
-         /t96ph9dUFVDBgWT79c0c9D4bwLQ1wMUByVrwpMrBmPmAPfgpuqyes6hIguCXbp1MOIF
-         zkGq2VBTXi2dY1CVSq3d+LreJcARUnlDUWvDAsSxMNMJhnhqjnL8KFTZ5t3ATbj6D7+H
-         3yzdxihLzzf8C462/e9lIkSUiVk6eH1CV9o9jNN41wOi2z25pMeDxNiSSRk5Tli/bR26
-         X0yg==
-X-Gm-Message-State: AC+VfDyS2I3Pf6BNIGPVgUf7r+f2tB9a5uF1qi4RUxNvLb6Z52Z6v5Im
-        m1yinwhMMVkvINCwBTqAFYsxgQ==
-X-Google-Smtp-Source: ACHHUZ7qj2PQGJs0JEW5DzuvuFrnOFTDItB2hIL41o+/4K+ucT8qI4A7vPZz6M4HpA6nLqP9CpRlLw==
-X-Received: by 2002:a2e:8302:0:b0:2b0:4c72:98fe with SMTP id a2-20020a2e8302000000b002b04c7298femr4318556ljh.45.1685611290053;
-        Thu, 01 Jun 2023 02:21:30 -0700 (PDT)
+        bh=HcLwB2KpV1ri4w95xBDRWeuJKZR2x70XYf56+LryApk=;
+        b=Suy2BXc92ChFWVQrm3SUHU6U3CKwPKpzZJs8FKCT5i/5chEfq+BK1zv3tefKpSmxBT
+         OAfibtaiMrfxRnqe9uI4aDZ4ZDxyZiK289rLxYm5e9Iv2KhLM4e+Z3jdwPaiE0fPRsXV
+         +jRCvvcQhmS52o2oZryXgfuH6p6U4+Lr8PJZJ40lFEF2s99iwjx8rZYSu6jSRxX3Wo/2
+         rQP9whjAnwAA21pcVtznyCwjwLAyP28AtdWAUdScxSAhd2IeVGcy4wqbr1NY9vxmhbI6
+         Rb7/THmYZzdVw+etNPxqf9B0lzf1F5NX/g7N0Y98ZR3tyBVJkC/r5Hhgfkm2JX7t7apO
+         0OSw==
+X-Gm-Message-State: AC+VfDzlt0B9gayMiX1doKa0JUQG3YlWte+WwG6zxnMCWU/tqN5TMrpW
+        OLvq61jdcL5qxO5a/9lMhh1yFw==
+X-Google-Smtp-Source: ACHHUZ4kW2qbjN0uWKFfGyuSgpi8Hh20AZgH0up94HsvFIJnRmSKuViO64VpvijOsF0ew8dofRcbYA==
+X-Received: by 2002:a1c:f60b:0:b0:3f6:58ad:ed85 with SMTP id w11-20020a1cf60b000000b003f658aded85mr1450174wmc.10.1685611291085;
+        Thu, 01 Jun 2023 02:21:31 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id a2-20020a1cf002000000b003f3157988f8sm1671572wmb.26.2023.06.01.02.21.29
+        by smtp.gmail.com with ESMTPSA id a2-20020a1cf002000000b003f3157988f8sm1671572wmb.26.2023.06.01.02.21.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 02:21:29 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 01 Jun 2023 11:21:12 +0200
-Subject: [PATCH 1/2] dt-bindings: usb: add ON Semiconductor nb7vpq904m
- Type-C Linear Redriver bindings
+        Thu, 01 Jun 2023 02:21:30 -0700 (PDT)
+From:   neil.armstrong@linaro.org
+Date:   Thu, 01 Jun 2023 11:21:13 +0200
+Subject: [PATCH 2/2] usb: typec: add support for the nb7vpq904m Type-C
+ Linear Redriver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-topic-sm8x50-upstream-redriver-v1-1-6ad21094ff6f@linaro.org>
+Message-Id: <20230601-topic-sm8x50-upstream-redriver-v1-2-6ad21094ff6f@linaro.org>
 References: <20230601-topic-sm8x50-upstream-redriver-v1-0-6ad21094ff6f@linaro.org>
 In-Reply-To: <20230601-topic-sm8x50-upstream-redriver-v1-0-6ad21094ff6f@linaro.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -73,25 +73,25 @@ Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5069;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=16391;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=WmTA18+aiJspbeMjHnTmU5gXepbbKxIUGkdpuOjC9jc=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkeGMXJSmFhv9l6JaOu2SonWjyzGOh7sKyN2Jg3tyh
- /yd5H3GJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHhjFwAKCRB33NvayMhJ0erGD/
- 4iXpJ4x0bImiPTaRl+EdzU6rRq3mtw9G/6AWwlgAZ4+EXR9SNLyubioL7mF2hmXzI59q4xAP6nDtPn
- 2EjlQAXxCtdL0zT5IJVanrlmWGzDCj+e+1GFNPldn5b8dduhztrhxS3Usfn/fbZij1yu7XaHOk+8sm
- H+Pq4jUMEOQm9ppVDJWQe5zCo+GnSq8oGLKG5NGREm0h+fbJo8JFewK5UxGrHQUbtAZPz6+oDKfoN0
- Y1ZVxd0SFn7OTJDSZhGPH3a6myjiWuEHVshFeO+2hbGsLBhonZ4zPwV8bYB85Yx3m6Fd4UTfwq+PXl
- r6jh5DGvr5kqeooVZ0zZWpd7mBjyPn5SvLOW1oIUDBIL5ibCggn9FOg60RcOy8TG29z6/J113XDv1Z
- kQ0f/YgppqTNrYGanv8i5rdcWzfthaxFCmSjCnlP3pVbwO0kp6RX5ClYPGak+J4aRFNBRkB8y6r7M+
- 38EajVxYN9Lo7A/5WKBTQWo68FBrUU0icRNkzmbXUsM6zT2REXzHSljPOpNgs3DNbFrLu8/NoOA6SZ
- mzOcdRoOv2i8CmEaM/sslZ83GGxqMhG4DoAoSDLkpb4Zjs1pLcpcVlg2qafJmv2YyrpcbQ0lGsxxXW
- v/pU/uOwUmboLB8TVh2iv/CcJgYXbSKeblkb3ooXVGFVwsFiQuwYc4OGVYaQ==
+ bh=oqQj50aVglfK7ZuTk0iA41ZkCZWzWoZpgLgHJuuIJ+c=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkeGMXniGO+EtFoAJe3zIrcdvbBEkTFOMkxOkCuMIW
+ CyxpyVqJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHhjFwAKCRB33NvayMhJ0QQwD/
+ 97NaxA1/jI+cIq3e1lT4RQv1dBrb3XJY5mFmBVSnp9E0c++YmKhKVR+Vx1ar4WZugSayrRBuOHatrj
+ +VHoMBjsrevIcioZdkGDWNZpLwmED5rsLPF0mDG7M0X3hE3m7Dd4izq+h2+iB+/scHLXODLMUaZiz5
+ afg7559hFO6XJ698mTLOIMxO5DmG9AUXyrQb+FaSTkzgpo3FDbRj0VnhCpb8hT7J85lXsFueX58XEG
+ R7BmTbQZqjKhN9gEEkvi4W2xvKQjWUCVAgnFMG03qXn/4y8c8wSzTeX2hJLuH0GGBcfEO5fLa/W3Md
+ Cg++4sMIBdc/OScnD2dYlUkYt173Ajb4MwCI9urTXSQbHMtD84VnMw2y9SG6t2KUX1pzVmhi2qtHbS
+ DIVHo2n2IlVeYuLfTGtXCc1HSALFKybKd2DwM3dKk50wYTUHFcEelpj76Ehn4SvPrzUqwhZmAWOBgo
+ 9U1gclCushuaX6e7Z3vwnS9sQD4tA6c79J1XVf9Ll2o0drW2MpBu77pOEchHK3NI2nV6TDxxKVrl6Q
+ mCLzACvUA/cddhSGwKSUrjCg0k+V4YiTD/Z5967XRlrlcq/AOHd/1NcZALHPs5qJk4hu1L0skc7XSK
+ 3HdlcgHJ6RySDaj/VtI515t/aNTcUwDhfYz2yqozUn5s6Sdwgmwr8U1QOs9g==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,161 +99,585 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document bindings for this ON Semiconductor Type-C USB SuperSpeed
-and DisplayPort ALT Mode Linear Redriver.
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
+Add support for the ON Semiconductor NB7VPQ904M Type-C USB SuperSpeed
+and DisplayPort ALT Mode Linear Redriver chip found on some devices
+with a Type-C port.
+
+The redriver compensates ultra High-Speeed DisplayPort and USB
+Super Speed signal integrity losses mainly due to PCB & transmission
+cables.
+
+The redriver doesn't support SuperSpeed lines swapping, but
+can support Type-C SBU lines swapping.
+
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../devicetree/bindings/usb/onnn,nb7vpq904m.yaml   | 141 +++++++++++++++++++++
- 1 file changed, 141 insertions(+)
+ drivers/usb/typec/mux/Kconfig      |   8 +
+ drivers/usb/typec/mux/Makefile     |   1 +
+ drivers/usb/typec/mux/nb7vpq904m.c | 526 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 535 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml b/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
+diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+index c46fa4f9d3df..8c4d6b8fb75c 100644
+--- a/drivers/usb/typec/mux/Kconfig
++++ b/drivers/usb/typec/mux/Kconfig
+@@ -35,4 +35,12 @@ config TYPEC_MUX_INTEL_PMC
+ 	  control the USB role switch and also the multiplexer/demultiplexer
+ 	  switches used with USB Type-C Alternate Modes.
+ 
++config TYPEC_MUX_NB7VPQ904M
++	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
++	  redriver chip found on some devices with a Type-C port.
++
+ endmenu
+diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
+index dda67e19b58b..76196096ef41 100644
+--- a/drivers/usb/typec/mux/Makefile
++++ b/drivers/usb/typec/mux/Makefile
+@@ -4,3 +4,4 @@ obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
+ obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
+ obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
+ obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
++obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
+diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
 new file mode 100644
-index 000000000000..c0989dc4d5bf
+index 000000000000..2f85ad9e417a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/onnn,nb7vpq904m.yaml
-@@ -0,0 +1,141 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/onnn,nb7vpq904m.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/usb/typec/mux/nb7vpq904m.c
+@@ -0,0 +1,526 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * OnSemi NB7VPQ904M Type-C driver
++ *
++ * Copyright (C) 2023 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
++ */
++#include <linux/i2c.h>
++#include <linux/mutex.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++#include <linux/of_graph.h>
++#include <drm/drm_bridge.h>
++#include <linux/usb/typec_dp.h>
++#include <linux/usb/typec_mux.h>
++#include <linux/gpio/consumer.h>
++#include <linux/regulator/consumer.h>
 +
-+title: ON Semiconductor Type-C DisplayPort ALT Mode Linear Redriver
++#define NB7_CHNA		0
++#define NB7_CHNB		1
++#define NB7_CHNC		2
++#define NB7_CHND		3
++#define NB7_IS_CHAN_AD(channel) (channel == NB7_CHNA || channel == NB7_CHND)
 +
-+maintainers:
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
++#define GEN_DEV_SET_REG			0x00
 +
-+properties:
-+  compatible:
-+    enum:
-+      - onnn,nb7vpq904m
++#define GEN_DEV_SET_CHIP_EN		BIT(0)
++#define GEN_DEV_SET_CHNA_EN		BIT(4)
++#define GEN_DEV_SET_CHNB_EN		BIT(5)
++#define GEN_DEV_SET_CHNC_EN		BIT(6)
++#define GEN_DEV_SET_CHND_EN		BIT(7)
 +
-+  reg:
-+    maxItems: 1
++#define GEN_DEV_SET_OP_MODE_MASK	GENMASK(3, 1)
 +
-+  vcc-supply:
-+    description: power supply (1.8V)
++#define GEN_DEV_SET_OP_MODE_DP_CC2	0
++#define GEN_DEV_SET_OP_MODE_DP_CC1	1
++#define GEN_DEV_SET_OP_MODE_DP_4LANE	2
++#define GEN_DEV_SET_OP_MODE_USB		5
 +
-+  enable-gpios: true
++#define EQ_SETTING_REG_BASE		0x01
++#define EQ_SETTING_REG(n)		(EQ_SETTING_REG_BASE + (n) * 2)
++#define EQ_SETTING_MASK			GENMASK(3, 1)
 +
-+  mode-switch:
-+    description: Flag the port as possible handle of altmode switching
-+    type: boolean
++#define OUTPUT_COMPRESSION_AND_POL_REG_BASE	0x02
++#define OUTPUT_COMPRESSION_AND_POL_REG(n)	(OUTPUT_COMPRESSION_AND_POL_REG_BASE + (n) * 2)
++#define OUTPUT_COMPRESSION_MASK		GENMASK(2, 1)
 +
-+  orientation-switch:
-+    description: Flag the port as possible handler of orientation switching
-+    type: boolean
++#define FLAT_GAIN_REG_BASE		0x18
++#define FLAT_GAIN_REG(n)		(FLAT_GAIN_REG_BASE + (n) * 2)
++#define FLAT_GAIN_MASK			GENMASK(1, 0)
 +
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: Super Speed (SS) Output endpoint to the Type-C connector
++#define LOSS_MATCH_REG_BASE		0x19
++#define LOSS_MATCH_REG(n)		(LOSS_MATCH_REG_BASE + (n) * 2)
++#define LOSS_MATCH_MASK			GENMASK(1, 0)
 +
-+      port@1:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        description: Super Speed (SS) Input endpoint from the Super-Speed PHY
-+        unevaluatedProperties: false
++#define AUX_CC_REG			0x09
 +
-+        properties:
-+          endpoint:
-+            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-+            unevaluatedProperties: false
++#define CHIP_VERSION_REG		0x17
 +
-+            properties:
-+              data-lanes:
-+                $ref: /schemas/types.yaml#/definitions/uint32-array
-+                description: |
-+                  An array of physical data lane indexes. Position determines how
-+                  lanes are connected to the redriver, It is assumed the same order
-+                  is kept on the other side of the redriver.
-+                  Lane number represents the following
-+                  - 0 is RX2 lane
-+                  - 1 is TX2 lane
-+                  - 2 is TX1 lane
-+                  - 3 is RX1 lane
-+                  The position determines the physical port of the redriver, in the
-+                  order A, B, C & D.
-+                oneOf:
-+                  - items:
-+                      - const: 0
-+                      - const: 1
-+                      - const: 2
-+                      - const: 3
-+                    description: |
-+                      This is the lanes default layout
-+                      - Port A to RX2 lane
-+                      - Port B to TX2 lane
-+                      - Port C to TX1 lane
-+                      - Port D to RX1 lane
-+                  - items:
-+                      - const: 2
-+                      - const: 3
-+                      - const: 0
-+                      - const: 1
-+                    description: |
-+                      This is the USBRX2/USBTX2 and USBRX1/USBTX1 swapped lanes layout
-+                      - Port A to RX1 lane
-+                      - Port B to TX1 lane
-+                      - Port C to TX2 lane
-+                      - Port D to RX2 lane
++struct nb7vpq904m {
++	struct i2c_client *client;
++	struct gpio_desc *enable_gpio;
++	struct regulator *vcc_supply;
++	struct regmap *regmap;
++	struct typec_switch_dev *sw;
++	struct typec_mux_dev *mux;
 +
-+      port@2:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          Sideband Use (SBU) AUX lines endpoint to the Type-C connector for the purpose of
-+          handling altmode muxing and orientation switching.
++	bool swap_data_lanes;
++	struct typec_switch *typec_switch;
 +
-+required:
-+  - compatible
-+  - reg
++	struct drm_bridge bridge;
 +
-+additionalProperties: false
++	struct mutex lock; /* protect non-concurrent mux & switch */
 +
-+examples:
-+  - |
-+    i2c13 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++	enum typec_orientation orientation;
++	unsigned long mode;
++	unsigned int svid;
++};
 +
-+        typec-mux@32 {
-+            compatible = "onnn,nb7vpq904m";
-+            reg = <0x32>;
++static void nb7vpq904m_set_channel(struct nb7vpq904m *nb7, unsigned int channel, bool dp)
++{
++	u8 eq, out_comp, flat_gain, loss_match;
 +
-+            vcc-supply = <&vreg_l15b_1p8>;
++	if (dp) {
++		eq = NB7_IS_CHAN_AD(channel) ? 0x6 : 0x4;
++		out_comp = 0x3;
++		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x2 : 0x1;
++		loss_match = 0x3;
++	} else {
++		eq = 0x4;
++		out_comp = 0x3;
++		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x3 : 0x1;
++		loss_match = NB7_IS_CHAN_AD(channel) ? 0x1 : 0x3;
++	}
 +
-+            mode-switch;
-+            orientation-switch;
++	regmap_update_bits(nb7->regmap, EQ_SETTING_REG(channel),
++			   EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
++	regmap_update_bits(nb7->regmap, OUTPUT_COMPRESSION_AND_POL_REG(channel),
++			   OUTPUT_COMPRESSION_MASK, FIELD_PREP(OUTPUT_COMPRESSION_MASK, out_comp));
++	regmap_update_bits(nb7->regmap, FLAT_GAIN_REG(channel),
++			   FLAT_GAIN_MASK, FIELD_PREP(FLAT_GAIN_MASK, flat_gain));
++	regmap_update_bits(nb7->regmap, LOSS_MATCH_REG(channel),
++			   LOSS_MATCH_MASK, FIELD_PREP(LOSS_MATCH_MASK, loss_match));
++}
 +
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
++static int nb7vpq904m_set(struct nb7vpq904m *nb7)
++{
++	bool reverse = (nb7->orientation == TYPEC_ORIENTATION_REVERSE);
 +
-+                port@0 {
-+                    reg = <0>;
-+                    usb_con_ss: endpoint {
-+                        remote-endpoint = <&typec_con_ss>;
-+                    };
-+                };
-+                port@1 {
-+                    reg = <1>;
-+                    phy_con_ss: endpoint {
-+                        remote-endpoint = <&usb_phy_ss>;
-+                        data-lanes = <2 3 0 1>;
-+                    };
-+                };
-+                port@2 {
-+                    reg = <2>;
-+                    usb_con_sbu: endpoint {
-+                        remote-endpoint = <&typec_dp_aux>;
-+                    };
-+                };
-+            };
-+        };
-+    };
-+...
++	switch (nb7->mode) {
++	case TYPEC_STATE_SAFE:
++		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
++			     GEN_DEV_SET_CHIP_EN |
++			     GEN_DEV_SET_CHNA_EN |
++			     GEN_DEV_SET_CHNB_EN |
++			     GEN_DEV_SET_CHNC_EN |
++			     GEN_DEV_SET_CHND_EN |
++			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
++					GEN_DEV_SET_OP_MODE_USB));
++		nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
++		nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
++		nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
++		nb7vpq904m_set_channel(nb7, NB7_CHND, false);
++		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
++
++		return 0;
++
++	case TYPEC_STATE_USB:
++		/*
++		 * Normal Orientation (CC1)
++		 * A -> USB RX
++		 * B -> USB TX
++		 * C -> X
++		 * D -> X
++		 * Flipped Orientation (CC2)
++		 * A -> X
++		 * B -> X
++		 * C -> USB TX
++		 * D -> USB RX
++		 *
++		 * Reversed if data lanes are swapped
++		 */
++		if (reverse ^ nb7->swap_data_lanes) {
++			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
++				     GEN_DEV_SET_CHIP_EN |
++				     GEN_DEV_SET_CHNA_EN |
++				     GEN_DEV_SET_CHNB_EN |
++				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
++						GEN_DEV_SET_OP_MODE_USB));
++			nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
++			nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
++		} else {
++			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
++				     GEN_DEV_SET_CHIP_EN |
++				     GEN_DEV_SET_CHNC_EN |
++				     GEN_DEV_SET_CHND_EN |
++				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
++						GEN_DEV_SET_OP_MODE_USB));
++			nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
++			nb7vpq904m_set_channel(nb7, NB7_CHND, false);
++		}
++		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
++
++		return 0;
++
++	default:
++		if (nb7->svid != USB_TYPEC_DP_SID)
++			return -EINVAL;
++
++		break;
++	}
++
++	/* DP Altmode Setup */
++
++	regmap_write(nb7->regmap, AUX_CC_REG, reverse ? 0x1 : 0x0);
++
++	switch (nb7->mode) {
++	case TYPEC_DP_STATE_C:
++	case TYPEC_DP_STATE_E:
++		/*
++		 * Normal Orientation (CC1)
++		 * A -> DP3
++		 * B -> DP2
++		 * C -> DP1
++		 * D -> DP0
++		 * Flipped Orientation (CC2)
++		 * A -> DP0
++		 * B -> DP1
++		 * C -> DP2
++		 * D -> DP3
++		 */
++		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
++			     GEN_DEV_SET_CHIP_EN |
++			     GEN_DEV_SET_CHNA_EN |
++			     GEN_DEV_SET_CHNB_EN |
++			     GEN_DEV_SET_CHNC_EN |
++			     GEN_DEV_SET_CHND_EN |
++			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
++					GEN_DEV_SET_OP_MODE_DP_4LANE));
++		nb7vpq904m_set_channel(nb7, NB7_CHNA, true);
++		nb7vpq904m_set_channel(nb7, NB7_CHNB, true);
++		nb7vpq904m_set_channel(nb7, NB7_CHNC, true);
++		nb7vpq904m_set_channel(nb7, NB7_CHND, true);
++		break;
++
++	case TYPEC_DP_STATE_D:
++	case TYPEC_DP_STATE_F:
++		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
++			     GEN_DEV_SET_CHIP_EN |
++			     GEN_DEV_SET_CHNA_EN |
++			     GEN_DEV_SET_CHNB_EN |
++			     GEN_DEV_SET_CHNC_EN |
++			     GEN_DEV_SET_CHND_EN |
++			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
++					reverse ^ nb7->swap_data_lanes ?
++						GEN_DEV_SET_OP_MODE_DP_CC2
++						: GEN_DEV_SET_OP_MODE_DP_CC1));
++
++		/*
++		 * Normal Orientation (CC1)
++		 * A -> USB RX
++		 * B -> USB TX
++		 * C -> DP1
++		 * D -> DP0
++		 * Flipped Orientation (CC2)
++		 * A -> DP0
++		 * B -> DP1
++		 * C -> USB TX
++		 * D -> USB RX
++		 *
++		 * Reversed if data lanes are swapped
++		 */
++		if (nb7->swap_data_lanes) {
++			nb7vpq904m_set_channel(nb7, NB7_CHNA, !reverse);
++			nb7vpq904m_set_channel(nb7, NB7_CHNB, !reverse);
++			nb7vpq904m_set_channel(nb7, NB7_CHNC, reverse);
++			nb7vpq904m_set_channel(nb7, NB7_CHND, reverse);
++		} else {
++			nb7vpq904m_set_channel(nb7, NB7_CHNA, reverse);
++			nb7vpq904m_set_channel(nb7, NB7_CHNB, reverse);
++			nb7vpq904m_set_channel(nb7, NB7_CHNC, !reverse);
++			nb7vpq904m_set_channel(nb7, NB7_CHND, !reverse);
++		}
++		break;
++
++	default:
++		return -ENOTSUPP;
++	}
++
++	return 0;
++}
++
++static int nb7vpq904m_sw_set(struct typec_switch_dev *sw,
++			      enum typec_orientation orientation)
++{
++	struct nb7vpq904m *nb7 = typec_switch_get_drvdata(sw);
++	int ret;
++
++	ret = typec_switch_set(nb7->typec_switch, orientation);
++	if (ret)
++		return ret;
++
++	mutex_lock(&nb7->lock);
++
++	if (nb7->orientation != orientation) {
++		nb7->orientation = orientation;
++
++		ret = nb7vpq904m_set(nb7);
++	}
++
++	mutex_unlock(&nb7->lock);
++
++	return ret;
++}
++
++static int nb7vpq904m_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
++{
++	struct nb7vpq904m *nb7 = typec_mux_get_drvdata(mux);
++	int ret = 0;
++
++	mutex_lock(&nb7->lock);
++
++	if (nb7->mode != state->mode) {
++		nb7->mode = state->mode;
++
++		if (state->alt)
++			nb7->svid = state->alt->svid;
++		else
++			nb7->svid = 0; // No SVID
++
++		ret = nb7vpq904m_set(nb7);
++	}
++
++	mutex_unlock(&nb7->lock);
++
++	return ret;
++}
++
++#if IS_ENABLED(CONFIG_DRM)
++static int nb7vpq904m_bridge_attach(struct drm_bridge *bridge,
++				    enum drm_bridge_attach_flags flags)
++{
++	struct nb7vpq904m *nb7 = container_of(bridge, struct nb7vpq904m, bridge);
++	struct drm_bridge *next_bridge;
++
++	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
++		return -EINVAL;
++
++	next_bridge = devm_drm_of_get_bridge(&nb7->client->dev, nb7->client->dev.of_node, 0, 0);
++	if (IS_ERR(next_bridge)) {
++		dev_err(&nb7->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
++		return PTR_ERR(next_bridge);
++	}
++
++	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
++				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
++}
++
++static const struct drm_bridge_funcs nb7vpq904m_bridge_funcs = {
++	.attach	= nb7vpq904m_bridge_attach,
++};
++
++static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
++{
++	nb7->bridge.funcs = &nb7vpq904m_bridge_funcs;
++	nb7->bridge.of_node = nb7->client->dev.of_node;
++
++	return devm_drm_bridge_add(&nb7->client->dev, &nb7->bridge);
++}
++#else
++static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
++{
++	return 0;
++}
++#endif
++
++static const struct regmap_config nb7_regmap = {
++	.max_register = 0x1f,
++	.reg_bits = 8,
++	.val_bits = 8,
++};
++
++enum {
++	NORMAL_LANE_MAPPING,
++	INVERT_LANE_MAPPING,
++};
++
++#define DATA_LANES_COUNT	4
++
++static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
++	[NORMAL_LANE_MAPPING] = { 0, 1, 2, 3 },
++	[INVERT_LANE_MAPPING] = { 2, 3, 0, 1 },
++};
++
++static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
++{
++	struct device_node *ep;
++	u32 data_lanes[4];
++	int ret, i, j;
++
++	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
++
++	if (ep) {
++		ret = of_property_count_u32_elems(ep, "data-lanes");
++		if (ret == -EINVAL)
++			/* Property isn't here, consider default mapping */
++			goto out_done;
++		if (ret < 0)
++			goto out_error;
++
++		if (ret != DATA_LANES_COUNT) {
++			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
++			ret = -EINVAL;
++			goto out_error;
++		}
++
++		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
++		if (ret)
++			goto out_error;
++
++		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
++			for (j = 0; j < DATA_LANES_COUNT; j++) {
++				if (data_lanes[j] != supported_data_lane_mapping[i][j])
++					break;
++			}
++
++			if (j == DATA_LANES_COUNT)
++				break;
++		}
++
++		switch (i) {
++		case NORMAL_LANE_MAPPING:
++			break;
++		case INVERT_LANE_MAPPING:
++			nb7->swap_data_lanes = true;
++			dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
++			break;
++		default:
++			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
++			ret = -EINVAL;
++			goto out_error;
++		}
++	}
++
++out_done:
++	ret = 0;
++
++out_error:
++	of_node_put(ep);
++
++	return ret;
++}
++
++static int nb7vpq904m_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	struct typec_switch_desc sw_desc = { };
++	struct typec_mux_desc mux_desc = { };
++	struct nb7vpq904m *nb7;
++	int ret;
++
++	nb7 = devm_kzalloc(dev, sizeof(*nb7), GFP_KERNEL);
++	if (!nb7)
++		return -ENOMEM;
++
++	nb7->client = client;
++
++	nb7->regmap = devm_regmap_init_i2c(client, &nb7_regmap);
++	if (IS_ERR(nb7->regmap)) {
++		dev_err(&client->dev, "Failed to allocate register map\n");
++		return PTR_ERR(nb7->regmap);
++	}
++
++	nb7->mode = TYPEC_STATE_SAFE;
++	nb7->orientation = TYPEC_ORIENTATION_NONE;
++
++	mutex_init(&nb7->lock);
++
++	nb7->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
++	if (IS_ERR(nb7->enable_gpio))
++		return dev_err_probe(dev, PTR_ERR(nb7->enable_gpio),
++				     "unable to acquire enable gpio\n");
++
++	nb7->vcc_supply = devm_regulator_get_optional(dev, "vcc");
++	if (IS_ERR(nb7->vcc_supply))
++		return PTR_ERR(nb7->vcc_supply);
++
++	nb7->typec_switch = fwnode_typec_switch_get(dev->fwnode);
++	if (IS_ERR(nb7->typec_switch))
++		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
++				     "failed to acquire orientation-switch\n");
++
++	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
++	if (ret)
++		return ret;
++
++	ret = regulator_enable(nb7->vcc_supply);
++	if (ret)
++		dev_warn(dev, "Failed to enable vcc: %d\n", ret);
++
++	gpiod_set_value(nb7->enable_gpio, 1);
++
++	ret = nb7vpq904m_register_bridge(nb7);
++	if (ret)
++		return ret;
++
++	sw_desc.drvdata = nb7;
++	sw_desc.fwnode = dev->fwnode;
++	sw_desc.set = nb7vpq904m_sw_set;
++
++	nb7->sw = typec_switch_register(dev, &sw_desc);
++	if (IS_ERR(nb7->sw))
++		return dev_err_probe(dev, PTR_ERR(nb7->sw), "Error registering typec switch\n");
++
++	mux_desc.drvdata = nb7;
++	mux_desc.fwnode = dev->fwnode;
++	mux_desc.set = nb7vpq904m_mux_set;
++
++	nb7->mux = typec_mux_register(dev, &mux_desc);
++	if (IS_ERR(nb7->mux)) {
++		typec_switch_unregister(nb7->sw);
++		return dev_err_probe(dev, PTR_ERR(nb7->mux), "Error registering typec mux\n");
++	}
++
++	return 0;
++}
++
++static void nb7vpq904m_remove(struct i2c_client *client)
++{
++	struct nb7vpq904m *nb7 = i2c_get_clientdata(client);
++
++	typec_mux_unregister(nb7->mux);
++	typec_switch_unregister(nb7->sw);
++
++	gpiod_set_value(nb7->enable_gpio, 0);
++
++	regulator_disable(nb7->vcc_supply);
++}
++
++static const struct i2c_device_id nb7vpq904m_table[] = {
++	{ "nb7vpq904m" },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, nb7vpq904m_table);
++
++static const struct of_device_id nb7vpq904m_of_table[] = {
++	{ .compatible = "onnn,nb7vpq904m" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, nb7vpq904m_of_table);
++
++static struct i2c_driver nb7vpq904m_driver = {
++	.driver = {
++		.name = "nb7vpq904m",
++		.of_match_table = nb7vpq904m_of_table,
++	},
++	.probe_new	= nb7vpq904m_probe,
++	.remove		= nb7vpq904m_remove,
++	.id_table	= nb7vpq904m_table,
++};
++
++module_i2c_driver(nb7vpq904m_driver);
++
++MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
++MODULE_DESCRIPTION("OnSemi NB7VPQ904M Type-C driver");
++MODULE_LICENSE("GPL");
 
 -- 
 2.34.1
