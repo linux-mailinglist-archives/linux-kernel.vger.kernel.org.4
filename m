@@ -2,83 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D7471F5E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203BA71F5EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbjFAWUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S233127AbjFAW1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjFAWUA (ORCPT
+        with ESMTP id S233059AbjFAW1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:20:00 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FC919F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:19:57 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-456fc318dd4so432385e0c.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 15:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685657997; x=1688249997;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXcTUw8/gzf+4N1Jk/+JzhhoqxoIN0uBNkkWWoz4GPk=;
-        b=lKmn3PVqplFZ6Tl/R2OiS7YLMS0fKl3V5pAXFFXtxdiOqXNaSsuy/SVBXluwYu+NpE
-         gEjizE8VxFoG54OHCJIUmFYsCVDVj8oGnROUnsd2EpWdvYmUjcHVpY/DCn44SaY+t3U0
-         bP7nHvVp6RjpfW6FJFzfE27GIWRgckM77zbcIMxgqmBUyFm+ZcpNfdULnT1BHpOdKx2u
-         SR6muvOs/x6Y+IOnatIYMGv2FjWpU57XvrXWRoyXZ8HXPrgixaxGPBf5ONVHSsH3O15H
-         gLaboI/BAxNxl+eVnGEPAiS8l0ZQxpgnfpC6em0/WviRKfsWb5PD3zEjJsXLvudcZGtr
-         jysA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685657997; x=1688249997;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gXcTUw8/gzf+4N1Jk/+JzhhoqxoIN0uBNkkWWoz4GPk=;
-        b=hmRbwAqTp7p+6vQWXjE7M1lPAubls0M0oTPh/O6ezo6ibhe6vuJQ9036PUKE0+IWAC
-         yaw2gNJ63BXYgthT4KdJYbQFWtY55yAN0aDt2H7Hey7zEoNTdBG2D8gCZ1kqtDgeiVxz
-         AHy/nQ082W9xM8IcBK5loansfmQq90mwxxPQyTPXBBvtKnljNVtVTXcdPf93d9KyTj4Z
-         DeGZhU6PlcJqo8knqOL23ojYE1BsltwYwjUJ9lPeF2aSv9lm5+qSuUV206w7AakWp8rY
-         RzoaoZcOkVfh0TOWLrtxRValVTU0tWdy7mHZoOvNyjt4QLD41iRd+M40tSmAjZJSkAZB
-         vayQ==
-X-Gm-Message-State: AC+VfDyRdVcPe+muRJSI7aE76ZPHOVkCi+CbqNGU9XBvNnUYqj06sn0K
-        pyNcwjG0cTEkgPHO+6EIqq53TpRx+urOVfr+CpQ=
-X-Google-Smtp-Source: ACHHUZ78m4EtqInwwZ/APQonGYAcWJtCb/PVKhOAOTS80SaR87ZXIAEqf5CzRA3XLj17nXsGQh6JcX55lK+dm8QhhNo=
-X-Received: by 2002:a1f:3f42:0:b0:45c:8ef0:e351 with SMTP id
- m63-20020a1f3f42000000b0045c8ef0e351mr1586704vka.4.1685657997040; Thu, 01 Jun
- 2023 15:19:57 -0700 (PDT)
+        Thu, 1 Jun 2023 18:27:02 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D40133;
+        Thu,  1 Jun 2023 15:27:01 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 917AE5C00E9;
+        Thu,  1 Jun 2023 18:27:00 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 01 Jun 2023 18:27:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1685658420; x=1685744820; bh=iy/GUaaPPTaS6rwFy0PBDtNgCO5kwW/eHTt
+        pnmc0zuM=; b=Z4CU56AmPFLmSjNIWicm+SUnvn06uYZdblO+4TbIMCkPjvv3Ln1
+        PUGtE16bSWofN22Vt+X2zZGIJGkuyouG/D5XPX8FvyTvcTrnvhzAuXCfY6ReCRCg
+        DiP6PNnaBxDU3OKY+F4z5pvJd1q5JvD5Kro6Nm/M3m6hYgGN7smjJSFilEt8t4zB
+        COaptwSpXohvxx2Gtb4UQ9U3UD7gU6gielaRyN58klN5CzFW+a4rUrI76DvkM/tR
+        wZV1J7+zVS+99LLzT780Rgd8aVgzRUqggLcsEDZyEIBXZ/5V9Vfr0VueVc3fKVGe
+        Rr1JnCq40cUvesA+lXIWJiE4XaxF4hbYslQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685658420; x=1685744820; bh=iy/GUaaPPTaS6
+        rwFy0PBDtNgCO5kwW/eHTtpnmc0zuM=; b=Scu4bR1SCTs286aPBJ/DD1KjDzD/I
+        8RxwId/3DCAKrMCzel/o2GuBy11qjd0/saTJzkxC9YQ7W5i1HQkQgsZYDNDkhKCc
+        1ktSFIQWP/HgA3TwfskAKrmbngIVbgpj58M3qeHRQw/8A+6Fuszl+N0TNADd2cOS
+        DmYiSHJgB/XGiYuIRG7aUyOQWrU5IQ6B0gutiBrATt9WODw73zImss9wLnbj43ow
+        Hxb7d9FRjkaeHWMu4VA+TXX273Q2GbSvRIEuOMqeNbRbRW+FXLCND3HiDlQdGQSJ
+        fPyGd0o/NyhaV82tXsUsGqbTlPt20GIaDtNlTHL5YZlq9YMXvOtJmdiAg==
+X-ME-Sender: <xms:NBt5ZOa1I9p2HrXSxmQ3PBPozIP2-Cing6xVgtVvXLwfBtpDazriSg>
+    <xme:NBt5ZBYzn2JCOnrKyXy0zUnn4QQyZC8xHzl7HcUQu0-5UYkHk8wf-ybaZX44NjKXk
+    cihMOnejmeWDWA>
+X-ME-Received: <xmr:NBt5ZI_cVimzQC8DvwhLNzjI5VxDhKfONe3kogA74XzI3DZgRkDUzmLe8ybYu_0Jgqd6EFrPT3o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelvddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgvmhhiucfo
+    rghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhnghhslh
+    grsgdrtghomheqnecuggftrfgrthhtvghrnhepvdefgeekvdekgfffgeekhfeijedtffek
+    hefhleehfeejueetgfelgefgtdevieelnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgr
+    sgdrtghomh
+X-ME-Proxy: <xmx:NBt5ZArP2z5ceXGfT-WnNAic88zSfXGiefzY0w7GCi8gY__mgqfqPg>
+    <xmx:NBt5ZJrnFQUM_pwfKg91jPfqXOgvhvtJ3e4MtUgG6qzzFfJBiMuZnw>
+    <xmx:NBt5ZOSURmcj3xPqFh8zXkD4AAFuGtgGFoRa5CV93AzUfZgyGNmmaA>
+    <xmx:NBt5ZKDxtd3dhzdgCmQxN2-98JyvDX0oo8PKnvrFn3_v8qjit326dA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Jun 2023 18:26:59 -0400 (EDT)
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] block, loop: Increment diskseq when releasing a loop device
+Date:   Thu,  1 Jun 2023 18:26:56 -0400
+Message-Id: <20230601222656.2062-1-demi@invisiblethingslab.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Received: by 2002:a05:6124:790:b0:371:8019:552 with HTTP; Thu, 1 Jun 2023
- 15:19:56 -0700 (PDT)
-Reply-To: choipark90@yahoo.com
-From:   Choi Park <ubacustormerscar@gmail.com>
-Date:   Thu, 1 Jun 2023 23:19:56 +0100
-Message-ID: <CAGMLrsVUAv6YRt8A2aRNOEGmHqn9yZRpODMesyTu5xAwrQ+unQ@mail.gmail.com>
-Subject: investment partners
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hello my friend how are you doing with your daily activities I hope
-you are doing well, sorry that I have to contact you via this
-platform.  Please this massage is not any way meant to steal your
-information, it=E2=80=99s just  to  assist my  client  to have   a  good
-partner for investment  . i got your contact when searching for a
-reliable and reputable person that can be trusted as my that client
-Mrs. Ma-Ri  Kim from  Hong Kong   Directed  me to get her someone that
-she can trust and  invest part of her money outside Hong Kong   for
-her under aged child  if you are interested and can handle this funds
-let me know  by  declaring your interest so that I can give you more
-details about this   .
-Mr Choi Park
+The previous patch for checking diskseq in blkback is not enough to
+prevent the following race:
+
+1. Program X opens a loop device
+2. Program X gets the diskseq of the loop device.
+3. Program X associates a file with the loop device.
+4. Program X passes the loop device major, minor, and diskseq to
+   something.
+5. Program X exits.
+6. Program Y detaches the file from the loop device.
+7. Program Y attaches a different file to the loop device.
+8. The opener finally gets around to opening the loop device and checks
+   that the diskseq is what it expects it to be.  Even though the
+   diskseq is the expected value, the result is that the opener is
+   accessing the wrong file.
+
+To prevent this race condition, increment the diskseq of a loop device
+when it is detached from its file descriptor.  This causes blkback (or
+any other program, for that matter) to fail at step 8.  Export the
+inc_diskseq() function to make this possible.
+
+Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+---
+I considered destroying the loop device altogether instead of bumping
+its diskseq, but was not able to accomplish that.  Suggestions welcome.
+---
+ block/genhd.c        | 1 +
+ drivers/block/loop.c | 6 ++++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/block/genhd.c b/block/genhd.c
+index 1cb489b927d50ab06a84a4bfd6913ca8ba7318d4..c0ca2c387732171321555cd57565fbc606768505 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -1502,3 +1502,4 @@ void inc_diskseq(struct gendisk *disk)
+ {
+ 	disk->diskseq = atomic64_inc_return(&diskseq);
+ }
++EXPORT_SYMBOL(inc_diskseq);
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index bc31bb7072a2cb7294d32066f5d0aa14130349b4..05ea5fb41508b4106f184dd6b4c37942716bdcac 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1205,6 +1205,12 @@ static void __loop_clr_fd(struct loop_device *lo, bool release)
+ 	if (!part_shift)
+ 		set_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
+ 	mutex_lock(&lo->lo_mutex);
++
++	/*
++	 * Increment the disk sequence number, so that userspace knows this
++	 * device now points to something else.
++	 */
++	inc_diskseq(lo->lo_disk);
+ 	lo->lo_state = Lo_unbound;
+ 	mutex_unlock(&lo->lo_mutex);
+ 
+-- 
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
