@@ -2,81 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBF87198C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0A47198DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbjFAKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S232527AbjFAKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbjFAKOS (ORCPT
+        with ESMTP id S233527AbjFAKPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:14:18 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644481FC3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:12:03 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3a9ad31dbso728073e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685614318; x=1688206318;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xkcs4FBY2IH4uDP0ChTAwfANhMPVoHA+mIZMX2WPYU0=;
-        b=IzxMTmMNDL6QqmBHuED+qJBF1pSH7Q6PLscxabaALjBfya+Vc9NN5QeY4e8hhICVqm
-         g0+XhtDk2Jm/xvZ8qSbhITYzsd6klovst3Nz2zN1rkN+PAyxWz/mJ889UMqMeX5Yb3RK
-         uW7RT9actilECmUo71JKqoMV0zVYvZhAGUzs2b4q7WQzf7Zeov+lTjsewCi33cW9tHBm
-         gVNRD3P0IRKWdyFm6qCTeXhluUkZ/HF16a6VNI7Fxqb+oaJoPLJj3Drg0ziJ2c5Vp3vW
-         f8nSGsqLCGsHZypoDXGIcYrvfu6TzDpUzyeBMoAmsXgEPeOKIVTV3G+vV6SbH2lgyNLe
-         kKeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685614318; x=1688206318;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xkcs4FBY2IH4uDP0ChTAwfANhMPVoHA+mIZMX2WPYU0=;
-        b=EkgbF9hgDVjv8uxaf0U08rkDQ5jWHusV1TeuzW/sx6sCPx15GzAAF0SLD2C8ZZA3AH
-         hf1vESZUqD44qqJdhJAA3GWrhJXb5NCtKSzwsGAP/wwNWfVLbx+6NdDQaHoMWOcc1ujr
-         PjT1Z7LvIIyWN6BGVSSXMUYrTSH2XexsvwYw8K8Ba3taS+aQxRPzro3Y+pSpO2O5OqiO
-         ZCmoor4VpmRaZSysWYFyZYHY36biTGHMg4YIAbJ6sgzuo5z3rl9VBiH4A/91h3c4GsPi
-         667A4L/CXsaquiGsC+ltACnQybeSR/7E+C7ctBJgElOWweLhlqDVGnZwHgFwgRB+Apa4
-         u7Yw==
-X-Gm-Message-State: AC+VfDzmDfbfMfZAranGYVD5c2VwSoDYlQB+h2FxO5HGyzBpvnsIVW1X
-        io2yVf9u2vFdUffFSj9tPLcMBA==
-X-Google-Smtp-Source: ACHHUZ6Ic/CkeTNZPuoG7vOwnAK6JXh0WZ+dJWmz/uVZxjVVZtvkZjOnrfA9b50EB2MfZkjsIt0Vmg==
-X-Received: by 2002:a19:f00e:0:b0:4eb:2d47:602 with SMTP id p14-20020a19f00e000000b004eb2d470602mr1000358lfc.59.1685614318618;
-        Thu, 01 Jun 2023 03:11:58 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac24843000000b004f58c69c583sm224848lfy.64.2023.06.01.03.11.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 03:11:58 -0700 (PDT)
-Message-ID: <c5e63138-ed8b-ac35-c8a3-3a6649df7477@linaro.org>
-Date:   Thu, 1 Jun 2023 13:11:57 +0300
+        Thu, 1 Jun 2023 06:15:06 -0400
+Received: from forward500a.mail.yandex.net (forward500a.mail.yandex.net [178.154.239.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28998E6F;
+        Thu,  1 Jun 2023 03:12:52 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:3487:0:640:5432:0])
+        by forward500a.mail.yandex.net (Yandex) with ESMTP id 6C3D15ECD9;
+        Thu,  1 Jun 2023 13:12:09 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 8CLA8e0DYuQ0-ISJWthyb;
+        Thu, 01 Jun 2023 13:12:08 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685614328;
+        bh=mKkVNkgkXY6MNVho2Qm6KsUuypPCjCch512PkoPBmg4=;
+        h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
+        b=aH7v70ehGwAeeDJStZ0281Nf5k6pbQlE+puD8q8C/MMZsdFJLGbRx79WQz4z+WPiH
+         FzFtGnSHeAUGM4E4FdfDER76nRKAVn9ssGfz+OK9tzSLmWW4+0tkD9XxGqiWhQPoV/
+         NAuo1VdmEkiLZaHxpqFHRkWrOBUigMalwP7afqX0=
+Authentication-Results: mail-nwsmtp-smtp-production-main-49.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Date:   Thu, 1 Jun 2023 13:12:08 +0300
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 16/43] pwm: ep93xx: add DT support for Cirrus EP93xx
+Message-ID: <20230601131208.7ee17749@redslave.neermore.group>
+In-Reply-To: <20230601070128.ejvigvxwm6cg4izf@pengutronix.de>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+        <20230601053546.9574-17-nikita.shubin@maquefel.me>
+        <20230601070128.ejvigvxwm6cg4izf@pengutronix.de>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 16/20] interconnect: qcom: qcm2290: Hook up RPM bus clk
- definitions
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-16-1bf8e6663c4e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v1-16-1bf8e6663c4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,18 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 13:20, Konrad Dybcio wrote:
-> Assign the necessary definitions to migrate to the new bus clock
-> handling mechanism.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/qcm2290.c | 6 ++++++
->   1 file changed, 6 insertions(+)
+Hello Uwe!
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Thu, 1 Jun 2023 09:01:28 +0200
+Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
 
--- 
-With best wishes
-Dmitry
+> Hello,
+>=20
+> On Thu, Jun 01, 2023 at 08:34:07AM +0300, Nikita Shubin wrote:
+> > - find register range from the device tree
+> > - provide clock access via of
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me> =20
+>=20
+> Looks good to me,
+>=20
+> Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+
+Thank you.
+
+>=20
+> There don't seem to be dependencies interdependencies to other patches
+> in this series?! What is the merge plan here. Should this patch go in
+> via the PWM tree, or will the whole series go in via armsoc?
+
+We are hoping to get it merged as a whole, and not in pieces.
+
+So we are trying to get Ack for all patches in series.
+
+>=20
+> Best regards
+> Uwe
+>=20
 
