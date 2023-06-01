@@ -2,148 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033B7719F8A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15DE719FAA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbjFAOQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S233855AbjFAOUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232167AbjFAOQ5 (ORCPT
+        with ESMTP id S233745AbjFAOUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:16:57 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AE8180
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:16:30 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d41763796so589112b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685628989; x=1688220989;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=twYg540X1PIqbMF2MOY+lphD+IJXhD0ehbrQ95GCUew=;
-        b=jGOM7i6CcGiTXBM1GKdxW+jDWjdpp2qglXKx6pdPELGipE5rc4OtuIloV7IG5PtsTa
-         AhO2ZY5uCu1mLbAzLjCtGTTEbs/0A5y+LD09wjEcQHrh5s5BmE8SOnMudG2hb0hv4qJI
-         63ENFL98pu0rrzG4Yqkt9aFn60UFMHD/omZWo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685628989; x=1688220989;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=twYg540X1PIqbMF2MOY+lphD+IJXhD0ehbrQ95GCUew=;
-        b=HOmKaUkJ2y6dNQQ9Y8U8joWb10gBkfd0oi6EJ4vOgNLMlXjD+/ZgsseYEqvxERk63X
-         y5HlxmOkI17eSy9hHKPDiqWRG5Ft/riKHoTsIWt8vo9PGU0i6ZfblWm3IKr7UXJox+L7
-         7s163a5/EhmT1fkZC80sJJ3pbkMYz2B/5am4HKJr+PjO9LJwaoHYkfzHWMXYyIgKMPVO
-         DYVZVKUF9b/ia20pbCacjVqd0MPkpZQgmaSdG0My/+aeS8p5LQqI2LYV/CNshjYGg5gn
-         jLMwe3jMBq8Frzcf59Q8MDR9lhO+g3m1lMKqtxftZr9tTQFjPNCXbfmGwiZ/H4kScaKY
-         l0ww==
-X-Gm-Message-State: AC+VfDwUT/WnIjbaUT+Qj7h0lpFKOZmmMekUlNC4U9P/Xh/vkxdyptlL
-        Jx0vV8DON77yovPwF+KbeiW8Nw==
-X-Google-Smtp-Source: ACHHUZ6dhSWZ+kaR9tr/tIo/y+AEBG5s4fnH5RJmGHToxHiUhgSxFkypP+G3Y/KlWXTXgmEvAZ48Zw==
-X-Received: by 2002:a05:6a00:24cc:b0:644:8172:3ea9 with SMTP id d12-20020a056a0024cc00b0064481723ea9mr7579505pfv.15.1685628989187;
-        Thu, 01 Jun 2023 07:16:29 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id c24-20020aa78c18000000b0064fe332209esm5272822pfd.98.2023.06.01.07.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 07:16:28 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 07:16:27 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH] firmware: meson_sm: Fix memcpy vs iomem type warnings
-Message-ID: <202306010716.02A835503C@keescook>
-References: <20221012185234.never.936-kees@kernel.org>
- <166602031304.3572695.12870664862275915316.b4-ty@linaro.org>
- <202305171124.4EB0D65@keescook>
- <9158d9ca-fe00-760c-4c95-f2ee045038ee@linaro.org>
+        Thu, 1 Jun 2023 10:20:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE28D18F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685629237; x=1717165237;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V3aEMThk1aOvzxlN2qMLUYHQSrj7IvusSGmojZBE7Fk=;
+  b=lVf0tOZNrkzc+9+KT8m+djXJiQL2WT4JmZGUkVunGmeqgqGGS+rfZcL7
+   c4Qwg8pGjMN1DqT0DO4B9zvgABCgYyBwDxOqi3Lmt0mOt72ErXUHyM/xC
+   KsgMbi+UbSzR/iq3SD015Y65XCtmkXvgQuEKldjwpasesBx+FbiXGU9NZ
+   LG40ElprJLbG9qPhBUNVvcXxOHQ3frAfSYJDbCNv5cPW+FEDWOuHWIuCn
+   7cE7Vx0RlM/qsqUlKTYJFPt7E8RF1ZAzm/20YQd0CJa1yw8/yjVJzcWix
+   f5xyrkkqlVjjCaHi4dWpOZ0rfGgy5SqtQDFhtDMgj/GEsab8OU+fRGL3I
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="357989671"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="357989671"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:18:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="881625227"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="881625227"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2023 07:18:15 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4j82-0002Lg-38;
+        Thu, 01 Jun 2023 14:18:14 +0000
+Date:   Thu, 1 Jun 2023 22:18:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 40/43] ARM: ep93xx: soc: drop defines
+Message-ID: <202306011611.BkjkqkuR-lkp@intel.com>
+References: <20230601054549.10843-22-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9158d9ca-fe00-760c-4c95-f2ee045038ee@linaro.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230601054549.10843-22-nikita.shubin@maquefel.me>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 10:59:14AM +0200, Neil Armstrong wrote:
-> On 17/05/2023 20:25, Kees Cook wrote:
-> > *thread necromancy*
-> > 
-> > On Mon, Oct 17, 2022 at 05:25:13PM +0200, Neil Armstrong wrote:
-> > > Hi,
-> > > 
-> > > On Wed, 12 Oct 2022 11:53:16 -0700, Kees Cook wrote:
-> > > > Use memcpy_{toio,fromio}() instead of memcpy(). Silences warnings from
-> > > > Sparse:
-> > > > 
-> > > > drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 1 (different address spaces)
-> > > > drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
-> > > > drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
-> > > > drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 2 (different address spaces)
-> > > > drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
-> > > > drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
-> > > > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> > > > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> > > > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> > > > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    expected void *
-> > > > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
-> > > > 
-> > > > [...]
-> > > 
-> > > Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.2/drivers)
-> > > 
-> > > [1/1] firmware: meson_sm: Fix memcpy vs iomem type warnings
-> > >        https://git.kernel.org/amlogic/c/7dc69c7d073e6004a281db8f7f15cf6ebf702ea0
-> > > 
-> > > These changes has been applied on the intermediate git tree [1].
-> > > 
-> > > The v6.2/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-> > > for inclusion in their intermediate git branches in order to be sent to Linus during
-> > > the next merge window, or sooner if it's a set of fixes.
-> > > 
-> > > In the cases of fixes, those will be merged in the current release candidate
-> > > kernel and as soon they appear on the Linux master branch they will be
-> > > backported to the previous Stable and Long-Stable kernels [2].
-> > > 
-> > > The intermediate git branches are merged daily in the linux-next tree [3],
-> > > people are encouraged testing these pre-release kernels and report issues on the
-> > > relevant mailing-lists.
-> > > 
-> > > If problems are discovered on those changes, please submit a signed-off-by revert
-> > > patch followed by a corrective changeset.
-> > > 
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-> > > [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-> > > [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > 
-> > Hi! This change seems to have never been mainlined and seems to have
-> > disappeared from linux-next.
-> > 
-> Hi,
-> 
-> Indeed it was rejected by Arnd, but I failed to find time to investigate how to fix it
-> 
-> https://lore.kernel.org/all/4a6b34ef-f5d2-4e56-a7f6-6a7c9cdda416@app.fastmail.com/
+Hi Nikita,
 
-Ah-ha! Thanks for the pointer.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on linusw-pinctrl/devel linusw-pinctrl/for-next linus/master v6.4-rc4]
+[cannot apply to soc/for-next robh/for-next next-20230601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikita-Shubin/dt-bindings-soc-Add-Cirrus-EP93xx/20230601-143415
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230601054549.10843-22-nikita.shubin%40maquefel.me
+patch subject: [PATCH v1 40/43] ARM: ep93xx: soc: drop defines
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230601/202306011611.BkjkqkuR-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/372fa9eb75b475c6b8f26079e8716c95622ae9b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nikita-Shubin/dt-bindings-soc-Add-Cirrus-EP93xx/20230601-143415
+        git checkout 372fa9eb75b475c6b8f26079e8716c95622ae9b7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/input/keyboard/ sound/soc/cirrus/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011611.BkjkqkuR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/input/keyboard/ep93xx_keypad.c:30:
+   include/linux/soc/cirrus/ep93xx.h: In function 'ep93xx_devcfg_set_clear':
+   include/linux/soc/cirrus/ep93xx.h:22:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+      22 |         return 0;
+         |                ^
+   include/linux/soc/cirrus/ep93xx.h:19:20: note: declared here
+      19 | static inline void ep93xx_devcfg_set_clear(unsigned int set_bits,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: At top level:
+>> include/linux/soc/cirrus/ep93xx.h:24:6: warning: no previous prototype for 'ep93xx_syscon_swlocked_write' [-Wmissing-prototypes]
+      24 | void ep93xx_syscon_swlocked_write(unsigned int val, unsigned int reg)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: In function 'ep93xx_syscon_swlocked_write':
+   include/linux/soc/cirrus/ep93xx.h:26:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+      26 |         return 0;
+         |                ^
+   include/linux/soc/cirrus/ep93xx.h:24:6: note: declared here
+      24 | void ep93xx_syscon_swlocked_write(unsigned int val, unsigned int reg)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: At top level:
+>> include/linux/soc/cirrus/ep93xx.h:28:6: warning: no previous prototype for 'ep93xx_swlocked_update_bits' [-Wmissing-prototypes]
+      28 | void ep93xx_swlocked_update_bits(unsigned int reg,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: In function 'ep93xx_swlocked_update_bits':
+   include/linux/soc/cirrus/ep93xx.h:31:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+      31 |         return 0;
+         |                ^
+   include/linux/soc/cirrus/ep93xx.h:28:6: note: declared here
+      28 | void ep93xx_swlocked_update_bits(unsigned int reg,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/input/keyboard/ep93xx_keypad.c: In function 'ep93xx_keypad_probe':
+   drivers/input/keyboard/ep93xx_keypad.c:262:9: error: implicit declaration of function 'of_property_read_u32' [-Werror=implicit-function-declaration]
+     262 |         of_property_read_u32(np, "cirrus,debounce-delay-ms", &keypad->debounce);
+         |         ^~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from sound/soc/cirrus/ep93xx-i2s.c:28:
+   include/linux/soc/cirrus/ep93xx.h: In function 'ep93xx_devcfg_set_clear':
+   include/linux/soc/cirrus/ep93xx.h:22:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+      22 |         return 0;
+         |                ^
+   include/linux/soc/cirrus/ep93xx.h:19:20: note: declared here
+      19 | static inline void ep93xx_devcfg_set_clear(unsigned int set_bits,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: At top level:
+>> include/linux/soc/cirrus/ep93xx.h:24:6: warning: no previous prototype for 'ep93xx_syscon_swlocked_write' [-Wmissing-prototypes]
+      24 | void ep93xx_syscon_swlocked_write(unsigned int val, unsigned int reg)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: In function 'ep93xx_syscon_swlocked_write':
+   include/linux/soc/cirrus/ep93xx.h:26:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+      26 |         return 0;
+         |                ^
+   include/linux/soc/cirrus/ep93xx.h:24:6: note: declared here
+      24 | void ep93xx_syscon_swlocked_write(unsigned int val, unsigned int reg)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: At top level:
+>> include/linux/soc/cirrus/ep93xx.h:28:6: warning: no previous prototype for 'ep93xx_swlocked_update_bits' [-Wmissing-prototypes]
+      28 | void ep93xx_swlocked_update_bits(unsigned int reg,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/soc/cirrus/ep93xx.h: In function 'ep93xx_swlocked_update_bits':
+   include/linux/soc/cirrus/ep93xx.h:31:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+      31 |         return 0;
+         |                ^
+   include/linux/soc/cirrus/ep93xx.h:28:6: note: declared here
+      28 | void ep93xx_swlocked_update_bits(unsigned int reg,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/ep93xx_syscon_swlocked_write +24 include/linux/soc/cirrus/ep93xx.h
+
+    10	
+    11	#if defined(CONFIG_ARCH_EP93XX)
+    12	unsigned int ep93xx_chip_revision(void);
+    13	void ep93xx_devcfg_set_clear(unsigned int set_bits, unsigned int clear_bits);
+    14	void ep93xx_syscon_swlocked_write(unsigned int val, unsigned int reg);
+    15	void ep93xx_swlocked_update_bits(unsigned int reg,
+    16					 unsigned int mask, unsigned int val);
+    17	#else
+    18	static inline unsigned int ep93xx_chip_revision(void) { return 0; }
+    19	static inline void ep93xx_devcfg_set_clear(unsigned int set_bits,
+    20					unsigned int clear_bits)
+    21	{
+  > 22		return 0;
+    23	}
+  > 24	void ep93xx_syscon_swlocked_write(unsigned int val, unsigned int reg)
+    25	{
+  > 26		return 0;
+    27	}
+  > 28	void ep93xx_swlocked_update_bits(unsigned int reg,
+    29					unsigned int mask, unsigned int val)
+    30	{
+    31		return 0;
+    32	}
+    33	#endif
+    34	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
