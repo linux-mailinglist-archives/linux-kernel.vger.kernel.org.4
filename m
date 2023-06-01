@@ -2,67 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FDC719120
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7093719134
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjFADNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
+        id S230344AbjFADQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjFADNl (ORCPT
+        with ESMTP id S230457AbjFADPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:13:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D739A185
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 20:13:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58064640BE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E49C433EF;
-        Thu,  1 Jun 2023 03:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685589215;
-        bh=lKySPhDaAFZidx0r5KCqZj3O3c6/3PILy5K6TsBjT04=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sBiVpraafTY8EFRPOkJzwAet2B/XIou7Zl9My/WGnMkfZqLGK9UtR5T6XkYYXOfqT
-         tpieVQzH6GjH45aMUYlg5Bis+RmOAmIxhYnb8HifLYEs6FuTvf338TIiR7GU8W/BRH
-         ckJL4NEfhJhhkjBOnVQXs5Bhy/gesiUS+CWfhF7OQxTYV4rzy20NTGOjQQ8sl7DoXp
-         P9X+lpDVeqLI9kdZEIlaLThq7rHRonvVtC9hc8LqmLC2kRZBvZsNTdTpBgmVXu2X+e
-         f3rNfP5y3XLbkUpBLAJuUMm7mwxPbm1W7rTVBRsPciHauOEu9hm2hq0Pc4uVQYDBzQ
-         HBZsSeBJUbLHQ==
-Message-ID: <e49e9c41-19c7-7cc5-897e-136ebc027f3e@kernel.org>
-Date:   Thu, 1 Jun 2023 11:13:32 +0800
+        Wed, 31 May 2023 23:15:49 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132E7133;
+        Wed, 31 May 2023 20:15:46 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-77493b3d18cso24539439f.0;
+        Wed, 31 May 2023 20:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685589345; x=1688181345;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D4/gO6XzfXDIrnN6Za2h18cWQCzN5ROHDvFmtwAmudE=;
+        b=aMxcq21jtx1Z9prFEVIcVdMpob4QsBzi6pEUBVw+8fc0YVcDo9cQDOEZEYirQ/o0vh
+         3P+6XoiatoFBbtW7m+JGCcg6mVN8Uw7jgRNjzb90Fgw+oFcdyAQLiDWlTlnzckzYaBwe
+         bLU5g75Qdw/j05ZHf/Oe/aVSW4tJtWSJmE9ZgMbcK4HdzJEINvrQTNgjPrLgKt1Nq06y
+         Pu2zZzudls6QVpMbBD6V++JVip7n38ym/0xxAJDzf2OvmzVbJMAziWLqc0UawuM+cSOc
+         f3EFDu2y4EYrEXzSYyrVpWxGtPTEa7fJcHqWm64jePSrPrM1IGPw64Y8OvZic3mN6HSS
+         7jLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685589345; x=1688181345;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D4/gO6XzfXDIrnN6Za2h18cWQCzN5ROHDvFmtwAmudE=;
+        b=GdeBk8LcBRExz69rbtOicceuyWzaXFneC1F9sCyKg4fLQWjMQQ/NNdHGlArUDr36e/
+         ZRUTf6nBa8BnvrRj6jTa5sPU/ntUxVIN20vH3CDXwPlnkeB6/a631i45+EoVp83vUmVU
+         sIp6X5zKRc+AKKf7/YtRw/cdIFPTdrzmVua06xaVLzRWr/8BzINO6T3KI6kXYVMsWg2T
+         2z3jMbUO5WvYvlrO81BIltmvUa4cPcwrLsKBjHq/xVYK1P1L/cSLVYETIcxXiEpG8mXu
+         8PCuzRAEfL7swM4XqAt0XXMzpaU7JQDeXv2MrCeu6zl8S9pLbIXW3P5Z+btU6f69npxv
+         QuHw==
+X-Gm-Message-State: AC+VfDzefNcgyWIneRNfwwY80E8OdPCEXDQDZEm4nWyJkE6FfbcAZNiK
+        k/uCeVcYXRFjUI1wQxx//vE=
+X-Google-Smtp-Source: ACHHUZ59Cs+/Q8eganB2/dKEb/mwwnRZnRrFojpciU475H4QwR8u+eQ9hw+kNCWMEK/u7RMYtoYEbw==
+X-Received: by 2002:a5e:a914:0:b0:775:5f74:f4c7 with SMTP id c20-20020a5ea914000000b007755f74f4c7mr7696453iod.17.1685589345144;
+        Wed, 31 May 2023 20:15:45 -0700 (PDT)
+Received: from aford-B741.lan ([2601:447:d001:897f:6ae0:d0f8:5d79:f782])
+        by smtp.gmail.com with ESMTPSA id b66-20020a0295c8000000b004165d7d6711sm1852590jai.71.2023.05.31.20.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 20:15:44 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] arm64: dts: imx8mn/imx8mm-beacon:  Add HDMI
+Date:   Wed, 31 May 2023 22:15:24 -0500
+Message-Id: <20230601031527.271232-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] f2fs_io: add [get|set_attr] to access inode extra
- attributes
-Content-Language: en-US
-To:     Sheng Yong <shengyong@oppo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230529013502.2230810-1-shengyong@oppo.com>
- <20230529013502.2230810-2-shengyong@oppo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230529013502.2230810-2-shengyong@oppo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/29 9:35, Sheng Yong wrote:
-> This patch adds get_attr and set_attr to access inode's extra
-> attributes.
+The DSI updates are in the DRM tree and Linux next with some updates
+that now allow the DSI to connect to an HDMI bridge and successfully
+sync displays at various resolutions and refresh rates.
 
-It needs to update f2fs_io(8) manual as well?
+Adam Ford (2):
+  arm64: dts: imx8mn-beacon: Add HDMI video with sound
+  arm64: dts: imx8mm-beacon: Add HDMI video with sound
 
-Thanks,
+ .../boot/dts/freescale/imx8mm-beacon-kit.dts  | 132 +++++++++++++++++
+ .../boot/dts/freescale/imx8mn-beacon-kit.dts  | 134 ++++++++++++++++++
+ 2 files changed, 266 insertions(+)
+
+-- 
+2.39.2
+
