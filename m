@@ -2,168 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862BB719DDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8072D719DCB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjFAN0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S233728AbjFAN01 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 09:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbjFAN0m (ORCPT
+        with ESMTP id S233822AbjFAN0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:26:42 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD63519B;
-        Thu,  1 Jun 2023 06:26:18 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f60e730bf2so8787015e9.1;
-        Thu, 01 Jun 2023 06:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685625977; x=1688217977;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mY4ulbNFE/jjkAM6F1KYjqgtbBRcYBjAGNE85b4mha4=;
-        b=Eyrfbb4GRekIwaWBrbBJoAQ+TnpS4Wpf9ICO7qzsFvxrI9yFUyGrFRxRngKXl20JW3
-         tEbx+C9qcNg2G+jhDjaxDGirdsMr/nreZgAB9LkqbAaVVfWCJFlrs3R8sFu+BsIiquMP
-         lbCyVxQMJzaR1SqXubYb72QmrEP1SnkUlHjOwgYf6cZjhmdUf0SWLC5O5Ya/hRGn8rHe
-         v9SzgNnKjXNQNNs/ci1y7YuRaMQWCCUzO3r6LLTJz12h5My9spUJ8CexcmAWpWSJowE8
-         MspDWpWbFA3mTGmxvAt9KdlZhRjlGfdLXibIIdrUbLBeVgxKF+cZsb4pvM56w+unqb+z
-         CfgA==
+        Thu, 1 Jun 2023 09:26:09 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEFFE49;
+        Thu,  1 Jun 2023 06:25:55 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b0218c979cso4180975ad.3;
+        Thu, 01 Jun 2023 06:25:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685625977; x=1688217977;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mY4ulbNFE/jjkAM6F1KYjqgtbBRcYBjAGNE85b4mha4=;
-        b=cgqF1eLqN//cS5cC7lWmVficG2kWef2OtvL1fbhR4JgfUMYhzXzovcBhN0epRyum/J
-         7fAmAUHeOFOGgrHYbhRu/n0A9n75ly9FeP7p4CsJzS1jvel9SQmkOZDVtmxWu+3gbmLx
-         3i1WbTovfUFOYxtaFgQNYp6M4tSOYGGAOAUZPOExxwxbWsUB/2UeqnjyAbgbzqRlvdUx
-         rtSH4+hrqvyCjWMMCPrq8jmQBIbDt1WL4AEHE3IXh3djGbYro3TD5uSIkTykX1Em054y
-         f0Nztyn+TkTGdOE10O5itjxIQ1sFaM+V7CYIRB7bpMVw2sfNiVJZN89yZ88J66nmxJ+W
-         0eZQ==
-X-Gm-Message-State: AC+VfDwtaKZ8rp1xgf+2pMiGyBLXQNCSeEgGfN2XVpcY6C+IMH1Mzf3j
-        0Y3VaEUDhn+U6oq5aYpAYNI=
-X-Google-Smtp-Source: ACHHUZ4u07oje+b/pW5QY8IISmc/7hrBKpGR8OodL8MJC5Gg23AvYMTBZe3OPWHRjosNZWA7j6ukxw==
-X-Received: by 2002:a7b:ca59:0:b0:3f4:f7c2:d681 with SMTP id m25-20020a7bca59000000b003f4f7c2d681mr2294755wml.29.1685625976702;
-        Thu, 01 Jun 2023 06:26:16 -0700 (PDT)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003f60119ee08sm2396549wmc.43.2023.06.01.06.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 06:26:16 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Andrew Powers-Holmes <aholmes@omnom.net>,
-        Ondrej Jirman <megi@xff.cz>, stable@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register and range mappings
-Date:   Thu,  1 Jun 2023 15:25:16 +0200
-Message-Id: <20230601132516.153934-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1685625955; x=1688217955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bpSK1tyvrOnn/69ucnamSU0HHWpIBr6ylCzTzygVnpg=;
+        b=XIKeUSRvIULWX8DCC4azLgdDGgOt9diyAW8sBN30/NrP8GxbmbrN+EYQH4pd02ZD5r
+         tm5sUUWkZGJUBNtocHfV7ccqtyQ9zv7aBXoB77HSr6S/qyijxmEb8kCewZWsmjtb7k86
+         FxEalYmWKyZWamo9nZ6RIgi/98PpmARWZsBaBSBxQnSOd4WKIT8C5JW9yTUyxpWk9Fbj
+         nsPMO4Q3v7D3uVUJyG6vmKZGFkdMXQV8uAgBiPQn070T0WAvFLOdpSDDS8tVDPLpZ0LR
+         vlrsx5bzMC7/uWmjXXxNSv1PCNzv3t3xiIE3TnEdQdTNKayxbBITm4pn4hHrUIcde8tn
+         T+xQ==
+X-Gm-Message-State: AC+VfDzkWiUeCN9wRjM/XkyR2s7ewXihdNhfUn7y9xVfZgffBZRm1Xnn
+        0Gxlw9LHRQIKRYzD2+77kmHi4jjl4jw=
+X-Google-Smtp-Source: ACHHUZ4XuPQTPBqS7WhsUKDqT1g+13+LHk+tFX665SKbN++JuvAmSHadPuVku9ua8lda9h21Fumk4w==
+X-Received: by 2002:a17:902:b08e:b0:1b0:3576:c2b5 with SMTP id p14-20020a170902b08e00b001b03576c2b5mr5686027plr.7.1685625954550;
+        Thu, 01 Jun 2023 06:25:54 -0700 (PDT)
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com. [209.85.210.171])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902748700b001afccb29d69sm3409811pll.303.2023.06.01.06.25.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 06:25:54 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-64d1e96c082so548064b3a.1;
+        Thu, 01 Jun 2023 06:25:54 -0700 (PDT)
+X-Received: by 2002:a05:6a20:ad90:b0:110:b0ab:8798 with SMTP id
+ dd16-20020a056a20ad9000b00110b0ab8798mr6531759pzb.36.1685625953866; Thu, 01
+ Jun 2023 06:25:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <808140.1685573412@warthog.procyon.org.uk>
+In-Reply-To: <808140.1685573412@warthog.procyon.org.uk>
+From:   Marc Dionne <marc.dionne@auristor.com>
+Date:   Thu, 1 Jun 2023 10:25:42 -0300
+X-Gmail-Original-Message-ID: <CAB9dFduJtzreY9dY0oa0oNtXBOWzRyCDZ45zPQR4neJBBuj94Q@mail.gmail.com>
+Message-ID: <CAB9dFduJtzreY9dY0oa0oNtXBOWzRyCDZ45zPQR4neJBBuj94Q@mail.gmail.com>
+Subject: Re: [PATCH] afs: Fix setting of mtime when creating a file/dir/symlink
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Powers-Holmes <aholmes@omnom.net>
+On Wed, May 31, 2023 at 7:50 PM David Howells <dhowells@redhat.com> wrote:
+>
+>
+> kafs incorrectly passes a zero mtime (ie. 1st Jan 1970) to the server when
+> creating a file, dir or symlink because commit 52af7105eceb caused the
+> mtime recorded in the afs_operation struct to be passed to the server, but
+> didn't modify the afs_mkdir(), afs_create() and afs_symlink() functions to
+> set it first.
+>
+> Those functions were written with the assumption that the mtime would be
+> obtained from the server - but that fell foul of malsynchronised clocks, so
+> it was decided that the mtime should be set from the client instead.
+>
+> Fix this by filling in op->mtime before calling the create op.
+>
+> Fixes: 52af7105eceb ("afs: Set mtime from the client for yfs create operations")
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Marc Dionne <marc.dionne@auristor.com>
+> cc: linux-afs@lists.infradead.org
+> cc: linux-fsdevel@vger.kernel.org
+> ---
+>  fs/afs/dir.c |    3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+> index 4dd97afa536c..5219182e52e1 100644
+> --- a/fs/afs/dir.c
+> +++ b/fs/afs/dir.c
+> @@ -1358,6 +1358,7 @@ static int afs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
+>         op->dentry      = dentry;
+>         op->create.mode = S_IFDIR | mode;
+>         op->create.reason = afs_edit_dir_for_mkdir;
+> +       op->mtime       = current_time(dir);
+>         op->ops         = &afs_mkdir_operation;
+>         return afs_do_sync_operation(op);
+>  }
+> @@ -1661,6 +1662,7 @@ static int afs_create(struct mnt_idmap *idmap, struct inode *dir,
+>         op->dentry      = dentry;
+>         op->create.mode = S_IFREG | mode;
+>         op->create.reason = afs_edit_dir_for_create;
+> +       op->mtime       = current_time(dir);
+>         op->ops         = &afs_create_operation;
+>         return afs_do_sync_operation(op);
+>
+> @@ -1796,6 +1798,7 @@ static int afs_symlink(struct mnt_idmap *idmap, struct inode *dir,
+>         op->ops                 = &afs_symlink_operation;
+>         op->create.reason       = afs_edit_dir_for_symlink;
+>         op->create.symlink      = content;
+> +       op->mtime               = current_time(dir);
+>         return afs_do_sync_operation(op);
+>
+>  error:
 
-The register and range mappings for the PCIe controller in Rockchip's
-RK356x SoCs are incorrect. Replace them with corrected values from the
-vendor BSP sources, updated to match current DT schema.
+The fix looks good, but as we discussed privately, the issue that this
+fixes predates commit 52af7105eceb.  That commit only touched the yfs
+client code and made it rely on the op mtime rather than letting the
+server set the time. This made it inherit the issue that was already
+present for the non yfs client code.
 
-These values are also used in u-boot.
-
-Fixes: 66b51ea7d70f ("arm64: dts: rockchip: Add rk3568 PCIe2x1 controller")
-Cc: stable@vger.kernel.org
-Signed-off-by: Andrew Powers-Holmes <aholmes@omnom.net>
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
-
-Since nobody else was gonna submit this fix on a fix, I decided
-to do it myself, based on the u-boot patch Jonas Karlman wrote.
-
-Please test that this does not break the PCIe 3 controller on
-RK3568 hardware, I don't have the right setup to easily test it
-on there.
-
-Changes since v1:
- - Fix copy-paste error on second reg property from 0xf2000000
-   to 0xf0000000
-
- arch/arm64/boot/dts/rockchip/rk3568.dtsi | 14 ++++++++------
- arch/arm64/boot/dts/rockchip/rk356x.dtsi |  7 ++++---
- 2 files changed, 12 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-index ba67b58f05b7..f1be76a54ceb 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-@@ -94,9 +94,10 @@ pcie3x1: pcie@fe270000 {
- 		power-domains = <&power RK3568_PD_PIPE>;
- 		reg = <0x3 0xc0400000 0x0 0x00400000>,
- 		      <0x0 0xfe270000 0x0 0x00010000>,
--		      <0x3 0x7f000000 0x0 0x01000000>;
--		ranges = <0x01000000 0x0 0x3ef00000 0x3 0x7ef00000 0x0 0x00100000>,
--			 <0x02000000 0x0 0x00000000 0x3 0x40000000 0x0 0x3ef00000>;
-+		      <0x0 0xf2000000 0x0 0x00100000>;
-+		ranges = <0x01000000 0x0 0xf2100000 0x0 0xf2100000 0x0 0x00100000>,
-+			 <0x02000000 0x0 0xf2200000 0x0 0xf2200000 0x0 0x01e00000>,
-+			 <0x03000000 0x0 0x40000000 0x3 0x40000000 0x0 0x40000000>;
- 		reg-names = "dbi", "apb", "config";
- 		resets = <&cru SRST_PCIE30X1_POWERUP>;
- 		reset-names = "pipe";
-@@ -146,9 +147,10 @@ pcie3x2: pcie@fe280000 {
- 		power-domains = <&power RK3568_PD_PIPE>;
- 		reg = <0x3 0xc0800000 0x0 0x00400000>,
- 		      <0x0 0xfe280000 0x0 0x00010000>,
--		      <0x3 0xbf000000 0x0 0x01000000>;
--		ranges = <0x01000000 0x0 0x3ef00000 0x3 0xbef00000 0x0 0x00100000>,
--			 <0x02000000 0x0 0x00000000 0x3 0x80000000 0x0 0x3ef00000>;
-+		      <0x0 0xf0000000 0x0 0x00100000>;
-+		ranges = <0x01000000 0x0 0xf0100000 0x0 0xf0100000 0x0 0x00100000>,
-+			 <0x02000000 0x0 0xf0200000 0x0 0xf0200000 0x0 0x01e00000>,
-+			 <0x03000000 0x0 0x40000000 0x3 0x80000000 0x0 0x40000000>;
- 		reg-names = "dbi", "apb", "config";
- 		resets = <&cru SRST_PCIE30X2_POWERUP>;
- 		reset-names = "pipe";
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index f62e0fd881a9..61680c7ac489 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -952,7 +952,7 @@ pcie2x1: pcie@fe260000 {
- 		compatible = "rockchip,rk3568-pcie";
- 		reg = <0x3 0xc0000000 0x0 0x00400000>,
- 		      <0x0 0xfe260000 0x0 0x00010000>,
--		      <0x3 0x3f000000 0x0 0x01000000>;
-+		      <0x0 0xf4000000 0x0 0x00100000>;
- 		reg-names = "dbi", "apb", "config";
- 		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
- 			     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
-@@ -982,8 +982,9 @@ pcie2x1: pcie@fe260000 {
- 		phys = <&combphy2 PHY_TYPE_PCIE>;
- 		phy-names = "pcie-phy";
- 		power-domains = <&power RK3568_PD_PIPE>;
--		ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
--			  0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
-+		ranges = <0x01000000 0x0 0xf4100000 0x0 0xf4100000 0x0 0x00100000>,
-+			 <0x02000000 0x0 0xf4200000 0x0 0xf4200000 0x0 0x01e00000>,
-+			 <0x03000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
- 		resets = <&cru SRST_PCIE20_POWERUP>;
- 		reset-names = "pipe";
- 		#address-cells = <3>;
--- 
-2.40.1
-
+Marc
