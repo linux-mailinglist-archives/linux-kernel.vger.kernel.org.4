@@ -2,83 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFCF719ABA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9EA719ABB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjFALLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S232709AbjFALL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbjFALLt (ORCPT
+        with ESMTP id S232380AbjFALLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:11:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208912C;
+        Thu, 1 Jun 2023 07:11:50 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0693107;
         Thu,  1 Jun 2023 04:11:48 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351ALkBw007387;
-        Thu, 1 Jun 2023 11:11:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=TpzYBEAOx+InJ//ZQQdUH9uFx1dfSk078zNEE1i9QLE=;
- b=GVoatkA9x3+XsSYXoBKjj0Qi4aA49ZJWcXfs0/Y8JIG/JTaUvHZNW73Mr2yhozDu68q0
- Ocfr2lBNfrGiQl1ruV4H9cX3N/yHDv0EIX2htlpoQcxnTSLDpydJ+/sxnWJ1v8e4qH47
- NxL0gt36lK0kX1yDGSiOTTR4aKobl37HNtYea8Uq+1xc79nUSDZ7lt8pGxjeK9+tvLuh
- EWhDO4cspSMG0wtWwM8T6Jz4jBmIbnX1He2gVe/IG48XZgy3VL7qNAeAjNjpbOjj4QRb
- pi/QCpeoF6uGRI8Pg/Dz4oswFTKaAgLr9bep/8FbPXg0w/lMEm6x+l9PIac8JZ+0z9b1 lQ== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxs9gr49e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 11:11:39 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 351BBXkN010992;
-        Thu, 1 Jun 2023 11:11:36 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3quaxm8j2k-1;
-        Thu, 01 Jun 2023 11:11:36 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351BBZdk011015;
-        Thu, 1 Jun 2023 11:11:35 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-kbajaj-hyd.qualcomm.com [10.147.247.189])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 351BBZOj011013;
-        Thu, 01 Jun 2023 11:11:35 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2340697)
-        id 17A83529754; Thu,  1 Jun 2023 16:41:35 +0530 (+0530)
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Komal Bajaj <quic_kbajaj@quicinc.com>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 3/3] arm64: dts: qcom: qdu1000-idp: add SDHCI for emmc
-Date:   Thu,  1 Jun 2023 16:41:28 +0530
-Message-Id: <20230601111128.19562-4-quic_kbajaj@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230601111128.19562-1-quic_kbajaj@quicinc.com>
-References: <20230601111128.19562-1-quic_kbajaj@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5eyfrhMrhOBKLvHbAI1GSBlL9t3Isfju
-X-Proofpoint-GUID: 5eyfrhMrhOBKLvHbAI1GSBlL9t3Isfju
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_07,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0
- phishscore=0 lowpriorityscore=0 mlxlogscore=824 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010098
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 3E08380F1;
+        Thu,  1 Jun 2023 11:11:48 +0000 (UTC)
+Date:   Thu, 1 Jun 2023 14:11:47 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <20230601111147.GA14287@atomide.com>
+References: <20230525113034.46880-1-tony@atomide.com>
+ <CGME20230601110030eucas1p2eed547c326a51a6110100fb50799d136@eucas1p2.samsung.com>
+ <88d9edfe-2f39-b15f-f513-463eac6bf473@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <88d9edfe-2f39-b15f-f513-463eac6bf473@samsung.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,48 +53,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sdhci node for emmc in qdu1000-idp.
+Hi,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+* Marek Szyprowski <m.szyprowski@samsung.com> [230601 11:00]:
+> Hi Tony,
+> 
+> On 25.05.2023 13:30, Tony Lindgren wrote:
+> > We want to enable runtime PM for serial port device drivers in a generic
+> > way. To do this, we want to have the serial core layer manage the
+> > registered physical serial controller devices.
+> >
+> > To manage serial controllers, let's set up a struct bus and struct device
+> > for the serial core controller as suggested by Greg and Jiri. The serial
+> > core controller devices are children of the physical serial port device.
+> > The serial core controller device is needed to support multiple different
+> > kind of ports connected to single physical serial port device.
+> >
+> > Let's also set up a struct device for the serial core port. The serial
+> > core port instances are children of the serial core controller device.
+> >
+> > With the serial core port device we can now flush pending TX on the
+> > runtime PM resume as suggested by Johan.
+> >
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Suggested-by: Jiri Slaby <jirislaby@kernel.org>
+> > Suggested-by: Johan Hovold <johan@kernel.org>
+> > Signed-off-by: Tony Lindgren <tony@atomide.com>
+> 
+> This patch landed in today's linux next-20230601 as commit 84a9582fd203 
+> ("serial: core: Start managing serial controllers to enable runtime 
+> PM"). Unfortunately it breaks booting some of my test boards. This can 
+> be easily reproduced with QEMU and ARM64 virt machine. The last message 
+> I see in the log is:
+> 
+> [    3.084743] Run /sbin/init as init process
 
-diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-index 9e9fd4b8023e..1d22f87fd238 100644
---- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-@@ -448,6 +448,29 @@
- 	status = "okay";
- };
+OK thanks for the report. I wonder if this issue is specific to ttyAM
+serial port devices somehow?
 
-+&sdhc {
-+	pinctrl-0 = <&sdc_on_state>;
-+	pinctrl-1 = <&sdc_off_state>;
-+	pinctrl-names = "default", "sleep";
-+
-+	cap-mmc-hw-reset;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	mmc-hs400-1_8v;
-+	mmc-hs400-enhanced-strobe;
-+
-+	non-removable;
-+	no-sd;
-+	no-sdio;
-+
-+	supports-cqe;
-+
-+	vmmc-supply = <&vreg_l10a_2p95>;
-+	vqmmc-supply = <&vreg_l7a_1p8>;
-+
-+	status = "okay";
-+};
-+
- &uart7 {
- 	status = "okay";
- };
---
-2.17.1
+> I've tried a hack posted here by Steven Price, but unfortunately it 
+> doesn't fix my issue. Reverting $subject on top of next-20230601 fixes 
+> the boot.
 
+OK
+
+> Here is my qemu test command (nothing really special...):
+> 
+> qemu-system-aarch64 -kernel Image -append "console=ttyAMA0 
+> no_console_suspend root=/dev/vda rootwait ip=::::target::off" -M virt 
+> -cpu cortex-a57 -smp 2 -m 1024 -device 
+> virtio-blk-device,drive=virtio-blk0 -device 
+> virtio-blk-device,drive=virtio-blk1 -drive 
+> file=qemu-virt-rootfs.raw,id=virtio-blk1,if=none,format=raw -drive 
+> file=initrd,id=virtio-blk0,if=none,format=raw -netdev user,id=user 
+> -device virtio-net-device,netdev=user -display none
+
+OK thanks I'll try to reproduce it.
+
+Regards,
+
+Tony
