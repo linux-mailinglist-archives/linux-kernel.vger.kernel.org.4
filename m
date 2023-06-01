@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F70719B96
+	by mail.lfdr.de (Postfix) with ESMTP id D056D719B97
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbjFAMLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S233422AbjFAMLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbjFAMKp (ORCPT
+        with ESMTP id S233364AbjFAMKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:10:45 -0400
+        Thu, 1 Jun 2023 08:10:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64FF197;
-        Thu,  1 Jun 2023 05:10:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE301B8;
+        Thu,  1 Jun 2023 05:10:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E8A9643ED;
-        Thu,  1 Jun 2023 12:10:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7128C4339C;
-        Thu,  1 Jun 2023 12:10:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 125AF643FB;
+        Thu,  1 Jun 2023 12:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCA2C433A4;
+        Thu,  1 Jun 2023 12:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685621431;
-        bh=AZOSF7tPW49wr8oQ2E4HJeege/cPwYFZ1zz3AnaRfDY=;
+        s=k20201202; t=1685621434;
+        bh=eRGe47kX3cGM5w4r8Dems50P7VdGPg3OOcR4aC02b70=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ycj27leB07TjGM8InrVlCfTP55GIaTEEQCCqpplZ9wFi+5TpOkJp11ZdLVyxCRsQo
-         2AzTbHoMHU4YukYqoQInAYk23Ii5jE613W5EsfzrrrnqqUxUSF1hUb61LiSoxi0SSg
-         0Di4jQW/p33oiQzdwJHd04iNqZ6pr4EWi+MGYE9WHrATJMzvP964qXqyL0Iw/8Xzux
-         +KnzIgwRghfnQGKOVpXY29177mcq3tJ8ptW6p3lqDhMdJisEcRWl2sRw5bZJrFECi8
-         XqJHSYq1j9TuryuWKAzQYU4CWy5Z+mqQR4LP/zjkfCCWY551eBjG9lMC2Batq6cthK
-         etcxud9XI2WAg==
+        b=q8NKzkee9vISUaZPJodekn7NPcjTrI7T4bZTLzyDUPhJPCb/VPXyphc66ouv2Ccqv
+         x9KwiLJsSMx0NJa1lQynQ7F5ckRdFc45kCK/rzI/I+uPAsZd5gLLgQ5LS61xSOJX5i
+         2KMSa3pPcU8TjwFyxQul8yT4Bw/bFQHpSTxPXCCpo86tFbTi4d0blMBWVRAfimemUY
+         nXNHvmbcUuktNWNcjr1nvh1Ny9lYyI+eC03OxqMdkMJeJQfP9JMtWNs4bOY19xXJ/t
+         L8IiodTAQOPzflB4mGhCKNEKBhdvpgN4Cywsl0flQMC6sYvGrCtnKJmIWEVoOw2noA
+         RVFF8L9HCvfVw==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         Russell King <linux@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
+        "David A. Long" <dave.long@linaro.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH 5/7] modpost: detect section mismatch for R_ARM_THM_{MOVW_ABS_NC,MOVT_ABS}
-Date:   Thu,  1 Jun 2023 21:09:59 +0900
-Message-Id: <20230601121001.1071533-6-masahiroy@kernel.org>
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Rusty Russell <rusty@rustcorp.com.au>
+Subject: [PATCH 6/7] modpost: fix section_mismatch message for R_ARM_THM_{CALL,JUMP24,JUMP19}
+Date:   Thu,  1 Jun 2023 21:10:00 +0900
+Message-Id: <20230601121001.1071533-7-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230601121001.1071533-1-masahiroy@kernel.org>
 References: <20230601121001.1071533-1-masahiroy@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -59,115 +63,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_THUMB2_KERNEL is enabled, modpost fails to detect some
-types of section mismatches.
+addend_arm_rel() processes R_ARM_THM_CALL, R_ARM_THM_JUMP24,
+R_ARM_THM_JUMP19 in a wrong way.
 
-  [test code]
+Here, test code.
 
-    #include <linux/init.h>
+[test code for R_ARM_THM_JUMP24]
 
-    int __initdata foo;
-    int get_foo(void) { return foo; }
+  .section .init.text,"ax"
+  bar:
+          bx      lr
 
-It is apparently a bad reference, but modpost does not report anything.
+  .section .text,"ax"
+  .globl foo
+  foo:
+          b       bar
 
-The test code above produces the following relocations.
+[test code for R_ARM_THM_CALL]
 
-  Relocation section '.rel.text' at offset 0x1e8 contains 2 entries:
-   Offset     Info    Type            Sym.Value  Sym. Name
-  00000000  0000052f R_ARM_THM_MOVW_AB 00000000   .LANCHOR0
-  00000004  00000530 R_ARM_THM_MOVT_AB 00000000   .LANCHOR0
+  .section .init.text,"ax"
+  bar:
+          bx      lr
 
-Currently, R_ARM_THM_MOVW_ABS_NC and R_ARM_THM_MOVT_ABS are just skipped.
+  .section .text,"ax"
+  .globl foo
+  foo:
+          push    {lr}
+          bl      bar
+          pop     {pc}
 
-Add code to handle them. I checked arch/arm/kernel/module.c to learn
-how the offset is encoded in the instruction.
+If you compile it with CONFIG_THUMB2_KERNEL=y, modpost will show the
+symbol name, (unknown).
 
-One more thing to note for Thumb instructions - the st_value is an odd
-value, so you need to mask the bit 0 to get the offset. Otherwise, you
-will get an off-by-one error in the nearest symbol look-up.
+  WARNING: modpost: vmlinux.o: section mismatch in reference: foo (section: .text) -> (unknown) (section: .init.text)
 
-It is documented in "ELF for the ARM Architecture" [1]:
+(You need to use GNU linker instead of LLD to reproduce it.)
 
-  * If the symbol addresses a Thumb instruction, its value is the address
-    of the instruction with bit zero set (in a relocatable object, the
-    section offset with bit zero set).
+Fix the code to make modpost show the correct symbol name. I checked
+arch/arm/kernel/module.c to learn the encoding of R_ARM_THM_CALL and
+R_ARM_THM_JUMP24. The module does not support R_ARM_THM_JUMP19, but
+I checked its encoding in ARM ARM.
 
-  * For the purposes of relocation the value used shall be the address
-    of the instruction (st_value & ~1).
+The '+4' is the compensation for pc-relative instruction. It is
+documented in "ELF for the Arm Architecture" [1].
+
+  "If the relocation is pc-relative then compensation for the PC bias
+  (the PC value is 8 bytes ahead of the executing instruction in Arm
+  state and 4 bytes in Thumb state) must be encoded in the relocation
+  by the object producer."
 
 [1]: https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst
 
+Fixes: c9698e5cd6ad ("ARM: 7964/1: Detect section mismatches in thumb relocations")
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 31 ++++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ scripts/mod/modpost.c | 53 ++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 47 insertions(+), 6 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 32d56efe3f3b..528aa9175e84 100644
+index 528aa9175e84..55d142bb000b 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -1082,7 +1082,8 @@ static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
- {
- 	Elf_Sym *sym;
- 	Elf_Sym *near = NULL;
--	Elf_Addr distance;
-+	Elf_Addr sym_addr, distance;
-+	bool is_arm = (elf->hdr->e_machine == EM_ARM);
- 
- 	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
- 		if (get_secindex(elf, sym) != secndx)
-@@ -1090,10 +1091,19 @@ static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
- 		if (!is_valid_name(elf, sym))
- 			continue;
- 
--		if (addr >= sym->st_value)
--			distance = addr - sym->st_value;
-+		sym_addr = sym->st_value;
-+
-+		/*
-+		 * For ARM Thumb instruction, the bit 0 of st_value is set.
-+		 * Mask it to get the address.
-+		 */
-+		if (is_arm)
-+			 sym_addr &= ~1;
-+
-+		if (addr >= sym_addr)
-+			distance = addr - sym_addr;
- 		else if (allow_negative)
--			distance = sym->st_value - addr;
-+			distance = sym_addr - addr;
- 		else
- 			continue;
- 
-@@ -1266,7 +1276,7 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
+@@ -1276,7 +1276,7 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
  	unsigned int r_typ = ELF_R_TYPE(r->r_info);
  	Elf_Sym *sym = elf->symtab_start + ELF_R_SYM(r->r_info);
  	void *loc = reloc_location(elf, sechdr, r);
--	uint32_t inst;
-+	uint32_t inst, upper, lower;
+-	uint32_t inst, upper, lower;
++	uint32_t inst, upper, lower, sign, j1, j2;
  	int32_t offset;
  
  	switch (r_typ) {
-@@ -1288,6 +1298,17 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
- 		offset = sign_extend32((inst & 0x00ffffff) << 2, 25);
- 		r->r_addend = offset + sym->st_value + 8;
+@@ -1309,13 +1309,54 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
+ 				       15);
+ 		r->r_addend = offset + sym->st_value;
  		break;
-+	case R_ARM_THM_MOVW_ABS_NC:
-+	case R_ARM_THM_MOVT_ABS:
++	case R_ARM_THM_JUMP19:
++		/*
++		 * Encoding T3:
++		 * S     = upper[10]
++		 * imm6  = upper[5:0]
++		 * J1    = lower[13]
++		 * J2    = lower[11]
++		 * imm11 = lower[10:0]
++		 * imm32 = SignExtend(S:J2:J1:imm6:imm11:'0')
++		 */
 +		upper = TO_NATIVE(*(uint16_t *)loc);
 +		lower = TO_NATIVE(*((uint16_t *)loc + 1));
-+		offset = sign_extend32(((upper & 0x000f) << 12) |
-+				       ((upper & 0x0400) << 1) |
-+				       ((lower & 0x7000) >> 4) |
-+				       (lower & 0x00ff),
-+				       15);
-+		r->r_addend = offset + sym->st_value;
++
++		sign = (upper >> 10) & 1;
++		j1 = (lower >> 13) & 1;
++		j2 = (lower >> 11) & 1;
++		offset = sign_extend32((sign << 20) | (j2 << 19) | (j1 << 18) |
++				       ((upper & 0x03f) << 12) |
++				       ((lower & 0x07ff) << 1),
++				       20);
++		r->r_addend = offset + sym->st_value + 4;
 +		break;
  	case R_ARM_THM_CALL:
  	case R_ARM_THM_JUMP24:
- 	case R_ARM_THM_JUMP19:
+-	case R_ARM_THM_JUMP19:
+-		/* From ARM ABI: ((S + A) | T) - P */
+-		r->r_addend = (int)(long)(elf->hdr +
+-			      sechdr->sh_offset +
+-			      (r->r_offset - sechdr->sh_addr));
++		/*
++		 * Encoding T4:
++		 * S     = upper[10]
++		 * imm10 = upper[9:0]
++		 * J1    = lower[13]
++		 * J2    = lower[11]
++		 * imm11 = lower[10:0]
++		 * I1    = NOT(J1 XOR S)
++		 * I2    = NOT(J2 XOR S)
++		 * imm32 = SignExtend(S:I1:I2:imm10:imm11:'0')
++		 */
++		upper = TO_NATIVE(*(uint16_t *)loc);
++		lower = TO_NATIVE(*((uint16_t *)loc + 1));
++
++		sign = (upper >> 10) & 1;
++		j1 = (lower >> 13) & 1;
++		j2 = (lower >> 11) & 1;
++		offset = sign_extend32((sign << 24) |
++				       ((~(j1 ^ sign) & 1) << 23) |
++				       ((~(j2 ^ sign) & 1) << 22) |
++				       ((upper & 0x03ff) << 12) |
++				       ((lower & 0x07ff) << 1),
++				       24);
++		r->r_addend = offset + sym->st_value + 4;
+ 		break;
+ 	default:
+ 		return 1;
 -- 
 2.39.2
 
