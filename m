@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B83071962C
+	by mail.lfdr.de (Postfix) with ESMTP id 67AE271962D
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbjFAI7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S232412AbjFAI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjFAI7B (ORCPT
+        with ESMTP id S232390AbjFAI7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Jun 2023 04:59:01 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5BAE7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685609938; x=1717145938;
-  h=date:from:to:cc:subject:message-id;
-  bh=bI04po/eK1H1qpKN8XdWnVH3kCj9h3k0RBK7LNfcsUg=;
-  b=K/JcUTkz93pacaocwQbEHHLg14kNgrwz0SJ1exGgi9eBduQCxuDV+DFr
-   30qcP/uIwsIQwoQjeFXTghSSkQwOdkF5NhhJ722ZPMJfTgcvJ6gOvOwka
-   XQpvoyTltmlf7L59uHHjThncGZK2N9mq9Zgpd6fkTEJL2iZbWc2wiQ6pD
-   5WSSeXeUQt1Ne74D9SSiItNA14GUgBm/yW8Bxf6mxye9+6jxv68qY3zm0
-   75ZsIDvLVWJu2tqKOnqlmKLrG0954z5thkCxZ0twCm38LwrEXmJqzzRFg
-   jEQz2vD3vzDkaCSKja0kmvZEovQ0amfPsjwANC8vfIShn9MVJYZLCrInB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="441862774"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="441862774"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 01:58:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="831509379"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="831509379"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2023 01:58:56 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4e92-00027q-0n;
-        Thu, 01 Jun 2023 08:58:56 +0000
-Date:   Thu, 01 Jun 2023 16:58:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/alternatives] BUILD SUCCESS
- 3496d1c64a0fcc9bae3ed40decc3ecd7f8ac072f
-Message-ID: <20230601085805.G_oh-%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302B5119;
+        Thu,  1 Jun 2023 01:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xmMkHzGdzpjqRjrvVYimkISzPUzm7dBn70bajFZ+I2c=; b=MlgHun9WGr1HjxDFXuy4L7QI+e
+        DSpMW4DJ5ONl0ltimC6YRZhTCmq+E9L39CHUv/7tKL1wLVgMN1P4DdovDHQvx1ycs8LQWdNurgZZG
+        E6qbRtfiRZyqXX8Ym7fMuFjRMXfNezuhHj2TFJ6lppKTgjpuPY4ECRnmnLHZ/mNa0NL15aILni1yC
+        Qy2vtwA5YtJmlUSjiJRbl/6CURleiUPT5W7wWvNLJepgVwaakz+1vPNwLz8PCQO2+QitObCnSsMRm
+        IqDRof7njSYC1+YwAQggUmtqF1TD0SlnzcDAa+oqEw4E+QqfsbM/WEyoOOU+RjoADuqDL7+WzO39O
+        TtiCMUvg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4e8f-00H7SI-0r;
+        Thu, 01 Jun 2023 08:58:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 06E0430031F;
+        Thu,  1 Jun 2023 10:58:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D8F1021484ABE; Thu,  1 Jun 2023 10:58:31 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 10:58:31 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Steven Noonan <steven@uplinklabs.net>, kernel@collabora.com
+Subject: Re: Direct rdtsc call side-effect
+Message-ID: <20230601085831.GH38236@hirez.programming.kicks-ass.net>
+References: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com>
+ <20230601085602.GR4253@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601085602.GR4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/alternatives
-branch HEAD: 3496d1c64a0fcc9bae3ed40decc3ecd7f8ac072f  x86/nospec: Shorten RESET_CALL_DEPTH
+On Thu, Jun 01, 2023 at 10:56:03AM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 01, 2023 at 01:45:35PM +0500, Muhammad Usama Anjum wrote:
+> > Hi,
+> > 
+> > I've been looking into a problem where Windows applications misbehave
+> > across suspend/resume when run on Wine on x86. These applications see time
+> > going backwards. The timestamp counter (TSC) is reset when system resumes.
+> > In case of Windows on Intel and AMD, the timestamp is saved and restored
+> > when the system resumes from suspend.
+> > 
+> > These applications read timestamp by rdtsc directly. These calls cannot be
+> > intercepted by Wine. The application should be fixed such that it handles
+> > these scenarios correctly. But there are hundreds of applications which
+> > cannot be fixed. So some support is required in Wine or kernel. There isn't
+> > anything which Wine can do as rdtsc call directly reads the timestamp. The
+> > only option is that we support something in kernel.
+> > 
+> > As more and more things are being added to Wine, Windows application can be
+> > run pretty easily on Linux. But this rdtsc is a big hurdle. What are your
+> > thoughts on solving this problem?
+> > 
+> > We are thinking of saving and restoring the timestamp counter at suspend
+> > and resume time respectively. In theory it can work on Intel because of
+> > TSC_ADJUST register. But it'll never work on AMD until:
+> > * AMD supports the same kind of adjust register. (AMD has said that the
+> > adjust register cannot be implemented in their firmware. They'll have to
+> > add it to their hardware.)
+> > * by manual synchronization in kernel (I know you don't like this idea. But
+> > there is something Windows is doing to save/restore and sync the TSC)
+> 
+> Wine could set TIF_NOTSC, which will cause it to run with CR4.TSD
+> cleared and cause RDTSC to #GP, at which point you can emulate it.
 
-Unverified Warning (likely false positive, please contact us if interested):
-
-arch/x86/kernel/alternative.c:1471:32: warning: no previous prototype for '__alt_reloc_selftest' [-Wmissing-prototypes]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-allyesconfig
-|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-|-- i386-debian-10.3
-|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-|-- i386-defconfig
-|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-|-- x86_64-allyesconfig
-|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-|-- x86_64-defconfig
-|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-|-- x86_64-kexec
-|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-`-- x86_64-rhel-8.3
-    `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
-
-elapsed time: 1252m
-
-configs tested: 40
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The other option is to have Wine run itself in a (KVM) virtual machine
+and mess with the VMM TSC offset :-)
