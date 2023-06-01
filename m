@@ -2,176 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31787719E45
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0353A719E52
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbjFANcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S233408AbjFANdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbjFANbz (ORCPT
+        with ESMTP id S233969AbjFANcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:31:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585691AB;
-        Thu,  1 Jun 2023 06:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685626291; x=1717162291;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=syPCDtC4AVBwm40gkOz80zQYze0KsxOe1ppN+hbBeP4=;
-  b=Oyyeq7aNDDoPzUTZo30uChrxrt7CQFFRhGFDxnnTxGg3x5Xdf2KJbTn9
-   3wuKy9VxThMltk9eHFl4SXeaFvU7QcY1kUXGUxIn3DRFTOBeEHHu6sNqm
-   HnjlCYoCE19OQBVW4KuPkL5oraNwXhVc72HiWvm/lm/dYrnCNBziUoLwf
-   kc0Fx0XiaEwpdnhvbDdTmtHqjmdNLW8CK2C0kJ62qZFDcrnFkBRohSDM9
-   1gF25AUrxQIudxRUsc/tqHEPk/AxoliSi+SjlF59ob/lEfI7FRdZtifJK
-   IbhEzP5CyQYGDS70nvp6q9vitsvgWxZWRINGO949zRpnbJNgf5T2F2vi9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383828421"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="383828421"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 06:30:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="819782671"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="819782671"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2023 06:30:32 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 06:30:32 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 1 Jun 2023 06:30:32 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 1 Jun 2023 06:30:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MZdFg4X/vH16pYRFXugIbidUyOyMFMTLIy+TQXjJrzzJojApXq6zTV9PKM8vrFSQpB+O9jzPCncYTrUEDVJhEkvsXi0jBFERh9qlRmEfTfNu7Tg1fpOLtDCLmppISVPuI7pZGQkwwhPhv8NSyVS4rQGOY9ByDDX8DCWQLwLhkeXFKQvguR4Pevr2TrmZeIe7sFYgoBJvodNbLu0w249PqfSoNMAA5AEGis2FvHyli3qsf02fJ3RmwbsdHCPpSwr2S/Tm3yTGR5sglfeUECJTKS/d/4XGwKrpdLV7xrR+b7wZIXyqFNFpaSHE20+4/jRIu8dysQT0K1PieKDYe7pX6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=syPCDtC4AVBwm40gkOz80zQYze0KsxOe1ppN+hbBeP4=;
- b=RFuLYU3t7bNssHtyyG35Z9BIcJYqnXwxmnnI+LfDi5KyjRFnrdZDp+qwqyXzA/4D+9KNzcbFbz0UcYZpOXRzHWmQXV5lM+ttSZm570I4BAOxvlFLd32S7VHUg08RCviVZqpgRnZi9fqRKWmRqlnPW4xAScI7vMyB9MJKsLI9NQYMblxYwWnAwnMe9slE4V26FR4JNK+URKRmpd4YpD2MMCM4mciYcTeBft78B6GpnsByeiv9xW9iUt6fd+iB/uwlzpAJnK4yarmmMYH6SRSm1GOaCxPhGcZs5/bU692aFG0cZH7fYcJWsxRLXZlqR489mAwQNMXYpXycw541ViD8cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
- PH7PR11MB8477.namprd11.prod.outlook.com (2603:10b6:510:30d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
- 2023 13:30:29 +0000
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::14c:205:c858:1ef6]) by DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::14c:205:c858:1ef6%7]) with mapi id 15.20.6411.021; Thu, 1 Jun 2023
- 13:30:29 +0000
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>
-CC:     "dmatlack@google.com" <dmatlack@google.com>,
-        "mizhang@google.com" <mizhang@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Thread-Topic: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Thread-Index: AQHZUPwYxSWFJqdvM0K0D4p/iJpYU67xiL+AgISXfTA=
-Date:   Thu, 1 Jun 2023 13:30:29 +0000
-Message-ID: <DS0PR11MB6373F567D22270CA3CE86696DC499@DS0PR11MB6373.namprd11.prod.outlook.com>
-References: <20230307135233.54684-1-wei.w.wang@intel.com>
- <ZAkZjzQ8pJQXQhJR@google.com>
-In-Reply-To: <ZAkZjzQ8pJQXQhJR@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|PH7PR11MB8477:EE_
-x-ms-office365-filtering-correlation-id: 964e9e11-5381-48a0-a8d9-08db62a45dc7
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vh8D/eZncoTUkQJE+XFUGUFzSTlbTHuuC7Bu7U99qnagzEQcWpaTqU1i8/xmX8QEilI+PfaYsjGO2RiZY3/+f+XoOku2TQGQI/50joSMUg0+xf5jlChhqGfP0YdX5dHUCCC6yj1Smw88umGSz0Kp5Km8G4O+2wGRlGvGq6CBEM4HZpIDTap4DXGNxZhHJZXOuh1wTOvmrB2IEkhDUt2iflrgPDopDr9lbaeshq9mc9hsHtxHt7Ogg6yV0DTd87jGf5cdqOK1NHVejsmG7UKDjXdT9+VCnSKmHulTbbSHQrrs2XE6bqrdlQnUqLqQneKXk4mlWOu8fUcqg0ji6sGoR33jAKnOlVpI193RrWS3Z7+leTaQqPAKRPm8j4lziV3BKumfv8CUqS7MAOl0JpScpIvLIv65k1qIosBtFHbmfcC+U6IE3ST3KZWye3ZZ1wWfb2wMpKFTjvJ8aL5aRjdEFyLwye0phyKQ+l0yhzQZIrqEReC5UlglT97TusTtRRSbwzDcbc314YYr2R45qUKUnatiD1xBC/SdrQw6g9EQTpKCYZ77DW+UGedVcPEhUnRdI9qqp0PAzs844cmbO2kTdXZktcPeehr3m/ggA3MPn+jdkznsuXdTNv3kwTXA2l+c
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(366004)(39860400002)(376002)(136003)(451199021)(82960400001)(33656002)(478600001)(122000001)(54906003)(66556008)(7696005)(71200400001)(76116006)(66446008)(66476007)(66946007)(64756008)(41300700001)(38100700002)(26005)(8676002)(52536014)(8936002)(86362001)(5660300002)(55016003)(2906002)(4744005)(53546011)(83380400001)(186003)(6506007)(9686003)(4326008)(38070700005)(6916009)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?23mOP5CtrDs/lUERyvAA/4lTV4AuhCuKXxYmZYRg0KcHYfqQu8BT5JL8zj3k?=
- =?us-ascii?Q?OgxGaXBIJ5CUNjNrwl0UpFgl/Ra9apA8fOIcMxcT9kkkyFqBaQCaC5aKFxfn?=
- =?us-ascii?Q?CPp80/jwCOdhmKJlLUmrtCn7niY7EY4K4uQU/3Pp6mPIR4QT83cbEjs3iVXf?=
- =?us-ascii?Q?EAKwkPm7cIoPerGl/wuczfcji1ZFOVY8bX7zjlZzUzLdpxV55wRLcinH7ZVi?=
- =?us-ascii?Q?CCimnumIw6OXLgYVWZi+FH0TClRNWrWSAoMJi/uIuliH1rBtSCUed2mOXG8t?=
- =?us-ascii?Q?wMfRFRhP2KIAD+dBM8J+UuaMDfwLM5E7mHrcLNrBEQuiKMqOapjYxa1f7ilV?=
- =?us-ascii?Q?XV31etnEMri9HtBIXs8o+FQTtD5LQwSbydf2ouT4FsvBts0Lsn1HEeYZFLBF?=
- =?us-ascii?Q?GrT3ZkngfsyLrwstzm2P61c6yGF3fsjxNveq50Ylkk541OY2VM2F+UjuXMG5?=
- =?us-ascii?Q?xiBm4GCWHrExW/jKBs20jdITW0+mDC51GYTInIo1JxAT9Aq4lF0q6yePoH05?=
- =?us-ascii?Q?UU66pY3FSK0iZjA76DyZNIgLWhO7y2bwyAcoPU9gF/d2Xl4henY3gzglrmhF?=
- =?us-ascii?Q?zUTOQp36HgoAqzPZ9EbU/9jHT8iPsCRX4KAEMqh2iYP6Sh2kRBlPOdjdtT9c?=
- =?us-ascii?Q?o45mkyDZL/nuBIH3ccbWCmPNzwPg4DZrzm6av3iotQHlNdBsf6sgccbqixZS?=
- =?us-ascii?Q?5EZ7bjm6zFPasYl8TGN0S8M7H8F/VLXmf3q24E4oWNfMfIFaCEYbuJY0B2nq?=
- =?us-ascii?Q?Gu4JgLFZ4tE9XpdAaOy1kZX0kQ2nxffEyD6GLq1cYbROf/qtQSoZa8sDy19o?=
- =?us-ascii?Q?byaOb0yav4sVSTXYiavBQ9/KHj6MmbaR4vKW9V21BQy4PZ2u2N/GcRYdyiPE?=
- =?us-ascii?Q?kKE7FaeuT2MhPW+h3WSDFNsHOGWbg+MkOuPC5ORXsRixPLdSAgrCnIlL+GyU?=
- =?us-ascii?Q?KBF0iJMimS2Mx/MTXxMJJ6UkmDDurbU1vV6/PgOCWiPra/y6ZBV3bZiq1QT1?=
- =?us-ascii?Q?LY3ur8DOVqOLuwrkDVx0GVcr67qT59JpiOGfyweW0P+MZ5Hniy8TsDIUN81V?=
- =?us-ascii?Q?peWqCzCEJHJWCD7GY5MU28B1H0iCF/NTTkaUZfk/OUX3GTpccUjsceL8Izvi?=
- =?us-ascii?Q?/QWs9iZstGDPq9nTC6VpRO7ECWOQpjmr1Mxy8gNeFjfZDzrGDX6NDzZKokYn?=
- =?us-ascii?Q?SyEBnKBbtt+Tn5ElfANnpevCJ+za4W0vPOGai0xMO8oLVGdAOjG6vfkUH/FW?=
- =?us-ascii?Q?On355w/M8GLRKMWSUz8Nr1Sklojbt0IE2Hq5HgzL3aAhoYIGUBjXZboSDeKe?=
- =?us-ascii?Q?eMzQE8aQMwzKPIRLNSkrJN+n6J3HmplObjp9hcnDV+Dhlc1CT9JTo5eaVGKN?=
- =?us-ascii?Q?NeXTOStuE6FevwY8E4lnkZJu61+jEHB699PU208zEw57GjX4iwx5rUuwDIqw?=
- =?us-ascii?Q?uHssKoxH79Utrs65jqSRtgV3BXeOgw3EMLRV0pQmXgX/ApnOOMNZ55zBOhK5?=
- =?us-ascii?Q?1kFc9RGjTRnofO8rVSFG01E4XucORiLYR3vqS1DyzRlG/lU7ww6E+QQOm+ZJ?=
- =?us-ascii?Q?ed+u7pRccSyNOSFHw/c/U+z29+4pAH5YR6mvrEF/?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 1 Jun 2023 09:32:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4283A1721
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685626247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nwT0bnt6yaC5RQaBH2mIMxuulB6SIiAIotbFGVGqSiY=;
+        b=V7+7dZPQpOfU5ZJYioCtAOesFp7lo73q/4c4/SH7R+JgsvEKkQ2Vi/GX+esZ8ePAcTaRXJ
+        5wkq/smKSoI016N2KjCI9zowaqqnNRyTt+nWrzu4GVYnFyAtUMU+lhOj6YfjaEpAJl3mrU
+        QYEy42F55BO2bXi7ouSp8JU3SAZguZQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-3U4-_H6VPIm1xJiPvtJ0Zw-1; Thu, 01 Jun 2023 09:30:43 -0400
+X-MC-Unique: 3U4-_H6VPIm1xJiPvtJ0Zw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99D751C0171E;
+        Thu,  1 Jun 2023 13:30:42 +0000 (UTC)
+Received: from [10.22.8.52] (unknown [10.22.8.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E7C42166B25;
+        Thu,  1 Jun 2023 13:30:41 +0000 (UTC)
+Message-ID: <9ec6f0ad-6236-4514-43ba-f202e948b905@redhat.com>
+Date:   Thu, 1 Jun 2023 09:30:40 -0400
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 964e9e11-5381-48a0-a8d9-08db62a45dc7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 13:30:29.0161
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pV6ZL+O0Ktc4rZRTX59OpytsXlVqjvBAYr//rN3ZHxLeIxF1HCJhgd0zB3TBVzqdzWLSMiXgHX+3O2uloobKHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8477
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 5/6] cgroup/cpuset: Documentation update for partition
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+References: <20230531163405.2200292-6-longman@redhat.com>
+ <c26c2a9e-13af-2b7c-d3dd-8455a10d84c6@infradead.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <c26c2a9e-13af-2b7c-d3dd-8455a10d84c6@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, March 9, 2023 7:26 AM, Sean Christopherson wrote:
-> On Tue, Mar 07, 2023, Wei Wang wrote:
-> > Current KVM_BUG and KVM_BUG_ON assume that 'cond' passed from
-> callers
-> > is 32-bit as it casts 'cond' to the type of int.
->=20
-> You're very generous, I would have led with "Fix a badly done
-> copy+paste ..." ;-)
->=20
-> > Fixes: 0b8f11737cff ("KVM: Add infrastructure and macro to mark VM as
-> > bugged")
-> > Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> > ---
->=20
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+On 5/31/23 19:11, Randy Dunlap wrote:
+> Hi,
+>
+> Just a few small nits below:
 
-Kind ping on this patch.
-Seems it wasn't noticed for months. Just check if it would be good to be
-merged or not proper for any reason?
+Thanks for catching that.
 
-Thanks,
-Wei
+Cheers,
+Longman
+
+>
+> On 5/31/23 09:34, Waiman Long wrote:
+>> This patch updates the cgroup-v2.rst file to include information about
+>> the new "cpuset.cpus.reserve" control file as well as the new remote
+>> partition.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   Documentation/admin-guide/cgroup-v2.rst | 92 +++++++++++++++++++++----
+>>   1 file changed, 79 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+>> index f67c0829350b..3e9351c2cd27 100644
+>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>> @@ -2215,6 +2215,38 @@ Cpuset Interface Files
+>>   
+>>   	Its value will be affected by memory nodes hotplug events.
+>>   
+>> +  cpuset.cpus.reserve
+>> +	A read-write multiple values file which exists only on root
+>> +	cgroup.
+>> +
+>> +	It lists all the CPUs that are reserved for adjacent and remote
+>> +	partitions created in the system.  See the next section for
+>> +	more information on what an adjacent or remote partitions is.
+>> +
+>> +	Creation of adjacent partition does not require touching this
+>> +	control file as CPU reservation will be done automatically.
+>> +	In order to create a remote partition, the CPUs needed by the
+>> +	remote partition has to be written to this file first.
+>> +
+>> +	Due to the fact that "cpuset.cpus.reserve" holds reserve CPUs
+>> +	that can be used by multiple partitions and automatic reservation
+>> +	may also race with manual reservation, an extension prefixes of
+>> +	"+" and "-" are allowed for this file to reduce race.
+>> +
+>> +	A "+" prefix can be used to indicate a list of additional
+>> +	CPUs that are to be added without disturbing the CPUs that are
+>> +	originally there.  For example, if its current value is "3-4",
+>> +	echoing ""+5" to it will change it to "3-5".
+> 	        "+5"
+>
+>> +
+>> +	Once a remote partition is destroyed, its CPUs have to be
+>> +	removed from this file or no other process can use them.  A "-"
+>> +	prefix can be used to remove a list of CPUs from it.  However,
+>> +	removing CPUs that are currently used in existing partitions
+>> +	may cause those partitions to become invalid.  A single "-"
+>> +	character without any number can be used to indicate removal
+>> +	of all the free CPUs not yet allocated to any partitions to
+>> +	avoid accidental partition invalidation.
+>> +
+>>     cpuset.cpus.partition
+>>   	A read-write single value file which exists on non-root
+>>   	cpuset-enabled cgroups.  This flag is owned by the parent cgroup
+>> @@ -2228,25 +2260,49 @@ Cpuset Interface Files
+>>   	  "isolated"	Partition root without load balancing
+>>   	  ==========	=====================================
+>>   
+>> -	The root cgroup is always a partition root and its state
+>> -	cannot be changed.  All other non-root cgroups start out as
+>> -	"member".
+>> +	A cpuset partition is a collection of cgroups with a partition
+>> +	root at the top of the hierarchy and its descendants except
+>> +	those that are separate partition roots themselves and their
+>> +	descendants.  A partition has exclusive access to the set of
+>> +	CPUs allocated to it.  Other cgroups outside of that partition
+>> +	cannot use any CPUs in that set.
+>> +
+>> +	There are two types of partitions - adjacent and remote.  The
+>> +	parent of an adjacent partition must be a valid partition root.
+>> +	Partition roots of adjacent partitions are all clustered around
+>> +	the root cgroup.  Creation of adjacent partition is done by
+>> +	writing the desired partition type into "cpuset.cpus.partition".
+>> +
+>> +	A remote partition does not require a partition root parent.
+>> +	So a remote partition can be formed far from the root cgroup.
+>> +	However, its creation is a 2-step process.  The CPUs needed
+>> +	by a remote partition ("cpuset.cpus" of the partition root)
+>> +	has to be written into "cpuset.cpus.reserve" of the root
+>> +	cgroup first.  After that, "isolated" can be written into
+>> +	"cpuset.cpus.partition" of the partition root to form a remote
+>> +	isolated partition which is the only supported remote partition
+>> +	type for now.
+>> +
+>> +	All remote partitions are terminal as adjacent partition cannot
+>> +	be created underneath it.  With the way remote partition is
+>> +	formed, it is not possible to create another valid remote
+>> +	partition underneath it.
+>> +
+>> +	The root cgroup is always a partition root and its state cannot
+>> +	be changed.  All other non-root cgroups start out as "member".
+>>   
+>>   	When set to "root", the current cgroup is the root of a new
+>> -	partition or scheduling domain that comprises itself and all
+>> -	its descendants except those that are separate partition roots
+>> -	themselves and their descendants.
+>> +	partition or scheduling domain.
+>>   
+>> -	When set to "isolated", the CPUs in that partition root will
+>> +	When set to "isolated", the CPUs in that partition will
+>>   	be in an isolated state without any load balancing from the
+>>   	scheduler.  Tasks placed in such a partition with multiple
+>>   	CPUs should be carefully distributed and bound to each of the
+>>   	individual CPUs for optimal performance.
+>>   
+>> -	The value shown in "cpuset.cpus.effective" of a partition root
+>> -	is the CPUs that the partition root can dedicate to a potential
+>> -	new child partition root. The new child subtracts available
+>> -	CPUs from its parent "cpuset.cpus.effective".
+>> +	The value shown in "cpuset.cpus.effective" of a partition root is
+>> +	the CPUs that are dedicated to that partition and not available
+>> +	to cgroups outside of that partittion.
+> 	                           partition.
+>
+>>   
+>>   	A partition root ("root" or "isolated") can be in one of the
+>>   	two possible states - valid or invalid.  An invalid partition
+>> @@ -2270,8 +2326,8 @@ Cpuset Interface Files
+>>   	In the case of an invalid partition root, a descriptive string on
+>>   	why the partition is invalid is included within parentheses.
+>>   
+>> -	For a partition root to become valid, the following conditions
+>> -	must be met.
+>> +	For an adjacent partition root to be valid, the following
+>> +	conditions must be met.
+>>   
+>>   	1) The "cpuset.cpus" is exclusive with its siblings , i.e. they
+>>   	   are not shared by any of its siblings (exclusivity rule).
+>> @@ -2281,6 +2337,16 @@ Cpuset Interface Files
+>>   	4) The "cpuset.cpus.effective" cannot be empty unless there is
+>>   	   no task associated with this partition.
+>>   
+>> +	For a remote partition root to be valid, the following conditions
+>> +	must be met.
+>> +
+>> +	1) The same exclusivity rule as adjacent partition root.
+>> +	2) The "cpuset.cpus" is not empty and all the CPUs must be
+>> +	   present in "cpuset.cpus.reserve" of the root cgroup and none
+>> +	   of them are allocated to another partition.
+>> +	3) The "cpuset.cpus" value must be present in all its ancestors
+>> +	   to ensure proper hierarchical cpu distribution.
+> 	                                 CPU
+>
+>> +
+>>   	External events like hotplug or changes to "cpuset.cpus" can
+>>   	cause a valid partition root to become invalid and vice versa.
+>>   	Note that a task cannot be moved to a cgroup with empty
+
