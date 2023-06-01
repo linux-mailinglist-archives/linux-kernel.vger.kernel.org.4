@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADDF719C7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E20E719C83
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbjFAMsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S233200AbjFAMtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjFAMsv (ORCPT
+        with ESMTP id S233192AbjFAMtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:48:51 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC03E7;
-        Thu,  1 Jun 2023 05:48:49 -0700 (PDT)
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 282DA1EC0478;
-        Thu,  1 Jun 2023 14:48:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1685623728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YmFiCbebQ6IXGcfBHVIHPePS7JhZlOwIY9i/4sf8dmg=;
-        b=V+jzs4R9Df7/I2Plut7u9DRpge6wgDMFzFR3iMwoolyeMNP+EwomwZy+5ZOiPGorThqbJ+
-        zGIY9KNBMBcqT447x/PtciLYFc8vbkD2vehfaY+K7ieI+jueySooXbsq1kDU3O9A+wFPgO
-        /ltT/MatCa58ljs9Rt4cX8o75p9QK0A=
-Date:   Thu, 1 Jun 2023 14:48:44 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
-        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
-Message-ID: <20230601124844.GBZHiTrDQk+F3lbzGO@fat_crate.local>
-References: <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
- <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
- <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
- <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
- <20230530152825.GAZHYWGXAp8PHgN/w0@fat_crate.local>
- <888f860d-4307-54eb-01da-11f9adf65559@suse.com>
- <20230531083508.GAZHcGvB68PUAH7f+a@fat_crate.local>
- <efe79c9e-1e31-adb9-8f93-962249bf01bb@suse.com>
- <20230531174857.GDZHeIib57h5lT5Vh1@fat_crate.local>
- <6700dc14-98fa-232d-5f8c-68a418849671@suse.com>
+        Thu, 1 Jun 2023 08:49:20 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AD2123
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:49:17 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3517gbC6006318;
+        Thu, 1 Jun 2023 07:49:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=Hx1i5w0nyq9m1kcDij6XJIcwI5RdLT1oMRmwl9V+aAY=;
+ b=BOE56TmRBFMI+h6wValPkdM4oEacJCxKpdOREBByZ+4f1ztrUCDpQnWsFtTMUQ50+I4p
+ 6T1K/km7UApK4Zud9SV8j/Hvz7tzhcfaEbV8ftyYfTsxBVGptNXdUgoKAQV6R3s6UdSj
+ k29Zd+I/mcVv1OrWU9YWgQjivsJstnrF+l0XIXqbNKvupP2NtabZLPOhWR/rjWQBB0J+
+ f2XLUE2gj4K8l4aYC0ZiwKC6+H29btrTpE6B/iqJGMtL+sY4YibXFcbd+qVn97brCx1A
+ JDbc9JoDQnx6wlDrHSnlwdY8Vd5saRc/8CQwXaFCO+KH3toALLZakadyaze2nam4Ghvl yw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mx9sd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 07:49:09 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 1 Jun
+ 2023 13:49:08 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 1 Jun 2023 13:49:08 +0100
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id EE916468;
+        Thu,  1 Jun 2023 12:49:07 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] ASoC: cs35l56: Remove NULL check from cs35l56_sdw_dai_set_stream()
+Date:   Thu, 1 Jun 2023 13:49:07 +0100
+Message-ID: <20230601124907.3128170-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6700dc14-98fa-232d-5f8c-68a418849671@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: NABGbYFSE8FDOgVXM9iuPK9CV-Gr3zMT
+X-Proofpoint-ORIG-GUID: NABGbYFSE8FDOgVXM9iuPK9CV-Gr3zMT
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 08:39:17AM +0200, Juergen Gross wrote:
-> Does this translate to: "we should remove that cleanup crap"? I'd be
-> positive to that. :-)
+The dma pointer must be set to the passed stream pointer, even
+if that pointer is NULL.
 
-Why, what's wrong with that thing?
+Fixes: e49611252900 ("ASoC: cs35l56: Add driver for Cirrus Logic CS35L56")
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ sound/soc/codecs/cs35l56.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
+diff --git a/sound/soc/codecs/cs35l56.c b/sound/soc/codecs/cs35l56.c
+index 3c07bd1e959e..c03f9d3c9a13 100644
+--- a/sound/soc/codecs/cs35l56.c
++++ b/sound/soc/codecs/cs35l56.c
+@@ -704,9 +704,6 @@ static int cs35l56_sdw_dai_hw_free(struct snd_pcm_substream *substream,
+ static int cs35l56_sdw_dai_set_stream(struct snd_soc_dai *dai,
+ 				      void *sdw_stream, int direction)
+ {
+-	if (!sdw_stream)
+-		return 0;
+-
+ 	snd_soc_dai_dma_data_set(dai, direction, sdw_stream);
+ 
+ 	return 0;
 -- 
-Regards/Gruss,
-    Boris.
+2.30.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
