@@ -2,177 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EC8719656
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB090719653
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjFAJEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S232573AbjFAJEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbjFAJEt (ORCPT
+        with ESMTP id S232565AbjFAJEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:04:49 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD59E50;
-        Thu,  1 Jun 2023 02:04:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0Vk41CPa_1685610190;
-Received: from 30.221.149.38(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vk41CPa_1685610190)
-          by smtp.aliyun-inc.com;
-          Thu, 01 Jun 2023 17:03:11 +0800
-Message-ID: <19823e23-cefa-a582-9e59-af0f963aef85@linux.alibaba.com>
-Date:   Thu, 1 Jun 2023 17:03:07 +0800
+        Thu, 1 Jun 2023 05:04:13 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF0AE4A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:03:35 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d3491609fso372726b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:03:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685610207; x=1688202207;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uUWrPdzK1S2MpP3NTfTcecbk91WZd1N8lyxQ0bkEwUI=;
+        b=dbuOyxq5c4Q8w2wawPzwrk6/ma79vcj3SdcEjmerG61ig2bqy5Tn+AeK7NYupbPRWy
+         74iYDoKQkkne9Tw0HjMifNwEJ8O20miYo7uHdOXEEh7dLZv9fJ0Ckg/ye7XMZDcwn1sE
+         9/v4nHQ70Eg1hsqCnfEwqlOHrpqlABkBo1Cf183RWU/9yreEty7yXRPmPbsJ5HqTKQNI
+         9w5FPCRkCDwZQFmF1SzmZmSTQ+FeZuFGz7C8nCBmqnuF96yapMbMR5913/2SBeiwe7C3
+         9hS9pf3lZ2Zjd5mTVZDnNCLHiZhFRhKBFs2dKRXAP7vhmvZGVDzhEynPzhyxdlTBhJ74
+         a6qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685610207; x=1688202207;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uUWrPdzK1S2MpP3NTfTcecbk91WZd1N8lyxQ0bkEwUI=;
+        b=D8I4bVLm3RrF4rGVmstplqhXFHeh7Jk1mwnb4rrxPE41v6gO64dWNfAYZFCUTziH6b
+         7ls5laJbaw1m5c29eknfz/FFfPgpRRTmVikJg3mj2P2pWUFty3c66AtI5/00yS3/ETjd
+         Q+QUCyPlGDlyAD5WyFbXyMAc4uEONbNw50DtQSsLe5CcKGXbtzgtxxO5bu3M5GFoBI78
+         Kh3poEWoDXiulfzshgF+z4HCZsjohn6Txa7m1pZruGGkvda0HPh9rlkWCD0Y0/hgtwSM
+         hQdtiVdRfChfTZpHYei1GApQIMZmQn2rXHcqL/YT28wBLdbTVLW3uS2D8vtNId6Mz4zy
+         SUDg==
+X-Gm-Message-State: AC+VfDwxeer72df0jVRaV8cMZT2dGMxp8xRSFEp2Ly53NNOZWV8K4lkT
+        dOWascEaDvqbtZkaFGSqpds=
+X-Google-Smtp-Source: ACHHUZ5B0w485bHAGhy9TjzNgXQswCsG3AkGbPW0ka0IgPEQEDtaoBnMF7spdxXEJFdrEx7mJbvtwQ==
+X-Received: by 2002:a05:6a20:2588:b0:10b:dca5:74e5 with SMTP id k8-20020a056a20258800b0010bdca574e5mr7418039pzd.0.1685610207038;
+        Thu, 01 Jun 2023 02:03:27 -0700 (PDT)
+Received: from [192.168.0.105] ([49.207.240.61])
+        by smtp.gmail.com with ESMTPSA id e10-20020a62ee0a000000b0064d5b82f987sm4726664pfi.140.2023.06.01.02.03.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 02:03:26 -0700 (PDT)
+Message-ID: <730c8712-1553-63e5-ffa1-d75a922f4a42@gmail.com>
+Date:   Thu, 1 Jun 2023 14:33:23 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/7] perf vendor events: Add JSON metrics for CMN
-To:     Ian Rogers <irogers@google.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-4-git-send-email-renyu.zj@linux.alibaba.com>
- <CAP-5=fVF4wD0t5Sxa56-pPevv4_NqKOYEeqqRLFYPL7a3FSffA@mail.gmail.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <CAP-5=fVF4wD0t5Sxa56-pPevv4_NqKOYEeqqRLFYPL7a3FSffA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v6 0/7] refactor file signing program
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        linux-kernel@vger.kernel.org, sshedi@vmware.com
+References: <20230321193341.87997-1-sshedi@vmware.com>
+ <0ae37bcc-4398-644b-a295-1245d73e5450@gmail.com>
+ <2023053135-bubbling-commodore-3a7b@gregkh>
+ <cefc1a42-725a-8afa-c222-f4df085ba6a2@gmail.com>
+ <2023053148-ahead-overbite-863d@gregkh>
+Content-Language: en-US
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+In-Reply-To: <2023053148-ahead-overbite-863d@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/5/31 上午9:18, Ian Rogers 写道:
-> On Tue, May 30, 2023 at 2:19 AM Jing Zhang <renyu.zj@linux.alibaba.com> wrote:
+On Wed, 31-May-2023 22:20, Greg KH wrote:
+> On Wed, May 31, 2023 at 09:01:24PM +0530, Shreenidhi Shedi wrote:
+>> On Wed, 31-May-2023 20:08, Greg KH wrote:
+>>> On Tue, Apr 25, 2023 at 04:14:49PM +0530, Shreenidhi Shedi wrote:
+>>>> On Wed, 22-Mar-2023 01:03, Shreenidhi Shedi wrote:
+>>>> Can you please review the latest patch series? I think I have addressed your
+>>>> concerns. Thanks.
+>>>
+>>> The big question is, "who is going to use these new features"?  This
+>>> tool is only used by the in-kernel build scripts, and if they do not
+>>> take advantage of these new options you have added, why are they needed?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
 >>
->> Add JSON metrics for arm CMN. Currently just add part of CMN PMU
->> metrics which are general and compatible for any SoC and CMN-ANY.
+>> Hi Greg,
 >>
->> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
->> ---
->>  .../pmu-events/arch/arm64/arm/cmn/sys/metrics.json | 74 ++++++++++++++++++++++
->>  tools/perf/pmu-events/jevents.py                   |  1 +
->>  2 files changed, 75 insertions(+)
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
+>> Thanks for the response.
 >>
->> diff --git a/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
->> new file mode 100644
->> index 0000000..e70ac1a
->> --- /dev/null
->> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
->> @@ -0,0 +1,74 @@
->> +[
->> +       {
->> +               "MetricName": "slc_miss_rate",
->> +               "BriefDescription": "The system level cache miss rate include.",
+>> We use it in VMware Photon OS. Following is the link for the same.
+>> https://github.com/vmware/photon/blob/master/SPECS/linux/spec_install_post.inc#L4
+>>
+>> If this change goes in, it will give a slight push to our build performance.
 > 
-> Nit, partial sentence?
+> What exactly do you mean by "slight push"?
 
-Yes my mistake.
+Instead of invoking the signing tool binary for each module, we can pass 
+modules in bulk and it will reduce the build time by couple of seconds.
 
 > 
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
->> +               "ScaleUnit": "100%",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "hnf_message_retry_rate",
->> +               "BriefDescription": "HN-F message retry rate indicates whether a lack of credits is causing the bottlenecks.",
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "hnf_pocq_retry / hnf_pocq_reqs_recvd",
->> +               "ScaleUnit": "100%",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "sf_hit_rate",
->> +               "BriefDescription": "Snoop filter hit rate can be used to measure the Snoop Filter efficiency.",
+>> Can you please take these changes?
 > 
-> Nit, inconsistent capitalization?
+> Why would we take changes for something that will not benifit us at all?
 
-Ok, fix it in next version.
+There were no remarks regarding this change being useful to all in the 
+earlier review comments so I thought this will make things better.
 
-> 
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "hnf_sf_hit / hnf_slc_sf_cache_access",
->> +               "ScaleUnit": "100%",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "mc_message_retry_rate",
->> +               "BriefDescription": "The memory controller request retries rate indicates whether the memory controller is the bottleneck.",
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "hnf_mc_retries / hnf_mc_reqs",
->> +               "ScaleUnit": "100%",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "rni_actual_read_bandwidth.all",
->> +               "BriefDescription": "This event measure the actual bandwidth(MB/sec) that RN-I bridge sends to the interconnect.",
-> 
-> Nit, the MB/sec is in the ScaleUnit so could be dropped here.
+And it is humanly impossible to create something which will benefit 
+everyone. And I think this applies for lot of things that are already 
+present in kernel and being maintained.
 
-ok
+> You are asking us to maintain code that only benifits your out-of-tree
+> usecase, which is not how kernel development works (and you don't want
+> it to work that way...)
 
-> 
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "rnid_rxdat_flits * 32 / 1e6 / duration_time",
->> +               "ScaleUnit": "1MB/s",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "rni_actual_write_bandwidth.all",
->> +               "BriefDescription": "This event measures the actual write bandwidth(MB/sec) at RN-I bridges.",
-> 
-> Nit, same thing.
+No problem, feel free to discard this PR.
+Thanks for your time and inputs. Have a nice time ahead.
 
-ok
+> thanks,
+> 
+> greg k-h
 
-> 
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "rnid_txdat_flits * 32 / 1e6 / duration_time",
->> +               "ScaleUnit": "1MB/s",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "rni_retry_rate",
->> +               "BriefDescription": "RN-I bridge retry rate indicates whether the memory controller is the bottleneck.",
->> +               "MetricGroup": "arm_cmn",
->> +               "MetricExpr": "rnid_txreq_flits_retried / rnid_txreq_flits_total",
->> +               "ScaleUnit": "100%",
->> +               "Unit": "arm_cmn",
->> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +       },
->> +       {
->> +               "MetricName": "sbsx_actual_write_bandwidth.all",
->> +               "BriefDescription": "sbsx actual write bandwidth(MB/sec).",
-> 
-> Nit, same thing.
-> 
+-- 
+Shedi
 
-Ok, Thanks Ian.
