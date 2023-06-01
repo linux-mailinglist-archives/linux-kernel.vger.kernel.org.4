@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186EA7194DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E0A7194E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbjFAH7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S231775AbjFAH7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjFAH6j (ORCPT
+        with ESMTP id S231641AbjFAH7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:58:39 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B49173A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:51:46 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685605905;
+        Thu, 1 Jun 2023 03:59:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99791981
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685605927;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+e3wI1fiGsWTXmwy45Q9EAm7dA/PfrhNn8PVmuub8MY=;
-        b=TgHA9VRFQkRXiNheNuKMUqBNVBf4NnoNZONHtuauHx+qh42PQfCljDf+8E1hPkA8QC2oc8
-        fa8Nnerjm7B1SBFxtQVgQyrSeJa+fN1ljPwppadYcpWzF8xgK3Hz/1gmtkizHWroa5BDZj
-        A/u0Qt1FrkOCkcHPaIXAXkvshawn9JTLP6LKc5rUbCTWoQPEvy/5ZeMgjNeDiqU+uOtLVB
-        DUaADvukxsrrfeE5QKp/Asymr3fuJW2eGCF5Wwj75vrlWYxgfEHiEFqO4xNnWbUoKhmFmc
-        UAryJpQBYJjvGF6WUrUkFZweWcI39buTkk0JpF8WVKwWpN+bql/oDquB6GrsYw==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D4D7E000D;
-        Thu,  1 Jun 2023 07:51:43 +0000 (UTC)
-Date:   Thu, 1 Jun 2023 09:51:42 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 1/6] mtd: rawnand: meson: fix ready/busy command
-Message-ID: <20230601095142.3a611b5a@xps-13>
-In-Reply-To: <20230601061850.3907800-2-AVKrasnov@sberdevices.ru>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
-        <20230601061850.3907800-2-AVKrasnov@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        bh=UGN0oJNZes7Qo6ZcpteciDRTsS0uKCd+DRQnkDayhbo=;
+        b=Ym2XfrjPng9LE4kAD1nGewVUpZE5uc+D+H2KD2kFHs/htRA7fyTFD1+XQsrK/0vbLva4JC
+        x/XfzBDSbdvAj/nKbdWBYTShI62PefBNLDvEMI6ItdHBlXSOq+DFCW4vfeCUd+SqgdCJ5m
+        UABrlYMt8kppkZ0b08jNX9HpDpQOGRs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-369-KdfeT4rmMJuW_7-bC6FadA-1; Thu, 01 Jun 2023 03:52:03 -0400
+X-MC-Unique: KdfeT4rmMJuW_7-bC6FadA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so3708465e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 00:52:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685605923; x=1688197923;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UGN0oJNZes7Qo6ZcpteciDRTsS0uKCd+DRQnkDayhbo=;
+        b=e/pLkxqd3cDour9Ic4kA1/9YHNrmmUQf6/PUPc9jSV+Uzbd2SQ272nStngxJS0pbg9
+         D4XzlDo1ZgvbcPiU3KF5wUXlHnc/PJobpKiWHHElIhSCHtA6HILw1s1DnIsR7CymCBEO
+         COqYDsE2iXcsb33IF9vrM+rqIadP9ck30/YR84ArJSx/cuD4yE0aLNlZKa2o+K+oxbuP
+         yXNrizyUbTFkGDcaWt8C93byLtc2I3oHhTEOyiHDaO/AGyP86qJWhcvIeRvu1t0lb7pF
+         kOYPBZjjNzfivX+C3ataJcv7EIAcjZu9BBRYXf54D8q9yUPHxiopYq/10GfzpSGBZSfQ
+         Bz5w==
+X-Gm-Message-State: AC+VfDyh+k/5tfJ5CcyfiLWrVLc7q9ZJ1JUty9ZVrq14vBQgNX0tMD1t
+        MZGkI3SoUPGbTSWcUcz8Ip44FrtwsnrGevBAy3v47mYp8Az9rdcAMBRxCC7YiZqE7Pnoh37QjEh
+        1MfF5HVC5Y89gBqdxU5mQ5P+y
+X-Received: by 2002:a05:600c:2252:b0:3f6:f29:7b41 with SMTP id a18-20020a05600c225200b003f60f297b41mr1285387wmm.7.1685605922820;
+        Thu, 01 Jun 2023 00:52:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6pqppsA7O9z8geVps55kh02RQkezTsYAVSQPRyQwzdBB9ynfyxZUJOB68G0Jnr3KhTLwFlsg==
+X-Received: by 2002:a05:600c:2252:b0:3f6:f29:7b41 with SMTP id a18-20020a05600c225200b003f60f297b41mr1285375wmm.7.1685605922505;
+        Thu, 01 Jun 2023 00:52:02 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id w8-20020a1cf608000000b003f603b8eb5asm1338590wmc.7.2023.06.01.00.52.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 00:52:02 -0700 (PDT)
+Message-ID: <4dfd0f47-e1f7-1e9f-65e0-ee4881495be3@redhat.com>
+Date:   Thu, 1 Jun 2023 09:52:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
+References: <20230519102723.185721-1-david@redhat.com>
+ <20230519102723.185721-2-david@redhat.com>
+ <e49b5642-014b-4a95-9ba8-738bfd02b2ea@lucifer.local>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 1/3] selftests/mm: factor out detection of hugetlb page
+ sizes into vm_util
+In-Reply-To: <e49b5642-014b-4a95-9ba8-738bfd02b2ea@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+On 28.05.23 16:49, Lorenzo Stoakes wrote:
+> On Fri, May 19, 2023 at 12:27:21PM +0200, David Hildenbrand wrote:
+>> Let's factor detection out into vm_util, to be reused by a new test.
+>>
+> 
+> Bit of a nit as it's hardly vitally important, but perhaps worth mentioning
+> that you also refactor the function to accept any array (this is a
+> requirement rather than simply refactoring a thing but still :)
 
-AVKrasnov@sberdevices.ru wrote on Thu, 1 Jun 2023 09:18:44 +0300:
+Well, the function used to, and still does accept an array. It's just a 
+more human-friendly way of expressing that.
 
-> This fixes ready/busy command value.
+If I have to resend the whole patchset, I can add a note "While at it, 
+make the function accept an array instead of a raw pointer.".
 
-nit: "Fix the ready/busy command value."
->=20
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  drivers/mtd/nand/raw/meson_nand.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
-on_nand.c
-> index 074e14225c06..9dd4a676497b 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -37,7 +37,7 @@
->  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
->  #define NFC_CMD_SCRAMBLER_DISABLE	0
->  #define NFC_CMD_SHORTMODE_DISABLE	0
-> -#define NFC_CMD_RB_INT		BIT(14)
-> +#define NFC_CMD_RB_INT		((0xb << 10) | BIT(18) | BIT(16))
-> =20
->  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
-> =20
+[...]
 
+> 
+> Looks good to me,
+> 
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> 
 
+Thanks!
+
+-- 
 Thanks,
-Miqu=C3=A8l
+
+David / dhildenb
+
