@@ -2,99 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5684671913A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3DB71913B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjFADRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S231332AbjFADRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjFADRL (ORCPT
+        with ESMTP id S229610AbjFADRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 23:17:11 -0400
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C3C9;
-        Wed, 31 May 2023 20:16:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowABXXDCNDXhk6FzJCA--.6399S2;
-        Thu, 01 Jun 2023 11:16:29 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     justin.chen@broadcom.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] net: systemport: Add and correct check for platform_get_irq
-Date:   Thu,  1 Jun 2023 11:16:35 +0800
-Message-Id: <20230601031635.28361-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFF8136
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 20:17:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6633640CD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C63C433D2;
+        Thu,  1 Jun 2023 03:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685589421;
+        bh=XvJPQ0XHSvZ7dSl5mVdAuoo5pLb3aJ1TYEwAlwW3WKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BzmOiuM4sreAVnlRxGo5JdeBu5cNJ0fH4DwQquEL3P5EwrPyuc4sKspHzWZsVlMNz
+         20HDBLLr8iGVVxAwICCmrS0FpgIfq2mgLzAWErForkcDEFf7cW1udSlHDglRAoOKBS
+         BeRlpU3bL+gYwgRMBZex9aPrkdWzvJkbAy3DPXTOYITesDlyXaGtiZX9ap5ZqsI+OZ
+         XJQR0ptuiOH50QaobLo096PO5FHvQCMgnSbQcHk1ALytx5hucKUSPCwTTEcTGt7jKe
+         QvWz5uom4ozXauycokNXLP2rq+8T5K0ABNH1QbjRbMzT9CSvn4Fp/lOyK6oafSjCg0
+         b6Zy78SwHVQgA==
+Date:   Wed, 31 May 2023 20:16:58 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Sheng Yong <shengyong@oppo.com>
+Cc:     jaegeuk@kernel.org, chao@kernel.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
+Message-ID: <20230601031658.GA728@quark.localdomain>
+References: <20230529013502.2230810-1-shengyong@oppo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABXXDCNDXhk6FzJCA--.6399S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFW8Zr4DGFyxJF1UAw4kXrb_yoW8Ww43pa
-        1DJrWrX3y8WF4Yvas7Z3W8AFsxZw4Fvw4UGrW7tr13Z3s0yr1xAa48KF13uFnrAr4rGw43
-        ZFyjva93CFn8ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JU-miiUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529013502.2230810-1-shengyong@oppo.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 06:42:26AM +0800, Justin Chen wrote:
-> On 5/31/23 2:11 AM, Jiasheng Jiang wrote:
->> Add the missing check for "priv->wol_irq".
->> Use "<" instead of "<=" to check the irqs since the platform_get_irq
->> returns non-zero IRQ number on success and negative error number on
->> failure, shown in `driver/base/platform.c`.
->> 
->> Fixes: 83e82f4c706b ("net: systemport: add Wake-on-LAN support")
->> Fixes: 80105befdb4b ("net: systemport: add Broadcom SYSTEMPORT Ethernet MAC driver")
->> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
->> ---
->>   drivers/net/ethernet/broadcom/bcmsysport.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
->> index 38d0cdaf22a5..16c9c0be1a33 100644
->> --- a/drivers/net/ethernet/broadcom/bcmsysport.c
->> +++ b/drivers/net/ethernet/broadcom/bcmsysport.c
->> @@ -2535,7 +2535,7 @@ static int bcm_sysport_probe(struct platform_device *pdev)
->>   	} else {
->>   		priv->wol_irq = platform_get_irq(pdev, 1);
->>   	}
->> -	if (priv->irq0 <= 0 || (priv->irq1 <= 0 && !priv->is_lite)) {
->> +	if (priv->irq0 < 0 || (priv->irq1 < 0 && !priv->is_lite) || priv->wol_irq < 0) {
->>   		ret = -EINVAL;
->>   		goto err_free_netdev;
->>   	}
+On Mon, May 29, 2023 at 09:35:00AM +0800, Sheng Yong via Linux-f2fs-devel wrote:
+> This patch introduces two ioctls:
+>   * f2fs_ioc_get_extra_attr
+>   * f2fs_ioc_set_extra_attr
+> to get or modify values in extra attribute area.
 > 
-> wol_irq is optional so we don't want to error out. Guess we should 
-> probably replace platform_get_irq with platform_get_irq_optional(). "<=" 
-> is fine. As you mentioned, a non-zero is success, so zero is considered 
-> invalid.
+> The argument of these two ioctls is `struct f2fs_extra_attr', which has
+> three members:
+>   * field: indicates which field in extra attribute area is handled
+>   * attr: value or userspace pointer
+>   * attr_size: size of `attr'
+> 
+> The `field' member could help extend functionality of these two ioctls
+> without modify or add new interfaces, if more fields are added into
+> extra attributes ares in the feture.
+> 
+> Signed-off-by: Sheng Yong <shengyong@oppo.com>
 
-Yes, you are right.
-I will submit a new patch that replace platform_get_irq with
-platform_get_irq_optional.
+Aren't there enough things called extra or extended attributes already?  Besides
+the standard "extended attributes" retrievable with the getxattr() system call,
+there is already the FS_IOC_FSGETXATTR ioctl too.
 
-Thanks,
-Jiasheng
-
+- Eric
