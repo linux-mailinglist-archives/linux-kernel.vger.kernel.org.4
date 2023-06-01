@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848BD71F37D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD41C71F383
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjFAUOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S230526AbjFAUQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbjFAUOs (ORCPT
+        with ESMTP id S229610AbjFAUQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:14:48 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A09D1;
-        Thu,  1 Jun 2023 13:14:43 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-75d13719304so107828485a.3;
-        Thu, 01 Jun 2023 13:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685650482; x=1688242482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OG/rCN+OmsjvZqSpHKkTEhSoHCNMP8tcTTpNoQzhqWw=;
-        b=kq2eymw2VSjHxgZ8bD2qhvvonK2PEHdjli0KOfLUxmQ/reYbP3lOLdnC+/bDkkptnS
-         WXO8dmaxEX/I0+uFe3e1gs3BkwGdOBXbA8WYwfY2lcHy4HNTjFyDG4XEyZSH7PmT0UWP
-         nc112NetAYEetGwtatwT3IceRMroEras5Fn+drBKH1g6lhs6yHflY9u5HM10uZ17dKHt
-         dVLAVvuFIrnzfyqXc+5pTg0FFhnaKVAhYcCPhd7IR30XOKIwk4aNJl8iuLLNDstqYR31
-         H+Mow4/CJyqAJ5g1l3Gn+IyMEmth8sXZiwh9aMNNeO4PKg6gkiVXH3EX0NEEAGNt+uAc
-         nw1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685650482; x=1688242482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OG/rCN+OmsjvZqSpHKkTEhSoHCNMP8tcTTpNoQzhqWw=;
-        b=JwGaVM5kiHCKcgdFL0578I/opskKuvSAgsc6aJmsDW13wMfLukBCrriRqg4d0bY0VY
-         BHC09zbBWCA1CaKQWUKKkOv9hRxHzG7LCKQeAmgj2PqrP94shSElGfEe0uwJf3s9WPi6
-         vO22TzQs8TLjEYgu2sds//vutDtGkmhQeqrhjvIekbZVda8G6+paiJdH59L+U9zlnL2S
-         5hFrSBW5EgqiZ1tjVWjCgywpecdCAjq/kypjQZBlaqNv9aJGxdnRNk3QFmoPy62PFwm2
-         sSzK9InbYYet533rnbQE5Jk2fkjrs0cMx9HNGucmSUF71kDSp/IVoL6nep02JRefgicH
-         QsZg==
-X-Gm-Message-State: AC+VfDyiBDuI2eA0JB0gXP5UOQeR4ok3c5xY0/NDy1sR9+qEz3nRXzRp
-        X/2DAcvyGj9NWADcEXkT36M=
-X-Google-Smtp-Source: ACHHUZ4AV6WD1JfrulwBn2M+UAuEznKd8O2ihs18fRBEsZf19tJuZpS3f6qRw6lQmik/Y6HYPT3UvA==
-X-Received: by 2002:a05:620a:2e1:b0:75b:23a1:3ec with SMTP id a1-20020a05620a02e100b0075b23a103ecmr9220461qko.2.1685650482328;
-        Thu, 01 Jun 2023 13:14:42 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c11-20020a05620a134b00b0074e0abe59a0sm7035104qkl.78.2023.06.01.13.14.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 13:14:41 -0700 (PDT)
-Message-ID: <94d74b65-55ad-d070-2590-d21b79ff5abb@gmail.com>
-Date:   Thu, 1 Jun 2023 13:14:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] net: phy: realtek: Add optional external PHY clock
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Detlev Casanova <detlev.casanova@collabora.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 1 Jun 2023 16:16:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F2ED1;
+        Thu,  1 Jun 2023 13:16:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9274E6494B;
+        Thu,  1 Jun 2023 20:16:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F1CC433EF;
+        Thu,  1 Jun 2023 20:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685650570;
+        bh=wGPqJrvnThf2mG968n+KNP3y1zAJ7zJqs9zWqYFuPsk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cVPNfgg0tmc/Hg74YF1KHv0xBe7isHo/YFggxip+dCk8ewu3DFZpETA9JK4uG/jZU
+         i8A04VJbhCzl00dhGSDlVW2O4TQmkyBSvs+HAaEylFKyddMxyVZTsP2SM6WCflMRcg
+         cG4rs6oyzLpSXrj38X7D3+8OZ3mc9DdAMHfI45TOzA411/3X6nadMDhvl56oc2osHG
+         QLvlj1piJfw1VWKZdZxiVfu8Q2kbCd/ixrWL8umSU4q+pyLpffoF+6Kr0P50flLpTT
+         3J2UleCccULReH9OmReyIpikC/4TkinQdLXclbta2W+0HjUcj0nPmhqHb+dPnCBYcV
+         0TU3n8DuGhUkQ==
+Date:   Thu, 1 Jun 2023 21:16:04 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230531150340.522994-1-detlev.casanova@collabora.com>
- <20230531150340.522994-2-detlev.casanova@collabora.com>
- <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com> <5682492.DvuYhMxLoT@arisu>
- <7bde15a1-08fe-4036-9256-b13280340b6b@lunn.ch>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <7bde15a1-08fe-4036-9256-b13280340b6b@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        =?utf-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: i2c-mt65xx: add additional clocks
+Message-ID: <20230601-exception-dodgy-97f2101d8a0e@spud>
+References: <5f15212060f82fb94239174c4e4b46c151645fe8.1685549360.git.daniel@makrotopia.org>
+ <12fea13e-e2c3-487f-8d2b-cfd320c98ba7@linaro.org>
+ <ZHjtExYIdVFo3HnB@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7maM1k8I9uCkvnld"
+Content-Disposition: inline
+In-Reply-To: <ZHjtExYIdVFo3HnB@makrotopia.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 12:37, Andrew Lunn wrote:
->> I'm not sure about this. Isn't the clock still necessary when suspended for
->> things like wake on lan ?
-> 
-> Yes, but the PHY should know if its a WoL source, and not disable its
-> own clock. There is some support for this in phylib, and Florian has
-> also reworked it recently for Broadcom PHYs.
 
-If you want to have the PHY driver have a chance to disable the clock if 
-Wake-on-LAN is disabled and therefore conserve power, you should set 
-PHY_ALWAYS_CALL_SUSPEND in the phy_driver::flags and in the 
-suspend/resume functions do something like:
+--7maM1k8I9uCkvnld
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-suspend:
-	/* last step after all registers are accessed */
-	if (!phydev->wol_enabled)
-		clk_disable_unprepare()
-resume:
-	/* first step before registers are accessed */
-	if (!phydev->wol_enabled)
-		clk_prepare_enable()
+On Thu, Jun 01, 2023 at 08:10:11PM +0100, Daniel Golle wrote:
 
-The flag is necessary to ensure that the PHY driver's suspend function 
-will be called. The resume will be called regardless of Wake-on-LAN 
-being enabled or not.
--- 
-Florian
+> Adding the clocks is done in patch 2/2 which just wasn't sent to
+> devicetree@ and dt maintainers, but to the relevant mailing lists
+> instead. Was that wrong and should I always send the complete series
+> also to devicetree@ as well as dt maintainers?
 
+Everyone is different, but getting both patches of a 2 patch series
+really should not annoy anyone and avoiding reviewers having to go
+hunting on lore etc is always a positive :)
+
+--7maM1k8I9uCkvnld
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHj8hAAKCRB4tDGHoIJi
+0gCxAPwJluO3r1kS32M0uweKJEPBXY4qvnAqMUrRvS0VRe6FegEAwEfuZCOXUdWI
+wW51d5BeoLvyIEciuumYzFvE7tKmtg4=
+=5SNU
+-----END PGP SIGNATURE-----
+
+--7maM1k8I9uCkvnld--
