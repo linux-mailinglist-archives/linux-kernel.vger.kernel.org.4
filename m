@@ -2,80 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5413719F55
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BA1719F56
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbjFAOMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S233988AbjFAOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbjFAOMg (ORCPT
+        with ESMTP id S233922AbjFAOMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:12:36 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED15B129;
-        Thu,  1 Jun 2023 07:12:34 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX7M31N99z6D91s;
-        Thu,  1 Jun 2023 22:10:23 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
- 2023 15:12:32 +0100
-Date:   Thu, 1 Jun 2023 15:12:31 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: Re: [PATCH v4 20/23] cxl/pci: Prepare for logging RCH downstream
- port protocol errors
-Message-ID: <20230601151231.00003f9f@Huawei.com>
-In-Reply-To: <11c99f76-2473-bf71-c2d5-f697b1b0e412@amd.com>
-References: <20230523232214.55282-1-terry.bowman@amd.com>
-        <20230523232214.55282-21-terry.bowman@amd.com>
-        <20230601144942.000075f5@Huawei.com>
-        <11c99f76-2473-bf71-c2d5-f697b1b0e412@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Jun 2023 10:12:49 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3639186
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:12:44 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6af713338ccso757404a34.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685628764; x=1688220764;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pGewkI3ZGhs7NmIEmWJMKJtAyCliT7h0BVcktsJwU3o=;
+        b=iLrGKN6wIAPT9VVUhQldt4cxeaEohbI3mrUxqNSXhhr2+olaCXGHGoXXI5YMjbDm5/
+         l5cS0i7lU5vrj8y3EhX87F/ubTpnrEk5/NjdrLdlZtTVPGGANkVz9hLdBLU7I3lVbRHS
+         aWnjfKhtA8uD7/hVWFMo7JN+iMtB7RgB1maLxPHR/TaZs9FzNIJrG+BJSXUlZwFM15of
+         9eccft+2iGMn8SaEcqR2360vFutF1hMMiTV11K6/w66te4YQo64OsCir4ihzPRWuziYO
+         rIjfd/kA4SXGjfIHPalzJP1pc4jpbMlcYWq7JmeQEr+9XeScn/KMdpBbEtFHKjpXnSat
+         Hm5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685628764; x=1688220764;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pGewkI3ZGhs7NmIEmWJMKJtAyCliT7h0BVcktsJwU3o=;
+        b=Pdo2ZrS1ChgC3b45MHO05xXVfNZsamOu/gGmCn5/V7nrYZuBPRGHAFpBGi+ShXXvvq
+         FE/WgqqtxuMKezoy7D+8fADHq3i2FlJO2AXjVSU+2hczNsvWFyAd8EWvs88D8wGOtEeR
+         YN/GxbzRKUS7x0JlJVqAKl2UwU9FcTh+KK0qrM+8zE4VtyOfpi+DzJk/J9pn+dxGIayz
+         I0dK5/YXeVlHWvKysxtkdqLJdBQgJfb+IKW+hsr5835tEydxjKuFPegInyrCeZcxTwlV
+         NGaMuMiq3pkLn8NBXk+KnAqI2iMdqXMRlKYmQxzhiJVMpEB4KNDj5YoR+PhxDX3f3GOs
+         FzQw==
+X-Gm-Message-State: AC+VfDzgCYMnGNq9q3kELBgZAzbnVJlIdM31HOrNRmH8yCUITHL+r6s5
+        EOWE5YpMTCCrGr10gZdvTAPwRLWNBZrymm1g1AZRig==
+X-Google-Smtp-Source: ACHHUZ4wquHJpPIxqvZcCQ0uKolewssm+RvOtOWUpV4z+7UxM0U9tgUV5c7HdMpqTP2Z1ClfiwF8GrWs42/u2xrYFnI=
+X-Received: by 2002:a05:6358:4322:b0:123:3346:593e with SMTP id
+ r34-20020a056358432200b001233346593emr3701190rwc.6.1685628763883; Thu, 01 Jun
+ 2023 07:12:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601131936.699199833@linuxfoundation.org>
+In-Reply-To: <20230601131936.699199833@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 1 Jun 2023 19:42:32 +0530
+Message-ID: <CA+G9fYt9d+bZwao0ia_7kp1maKLWepci6R4gUnb_FN2OjCSjyg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/42] 5.15.115-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 09:06:23 -0500
-Terry Bowman <Terry.Bowman@amd.com> wrote:
+On Thu, 1 Jun 2023 at 18:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.115 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> Hi Jonathan, thanks for reviewing.
-> 
-> On 6/1/23 08:49, Jonathan Cameron wrote:
-> > On Tue, 23 May 2023 18:22:11 -0500
-> > Terry Bowman <terry.bowman@amd.com> wrote:
-> > 
-> > The title is very vague.  Can it be more specific to what
-> > is in this patch?  The description makes it seem like a bunch of
-> > unconnected things, but in reality they all chain together
-> > to get the registers and disable the interrupt.
-> >   
-> 
-> How about I split this into 2 patches (along lines of register mapping
-> and root port interrupt disable) and title as:
-> cxl/pci: Map RCH downstream registers for AER protocol error logging
-> cxl/pci: Disable root port interrupts in RCH mode
 
-Sounds good to me.
+Following build errors noticed on 6.1 and 5.15.
 
-Jonathan
+drivers/dma/at_xdmac.c: In function 'atmel_xdmac_resume':
+drivers/dma/at_xdmac.c:2049:9: error: implicit declaration of function
+'pm_runtime_get_noresume' [-Werror=implicit-function-declaration]
+ 2049 |         pm_runtime_get_noresume(atxdmac->dev);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/dma/at_xdmac.c:2049:40: error: 'struct at_xdmac' has no member
+named 'dev'
+ 2049 |         pm_runtime_get_noresume(atxdmac->dev);
+      |                                        ^~
+cc1: some warnings being treated as errors
+
+reported link:
+https://lore.kernel.org/stable/CA+G9fYswtPyrYJbwcGFhc5o7mkRmWZEWCCeSjmR64M+N-odQhQ@mail.gmail.com/
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
