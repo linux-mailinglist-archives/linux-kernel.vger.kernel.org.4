@@ -2,116 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E3E71F4A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A080E71F4AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjFAV1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S232258AbjFAVa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjFAV1u (ORCPT
+        with ESMTP id S232102AbjFAVa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:27:50 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0464AE41;
-        Thu,  1 Jun 2023 14:27:42 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351L7bwa005951;
-        Thu, 1 Jun 2023 21:27:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=FH0heBzwXcDeikXqMc1Y0eyAdfHDDH5YInxRnWMNIH4=;
- b=nfHAX+wJcFG8CReq+wLgWaq+uX59FJFWMyCzo0KhLC3AgTUAQ0Dr2TWLxOpQGyDafqjG
- eWgzUfsxIyuzKVQQ1k1Tq5pbea+ySAdroML+CrCWkIqsz4nrBMPfd6FxkUsqq2mLm6FX
- 7VaXeYNF3KQL7bHKvakhqve0BO6mr0ZhnbPkbvHBPR14fWlQ37Vw6FPN8hcr1xTEd3ih
- k4xtdsJ40SKMFvGul3sseEgX4S/KgVP0DwXKoFhDMeFgGyg+P9z3nH3x6pdSlicToKjs
- 2zv7eYNfz6aCoE2DOuxHNrC+lo/FKugC+wx++oU5lLf4uzr6KKo9nKm9zaVCyAg64MUA Xg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxugrs63u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 21:27:40 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 351LRdwi028142;
-        Thu, 1 Jun 2023 21:27:39 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTP id 3qwp5n628a-1;
-        Thu, 01 Jun 2023 21:27:39 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351LRdW7028137;
-        Thu, 1 Jun 2023 21:27:39 GMT
-Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTP id 351LRdfB028136;
-        Thu, 01 Jun 2023 21:27:39 +0000
-Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id 0C9B420DF9; Thu,  1 Jun 2023 14:27:39 -0700 (PDT)
-From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
-To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Reset num TRBs before giving back the request
-Date:   Thu,  1 Jun 2023 14:27:30 -0700
-Message-Id: <1685654850-8468-1-git-send-email-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QqUwWJcthw28D-oHwrBuvWnOwts8ObWV
-X-Proofpoint-GUID: QqUwWJcthw28D-oHwrBuvWnOwts8ObWV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=856 lowpriorityscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- phishscore=0 spamscore=0 impostorscore=0 priorityscore=1501 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010184
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 17:30:26 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1373C196
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:30:23 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 7eea1b78-00c3-11ee-abf4-005056bdd08f;
+        Fri, 02 Jun 2023 00:30:15 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Fri, 2 Jun 2023 00:30:14 +0300
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v6 5/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+Message-ID: <ZHkN5kEa6yqHdDeL@surfacebook>
+References: <20230601201844.3739926-1-hugo@hugovil.com>
+ <20230601201844.3739926-6-hugo@hugovil.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601201844.3739926-6-hugo@hugovil.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider a scenario where cable disconnect happens when there is an active
-usb reqest queued to the UDC. As part of the disconnect we would issue an
-end transfer with no interrupt-on-completion before giving back this
-request. Since we are giving back the request without skipping TRBs the
-num_trbs field of dwc3_request still holds the stale value previously used.
-Function drivers re-use same request for a given bind-unbind session and
-hence their dwc3_request context gets preserved across cable
-disconnect/connect. When such a request gets re-queued after cable connect,
-we would increase the num_trbs field on top of the previous stale value
-thus incorrectly representing the number of TRBs used. Fix this by
-resetting num_trbs field before giving back the request.
+Thu, Jun 01, 2023 at 04:18:40PM -0400, Hugo Villeneuve kirjoitti:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> changed the function of the GPIOs pins to act as modem control
+> lines without any possibility of selecting GPIO function.
+> 
+> As a consequence, applications that depends on GPIO lines configured
+> by default as GPIO pins no longer work as expected.
+> 
+> Also, the change to select modem control lines function was done only
+> for channel A of dual UART variants (752/762). This was not documented
+> in the log message.
+> 
+> Allow to specify GPIO or modem control line function in the device
+> tree, and for each of the ports (A or B).
+> 
+> Do so by using the new device-tree property named
+> "modem-control-line-ports" (property added in separate patch).
+> 
+> When registering GPIO chip controller, mask-out GPIO pins declared as
+> modem control lines according to this new "modem-control-line-ports"
+> DT property.
+> 
+> Boards that need to have GPIOS configured as modem control lines
+> should add that property to their device tree. Here is a list of
+> boards using the sc16is7xx driver in their device tree and that may
+> need to be modified:
+>     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+>     mips/boot/dts/ingenic/cu1830-neo.dts
+>     mips/boot/dts/ingenic/cu1000-neo.dts
 
-Fixes: 09fe1f8d7e2f ("usb: dwc3: gadget: track number of TRBs per request")
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
----
-Changes in v2:
- - Addressed Thinh's comment to reset num_trbs in dwc3_gadget_del_and_unmap_request
-   rather than calling skip_trbs.
- - Modify the commit message to match the modification.
+Almost good, a few remarks and if addressed as suggested,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
- drivers/usb/dwc3/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
+Thank you!
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 578804d..0ded919 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -198,6 +198,7 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
- 	list_del(&req->list);
- 	req->remaining = 0;
- 	req->needs_extra_trb = false;
-+	req->num_trbs = 0;
- 
- 	if (req->request.status == -EINPROGRESS)
- 		req->request.status = status;
+...
+
+> +	if (!s->gpio_valid_mask)
+
+I would use == 0, but it's up to you. Both will work equally.
+
+> +		return 0;
+
+...
+
+> +static int sc16is7xx_setup_mctrl_ports(struct device *dev)
+
+Not sure why int if you always return an unsigned value.
+Otherwise return an error code when it's no defined mask
+and check it in the caller.
+
+> +{
+> +	struct sc16is7xx_port *s = dev_get_drvdata(dev);
+> +	int i;
+> +	int ret;
+> +	int count;
+> +	u32 mctrl_port[2];
+> +	u8 mctrl_mask = 0;
+
+I would return 0 directly in the first two cases and split an assignment closer
+to the first user.
+
+> +	count = device_property_count_u32(dev, "nxp,modem-control-line-ports");
+> +	if (count < 0 || count > ARRAY_SIZE(mctrl_port))
+> +		return mctrl_mask;
+
+		return 0;
+
+> +	ret = device_property_read_u32_array(dev, "nxp,modem-control-line-ports",
+> +					     mctrl_port, count);
+> +	if (ret)
+> +		return mctrl_mask;
+
+		return 0;
+
+
+	mctrl_mask = 0;
+
+> +	for (i = 0; i < count; i++) {
+> +		/* Use GPIO lines as modem control lines */
+> +		if (mctrl_port[i] == 0)
+> +			mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
+> +		else if (mctrl_port[i] == 1)
+> +			mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
+> +	}
+
+> +	if (!mctrl_mask)
+> +		return mctrl_mask;
+
+Maybe positive one?
+
+	if (mctrl_mask)
+		regmap_update_bits(...);
+
+> +	regmap_update_bits(s->regmap,
+> +			   SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
+> +			   SC16IS7XX_IOCONTROL_MODEM_A_BIT |
+> +			   SC16IS7XX_IOCONTROL_MODEM_B_BIT, mctrl_mask);
+> +
+> +	return mctrl_mask;
+> +}
+
+...
+
+>  	unsigned long freq = 0, *pfreq = dev_get_platdata(dev);
+>  	unsigned int val;
+> +	u8 mctrl_mask = 0;
+
+This assignment is redundant, so you simply can define it
+
+>  	u32 uartclk = 0;
+
+	u8 mctrl_mask;
+
+>  	int i, ret;
+>  	struct sc16is7xx_port *s;
+
 -- 
-2.7.4
+With Best Regards,
+Andy Shevchenko
+
 
