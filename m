@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81F7719986
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B085471999D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjFAKTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S232773AbjFAKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjFAKS4 (ORCPT
+        with ESMTP id S233639AbjFAKWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:18:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A1C2118
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:16:03 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q4fKZ-0004WH-5v; Thu, 01 Jun 2023 12:14:55 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q4fKY-004KWQ-95; Thu, 01 Jun 2023 12:14:54 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q4fKW-001V4d-Nx; Thu, 01 Jun 2023 12:14:52 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Anson Huang <Anson.Huang@nxp.com>, Marek Vasut <marex@denx.de>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: [PATCH v1 7/7] dt-bindings: input: touchscreen: edt-ft5x06: Add 'threshold' property
-Date:   Thu,  1 Jun 2023 12:14:51 +0200
-Message-Id: <20230601101451.357662-8-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230601101451.357662-1-o.rempel@pengutronix.de>
-References: <20230601101451.357662-1-o.rempel@pengutronix.de>
+        Thu, 1 Jun 2023 06:22:05 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DD01FD3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:18:40 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6e4554453so6386815e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google; t=1685614691; x=1688206691;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6XkTQ3CoGch36kB7T1IroYG5r0BhmIO+8aTMljzxUEY=;
+        b=URvuUPMduCrUKpW+Ol39ok793SYOg+PBYxgwDTW9AyapjAXj7Jb2F8lUTjkdEAexXJ
+         u/DxrvJ6zz0EBt1+lSqHy/dfb1lRLWRop7968NKxMbXVdFykRANlQybHBIfH+gr7mIVJ
+         bE1Gkwvlk3eSLxRXCfhXcj1Z1VIXdLl5l6r3pP1q+4KakcntNIv84FhHGSu35z3X46sD
+         UKk9wuvex7cpvZ+0BP4P3Y0UU7ole6RvlWWeDzOVO2cPewbLoLdyWE0cDZ0jeKBQQphD
+         kxuEDR/pbICZB+TQFBVsG3eFXCE4BU7438dfgC0LLlChW+pfjPrfUmNzSwU/7V8EoCX1
+         8TnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685614691; x=1688206691;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6XkTQ3CoGch36kB7T1IroYG5r0BhmIO+8aTMljzxUEY=;
+        b=Cey1p5Pb6b+RzFvSCreIpjlnWchZfm3HEVOi+1zkROuva3y+gNlVc7q7FyFSJzdh9I
+         Sq84jdhyVEai1IpE0QCMAm1xfPjB2oPF0+ggqmNqDvzO+SOzekGwIUFTZ5nlPtUKcKiP
+         5YRLgl3K3mdZDNixcCU/jzrcrl5VKFwzHikXXcsVUBM+f76l+HsoEVZioheDxqQL8kNE
+         VKvGC/u+paImDYKRBnZnf0HLOQoXud7h+ONsfeYCbyywN6kz5WP4ZkSVcfy47glUFxl4
+         OQKIQFvcqWvIfv+yXqmxTI5O1bh4Ri8LsrYhlEfBQKIJEIHagUqXJQqL7SOwT+4FRy9o
+         kKnw==
+X-Gm-Message-State: AC+VfDwnOI/q+vjCfRV/fqQl+dqN9vWqL69RbkjVGYjdT/bLFoOzxwMb
+        mRSdEjZ7RA7DpkG8oqQPd/Vt0Q==
+X-Google-Smtp-Source: ACHHUZ6zWD2AjaNcc66+tXB2tbV5HvOXZIVxwveIS7GawEtSHtUuAbiPap7EgwcP1KYkdHehyB3moA==
+X-Received: by 2002:adf:ef8d:0:b0:2f4:6574:5a93 with SMTP id d13-20020adfef8d000000b002f465745a93mr1566253wro.4.1685614691384;
+        Thu, 01 Jun 2023 03:18:11 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:a1c1:aac9:326c:88d7? ([2a01:e0a:b41:c160:a1c1:aac9:326c:88d7])
+        by smtp.gmail.com with ESMTPSA id i14-20020adfe48e000000b0030ae499da59sm9735708wrm.111.2023.06.01.03.18.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 03:18:10 -0700 (PDT)
+Message-ID: <1c464b6a-dd02-f846-5691-c29f567466c1@6wind.com>
+Date:   Thu, 1 Jun 2023 12:18:09 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [RFC PATCH 0/8] vhost_tasks: Use CLONE_THREAD/SIGHAND
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Christian Brauner <brauner@kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     oleg@redhat.com, axboe@kernel.dk, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        hch@infradead.org, konrad.wilk@oracle.com
+References: <20230519-vormittag-dschungel-83607e9d2255@brauner>
+ <ab8c9f95-c9e9-de04-4e28-78163a32da80@leemhuis.info>
+Content-Language: en-US
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Organization: 6WIND
+In-Reply-To: <ab8c9f95-c9e9-de04-4e28-78163a32da80@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,36 +87,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new property 'threshold' to the edt-ft5x06 touchscreen binding.
-This property allows setting the "click"-threshold in the range from 0
-to 255. This change addresses the following dtbs_check warning:
-  imx6dl-lanmcu.dtb: touchscreen@38: 'threshold' does not match any of the
-    regexes: 'pinctrl-[0-9]+'
-  From schema:
-    Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
+Le 01/06/2023 à 09:58, Thorsten Leemhuis a écrit :
+[snip]
+> 
+> Meanwhile -rc5 is just a few days away and there are still a lot of
+> discussions in the patch-set proposed to address the issues[1]. Which is
+> kinda great (albeit also why I haven't given it a spin yet), but on the
+> other hand makes we wonder:
+> 
+> Is it maybe time to revert the vhost parts for 6.4 and try again next cycle?
+At least it's time to find a way to fix this issue :)
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- .../devicetree/bindings/input/touchscreen/edt-ft5x06.yaml   | 6 ++++++
- 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml b/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
-index ef4c841387bd..f2808cb4d99d 100644
---- a/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
-+++ b/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
-@@ -93,6 +93,12 @@ properties:
-     minimum: 1
-     maximum: 255
- 
-+  threshold:
-+    description: Allows setting the  "click"-threshold in the range from 0 to 255.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 255
-+
-   touchscreen-size-x: true
-   touchscreen-size-y: true
-   touchscreen-fuzz-x: true
--- 
-2.39.2
-
+Thank you,
+Nicolas
