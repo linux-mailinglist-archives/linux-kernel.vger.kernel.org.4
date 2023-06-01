@@ -2,83 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5949719CA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA7A719CAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbjFAMzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S233241AbjFAMzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbjFAMyw (ORCPT
+        with ESMTP id S232252AbjFAMzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:54:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68576124;
-        Thu,  1 Jun 2023 05:54:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 1 Jun 2023 08:55:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA8A128;
+        Thu,  1 Jun 2023 05:55:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QX5gm3jPHz4whk;
-        Thu,  1 Jun 2023 22:54:44 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1685624085;
-        bh=OZ/5HE/soAZZFHMXDiilpjDsIee5iu2+4q2X3qd67Kk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Gzr/Hmhjs2KUDi4nnp0MTHzIyL0PHDDlwEtr+CBgyllamdBOtERawuTPq1+Z0snRe
-         RqvCFjm/AWFD80J4BeLp2QSQym1ZXeBiTft476K8ziJUbnMOsjsA8RguD3AXyBM5ye
-         BB8D+ZLSQhYU4+sMbj/eMXeZOxXpMmvnOSbuYx4SljrZQOjCTWzd6GgU2ijA91cw2e
-         hBlD1wH6lVO9+LZrJWD78PbLEnkVDbcqxmqj/xz6NryKP4Qh8wL5EamqBP+0kxiavr
-         heyBgrKUWteT0TNw6HQ7F6eykkAzJNWrx0xo+P2Vm3YnPQiCg8krOBryTkoo95eIfg
-         HINee5Siuuv1g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Maninder Singh <maninder1.s@samsung.com>, bcain@quicinc.com,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        keescook@chromium.org, nathanl@linux.ibm.com, ustavoars@kernel.org,
-        alex.gaynor@gmail.com, gary@garyguo.net, ojeda@kernel.org,
-        pmladek@suse.com, wedsonaf@google.com,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Onkarnath <onkarnath.1@samsung.com>
-Subject: Re: [PATCH 2/2] powerpc/xmon: use KSYM_NAME_LEN in array size
-In-Reply-To: <CANiq72nf-MC36hHzv0ZpR+qUyaf3mhF+rfqpMcVbw0AheuRBpA@mail.gmail.com>
-References: <CGME20230529111404epcas5p2d540d726dcf3e21aae2a6a0958e2eea5@epcas5p2.samsung.com>
- <20230529111337.352990-1-maninder1.s@samsung.com>
- <20230529111337.352990-2-maninder1.s@samsung.com>
- <CANiq72=QeTgtZL4k9=4CJP6C_Hv=rh3fsn3B9S3KFoPXkyWk3w@mail.gmail.com>
- <87ilc8ym6v.fsf@mail.lhotse>
- <CANiq72nf-MC36hHzv0ZpR+qUyaf3mhF+rfqpMcVbw0AheuRBpA@mail.gmail.com>
-Date:   Thu, 01 Jun 2023 22:54:42 +1000
-Message-ID: <87jzwngx65.fsf@mail.lhotse>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E878C60DBE;
+        Thu,  1 Jun 2023 12:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086C2C433D2;
+        Thu,  1 Jun 2023 12:55:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685624109;
+        bh=ZqxTQp6PSUQnFN/2lX8WhB9VL0uNNxw4eFDlQcou2hM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AJ6uDVxIcnDi9PdUqw02PEj1p95RcNg3MKp1wDy2TmBbS8pVmptiCPIseJN4xU9QU
+         kCgcelTnYnYjNuM9MVgFFW/yyFFlTJnCMPoHbJDdn9kHKQLlmF1rRPYLM1lQzzD5EG
+         KyDzNREX23EwoNey1cXeLk+/T8tv9lioMokqQx5kX3+zkQW8G8Y8fRcgTnBCD18yy8
+         /EKy68ttRK3uJdPkQ/ThWUGhZHitOz32UyIBcu03OMN+zwruzur0h5baKkACR6bah4
+         oEcgapiMgotduxHfGYnTsBxn2ErLhl12AP08PsIBfn0o6ZdsMq4Xr8iOJHCJAe3sd0
+         Nl6oJX4aveXvg==
+Date:   Thu, 1 Jun 2023 13:55:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
+Message-ID: <b2fc1733-4841-42e9-8bf7-1534a5d1a1b4@sirena.org.uk>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601053546.9574-18-nikita.shubin@maquefel.me>
+ <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
+ <20230601154154.57ae1b93@redslave.neermore.group>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="V3JKa2O2njgMRI99"
+Content-Disposition: inline
+In-Reply-To: <20230601154154.57ae1b93@redslave.neermore.group>
+X-Cookie: Positively no smoking.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> writes:
-> On Thu, Jun 1, 2023 at 4:02=E2=80=AFAM Michael Ellerman <mpe@ellerman.id.=
-au> wrote:
->>
->> > Side-note: in `get_function_bounds()`, I see `kallsyms_lookup()` being
->> > used, but the name seems discarded? Can
->> > `kallsyms_lookup_size_offset()` be used instead, thus avoiding the
->> > usage of the buffer there to begin with?
->>
->> A few lines below it uses the modname, and AFAICS there's no (easy) way
->> to lookup the modname without also looking up the name.
->
-> Hmm... I think you are looking at the `xmon_print_symbol()` one? I was
-> referring to the `get_function_bounds()` one, where the `modname`
-> parameter is `NULL` (and the `name` contents are not used, only
-> whether it was found or not).
 
-Yes you're right, apparently I can't read :}
+--V3JKa2O2njgMRI99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-cheers
+On Thu, Jun 01, 2023 at 03:41:54PM +0300, Nikita Shubin wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Thu, Jun 01, 2023 at 08:34:08AM +0300, Nikita Shubin wrote:
+
+> > > +  cirrus,ep9301-use-dma:
+> > > +    description: Flag indicating that the SPI should use dma
+> > > +    type: boolean =20
+
+> > My previous feedback on this property still applies.
+
+> > > +  cirrus,ep9301-use-dma:
+
+> The reason is that ep93xx DMA state is not quite device-tree ready at
+> this moment, and clients use it with the help of:
+
+> https://elixir.bootlin.com/linux/v6.4-rc4/source/include/linux/platform_d=
+ata/dma-ep93xx.h
+
+> I was hoping to slip by without changing much in ep93xx DMA driver, so
+
+You're definign new ABI here, that's not a good thing to do for a
+temporary workaround.
+
+> I can move "use-dma" to module parameters, if this is acceptable.
+
+That's less bad.  I guess you could also define the bindings for the DMA
+controller so that the properties are there then instead of properly
+using the DMA API in the clients just check to see if the DMA properties
+are present and then proceed accordingly?
+
+--V3JKa2O2njgMRI99
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR4lSYACgkQJNaLcl1U
+h9DnQAf/dOQ5yJ4O/a6/eDXnlTKTJomQveH4SJUqEYc9Jr5rTiC4ZpD8YGXTKLfJ
+rh8ZtJo8V7AL5gxaaHy3elU7nGppA0IgAAvPhhw2hKYdCMMP3Yo2Lan3R7c/VK6R
+4z8kiUZM2elNvLEa5bG4cw/OGFBl4jFG/pZs7SsgBuvJ+4kU/eAqztvoAWo88FSU
+UUA4V2Zbj5ojJ9ihe8eB5WeGXCnFbSSUIEzfoicwJ30dj/fO4RKsXscp0G9gMJyn
+k/yLGSkYe171xoNnkwvOyTjsLGBgCfheKXX36+SCi5qR70cNONx5xsnstT5UJNrh
+jka8g3Gz6KZCu2BNk1BckqDOMeWwEA==
+=b0C9
+-----END PGP SIGNATURE-----
+
+--V3JKa2O2njgMRI99--
