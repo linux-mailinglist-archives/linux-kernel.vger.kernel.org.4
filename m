@@ -2,681 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E2B719717
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF1171971E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbjFAJhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
+        id S232621AbjFAJh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbjFAJhT (ORCPT
+        with ESMTP id S232258AbjFAJhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:37:19 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6A1A4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:37:03 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2af177f12d1so8651561fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:37:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685612222; x=1688204222;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N72csYWRXaLK1Mlqt6d+OoK5HIL7O34x+wZGLEfCCiQ=;
-        b=NQIgApTD70jlwZApjTV0910Q8BR67gNtVRbBXE04M+U9Bq6Rq7HFo8CAlSKVYhzjY2
-         ETASu/AdcWwY+AmF2OI+ipCIf4nbE+3drbJdONFK7M09GN3l7HPokeT+TARgs3xzpRi5
-         OUJAxwuvNXcbll/25Pz3Y5iH2OnBBHdInqQpI8IXzlgy9/r0PL+tILruxn4UsaVbwwln
-         uMkCAzXe74QE8GTXfp6s8g5NwLQ7dxusBmIuiJJEhDMlSC8PWwxyzRBBubRr/fmgzD2T
-         Njuj+aJNYbl4RI5TSCd91o9b8+91XKxv9dKlNus/05yqzGbsGEefW0RM695bVQCuX8ad
-         tirw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685612222; x=1688204222;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N72csYWRXaLK1Mlqt6d+OoK5HIL7O34x+wZGLEfCCiQ=;
-        b=H4OWm08AKMz7o1vMISva2qTyZEuWM+adTRKF3MjXEs268BcMzE99fYDfU2bU3pCa9A
-         CcRlJOlC+LZImg3Cp5s+FDbazt/AsxcgBxogRkE6YBynDY89HEVAsnSXmfFxwWAEcD6G
-         B659d3ImY0w7C+VCPFRhGcCnmPOu1iBaOOp5FfzdhYUW6I+M2iVHw7B6Ah6q1M8DfSNK
-         TorM20tG8WXtVq78zvpmHgz8moMA1LuhAqfAYV9S6C2cAOuXIM55x/J08Cj9vcqpgXLe
-         7dZa61A1pi6QU/X1CZTFR6yddQtitnAWGwgrE1gXF6+uaCnv0wj/at9BctQl0O0lu1Tb
-         0J0A==
-X-Gm-Message-State: AC+VfDwGAVI/oW8n+C4M7oik3n1hoV6yAWQYPp0zDCQMjz4aVJKpIg2C
-        gh7X/nzkpTagxfPfdcnqb62dsg==
-X-Google-Smtp-Source: ACHHUZ7uwivoGbRr8ppgdNa6Y49ZWaCw3DD4M4+h81jomEGISQdhfsyj4fEEr1+r9xMjXWHJonGuiw==
-X-Received: by 2002:a2e:86d1:0:b0:2ad:8ffe:5f37 with SMTP id n17-20020a2e86d1000000b002ad8ffe5f37mr4626222ljj.47.1685612221843;
-        Thu, 01 Jun 2023 02:37:01 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id m10-20020a2e870a000000b002b1a666dddbsm46645lji.126.2023.06.01.02.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 02:37:01 -0700 (PDT)
-Message-ID: <36c1b720-f743-4ebc-029e-d04659dfa38f@linaro.org>
-Date:   Thu, 1 Jun 2023 12:37:00 +0300
+        Thu, 1 Jun 2023 05:37:53 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B966134;
+        Thu,  1 Jun 2023 02:37:50 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35158eBY001802;
+        Thu, 1 Jun 2023 09:37:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=W/k5FMFIiDVmSGnrut0ZiBHdp2E7/iWBsuAHGK4OneQ=;
+ b=aaR8TJV7UT/UKozPBCcuyI1lja+jXwzkpPudkB7Ycv5s4DNAwOwaL4o1D5/sWDSxUhA7
+ qHjXDZEa7IxXFFKTEl3maZfhaucbAq+hhUpS1z97FmewH9VQtbt57/KdRhjg2LrpD3CM
+ wbubUrh6DgKdq7OxMfFCJKhlTYvP5ghcE49wjgPK/K4xh/akJcsLPku/H5A7FkfiX4En
+ n7JTgQS6cCqJDscIPbc0fhgcwVsg6CBUIiToqtfQ9yGhVgd0ZfIjjYY4OI+wk4EvrKMJ
+ OzynjYjIRbWMrQEDT0DvRNYXfb6mHeMLg1R7dB0NB4ryoa9MyvGJya3abwT6BCz6mFJZ 1A== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxbt8hjf9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 09:37:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3519bHEC030133
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 09:37:17 GMT
+Received: from [10.50.56.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 02:37:12 -0700
+Message-ID: <a04910bf-f8f3-dc15-5ce8-7300ac6a060c@quicinc.com>
+Date:   Thu, 1 Jun 2023 15:07:08 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] usb: typec: add support for the nb7vpq904m Type-C
- Linear Redriver
-Content-Language: en-GB
-To:     neil.armstrong@linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 15/17] media: venus: Introduce accessors for remapped
+ hfi_buffer_reqs members
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <20230601-topic-sm8x50-upstream-redriver-v1-0-6ad21094ff6f@linaro.org>
- <20230601-topic-sm8x50-upstream-redriver-v1-2-6ad21094ff6f@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230601-topic-sm8x50-upstream-redriver-v1-2-6ad21094ff6f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
+ <20230228-topic-venus-v4-15-feebb2f6e9b8@linaro.org>
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v4-15-feebb2f6e9b8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9N_jhD34ycGEc9-UQGieCFxrOfeFRvZD
+X-Proofpoint-ORIG-GUID: 9N_jhD34ycGEc9-UQGieCFxrOfeFRvZD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_06,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015 spamscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306010085
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 12:21, neil.armstrong@linaro.org wrote:
-> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+
+On 5/30/2023 6:00 PM, Konrad Dybcio wrote:
+> Currently we have macros to access these, but they don't provide a
+> way to override the remapped fields. Replace the macros with actual
+> get/set pairs to fix that.
 > 
-> Add support for the ON Semiconductor NB7VPQ904M Type-C USB SuperSpeed
-> and DisplayPort ALT Mode Linear Redriver chip found on some devices
-> with a Type-C port.
-> 
-> The redriver compensates ultra High-Speeed DisplayPort and USB
-> Super Speed signal integrity losses mainly due to PCB & transmission
-> cables.
-> 
-> The redriver doesn't support SuperSpeed lines swapping, but
-> can support Type-C SBU lines swapping.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+
 > ---
->   drivers/usb/typec/mux/Kconfig      |   8 +
->   drivers/usb/typec/mux/Makefile     |   1 +
->   drivers/usb/typec/mux/nb7vpq904m.c | 526 +++++++++++++++++++++++++++++++++++++
->   3 files changed, 535 insertions(+)
+>  drivers/media/platform/qcom/venus/helpers.c    |  2 +-
+>  drivers/media/platform/qcom/venus/hfi_helper.h | 61 ++++++++++++++++++++++----
+>  drivers/media/platform/qcom/venus/hfi_msgs.c   |  2 +-
+>  drivers/media/platform/qcom/venus/vdec.c       |  8 ++--
+>  drivers/media/platform/qcom/venus/vdec_ctrls.c |  2 +-
+>  drivers/media/platform/qcom/venus/venc.c       |  4 +-
+>  drivers/media/platform/qcom/venus/venc_ctrls.c |  2 +-
+>  7 files changed, 63 insertions(+), 18 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-> index c46fa4f9d3df..8c4d6b8fb75c 100644
-> --- a/drivers/usb/typec/mux/Kconfig
-> +++ b/drivers/usb/typec/mux/Kconfig
-> @@ -35,4 +35,12 @@ config TYPEC_MUX_INTEL_PMC
->   	  control the USB role switch and also the multiplexer/demultiplexer
->   	  switches used with USB Type-C Alternate Modes.
->   
-> +config TYPEC_MUX_NB7VPQ904M
-> +	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-> +	  redriver chip found on some devices with a Type-C port.
-> +
->   endmenu
-> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-> index dda67e19b58b..76196096ef41 100644
-> --- a/drivers/usb/typec/mux/Makefile
-> +++ b/drivers/usb/typec/mux/Makefile
-> @@ -4,3 +4,4 @@ obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
->   obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
->   obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
->   obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-> +obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
-> diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-> new file mode 100644
-> index 000000000000..2f85ad9e417a
-> --- /dev/null
-> +++ b/drivers/usb/typec/mux/nb7vpq904m.c
-> @@ -0,0 +1,526 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * OnSemi NB7VPQ904M Type-C driver
-> + *
-> + * Copyright (C) 2023 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> + */
-> +#include <linux/i2c.h>
-> +#include <linux/mutex.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +#include <linux/of_graph.h>
-> +#include <drm/drm_bridge.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/typec_mux.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +#define NB7_CHNA		0
-> +#define NB7_CHNB		1
-> +#define NB7_CHNC		2
-> +#define NB7_CHND		3
-> +#define NB7_IS_CHAN_AD(channel) (channel == NB7_CHNA || channel == NB7_CHND)
-> +
-> +#define GEN_DEV_SET_REG			0x00
-> +
-> +#define GEN_DEV_SET_CHIP_EN		BIT(0)
-> +#define GEN_DEV_SET_CHNA_EN		BIT(4)
-> +#define GEN_DEV_SET_CHNB_EN		BIT(5)
-> +#define GEN_DEV_SET_CHNC_EN		BIT(6)
-> +#define GEN_DEV_SET_CHND_EN		BIT(7)
-> +
-> +#define GEN_DEV_SET_OP_MODE_MASK	GENMASK(3, 1)
-> +
-> +#define GEN_DEV_SET_OP_MODE_DP_CC2	0
-> +#define GEN_DEV_SET_OP_MODE_DP_CC1	1
-> +#define GEN_DEV_SET_OP_MODE_DP_4LANE	2
-> +#define GEN_DEV_SET_OP_MODE_USB		5
-> +
-> +#define EQ_SETTING_REG_BASE		0x01
-> +#define EQ_SETTING_REG(n)		(EQ_SETTING_REG_BASE + (n) * 2)
-> +#define EQ_SETTING_MASK			GENMASK(3, 1)
-> +
-> +#define OUTPUT_COMPRESSION_AND_POL_REG_BASE	0x02
-> +#define OUTPUT_COMPRESSION_AND_POL_REG(n)	(OUTPUT_COMPRESSION_AND_POL_REG_BASE + (n) * 2)
-> +#define OUTPUT_COMPRESSION_MASK		GENMASK(2, 1)
-> +
-> +#define FLAT_GAIN_REG_BASE		0x18
-> +#define FLAT_GAIN_REG(n)		(FLAT_GAIN_REG_BASE + (n) * 2)
-> +#define FLAT_GAIN_MASK			GENMASK(1, 0)
-> +
-> +#define LOSS_MATCH_REG_BASE		0x19
-> +#define LOSS_MATCH_REG(n)		(LOSS_MATCH_REG_BASE + (n) * 2)
-> +#define LOSS_MATCH_MASK			GENMASK(1, 0)
-> +
-> +#define AUX_CC_REG			0x09
-> +
-> +#define CHIP_VERSION_REG		0x17
-> +
-> +struct nb7vpq904m {
-> +	struct i2c_client *client;
-> +	struct gpio_desc *enable_gpio;
-> +	struct regulator *vcc_supply;
-> +	struct regmap *regmap;
-> +	struct typec_switch_dev *sw;
-> +	struct typec_mux_dev *mux;
-> +
-> +	bool swap_data_lanes;
-> +	struct typec_switch *typec_switch;
-> +
-> +	struct drm_bridge bridge;
-> +
-> +	struct mutex lock; /* protect non-concurrent mux & switch */
-> +
-> +	enum typec_orientation orientation;
-> +	unsigned long mode;
-> +	unsigned int svid;
-> +};
-> +
-> +static void nb7vpq904m_set_channel(struct nb7vpq904m *nb7, unsigned int channel, bool dp)
+> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+> index 1822e85ab6bf..b70bd3dac4df 100644
+> --- a/drivers/media/platform/qcom/venus/helpers.c
+> +++ b/drivers/media/platform/qcom/venus/helpers.c
+> @@ -189,7 +189,7 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *inst)
+>  	if (ret)
+>  		return ret;
+>  
+> -	count = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
+> +	count = hfi_bufreq_get_count_min(&bufreq, ver);
+>  
+>  	for (i = 0; i < count; i++) {
+>  		buf = kzalloc(sizeof(*buf), GFP_KERNEL);
+> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+> index 0abbc50c5864..e4c05d62cfc7 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+> @@ -1170,14 +1170,6 @@ struct hfi_buffer_display_hold_count_actual {
+>  	u32 hold_count;
+>  };
+>  
+> -/* HFI 4XX reorder the fields, use these macros */
+> -#define HFI_BUFREQ_HOLD_COUNT(bufreq, ver)	\
+> -	((ver) == HFI_VERSION_4XX ? 0 : (bufreq)->hold_count)
+> -#define HFI_BUFREQ_COUNT_MIN(bufreq, ver)	\
+> -	((ver) == HFI_VERSION_4XX ? (bufreq)->hold_count : (bufreq)->count_min)
+> -#define HFI_BUFREQ_COUNT_MIN_HOST(bufreq, ver)	\
+> -	((ver) == HFI_VERSION_4XX ? (bufreq)->count_min : 0)
+> -
+>  struct hfi_buffer_requirements {
+>  	u32 type;
+>  	u32 size;
+> @@ -1189,6 +1181,59 @@ struct hfi_buffer_requirements {
+>  	u32 alignment;
+>  };
+>  
+> +/* On HFI 4XX, some of the struct members have been swapped. */
+> +static inline u32 hfi_bufreq_get_hold_count(struct hfi_buffer_requirements *req,
+> +					    u32 ver)
 > +{
-> +	u8 eq, out_comp, flat_gain, loss_match;
-> +
-> +	if (dp) {
-> +		eq = NB7_IS_CHAN_AD(channel) ? 0x6 : 0x4;
-> +		out_comp = 0x3;
-> +		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x2 : 0x1;
-> +		loss_match = 0x3;
-> +	} else {
-> +		eq = 0x4;
-> +		out_comp = 0x3;
-> +		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x3 : 0x1;
-> +		loss_match = NB7_IS_CHAN_AD(channel) ? 0x1 : 0x3;
-> +	}
-> +
-> +	regmap_update_bits(nb7->regmap, EQ_SETTING_REG(channel),
-> +			   EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
-> +	regmap_update_bits(nb7->regmap, OUTPUT_COMPRESSION_AND_POL_REG(channel),
-> +			   OUTPUT_COMPRESSION_MASK, FIELD_PREP(OUTPUT_COMPRESSION_MASK, out_comp));
-> +	regmap_update_bits(nb7->regmap, FLAT_GAIN_REG(channel),
-> +			   FLAT_GAIN_MASK, FIELD_PREP(FLAT_GAIN_MASK, flat_gain));
-> +	regmap_update_bits(nb7->regmap, LOSS_MATCH_REG(channel),
-> +			   LOSS_MATCH_MASK, FIELD_PREP(LOSS_MATCH_MASK, loss_match));
-> +}
-> +
-> +static int nb7vpq904m_set(struct nb7vpq904m *nb7)
-> +{
-> +	bool reverse = (nb7->orientation == TYPEC_ORIENTATION_REVERSE);
-> +
-> +	switch (nb7->mode) {
-> +	case TYPEC_STATE_SAFE:
-> +		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-> +			     GEN_DEV_SET_CHIP_EN |
-> +			     GEN_DEV_SET_CHNA_EN |
-> +			     GEN_DEV_SET_CHNB_EN |
-> +			     GEN_DEV_SET_CHNC_EN |
-> +			     GEN_DEV_SET_CHND_EN |
-> +			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-> +					GEN_DEV_SET_OP_MODE_USB));
-> +		nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
-> +		nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
-> +		nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
-> +		nb7vpq904m_set_channel(nb7, NB7_CHND, false);
-> +		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
-> +
+> +	if (ver == HFI_VERSION_4XX)
 > +		return 0;
 > +
-> +	case TYPEC_STATE_USB:
-> +		/*
-> +		 * Normal Orientation (CC1)
-> +		 * A -> USB RX
-> +		 * B -> USB TX
-> +		 * C -> X
-> +		 * D -> X
-> +		 * Flipped Orientation (CC2)
-> +		 * A -> X
-> +		 * B -> X
-> +		 * C -> USB TX
-> +		 * D -> USB RX
-> +		 *
-> +		 * Reversed if data lanes are swapped
-> +		 */
-> +		if (reverse ^ nb7->swap_data_lanes) {
-> +			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-> +				     GEN_DEV_SET_CHIP_EN |
-> +				     GEN_DEV_SET_CHNA_EN |
-> +				     GEN_DEV_SET_CHNB_EN |
-> +				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-> +						GEN_DEV_SET_OP_MODE_USB));
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
-> +		} else {
-> +			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-> +				     GEN_DEV_SET_CHIP_EN |
-> +				     GEN_DEV_SET_CHNC_EN |
-> +				     GEN_DEV_SET_CHND_EN |
-> +				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-> +						GEN_DEV_SET_OP_MODE_USB));
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHND, false);
-> +		}
-> +		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
+> +	return req->hold_count;
+> +};
 > +
-> +		return 0;
+> +static inline u32 hfi_bufreq_get_count_min(struct hfi_buffer_requirements *req,
+> +					   u32 ver)
+> +{
+> +	if (ver == HFI_VERSION_4XX)
+> +		return req->hold_count;
 > +
-> +	default:
-> +		if (nb7->svid != USB_TYPEC_DP_SID)
-> +			return -EINVAL;
+> +	return req->count_min;
+> +};
 > +
-> +		break;
-> +	}
-> +
-> +	/* DP Altmode Setup */
-> +
-> +	regmap_write(nb7->regmap, AUX_CC_REG, reverse ? 0x1 : 0x0);
-> +
-> +	switch (nb7->mode) {
-> +	case TYPEC_DP_STATE_C:
-> +	case TYPEC_DP_STATE_E:
-> +		/*
-> +		 * Normal Orientation (CC1)
-> +		 * A -> DP3
-> +		 * B -> DP2
-> +		 * C -> DP1
-> +		 * D -> DP0
-> +		 * Flipped Orientation (CC2)
-> +		 * A -> DP0
-> +		 * B -> DP1
-> +		 * C -> DP2
-> +		 * D -> DP3
-> +		 */
-> +		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-> +			     GEN_DEV_SET_CHIP_EN |
-> +			     GEN_DEV_SET_CHNA_EN |
-> +			     GEN_DEV_SET_CHNB_EN |
-> +			     GEN_DEV_SET_CHNC_EN |
-> +			     GEN_DEV_SET_CHND_EN |
-> +			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-> +					GEN_DEV_SET_OP_MODE_DP_4LANE));
-> +		nb7vpq904m_set_channel(nb7, NB7_CHNA, true);
-> +		nb7vpq904m_set_channel(nb7, NB7_CHNB, true);
-> +		nb7vpq904m_set_channel(nb7, NB7_CHNC, true);
-> +		nb7vpq904m_set_channel(nb7, NB7_CHND, true);
-> +		break;
-> +
-> +	case TYPEC_DP_STATE_D:
-> +	case TYPEC_DP_STATE_F:
-> +		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-> +			     GEN_DEV_SET_CHIP_EN |
-> +			     GEN_DEV_SET_CHNA_EN |
-> +			     GEN_DEV_SET_CHNB_EN |
-> +			     GEN_DEV_SET_CHNC_EN |
-> +			     GEN_DEV_SET_CHND_EN |
-> +			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-> +					reverse ^ nb7->swap_data_lanes ?
-> +						GEN_DEV_SET_OP_MODE_DP_CC2
-> +						: GEN_DEV_SET_OP_MODE_DP_CC1));
-> +
-> +		/*
-> +		 * Normal Orientation (CC1)
-> +		 * A -> USB RX
-> +		 * B -> USB TX
-> +		 * C -> DP1
-> +		 * D -> DP0
-> +		 * Flipped Orientation (CC2)
-> +		 * A -> DP0
-> +		 * B -> DP1
-> +		 * C -> USB TX
-> +		 * D -> USB RX
-> +		 *
-> +		 * Reversed if data lanes are swapped
-> +		 */
-> +		if (nb7->swap_data_lanes) {
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNA, !reverse);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNB, !reverse);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNC, reverse);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHND, reverse);
-> +		} else {
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNA, reverse);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNB, reverse);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHNC, !reverse);
-> +			nb7vpq904m_set_channel(nb7, NB7_CHND, !reverse);
-> +		}
-> +		break;
-> +
-> +	default:
-> +		return -ENOTSUPP;
-> +	}
+> +static inline u32 hfi_bufreq_get_count_min_host(struct hfi_buffer_requirements *req,
+> +						u32 ver)
+> +{
+> +	if (ver == HFI_VERSION_4XX)
+> +		return req->count_min;
 > +
 > +	return 0;
-> +}
-> +
-> +static int nb7vpq904m_sw_set(struct typec_switch_dev *sw,
-> +			      enum typec_orientation orientation)
-> +{
-> +	struct nb7vpq904m *nb7 = typec_switch_get_drvdata(sw);
-> +	int ret;
-> +
-> +	ret = typec_switch_set(nb7->typec_switch, orientation);
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&nb7->lock);
-> +
-> +	if (nb7->orientation != orientation) {
-> +		nb7->orientation = orientation;
-> +
-> +		ret = nb7vpq904m_set(nb7);
-> +	}
-> +
-> +	mutex_unlock(&nb7->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int nb7vpq904m_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
-> +{
-> +	struct nb7vpq904m *nb7 = typec_mux_get_drvdata(mux);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&nb7->lock);
-> +
-> +	if (nb7->mode != state->mode) {
-> +		nb7->mode = state->mode;
-> +
-> +		if (state->alt)
-> +			nb7->svid = state->alt->svid;
-> +		else
-> +			nb7->svid = 0; // No SVID
-> +
-> +		ret = nb7vpq904m_set(nb7);
-> +	}
-> +
-> +	mutex_unlock(&nb7->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_DRM)
-> +static int nb7vpq904m_bridge_attach(struct drm_bridge *bridge,
-> +				    enum drm_bridge_attach_flags flags)
-> +{
-> +	struct nb7vpq904m *nb7 = container_of(bridge, struct nb7vpq904m, bridge);
-> +	struct drm_bridge *next_bridge;
-> +
-> +	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-> +		return -EINVAL;
-> +
-> +	next_bridge = devm_drm_of_get_bridge(&nb7->client->dev, nb7->client->dev.of_node, 0, 0);
-> +	if (IS_ERR(next_bridge)) {
-> +		dev_err(&nb7->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
-> +		return PTR_ERR(next_bridge);
-> +	}
-> +
-> +	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
-> +				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-> +}
-> +
-> +static const struct drm_bridge_funcs nb7vpq904m_bridge_funcs = {
-> +	.attach	= nb7vpq904m_bridge_attach,
 > +};
 > +
-> +static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
+> +static inline void hfi_bufreq_set_hold_count(struct hfi_buffer_requirements *req,
+> +					     u32 ver, u32 val)
 > +{
-> +	nb7->bridge.funcs = &nb7vpq904m_bridge_funcs;
-> +	nb7->bridge.of_node = nb7->client->dev.of_node;
+> +	if (ver == HFI_VERSION_4XX)
+> +		return;
 > +
-> +	return devm_drm_bridge_add(&nb7->client->dev, &nb7->bridge);
-> +}
-> +#else
-> +static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
+> +	req->hold_count = val;
+> +};
+> +
+> +static inline void hfi_bufreq_set_count_min(struct hfi_buffer_requirements *req,
+> +					    u32 ver, u32 val)
 > +{
-> +	return 0;
-> +}
-> +#endif
-
-This is what I feared of when we started mixing USB-C and drm bridges. A 
-part of me still thinks that the proper solution should involve OOB 
-notifications.
-
-If we can expect a sizeable amount of such drivers, can we have a 
-generic drm helper for such passthrough bridges?
-
+> +	if (ver == HFI_VERSION_4XX)
+> +		req->hold_count = val;
 > +
-> +static const struct regmap_config nb7_regmap = {
-> +	.max_register = 0x1f,
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
+> +	req->count_min = val;
 > +};
 > +
-> +enum {
-> +	NORMAL_LANE_MAPPING,
-> +	INVERT_LANE_MAPPING,
-> +};
-> +
-> +#define DATA_LANES_COUNT	4
-> +
-> +static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
-> +	[NORMAL_LANE_MAPPING] = { 0, 1, 2, 3 },
-> +	[INVERT_LANE_MAPPING] = { 2, 3, 0, 1 },
-> +};
-> +
-> +static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
+> +static inline void hfi_bufreq_set_count_min_host(struct hfi_buffer_requirements *req,
+> +						 u32 ver, u32 val)
 > +{
-> +	struct device_node *ep;
-> +	u32 data_lanes[4];
-> +	int ret, i, j;
-> +
-> +	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
-> +
-> +	if (ep) {
-> +		ret = of_property_count_u32_elems(ep, "data-lanes");
-> +		if (ret == -EINVAL)
-> +			/* Property isn't here, consider default mapping */
-> +			goto out_done;
-> +		if (ret < 0)
-> +			goto out_error;
-> +
-> +		if (ret != DATA_LANES_COUNT) {
-> +			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
-> +			ret = -EINVAL;
-> +			goto out_error;
-> +		}
-> +
-> +		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
-> +		if (ret)
-> +			goto out_error;
-> +
-> +		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
-> +			for (j = 0; j < DATA_LANES_COUNT; j++) {
-> +				if (data_lanes[j] != supported_data_lane_mapping[i][j])
-> +					break;
-> +			}
-> +
-> +			if (j == DATA_LANES_COUNT)
-> +				break;
-> +		}
-> +
-> +		switch (i) {
-> +		case NORMAL_LANE_MAPPING:
-> +			break;
-> +		case INVERT_LANE_MAPPING:
-> +			nb7->swap_data_lanes = true;
-> +			dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-> +			break;
-> +		default:
-> +			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
-> +			ret = -EINVAL;
-> +			goto out_error;
-> +		}
-> +	}
-> +
-> +out_done:
-> +	ret = 0;
-> +
-> +out_error:
-> +	of_node_put(ep);
-> +
-> +	return ret;
-> +}
-> +
-> +static int nb7vpq904m_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct typec_switch_desc sw_desc = { };
-> +	struct typec_mux_desc mux_desc = { };
-> +	struct nb7vpq904m *nb7;
-> +	int ret;
-> +
-> +	nb7 = devm_kzalloc(dev, sizeof(*nb7), GFP_KERNEL);
-> +	if (!nb7)
-> +		return -ENOMEM;
-> +
-> +	nb7->client = client;
-> +
-> +	nb7->regmap = devm_regmap_init_i2c(client, &nb7_regmap);
-> +	if (IS_ERR(nb7->regmap)) {
-> +		dev_err(&client->dev, "Failed to allocate register map\n");
-> +		return PTR_ERR(nb7->regmap);
-> +	}
-> +
-> +	nb7->mode = TYPEC_STATE_SAFE;
-> +	nb7->orientation = TYPEC_ORIENTATION_NONE;
-> +
-> +	mutex_init(&nb7->lock);
-> +
-> +	nb7->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
-> +	if (IS_ERR(nb7->enable_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(nb7->enable_gpio),
-> +				     "unable to acquire enable gpio\n");
-> +
-> +	nb7->vcc_supply = devm_regulator_get_optional(dev, "vcc");
-> +	if (IS_ERR(nb7->vcc_supply))
-> +		return PTR_ERR(nb7->vcc_supply);
-> +
-> +	nb7->typec_switch = fwnode_typec_switch_get(dev->fwnode);
-> +	if (IS_ERR(nb7->typec_switch))
-> +		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
-> +				     "failed to acquire orientation-switch\n");
-> +
-> +	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regulator_enable(nb7->vcc_supply);
-> +	if (ret)
-> +		dev_warn(dev, "Failed to enable vcc: %d\n", ret);
-> +
-> +	gpiod_set_value(nb7->enable_gpio, 1);
-> +
-> +	ret = nb7vpq904m_register_bridge(nb7);
-> +	if (ret)
-> +		return ret;
-> +
-> +	sw_desc.drvdata = nb7;
-> +	sw_desc.fwnode = dev->fwnode;
-> +	sw_desc.set = nb7vpq904m_sw_set;
-> +
-> +	nb7->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(nb7->sw))
-> +		return dev_err_probe(dev, PTR_ERR(nb7->sw), "Error registering typec switch\n");
-> +
-> +	mux_desc.drvdata = nb7;
-> +	mux_desc.fwnode = dev->fwnode;
-> +	mux_desc.set = nb7vpq904m_mux_set;
-> +
-> +	nb7->mux = typec_mux_register(dev, &mux_desc);
-> +	if (IS_ERR(nb7->mux)) {
-> +		typec_switch_unregister(nb7->sw);
-> +		return dev_err_probe(dev, PTR_ERR(nb7->mux), "Error registering typec mux\n");
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void nb7vpq904m_remove(struct i2c_client *client)
-> +{
-> +	struct nb7vpq904m *nb7 = i2c_get_clientdata(client);
-> +
-> +	typec_mux_unregister(nb7->mux);
-> +	typec_switch_unregister(nb7->sw);
-> +
-> +	gpiod_set_value(nb7->enable_gpio, 0);
-> +
-> +	regulator_disable(nb7->vcc_supply);
-> +}
-> +
-> +static const struct i2c_device_id nb7vpq904m_table[] = {
-> +	{ "nb7vpq904m" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, nb7vpq904m_table);
-> +
-> +static const struct of_device_id nb7vpq904m_of_table[] = {
-> +	{ .compatible = "onnn,nb7vpq904m" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, nb7vpq904m_of_table);
-> +
-> +static struct i2c_driver nb7vpq904m_driver = {
-> +	.driver = {
-> +		.name = "nb7vpq904m",
-> +		.of_match_table = nb7vpq904m_of_table,
-> +	},
-> +	.probe_new	= nb7vpq904m_probe,
-> +	.remove		= nb7vpq904m_remove,
-> +	.id_table	= nb7vpq904m_table,
+> +	if (ver == HFI_VERSION_4XX)
+> +		req->count_min = val;
 > +};
 > +
-> +module_i2c_driver(nb7vpq904m_driver);
-> +
-> +MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-> +MODULE_DESCRIPTION("OnSemi NB7VPQ904M Type-C driver");
-> +MODULE_LICENSE("GPL");
+>  struct hfi_data_payload {
+>  	u32 size;
+>  	u8 data[1];
+> diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
+> index 3d5dadfa1900..7cab685a2ec8 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_msgs.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
+> @@ -99,7 +99,7 @@ static void event_seq_changed(struct venus_core *core, struct venus_inst *inst,
+>  		case HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS:
+>  			data_ptr += sizeof(u32);
+>  			bufreq = (struct hfi_buffer_requirements *)data_ptr;
+> -			event.buf_count = HFI_BUFREQ_COUNT_MIN(bufreq, ver);
+> +			event.buf_count = hfi_bufreq_get_count_min(bufreq, ver);
+>  			data_ptr += sizeof(*bufreq);
+>  			break;
+>  		case HFI_INDEX_EXTRADATA_INPUT_CROP:
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 063a8b0d357b..2a1e038f92cf 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -899,13 +899,13 @@ static int vdec_num_buffers(struct venus_inst *inst, unsigned int *in_num,
+>  	if (ret)
+>  		return ret;
+>  
+> -	*in_num = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
+> +	*in_num = hfi_bufreq_get_count_min(&bufreq, ver);
+>  
+>  	ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT, &bufreq);
+>  	if (ret)
+>  		return ret;
+>  
+> -	*out_num = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
+> +	*out_num = hfi_bufreq_get_count_min(&bufreq, ver);
+>  
+>  	return 0;
+>  }
+> @@ -1019,14 +1019,14 @@ static int vdec_verify_conf(struct venus_inst *inst)
+>  		return ret;
+>  
+>  	if (inst->num_output_bufs < bufreq.count_actual ||
+> -	    inst->num_output_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
+> +	    inst->num_output_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
+>  		return -EINVAL;
+>  
+>  	ret = venus_helper_get_bufreq(inst, HFI_BUFFER_INPUT, &bufreq);
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (inst->num_input_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
+> +	if (inst->num_input_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
+>  		return -EINVAL;
+>  
+>  	return 0;
+> diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+> index fbe12a608b21..7e0f29bf7fae 100644
+> --- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
+> +++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+> @@ -79,7 +79,7 @@ static int vdec_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+>  	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
+>  		ret = venus_helper_get_bufreq(inst, HFI_BUFFER_OUTPUT, &bufreq);
+>  		if (!ret)
+> -			ctrl->val = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
+> +			ctrl->val = hfi_bufreq_get_count_min(&bufreq, ver);
+>  		break;
+>  	default:
+>  		return -EINVAL;
+> diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+> index b60772cc2cdc..d2e2d3108752 100644
+> --- a/drivers/media/platform/qcom/venus/venc.c
+> +++ b/drivers/media/platform/qcom/venus/venc.c
+> @@ -1207,7 +1207,7 @@ static int venc_verify_conf(struct venus_inst *inst)
+>  		return ret;
+>  
+>  	if (inst->num_output_bufs < bufreq.count_actual ||
+> -	    inst->num_output_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
+> +	    inst->num_output_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
+>  		return -EINVAL;
+>  
+>  	ret = venus_helper_get_bufreq(inst, HFI_BUFFER_INPUT, &bufreq);
+> @@ -1215,7 +1215,7 @@ static int venc_verify_conf(struct venus_inst *inst)
+>  		return ret;
+>  
+>  	if (inst->num_input_bufs < bufreq.count_actual ||
+> -	    inst->num_input_bufs < HFI_BUFREQ_COUNT_MIN(&bufreq, ver))
+> +	    inst->num_input_bufs < hfi_bufreq_get_count_min(&bufreq, ver))
+>  		return -EINVAL;
+>  
+>  	return 0;
+> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> index 7468e43800a9..d9d2a293f3ef 100644
+> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
+> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> @@ -358,7 +358,7 @@ static int venc_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+>  	case V4L2_CID_MIN_BUFFERS_FOR_OUTPUT:
+>  		ret = venus_helper_get_bufreq(inst, HFI_BUFFER_INPUT, &bufreq);
+>  		if (!ret)
+> -			ctrl->val = HFI_BUFREQ_COUNT_MIN(&bufreq, ver);
+> +			ctrl->val = hfi_bufreq_get_count_min(&bufreq, ver);
+>  		break;
+>  	default:
+>  		return -EINVAL;
 > 
-
--- 
-With best wishes
-Dmitry
-
