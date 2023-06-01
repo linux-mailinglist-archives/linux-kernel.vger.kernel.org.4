@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F162719AA3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8A719AA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbjFALIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S233281AbjFALIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbjFALI2 (ORCPT
+        with ESMTP id S232853AbjFALIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:08:28 -0400
+        Thu, 1 Jun 2023 07:08:34 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B57B123;
-        Thu,  1 Jun 2023 04:08:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C70133;
+        Thu,  1 Jun 2023 04:08:26 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B1D156606ECB;
-        Thu,  1 Jun 2023 12:08:23 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A75DE66003B1;
+        Thu,  1 Jun 2023 12:08:24 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685617704;
-        bh=x0Qr5LahDfyZYZmRkn9rv/gKpzoGdsqrT9tCKkLWPyA=;
+        s=mail; t=1685617705;
+        bh=rtkU/LXfohClR1Fp46CLmRkHJo8bXflFgsmdF+fF9IQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jkQIaAMQWxdMtJ2Y2UqHFh9nVHlXD+9iuuCazccKhNJRxHaM69XgsHkg5W+8ECBOr
-         utYhND6GBl/pA+BOzweDtrDNt0I5cBj4mRUIBgezE8viQLkKY7I/+952tcuPh6IPEH
-         Fp2T/8eJrte8iJ3m/cJmZ4DYp4DGK6g0x5W+ECg/Y9qmsIf4HziJZ2HfGuiwii8yDL
-         1d2ssJvYZLlHmhOz2fwr/2p1ExYKQ/gAHBZGWT4b1HhrX7pBbPYYDiNWgQIcUm2AO1
-         EnbJr0vl0LYZW1NK5qOY0fs1nXzGFlULA/ht0TvCjZIjLt5S2CtNM/XKnFVzp0uHID
-         0IleZnRS1Y8EQ==
+        b=R3IqwhnCOUQ5YmTsSOqw9XdFRg+83XHDCkTO62ylLR0xe/WV4OpHY9agl0/YzJadB
+         qf6XaEV3z5M9Z4NWgfqathD5tfvjH5WTv6bsw2v4lCLEugFVGJdrac28A013ig+XFX
+         APMTSf8Dg/3JjFno1S+ERcfKzsd7J92Uu3GPyFpvNx0XnfXoQfoZwBN9mOtPRRshK6
+         NTStgOTinKjaOHfXYfgbN2b9X7jC3Nli9fUPrIvRetgGeeVtT845LmW6LYBZBaW6tr
+         3SwlBd5WLThvFN4qJ3ClTA4pjBgjktrFvJxCypl9xSXCWzLAfzMeS4f3A4EgIrVYvh
+         Os795yIVjI1jA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     pavel@ucw.cz
@@ -44,9 +44,9 @@ Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Alexandre Mergnat <amergnat@baylibre.com>
-Subject: [PATCH v3 6/8] leds: leds-mt6323: Open code and drop MT6323_CAL_HW_DUTY macro
-Date:   Thu,  1 Jun 2023 13:08:11 +0200
-Message-Id: <20230601110813.2373764-7-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 7/8] leds: leds-mt6323: Add support for MT6331 leds
+Date:   Thu,  1 Jun 2023 13:08:12 +0200
+Message-Id: <20230601110813.2373764-8-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
 References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
@@ -61,41 +61,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is only one instance of using this macro and it's anyway not
-simplifying the flow, or increasing the readability of this driver.
-
-Drop this macro by open coding it in mt6323_led_set_blink().
-
-No functional changes.
+Add the register offsets for MT6331. The hwspec is the same as MT6323.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Pavel Machek <pavel@ucw.cz>
 Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- drivers/leds/leds-mt6323.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/leds/leds-mt6323.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
-index dae782de09c4..f8bd9f17e89c 100644
+index f8bd9f17e89c..85b056fcd94e 100644
 --- a/drivers/leds/leds-mt6323.c
 +++ b/drivers/leds/leds-mt6323.c
-@@ -57,8 +57,6 @@
- #define ISINK_CH_EN(i)		BIT(i)
+@@ -529,6 +529,17 @@ static const struct mt6323_regs mt6323_registers = {
+ 	.isink_en_ctrl = 0x356,
+ };
  
- #define MAX_SUPPORTED_LEDS		8
--#define MT6323_CAL_HW_DUTY(o, p, u)	DIV_ROUND_CLOSEST((o) * 100000ul,\
--					(p) * (u))
++static const struct mt6323_regs mt6331_registers = {
++	.top_ckpdn = (const u16[]){ 0x138, 0x13e, 0x144 },
++	.num_top_ckpdn = 3,
++	.top_ckcon = (const u16[]){ 0x14c, 0x14a },
++	.num_top_ckcon = 2,
++	.isink_con = (const u16[]){ 0x40c, 0x40e, 0x410, 0x412, 0x414 },
++	.num_isink_con = 5,
++	.isink_max_regs = 4, /* ISINK[0..3] */
++	.isink_en_ctrl = 0x43a,
++};
++
+ static const struct mt6323_hwspec mt6323_spec = {
+ 	.max_period = 10000,
+ 	.max_leds = 4,
+@@ -541,8 +552,14 @@ static const struct mt6323_data mt6323_pdata = {
+ 	.spec = &mt6323_spec,
+ };
  
- struct mt6323_leds;
- 
-@@ -316,7 +314,7 @@ static int mt6323_led_set_blink(struct led_classdev *cdev,
- 	 * Calculate duty_hw based on the percentage of period during
- 	 * which the led is ON.
- 	 */
--	duty_hw = MT6323_CAL_HW_DUTY(*delay_on, period, spec->unit_duty);
-+	duty_hw = DIV_ROUND_CLOSEST(*delay_on * 100000ul, period * spec->unit_duty);
- 
- 	/* hardware doesn't support zero duty cycle. */
- 	if (!duty_hw)
++static const struct mt6323_data mt6331_pdata = {
++	.regs = &mt6331_registers,
++	.spec = &mt6323_spec,
++};
++
+ static const struct of_device_id mt6323_led_dt_match[] = {
+ 	{ .compatible = "mediatek,mt6323-led", .data = &mt6323_pdata},
++	{ .compatible = "mediatek,mt6331-led", .data = &mt6331_pdata },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, mt6323_led_dt_match);
 -- 
 2.40.1
 
