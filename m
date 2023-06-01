@@ -2,137 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A886071F2FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE9571F30B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbjFATdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S231493AbjFATgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjFATdn (ORCPT
+        with ESMTP id S231246AbjFATge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:33:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF0E99
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685648022; x=1717184022;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kcZJ3+qNx8leUOO/Kenv3qu0LykWwuGfFkR6Pl0R91o=;
-  b=g3NmgtsTpubGY40XZ9jBJ+W2p/82OtpO27STt3RKCgPpLZsg/nx0pAB8
-   wwf9XpGxMDQWqFcCU5mTm5uoTssMkqtKrEmIjgCcHQrye/nh1aBjmzoab
-   ftEQ8ucwHExH+MjJfp0/WlMy0PK3TfA6BtkcaCiJWkArGSY+x/MZJA7mB
-   U0Joc3Spf/sUdBfEkcKiK2oFrsQjzzkCdw036UmWPppeY9AMYa83M2+gk
-   XVIMmdmKK/VO4+ulaFJUMcgcaZOobyrxFw92QcrL8z4+P3fQGfj9ICRjI
-   WqK8Nbx8OptiyS/OrnZywT8n+NRFO22d8xKN4yLV/zoBVtqCLI55LZbTO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353158105"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="353158105"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 12:33:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="819954904"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="819954904"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2023 12:33:39 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4o3H-0002do-0N;
-        Thu, 01 Jun 2023 19:33:39 +0000
-Date:   Fri, 2 Jun 2023 03:32:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 5/6] drm/panel: simple: add support for Rocktech
- RK043FN48H panel
-Message-ID: <202306020343.jNTWeM0P-lkp@intel.com>
-References: <20230601170320.2845218-6-dario.binacchi@amarulasolutions.com>
+        Thu, 1 Jun 2023 15:36:34 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D7D186
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:36:32 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f80e055549so9512781cf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 12:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685648191; x=1688240191;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YMBOA4WH9GmX8va2TeN6IF1hKckQ4hk2vM+qJu7Yuk8=;
+        b=JKQScWQlepZwk1rwr8D4B8rhFPkzPfrRjo7oBWfw+nEP9EfqxAcT+QW4osjwPhmT5Q
+         ZQV6JWXs8rJRB3wOSil33aA6VH95iOYN6NoX5pyxPzvm5t4sMk6BhLLDlzYUm0BDj51b
+         NzeK/c8Vw1d6f0CTxvogTrH8Jj3bZjQMBYb3ccX2/bMjCwpvFGw6aikcmLyNiBcs4KEU
+         czOUcxsiQkOFgG8W7JYe0fmkQADh9wc7yDtbyUxt+Mn4vHqjpz7R6q6mj9tnNkmcZpcb
+         6qOD1px5L7EOtewVnd2LWHez4iP7SCtbcRjjzfJCt5Ov8Ju3NzRD7iK3yEysqmi3RAWk
+         z6WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685648191; x=1688240191;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YMBOA4WH9GmX8va2TeN6IF1hKckQ4hk2vM+qJu7Yuk8=;
+        b=NbnQDMQix7dbhvzilEq0K5yjtUDKUr/YnYrSC1LY4PpXOsmr3rjBX6Hr8wxGZKZBHa
+         v/5PIrNk8vogvL/RZv/BSa/yr+VmfkdFgHANB9joV84qAhZTaZbTTvuYbIm/m0em5dd3
+         hlSF+SFQEjOkSAzZWq+RZhQ344Yg7TpAeQvZnvW/xQ2dq8mom7Rfk4T4Z5rV3UI0cuXh
+         6acLKdKEnAKeyLT7QVFN6+ZdfbbW2S6z/SiHyx/HDsIvBntIMOv0+Ove/S3NjUE2usBp
+         0MQHypzbKhRACsrR3JqLWEVPspNCUByceUlO5T65Q8nArznYfXYYhmmXDGpGVEIU6Qyk
+         Gxog==
+X-Gm-Message-State: AC+VfDzIaczX0TQdV1eRDyp5b4sKQ8mkWrAyNmCMr+fTw+8MmUoGivOC
+        Fy1hv07YMGhRo6cqW11+L05KHg==
+X-Google-Smtp-Source: ACHHUZ7CZ13+q3p59s8LZm39fYm6itDCPooJs/hGoBcJsKdzQMerh2esQX0ar5jZ58mA8fqbfZLxrQ==
+X-Received: by 2002:a05:622a:4d:b0:3f7:fcb1:3153 with SMTP id y13-20020a05622a004d00b003f7fcb13153mr11551235qtw.30.1685648191239;
+        Thu, 01 Jun 2023 12:36:31 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:ec58])
+        by smtp.gmail.com with ESMTPSA id g11-20020ac8774b000000b003eda962ed24sm7973574qtu.22.2023.06.01.12.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 12:36:30 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 15:36:30 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Dan Schatzberg <schatzberg.dan@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, Chris Down <chris@chrisdown.name>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: Clarify usage of memory limits
+Message-ID: <20230601193630.GA157732@cmpxchg.org>
+References: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601170320.2845218-6-dario.binacchi@amarulasolutions.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario,
+On Thu, Jun 01, 2023 at 11:38:19AM -0700, Dan Schatzberg wrote:
+> The existing documentation refers to memory.high as the "main mechanism
+> to control memory usage." This seems incorrect to me - memory.high can
+> result in reclaim pressure which simply leads to stalls unless some
+> external component observes and actions on it (e.g. systemd-oomd can be
+> used for this purpose). While this is feasible, users are unaware of
+> this interaction and are led to believe that memory.high alone is an
+> effective mechanism for limiting memory.
+> 
+> The documentation should recommend the use of memory.max as the
+> effective way to enforce memory limits - it triggers reclaim and results
+> in OOM kills by itself.
+> 
+> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
 
-kernel test robot noticed the following build warnings:
+Yeah, this is quite stale. How this ended up working in practice is a
+bit different from how we initially conceived it.
 
-[auto build test WARNING on drm-intel/for-linux-next-fixes]
-[also build test WARNING on drm-tip/drm-tip linus/master v6.4-rc4 next-20230601]
-[cannot apply to atorgue-stm32/stm32-next drm-misc/drm-misc-next drm-intel/for-linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for updating it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dario-Binacchi/ARM-dts-stm32-add-ltdc-support-on-stm32f746-MCU/20230602-010536
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
-patch link:    https://lore.kernel.org/r/20230601170320.2845218-6-dario.binacchi%40amarulasolutions.com
-patch subject: [PATCH 5/6] drm/panel: simple: add support for Rocktech RK043FN48H panel
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230602/202306020343.jNTWeM0P-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5a692e898df9428078855c58f8e945def084613b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dario-Binacchi/ARM-dts-stm32-add-ltdc-support-on-stm32f746-MCU/20230602-010536
-        git checkout 5a692e898df9428078855c58f8e945def084613b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306020343.jNTWeM0P-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/panel/panel-simple.c:3201:68: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
-    3201 |         .flags = DISPLAY_FLAGS_VSYNC_LOW + DISPLAY_FLAGS_HSYNC_LOW |
-         |                                                                    ^
-
-
-vim +3201 drivers/gpu/drm/panel/panel-simple.c
-
-  3190	
-  3191	static const struct display_timing rocktech_rk043fn48h_timing = {
-  3192		.pixelclock = { 6000000, 9000000, 12000000 },
-  3193		.hactive = { 480, 480, 480 },
-  3194		.hback_porch = { 8, 43, 43 },
-  3195		.hfront_porch = { 2, 8, 8 },
-  3196		.hsync_len = { 1, 1, 1 },
-  3197		.vactive = { 272, 272, 272 },
-  3198		.vback_porch = { 2, 12, 12 },
-  3199		.vfront_porch = { 1, 4, 4 },
-  3200		.vsync_len = { 1, 10, 10 },
-> 3201		.flags = DISPLAY_FLAGS_VSYNC_LOW + DISPLAY_FLAGS_HSYNC_LOW |
-  3202			 DISPLAY_FLAGS_DE_HIGH | DISPLAY_FLAGS_PIXDATA_POSEDGE,
-  3203	};
-  3204	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
