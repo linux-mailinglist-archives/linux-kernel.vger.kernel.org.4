@@ -2,123 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24EA71F25A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15AC71F260
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjFAStA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S233187AbjFASt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjFASs6 (ORCPT
+        with ESMTP id S231691AbjFAStr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:48:58 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1C718D;
-        Thu,  1 Jun 2023 11:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=bHdmnR1Xzli1omfGwEoz5opBryIwcSOFGIV2/hia/f0=; b=Xj
-        v90ww/C1HE3NKJDoyJpYVZ38/0NS0131d81z0uGkR2BYA4jQ0YHwR+b32P+Jw7CR/vgMk+bhCosbF
-        vxap1wKiltEir3iYsSyn4+IHwgII+6jzdCxKswz9BMO1D2Eu5OsdyqAkfSORFQtsT73aVDD+k+K/T
-        xvQa7naKxvwK31o=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q4nLx-00EbD4-SR; Thu, 01 Jun 2023 20:48:53 +0200
-Date:   Thu, 1 Jun 2023 20:48:53 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     Justin Chen <justin.chen@broadcom.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com,
-        Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Yuiko Oshino <yuiko.oshino@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>
-Subject: Re: [PATCH net-next] ethtool: ioctl: improve error checking for
- set_wol
-Message-ID: <312c1067-aab6-4f04-b18e-ba1b7a0d1427@lunn.ch>
-References: <1685566429-2869-1-git-send-email-justin.chen@broadcom.com>
- <ZHi/aT6vxpdOryD8@corigine.com>
- <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
- <eda87740-669c-a6e1-9c71-a9a92d3b173a@broadcom.com>
- <e3065103-d38c-1b80-5b61-71e8ba017e71@broadcom.com>
+        Thu, 1 Jun 2023 14:49:47 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F2318D;
+        Thu,  1 Jun 2023 11:49:45 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351InZKD107564;
+        Thu, 1 Jun 2023 13:49:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685645375;
+        bh=krlI7zBjpD9L7kbQEVnqELx+bszogFDUsKdMJkJah0E=;
+        h=From:To:CC:Subject:Date;
+        b=cDI2EpYo0Umr4lCox+u0YtBMUkPL6WDWJsLyddLLxQXsrMBcqgcOL7VbSb9D7Fw/K
+         tqu8ntbGQkYHeytGn99+khFwFn2f/co3S4ovx8//d3TDeLUU0sSZQIA8X98JtfFr+7
+         lR7xdTHULc7NUzMWH5qDsIcDX9Y44aQNtN/8Ih3E=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351InZWb113981
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Jun 2023 13:49:35 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
+ Jun 2023 13:49:35 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 1 Jun 2023 13:49:35 -0500
+Received: from fllv0040.itg.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351InYGk073938;
+        Thu, 1 Jun 2023 13:49:34 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Wadim Egorov <w.egorov@phytec.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>
+Subject: [PATCH 1/2] arm64: dts: ti: k3-am64: Only set UART baud for used ports
+Date:   Thu, 1 Jun 2023 13:49:32 -0500
+Message-ID: <20230601184933.358731-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e3065103-d38c-1b80-5b61-71e8ba017e71@broadcom.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > I was planning to for the Broadcom drivers since those I can test.
-> > > But I could do it across the board if that is preferred.
-> > > 
-> > > > > Signed-off-by: Justin Chen <justin.chen@broadcom.com>
-> > > > > ---
-> > > > >   net/ethtool/ioctl.c | 14 ++++++++++++--
-> > > > >   1 file changed, 12 insertions(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-> > > > > index 6bb778e10461..80f456f83db0 100644
-> > > > > --- a/net/ethtool/ioctl.c
-> > > > > +++ b/net/ethtool/ioctl.c
-> > > > > @@ -1436,15 +1436,25 @@ static int ethtool_get_wol(struct
-> > > > > net_device *dev, char __user *useraddr)
-> > > > >   static int ethtool_set_wol(struct net_device *dev, char
-> > > > > __user *useraddr)
-> > > > >   {
-> > > > > -    struct ethtool_wolinfo wol;
-> > > > > +    struct ethtool_wolinfo wol, cur_wol;
-> > > > >       int ret;
-> > > > > -    if (!dev->ethtool_ops->set_wol)
-> > > > > +    if (!dev->ethtool_ops->get_wol || !dev->ethtool_ops->set_wol)
-> > > > >           return -EOPNOTSUPP;
-> > > > 
-> > > > Are there cases where (in-tree) drivers provide set_wol byt not get_wol?
-> > > > If so, does this break their set_wol support?
-> > > > 
-> > > 
-> > > My original thought was to match netlink set wol behavior. So
-> > > drivers that do that won't work with netlink set_wol right now. I'll
-> > > skim around to see if any drivers do this. But I would reckon this
-> > > should be a driver fix.
-> > > 
-> > > Thanks,
-> > > Justin
-> > > 
-> > 
-> > I see a driver at drivers/net/phy/microchip.c. But this is a phy driver
-> > set_wol hook.
-> 
-> That part of the driver appears to be dead code. It attempts to pretend to
-> support Wake-on-LAN, but it does not do any specific programming of wake-up
-> filters, nor does it implement get_wol. It also does not make use of the
-> recently introduced PHY_ALWAYS_CALL_SUSPEND flag.
-> 
-> When it is time to determine whether to suspend the PHY or not, eventually
-> phy_suspend() will call phy_ethtool_get_wol(). Since no get_wol is
-> implemented, the wol.wolopts will remain zero, therefore we will just
-> suspend the PHY.
-> 
-> I suspect this was added to work around MAC drivers that may forcefully try
-> to suspend the PHY, but that should not even be possible these days.
-> 
-> I would just remove that logic from microchip.c entirely.
+As the binding for "current-speed" states, this should only be used
+when the baud rate of an attached device cannot be detected. This is
+the case for our attached on-board USB-to-UART converter used for
+early kernel console. For all other unconnected/disabled ports this
+can be configured in userspace later, DT is not the place for device
+configuration, especially when there are already standard ways to
+set serial baud in userspace.
 
-The Microchip developers are reasonably responsive. So we should Cc:
-them.
+Remove setting baud for all disabled serial ports and move setting
+it for the couple enabled ports down into the board files.
 
-	Andrew
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi                 | 7 -------
+ arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi                  | 2 --
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts                  | 1 +
+ arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts | 2 ++
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts                   | 1 +
+ 5 files changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+index f5e25d6c3c28b..a5df81c6b0f9f 100644
+--- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+@@ -377,7 +377,6 @@ main_uart0: serial@2800000 {
+ 		reg = <0x00 0x02800000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 146 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 146 0>;
+ 		clock-names = "fclk";
+@@ -389,7 +388,6 @@ main_uart1: serial@2810000 {
+ 		reg = <0x00 0x02810000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 152 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 152 0>;
+ 		clock-names = "fclk";
+@@ -401,7 +399,6 @@ main_uart2: serial@2820000 {
+ 		reg = <0x00 0x02820000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 153 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 153 0>;
+ 		clock-names = "fclk";
+@@ -413,7 +410,6 @@ main_uart3: serial@2830000 {
+ 		reg = <0x00 0x02830000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 181 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 154 0>;
+ 		clock-names = "fclk";
+@@ -425,7 +421,6 @@ main_uart4: serial@2840000 {
+ 		reg = <0x00 0x02840000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 182 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 155 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 155 0>;
+ 		clock-names = "fclk";
+@@ -437,7 +432,6 @@ main_uart5: serial@2850000 {
+ 		reg = <0x00 0x02850000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 156 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 156 0>;
+ 		clock-names = "fclk";
+@@ -449,7 +443,6 @@ main_uart6: serial@2860000 {
+ 		reg = <0x00 0x02860000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
+ 		clock-frequency = <48000000>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 158 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 158 0>;
+ 		clock-names = "fclk";
+diff --git a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+index 31336b0e290e5..67ad414a5eab9 100644
+--- a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+@@ -55,7 +55,6 @@ mcu_uart0: serial@4a00000 {
+ 		compatible = "ti,am64-uart", "ti,am654-uart";
+ 		reg = <0x00 0x04a00000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 149 0>;
+ 		clock-names = "fclk";
+@@ -66,7 +65,6 @@ mcu_uart1: serial@4a10000 {
+ 		compatible = "ti,am64-uart", "ti,am654-uart";
+ 		reg = <0x00 0x04a10000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
+-		current-speed = <115200>;
+ 		power-domains = <&k3_pds 160 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 160 0>;
+ 		clock-names = "fclk";
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+index 3db740f78cd25..2b7373207cb71 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+@@ -375,6 +375,7 @@ &main_uart0 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_uart0_pins_default>;
++	current-speed = <115200>;
+ };
+ 
+ /* main_uart1 is reserved for firmware usage */
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts b/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts
+index 8d3114d14a8b5..e4c2944f5dc8c 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-phyboard-electra-rdk.dts
+@@ -230,6 +230,7 @@ &main_uart0 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_uart0_pins_default>;
++	current-speed = <115200>;
+ };
+ 
+ &main_uart1 {
+@@ -237,6 +238,7 @@ &main_uart1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_uart1_pins_default>;
+ 	uart-has-rtscts;
++	current-speed = <115200>;
+ };
+ 
+ &sdhci1 {
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+index 003cff9a27990..cab5fe9e7a784 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+@@ -369,6 +369,7 @@ &main_uart0 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_uart0_pins_default>;
++	current-speed = <115200>;
+ };
+ 
+ &main_uart1 {
+-- 
+2.39.2
+
