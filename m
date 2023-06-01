@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE29719BFD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C4B719C03
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjFAMXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S232749AbjFAMXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbjFAMXf (ORCPT
+        with ESMTP id S232230AbjFAMXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:23:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7AD9D;
-        Thu,  1 Jun 2023 05:23:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52347643CA;
-        Thu,  1 Jun 2023 12:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8222C433EF;
-        Thu,  1 Jun 2023 12:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685622212;
-        bh=fkFYdcDraY8CxXefsOf2X+lFb/cNpX2LQm9Gppg1hzM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JiljeqkLXukpkIkoSD6ciRMKkw24FJUS+AumrLx5OsYE1UZla7Bjeyn07M1raqfuM
-         WPckXzdhZmIU1EIrA+wpky4GkOiHTE8Ojy6CXjJlapT1DYLZb7azoLpeHR2vrkCWbk
-         EXsjpSNA+GA77+oXVrjI7T5WDL6L06rCKhQz9Y73BJrSlJ8xL0+SYegW8WZmDhZGAG
-         kbIvhgnvSaTCMhGr371gR2r2yRl0VlJn1Ahg+jGyPGMPGt3G+2RvyA93oCuv3xQc/F
-         aZ/GEIz2Izt2wM0U60VMQ2aaMEzWXTPjfoa5jdigfgpHeD9UaAmRF4WSEmWXHbbS3z
-         EA0DeL5w6YpWA==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2af2602848aso10547341fa.2;
-        Thu, 01 Jun 2023 05:23:32 -0700 (PDT)
-X-Gm-Message-State: AC+VfDx9B59Mv8gtkuFha3zRgpvVrkTR7leDF+yg7Ig0VtdsOhK1JSWC
-        CyEW6DIy5c6xuG1MZRHJi7TavGSALB4h+VW1cZA=
-X-Google-Smtp-Source: ACHHUZ6cRMYPOSYQUWlSFAarfHRT7foXMycSC83wIP43hL55JTKrs8FD2Z85rJEK0bkTYAPwv+KAdLUD8wIqNXWlHvw=
-X-Received: by 2002:a2e:9e04:0:b0:2a8:bce4:c70f with SMTP id
- e4-20020a2e9e04000000b002a8bce4c70fmr4452754ljk.26.1685622210654; Thu, 01 Jun
- 2023 05:23:30 -0700 (PDT)
+        Thu, 1 Jun 2023 08:23:38 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB509119
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:23:36 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so904434e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 05:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685622215; x=1688214215;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6EO4znPlGyPioDpISoDQQKhy8b33gnVoI3J9XkVoqI4=;
+        b=oUg4qvp8oLqzJnjoL3K9BcS30EdCA9l4T1upxsgGfO6KoVOumBQLjxS7C4NjMLLc1q
+         ummZQIwIVQROr4RsKJ3uuU9ST9tkNXA1b/DvPD4cZKyirgnaR6n5pRqU42dwD0zwcM/g
+         CSeaE/5+yjh2v4HPyYp9GevEA0cboqcL23j/lBhIYo24CuUUKqczEaNmgxZUvGr/TEQl
+         2P5B943twhasFdeAdQJsxG0MQZQdKABcHvu7NbsHzoV+oG8s6+W/3s11UrY3yH3iNAYr
+         6FOwEf+wFjTKQteNZZLTAchD95BqbLyYT563ERomkhBwRt+YI/LGV/Xad/iuOPc52xJ4
+         SXJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685622215; x=1688214215;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6EO4znPlGyPioDpISoDQQKhy8b33gnVoI3J9XkVoqI4=;
+        b=bUDqrAv2Xh4jbcGHnTjbpGk55IZ0gvfeQraStLLtHZODlQr8MZ3/eTvn4dkP+Ea+Lf
+         1cczBejJ+bNURSCyh66soDZfQx+KR6ZDtOXN4xGtY5NilvKl6NJE0VrcpD56sykiWiGR
+         h4aX2dJ5zXkqSaoGZuI2Mi/U+UIiEkRnFgsQBfwEksuHZdEbyC3CuoTQtAz+XojSSDOc
+         hSUzQJXRokwQe1oFTsQvFRxB8UwrR5b7z0BWXVaTS9+JRTJOQBOjGfnG/mrKPZ33oGro
+         x2fnzrF8YLdDT7NyQzkw0pNIYlFmNz6AMIrM7/PTvi4NY1ccvGZNK50EioK7mYJN1K6o
+         22VA==
+X-Gm-Message-State: AC+VfDw3vh80MUMcta3alPOfodNS8IejhlXA2Sqz8yH/9tmKWR2aah7y
+        M8b1Q4PD1Zafu5oxGZYQhSY1mw==
+X-Google-Smtp-Source: ACHHUZ5MuICtOxcLaiP3bFamo3/X2G5wiI2qLOKcLbRIJjwqVGMyUXDe4MxvDnMctwm5C64PfLbPNQ==
+X-Received: by 2002:a19:ae04:0:b0:4f2:5ef9:45fb with SMTP id f4-20020a19ae04000000b004f25ef945fbmr1205725lfc.52.1685622215115;
+        Thu, 01 Jun 2023 05:23:35 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id u4-20020ac248a4000000b004f3b5af3971sm1073849lfg.104.2023.06.01.05.23.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 05:23:34 -0700 (PDT)
+Message-ID: <a19b7ff8-d253-f021-0987-f9ff13cddf93@linaro.org>
+Date:   Thu, 1 Jun 2023 14:23:33 +0200
 MIME-Version: 1.0
-References: <20230601121001.1071533-1-masahiroy@kernel.org> <20230601121001.1071533-6-masahiroy@kernel.org>
-In-Reply-To: <20230601121001.1071533-6-masahiroy@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 1 Jun 2023 14:23:19 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHuasyDeAvs6ZX3wR155uiVOZUO0-VbVpTQq9+v=WE5Sw@mail.gmail.com>
-Message-ID: <CAMj1kXHuasyDeAvs6ZX3wR155uiVOZUO0-VbVpTQq9+v=WE5Sw@mail.gmail.com>
-Subject: Re: [PATCH 5/7] modpost: detect section mismatch for R_ARM_THM_{MOVW_ABS_NC,MOVT_ABS}
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sm8350: Add missing interconnect
+ paths to USB HCs
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230601120029.38859-1-abel.vesa@linaro.org>
+ <20230601120029.38859-3-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230601120029.38859-3-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,123 +81,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 at 14:10, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> When CONFIG_THUMB2_KERNEL is enabled, modpost fails to detect some
-> types of section mismatches.
->
->   [test code]
->
->     #include <linux/init.h>
->
->     int __initdata foo;
->     int get_foo(void) { return foo; }
->
-> It is apparently a bad reference, but modpost does not report anything.
->
-> The test code above produces the following relocations.
->
->   Relocation section '.rel.text' at offset 0x1e8 contains 2 entries:
->    Offset     Info    Type            Sym.Value  Sym. Name
->   00000000  0000052f R_ARM_THM_MOVW_AB 00000000   .LANCHOR0
->   00000004  00000530 R_ARM_THM_MOVT_AB 00000000   .LANCHOR0
->
-> Currently, R_ARM_THM_MOVW_ABS_NC and R_ARM_THM_MOVT_ABS are just skipped.
->
-> Add code to handle them. I checked arch/arm/kernel/module.c to learn
-> how the offset is encoded in the instruction.
->
-> One more thing to note for Thumb instructions - the st_value is an odd
-> value, so you need to mask the bit 0 to get the offset. Otherwise, you
-> will get an off-by-one error in the nearest symbol look-up.
->
-> It is documented in "ELF for the ARM Architecture" [1]:
->
->   * If the symbol addresses a Thumb instruction, its value is the address
->     of the instruction with bit zero set (in a relocatable object, the
->     section offset with bit zero set).
->
->   * For the purposes of relocation the value used shall be the address
->     of the instruction (st_value & ~1).
->
-> [1]: https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+On 1.06.2023 14:00, Abel Vesa wrote:
+> The USB HCs nodes are missing the interconnect paths, so add them.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->
->  scripts/mod/modpost.c | 31 ++++++++++++++++++++++++++-----
->  1 file changed, 26 insertions(+), 5 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 32d56efe3f3b..528aa9175e84 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1082,7 +1082,8 @@ static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
->  {
->         Elf_Sym *sym;
->         Elf_Sym *near = NULL;
-> -       Elf_Addr distance;
-> +       Elf_Addr sym_addr, distance;
-> +       bool is_arm = (elf->hdr->e_machine == EM_ARM);
->
->         for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
->                 if (get_secindex(elf, sym) != secndx)
-> @@ -1090,10 +1091,19 @@ static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
->                 if (!is_valid_name(elf, sym))
->                         continue;
->
-> -               if (addr >= sym->st_value)
-> -                       distance = addr - sym->st_value;
-> +               sym_addr = sym->st_value;
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index 2798a5d6e5f7..88ef478cb5cc 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -2304,6 +2304,10 @@ usb_1: usb@a6f8800 {
+>  
+>  			resets = <&gcc GCC_USB30_PRIM_BCR>;
+>  
+> +			interconnects = <&aggre1_noc MASTER_USB3_0 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
+> +			interconnect-names = "usb-ddr", "apps-usb";
 > +
-> +               /*
-> +                * For ARM Thumb instruction, the bit 0 of st_value is set.
-> +                * Mask it to get the address.
-> +                */
-> +               if (is_arm)
-> +                        sym_addr &= ~1;
+>  			usb_1_dwc3: usb@a600000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0 0x0a600000 0 0xcd00>;
+> @@ -2373,6 +2377,10 @@ usb_2: usb@a8f8800 {
+>  
+>  			resets = <&gcc GCC_USB30_SEC_BCR>;
+>  
+> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
+> +			interconnect-names = "usb-ddr", "apps-usb";
 > +
-
-This is only appropriate for STT_FUNC symbols. If this is a data
-reference, bit 0 could be a valid address bit.
-
-
-
-> +               if (addr >= sym_addr)
-> +                       distance = addr - sym_addr;
->                 else if (allow_negative)
-> -                       distance = sym->st_value - addr;
-> +                       distance = sym_addr - addr;
->                 else
->                         continue;
->
-> @@ -1266,7 +1276,7 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
->         unsigned int r_typ = ELF_R_TYPE(r->r_info);
->         Elf_Sym *sym = elf->symtab_start + ELF_R_SYM(r->r_info);
->         void *loc = reloc_location(elf, sechdr, r);
-> -       uint32_t inst;
-> +       uint32_t inst, upper, lower;
->         int32_t offset;
->
->         switch (r_typ) {
-> @@ -1288,6 +1298,17 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
->                 offset = sign_extend32((inst & 0x00ffffff) << 2, 25);
->                 r->r_addend = offset + sym->st_value + 8;
->                 break;
-> +       case R_ARM_THM_MOVW_ABS_NC:
-> +       case R_ARM_THM_MOVT_ABS:
-> +               upper = TO_NATIVE(*(uint16_t *)loc);
-> +               lower = TO_NATIVE(*((uint16_t *)loc + 1));
-> +               offset = sign_extend32(((upper & 0x000f) << 12) |
-> +                                      ((upper & 0x0400) << 1) |
-> +                                      ((lower & 0x7000) >> 4) |
-> +                                      (lower & 0x00ff),
-> +                                      15);
-> +               r->r_addend = offset + sym->st_value;
-> +               break;
->         case R_ARM_THM_CALL:
->         case R_ARM_THM_JUMP24:
->         case R_ARM_THM_JUMP19:
-> --
-> 2.39.2
->
+>  			usb_2_dwc3: usb@a800000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0 0x0a800000 0 0xcd00>;
