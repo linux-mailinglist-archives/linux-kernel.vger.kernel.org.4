@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E4871F4DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C16771F4E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbjFAVhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
+        id S229618AbjFAVhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbjFAVhO (ORCPT
+        with ESMTP id S232836AbjFAVhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:37:14 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6DA19B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:37:12 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-652a6cf1918so294693b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 14:37:12 -0700 (PDT)
+        Thu, 1 Jun 2023 17:37:25 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE9B1AB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:37:14 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-65299178ac5so448090b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 14:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685655432; x=1688247432;
+        d=chromium.org; s=google; t=1685655434; x=1688247434;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VxngL/nWZ9CvmSVXwg8pkM18NqkUW/hq6cWY9xHbU50=;
-        b=aXtBMJsuEHVcZIKV7cLRpp9gJah5t0XCzX6mPhaAfDBP1dJ5ow0nIMbyHBqXyExXs/
-         iONAnH757E2JdGKhPAJpJ0T+0at+owiwzn2oTUIqycF0fDPlNwbji/qaAjIXJsOAh/DF
-         EzBp3VrZJfcftxuQAMYGMNArokNyBuLgHVwN8=
+        bh=KFbc1DnTsptgPHbVgbrtLnQoZRYq2p52Sq+V7Mil0Po=;
+        b=Y+IRG40LZKw0u4RWejoPo9t2VThioi9WMya6GxurCgZXecIGTCiWNYFwet6YeXaBL1
+         s6e2+jx6ksC3geJ2joOYMSft3G8UQ2LyzodMjp70BrhkADj72DmV4KOC7eg1PWGkJS7W
+         bhnuM4cF9tMcOEK2gfzpuj7nrcaJZqp/6IeD0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685655432; x=1688247432;
+        d=1e100.net; s=20221208; t=1685655434; x=1688247434;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VxngL/nWZ9CvmSVXwg8pkM18NqkUW/hq6cWY9xHbU50=;
-        b=SVQn6hBXGRfOonl/DPD7pkHCOaHdr7rPI+wxrCXo7vDj31hsNhbyc9nfrBzAx/gOOv
-         fqZO1sgOOhamnc0Ab2YNSk7yszxUPfivagUr+frPJp1BjIkTirlCDHfFhRuDGbnsR3aS
-         +5dRzDkEbNXoQI+oxI9dRJqLqUnqeTHeD9ch/f0aQzcxP/fU8ns61J2aTQNeSEri14aj
-         EGATVzpGp989JXfB5CHggcRfNZlWzfX6Eu+fGfbPf/IxW024pWd2Rox++FNiX6AM0/E3
-         UtAKC4yqstTUYBnqgX0c+49pOjRyfNETnnqjQg6vSNomFYKhUtVrOS49pDMFXZ0PUReH
-         9wkw==
-X-Gm-Message-State: AC+VfDzgqjB8lS2ll9UGf82A1jcikuEanH/pzz1t/vPnYGk+Mmr8e6b1
-        4cxNxjYVnT5VQmGj4djmNlbDgw==
-X-Google-Smtp-Source: ACHHUZ5ef/rtEIYJxyW1OxKT1bSL//A95UwWPCmZBbTCdj36TOdor4jNJCZmCSlkwGKN3QsCenCWSg==
-X-Received: by 2002:a05:6a00:8ca:b0:64c:b45f:fc86 with SMTP id s10-20020a056a0008ca00b0064cb45ffc86mr10767019pfu.17.1685655432123;
-        Thu, 01 Jun 2023 14:37:12 -0700 (PDT)
+        bh=KFbc1DnTsptgPHbVgbrtLnQoZRYq2p52Sq+V7Mil0Po=;
+        b=IsOzw/PaQQwrkSNSPE3hnBHZKDwrzySeEAfNk5663Fqw8a7//kRDh1qxgGLTyXHETw
+         7uuzNVwNgAhICHWdLvlCCIFEKzvZ6kWjjfcAt+3farAgRCX55eleucI9k6cY9cMkpgD5
+         zDKpPOxh0oDTvdZmtlS/vlm38vY3r4wZnQEZO2DL0ynSc+IXXDYXnTLmvGFROjs5K2K2
+         DQ4X2gVe3jHNgmQTng0zRfGOcYzLzOdJGbkKBsfKPC/kLnHBta9j/4Xi8/hMR401vMkC
+         LzIbEkdSokWEihWSLIkGhAJMUqhrvvfj2Uej1puFV2e56d96aTBlSlDnpSzchl/sqtSp
+         cDpw==
+X-Gm-Message-State: AC+VfDzooTBsOdEyPBYwX2IEidBR5mAOaoX1Ng6lgnys7mQhNNsUoVE9
+        jgnOz/2iaC7xxIMYICoWGI/baA==
+X-Google-Smtp-Source: ACHHUZ6rVQO/ue/4i8mO1Mux6x0NhxVI4bfPrl/BtKSwVXR51RsA4b7YL68gkPubx0VgpaYp2gyoBg==
+X-Received: by 2002:a05:6a00:c89:b0:652:7b99:df30 with SMTP id a9-20020a056a000c8900b006527b99df30mr1613289pfv.25.1685655434352;
+        Thu, 01 Jun 2023 14:37:14 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:11b8:2d2:7e02:6bff])
-        by smtp.gmail.com with ESMTPSA id g22-20020aa78756000000b0064d48d98260sm5319534pfo.156.2023.06.01.14.37.10
+        by smtp.gmail.com with ESMTPSA id g22-20020aa78756000000b0064d48d98260sm5319534pfo.156.2023.06.01.14.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 14:37:11 -0700 (PDT)
+        Thu, 01 Jun 2023 14:37:13 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -65,12 +65,14 @@ Cc:     linux-perf-users@vger.kernel.org, ito-yuichi@fujitsu.com,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Lecopzer Chen <lecopzer.chen@mediatek.com>,
         Douglas Anderson <dianders@chromium.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Ben Dooks <ben-linux@fluff.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Valentin Schneider <vschneid@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v9 3/7] arm64: Add framework for a debug IPI
-Date:   Thu,  1 Jun 2023 14:31:47 -0700
-Message-ID: <20230601143109.v9.3.Ie6c132b96ebbbcddbf6954b9469ed40a6960343c@changeid>
+Subject: [PATCH v9 4/7] arm64: smp: Assign and setup the debug IPI
+Date:   Thu,  1 Jun 2023 14:31:48 -0700
+Message-ID: <20230601143109.v9.4.I6d7f7d5fa0aa293c8c3374194947254b93114d37@changeid>
 X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
 In-Reply-To: <20230601213440.2488667-1-dianders@chromium.org>
 References: <20230601213440.2488667-1-dianders@chromium.org>
@@ -78,7 +80,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,158 +90,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sumit Garg <sumit.garg@linaro.org>
 
-Introduce a framework for an IPI that will be used for debug
-purposes. The primary use case of this IPI will be to generate stack
-crawls on other CPUs, but it will also be used to round up CPUs for
-kgdb.
-
-When possible, we try to allocate this debug IPI as an NMI (or a
-pseudo NMI). If that fails (due to CONFIG, an incompatible interrupt
-controller, a quirk, missing the "irqchip.gicv3_pseudo_nmi=1" kernel
-parameter, etc) we fall back to a normal IPI.
-
-NOTE: hooking this up for CPU backtrace / kgdb will happen in a future
-patch, this just adds the framework.
+All current arm64 interrupt controllers have at least 8
+IPIs. Currently we are only using 7 of them on arm64. Let's use the
+8th one as a debug IPI. This uses the new "debug IPI" infrastructure
+which will try to allocate this IPI as an NMI/pseudo NMI if possible.
 
 Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-I didn't get any feedback from v8 patch #10 [1], but I went ahead and
-folded it in here anyway since it really simplfies things. If people
-don't like the fallback to regular IPI, I can also undo it.
-
-[1] https://lore.kernel.org/r/20230419155341.v8.10.Ic3659997d6243139d0522fc3afcdfd88d7a5f030@changeid/
+I could imagine that people object to using up the last free IPI on
+interrupt controllers with only 8 IPIs. However, it shouldn't be a big
+deal. If we later need an extra IPI, it shouldn't be too hard to
+combine some of the existing ones. Presumably we could just get rid of
+the "crash stop" IPI and have the normal "stop" IPI do the crash if
+"waiting_for_crash_ipi" is non-zero
 
 Changes in v9:
-- Fold in v8 patch #10 ("Fallback to a regular IPI if NMI isn't enabled")
-- Moved header file out of "include" since it didn't need to be there.
-- Remove arm64_supports_nmi()
+- Add a warning if we don't have enough IPIs for the NMI IPI
 - Renamed "NMI IPI" to "debug IPI" since it might not be backed by NMI.
+- Update commit description
 
 Changes in v8:
 - debug_ipi_setup() and debug_ipi_teardown() no longer take cpu param
 
- arch/arm64/kernel/Makefile    |  2 +-
- arch/arm64/kernel/ipi_debug.c | 76 +++++++++++++++++++++++++++++++++++
- arch/arm64/kernel/ipi_debug.h | 13 ++++++
- 3 files changed, 90 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/kernel/ipi_debug.c
- create mode 100644 arch/arm64/kernel/ipi_debug.h
+ arch/arm64/kernel/smp.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-index cc22011ab66a..737838f803b7 100644
---- a/arch/arm64/kernel/Makefile
-+++ b/arch/arm64/kernel/Makefile
-@@ -34,7 +34,7 @@ obj-y			:= debug-monitors.o entry.o irq.o fpsimd.o		\
- 			   cpufeature.o alternative.o cacheinfo.o		\
- 			   smp.o smp_spin_table.o topology.o smccc-call.o	\
- 			   syscall.o proton-pack.o idreg-override.o idle.o	\
--			   patching.o
-+			   patching.o ipi_debug.o
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index edd63894d61e..db019b49d3bd 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -53,6 +53,8 @@
  
- obj-$(CONFIG_COMPAT)			+= sys32.o signal32.o			\
- 					   sys_compat.o
-diff --git a/arch/arm64/kernel/ipi_debug.c b/arch/arm64/kernel/ipi_debug.c
-new file mode 100644
-index 000000000000..b57833e31eaf
---- /dev/null
-+++ b/arch/arm64/kernel/ipi_debug.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Debug IPI support
-+ *
-+ * Copyright (C) 2020 Linaro Limited
-+ * Author: Sumit Garg <sumit.garg@linaro.org>
-+ */
-+
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/smp.h>
-+
+ #include <trace/events/ipi.h>
+ 
 +#include "ipi_debug.h"
 +
-+static struct irq_desc *ipi_debug_desc __read_mostly;
-+static int ipi_debug_id __read_mostly;
-+static bool is_nmi;
+ DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
+ EXPORT_PER_CPU_SYMBOL(cpu_number);
+ 
+@@ -935,6 +937,8 @@ static void ipi_setup(int cpu)
+ 
+ 	for (i = 0; i < nr_ipi; i++)
+ 		enable_percpu_irq(ipi_irq_base + i, 0);
 +
-+void arm64_debug_ipi(cpumask_t *mask)
-+{
-+	if (WARN_ON_ONCE(!ipi_debug_desc))
-+		return;
++	debug_ipi_setup();
+ }
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+@@ -947,6 +951,8 @@ static void ipi_teardown(int cpu)
+ 
+ 	for (i = 0; i < nr_ipi; i++)
+ 		disable_percpu_irq(ipi_irq_base + i);
 +
-+	__ipi_send_mask(ipi_debug_desc, mask);
-+}
++	debug_ipi_teardown();
+ }
+ #endif
+ 
+@@ -968,6 +974,11 @@ void __init set_smp_ipi_range(int ipi_base, int n)
+ 		irq_set_status_flags(ipi_base + i, IRQ_HIDDEN);
+ 	}
+ 
++	if (n > nr_ipi)
++		set_smp_debug_ipi(ipi_base + nr_ipi);
++	else
++		WARN(1, "Not enough IPIs for NMI IPI\n");
 +
-+static irqreturn_t ipi_debug_handler(int irq, void *data)
-+{
-+	/* nop, NMI handlers for special features can be added here. */
-+
-+	return IRQ_NONE;
-+}
-+
-+void debug_ipi_setup(void)
-+{
-+	if (!ipi_debug_desc)
-+		return;
-+
-+	if (is_nmi) {
-+		if (!prepare_percpu_nmi(ipi_debug_id))
-+			enable_percpu_nmi(ipi_debug_id, IRQ_TYPE_NONE);
-+	} else {
-+		enable_percpu_irq(ipi_debug_id, IRQ_TYPE_NONE);
-+	}
-+}
-+
-+void debug_ipi_teardown(void)
-+{
-+	if (!ipi_debug_desc)
-+		return;
-+
-+	if (is_nmi) {
-+		disable_percpu_nmi(ipi_debug_id);
-+		teardown_percpu_nmi(ipi_debug_id);
-+	} else {
-+		disable_percpu_irq(ipi_debug_id);
-+	}
-+}
-+
-+void __init set_smp_debug_ipi(int ipi)
-+{
-+	int err;
-+
-+	if (!request_percpu_nmi(ipi, ipi_debug_handler, "IPI", &cpu_number)) {
-+		is_nmi = true;
-+	} else {
-+		err = request_percpu_irq(ipi, ipi_debug_handler, "IPI", &cpu_number);
-+		if (WARN_ON(err))
-+			return;
-+
-+		irq_set_status_flags(ipi, IRQ_HIDDEN);
-+	}
-+
-+	ipi_debug_desc = irq_to_desc(ipi);
-+	ipi_debug_id = ipi;
-+}
-diff --git a/arch/arm64/kernel/ipi_debug.h b/arch/arm64/kernel/ipi_debug.h
-new file mode 100644
-index 000000000000..f6011a09282f
---- /dev/null
-+++ b/arch/arm64/kernel/ipi_debug.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_NMI_H
-+#define __ASM_NMI_H
-+
-+#include <linux/cpumask.h>
-+
-+void arm64_debug_ipi(cpumask_t *mask);
-+
-+void set_smp_debug_ipi(int ipi);
-+void debug_ipi_setup(void);
-+void debug_ipi_teardown(void);
-+
-+#endif
+ 	ipi_irq_base = ipi_base;
+ 
+ 	/* Setup the boot CPU immediately */
 -- 
 2.41.0.rc2.161.g9c6817b8e7-goog
 
