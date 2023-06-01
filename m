@@ -2,152 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9714171F3CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9BC71F3CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjFAUYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
+        id S232319AbjFAUZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjFAUX5 (ORCPT
+        with ESMTP id S232771AbjFAUY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:23:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C05419D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=KHOfwolgp9XhN7STp1l0dexkTZzW2Pcs/mHiDWhkhXI=; b=lVug5T1raKnst0iLVKJVuj0iZo
-        tw5+d34F0rJrIDMYTxT8bJqtA5jnw89Y6Ri3siDGv1CFagjvYPl0JYMXv7ASS3FZjLSwcIqF4Lb2L
-        gxfw9+DYM3rVDwrK68a+F3UJTNV4XuhAd9TnIXUSol45TZQ4Bv/DoRKY38XGo9fmLuhg3FMqeZ3XU
-        YYk63+DXJsurDmtWeUm2Enk9OWU2Cg2gq3kXqhgT4raIEQ5gHYXcK8Hk7u87y8fKThYzSSh4GpkF2
-        ixgdxIU7CcL7BeNLXNMJjWTqmdaiVrjXwTm7npZWOqCqQUzO2MkGMI5w3Eaplpw2GLdVqvQUSR8nU
-        4ksDo8Xw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4opU-004rIk-26;
-        Thu, 01 Jun 2023 20:23:28 +0000
-Message-ID: <c9770ddc-d1fe-d49f-adec-a413a7bf65ec@infradead.org>
-Date:   Thu, 1 Jun 2023 13:23:27 -0700
+        Thu, 1 Jun 2023 16:24:58 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E63E77;
+        Thu,  1 Jun 2023 13:24:27 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b02d0942caso7154285ad.1;
+        Thu, 01 Jun 2023 13:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685651067; x=1688243067;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jr4QoGMO1QTzHP9BeseO541cUPfP+RsuPOsza+Ci6zg=;
+        b=dxhgsvLIy1s+XWMQCTe4+xlGB+vnb45lA6Lh/e+U/FPOFMSsIYKCAlmWKHZKA7o+ou
+         xEdJ04wbVmkLV9mo8/IKkR9sGGVHQ/yYrheMbzknJhogN3Ld8SKhDk7g1Mc4HLpoXIJI
+         huZVxAOXQ8yZkB5UTEIC/aSV86GrtltiamEuPf7ZrZTCLWyrTd/kXDDwSOpqFiOUHvuj
+         bv+Smf92g/THGIV2uuKEIdAwkcH/C/9VQJ2msvWja1E2BT139RiUMFAbf0T25JEnAhE/
+         /xwYwEqwGdieHB7zYcQHYH8UXIHJj4/7c1ooecRq3eOi9BkWY0+4JfxLSyp6P33DHXIo
+         t/IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685651067; x=1688243067;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jr4QoGMO1QTzHP9BeseO541cUPfP+RsuPOsza+Ci6zg=;
+        b=KIFM7kSt7IZ6sZtvPpYDsULHOV6/jPPNiJNU0yLsbk7VyAUI/zRzZsVq2CnzOjd/Xm
+         5NVimHb2KtSEWnOuBF/RtyPILMd5zgl+bU7dxo3GCVPcjPwGNi0HfslVXIu0Vlr+LtrC
+         RLM+JL+6u8NvtGCxkE08L+SZFcUuhyFOlaQmGCN84BFzRINPf7M8i65P2EWYyFB/Ef0Z
+         EPKy2zbg4Tfs+Pwk6WsA/y5vgQcn7QzdYr8g77HAUcoOCOIWKh4nuoPPTSVkTCSw+Wvy
+         4XoEP5HbpRTlK0xn1WRXLV9BL5o/T3vnjvEDL8vq/ZEEpe7HL1k00c/7p7u4EUCYc0I4
+         oMlg==
+X-Gm-Message-State: AC+VfDxKWCwfbTTm597tbWHX8MeUjQQ5bwLCcs2u2nawpFeGkE1SNJa+
+        AgZn9fo3jPDVadbEPknopTI=
+X-Google-Smtp-Source: ACHHUZ73Ubusk/S2VWgqOC4SdykzigIl9jroTRyTqEbZOYA6hn4V9gHTTznzcAG0r1MhWfSay382ug==
+X-Received: by 2002:a17:903:2603:b0:1b1:bcc1:bcdb with SMTP id jd3-20020a170903260300b001b1bcc1bcdbmr23072plb.53.1685651066747;
+        Thu, 01 Jun 2023 13:24:26 -0700 (PDT)
+Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
+        by smtp.googlemail.com with ESMTPSA id t14-20020a1709028c8e00b001b052483e9csm3898254plo.231.2023.06.01.13.24.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 13:24:26 -0700 (PDT)
+Message-ID: <269262acfcce8eb1b85ee1fe3424a5ef2991f481.camel@gmail.com>
+Subject: Re: [PATCH] e1000e: Use PME poll to circumvent unreliable ACPI wake
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
+Cc:     linux-pm@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 01 Jun 2023 13:24:24 -0700
+In-Reply-To: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
+References: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] firewire: fix warnings to generate UAPI documentation
-Content-Language: en-US
-To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230601144937.121179-1-o-takashi@sakamocchi.jp>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230601144937.121179-1-o-takashi@sakamocchi.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 2023-06-02 at 00:25 +0800, Kai-Heng Feng wrote:
+> On some I219 devices, ethernet cable plugging detection only works once
+> from PCI D3 state. Subsequent cable plugging does set PME bit correctly,
+> but device still doesn't get woken up.
 
-On 6/1/23 07:49, Takashi Sakamoto wrote:
-> Any target to generate UAPI documentation reports warnings to missing
-> annotation for padding member in structures added recently.
-> 
-> This commit suppresses the warnings.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/lkml/20230531135306.43613a59@canb.auug.org.au/
-> Fixes: 7c22d4a92bb2 ("firewire: cdev: add new event to notify request subaction with time stamp")
-> Fixes: fc2b52cf2e0e ("firewire: cdev: add new event to notify response subaction with time stamp")
-> Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Do we have a root cause on why things don't get woken up? This seems
+like an issue where something isn't getting reset after the first
+wakeup and so future ones are blocked.
+
+> Since I219 connects to the root complex directly, it relies on platform
+> firmware (ACPI) to wake it up. In this case, the GPE from _PRW only
+> works for first cable plugging but fails to notify the driver for
+> subsequent plugging events.
+>=20
+> The issue was originally found on CNP, but the same issue can be found
+> on ADL too. So workaround the issue by continuing use PME poll after
+> first ACPI wake. As PME poll is always used, the runtime suspend
+> restriction for CNP can also be removed.
+>=20
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
->  include/uapi/linux/firewire-cdev.h | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
-> 
+>  drivers/net/ethernet/intel/e1000e/netdev.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/eth=
+ernet/intel/e1000e/netdev.c
+> index bd7ef59b1f2e..f0e48f2bc3a2 100644
+> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+> @@ -7021,6 +7021,8 @@ static __maybe_unused int e1000e_pm_runtime_resume(=
+struct device *dev)
+>  	struct e1000_adapter *adapter =3D netdev_priv(netdev);
+>  	int rc;
+> =20
+> +	pdev->pme_poll =3D true;
+> +
+>  	rc =3D __e1000_resume(pdev);
+>  	if (rc)
+>  		return rc;
 
-You can do it as this patch shows, or you can hide those padding fields as
-described in Documentation/doc-guide/kernel-doc.rst:
+Doesn't this enable this too broadly. I know there are a number of
+devices that run under the e1000e and I would imagine that we don't
+want them all running with "pme_poll =3D true" do we?
 
-Inside a struct or union description, you can use the ``private:`` and
-``public:`` comment tags. Structure fields that are inside a ``private:``
-area are not listed in the generated output documentation.
+It seems like at a minimum we should only be setting this for specific
+platofrms or devices instead of on all of them.
 
-The ``private:`` and ``public:`` tags must begin immediately following a
-``/*`` comment marker. They may optionally include comments between the
-``:`` and the ending ``*/`` marker.
+Also this seems like something we should be setting on the suspend side
+since it seems to be clared in the wakeup calls.
 
-See below.
+Lastly I am not sure the first one is necessarily succeding. You might
+want to check the status of pme_poll before you run your first test.
+From what I can tell it looks like the initial state is true in
+pci_pm_init. If so it might be getting cleared after the first wakeup
+which is what causes your issues.
 
-> diff --git a/include/uapi/linux/firewire-cdev.h b/include/uapi/linux/firewire-cdev.h
-> index 99e823935427..1f2c9469f921 100644
-> --- a/include/uapi/linux/firewire-cdev.h
-> +++ b/include/uapi/linux/firewire-cdev.h
-> @@ -130,6 +130,9 @@ struct fw_cdev_event_response {
->   * @length:	Data length, i.e. the response's payload size in bytes
->   * @request_tstamp:	The time stamp of isochronous cycle at which the request was sent.
->   * @response_tstamp:	The time stamp of isochronous cycle at which the response was sent.
-> + * @padding:	Padding to keep the size of structure as multiples of 8 in various architectures
-> + *		since 4 byte alignment is used for 8 byte of object type in System V ABI for i386
-> + *		architecture.
+> @@ -7682,7 +7684,7 @@ static int e1000_probe(struct pci_dev *pdev, const =
+struct pci_device_id *ent)
+> =20
+>  	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
+> =20
+> -	if (pci_dev_run_wake(pdev) && hw->mac.type !=3D e1000_pch_cnp)
+> +	if (pci_dev_run_wake(pdev))
+>  		pm_runtime_put_noidle(&pdev->dev);
+> =20
+>  	return 0;
 
-You could drop that change.
-
->   * @data:	Payload data, if any
->   *
->   * This event is sent when the stack receives a response to an outgoing request
-> @@ -155,10 +158,6 @@ struct fw_cdev_event_response2 {
->  	__u32 length;
->  	__u32 request_tstamp;
->  	__u32 response_tstamp;
-
-	/* private: */
-> -	/*
-> -	 * Padding to keep the size of structure as multiples of 8 in various architectures since
-> -	 * 4 byte alignment is used for 8 byte of object type in System V ABI for i386 architecture.
-> -	 */
->  	__u32 padding;
-
-	/* public: */
-
->  	__u32 data[];
->  };
-> @@ -231,6 +230,9 @@ struct fw_cdev_event_request2 {
->   * @handle:	Reference to the kernel-side pending request
->   * @length:	Data length, i.e. the request's payload size in bytes
->   * @tstamp:	The time stamp of isochronous cycle at which the request arrived.
-> + * @padding:	Padding to keep the size of structure as multiples of 8 in various architectures
-> + *		since 4 byte alignment is used for 8 byte of object type in System V ABI for i386
-> + *		architecture.
-
-drop that.
-
->   * @data:	Incoming data, if any
->   *
->   * This event is sent when the stack receives an incoming request to an address
-> @@ -284,10 +286,6 @@ struct fw_cdev_event_request3 {
->  	__u32 handle;
->  	__u32 length;
->  	__u32 tstamp;
-
-	/* private: */
-
-> -	/*
-> -	 * Padding to keep the size of structure as multiples of 8 in various architectures since
-> -	 * 4 byte alignment is used for 8 byte of object type in System V ABI for i386 architecture.
-> -	 */
->  	__u32 padding;
-
-	/* public: */
-
->  	__u32 data[];
->  };
-
--- 
-~Randy
+I assume this is the original workaround that was put in to address
+this issue. Perhaps you should add a Fixes tag to this to identify
+which workaround this patch is meant to be replacing.
