@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AC97197D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAA77197D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbjFAJx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S231995AbjFAJz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjFAJx2 (ORCPT
+        with ESMTP id S233159AbjFAJya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:53:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E20510C1
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:53:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6972169C;
-        Thu,  1 Jun 2023 02:53:46 -0700 (PDT)
-Received: from [10.57.22.124] (unknown [10.57.22.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C3A5A3F663;
-        Thu,  1 Jun 2023 02:53:00 -0700 (PDT)
-Message-ID: <f52a1dee-70f2-e3b4-4aa2-f591d7d8063e@arm.com>
-Date:   Thu, 1 Jun 2023 10:52:59 +0100
+        Thu, 1 Jun 2023 05:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0EDE5B;
+        Thu,  1 Jun 2023 02:53:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D45A76092A;
+        Thu,  1 Jun 2023 09:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B5CC433EF;
+        Thu,  1 Jun 2023 09:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685613227;
+        bh=fm7sw9sNJNxay74Yt8jfMtjyjVMmd/+OYcZxUbraMcA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=irmlnJdfZQqDpJHR+4hazW/0EFkoY7IbZnEvNqggTskj/EsMDRu54dYy/j77NVYso
+         nlz0GS4Z3EQBpgLv1uXFxwFqv/9slQiO0f8oDSZWcoxfkufh+yyJRF31Xp3jd9pSFe
+         pcPccoQrYfDSDmgY4Mn26q87m60AsIG618tpvtAgcPrQzStQawG879bjNgcYSc8YjT
+         mJDEswbxaVNwAnZfniJaovR7UkIr40m5FABshB3WmZ6MPY3tDG0uhs7CTGik5zypq2
+         cPx+W9+RSOM2XyYB7kK31CI/0mGqxqRmjanRVDQDgvOSISIYtg4ZcraJdbgHaQiDeE
+         QTYGTzeGm/WyA==
+Date:   Thu, 1 Jun 2023 05:53:46 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        felipe.clark@amd.com, Aric.Cyr@amd.com, wenjing.liu@amd.com,
+        dri-devel@lists.freedesktop.org, Jun.Lei@amd.com,
+        airlied@gmail.com, jiapeng.chong@linux.alibaba.com,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        amd-gfx@lists.freedesktop.org, aurabindo.pillai@amd.com,
+        Alvin.Lee2@amd.com, harry.wentland@amd.com, sunpeng.li@amd.com,
+        mwen@igalia.com, Daniel Wheeler <daniel.wheeler@amd.com>,
+        Dillon.Varone@amd.com, Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        qingqing.zhuo@amd.com, Xinhui.Pan@amd.com, daniel@ffwll.ch,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com
+Subject: Re: [PATCH AUTOSEL 6.1 4/9] drm/amd/display: Do not set drr on pipe
+ commit
+Message-ID: <ZHhqqkF8FCSqMi81@sashalap>
+References: <20230511193945.623476-1-sashal@kernel.org>
+ <20230511193945.623476-4-sashal@kernel.org>
+ <bc4d10f2-6ded-bed3-1d81-7e09292adf6f@mailbox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Coresight ML <coresight@lists.linaro.org>
-References: <20230509094942.396150-1-james.clark@arm.com>
- <20230509094942.396150-2-james.clark@arm.com>
- <2023051340-sinuous-darkroom-2497@gregkh>
- <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
- <2023051530-immunize-pony-49ef@gregkh>
- <46bb773c-31a8-c57a-0cde-39c27d0a6e36@arm.com>
- <2023060104-removal-map-b194@gregkh>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <2023060104-removal-map-b194@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bc4d10f2-6ded-bed3-1d81-7e09292adf6f@mailbox.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 10:33, Greg KH wrote:
-> On Wed, May 31, 2023 at 11:44:55PM +0100, Suzuki K Poulose wrote:
->> (Removed irrelevant recipients), +Cc: coresight ml
+On Mon, May 15, 2023 at 03:04:43PM +0200, Michel Dänzer wrote:
+>On 5/11/23 21:39, Sasha Levin wrote:
+>> From: Wesley Chalmers <Wesley.Chalmers@amd.com>
 >>
->> Hi Greg,
+>> [ Upstream commit 474f01015ffdb74e01c2eb3584a2822c64e7b2be ]
 >>
->> On 15/05/2023 12:55, Greg KH wrote:
->>> On Mon, May 15, 2023 at 08:55:33AM +0100, James Clark wrote:
->>>>
->>>>
->>>> On 13/05/2023 12:04, Greg KH wrote:
->>>>> On Tue, May 09, 2023 at 10:49:38AM +0100, James Clark wrote:
->>>>>> There is no krealloc_array equivalent in devres. Users would have to
->>>>>> do their own multiplication overflow check so provide one.
->>>>>>
->>>>>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>>>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>>>> ---
->>>>>>    Documentation/driver-api/driver-model/devres.rst |  1 +
->>>>>>    include/linux/device.h                           | 11 +++++++++++
->>>>>>    2 files changed, 12 insertions(+)
+>> [WHY]
+>> Writing to DRR registers such as OTG_V_TOTAL_MIN on the same frame as a
+>> pipe commit can cause underflow.
 >>
->> ...
+>> [HOW]
+>> Move DMUB p-state delegate into optimze_bandwidth; enabling FAMS sets
+>> optimized_required.
 >>
->>>> Maybe something could be done with some macro magic, but it would
->>>> probably end up being worse than just copying them and would affect the
->>>> real ones as well. So yeah I can't think of any easy gains either.
->>>
->>> Ok, that's good.  Given a lack of objections from others, I'll just take
->>> this through my driver core tree in a few days.
->>
->> Apologies for hijacking the thread. We have a series for CoreSight[1]
->> that depends on this series, which I see that, is queued in your
->> driver-core-next.
->>
->> I would like to queue [1] for the next version (as there are other
->> work that depend on this, e.g., [2]). Do you have any
->> recommendations/comments on the proposal ? Are you able to share a
->> stable branch which can be merged to coresight/next and queue the
->> series ontop ? (PS: I haven't queued anything for coresight/next yet).
-> 
-> You can pull from my driver-core-next branch just fine and assume it
-> will be stable.  So just pull in that one commit and all should be good
-> in the future.
+>> This change expects that Freesync requests are blocked when
+>> optimized_required is true.
+>
+>This change caused a regression, see https://patchwork.freedesktop.org/patch/532240/?series=116487&rev=1#comment_972234 / 9deeb132-a317-7419-e9da-cbc0a379c0eb@daenzer.net .
 
-Thanks Greg, I will give it a go
+Dropped, thanks!
 
-Suzuki
-
-> 
-> thanks,
-> 
-> greg k-h
-
+-- 
+Thanks,
+Sasha
