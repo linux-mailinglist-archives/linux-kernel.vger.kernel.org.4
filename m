@@ -2,117 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48A6719F0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE31B719F1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbjFAOHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S233781AbjFAOH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbjFAOHH (ORCPT
+        with ESMTP id S232873AbjFAOHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:07:07 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A913199;
-        Thu,  1 Jun 2023 07:07:01 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX7F664D3z6D8W5;
-        Thu,  1 Jun 2023 22:05:14 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
- 2023 15:06:58 +0100
-Date:   Thu, 1 Jun 2023 15:06:58 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Terry Bowman <terry.bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v4 22/23] PCI/AER: Forward RCH downstream port-detected
- errors to the CXL.mem dev handler
-Message-ID: <20230601150658.000021d4@Huawei.com>
-In-Reply-To: <20230523232214.55282-23-terry.bowman@amd.com>
-References: <20230523232214.55282-1-terry.bowman@amd.com>
-        <20230523232214.55282-23-terry.bowman@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Jun 2023 10:07:21 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C499D19A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:07:08 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af0aa4812so925653f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685628427; x=1688220427;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ty9X1/lZ4kxiMPfO6SIBOmi6pFSnYht8KTXY1jDqhMk=;
+        b=IbNZ/h4TiuSpaJndwjHm+qNz1wA3az6rVJttp6dEU8IO0aQLMDFSmP2dN+eFBQ1HDx
+         fg8PWloJbb4r6byJRuANvyrhQubW/pLkfkOkCHgVmH3FOfwoCeQvZTRUZ4tlUzqnjJ3r
+         I0AE5kjMz+BJza9C/PrlYKrII6tjp6UaL4wee+dLKk6lVsHOWMCf2RHqOSTNjFH8ucQw
+         tDMpPAE+jCm5zOLHcd0CxyC+LqwMOGMppFkvfTn+zxO03Ibn0du/IFShugVW6IWq+T0d
+         f95EXlwQ3BXEC6Hc+zxMEsPXu63bbB1+bZa9jevQinZL9Mcc7zJnqu0I2AiaZjOECp2a
+         rOHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685628427; x=1688220427;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ty9X1/lZ4kxiMPfO6SIBOmi6pFSnYht8KTXY1jDqhMk=;
+        b=GIXQuFqzwT0NVPtMhIkQPJKLeyhzkOPpqDRQAg6bFSGmedVoMhwLpUj3D8xJkUhir4
+         sj3Z2DnUg2dj+IzuXOr341rhaRg+2LUwF8WziOEFBjSaQ8UtDUjkmahTZfPW1ek2sd2E
+         60tpTYDIuMxL2jhpzvtpr5bOx3lZPe5dSesjk1fBmOIS0a/BnbtIUYnQpecyVFzpkqD/
+         OJNSPECEO49XtcijpQKWbFjX905ZdGshiKjqvH9N5uDVS+y1AUzMKKUNiFgG3QGjkGPq
+         eOukNMk0C7+nKhiWz/uJ+RMtO2tsB76YnWylaYmd2/1+LJkZvUuU1w4IIsK81Lyqmf1L
+         Lp0g==
+X-Gm-Message-State: AC+VfDx2oxXUYvOdHT3nhXevlSh5PsFijnlTtoJelUZ33ibZLp5XCFyo
+        2RJULZWQPHCuVzC58qrgLWgPfA==
+X-Google-Smtp-Source: ACHHUZ4b47dm+Xm9jwckIXF0KkauMPIOnltIj9V54u33oWFbZgBNyMbisrPoI/BqdP8HsjWMXIyqlQ==
+X-Received: by 2002:adf:f307:0:b0:30a:f606:2459 with SMTP id i7-20020adff307000000b0030af6062459mr2025299wro.25.1685628427113;
+        Thu, 01 Jun 2023 07:07:07 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id k11-20020adfe3cb000000b003078a3f3a24sm10504166wrm.114.2023.06.01.07.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 07:07:06 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH RFC 0/7] arm64: qcom: add Type-C Altmode support
+Date:   Thu, 01 Jun 2023 16:07:00 +0200
+Message-Id: <20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAASmeGQC/x2NQQ6CMBAAv0L27CYtUkWvJj7AK/HQllU2gdJ0C
+ 9EQ/m7jceYws4FQYhK4VhskWll4DgX0oQI/2PAm5L4w1Ko+qpPSmOfIHmVqjVG4RMmJ7IT5Gwk
+ 9Umtc01/OujEKSsJZIXTJBj+USFjGsciY6MWf/7ODx/0Gz33/AZZ6Ex6IAAAA
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1978;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=pWKd11RIdBHbnx87p7fyQJTNZj+yiLAVlSvzPs6zzkc=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkeKYGc/gegYT+2ro5I97D4w0ztrwLZSHJjqxi0rlv
+ 37qRo3yJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHimBgAKCRB33NvayMhJ0TJnD/
+ 9qkKwIXFLTkm0pNFWnXYmzKRsVqM5YaC3GmSaZPYZ4VGOcM6zN8YF/2BpMVElgf2lO4uiGstOrxH6i
+ c+66+MonE+Sd7IWBzYbaaX3354h33i4EAAZrydr5ewDcwwB9PymInhyn4SbHpRWUR5jiy77lWtXMG6
+ AOj+l+wHeBNTNhoJ003676YRhmQCYrngDBTVWK0GanTitz85TyVGRTL3lSvCtytZacQiJpvnNKlpUN
+ EnguSmODmXNcAU2SOMwuMlJGIRiEJqJOLBgI/qQxfd2JOaalkyUdsZSXOvDfMKYe2NLazgl7jLsBOg
+ z9rBGG0GZqjsjR+G5ALOVNw6ioD3l/B7r8J2skGX7PZjMN2BS9D0iuCV7ojgTG34xtxaPzvjg500XL
+ s5NBqBkH5QzXcHZNcNN/djhcYG+5iH0czlXrottXBV1ppTHMkCuCWxxxmHNWgRxcWbAiNZSkhwHW69
+ OsO6Bi4Us4jW7Bj2ktBNgO10mp/B7PnYVPdxpFFdpmcTs1UYI628AYLSajxOeHXy5le0dazI+SkXk4
+ R8i58VIdbilTMhLhLnik2Q7Ua96CuSta92AbuMw2CRqcT4eaWBxLE2bZoKxg1vkIakrRCvJZNvz8Gt
+ LnXPbPMR8DM9E08FjoKdBoOEhkBp9JW2t7x3urh7DLIVP8mjfDhhwBeOCsNQ==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 18:22:13 -0500
-Terry Bowman <terry.bowman@amd.com> wrote:
+This adds the missing bits to support the USB-C Altmode
+support on SM8550.
 
-> From: Robert Richter <rrichter@amd.com>
-> 
-> In Restricted CXL Device (RCD) mode a CXL device is exposed as an
-> RCiEP, but CXL downstream and upstream ports are not enumerated and
-> not visible in the PCIe hierarchy. Protocol and link errors are sent
-> to an RCEC.
-> 
-> Restricted CXL host (RCH) downstream port-detected errors are signaled
-> as internal AER errors, either Uncorrectable Internal Error (UIE) or
-> Corrected Internal Errors (CIE). The error source is the id of the
-> RCEC. A CXL handler must then inspect the error status in various CXL
-> registers residing in the dport's component register space (CXL RAS
-> capability) or the dport's RCRB (PCIe AER extended capability). [1]
-> 
-> Errors showing up in the RCEC's error handler must be handled and
-> connected to the CXL subsystem. Implement this by forwarding the error
-> to all CXL devices below the RCEC. Since the entire CXL device is
-> controlled only using PCIe Configuration Space of device 0, function
-> 0, only pass it there [2]. The error handling is limited to currently
-> supported devices with the Memory Device class code set
-> (PCI_CLASS_MEMORY_CXL, 502h), where the handler can be implemented in
-> the existing cxl_pci driver. Support of CXL devices (e.g. a CXL.cache
-> device) can be enabled later.
-> 
-> In addition to errors directed to the CXL endpoint device, a handler
-> must also inspect the CXL RAS and PCIe AER capabilities of the CXL
-> downstream port that is connected to the device.
-> 
-> Since CXL downstream port errors are signaled using internal errors,
-> the handler requires those errors to be unmasked. This is subject of a
-> follow-on patch.
-> 
-> The reason for choosing this implementation is that a CXL RCEC device
-> is bound to the AER port driver, but the driver does not allow it to
-> register a custom specific handler to support CXL. Connecting the RCEC
-> hard-wired with a CXL handler does not work, as the CXL subsystem
-> might not be present all the time. The alternative to add an
-> implementation to the portdrv to allow the registration of a custom
-> RCEC error handler isn't worth doing it as CXL would be its only user.
-> Instead, just check for an CXL RCEC and pass it down to the connected
-> CXL device's error handler. With this approach the code can entirely
-> be implemented in the PCIe AER driver and is independent of the CXL
-> subsystem. The CXL driver only provides the handler.
-> 
-> [1] CXL 3.0 spec, 12.2.1.1 RCH Downstream Port-detected Errors
-> [2] CXL 3.0 spec, 8.1.3 PCIe DVSEC for CXL Devices
-> 
-> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Cc: "Oliver O'Halloran" <oohall@gmail.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-pci@vger.kernel.org
-> ---
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+These are the following changes since the previous SM8450 SoC:
+- No more GLINK altmode events for USB only changes, only DP
+- Type-C orientation is available on a PMIC signal connected
+  to a GPIO line
+- When altmode is disconnected, an 0xff mode event is sent.
+
+In order to handle those changes, a new orientation-gpios property
+is added to the usb-c connector bindings.
+The 0xff altomode is translated as a SAFE type-c mux mode.
+
+And in order to handle such info, we tie this to the UCSI connector
+events to propagate the orientation to Type-C switches.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (7):
+      dt-bindings: connector: usb-connector: add a gpio used to determine the Type-C port plug orientation
+      soc: qcom: pmic_glink_altmode: handle safe mode when disconnect
+      usb: ucsi: glink: use the connector orientation GPIO to provide switch events
+      qcom: pmic_glink: enable altmode for SM8550
+      arm64: dts: qcom: sm8550: add ports subnodes in usb/dp qmpphy node
+      arm64: dts: qcom: sm8550-mtp: add pmic glink port/endpoints
+      arm64: dts: qcom: sm8550-qrd: add pmic glink port/endpoints
+
+ .../bindings/connector/usb-connector.yaml          |  5 ++
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            | 67 ++++++++++++++-
+ arch/arm64/boot/dts/qcom/sm8550-qrd.dts            | 99 +++++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               | 26 ++++++
+ drivers/soc/qcom/pmic_glink.c                      |  6 +-
+ drivers/soc/qcom/pmic_glink_altmode.c              | 18 +++-
+ drivers/usb/typec/ucsi/ucsi_glink.c                | 52 +++++++++++-
+ 7 files changed, 262 insertions(+), 11 deletions(-)
+---
+base-commit: f339b18115200db76b42475e44e3bc926e3ecab0
+change-id: 20230601-topic-sm8550-upstream-type-c-e85b4d971450
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
