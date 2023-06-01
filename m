@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453B871F0E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B6771F0E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjFARf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S232889AbjFARhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFARfz (ORCPT
+        with ESMTP id S229459AbjFARhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:35:55 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014E5134
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:35:54 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d247a023aso845600b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:35:54 -0700 (PDT)
+        Thu, 1 Jun 2023 13:37:46 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62149197
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:37:45 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d57cd373fso1864054b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685640954; x=1688232954;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PVGMREsWzO1c/sNV3gmLzKlvHUynvxsJtWsx11SaIbs=;
-        b=wZGzjXotCrJNzs6y2cgRlaw5IBrRhWt0Z7ZPML9GorT6fZQ3GU9ZwUAaI7PYjUDQVy
-         wOuqdAueAayn1y6abPJJoiJr8RKSBeyA7sKkImyrhV1KHsxQ1614UAt//eXUFm9kkJys
-         SLERr9Ofld00I5Gz3lfvKAppcLOfz+J7z5xiKqARZFKesQmyxykzKwLvOnbW/dHEoyyo
-         P7/dbb4J1s4pepzSF55KH4BtIR91FGMKuaw8R1b2HMUrWq2UfH/RjX7Au59k8652+nqN
-         OzWFsUH1JhreWKsJJs4bXQgqqdGN5T7nog+xz1a5dWs1Zl4EEkfN9M2bJu/y5Fq6Swt/
-         coeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685640954; x=1688232954;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1685641065; x=1688233065;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PVGMREsWzO1c/sNV3gmLzKlvHUynvxsJtWsx11SaIbs=;
-        b=gpmcpUtkBCW9S+r8m9gHKOiU9KyEDs0wWSDFaNsIcoXYdUm7SJzWDWjzyLP/FMiue5
-         5oHdogjjQH3kfZjIeR35b4OqgrDLbcTuyfaXpCU8wa8FJ7Gv0g3yueXJb2dv/2oOigkN
-         qrwLg/pRQ01eYBlARTl/kMaHdYUV9n5AWW5e4iPIPmNEmlcWIBLFbxP37jYOIPs6MbqB
-         S5CZDPMv121cLzfp3jX323BnDARWjlh/PRlBFViu0KSfNg6JqWm8/INiCEmYegevk891
-         nfRfa/KKaZQO4AemuYUbwiNV1BP3lwIay6fZfHfCTS5HKCa7vTPSUnJT11yvVCMuac61
-         UTGg==
-X-Gm-Message-State: AC+VfDy6E7ULqgPHdVcz/mzCAjXScSFMB9u0gjKyeAUAQCbQpYp7x45m
-        T6xI7G0V5gxve30WXylgQze8Bw==
-X-Google-Smtp-Source: ACHHUZ51vbDxBWBcgm+efybO7lW68d64nZiJTizcRZ9cY1kdV2hxbgulcI1/JGkC1hoUMMmyGgSpGQ==
-X-Received: by 2002:a05:6a00:2295:b0:64c:c5f9:1533 with SMTP id f21-20020a056a00229500b0064cc5f91533mr9662058pfe.33.1685640954214;
-        Thu, 01 Jun 2023 10:35:54 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 13-20020aa7910d000000b00634dde2992bsm5288998pfh.132.2023.06.01.10.35.53
+        bh=3VaooKom1fpr+/gFLUK2ePWF2zVhCHZPLzAcFMttDEM=;
+        b=MHSqsckRCpeDoAGkYMTNaUf8HXTi7i1vORvFkCxMTEUbOwF3hDPYiDc7fFQMPlAq2F
+         cXQdYOZneqJDanRwrJGT5TiAw3lSbDh/dzwSjw6g4CmcRcd2jULq+fPI64PC3km0AJ8o
+         2PjBMI8jyygfqWvpj/9HPpCKdpPk7v0MskmbjN6d7QCnag4DGEbtq3amlJSeDTwYc3zT
+         c0cV9wX4QJgURi4YJnSboQbChb1aZWzL1hvpMQc5EufEqPm6+DIaJwCYZOZ6FWPWEgmi
+         1vId6smHDNqp1/Et5J7vtutwuBFt7gM/c2cO7oARrjPxprOFoTUBsByAcCb0gBVMlPmH
+         8rkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685641065; x=1688233065;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3VaooKom1fpr+/gFLUK2ePWF2zVhCHZPLzAcFMttDEM=;
+        b=V7RYJUrljKz/y4GfjOzcsdQ+F6DaAJXBssAuKt5hIO3IVhZvuF48WxTdmAU6BXrDpE
+         Oe/OeI8WOC9NoG1hfVMH6KV4NpJj2Do1Ggh1MeEzY3o37fbZNfqLs6HxmWqFxLbx1+Ob
+         e/bZ8xUS6C/qNCOL9JUmTcAJkZRVU3v5c08DRQGANdvF69IOJKD5m9mQg/a/K6qnOcdO
+         HqHlsebAJnM6ERHM7vV060y5bJYO23Y5hH696MXexIUBfE+kQdWZQthyKd3q4w87WmDM
+         ezFCqDXE3f6nYB/x6QPSECrc6qUOeu3rJY/4+DIP8zK6VEhK+JK4I7ppMrjbX6d6vzx7
+         LwPQ==
+X-Gm-Message-State: AC+VfDzN2fA8VnJ3ZupwS8vM0YRehCRRAPH2S37SomkZc4ZupZywQjo9
+        Ksf3mGdBZTNq+0d+nVj0L3dTVg==
+X-Google-Smtp-Source: ACHHUZ7z6hqFz0/ybL9ukj5Ma2ElT9E2J0J2UDKTdWLYHsIJgV2YGGUXYubX2wob3APlALw7YS3Uvg==
+X-Received: by 2002:a05:6a20:3d87:b0:104:1016:dd0e with SMTP id s7-20020a056a203d8700b001041016dd0emr3075210pzi.3.1685641064841;
+        Thu, 01 Jun 2023 10:37:44 -0700 (PDT)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id s13-20020a65644d000000b0053fbacdaf59sm3139207pgv.69.2023.06.01.10.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 10:35:53 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 17:35:49 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Jialu Xu <xujialu@vimux.org>
-Cc:     gregkh@linuxfoundation.org, cristian.ciocaltea@collabora.com,
-        masahiroy@kernel.org, vipinsh@google.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts/tags.sh: improve compiled sources generation
-Message-ID: <ZHjW9RJ/jinVe5F/@google.com>
-References: <20230601010402.71040-1-xujialu@vimux.org>
+        Thu, 01 Jun 2023 10:37:44 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 10:37:42 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Mat Martineau <martineau@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next RFC] net: skip printing "link become ready" v6
+ msg
+Message-ID: <20230601103742.71285cf1@hermes.local>
+In-Reply-To: <20230601-net-next-skip_print_link_becomes_ready-v1-1-c13e64c14095@tessares.net>
+References: <20230601-net-next-skip_print_link_becomes_ready-v1-1-c13e64c14095@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601010402.71040-1-xujialu@vimux.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 09:04:02AM +0800, Jialu Xu wrote:
-> Use grep instead of sed for all compiled sources generation, it is three
-> times more efficient.
+On Thu, 01 Jun 2023 16:34:36 +0200
+Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
 
-Although I'm not sure how you obtained a 3x efficiency it did make
-things faster for me. I suppose there are several factors involved.
-I used defconfig for arm64 and got the following results:
-	real    1m50.790s
-	real    1m27.907s (with patch)
+> This following message is printed in the console each time a network
+> device configured with an IPv6 addresses is ready to be used:
+> 
+>   ADDRCONF(NETDEV_CHANGE): <iface>: link becomes ready
+> 
+> When netns are being extensively used -- e.g. by re-creating netns with
+> veth to discuss with each other for testing purposes like mptcp_join.sh
+> selftest does -- it generates a lot of messages: more than 700 when
+> executing mptcp_join.sh with the latest version.
 
-Tested-by: Carlos Llamas <cmllamas@google.com>
-
-> 
-> Signed-off-by: Jialu Xu <xujialu@vimux.org>
-> ---
->  scripts/tags.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/tags.sh b/scripts/tags.sh
-> index ea31640b2671..938dba219534 100755
-> --- a/scripts/tags.sh
-> +++ b/scripts/tags.sh
-> @@ -98,7 +98,7 @@ all_compiled_sources()
->  	{
->  		echo include/generated/autoconf.h
->  		find $ignore -name "*.cmd" -exec \
-> -			sed -n -E 's/^source_.* (.*)/\1/p; s/^  (\S.*) \\/\1/p' {} \+ |
-> +			grep -Poh '(?<=^  )\S+|(?<== )\S+[^\\](?=$)' {} \+ |
->  		awk '!a[$0]++'
->  	} | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
->  	sort -u
-> -- 
-> 2.30.2
-> 
+Don't add yet another network nerd knob.
+Just change message from pr_info to pr_debug.
