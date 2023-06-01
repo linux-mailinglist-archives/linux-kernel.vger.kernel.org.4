@@ -2,134 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B277C719367
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E0571936B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjFAGkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        id S231869AbjFAGk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjFAGkM (ORCPT
+        with ESMTP id S231831AbjFAGkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:40:12 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DD5126
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:40:10 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f6e83e12fso54970266b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685601608; x=1688193608;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Cv6JOLKqyraaAJ1veDO2EfbDEnH0qDmoSmkFEbJxzU=;
-        b=rGULAy8o6ltpYLKvIWAp6dbZn/AbKY9W5TZa/ke5vYz4397NkfiwVXAd3rniVX3jnb
-         P3tBKaU08bTKi8Lb7UbGlLPzPGo6NJV+Gr+cMwH7n1Z2OnA6VayOZOFZer87sN5bj7wV
-         lvm28mS+XzC5qHqaoWh2WlA0d34xqq7bVhx1U1RcAu4sAhKLuICvynoxV05PYZKglk+a
-         LwtfnDkJWN3OxdOZlFjAacxmYEBPjSK/HUuwnf04wKFy7AMd8LEn50DgdNMggEuevjTe
-         pxxZNaALd73mZl6EUtZUnd4uSWuJyberrCZpraXR09M2r7n1oqCxAGOv/zqy4qch1B8P
-         ZSMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685601608; x=1688193608;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Cv6JOLKqyraaAJ1veDO2EfbDEnH0qDmoSmkFEbJxzU=;
-        b=Qcgtq2vaaeJLomwxw/ly6jO6T+1ibDxoSTQkp2RiPm6lqCRcUQNxWLsxlLWxpruH/w
-         EtQoMH0Z0RWwdfd1jvmUlAo7d9feCfvrKl9GzpORjkEDlfXf2LIFPcQA1HhOX/nPeL9u
-         hA/IEnxJdqh5nJh+IBTHZfbj5Qg1svxy7OOQizkanLTN05eC9m1uExUDITvz4ovSI+Vv
-         VHOcgrx42jYpV1vvLX2105jtZjPpD7n5UIZ+gIIlMIv51bRDVNi14+5XtwWHTvErmdL0
-         06U6LiA7HP8/vGD3cMFxY0kK530ud8DkjPz8ya9lAcZJXqjhb3idTDcHZ0Ge+mAq1Tgv
-         +7bw==
-X-Gm-Message-State: AC+VfDwbn+wOTDxBN0KesJWSnp14sFtoFzLColrAaivVMED1D7t+7Moe
-        UZb5OtP2zRNUC/kVyPbvfgDstA==
-X-Google-Smtp-Source: ACHHUZ6irEqbHsAc+m1c3TXDwUEB0JblM1p8azIRxgoVEdZK5OgrTJxaZdnjwZJYFqEYXfpAyj4MLw==
-X-Received: by 2002:a05:6402:1252:b0:514:97f4:8401 with SMTP id l18-20020a056402125200b0051497f48401mr5581425edw.21.1685601608491;
-        Wed, 31 May 2023 23:40:08 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056402138d00b0050690bc07a3sm6841935edv.18.2023.05.31.23.40.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 23:40:08 -0700 (PDT)
-Message-ID: <cbe93a8b-bb48-d5f4-38cd-eb63792cff14@linaro.org>
-Date:   Thu, 1 Jun 2023 08:40:06 +0200
+        Thu, 1 Jun 2023 02:40:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5213E98;
+        Wed, 31 May 2023 23:40:14 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QWxJ80XzczLqSf;
+        Thu,  1 Jun 2023 14:37:12 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 1 Jun 2023 14:40:11 +0800
+CC:     <yangyicong@hisilicon.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
+        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>
+Subject: Re: [PATCH v2 1/3] drivers/perf: hisi: Add support for HiSilicon
+ H60PA and PAv3 PMU driver
+To:     Junhao He <hejunhao3@huawei.com>, <will@kernel.org>,
+        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <mark.rutland@arm.com>
+References: <20230531104625.18296-1-hejunhao3@huawei.com>
+ <20230531104625.18296-2-hejunhao3@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <fd7d3809-30d0-aecd-8d6e-696572e85551@huawei.com>
+Date:   Thu, 1 Jun 2023 14:40:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 04/43] dt-bindings: clock: Add Cirrus EP93xx
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601053546.9574-5-nikita.shubin@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601053546.9574-5-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230531104625.18296-2-hejunhao3@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 07:33, Nikita Shubin wrote:
-> This adds device tree bindings for the Cirrus Logic EP93xx
-> clock block used in these SoCs.
+On 2023/5/31 18:46, Junhao He wrote:
+> Compared to the original PA device, H60PA offers higher bandwidth.
+> The H60PA is a new device and we use HID to differentiate them.
 > 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> The events supported by PAv3 and PAv2 are different. They use the
+> same HID. The PMU version register is used in the driver to
+> distinguish different versions.
+> 
+> For each H60PA PMU, except for the overflow interrupt register, other
+> functions of the H60PA PMU are the same as the original PA PMU module.
+> It has 8-programable counters and each counter is free-running.
+> Interrupt is supported to handle counter (64-bits) overflow.
+> 
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+
+Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+
 > ---
+>  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 142 +++++++++++++++++---
+>  drivers/perf/hisilicon/hisi_uncore_pmu.h    |   9 ++
+>  2 files changed, 136 insertions(+), 15 deletions(-)
 > 
-> Notes:
->     v0 -> v1:
->     
->     - it's now a clock controller
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> index 71b6687d6696..c1b7180aadc1 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> @@ -22,9 +22,15 @@
+>  #define PA_TT_CTRL			0x1c08
+>  #define PA_TGTID_CTRL			0x1c14
+>  #define PA_SRCID_CTRL			0x1c18
+> +
+> +/* H32 PA interrupt registers */
+>  #define PA_INT_MASK			0x1c70
+>  #define PA_INT_STATUS			0x1c78
+>  #define PA_INT_CLEAR			0x1c7c
+> +
+> +#define H60PA_INT_STATUS		0x1c70
+> +#define H60PA_INT_MASK			0x1c74
+> +
+>  #define PA_EVENT_TYPE0			0x1c80
+>  #define PA_PMU_VERSION			0x1cf0
+>  #define PA_EVENT_CNT0_L			0x1d00
+> @@ -46,6 +52,12 @@ HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_cmd, config1, 32, 22);
+>  HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_msk, config1, 43, 33);
+>  HISI_PMU_EVENT_ATTR_EXTRACTOR(tracetag_en, config1, 44, 44);
+>  
+> +struct hisi_pa_pmu_int_regs {
+> +	u32 mask_offset;
+> +	u32 clear_offset;
+> +	u32 status_offset;
+> +};
+> +
+>  static void hisi_pa_pmu_enable_tracetag(struct perf_event *event)
+>  {
+>  	struct hisi_pmu *pa_pmu = to_hisi_pmu(event->pmu);
+> @@ -219,44 +231,50 @@ static void hisi_pa_pmu_disable_counter(struct hisi_pmu *pa_pmu,
+>  static void hisi_pa_pmu_enable_counter_int(struct hisi_pmu *pa_pmu,
+>  					   struct hw_perf_event *hwc)
+>  {
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+>  	u32 val;
+>  
+>  	/* Write 0 to enable interrupt */
+> -	val = readl(pa_pmu->base + PA_INT_MASK);
+> +	val = readl(pa_pmu->base + regs->mask_offset);
+>  	val &= ~(1 << hwc->idx);
+> -	writel(val, pa_pmu->base + PA_INT_MASK);
+> +	writel(val, pa_pmu->base + regs->mask_offset);
+>  }
+>  
+>  static void hisi_pa_pmu_disable_counter_int(struct hisi_pmu *pa_pmu,
+>  					    struct hw_perf_event *hwc)
+>  {
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+>  	u32 val;
+>  
+>  	/* Write 1 to mask interrupt */
+> -	val = readl(pa_pmu->base + PA_INT_MASK);
+> +	val = readl(pa_pmu->base + regs->mask_offset);
+>  	val |= 1 << hwc->idx;
+> -	writel(val, pa_pmu->base + PA_INT_MASK);
+> +	writel(val, pa_pmu->base + regs->mask_offset);
+>  }
+>  
+>  static u32 hisi_pa_pmu_get_int_status(struct hisi_pmu *pa_pmu)
+>  {
+> -	return readl(pa_pmu->base + PA_INT_STATUS);
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+> +
+> +	return readl(pa_pmu->base + regs->status_offset);
+>  }
+>  
+>  static void hisi_pa_pmu_clear_int_status(struct hisi_pmu *pa_pmu, int idx)
+>  {
+> -	writel(1 << idx, pa_pmu->base + PA_INT_CLEAR);
+> -}
+> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->private;
+>  
+> -static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
+> -	{ "HISI0273", },
+> -	{}
+> -};
+> -MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
+> +	writel(1 << idx, pa_pmu->base + regs->clear_offset);
+> +}
+>  
+>  static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>  				   struct hisi_pmu *pa_pmu)
+>  {
+> +	const struct hisi_pmu_dev_info *pa_pmu_info;
+> +
+> +	pa_pmu_info = device_get_match_data(&pdev->dev);
+> +	if (!pa_pmu_info)
+> +		return -ENODEV;
+> +
+>  	/*
+>  	 * As PA PMU is in a SICL, use the SICL_ID and the index ID
+>  	 * to identify the PA PMU.
+> @@ -284,6 +302,15 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>  
+>  	pa_pmu->identifier = readl(pa_pmu->base + PA_PMU_VERSION);
+>  
+> +	/* When running on v3 or later, returns the largest version supported */
+> +	if (pa_pmu->identifier >= HISI_PMU_V3)
+> +		pa_pmu->dev_info = &pa_pmu_info[2];
+> +	else if (HISI_PMU_V2)
+> +		pa_pmu->dev_info = &pa_pmu_info[1];
+> +
+> +	if (!pa_pmu->dev_info || !pa_pmu->dev_info->name)
+> +		return -EINVAL;
+> +
+>  	return 0;
+>  }
+>  
+> @@ -314,6 +341,32 @@ static const struct attribute_group hisi_pa_pmu_v2_events_group = {
+>  	.attrs = hisi_pa_pmu_v2_events_attr,
+>  };
+>  
+> +static struct attribute *hisi_pa_pmu_v3_events_attr[] = {
+> +	HISI_PMU_EVENT_ATTR(tx_req,	0x0),
+> +	HISI_PMU_EVENT_ATTR(tx_dat,	0x1),
+> +	HISI_PMU_EVENT_ATTR(tx_snp,	0x2),
+> +	HISI_PMU_EVENT_ATTR(rx_req,	0x7),
+> +	HISI_PMU_EVENT_ATTR(rx_dat,	0x8),
+> +	HISI_PMU_EVENT_ATTR(rx_snp,	0x9),
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_pa_pmu_v3_events_group = {
+> +	.name = "events",
+> +	.attrs = hisi_pa_pmu_v3_events_attr,
+> +};
+> +
+> +static struct attribute *hisi_h60pa_pmu_events_attr[] = {
+> +	HISI_PMU_EVENT_ATTR(rx_flit,	0x50),
+> +	HISI_PMU_EVENT_ATTR(tx_flit,	0x65),
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group hisi_h60pa_pmu_events_group = {
+> +	.name = "events",
+> +	.attrs = hisi_h60pa_pmu_events_attr,
+> +};
+> +
+>  static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
+>  
+>  static struct attribute *hisi_pa_pmu_cpumask_attrs[] = {
+> @@ -345,6 +398,57 @@ static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
+>  	NULL
+>  };
+>  
+> +static const struct attribute_group *hisi_pa_pmu_v3_attr_groups[] = {
+> +	&hisi_pa_pmu_v2_format_group,
+> +	&hisi_pa_pmu_v3_events_group,
+> +	&hisi_pa_pmu_cpumask_attr_group,
+> +	&hisi_pa_pmu_identifier_group,
+> +	NULL
+> +};
+> +
+> +static struct hisi_pa_pmu_int_regs hisi_pa_pmu_regs = {
+> +	.mask_offset = PA_INT_MASK,
+> +	.clear_offset = PA_INT_CLEAR,
+> +	.status_offset = PA_INT_STATUS,
+> +};
+> +
+> +static const struct hisi_pmu_dev_info hisi_h32pa[] = {
+> +	[1] = {
+> +		.name = "pa",
+> +		.attr_groups = hisi_pa_pmu_v2_attr_groups,
+> +		.private = &hisi_pa_pmu_regs,
+> +	},
+> +	[2] = {
+> +		.name = "pa",
+> +		.attr_groups = hisi_pa_pmu_v3_attr_groups,
+> +		.private = &hisi_pa_pmu_regs,
+> +	},
+> +	{}
+> +};
+> +
+> +static const struct attribute_group *hisi_h60pa_pmu_attr_groups[] = {
+> +	&hisi_pa_pmu_v2_format_group,
+> +	&hisi_h60pa_pmu_events_group,
+> +	&hisi_pa_pmu_cpumask_attr_group,
+> +	&hisi_pa_pmu_identifier_group,
+> +	NULL
+> +};
+> +
+> +static struct hisi_pa_pmu_int_regs hisi_h60pa_pmu_regs = {
+> +	.mask_offset = H60PA_INT_MASK,
+> +	.clear_offset = H60PA_INT_STATUS, /* Clear on write */
+> +	.status_offset = H60PA_INT_STATUS,
+> +};
+> +
+> +static const struct hisi_pmu_dev_info hisi_h60pa[] = {
+> +	[1] = {
+> +		.name = "h60pa",
+> +		.attr_groups = hisi_h60pa_pmu_attr_groups,
+> +		.private = &hisi_h60pa_pmu_regs,
+> +	},
+> +	{}
+> +};
+> +
+>  static const struct hisi_uncore_ops hisi_uncore_pa_ops = {
+>  	.write_evtype		= hisi_pa_pmu_write_evtype,
+>  	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
+> @@ -375,7 +479,7 @@ static int hisi_pa_pmu_dev_probe(struct platform_device *pdev,
+>  	if (ret)
+>  		return ret;
+>  
+> -	pa_pmu->pmu_events.attr_groups = hisi_pa_pmu_v2_attr_groups;
+> +	pa_pmu->pmu_events.attr_groups = pa_pmu->dev_info->attr_groups;
+>  	pa_pmu->num_counters = PA_NR_COUNTERS;
+>  	pa_pmu->ops = &hisi_uncore_pa_ops;
+>  	pa_pmu->check_event = 0xB0;
+> @@ -400,8 +504,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
+> -			      pa_pmu->sicl_id, pa_pmu->index_id);
+> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_%s%u",
+> +			      pa_pmu->sicl_id, pa_pmu->dev_info->name,
+> +			      pa_pmu->index_id);
+>  	if (!name)
+>  		return -ENOMEM;
+>  
+> @@ -435,6 +540,13 @@ static int hisi_pa_pmu_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
+> +	{ "HISI0273", (kernel_ulong_t)hisi_h32pa },
+> +	{ "HISI0274", (kernel_ulong_t)hisi_h60pa },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
+> +
+>  static struct platform_driver hisi_pa_pmu_driver = {
+>  	.driver = {
+>  		.name = "hisi_pa_pmu",
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> index 07890a8e96ca..a8d6d6905f3f 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> @@ -24,6 +24,7 @@
+>  #define pr_fmt(fmt)     "hisi_pmu: " fmt
+>  
+>  #define HISI_PMU_V2		0x30
+> +#define HISI_PMU_V3		0x40
+>  #define HISI_MAX_COUNTERS 0x10
+>  #define to_hisi_pmu(p)	(container_of(p, struct hisi_pmu, pmu))
+>  
+> @@ -62,6 +63,13 @@ struct hisi_uncore_ops {
+>  	void (*disable_filter)(struct perf_event *event);
+>  };
+>  
+> +/* Describes the HISI PMU chip features information */
+> +struct hisi_pmu_dev_info {
+> +	const char *name;
+> +	const struct attribute_group **attr_groups;
+> +	void *private;
+> +};
+> +
+>  struct hisi_pmu_hwevents {
+>  	struct perf_event *hw_events[HISI_MAX_COUNTERS];
+>  	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
+> @@ -72,6 +80,7 @@ struct hisi_pmu_hwevents {
+>  struct hisi_pmu {
+>  	struct pmu pmu;
+>  	const struct hisi_uncore_ops *ops;
+> +	const struct hisi_pmu_dev_info *dev_info;
+>  	struct hisi_pmu_hwevents pmu_events;
+>  	/* associated_cpus: All CPUs associated with the PMU */
+>  	cpumask_t associated_cpus;
 > 
->  .../bindings/clock/cirrus,ep9301.yaml         | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/cirrus,ep9301.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/cirrus,ep9301.yaml b/Documentation/devicetree/bindings/clock/cirrus,ep9301.yaml
-> new file mode 100644
-> index 000000000000..4f9e0d483698
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/cirrus,ep9301.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/cirrus,ep9301.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus Logic ep93xx SoC's clock controller
-> +
-> +maintainers:
-> +  - Nikita Shubin <nikita.shubin@maquefel.me>
-> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> +
-> +description: |
-> +  Cirrus Logic EP93XX SoC clocks driver bindings. The clock
-
-First sentence is not suitable for bindings. Describe the hardware or
-skip it.
-
-> +  controller node must be defined as a child node of the ep93xx
-> +  system controller node.
-> +
-
-parent schema should define it...
-
-Best regards,
-Krzysztof
-
