@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBF671EE9F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D2C71EE89
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjFAQUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S231146AbjFAQRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjFAQUR (ORCPT
+        with ESMTP id S231191AbjFAQQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:20:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78ADF12C;
-        Thu,  1 Jun 2023 09:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685636416; x=1717172416;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=66IbxJcu+ERP7iDReAuuseWeSYepw+/LOPDcQLh6/HQ=;
-  b=cQMgBE2wPwabOoxsqdvdV0HK9JzB/E25Aiz2JnLsAHxW301ib0A0g0Ws
-   JLipOHlD4uKXnpvr/NaWWsBq6qnjpi8d3q908UMbSvFC4uVOcHdiTfW7+
-   89i6XwssIWsRqZVQ4LfO1IEjUPAY2si1OIyOpoAzGICsdYN2aXzV/C8CV
-   ivVr0kpBwofVYYfuTART+fK8nI7UrTBgOnIzgLhjO3Ff8cYHAoSVcaVdc
-   iD+QStK4AlHcepQ3TWONa4pAjzZuAdJf+F9q6LP89FUilPy6JI1kVlttI
-   00exzl1ZDTsDLMMeF7BU/IjJQkoET7NDi9AdavlZupquxvV9TvhWtXyYK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383879560"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="383879560"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:16:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737160337"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="737160337"
-Received: from jdboswor-mobl.amr.corp.intel.com (HELO [10.212.227.45]) ([10.212.227.45])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:16:03 -0700
-Message-ID: <d29492e3-b071-7b16-41ec-c499d6802257@intel.com>
-Date:   Thu, 1 Jun 2023 09:16:03 -0700
+        Thu, 1 Jun 2023 12:16:50 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FE91A8
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:16:47 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351BpAhP020645;
+        Thu, 1 Jun 2023 11:16:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=WVl77aDZPiiy/Xm2MeadfaVYJBvh09LDGtM6Q0gPMuI=;
+ b=b9MVpmVjFCP1W+VRojkkvlCYHS0nH3raAy/dPqlNwsNtapxNZYsvU5SaZzEAXYd7K5gw
+ FZ7Hma7K7r6K2eOedz/ZIKgpQUwPJk1727uNeyElo8Krro4/NSn/jssjkBSiwsUhhwbZ
+ 01Ue0A7BpglNDQocs4fTxfHQek6V+REulUvHUdVIdrExINHLsuJg1yd+npmhtghZfsIQ
+ I2pQ5vPMc9tPVB+mSGjcecnQnR1xhsv5fBriOXzml7pkxTgq+ktZ8xdBLVz4g3dlzAM7
+ gXdyoWe6mVHKS3XR8/L8TvfmHSvQu/z33Wd9e2ns7myQ7Jpe/PEN25L7nIMPwBay2zdB ug== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mxmbs-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 11:16:25 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 1 Jun
+ 2023 17:16:22 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Thu, 1 Jun 2023 17:16:22 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AEFBF468;
+        Thu,  1 Jun 2023 16:16:22 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <vkoul@kernel.org>
+CC:     <yung-chuan.liao@linux.intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH 1/4] soundwire: stream: Add missing clear of alloc_slave_rt
+Date:   Thu, 1 Jun 2023 17:16:19 +0100
+Message-ID: <20230601161622.1808135-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-Content-Language: en-US
-To:     Jeff Xu <jeffxu@chromium.org>
-Cc:     Jeff Xu <jeffxu@google.com>,
-        =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
-        luto@kernel.org, jorgelo@chromium.org, keescook@chromium.org,
-        groeck@chromium.org, jannh@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
- <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
- <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
- <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
- <b69f6809-b483-158f-8be9-4976fad918d8@intel.com>
- <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
- <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
- <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
- <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
- <CABi2SkVmAw379G-o26sZnmt5p2FY8atoDfRMfKv0yFsfJOe7rA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CABi2SkVmAw379G-o26sZnmt5p2FY8atoDfRMfKv0yFsfJOe7rA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: _k6sMXl3nmUC_5yfSH5nMaB7j9PP9N91
+X-Proofpoint-ORIG-GUID: _k6sMXl3nmUC_5yfSH5nMaB7j9PP9N91
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 18:39, Jeff Xu wrote:
-> I think this solution should work.
+The current path that skips allocating the slave runtime does not clear
+the alloc_slave_rt flag, this is clearly incorrect. Add the missing
+clear, so the runtime won't be erroneously cleaned up.
 
-By "work" I think you mean that if laser-focused on this one use case,
-without a full implementation, it looks like it can work.
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ drivers/soundwire/stream.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I'll give you a "maybe" on that.
+diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+index c2191c07442b0..379228f221869 100644
+--- a/drivers/soundwire/stream.c
++++ b/drivers/soundwire/stream.c
+@@ -2021,8 +2021,10 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
+ 
+ skip_alloc_master_rt:
+ 	s_rt = sdw_slave_rt_find(slave, stream);
+-	if (s_rt)
++	if (s_rt) {
++		alloc_slave_rt = false;
+ 		goto skip_alloc_slave_rt;
++	}
+ 
+ 	s_rt = sdw_slave_rt_alloc(slave, m_rt);
+ 	if (!s_rt) {
+-- 
+2.30.2
 
-But that leaves out the bigger picture.  How many other things will we
-regress doing this?  What's the opportunity cost?  What other things
-will get neglected because we did _this_ one?  Are there more users out
-there?
-
-Looking at the big picture, I'm not convinced those tradeoffs are good
-ones (and you're not going to find anyone that's a bigger fan of pkeys
-than me).
