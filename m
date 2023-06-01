@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFB871A07D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6551771A081
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233848AbjFAOkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S234335AbjFAOlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjFAOkl (ORCPT
+        with ESMTP id S233470AbjFAOlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:40:41 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C2E123;
-        Thu,  1 Jun 2023 07:40:40 -0700 (PDT)
-Received: from fpc.intra.ispras.ru (unknown [10.10.165.6])
-        by mail.ispras.ru (Postfix) with ESMTPSA id B17374076277;
-        Thu,  1 Jun 2023 14:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru B17374076277
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1685630438;
-        bh=r9sMHMiXrbhy7C+21akEGSbG3LyQKzFWYpKX8g3KZvA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VaYHgFvPhdR0AuoOlH2kxWpO5TvNt0Bc8jC7ZOQ16/N3Df/ZL+v5JR2HWcNFg4m1b
-         NJ4p/9tituVcqzVUVkYqdX3yqkqeS4le4oRhtuZJqH7Rc8xEE41wZgKKMl6jw9AE85
-         5L+W+iUwluA3s5AIa7K8XY2gNstWS5biG6v9VVtc=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, fuyufan <fuyufan@huawei.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 5.4/5.10 1/1] drm/atomic: Don't pollute crtc_state->mode_blob with error pointers
-Date:   Thu,  1 Jun 2023 17:40:16 +0300
-Message-Id: <20230601144016.475176-2-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230601144016.475176-1-pchelkin@ispras.ru>
-References: <20230601144016.475176-1-pchelkin@ispras.ru>
+        Thu, 1 Jun 2023 10:41:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D7118C;
+        Thu,  1 Jun 2023 07:41:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 469AF64608;
+        Thu,  1 Jun 2023 14:41:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BD2C4339B;
+        Thu,  1 Jun 2023 14:41:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685630467;
+        bh=fKcNy26Ot13k/n7UuJGvVszN9Le6Ytdc+ch3JGpTnm0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nepBlgSuMwWPO8KXzxrAkpVSePJRt9d/4qLbEggBDOBVFe+Qf+dbJ2V0tVFbZgX5z
+         wJ1FWiNARn80QP67yVBfhK6OWqAZWGC9uq2LhwP/fsp0ZDJ5nVCJA+MPqo4Q3q+yEt
+         MLaMh4oM7AzCptfc4KtjPpQnKM23mMe+6N8ilwmCovQqnpADRrioKccuU9tJF37XN2
+         qxh9WD6+00XsViRh+hdojT1SuW8PHkngMkbCQXXiFUd9cT9gjP/BlE7PR4GXxvLqWy
+         PsrigFITXBZ7ryu2zqNZee3AxvVKAmNAt05rFfGPldzZFWXFAvhsRBjNiZ6FjqTvJA
+         sDEbf1RdnYHwg==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2afb2875491so12142241fa.1;
+        Thu, 01 Jun 2023 07:41:07 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwnFL6dL20SPNFy/TPITnKXeu059kjNYWMJiY491NrB01KKFrol
+        u5duAYIef+XK+kfwArHRRgTpT5xW3upDva3k3b4=
+X-Google-Smtp-Source: ACHHUZ4yo59UWvjyjGKifTNOAp2GpzUk9Bw0Ta78Yradc0BnhsIRm7sWUvBss2qlLPYn/4AjMU7EvC/uHKkYRTC6P5g=
+X-Received: by 2002:a2e:7e04:0:b0:2af:231a:f9f0 with SMTP id
+ z4-20020a2e7e04000000b002af231af9f0mr5136777ljc.42.1685630465613; Thu, 01 Jun
+ 2023 07:41:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230601121001.1071533-1-masahiroy@kernel.org>
+ <20230601121001.1071533-8-masahiroy@kernel.org> <CAMj1kXFJOHsgopUOR7+jvC8s6bvSCZ3XAkQM1FbnZ8Qj6azvQA@mail.gmail.com>
+ <CAK7LNATDJmh1aas86YW4yrG_8Rqgz7r82NwaPj1x5c7tg-d-jg@mail.gmail.com>
+In-Reply-To: <CAK7LNATDJmh1aas86YW4yrG_8Rqgz7r82NwaPj1x5c7tg-d-jg@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 1 Jun 2023 16:40:54 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHQHVy5KRmeQzDb=d1QQXZKZGy+iLk2wg5Mfp0Ap+TDMA@mail.gmail.com>
+Message-ID: <CAMj1kXHQHVy5KRmeQzDb=d1QQXZKZGy+iLk2wg5Mfp0Ap+TDMA@mail.gmail.com>
+Subject: Re: [PATCH 7/7] modpost: detect section mismatch for R_ARM_REL32
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,52 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+On Thu, 1 Jun 2023 at 16:36, Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Thu, Jun 1, 2023 at 9:40=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> w=
+rote:
+> >
+> > On Thu, 1 Jun 2023 at 14:10, Masahiro Yamada <masahiroy@kernel.org> wro=
+te:
+> > >
+> > > For ARM, modpost fails to detect some types of section mismatches.
+> > >
+> > >   [test code]
+> > >
+> > >     .section .init.data,"aw"
+> > >     bar:
+> > >             .long 0
+> > >
+> > >     .section .data,"aw"
+> > >     .globl foo
+> > >     foo:
+> > >             .long bar - .
+> > >
+> > > It is apparently a bad reference, but modpost does not report anythin=
+g.
+> > >
+> > > The test code above produces the following relocations.
+> > >
+> > >   Relocation section '.rel.data' at offset 0xe8 contains 1 entry:
+> > >    Offset     Info    Type            Sym.Value  Sym. Name
+> > >   00000000  00000403 R_ARM_REL32       00000000   .init.data
+> > >
+> > > Currently, R_ARM_REL32 is just skipped.
+> > >
+> > > Handle it like R_ARM_ABS32.
+> >
+> > OK, so the reason we can handle these in the same way is because we
+> > never calculate the resulting value, right? Because that value would
+> > be different for these cases.
+>
+> Right.
+>
+> '- loc' is unnecessary here because modpost never calculates the
+> resulting instruction.
+>
+> modpost wants to know the location of the referenced symbol.
+> (the offset from the start of the section).
+>
+> For the same reason, I omitted '- loc' for
+> PC-relative ones such as R_ARM_CALL, R_ARM_JUMP24, etc.
+>
 
-commit 439cf34c8e0a8a33d8c15a31be1b7423426bc765 upstream.
-
-Make sure we don't assign an error pointer to crtc_state->mode_blob
-as that will break all kinds of places that assume either NULL or a
-valid pointer (eg. drm_property_blob_put()).
-
-Cc: stable@vger.kernel.org
-Reported-by: fuyufan <fuyufan@huawei.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220209091928.14766-1-ville.syrjala@linux.intel.com
-Acked-by: Maxime Ripard <maxime@cerno.tech>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- drivers/gpu/drm/drm_atomic_uapi.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-index 25c269bc4681..b6062833370f 100644
---- a/drivers/gpu/drm/drm_atomic_uapi.c
-+++ b/drivers/gpu/drm/drm_atomic_uapi.c
-@@ -75,15 +75,17 @@ int drm_atomic_set_mode_for_crtc(struct drm_crtc_state *state,
- 	state->mode_blob = NULL;
- 
- 	if (mode) {
-+		struct drm_property_blob *blob;
-+
- 		drm_mode_convert_to_umode(&umode, mode);
--		state->mode_blob =
--			drm_property_create_blob(state->crtc->dev,
--		                                 sizeof(umode),
--		                                 &umode);
--		if (IS_ERR(state->mode_blob))
--			return PTR_ERR(state->mode_blob);
-+		blob = drm_property_create_blob(crtc->dev,
-+						sizeof(umode), &umode);
-+		if (IS_ERR(blob))
-+			return PTR_ERR(blob);
- 
- 		drm_mode_copy(&state->mode, mode);
-+
-+		state->mode_blob = blob;
- 		state->enable = true;
- 		DRM_DEBUG_ATOMIC("Set [MODE:%s] for [CRTC:%d:%s] state %p\n",
- 				 mode->name, crtc->base.id, crtc->name, state);
--- 
-2.34.1
-
+OK makes sense - I just wanted to double check
