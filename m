@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3989871F5FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2E471F5FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjFAWcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S232900AbjFAWco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjFAWcQ (ORCPT
+        with ESMTP id S232616AbjFAWcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:32:16 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A14136;
-        Thu,  1 Jun 2023 15:32:13 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30ae141785bso1382194f8f.3;
-        Thu, 01 Jun 2023 15:32:13 -0700 (PDT)
+        Thu, 1 Jun 2023 18:32:41 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D716C1A8;
+        Thu,  1 Jun 2023 15:32:33 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so1390259f8f.2;
+        Thu, 01 Jun 2023 15:32:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685658731; x=1688250731;
+        d=gmail.com; s=20221208; t=1685658752; x=1688250752;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RDQovBoms3FLau58BysfqmyJWkZDGP+mDWm5zuqZL/Y=;
-        b=nJ5nrB/K65xBQKeS4GK49exb8oASXvkB07wZO02wNCVCzxUG+fXPDtEcDX1berfUJd
-         +Dnim0ocLAx6/xp4BqZHLDSdO5QS9me/pYMaRIrhky0TGnpJbxDqO7aDu8BcOELRIMIV
-         T1FMGnigqZwePfryfBXqE8S6Um91z4H7ji7M6+YlBlSeaJxylPSlgpsSFbnmXAeNQ/H+
-         WzpMtM1IbWpS4PUsNYMkWRN6+G7FtIdvkbA4F1Fd2UWBP8woALbMjNjERKg2hovSBsH3
-         0y0YkI4wO8qI2MI3pKH5oA+nA+L6qGqsRXDsSiH58FHQshYUIdHAxwdUS2TU9nh2dsMa
-         exYA==
+        bh=9/TmEA+PoC7xu6/KU/ll32pvJQ2ck1CrGNuRyF6FIV0=;
+        b=PONnEob4cS799koyjCLxAEsadb0C5Fdkmzoc9mRcit0XlOSYJQv+wlsMZI1/KUhrq0
+         EmiI5N6UUlzX07g4bppV5fM/ERH0Kc1q6C1Ecwo+XK/lBO+kqZhSWdHRQTJn/r+xHJ3Q
+         /RBLLfLxgIVRLbYYoZgGQ+EM/XZH2dpFGccTFJrYUZ3AkWEYYPMaVSTUYmlnEKCu306P
+         mM31tPQ8fqWiFZRgKAMLFy8HVh/vqXa11YJMlUmyGKmSiVSSfBBkOZuln7xeu0urBO3P
+         kdwBI+K529QyXPDED8jvlTPhU96rtmoSs6MoFIw1vWgaQmEoeT+EXp2xw9pGcPw+t1ZH
+         J4Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685658731; x=1688250731;
+        d=1e100.net; s=20221208; t=1685658752; x=1688250752;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RDQovBoms3FLau58BysfqmyJWkZDGP+mDWm5zuqZL/Y=;
-        b=Ms0yKumrEMSmJ+b9jOl4IyTYQMMs8p7ggZL3O9UQH1qpsfsIhzM8O+BUJ0N0vsS+Bi
-         rKGE1RtzY0xT5vrkNjhFZojYPpDHzZehEtpr3B/m5DbfObXl68t7sVgnl38o8Ek+Vlis
-         hzkr0B7E1CFjzgFKiGjHCssPEj0FIE3ibqTpgASuND7eeA6e0rG/UxvjZLXutMQKGEc0
-         8eB/M3YLKQVypAEsrLuQa3GnCOI/R3bYMoosXOmg8bqLef+z6IjlvzbULq/+c/xRl8Jo
-         w4Dbh4+JbbeqoNE2EDNwFRT+9+tDhcn4589beNQK6mYT8dUgWY8+SCW552+iW1s5xDH+
-         1J0Q==
-X-Gm-Message-State: AC+VfDyUDVjWGQ4CxjktjdRhXbRJZzraTGqwY6xOkfYVfdp9Ef9XegzQ
-        cspgHSm+tfoK/W3EnRwERt5kaMTGy3m4Gdtu
-X-Google-Smtp-Source: ACHHUZ4UrAst4qPVDvoXKTVPsJrseXBlcZmYfr9vB25sGSdLTIpkgvX8Re139ignQ4DE5Du+R0qDmw==
-X-Received: by 2002:a05:6000:1191:b0:300:cb8c:fd8f with SMTP id g17-20020a056000119100b00300cb8cfd8fmr2588538wrx.54.1685658731484;
-        Thu, 01 Jun 2023 15:32:11 -0700 (PDT)
+        bh=9/TmEA+PoC7xu6/KU/ll32pvJQ2ck1CrGNuRyF6FIV0=;
+        b=g0LNO0f2Uzn11IScvna4IFRB3R89Xpt6LCLn/IsLcQxQKnwupTvq25fXoih4W6iEvS
+         A/wkGyWc5qKcljBxdRTeAmFO6GUvAVA3vU+jGmjo2DPUNpxOf3REqHb8kmNuFl8ZmBtG
+         jXQJ4qgGHABTTHMN4xMAB58HhG6det4qcBi7r7Mi0gYI27SRrM95qO8grmUhdlYjOnd1
+         iXJP+xKWOacPh9z9WvzVN4Kg3+Dr8a2yMQdhjVnMynm94g0ngqba01w8tgAkr+HZemHh
+         QhqDBIezJAobcwBW4/pau2LsapFzR0EbJci6U/sFR8bB6vJdmjKApalKxElXbAwcGMPg
+         WRzg==
+X-Gm-Message-State: AC+VfDxPE2rK4GNhP1ZrcEZhuEyxU00aVhWIAwrth70QsJ5Znbnlr+/o
+        puivxxvhd6RStuGFztRJK4YdM2aV9emR3cI2
+X-Google-Smtp-Source: ACHHUZ7+6YZkcaeG6CeOS2iTlIxdCLfJll9IA+N/ujkTvPbYMeBBBBx/fSq02syrGNxPfUZeojqXWg==
+X-Received: by 2002:a5d:6709:0:b0:30a:eac8:e5c1 with SMTP id o9-20020a5d6709000000b0030aeac8e5c1mr3088955wru.6.1685658751871;
+        Thu, 01 Jun 2023 15:32:31 -0700 (PDT)
 Received: from user-PC.. ([178.134.198.138])
-        by smtp.gmail.com with ESMTPSA id b7-20020a5d4d87000000b0030af8da022dsm8619149wru.44.2023.06.01.15.32.08
+        by smtp.gmail.com with ESMTPSA id b7-20020a5d4d87000000b0030af8da022dsm8619149wru.44.2023.06.01.15.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 15:32:11 -0700 (PDT)
+        Thu, 01 Jun 2023 15:32:31 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     linux-iio@vger.kernel.org
 Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
@@ -66,25 +66,27 @@ Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Andre Przywara <andre.przywara@arm.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
         ChiYuan Huang <cy_huang@richtek.com>,
         Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
         Caleb Connolly <caleb.connolly@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v2 2/3] dt-bindings: iio: adc: Add Allwinner D1/T113s/R329/T507 SoCs GPADC
-Date:   Fri,  2 Jun 2023 01:30:40 +0300
-Message-Id: <20230601223104.1243871-3-bigunclemax@gmail.com>
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v2 3/3] riscv: dts: allwinner: d1: Add GPADC node
+Date:   Fri,  2 Jun 2023 01:30:41 +0300
+Message-Id: <20230601223104.1243871-4-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230601223104.1243871-1-bigunclemax@gmail.com>
 References: <20230601223104.1243871-1-bigunclemax@gmail.com>
@@ -102,101 +104,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maxim Kiselev <bigunclemax@gmail.com>
 
-Allwinner's D1/T113s/R329/T507 SoCs have a new general purpose ADC.
-This ADC is the same for all of this SoCs. The only difference is
-the number of available channels.
+This patch adds declaration of the general purpose ADC for D1
+and T113s SoCs.
 
 Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
 ---
- .../iio/adc/allwinner,sun20i-d1-gpadc.yaml    | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml b/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml
-new file mode 100644
-index 000000000000..94f15bb48231
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/adc/allwinner,sun20i-d1-gpadc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+index 922e8e0e2c09..90c79041cfba 100644
+--- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
++++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+@@ -138,6 +138,16 @@ ccu: clock-controller@2001000 {
+ 			#reset-cells = <1>;
+ 		};
+ 
++		gpadc: adc@2009000 {
++			compatible = "allwinner,sun20i-d1-gpadc";
++			reg = <0x2009000 0x1000>;
++			clocks = <&ccu CLK_BUS_GPADC>;
++			resets = <&ccu RST_BUS_GPADC>;
++			interrupts = <SOC_PERIPHERAL_IRQ(57) IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++			#io-channel-cells = <1>;
++		};
 +
-+title: Allwinner D1 General Purpose ADC
-+
-+properties:
-+  "#io-channel-cells":
-+    const: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  compatible:
-+    enum:
-+      - allwinner,sun20i-d1-gpadc
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - "#io-channel-cells"
-+  - clocks
-+  - compatible
-+  - interrupts
-+  - reg
-+  - resets
-+
-+patternProperties:
-+  "^channel@([0-15])$":
-+    $ref: adc.yaml
-+    type: object
-+    description: |
-+      Represents the internal channels of the ADC.
-+
-+    properties:
-+      reg:
-+        description: |
-+          The channel number.
-+          Up to 16 channels, numbered from 0 to 15.
-+        items:
-+          minimum: 0
-+          maximum: 15
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpadc: adc@2009000 {
-+        compatible = "allwinner,sun20i-d1-gpadc";
-+        reg = <0x2009000 0x1000>;
-+        clocks = <&ccu 80>;
-+        resets = <&ccu 32>;
-+        interrupts = <0 57 4>;
-+        #io-channel-cells = <1>;
-+
-+        channel@0 {
-+          reg = <0>;
-+        };
-+
-+        channel@1 {
-+          reg = <1>;
-+        };
-+    };
-+
-+...
+ 		dmic: dmic@2031000 {
+ 			compatible = "allwinner,sun20i-d1-dmic",
+ 				     "allwinner,sun50i-h6-dmic";
 -- 
 2.39.2
 
