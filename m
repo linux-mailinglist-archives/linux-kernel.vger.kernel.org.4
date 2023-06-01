@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDF471F362
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8565A71F36B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjFAUGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S231801AbjFAUGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjFAUGB (ORCPT
+        with ESMTP id S231418AbjFAUGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:06:01 -0400
+        Thu, 1 Jun 2023 16:06:02 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E8C134;
-        Thu,  1 Jun 2023 13:05:59 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 6EB7C32001FC;
-        Thu,  1 Jun 2023 16:05:58 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0331613D;
+        Thu,  1 Jun 2023 13:06:01 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 20D563200934;
+        Thu,  1 Jun 2023 16:06:00 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 01 Jun 2023 16:05:58 -0400
+  by compute1.internal (MEProxy); Thu, 01 Jun 2023 16:06:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649958; x=
-        1685736358; bh=BuihjXCY0FZRPM1FRQ1H6wx+Ft5lKyW8JMDLJbKUpdE=; b=p
-        TFEbXB2nZmJpBzR2g/prdstVVpfbEzaj0wJ+vCmlyrCotpnJ0G8igJajZ4DojHKh
-        jez4xHv2Fx9WV0jggwH0FRO7vRhqTuveCjU6cif3iLa9wgkpxO0c4IcU+tSbVOk5
-        CqWECsJzplVCsGSYOYQsVc3tiBb0lrKs8wiGQAaTZx+w58wswgpgqh8+5Jya0YSM
-        rQpZmVqszmP6uWqgjXJqjPJofHHifPzr+KAyNEXfu+RgZ/Mbp6itog3L6+J3UGiH
-        PsBO34LrY8WFxTS9nAh44VeLhs3yQ3NtBd2ykDjY9z/ffr0U2MTIFsk8M95VSLjn
-        nakJIIhLnIX1Yap9usQ2w==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649959; x=
+        1685736359; bh=cLRPgHTyo6c+6/oybL3A1mBCEIZMGkL9lFVRPDGt43Y=; b=o
+        irn+iISfJ2v2EiO0BiBzXMNutmFAim0Ed/VDO69SfSuvKkpMGIyrkoEou54p4Ywk
+        dQVgAUOUWp75+MLcMWliJb7TV2brHPzaK0fZ51pV9iPevQa3wyi1naqTo352fqv3
+        moQIzmxsVhiThXMAaJGhjFN1oRiXmn4s1941y0srcLleyIYyKP7SY8jNNpF8aAyf
+        LrgQVscA/8iz7Wlfp0JLHKE0X2ZlqnoS4+hrvk8UFtYT96gEcclBfDSTeMqBooFF
+        /LZ1UMbP79a03LtgTxkgHbnB/07sy8MlWPNjdehrVPDrn8xmgeDlN3MGY8M4UvFu
+        QkYCaN4SXcN/z9Lj5Vilg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649958; x=
-        1685736358; bh=BuihjXCY0FZRPM1FRQ1H6wx+Ft5lKyW8JMDLJbKUpdE=; b=g
-        3aoVubITj4Yqj+bVpLgZA+HbXFBGAKK87N1jZ84aYdeYO60D/NlOYIfe+hMGaK/H
-        Z+TnLHdUAIdWY96g0zSNU46LbTYJGLBDy6BeUS0x5Fq9pIs280qnsBMDFEwHbDB8
-        AVBviyOr0Enw9y627yU14MEnz/DGTyawEM+UC1wDnvVuTpYs88Z1D7GktrLd9SpI
-        cHAhJaCjaDD6QxLGH7w+AaXkDgKBkqpA4i2M2DIoU1wvXECyDvsnh22CLUGecKxC
-        XlV9S5Lr58b+cKTAzTdkfe9pFkas8ayBN77mM65xqCjARtVQAMCkAeUACF0SBsRR
-        UtdBq+Ng6hu6yyuBZlIag==
-X-ME-Sender: <xms:Jfp4ZEzsw39U6kKUrKRVOyiQaIC0QnrKnAPKYoyt83JbppXWTq9gAw>
-    <xme:Jfp4ZIQAvnKwMsARyIjbaLNqFuKKq75ldffc2Tl9IQfrCitJ3lAb-vMbzSoz68yc4
-    hViex7NeGrCWpj4Ft0>
-X-ME-Received: <xmr:Jfp4ZGUobXidmF6RDJjLrJjqFkZk_N1V1PhJBgLFTpd6mVaTgEmYsipwqlowZ-mQXktIrzZ02wBav4GHSfYJO6OX1PF7KGtP0DvANZm6ZxGV71CS73jXmLNoww>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649959; x=
+        1685736359; bh=cLRPgHTyo6c+6/oybL3A1mBCEIZMGkL9lFVRPDGt43Y=; b=m
+        wD3SyB2r5oQrgbxOuR+t45kOCGcEil8va8a6hZnmLKu/TFZCP3G8VSU1sAQCOcOW
+        +H0jpBJs3jNRPw9KrSkemqoKt5nNmGTzgP/mk2P17O+rDQj38VEKOKQy/qHcW9eg
+        Z9x0THnN/e5Bq02TIGEIBSkJVZXag7Cs2qGF8EzRkqQ6eeOqkq0U/eTT2tvv0q0H
+        rDoqQORPjyz0bDwZGc3yV1oaAfNy3mlZRaQQK5CGODC9vpNJIcny7913ZAUtXduq
+        JpeWdWDbtwOvAnJFxkV+stPQTOUUCCIoqwo2++BY4URZqv5mKbD8hDj3Dz4d1WSg
+        h5dHuMGtQBX9BgVCXc0oQ==
+X-ME-Sender: <xms:J_p4ZNQhZ6qRHXlulFoQEdSlrlUDH1bbqERtV2ahA2wxGMfzxRwzIQ>
+    <xme:J_p4ZGz7s4VGKqUQQrgvppd49djtDYQ9KL2KdC80x9eBelmoMXt60Te9rHejyqJuX
+    IlyIXPVf1unvBKTjL4>
+X-ME-Received: <xmr:J_p4ZC1tdQjVpAGjLOod_HD9Vs0CiS52HYHURm9k4BJ8_5-ul7anaIcQGjO7OsZfS7xjE35_QgwXfvWCEbeeGQV5G7ivzEO7ddGfX-BGjhzBm7pa7LTj_oHDmQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
@@ -56,21 +56,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetgg
     frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
     teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:Jfp4ZChdxHCfaVVozUizkKiAJevq9rsQTL8WWZgRH5cJCizugVjomA>
-    <xmx:Jfp4ZGBecTz0K1S-qhgTtAmKFhcWdkAOoSUMVdWY6FbOSW7G61RUyQ>
-    <xmx:Jfp4ZDILdlh1IZX2G87iYmNDprFRRNcCom8019KrOJ36Ez1lLxyToA>
-    <xmx:Jvp4ZJ860YOogXffU9xcTd-WVG0NvMcaKdcHHR7TyLJQszujvIpk9A>
+X-ME-Proxy: <xmx:J_p4ZFBWdQrwoGK-DlaYbQ6hoMB0Sir1H5F0unhgQQplAF994MFy7g>
+    <xmx:J_p4ZGhkhQ2Z_sO6ED6zhEtPiDKVTv8bCIZF0_aAInroFjrh54UNOw>
+    <xmx:J_p4ZJrMx9r6eknezFImJAFN0P4Qm8JXsdZ9oZ9Z5vETBaBOhLK3Cw>
+    <xmx:J_p4ZOfkCJlU2LEWDqoIO_yluZ94Qd4HzMXchDgvbw4IRqlPRc3Q5A>
 Feedback-ID: ibe194615:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 16:05:57 -0400 (EDT)
+ 1 Jun 2023 16:05:59 -0400 (EDT)
 From:   Mark Pearson <mpearson-lenovo@squebb.ca>
 To:     mpearson-lenovo@squebb.ca
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 2/8] platform/x86: think-lmi: Enable opcode support on BIOS settings
-Date:   Thu,  1 Jun 2023 16:05:46 -0400
-Message-Id: <20230601200552.4396-2-mpearson-lenovo@squebb.ca>
+Subject: [PATCH v4 3/8] platform/x86: think-lmi: Correct System password interface
+Date:   Thu,  1 Jun 2023 16:05:47 -0400
+Message-Id: <20230601200552.4396-3-mpearson-lenovo@squebb.ca>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
 References: <mpearson-lenovo@squebb.ca>
@@ -87,69 +87,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whilst reviewing some documentation from the FW team on using WMI on
-Lenovo system I noticed that we weren't using Opcode support when
-changing BIOS settings in the thinkLMI driver.
+The system password identification was incorrect. This means that if
+the password was enabled it wouldn't be detected correctly; and setting
+it would not work.
+Also updated code to use TLMI_SMP_PWD instead of TLMI_SYS_PWD to be in
+sync with Lenovo documentation.
 
-We should be doing this to ensure we're future proof as the old
-non-opcode mechanism has been deprecated.
-
-Tested on X1 Carbon G10 and G11.
-
+Fixes: 640a5fa50a42 ("platform/x86: think-lmi: Opcode support")
 Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 ---
 Changes in v2:
- - Update comment for clearer explanation of what the driver is doing.
+ - Updated define name to be SMP_PWD instead of SYS_PWD.
+ - Clarified in comments what each password type is.
 Changes in v3:
  - None. Version bump with rest of series.
 Changes in v4:
- - Fixed code alignment as requested.
- - changed 'non opcode' to 'non-opcode'.
- - Missing space added at end of comment.
- - This patch was previously #1 and is now #2 in series.
+ - This patch was previously #2 and is now #3 in series.
+ - Patch split so comment updates moved into new patch (next in series).
 
- drivers/platform/x86/think-lmi.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ drivers/platform/x86/think-lmi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 6cf77bc26b05..80a5c989db03 100644
+index 80a5c989db03..f6d1931540f1 100644
 --- a/drivers/platform/x86/think-lmi.c
 +++ b/drivers/platform/x86/think-lmi.c
-@@ -1010,7 +1010,33 @@ static ssize_t current_value_store(struct kobject *kobj,
- 				tlmi_priv.pwd_admin->save_signature);
- 		if (ret)
- 			goto out;
--	} else { /* Non certiifcate based authentication */
-+	} else if (tlmi_priv.opcode_support) {
-+		/*
-+		 * If opcode support is present use that interface.
-+		 * Note - this sets the variable and then the password as separate
-+		 * WMI calls. Function tlmi_save_bios_settings will error if the
-+		 * password is incorrect.
-+		 */
-+		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
-+				    new_setting);
-+		if (!set_str) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
-+		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
-+		if (ret)
-+			goto out;
-+
-+		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
-+			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
-+						  tlmi_priv.pwd_admin->password);
-+			if (ret)
-+				goto out;
-+		}
-+
-+		ret = tlmi_save_bios_settings("");
-+	} else { /* old non-opcode based authentication method (deprecated) */
- 		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
- 			auth_str = kasprintf(GFP_KERNEL, "%s,%s,%s;",
- 					tlmi_priv.pwd_admin->password,
+@@ -172,7 +172,7 @@ MODULE_PARM_DESC(debug_support, "Enable debug command support");
+ #define TLMI_POP_PWD (1 << 0)
+ #define TLMI_PAP_PWD (1 << 1)
+ #define TLMI_HDD_PWD (1 << 2)
+-#define TLMI_SYS_PWD (1 << 3)
++#define TLMI_SMP_PWD (1 << 6) /* System Management */
+ #define TLMI_CERT    (1 << 7)
+ 
+ #define to_tlmi_pwd_setting(kobj)  container_of(kobj, struct tlmi_pwd_setting, kobj)
+@@ -1519,11 +1519,11 @@ static int tlmi_analyze(void)
+ 		tlmi_priv.pwd_power->valid = true;
+ 
+ 	if (tlmi_priv.opcode_support) {
+-		tlmi_priv.pwd_system = tlmi_create_auth("sys", "system");
++		tlmi_priv.pwd_system = tlmi_create_auth("smp", "system");
+ 		if (!tlmi_priv.pwd_system)
+ 			goto fail_clear_attr;
+ 
+-		if (tlmi_priv.pwdcfg.core.password_state & TLMI_SYS_PWD)
++		if (tlmi_priv.pwdcfg.core.password_state & TLMI_SMP_PWD)
+ 			tlmi_priv.pwd_system->valid = true;
+ 
+ 		tlmi_priv.pwd_hdd = tlmi_create_auth("hdd", "hdd");
 -- 
 2.40.1
 
