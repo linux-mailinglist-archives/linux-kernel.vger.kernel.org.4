@@ -2,226 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4227271A412
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065FB71E9E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbjFAQJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S234754AbjFAQJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbjFAQJC (ORCPT
+        with ESMTP id S234817AbjFAQJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:09:02 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C01AC0;
-        Thu,  1 Jun 2023 09:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685635741; x=1717171741;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NbH0oSUUj5UZLS1hq4IjYG2wDxtkDvSBLYMKBssoAKU=;
-  b=UR34xo8J1v7zVx+MWQI4CKr89CSRMpS4DGGPlq0TcRSGPMCTXCwkXG6z
-   HnKlEXlh1F1p1fxZhE+Ly+QxqAVwjAYk9Ynpxd3LOeJJtA0DOMVxY1IXe
-   q6xauI46wasdn3ZYYBvoKDJbk1laWrgoyUfcByKoMuIixkrmNfAwWwIJ+
-   FeqqXc+djU13zHswkCSrCTkSkw5gvygLqAdxcXWkG3Hxv/2qKIgYXfvI0
-   zpfsUXR+U4EB7r0r9PX9KDgi1OSfAyzotVyy5eru52fDhUI/7BF3+SRxj
-   nEEThS9fHoxRzRe5BtPLqFn0qH5IXLzC1kTD8A34PTW/5oBvi1Jeh2EKI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="335223461"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="335223461"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:08:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="819882198"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="819882198"
-Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([10.214.197.5])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:08:48 -0700
-Message-ID: <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
-Subject: [PATCH v4] media: uapi: v4l: Intel metadata format update
-From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, linux-kernel@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, sakari.ailus@intel.com,
-        Evgeni Raikhel <evgeni.raikhel@intel.com>, demisrael@gmail.com,
-        Nir Azkiel <nir.azkiel@intel.com>
-Date:   Thu, 01 Jun 2023 19:08:46 +0300
-In-Reply-To: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
-References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 1 Jun 2023 12:09:51 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47080E4;
+        Thu,  1 Jun 2023 09:09:47 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f623adec61so11094275e9.0;
+        Thu, 01 Jun 2023 09:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685635785; x=1688227785;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJy1XLQe0f69VJ3NGViu08fY1j4ecaxgtIAG9URJ/Bs=;
+        b=VJFxoPl1CmAbELXfEoG8logTM8qe6JOzO30zfRdxMxiWz+idH3tnTWGnBTUDjgOaz0
+         EdOeANV7bwV+TxZfQzTmV3YjVnhhLjZHYE4lznnExAPdkqmZXXOGdrLHvfc9hnXtLby2
+         665jwMes+2yKtUxBfXyPl9lWoZt2szSkDtaOduns4p10VsnsKZBs7p7G+g2uxDkZcSar
+         iqIh7gl+zSrKjeYzpeNx9sB/xM/Todela/FZge+RhOXsFE6p4t7yoyhd8Dk3NcEHt9Kp
+         Urp3Kk951wBS4tvhNoNhUsN36+HGP/VgT7+fMmGHhzLRmJs3n6wzhko4pqsInYkuqF22
+         I7wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685635785; x=1688227785;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SJy1XLQe0f69VJ3NGViu08fY1j4ecaxgtIAG9URJ/Bs=;
+        b=f2/m/ODXbe9Ev7T/tyRKe8TPHyh/Tl18rF0eSdFDF47NYXuG+q/jfWIYdh7hcqk/hi
+         zVSY63Zgge7zekRGEPuTfcReM+wRcmTLp9Pa7RE4GkkVY1b3edvg5kbVenZi8WR/unxn
+         y4XmnymUM9O1F8i+DpOLETTF4R8SWxbz1EBbYOhRsa7VYtmX3tlMgV3866rJYJiIIg9k
+         tb1UYiCPECGXpAe5Epl2rq/ayEG5kSpkz59oSdVzsA/BVlGo497XZG19z0jiZtdcLOjZ
+         7RzZsah+ECgbC3DidTIUb4sIUq1ccTWG1GESlBIrT0dTPQPaCh8s0ZbpzWxI8/F7BnAV
+         HA1g==
+X-Gm-Message-State: AC+VfDzfyzjOCopQTjoONxGucpVl3mzCub8F7ATEircg5ozwEjFDCiYG
+        9eD3kIKbz8qnf0zFLVAmQ28=
+X-Google-Smtp-Source: ACHHUZ5CBTdMBJ9puGi6YSqi6BrF6w/kSxUKAOuyg3MS+9FJZ4ZmJbyNOzWR2w995BVRfEwyPy/lPA==
+X-Received: by 2002:a1c:721a:0:b0:3f4:f0c2:143 with SMTP id n26-20020a1c721a000000b003f4f0c20143mr1932245wmc.20.1685635785560;
+        Thu, 01 Jun 2023 09:09:45 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c1d1200b003f61177faffsm9550124wms.0.2023.06.01.09.09.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 09:09:45 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 18:09:28 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, aleksander.lobakin@intel.com,
+        lixiaoyan@google.com, lucien.xin@gmail.com,
+        richardbgobert@gmail.com, alexanderduyck@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/1] gro: decrease size of CB
+Message-ID: <20230601160924.GA9194@debian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update metadata structure for Intel RealSense UVC/MIPI cameras.
-Compliant to Intel Configuration version 3.
+This patch frees up space in the GRO CB, which is currently at its maximum
+size. This patch was submitted and reviewed previously in a patch series,
+but is now reposted as a standalone patch, as suggested by Paolo.
+(https://lore.kernel.org/netdev/889f2dc5e646992033e0d9b0951d5a42f1907e07.camel@redhat.com/)
 
-Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
----
- .../media/v4l/pixfmt-meta-d4xx.rst            | 52 ++++++++++++++++---
- 1 file changed, 46 insertions(+), 6 deletions(-)
+Changelog:
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst b/D=
-ocumentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-index 4e437ba97a0e..7482f298d0cc 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-@@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
- Description
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- =
+v2 -> v3:
+  * add comment
 
--Intel D4xx (D435 and other) cameras include per-frame metadata in their UVC
-+Intel D4xx (D435, D455 and others) cameras include per-frame metadata in t=
-heir UVC
- payload headers, following the Microsoft(R) UVC extension proposal [1_]. T=
-hat
- means, that the private D4XX metadata, following the standard UVC header, =
-is
- organised in blocks. D4XX cameras implement several standard block types,
-@@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it also =
-includes proprietary
- payload header data. D4xx cameras use bulk transfers and only send one pay=
-load
- per frame, therefore their headers cannot be larger than 255 bytes.
- =
+v1 -> v2:
+  * remove inline keyword
 
-+This document implements Intel Configuration version 3 [9_].
-+
- Below are proprietary Microsoft style metadata types, used by D4xx cameras,
- where all fields are in little endian order:
- =
+Richard Gobert (1):
+  gro: decrease size of CB
 
-@@ -43,7 +45,7 @@ where all fields are in little endian order:
-     * - __u32 ID
-       - 0x80000000
-     * - __u32 Size
--      - Size in bytes (currently 56)
-+      - Size in bytes, include ID (all protocol versions: 60)
-     * - __u32 Version
-       - Version of this structure. The documentation herein corresponds to
-         version xxx. The version number will be incremented when new field=
-s are
-@@ -72,13 +74,17 @@ where all fields are in little endian order:
-       - Bottom border of the AE Region of Interest
-     * - __u32 Preset
-       - Preset selector value, default: 0, unless changed by the user
--    * - __u32 Laser mode
--      - 0: off, 1: on
-+    * - __u8 Emitter mode (v3 only) (__u32 Laser mode for v1) [8_]
-+      - 0: off, 1: on, same as __u32 Laser mode for v1
-+    * - __u8 RFU byte (v3 only)
-+      - Spare byte for future use
-+    * - __u16 LED Power (v3 only)
-+      - Led power value 0-360 (F416 SKU)
-     * - :cspan:`1` *Capture Timing*
-     * - __u32 ID
-       - 0x80000001
-     * - __u32 Size
--      - Size in bytes (currently 40)
-+      - Size in bytes, include ID (all protocol versions: 40)
-     * - __u32 Version
-       - Version of this structure. The documentation herein corresponds to
-         version xxx. The version number will be incremented when new field=
-s are
-@@ -101,7 +107,7 @@ where all fields are in little endian order:
-     * - __u32 ID
-       - 0x80000002
-     * - __u32 Size
--      - Size in bytes (currently 40)
-+      - Size in bytes, include ID (v1:36, v3:40)
-     * - __u32 Version
-       - Version of this structure. The documentation herein corresponds to
-         version xxx. The version number will be incremented when new field=
-s are
-@@ -124,6 +130,14 @@ where all fields are in little endian order:
-       - Requested frame rate per second
-     * - __u16 Trigger
-       - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external tri=
-gger
-+    * - __u16 Calibration count (v3 only)
-+      - Calibration counter, see [4_] below
-+    * - __u8 GPIO input data (v3 only)
-+      - GPIO readout, see [4_] below (Supported from FW 5.12.7.0)
-+    * - __u32 Sub-preset info (v3 only)
-+      - Sub-preset choice information, see [4_] below
-+    * - __u8 reserved (v3 only)
-+      - RFU byte.
- =
+ include/net/gro.h | 26 ++++++++++++++++----------
+ net/core/gro.c    | 19 ++++++++++++-------
+ 2 files changed, 28 insertions(+), 17 deletions(-)
 
- .. _1:
- =
-
-@@ -140,6 +154,8 @@ where all fields are in little endian order:
-   0x00000010 Exposure priority
-   0x00000020 AE ROI
-   0x00000040 Preset
-+  0x00000080 Emitter mode
-+  0x00000100 LED Power
- =
-
- .. _3:
- =
-
-@@ -165,6 +181,8 @@ where all fields are in little endian order:
-   0x00000040 Framerate
-   0x00000080 Trigger
-   0x00000100 Cal count
-+  0x00000200 GPIO Input Data
-+  0x00000400 Sub-preset Info
- =
-
- .. _5:
- =
-
-@@ -211,3 +229,25 @@ Left sensor: ::
- Fish Eye sensor: ::
- =
-
-   1 RAW8
-+
-+.. _8:
-+
-+[8] The "Laser mode" is replaced by three different fields.
-+"Laser" renamed to "Emitter" as there multiple technologies
-+for camera projectors. As we have another field for "Laser Power"
-+we introduced "LED Power" for extra emitter.
-+
-+The __u32 "Laser mode" integer is divided by two bytes and short: ::
-+   1 __u8 Emitter mode
-+   2 __u8 RFU byte
-+   3 __u16 LED Power
-+
-+This is a change between versions 1 and 3. All versions 1,2 and 3
-+are backward compatible with same data format and they are supported.
-+See [2_] for which attributes are valid.
-+
-+.. _9:
-+
-+[9]
-+LibRealSense SDK metadata source:
-+https://github.com/IntelRealSense/librealsense/blob/master/src/metadata.h
--- =
-
-2.25.1
-
-
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+-- 
+2.36.1
 
