@@ -2,66 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E6671F0EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D9E71F0F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbjFARiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        id S232979AbjFARjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbjFARit (ORCPT
+        with ESMTP id S231346AbjFARjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:38:49 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B34C136;
-        Thu,  1 Jun 2023 10:38:48 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351HcZSl080117;
-        Thu, 1 Jun 2023 12:38:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685641115;
-        bh=eTqaoWdBnubYt8g2HfY5tipV6+UjftnHfJskSCfl15g=;
-        h=From:To:CC:Subject:Date;
-        b=GkeyLZ1jepVLvzXjeN5yswtJwkHfufw6//9Fb2DWbdw2S+7d2Yz+aE4XvKiTLpxTF
-         C7r+OqbCuLayey2j+vepWmhpY1HYWhhdVvMYlrBnkyMAue8LlGKhbxfhoTvHBtKD7a
-         L+NG1BHKwWcSqE17i+uF2K/ebv4Hur7v5sp/BBqI=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351HcZf9007663
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Jun 2023 12:38:35 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Jun 2023 12:38:35 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Jun 2023 12:38:35 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351HcYIP016395;
-        Thu, 1 Jun 2023 12:38:34 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: pinctrl: Drop k3
-Date:   Thu, 1 Jun 2023 12:38:31 -0500
-Message-ID: <20230601173831.982429-1-nm@ti.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 1 Jun 2023 13:39:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D304136;
+        Thu,  1 Jun 2023 10:39:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE33E64860;
+        Thu,  1 Jun 2023 17:39:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D9AC4339E;
+        Thu,  1 Jun 2023 17:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685641181;
+        bh=rOyxKwyKoD8JRFg4gUZg/5MsYAzctjBiJEmXXIw+2Pg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o/tcJHGXDGK+Cmz0WPMH9eqt4DXVRB87b+bOc4yCFZZx+pNoEHu0L6Kk/WHl5TZCQ
+         v4wg++ka5L5/koa89l5lEtczt9Lp/CS49/lq9S/D/gsV6IN2cJNGZcqlW9mzDWtgf8
+         kSPa6HE9uQjRqdmZMZGwEA+2H5w1XPFs1bwtf87IXl053GkxGBjbRGWwQEhiSemK34
+         SURRDqI9JYl4AuMZSjsgfbIzfuYI4ScXci6h+5ayJwzrwQeS7v4C8WHfjDAbGm6Wt7
+         HhKwh2oygRzaHVjZAo7rCNsfYsqW/i3EtbygDwQjD02rjzFKXYyUdDoEjObai2iibs
+         UOf6kgrQWTHWg==
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-45c6c6e0ab2so599177e0c.1;
+        Thu, 01 Jun 2023 10:39:41 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzzxOBgQs22Zp+fPZ5LbXE5al098PVjDPukZSVDJiG9ue70wnq0
+        mTIF1LqBegezr4klJ3rP77T6/6P+iMKs1xV/gVo=
+X-Google-Smtp-Source: ACHHUZ7saBfaT5uX7NLiJU4LIkIoXw37eBnBmjdUSiEWtD7RMOu14iPsR47csoQHy7I8rQlHKSda/v96q9Noy2qP/FE=
+X-Received: by 2002:aca:ead6:0:b0:398:2f7f:a5cd with SMTP id
+ i205-20020acaead6000000b003982f7fa5cdmr1228908oih.24.1685641160132; Thu, 01
+ Jun 2023 10:39:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org>
+ <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net>
+ <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de> <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
+In-Reply-To: <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 2 Jun 2023 02:38:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATxpUK+w=VAkhLZserLr4cMk2ffSr+qzzZwuZ6DKWA0mw@mail.gmail.com>
+Message-ID: <CAK7LNATxpUK+w=VAkhLZserLr4cMk2ffSr+qzzZwuZ6DKWA0mw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of __SIZEOF_INT128__
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Helge Deller <deller@gmx.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        John David Anglin <dave.anglin@bell.net>,
+        Sam James <sam@gentoo.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,117 +101,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For convenience (less code duplication), the pin controller pin
-configuration register values were defined in the bindings header.
-These are not some IDs or other abstraction layer but raw numbers used
-in the registers.
+On Thu, Jun 1, 2023 at 10:29=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Thu, Jun 1, 2023 at 6:32=E2=80=AFAM Helge Deller <deller@gmx.de> wrote=
+:
+> >
+> > I don't think we need to care about gcc-10 on parisc.
+> > Debian and Gentoo are the only supported distributions, while Debian
+> > requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at lea=
+st
+> > gcc-12 as well.
+> >
+> > So raising the gcc limit for parisc only (at least temporarily for now)
+> > should be fine and your workaround below wouldn't be necessary, right?
+>
+> This absolutely sounds like the right option. Let's simplify the
+> problem space by just saying that parisc needs the newer compiler.
+>
+> Right now we have that "minimum gcc version" in a somewhat annoying
+> place: it's in the ./scripts/min-tool-version.sh file as a shell
+> script.
+>
+> I wonder if we could move the gcc minimum version check into the
+> Kconfig file instead, and make it easier to let architectures override
+> the minimum version.
 
-These constants do not fit the purpose of bindings. They do not
-provide any abstraction, any hardware and driver independent ID. In
-fact, the Linux pinctrl-single driver actually do not use the bindings
-header at all.
+Currently, it is invoked in the Kconfig time,
+but not directly in Kconfig files.
 
-Commit f2de003e1426 ("dt-bindings: pinctrl: k3: Deprecate header with
-register constants") already moved users to the local header, so, drop
-the binding header. See background discussion in [1].
+scripts/Kconfig.include
+ -> scripts/cc-version.sh
+    -> scripts/min-tool-version.sh
 
-While at it, clean up the MAINTAINERS file which is the only reference
-left.
+It would be ugly if we wrote the equivalent code
+directly in Kconfig files.
 
-[1]: https://lore.kernel.org/linux-arm-kernel/71c7feff-4189-f12f-7353-bce41a61119d@linaro.org/
-Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-Linus,
 
-If you could pick this up for the next 6.5 kernel window now that we have kept the
-old header around for one cycle.
+>
+> I don't quite know how to do that sanely, though. I don't think we
+> have a sane way to error out at Kconfig time (except by forcing some
+> syntax error inside an 'if' statement or something horrendously hacky
+> like that).
 
-Ref: https://lore.kernel.org/linux-arm-kernel/20230313160019.vask6atfs6qwphml@twerp/
+The parse stage can fail by $(error-if ) macro, but
+the evaluation stage never fails. I think it is a design.
 
- MAINTAINERS                      |  1 -
- include/dt-bindings/pinctrl/k3.h | 60 --------------------------------
- 2 files changed, 61 deletions(-)
- delete mode 100644 include/dt-bindings/pinctrl/k3.h
+I think checking the compiler version during the parse stage
+makes sense given the current situation. The compiler version is
+fixed when Kconfig starts. If the compiler is found to be too old,
+there is no meaning to proceed.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 16ee982ce8cf..d25a463fd6a9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2948,7 +2948,6 @@ F:	Documentation/devicetree/bindings/arm/ti/k3.yaml
- F:	Documentation/devicetree/bindings/hwinfo/ti,k3-socinfo.yaml
- F:	arch/arm64/boot/dts/ti/Makefile
- F:	arch/arm64/boot/dts/ti/k3-*
--F:	include/dt-bindings/pinctrl/k3.h
- 
- ARM/TOSHIBA VISCONTI ARCHITECTURE
- M:	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-diff --git a/include/dt-bindings/pinctrl/k3.h b/include/dt-bindings/pinctrl/k3.h
-deleted file mode 100644
-index b5aca149664e..000000000000
---- a/include/dt-bindings/pinctrl/k3.h
-+++ /dev/null
-@@ -1,60 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * This header provides constants for pinctrl bindings for TI's K3 SoC
-- * family.
-- *
-- * Copyright (C) 2018-2021 Texas Instruments Incorporated - https://www.ti.com/
-- */
--#ifndef _DT_BINDINGS_PINCTRL_TI_K3_H
--#define _DT_BINDINGS_PINCTRL_TI_K3_H
--
--/*
-- * These bindings are deprecated, because they do not match the actual
-- * concept of bindings but rather contain pure register values.
-- * Instead include the header in the DTS source directory.
-- */
--#warning "These bindings are deprecated. Instead, use the header in the DTS source directory."
--
--#define PULLUDEN_SHIFT		(16)
--#define PULLTYPESEL_SHIFT	(17)
--#define RXACTIVE_SHIFT		(18)
--
--#define PULL_DISABLE		(1 << PULLUDEN_SHIFT)
--#define PULL_ENABLE		(0 << PULLUDEN_SHIFT)
--
--#define PULL_UP			(1 << PULLTYPESEL_SHIFT | PULL_ENABLE)
--#define PULL_DOWN		(0 << PULLTYPESEL_SHIFT | PULL_ENABLE)
--
--#define INPUT_EN		(1 << RXACTIVE_SHIFT)
--#define INPUT_DISABLE		(0 << RXACTIVE_SHIFT)
--
--/* Only these macros are expected be used directly in device tree files */
--#define PIN_OUTPUT		(INPUT_DISABLE | PULL_DISABLE)
--#define PIN_OUTPUT_PULLUP	(INPUT_DISABLE | PULL_UP)
--#define PIN_OUTPUT_PULLDOWN	(INPUT_DISABLE | PULL_DOWN)
--#define PIN_INPUT		(INPUT_EN | PULL_DISABLE)
--#define PIN_INPUT_PULLUP	(INPUT_EN | PULL_UP)
--#define PIN_INPUT_PULLDOWN	(INPUT_EN | PULL_DOWN)
--
--#define AM62AX_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define AM62AX_MCU_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#define AM62X_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define AM62X_MCU_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#define AM64X_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define AM64X_MCU_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#define AM65X_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define AM65X_WKUP_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#define J721E_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define J721E_WKUP_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#define J721S2_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define J721S2_WKUP_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#define J784S4_IOPAD(pa, val, muxmode)		(((pa) & 0x1fff)) ((val) | (muxmode))
--#define J784S4_WKUP_IOPAD(pa, val, muxmode)	(((pa) & 0x1fff)) ((val) | (muxmode))
--
--#endif
--- 
-2.40.0
 
+You suggested to choose a compiler in the Kconfig time:
+https://lore.kernel.org/lkml/CAHk-=3DwhdrvCkSWh=3DBRrwZwNo3=3DyLBXXM88NGx8V=
+EpP1VTgmkyQ@mail.gmail.com/
+
+When we achieve that, moving the min version to Kconfig files will be
+the right thing to do. Then, everything will be evaluated dynamically.
+
+
+>
+> Added Masahiro to the (already overlong) participants list.
+>
+>                    Linus
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
