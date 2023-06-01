@@ -2,122 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85034719172
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A8171916E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjFADkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S231147AbjFADjj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 23:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjFADkl (ORCPT
+        with ESMTP id S229499AbjFADjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:40:41 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA9B136;
-        Wed, 31 May 2023 20:40:37 -0700 (PDT)
-Received: from hzh.. ([10.12.190.56])
-        (user=zero12113@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 3513cR3X030481-3513cR3Y030481
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 1 Jun 2023 11:38:31 +0800
-From:   Zhanhao Hu <zero12113@hust.edu.cn>
-To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Zhanhao Hu <zero12113@hust.edu.cn>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] clk: imx93: fix memory leak and missing unwind goto in imx93_clocks_probe
-Date:   Thu,  1 Jun 2023 03:38:25 +0000
-Message-Id: <20230601033825.336558-1-zero12113@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 May 2023 23:39:37 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AED2123;
+        Wed, 31 May 2023 20:39:34 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B065D24DC28;
+        Thu,  1 Jun 2023 11:39:26 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Jun
+ 2023 11:39:26 +0800
+Received: from [192.168.125.80] (113.72.147.198) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Jun
+ 2023 11:39:25 +0800
+Message-ID: <94ec74dd-2f04-8dca-35ff-a537811d1ccf@starfivetech.com>
+Date:   Thu, 1 Jun 2023 11:39:24 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: zero12113@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v7 19/22] riscv: dts: starfive: Add initial StarFive
+ JH7110 device tree
+To:     Shengyu Qu <wiagn233@outlook.com>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230401111934.130844-1-hal.feng@starfivetech.com>
+ <20230401111934.130844-20-hal.feng@starfivetech.com>
+ <TY3P286MB2611C61D1EDB70BF0A37E65298709@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <TY3P286MB2611C61D1EDB70BF0A37E65298709@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.147.198]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In function probe(), it returns directly without unregistered hws
-when error occurs.
+On Sun, 7 May 2023 18:03:19 +0800, Shengyu Qu wrote:
+> Hi Hal,
+>> From: Emil Renner Berthing <kernel@esmil.dk>
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> new file mode 100644
+>> index 000000000000..d484ecdf93f7
+>> --- /dev/null
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -0,0 +1,509 @@
+>> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+>> +/*
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+>> + */
+>> +
+>> +/dts-v1/;
+>> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+>> +#include <dt-bindings/reset/starfive,jh7110-crg.h>
+>> +
+>> +/ {
+[...]
+>> +
+>> +    soc {
+>> +        compatible = "simple-bus";
+>> +        interrupt-parent = <&plic>;
+> 
+> Do we really need this interrupt-parent? Seems it is causing a dependency cycle:
+> 
+> platform soc: Fixed dependency cycle(s) with /soc/interrupt-controller@c000000
+> 
+> And seems fu740 dts doesn't have this.
 
-Fix this by adding 'goto unregister_hws;' on line 295 and
-line 310.
+Sorry to reply too late. If we drop this line, we need to add 'interrupt-parent'
+to every node which uses interrupt. And I found some other platform did the same
+such as 
 
-Use devm_kzalloc() instead of kzalloc() to automatically
-free the memory using devm_kfree() when error occurs.
+arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+arch/riscv/boot/dts/canaan/k210.dtsi
+arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
 
-Replace of_iomap() with devm_of_iomap() to automatically
-handle the unused ioremap region and delete 'iounmap(anatop_base);'
-in unregister_hws.
+Best regards,
+Hal
 
-Fixes: 24defbe194b6 ("clk: imx: add i.MX93 clk")
-Signed-off-by: Zhanhao Hu <zero12113@hust.edu.cn>
----
-V1 -> V2 : Rephrase commit message in imperative mood.
-This issue is found by static analysis and remains untested.
----
- drivers/clk/imx/clk-imx93.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
-index 07b4a043e449..b6c7c2725906 100644
---- a/drivers/clk/imx/clk-imx93.c
-+++ b/drivers/clk/imx/clk-imx93.c
-@@ -264,7 +264,7 @@ static int imx93_clocks_probe(struct platform_device *pdev)
- 	void __iomem *base, *anatop_base;
- 	int i, ret;
- 
--	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
-+	clk_hw_data = devm_kzalloc(dev, struct_size(clk_hw_data, hws,
- 					  IMX93_CLK_END), GFP_KERNEL);
- 	if (!clk_hw_data)
- 		return -ENOMEM;
-@@ -288,10 +288,12 @@ static int imx93_clocks_probe(struct platform_device *pdev)
- 								    "sys_pll_pfd2", 1, 2);
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
--	anatop_base = of_iomap(np, 0);
-+	anatop_base = devm_of_iomap(dev, np, 0, NULL);
- 	of_node_put(np);
--	if (WARN_ON(!anatop_base))
--		return -ENOMEM;
-+	if (WARN_ON(IS_ERR(anatop_base))) {
-+		ret = PTR_ERR(base);
-+		goto unregister_hws;
-+	}
- 
- 	clks[IMX93_CLK_ARM_PLL] = imx_clk_fracn_gppll_integer("arm_pll", "osc_24m",
- 							      anatop_base + 0x1000,
-@@ -304,8 +306,8 @@ static int imx93_clocks_probe(struct platform_device *pdev)
- 	np = dev->of_node;
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (WARN_ON(IS_ERR(base))) {
--		iounmap(anatop_base);
--		return PTR_ERR(base);
-+		ret = PTR_ERR(base);
-+		goto unregister_hws;
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(root_array); i++) {
-@@ -345,7 +347,6 @@ static int imx93_clocks_probe(struct platform_device *pdev)
- 
- unregister_hws:
- 	imx_unregister_hw_clocks(clks, IMX93_CLK_END);
--	iounmap(anatop_base);
- 
- 	return ret;
- }
--- 
-2.34.1
-
+> 
+>> +        #address-cells = <2>;
+>> +        #size-cells = <2>;
+>> +        ranges;
+>> +
+>> +        clint: timer@2000000 {
+>> +            compatible = "starfive,jh7110-clint", "sifive,clint0";
+>> +            reg = <0x0 0x2000000 0x0 0x10000>;
+>> +            interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
+>> +                          <&cpu1_intc 3>, <&cpu1_intc 7>,
+>> +                          <&cpu2_intc 3>, <&cpu2_intc 7>,
+>> +                          <&cpu3_intc 3>, <&cpu3_intc 7>,
+>> +                          <&cpu4_intc 3>, <&cpu4_intc 7>;
+>> +        };
+>> +
+>> +        ccache: cache-controller@2010000 {
+>> +            compatible = "starfive,jh7110-ccache", "sifive,ccache0", "cache";
+>> +            reg = <0x0 0x2010000 0x0 0x4000>;
+>> +            interrupts = <1>, <3>, <4>, <2>;
+>> +            cache-block-size = <64>;
+>> +            cache-level = <2>;
+>> +            cache-sets = <2048>;
+>> +            cache-size = <2097152>;
+>> +            cache-unified;
+>> +        };
+>> +
+>> +        plic: interrupt-controller@c000000 {
+>> +            compatible = "starfive,jh7110-plic", "sifive,plic-1.0.0";
+>> +            reg = <0x0 0xc000000 0x0 0x4000000>;
+>> +            interrupts-extended = <&cpu0_intc 11>,
+>> +                          <&cpu1_intc 11>, <&cpu1_intc 9>,
+>> +                          <&cpu2_intc 11>, <&cpu2_intc 9>,
+>> +                          <&cpu3_intc 11>, <&cpu3_intc 9>,
+>> +                          <&cpu4_intc 11>, <&cpu4_intc 9>;
+>> +            interrupt-controller;
+>> +            #interrupt-cells = <1>;
+>> +            #address-cells = <0>;
+>> +            riscv,ndev = <136>;
+>> +        };
+>> +
+>> +        uart0: serial@10000000 {
+>> +            compatible = "snps,dw-apb-uart";
+>> +            reg = <0x0 0x10000000 0x0 0x10000>;
+>> +            clocks = <&syscrg JH7110_SYSCLK_UART0_CORE>,
+>> +                 <&syscrg JH7110_SYSCLK_UART0_APB>;
+>> +            clock-names = "baudclk", "apb_pclk";
+>> +            resets = <&syscrg JH7110_SYSRST_UART0_APB>;
+>> +            interrupts = <32>;
+>> +            reg-io-width = <4>;
+>> +            reg-shift = <2>;
+>> +            status = "disabled";
+>> +        };
+>> +
+[...]
