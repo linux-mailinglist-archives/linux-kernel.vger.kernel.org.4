@@ -2,163 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BBB719657
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D879371965A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjFAJFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S231526AbjFAJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjFAJFp (ORCPT
+        with ESMTP id S232476AbjFAJGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:05:45 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74E4E52
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:05:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8B58321985;
-        Thu,  1 Jun 2023 09:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1685610281; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rz7freKA1+2v0T9mj5JS7fcoX0COXAEGRmV8ZldKUlY=;
-        b=qlT3RK6BvGSSML4nFNrWelnh4sKeXbH4WlY3s7KwAt3RHMS2RDlZ7P4I4PvuLWG6IgZqY7
-        N61vB0MgA1Y4Ipq1klSjqLC9carwVUzrkGodOgXaFEkaUQtxvGIvrsaiDGhFNhQ9H6uexQ
-        W+zdDQbGN+4D8KwNUSJsZ4ip4WUMCDs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1685610281;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rz7freKA1+2v0T9mj5JS7fcoX0COXAEGRmV8ZldKUlY=;
-        b=2PVQWe1CbSGqVpSqydRSw8oAUxNUZfxZbPasAW4FhIAZwwwMTaIBaXgR7U7UDAX8tbKbf7
-        8VvVz6ehRhiJ8yAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6822E13441;
-        Thu,  1 Jun 2023 09:04:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kXc3GClfeGTCGQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 01 Jun 2023 09:04:41 +0000
-Message-ID: <2ddf5210-a130-d496-53d9-29b7a068c182@suse.de>
-Date:   Thu, 1 Jun 2023 11:04:40 +0200
+        Thu, 1 Jun 2023 05:06:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE7E21B8;
+        Thu,  1 Jun 2023 02:05:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9323C169C;
+        Thu,  1 Jun 2023 02:06:02 -0700 (PDT)
+Received: from [10.57.22.124] (unknown [10.57.22.124])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 901053F663;
+        Thu,  1 Jun 2023 02:05:14 -0700 (PDT)
+Message-ID: <ccdc58ff-f86b-6ca8-cdf6-299cc454873c@arm.com>
+Date:   Thu, 1 Jun 2023 10:05:13 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3] drm/ast: Fix modeset failed on DisplayPort
-To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
-        airlied@gmail.com, daniel@ffwll.ch
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230601004847.1115-1-jammy_huang@aspeedtech.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230601004847.1115-1-jammy_huang@aspeedtech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------tAY3WyZt822BDJic0jH0JYma"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH v4 05/11] coresight-tpdm: Add nodes to set trigger
+ timestamp and type
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+ <1682586037-25973-6-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1682586037-25973-6-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------tAY3WyZt822BDJic0jH0JYma
-Content-Type: multipart/mixed; boundary="------------VdrbKW5ihEJuyslJsZdEZPUN";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
- airlied@gmail.com, daniel@ffwll.ch
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <2ddf5210-a130-d496-53d9-29b7a068c182@suse.de>
-Subject: Re: [PATCH v3] drm/ast: Fix modeset failed on DisplayPort
-References: <20230601004847.1115-1-jammy_huang@aspeedtech.com>
-In-Reply-To: <20230601004847.1115-1-jammy_huang@aspeedtech.com>
+On 27/04/2023 10:00, Tao Zhang wrote:
+> The nodes are needed to set or show the trigger timestamp and
+> trigger type. This change is to add these nodes to achieve these
+> function.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 24 ++++++
+>   drivers/hwtracing/coresight/coresight-tpdm.c       | 95 ++++++++++++++++++++++
+>   2 files changed, 119 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> index 686bdde..77e67f2 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -21,3 +21,27 @@ Description:
+>   
+>   		Accepts only one value -  1.
+>   		1 : Reset the dataset of the tpdm
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_type
+> +Date:		March 2023
+> +KernelVersion	6.3
 
---------------VdrbKW5ihEJuyslJsZdEZPUN
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This would need updating. We are not sure if this can make it to 6.5, 
+with dependency on James' series. Fix this with 6.5 here and we can take
+a shot.
 
-SGkNCg0KQW0gMDEuMDYuMjMgdW0gMDI6NDggc2NocmllYiBKYW1teSBIdWFuZzoNCj4gSWYg
-d2Ugc3dpdGNoIGRpc3BsYXkgYW5kIHVwZGF0ZSBjdXJzb3IgdG9nZXRoZXIsIGl0IGNvdWxk
-IGxlYWQgdG8NCj4gbW9kZXNldCBmYWlsZWQgYmVjYXVzZSBvZiBjb25jdXJyZW50IGFjY2Vz
-cyB0byBJTyByZWdpc3RlcnMuDQo+IA0KPiBBZGQgbG9jayBwcm90ZWN0aW9uIGluIERQJ3Mg
-ZWRpZCBhY2Nlc3MgdG8gYXZvaWQgdGhpcyBwcm9ibGVtLg0KDQpNZXJnZWQgaW50byBkcm0t
-bWlzYy1maXhlcy4gVGhhbmtzIGZvciB0aGUgcGF0Y2guDQoNCkJlc3QgcmVnYXJkcw0KVGhv
-bWFzDQoNCj4gDQo+IFJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1h
-bm5Ac3VzZS5kZT4NCj4gU2lnbmVkLW9mZi1ieTogSmFtbXkgSHVhbmcgPGphbW15X2h1YW5n
-QGFzcGVlZHRlY2guY29tPg0KPiAtLS0NCj4gICB2MyBjaGFuZ2VzOg0KPiAgICAtIFVwZGF0
-ZSBsYWJlbCBuYW1lIGFmdGVyIG11dGV4IGFkZGVkLg0KPiAgIHYyIGNoYW5nZXM6DQo+ICAg
-IC0gRml4IGJ1aWxkIGVycm9yIHNpbmNlIG5ldyBzdHJ1Y3QgYXN0X2RldmljZSBpcyB1c2Vk
-Lg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMgfCAxNSArKysr
-KysrKysrKysrLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKSwgMiBk
-ZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2Fz
-dF9tb2RlLmMgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4gaW5kZXggMzYz
-NzQ4MjhmNmM4Li5iM2M2NzBhZjZlZjIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2Ry
-bS9hc3QvYXN0X21vZGUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2Rl
-LmMNCj4gQEAgLTE2NDcsNiArMTY0Nyw4IEBAIHN0YXRpYyBpbnQgYXN0X2RwNTAxX291dHB1
-dF9pbml0KHN0cnVjdCBhc3RfZGV2aWNlICphc3QpDQo+ICAgc3RhdGljIGludCBhc3RfYXN0
-ZHBfY29ubmVjdG9yX2hlbHBlcl9nZXRfbW9kZXMoc3RydWN0IGRybV9jb25uZWN0b3IgKmNv
-bm5lY3RvcikNCj4gICB7DQo+ICAgCXZvaWQgKmVkaWQ7DQo+ICsJc3RydWN0IGRybV9kZXZp
-Y2UgKmRldiA9IGNvbm5lY3Rvci0+ZGV2Ow0KPiArCXN0cnVjdCBhc3RfZGV2aWNlICphc3Qg
-PSB0b19hc3RfZGV2aWNlKGRldik7DQo+ICAgDQo+ICAgCWludCBzdWNjOw0KPiAgIAlpbnQg
-Y291bnQ7DQo+IEBAIC0xNjU1LDkgKzE2NTcsMTcgQEAgc3RhdGljIGludCBhc3RfYXN0ZHBf
-Y29ubmVjdG9yX2hlbHBlcl9nZXRfbW9kZXMoc3RydWN0IGRybV9jb25uZWN0b3IgKmNvbm5l
-Y3RvcikNCj4gICAJaWYgKCFlZGlkKQ0KPiAgIAkJZ290byBlcnJfZHJtX2Nvbm5lY3Rvcl91
-cGRhdGVfZWRpZF9wcm9wZXJ0eTsNCj4gICANCj4gKwkvKg0KPiArCSAqIFByb3RlY3QgYWNj
-ZXNzIHRvIEkvTyByZWdpc3RlcnMgZnJvbSBjb25jdXJyZW50IG1vZGVzZXR0aW5nDQo+ICsJ
-ICogYnkgYWNxdWlyaW5nIHRoZSBJL08tcmVnaXN0ZXIgbG9jay4NCj4gKwkgKi8NCj4gKwlt
-dXRleF9sb2NrKCZhc3QtPmlvcmVnc19sb2NrKTsNCj4gKw0KPiAgIAlzdWNjID0gYXN0X2Fz
-dGRwX3JlYWRfZWRpZChjb25uZWN0b3ItPmRldiwgZWRpZCk7DQo+ICAgCWlmIChzdWNjIDwg
-MCkNCj4gLQkJZ290byBlcnJfa2ZyZWU7DQo+ICsJCWdvdG8gZXJyX211dGV4X3VubG9jazsN
-Cj4gKw0KPiArCW11dGV4X3VubG9jaygmYXN0LT5pb3JlZ3NfbG9jayk7DQo+ICAgDQo+ICAg
-CWRybV9jb25uZWN0b3JfdXBkYXRlX2VkaWRfcHJvcGVydHkoY29ubmVjdG9yLCBlZGlkKTsN
-Cj4gICAJY291bnQgPSBkcm1fYWRkX2VkaWRfbW9kZXMoY29ubmVjdG9yLCBlZGlkKTsNCj4g
-QEAgLTE2NjUsNyArMTY3NSw4IEBAIHN0YXRpYyBpbnQgYXN0X2FzdGRwX2Nvbm5lY3Rvcl9o
-ZWxwZXJfZ2V0X21vZGVzKHN0cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAg
-DQo+ICAgCXJldHVybiBjb3VudDsNCj4gICANCj4gLWVycl9rZnJlZToNCj4gK2Vycl9tdXRl
-eF91bmxvY2s6DQo+ICsJbXV0ZXhfdW5sb2NrKCZhc3QtPmlvcmVnc19sb2NrKTsNCj4gICAJ
-a2ZyZWUoZWRpZCk7DQo+ICAgZXJyX2RybV9jb25uZWN0b3JfdXBkYXRlX2VkaWRfcHJvcGVy
-dHk6DQo+ICAgCWRybV9jb25uZWN0b3JfdXBkYXRlX2VkaWRfcHJvcGVydHkoY29ubmVjdG9y
-LCBOVUxMKTsNCj4gDQo+IGJhc2UtY29tbWl0OiBlMzM4MTQyYjM5Y2Y0MDE1NTA1NGY5NWRh
-YTI4ZDIxMGQyZWUxYjJkDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
-aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
-RnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8g
-VG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4N
-CkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the trigger type of DSB tpdm. Read the trigger
+> +		type of DSB tpdm.
+> +
+> +		Accepts only one of the 2 values -  0 or 1.
+> +		0 : Set the DSB trigger type to false
+> +		1 : Set the DSB trigger type to true
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_ts
+> +Date:		March 2023
+> +KernelVersion	6.3
 
---------------VdrbKW5ihEJuyslJsZdEZPUN--
+Same here
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the trigger timestamp of DSB tpdm. Read the
+> +		trigger timestamp of DSB tpdm.
+> +
+> +		Accepts only one of the 2 values -  0 or 1.
+> +		0 : Set the DSB trigger type to false
+> +		1 : Set the DSB trigger type to true
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index 2e64cfd..14f4352 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -20,6 +20,19 @@
+>   
+>   DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+>   
+> +static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
+> +								   struct attribute *attr, int n)
 
---------------tAY3WyZt822BDJic0jH0JYma
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+minor nit: alignment ?
 
------BEGIN PGP SIGNATURE-----
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	if (drvdata)
+> +		if (drvdata && (drvdata->datasets & TPDM_PIDR0_DS_DSB))
+> +			return attr->mode;
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmR4XygFAwAAAAAACgkQlh/E3EQov+B8
-6xAAnNy/afTZu9lDoy+4unmXkjy/vV01UOpoL572vBcR6XOi2RqB1XuGjOolsLDcLUqSih1/Z46R
-6nEDtwV+T2IWBgfVuZganxLhHbS4ny22Xc51fBfbEqLFr6Hi+YH+uKwIAFf4ns5OXWtaJ2i4tOi9
-awJVerKcN4QxV1nrKypdyx+WVyI7z+wDFlmXyWrn2cA/FIlQRvkXaF9mGCTzCgt3Zl7hVKUHaMru
-F14V+/2aMnDx8G+3XcHnXfvSepSfpfbxDpyPAr5o3ZF8ZFnqpzowxzKp+VjXCznvx5vKs/QHqmSg
-NvnJOKRZulABw0vUmVjRsxaj6xD6gMQQ6uMSDhVWlwTazPn043XlsIP0HaqVLN3IcnZFV7Q0SWgF
-cowx0pogM9DCTdl5byWdeeOhEsIQzEFLN4LbeddhfNewdqU5rPHvfcGQZiyDBnrL/QQKCX03HdTM
-IH5M+qNYqqPEu9OEKBg8OBbB/gyXX4le7oBDk/22gWUw6/qIZ2Wnr9xwCMCmRZDCZ9TxLZkfQZ11
-B0nIYIBeKSfXwbV44DFKHuHzVe6/x/cb+wlQ5y1rH/LOrz0AgvJE6HJtPstfDyT50L8iMiyYfuI1
-55zSN7SgttEUzK6IzQHgwmhhGTgglpbXXhsEmnhzKN2Ej4Wc79NmKrADSGiXgoWf+C+pE91B5fkq
-qWk=
-=Mnxh
------END PGP SIGNATURE-----
+Duplicate check for drvdata ?
 
---------------tAY3WyZt822BDJic0jH0JYma--
+	if (drvdata && (drvdata->datasets & TPDM_PIDR0_DS_DSB))
+		return attr->mode;
+> +
+> +	return 0;
+> +}
+> +
+>   static void tpdm_reset_datasets(struct tpdm_drvdata *drvdata)
+>   {
+>   	if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
+> @@ -239,8 +252,90 @@ static struct attribute_group tpdm_attr_grp = {
+>   	.attrs = tpdm_attrs,
+>   };
+>   
+> +static ssize_t dsb_trig_type_show(struct device *dev,
+> +				     struct device_attribute *attr, char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "%u\n",
+> +			 (unsigned int)drvdata->dsb->trig_type);
+> +}
+> +
+> +/*
+> + * Trigger type (boolean):
+> + * false - Disable trigger type.
+> + * true  - Enable trigger type.
+> + */
+> +static ssize_t dsb_trig_type_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf,
+> +				      size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	if (val)
+> +		drvdata->dsb->trig_type = true;
+> +	else
+> +		drvdata->dsb->trig_type = false;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_trig_type);
+> +
+> +static ssize_t dsb_trig_ts_show(struct device *dev,
+> +				     struct device_attribute *attr, char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "%u\n",
+> +			 (unsigned int)drvdata->dsb->trig_ts);
+> +}
+> +
+> +/*
+> + * Trigger timestamp (boolean):
+> + * false - Disable trigger timestamp.
+> + * true  - Enable trigger timestamp.
+> + */
+> +static ssize_t dsb_trig_ts_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf,
+> +				      size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	if (val)
+> +		drvdata->dsb->trig_ts = true;
+> +	else
+> +		drvdata->dsb->trig_ts = false;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_trig_ts);
+> +
+> +static struct attribute *tpdm_dsb_attrs[] = {
+> +	&dev_attr_dsb_trig_ts.attr,
+> +	&dev_attr_dsb_trig_type.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group tpdm_dsb_attr_grp = {
+> +	.attrs = tpdm_dsb_attrs,
+> +	.is_visible = tpdm_dsb_is_visible,
+> +};
+> +
+>   static const struct attribute_group *tpdm_attr_grps[] = {
+>   	&tpdm_attr_grp,
+> +	&tpdm_dsb_attr_grp,
+>   	NULL,
+>   };
+>   
+
+Rest looks fine to me
+
+Suzuki
+
