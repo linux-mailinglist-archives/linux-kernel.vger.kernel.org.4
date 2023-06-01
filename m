@@ -2,108 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C0271F134
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D908C71F13F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbjFAR5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S232218AbjFAR5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjFAR46 (ORCPT
+        with ESMTP id S229514AbjFAR5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:56:58 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8CE8E;
-        Thu,  1 Jun 2023 10:56:57 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-651f2f38634so491476b3a.0;
-        Thu, 01 Jun 2023 10:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685642217; x=1688234217;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eW3QFVF57TKq+xJSZJQaBxxKYLyfH2NJCp7Uqxfjsd8=;
-        b=E3pEJVxDo3EZC5CvAjfToZZgPEP2m9NuBKb1kJurZQ+tevnlv1LScOhAn47Tzv4omZ
-         qDiUGwHHNI1sJS8EXRvwStb3NvIX/oVlhKntwOXPxCXExqZkguGWUw2Bm03nnBvahh43
-         mKQ5f4r1RJc5JCzWKI5vX+XM+0uXnxHUr5ksV0QUx86G7I1NA+BoXHai8rh0+4Bip+2f
-         zkl+jOSGHSglRBNn4XET1A8Bg7m9ROYxlOKk0GFn3QSU9EDxrSp8NwjmYmLjJwYwRxCA
-         EIo0NCKfGZEeyRgi4P+RrmIfjimf4zsRlw1v4VwugbIs+NtXVLByepdbjioh3Yqtul8e
-         KVgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685642217; x=1688234217;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW3QFVF57TKq+xJSZJQaBxxKYLyfH2NJCp7Uqxfjsd8=;
-        b=XUmEicWqdUMwzwKmf5V7IsmR0IHilwqBxx8mImsp1FIYR08avmsgQqJdnRuMhDzNRY
-         devT5d6iGMTk7up7UqzsD0fmyxrqYUsSecf9c3qGeH3OYInbYgyr77E5Y5Mb6BxS1lBA
-         mWk8n4EkO5SHEGZoygq/vEzoMn0b3xJSuWN4nJ6Kf2eghtmam58xCrZIED1AkllBtbwa
-         uTl8qflzTx8EffMz6QzUbiwxEHiV+Eyovdpf0nmnzOqfbe5FvEUkNwxQigMyKt+dGalb
-         E1uQ8/e+3kMfB4BLCNwE6xeTCExpGQrxNtDlRG3j53QETxoUyf5Gcq9u0Ye+6nwwFB8L
-         GTfQ==
-X-Gm-Message-State: AC+VfDyQcEs0TzQ/NdVY1MgowFkIrMRwXZujFf/yT9MevAlRQyQ8U97P
-        h6IDzgqnuTGJf2fY99+NqM4=
-X-Google-Smtp-Source: ACHHUZ4iUp0Mo1PQUUKsMCABVAushMXRZCylzJ8g1BUdc/cieUhWDCiC+J9eJGKFewUaldTKKFKCDA==
-X-Received: by 2002:a05:6a00:2450:b0:63f:2f00:c6d with SMTP id d16-20020a056a00245000b0063f2f000c6dmr9997307pfj.2.1685642216952;
-        Thu, 01 Jun 2023 10:56:56 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q24-20020a62ae18000000b006414289ab69sm5364231pff.52.2023.06.01.10.56.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 10:56:56 -0700 (PDT)
-Message-ID: <de024e21-6cb9-d90f-9a0e-561ba979f242@gmail.com>
-Date:   Thu, 1 Jun 2023 10:56:41 -0700
+        Thu, 1 Jun 2023 13:57:30 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F761A6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:57:24 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 4mXxqV4hJZvWO4mXxqrkEg; Thu, 01 Jun 2023 19:57:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685642237;
+        bh=7vt9+fLVrJ0DcwYcq+OdF4MOQmmWuiozZXmgqPSyP9w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gaAu0HoiO+QyAxiOQKP1BGQtfBxDsExDWKFv/pCSfTswi3suLyp4hehNCsJ/IYNA3
+         QRd9xIN3lFZ5Hx3jD2P/fMLcQZ/tCA5gW38G3WQTIH9Hq3ImmwQcLA+5Cu/eapwSPk
+         ZmWmyQVIVw1HzA4efx2xUR1MGwImvTX0I807GB2gi4lunf5P7PwUv8nInUNPC50cC6
+         uNjuq582gY1Hv1UqopuJ/Z4BNTKzRA14ktud2dFDNgLn0CCsm6YKmpp/bFdzDHAVct
+         GYA6tk60qS2k9QWqzeTXZqjAmZ0JGuLxujS6ANiuETu+BnDEXeerlVv38k3P+fdxkK
+         uiPwdXV7rtqbg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 01 Jun 2023 19:57:17 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <f3aa01d9-7dc5-ded4-1a9a-07634afc0726@wanadoo.fr>
+Date:   Thu, 1 Jun 2023 19:57:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 6.1 00/39] 6.1.32-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230601143327.479886832@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20230601143327.479886832@linuxfoundation.org>
+Subject: Re: [PATCH] ASoC: SOF: ipc4-topology: Use size_t for variable passed
+ to kzalloc()
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
+References: <a311e4ae83406f714c9d1f7f2f857284265e581c.1685640591.git.christophe.jaillet@wanadoo.fr>
+ <2720a80a-4496-0ba9-e545-046ed2529f7d@linux.intel.com>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <2720a80a-4496-0ba9-e545-046ed2529f7d@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 01/06/2023 à 19:39, Pierre-Louis Bossart a écrit :
+> 
+> 
+> On 6/1/23 12:30, Christophe JAILLET wrote:
+>> struct_size() checks for overflow, but assigning its result to just a u32
+>> may still overflow after a successful check.
+>>
+>> Use a size_t instead in order to be cleaner.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Based on analysis from Dan Carpenter on another patch (see [1]).
+>>
+>> [1]: https://lore.kernel.org/all/00e84595-e2c9-48ea-8737-18da34eaafbf@kili.mountain/
+> 
+> looks like there are similar cases of struct_size -> u32 conversions in
+> other places:
+> 
+> struct snd_sof_control {
+>      u32 size;	/* cdata size */
+> 
+> ipc3-topology.c:        scontrol->size = struct_size(cdata, chanv,
+> scontrol->num_channels);
+> ipc3-topology.c:        scontrol->size = struct_size(cdata, chanv,
+> scontrol->num_channels);
+> ipc4-topology.c:        scontrol->size = struct_size(control_data,
+> chanv, scontrol->num_channels);
+
+My coccinelle script does not handle such cases.
+
+> 
+> not sure how much of an issue this really is though?
+
+I agree that in practice it should be safe as-is, but it can't hurt :).
+I don't know this code well, but should [2] be part of the call chain, 
+it is obvious that it CAN'T overflow.
 
 
-On 6/1/2023 7:35 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.32 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 03 Jun 2023 14:33:15 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+I checked for places where such pattern occurs after Dan's comment on 
+another patch. I'll see if I find better candidates.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
 
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+CJ
+
+[2]: 
+https://elixir.bootlin.com/linux/v6.4-rc1/source/sound/soc/sof/topology.c#L1404
+
+> 
+>> ---
+>>   sound/soc/sof/ipc4-topology.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
+>> index db64e0cb8663..50faa4c88b97 100644
+>> --- a/sound/soc/sof/ipc4-topology.c
+>> +++ b/sound/soc/sof/ipc4-topology.c
+>> @@ -881,7 +881,7 @@ static int sof_ipc4_widget_setup_comp_process(struct snd_sof_widget *swidget)
+>>   	/* allocate memory for base config extension if needed */
+>>   	if (process->init_config == SOF_IPC4_MODULE_INIT_CONFIG_TYPE_BASE_CFG_WITH_EXT) {
+>>   		struct sof_ipc4_base_module_cfg_ext *base_cfg_ext;
+>> -		u32 ext_size = struct_size(base_cfg_ext, pin_formats,
+>> +		size_t ext_size = struct_size(base_cfg_ext, pin_formats,
+>>   						swidget->num_input_pins + swidget->num_output_pins);
+>>   
+>>   		base_cfg_ext = kzalloc(ext_size, GFP_KERNEL);
+> 
 
