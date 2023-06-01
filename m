@@ -2,217 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A453971F2CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7151571F2D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjFATS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S230472AbjFATVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjFATSZ (ORCPT
+        with ESMTP id S229514AbjFATVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:18:25 -0400
-Received: from out-12.mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB118C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:18:22 -0700 (PDT)
-Message-ID: <95b5da7c-ee52-3ecb-0a4e-f6a7a114f269@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685647100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IgQZpjSw84vHYzWJzYdDrGuuO8eVETVsB+aIQNPgeJo=;
-        b=T5TRCpFPEJWIYl7mNS9gOtoXuy3z/cFxsJM4qoVYA9XPtITZxRANGN4Ldk58dRi1mIrA3X
-        6ADfH8TO+l/v9ZFMMpebcSUEey5zfCSEGLYrSu6Vp6oanVkUFdySPYHH37YcEdcTWD1x86
-        qJHP6DVnwIpsrsOc/JPIJgNEj6W58Fw=
-Date:   Thu, 1 Jun 2023 12:18:15 -0700
+        Thu, 1 Jun 2023 15:21:39 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1510A98;
+        Thu,  1 Jun 2023 12:21:37 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351IWT64021738;
+        Thu, 1 Jun 2023 19:21:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EFa/NmBtii/RjNtJcSA+b7nC2BASDp2x0P9xuuJoJ8c=;
+ b=C44go066ITZPRfVic9csx3exufeUwC/i4mS/KtGotJH0JgrM8bscHqZBrw/a8uN2yvi8
+ 8rcbcXjKzOc7LC56KhXJYy08BRlTmBGMAYIO3FIXWbAIjQhVSwjyizb5c0JiXnWfK8wv
+ Y8+iPi0Bw8wbV3wQI6r1WAzOH+QB4WZyl18rctUx+kIOAUsmzOnaTQezX/gZTXGWlFOe
+ Grx0s6J6bkUl33oLgSW8ekpe1yROqZEcHM9SH1imQFzvv5+ihBbB/PZ0LzEnp5rx8Ntn
+ 2woewvQtlczuf07jGStJzT5kpLeeS3RQbfqd4AQIpycous8peXHHAFyUm7T9Q6axTUj+ BA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxnwv1xuu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 19:21:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351JL1UM007473
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 19:21:01 GMT
+Received: from [10.110.26.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 12:20:58 -0700
+Message-ID: <932ee149-c524-25e7-ee49-5ea1a7e6708c@quicinc.com>
+Date:   Thu, 1 Jun 2023 12:20:56 -0700
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf: Fix elem_size not being set for inner maps
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
 Content-Language: en-US
-To:     Rhys Rustad-Elliott <me@rhysre.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20230601000713.506358-1-me@rhysre.net>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20230601000713.506358-1-me@rhysre.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Leonard Lausen <leonard@lausen.nl>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     <freedreno@lists.freedesktop.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        <regressions@lists.linux.dev>, David Airlie <airlied@gmail.com>,
+        "Nikita Travkin" <nikita@trvn.ru>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
+ <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
+ <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+ <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+ <20230508021536.txtamifw2vkfncnx@ripper>
+ <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
+ <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
+ <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
+ <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
+ <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NEEKnNQnkoXQnQdsGsQfqb3d1ckaav82
+X-Proofpoint-ORIG-GUID: NEEKnNQnkoXQnQdsGsQfqb3d1ckaav82
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 clxscore=1015 malwarescore=0 impostorscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010167
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 5:08 PM, Rhys Rustad-Elliott wrote:
-> Commit d937bc3449fa ("bpf: make uniform use of array->elem_size
-> everywhere in arraymap.c") changed array_map_gen_lookup to use
-> array->elem_size instead of round_up(map->value_size, 8) as the element
-> size when generating code to access a value in an array map.
+Hi Leonard
+
+On 5/24/2023 5:58 AM, Leonard Lausen wrote:
+>>>>>>> [  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488]
+>>>>>>> [dpu error]vblank timeout
+>>>>>>> [  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu error]wait
+>>>>>>> for commit done returned -110
+>>>>>>> [  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu
+>>>>>>> error]enc33 frame done timeout
+>>>>>
+>>>>> This is a different crash but the root-cause of both the issues is the
+>>>>> bridge hpd_enable/disable series.
+>>>>>
+>>>>> https://patchwork.freedesktop.org/patch/514414/
+>>>
+>>> Yes, the new patch to fix this issue is here
+>>>
+>>> https://patchwork.freedesktop.org/patch/538601/?series=118148&rev=3
+>>>
+>>> Apologies if you were not CCed on this, if a next version is CCed,
+>>> will ask kuogee to cc you.
+>>>
+>>> Meanwhile, will be great if you can verify if it works for you and
+>>> provide Tested-by tags.
+>>
+>> Hi Leonard,
+>>
+>> I had  cc you with v5 patches.
+>>
+>> Would you please verify it.
 > 
-> array->elem_size, however, is not set by bpf_map_meta_alloc when
-> initializing an BPF_MAP_TYPE_ARRAY_OF_MAPS or BPF_MAP_TYPE_HASH_OF_MAPS.
-> This results in array_map_gen_lookup incorrectly outputting code that
-> always accesses index 0 in the array (as the index will be calculated
-> via a multiplication with the element size, which is incorrectly set to
-> 0).
+> Hi Kuogee,
 > 
-> Set elem_size on the bpf_array object when allocating an array or hash
-> of maps and add a selftest that accesses an inner map at a nonzero index
-> to prevent regressions.
+> thank you. Verified the v6 patch fixes the regression when ported to
+> 6.3.3. One non-fatal issue remains: Suspending and resuming the system
+> while USB-C DP monitor is connected triggers an error, though the system
+> recovers within a second without the need to unplug the cable.
 > 
-> Fixes: d937bc3449fa ("bpf: make uniform use of array->elem_size everywhere in arraymap.c")
-> Signed-off-by: Rhys Rustad-Elliott <me@rhysre.net>
-> ---
->   kernel/bpf/map_in_map.c                       |  8 +++-
->   .../map_in_map_inner_array_lookup.c           | 33 ++++++++++++++
->   .../test_map_in_map_inner_array_lookup.c      | 45 +++++++++++++++++++
->   3 files changed, 84 insertions(+), 2 deletions(-)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c
->   create mode 100644 tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c
+> [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
 > 
-> diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-> index 2c5c64c2a53b..8d65b12e0834 100644
-> --- a/kernel/bpf/map_in_map.c
-> +++ b/kernel/bpf/map_in_map.c
-> @@ -69,9 +69,13 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
->   	/* Misc members not needed in bpf_map_meta_equal() check. */
->   	inner_map_meta->ops = inner_map->ops;
->   	if (inner_map->ops == &array_map_ops) {
-> +		struct bpf_array *inner_array_meta =
-> +			container_of(inner_map_meta, struct bpf_array, map);
-> +		struct bpf_array *inner_array = container_of(inner_map, struct bpf_array, map);
-> +
-> +		inner_array_meta->index_mask = inner_array->index_mask;
-> +		inner_array_meta->elem_size = round_up(inner_map->value_size, 8);
 
-How about directly use inner_array->elem_size instead of
-"round_up(inner_map->value_size, 8)"?
-
->   		inner_map_meta->bypass_spec_v1 = inner_map->bypass_spec_v1;
-> -		container_of(inner_map_meta, struct bpf_array, map)->index_mask =
-> -		     container_of(inner_map, struct bpf_array, map)->index_mask;
->   	}
->   
->   	fdput(f);
-> diff --git a/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c
-> new file mode 100644
-> index 000000000000..264d4788e5fd
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c
-
-Separate the selftests into another patch.
-
-> @@ -0,0 +1,33 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <test_progs.h>
-> +
-> +#include "test_map_in_map_inner_array_lookup.skel.h"
-> +
-> +static int duration;
-
-Use the ASSERT_* macro instead of CHECK, then no need for
-"static int duration;".
-
-> +
-> +void test_map_in_map_inner_array_lookup(void)
-
-nit. A shorter name? may be test_inner_array_lookup().
-
-> +{
-> +	int map1_fd, err;
-> +	int key = 3;
-> +	int val = 1;
-> +	struct test_map_in_map_inner_array_lookup *skel;
-> +
-> +	skel = test_map_in_map_inner_array_lookup__open_and_load();
-> +	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
-> +		return;
-> +
-> +	err = test_map_in_map_inner_array_lookup__attach(skel);
-> +	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-> +		goto cleanup;
-> +
-> +	map1_fd = bpf_map__fd(skel->maps.inner_map1);
-> +	bpf_map_update_elem(map1_fd, &key, &val, 0);
-> +	usleep(1);
-
-Why usleep is needed?
-
-> +	/* Probe should have set the element at index 3 to 2 */
-> +	bpf_map_lookup_elem(map1_fd, &key, &val);
-> +	CHECK(val != 2, "inner1", "got %d != exp %d\n", val, 2);
-> +
-> +cleanup:
-> +	test_map_in_map_inner_array_lookup__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c
-> new file mode 100644
-> index 000000000000..c2c8f2fa451d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c
-
-nit. A shorter name also, inner_array_lookup.c?
-
-> @@ -0,0 +1,45 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +struct inner_map {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 5);
-> +	__type(key, int);
-> +	__type(value, int);
-> +} inner_map1 SEC(".maps");
-> +
-> +struct outer_map {
-> +	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
-> +	__uint(max_entries, 3);
-> +	__type(key, int);
-> +	__array(values, struct inner_map);
-> +} outer_map1 SEC(".maps") = {
-> +	.values = {
-> +		[2] = &inner_map1,
-> +	},
-> +};
-> +
-> +SEC("raw_tp/sys_enter")
-> +int handle__sys_enter(void *ctx)
-> +{
-> +	int outer_key = 2, inner_key = 3;
-> +	int *val;
-> +	void *map;
-> +
-> +	map = bpf_map_lookup_elem(&outer_map1, &outer_key);
-> +	if (!map)
-> +		return 1;
-> +
-> +	val = bpf_map_lookup_elem(map, &inner_key);
-> +	if (!val)
-> +		return 1;
-> +
-> +	if (*val == 1)
-> +		*val = 2;
-> +
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-
+We are not able to recreate this on sc7280 chromebooks , will need to 
+check on sc7180. This does not seem directly related to any of the 
+hotplug changes though so needs to be checked separately. So please feel 
+free to raise a gitlab bug for this and assign to me.
