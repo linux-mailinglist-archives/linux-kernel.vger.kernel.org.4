@@ -2,248 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834087194CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC7B7194CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjFAH5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S231727AbjFAH5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjFAHzZ (ORCPT
+        with ESMTP id S232049AbjFAHzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:55:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B85170D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:47:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685605672;
+        Thu, 1 Jun 2023 03:55:00 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95B1A1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:49:15 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685605753;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LJY0ffzy9d7zjgW/HEvqIO2dS8yVBrmwr6J73PuSOuU=;
-        b=CgGko6pxX5vQUtwvveXVGwMkmHEdL/1TxFwGQGOQTVaJM3XcLWQ3rr+Oa/5vLiRh9IvZTZ
-        Av/mqrbLDZ5AQCXEKSgx12paf/pxL1kPDEiC3C+KwIfjJI2cpmSIQtPeQKuVErI4y/OT83
-        IRBcmFWtPJs90iQU7c1h1G/rs1Lsd0g=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-343-xiAgqL4hNf-L1kX4hbbJmA-1; Thu, 01 Jun 2023 03:47:51 -0400
-X-MC-Unique: xiAgqL4hNf-L1kX4hbbJmA-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2b057e763a3so3920581fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 00:47:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685605670; x=1688197670;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LJY0ffzy9d7zjgW/HEvqIO2dS8yVBrmwr6J73PuSOuU=;
-        b=H5FsB80GdMoq/J9kjw/U4Iy0YWuUNTepMOArlHWsZtJO7Zz+stZVX/5bgbdZTdWpXg
-         DpPUkvg3YySUqxh2ci/pb9ST6EHLQurb4nWk8mbMwKDZSL6Hyz1qAkK7+VlQvTZGOjqV
-         KzrEgvdlqfx3mIJ97xQVjZ9e6ti8UW74hgc9RmYL+BiNAkk2EViIqF7weAmYyRHkuh0O
-         WjCQTZXeEIb7fSX9vZpOmjdkE5i3mvAw0DnEnY2mDWd5C/ssDXetLyBV/JVPsMORCPIo
-         1ufwVLFQzeJ7Pe2EOXkCCk3j/K7NelRL27wmoXbRbLh+TgQHabuHed3ILIJhBhc0J90F
-         KZvA==
-X-Gm-Message-State: AC+VfDwtei6zP4ffhpvCIJVGFWfP+5OUflafYLW3HmYlmLshjbCkXreX
-        fCaPw2uH6Wf5BmcRjnW6ZewjcjSryY9wXccWRN2Hgjefnv/FKU0xxY/lR5uICZTGEFxHUUytjEd
-        8KZSBnKYOl3FOQeqE8QtGtsfV
-X-Received: by 2002:a2e:8782:0:b0:2ad:8c4a:ef7e with SMTP id n2-20020a2e8782000000b002ad8c4aef7emr4339346lji.43.1685605670000;
-        Thu, 01 Jun 2023 00:47:50 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6n6txE71tIS8COu2Dmzs3VgI+CjTKwcsBTD8jJe3gHKSoIl+5OkJ1upYUs7A36ArMnP+FMZA==
-X-Received: by 2002:a2e:8782:0:b0:2ad:8c4a:ef7e with SMTP id n2-20020a2e8782000000b002ad8c4aef7emr4339335lji.43.1685605669610;
-        Thu, 01 Jun 2023 00:47:49 -0700 (PDT)
-Received: from sgarzare-redhat ([134.0.3.103])
-        by smtp.gmail.com with ESMTPSA id k12-20020a056402048c00b00514c4350243sm1763867edv.56.2023.06.01.00.47.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 00:47:48 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 09:47:45 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>,
-        jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org, stefanha@redhat.com
-Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in
- vhost_work_queue
-Message-ID: <7vk2uizpmf4fi54tmmopnbwwb7fs2xg6vae6ynrcvs26hjmshb@hpjzu4jfj35i>
-References: <0000000000001777f605fce42c5f@google.com>
- <20230530072310-mutt-send-email-mst@kernel.org>
- <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
- <CAGxU2F7HK5KRggiY7xnKHeXFRXJmqcKbjf3JnXC3mbmn9xqRtw@mail.gmail.com>
- <e4589879-1139-22cc-854f-fed22cc18693@oracle.com>
- <6p7pi6mf3db3gp3xqarap4uzrgwlzqiz7wgg5kn2ep7hvrw5pg@wxowhbw4e7w7>
- <035e3423-c003-3de9-0805-2091b9efb45d@oracle.com>
- <CAGxU2F5oTLY_weLixRKMQVqmjpDG_09yL6tS2rF8mwJ7K+xP0Q@mail.gmail.com>
- <43f67549-fe4d-e3ca-fbb0-33bea6e2b534@oracle.com>
- <bbe697b6-dd9e-5a8d-21c5-315ab59f0456@oracle.com>
+        bh=p8zgnzutmlxoB/RLgH8MCBdqpFZrjqcSK1xpIkDue6o=;
+        b=KbeWYcIkRJ1sK7c0UlhKZhnmQ8JZHE5MzAxAfkwMiJ6rsCuqfR7J2qpxuwAwjR4KNy1cKZ
+        P4ThP/k9rpHM/5CbGzqogIzEexqvotx5PqMxuOCTOwwS2Y+C557Jba38pbWPXrfpFJ3D8j
+        G2yY5ib1G9o12uuxy65gvPoQj6UoYnfmGQ+sIEAEfEpmMwbf4nQ1B8zDAop80MAndIhX3I
+        dJQCmb3du9+OmxJPYPcBjWq7UnH2tlTtz++DKJm6pDwu2WBs0TFFixhen7v79PL2IOrMI3
+        bz8YCrdizsPVkEja2BkNpTUlNT7unWKk3fYPEAuDTjErhGjeREpdk4v9jU/FSA==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1DBD640014;
+        Thu,  1 Jun 2023 07:49:09 +0000 (UTC)
+Date:   Thu, 1 Jun 2023 09:49:08 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v1 24/43] mtd: nand: add support for ts72xx
+Message-ID: <20230601094908.7838ec17@xps-13>
+In-Reply-To: <20230601054549.10843-6-nikita.shubin@maquefel.me>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+        <20230601054549.10843-6-nikita.shubin@maquefel.me>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <bbe697b6-dd9e-5a8d-21c5-315ab59f0456@oracle.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:27:12AM -0500, Mike Christie wrote:
->On 5/31/23 10:15 AM, Mike Christie wrote:
->>>> rcu would work for your case and for what Jason had requested.
->>> Yeah, so you already have some patches?
->>>
->>> Do you want to send it to solve this problem?
->>>
->> Yeah, I'll break them out and send them later today when I can retest
->> rebased patches.
->>
->
->Just one question. Do you core vhost developers consider RCU more complex
->or switching to READ_ONCE/WRITE_ONCE? I am asking because for this immediate
->regression fix we could just switch to the latter like below to just fix
->the crash if we think that is more simple.
->
->I think RCU is just a little more complex/invasive because it will have the
->extra synchronize_rcu calls.
+Hi Nikita,
 
-Yes, you may be right, in this case we should just need
-READ_ONCE/WRITE_ONCE if dev->worker is no longer a pointer.
+nikita.shubin@maquefel.me wrote on Thu,  1 Jun 2023 08:45:29 +0300:
 
->
->
->diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->index a92af08e7864..03fd47a22a73 100644
->--- a/drivers/vhost/vhost.c
->+++ b/drivers/vhost/vhost.c
->@@ -235,7 +235,7 @@ void vhost_dev_flush(struct vhost_dev *dev)
-> {
-> 	struct vhost_flush_struct flush;
->
->-	if (dev->worker) {
->+	if (READ_ONCE(dev->worker.vtsk)) {
-> 		init_completion(&flush.wait_event);
-> 		vhost_work_init(&flush.work, vhost_flush_work);
->
->@@ -247,7 +247,9 @@ EXPORT_SYMBOL_GPL(vhost_dev_flush);
->
-> void vhost_work_queue(struct vhost_dev *dev, struct vhost_work *work)
-> {
->-	if (!dev->worker)
->+	struct vhost_task *vtsk = READ_ONCE(dev->worker.vtsk);
->+
->+	if (!vtsk)
-> 		return;
->
-> 	if (!test_and_set_bit(VHOST_WORK_QUEUED, &work->flags)) {
->@@ -255,8 +257,8 @@ void vhost_work_queue(struct vhost_dev *dev, struct vhost_work *work)
-> 		 * sure it was not in the list.
-> 		 * test_and_set_bit() implies a memory barrier.
-> 		 */
->-		llist_add(&work->node, &dev->worker->work_list);
->-		wake_up_process(dev->worker->vtsk->task);
->+		llist_add(&work->node, &dev->worker.work_list);
->+		wake_up_process(vtsk->task);
-> 	}
-> }
-> EXPORT_SYMBOL_GPL(vhost_work_queue);
->@@ -264,7 +266,7 @@ EXPORT_SYMBOL_GPL(vhost_work_queue);
-> /* A lockless hint for busy polling code to exit the loop */
-> bool vhost_has_work(struct vhost_dev *dev)
-> {
->-	return dev->worker && !llist_empty(&dev->worker->work_list);
->+	return !llist_empty(&dev->worker.work_list);
-> }
-> EXPORT_SYMBOL_GPL(vhost_has_work);
->
->@@ -468,7 +470,7 @@ void vhost_dev_init(struct vhost_dev *dev,
-> 	dev->umem = NULL;
-> 	dev->iotlb = NULL;
-> 	dev->mm = NULL;
->-	dev->worker = NULL;
->+	memset(&dev->worker, 0, sizeof(dev->worker));
-> 	dev->iov_limit = iov_limit;
-> 	dev->weight = weight;
-> 	dev->byte_weight = byte_weight;
->@@ -542,46 +544,38 @@ static void vhost_detach_mm(struct vhost_dev *dev)
->
-> static void vhost_worker_free(struct vhost_dev *dev)
-> {
->-	struct vhost_worker *worker = dev->worker;
->+	struct vhost_task *vtsk = READ_ONCE(dev->worker.vtsk);
->
->-	if (!worker)
->+	if (!vtsk)
-> 		return;
->
->-	dev->worker = NULL;
->-	WARN_ON(!llist_empty(&worker->work_list));
->-	vhost_task_stop(worker->vtsk);
->-	kfree(worker);
->+	vhost_task_stop(vtsk);
->+	WARN_ON(!llist_empty(&dev->worker.work_list));
->+	WRITE_ONCE(dev->worker.vtsk, NULL);
+> Technologic Systems has it's own nand controller implementation in CPLD.
+>=20
+> This patch adds support for TS-72XX boards family.
+>=20
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+>  drivers/mtd/nand/raw/Kconfig                  |   7 +
+>  drivers/mtd/nand/raw/Makefile                 |   1 +
+>  .../nand/raw/technologic-nand-controller.c    | 151 ++++++++++++++++++
+>  3 files changed, 159 insertions(+)
+>  create mode 100644 drivers/mtd/nand/raw/technologic-nand-controller.c
+>=20
+> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+> index b523354dfb00..94788da1a169 100644
+> --- a/drivers/mtd/nand/raw/Kconfig
+> +++ b/drivers/mtd/nand/raw/Kconfig
+> @@ -456,6 +456,13 @@ config MTD_NAND_RENESAS
+>  	  Enables support for the NAND controller found on Renesas R-Car
+>  	  Gen3 and RZ/N1 SoC families.
+> =20
+> +config MTD_NAND_TS72XX
+> +	bool "ts72xx NAND controller"
+> +	depends on ARCH_EP93XX && HAS_IOMEM
+> +	help
+> +	  Enables support for NAND controller on ts72xx SBCs.
+> +	  This is a legacy driver based on gen_nand.
+> +
+>  comment "Misc"
+> =20
+>  config MTD_SM_COMMON
+> diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
+> index 917cdfb815b9..783e990a0078 100644
+> --- a/drivers/mtd/nand/raw/Makefile
+> +++ b/drivers/mtd/nand/raw/Makefile
+> @@ -23,6 +23,7 @@ omap2_nand-objs :=3D omap2.o
+>  obj-$(CONFIG_MTD_NAND_OMAP2) 		+=3D omap2_nand.o
+>  obj-$(CONFIG_MTD_NAND_OMAP_BCH_BUILD)	+=3D omap_elm.o
+>  obj-$(CONFIG_MTD_NAND_MARVELL)		+=3D marvell_nand.o
+> +obj-$(CONFIG_MTD_NAND_TS72XX)		+=3D technologic-nand-controller.o
+>  obj-$(CONFIG_MTD_NAND_PLATFORM)		+=3D plat_nand.o
+>  obj-$(CONFIG_MTD_NAND_PASEMI)		+=3D pasemi_nand.o
+>  obj-$(CONFIG_MTD_NAND_ORION)		+=3D orion_nand.o
+> diff --git a/drivers/mtd/nand/raw/technologic-nand-controller.c b/drivers=
+/mtd/nand/raw/technologic-nand-controller.c
+> new file mode 100644
+> index 000000000000..09aeada933a1
+> --- /dev/null
+> +++ b/drivers/mtd/nand/raw/technologic-nand-controller.c
+> @@ -0,0 +1,151 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Technologic Systems TS72xx NAND controller driver
+> + *
+> + * Copyright (C) 2023 Nikita Shubin <nikita.shubin@maquefel.me>
+> + *
+> + * derived: plat_nand.c
+> + *  Author: Vitaly Wool <vitalywool@gmail.com>
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/mtd/mtd.h>
+> +#include <linux/mtd/platnand.h>
+> +
+> +#define TS72XX_NAND_CONTROL_ADDR_LINE	22	/* 0xN0400000 */
+> +#define TS72XX_NAND_BUSY_ADDR_LINE	23	/* 0xN0800000 */
+> +
+> +struct ts72xx_nand_data {
+> +	struct nand_controller	controller;
+> +	struct nand_chip	chip;
+> +	void __iomem		*io_base;
+> +};
+> +
+> +static int ts72xx_nand_attach_chip(struct nand_chip *chip)
+> +{
+> +	if (chip->ecc.engine_type =3D=3D NAND_ECC_ENGINE_TYPE_SOFT &&
+> +	    chip->ecc.algo =3D=3D NAND_ECC_ALGO_UNKNOWN)
+> +		chip->ecc.algo =3D NAND_ECC_ALGO_HAMMING;
 
-The patch LGTM, I just wonder if we should set dev->worker to zero here,
-but maybe we don't need to.
+I believe engine_type =3D=3D ON_HOST should return an error.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct nand_controller_ops ts72xx_nand_ops =3D {
+> +	.attach_chip =3D ts72xx_nand_attach_chip,
+> +};
+> +
+> +static void ts72xx_nand_hwcontrol(struct nand_chip *chip,
+> +				  int cmd, unsigned int ctrl)
+> +{
+> +	if (ctrl & NAND_CTRL_CHANGE) {
+> +		void __iomem *addr =3D chip->legacy.IO_ADDR_R;
+> +		unsigned char bits;
+> +
+> +		addr +=3D (1 << TS72XX_NAND_CONTROL_ADDR_LINE);
+> +
+> +		bits =3D readb(addr) & ~0x07;
+> +		bits |=3D (ctrl & NAND_NCE) << 2;	/* bit 0 -> bit 2 */
+> +		bits |=3D (ctrl & NAND_CLE);	/* bit 1 -> bit 1 */
+> +		bits |=3D (ctrl & NAND_ALE) >> 2;	/* bit 2 -> bit 0 */
+> +
+> +		writeb(bits, addr);
+> +	}
+> +
+> +	if (cmd !=3D NAND_CMD_NONE)
+> +		writeb(cmd, chip->legacy.IO_ADDR_W);
+> +}
+> +
+> +static int ts72xx_nand_device_ready(struct nand_chip *chip)
+> +{
+> +	void __iomem *addr =3D chip->legacy.IO_ADDR_R;
+> +
+> +	addr +=3D (1 << TS72XX_NAND_BUSY_ADDR_LINE);
+> +
+> +	return !!(readb(addr) & 0x20);
+> +}
+> +
+> +static int ts72xx_nand_probe(struct platform_device *pdev)
+> +{
+> +	struct ts72xx_nand_data *data;
+> +	struct mtd_info *mtd;
+> +	int err =3D 0;
+> +
+> +	/* Allocate memory for the device structure (and zero it) */
+> +	data =3D devm_kzalloc(&pdev->dev, sizeof(struct ts72xx_nand_data),
+> +			    GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->controller.ops =3D &ts72xx_nand_ops;
+> +	nand_controller_init(&data->controller);
+> +	data->chip.controller =3D &data->controller;
+> +
+> +	data->io_base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(data->io_base))
+> +		return PTR_ERR(data->io_base);
+> +
+> +	nand_set_flash_node(&data->chip, pdev->dev.of_node);
+> +	mtd =3D nand_to_mtd(&data->chip);
+> +	mtd->dev.parent =3D &pdev->dev;
+> +
+> +	data->chip.legacy.IO_ADDR_R =3D data->io_base;
+> +	data->chip.legacy.IO_ADDR_W =3D data->io_base;
+> +	data->chip.legacy.cmd_ctrl =3D ts72xx_nand_hwcontrol;
+> +	data->chip.legacy.dev_ready =3D ts72xx_nand_device_ready;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	/*
+> +	 * This driver assumes that the default ECC engine should be TYPE_SOFT.
+> +	 * Set ->engine_type before registering the NAND devices in order to
+> +	 * provide a driver specific default value.
+> +	 */
+> +	data->chip.ecc.engine_type =3D NAND_ECC_ENGINE_TYPE_SOFT;
+> +
+> +	/* Scan to find existence of the device */
+> +	err =3D nand_scan(&data->chip, 1);
+> +	if (err)
+> +		return err;
+> +
+> +	err =3D mtd_device_parse_register(mtd, NULL, NULL,
+> +					NULL, 0);
+
+The usual way -and more readable- is to jump to a goto label upon
+error, and return 0 in the normal path.
+> +
+> +	if (!err)
+> +		return err;
+> +
+> +	nand_cleanup(&data->chip);
+> +
+> +	return 0;
+> +}
+> +
+> +static void ts72xx_nand_remove(struct platform_device *pdev)
+> +{
+> +	struct ts72xx_nand_data *data =3D platform_get_drvdata(pdev);
+> +	struct nand_chip *chip =3D &data->chip;
+> +	int ret;
+> +
+> +	ret =3D mtd_device_unregister(nand_to_mtd(chip));
+> +	WARN_ON(ret);
+> +	nand_cleanup(chip);
+> +}
+> +
+> +static const struct of_device_id ts72xx_id_table[] =3D {
+> +	{ .compatible =3D "technologic,ts7200-nand" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ts72xx_id_table);
+> +
+> +static struct platform_driver ts72xx_nand_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "ts72xx-nand",
+> +		.of_match_table =3D ts72xx_id_table,
+> +	},
+> +	.probe =3D ts72xx_nand_probe,
+> +	.remove_new =3D ts72xx_nand_remove,
+> +};
+> +module_platform_driver(ts72xx_nand_driver);
+> +
+
 
 Thanks,
-Stefano
-
-> }
->
-> static int vhost_worker_create(struct vhost_dev *dev)
-> {
->-	struct vhost_worker *worker;
-> 	struct vhost_task *vtsk;
-> 	char name[TASK_COMM_LEN];
-> 	int ret;
->
->-	worker = kzalloc(sizeof(*worker), GFP_KERNEL_ACCOUNT);
->-	if (!worker)
->-		return -ENOMEM;
->-
->-	dev->worker = worker;
->-	worker->kcov_handle = kcov_common_handle();
->-	init_llist_head(&worker->work_list);
->+	dev->worker.kcov_handle = kcov_common_handle();
->+	init_llist_head(&dev->worker.work_list);
-> 	snprintf(name, sizeof(name), "vhost-%d", current->pid);
->
->-	vtsk = vhost_task_create(vhost_worker, worker, name);
->+	vtsk = vhost_task_create(vhost_worker, &dev->worker, name);
-> 	if (!vtsk) {
-> 		ret = -ENOMEM;
-> 		goto free_worker;
-> 	}
->
->-	worker->vtsk = vtsk;
->+	WRITE_ONCE(dev->worker.vtsk, vtsk);
-> 	vhost_task_start(vtsk);
-> 	return 0;
->
-> free_worker:
->-	kfree(worker);
->-	dev->worker = NULL;
->+	WRITE_ONCE(dev->worker.vtsk, NULL);
-> 	return ret;
-> }
->
->diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
->index 0308638cdeee..305ec8593d46 100644
->--- a/drivers/vhost/vhost.h
->+++ b/drivers/vhost/vhost.h
->@@ -154,7 +154,7 @@ struct vhost_dev {
-> 	struct vhost_virtqueue **vqs;
-> 	int nvqs;
-> 	struct eventfd_ctx *log_ctx;
->-	struct vhost_worker *worker;
->+	struct vhost_worker worker;
-> 	struct vhost_iotlb *umem;
-> 	struct vhost_iotlb *iotlb;
-> 	spinlock_t iotlb_lock;
->
-
+Miqu=C3=A8l
