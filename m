@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5C6719ADB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CC8719AE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbjFALUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S232665AbjFALW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjFALUx (ORCPT
+        with ESMTP id S232588AbjFALWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:20:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87535123;
-        Thu,  1 Jun 2023 04:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Jzcx+R+c6UOqzz0gVG07uUa29kOBvr3x5e8X9TFuwcA=; b=oQ8d4cw3GAx07aySlQ39lT4A8H
-        prkDbHMJybq15SDspPHtVe9iiG+gfjkElttDpsY8z8UlgWtby1L64wWiDvn4LCC+WTcKHkzU2uCVU
-        Il3IG6TJVbBw9F0wcsP4EFmQr1my4e2Wh0UYpw8cam+gBKhpQJY7tpxiPeVWY1yhA82CNY6Fx9I5x
-        mM91gUzo12SNrcaM9a68ZIINX0H2/ZLb74OaH9RebDzycs3fze5p/lWol2AQOXOyvokCXPilqkWa5
-        +nhi4EoTnMscy882WT5oR/Y5l8hR6D2t88nbMSI93A02rL9M7UpKAB5iPK226BszP0ZiYxjDrPS8Q
-        i7+Eq3vg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4gM0-00H940-1R;
-        Thu, 01 Jun 2023 11:20:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 34D6630031F;
-        Thu,  1 Jun 2023 13:20:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2450C202BDCB6; Thu,  1 Jun 2023 13:20:27 +0200 (CEST)
-Date:   Thu, 1 Jun 2023 13:20:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>, namhyung@kernel.org,
-        eranian@google.com, acme@kernel.org, mark.rutland@arm.com,
-        jolsa@kernel.org, bp@alien8.de, kan.liang@linux.intel.com,
-        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
-Message-ID: <20230601112027.GI38236@hirez.programming.kicks-ass.net>
-References: <CAP-5=fWYbzmTETgqJ11y22=JaXDM0gnb4qR6KYeRGmFXw08f-Q@mail.gmail.com>
- <86jzwtdhmk.wl-maz@kernel.org>
- <CAP-5=fVW6KbUbbEfF3mEFvTfFDC5yKSjSpa+w3D55dG3CNUERw@mail.gmail.com>
- <86h6rxd3gh.wl-maz@kernel.org>
- <0075d8a9-2df4-86eb-8171-8995f59904e0@linux.ibm.com>
- <CAP-5=fXo0t+buDrmf7SyTD97gmTWGoDAO2YXWyav+_79O3MZ0w@mail.gmail.com>
- <a1f27798-0b06-7dc3-028b-038512947306@linux.ibm.com>
- <CAP-5=fVw3vSEu7yGFDnZi8c3VUFJu_XEZtY9ZcTsD7ip2imR6Q@mail.gmail.com>
- <aa2f8581-6440-87c0-1578-157719f7543e@linux.ibm.com>
- <20230601111856.GW4253@hirez.programming.kicks-ass.net>
+        Thu, 1 Jun 2023 07:22:54 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1834139
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:22:50 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f8115ca685so5702701cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 04:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685618570; x=1688210570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sUmhHU1fbhyU+RUYWStGTJNMxjAzPmJ//EgW00C5mZw=;
+        b=eZ9To0SI50DTVI2dAf2RP1StKYs+cyEqUpAF2574fnqGhgB2TAaZ0gBa8bYXdn/j0x
+         FuBa8X6m1Y1EYf3bzxSBu2csTyMGZkE9/fuq0cSSE1h5sqzqaZhxg4bU1VFvtPSzv9lW
+         5QLOOoGgY2C/+BRg+CxZVUgRFDUMQ2vepXR8quVdyenHux1FM0wWOKni7MlZMsghXV69
+         FUODS4sK/uZiVM1aOfjh7UXurbvyBjLO3yR32V+j2o7vSqQ5w39O3/jGmJebHAl220wl
+         l2YbU4dB3dhyKQsqpA//vOIfL9sewdZswWZOJLPoyEsCk6buDMIeXHjvUR1hnxPzY0TO
+         4ZUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685618570; x=1688210570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sUmhHU1fbhyU+RUYWStGTJNMxjAzPmJ//EgW00C5mZw=;
+        b=jkA+sKbuVtNJHV95yZcx6CO102Tvsg6yMdlzO/XuKSi1zoQbQwRIu87foGGNWh0eoY
+         CGlMOAJ9bPb508sdkgkbNzoEPbf6X/ESCWAqP03rrqp3YSoq96BkGpYTfTwalJl7gcUg
+         1jGZWpTRsf1OodOSSuyKiZbI57m03hs/lSrgnlXPUfWTfPwF5Ycp8VTqcx9qhcrN8v6H
+         4n9ksCwnFXOl7nmYcBIMYKyOB9KNpfYEb3DRE1MqwEaIf5pdfxfRFgAJbLb8iv8x10y8
+         Un2I4EgbZy6jOOMZNs72iJZiyRq1LG3neI4w7GTYEfk/vo7U/sTpsbAmZ1kbtMULTjZO
+         frmg==
+X-Gm-Message-State: AC+VfDzKogOwdStDzeRPdHLaOaeqDjrP+cWK5FpjFz9e8B3mTL1KMh+T
+        4OMJxqfSoQcquivAM6a/7VvKw9MqToJL5OnH5DYAnA==
+X-Google-Smtp-Source: ACHHUZ672XhBtqgSSO+77bYpfA5o+5/XdJD5UDVXzB2ag05nisa3IUi07jZC+Cq76E6sC0H/aS/YY93daCCv9WmxO/Y=
+X-Received: by 2002:a05:622a:182a:b0:3f6:b055:81ff with SMTP id
+ t42-20020a05622a182a00b003f6b05581ffmr9265467qtc.50.1685618569842; Thu, 01
+ Jun 2023 04:22:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601111856.GW4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com> <20230530122112.1314458-5-ckeepax@opensource.cirrus.com>
+In-Reply-To: <20230530122112.1314458-5-ckeepax@opensource.cirrus.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 1 Jun 2023 13:22:49 +0200
+Message-ID: <CACRpkdb-jk50gO_Y-7NKQfLjPOH6ZwL37YsQJoJNfoqS+N8NVw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] pinctrl: cs42l43: Add support for the cs42l43
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, lee@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        robh+dt@kernel.org, conor+dt@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 01:18:56PM +0200, Peter Zijlstra wrote:
-> On Thu, Jun 01, 2023 at 01:02:30PM +0200, Thomas Richter wrote:
-> 
-> > PS: I have the feeling, it gets complicated to have multiple hardware PMUs
-> > per platform.
-> 
-> Recently someone was poking around giving the pmu device a parent, this
-> would, I think, result in sysfs links, which could be used to decide
-> what's what.
-> 
-> Core pmus would have the CPU device as their parent, while memory
-> controller thingies would link to the relevant node or something.
-> 
-> Ofc. all that's future-work/pending.
+On Tue, May 30, 2023 at 2:21=E2=80=AFPM Charles Keepax
+<ckeepax@opensource.cirrus.com> wrote:
 
-https://lkml.kernel.org/r/20230404134225.13408-1-Jonathan.Cameron%40huawei.com
+> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> for portable applications. It provides a high dynamic range, stereo
+> DAC for headphone output, two integrated Class D amplifiers for
+> loudspeakers, and two ADCs for wired headset microphone input or
+> stereo line input. PDM inputs are provided for digital microphones.
+>
+> Add a basic pinctrl driver which supports driver strength for the
+> various pins, gpios, and pinmux for the 2 multi-function pins.
+>
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-https://lkml.kernel.org/r/20230531110011.13963-2-Jonathan.Cameron%40huawei.com
+This version looks acceptable to me!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+I guess it will be merged with the rest.
+
+Yours,
+Linus Walleij
