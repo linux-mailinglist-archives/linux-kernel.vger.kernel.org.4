@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AAE71901E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC39719021
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjFABjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S230075AbjFABkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 21:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjFABjr (ORCPT
+        with ESMTP id S229499AbjFABko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:39:47 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66A132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:39:45 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1a1b95cc10eso450227fac.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685583584; x=1688175584;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tMAT58qbQXF1B/aV0JXyDKL3tKS6p5XVrEhxiBvvom8=;
-        b=QqnSID8TL++2yzRRDDuaMkHhVp8lsXcS+ymgGQb5lDd4sYMhG/oQFCl2NU1I8d59+b
-         6e5ESL6nze+ez1VHvS6R/k/V3uRvZvufAgrj1cS/yr1tMkBARrKMK25VaRl7bEdsYe3J
-         KAVU7aCxUJijFS63DKZwrheTh7hF6OQyZBKYo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685583584; x=1688175584;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tMAT58qbQXF1B/aV0JXyDKL3tKS6p5XVrEhxiBvvom8=;
-        b=DloPqVygvV9vgckdLfkqRS+mkN7+rTUCG3QVCImx30v09052HAtxoYAx7m2Kb51S4H
-         8DkRqDRqERjESYcvIedPFpBnncQeSSOlpbiLMFD9Lk6qfOYtYv036z0kOLuX2IEBzsHo
-         b6oDS+x0l3ExbNdwiHzQBG00ZI5E9A/HrB6NORam8CvOH2R849WxqoCcc94mAIFrLPrr
-         g066gYb0DsxtQuKZxHqAUP7P7xznRJsVO0cLZOI2lYnyEWc9MzwGsHzmH09f/Ex8eysX
-         PJgHNXgW1P/sIxB1fqumfcqfCtQTfrlnl7/7lcR6q6cqtZnu2hUdy7CF1ib4Yv0utVfF
-         CMhg==
-X-Gm-Message-State: AC+VfDyw7X/Zer7+/sXRV1Lp+AX//yxceJwPM1RYaaNPSU4b72K0v1g/
-        UXUFn6m/tsNBq9jZEuIusHPZ6YZ7zg4/i3rHQ1vYlw==
-X-Google-Smtp-Source: ACHHUZ6rQCmNsdIpMKJMXK5OdEAeSR/Lg451aSaAFhfhWDOg0vW1ZMH240lxWejfpSLYVnJNiBt9Y9Q9npi1VNxCgO8=
-X-Received: by 2002:a05:6870:d411:b0:192:7111:d8c9 with SMTP id
- i17-20020a056870d41100b001927111d8c9mr5718936oag.42.1685583584692; Wed, 31
- May 2023 18:39:44 -0700 (PDT)
+        Wed, 31 May 2023 21:40:44 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75446121;
+        Wed, 31 May 2023 18:40:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QWpk05Grzz4x3g;
+        Thu,  1 Jun 2023 11:40:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685583641;
+        bh=yXnYgbGSBqLsbTFR2/V+58Z3G9mVeTlswbnRoEMAZj0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lFx8+2uajuPQKlsqwmr14oyHtPI56C1VrP7OfmoWTX4WOfh2+OZy3NSjLPyw7Ln3J
+         OTY0HGGp36hkwto6qdWk6UTqiT42mkhZ8M/bBeAMIepQokcMjolAlJqTc/b61M+L3B
+         n+cWNqF5NdbBHaWqYww0M8B77Sh0FN0eT0+1DPzgpRu96SvbongSS7+oJzujUd4CEG
+         FbCdB6a17U2duD/2fNqr2cPOycCPy9PGYtwdospin7KXOvFC5xMGAqoCmdeqYUNwKz
+         JpwUIi89dHIuKzUe9TS5sqqDPhZNcWH1R5Tcbl5g/QYWC8UOJ0QY7rA83mLlXDeIIL
+         PixKF4qLh4x1g==
+Date:   Thu, 1 Jun 2023 11:40:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sudeep Holla <sudeep.holla@arm.com>, Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the scmi tree
+Message-ID: <20230601114014.52b6dd99@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com> <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
- <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com> <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
- <b69f6809-b483-158f-8be9-4976fad918d8@intel.com> <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
- <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com> <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
- <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-In-Reply-To: <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Wed, 31 May 2023 18:39:00 -0700
-Message-ID: <CABi2SkVmAw379G-o26sZnmt5p2FY8atoDfRMfKv0yFsfJOe7rA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jeff Xu <jeffxu@google.com>,
-        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
-        luto@kernel.org, jorgelo@chromium.org, keescook@chromium.org,
-        groeck@chromium.org, jannh@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/9AkwAZ+VNsCd6Z77oN9VNEO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-Thanks for feedback, regarding sigaltstack:
+--Sig_/9AkwAZ+VNsCd6Z77oN9VNEO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 18, 2023 at 2:04=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
-> >
-> > Agreed on signaling handling is a tough part: what do you think about
-> > the approach (modifying PKRU from saved stack after XSAVE), is there a
-> > blocker ?
->
-> Yes, signal entry and sigreturn are not necessarily symmetric so you
-> can't really have a stack.
->
+Hi all,
 
-To clarify: I mean this option below:
-- before get_sigframe(), save PKUR =3D> tmp
-- modify thread's PKRU so it can write to sigframe
-- XSAVE
-- save tmp =3D> sigframe
+The following commits are also in driver-core.current tree as different
+commits (but the same patches):
 
-I believe you proposed this in a previous discussion [1]:
-and I quote here:
-"There's a delicate point when building the stack frame that the
-kernel would need to move over to the new PKRU value to build the
-frame before it writes the *OLD* value to the frame.  But, it's far
-from impossible."
+  78c5fa2c98af ("drivers: base: cacheinfo: Update cpu_map_populated during =
+CPU Hotplug")
+  3e871b199c9f ("drivers: base: cacheinfo: Fix shared_cpu_map changes in ev=
+ent of CPU hotplug")
 
-sigreturn will restore thread's original PKRU from sigframe.
-In case of asymmetrics caused by siglongjmp, user space doesn't call
-sigreturn, the application needs to set desired PKRU before siglongjmp.
+These are commits
 
-I think this solution should work.
+  c26fabe73330 ("drivers: base: cacheinfo: Update cpu_map_populated during =
+CPU Hotplug")
+  126310c9f669 ("drivers: base: cacheinfo: Fix shared_cpu_map changes in ev=
+ent of CPU hotplug")
 
-[1] https://lore.kernel.org/lkml/b4f0dca5-1d15-67f7-4600-9a0a91e9d0bd@intel=
-.com/
+in the driver-core.current tree.
 
-Best regards,
--Jeff
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9AkwAZ+VNsCd6Z77oN9VNEO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR39xYACgkQAVBC80lX
+0GwVNQf/ZakjTaJrj+FKHAZv18ixFbo4kTblk63bExqEBPGdD0BlczqUdk3e1HLJ
+QAAsYdVemQiwlfn08sRmANOLfpQ9HMQ1+e1FUt1VCh3QHVSaJuv/Lqf3yddPJ+e/
+YFwXUtVG+O7I+DTkt2nRpM4K2Xje4vWL8VJihSIJtrWSPUavEf+w7E/L316nwGmc
+0PEvrn2+j/WB8hiZw05ALJKS9SM7OVpImNkJi4svWILI+jiV2PcO1oH0xQCuIKdm
+OBPY5E8NL6DolGR0W1beSqu2P6sBfj0TnRcPdOfgcxKJxpgLbPxG5u/CEaX92K/d
+lU1ARMAPgKISXRrkMNa0bs1iTNfxsg==
+=9PFc
+-----END PGP SIGNATURE-----
+
+--Sig_/9AkwAZ+VNsCd6Z77oN9VNEO--
