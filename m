@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18FC719AD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C581719AD7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjFALRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S232183AbjFALTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjFALRe (ORCPT
+        with ESMTP id S230222AbjFALTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:17:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE80124;
-        Thu,  1 Jun 2023 04:17:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B3A861D55;
-        Thu,  1 Jun 2023 11:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655FEC433EF;
-        Thu,  1 Jun 2023 11:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685618252;
-        bh=PQTKK4TNTGd6SkNciPTZxhjIN8KD4aPCXVFtu9urh0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IwLd9186Cl7yV6e6P5jeJ8w1Q/Vkm3zq07lBa4pxAuTmYF5jaBtrRroFxK3RG7EL7
-         nwksoTS7+n8AearzxyD/PGe5L1jK2Y51cuXKdUkoseI4vr/GdwYCFfPjSFVkx3EusD
-         LCx5CHkNsqYjPvWKrcoZQtDrpllobQnksjUWeYAPGneibLAiYaY211BxD56rmj/pWL
-         B7owhhYcDy5CPuSuWDFvMv+t+g8Dfv9YBl+gmyES0riKtFzInI/ZpuWu+nvCOaJc+Y
-         yM1FXBhNT4BuBK9sRQhJ/bUraW0JWEcunXiEB1EPFukV5sAwUOne5WanRariFYDXUU
-         UaHSy9W9hmFmw==
-Date:   Thu, 1 Jun 2023 12:17:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
-Message-ID: <d6bc264b-9c52-49c0-8012-b938da37337f@sirena.org.uk>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601053546.9574-18-nikita.shubin@maquefel.me>
+        Thu, 1 Jun 2023 07:19:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62245123;
+        Thu,  1 Jun 2023 04:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k298/5fkUyGMQVZFoJngwDNksJ6FGeEJX961JrMA2G4=; b=IcuQb6Gb3H5ph6k4MgLyJ43Yw6
+        QFDMkrxLMRYR1xzUtFBXVk8ELrhj/aKtqB3FaPLPi2O4wvPHH74PLk2akm5wKnIx4RRQcxr2uFf28
+        AU8mQKRK1sH0GBhCQICt1PMSNksLKQfNRLfgQzapNPjeCekQCK6rJjdLNeRvxmxCky+mNyo+trpe7
+        ualPgeY6ag1fQOzZlqm3UgtCP06BNMYXfmeIntNYGhW7z5edNb/CPYINjXUSiSq67/7tZ5TrEuVQB
+        RlsdrWO9ZKtvpscuaPsWessl0SMiwewxHifD8kl2Q9ldZ84zXbhxdcqG+/93LuYtrgi5yNMXiaGmS
+        i0J9Ikyw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4gKY-008Jfd-D6; Thu, 01 Jun 2023 11:18:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0091B30031F;
+        Thu,  1 Jun 2023 13:18:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DC97B202BDCB5; Thu,  1 Jun 2023 13:18:56 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 13:18:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Richter <tmricht@linux.ibm.com>
+Cc:     Ian Rogers <irogers@google.com>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Nathan Chancellor <nathan@kernel.org>, namhyung@kernel.org,
+        eranian@google.com, acme@kernel.org, mark.rutland@arm.com,
+        jolsa@kernel.org, bp@alien8.de, kan.liang@linux.intel.com,
+        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
+Message-ID: <20230601111856.GW4253@hirez.programming.kicks-ass.net>
+References: <ZG+FLdP2kkfI1m2Z@linux.dev>
+ <CAP-5=fWYbzmTETgqJ11y22=JaXDM0gnb4qR6KYeRGmFXw08f-Q@mail.gmail.com>
+ <86jzwtdhmk.wl-maz@kernel.org>
+ <CAP-5=fVW6KbUbbEfF3mEFvTfFDC5yKSjSpa+w3D55dG3CNUERw@mail.gmail.com>
+ <86h6rxd3gh.wl-maz@kernel.org>
+ <0075d8a9-2df4-86eb-8171-8995f59904e0@linux.ibm.com>
+ <CAP-5=fXo0t+buDrmf7SyTD97gmTWGoDAO2YXWyav+_79O3MZ0w@mail.gmail.com>
+ <a1f27798-0b06-7dc3-028b-038512947306@linux.ibm.com>
+ <CAP-5=fVw3vSEu7yGFDnZi8c3VUFJu_XEZtY9ZcTsD7ip2imR6Q@mail.gmail.com>
+ <aa2f8581-6440-87c0-1578-157719f7543e@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AKogeu+AvJwZdIqg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601053546.9574-18-nikita.shubin@maquefel.me>
-X-Cookie: Positively no smoking.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <aa2f8581-6440-87c0-1578-157719f7543e@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 01, 2023 at 01:02:30PM +0200, Thomas Richter wrote:
 
---AKogeu+AvJwZdIqg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> PS: I have the feeling, it gets complicated to have multiple hardware PMUs
+> per platform.
 
-On Thu, Jun 01, 2023 at 08:34:08AM +0300, Nikita Shubin wrote:
+Recently someone was poking around giving the pmu device a parent, this
+would, I think, result in sysfs links, which could be used to decide
+what's what.
 
-> +  cirrus,ep9301-use-dma:
-> +    description: Flag indicating that the SPI should use dma
-> +    type: boolean
+Core pmus would have the CPU device as their parent, while memory
+controller thingies would link to the relevant node or something.
 
-My previous feedback on this property still applies.
-
-Please don't ignore review comments, people are generally making them
-for a reason and are likely to have the same concerns if issues remain
-unaddressed.  Having to repeat the same comments can get repetitive and
-make people question the value of time spent reviewing.  If you disagree
-with the review comments that's fine but you need to reply and discuss
-your concerns so that the reviewer can understand your decisions.
-
---AKogeu+AvJwZdIqg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR4fkYACgkQJNaLcl1U
-h9D2FQf+II4RWUC3YTpWqIDLH2ty9ClJoudhNuUP8oYmUpY2FZogg4DQ+r3a/Hxs
-xEA1aTgyE2Os3RTZf+OXfZgTjHInNvb5Z5/txOUdFDuYW/Xt5NMGRCfpflrS9Y1k
-NLpK/XESM3GR9+DnVJi8K44fkO9YvbuxPesZFIYAk7qFagamzOxmiqE4lvzkgPy6
-Kb7ut2Hun9ZS0odsW3MOobBFeKCPxSifpinx+UdP+hw+5D6VfsF0hEfW4kp/w/6i
-LSkMy17aTHGMgX/oXUHMX70Nx59pE1g5jz7oBT/p7WyQFvj/XGh89eM/4xuP0RM+
-Aq9Zn0YzKwEKLdBKzObjSyuC1ptLyQ==
-=bKAo
------END PGP SIGNATURE-----
-
---AKogeu+AvJwZdIqg--
+Ofc. all that's future-work/pending.
