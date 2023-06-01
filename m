@@ -2,58 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F77719314
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEFF719315
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbjFAGTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S231411AbjFAGTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjFAGTE (ORCPT
+        with ESMTP id S230472AbjFAGTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:19:04 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6526CE2;
-        Wed, 31 May 2023 23:19:02 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 194B267373; Thu,  1 Jun 2023 08:18:59 +0200 (CEST)
-Date:   Thu, 1 Jun 2023 08:18:58 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Christoph Hellwig <hch@lst.de>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH -next v2] block: fix blktrace debugfs entries leak
-Message-ID: <20230601061858.GA24071@lst.de>
-References: <20230531092606.3037560-1-yukuai1@huaweicloud.com> <20230531124404.GA27412@lst.de> <509bcea6-21f6-3f64-01c3-02215955283d@huaweicloud.com>
+        Thu, 1 Jun 2023 02:19:37 -0400
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92C2E2;
+        Wed, 31 May 2023 23:19:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowAB3fY1fOHhkUoQiCQ--.25485S2;
+        Thu, 01 Jun 2023 14:19:13 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, davthompson@nvidia.com, asmaa@nvidia.com,
+        mkl@pengutronix.de, limings@nvidia.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] mlxbf_gige: Add missing check for platform_get_irq
+Date:   Thu,  1 Jun 2023 14:19:08 +0800
+Message-Id: <20230601061908.1076-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <509bcea6-21f6-3f64-01c3-02215955283d@huaweicloud.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: zQCowAB3fY1fOHhkUoQiCQ--.25485S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrZF4UGr1xJr43AF1ruF1ftFb_yoW8Jry7pr
+        y8JryvqrZ5J3Wjg3Z7J395Zr1fuw4qvF1a9FWfKa1furn8Za1qkr98tFWxuFn7Gr9xG3y3
+        Ary3ZFs5ZFn8A3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JU-J5rUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 09:50:22AM +0800, Yu Kuai wrote:
-> Hi, Christoph
->
-> 在 2023/05/31 20:44, Christoph Hellwig 写道:
->> I like where this is going, but did you check that this doesn't
->> introduce a potential crash with the current /dev/sg based blktrace?
->
-> I just start to look at how /dev/sg is created and destroyed, however,
-> I'm confused here, do you mean that the added blk_trace_shutdown() here
-> might cause that /dev/sg blktrace to access freed momory or NULL
-> pointer?
+Add the check for the return value of the platform_get_irq and
+return error if it fails.
 
-Yes.  Given that __blk_trace_remove clears out q->blk_trace and
-frees the blk trace structure I'm worried about that.
+Fixes: f92e1869d74e ("Add Mellanox BlueField Gigabit Ethernet driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
+index 694de9513b9f..a38e1c68874f 100644
+--- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
++++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
+@@ -427,6 +427,10 @@ static int mlxbf_gige_probe(struct platform_device *pdev)
+ 	priv->error_irq = platform_get_irq(pdev, MLXBF_GIGE_ERROR_INTR_IDX);
+ 	priv->rx_irq = platform_get_irq(pdev, MLXBF_GIGE_RECEIVE_PKT_INTR_IDX);
+ 	priv->llu_plu_irq = platform_get_irq(pdev, MLXBF_GIGE_LLU_PLU_INTR_IDX);
++	if (priv->error_irq < 0 || priv->rx_irq < 0 || priv->llu_plu_irq < 0) {
++		err = -ENODEV;
++		goto out;
++	}
+ 
+ 	phy_irq = acpi_dev_gpio_irq_get_by(ACPI_COMPANION(&pdev->dev), "phy-gpios", 0);
+ 	if (phy_irq < 0) {
+-- 
+2.25.1
 
