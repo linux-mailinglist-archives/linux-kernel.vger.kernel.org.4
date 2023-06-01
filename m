@@ -2,105 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384F0718FF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6427D719002
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjFABYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
+        id S229964AbjFAB1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 21:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjFABYp (ORCPT
+        with ESMTP id S229536AbjFAB13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:24:45 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3B5101;
-        Wed, 31 May 2023 18:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685582684; x=1717118684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MEEMrxv7tA0YbZIe/40VKopn6R+fUhfu8ONccvTrMVU=;
-  b=Mpt+Z++txwoOEU/Vj6pfBZf6RRNAcgEdd29m6wfzZVkc1RLHNIIoHerb
-   nfdegvTisy8Gt7TDafFUX/zW+fVhUeh1SbGt954hzxJFzHDtvIW2lrrh1
-   IrZP8BlSs9h1h0ZsY80x7HJBVtA+c0heb2RM6nytRNlPh7WlNXkZqLvFr
-   PKrhVjXbtCxMIzjVJvH6eCjmAWH1tvHB99ReL3+4KzvgbwuH2OhgaPZdN
-   5Vqod+JKekrrnx6Ko3s9ML9buqttxM/rXr3QdVVigUGkny5LD+SJv1S4n
-   AdCT781pxRg0MVdwyylnMLbZ+e6UWPZYxXxmadGziePXGdYRJqE8fBat+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357815158"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="357815158"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 18:24:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="684634736"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="684634736"
-Received: from ksauluck-mobl.amr.corp.intel.com (HELO desk) ([10.212.165.26])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 18:24:30 -0700
-Date:   Wed, 31 May 2023 18:24:29 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, Jon Kohler <jon@nutanix.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: VMX: remove LFENCE in vmx_spec_ctrl_restore_host()
-Message-ID: <20230601012323.36te7hfv366danpf@desk>
-References: <20230531150112.76156-1-jon@nutanix.com>
- <20230531231820.trrs2uugc24gegj4@treble>
- <F4BEBCAF-CBFC-4C3E-8B01-2ED84CF2E13A@nutanix.com>
- <20230601004202.63yulqs73kuh3ep6@treble>
- <846dd0c5-d431-e20e-fdb3-a4a26b6a22ca@citrix.com>
+        Wed, 31 May 2023 21:27:29 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA12132;
+        Wed, 31 May 2023 18:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685582849; x=1717118849;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QL2OZ313EwmN60TzyZOc3z6kVjQbJz7AAINlpj/2q9k=;
+  b=tbMhZeBGPeKXjGUskbPd9dz8ppClVpAYf+ZNcVggJH9mVD/7WE2fCyXJ
+   hZXMMxpP+BpybF4tZfgUNp+hUUVvsaHaczeC1tXEPlEfgRNWFbxt6Ge7I
+   elfDd8xXIvTyR/6IV2q93Sc18cPmgUn+ZNIAS/Eu7TOcybad0J/UTz5Bk
+   c=;
+X-IronPort-AV: E=Sophos;i="6.00,207,1681171200"; 
+   d="scan'208";a="337792469"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-8c5b1df3.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 01:27:25 +0000
+Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-8c5b1df3.us-west-2.amazon.com (Postfix) with ESMTPS id 3035F410E9;
+        Thu,  1 Jun 2023 01:27:23 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 01:27:22 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.95.246.21) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 01:27:19 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <akihirosuda@git.sr.ht>
+CC:     <akihiro.suda.cz@hco.ntt.co.jp>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <segoon@openwall.com>, <suda.kyoto@gmail.com>
+Subject: Re: [PATCH linux v2] net/ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
+Date:   Wed, 31 May 2023 18:27:08 -0700
+Message-ID: <20230601012708.69681-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <168557950756.14226.6470993129419598644-0@git.sr.ht>
+References: <168557950756.14226.6470993129419598644-0@git.sr.ht>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <846dd0c5-d431-e20e-fdb3-a4a26b6a22ca@citrix.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.95.246.21]
+X-ClientProxiedBy: EX19D044UWB001.ant.amazon.com (10.13.139.171) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 01:50:48AM +0100, Andrew Cooper wrote:
-> On 01/06/2023 1:42 am, Josh Poimboeuf wrote:
-> > So each LFENCE has a distinct purpose.  That said, there are no indirect
-> > branches or unbalanced RETs between them.
+From: ~akihirosuda <akihirosuda@git.sr.ht>
+Date: Wed, 31 May 2023 19:42:49 +0900
+> From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
 > 
-> How lucky are you feeling?
+> With this commit, all the GIDs ("0 4294967294") can be written to the
+> "net.ipv4.ping_group_range" sysctl.
 > 
-> You're in C at this point, which means the compiler could have emitted a
-> call to mem{cpy,cmp}() in place of a simple assignment/comparison.
+> Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
+> include/linux/uidgid.h), and an attempt to register this number will cause
+> -EINVAL.
+> 
+> Prior to this commit, only up to GID 2147483647 could be covered.
+> Documentation/networking/ip-sysctl.rst had "0 4294967295" as an example
+> value, but this example was wrong and causing -EINVAL.
+> 
+> v1->v2: Simplified the patch (Thanks to Kuniyuki Iwashima for suggestion)
 
-Moving the second LFENCE to the else part of WRMSR should be possible?
-So that the serialization can be achived either by WRMSR or LFENCE. This
-saves an LFENCE when host and guest value of MSR_SPEC_CTRL differ.
+Changelog should be placed under '---'.
 
----
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d2d6e1b6c788..d32e6d172dd6 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7157,8 +7157,8 @@ void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
- 	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
- 	    vmx->spec_ctrl != hostval)
- 		native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
--
--	barrier_nospec();
-+	else
-+		barrier_nospec();
- }
- 
- static fastpath_t vmx_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+Also could you use 'net' instead of 'linux' in Subject so that
+patchwork will be happy ?
+
+https://patchwork.kernel.org/project/netdevbpf/patch/168557950756.14226.6470993129419598644-0@git.sr.ht/
+
+
+> 
+> Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+> Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+> ---
+>  Documentation/networking/ip-sysctl.rst | 4 ++--
+>  include/net/ping.h                     | 6 +-----
+>  net/ipv4/sysctl_net_ipv4.c             | 8 ++++----
+>  3 files changed, 7 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> index 6ec06a33688a..80b8f73a0244 100644
+> --- a/Documentation/networking/ip-sysctl.rst
+> +++ b/Documentation/networking/ip-sysctl.rst
+> @@ -1352,8 +1352,8 @@ ping_group_range - 2 INTEGERS
+>  	Restrict ICMP_PROTO datagram sockets to users in the group range.
+>  	The default is "1 0", meaning, that nobody (not even root) may
+>  	create ping sockets.  Setting it to "100 100" would grant permissions
+> -	to the single group. "0 4294967295" would enable it for the world, "100
+> -	4294967295" would enable it for the users, but not daemons.
+> +	to the single group. "0 4294967294" would enable it for the world, "100
+> +	4294967294" would enable it for the users, but not daemons.
+>  
+>  tcp_early_demux - BOOLEAN
+>  	Enable early demux for established TCP sockets.
+> diff --git a/include/net/ping.h b/include/net/ping.h
+> index 9233ad3de0ad..bc7779262e60 100644
+> --- a/include/net/ping.h
+> +++ b/include/net/ping.h
+> @@ -16,11 +16,7 @@
+>  #define PING_HTABLE_SIZE 	64
+>  #define PING_HTABLE_MASK 	(PING_HTABLE_SIZE-1)
+>  
+> -/*
+> - * gid_t is either uint or ushort.  We want to pass it to
+> - * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+> - */
+> -#define GID_T_MAX (((gid_t)~0U) >> 1)
+> +#define GID_T_MAX (((gid_t)~0U) - 1)
+>  
+>  /* Compatibility glue so we can support IPv6 when it's compiled as a module */
+>  struct pingv6_ops {
+> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+> index 40fe70fc2015..bb49d9407c45 100644
+> --- a/net/ipv4/sysctl_net_ipv4.c
+> +++ b/net/ipv4/sysctl_net_ipv4.c
+> @@ -34,8 +34,8 @@ static int ip_ttl_min = 1;
+>  static int ip_ttl_max = 255;
+>  static int tcp_syn_retries_min = 1;
+>  static int tcp_syn_retries_max = MAX_TCP_SYNCNT;
+> -static int ip_ping_group_range_min[] = { 0, 0 };
+> -static int ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
+> +static long ip_ping_group_range_min[] = { 0, 0 };
+> +static long ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
+
+nit: s/long/unsigned long/
+
+Then, add
+
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+
+Thanks!
+
+
+>  static u32 u32_max_div_HZ = UINT_MAX / HZ;
+>  static int one_day_secs = 24 * 3600;
+>  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =
+> @@ -165,7 +165,7 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
+>  {
+>  	struct user_namespace *user_ns = current_user_ns();
+>  	int ret;
+> -	gid_t urange[2];
+> +	unsigned long urange[2];
+>  	kgid_t low, high;
+>  	struct ctl_table tmp = {
+>  		.data = &urange,
+> @@ -178,7 +178,7 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
+>  	inet_get_ping_group_range_table(table, &low, &high);
+>  	urange[0] = from_kgid_munged(user_ns, low);
+>  	urange[1] = from_kgid_munged(user_ns, high);
+> -	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+> +	ret = proc_doulongvec_minmax(&tmp, write, buffer, lenp, ppos);
+>  
+>  	if (write && ret == 0) {
+>  		low = make_kgid(user_ns, urange[0]);
+> -- 
+> 2.38.4
+
