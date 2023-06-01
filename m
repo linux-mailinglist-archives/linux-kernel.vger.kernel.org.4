@@ -2,140 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE0571F268
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3702671F26C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbjFASvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S231339AbjFASxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjFASva (ORCPT
+        with ESMTP id S229899AbjFASxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:51:30 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181D9197;
-        Thu,  1 Jun 2023 11:51:29 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Fh8rQ010572;
-        Thu, 1 Jun 2023 18:51:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=/o27oaTZwom7lgPceWI/6gu5Br5ovRQKkXhKmeNeyuE=;
- b=A8H1zCd8XwBt8n3x2ln3ZgOeqFxA5IKhD8SL4LYfAmf55rTTffH8kKvg79UPc1XrShcl
- lZvrTiSXbonGw0l3huQbmv7Sgi0OQq57MCZPRhp45j0DVJNpUFseS5WzJuLqUmmI1rjX
- f1gKZnNjEAx5E3aSE4sS6bP+juOdti97heV9kK91boD9KUn24Vyr52/U2dWNWlhHHZSS
- yEBShlbKlAZuV0UTPFzZ5YpjrSbgGNzpWdIZvIw2Ke7Zu01MvGXa4Tw7UaHGoOLmyORD
- t1VRK+J30g/DlODr2ocvKPqdrYA+1ynqmiuR64dF5DgL9WFCTwJmlkzkweIvHAooZ5M3 NQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxqyd9kax-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 18:51:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351IpNxB030625
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 18:51:23 GMT
-Received: from akhilpo-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 1 Jun 2023 11:51:19 -0700
-Date:   Fri, 2 Jun 2023 00:21:17 +0530
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-CC:     Manivannan Sadhasivam <mani@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <johan@kernel.org>
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc8280xp: Add GPU related nodes
-Message-ID: <wirvpuzwcqn4ywvhshyfxp3upk6elc5walifaokapftqoiipxp@62h5ev3neofu>
-References: <20230523011522.65351-1-quic_bjorande@quicinc.com>
- <20230523011522.65351-3-quic_bjorande@quicinc.com>
- <097944b0-fa7a-ad4d-1c3d-e74ab2b977de@linaro.org>
- <20230528170717.GG2814@thinkpad>
- <a64ac105-90cf-eea0-5cb2-74be201386a9@linaro.org>
- <20230529084614.GA5633@thinkpad>
- <20230530153514.GB3643653@hu-bjorande-lv.qualcomm.com>
+        Thu, 1 Jun 2023 14:53:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEE2137;
+        Thu,  1 Jun 2023 11:53:01 -0700 (PDT)
+Received: from arisu.localnet (unknown [23.233.251.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: detlev)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 621166606ECA;
+        Thu,  1 Jun 2023 19:52:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685645579;
+        bh=HA9WLCD2ceWYBo2r9YOQjN+RA/kPiPSlzAQ3oEd40Ng=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Pha/7fjJpKB9OGSkoq37gQXG8fTg0POKJKClZoPz6/0RvQPywX/k9YoOC1WxRQ2uM
+         jxn1n8rbEfdEkLFpBxbueb+GArIjeL+pork23RNdJtHJzfM8FGpEATYAi+lORycX8b
+         nSqnE8RIyYATLyDAH8xCXBzmxJi/9P3sL6kuodZu4zD0gsBHpZUPcbcdhJwDfG3WnV
+         D4Mu9HHJZxIkU8Aya0Yyf1X3wVbSBhWGxsDp14Bj2OMQMHLBToXqedhZN58Appkh1w
+         7KwYMdgfpVVShy200svEQTO1RbeoRePQALXfUjbPSvhoYuGBLOa5Kltp6z0mTUzhoZ
+         BgwUDiBPdbYWA==
+From:   Detlev Casanova <detlev.casanova@collabora.com>
+To:     linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] net: phy: realtek: Add optional external PHY clock
+Date:   Thu, 01 Jun 2023 14:53:02 -0400
+Message-ID: <5682492.DvuYhMxLoT@arisu>
+In-Reply-To: <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com>
+References: <20230531150340.522994-1-detlev.casanova@collabora.com>
+ <20230531150340.522994-2-detlev.casanova@collabora.com>
+ <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230530153514.GB3643653@hu-bjorande-lv.qualcomm.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: l4PvP01TFZIut_KzpnBA0p8yEAcT8jnW
-X-Proofpoint-GUID: l4PvP01TFZIut_KzpnBA0p8yEAcT8jnW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=816 phishscore=0 mlxscore=0 bulkscore=0 spamscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306010163
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 08:35:14AM -0700, Bjorn Andersson wrote:
-> 
-> On Mon, May 29, 2023 at 02:16:14PM +0530, Manivannan Sadhasivam wrote:
-> > On Mon, May 29, 2023 at 09:38:59AM +0200, Konrad Dybcio wrote:
-> > > On 28.05.2023 19:07, Manivannan Sadhasivam wrote:
-> > > > On Tue, May 23, 2023 at 09:59:53AM +0200, Konrad Dybcio wrote:
-> > > >> On 23.05.2023 03:15, Bjorn Andersson wrote:
-> > > >>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> [..]
-> > > >>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> [..]
-> > > >>> +		gmu: gmu@3d6a000 {
-> [..]
-> > > >>> +			status = "disabled";
-> > > >> I've recently discovered that - and I am not 100% sure - all GMUs are
-> > > >> cache-coherent. Could you please ask somebody at qc about this?
-> > > >>
-> > > > 
-> > > > AFAIU, GMU's job is controlling the voltage and clock to the GPU.
-> > > Not just that, it's only the limited functionality we've implemented
-> > > upstream so far.
-> > > 
+On Wednesday, May 31, 2023 3:08:53 P.M. EDT Heiner Kallweit wrote:
+> On 31.05.2023 17:03, Detlev Casanova wrote:
+> > In some cases, the PHY can use an external clock source instead of a
+> > crystal.
 > > 
-> > Okay, good to know!
+> > Add an optional clock in the phy node to make sure that the clock source
+> > is enabled, if specified, before probing.
 > > 
-> > > It doesn't do
-> > > > any data transactions on its own.
-> > > Of course it does. AP communication is done through MMIO writes and
-> > > the GMU talks to RPMh via the GPU RSC directly. Apart from that, some
-> > > of the GPU registers (that nota bene don't have anything to do with
-> > > the GMU M3 core itself) lay within the GMU address space.
-> > > 
-> 
-> But those aren't shared memory accesses.
-> 
+> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> > ---
 > > 
-> > That doesn't justify the fact that cache coherency is needed, especially
-> > MMIO writes, unless GMU could snoop the MMIO writes to AP caches.
+> >  drivers/net/phy/realtek.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
 > > 
+> > diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+> > index 3d99fd6664d7..70c75dbbf799 100644
+> > --- a/drivers/net/phy/realtek.c
+> > +++ b/drivers/net/phy/realtek.c
+> > @@ -12,6 +12,7 @@
+> > 
+> >  #include <linux/phy.h>
+> >  #include <linux/module.h>
+> >  #include <linux/delay.h>
+> > 
+> > +#include <linux/clk.h>
+> > 
+> >  #define RTL821x_PHYSR				0x11
+> >  #define RTL821x_PHYSR_DUPLEX			BIT(13)
+> > 
+> > @@ -80,6 +81,7 @@ struct rtl821x_priv {
+> > 
+> >  	u16 phycr1;
+> >  	u16 phycr2;
+> >  	bool has_phycr2;
+> > 
+> > +	struct clk *clk;
+> > 
+> >  };
+> >  
+> >  static int rtl821x_read_page(struct phy_device *phydev)
+> > 
+> > @@ -103,6 +105,11 @@ static int rtl821x_probe(struct phy_device *phydev)
+> > 
+> >  	if (!priv)
+> >  	
+> >  		return -ENOMEM;
+> > 
+> > +	priv->clk = devm_clk_get_optional_enabled(dev, "xtal");
 > 
-> In reviewing the downstream state again I noticed that the GPU smmu is
-> marked dma-coherent, so I will adjust that in v3.
-Bjorn,
+> Why add priv->clk if it isn't used outside probe()?
+> 
+> How about suspend/resume? Would it make sense to stop the clock
+> whilst PHY is suspended?
 
-Would you mind sharing a perf delta (preferrably manhattan offscreen)
-you see with and without this dma-coherent property?
+I'm not sure about this. Isn't the clock still necessary when suspended for 
+things like wake on lan ?
 
--Akhil.
-> 
-> Regards,
-> Bjorn
+> > +	if (IS_ERR(priv->clk))
+> > +		return dev_err_probe(dev, PTR_ERR(priv->clk),
+> > +				     "failed to get phy xtal 
+clock\n");
+> > +
+> > 
+> >  	ret = phy_read_paged(phydev, 0xa43, RTL8211F_PHYCR1);
+> >  	if (ret < 0)
+> >  	
+> >  		return ret;
+
+
+
+
