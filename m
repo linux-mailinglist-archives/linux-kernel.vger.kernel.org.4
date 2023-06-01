@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC45D719FCD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10C3719FA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbjFAOYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S233517AbjFAOTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjFAOYh (ORCPT
+        with ESMTP id S232834AbjFAOTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:24:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D69C186;
-        Thu,  1 Jun 2023 07:24:36 -0700 (PDT)
+        Thu, 1 Jun 2023 10:19:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF829C0;
+        Thu,  1 Jun 2023 07:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685629476; x=1717165476;
+  t=1685629182; x=1717165182;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=F+v0KYqgmXbJzCwwpH3tD86bRW38udBiayCtr+jvjqU=;
-  b=X26w7TlQBCR06/ROInIyqQR84NEpnU4eIjheD0nSLhVTBD2zRuSFE24l
-   Fu2fBEHot3b+J7WVJkUdGf+LedDOmtUbYMUDb4HOGr8PrD3c5eKEeL7yh
-   j7dofaaMM0Oe4J+naIzwKgs4DbTIYanYXzx7IbeRht7WHUhwDOhjXVQOW
-   qGPdBDFzc1qiioErv3Bm4wqiVeujUScmVbGBUCNi90YkpInHK/MWTF38Y
-   lzAp5jyxdp0Du065JEz/n+VnJVJlhkB57mCJCqFGyuBpm376ZM5sMBnIv
-   mEUHRyJJ4Sqbq9wbwrQwdrsEumvnOZaYC54KGK1D6/cqrzKhF+rBvP3f2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="419088759"
+  bh=I4kycmK6ZsZGDqn1h2vHJE5lPWq2KktJ9e9ABzGmIj4=;
+  b=L7zxAffl6QY0zXjPop1xzlVGZfu8kjrD1ci6XKDRoKmf0S5pXJ4oQXkm
+   fNfe8rCIGQfWm0c7Y9TDIVOG2MKah2hZtKk+F3tqNLOZQbrC9z2oSoZFK
+   9+tKZWZz7VmyLWV4j6KrENOX8ZFtt1Z2xNtIdUjS+GBveFWPZ/ASvxsBA
+   xnNp+dut2ysBCPCQh6EcAYgrHDT9HqcbAdim1XG7XgSpR8aG64epgf16V
+   I4cyC5pmMPfPE4CTqjtsMgo4Wu3jW3JQ4CkzC5UCV3HMWG4IEAI1nxiXT
+   d4LfJJdJv9cwdZ1xAUgW3x6yO7qAI/I8Xr1F9qZIrKdP/jjsfcilalUT+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="441931591"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="419088759"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:19:20 -0700
+   d="scan'208";a="441931591"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:19:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657813872"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="819811076"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="657813872"
+   d="scan'208";a="819811076"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2023 07:19:17 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2023 07:19:17 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q4j92-0002Lv-2b;
+        id 1q4j92-0002Ly-2y;
         Thu, 01 Jun 2023 14:19:16 +0000
-Date:   Thu, 1 Jun 2023 22:18:20 +0800
+Date:   Thu, 1 Jun 2023 22:18:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
         linux-remoteproc@vger.kernel.org
@@ -59,7 +59,7 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         Melody Olvera <quic_molvera@quicinc.com>,
         Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 Subject: Re: [PATCH v4 2/2] remoteproc: qcom: Add remoteproc tracing
-Message-ID: <202306011703.PMV10K8E-lkp@intel.com>
+Message-ID: <202306011819.IWZmMEEa-lkp@intel.com>
 References: <bd949ac8225abb842630bd7f4a2d45334c58f17f.1685486994.git.quic_gokukris@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -89,8 +89,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Gokul-krishna-Krishnakuma
 base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
 patch link:    https://lore.kernel.org/r/bd949ac8225abb842630bd7f4a2d45334c58f17f.1685486994.git.quic_gokukris%40quicinc.com
 patch subject: [PATCH v4 2/2] remoteproc: qcom: Add remoteproc tracing
-config: arm64-randconfig-r036-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011703.PMV10K8E-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
+config: csky-randconfig-r025-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011819.IWZmMEEa-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -101,19 +101,27 @@ reproduce (this is a W=1 build):
         git checkout 8a5252420291719cda102eb8ca72295283540cd4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306011703.PMV10K8E-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011819.IWZmMEEa-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "__tracepoint_rproc_subdev_event" [drivers/remoteproc/qcom_common.ko] undefined!
->> ERROR: modpost: "__traceiter_rproc_subdev_event" [drivers/remoteproc/qcom_common.ko] undefined!
->> ERROR: modpost: "__tracepoint_rproc_interrupt_event" [drivers/remoteproc/qcom_q6v5.ko] undefined!
->> ERROR: modpost: "__traceiter_rproc_interrupt_event" [drivers/remoteproc/qcom_q6v5.ko] undefined!
+   csky-linux-ld: drivers/remoteproc/remoteproc_core.o: in function `rproc_stop':
+>> remoteproc_core.c:(.text+0x4c6): undefined reference to `__traceiter_rproc_stop_event'
+>> csky-linux-ld: remoteproc_core.c:(.text+0x510): undefined reference to `__tracepoint_rproc_stop_event'
+>> csky-linux-ld: remoteproc_core.c:(.text+0x518): undefined reference to `__traceiter_rproc_stop_event'
+   csky-linux-ld: drivers/remoteproc/remoteproc_core.o: in function `rproc_start':
+>> remoteproc_core.c:(.text.unlikely+0x230): undefined reference to `__traceiter_rproc_load_event'
+   csky-linux-ld: drivers/remoteproc/remoteproc_core.o: in function `trace_rproc_start_event':
+>> remoteproc_core.c:(.text.unlikely+0x30a): undefined reference to `__traceiter_rproc_start_event'
+>> csky-linux-ld: remoteproc_core.c:(.text.unlikely+0x31c): undefined reference to `__tracepoint_rproc_load_event'
+>> csky-linux-ld: remoteproc_core.c:(.text.unlikely+0x324): undefined reference to `__traceiter_rproc_load_event'
+>> csky-linux-ld: remoteproc_core.c:(.text.unlikely+0x354): undefined reference to `__tracepoint_rproc_start_event'
+>> csky-linux-ld: remoteproc_core.c:(.text.unlikely+0x358): undefined reference to `__traceiter_rproc_start_event'
 
 -- 
 0-DAY CI Kernel Test Service
