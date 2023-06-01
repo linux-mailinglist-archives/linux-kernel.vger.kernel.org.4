@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949E371F6BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0574971F6B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjFAXko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S232959AbjFAXkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 19:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjFAXkl (ORCPT
+        with ESMTP id S232746AbjFAXjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:40:41 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADC8E4E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 16:40:30 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2569094c4cdso605895a91.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 16:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685662830; x=1688254830;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0XvmQSwr0mCxObK3MzFZIgIzpC/cE3GSOx8vLaSE+0M=;
-        b=3uoqd6qN76UCqUThv8krW8tmhYBkKbfHCmX5A8TDxztGUhslLro864nOjLhTJk/dm3
-         6HkXnEKTibcnkx305OW+z/zk9KsiKstemyhs32b5Y6g/eKipjob0IeM5lfSrwMLUtPNI
-         dO/U7VY5ft1AhnhfN8PfHcvMNkdo131C3mZlRlJTHc/7KEQClinVoic9yVti9HKMFxKQ
-         ntdFFGhqPWQ6wj4cnBxXvax3R/Fhg2/NwGL65UVvW+dYZm9orwMoq423tMHvFFFPO0wD
-         UN4nVCd8wFh5KwPBgj6xuVrGiqTK/lMi+c8KZOs80oCTcUOl61Ai8zgHgom7sEBC0jeT
-         4GEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685662830; x=1688254830;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0XvmQSwr0mCxObK3MzFZIgIzpC/cE3GSOx8vLaSE+0M=;
-        b=Iezmwq4o3SwImXJEuVhKvxIZ/KSJhCWJvRoCHBadzebHcbZT7ku6E1g2gW/mNTGhmh
-         OzZN8t4Ca582uqLHjhptbJEMGieUxELs9RAvXAmFUfTrXpL5XSmBvErFd/hI9yhPaYXq
-         GutjlURpwypTmtMtzKWikfj3ndVRX6jCEIWtJBKw3mHOlXeG/ZVHLZR8j5bXTM8GoPfL
-         nMDT748TUvPmmmu/t6u7yPfvSU/3kn+MWadNEbFlYp6NAlG+QL58LzOewWcw948h33Lg
-         DEUMaRZfYC+jEaYDeimgYR+5ftaDl7YzYHOV3SCVaNLARc+Rq3eE1a5N01LELt49SwdD
-         Rwhg==
-X-Gm-Message-State: AC+VfDzEx4gRiJVUCkKYxEGu8ktxHxDg8Yk2T30aZvUpjfs54kzhlK/5
-        zRnR8FHf7ZFi/YNVIigbiBFfqKQtcX4=
-X-Google-Smtp-Source: ACHHUZ46ko/gb9Hf+MvQEv5oPOT4paCbzWhd4fIAz51nPCijZ9ImA6WrM2WZOQ/Fd1YBLztN3oj0lMjej8Y=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:d185:b0:256:3e18:39e with SMTP id
- fu5-20020a17090ad18500b002563e18039emr187908pjb.3.1685662829913; Thu, 01 Jun
- 2023 16:40:29 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 16:40:28 -0700
-In-Reply-To: <ZHklss/E5uQdRktD@google.com>
-Mime-Version: 1.0
-References: <20230526235048.2842761-1-seanjc@google.com> <20230526235048.2842761-4-seanjc@google.com>
- <ZHklss/E5uQdRktD@google.com>
-Message-ID: <ZHksbJGKbNJpNcJI@google.com>
-Subject: Re: [PATCH v2 3/3] KVM: selftests: Add test for race in kvm_recalculate_apic_map()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 19:39:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FEE136;
+        Thu,  1 Jun 2023 16:39:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6EE646B3;
+        Thu,  1 Jun 2023 23:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA09C433EF;
+        Thu,  1 Jun 2023 23:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685662789;
+        bh=3jR6coTEIcQtDZcNzSMSFv+M4QM62RvBoRRP0rTVqDY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fwc7Tv0DaRLNwBp0LIrrU8Ot+TZ8GxkknFOtF7HdZbG2BM2+QkEHGkrNQAhjeqfKC
+         95COu5tIu/DBAA9fFFzhQzVZG0gZBic5SJzHbJJIGGUGSyuDRZQfJgSRWRjOjahJtL
+         v5QQVcdPfunXzlsLY0XhxNr9yg0W2SMHZO6Me3den1nsWJWcablV46r1Wh+rSqhM+3
+         8OT+OgEPDdJf+Dy37ih6KM1QJ75q7NnSQj42MVexWoBqIWxH48DlgR1d5Q/IEw6Q0R
+         MhBTJXdyGFnICpULkSxMc/POPCMFpRJJCCMErrRmjGRxyZN2/B3A8B6qNtral0teVk
+         s7p9MKckvfIVw==
+Date:   Thu, 1 Jun 2023 17:40:41 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2][next] scsi: lpfc: Avoid -Wstringop-overflow warning
+Message-ID: <ZHkseX6TiFahvxJA@work>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023, Sean Christopherson wrote:
-> On Fri, May 26, 2023, Sean Christopherson wrote:
-> > From: Michal Luczaj <mhal@rbox.co>
-> > 
-> > Keep switching between LAPIC_MODE_X2APIC and LAPIC_MODE_DISABLED during
-> > APIC map construction to hunt for TOCTOU bugs in KVM.  KVM's optimized map
-> > recalc makes multiple passes over the list of vCPUs, and the calculations
-> > ignore vCPU's whose APIC is hardware-disabled, i.e. there's a window where
-> > toggling LAPIC_MODE_DISABLED is quite interesting.
-> > 
-> > Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> > Co-developed-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/Makefile          |  1 +
-> >  .../kvm/x86_64/recalc_apic_map_race.c         | 76 +++++++++++++++++++
-> >  2 files changed, 77 insertions(+)
-> >  create mode 100644 tools/testing/selftests/kvm/x86_64/recalc_apic_map_race.c
-> 
-> Since there's another bug+test related to kvm_recalculate_apic_map()[*], I think
-> it makes sense to name this recalc_apic_map_test, and then fold the LDR test into
-> this one.  The LDR test is tiny enough that I don't think it's worth a separate
-> binary, even though I generally prefer to keep the selftests small.
+Prevent any potential integer wrapping issue, and avoid a
+-Wstringop-overflow warning by using the check_mul_overflow() helper.
 
-Actually, the x2APIC test is a better fit in xapic_state_test.  I'll probably
-still rename this to match (almost) every other selftest name.
+drivers/scsi/lpfc/lpfc.h:
+837:#define LPFC_RAS_MIN_BUFF_POST_SIZE (256 * 1024)
+
+drivers/scsi/lpfc/lpfc_debugfs.c:
+2266 size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
+
+this can wrap to negative if cfg_ras_fwlog_buffsize is large
+enough. And even when in practice this is not possible (due to
+phba->cfg_ras_fwlog_buffsize never being larger than 4[1]), the
+compiler is legitimately warning us about potentially buggy code.
+
+Fix the following warning seen under GCC-13:
+In function ‘lpfc_debugfs_ras_log_data’,
+    inlined from ‘lpfc_debugfs_ras_log_open’ at drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
+drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: ‘memcpy’ specified bound between 18446744071562067968 and 18446744073709551615 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
+ 2210 |                         memcpy(buffer + copied, dmabuf->virt,
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2211 |                                size - copied - 1);
+      |                                ~~~~~~~~~~~~~~~~~~
+
+Link: https://github.com/KSPP/linux/issues/305
+Link: https://lore.kernel.org/linux-hardening/CABPRKS8zyzrbsWt4B5fp7kMowAZFiMLKg5kW26uELpg1cDKY3A@mail.gmail.com/ [1]
+Co-developed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v2:
+ - Use check_mul_overflow() helper (Kees).
+
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/ZHZq7AV9Q2WG1xRB@work/
+
+ drivers/scsi/lpfc/lpfc_debugfs.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index bdf34af4ef36..7f9b221e7c34 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -2259,11 +2259,15 @@ lpfc_debugfs_ras_log_open(struct inode *inode, struct file *file)
+ 		goto out;
+ 	}
+ 	spin_unlock_irq(&phba->hbalock);
+-	debug = kmalloc(sizeof(*debug), GFP_KERNEL);
++
++	if (check_mul_overflow(LPFC_RAS_MIN_BUFF_POST_SIZE,
++			       phba->cfg_ras_fwlog_buffsize, &size))
++		goto out;
++
++	debug = kzalloc(sizeof(*debug), GFP_KERNEL);
+ 	if (!debug)
+ 		goto out;
+ 
+-	size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
+ 	debug->buffer = vmalloc(size);
+ 	if (!debug->buffer)
+ 		goto free_debug;
+-- 
+2.34.1
+
