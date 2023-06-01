@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08157194F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CA47194F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbjFAICW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        id S231978AbjFAICm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjFAICC (ORCPT
+        with ESMTP id S232067AbjFAIC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:02:02 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163E11BF
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:01:33 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-568928af8f5so9665327b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:01:33 -0700 (PDT)
+        Thu, 1 Jun 2023 04:02:29 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5F1E4D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:02:13 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1a2188fdf17so539111fac.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685606488; x=1688198488;
+        d=google.com; s=20221208; t=1685606523; x=1688198523;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N9YFgvxYasGOc52hSkyIdHgDbZQErSjGRMw/oOdPziU=;
-        b=KHQ6pezybqAMTHHZ8WiEt5Y4JrHEW01ffkpAxUAmUiroeo/5qdYlrTmnYDVXWXcHGt
-         1/mopfyHFotT6CZilwukCVa+wkgmGHftlaD3GaaSoU9E/8SPAEo/oi4Gg3N7GA3bzuQB
-         7Bcdd1KfXygyM2G0zqS/T8o/cNVkXFUJ840ORoCp6XtK/56Cm6dyiXyIWVLcLgb7D21e
-         LrHPJLWWXabfpK4L0FOIEcu9OMGkCUGDt+XZtzi0bBLjQ0fzlqxufcWZSNGzVMyHC4si
-         kC0dOIAssKBI8I5wdkOmnLM21PEZ7ahnfK1DAYIkyHFAesOOFDknuRM+8VPZgFNALw0E
-         tmoA==
+        bh=WRZjZYxlKfmozXKP41fYYZOiKNIE71+gHVM0u7M437U=;
+        b=KoqoJfijI4kXQtFyXjro5tEMpsXudDi9NBfO3/NnE9oRN+G9VdXaDV+kWN3hCvPNgX
+         H01p3afdbrn/3T/FOkBZgEADIM5qu5/zDF3hLyY8SB0sayT0I7OQOIaQqajlM7iv44lU
+         ohSQxDvC3dyqXDHF+R+ZHXC5rA7UIwtJZ2iBhnemQwFZRDli0mx5kRsGULql3L8eLxWz
+         ybNvpx3vdiwITO3tJThUchWTAdOXpoWjN/Gqtja4VNd99yBh7djy7XMNI8Jx5kYIJz6h
+         U1M0p0clm9Xnd81hJ1B1CWSDmd/u10XJ4kuoTDc9vTEvUhDIxlPMheaR9wOf+qlDtSjx
+         Nl/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685606488; x=1688198488;
+        d=1e100.net; s=20221208; t=1685606523; x=1688198523;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N9YFgvxYasGOc52hSkyIdHgDbZQErSjGRMw/oOdPziU=;
-        b=FiIqijHVxtJGwsl85d7o09GtpqS4KE1t0tFejlxAWDMmGRwPVs7EjuSaZXBHwXZAd9
-         gFAzOLZBpjuJLgaOPX2yvTQbMWrPiLM/bFSQRjNH/be8DuDlZM5rD1lVRi5IV4HksR5P
-         W7ynAluU+6G8NH/c97/MsHa75dxtJIswwg6hUWNHFuHU4IJ4aYM1KAfnuV5fLfOuKG51
-         GsK2aKA+3yYA3nPfGvMoblXsFbqVz4df1gcL5Xf1J183zUJ7RysMF9gjii7+5NNd+6dn
-         +y1EqX9Al+yxFAto3ofTDoZ3FREGYNfCAWOpeRG3zE0zr70tivWSIOfBjGKTqUUgW64V
-         M2bA==
-X-Gm-Message-State: AC+VfDxt/Zm62UHdzVvSuoYVEJSlfMq98Q1KXyP9grds580sB4fQN/ON
-        Kcb9LcdIL0msgTcMEXTo1B80a/hQxx7yas2WiU9lqA==
-X-Google-Smtp-Source: ACHHUZ6lblCs2Xm3DyDKlSuHvyjWhitGv4+LXcfblidMGCwWUFHyZMmO48y0apGeQ/v0yHRXEF+K3RFeQEfv0IKfupw=
-X-Received: by 2002:a0d:d651:0:b0:55d:626e:3dcf with SMTP id
- y78-20020a0dd651000000b0055d626e3dcfmr1069948ywd.12.1685606488382; Thu, 01
- Jun 2023 01:01:28 -0700 (PDT)
+        bh=WRZjZYxlKfmozXKP41fYYZOiKNIE71+gHVM0u7M437U=;
+        b=XsJXfhS82B3HLK6L7WnDsuw3O66HVMxK8NfzQa80JDDliM7Hewj4RUvgozmfhyVx+g
+         U7PEmDULxwzCIT5RHVSzQY12x2OZJRKd0CifvZ/ZPhkPEDWiznCoVMeJz9UqQ4cgP10t
+         +PHYN3GxZ72T1Cm8NXJD0dwmEo0nMtqjrtZ3/kuj3dnk47PoDgh0pzChS0xhS4aTh6VR
+         U0uuAPrWVymSye9WDWvElS05NzBamr1zUs3vYdRwYdrHVCxcEqIxFJ6taDb4muhs0vU0
+         +aTPCxfHztwp4lqVxS6yJEbKAF5v8agbfAAkyHYxyNCcWsQXqR/eGXBRL8NxYBEwQsze
+         Escg==
+X-Gm-Message-State: AC+VfDwAz7E03b3tfvWtGcY9ghNl8RgJPrAVx+5N4bSwiCrAbe7k3h8D
+        gO+1t5s/ayGfUPATvOPeKm6giZvoQ0hpWecv+nqbbw==
+X-Google-Smtp-Source: ACHHUZ6tXNmDjsRHI+jeobC1q7S70Lux0KBOV/EkIeFfLX/4vW8c/r1AL35d2Z/3qgBRKFDtvtsfPV4imG35yN8bJ/s=
+X-Received: by 2002:a05:6870:e606:b0:192:7320:ce with SMTP id
+ q6-20020a056870e60600b00192732000cemr4703852oag.40.1685606522700; Thu, 01 Jun
+ 2023 01:02:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230522112058.2965866-1-talumbau@google.com>
-In-Reply-To: <20230522112058.2965866-1-talumbau@google.com>
+References: <20230522112058.2965866-1-talumbau@google.com> <20230522112058.2965866-2-talumbau@google.com>
+In-Reply-To: <20230522112058.2965866-2-talumbau@google.com>
 From:   Yuanchu Xie <yuanchu@google.com>
-Date:   Thu, 1 Jun 2023 16:01:16 +0800
-Message-ID: <CAJj2-QGuYP68ZVfb1PAHmCnS8H+Bzkvpz3c7G9An4=FL-=JApg@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable 1/4] mm: multi-gen LRU: use macro for bitmap
+Date:   Thu, 1 Jun 2023 16:01:51 +0800
+Message-ID: <CAJj2-QG0cobX72VCOnbyZcb9FREvfj87Dr=6WR0dSHD0u03gDQ@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable 2/4] mm: multi-gen LRU: cleanup lru_gen_soft_reclaim()
 To:     "T.J. Alumbaugh" <talumbau@google.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
@@ -76,27 +76,73 @@ Reviewed-by: Yuanchu Xie <yuanchu@google.com>
 On Mon, May 22, 2023 at 7:21=E2=80=AFPM T.J. Alumbaugh <talumbau@google.com=
 > wrote:
 >
-> Use DECLARE_BITMAP macro when possible.
+> lru_gen_soft_reclaim() gets the lruvec from the memcg and node ID to keep=
+ a
+> cleaner interface on the caller side.
 >
 > Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
 > ---
->  mm/vmscan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  include/linux/mmzone.h | 4 ++--
+>  mm/memcontrol.c        | 2 +-
+>  mm/vmscan.c            | 4 +++-
+>  3 files changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 3a68326c9989..5a7ada0413da 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -534,7 +534,7 @@ void lru_gen_exit_memcg(struct mem_cgroup *memcg);
+>  void lru_gen_online_memcg(struct mem_cgroup *memcg);
+>  void lru_gen_offline_memcg(struct mem_cgroup *memcg);
+>  void lru_gen_release_memcg(struct mem_cgroup *memcg);
+> -void lru_gen_soft_reclaim(struct lruvec *lruvec);
+> +void lru_gen_soft_reclaim(struct mem_cgroup *memcg, int nid);
+>
+>  #else /* !CONFIG_MEMCG */
+>
+> @@ -585,7 +585,7 @@ static inline void lru_gen_release_memcg(struct mem_c=
+group *memcg)
+>  {
+>  }
+>
+> -static inline void lru_gen_soft_reclaim(struct lruvec *lruvec)
+> +static inline void lru_gen_soft_reclaim(struct mem_cgroup *memcg, int ni=
+d)
+>  {
+>  }
+>
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index d31fb1e2cb33..738ba18f3a0c 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -485,7 +485,7 @@ static void mem_cgroup_update_tree(struct mem_cgroup =
+*memcg, int nid)
+>
+>         if (lru_gen_enabled()) {
+>                 if (soft_limit_excess(memcg))
+> -                       lru_gen_soft_reclaim(&memcg->nodeinfo[nid]->lruve=
+c);
+> +                       lru_gen_soft_reclaim(memcg, nid);
+>                 return;
+>         }
 >
 > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 4637f6462e9c..cf18873a36b9 100644
+> index cf18873a36b9..e088db138f5f 100644
 > --- a/mm/vmscan.c
 > +++ b/mm/vmscan.c
-> @@ -4144,7 +4144,7 @@ static void walk_pmd_range(pud_t *pud, unsigned lon=
-g start, unsigned long end,
->         unsigned long next;
->         unsigned long addr;
->         struct vm_area_struct *vma;
-> -       unsigned long bitmap[BITS_TO_LONGS(MIN_LRU_BATCH)];
-> +       DECLARE_BITMAP(bitmap, MIN_LRU_BATCH);
->         unsigned long first =3D -1;
->         struct lru_gen_mm_walk *walk =3D args->private;
+> @@ -4846,8 +4846,10 @@ void lru_gen_release_memcg(struct mem_cgroup *memc=
+g)
+>         }
+>  }
 >
+> -void lru_gen_soft_reclaim(struct lruvec *lruvec)
+> +void lru_gen_soft_reclaim(struct mem_cgroup *memcg, int nid)
+>  {
+> +       struct lruvec *lruvec =3D get_lruvec(memcg, nid);
+> +
+>         /* see the comment on MEMCG_NR_GENS */
+>         if (lru_gen_memcg_seg(lruvec) !=3D MEMCG_LRU_HEAD)
+>                 lru_gen_rotate_memcg(lruvec, MEMCG_LRU_HEAD);
 > --
 > 2.40.1.698.g37aff9b760-goog
 >
