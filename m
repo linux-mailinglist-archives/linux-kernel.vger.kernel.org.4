@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D71719E01
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27099719D4D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233847AbjFAN20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S233455AbjFANVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233894AbjFAN2L (ORCPT
+        with ESMTP id S233406AbjFANVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:28:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCE4199;
-        Thu,  1 Jun 2023 06:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BAEC64473;
-        Thu,  1 Jun 2023 13:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63907C4339C;
-        Thu,  1 Jun 2023 13:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685626070;
-        bh=lYvcMNrBCOjDHywtvbagoDsSmsFgmvin0K6p9+lv3jg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PV4b5T3BBN9kjHKxjAiPXIkYli+CfyTJJkA+5Q1VJLuaXQhewc76YYH3zimdbNPmO
-         hIopYe9UjqsLfREZPQEMeA6I4RovknSDZriHPfNk+0DrWXHAYnKSpu+8hnDZPHzKRa
-         k7LwgpIUv23M0YdiPuQB1Xpzm66xQXnBPWuGK8RY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 6.1 00/42] 6.1.32-rc1 review
-Date:   Thu,  1 Jun 2023 14:21:09 +0100
-Message-Id: <20230601131939.051934720@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.1
+        Thu, 1 Jun 2023 09:21:42 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85B0797
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:21:40 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Ax3Opjm3hkqE8DAA--.2859S3;
+        Thu, 01 Jun 2023 21:21:39 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx87Bhm3hkq02EAA--.18683S3;
+        Thu, 01 Jun 2023 21:21:38 +0800 (CST)
+Message-ID: <81276850-d371-e61d-e13d-3a90aa950981@loongson.cn>
+Date:   Thu, 1 Jun 2023 21:21:37 +0800
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.1.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.1.32-rc1
-X-KernelTest-Deadline: 2023-06-03T13:19+00:00
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 2/6] drm/etnaviv: add a dedicated function to get
+ various clocks
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230530160643.2344551-1-suijingfeng@loongson.cn>
+ <20230530160643.2344551-3-suijingfeng@loongson.cn>
+ <85565974d45b5553035aeabe8a98a667718482d5.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <85565974d45b5553035aeabe8a98a667718482d5.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Dx87Bhm3hkq02EAA--.18683S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Kw1rtF15ZF48uF1fGFW8tFb_yoW8tw4UpF
+        s7J3W5GrWUury0k347Xr1DGrsakr1Iy3W2k3ZYvF92vrn8uF1kKw4YkrWYg3Wrur10qFWF
+        kw4UGr4qka4F9FDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2TKZDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,211 +72,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.1.32 release.
-There are 42 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+Hi,
 
-Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
-Anything received after that time might be too late.
+On 2023/6/1 02:07, Lucas Stach wrote:
+>> +static int etnaviv_gpu_clk_get(struct etnaviv_gpu *gpu)
+>> +{
+>> +	struct device *dev = gpu->dev;
+>> +
+>> +	if (gpu->no_clk)
+>> +		return 0;
+>> +
+>> +	gpu->clk_reg = devm_clk_get_optional(dev, "reg");
+>> +	DBG("clk_reg: %p", gpu->clk_reg);
+>> +	if (IS_ERR(gpu->clk_reg))
+>> +		return PTR_ERR(gpu->clk_reg);
+>> +
+>> +	gpu->clk_bus = devm_clk_get_optional(dev, "bus");
+>> +	DBG("clk_bus: %p", gpu->clk_bus);
+>> +	if (IS_ERR(gpu->clk_bus))
+>> +		return PTR_ERR(gpu->clk_bus);
+>> +
+>> +	gpu->clk_core = devm_clk_get(dev, "core");
+>> +	DBG("clk_core: %p", gpu->clk_core);
+>> +	if (IS_ERR(gpu->clk_core))
+>> +		return PTR_ERR(gpu->clk_core);
+>> +	gpu->base_rate_core = clk_get_rate(gpu->clk_core);
+>> +
+>> +	gpu->clk_shader = devm_clk_get_optional(dev, "shader");
+>> +	DBG("clk_shader: %p", gpu->clk_shader);
+>> +	if (IS_ERR(gpu->clk_shader))
+>> +		return PTR_ERR(gpu->clk_shader);
+>> +	gpu->base_rate_shader = clk_get_rate(gpu->clk_shader);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int etnaviv_gpu_clk_enable(struct etnaviv_gpu *gpu)
+>>   {
+>>   	int ret;
+>>   
+>> +	if (gpu->no_clk)
+>> +		return 0;
+>> +
+> I don't see why this would be needed?
+I have just tested, this do not needed.
+> If your platform doesn't provide
+> CONFIG_HAVE_CLK all those functions should be successful no-ops, so
+> there is no need to special case this in the driver.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-and the diffstat can be found below.
+My platform do enable CONFIG_HAVE_CLK,
 
-thanks,
+for ls3a5000 + ls7a1000, my system do not provide device tree support,
 
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.1.32-rc1
-
-Yanteng Si <siyanteng@loongson.cn>
-    tools headers UAPI: Sync the linux/in.h with the kernel sources
-
-Paul Blakey <paulb@nvidia.com>
-    netfilter: ctnetlink: Support offloaded conntrack entry deletion
-
-Gautham R. Shenoy <gautham.shenoy@amd.com>
-    cpufreq: amd-pstate: Add ->fast_switch() callback
-
-Wyes Karny <wyes.karny@amd.com>
-    cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
-
-Anuj Gupta <anuj20.g@samsung.com>
-    block: fix bio-cache for passthru IO
-
-Ido Schimmel <idosch@nvidia.com>
-    Revert "thermal/drivers/mellanox: Use generic thermal_zone_get_trip() function"
-
-Ruihan Li <lrh2000@pku.edu.cn>
-    bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
-
-Mario Limonciello <mario.limonciello@amd.com>
-    drm/amd: Don't allow s0ix on APUs older than Raven
-
-Hariprasad Kelam <hkelam@marvell.com>
-    octeontx2-af: Add validation for lmac type
-
-Claudiu Beznea <claudiu.beznea@microchip.com>
-    dmaengine: at_xdmac: restore the content of grws register
-
-Claudiu Beznea <claudiu.beznea@microchip.com>
-    dmaengine: at_xdmac: do not resume channels paused by consumers
-
-Claudiu Beznea <claudiu.beznea@microchip.com>
-    dmaengine: at_xdmac: disable/enable clock directly on suspend/resume
-
-Zhu Yanjun <yanjun.zhu@linux.dev>
-    RDMA/rxe: Fix the error "trying to register non-static key in rxe_cleanup_task"
-
-Johannes Berg <johannes.berg@intel.com>
-    wifi: iwlwifi: mvm: fix potential memory leak
-
-Haim Dreyfuss <haim.dreyfuss@intel.com>
-    wifi: iwlwifi: mvm: support wowlan info notification version 2
-
-Eric Huang <echuang@realtek.com>
-    wifi: rtw89: correct 5 MHz mask setting
-
-David Epping <david.epping@missinglinkelectronics.com>
-    net: phy: mscc: enable VSC8501/2 RGMII RX clock
-
-Yunsheng Lin <linyunsheng@huawei.com>
-    page_pool: fix inconsistency for page_pool_ring_[un]lock()
-
-Qingfang DENG <qingfang.deng@siflower.com.cn>
-    net: page_pool: use in_softirq() instead
-
-Yan Zhao <yan.y.zhao@intel.com>
-    vfio/type1: check pfn valid before converting to struct page
-
-Tian Lan <tian.lan@twosigma.com>
-    blk-mq: fix race condition in active queue accounting
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Incorrectly handling copied_seq
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Wake up polling after data copy
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: TCP data stall on recv before accept
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Handle fin correctly
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Improved check for empty queue
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Reschedule is now done through backlog
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Convert schedule_work into delayed_work
-
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Pass skb ownership through read_skb
-
-Henning Schild <henning.schild@siemens.com>
-    gpio-f7188x: fix chip name and pin count on Nuvoton chip
-
-Shay Drory <shayd@nvidia.com>
-    net/mlx5: E-switch, Devcom, sync devcom events and devcom comp register
-
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: preserve decryption status of skbs when needed
-
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: factor out copying skb data
-
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: force mixed decrypted records into copy mode
-
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: fix determining record length in copy mode
-
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: set the skb->len of detached / CoW'ed skbs
-
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: device: fix checking decryption status
-
-Mario Limonciello <mario.limonciello@amd.com>
-    platform/x86/amd/pmf: Fix CnQF and auto-mode after resume
-
-Jeremy Sowden <jeremy@azazel.net>
-    selftests/bpf: Fix pkg-config call building sign-file
-
-Sudeep Holla <sudeep.holla@arm.com>
-    firmware: arm_ffa: Fix usage of partition info get count flag
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    ipv{4,6}/raw: fix output xfrm lookup wrt protocol
-
-Jakub Sitnicki <jakub@cloudflare.com>
-    inet: Add IP_LOCAL_PORT_RANGE socket option
+that's is to say, there is no DT support.
 
 
--------------
+For ls3a4000 + ls7a1000 platform, the system has DT support, but don't 
+has CLK drivers implement toward the clock tree.
 
-Diffstat:
+typically, our platform's firmware will do such thing(setting a default 
+working frequency).
 
- Makefile                                           |   4 +-
- block/blk-map.c                                    |   2 +-
- block/blk-mq-tag.c                                 |  12 +-
- drivers/cpufreq/amd-pstate.c                       |  45 ++++-
- drivers/dma/at_xdmac.c                             |  60 +++++-
- drivers/firmware/arm_ffa/driver.c                  |   3 +-
- drivers/gpio/Kconfig                               |   2 +-
- drivers/gpio/gpio-f7188x.c                         |  28 +--
- drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c           |   3 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   7 +-
- drivers/infiniband/sw/rxe/rxe_qp.c                 |   7 +-
- drivers/net/ethernet/marvell/octeontx2/af/cgx.c    |   8 +
- drivers/net/ethernet/mellanox/mlx5/core/eswitch.h  |   1 +
- .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |   9 +-
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 ++++++++++++++++-----
- drivers/net/phy/mscc/mscc.h                        |   1 +
- drivers/net/phy/mscc/mscc_main.c                   |  54 +++---
- drivers/net/wireless/intel/iwlwifi/fw/api/d3.h     |  37 +++-
- drivers/net/wireless/intel/iwlwifi/mvm/d3.c        |  35 +++-
- drivers/net/wireless/realtek/rtw89/rtw8852c.c      |   9 +-
- drivers/platform/x86/amd/pmf/core.c                |  32 +++-
- drivers/vfio/vfio_iommu_type1.c                    |   5 +
- include/linux/skbuff.h                             |  10 +
- include/linux/skmsg.h                              |   3 +-
- include/net/inet_sock.h                            |   4 +
- include/net/ip.h                                   |   5 +-
- include/net/page_pool.h                            |  18 --
- include/net/tcp.h                                  |  10 +
- include/net/tls.h                                  |   1 +
- include/uapi/linux/in.h                            |   2 +
- net/bluetooth/hci_sock.c                           |  28 +++
- net/core/page_pool.c                               |  34 +++-
- net/core/skmsg.c                                   |  81 ++++----
- net/core/sock_map.c                                |   3 +-
- net/ipv4/inet_connection_sock.c                    |  25 ++-
- net/ipv4/inet_hashtables.c                         |   2 +-
- net/ipv4/ip_sockglue.c                             |  30 ++-
- net/ipv4/raw.c                                     |   5 +-
- net/ipv4/tcp.c                                     |  11 +-
- net/ipv4/tcp_bpf.c                                 |  79 +++++++-
- net/ipv4/udp.c                                     |   9 +-
- net/ipv6/raw.c                                     |   3 +-
- net/netfilter/nf_conntrack_netlink.c               |   8 -
- net/sctp/socket.c                                  |   2 +-
- net/tls/tls.h                                      |   5 +
- net/tls/tls_device.c                               |  22 +--
- net/tls/tls_strp.c                                 | 185 ++++++++++++++----
- net/unix/af_unix.c                                 |   7 +-
- tools/include/uapi/linux/in.h                      |   1 +
- tools/testing/selftests/bpf/Makefile               |   2 +-
- 50 files changed, 881 insertions(+), 287 deletions(-)
 
+When I first saw etnaviv, I'm also astonishing.
+
+I don't know why there so much clock controllable.
+
+As far as I can understand, my system/hardware have only one clock,
+
+It shall corresponding to the core clk.
+
+> Or does your platform in fact provide a clk subsystem, just the GPU
+> clocks are managed by it?
+>
+> Also all those functions are fine with being called on a NULL clk, so
+> shouldn't it be enough to simply avoid calling etnaviv_gpu_clk_get() in
+> the PCI device case?
+>
+> Regards,
+> Lucas
+>
+-- 
+Jingfeng
 
