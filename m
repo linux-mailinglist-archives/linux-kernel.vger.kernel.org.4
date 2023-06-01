@@ -2,154 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F86671952C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365CD719535
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjFAIPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S231848AbjFAIQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjFAIPW (ORCPT
+        with ESMTP id S231151AbjFAIQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:15:22 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCC5C0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:15:17 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af28303127so7299611fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685607316; x=1688199316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/wwwjM9P/GD9y2WtF65nLtVcIMEiwxXul9Ob8jZmYYk=;
-        b=XI3ldMgL0wgSZCxVcqoTaJKj8OW3UmqWeaQ0GC3A0n00XtrjXX71IOLLTytWsCZmfS
-         ZBhojKovQxnkZWjbYM3OqfmBKiYKw67kSgXDGgx9OekKZHP2vCfF3/H9pEBNED5pR+B0
-         HbivpF/e5u9dbmyoIU3uFFpXTlxwkzWCyfytvv3dAN615J781KE7nUQiSrM7qQhpXFqR
-         q5jlql1mv1I2hjm6ogx+fYQuBBAxwSqZR6X3weutBUdTXWEGYyWu/8kfEDub7nqAptrc
-         WlkYyRBO8W1cvyn3Wg/AdZHc5849fmMfy/8AF4M2JvCJWZ47dBOsFCZdLkBPM/xywO2s
-         Lgpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685607316; x=1688199316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/wwwjM9P/GD9y2WtF65nLtVcIMEiwxXul9Ob8jZmYYk=;
-        b=coxGDmQjR7m4Ig/U/mGv8cITFNbfE4julyDEHUPb0P+OtDgpC/STsj8iRoBCXxZcTH
-         RTGk2ZhC2DrAToOneyBJ5nKfdJdwdwdRsaplnLi1oadweyiSdJssSpwTVMdxO3W17er2
-         0r4883QHz1oQvLf+SAoraMFmCZZWVG3dZKwY5Z1eJU+QuHr0lsFxGJXhxoFXXYpMzLV4
-         8QCYihEkNbYiFeIOdmRO4/29jwW1G+dcYR47vI1D9Q8QsaVfmtwAAmIo/GOthdAtrkWj
-         Kq8ONTwc9csXb7+0RazIORaLDySwZdJ4w5/Yc9juJdeaWZFygl4X4b4J1gejXVCuOlP8
-         M/EQ==
-X-Gm-Message-State: AC+VfDxXISzsm6kcRmLby0+1X8ax7fhIMLYtJWdE6nSvMIoMQdDJp54D
-        CKitYZtK+lqghIIhVGEf3hiTLg==
-X-Google-Smtp-Source: ACHHUZ6iiQPR2tf93aAvw7Aij8815QXY9Vq0T9piVYxnhMCB9kcVvtlaaPViZzJ/DeRWFf/5vVtajg==
-X-Received: by 2002:a2e:9dc1:0:b0:2ac:819f:f73f with SMTP id x1-20020a2e9dc1000000b002ac819ff73fmr4470033ljj.20.1685607316119;
-        Thu, 01 Jun 2023 01:15:16 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id v12-20020a2e990c000000b002af01da6c67sm3692769lji.32.2023.06.01.01.15.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 01:15:15 -0700 (PDT)
-Message-ID: <e98a2901-7ad4-5a1f-5739-64750836d396@linaro.org>
-Date:   Thu, 1 Jun 2023 10:15:13 +0200
+        Thu, 1 Jun 2023 04:16:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D119F;
+        Thu,  1 Jun 2023 01:16:50 -0700 (PDT)
+Received: from [192.168.127.158] (unknown [118.107.131.147])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 995F86606E8C;
+        Thu,  1 Jun 2023 09:16:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685607409;
+        bh=BA3QmEKFqxqHdhhS4O9rOqqxg4EqkWr8qScJTtUpscw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=BW8rTdw4F+NWs34EXLaSqYAKE0lj+Cv98P4+2+RNl+iH0+ECZUTXf4/7QhoYlrZJ1
+         tHsJU8Mv9S2CiDymCEnw6J1uQVLylqwpKTuU8OZx7ObMcJ6tDqmYGsaOaV9XWTrlKu
+         0TDMFNgWAZ2pXvXEwxr7mtw9LLAIOXXiW/Hz3wy1p6ZQk2aJiqZzKluI8obkWl5yyf
+         Dfe93RFyS8Q7qzJ7hH6RxATRLtXGd8q7qpubaBB6coat4mHcZcaSgYe5F0ubVvzUws
+         APPbBmq5x4AxTM/ddC2/4NMC2YoQisDIS3nI3YOhZAFLyM5eMAOzLpFTvwEfjbukgV
+         poxEWcIJUaduA==
+Message-ID: <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
+Date:   Thu, 1 Jun 2023 13:16:14 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 0/8] Flush RSC votes properly on more RPMh platforms
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
 Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>
-References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
- <f5875c10-21c1-43b6-4ce6-25b968588412@linaro.org>
- <CAD=FV=Um8U2MQsrv+ngQg_h-aQMi5_yy6Lrj3ovr7eV1PC+Wnw@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAD=FV=Um8U2MQsrv+ngQg_h-aQMi5_yy6Lrj3ovr7eV1PC+Wnw@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZHfAOAKj1ZQJ+zSy@x1n>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/1/23 2:46 AM, Peter Xu wrote:
+> Muhammad,
+> 
+> Sorry, I probably can only review the non-interface part, and leave the
+> interface/buffer handling, etc. review for others and real potential users
+> of it..
+Thank you so much for the review. I think mostly we should be okay with
+interface as everybody has been making suggestions over the past revisions.
+
+> 
+> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
+>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+>> +					 unsigned long addr, pte_t *ptep,
+>> +					 pte_t ptent)
+>> +{
+>> +	pte_t old_pte;
+>> +
+>> +	if (!huge_pte_none(ptent)) {
+>> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
+>> +		ptent = huge_pte_mkuffd_wp(old_pte);
+>> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
+> 
+> huge_ptep_modify_prot_start()?
+Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
+from its pte version.
+
+> 
+> The other thing is what if it's a pte marker already?  What if a hugetlb
+> migration entry?  Please check hugetlb_change_protection().
+I've updated it in more better way. Please let me know what do you think
+about the following:
+
+static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+					 unsigned long addr, pte_t *ptep,
+					 pte_t ptent)
+{
+	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+		return;
+
+	if (is_hugetlb_entry_migration(ptent))
+		set_huge_pte_at(vma->vm_mm, addr, ptep,
+				pte_swp_mkuffd_wp(ptent));
+	else if (!huge_pte_none(ptent))
+		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+					huge_pte_mkuffd_wp(ptent));
+	else
+		set_huge_pte_at(vma->vm_mm, addr, ptep,
+				make_pte_marker(PTE_MARKER_UFFD_WP));
+}
+
+As we always set UNPOPULATED, so markers are always set on none ptes
+initially. Is it possible that a none pte becomes present, then swapped and
+finally none again? So I'll do the following addition for make_uffd_wp_pte():
+
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+vm_area_struct *vma,
+ 	} else if (is_swap_pte(ptent)) {
+ 		ptent = pte_swp_mkuffd_wp(ptent);
+ 		set_pte_at(vma->vm_mm, addr, pte, ptent);
++	} else {
++		set_pte_at(vma->vm_mm, addr, pte,
++			   make_pte_marker(PTE_MARKER_UFFD_WP));
+ 	}
+ }
 
 
-On 31.05.2023 23:45, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, May 31, 2023 at 7:26 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> On 31.05.2023 15:22, Konrad Dybcio wrote:
->>> As pointed out in [1], the Linux implementation of RSC basically requires
->>> (even if not explicitly) that we point it to a power domain which
->>> represents the power state of the CPUs. In an effort to fulfill that
->>> requirement, make it required in bindings and hook it up on all platforms
->>> where I was able to do. This means all RPMh platforms, except
->>>
->>> - SC7180
->>> - SC7280
->>> - SA8775
->>>
->>> As there wasn't an idle-states setup (which may be on purpose for CrOS
->>> devices, certainly not for Windows SC7[12]80s) that I could validate.
->>> (Doug, Bartosz, could you guys look into your respective platforms of
->>> interest here?)
->>>
->>> This series also adds support for idle states on SM6350, as I was able
->>> to add and test that.
->> I noticed that 7280 is WIP:
->>
->> https://lore.kernel.org/lkml/20230424110933.3908-4-quic_mkshah@quicinc.com/
-> 
-> Right. For sc7180 Chromebooks we don't use OSI (OS Initiated) mode but
-> instead use PC (Platform Coordinated) mode. As I understand it, that
-> means we take a different path through all this stuff.
-> 
-> That being said, in the sc7280 thread you pointed at, Bjorn and Ulf
-> said that we could use the new device tree snippets for sc7280 even
-> before the ATF update. If I'm reading the thread correctly and the
-> same applies to sc7180:
-> 
-> 1. New DT plus firmware that doesn't support OSI - OK
-> 2. New DT plus firmware that supports OSI - OK after code changes
-> 3. Old DT plus firmware that doesn't support OSI - OK
-> 4. Old DT plus firmware that supports OSI - Not OK
-> 
-> For sc7180 Chromebooks we'll never have firmware that supports OSI.
-> That means that, assuming I'm understanding correctly, we actually
-> could move the DT to represent things the new way. Presumably this
-> would be important for sc7180 devices that originally shipped with
-> Windows (I think support for one of these is underway).
-It's even merged now!
 
-Yeah, AFAICT all you said makes sense
 
-I don't however know how you tell RSC driver that your platform is
-going to sleep when using PC mode..
-
-KOnrad
 > 
-> -Doug
+>> +	} else {
+>> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+>> +	}
+>> +}
+>> +#endif
+> 
+> [...]
+> 
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +				  unsigned long end, struct mm_walk *walk)
+>> +{
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	unsigned long addr = end;
+>> +	pte_t *pte, *orig_pte;
+>> +	spinlock_t *ptl;
+>> +	bool is_written;
+>> +	int ret = 0;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +	ptl = pmd_trans_huge_lock(pmd, vma);
+>> +	if (ptl) {
+>> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +			n_pages = p->max_pages - p->found_pages;
+>> +
+>> +		is_written = !is_pmd_uffd_wp(*pmd);
+>> +
+>> +		/*
+>> +		 * Break huge page into small pages if the WP operation need to
+>> +		 * be performed is on a portion of the huge page.
+>> +		 */
+>> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +			spin_unlock(ptl);
+>> +
+>> +			split_huge_pmd(vma, pmd, start);
+>> +			goto process_smaller_pages;
+>> +		}
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags))
+>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +						  pmd_present(*pmd),
+>> +						  is_swap_pmd(*pmd),
+>> +						  p, start, n_pages);
+>> +
+>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +			make_uffd_wp_pmd(vma, addr, pmd);
+>> +
+>> +		if (IS_PM_SCAN_WP(p->flags))
+>> +			flush_tlb_range(vma, start, end);
+>> +
+>> +		spin_unlock(ptl);
+>> +
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return ret;
+>> +	}
+>> +
+>> +process_smaller_pages:
+>> +	if (pmd_trans_unstable(pmd)) {
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return 0;
+> 
+> I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
+> let the user retry?  Returning 0 means you'll move on with the next pmd
+> afaict and ignoring this one.
+This has come up before. We are just replicating pagemap_pmd_range() here
+as we are doing almost the same thing through IOCTL. It doesn't return any
+error in this case and just skips it. So we are doing the same.
+
+> 
+>> +	}
+>> +#endif
+>> +
+>> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+> 
+> Just a heads-up that this may start to fail at some point if Hugh's work
+> will land earlier:
+> 
+> https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
+Thank you so much for the heads up.
+
+> 
+>> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+>> +		is_written = !is_pte_uffd_wp(*pte);
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags))
+>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +						  pte_present(*pte),
+>> +						  is_swap_pte(*pte),
+>> +						  p, addr, 1);
+>> +
+>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +			make_uffd_wp_pte(vma, addr, pte);
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags))
+>> +		flush_tlb_range(vma, start, addr);
+>> +
+>> +	pte_unmap_unlock(orig_pte, ptl);
+>> +	arch_leave_lazy_mmu_mode();
+>> +
+>> +	cond_resched();
+>> +	return ret;
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>> +				      unsigned long start, unsigned long end,
+>> +				      struct mm_walk *walk)
+>> +{
+>> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	struct hstate *h = hstate_vma(vma);
+>> +	spinlock_t *ptl;
+>> +	bool is_written;
+>> +	int ret = 0;
+>> +	pte_t pte;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+> 
+> This _seems_ to be not needed for hugetlb entries.
+I'll remove it.
+
+> 
+>> +
+>> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +		n_pages = p->max_pages - p->found_pages;
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+>> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+>> +	}
+>> +
+>> +	pte = huge_ptep_get(ptep);
+>> +	is_written = !is_huge_pte_uffd_wp(pte);
+>> +
+>> +	/*
+>> +	 * Partial hugetlb page clear isn't supported
+>> +	 */
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +		ret = -EPERM;
+>> +		goto unlock_and_return;
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_GET(p->flags)) {
+>> +		ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +					  pte_present(pte), is_swap_pte(pte),
+>> +					  p, start, n_pages);
+>> +		if (ret < 0)
+>> +			goto unlock_and_return;
+>> +	}
+>> +
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags)) {
+>> +		make_uffd_wp_huge_pte(vma, start, ptep, pte);
+>> +		flush_hugetlb_tlb_range(vma, start, end);
+>> +	}
+>> +
+>> +unlock_and_return:
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		spin_unlock(ptl);
+>> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+>> +	}
+>> +
+>> +	arch_leave_lazy_mmu_mode();
+> 
+> Same here.
+> 
+>> +
+>> +	return ret;
+>> +}
+> 
+> [...]
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
