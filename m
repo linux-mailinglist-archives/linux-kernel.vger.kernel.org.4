@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B757195EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAABB7195EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbjFAIp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S231740AbjFAIq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbjFAIpp (ORCPT
+        with ESMTP id S232208AbjFAIqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:45:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822A6125;
-        Thu,  1 Jun 2023 01:45:43 -0700 (PDT)
-Received: from [192.168.10.48] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E24FD660322C;
-        Thu,  1 Jun 2023 09:45:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685609141;
-        bh=b9IUPiW6SWyyXL2LT/U9gtQHuJcEEu15KtqA0O6EN+g=;
-        h=Date:Cc:To:From:Subject:From;
-        b=FgYlzH1lShmkSH8uSRNhevv1vPqgd9wvZu5AA/nzE4JiznqoIApbmO1DskeWRW1TS
-         +7WItDIfI4PwQmtPaj5K9yRfB4PT4u27KSeVElekiPyx3MjLOXQ2+pDAmbPSKxjX53
-         orIgwxM0sAz8HqGGmd4DKMQVKkQlnvy34MzXtU8aN2RHHndqdzEBLDhmXRg0cTszRm
-         +D9QpZ3l023GAMRR867joNUWC2sWUFbTx9u7GgZ6yvim8HtSvkX38pJhPQVcVPECSs
-         wo+rTWZNgIIIWTrkmkAEtIg9EcstmepusuzXASZYTohcDrO+z5bCWRIDrxKYDzvpA4
-         o9cedIeKvcEzg==
-Message-ID: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com>
-Date:   Thu, 1 Jun 2023 13:45:35 +0500
+        Thu, 1 Jun 2023 04:46:21 -0400
+Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [IPv6:2001:41d0:203:375::3b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0925A134
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:46:11 -0700 (PDT)
+Message-ID: <ce82b32c-95b5-c6ad-9466-39c68dcf5119@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685609168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=viwhASMvyk0Cjm0jq9ZeM+ouB4uWAEMzGdt0PzGjYnA=;
+        b=b4INK5nOSvj+75WjbDesPWXE9AWkPJLkn0CqnTqvUvZPjLpeC/weObuZD0D9N+pq2TyM+Q
+        SLt6WHzcqRMkacOE6fFeTGK0DV1zDWyMJCvSGdyA9fkcu7loNxzGDd4xlLT3zo7YLqAg8O
+        CHFEm/Rhuq4aIM7H7jTCHMz2EGYRaiY=
+Date:   Thu, 1 Jun 2023 16:46:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Steven Noonan <steven@uplinklabs.net>, kernel@collabora.com
+Subject: Re: [PATCH 0/8] make unregistration of super_block shrinker more
+ faster
 Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: Direct rdtsc call side-effect
-Content-Type: text/plain; charset=UTF-8
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     tkhai@ya.ru, roman.gushchin@linux.dev, vbabka@suse.cz,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, djwong@kernel.org,
+        hughd@google.com, paulmck@kernel.org, muchun.song@linux.dev,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+References: <20230531095742.2480623-1-qi.zheng@linux.dev>
+ <20230531114054.bf077db642aa9c58c0831687@linux-foundation.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <20230531114054.bf077db642aa9c58c0831687@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -63,36 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-I've been looking into a problem where Windows applications misbehave
-across suspend/resume when run on Wine on x86. These applications see time
-going backwards. The timestamp counter (TSC) is reset when system resumes.
-In case of Windows on Intel and AMD, the timestamp is saved and restored
-when the system resumes from suspend.
 
-These applications read timestamp by rdtsc directly. These calls cannot be
-intercepted by Wine. The application should be fixed such that it handles
-these scenarios correctly. But there are hundreds of applications which
-cannot be fixed. So some support is required in Wine or kernel. There isn't
-anything which Wine can do as rdtsc call directly reads the timestamp. The
-only option is that we support something in kernel.
+On 2023/6/1 02:40, Andrew Morton wrote:
+> On Wed, 31 May 2023 09:57:34 +0000 Qi Zheng <qi.zheng@linux.dev> wrote:
+> 
+>> From: Qi Zheng <zhengqi.arch@bytedance.com>
+>>
+>> Hi all,
+>>
+>> This patch series aims to make unregistration of super_block shrinker more
+>> faster.
+>>
+>> 1. Background
+>> =============
+>>
+>> The kernel test robot noticed a -88.8% regression of stress-ng.ramfs.ops_per_sec
+>> on commit f95bdb700bc6 ("mm: vmscan: make global slab shrink lockless"). More
+>> details can be seen from the link[1] below.
+>>
+>> [1]. https://lore.kernel.org/lkml/202305230837.db2c233f-yujie.liu@intel.com/
+>>
+>> We can just use the following command to reproduce the result:
+>>
+>> stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
+>>
+>> 1) before commit f95bdb700bc6b:
+>>
+>> stress-ng: info:  [11023] dispatching hogs: 9 ramfs
+>> stress-ng: info:  [11023] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+>> stress-ng: info:  [11023]                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+>> stress-ng: info:  [11023] ramfs            774966     60.00     10.18    169.45     12915.89        4314.26
+>> stress-ng: info:  [11023] for a 60.00s run time:
+>> stress-ng: info:  [11023]    1920.11s available CPU time
+>> stress-ng: info:  [11023]      10.18s user time   (  0.53%)
+>> stress-ng: info:  [11023]     169.44s system time (  8.82%)
+>> stress-ng: info:  [11023]     179.62s total time  (  9.35%)
+>> stress-ng: info:  [11023] load average: 8.99 2.69 0.93
+>> stress-ng: info:  [11023] successful run completed in 60.00s (1 min, 0.00 secs)
+>>
+>> 2) after commit f95bdb700bc6b:
+>>
+>> stress-ng: info:  [37676] dispatching hogs: 9 ramfs
+>> stress-ng: info:  [37676] stressor       bogo ops real time  usrtime  sys time   bogo ops/s     bogo ops/s
+>> stress-ng: info:  [37676]                           (secs)    (secs)   (secs)   (real time) (usr+sys time)
+>> stress-ng: info:  [37676] ramfs            168673     60.00     1.61    39.66      2811.08        4087.47
+>> stress-ng: info:  [37676] for a 60.10s run time:
+>> stress-ng: info:  [37676]    1923.36s available CPU time
+>> stress-ng: info:  [37676]       1.60s user time   (  0.08%)
+>> stress-ng: info:  [37676]      39.66s system time (  2.06%)
+>> stress-ng: info:  [37676]      41.26s total time  (  2.15%)
+>> stress-ng: info:  [37676] load average: 7.69 3.63 2.36
+>> stress-ng: info:  [37676] successful run completed in 60.10s (1 min, 0.10 secs)
+> 
+> Is this comparison reversed?  It appears to demonstrate that
+> f95bdb700bc6b made the operation faster.
 
-As more and more things are being added to Wine, Windows application can be
-run pretty easily on Linux. But this rdtsc is a big hurdle. What are your
-thoughts on solving this problem?
+Maybe not. IIUC, the bogo ops/s (real time) bigger the better.
 
-We are thinking of saving and restoring the timestamp counter at suspend
-and resume time respectively. In theory it can work on Intel because of
-TSC_ADJUST register. But it'll never work on AMD until:
-* AMD supports the same kind of adjust register. (AMD has said that the
-adjust register cannot be implemented in their firmware. They'll have to
-add it to their hardware.)
-* by manual synchronization in kernel (I know you don't like this idea. But
-there is something Windows is doing to save/restore and sync the TSC)
+Thanks,
+Qi
 
-I really hope that you share some thoughts.
+> 
 
--- 
-BR,
-Muhammad Usama Anjum
