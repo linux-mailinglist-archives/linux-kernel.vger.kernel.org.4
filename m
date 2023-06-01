@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2917C71F681
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8AB71F684
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjFAXVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S232880AbjFAXWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 19:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbjFAXVh (ORCPT
+        with ESMTP id S232853AbjFAXWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:21:37 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BE839184
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 16:21:34 -0700 (PDT)
-Received: (qmail 20719 invoked by uid 1000); 1 Jun 2023 19:21:33 -0400
-Date:   Thu, 1 Jun 2023 19:21:33 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Roy Luo <royluo@google.com>
-Cc:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: add sysfs entry for usb device state
-Message-ID: <4f049d62-d103-4491-9c7e-16c7cf94eac1@rowland.harvard.edu>
-References: <20230601230456.2234972-1-royluo@google.com>
+        Thu, 1 Jun 2023 19:22:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2796E194;
+        Thu,  1 Jun 2023 16:22:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A429464ABC;
+        Thu,  1 Jun 2023 23:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38233C433EF;
+        Thu,  1 Jun 2023 23:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685661728;
+        bh=jVqa4HVAY88M9XGwNPRn8smOGCL/KswNwBM6sVilIek=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=s5vosy119KR1HGeelR6AC8C5RLfLSFs74mHYl5EggO7yUOprjBAWokjv/V4gVwMpf
+         UgopDvmQ9OkuMbdblm3eDZPxofcmnacQ765WlakZiM8XdTtk5GCg++Y+HsMQNfqzVB
+         p2VJYwIrWM1a08XwTjCyxMh0ENfHeCcj3wO03Ajle+WAiGrrWgKWhNcRJGLiiWOSg5
+         hUfdPIAFXq4O3A29iuSSPrXV6vaU1LCMQr6yYNoGUaYTDIIkwujnrGr5wAKXaFHl/a
+         cSMUUxB0X2JYEJIH6fF91YeeQ2/c6SHBt1qUJmHh5XveKSdlJmbDK04q0EbP/Oql1r
+         Sg2d+8XvNR8eA==
+Message-ID: <2fd9eee4-7e79-e94e-1619-5b1ce5ed64df@kernel.org>
+Date:   Fri, 2 Jun 2023 08:22:06 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601230456.2234972-1-royluo@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 7/9] PCI: qcom-ep: Add support for Link down
+ notification
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        lpieralisi@kernel.org, kw@linux.com
+Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230601145718.12204-1-manivannan.sadhasivam@linaro.org>
+ <20230601145718.12204-8-manivannan.sadhasivam@linaro.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230601145718.12204-8-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 11:04:56PM +0000, Roy Luo wrote:
-> Expose usb device state to userland as the information is useful in
-> detecting non-compliant setups and diagnosing enumeration failures.
-> For example:
-> - End-to-end signal integrity issues: the device would fail port reset
->   repeatedly and thus be stuck in POWERED state.
-> - Charge-only cables (missing D+/D- lines): the device would never enter
->   POWERED state as the HC would not see any pullup.
+On 6/1/23 23:57, Manivannan Sadhasivam wrote:
+> Add support to pass Link down notification to Endpoint function driver
+> so that the LINK_DOWN event can be processed by the function.
 > 
-> What's the status quo?
-> We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
-> to flag potential setup issues, but there's no good way to expose them to
-> userspace.
-> 
-> Why add a sysfs entry in struct usb_port instead of struct usb_device?
-> The struct usb_device is not device_add() to the system until it's in
-> ADDRESS state hence we would miss the first two states. The struct
-> usb_port is a better place to keep the information because its life
-> cycle is longer than the struct usb_device that is attached to the port.
-> 
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Roy Luo <royluo@google.com>
-> ---
+> Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 97a0f8faea6e..35d94288726b 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2018,6 +2018,23 @@ bool usb_device_is_owned(struct usb_device *udev)
->  	return !!hub->ports[udev->portnum - 1]->port_owner;
->  }
->  
-> +static void update_port_device_state(struct usb_device *udev)
-> +{
-> +	struct usb_port *port_dev = NULL;
-> +	struct usb_hub *hub = NULL;
-> +	struct kernfs_node *state_node = NULL;
-> +
-> +	if (udev->parent) {
-> +		hub = usb_hub_to_struct_hub(udev->parent);
-> +		port_dev = hub->ports[udev->portnum - 1];
-> +		WRITE_ONCE(port_dev->state, udev->state);
-> +		state_node = sysfs_get_dirent(port_dev->dev.kobj.sd, "state");
-> +		if (state_node) {
-> +			sysfs_notify_dirent(state_node);
-> +		}
-> +	}
-> +}
+Looks good.
 
-I didn't notice the "= NULL" initializers before.  You might want to 
-remove them, since they are completely unnecessary.
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 
-Alan Stern
+-- 
+Damien Le Moal
+Western Digital Research
+
