@@ -2,155 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6374671F29D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1399A71F29F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjFATFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
+        id S230349AbjFATHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjFATFV (ORCPT
+        with ESMTP id S229693AbjFATHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:05:21 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B070184;
-        Thu,  1 Jun 2023 12:05:18 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-97458c97333so47458466b.2;
-        Thu, 01 Jun 2023 12:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1685646317; x=1688238317;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yn6AtAHnk/JRQ6tg3VOO2xTr5zdu98dQLt73x2iUz/8=;
-        b=CkNIYWFGXToMiQhfilezgCUI14q4U1K908IlgaVRn/rx+3Ygct3nZUeXPOJXo9v/cY
-         bK5gUpgEJPH1jpOgpkX3DqbGcRcCXpTQaTfTmVByIYopKHGqbgRFGqt9V6V/maAjXY87
-         vTPT1C1rZ2/yyVk+doBLHfa/EeEHbzu6MgtrpKNFtMabwRqQbKKsemEUU8dnuUbYb73l
-         kHyQWdVbUNpOeOgxOJjpYpNC+rU4Gl4/XOUuWFsTh5c5/CxyQ9nPUpbXhIrWqUrTxxhc
-         UMGpjRmc3dAHG4ZSaJlt+SOn2YfzhFeiuznIFrGwceiWJ4kG+qsykmTQ2UvpoBP21Nhf
-         XlIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685646317; x=1688238317;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yn6AtAHnk/JRQ6tg3VOO2xTr5zdu98dQLt73x2iUz/8=;
-        b=MFhbBDOc7fDe3SyhfceDvrvyDHO4lRjOQgCAocJSP9GwEAoB7KeTfGUmYIaFx3tyZg
-         miWgZALAhaXqL4SAQaThU9fzFooMQs9tyF87im3bT0i3YTn64PJODv1gOC3UPsFRLE2u
-         pPGe2hVWT04hMBnJ4vVeKzyDn49iFJi5yV+hsL3zAqI7nWcwsRuNHzlL75HjR/ZgZG6r
-         0KWL3Q8k/e+hDtOsSkBVlWBFeyXI/xq3XnLnoPMJ5rDbRXWRJVSEE/Clho/GNvVVbaVq
-         REg15tRPqj+oAJYctGCnxusCEvRNn+16bZi5JOz5Pp0C89qeuMotICdPeAi3rdMtN+RP
-         fqMw==
-X-Gm-Message-State: AC+VfDyw63jAP/t/8H1a5hJG5flNxQyy7vOC7yW65So6KDILdYFKp7Bh
-        iD5JsQIhyk6PZ8zTxNnMf4aeFl9dWf4DEA==
-X-Google-Smtp-Source: ACHHUZ6sPBq1F5986rglI1DSySnxtczgNgLz6KrKanHQAMXYm7dpG2q3r6n3t+iZpQw7PKXLF6ps8A==
-X-Received: by 2002:a17:907:9806:b0:96a:9b5b:5d80 with SMTP id ji6-20020a170907980600b0096a9b5b5d80mr8935321ejc.13.1685646316531;
-        Thu, 01 Jun 2023 12:05:16 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810a:9640:26a8:d56e:8fdf:f926:4676])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170906681100b0096f7105b3a6sm10827323ejr.189.2023.06.01.12.05.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 01 Jun 2023 12:05:16 -0700 (PDT)
-From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
-X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
-To:     keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>
-Subject: [PATCH] certs/extract-cert: Fix checkpatch issues
-Date:   Thu,  1 Jun 2023 21:05:08 +0200
-Message-Id: <20230601190508.56610-1-franziska.naepelt@gmail.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        Thu, 1 Jun 2023 15:07:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA8413E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:07:39 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685646457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jk3OoUH/vZ/PG3PRxTx2YkNfM1UU6F5mJBsyBA6TRrs=;
+        b=nIt1sJEqQB6By3BxH5cEPmu1YnS5qbn+FgaDghURYc8HcWrS9HvQ4QiMyL/ztPdXADCohE
+        nZrhgbdMoArVnJLLHhmfsMwV/NihjleXWqcdSL8O6SqmQDPgiNlPTOhTop6LnUCsPl4yHF
+        EJYLV8D4TPnFsefhvZMaYpC4Zx9WQbqqZwfl10rW1nYQ2e4uEoxugYnD/0D6gmLy2JCyLO
+        H31I0+IPrHP3rH6IMulFZt63TTW6Ik5i3ZEfglRFVi6nmXDKwBPk8GVxKt6yIFXQHd3fXC
+        BJSsqRg2pj1IKuPKyeUxH9g3NJrQfd0jvfdTx9cQRm50kKP9QR9Wtsvh3iCWzQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685646457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jk3OoUH/vZ/PG3PRxTx2YkNfM1UU6F5mJBsyBA6TRrs=;
+        b=0XqM433XX03aY9XDC63CjR6M1lCyncWLejBoFggnpDCkbPIAUP5HJ9wFhLv3zIJgM/QY4T
+        LpdBehvpCuBgUJCw==
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [patch 18/20] posix-timers: Clarify posix_timer_fn() comments
+In-Reply-To: <ZHibcwrDgegKwQeQ@lothringen>
+References: <20230425181827.219128101@linutronix.de>
+ <20230425183313.777610259@linutronix.de> <ZHibcwrDgegKwQeQ@lothringen>
+Date:   Thu, 01 Jun 2023 21:07:37 +0200
+Message-ID: <874jnrdmrq.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following issues are fixed:
-- WARNING: Missing or malformed SPDX-License-Identifier tag
-- WARNING: Prefer __noreturn over __attribute__((noreturn))
-- ERROR: trailing statements should be on next line
-- WARNING: braces {} are not necessary for single statement blocks
-- ERROR: space required before the open parenthesis '('
-- ERROR: code indent should use tabs where possible
-- WARNING: please, no spaces at the start of a line
-- WARNING: Missing a blank line after declarations
+Make the issues vs. SIG_IGN understandable and remove the 15 years old
+promise that a proper solution is already on the horizon.
 
-Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- certs/extract-cert.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+V2: Clarify comments and use TICK_NSECS - Frederic
+---
+ kernel/time/posix-timers.c |   62 +++++++++++++++++++++++----------------------
+ 1 file changed, 32 insertions(+), 30 deletions(-)
 
-diff --git a/certs/extract-cert.c b/certs/extract-cert.c
-index 70e9ec89d87d..dd76fb0f7f8d 100644
---- a/certs/extract-cert.c
-+++ b/certs/extract-cert.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: LGPL-2.1
- /* Extract X.509 certificate in DER form from PKCS#11 or PEM.
-  *
-  * Copyright © 2014-2015 Red Hat, Inc. All Rights Reserved.
-@@ -32,7 +33,7 @@
-
- #define PKEY_ID_PKCS7 2
-
--static __attribute__((noreturn))
-+static __noreturn
- void format(void)
- {
- 	fprintf(stderr,
-@@ -63,7 +64,8 @@ static void drain_openssl_errors(void)
-
- 	if (ERR_peek_error() == 0)
- 		return;
--	while (ERR_get_error_line(&file, &line)) {}
-+	while (ERR_get_error_line(&file, &line))
-+		;
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -326,11 +326,11 @@ int posix_timer_event(struct k_itimer *t
  }
-
- #define ERR(cond, fmt, ...)				\
-@@ -73,7 +75,7 @@ static void drain_openssl_errors(void)
- 		if (__cond) {				\
- 			err(1, fmt, ## __VA_ARGS__);	\
- 		}					\
--	} while(0)
-+	} while (0)
-
- static const char *key_pass;
- static BIO *wb;
-@@ -107,7 +109,7 @@ int main(int argc, char **argv)
- 	if (verbose_env && strchr(verbose_env, '1'))
- 		verbose = true;
-
--        key_pass = getenv("KBUILD_SIGN_PIN");
-+	key_pass = getenv("KBUILD_SIGN_PIN");
-
- 	if (argc != 3)
- 		format();
-@@ -118,6 +120,7 @@ int main(int argc, char **argv)
- 	if (!cert_src[0]) {
- 		/* Invoked with no input; create empty file */
- 		FILE *f = fopen(cert_dst, "wb");
+ 
+ /*
+- * This function gets called when a POSIX.1b interval timer expires.  It
+- * is used as a callback from the kernel internal timer.  The
+- * run_timer_list code ALWAYS calls with interrupts on.
+-
+- * This code is for CLOCK_REALTIME* and CLOCK_MONOTONIC* timers.
++ * This function gets called when a POSIX.1b interval timer expires from
++ * the HRTIMER interrupt (soft interrupt on RT kernels).
++ *
++ * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
++ * based timers.
+  */
+ static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+ {
+@@ -348,9 +348,10 @@ static enum hrtimer_restart posix_timer_
+ 
+ 	if (posix_timer_event(timr, si_private)) {
+ 		/*
+-		 * signal was not sent because of sig_ignor
+-		 * we will not get a call back to restart it AND
+-		 * it should be restarted.
++		 * The signal was not queued due to SIG_IGN. As a
++		 * consequence the timer is not going to be rearmed from
++		 * the signal delivery path. But as a real signal handler
++		 * can be installed later the timer must be rearmed here.
+ 		 */
+ 		if (timr->it_interval != 0) {
+ 			ktime_t now = hrtimer_cb_get_time(timer);
+@@ -359,34 +360,35 @@ static enum hrtimer_restart posix_timer_
+ 			 * FIXME: What we really want, is to stop this
+ 			 * timer completely and restart it in case the
+ 			 * SIG_IGN is removed. This is a non trivial
+-			 * change which involves sighand locking
+-			 * (sigh !), which we don't want to do late in
+-			 * the release cycle.
++			 * change to the signal handling code.
++			 *
++			 * For now let timers with an interval less than a
++			 * jiffie expire every jiffie and recheck for a
++			 * valid signal handler.
++			 *
++			 * This avoids interrupt starvation in case of a
++			 * very small interval, which would expire the
++			 * timer immediately again.
+ 			 *
+-			 * For now we just let timers with an interval
+-			 * less than a jiffie expire every jiffie to
+-			 * avoid softirq starvation in case of SIG_IGN
+-			 * and a very small interval, which would put
+-			 * the timer right back on the softirq pending
+-			 * list. By moving now ahead of time we trick
+-			 * hrtimer_forward() to expire the timer
+-			 * later, while we still maintain the overrun
+-			 * accuracy, but have some inconsistency in
+-			 * the timer_gettime() case. This is at least
+-			 * better than a starved softirq. A more
+-			 * complex fix which solves also another related
+-			 * inconsistency is already in the pipeline.
++			 * Moving now ahead of time by one jiffie tricks
++			 * hrtimer_forward() to expire the timer later,
++			 * while it still maintains the overrun accuracy
++			 * for the price of a slight inconsistency in the
++			 * timer_gettime() case. This is at least better
++			 * than a starved softirq.
++			 *
++			 * Only required when high resolution timers are
++			 * enabled as the periodic tick based timers are
++			 * automatically aligned to the next tick.
+ 			 */
+-#ifdef CONFIG_HIGH_RES_TIMERS
+-			{
+-				ktime_t kj = NSEC_PER_SEC / HZ;
++			if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
++				ktime_t kj = TICK_NSECS;
+ 
+ 				if (timr->it_interval < kj)
+ 					now = ktime_add(now, kj);
+ 			}
+-#endif
+-			timr->it_overrun += hrtimer_forward(timer, now,
+-							    timr->it_interval);
 +
- 		ERR(!f, "%s", cert_dst);
- 		fclose(f);
- 		exit(0);
-@@ -155,6 +158,7 @@ int main(int argc, char **argv)
- 			x509 = PEM_read_bio_X509(b, NULL, NULL, NULL);
- 			if (wb && !x509) {
- 				unsigned long err = ERR_peek_last_error();
-+
- 				if (ERR_GET_LIB(err) == ERR_LIB_PEM &&
- 				    ERR_GET_REASON(err) == PEM_R_NO_START_LINE) {
- 					ERR_clear_error();
-
-base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
---
-2.39.2 (Apple Git-143)
-
++			timr->it_overrun += hrtimer_forward(timer, now, timr->it_interval);
+ 			ret = HRTIMER_RESTART;
+ 			++timr->it_requeue_pending;
+ 			timr->it_active = 1;
