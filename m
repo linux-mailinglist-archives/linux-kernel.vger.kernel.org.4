@@ -2,59 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550F47209FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C7F720A03
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbjFBTnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S235458AbjFBTov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235353AbjFBTnk (ORCPT
+        with ESMTP id S236115AbjFBTot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:43:40 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E21B19B;
-        Fri,  2 Jun 2023 12:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=p2kx53FIkLSzM3l59PYme95Et3nogdbgkEjsVJ+GbYY=; b=mBN8lN82hw72k5hWdJGwf9dN7a
-        nCTt8kw/sUpcFmsarHCKX/+XUQGB/bn/IGgc1kGZFdICq0TO6B6+hiQMPJottKXIxFa92Y0w+1inY
-        pBzrIjkMP8jPOtmhlHlrz0t4WX8xHBYL3ZExa3hsvhgHp4iciYV8qeHDjfKcycH//mvA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q5AgG-00EhxJ-4o; Fri, 02 Jun 2023 21:43:24 +0200
-Date:   Fri, 2 Jun 2023 21:43:24 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Detlev Casanova <detlev.casanova@collabora.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: net: phy: Document support for
- external PHY clk
-Message-ID: <b188ba63-5e9e-403b-9caa-a52085279e3d@lunn.ch>
-References: <20230602182659.307876-1-detlev.casanova@collabora.com>
- <20230602182659.307876-3-detlev.casanova@collabora.com>
- <4255bc0a-491c-4fbb-88ea-ec1d864a1a24@lunn.ch>
- <2288019.ElGaqSPkdT@arisu>
+        Fri, 2 Jun 2023 15:44:49 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67B8B123;
+        Fri,  2 Jun 2023 12:44:48 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 352JiC25026412;
+        Fri, 2 Jun 2023 21:44:12 +0200
+Date:   Fri, 2 Jun 2023 21:44:12 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v2 00/13] nolibc: add part2 of support for rv32
+Message-ID: <ZHpGjMHPzyRcEX3C@1wt.eu>
+References: <cover.1685387484.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2288019.ElGaqSPkdT@arisu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,10 +40,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> What about "Ethernet PHYs can have an external clock that needs to be 
-> activated before communicating with the PHY" ?
+Hi Zhangjin,
 
-That good.
+On Tue, May 30, 2023 at 03:45:23AM +0800, Zhangjin Wu wrote:
+> Hi, all
+> 
+> Thanks very much for your review suggestions of the v1 series [1], we
+> just sent out the generic part1 [2], and here is the part2 of the whole
+> v2 revision.
+(...)
 
-Thanks
-	Andrew
+Just to let you know, I'm now done with my release and will slowly try
+to catch up with all your series!
+
+Stay tuned!
+Willy
