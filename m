@@ -2,83 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A22071FAC4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3214F71FAC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234109AbjFBHMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 03:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S234124AbjFBHNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbjFBHMO (ORCPT
+        with ESMTP id S234314AbjFBHMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:12:14 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489B10C2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:12:09 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-970056276acso245218166b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 00:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685689928; x=1688281928;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ID97egBGuXMI7J4GkeNsqWERFtG/jgBWuZXR0IgIwWE=;
-        b=pJ6WxSKGbQ1lTXGYSx5AV6TgLnndwDX+mYc4xaGh0RzfzalUrq3xVEWx54oWvDi02I
-         z1fvVun1fQXFZBEdCACH3A6qBZmGWyjxGbOKud+dLG9w+/9DEIU1owODdv9vBALtlBrf
-         OXsvJ2jO/bxffy3BDljQJDG/GORMavqDuUvF6qtPv+yxO/+R3BQdJ3p6BTSbPay0Hxv7
-         dY53Bs3Z8PYwSd5WBPOuwBbVrXj+sbZYw7QtiuISgIKdt4FCeuBAoBXK6n1Pq6mUXacl
-         ZLN8o4wds8nM3S3H16LEMFHrkqTKHIWPKMnJARqQVdgy0rbl3V2ZrqlFi6a0s3q/rsLW
-         KusA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685689928; x=1688281928;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ID97egBGuXMI7J4GkeNsqWERFtG/jgBWuZXR0IgIwWE=;
-        b=f3TqCiqlZ6dVLiBJSdOz2ySSTXiSVHTKlPppCfXjTJPgZRu4NNc/LxDtpOm7bQD8Cg
-         hqjfIpfcy674XHZBOHtf932DXfM+BRM++LE6vo50fvjtoTgLbgJIbXR1rEfKu88liNIp
-         1b81oXfvOvtIXp7uwlMq3hINugi1wtFRj3c/HBw1y3zwNf00h9BkEIBQnPp/iEWe2ark
-         4CKq7fbpuV/EV6Nio6fPsOx/BngowrQhqD+Yj6yvQKZ6rRmhJ5C4IvS5F13CypaIXJ/p
-         fEroWc7PNTSyIZ5mN9GFiOFWPrNiyAIDotJ9mK9MuuQx7js1XjhVM+EzOiIDKBLG0ete
-         a0wg==
-X-Gm-Message-State: AC+VfDwVrgA0dluXGWW1XdwxEAxGdX2lab8I1IhMcTWeraj23YRM4F/R
-        f9kreH10lTvblGucoWINxk62qw==
-X-Google-Smtp-Source: ACHHUZ4hbQaYX7U80wxKjvKgnV9pZX+PaiNP2lawdYjP7mjQi3B2eIAZoovKcl7m0wcRKYSz3aVP3Q==
-X-Received: by 2002:a17:906:6a16:b0:947:ebd5:c798 with SMTP id qw22-20020a1709066a1600b00947ebd5c798mr10173625ejc.54.1685689927791;
-        Fri, 02 Jun 2023 00:12:07 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id g4-20020a170906c18400b00969f13d886fsm397252ejz.71.2023.06.02.00.12.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 00:12:07 -0700 (PDT)
-Message-ID: <7dfc6241-ed72-d655-7400-fd8f9c413e69@linaro.org>
-Date:   Fri, 2 Jun 2023 09:12:05 +0200
+        Fri, 2 Jun 2023 03:12:31 -0400
+Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A52D1B5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:12:29 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
+ s=mx; t=1685689948; x=1685697148; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
+ Sender: Sender; bh=rcYboFVd7AE2p0CUNEz6a2jsGbJCMFxFjqC+A9m1lBw=;
+ b=oua6mHVg/PrauupNsyfY86SDR1DZTONWPDageeVj0gTD0S97alcTPsttTqmT+M89N9mN/p0+/I9pEq8nKqhYSqVzeN/U2lGP601VKJBcYd0gtDZHe5Jsj4YamGqBpaEDoTh0ZGsQE7Rvn3RIhv9vK+54VcyYEU2yfSEJJXB5qXmkq6INIeOV+F/FZu2lqQ0E6nvo41JqGWwKSWiqJCB2qr4E1kWcLdxQuyrFBLF/qasiHEQL89wumVCDgVVRGg5PsjX8Sf7Q2eHLB897eUFuqAvxnjc5oXU+ysb/ISIflbZMhy0ECp+CrF4Q1SsGFIS8UTLlUO1WwLM1x36LZpF3Qg==
+X-Mailgun-Sending-Ip: 159.135.228.13
+X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 29052c795feb with SMTP id
+ 6479965c2853aaaeeb0645ad (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 02 Jun 2023 07:12:28 GMT
+Sender: james@equiv.tech
+Date:   Fri, 2 Jun 2023 00:12:27 -0700
+From:   James Seo <james@equiv.tech>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: hp-wmi-sensors: fix debugfs check
+Message-ID: <ZHmWWzb3PiCiExJf@equiv.tech>
+References: <20230601213216.3220550-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: i2c-mt65xx: add additional clocks
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        =?UTF-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
-References: <5f15212060f82fb94239174c4e4b46c151645fe8.1685549360.git.daniel@makrotopia.org>
- <12fea13e-e2c3-487f-8d2b-cfd320c98ba7@linaro.org>
- <ZHjtExYIdVFo3HnB@makrotopia.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZHjtExYIdVFo3HnB@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230601213216.3220550-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,40 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 21:10, Daniel Golle wrote:
-> On Thu, Jun 01, 2023 at 06:54:01PM +0200, Krzysztof Kozlowski wrote:
->> On 31/05/2023 18:10, Daniel Golle wrote:
->>> Add pck and mck clocks which are needed to access I2C registers on MT7981.
->>>
->>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
->>> ---
->>>  Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
->>> index fda0467cdd954..550795f6573c5 100644
->>> --- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
->>> @@ -78,6 +78,8 @@ properties:
->>>        - const: dma
->>>        - const: arb
->>>        - const: pmic
->>> +      - const: mck
->>> +      - const: pck
->>>  
->>
->> Adding names does not magically add the clocks. This wasn't tested.
+On Thu, Jun 01, 2023 at 11:31:54PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Adding the clocks is done in patch 2/2 which just wasn't sent to
-> devicetree@ and dt maintainers, but to the relevant mailing lists
-> instead. Was that wrong and should I always send the complete series
-> also to devicetree@ as well as dt maintainers?
+> Checking for Kconfig symbols with #if is wrong:
+> 
+> drivers/hwmon/hp-wmi-sensors.c:1141:5: error: "CONFIG_DEBUG_FS" is not defined, evaluates to 0 [-Werror=undef]
+> 
+> This could be an #ifdef, but an IS_ENABLED() check is even better to
+> give the best compile coverage.
+> 
+> Fixes: 602bef0fa281f ("hwmon: add HP WMI Sensors driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/hwmon/hp-wmi-sensors.c | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
+> index 7218945bd03fc..ebe2fb5134805 100644
+> --- a/drivers/hwmon/hp-wmi-sensors.c
+> +++ b/drivers/hwmon/hp-wmi-sensors.c
+> @@ -1138,8 +1138,6 @@ static int hp_wmi_update_info(struct hp_wmi_sensors *state,
+>  	return ret;
+>  }
+>  
+> -#if CONFIG_DEBUG_FS
+> -
+>  static int basic_string_show(struct seq_file *seqf, void *ignored)
+>  {
+>  	const char *str = seqf->private;
+> @@ -1341,16 +1339,6 @@ static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
+>  	}
+>  }
+>  
+> -#else
+> -
+> -static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
+> -				struct hp_wmi_platform_events *pevents,
+> -				u8 icount, u8 pcount, bool is_new)
+> -{
+> -}
+> -
+> -#endif
+> -
+>  static umode_t hp_wmi_hwmon_is_visible(const void *drvdata,
+>  				       enum hwmon_sensor_types type,
+>  				       u32 attr, int channel)
+> @@ -1959,7 +1947,8 @@ static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
+>  	if (err)
+>  		return err;
+>  
+> -	hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
+> +	if (IS_ENABLED(CONFIG_DEBUG_FS))
+> +		hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
+>  
+>  	if (!count)
+>  		return 0;	/* No connected sensors; debugfs only. */
+> -- 
+> 2.39.2
+>
 
-I didn't mean implementation. I meant that you still do not allow more
-clocks! You can put into names whatever you wish but clocks are taken
-from "clocks" property, not from clock-names.
-
-
-Best regards,
-Krzysztof
+Acked-by: James Seo <james@equiv.tech>
 
