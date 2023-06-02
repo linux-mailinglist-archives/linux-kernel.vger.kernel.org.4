@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54160720B38
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B465720B3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbjFBVuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
+        id S236787AbjFBVuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbjFBVt6 (ORCPT
+        with ESMTP id S236621AbjFBVtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:49:58 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DD41BB;
-        Fri,  2 Jun 2023 14:49:57 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 352LndFO066071;
+        Fri, 2 Jun 2023 17:49:51 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED41BB;
+        Fri,  2 Jun 2023 14:49:49 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 352Lndr9072489;
         Fri, 2 Jun 2023 16:49:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1685742579;
-        bh=LYknLycg/NlRXtea6zAhNjjVX0g50LoiliRcbXrGvUU=;
+        bh=jI+nDGX8lCYqPRP99t/hL8phcW6w/q6DhsT4zyCBtC0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=f2+kQ5SSkX3kYl1TadOzrWt+/O2CMhcGea5V2AFNoqsutNfG5KIusSHecZKSsFTju
-         RFXsZ7BuNXqFbs8AFp+BF7TnpNkRfR5zFfm+b3ohadXHS8c3UxuoHvKivLiTB6VFz5
-         8FLr620qTjzv5e/ZNDFZdIhYpsd8ZAa7UY4ojTsE=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 352LndjB059491
+        b=O+tIU+2JibWQuZknB270sKZnjx0hVqxmQrbJb/GGQItecNl7p2opJw5fctwWleuS0
+         Y43aQwrU3kjj99jmMx8Gbh02zcF+/y0OytnbBcz9mIapVZHj+WHJqditLnYeX2UaHa
+         rQwlCSLVOWj7Z5t8wLX/+kmHG1GjS5CbMKQPCnHI=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 352LndkY017965
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Fri, 2 Jun 2023 16:49:39 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 2
  Jun 2023 16:49:38 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Fri, 2 Jun 2023 16:49:38 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 352LncGs080640;
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 352LnciY006133;
         Fri, 2 Jun 2023 16:49:38 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -53,9 +53,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Sinthu Raja <sinthu.raja@ti.com>,
         Thejasvi Konduru <t-konduru@ti.com>,
         Dasnavis Sabiya <sabiya.d@ti.com>
-Subject: [PATCH 1/8] arm64: dts: ti: k3-j784s4-evm: Fix main_i2c0 alias
-Date:   Fri, 2 Jun 2023 16:49:30 -0500
-Message-ID: <20230602214937.2349545-2-nm@ti.com>
+Subject: [PATCH 2/8] arm64: dts: ti: k3-j784s4-evm: Add mcu and wakeup uarts
+Date:   Fri, 2 Jun 2023 16:49:31 -0500
+Message-ID: <20230602214937.2349545-3-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230602214937.2349545-1-nm@ti.com>
 References: <20230602214937.2349545-1-nm@ti.com>
@@ -73,33 +73,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-main_i2c0 is aliased as i2c0 which creates a problem for u-boot R5
-SPL attempting to reuse the same definition in the common board
-detection logic as it looks for the first i2c instance as the bus on
-which to detect the eeprom to understand the board variant involved.
-Switch main_i2c0 to i2c3 alias allowing us to introduce wkup_i2c0
-and potentially space for mcu_i2c instances in the gap for follow on
-patches.
+Add wakeup and MCU uart. This allows the device tree usage in
+bootloader and firmwares that can configure the same appropriately.
 
-Fixes: e20a06aca5c9 ("arm64: dts: ti: Add support for J784S4 EVM board")
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Depends on https://lore.kernel.org/linux-arm-kernel/20230503083143.32369-1-t-konduru@ti.com/
+
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 33 ++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index 490d0b8624f3..34e9bc89ac66 100644
+index 34e9bc89ac66..3f499e527523 100644
 --- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
 +++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -23,7 +23,7 @@ aliases {
+@@ -20,6 +20,8 @@ chosen {
+ 	};
+ 
+ 	aliases {
++		serial0 = &wkup_uart0;
++		serial1 = &mcu_uart0;
  		serial2 = &main_uart8;
  		mmc0 = &main_sdhci0;
  		mmc1 = &main_sdhci1;
--		i2c0 = &main_i2c0;
-+		i2c3 = &main_i2c0;
- 	};
+@@ -142,6 +144,24 @@ J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
+ };
  
- 	memory@80000000 {
+ &wkup_pmx2 {
++	wkup_uart0_pins_default: wkup-uart0-pins-default {
++		pinctrl-single,pins = <
++			J721S2_WKUP_IOPAD(0x070, PIN_INPUT, 0) /* (L37) WKUP_GPIO0_6.WKUP_UART0_CTSn */
++			J721S2_WKUP_IOPAD(0x074, PIN_INPUT, 0) /* (L36) WKUP_GPIO0_7.WKUP_UART0_RTSn */
++			J721S2_WKUP_IOPAD(0x048, PIN_INPUT, 0) /* (K35) WKUP_UART0_RXD */
++			J721S2_WKUP_IOPAD(0x04c, PIN_INPUT, 0) /* (K34) WKUP_UART0_TXD */
++		>;
++	};
++
++	mcu_uart0_pins_default: mcu-uart0-pins-default {
++		pinctrl-single,pins = <
++			J784S4_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (H37) WKUP_GPIO0_14.MCU_UART0_CTSn */
++			J784S4_WKUP_IOPAD(0x094, PIN_OUTPUT, 0) /* (K37) WKUP_GPIO0_15.MCU_UART0_RTSn */
++			J784S4_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (K38) WKUP_GPIO0_13.MCU_UART0_RXD */
++			J784S4_WKUP_IOPAD(0x088, PIN_OUTPUT, 0) /* (J37) WKUP_GPIO0_12.MCU_UART0_TXD */
++		>;
++	};
++
+ 	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
+ 		pinctrl-single,pins = <
+ 			J784S4_WKUP_IOPAD(0x02c, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
+@@ -167,6 +187,19 @@ J784S4_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
+ 	};
+ };
+ 
++&wkup_uart0 {
++	/* Firmware usage */
++	status = "reserved";
++	pinctrl-names = "default";
++	pinctrl-0 = <&wkup_uart0_pins_default>;
++};
++
++&mcu_uart0 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_uart0_pins_default>;
++};
++
+ &main_uart8 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
 -- 
 2.40.0
 
