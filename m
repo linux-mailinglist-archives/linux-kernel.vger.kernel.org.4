@@ -2,144 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D07A7204CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974197204D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbjFBOrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S236217AbjFBOsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235311AbjFBOrJ (ORCPT
+        with ESMTP id S235427AbjFBOsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:47:09 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1132134
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:47:07 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75b064451d3so205880785a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685717227; x=1688309227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FP4gFagKNPHKRp8BSra7FGUts20+QHmvD8L/6jKh1SA=;
-        b=MtQrKf3Aq4ywNNmwBn+4KQwmQeG2JkEtU+VwRFhq5xHnjIeHGlyeZJ6dZ8YNsSbXvZ
-         j1CapqzyAiqC8lBwiWOA+xAyYTflGylKU2PBwSTTmvHJDFHXdYrdJDiLFu0OYxCVpoQ/
-         R4kbl5OU33YR3ax1JbmLqg5f9S/KHZ5IPvGHaBNdE7koFo+9mfzNj6FOaN1LUhjbvJ7q
-         QCkGB2Kg4xqOe0l03A1iI3Ox63oKOjG/fW2ygSexk+KfhpPgAZmQSyZFxHb/WrJN0EeO
-         JqsvuSo6q4SEf+2jewXSIwmUbbtjcldQtPPsX89C37f29U/tTm3Wp1PhK/onirVoS+vK
-         t8TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717227; x=1688309227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FP4gFagKNPHKRp8BSra7FGUts20+QHmvD8L/6jKh1SA=;
-        b=UTWqHjJTWd3XCVtUxDrgURJ9pbtZTuNCWBcMobGWsfbAfc7pQmBUlvxXMk9qKbrlXg
-         s5CGHo3+uXXAgOUgPnCinrpsIs2SQwRYXrvzwYZYCF+VbKKlrz+TtiYfC8BH0vWxz8Rt
-         QepkRMcSLwuZmjBf2MXr/JHYtAbzzB0tg53Y6fTgx1ngefxriddFUo9qhcdJocT2QUK7
-         uGu/Id8em2zMJiKYmbbnPUxC+GRUZNr/psUANh4vmrMKOeNpjT8FWvvd18Aai1JCa+z5
-         p8OW7LzVFfy7Zl3AXJN6L1owCqjSB4pOG5Lbtt5h53ZrvKs/pT0dhvSM/BHRfALrTd1j
-         YUxQ==
-X-Gm-Message-State: AC+VfDyUcQLi8Pl8Psj+Pvg2gZ3peq+fkj8Kwi2GciFyUk9Wtknum2Se
-        9sB9z+h9T+PVWZ9Kpm+/obxWhg==
-X-Google-Smtp-Source: ACHHUZ71No0tnTDpHFcZMCUY7YwJgRdAZHnJ/RAWO+H6cioy23x5MVN+Xmamhs/C+Q84rOWgDPAJRQ==
-X-Received: by 2002:a05:620a:215c:b0:75b:23a1:8342 with SMTP id m28-20020a05620a215c00b0075b23a18342mr12555228qkm.61.1685717227013;
-        Fri, 02 Jun 2023 07:47:07 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:ec58])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05620a035100b0075cdb0381ebsm703636qkm.67.2023.06.02.07.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 07:47:06 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 10:47:05 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH 2/5] mm: compaction: simplify should_compact_retry()
-Message-ID: <20230602144705.GB161817@cmpxchg.org>
-References: <20230519123959.77335-1-hannes@cmpxchg.org>
- <20230519123959.77335-3-hannes@cmpxchg.org>
- <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
- <20230529163805.GA84971@cmpxchg.org>
+        Fri, 2 Jun 2023 10:48:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF7C1BF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:48:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E35A621A2C;
+        Fri,  2 Jun 2023 14:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685717292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qgCcBdiuMHEcUROu//ERii1RUEDyG9SRk3k8Wf+Yozc=;
+        b=kHP2tR4LakBIm3RgvPtArMr3AOseyJZSk/TxM/oAaF8iDXEkF5f6imlfwJuR68jwwxeMJ0
+        XgrmFeDP4dgsyoyuSrGccehwvZIyEWLc562GX3SL6+fs7qVgiIW5unDxk/Rjz1KegEmgxb
+        sXQOKO2kDnWoISB0VfflqDn5EObX5wQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DC5D13A2E;
+        Fri,  2 Jun 2023 14:48:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YwrqGCwBemR6XQAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 02 Jun 2023 14:48:12 +0000
+Message-ID: <bd70e7b8-1971-6982-979a-ce1eb4c93465@suse.com>
+Date:   Fri, 2 Jun 2023 16:48:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529163805.GA84971@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
+ protection modify mask
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
+ <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
+ <cfd19da7-4148-f277-0cf8-507b94d214a3@suse.com>
+ <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------xSod5AXDcN7eeAnElmpFWrrJ"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 12:38:07PM -0400, Johannes Weiner wrote:
-> On Mon, May 29, 2023 at 03:03:52PM +0200, Vlastimil Babka wrote:
-> > I think you simplified this part too much, so now once it runs out of
-> > retries, it will return false, while previously it would increase the priority.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------xSod5AXDcN7eeAnElmpFWrrJ
+Content-Type: multipart/mixed; boundary="------------pvIpQ559mjmcgHKBMLSOMf6K";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>, Yu Zhao <yuzhao@google.com>,
+ linux-kernel@vger.kernel.org,
+ =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?=
+ <marmarek@invisiblethingslab.com>, Andi Shyti <andi.shyti@linux.intel.com>,
+ drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Message-ID: <bd70e7b8-1971-6982-979a-ce1eb4c93465@suse.com>
+Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
+ protection modify mask
+References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
+ <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
+ <cfd19da7-4148-f277-0cf8-507b94d214a3@suse.com>
+ <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
+In-Reply-To: <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
 
-Here is the delta fix. If this looks good to everybody, can you please
-fold this into the patch you have in tree? Thanks!
+--------------pvIpQ559mjmcgHKBMLSOMf6K
+Content-Type: multipart/mixed; boundary="------------Dk7NVigM3sGgJDBkoB6lZ7gd"
 
----
-From 4b9429f9ef04fcb7bb5ffae0db8ea113b26d097b Mon Sep 17 00:00:00 2001
-From: Johannes Weiner <hannes@cmpxchg.org>
-Date: Fri, 2 Jun 2023 16:02:37 +0200
-Subject: [PATCH] mm: compaction: simplify should_compact_retry() fix
+--------------Dk7NVigM3sGgJDBkoB6lZ7gd
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Vlastimil points out an unintended change. Previously when hitting
-max_retries we'd bump the priority level and restart the loop. Now we
-bail out and fail instead. Restore the original behavior.
+T24gMDIuMDYuMjMgMTY6NDMsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBK
+dW4gMDEsIDIwMjMgYXQgMTA6NDc6MzlBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IEFzIGRlc2NyaWJlZCBpbiB0aGUgY29tbWl0IG1lc3NhZ2UsIHRoaXMgb25seSB3b3Jr
+cyBvbiBiYXJlIG1ldGFsIGR1ZSB0byB0aGUNCj4+IFBBVCBiaXQgbm90IGJlaW5nIG5lZWRl
+ZCBmb3IgV0MgbWFwcGluZ3MuDQo+Pg0KPj4gTWFraW5nIHRoaXMgcGF0Y2ggWGVuIHNwZWNp
+ZmljIHdvdWxkIHRyeSB0byBjdXJlIHRoZSBzeW1wdG9tcyB3aXRob3V0IGZpeGluZw0KPj4g
+dGhlIHVuZGVybHlpbmcgcHJvYmxlbTogX1BBR0VfUEFUIHNob3VsZCBiZSByZWdhcmRlZCB0
+aGUgc2FtZSB3YXkgYXMgdGhlIGJpdHMNCj4+IGZvciBjYWNoaW5nIG1vZGUgKF9QQUdFX0NI
+R19NQVNLKS4NCj4gDQo+IFNvIHdoeSBpc24ndCBfUEFHRV9QQVQgcGFydCBvZiBfUEFHRV9D
+SEdfTUFTSz8NCg0KVGhpcyB3b3VsZCByZXN1bHQgaW4gcHJvYmxlbXMgZm9yIGxhcmdlIHBh
+Z2VzOiBfUEFHRV9QU0UgaXMgYXQgdGhlIHNhbWUNCnBvc2l0aW9uIGFzIF9QQUdFX1BBVCAo
+bGFyZ2UgcGFnZXMgYXJlIHVzaW5nIF9QQUdFX1BBVF9MQVJHRSBpbnN0ZWFkKS4NCg0KWWVz
+LCB4ODYgQUJJIGlzIGEgbWVzcy4NCg0KDQpKdWVyZ2VuDQoNCg==
+--------------Dk7NVigM3sGgJDBkoB6lZ7gd
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
----
- mm/page_alloc.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 72660e924b95..e7d7db36582b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3768,6 +3768,15 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
- 	if (fatal_signal_pending(current))
- 		return false;
- 
-+	/*
-+	 * Compaction was skipped due to a lack of free order-0
-+	 * migration targets. Continue if reclaim can help.
-+	 */
-+	if (compact_result == COMPACT_SKIPPED) {
-+		ret = compaction_zonelist_suitable(ac, order, alloc_flags);
-+		goto out;
-+	}
-+
- 	/*
- 	 * Compaction managed to coalesce some page blocks, but the
- 	 * allocation failed presumably due to a race. Retry some.
-@@ -3785,17 +3794,10 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
- 		if (order > PAGE_ALLOC_COSTLY_ORDER)
- 			max_retries /= 4;
- 
--		ret = ++(*compaction_retries) <= max_retries;
--		goto out;
--	}
--
--	/*
--	 * Compaction was skipped due to a lack of free order-0
--	 * migration targets. Continue if reclaim can help.
--	 */
--	if (compact_result == COMPACT_SKIPPED) {
--		ret = compaction_zonelist_suitable(ac, order, alloc_flags);
--		goto out;
-+		if (++(*compaction_retries) <= max_retries) {
-+			ret = true;
-+			goto out;
-+		}
- 	}
- 
- 	/*
--- 
-2.40.1
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
+--------------Dk7NVigM3sGgJDBkoB6lZ7gd--
+
+--------------pvIpQ559mjmcgHKBMLSOMf6K--
+
+--------------xSod5AXDcN7eeAnElmpFWrrJ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmR6ASwFAwAAAAAACgkQsN6d1ii/Ey+t
+Kwf+J581HB+9alPQG+Y6YV6SaYs+cqCaGLsEL/4a0Vem+j67nYpFFIgyv2tMhCgtJbnALHhJx0lZ
+NJM1XKZOJD0PW9s74DqmzYKkE0SfBppGsF9lobv0yod0kKku/tV6AOXRoKcd1tMCvOiVDREcpSF5
+Wh3NyX0iOTNHwNWH3hFJDzJ0dKIL9AtkG0R54eGaKXtcAtQEJ5r7Nhs4jK8maJHTKA4joZuWl6yh
+p3+huplv4ewT5TQvLSGSEMuZ28wr7FyN/Mj3wi4r3Qwtzn/jEayh3b72m5ajS3xg/TFx7hew2qeF
+//8fEk09ZDA9ebGJzJDSkm2VbVJ6ZzZzCEG8jQvvqw==
+=lbX1
+-----END PGP SIGNATURE-----
+
+--------------xSod5AXDcN7eeAnElmpFWrrJ--
