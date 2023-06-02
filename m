@@ -2,116 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0BC72084D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4D6720851
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236170AbjFBRWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S236917AbjFBRYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbjFBRWJ (ORCPT
+        with ESMTP id S236592AbjFBRX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:22:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5DB1A2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:22:07 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352Fjp6X020574;
-        Fri, 2 Jun 2023 17:21:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CV/zv2rEx6HI1bxvAwZy7pg+66Syy5hdPrY4LUHd8WY=;
- b=LoKJ0jB8rEZZywhEr9O+n/hjBsinX6Z3vr8N/tkk6AXYqZS/xKFlTvj9JntjUSMYROo6
- 7m4Xrr/SHZrUnnSTfppwESX/+wu/QcXTktuzIrQyfMKuAM4YYlA1vQIQHeO1etRLJtCj
- SKUBqgOBZ0YCPhcAx0oKf/Jkz6lgGKMJm1l/xbIKxOV+QmdKED9hmy3kRTPI97Usel9R
- S4WuZBkg62KQz7BS6Nss7AxnH/zrcXQbgLNUgH2WuZArygO2SY4kYAe5SbFW0LUmtMjE
- sUscWNLSXyGr08a1lc/Yj/XaLOJpMNIrQlz0cM5cg5z2BuDpsZCWXU3z386Mk+Yb63+u fA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qycwe95rm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 17:21:55 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 352HLsEF001287
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 17:21:54 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 2 Jun 2023
- 10:21:53 -0700
-Message-ID: <bbf3e219-eae4-0b50-d552-23b60d83d3f0@quicinc.com>
-Date:   Fri, 2 Jun 2023 11:21:53 -0600
+        Fri, 2 Jun 2023 13:23:59 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBD91B3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:23:58 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53fb64b3368so1284605a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685726637; x=1688318637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qwbDkzUy6Qk5difaDNXua1bNRo0UZZqSnu/ErFEprlc=;
+        b=d8jByJ1PZJmeuk8EagYsF/DqAjxrBWU4gad8vpYvXne/vNgX/IDf4GWwHXV6NiU/hu
+         kkl8cuQ5vsvBNhHEsnJFV267CUwy0EBs/SFk1CKiKB53AIdaP+WFl94gixrDvxoyJWxu
+         nwndksvlaDuULMjSRkPvUccpmrKiSOGoP2gw47O+pTKx515bSSgUjtlUMorLrQTD81nk
+         w5gz6ow21AE4zZ+/oyFgcJyf6zafnE+3lmdTYTjg5L85jjRhHKQ1KdM3lbktGK2rycW/
+         o38TUh2fJL13aUVnb/BWDEP7AhkiqGchaHjNnq4Psf1o5AQeadf43KXgJWWy2b4VuKoF
+         X9cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685726637; x=1688318637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qwbDkzUy6Qk5difaDNXua1bNRo0UZZqSnu/ErFEprlc=;
+        b=g+br7qao6/XIHuhKZvA0ce+UrFU3vEBg1X6pvaNFqAMQlB4d6p0o4cPac11rpiCr07
+         D9CZEYvqM0ndqHEkdaq7Hlr9rB07qDk56+azIUOhCp2bfmTSy+ITbpJmXgc7V/8PC7NK
+         V4ltCsR6YC+utUbU8+v24X8MynMxVUmzGeqEO4oBUgXSwXkPmv/5tGO4izTV3c4coh64
+         apV0xtFdO7xJTTJSl23XZ8tlGvVZaq33ELEJFJxXkhfauV3v2ZH75BSzEcFzpyhTZL4W
+         nSQjCHLLokTBkWny/adv6KBTkvShpFq2XIjjwyZNiJVkCTBbWQA8H3+Xq+uIPp86uE9N
+         Q7uQ==
+X-Gm-Message-State: AC+VfDza1edsN0nibYJXcRRcdf2J0RLjpXzlgyHQl1zyfk6XwOqJohKq
+        hBONO7iNO+RcqBiH/vXzxDLeIsLBEJblHUtsvjGtqg==
+X-Google-Smtp-Source: ACHHUZ762nQgYgkGSGWGzTCG2EpeYIDrgmi0VEHYv1zz0QMPuLPlSiCuR3LC8MK9kEu0VQD18Frfb4iLdUYdkTlXw5U=
+X-Received: by 2002:a17:902:f7cc:b0:1b1:a4e2:a2ce with SMTP id
+ h12-20020a170902f7cc00b001b1a4e2a2cemr571077plw.20.1685726636958; Fri, 02 Jun
+ 2023 10:23:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] accel/ivpu: ivpu_ipc needs GENERIC_ALLOCATOR
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     kernel test robot <lkp@intel.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Andrzej Kacprowski <andrzej.kacprowski@linux.intel.com>,
-        Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-References: <20230526044519.13441-1-rdunlap@infradead.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230526044519.13441-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gkOGvE_uJrjby2pbGcuIuov8leJcUUYg
-X-Proofpoint-GUID: gkOGvE_uJrjby2pbGcuIuov8leJcUUYg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_13,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=857
- lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0 bulkscore=0
- clxscore=1011 spamscore=0 suspectscore=0 phishscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020132
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230531040203.19295-1-badhri@google.com> <65dd300b-b967-41ab-b174-a7dc13ec2e19@rowland.harvard.edu>
+In-Reply-To: <65dd300b-b967-41ab-b174-a7dc13ec2e19@rowland.harvard.edu>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Fri, 2 Jun 2023 10:23:20 -0700
+Message-ID: <CAPTae5LV0jhLq10zj+dmg_d2oJmwx+Xe7gJGk-w27woEgz+c4A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] usb: gadget: udc: core: Offload
+ usb_udc_vbus_handler processing
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/2023 10:45 PM, Randy Dunlap wrote:
-> Drivers that use the gen_pool*() family of functions should
-> select GENERIC_ALLOCATOR to prevent build errors like these:
-> 
-> ld: drivers/accel/ivpu/ivpu_ipc.o: in function `gen_pool_free':
-> include/linux/genalloc.h:172: undefined reference to `gen_pool_free_owner'
-> ld: drivers/accel/ivpu/ivpu_ipc.o: in function `gen_pool_alloc_algo':
-> include/linux/genalloc.h:138: undefined reference to `gen_pool_alloc_algo_owner'
-> ld: drivers/accel/ivpu/ivpu_ipc.o: in function `gen_pool_free':
-> include/linux/genalloc.h:172: undefined reference to `gen_pool_free_owner'
-> ld: drivers/accel/ivpu/ivpu_ipc.o: in function `ivpu_ipc_init':
-> drivers/accel/ivpu/ivpu_ipc.c:441: undefined reference to `devm_gen_pool_create'
-> ld: drivers/accel/ivpu/ivpu_ipc.o: in function `gen_pool_add_virt':
-> include/linux/genalloc.h:104: undefined reference to `gen_pool_add_owner'
-> 
-> Fixes: 5d7422cfb498 ("accel/ivpu: Add IPC driver and JSM messages")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202305221206.1TaugDKP-lkp@intel.com/
-> Cc: Oded Gabbay <ogabbay@kernel.org>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
-> Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> Cc: Andrzej Kacprowski <andrzej.kacprowski@linux.intel.com>
-> Cc: Krystian Pradzynski <krystian.pradzynski@linux.intel.com>
-> Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+On Wed, May 31, 2023 at 10:29=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Wed, May 31, 2023 at 04:02:01AM +0000, Badhri Jagan Sridharan wrote:
+> > usb_udc_vbus_handler() can be invoked from interrupt context by irq
+> > handlers of the gadget drivers, however, usb_udc_connect_control() has
+> > to run in non-atomic context due to the following:
+> > a. Some of the gadget driver implementations expect the ->pullup
+> >    callback to be invoked in non-atomic context.
+> > b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
+> >
+> > Hence offload invocation of usb_udc_connect_control()
+> > to workqueue.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 1016fc0c096c ("USB: gadget: Fix obscure lockdep violation for ud=
+c_mutex")
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v1:
+> > - Address Alan Stern's comment on usb_udc_vbus_handler invocation from
+> >   atomic context:
+> > * vbus_events_lock is now a spinlock and allocations in
+> > * usb_udc_vbus_handler are atomic now.
+> >
+> > Changes since v2:
+> > - Addressing Alan Stern's comments:
+> > ** connect_lock is now held by callers of
+> > * usb_gadget_pullup_update_locked() and gadget_(un)bind_driver() does
+> > * notdirectly hold the lock.
+> >
+> > ** Both usb_gadget_(dis)connect() and usb_udc_vbus_handler() would
+> > * set/clear udc->vbus and invoke usb_gadget_pullup_update_locked.
+> >
+> > ** Add "unbinding" to prevent new connections after the gadget is being
+> > * unbound.
+> >
+> > Changes since v3:
+> > ** Made a minor cleanup which I missed to do in v3 in
+> > * usb_udc_vbus_handler().
+> >
+> > Changes since v4:
+> > - Addressing Alan Stern's comments:
+> > ** usb_udc_vbus_handler() now offloads invocation of usb_udc_connect_co=
+ntrol()
+> > * from workqueue.
+> >
+> > ** Dropped vbus_events list as this was redundant. Updating to the
+> > * latest value is suffice
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 19 ++++++++++++++++++-
+> >  1 file changed, 18 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
+e.c
+> > index 52e6d2e84e35..44a9f32679b5 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -48,6 +48,7 @@ struct usb_udc {
+> >       struct list_head                list;
+> >       bool                            vbus;
+> >       bool                            started;
+> > +     struct work_struct              vbus_work;
+> >  };
+> >
+> >  static struct class *udc_class;
+> > @@ -1086,6 +1087,13 @@ static void usb_udc_connect_control(struct usb_u=
+dc *udc)
+> >               usb_gadget_disconnect(udc->gadget);
+> >  }
+> >
+> > +static void vbus_event_work(struct work_struct *work)
+> > +{
+> > +     struct usb_udc *udc =3D container_of(work, struct usb_udc, vbus_w=
+ork);
+> > +
+> > +     usb_udc_connect_control(udc);
+> > +}
+> > +
+> >  /**
+> >   * usb_udc_vbus_handler - updates the udc core vbus status, and try to
+> >   * connect or disconnect gadget
+> > @@ -1094,6 +1102,13 @@ static void usb_udc_connect_control(struct usb_u=
+dc *udc)
+> >   *
+> >   * The udc driver calls it when it wants to connect or disconnect gadg=
+et
+> >   * according to vbus status.
+> > + *
+> > + * This function can be invoked from interrupt context by irq handlers=
+ of the gadget drivers,
+> > + * however, usb_udc_connect_control() has to run in non-atomic context=
+ due to the following:
+> > + * a. Some of the gadget driver implementations expect the ->pullup ca=
+llback to be invoked in
+> > + * non-atomic context.
+> > + * b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
+> > + * Hence offload invocation of usb_udc_connect_control() to workqueue.
+>
+> Comments should be wrapped after about 76 columns (unless there is some
+> very good reason not to).
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Sounds good ! Have addressed this in v6. Wrapping comments at 76.
+
+>
+> >   */
+> >  void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+> >  {
+> > @@ -1101,7 +1116,7 @@ void usb_udc_vbus_handler(struct usb_gadget *gadg=
+et, bool status)
+> >
+> >       if (udc) {
+> >               udc->vbus =3D status;
+> > -             usb_udc_connect_control(udc);
+> > +             schedule_work(&udc->vbus_work);
+> >       }
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+> > @@ -1328,6 +1343,7 @@ int usb_add_gadget(struct usb_gadget *gadget)
+> >       mutex_lock(&udc_lock);
+> >       list_add_tail(&udc->list, &udc_list);
+> >       mutex_unlock(&udc_lock);
+> > +     INIT_WORK(&udc->vbus_work, vbus_event_work);
+> >
+> >       ret =3D device_add(&udc->dev);
+> >       if (ret)
+> > @@ -1558,6 +1574,7 @@ static void gadget_unbind_driver(struct device *d=
+ev)
+> >
+> >       kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+> >
+> > +     cancel_work_sync(&udc->vbus_work);
+> >       usb_gadget_disconnect(gadget);
+> >       usb_gadget_disable_async_callbacks(udc);
+> >       if (gadget->irq)
+>
+> I'm not in love with this, because there's nothing here to prevent the
+> work item from being queued again right after it is cancelled.  Patch
+> 3/3 in the series will fix this, but in the meantime this window will
+> exist.
+>
+> Maybe it would be better to merge the 3/3 patch with this one.  They are
+> very closely related, after all, since the other patch addresses the
+> matter of not allowing the work item to do anything bad at the wrong
+> time.
+
+Done ! v6. now squashes 1/3 with 3/3.
+
+Thanks a lot,
+Badhri
+
+>
+> Alan Stern
