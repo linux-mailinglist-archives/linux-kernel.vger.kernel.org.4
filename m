@@ -2,114 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A89471F813
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4011871F815
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbjFBBhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
+        id S233715AbjFBBiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjFBBhp (ORCPT
+        with ESMTP id S233727AbjFBBiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:37:45 -0400
-Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D4BE5E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:37:13 -0700 (PDT)
-Received: (qmail 10122 invoked by uid 990); 2 Jun 2023 01:36:36 -0000
-Authentication-Results: devico.uberspace.de;
-        auth=pass (plain)
+        Thu, 1 Jun 2023 21:38:03 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361E018D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:37:40 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so30115ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685669859; x=1688261859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XqK+LRqUfX7YWXdw+FC58BH33IXhJbV4zkm9bX0JR7g=;
+        b=lNs//9ZjI8SYBNPM84Yyp+jfuQxpvN4VGBDkGBNVlWSSahevpk4zeGRX8Ch6GPM3Hq
+         VnT2ijtWicIIZHThS+cvOf4QwGLiuTxbEfFkbXjB3LkrfHY4xoAz2gTAIgvP30Z9W5Sc
+         Xd4ooWgvhdVYbJfe/SEvqzEl8P6xMoP3Ye7Dz+CFC0SHk7h5dWGe/iQIw3QrWieJGvnR
+         l8z10UpgH45xTmiSJ/Zl60beF+7tIxysma7VFexBlweVYmnT/LoXS80UQyoV0LBCWDiR
+         N4h2fq3Hf+TFGtgT2RrMSnbFrCFM58ckJNrpSMvDIwLFM9SNfccB73Fxhh1Kwj/LNf21
+         oO9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685669859; x=1688261859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XqK+LRqUfX7YWXdw+FC58BH33IXhJbV4zkm9bX0JR7g=;
+        b=SQ8KjbwovBjQIizqwHky6ofgjjPmoErZSvQez3Jwbpcf8w2ueTgwGIeTojnCujv7QA
+         9XZS37u1OrCy6APURhKckh6SBy/Vzxtr6E5iDsO/3EKPJL1d0DrFXUaFuaLKTrdnlxTA
+         ioZNo2jVWy9t1eTXkwhvxWh+f4ALpqkH5SzRmunm+/lZyDhV0qVaAEtAumLAYbOSyJQc
+         alNkhqFPclFWxUPppE+T5ItpHkM8on7jy3hx0lJpQm5AE/wsOi+J3PExNznmYN59AjxU
+         ZJZnLsZErSewwIiKIO4ewbznWiSG4qME731jQsWNHm7E2VXKDoh2xnO3zvTX01evGpMa
+         DQmQ==
+X-Gm-Message-State: AC+VfDw4w11OR0CG/4LLiuKVJucorhLmLFLTSNRNJVUuN27W0I127Lom
+        cwc0t2s5d2ix16kskYyKRH13c5KdcPmjLD3Olcxahg==
+X-Google-Smtp-Source: ACHHUZ59LayDDuFa4x5N7le29MHxojRgO7APtJiUVFdDa51w0VW6AysowPj3x1sUV/AAwEyyH5BzRW2PlE3RH21PvtU=
+X-Received: by 2002:a05:6e02:214e:b0:33b:3d94:afb5 with SMTP id
+ d14-20020a056e02214e00b0033b3d94afb5mr58573ilv.25.1685669859279; Thu, 01 Jun
+ 2023 18:37:39 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Fri, 02 Jun 2023 01:36:35 +0000
-Content-Type: text/plain; charset="utf-8"
+References: <20230519005231.3027912-1-rananta@google.com> <20230519005231.3027912-4-rananta@google.com>
+ <87v8gbjkzn.wl-maz@kernel.org> <CAJHc60x0iFWOFxcCYpH6bG+CinBM2TmYxvADKwOqDsUFJCr0AA@mail.gmail.com>
+ <86zg5kc2ho.wl-maz@kernel.org>
+In-Reply-To: <86zg5kc2ho.wl-maz@kernel.org>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu, 1 Jun 2023 18:37:28 -0700
+Message-ID: <CAJHc60wKDbfQsjmxkv9A6h56NXtU=DapDynFLDtdvChX_ueQeA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-From:   "Leonard Lausen" <leonard@lausen.nl>
-Message-ID: <f98dcffe4b1dc91edf692fbaa766a263910f2c5b@lausen.nl>
-TLS-Required: No
-Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
-To:     "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>
-Cc:     freedreno@lists.freedesktop.org,
-        "Sankeerth Billakanti" <quic_sbillaka@quicinc.com>,
-        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
-        regressions@lists.linux.dev, "David Airlie" <airlied@gmail.com>,
-        "Nikita Travkin" <nikita@trvn.ru>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, "Rob Clark" <robdclark@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        "Sean Paul" <sean@poorly.run>,
-        "Johan Hovold" <johan+linaro@kernel.org>
-In-Reply-To: <932ee149-c524-25e7-ee49-5ea1a7e6708c@quicinc.com>
-References: <932ee149-c524-25e7-ee49-5ea1a7e6708c@quicinc.com>
- <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
- <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
- <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
- <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
- <20230508021536.txtamifw2vkfncnx@ripper>
- <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
- <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
- <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
- <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
- <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
-X-Rspamd-Bar: /
-X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-0.653806) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: 0.746193
-Received: from unknown (HELO unkown) (::1)
-        by devico.uberspace.de (Haraka/3.0.1) with ESMTPSA; Fri, 02 Jun 2023 03:36:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=lausen.nl; s=uberspace;
-        h=from;
-        bh=F1dvcx9M5aUHwpLVgbzf/l4rVtHAAaC7rv6RpWusZ5s=;
-        b=wFk1temRwaSxBD9VI5V46NvXc365LyX2Oy2QNyMIivszup70xaT/XGMZU9EImnz2BJ4OAZR/Ng
-        /+LZGTrJC+Vrm93lm6S9PM/qij10wuT53Ig7zCv+9c085Xm+9fxf5fDzKYr05woN1avArs2muKTc
-        +dQytvX5Q7DgjKbcJZtFQkQ7QseKeklh9Qlue7F9wQTLCHfdOqm4Y4qQk2cGlL34GzXda63ViAd5
-        8yfFe5zJjWkTACc5P7Avxr5evqcUzZuolE9tMP76oAtyEu8RCVAOQs47MP3uAUyhLqWJVkSid/h3
-        dnWDVjz4YUH9H878dg0emKksBhR3ZpSi4RQP1CPXanMBcAshgbjBxHGigY+PejnMoOGfw1jJrvqO
-        dubxnpOH3IyfpKlLY+F28N2lSoYyedtoSACiRy59GWHWiiOwkaO51SoFYwU5VM/dYG3RpEiFnoLP
-        n3YP+gMxFqv+UrRpHzz+QulynVDBaFiizMzwpoMiHSvlczC5AUI+aJhlhQyT4nlYf95/UGIs96Ih
-        /try9w4FMiDYKpELz9gP22UMwK5Xi9j27MK2yn3uKcs25g7GIy+87Wbb2b3sp9wwD5jTGq4urLRt
-        8TGdvJxgrlCuiZ9cNuJLk9V7KDF+aseLMe6kLuvoWQXSd/l1Ju+nlTIxaR7GLjuxqscmWxWZeyDe
-        s=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abhinav,
+On Wed, May 31, 2023 at 1:46=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
+:
+>
+> On Tue, 30 May 2023 22:22:23 +0100,
+> Raghavendra Rao Ananta <rananta@google.com> wrote:
+> >
+> > On Mon, May 29, 2023 at 7:00=E2=80=AFAM Marc Zyngier <maz@kernel.org> w=
+rote:
+> > >
+> > > On Fri, 19 May 2023 01:52:28 +0100,
+> > > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > > >
+> > > > Implement kvm_arch_flush_remote_tlbs_range() for arm64
+> > > > to invalidate the given range in the TLB.
+> > > >
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  arch/arm64/include/asm/kvm_host.h |  3 +++
+> > > >  arch/arm64/kvm/hyp/nvhe/tlb.c     |  4 +---
+> > > >  arch/arm64/kvm/mmu.c              | 11 +++++++++++
+> > > >  3 files changed, 15 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include=
+/asm/kvm_host.h
+> > > > index 81ab41b84f436..343fb530eea9c 100644
+> > > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > > @@ -1081,6 +1081,9 @@ struct kvm *kvm_arch_alloc_vm(void);
+> > > >  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> > > >  int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> > > >
+> > > > +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> > > > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_=
+gfn, u64 pages);
+> > > > +
+> > > >  static inline bool kvm_vm_is_protected(struct kvm *kvm)
+> > > >  {
+> > > >       return false;
+> > > > diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvh=
+e/tlb.c
+> > > > index d4ea549c4b5c4..d2c7c1bc6d441 100644
+> > > > --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > > > +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > > > @@ -150,10 +150,8 @@ void __kvm_tlb_flush_vmid_range(struct kvm_s2_=
+mmu *mmu,
+> > > >               return;
+> > > >       }
+> > > >
+> > > > -     dsb(ishst);
+> > > > -
+> > > >       /* Switch to requested VMID */
+> > > > -     __tlb_switch_to_guest(mmu, &cxt);
+> > > > +     __tlb_switch_to_guest(mmu, &cxt, false);
+> > >
+> > > This hunk is in the wrong patch, isn't it?
+> > >
+> > Ah, you are right. It should be part of the previous patch. I think I
+> > introduced it accidentally when I rebased the series. I'll remove it
+> > in the next spin.
+> >
+> >
+> > > >
+> > > >       __flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, f=
+alse);
+> > > >
+> > > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > > index d0a0d3dca9316..e3673b4c10292 100644
+> > > > --- a/arch/arm64/kvm/mmu.c
+> > > > +++ b/arch/arm64/kvm/mmu.c
+> > > > @@ -92,6 +92,17 @@ int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_=
+gfn, u64 pages)
+> > > > +{
+> > > > +     phys_addr_t start, end;
+> > > > +
+> > > > +     start =3D start_gfn << PAGE_SHIFT;
+> > > > +     end =3D (start_gfn + pages) << PAGE_SHIFT;
+> > > > +
+> > > > +     kvm_call_hyp(__kvm_tlb_flush_vmid_range, &kvm->arch.mmu, star=
+t, end);
+> > >
+> > > So that's the point that I think is not right. It is the MMU code tha=
+t
+> > > should drive the invalidation method, and not the HYP code. The HYP
+> > > code should be as dumb as possible, and the logic should be kept in
+> > > the MMU code.
+> > >
+> > > So when a range invalidation is forwarded to HYP, it's a *valid* rang=
+e
+> > > invalidation. not something that can fallback to VMID-wide invalidati=
+on.
+> > >
+> > I'm guessing that you are referring to patch-2. Do you recommend
+> > moving the 'pages >=3D MAX_TLBI_RANGE_PAGES' logic here and simply
+> > return an error? How about for the other check:
+> > system_supports_tlb_range()?
+> > The idea was for __kvm_tlb_flush_vmid_range() to also implement a
+> > fallback mechanism in case the system doesn't support the range-based
+> > instructions. But if we end up calling __kvm_tlb_flush_vmid_range()
+> > from multiple cases, we'd end up duplicating the checks. WDYT?
+>
+> My take is that there should be a single helper deciding to issue
+> either a number of range-based TLBIs depending on start/end, or a
+> single VMID-based TLBI. Having multiple calling sites is not a
+> problem, and even if that code gets duplicated, big deal.
+>
+Hypothetically, if I move the check to this patch and return an error
+if this situation occurs, since I'm dependending on David's common MMU
+code [1], kvm_main.c would end of calling kvm_flush_remote_tlbs() and
+we'd be doing a VMID-based TLBI.
+One idea would be to issue a WARN_ON() and return 0 so that we don't
+issue any TLBIs. Thoughts?
 
-June 1, 2023 at 3:20 PM, "Abhinav Kumar" <quic_abhinavk@quicinc.com> wrot=
-e:
-> >=20
->=20>  [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107=
-)
-> >=20
->=20
-> We are not able to recreate this on sc7280 chromebooks , will need to c=
-heck on sc7180. This does not seem directly related to any of the hotplug=
- changes though so needs to be checked separately. So please feel free to=
- raise a gitlab bug for this and assign to me.
+> But a hypercall that falls back to global invalidation based on a
+> range evaluation error (more than MAX_TLBI_RANGE_PAGES) is papering
+> over a latent bug.
+>
+If I understand this correctly, MAX_TLBI_RANGE_PAGES is specifically
+the capacity of the range-based instructions itself, isn't it? Is it
+incorrect for the caller to request a higher range be invalidated even
+on systems that do not support these instructions? Probably that's why
+__flush_tlb_range() falls back to a global flush when the range
+request is exceeded?
 
-Thank you for checking with sc7280. I created https://gitlab.freedesktop.=
-org/drm/msm/-/issues/25 and CCed you. I've also verified that the error p=
-ersists with v6.4.0-rc4 + Kuogee's patch (just in case you may have teste=
-d on sc7280 with 6.4).
-=20
->=20>  https://patchwork.freedesktop.org/patch/538601/?series=3D118148&re=
-v=3D3
-> >  Apologies if you were not CCed on this, if a next version is CCed,
-> >  will ask kuogee to cc you.
-> >  Meanwhile, will be great if you can verify if it works for you and
-> >  provide Tested-by tags.
+Thank you.
+Raghavendra
 
-I see Bjorn also tested the patch. As it fixes a serious USB-C DP regress=
-ion which broke USB-C DP completely on lazor for v6.3, can it be included=
- in upcoming 6.3.y release?
+[1]:  https://lore.kernel.org/linux-arm-kernel/20230126184025.2294823-7-dma=
+tlack@google.com/
 
-Thank you
-Leonard
+
+> There should be no logic whatsoever in any of the two tlb.c files.
+> Only a switch to the correct context, and the requested invalidation,
+> which *must* be architecturally correct.
+>
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
