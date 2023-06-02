@@ -2,158 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0732D7207F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B517207F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbjFBQyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S236068AbjFBQz3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 12:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235575AbjFBQyE (ORCPT
+        with ESMTP id S230430AbjFBQz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:54:04 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D80197
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:54:02 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-976a0a1a92bso20386766b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685724841; x=1688316841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lPmI2TrZDJVO0p/gCaOEjLaAl8IYK3WfafDGT3CK+9M=;
-        b=D7rjhzbSbPeeaPEAqYQi9x2/eb9VhR7WjqKyoXPjrTqeqC1931F8awE1RHk39TC09a
-         KzKDcyUI5q0rvSoQ78m4ZtaFoNDQOLfUpzoNqu6h5lRb3JPCqOQclRJAqV/oBqCcsfPU
-         cGL6+WFMKP/F/D7GOVA6RDKH+0rzhXincuHh4=
+        Fri, 2 Jun 2023 12:55:27 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9E4196;
+        Fri,  2 Jun 2023 09:55:25 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-974604c1394so23398066b.0;
+        Fri, 02 Jun 2023 09:55:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685724841; x=1688316841;
+        d=1e100.net; s=20221208; t=1685724924; x=1688316924;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lPmI2TrZDJVO0p/gCaOEjLaAl8IYK3WfafDGT3CK+9M=;
-        b=Xcl1MA+0/mBKYiF6MDgcdweF6AtE7WMHN8ms7OmMmw/u2RPjhEVmUmyVC6F6vFOqPn
-         fna2UpNgV1mYLYaAodSJ5NOAHs4Yn9paOriYec08kbfQVgL4RKPaxF3JrIChNHrgjqMO
-         CVCsfolYRTgo1iDkf317dIlfDR7oi5rNR2Eu3kMSvj5aQ4FG2FMBAuajNV2trydVOB+Z
-         Zl1XdhPscarqM7j9NuXu+GXffl9D9SnTxgPGtrpLPwo44Rj/o/PGpQCxgY+sXlcCnKQM
-         GH/Y0Mgk059ZEJj7uCaCAFfkxGtd3colQdpE0G/kZ/JUK937MEfvuiD3R4dcX3HE6q6U
-         Z5yw==
-X-Gm-Message-State: AC+VfDyPp4Be/FiHYNQnigqiB4xHEoVj89IwNomBECD59jda7cLRfO0C
-        UrnK5i74jmdyd4vNN6WXA4IyHTMvdCQ7gRz64xENTq4m
-X-Google-Smtp-Source: ACHHUZ7IZ2uCTf33fxqloQD4v5+KrM3+eOsabjbAFa5SMMj7/L7cO0blu2SVJ6He89tDLjDl/S2y7w==
-X-Received: by 2002:a17:907:2d29:b0:974:55ea:1ace with SMTP id gs41-20020a1709072d2900b0097455ea1acemr3462191ejc.6.1685724841132;
-        Fri, 02 Jun 2023 09:54:01 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id bi1-20020a170906a24100b009664cdb3fc5sm937216ejb.138.2023.06.02.09.53.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 09:53:59 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-30af56f5f52so2177342f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:53:59 -0700 (PDT)
-X-Received: by 2002:adf:e2c6:0:b0:307:839a:335e with SMTP id
- d6-20020adfe2c6000000b00307839a335emr422037wrj.44.1685724839196; Fri, 02 Jun
- 2023 09:53:59 -0700 (PDT)
+        bh=pt9VNTeJlFVEV3sIod8cHGTAKd0dmJxzfE9EV8gLQWE=;
+        b=HodPOyJNhYxQ60vwtp4RyfBXr7UskTIgCAEk2wJ/1jYVuesor3MJal4KF6yB1W1FKZ
+         1XSWy5JpREK+undDIkqOfukU154VpavJIkbBV829y5FraqDksaIG/N0h2VaBvRPJkA/l
+         wd4Z0vPSEtP14aV3zkJK3IHFRHT/DGM09zo1v1JgH0aA9uuygUBJ34e+Oeap8yNX6DG8
+         X5/DemQxNHz2zm6bxH9tfTUTv0CR7Xm1Mxebeh89qQ0YJypkmkMroWBHIQ73hTSXtcCG
+         b8dy/eiAMn1TB3hQAFlGTCWHDAeivrJSJ/TOsgiHdSLjAfCHHAMQgXgbS9qww8Y4SGmL
+         Hf6w==
+X-Gm-Message-State: AC+VfDzuSNA53YZ6xGqDvdGgYHjY6wzWRCkyGiMGw9CGUD0FXAI/xnHx
+        UKY30P7Imf8ufjgIU6co7yHXbSD/CfxqDijaFInIxyqfTLE=
+X-Google-Smtp-Source: ACHHUZ6Py3U/a0yFJ9hJFd0xhfSWBcfOZ1zZOLFsSPZRu42PNsWRoF6JOHnKOtYWEcuxqvrGUZPUIF6mO/lz3yYt3mg=
+X-Received: by 2002:a17:906:145:b0:94a:5f0d:d9d6 with SMTP id
+ 5-20020a170906014500b0094a5f0dd9d6mr10572995ejh.4.1685724924056; Fri, 02 Jun
+ 2023 09:55:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
- <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com>
- <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk>
- <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
- <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com>
- <832277.1685630048@warthog.procyon.org.uk> <909595.1685639680@warthog.procyon.org.uk>
- <20230601212043.720f85c2@kernel.org> <952877.1685694220@warthog.procyon.org.uk>
- <CAHk-=wjvgL5nyZmpYRWBfab4NKvfQ7NjUvUhE3a3wYTyTEHdfQ@mail.gmail.com>
- <1227123.1685706296@warthog.procyon.org.uk> <CAHk-=wgyAGUMHmQM-5Eb556z5xiHZB7cF05qjrtUH4F7P-1rSA@mail.gmail.com>
- <20230602093929.29fd447d@kernel.org>
-In-Reply-To: <20230602093929.29fd447d@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Jun 2023 12:53:42 -0400
-X-Gmail-Original-Message-ID: <CAHk-=whgpCNzmQfTAUY7D8P6t9TgzoLx9Uauu7YGQpgZtg-SYg@mail.gmail.com>
-Message-ID: <CAHk-=whgpCNzmQfTAUY7D8P6t9TgzoLx9Uauu7YGQpgZtg-SYg@mail.gmail.com>
-Subject: Re: Bug in short splice to socket?
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
+References: <20230601213246.3271412-1-arnd@kernel.org> <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
+ <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
+In-Reply-To: <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Jun 2023 18:55:12 +0200
+Message-ID: <CAJZ5v0iP+cmcoigiGwv58Hf8_3iM-+_5KZbAqiZyjqZxfBQR6A@mail.gmail.com>
+Subject: Re: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Zhang Rui <rui.zhang@intel.com>, Arnd Bergmann <arnd@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 12:39=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+On Fri, Jun 2, 2023 at 11:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Can we add an optional splice_end / short_splice / splice_underflow /
-> splice_I_did_not_mean_to_set_more_on_the_previous_call_sorry callback
-> to struct file_operations?
+> On Fri, Jun 2, 2023, at 10:04, Zhang, Rui wrote:
+> > On Thu, 2023-06-01 at 23:32 +0200, Arnd Bergmann wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >>
+> >> When the intel_rapl driver is built-in, but iosf_mbi is a loadable
+> >> module,
+> >> the kernel fails to link:
+> >>
+> >> x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
+> >> intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to
+> >> `iosf_mbi_write'
+> >> x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined
+> >> reference to `iosf_mbi_read'
+> >>
+> >
+> > IMO, it is the intel_rapl_common.c that calls IOSF APIs without
+> > specifying the dependency. Thus it should be fixed by something like
+> > below,
+> >
+> > --- a/drivers/powercap/Kconfig
+> > +++ b/drivers/powercap/Kconfig
+> > @@ -18,10 +18,11 @@ if POWERCAP
+> >  # Client driver configurations go here.
+> >  config INTEL_RAPL_CORE
+> >       tristate
+> > +     select IOSF_MBI
+> >
+> >  config INTEL_RAPL
+> >       tristate "Intel RAPL Support via MSR Interface"
+> > -     depends on X86 && IOSF_MBI
+> > +     depends on X86
+> >       select INTEL_RAPL_CORE
+> >       help
+> >         This enables support for the Intel Running Average Power Limit
+>
+> I think that has the logic slightly backwards from a usability point
+> of view: The way I read the arch/x86/Kconfig description, IOSF_MBI
+> is a feature of specific Intel hardware implementations, which
+> gets enabled when any of these SoC platforms are enabled in
+> the build, and the INTEL_RAPL driver specifically only works
+> on those, while the new INTEL_RAPL_TPMI driver works on other
+> hardware.
+>
+> More generally speaking, I think it is a mistake for a device
+> driver in one subsystem to use 'select' to enforce a build
+> dependency on a driver in another subsystem when the other
+> symbol is user-visible.
 
-A splice_end() operation might well be the simplest model, but I think
-it's broken.
+IOSF_MBI is already selected from multiple places and while you can
+argue that they are all mistakes, this particular new one would not be
+worse than any of them.
 
-It would certainly be easy to implement: file descriptor that doesn't
-care about SPLICE_F_MORE - so most of them - would just leave it as
-NULL, and the splice code could decide to call it *if* it had left the
-last splice with SPLICE_F_MORE, _and_ the user hadn't set it, and the
-file descriptor wants that information.
-
-But I think one of the problems here is one of "what the hell is the
-meaning of that bit"?
-
-In particular, think about what happens if a signal is pending, and we
-return with a partially completed write? There potentially *is* more
-data to be sent, it's just not sent by *this* splice() call, as user
-space has to handle the signal first.
-
-What is the semantics of SPLICE_F_MORE in that kind of situation?
-
-Which is why I really think that it would be *so* much better if we
-really let the whole SPLICE_F_MORE bit be a signal from the *input*
-side.
-
-I know I've been harping on this, but just from a "sane semantics"
-standpoint, I really think the only thing that *really* makes sense is
-for the input side of a splice to say "I gave you X amount of data,
-but I have more to give".
-
-And that would *literally* be the semantic meaning of that SPLICE_F_MORE bi=
-t.
-
-Wouldn't it be lovely to have some actual documented meaning to it,
-which does *not* depend on things like ".. but what if a signal
-happens" issues?
-
-And yes, it's entirely possible that I'm missing something, and I'm
-misunderstanding what people really want, but I do feel like this is a
-somewhat subtle area, and if people really care about the exact
-semantics of SPLICE_F_MORE, then we need to *have* exact semantics for
-it.
-
-And no, I don't think "splice_end()" can be that exact semantics -
-even if it's simple - exactly because splice() is an interruptible
-operation, so the "end" of a splice() is simply not a stable thing.
-
-I also do wonder how much we care. What are the situations where the
-packet boundaries can really matter in actual real world. Exactly
-because I'm not 100% convinced we've had super-stable behavior here.
-
-The fact that a test-case never triggers signal handling in the middle
-of a splice() call isn't exactly a huge surprise. The test case
-probably doesn't *have* signals. But it just means that the test-case
-isn't all that real-life.
-
-              Linus
+IMO it would be better if IOSF_MBI were not user-visible (and
+interestingly enough, whoever selects it should also select PCI or
+depend on it - I'm not really sure if that dependency is taken care of
+in all cases).
