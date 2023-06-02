@@ -2,177 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5E47206D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963447206D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbjFBQGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S236386AbjFBQHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236314AbjFBQGN (ORCPT
+        with ESMTP id S236543AbjFBQHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:06:13 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37131AB;
-        Fri,  2 Jun 2023 09:06:10 -0700 (PDT)
-Received: from fpc (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 3501944C1018;
-        Fri,  2 Jun 2023 16:06:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 3501944C1018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1685721967;
-        bh=WkPGlu7uffOzFW2P46Q5YpneXdP5+zaFtMiibuBD29Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yse7c51SyzN8q/E8cM0ipBIcESp3+C0rv5qr0XNh/6eOFSBsbq5QSJUyepQaO28qF
-         Ds51W+ICQFdCXn43F7cMawr2HLQVj3jM6QeUF7pMSBvbMj1U7+KVNpyMF8gIt+QLWn
-         /olPNqlpTvmGDHJ6hrLn7fXoLgc4wTIYdXp0YU7Q=
-Date:   Fri, 2 Jun 2023 19:06:02 +0300
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        lvc-project@linuxtesting.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-can@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] can: j1939: avoid possible use-after-free when
- j1939_can_rx_register fails
-Message-ID: <20230602160602.myfk52mxs25mekzb@fpc>
-References: <20230526171910.227615-1-pchelkin@ispras.ru>
- <20230526171910.227615-3-pchelkin@ispras.ru>
- <20230602123519.GH17237@pengutronix.de>
+        Fri, 2 Jun 2023 12:07:38 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFAA1B7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:07:33 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-974638ed5c5so138267066b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685722051; x=1688314051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pSyIWuON41xIpPsAfkdJjA0fkmYqrGMTTzJNJtvl1ho=;
+        b=Vfh0HBQP9WOsPk/09//1NgyAMTU3HloZI1+GuAjqp7Fz2sCHJT3TJDGpnjaenHHbm0
+         UUZ8MzC5kEuRRtA9XkhfAaN3TrUXjYS6ZQtW2KsYAjAW4haZVnfVVP74giz+deURrLFv
+         3AoYjMY0jdGEkHl0URpi1IWo8dzeCJVXNWmhE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685722051; x=1688314051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pSyIWuON41xIpPsAfkdJjA0fkmYqrGMTTzJNJtvl1ho=;
+        b=Vp/Kjscg/ej+LVcKyBU5JpgHwHDzQVqKinHXeiCr0oaJbbMCZWN2+/BxYkrEGQ7E+M
+         Oa6oGaIMrzlJQy4tar1lXZc/yoQTVCddXWFyTMcIqOCcGvNTsj1wwefFEGmN4EGqoCtW
+         jZl3VFPFp9GJpJMcFvjgaN3FkNpaLrNrR3bz9yhDppn5IesZug6ldd2WRvDO0w31SDXA
+         A8LK1aEY8ocuRHAOV9Tx06udQQHsx4QZjvaHaqFrJSKmu3FdadTExCAyZG4AV0m+KaE+
+         E3AQvS/6B1/eq2f5MdYoM0VbwmIHAD666KqkBh1jHRiB3mfSk+Iyf7aIwNRxi7LyOmgk
+         QRvQ==
+X-Gm-Message-State: AC+VfDw+9q2S8m356QMX1tEKGnCGiXcw3HzQ0MUcA6fiFE/yysNym6B9
+        5C5XbmbiOHv9wG6Dyzpd+jWb/RPcJCwVdioiV+jVdVuv
+X-Google-Smtp-Source: ACHHUZ5XcQnLEFvz8kZuRsmUm4pSQ3y2t86BG/Hxm3YL/vJ5OjWJyicucLZYnI7p0gCHsy5Xoa70NA==
+X-Received: by 2002:a17:907:168d:b0:976:a0b2:bf0a with SMTP id hc13-20020a170907168d00b00976a0b2bf0amr207100ejc.7.1685722051743;
+        Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
+        by smtp.gmail.com with ESMTPSA id dk23-20020a170906f0d700b009746394662asm782626ejb.53.2023.06.02.09.07.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96fab30d1e1so482562166b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
+X-Received: by 2002:aa7:c0ce:0:b0:516:2dcf:d027 with SMTP id
+ j14-20020aa7c0ce000000b005162dcfd027mr2836164edp.10.1685722030936; Fri, 02
+ Jun 2023 09:07:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602123519.GH17237@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org> <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com> <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com> <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
+ <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+ <ZHYitt7P7W+8ZlSB@bombadil.infradead.org> <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+ <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org> <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+In-Reply-To: <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 2 Jun 2023 12:06:54 -0400
+X-Gmail-Original-Message-ID: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
+Message-ID: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:35:19PM +0200, Oleksij Rempel wrote:
-> On Fri, May 26, 2023 at 08:19:10PM +0300, Fedor Pchelkin wrote:
-> > Syzkaller reports the following failure:
-> > 
-> > BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
-> > BUG: KASAN: use-after-free in j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
-> > Write of size 4 at addr ffff888141c15058 by task swapper/3/0
-> > 
-> > CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.10.144-syzkaller #0
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-> > Call Trace:
-> >  <IRQ>
-> >  __dump_stack lib/dump_stack.c:77 [inline]
-> >  dump_stack+0x107/0x167 lib/dump_stack.c:118
-> >  print_address_description.constprop.0+0x1c/0x220 mm/kasan/report.c:385
-> >  __kasan_report mm/kasan/report.c:545 [inline]
-> >  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
-> >  check_memory_region_inline mm/kasan/generic.c:186 [inline]
-> >  check_memory_region+0x145/0x190 mm/kasan/generic.c:192
-> >  instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-> >  atomic_fetch_sub_release include/asm-generic/atomic-instrumented.h:220 [inline]
-> >  __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-> >  __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-> >  refcount_dec_and_test include/linux/refcount.h:333 [inline]
-> >  kref_put include/linux/kref.h:64 [inline]
-> >  j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
-> >  j1939_sk_sock_destruct+0x44/0x90 net/can/j1939/socket.c:374
-> >  __sk_destruct+0x4e/0x820 net/core/sock.c:1784
-> >  rcu_do_batch kernel/rcu/tree.c:2485 [inline]
-> >  rcu_core+0xb35/0x1a30 kernel/rcu/tree.c:2726
-> >  __do_softirq+0x289/0x9a3 kernel/softirq.c:298
-> >  asm_call_irq_on_stack+0x12/0x20
-> >  </IRQ>
-> >  __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
-> >  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
-> >  do_softirq_own_stack+0xaa/0xe0 arch/x86/kernel/irq_64.c:77
-> >  invoke_softirq kernel/softirq.c:393 [inline]
-> >  __irq_exit_rcu kernel/softirq.c:423 [inline]
-> >  irq_exit_rcu+0x136/0x200 kernel/softirq.c:435
-> >  sysvec_apic_timer_interrupt+0x4d/0x100 arch/x86/kernel/apic/apic.c:1095
-> >  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:635
-> > 
-> > Allocated by task 1141:
-> >  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
-> >  kasan_set_track mm/kasan/common.c:56 [inline]
-> >  __kasan_kmalloc.constprop.0+0xc9/0xd0 mm/kasan/common.c:461
-> >  kmalloc include/linux/slab.h:552 [inline]
-> >  kzalloc include/linux/slab.h:664 [inline]
-> >  j1939_priv_create net/can/j1939/main.c:131 [inline]
-> >  j1939_netdev_start+0x111/0x860 net/can/j1939/main.c:268
-> >  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
-> >  __sys_bind+0x1f2/0x260 net/socket.c:1645
-> >  __do_sys_bind net/socket.c:1656 [inline]
-> >  __se_sys_bind net/socket.c:1654 [inline]
-> >  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
-> >  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
-> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> > 
-> > Freed by task 1141:
-> >  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
-> >  kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
-> >  kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
-> >  __kasan_slab_free+0x112/0x170 mm/kasan/common.c:422
-> >  slab_free_hook mm/slub.c:1542 [inline]
-> >  slab_free_freelist_hook+0xad/0x190 mm/slub.c:1576
-> >  slab_free mm/slub.c:3149 [inline]
-> >  kfree+0xd9/0x3b0 mm/slub.c:4125
-> >  j1939_netdev_start+0x5ee/0x860 net/can/j1939/main.c:300
-> >  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
-> >  __sys_bind+0x1f2/0x260 net/socket.c:1645
-> >  __do_sys_bind net/socket.c:1656 [inline]
-> >  __se_sys_bind net/socket.c:1654 [inline]
-> >  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
-> >  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
-> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> > 
-> > It can be caused by this scenario:
-> > 
-> > CPU0					CPU1
-> > j1939_sk_bind(socket0, ndev0, ...)
-> >   j1939_netdev_start()
-> > 					j1939_sk_bind(socket1, ndev0, ...)
-> >                                           j1939_netdev_start()
-> >   mutex_lock(&j1939_netdev_lock)
-> >   j1939_priv_set(ndev0, priv)
-> >   mutex_unlock(&j1939_netdev_lock)
-> > 					  if (priv_new)
-> > 					    kref_get(&priv_new->rx_kref)
-> > 					    return priv_new;
-> > 					  /* inside j1939_sk_bind() */
-> > 					  jsk->priv = priv
-> >   j1939_can_rx_register(priv) // fails
-> >   j1939_priv_set(ndev, NULL)
-> >   kfree(priv)
-> > 					j1939_sk_sock_destruct()
-> > 					j1939_priv_put() // <- uaf
-> > 
-> > To avoid this, call j1939_can_rx_register() under j1939_netdev_lock so
-> > that a concurrent thread cannot process j1939_priv before
-> > j1939_can_rx_register() returns.
-> > 
-> > Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-> > 
-> > Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> > Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> 
-> Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> Thank you!
-> 
+On Fri, Jun 2, 2023 at 11:20=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> What concerns me a bit, is that on the patched kernel we seem to hit more=
+ cases where
+> boot takes much longer (in both kernel configs).
 
-Great!
+So it potentially serializes the loads to the same file more, but in
+the process uses much less memory (since the ones waiting will not
+have done any of the "load file contents and uncompress them"). So
+it's a bit of a trade-off.
 
-Thanks for testing the patches!
+We could complicate things a bit, and let other callers return -EEXIST
+a bit earlier, but I'm not convinced it really matters.
+
+Honestly, taking too long because user space does something stupid and
+wrong is not a kernel bug. Not booting because we use too much memory
+- that's problematic. But booting slowly because udev does several
+thousand unnecessary module loads is entirely on udev.
+
+                 Linus
