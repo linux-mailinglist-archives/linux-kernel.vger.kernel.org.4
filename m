@@ -2,202 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E613671FDD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB1971FDDD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbjFBJ2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S235192AbjFBJ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235143AbjFBJ2O (ORCPT
+        with ESMTP id S234137AbjFBJ20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:28:14 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C821BCE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:26:14 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so2538229a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685697972; x=1688289972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y5mONN4wL/Liqce4VaaIxlv40SSoKGs7lYJ0PeAaNVU=;
-        b=YArpIdjhBau4bUHncRhdtnLrifllglfO2cL4Y2QdyOAAb/ShSvsnO47/l5v0J7eqTR
-         C4MHZhLJkLj0XoIiySwbWvER/8TCvSpzYm0mPI0o4ot0Qxlx4eg5ZCuQN2hQ86bmkWGY
-         dVYCffeP5ojLv1NwIv62nYSegwQemmZCZHhlO1IzmB20ERZCdXdNZ0FNzcNM6VhKq7R5
-         gnDZYGBJ47qswZR7Hu5UWtOqusuyll0RL2cT+njLETFKD+7FFlW6rqc1qBepy/qUisRC
-         h0t3XsFQ47fpCI9Hvcex92O45cez+naHuCMUfbr00t1OQTVtr4MyQ9NCJD0+L2nj/vye
-         dQWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685697972; x=1688289972;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5mONN4wL/Liqce4VaaIxlv40SSoKGs7lYJ0PeAaNVU=;
-        b=HzUkQJL6g3Gf6Pe+r9SLsidkq906KZsRMnb6cIJReXiVsV2s9Oh0yLgQ8ZOb6t707x
-         Sn28tO8Wme/Yi3RE+mLNgenIYvkxjeLc3RG6TuCy6stvUkebp4lLdubUQei/bJlozIRT
-         0CGrSjb0Akx1+KE6T4BC0fWN6nnkytnvIArpdl3tpMiKa27M92i087ExattNVfkG2Qm4
-         /WGa8EMbXPBROTdVykspQW6VvFOsnhPN84MC2LAtqBE1iiYQxSMc4RLDgf8pWdxQYiyG
-         wjTEwiJiWJKujpp5wl9BvY7lnTB4vTwlICCpnLsibl5OtmYvP74NrxLB7BVWewCTMCHq
-         WFlw==
-X-Gm-Message-State: AC+VfDwjIzcZTCVhYdLWm4ywM+sWedohbo5H2udftGnGAF0Qh61AF9T4
-        XNCDZGIMnD2psqE/ExMBf6XTuA==
-X-Google-Smtp-Source: ACHHUZ7kLXNcFuvemWZ7GVhVmmdkvpqq44En4YBUYu4k69KzyVyYRAdzmK7csLF19ZEPgvY4RM+wMQ==
-X-Received: by 2002:aa7:da42:0:b0:510:e80f:fa4e with SMTP id w2-20020aa7da42000000b00510e80ffa4emr1752627eds.1.1685697972632;
-        Fri, 02 Jun 2023 02:26:12 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id y17-20020a50e611000000b005149e90115bsm459518edm.83.2023.06.02.02.26.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 02:26:12 -0700 (PDT)
-Message-ID: <88f91fc2-3b10-872d-4ade-486b25e94129@linaro.org>
-Date:   Fri, 2 Jun 2023 11:26:10 +0200
+        Fri, 2 Jun 2023 05:28:26 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 718981B9;
+        Fri,  2 Jun 2023 02:27:03 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 8E8B78111;
+        Fri,  2 Jun 2023 09:27:02 +0000 (UTC)
+Date:   Fri, 2 Jun 2023 12:27:01 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <20230602092701.GP14287@atomide.com>
+References: <20230525113034.46880-1-tony@atomide.com>
+ <20230602083335.GA181647@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/2] dt-bindings: leds: Document Awinic AW2026 bindings
-Content-Language: en-US
-To:     Vladimir Barinov <v.barinov@yadro.com>, Lee Jones <lee@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux@yadro.com
-References: <20230525101341.2036563-1-v.barinov@yadro.com>
- <20230525101428.2037061-1-v.barinov@yadro.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230525101428.2037061-1-v.barinov@yadro.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602083335.GA181647@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2023 12:14, Vladimir Barinov wrote:
-> Add Awinic AW2026 binding documentation
+Hi,
+
+* Chen-Yu Tsai <wenst@chromium.org> [230602 08:33]:
+> This patch, in linux-next since 20230601, unfortunately breaks MediaTek
+> based Chromebooks. The kernel hangs during the probe of the serial ports,
+> which use the 8250_mtk driver. This happens even with the subsequent
+> fixes in next-20230602 and on the mailing list:
 > 
-> Signed-off-by: Vladimir Barinov <v.barinov@yadro.com>
-> ---
-> Changes in version 2:
-> - fixed typos in patch header 2016 -> 2026
-> - fixed typo in example section that break dt_binding_check
+>     serial: core: Fix probing serial_base_bus devices
+>     serial: core: Don't drop port_mutex in serial_core_remove_one_port
+>     serial: core: Fix error handling for serial_core_ctrl_device_add()
+
+OK thanks for reporting it.
+
+> Without the fixes, the kernel gives "WARNING: bad unlock balance detected!"
+> With the fixes, it just silently hangs. The last messages seen on the
+> (serial) console are:
 > 
->  .../bindings/leds/awinic,aw2026.yaml          | 92 +++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/awinic,aw2026.yaml
+>     Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+>     printk: console [ttyS0] disabled
+>     mt6577-uart 11002000.serial: using DT '/soc/serial@11002000' for 'rs485-term' GPIO lookup
+>     of_get_named_gpiod_flags: can't parse 'rs485-term-gpios' property of node '/soc/serial@11002000[0]'
+>     of_get_named_gpiod_flags: can't parse 'rs485-term-gpio' property of node '/soc/serial@11002000[0]'
+>     mt6577-uart 11002000.serial: using lookup tables for GPIO lookup
+>     mt6577-uart 11002000.serial: No GPIO consumer rs485-term found
+>     mt6577-uart 11002000.serial: using DT '/soc/serial@11002000' for 'rs485-rx-during-tx' GPIO lookup
+>     of_get_named_gpiod_flags: can't parse 'rs485-rx-during-tx-gpios' property of node '/soc/serial@11002000[0]'
+>     of_get_named_gpiod_flags: can't parse 'rs485-rx-during-tx-gpio' property of node '/soc/serial@11002000[0]'
+>     mt6577-uart 11002000.serial: using lookup tables for GPIO lookup
+>     mt6577-uart 11002000.serial: No GPIO consumer rs485-rx-during-tx found
 > 
-> diff --git a/Documentation/devicetree/bindings/leds/awinic,aw2026.yaml b/Documentation/devicetree/bindings/leds/awinic,aw2026.yaml
-> new file mode 100664
-> index 000000000000..abacf746677b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/awinic,aw2026.yaml
-> @@ -0,0 +1,93 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/awinic,aw2026.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Awinic AW2026 3-channel LED Driver
-> +
-> +maintainers:
-> +  - Vladimir Barinov <v.barinov@yadro.com>
-> +
-> +description: |
+> What can we do to help resolve this?
 
-Do not need '|' unless you need to preserve formatting.
+There may be something blocking serial_ctrl and serial_port from
+probing. That was the issue with the arch_initcall() using drivers.
 
-> +  The AW2026 is a 3-channel LED driver with I2C interface. It can control
-> +  LED brightness with PWM output. It supports hardware blinking and
-> +  hardware patterns.
-> +
-> +properties:
-> +  compatible:
-> +    const: awinic,aw2026
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  awinic,led-max-microamp:
+Not sure yet what the issue here might be, but the 8250_mtk should be
+fairly similar use case to the 8250_omap driver that I've tested with.
+But unfortunately I don't think I have any 8250_mtk using devices to
+test with.
 
-microamp is per sub-LED, not per entire device. This is already
-expressed by common bindings. Drop entire property and use common one in
-children.
+The following hack should allow you to maybe see more info on what goes
+wrong and allows adding some debug printk to serial_base_match() for
+example to see if that gets called for mt6577-uart.
 
+Hmm maybe early_mtk8250_setup() somehow triggers the issue? Not sure why
+early_serial8250_setup() would cause issues here though.
 
+Regards,
 
-> +    description:
-> +      Maximum current at LED output
-> +    enum:
-> +      [3000, 6375, 12750, 25500]
-> +
-> +  vcc-supply:
-> +    description: Regulator providing power to the "VBAT" pin.
-> +
-> +patternProperties:
-> +  "^led@[0-2]$":
-> +    type: object
-> +    $ref: common.yaml#
+Tony
 
-unevaluatedProperties: false
-
-Just open existing bindings and do not code it differently...
-
-> +
-> +    properties:
-> +      reg:
-> +        description: Index of the LED.
-> +        minimum: 0
-> +        maximum: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    i2c0 {
-
-i2c
-
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        led-controller@64 {
-> +            compatible = "awinic,aw2026";
-> +            reg = <0x64>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            awinic,led-max-microamp = <6375>;
-> +            vcc-supply = <&vcc_3v3_s0>;
-> +
-> +            led@0 {
-> +                    reg = <0>;
-
-Wrong indenration.
-Use 4 spaces for example indentation.
-
-> +                    function = LED_FUNCTION_INDICATOR;
-> +                    color = <LED_COLOR_ID_RED>;
-> +            };
-
-Best regards,
-Krzysztof
-
+8< -----------------
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -144,7 +144,7 @@ static void __uart_start(struct tty_struct *tty)
+ 		return;
+ 
+ 	port_dev = port->port_dev;
+-
++#if 0
+ 	/* Increment the runtime PM usage count for the active check below */
+ 	err = pm_runtime_get(&port_dev->dev);
+ 	if (err < 0) {
+@@ -161,6 +161,9 @@ static void __uart_start(struct tty_struct *tty)
+ 		port->ops->start_tx(port);
+ 	pm_runtime_mark_last_busy(&port_dev->dev);
+ 	pm_runtime_put_autosuspend(&port_dev->dev);
++#else
++	port->ops->start_tx(port);
++#endif
+ }
+ 
+ static void uart_start(struct tty_struct *tty)
+-- 
+2.41.0
