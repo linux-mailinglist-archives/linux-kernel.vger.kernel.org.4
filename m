@@ -2,164 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2912A720BD6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D64720BD8
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236399AbjFBWUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 18:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        id S236513AbjFBWVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 18:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbjFBWUg (ORCPT
+        with ESMTP id S235208AbjFBWVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 18:20:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DCE1BB;
-        Fri,  2 Jun 2023 15:20:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E1E161EF1;
-        Fri,  2 Jun 2023 22:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDE4C433D2;
-        Fri,  2 Jun 2023 22:20:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685744433;
-        bh=ARyPoi7kYarpVw7JYT8TRHRJ03CAZL5ro3FtDi8lX58=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=epc/06WTuFNz6XULfL2XX0PsRI7mMHpwrvq9vk/lI9/Ap4q6iEOtMrFkojjUcelfR
-         5ceSMIgZdv07ut21nQw8DZLQQsnPfUF7FufXmCYhTXx7e0Ll6CtMLx3cViEkiJTCn1
-         USlkzO0tO8ptJvrr+0DBbmWBRYCMLLA/+zb/6lXppzCcxI4X6gZLjcCb+DfEWA9N0J
-         6kH2V38VXgpTyKs4bVD9lr+5a+F0COuf94Vu1FLvG5g8nwBsCJMkQY7Idl2h+Kqi29
-         cLts9IDmtU2zYPPAKm4ix7Evpv2svgnBAStyHAkozZ9IyCrg5x6a4ymMjZDp9qfCAe
-         slU6E11r5hyyA==
-Date:   Fri, 2 Jun 2023 17:20:31 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Iain Lane <iain@orangesquash.org.uk>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] PCI: Don't assume root ports are power manageable
-Message-ID: <ZHprL3oavxW+tUsX@bhelgaas>
+        Fri, 2 Jun 2023 18:21:04 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30021BB;
+        Fri,  2 Jun 2023 15:21:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kXSniAdfFm2BZG1XEROk+sO4r2aw+5mWfdPCh/kfB6vRpQDnEqQevI19qijSc7LiAdII37SlbmP7+zAmE1hhWLDSVFk3D5wb+Ri2cBKJgSiwjibyullnDK3Zmfzunx4c7OosUB1v6byx4Wic6iTdKa48Lrpk8Ttzsx6SrMumT1vbKmurc7aTzWBlZGkdStUj8zYiYinn2Ot9lN+Q+S0qytvgdm9F8Ik7p3i7awD4+lZt3Q3jYo15EACNttqADB6f/zvMqBCbucAB/EP18s+gtAUCs8+NEnlIWvJVWl1MavwFFykSjbprLjUnjBI9B7hARVH+yw8ovpaXhVY/6kiCnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bO7y+xUB0Lmsf6mEEOg36K8KO0JvE2WxboPiOsYSMoI=;
+ b=GY2tzTL1TKP6mfcG/ch44a6eEfKrhEMKk4dbp/egsyXy5hscF0ZDCl/dQwPL/tyl2eRdk0ilgdVqNmQoim5sscSedPTMqwaSGKWLV5+UO2IIQ2mXYODrEYwt9ixwHTn3C+BJWaO0ymIhpnmv+2gLI7ZDIeTAD0+qRU+yNnqD+gZiHcGCIeOQBWBQtMdYLkBWe4ISwHi9RuGUmP7wB2cz/VPbAXdOoG0D6wA31q6JHZWQzrRdDe/d0fei688LijbY0WtuHzg6fwiAwzSEPbLdoqXHw74zZR5bI4+vW4tUJwlNrJC2/cRH0u2TyEu4wYplFMsse0DTu4lWxF6B6PSMpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bO7y+xUB0Lmsf6mEEOg36K8KO0JvE2WxboPiOsYSMoI=;
+ b=jFEbEzaZwVRe2KFzNhnJCDCFCNLy9mBp6Xf4NdWIEMpePUPxnQcB4YY5RXOb6Ev8HSyce9KDmDSvahnzHb6I1pdhfW6iFl6IHVkoDTT93y68pdes+4xnkarjNq3geZSK3ll/SIrE1AJOB09RON3kaCx8ByRd63CFmcryGTLzWBrEHWWZjb8OlAZMklBjnpVCb7v9ziWKcF4GTpiDOdwpleCvnJruOPWaeA6/Vn1cUCIO6b+dlgmR9v3k3dt6qaiE87ijfgmXC4r00W4TVjTFtJS6qrdiDDYYxHcKvCkZU1fCZ33gkmJa5ElmWHwDYFDNfqUZzuaAvd26ThCncmIZsg==
+Received: from BN0PR10CA0010.namprd10.prod.outlook.com (2603:10b6:408:143::14)
+ by DM6PR12MB5024.namprd12.prod.outlook.com (2603:10b6:5:20a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.27; Fri, 2 Jun
+ 2023 22:20:59 +0000
+Received: from BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:143:cafe::84) by BN0PR10CA0010.outlook.office365.com
+ (2603:10b6:408:143::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
+ Transport; Fri, 2 Jun 2023 22:20:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT050.mail.protection.outlook.com (10.13.177.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.26 via Frontend Transport; Fri, 2 Jun 2023 22:20:59 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
+ 15:20:42 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
+ 15:20:41 -0700
+Message-ID: <993773ab-7f5b-241f-b532-ee79a03b371f@nvidia.com>
+Date:   Fri, 2 Jun 2023 15:20:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530163947.230418-2-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 11/12] selftests/mm: fix missing UFFDIO_CONTINUE_MODE_WP
+ and similar build failures
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-12-jhubbard@nvidia.com>
+ <7a999b80-e266-2b7e-f198-869b1ac7cde7@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <7a999b80-e266-2b7e-f198-869b1ac7cde7@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT050:EE_|DM6PR12MB5024:EE_
+X-MS-Office365-Filtering-Correlation-Id: f55f774e-6083-43a2-80e3-08db63b7a491
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hdsXCTUYxvEpFuGItO5SHaaUAQxh9WXBC+64hEi2rxE/366x3hddKot5bmqvTYjTs5SD9G9uSqqAp4iwljqCEAUIqIG/jWv5OQvmoiy5lH9SopFAz68FcijGcj/SnmtgX9uEVyb1iG0bmIuDuV98AR8f4iGJ4pOevEiC+FCDEKdRR4egidOpS7LNmPFEv10lo9PfTkM1BDBKAFEEwBj88+mX/visRbuYa0GfSKmC1myxg7bm9DbZRMx/C5ib89qXlYEZYDWGDVrjtRry5SKUMs69M1T8bq38eA+7FrQhrNo6A4ASrB6XTMKFg+s3qig040pfUYdjpvR5qmtXTreuHUDpie4oF2C1DC5BKyD7/SrTtUh2pXXoGzQbunlLiPfsn9BZ2lbOVLM85do16RNT04Km0DmWuR4YW3JfmTytDAm+zXRuYmYHAYSSYKYhtMzUbQDqdXiYDQ3cqW35yQOF/er51sBtEGf4VeUYEpVFKwnW1oI7so7XK//lv/UmTzE3Ug5VKJ7XV6b1w5ygb8Z5U3UqDTHfqYXenacH7lCv3REIvzDrwSsmnRuqgQyBs6o1lOikghsIh9zOHgFP1hBPwoZekVoC9NSeIQTDllhyfK0CAP/sNNOxeyYoKiA7M/in3ptFndwUwg1SAG9YH8xu8deIdELPZc/Vk1V0ZGkf9AHsj4zE7l5suYuVsvpdMbJqNWrlf8nmPPMAVRwUdaBfMO9uTtMXW567McZatoLZMGpR4uG2mffuKUstzZkcJZg9IvIet9V/c3tbbh3MmCjv8w==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(46966006)(36840700001)(40470700004)(2616005)(36860700001)(426003)(47076005)(36756003)(336012)(53546011)(16526019)(40480700001)(186003)(40460700003)(26005)(82310400005)(2906002)(4744005)(16576012)(54906003)(110136005)(316002)(31696002)(5660300002)(31686004)(41300700001)(86362001)(70206006)(70586007)(4326008)(82740400003)(356005)(7636003)(8936002)(8676002)(478600001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 22:20:59.2190
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f55f774e-6083-43a2-80e3-08db63b7a491
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5024
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On 6/2/23 03:23, David Hildenbrand wrote:
+...
+> Unfortunately, that seems to be the ugly way to handle this because
+> including the in-tree headers seems to not work and I yet haven't
+> figured out why (there were some changes back and forth so I lost track).
 
-The patch itself looks fine, but since I don't have all the power
-management details in my head, it would help me a lot to make the
-description more concrete.
+Yes, ugly, and based on Muhammad's response, I plan on dropping this patch
+entirely, in fact.
 
-On Tue, May 30, 2023 at 11:39:47AM -0500, Mario Limonciello wrote:
-> Using a USB keyboard or mouse to wakeup the system from s2idle fails when
-> that xHCI device is connected to a USB-C port for an AMD USB4 router.
-
-It sounds like the real issue is that "Root Ports in D3hot/D3cold may
-not support wakeup", and the USB, xHCI, USB-C, AMD USB4 router bits
-are probably not really relevant.  And hopefully even the "AMD
-platforms" mentioned below is not relevant.
-
-> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> all PCIe ports go into D3 during s2idle.
 > 
-> When specific root ports are put into D3 over s2idle on some AMD platforms
-> it is not possible for the platform to properly identify wakeup sources.
-> This happens whether the root port goes into D3hot or D3cold.
-
-Can we connect this to a spec so it's not just the empirical "some AMD
-platforms work like X" observation?
-
-"s2idle" is meaningful on the power management side of the house, but
-it doesn't appear in PCI or ACPI specs, so I don't know what it means
-here.  I assume the D3hot/D3cold state of the Root Port is the
-critical factor, regardless of how it got there.
-
-> Comparing registers between Linux and Windows 11 this behavior to put
-> these specific root ports into D3 at suspend is unique to Linux. On an
-> affected system Windows does not put those specific root ports into D3
-> over Modern Standby.
+> CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/tools/include/uapi $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
 > 
-> Windows avoids putting Root Ports that are not power manageable (e.g do
-> not have platform firmware support) into low power states.
-
-The Windows behavior was probably useful to you in debugging, but I
-don't really care about these Windows details because I don't think
-they help us maintain this in the future.
-
-> Linux shouldn't assume root ports support D3 just because they're on a
-> machine newer than 2015, the ports should also be deemed power manageable.
-> Add an extra check explicitly for root ports to ensure D3 isn't selected
-> for them if they are not power-manageable through platform firmware.
-
-But I *would* like to know specifically what "power manageable" means
-here.  I might naively assume that a device with the PCI Power
-Management Capability is "power manageable", and that if PME_Support
-includes D3hot and D3cold, we're good to go.  But obviously it's more
-complicated than that, and I'd like to cite the spec that mentions the
-actual things we need here.
-
-> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> Reported-by: Iain Lane <iain@orangesquash.org.uk>
-> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v4->v5:
->  * Add tags
->  * Fix title
->  * Adjust commit message
-> v3->v4:
->  * Move after refactor
-> ---
->  drivers/pci/pci.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
 > 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index d1fa040bcea7..d293db963327 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -3015,6 +3015,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
->  	if (dmi_check_system(bridge_d3_blacklist))
->  		return false;
->  
-> +	/*
-> +	 * It's not safe to put root ports that don't support power
-> +	 * management into D3.
-
-I assume "it's not safe" really means "Root Ports in D3hot/D3cold may
-not be able to signal PME interrupts unless ... <mumble> platform
-firmware <mumble> e.g., ACPI method <mumble> ..."
-
-Can we include some of those hints here?
-
-> +	 */
-> +	if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
-> +	    !platform_pci_power_manageable(bridge))
-> +		return false;
-> +
->  	/*
->  	 * It should be safe to put PCIe ports from 2015 or newer
->  	 * to D3.
-> -- 
-> 2.34.1
+> Acked-by: David Hildenbrand <david@redhat.com>
 > 
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
