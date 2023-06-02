@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67914720127
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA11720125
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbjFBMIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S235414AbjFBMIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbjFBMI1 (ORCPT
+        with ESMTP id S234798AbjFBMI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Jun 2023 08:08:27 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6B21AD;
-        Fri,  2 Jun 2023 05:08:26 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5148f299105so4276478a12.1;
-        Fri, 02 Jun 2023 05:08:26 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA19AD3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:08:25 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f60dfc6028so20173935e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 05:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685707705; x=1688299705;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NX4MckBz+kMOWWfYXwQZwvt4Wo7nQreetEG9P/8etNY=;
-        b=MDzogKGgpQt2NfKjKR2ABAnQ6PSNWZBvu0fv2J7+xfF5C41DC4RF+q3E1HGzB0ZMhV
-         vHzp6MfzR3ujs2eivp/hgH73nCaEqHdwBbmjp+BzD+PFpzlXJJd62OaE0jrWUq2cCcbm
-         gAaPwxRgLE1xCK+PlxIQXar26PrNut/5fYWOfALJs+aBTHb5TQ8uzlPaG15A4rqEJprO
-         +KxRj8cRVm2tzTFShQp47ZqeyOr6Sb5mgGoLwlLlaBUEZP6ZVD1uEY0EX7Rmw0n4S8di
-         sH37RgFaWRfkAfUwA15nmc9k2lLP2JDou/XXZTtg9KKBQZYPR9d2GMFLyR4vj8bpO4EJ
-         Mzcg==
+        d=linaro.org; s=google; t=1685707704; x=1688299704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6N5RSBDUYVnk68nNFO5iJo36EpLGHeNx7EXSoald+6Y=;
+        b=vbCorPrw3tzdPss9fLKN2Jev52SLfxSgOQqoKYqSY65ZLrLB+P74BJBRbJMFFlcFg2
+         V7Ot2gZjxhSVBPFfbnvwW9yQnphdHhOVXVBSwm4xRuxJ7ex+cLBItdHMh0IW9kYNykOa
+         7ioPtcQlOz5kRi11B/L0Pqn/A4DqxsPhLJciZSe5it+Ilkag+UN92q1nxXIWDU/bW0qK
+         6n+AgA2OZjG9C+NW4fCSkwSci3fkVM85PC1Jj5pey0miF/c1R/uevQGKz7/OoRj2qh4D
+         /Wvth9lpOh+tzo6e1tyb8kTh0oojqqD8BaMgr10akG2ABdWDuoArukXsPjYCzyfN3h4D
+         0dPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685707705; x=1688299705;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NX4MckBz+kMOWWfYXwQZwvt4Wo7nQreetEG9P/8etNY=;
-        b=jrw4DU+kvwEaWUKq6ZJ2263aJ0AExk9b8yV0l3C76wu6m5K3WZFdGFvlggokPCpvRF
-         95+bL/4l2mtBHjrajS46eLwONKiufcc4OTw6tylhg0bhWa6SlBL6xRMsjCkrBn7t/wNo
-         UyyERL/TnLkVgZfxjwccX7bsCgkJZBx4jqUnxoJ5YjlGwxL+Nj+UAXAabrKPXwB5jiiN
-         XdyVnZaqsFFf4cNcq+GFMCwrn17ECuJdvfx6haw9FK3ypGvjb8kpQPjiV9lAutIrO/PE
-         K5htmEotSKrjXUd0JAJUfWoYMlzDpPHKFaxJKdtKdhqcUrmfarBjBdtH2kgjziV9eQyR
-         DQfA==
-X-Gm-Message-State: AC+VfDxmOZ0Wchw8HOM/qi5P9QSzBTlEXazkRxfzM2DJRWKj0xoEWE0A
-        k7tslmN7njU7hl8xRCG/SL+Tj5WyVMCOHafY+zUCNJjMOVY=
-X-Google-Smtp-Source: ACHHUZ7gwc/jkjRlVjHpwzT1u4y5IMyFOHYEnDBUueOVz04IhMv9WNJUyTIVgu1hKV5sLIk5Pcee5Br2y+E0OQbis5Y=
-X-Received: by 2002:a05:6402:5252:b0:514:9e81:6185 with SMTP id
- t18-20020a056402525200b005149e816185mr2701109edd.16.1685707704786; Fri, 02
- Jun 2023 05:08:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685707704; x=1688299704;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6N5RSBDUYVnk68nNFO5iJo36EpLGHeNx7EXSoald+6Y=;
+        b=AewZioJ0ISQ5eF6oUuo3m/J1VnRnGogmfMLc0RVQl7fpRDlekltJVnoG6q2Kvqcf0v
+         TrZrOAD1FbblgJOcMFFfTG1sQy/Crxo0xM4D3j+5PpGjghebJlE5yrM9+vmsls6qhB7k
+         eZxxmOGOb0AHHMA8r16VmbW0AGEY6lx0Tq20Ufs8fV/Fa5IZNHNRHW/xu9npbVeHTc1e
+         +R57wyJLB9vW9ZPKfu6IUGGwrzSHSxOzLgw/R2FT5xvnos/kdVrm13JrEdv1nGq3Npqv
+         dyBfikwaLNKKSG7/5Jml38j4yketgIP9KiYfG8Cr3Kf9LuFfzlP6l6TCAAO0Xres2hZ0
+         tPkA==
+X-Gm-Message-State: AC+VfDyZhDu+RWAqXgWskQNIMmuebz3dMNbMmS1rrc6D7k3bcGk2xXmQ
+        afUk3+eyoXzxx7b/ICrvUse6LA==
+X-Google-Smtp-Source: ACHHUZ7oZo7G5GE5Au7PiQOHzixE8gijDSexUoXlU0n8rp+47guVjLqwzhNWj3i4s1C/PP2kjor3sg==
+X-Received: by 2002:a7b:c3cb:0:b0:3f4:c28b:ec88 with SMTP id t11-20020a7bc3cb000000b003f4c28bec88mr1799069wmj.41.1685707704172;
+        Fri, 02 Jun 2023 05:08:24 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id a19-20020a05600c225300b003f42d8dd7ffsm1784513wmm.19.2023.06.02.05.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 05:08:22 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 15:08:19 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Janosch Frank <frankja@linux.ibm.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] KVM: s390: selftests: Fix spelling mistake
+ "initally" -> "initially"
+Message-ID: <bbd79f29-f490-4fe4-b5b9-2a0a85c31431@kadam.mountain>
+References: <20230602102330.1230734-1-colin.i.king@gmail.com>
+ <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230601143331.405588582@linuxfoundation.org>
-In-Reply-To: <20230601143331.405588582@linuxfoundation.org>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Fri, 2 Jun 2023 13:07:48 +0100
-Message-ID: <CADVatmPDwobeqntQ5+LQibMSHK86FmwUpN+E3JUd+GMs3bWpDQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/37] 5.15.115-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0f0587b-5f19-82bd-3d58-bdb89ff59f8c@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, Jun 02, 2023 at 01:07:45PM +0200, Janosch Frank wrote:
+> On 6/2/23 12:23, Colin Ian King wrote:
+> > There is a spelling mistake in literal string. Fix it.
+> > 
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> 
+> Hey Colin,
+> 
+> I'm not a big fan of such fixes since they are most of the time more work
+> for the maintainers than they are worth and accepting one can result in a
+> flood of similar new patches. If this would have been your first ever patch
+> I might have considered picking this but that's not the case.
+> 
+> That being said, if one of the other maintainers choose to pick it I won't
+> stand in their way.
 
-On Thu, 1 Jun 2023 at 15:36, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.115 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+I kind of get dread when people ask me to fix a typo in my commit
+message.  The drudgery of Sort by thread, Up arrow to the patch, Hit e,
+Fix the typo, Add the v2 to the subject, The little note under the
+--- cut off, and Hit send.  FML, right?  So I sympathize about not
+caring about spelling.  But this is a user visible string.  Kind of.
+It's testing code...
 
-s390 allmodconfig build fails with the error:
+You should improve your process so it's easier to apply patches.  For
+me, I type "i" to review this patch in context.  Then "ESC:q" to leave
+vim.  Then "ap" to apply the patch.  It's six key strokes.  Anything
+more than 10 key strokes to review and apply a patch is not Web Scale.
 
-arch/s390/kernel/uv.c: In function 'should_export_before_import':
-arch/s390/kernel/uv.c:204:40: error: 'mm_context_t' has no member
-named 'protected_count'
-  204 |         return atomic_read(&mm->context.protected_count) > 1;
-      |                                        ^
-arch/s390/kernel/uv.c:205:1: error: control reaches end of non-void
-function [-Werror=return-type]
-  205 | }
-      | ^
-
-
-
--- 
-Regards
-Sudip
+regards,
+dan carpenter
