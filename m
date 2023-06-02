@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295A4720282
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEDA720289
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235607AbjFBND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S235682AbjFBND7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjFBNDZ (ORCPT
+        with ESMTP id S234629AbjFBNDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:03:25 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EE01AB;
-        Fri,  2 Jun 2023 06:03:24 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-6261367d2f1so18403086d6.3;
-        Fri, 02 Jun 2023 06:03:24 -0700 (PDT)
+        Fri, 2 Jun 2023 09:03:55 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB30819A;
+        Fri,  2 Jun 2023 06:03:52 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6261cb1208eso19480756d6.0;
+        Fri, 02 Jun 2023 06:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685711003; x=1688303003;
+        d=gmail.com; s=20221208; t=1685711032; x=1688303032;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dmAYzj4TVS8G4kAy4ewMFZCKNd6Q/Glo48aZ4gYHigw=;
-        b=HHrc6oa9YKDr2I5o+sSBEjwy3Ls7OV070GoaRUfPUNjCHVEeqSt1o+Idl3PT1Pwxa3
-         a9pqj7TyTKkbjNwCokKvgFxm7DcoJrV+1bcbt+uGbXRTMAwbBQiqxV7zb+SG7xJAgVVB
-         tFJfzknMRrjkmD09lx1SPQVmVgnzx4Gud+6/TgWcKgldQIVZQKpTtFfR2WOWxmD+d4Ko
-         9rrdJVwK34h0WlTA6TCds36FBzj4YZ7WLuhN+b2OSfz7FeKosDBLw4BCAapUzwrS5r9y
-         dmjpxzU8rZSKOMpC5YaPVzqifYEneRFMxd3ozV5589jE086s1B/Nr9NW5AvnK/gEci/L
-         FQ2Q==
+        bh=bwu3a5TiDNk8aQX2qZ7oGL61sBeYU4YgJcuj8qXhAP4=;
+        b=AUtqBJyZ0q5NPj4CuiDNzoMzkp06YVY+KXCw5P/LEFgqo3bvtjU6wcdT7Kq/bJ00fj
+         ekdccBJyWK2YzgUG7gaIPL+N4PS/WXGy2QeKn5PHijfRsko0ofEI8CMTURVlVWKxmkye
+         kdW8vINpOKSOJanVCdeVHNNfwMQqwEj4w5/4lntGFRbYJNIve1fLkT6rpmIDOv23VQxL
+         lQTb/wkp8kOH/XIhV0Eb5vkyxLtyiyAnBd+zh3ASH3S3Xmi7JRKG4FPZZhLnBFLI89XV
+         OOlQcvBm+Ri3hEfok4py9SD/ch5NIKxHTLItTJhZRlcFSNgdUaQj3q4ZdW0K2tAqeTZr
+         OY4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711003; x=1688303003;
+        d=1e100.net; s=20221208; t=1685711032; x=1688303032;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dmAYzj4TVS8G4kAy4ewMFZCKNd6Q/Glo48aZ4gYHigw=;
-        b=F9ZaPgriVOxWeYXb0kUmcq01PDhVFwrmdze21CfZdaABVROqyXGXom5s8TUi344dti
-         /OkVjAmqzY9Zq0vQAgE4z7jygOTCiwbHubCKZ0gp+k2J+4LUnB8wIvVJwWQfI0QpMJrS
-         VWeCvYsJTcuzm8QAP0NQyX5YKJ/PpCGC+S++iPVjSdFftmzLfe6CVKK5W+3HZd567V9y
-         5cWo3HGDuAnhJO9GZ1LSa6gAsPl+Up9msSZ7XDH/I2HOi2zGXfd+8Dv9XFbF7nc5tPfM
-         nQ32DJKxHvBOE92Ejpgb85N2sFZdrAxvjWgJy4N0c6hImHNAultqqeByrhiewsBgjXrh
-         l+9A==
-X-Gm-Message-State: AC+VfDyA1cNj1POZVm3OelHB9nQ3LZgR+cRMGJDHw4oNAfr7WrGyxyK+
-        VVXSrFEAqKv4wBWt7OHH3bZl9NPKAMNkgRi2z90=
-X-Google-Smtp-Source: ACHHUZ7G91yEcHCmh+JlOFf21PmDb1tvy27KzWOAYjldVj0a5ew+/R2r4VpVwXi2gC0rTL8uLA+S66YzrRRR/V+68JU=
-X-Received: by 2002:a05:6214:caa:b0:600:5dbc:c31a with SMTP id
- s10-20020a0562140caa00b006005dbcc31amr13216663qvs.7.1685711003146; Fri, 02
- Jun 2023 06:03:23 -0700 (PDT)
+        bh=bwu3a5TiDNk8aQX2qZ7oGL61sBeYU4YgJcuj8qXhAP4=;
+        b=JlF+uC8DEa1B6QYdTK4K8/sTrkUUCOKievCj18siXvJ7KcSUoPtvm6HvpT1zWqnqDK
+         3U5/nmyWq3FtBny+uhUGHj9Ur0WU/cGdetSRk86OXy5W1FT68UykV/RwHdPIKVWnOfOk
+         AjeP/x2CCceO7UV5LbvhZihF9knU7tPVrAzlAcf/tpesne5jXJAvpLCLLBJO7UPmmzrt
+         tfXSD1UZrXlYVWQDVkEFYRbJKFK5F8FARvyNMMETvXbqvFv2+ah5wRgPH0DRDYIZES9N
+         0SQmBwpqAjW+ByiPRvT9ENeWunqXEvFJkS+lUJTckDZUDHc003YPDECh2l5gxA7LMBbc
+         iuKQ==
+X-Gm-Message-State: AC+VfDwLmJDNtxf2IwTGec7puPpvEHPn8iye2ST8sK5jrPHLC2H4++Nf
+        aQb1bJ/668gi/Cw9lYIlfjL0IouaZvKMGKirT8o=
+X-Google-Smtp-Source: ACHHUZ5oNkE2+uMJq9lvZUWNrIS3tlbtY4VxLBOJs7jzLpJ3o43croYk9Ip3WhUy+unyiGCQgAx5CbQb186fLGTd1yc=
+X-Received: by 2002:a05:6214:240b:b0:623:9a08:4edd with SMTP id
+ fv11-20020a056214240b00b006239a084eddmr6420585qvb.25.1685711031776; Fri, 02
+ Jun 2023 06:03:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230602073300.7536-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230602073300.7536-1-jiasheng@iscas.ac.cn>
+References: <20230602072755.7314-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20230602072755.7314-1-jiasheng@iscas.ac.cn>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Jun 2023 16:02:47 +0300
-Message-ID: <CAHp75Vdfvt-jxesWOgki+wV0QdVLidSVc6J+Fcm6dU4pxZYfPg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: ath79: Add missing check for platform_get_irq
+Date:   Fri, 2 Jun 2023 16:03:15 +0300
+Message-ID: <CAHp75VfSU-xXWPmwjCKsxc_WcFdZmJuYBO1nd230SeLe7D+b-g@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: sifive: Add missing check for platform_get_irq
 To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     albeu@free.fr, linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-gpio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,7 +70,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:33=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.c=
+On Fri, Jun 2, 2023 at 10:28=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.c=
 n> wrote:
 >
 > Add the missing check for platform_get_irq and return error code
@@ -85,30 +86,34 @@ Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 >
 > v1 -> v2:
 >
-> 1. Return "girq->parents[0]" instead of "-ENODEV".
+> 1. Return "chip->irq_number[i]" instead of "-ENODEV".
 > ---
->  drivers/gpio/gpio-ath79.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/gpio/gpio-sifive.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/gpio/gpio-ath79.c b/drivers/gpio/gpio-ath79.c
-> index aa0a954b8392..31ce2d5c6ba0 100644
-> --- a/drivers/gpio/gpio-ath79.c
-> +++ b/drivers/gpio/gpio-ath79.c
-> @@ -286,6 +286,8 @@ static int ath79_gpio_probe(struct platform_device *p=
-dev)
->                 if (!girq->parents)
->                         return -ENOMEM;
->                 girq->parents[0] =3D platform_get_irq(pdev, 0);
-> +               if (girq->parents[0] < 0)
-> +                       return girq->parents[0];
->                 girq->default_type =3D IRQ_TYPE_NONE;
->                 girq->handler =3D handle_simple_irq;
+> diff --git a/drivers/gpio/gpio-sifive.c b/drivers/gpio/gpio-sifive.c
+> index 98939cd4a71e..7245000fb049 100644
+> --- a/drivers/gpio/gpio-sifive.c
+> +++ b/drivers/gpio/gpio-sifive.c
+> @@ -221,8 +221,11 @@ static int sifive_gpio_probe(struct platform_device =
+*pdev)
+>                 return -ENODEV;
 >         }
+>
+> -       for (i =3D 0; i < ngpio; i++)
+> +       for (i =3D 0; i < ngpio; i++) {
+>                 chip->irq_number[i] =3D platform_get_irq(pdev, i);
+> +               if (chip->irq_number[i] < 0)
+> +                       return chip->irq_number[i];
+> +       }
+>
+>         ret =3D bgpio_init(&chip->gc, dev, 4,
+>                          chip->base + SIFIVE_GPIO_INPUT_VAL,
 > --
 > 2.25.1
 >
 
 
---=20
+--
 With Best Regards,
 Andy Shevchenko
