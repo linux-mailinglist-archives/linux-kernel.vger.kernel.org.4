@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A225F71F9BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 07:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025E471F9B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 07:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbjFBFqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 01:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+        id S233670AbjFBFmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 01:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjFBFq0 (ORCPT
+        with ESMTP id S233346AbjFBFmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 01:46:26 -0400
-X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 22:46:20 PDT
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8C4A4197
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 22:46:19 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.65.12])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id C8862110020826;
-        Fri,  2 Jun 2023 13:44:14 +0800 (CST)
-Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 2 Jun 2023 13:44:14 +0800
-Date:   Fri, 2 Jun 2023 13:44:04 +0800
-X-MD-Sfrom: tiozhang@didiglobal.com
-X-MD-SrcIP: 10.79.65.12
-From:   Tio Zhang <tiozhang@didiglobal.com>
-To:     <pmladek@suse.com>, <yu.c.chen@intel.com>,
-        <akpm@linux-foundation.org>
-CC:     <juri.lelli@redhat.com>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <vincent.guittot@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <tiozhang@didiglobal.com>,
-        <zyhtheonly@gmail.com>, <zwp10758@gmail.com>, <zyhtheonly@yeah.net>
-Subject: [PATCH v3 2/2] sched: print parent comm in sched_show_task()
-Message-ID: <20230602054404.GA30014@didi-ThinkCentre-M930t-N000>
-Mail-Followup-To: pmladek@suse.com, yu.c.chen@intel.com,
-        akpm@linux-foundation.org, juri.lelli@redhat.com, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, zyhtheonly@gmail.com,
-        zwp10758@gmail.com, zyhtheonly@yeah.net
+        Fri, 2 Jun 2023 01:42:18 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED9B1A1;
+        Thu,  1 Jun 2023 22:42:17 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXX2C6thPz4f3mVg;
+        Fri,  2 Jun 2023 13:42:11 +0800 (CST)
+Received: from ubuntu20.huawei.com (unknown [10.67.174.33])
+        by APP4 (Coremail) with SMTP id gCh0CgBHsLMkgXlkIMb+Kg--.35696S2;
+        Fri, 02 Jun 2023 13:42:13 +0800 (CST)
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+To:     Serge Hallyn <serge@hallyn.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
+Subject: [PATCH] capability: erase checker warnings about struct __user_cap_data_struct
+Date:   Fri,  2 Jun 2023 13:45:27 +0800
+Message-Id: <20230602054527.290696-1-gongruiqi@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZCK2HuorPgSwWZpw@alley>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.79.64.101]
-X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBHsLMkgXlkIMb+Kg--.35696S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7trW7Cr4UKrWkJFW3Jr43ZFb_yoW8CF1rpF
+        18Gw4fGFZ7Ar4xCw4kCa12yr1FqrWDJFy7tFy7Gw1Fyr4Fk3W8WF1jka40yF1Fvrs7KrW3
+        X392grWF934DC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Knowing who the parent is might be useful for debugging.
-For example, we can sometimes resolve kernel hung tasks by stopping
-the person who begins those hung tasks.
-With the parent's name printed in sched_show_task(),
-it might be helpful to let people know which "service" should be operated.
-Also, we move the parent info to a following new line.
-It would be better to solve the situation when the task
-is not alive and we could not get information about the parent.
+Currently Sparse warns the following when compiling kernel/capability.c:
 
-Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
+kernel/capability.c:191:35: warning: incorrect type in argument 2 (different address spaces)
+kernel/capability.c:191:35:    expected void const *from
+kernel/capability.c:191:35:    got struct __user_cap_data_struct [noderef] __user *
+kernel/capability.c:168:14: warning: dereference of noderef expression
+...... (multiple noderef warnings on different locations)
+kernel/capability.c:244:29: warning: incorrect type in argument 1 (different address spaces)
+kernel/capability.c:244:29:    expected void *to
+kernel/capability.c:244:29:    got struct __user_cap_data_struct [noderef] __user ( * )[2]
+kernel/capability.c:247:42: warning: dereference of noderef expression
+...... (multiple noderef warnings on different locations)
+
+It seems that defining `struct __user_cap_data_struct` together with
+`cap_user_data_t` make Sparse believe that the struct is `noderef` as
+well. Separate their definitions to clarify their respective attributes.
+
+Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
 ---
- kernel/sched/core.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ include/uapi/linux/capability.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index cb2aa2b54c7a..d8fd35684d6c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8853,7 +8853,6 @@ SYSCALL_DEFINE2(sched_rr_get_interval_time32, pid_t, pid,
- void sched_show_task(struct task_struct *p)
- {
- 	unsigned long free = 0;
--	int ppid;
+diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+index 3d61a0ae055d..5bb906098697 100644
+--- a/include/uapi/linux/capability.h
++++ b/include/uapi/linux/capability.h
+@@ -41,11 +41,12 @@ typedef struct __user_cap_header_struct {
+ 	int pid;
+ } __user *cap_user_header_t;
  
- 	if (!try_get_task_stack(p))
- 		return;
-@@ -8865,14 +8864,19 @@ void sched_show_task(struct task_struct *p)
- #ifdef CONFIG_DEBUG_STACK_USAGE
- 	free = stack_not_used(p);
- #endif
--	ppid = 0;
-+
-+	pr_cont(" stack:%-5lu pid:%-5d flags:0x%08lx\n",
-+		free, task_pid_nr(p), read_task_thread_flags(p));
-+
- 	rcu_read_lock();
--	if (pid_alive(p))
--		ppid = task_pid_nr(rcu_dereference(p->real_parent));
-+	if (pid_alive(p)) {
-+		struct task_struct *parent = rcu_dereference(p->real_parent);
-+
-+		pr_info("parent:%-15.15s ppid:%-6d\n", parent->comm, task_pid_nr(parent));
-+	} else {
-+		pr_info("parent:unknown         ppid:<NULL>\n");
-+	}
- 	rcu_read_unlock();
--	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
--		free, task_pid_nr(p), ppid,
--		read_task_thread_flags(p));
+-typedef struct __user_cap_data_struct {
++struct __user_cap_data_struct {
+         __u32 effective;
+         __u32 permitted;
+         __u32 inheritable;
+-} __user *cap_user_data_t;
++};
++typedef struct __user_cap_data_struct __user *cap_user_data_t;
  
- 	print_worker_info(KERN_INFO, p);
- 	print_stop_info(KERN_INFO, p);
+ 
+ #define VFS_CAP_REVISION_MASK	0xFF000000
 -- 
-2.17.1
+2.25.1
 
