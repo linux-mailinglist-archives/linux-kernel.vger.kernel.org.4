@@ -2,137 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F4F72087F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9214720880
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbjFBRiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        id S236944AbjFBRlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236882AbjFBRis (ORCPT
+        with ESMTP id S235789AbjFBRlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:38:48 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53481BB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:38:46 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96fab30d1e1so505912166b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685727525; x=1688319525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qPpIUifsrj3WhrOLcjmDKG+n28eYiyTfgghRaS6XkRs=;
-        b=IKRPxJ3A0yf2tZl1cV/0w2dtc7OEvW1uj1qqlfdLfH6hbUUfGsHB0M83XAWUkuZEXI
-         rWQypeGHOLw7lhGuspNtOMw+mlk1AUWdqj9drpaGt/SxaZqMXLcZmWXcx7uu71+974KQ
-         YfOQSvOhd6kPyAndsrGpN35sfO/7fnRVnWxG4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685727525; x=1688319525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qPpIUifsrj3WhrOLcjmDKG+n28eYiyTfgghRaS6XkRs=;
-        b=MaMv26ZUXVPh1ve4rJ6vi14Do7uijmvIKo48fUEy9glMEaMgGB6paRfUgr2J3uIy73
-         4G9Akz6fUzxPsTMUAv1pP3/4WFi6uYrol/2CNldcKbwYhJ/dRTF6krURkx+pp5TjuIi9
-         pplER+2MlYHhu7kDEPcr8812lWgqCQ/HMkhGwldXsHt0TmsgqcyvZ3V10/r0x7JX7qDD
-         HwaArFWWhb78McEbHI6KQkHNzJO281KzInb5dhxCiW5Fh6PEFnwhKTewj8ymRislKP5C
-         zGVH3GXIBSirS7FWMIWzngOveJgY+cmeBisMj4Ay/XA6QwAk3f1Duhof+i78tSn1IEe/
-         YZ0A==
-X-Gm-Message-State: AC+VfDxe1xY1G04NoSxomawIF5/bPIELPUE0sPVHebSZ5P8YtWh40xZj
-        TodRRDZtIlIcgxzmjD53f4WsX64HGJibl05ezTreZDxl
-X-Google-Smtp-Source: ACHHUZ6qhfdG2fZhdGHsml/SlY1/gE0nLZDDgPGOp1D4nkrUU/a7mwgvShXfR0D8Lozp/i2DjVdefw==
-X-Received: by 2002:a17:907:6d88:b0:973:ddfe:e074 with SMTP id sb8-20020a1709076d8800b00973ddfee074mr5519077ejc.2.1685727525176;
-        Fri, 02 Jun 2023 10:38:45 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id l1-20020a17090615c100b0096a742beb68sm983013ejd.201.2023.06.02.10.38.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 10:38:44 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so7494333a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:38:43 -0700 (PDT)
-X-Received: by 2002:a05:6402:202e:b0:505:d16:9374 with SMTP id
- ay14-20020a056402202e00b005050d169374mr3588912edb.9.1685727523436; Fri, 02
- Jun 2023 10:38:43 -0700 (PDT)
+        Fri, 2 Jun 2023 13:41:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341621B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685727627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wbtd2XCVq+/sFLE2jxa6+mJAIWTP4JlHCpeKfF2/aOU=;
+        b=FL0FZSB8o/TqIo7SPRvxchPKqz1PmRTQjBJ84FaRyK/FcwTe6zmcPKLh4IkVjlIz2o0HJW
+        2UMvKupEq9o55pUGJr1nrWlq6cZO6dO8S0VN2UYPVIWQ7DKux4Q4t+WVBfn1mhZ/nN6IwV
+        DiqqrikJo5rEWvp9wAegp4Me3jMrrN0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-Y5BaPcR8NzKjlfIPcJuT6A-1; Fri, 02 Jun 2023 13:40:23 -0400
+X-MC-Unique: Y5BaPcR8NzKjlfIPcJuT6A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF386800B35;
+        Fri,  2 Jun 2023 17:40:22 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
+        by smtp.corp.redhat.com (Postfix) with SMTP id C9F649E63;
+        Fri,  2 Jun 2023 17:40:17 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Fri,  2 Jun 2023 19:40:01 +0200 (CEST)
+Date:   Fri, 2 Jun 2023 19:39:56 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Brian Cain <bcain@quicinc.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: Re: [PATCH v9] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230602173955.GA555@redhat.com>
+References: <20230516191441.34377-1-wander@redhat.com>
+ <20230517152632.GC1286@redhat.com>
+ <CAAq0SUkE_4qF5RuWE7MxnzcbchE4SHkyMvJxHAQeJ+=ZTEwdgg@mail.gmail.com>
+ <20230529122256.GA588@redhat.com>
+ <CAAq0SUkjFiN3Xap-S2awymDqDWZceCnAWBQnESVMVya7RpFFUw@mail.gmail.com>
+ <20230601181359.GA23852@redhat.com>
+ <CAAq0SUk3c5H8YCVAfRAU=pZFNLrA90mNMq=k5BohTutM7cfcvg@mail.gmail.com>
 MIME-Version: 1.0
-References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
-In-Reply-To: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Jun 2023 13:38:26 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
-Message-ID: <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
-Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAq0SUk3c5H8YCVAfRAU=pZFNLrA90mNMq=k5BohTutM7cfcvg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:41=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
+On 06/01, Wander Lairson Costa wrote:
 >
-> sorry for this unusual procedure of me requesting a patch to be pulled.
-> I asked for several months the maintainers (David: asymmetric keys,
-> Jarkko: key subsystem) to pick my patch but without any luck.
+> On Thu, Jun 1, 2023 at 3:14 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> >
+> > > but only in the RT kernel
+> >
+> > this again suggests that your testing was wrong or I am totally confused (quite
+> > possible, I know nothing about RT). I did the testing without CONFIG_PREEMPT_RT.
+> >
+>
+> Hrm, could you please share your .config?
 
-Hmm.
+Sure. I do not want to spam the list, I'll send you a private email.
 
-The patch behind that tag looks sane to me, but this is not code I am
-hugely familiar with.
+Can you share your kernel module code?
 
-Who is the caller that passes in the public_key_signature data on the
-stack to public_key_verify_signature()? This may well be the right
-point to move it away from the stack in order to have a valid sg-list,
-but even if this patch is all good, it would be nice to have the call
-chain documented as part of the commit message.
+Did you verify that debug_locks != 0 as I asked in my previous email ?
 
-> I signed the tag, but probably it would not matter, since my key is not
-> among your trusted keys.
+> > > But running the reproducer for put_task_struct(), works fine.
+> >
+> > which reproducer ?
+> >
+>
+> Only now I noticed I didn't add the reproducer to the commit message:
+>
+> while true; do
+>     stress-ng --sched deadline --sched-period 1000000000
+> --sched-runtime 800000000 --sched-deadline 1000000000 --mmapfork 23 -t
+> 20
+> done
 
-It does matter - I do pull from people even without full chains, I
-just end up being a lot more careful, and I still want to see the
-signature for any future reference...
+Cough ;) I think we need something more simple to ensure that
+refcount_sub_and_test(nr, &t->usage) returns true under raw_spin_lock()
+and then __put_task_struct() actually takes spin_lock().
 
-DavidH, Herbert, please comment:
+Oleg.
 
->   https://github.com/robertosassu/linux.git tags/asym-keys-fix-for-linus-=
-v6.4-rc5
-
-basically public_key_verify_signature() is passed that
-
-     const struct public_key_signature *sig
-
-as an argument, and currently does
-
-        sg_init_table(src_sg, 2);
-        sg_set_buf(&src_sg[0], sig->s, sig->s_size);
-        sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-
-
-on it which is *not* ok if the s->s and s->digest points to stack data
-that ends up not dma'able because of a virtually mapped stack.
-
-The patch re-uses the allocation it already does for the key data, and
-it seems sane.
-
-But again, this is not code I look at normally, so...
-
-               Linus
