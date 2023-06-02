@@ -2,409 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1666D720030
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B560D72003F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235419AbjFBLPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S235648AbjFBLSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbjFBLPR (ORCPT
+        with ESMTP id S235358AbjFBLSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:15:17 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B8CE;
-        Fri,  2 Jun 2023 04:15:14 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 668CE6E0;
-        Fri,  2 Jun 2023 13:14:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685704490;
-        bh=/MdE2sKvMfcS77XSPTNugqlB7UUuZXVPDVGR3BOs8aM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vMfEvTEQs2G6eO7fAlcijX2NScsMfBlh6DbVz48zfnTDWFQT60gOTkBb9IivCuKZe
-         lfQQVhI+vVjodQAmTMZEkxZ4ULyJoca4F2PU743Xvb9y3UPYU2hmkCTikMdIbDIdVh
-         6Ph7ZquJyEuZ4sXNdD9vO7JjNT/i8XMzXS+k8wtI=
-Date:   Fri, 2 Jun 2023 14:15:10 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display Unit
- support
-Message-ID: <20230602111510.GE26944@pendragon.ideasonboard.com>
-References: <20230502100912.143114-1-biju.das.jz@bp.renesas.com>
- <OS0PR01MB59220E8306506F3E0B17968A86789@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922CC640A93CF85033FB47086469@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230529141349.GA15264@pendragon.ideasonboard.com>
- <OS0PR01MB5922B66349F301074C51018F864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230529154504.GC15264@pendragon.ideasonboard.com>
- <OS0PR01MB59222EFBB7C6549620192AAF86499@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        Fri, 2 Jun 2023 07:18:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC264180
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685704672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=imQ8hkrYLqR8ckCqlA+Lim20RdkOae7FAIksRB3MKCQ=;
+        b=LszkSpSo/Il7d347hmFA50w05ihPTUJdjDY8TPzvpQjkp+8H6OlijTvZiIMM6qnDtdiyf+
+        hATsmthYiynHwF+b1caiICQP7W5fXjtKwH+fF/zVOYteiOsx8fO4Yn3O87w8BtIQVNemAO
+        Nx/PQ0KrmgmlR7zOcudOjdY+98y5pQg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-7-AxRKHyJtMFaKTgKggW_8_A-1; Fri, 02 Jun 2023 07:15:31 -0400
+X-MC-Unique: AxRKHyJtMFaKTgKggW_8_A-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f71907c036so10851835e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 04:15:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685704531; x=1688296531;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=imQ8hkrYLqR8ckCqlA+Lim20RdkOae7FAIksRB3MKCQ=;
+        b=TftNl7FbBPUTMi5MSl1e0gyBe0v6o+Rj0918W0Lt0lHzmZxiqzPWv4AElTcs5Qi0uf
+         nkOVKVyl2oiSrd/p32sTomkhAhFodnLHUHwL/UhpJfaMZyaIOacjeTdiKAOHuQ7njrnH
+         5Ee1Bs60vlPiBFguZx7mb4PgYCmqwV7RqZyHs1gnIPbGeq+GpY5C2NZIBiHDCGugOTQG
+         UFgOa2AgqkTq6J7yRS333O8RXpkFNJDKgIzh9N7WHAZ9i9kxc6Ec1OpqAp5tVufiCuqT
+         nPgdo8h4/pPdMolJbTe4EVRQtbmnB5/duHVta5UsJhF1W3LXG3yCdwR1q/3azPRuBTrC
+         kA0A==
+X-Gm-Message-State: AC+VfDwQLoaMht9BPuA/tsjIrM7KwPXJRxyWY8GPxZqfpSpf5yZ4E52X
+        GNXjMQbG96V56OFPSsaKej5mKr7ZgcYgrwas/XWiB8vpm4NekwI1WHE3nRBDPD97G9Po/hnnout
+        ZeOzPdT/Wfdk1pAi0PS5/R/wU
+X-Received: by 2002:a7b:c841:0:b0:3f7:26f8:f9c3 with SMTP id c1-20020a7bc841000000b003f726f8f9c3mr1064700wml.5.1685704530892;
+        Fri, 02 Jun 2023 04:15:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6UWcaTAnKc4xQxzU4UjZxKiFiySGLh197x+LFMig+w4H4npT0uQes1m4bOREHyF9AKJ4OAiw==
+X-Received: by 2002:a7b:c841:0:b0:3f7:26f8:f9c3 with SMTP id c1-20020a7bc841000000b003f726f8f9c3mr1064685wml.5.1685704530633;
+        Fri, 02 Jun 2023 04:15:30 -0700 (PDT)
+Received: from redhat.com ([2.55.4.169])
+        by smtp.gmail.com with ESMTPSA id w11-20020a1cf60b000000b003f423f5b659sm1630095wmc.10.2023.06.02.04.15.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 04:15:29 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 07:15:26 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Ross Zwisler <zwisler@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v2 5/6] tools/virtio: use canonical ftrace path
+Message-ID: <20230602071517-mutt-send-email-mst@kernel.org>
+References: <20230215223350.2658616-1-zwisler@google.com>
+ <20230215223350.2658616-6-zwisler@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OS0PR01MB59222EFBB7C6549620192AAF86499@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230215223350.2658616-6-zwisler@google.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
-
-On Thu, Jun 01, 2023 at 12:12:59PM +0000, Biju Das wrote:
-> > Subject: Re: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display
-> > Unit support
-> > 
-> > On Mon, May 29, 2023 at 02:22:06PM +0000, Biju Das wrote:
-> > > > Subject: Re: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L
-> > > > Display Unit support
-> > > > On Thu, May 25, 2023 at 02:30:10PM +0000, Biju Das wrote:
-> > > > > Hi DRM maintainers,
-> > > > >
-> > > > > Gentle ping.
-> > > >
-> > > > Sorry, I was on holidays the last two weeks.
-> > > >
-> > > > > Are we happy with moving all Renesas drm drivers to Renesas
-> > > > > specific directory or preference is for separate one??
-> > > >
-> > > > This works for me.
-> > > >
-> > > > > If it is later, I can send RZ/G2L drm driver separate.
-> > > > >
-> > > > > Otherwise, I need to rebase and resend.
-> > > >
-> > > > Your series applies cleanly on top of the latest drm-next branch. Is
-> > > > there a specific need to rebase and resend ?
-> > >
-> > > Nope. After my patch series there were some patches from Geert for
-> > > drm/shmobile merged to drm-misc-next by Thomas.
-> > >
-> > > Maybe git managed this automatically??
-> > 
-> > Probably, git is nice :-)
-> > 
-> > > > I haven't had time to review patch 4/5 (the driver) yet. All the
-> > > > rest looks good to me. Should I already include 1/5 in my next pull
-> > request ?
-> > >
-> > > Yes, please.
-> > 
-> > OK, I will do so. I've reviewed 4/5 in the meantime, but changes are
-> > needed, so I won't wait for v10 before applying 1/5.
+On Wed, Feb 15, 2023 at 03:33:49PM -0700, Ross Zwisler wrote:
+> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
 > 
-> I have incorporated review comments for v9. I need to rebase my changes.
+> But, from Documentation/trace/ftrace.rst:
 > 
-> Is the pull request being done to drm-misc-next?
+>   Before 4.1, all ftrace tracing control files were within the debugfs
+>   file system, which is typically located at /sys/kernel/debug/tracing.
+>   For backward compatibility, when mounting the debugfs file system,
+>   the tracefs file system will be automatically mounted at:
+> 
+>   /sys/kernel/debug/tracing
+> 
+> A few spots in tools/virtio still refer to this older debugfs
+> path, so let's update them to avoid confusion.
+> 
+> Signed-off-by: Ross Zwisler <zwisler@google.com>
 
-I've just sent the pull request for drm-next, and have CC'ed you.
+queued this too. thanks!
 
-> > > > > Please let me know your preference.
-> > > > >
-> > > > > Cheers,
-> > > > > Biju
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Biju Das
-> > > > > > Sent: Monday, May 15, 2023 8:58 AM
-> > > > > > To: David Airlie <airlied@gmail.com>; Daniel Vetter
-> > > > > > <daniel@ffwll.ch>; Philipp Zabel <p.zabel@pengutronix.de>; Geert
-> > > > > > Uytterhoeven <geert+renesas@glider.be>; Laurent Pinchart
-> > > > > > <laurent.pinchart@ideasonboard.com>; Kieran Bingham
-> > > > > > <kieran.bingham+renesas@ideasonboard.com>
-> > > > > > Cc: dri-devel@lists.freedesktop.org;
-> > > > > > linux-renesas-soc@vger.kernel.org;
-> > > > > > Fabrizio Castro <fabrizio.castro.jz@renesas.com>; Prabhakar
-> > > > > > Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > > Subject: RE: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L
-> > > > > > Display Unit support
-> > > > > >
-> > > > > > Hi All,
-> > > > > >
-> > > > > > Gentle ping. Are we happy with this patch series?
-> > > > > >
-> > > > > > Cheers,
-> > > > > > Biju
-> > > > > >
-> > > > > > > Subject: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L
-> > > > > > > Display Unit support
-> > > > > > >
-> > > > > > > RZ/G2L LCD controller composed of Frame compression
-> > > > > > > Processor(FCPVD), Video signal processor (VSPD) and Display
-> > > > > > > unit(DU). The output of LCDC is connected to Display parallel
-> > > > > > > interface and MIPI link video interface.
-> > > > > > >
-> > > > > > > The output from DSI is connected to ADV7535.
-> > > > > > >
-> > > > > > > Created a vendor specific directory renesas and moved all
-> > > > > > > renesas drm drivers to it (rcar-du and shmobile). Then added
-> > > > > > > support for RZ/G2L DU DRM driver by creating rz_du directory.
-> > > > > > >
-> > > > > > > Ref:
-> > > > > > >
-> > > > > > >
-> > > > > > > v8->v9:
-> > > > > > >  * Added Rb tag from Laurent and Acked-by tag from Kieran for
-> > > > patch#1.
-> > > > > > >  * Added Rb tag from Laurent and Geert for patch#3.
-> > > > > > >  * Dropped reset_control_assert() from error patch for
-> > > > > > > rzg2l_du_crtc_get() as
-> > > > > > >    suggested by Philipp Zabel.
-> > > > > > >  * Added Rb tag from Laurent oatch#5.
-> > > > > > >  * Updated MAINTAINERS entries for common parts(Makefile and
-> > > > Kconfig).
-> > > > > > > v7->v8:
-> > > > > > >  * Moved rcar-du and shmobile DRM drivers to renesas specific
-> > > > > > > vendor directory.
-> > > > > > >  * Fixed the typo vsp2->du in RZ/V2L DU bindings patch.
-> > > > > > >  * Added Rb tag from Rob for RZ/V2L DU bindings patch.
-> > > > > > >  * Dropped RCar du lib and created RZ/G2L DU DRM driver by
-> > > > > > > creating rz_du folder.
-> > > > > > >  * Updated MAINTAINERS entries.
-> > > > > > > v6->v7:
-> > > > > > >  * Split DU lib and  RZ/G2L du driver as separate patch series
-> > as
-> > > > > > >    DU support added to more platforms based on RZ/G2L alike
-> > SoCs.
-> > > > > > >  * Rebased to latest drm-tip.
-> > > > > > >  * Added patch #2 for binding support for RZ/V2L DU
-> > > > > > >  * Added patch #4 for driver support for RZ/V2L DU
-> > > > > > >  * Added patch #5 for SoC DTSI support for RZ/G2L DU
-> > > > > > >  * Added patch #6 for SoC DTSI support for RZ/V2L DU
-> > > > > > >  * Added patch #7 for Enabling DU on SMARC EVK based on
-> > > > > > > RZ/{G2L,V2L} SoCs.
-> > > > > > >  * Added patch #8 for Enabling DU on SMARC EVK based on
-> > > > > > > RZ/G2LC
-> > > > SoC.
-> > > > > > > v5->v6:
-> > > > > > >  * Merged DU lib and RZ/G2L du driver in same patch series
-> > > > > > >  * Rebased to latest drm-misc.
-> > > > > > >  * Merged patch#1 to RZ/G2L Driver patch.
-> > > > > > >  * Updated KConfig dependency from ARCH_RENESAS->ARCH_RZG2L.
-> > > > > > >  * Optimized rzg2l_du_output_name() by removing unsupported
-> > > > outputs.
-> > > > > > >
-> > > > > > > v4->v5:
-> > > > > > >  * Added Rb tag from Rob for binding patch.
-> > > > > > >  * Started using RCar DU libs(kms, vsp and encoder)
-> > > > > > >  * Started using rcar_du_device, rcar_du_write, rcar_du_crtc,
-> > > > > > >    rcar_du_format_info and rcar_du_encoder.
-> > > > > > > v3->v4:
-> > > > > > >  * Changed compatible name from
-> > > > > > > renesas,du-r9a07g044->renesas,r9a07g044-
-> > > > > > > du
-> > > > > > >  * started using same compatible for RZ/G2{L,LC}
-> > > > > > >  * Removed rzg2l_du_group.h and struct rzg2l_du_group
-> > > > > > >  * Renamed __rzg2l_du_group_start_stop->rzg2l_du_start_stop
-> > > > > > >  * Removed rzg2l_du_group_restart
-> > > > > > >  * Updated rzg2l_du_crtc_set_display_timing
-> > > > > > >  * Removed mode_valid callback.
-> > > > > > >  * Updated rzg2l_du_crtc_create() parameters
-> > > > > > >  * Updated compatible
-> > > > > > >  * Removed RZG2L_DU_MAX_GROUPS
-> > > > > > > V2->v3:
-> > > > > > >  * Added new bindings for RZ/G2L DU
-> > > > > > >  * Removed indirection and created new DRM driver based on
-> > > > > > > R-Car DU
-> > > > > > > v1->v2:
-> > > > > > >  * Based on [1], all references to 'rzg2l_lcdc' replaced with
-> > > > > > 'rzg2l_du'
-> > > > > > >  * Updated commit description for bindings
-> > > > > > >  * Removed LCDC references from bindings
-> > > > > > >  * Changed clock name from du.0->aclk from bindings
-> > > > > > >  * Changed reset name from du.0->du from bindings
-> > > > > > >  * Replaced crtc_helper_funcs->rcar_crtc_helper_funcs
-> > > > > > >  * Updated macro DRM_RZG2L_LCDC->DRM_RZG2L_DU
-> > > > > > >  * Replaced rzg2l-lcdc-drm->rzg2l-du-drm
-> > > > > > >  * Added forward declaration for struct reset_control
-> > > > > > >
-> > > > > > > [1]
-> > > > > > >
-> > > > > > > Biju Das (5):
-> > > > > > >   drm: Place Renesas drivers in a separate dir
-> > > > > > >   dt-bindings: display: Document Renesas RZ/G2L DU bindings
-> > > > > > >   dt-bindings: display: renesas,rzg2l-du: Document RZ/V2L DU
-> > > > bindings
-> > > > > > >   drm: Add RZ/G2L DU Support
-> > > > > > >   MAINTAINERS: Add maintainer for RZ DU drivers
-> > > > > > >
-> > > > > > >  .../bindings/display/renesas,rzg2l-du.yaml    | 129 +++
-> > > > > > >  MAINTAINERS                                   |  16 +-
-> > > > > > >  drivers/gpu/drm/Kconfig                       |   4 +-
-> > > > > > >  drivers/gpu/drm/Makefile                      |   3 +-
-> > > > > > >  drivers/gpu/drm/renesas/Kconfig               |   5 +
-> > > > > > >  drivers/gpu/drm/renesas/Makefile              |   5 +
-> > > > > > >  drivers/gpu/drm/{ => renesas}/rcar-du/Kconfig |   0
-> > > > > > >  .../gpu/drm/{ => renesas}/rcar-du/Makefile    |   0
-> > > > > > >  .../gpu/drm/{ => renesas}/rcar-du/rcar_cmm.c  |   0
-> > > > > > >  .../gpu/drm/{ => renesas}/rcar-du/rcar_cmm.h  |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_crtc.c  |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_crtc.h  |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_drv.c   |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_drv.h   |   0
-> > > > > > >  .../{ => renesas}/rcar-du/rcar_du_encoder.c   |   0
-> > > > > > >  .../{ => renesas}/rcar-du/rcar_du_encoder.h   |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_group.c |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_group.h |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_kms.c   |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_kms.h   |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_plane.c |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_plane.h |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_regs.h  |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_vsp.c   |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_du_vsp.h   |   0
-> > > > > > >  .../{ => renesas}/rcar-du/rcar_du_writeback.c |   0
-> > > > > > >  .../{ => renesas}/rcar-du/rcar_du_writeback.h |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_dw_hdmi.c  |   0
-> > > > > > >  .../gpu/drm/{ => renesas}/rcar-du/rcar_lvds.c |   0
-> > > > > > >  .../gpu/drm/{ => renesas}/rcar-du/rcar_lvds.h |   0
-> > > > > > >  .../{ => renesas}/rcar-du/rcar_lvds_regs.h    |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_mipi_dsi.c |   0
-> > > > > > >  .../drm/{ => renesas}/rcar-du/rcar_mipi_dsi.h |   0
-> > > > > > >  .../rcar-du/rcar_mipi_dsi_regs.h              |   0
-> > > > > > >  .../{ => renesas}/rcar-du/rzg2l_mipi_dsi.c    |   0
-> > > > > > >  .../rcar-du/rzg2l_mipi_dsi_regs.h             |   0
-> > > > > > >  drivers/gpu/drm/renesas/rz-du/Kconfig         |  20 +
-> > > > > > >  drivers/gpu/drm/renesas/rz-du/Makefile        |   8 +
-> > > > > > >  drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.c | 714
-> > > > > > > ++++++++++++++++ drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.h
-> > > > > > > ++++++++++++++++ |
-> > > > > > > 99 +++ drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.c  | 188
-> > > > > > > +++++ drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.h  |  89 ++
-> > > > > > > .../gpu/drm/renesas/rz-du/rzg2l_du_encoder.c  | 112 +++
-> > > > > > > .../gpu/drm/renesas/rz-du/rzg2l_du_encoder.h  |  28 +
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c  | 770
-> > > > > > > ++++++++++++++++++ drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.
-> > > > > > > ++++++++++++++++++ h  |
-> > > > > > > 43 + drivers/gpu/drm/renesas/rz-du/rzg2l_du_regs.h |  67 ++
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c  | 430 ++++++++++
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h  |  94 +++
-> > > > > > >  .../gpu/drm/{ => renesas}/shmobile/Kconfig    |   0
-> > > > > > >  .../gpu/drm/{ => renesas}/shmobile/Makefile   |   0
-> > > > > > >  .../shmobile/shmob_drm_backlight.c            |   0
-> > > > > > >  .../shmobile/shmob_drm_backlight.h            |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_crtc.c   |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_crtc.h   |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_drv.c    |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_drv.h    |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_kms.c    |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_kms.h    |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_plane.c  |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_plane.h  |   0
-> > > > > > >  .../{ => renesas}/shmobile/shmob_drm_regs.h   |   0
-> > > > > > >  62 files changed, 2816 insertions(+), 8 deletions(-)  create
-> > > > > > > mode
-> > > > > > > 100644
-> > > > > > > Documentation/devicetree/bindings/display/renesas,rzg2l-du.yam
-> > > > > > > l  create mode 100644 drivers/gpu/drm/renesas/Kconfig  create
-> > > > > > > mode
-> > > > > > > 100644 drivers/gpu/drm/renesas/Makefile  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/Kconfig (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/Makefile (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_cmm.c (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_cmm.h (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_crtc.c
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_du_crtc.h (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_drv.c (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_drv.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_du_encoder.c (100%) rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_encoder.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_du_group.c (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_group.h (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_kms.c
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_du_kms.h (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_plane.c (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_plane.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_du_regs.h (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_vsp.c (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_vsp.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_du_writeback.c (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_du_writeback.h
-> > > > > > > (100%) rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_dw_hdmi.c (100%) rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_lvds.c (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/rcar-du/rcar_lvds.h
-> > > > > > > (100%) rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_lvds_regs.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_mipi_dsi.c (100%)  rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rcar_mipi_dsi.h (100%)
-> > > > > > > rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rcar_mipi_dsi_regs.h (100%) rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/rcar-du/rzg2l_mipi_dsi.c
-> > > > > > > (100%) rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/rcar-du/rzg2l_mipi_dsi_regs.h
-> > > > > > > (100%)  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/Kconfig
-> > > > > > >  create mode 100644 drivers/gpu/drm/renesas/rz-du/Makefile
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.c
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.h
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.c
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.h
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_encoder.c
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_encoder.h
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.h
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_regs.h
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c
-> > > > > > >  create mode 100644
-> > > > > > > drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.h
-> > > > > > >  rename drivers/gpu/drm/{ => renesas}/shmobile/Kconfig (100%)
-> > > > > > > rename drivers/gpu/drm/{ => renesas}/shmobile/Makefile (100%)
-> > > > > > > rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_backlight.c (100%) rename
-> > > > > > > drivers/gpu/drm/{ => renesas}/shmobile/shmob_drm_backlight.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_crtc.c
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_crtc.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_drv.c
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_drv.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_kms.c
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_kms.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_plane.c
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_plane.h
-> > > > > > > (100%)  rename drivers/gpu/drm/{ =>
-> > > > > > > renesas}/shmobile/shmob_drm_regs.h
-> > > > > > > (100%)
+> ---
+>  tools/virtio/virtio-trace/README        |  2 +-
+>  tools/virtio/virtio-trace/trace-agent.c | 12 ++++++++----
+>  2 files changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/virtio/virtio-trace/README b/tools/virtio/virtio-trace/README
+> index b64845b823ab..cea29a2a4c0a 100644
+> --- a/tools/virtio/virtio-trace/README
+> +++ b/tools/virtio/virtio-trace/README
+> @@ -95,7 +95,7 @@ Run
+>  
+>  1) Enable ftrace in the guest
+>   <Example>
+> -	# echo 1 > /sys/kernel/debug/tracing/events/sched/enable
+> +	# echo 1 > /sys/kernel/tracing/events/sched/enable
+>  
+>  2) Run trace agent in the guest
+>   This agent must be operated as root.
+> diff --git a/tools/virtio/virtio-trace/trace-agent.c b/tools/virtio/virtio-trace/trace-agent.c
+> index cdfe77c2b4c8..7e2d9bbf0b84 100644
+> --- a/tools/virtio/virtio-trace/trace-agent.c
+> +++ b/tools/virtio/virtio-trace/trace-agent.c
+> @@ -18,8 +18,9 @@
+>  #define PIPE_DEF_BUFS		16
+>  #define PIPE_MIN_SIZE		(PAGE_SIZE*PIPE_DEF_BUFS)
+>  #define PIPE_MAX_SIZE		(1024*1024)
+> -#define READ_PATH_FMT	\
+> -		"/sys/kernel/debug/tracing/per_cpu/cpu%d/trace_pipe_raw"
+> +#define TRACEFS 		"/sys/kernel/tracing"
+> +#define DEBUGFS 		"/sys/kernel/debug/tracing"
+> +#define READ_PATH_FMT		"%s/per_cpu/cpu%d/trace_pipe_raw"
+>  #define WRITE_PATH_FMT		"/dev/virtio-ports/trace-path-cpu%d"
+>  #define CTL_PATH		"/dev/virtio-ports/agent-ctl-path"
+>  
+> @@ -120,9 +121,12 @@ static const char *make_path(int cpu_num, bool this_is_write_path)
+>  	if (this_is_write_path)
+>  		/* write(output) path */
+>  		ret = snprintf(buf, PATH_MAX, WRITE_PATH_FMT, cpu_num);
+> -	else
+> +	else {
+>  		/* read(input) path */
+> -		ret = snprintf(buf, PATH_MAX, READ_PATH_FMT, cpu_num);
+> +		ret = snprintf(buf, PATH_MAX, READ_PATH_FMT, TRACEFS, cpu_num);
+> +		if (ret > 0 && access(buf, F_OK) != 0)
+> +			ret = snprintf(buf, PATH_MAX, READ_PATH_FMT, DEBUGFS, cpu_num);
+> +	}
+>  
+>  	if (ret <= 0) {
+>  		pr_err("Failed to generate %s path(CPU#%d):%d\n",
+> -- 
+> 2.39.1.637.g21b0678d19-goog
 
--- 
-Regards,
-
-Laurent Pinchart
