@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676787204A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF847204AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236088AbjFBOjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
+        id S236112AbjFBOkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236047AbjFBOjd (ORCPT
+        with ESMTP id S235707AbjFBOkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:39:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C83F99;
-        Fri,  2 Jun 2023 07:39:31 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352CtKFc003737;
-        Fri, 2 Jun 2023 14:39:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=q86k7CM1/8cC0ZfpyvBhE3VtRtfoTKqmBnlMXnF6eJE=;
- b=Q0t7hLTjApUUTRQ1iAgr7f3Z0eRC9voY4Srzm4CdV3IFDmHPExqxgenBviwzarMJ91vb
- /JvdEj5YBHTpjsVuPcrEKciTsUzqADfHwf7aRsLBLwTAPinj4/nQubJ71KeYsM9iQILr
- mZe++7vGmKOZSv1Zxq/N6bTjryvYVYv70WgX2DaCpt+VF6yS5NzshHZyBAmLYi41da15
- S6CFkByUvqayti0x2h9hMDcGJZ7y2ECjYy34iOvFpOXRC0rGt4lM/QVJ9ulQvyimCult
- IH/tKmrRy6xgLmPd4q4Qo1gaV0wKlfjq0LF0lVGsZV+5Fok9Zu2rD2d2lxjWDPcKWNzx /w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyb6f0xud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 14:39:16 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 352EcePh029373
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 14:38:40 GMT
-Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 2 Jun 2023
- 07:38:36 -0700
-Message-ID: <19bd262c-9063-5c7c-02b2-aa507c8c2a31@quicinc.com>
-Date:   Fri, 2 Jun 2023 22:38:33 +0800
+        Fri, 2 Jun 2023 10:40:40 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39211BC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:40:34 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f60e536250so25691215e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685716832; x=1688308832;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=dd7s3Z3wE1FRuEKyebQLFIwrLmyQsduGsJm+S7BiDBA=;
+        b=WbTcJBu7dkxQd6Xx/FdhcI+/W6kFAf+fOjnkbtuj7zwZ2Zaiz7RATDiV0A9TyiPZDX
+         /9UbiI5tERB8SJ0XsVpCPyn757q28Wt9HzY5kMGLyi2rr0xEPHFYkQ7FMwoqqlBKa/rG
+         T0NtUZJu2NarhxXvNXFTUmo8djZ/dWT6NvIZf4tF7hwLFlX038eumQC/oAE7YrY1wxo6
+         Sx6Ps3Dcnkc6rz096/AvPzCwBqGaN7l0xOGfTCZq8daGKBb6nwVxKC2p/Qbpjb12Lgjs
+         4x1b5psWDoiDnT41ltq0ZgoO/nNBh3+wZbhOJdeaHv335cmrVv/qUV41Yyvbuh2j9T3c
+         /axw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685716832; x=1688308832;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dd7s3Z3wE1FRuEKyebQLFIwrLmyQsduGsJm+S7BiDBA=;
+        b=Mp2qKZqq1yvaJ0IALC2SvKCGEu1U++7dyBGhFgsRAYc5wGCjwu/CtjyJ/7kBRtW++W
+         Z1u41+jq+HfyCfvUSO1CWPt6GnRriKLypxbC93i3Za1NaocjFJeetFUUjHW6rwWBPm7+
+         iMuxmDoE+wz0XVrWYGUpl3FLJ/UvENzk8svMh31k0nmAyk4viYf6ryyyr7Nve9lAVyVO
+         +8ZPs/tAfsH5azLd9RarLRMT8DdIdHi8bHJXNByqzuKgXpa/HZdzeUkEsoixKOlM2o8q
+         3J3BLD8Tz5mZNxEeS1t+oAZE4QX8PJdJpfr25L4T+tnoCDIL0R2yvHsXlPwEbczgDEOs
+         Cv5A==
+X-Gm-Message-State: AC+VfDykBtjthclqx6czmKbENYq0HT3xkvwHyUo8nsTANgmK4c/zPfFO
+        nEjOW/IOHLDYWwVZ96T3VQU7ng==
+X-Google-Smtp-Source: ACHHUZ5plGOHiofUtGd1wr0/17WzX3lFPrk17UetRP4zhL9gwB5+dLNKk+DiK+EIzimgC1GyyD/rSA==
+X-Received: by 2002:adf:f606:0:b0:30a:d944:b765 with SMTP id t6-20020adff606000000b0030ad944b765mr57873wrp.15.1685716832593;
+        Fri, 02 Jun 2023 07:40:32 -0700 (PDT)
+Received: from localhost ([194.62.217.2])
+        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b003079986fd71sm1898268wrx.88.2023.06.02.07.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 07:40:32 -0700 (PDT)
+References: <20230601134946.3887870-1-aliceryhl@google.com>
+ <20230601134946.3887870-2-aliceryhl@google.com>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v2 1/8] rust: workqueue: add low-level workqueue bindings
+Date:   Fri, 02 Jun 2023 16:39:00 +0200
+In-reply-to: <20230601134946.3887870-2-aliceryhl@google.com>
+Message-ID: <87o7ly0vxc.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 07/11] coresight-tpdm: Add nodes for dsb edge control
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-8-git-send-email-quic_taozha@quicinc.com>
- <606b8a25-0468-c310-ccff-1477e2b238b2@arm.com>
- <c5c28ab8-7d6a-f8e7-ad34-8716ac77d2dc@quicinc.com>
- <a2bd3bbf-5512-971a-95a1-3220f31814a2@arm.com>
-Content-Language: en-US
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <a2bd3bbf-5512-971a-95a1-3220f31814a2@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZtqLMuMy6QfTCQbfCPTcWTh62dBYPdRA
-X-Proofpoint-ORIG-GUID: ZtqLMuMy6QfTCQbfCPTcWTh62dBYPdRA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_10,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020111
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,394 +80,160 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 6/2/2023 4:45 PM, Suzuki K Poulose wrote:
-> On 02/06/2023 09:21, Tao Zhang wrote:
->>
->> On 6/1/2023 8:14 PM, Suzuki K Poulose wrote:
->>> On 27/04/2023 10:00, Tao Zhang wrote:
->>>> Add the nodes to set value for DSB edge control and DSB edge
->>>> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
->>>> resgisters to configure edge control. DSB edge detection control
->>>> 00: Rising edge detection
->>>> 01: Falling edge detection
->>>> 10: Rising and falling edge detection (toggle detection)
->>>> And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
->>>> configure mask. Eight 32 bit registers providing DSB interface
->>>> edge detection mask control.
->>>>
->>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>>> ---
->>>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  32 +++++
->>>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 135 
->>>> ++++++++++++++++++++-
->>>>   drivers/hwtracing/coresight/coresight-tpdm.h       |  21 ++++
->>>>   3 files changed, 187 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git 
->>>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->>>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>> index 348e167..a57f000 100644
->>>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>> @@ -60,3 +60,35 @@ Description:
->>>>           Bit[3] : Set to 0 for low performance mode.
->>>>                    Set to 1 for high performance mode.
->>>>           Bit[4:8] : Select byte lane for high performance mode.
->>>> +
->>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
->>>> +Date:        March 2023
->>>> +KernelVersion    6.3
->>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
->>>> Zhang (QUIC) <quic_taozha@quicinc.com>
->>>> +Description:
->>>> +        Read/Write a set of the edge control registers of the DSB
->>>> +        in TPDM.
->>>> +
->>>> +        Expected format is the following:
->>>> +        <integer1> <integer2> <integer3>
->>>> +
->>>> +        Where:
->>>> +        <integer1> : Start EDCR register number
->>>> +        <integer2> : End EDCR register number
->>>> +        <integer3> : The value need to be written
->>>> +
->>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
->>>> +Date:        March 2023
->>>> +KernelVersion    6.3
->>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
->>>> Zhang (QUIC) <quic_taozha@quicinc.com>
->>>> +Description:
->>>> +        Read/Write a set of the edge control mask registers of the
->>>> +        DSB in TPDM.
->>>> +
->>>> +        Expected format is the following:
->>>> +        <integer1> <integer2> <integer3>
->>>> +
->>>> +        Where:
->>>> +        <integer1> : Start EDCMR register number
->>>> +        <integer2> : End EDCMR register number
->>>> +        <integer3> : The value need to be written
->>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->>>> b/drivers/hwtracing/coresight/coresight-tpdm.c
->>>> index 1bacaa5..a40e458 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->>>> @@ -80,7 +80,14 @@ static void set_trigger_type(struct tpdm_drvdata 
->>>> *drvdata, u32 *val)
->>>>     static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->>>>   {
->>>> -    u32 val;
->>>> +    u32 val, i;
->>>> +
->>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
->>>> +        writel_relaxed(drvdata->dsb->edge_ctrl[i],
->>>> +               drvdata->base + TPDM_DSB_EDCR(i));
->>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
->>>> + writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
->>>> +               drvdata->base + TPDM_DSB_EDCMR(i));
->>>
->>> Do all TPDM DSBs have MAX_EDCR registers ? Or some have less than 
->>> that ?
->>> If it is latter, do we need special care to avoid writing to inexistent
->>> registers ?
->>>
->> You are right, not all DSB TPDMs have MAX_EDCR registers. In our 
->> design, the inexistent register addresses
->>
->> are not occupied and safe for accessing.
->>
->> Currently we don't have a good way to know the quantity of EDCR/EDCMR 
->> registers for DSB TPDMs.
->>
->> The only way we can think of is to set it in device tree manually.
->>
->> Do you have other suggestion for this?
->>
->>>>         val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->>>>       /* Set trigger timestamp */
->>>> @@ -313,6 +320,130 @@ static ssize_t dsb_mode_store(struct device 
->>>> *dev,
->>>>   }
->>>>   static DEVICE_ATTR_RW(dsb_mode);
->>>>   +static ssize_t dsb_edge_ctrl_show(struct device *dev,
->>>> +                       struct device_attribute *attr,
->>>> +                       char *buf)
->>>> +{
->>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>> +    ssize_t size = 0;
->>>> +    int i;
->>>> +
->>>> +    spin_lock(&drvdata->spinlock);
->>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
->>>> +        size += sysfs_emit_at(buf, size,
->>>> +                  "Index:0x%x Val:0x%x\n", i,
->>>> +                  drvdata->dsb->edge_ctrl[i]);
->>>
->>> It may be safe, but please add a check to make sure that we don't
->>> overflow. At least bail out when we hit a return of 0, indicating
->>> reached the end of buffer.
->>>
->> Can I add the following check to replace the current code??
->>
->> int ret = 0;
->>
->>
->> for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
->>
->>      ret = sysfs_emit_at(buf, size, "Index:0x%x Val:0x%x\n", i, 
->> drvdata->dsb->edge_ctrl[i]);
->>
->>      if (!ret) {
->>
->>          dev_warn(drvdata->dev, "The buffer has been overflowed\n");
->
-> You don't need this, it already triggers a WARN() in sysfs_emit_at().
-> So you could do:
->
->     for (....) {
->         unsigned long bytes = sysfs_emit_at(buf, size, ....);
->
->         if (bytes <= 0)
->             break;
->         size += bytes;
->     }
->
-Sure, I will update in the next patch series.
->
->>
->>          spin_unlock(&drvdata->spinlock);
->>
->>          return size;
->>
->>      } else
->>
->>          size += ret;
->>
->> }
->>
->>>> +    }
->>>> +    spin_unlock(&drvdata->spinlock);
->>>> +    return size;
->>>> +}
->>>> +
->>>> +/*
->>>> + * value 1: Start EDCR register number
->>>> + * value 2: End EDCR register number
->>>> + * value 3: The value need to be written
->>>> + * The EDCR registers can include up to 16 32-bit registers, and each
->>>> + * one can be configured to control up to 16 edge detections(2 bits
->>>> + * control one edge detection). So a total 256 edge detections can be
->>>> + * configured. So the starting number(value 1) and ending 
->>>> number(value 2)
->>>> + * cannot be greater than 256, and value 1 should be less than 
->>>> value 2.
->>>> + * The following values are the rage of value 3.
->>>> + * 0 - Rising edge detection
->>>> + * 1 - Falling edge detection
->>>> + * 2 - Rising and falling edge detection (toggle detection)
->>>> + */
->>>> +static ssize_t dsb_edge_ctrl_store(struct device *dev,
->>>> +                    struct device_attribute *attr,
->>>> +                    const char *buf,
->>>> +                    size_t size)
->>>> +{
->>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>> +    unsigned long val, mask, start, end, edge_ctrl, edge_ctrl_shift;
->>>> +    int i, reg;
->>>> +
->>>> +    if (sscanf(buf, "%lx %lx %lx", &start, &end, &edge_ctrl) != 3)
->>>> +        return -EINVAL;
->>>> +    if ((start >= TPDM_DSB_MAX_LINES) || (end >= 
->>>> TPDM_DSB_MAX_LINES) ||
->>>> +        (start > end) || (edge_ctrl > 0x2))
->>>> +        return -EPERM;
->>>> +
->>>> +    spin_lock(&drvdata->spinlock);
->>>> +    for (i = start; i <= end; i++) {
->>>> +        /*
->>>> +         * There are 2 bit per DSB Edge Control line.
->>>> +         * Thus we have 16 lines in a 32bit word.
->>>> +         */
->>>> +        reg = EDCR_TO_WORD_IDX(i);
->>>> +        mask = EDCR_TO_WORD_MASK(i);
->>>> +        val = drvdata->dsb->edge_ctrl[reg];
->>>
->>>> +        edge_ctrl_shift = EDCR_TO_WORD_VAL(edge_ctrl, i);
->>>> +        bitmap_replace(&val, &val, &edge_ctrl_shift, &mask, 32);
->>>
->>> Could we simply do :
->>>
->>>         reg &= ~mask;
->>>         reg |= FIELD_PREP(mask, edge_ctrl);
->>>
->> Perhaps "FIELD_PREP" cannot be used here since "mask" must be 
->> constant in this macro.
->
-> Ah, you are right. Sorry about that.
->
->>
->> But in our code, the variable "mask" is not constant.
->
-> Still I think using the bitmap_replace is an overkill. We could simply
-> do:
->         val &= ~mask;
->         val |= EDCR_TO_WORD_VAL(edge_ctrl, i);
+Alice Ryhl <aliceryhl@google.com> writes:
 
-Sure, I will update in the next patch series.
-
-
-Best,
-
-Tao
-
+> Define basic low-level bindings to a kernel workqueue. The API defined
+> here can only be used unsafely. Later commits will provide safe
+> wrappers.
 >
-> Suzuki
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+
+Reviewed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+
+> ---
+>  rust/bindings/bindings_helper.h |   1 +
+>  rust/kernel/lib.rs              |   1 +
+>  rust/kernel/workqueue.rs        | 107 ++++++++++++++++++++++++++++++++
+>  3 files changed, 109 insertions(+)
+>  create mode 100644 rust/kernel/workqueue.rs
 >
->>>
->>>> + drvdata->dsb->edge_ctrl[reg] = val;
->>>> +    }
->>>> +    spin_unlock(&drvdata->spinlock);
->>>> +
->>>> +    return size;
->>>> +}
->>>> +static DEVICE_ATTR_RW(dsb_edge_ctrl);
->>>> +
->>>> +static ssize_t dsb_edge_ctrl_mask_show(struct device *dev,
->>>> +                        struct device_attribute *attr,
->>>> +                        char *buf)
->>>> +{
->>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>> +    ssize_t size = 0;
->>>> +    int i;
->>>> +
->>>> +    spin_lock(&drvdata->spinlock);
->>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++) {
->>>> +        size += sysfs_emit_at(buf, size,
->>>> +                  "Index:0x%x Val:0x%x\n", i,
->>>> +                  drvdata->dsb->edge_ctrl_mask[i]);
->>>> +    }
->>>> +    spin_unlock(&drvdata->spinlock);
->>>> +    return size;
->>>> +}
->>>> +
->>>> +/*
->>>> + * value 1: Start EDCMR register number
->>>> + * value 2: End EDCMR register number
->>>> + * value 3: The value need to be written
->>>> + */
->>>> +static ssize_t dsb_edge_ctrl_mask_store(struct device *dev,
->>>> +                         struct device_attribute *attr,
->>>> +                         const char *buf,
->>>> +                         size_t size)
->>>> +{
->>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>> +    unsigned long start, end, val;
->>>> +    u32 set;
->>>> +    int i, reg;
->>>> +
->>>> +    if (sscanf(buf, "%lx %lx %lx", &start, &end, &val) != 3)
->>>> +        return -EINVAL;
->>>> +    if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES)
->>>> +        || (start > end) || (val & ~1UL))
->>>> +        return -EPERM;
->>>> +
->>>> +    spin_lock(&drvdata->spinlock);
->>>> +    for (i = start; i <= end; i++) {
->>>> +        /*
->>>> +         * There is 1 bit per DSB Edge Control Mark line.
->>>> +         * Thus we have 32 lines in a 32bit word.
->>>> +         */
->>>> +        reg = EDCMR_TO_WORD_IDX(i);
->>>> +        set = drvdata->dsb->edge_ctrl_mask[reg];
->>>> +        if (val)
->>>> +            set |= BIT(EDCR_TO_WORD_SHIFT(i));
->>>> +        else
->>>> +            set &= ~BIT(EDCR_TO_WORD_SHIFT(i));
->>>> +        drvdata->dsb->edge_ctrl_mask[reg] = set;
->>>> +    }
->>>> +    spin_unlock(&drvdata->spinlock);
->>>> +    return size;
->>>> +}
->>>> +static DEVICE_ATTR_RW(dsb_edge_ctrl_mask);
->>>> +
->>>>   static ssize_t dsb_trig_type_show(struct device *dev,
->>>>                        struct device_attribute *attr, char *buf)
->>>>   {
->>>> @@ -385,6 +516,8 @@ static DEVICE_ATTR_RW(dsb_trig_ts);
->>>>     static struct attribute *tpdm_dsb_attrs[] = {
->>>>       &dev_attr_dsb_mode.attr,
->>>> +    &dev_attr_dsb_edge_ctrl.attr,
->>>> +    &dev_attr_dsb_edge_ctrl_mask.attr,
->>>>       &dev_attr_dsb_trig_ts.attr,
->>>>       &dev_attr_dsb_trig_type.attr,
->>>>       NULL,
->>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
->>>> b/drivers/hwtracing/coresight/coresight-tpdm.h
->>>> index 79df07e..f25dcdec 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
->>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
->>>> @@ -12,6 +12,8 @@
->>>>   /* DSB Subunit Registers */
->>>>   #define TPDM_DSB_CR        (0x780)
->>>>   #define TPDM_DSB_TIER        (0x784)
->>>> +#define TPDM_DSB_EDCR(n)    (0x808 + (n * 4))
->>>> +#define TPDM_DSB_EDCMR(n)    (0x848 + (n * 4))
->>>>     /* Enable bit for DSB subunit */
->>>>   #define TPDM_DSB_CR_ENA        BIT(0)
->>>> @@ -34,6 +36,15 @@
->>>>   #define TPDM_DSB_TEST_MODE        GENMASK(10, 9)
->>>>   #define TPDM_DSB_HPSEL        GENMASK(6, 2)
->>>>   +#define EDCRS_PER_WORD                16
->>>> +#define EDCR_TO_WORD_IDX(r)            ((r) / EDCRS_PER_WORD)
->>>> +#define EDCR_TO_WORD_SHIFT(r)        ((r % EDCRS_PER_WORD) * 2)
->>>> +#define EDCR_TO_WORD_VAL(val, r)    (val << EDCR_TO_WORD_SHIFT(r))
->>>> +#define EDCR_TO_WORD_MASK(r)        EDCR_TO_WORD_VAL(0x3, r)
->>>
->>> minor nit: add a new line here please
->> Sure, I will update this in the next patch series.
->>>
->>>> +#define EDCMRS_PER_WORD                32
->>>> +#define EDCMR_TO_WORD_IDX(r)        ((r) / EDCMRS_PER_WORD)
->>>> +#define EDCMR_TO_WORD_SHIFT(r)        ((r) % EDCMRS_PER_WORD)
->>>> +
->>>>   /* TPDM integration test registers */
->>>>   #define TPDM_ITATBCNTRL        (0xEF0)
->>>>   #define TPDM_ITCNTRL        (0xF00)
->>>> @@ -60,14 +71,24 @@
->>>>   #define TPDM_PIDR0_DS_IMPDEF    BIT(0)
->>>>   #define TPDM_PIDR0_DS_DSB    BIT(1)
->>>>   +#define TPDM_DSB_MAX_LINES    256
->>>> +/* MAX number of EDCR registers */
->>>> +#define TPDM_DSB_MAX_EDCR    16
->>>> +/* MAX number of EDCMR registers */
->>>> +#define TPDM_DSB_MAX_EDCMR    8
->>>> +
->>>>   /**
->>>>    * struct dsb_dataset - specifics associated to dsb dataset
->>>>    * @mode:             DSB programming mode
->>>> + * @edge_ctrl:        Save value for edge control
->>>> + * @edge_ctrl_mask:   Save value for edge control mask
->>>>    * @trig_ts:          Enable/Disable trigger timestamp.
->>>>    * @trig_type:        Enable/Disable trigger type.
->>>>    */
->>>>   struct dsb_dataset {
->>>>       u32                mode;
->>>> +    u32                edge_ctrl[TPDM_DSB_MAX_EDCR];
->>>> +    u32                edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
->>>
->>> minor nit: Please align it with the fields below.
->>
->> Sure, I will update this in the next patch series.
->>
->>
->> Best,
->>
->> Tao
->>
->>>
->>>>       bool            trig_ts;
->>>>       bool            trig_type;
->>>>   };
->>>
->>> Suzuki
->
+> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+> index 50e7a76d5455..ae2e8f018268 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -10,6 +10,7 @@
+>  #include <linux/refcount.h>
+>  #include <linux/wait.h>
+>  #include <linux/sched.h>
+> +#include <linux/workqueue.h>
+>  
+>  /* `bindgen` gets confused at certain things. */
+>  const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 85b261209977..eaded02ffb01 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -43,6 +43,7 @@
+>  pub mod sync;
+>  pub mod task;
+>  pub mod types;
+> +pub mod workqueue;
+>  
+>  #[doc(hidden)]
+>  pub use bindings;
+> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+> new file mode 100644
+> index 000000000000..9c630840039b
+> --- /dev/null
+> +++ b/rust/kernel/workqueue.rs
+> @@ -0,0 +1,107 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Work queues.
+> +//!
+> +//! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
+> +
+> +use crate::{bindings, types::Opaque};
+> +
+> +/// A kernel work queue.
+> +///
+> +/// Wraps the kernel's C `struct workqueue_struct`.
+> +///
+> +/// It allows work items to be queued to run on thread pools managed by the kernel. Several are
+> +/// always available, for example, `system`, `system_highpri`, `system_long`, etc.
+> +#[repr(transparent)]
+> +pub struct Queue(Opaque<bindings::workqueue_struct>);
+> +
+> +// SAFETY: Kernel workqueues are usable from any thread.
+> +unsafe impl Send for Queue {}
+> +unsafe impl Sync for Queue {}
+> +
+> +impl Queue {
+> +    /// Use the provided `struct workqueue_struct` with Rust.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The caller must ensure that the provided raw pointer is not dangling, that it points at a
+> +    /// valid workqueue, and that it remains valid until the end of 'a.
+> +    pub unsafe fn from_raw<'a>(ptr: *const bindings::workqueue_struct) -> &'a Queue {
+> +        // SAFETY: The `Queue` type is `#[repr(transparent)]`, so the pointer cast is valid. The
+> +        // caller promises that the pointer is not dangling.
+> +        unsafe { &*(ptr as *const Queue) }
+> +    }
+> +
+> +    /// Enqueues a work item.
+> +    ///
+> +    /// This may fail if the work item is already enqueued in a workqueue.
+> +    ///
+> +    /// The work item will be submitted using `WORK_CPU_UNBOUND`.
+> +    pub fn enqueue<W, const ID: u64>(&self, w: W) -> W::EnqueueOutput
+> +    where
+> +        W: RawWorkItem<ID> + Send + 'static,
+> +    {
+> +        let queue_ptr = self.0.get();
+> +
+> +        // SAFETY: We only return `false` if the `work_struct` is already in a workqueue. The other
+> +        // `__enqueue` requirements are not relevant since `W` is `Send` and static.
+> +        //
+> +        // The call to `bindings::queue_work_on` will dereference the provided raw pointer, which
+> +        // is ok because `__enqueue` guarantees that the pointer is valid for the duration of this
+> +        // closure.
+> +        //
+> +        // Furthermore, if the C workqueue code accesses the pointer after this call to
+> +        // `__enqueue`, then the work item was successfully enqueued, and `bindings::queue_work_on`
+> +        // will have returned true. In this case, `__enqueue` promises that the raw pointer will
+> +        // stay valid until we call the function pointer in the `work_struct`, so the access is ok.
+> +        unsafe {
+> +            w.__enqueue(move |work_ptr| {
+> +                bindings::queue_work_on(bindings::WORK_CPU_UNBOUND as _, queue_ptr, work_ptr)
+> +            })
+> +        }
+> +    }
+> +}
+> +
+> +/// A raw work item.
+> +///
+> +/// This is the low-level trait that is designed for being as general as possible.
+> +///
+> +/// The `ID` parameter to this trait exists so that a single type can provide multiple
+> +/// implementations of this trait. For example, if a struct has multiple `work_struct` fields, then
+> +/// you will implement this trait once for each field, using a different id for each field. The
+> +/// actual value of the id is not important as long as you use different ids for different fields
+> +/// of the same struct. (Fields of different structs need not use different ids.)
+> +///
+> +/// Note that the id is used only to select the right method to call during compilation. It wont be
+> +/// part of the final executable.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementers must ensure that any pointers passed to a `queue_work_on` closure by `__enqueue`
+> +/// remain valid for the duration specified in the documentation for `__enqueue`.
+> +pub unsafe trait RawWorkItem<const ID: u64> {
+> +    /// The return type of [`Queue::enqueue`].
+> +    type EnqueueOutput;
+> +
+> +    /// Enqueues this work item on a queue using the provided `queue_work_on` method.
+> +    ///
+> +    /// # Guarantees
+> +    ///
+> +    /// If this method calls the provided closure, then the raw pointer is guaranteed to point at a
+> +    /// valid `work_struct` for the duration of the call to the closure. If the closure returns
+> +    /// true, then it is further guaranteed that the pointer remains valid until someone calls the
+> +    /// function pointer stored in the `work_struct`.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The provided closure may only return `false` if the `work_struct` is already in a workqueue.
+> +    ///
+> +    /// If the work item type is annotated with any lifetimes, then you must not call the function
+> +    /// pointer after any such lifetime expires. (Never calling the function pointer is okay.)
+> +    ///
+> +    /// If the work item type is not [`Send`], then the function pointer must be called on the same
+> +    /// thread as the call to `__enqueue`.
+> +    unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::EnqueueOutput
+> +    where
+> +        F: FnOnce(*mut bindings::work_struct) -> bool;
+> +}
+
