@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE1E71FD68
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5206E71FD6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbjFBJPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S235157AbjFBJRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbjFBJPT (ORCPT
+        with ESMTP id S233933AbjFBJQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:15:19 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1612E18C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:15:14 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51458e3af68so2573717a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:15:14 -0700 (PDT)
+        Fri, 2 Jun 2023 05:16:30 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B69D194
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:16:20 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f623adec61so18796035e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685697312; x=1688289312;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yLdU4Q8ozDdxq74yNihKW+OJlWWA0/2lZXXu2wMUGK0=;
-        b=hoTFOaLz93wlq05dLe0Yk0a+roPiXut39EDht3/CVz2w1euedsX2QEBsuiqI4vt0UO
-         ia91d0+VlCHK26rzDq4b5PC48HtoK98XO156DGHthjoL1MF8r6a5oF7UgCNpJKebuzqj
-         XOLWdPu8Ei1fqkt9r0vqIvn22QUkP29U7TNNUbw8t7M4oP0HJGLRE9yZlbwDjFEjuKgq
-         YRYCpUO+WBo/k09VH3awCcm8eWT2zFjk6ElB8XvXFNQTtii76845VRF1Nc8ZMV4qYxpA
-         nDqMVLsSnnJSKrjvpV03rHVv5u+p+/5+nThy/XuYR9ka+6KpoqbulEWzXJfLeIsyRx1m
-         ULHA==
+        d=linaro.org; s=google; t=1685697379; x=1688289379;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=XCSBt06ODCOO6aeVJ2PlXGU7kys31a0U2ya2eb1ukWw=;
+        b=Z+ctFkEefF0e4doqq0Ug4bfRYfV4IApiuCj62wHwH5KpnMjImkCKEMD6dqT7PNRqck
+         1KxgSYzQW+icJWnxf2IK5Zp6wkBYQ4bRr7wuvKK94lbSyRpz8wwAkskcQMj24qiM1v0M
+         GAluuGomAl2RCXaT9ZNXSrDGVZapBa7+Jq9d18QJrscreKDrwX3flFnK43x57UYOsIv7
+         zbcespmhVHncyojB36fAyNh5rqJJzl51FFFHTVKe35+DnbdMKCKo7o58rfG7d9pVH8OQ
+         EDdUTisqSCde7B8cMJMJtg/sm2DSAVQCSVe5ZJZSZNK6PQkM3H4WEQBgjLvVos0fww56
+         a6oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685697312; x=1688289312;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yLdU4Q8ozDdxq74yNihKW+OJlWWA0/2lZXXu2wMUGK0=;
-        b=SNLc9CkEl7JuRErazlmYYibM9fQcpcHbySQXI0jJtMhWg08MHXQT+QTq+fgqfE++Qo
-         a+L1fVS8AC1yYrPKfE5XxULtuDbFAbmqW9wGoUDBJZKBW+dcAnA1LJittZN1/WNioLMw
-         UYZs3q8Zgdif9nLStWMY2nY1zsbftWyqT5/lODoO8fYgb/OogdnOn8w3sduTyJ89czmj
-         yDtXnlJJBHT2t/ComZv+T77/CRTveAHDVWkl5ZHMwj0ZSYl/1A+JJhrwdMhJxcTPeXjB
-         3jH/uh+uqso+r4y1WcXssgLCwuvy213FcNIu14chqOYEcQ/r6JB9alyvjNwXmJTvkJwA
-         DPwA==
-X-Gm-Message-State: AC+VfDxCllYr2yFwirLw7XD4hNTJbajOZ9aHeAzsF9QVMdxKqINFZMY+
-        fov3URQDGqNjKBGRjfp2pUed9Q==
-X-Google-Smtp-Source: ACHHUZ46P9H+JJXIA3e7YoKj3JBcYOwil7LjToqG+b/wH8fdOhwkND9umKE0x7FpXb0LBZM1aiRffA==
-X-Received: by 2002:a17:907:d88:b0:96a:43b9:95b1 with SMTP id go8-20020a1709070d8800b0096a43b995b1mr11242892ejc.59.1685697312691;
-        Fri, 02 Jun 2023 02:15:12 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id z13-20020a170906240d00b0094e597f0e4dsm514255eja.121.2023.06.02.02.15.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 02:15:12 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>, replicant@osuosl.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        Artur Weber <aweber.kernel@gmail.com>
-Subject: [GIT PULL 3/3] ARM: samsung: soc for v6.5
-Date:   Fri,  2 Jun 2023 11:15:01 +0200
-Message-Id: <20230602091501.15178-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602091501.15178-1-krzysztof.kozlowski@linaro.org>
-References: <20230602091501.15178-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20221208; t=1685697379; x=1688289379;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XCSBt06ODCOO6aeVJ2PlXGU7kys31a0U2ya2eb1ukWw=;
+        b=SMpoEdJZRZYsRCKhRFfUCvN4EohOnpQt+avSOarEuwEIdTGlvC6VbzOgD7Kgi5EwAP
+         AWARRk7VbVbvpRlPlOoot4OHW6KXTlnaLvmtmc19ULx3sv6DtK6+JqCNEzBJxwIFqwsB
+         472zY9z9OVNf6NEBVVNWiY1JqnqL2r1A/YLZc05B/I4atoFWWQKgtMFE1B2WvxEERPf7
+         lwaTYXc4wtTPjYvDR/SoqMxvUqBx8J2vqiiwYh2fzYJ7Ej3ss+gz1NumteqQRBeITEzP
+         u1Zv0ZTxHxtMBzHG70vqGtgk/B8jOHEZAFlAM6gYVlXe+6CcR5R0XYYu6IYdtSSXaI0z
+         rDYQ==
+X-Gm-Message-State: AC+VfDxHtDWeRoVYjS4rSOgbJZElHsazrsfegKQnMDMCCrJc3tX3Mc/W
+        b9HIL3HkxU5oTh2tDzfPZ39lUw==
+X-Google-Smtp-Source: ACHHUZ5kFDVkTijAYhopCOawiE08DDNzoy6papAmWv1662nnpG5t1S72iJGGObX98yTOLoivrgSqwg==
+X-Received: by 2002:a05:600c:3798:b0:3f6:244:55df with SMTP id o24-20020a05600c379800b003f6024455dfmr1508463wmr.29.1685697378846;
+        Fri, 02 Jun 2023 02:16:18 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:cabd:b6f:39ae:51a2? ([2a01:e0a:982:cbb0:cabd:b6f:39ae:51a2])
+        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003f60119ee08sm4895391wmc.43.2023.06.02.02.16.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 02:16:18 -0700 (PDT)
+Message-ID: <1ed84d1f-d999-f0f2-bd84-d56f46efa384@linaro.org>
+Date:   Fri, 2 Jun 2023 11:16:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH -next] drm/meson: Remove unneeded semicolon
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, airlied@gmail.com
+Cc:     daniel@ffwll.ch, khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230602091416.107850-1-yang.lee@linux.alibaba.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230602091416.107850-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On 02/06/2023 11:14, Yang Li wrote:
+> ./drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:117:2-3: Unneeded semicolon
+> ./drivers/gpu/drm/meson/meson_dw_mipi_dsi.c:231:2-3: Unneeded semicolon
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5392
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+> index dd505ac37976..57447abf1a29 100644
+> --- a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+> +++ b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+> @@ -114,7 +114,7 @@ static int dw_mipi_dsi_phy_init(void *priv_data)
+>   	case MIPI_DSI_FMT_RGB666_PACKED:
+>   	case MIPI_DSI_FMT_RGB565:
+>   		return -EINVAL;
+> -	};
+> +	}
+>   
+>   	/* Configure color format for DPI register */
+>   	writel_relaxed(FIELD_PREP(MIPI_DSI_TOP_DPI_COLOR_MODE, dpi_data_format) |
+> @@ -228,7 +228,7 @@ static int meson_dw_mipi_dsi_host_attach(void *priv_data,
+>   	case MIPI_DSI_FMT_RGB565:
+>   		dev_err(mipi_dsi->dev, "invalid pixel format %d\n", device->format);
+>   		return -EINVAL;
+> -	};
+> +	}
+>   
+>   	ret = phy_init(mipi_dsi->phy);
+>   	if (ret)
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-6.5
-
-for you to fetch changes up to ca027ae58eaab3632966158ce440a7f50da52bef:
-
-  ARM: s3c: Switch i2c drivers back to use .probe() (2023-05-30 09:40:37 +0200)
-
-----------------------------------------------------------------
-Samsung mach/soc changes for v6.5
-
-1. Re-introduce Exynos4212 which was removed because of lack of upstream
-   users.  Artur Weber adds now Samsung Galaxy Tab3 with Exynos4212.
-
-2. Minor cleanups.
-
-----------------------------------------------------------------
-Artur Weber (1):
-      ARM: exynos: Re-introduce Exynos4212 support
-
-Lukas Bulwahn (1):
-      ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
-
-Uwe Kleine-König (1):
-      ARM: s3c: Switch i2c drivers back to use .probe()
-
- arch/arm/mach-exynos/Kconfig             | 5 +++++
- arch/arm/mach-exynos/common.h            | 8 ++++++++
- arch/arm/mach-exynos/exynos.c            | 2 ++
- arch/arm/mach-exynos/firmware.c          | 8 +++++++-
- arch/arm/mach-exynos/pm.c                | 2 +-
- arch/arm/mach-exynos/suspend.c           | 4 ++++
- arch/arm/mach-s3c/Kconfig.s3c64xx        | 6 ------
- arch/arm/mach-s3c/mach-crag6410-module.c | 2 +-
- 8 files changed, 28 insertions(+), 9 deletions(-)
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
