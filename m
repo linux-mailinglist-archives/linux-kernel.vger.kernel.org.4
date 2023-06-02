@@ -2,184 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157EB7208DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E347208DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236769AbjFBSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S235577AbjFBSNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjFBSN5 (ORCPT
+        with ESMTP id S232628AbjFBSNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:13:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1D196;
-        Fri,  2 Jun 2023 11:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685729636; x=1717265636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yIozrWDl/5hQ5vXZiPITasCQOwSsn+udVyA99ySkQ4Q=;
-  b=LMlhyRSGPVgdVQqJ/a0iR3F2ol5niq/zLCbDcE8VrFHR75vZ63iEtocu
-   pyCvxT020i0dAdsm7DqWDwkvLR3PpMYz+jfNKrlsBgupuCFmYEfp+XCUp
-   QdhnDEP9lgyw88WP6zQa/F7C2ySxJGadqSk5gS0cbKX7uueb0G4/7EbEl
-   hjXIb/S9dtqwIZZH1jKJSbq51D0bSozWKWjLmYlnvY5cA4FWcgmJasJTC
-   2aORBl22e9D+zRmHay4OIfs9rM9A4hAvPesru+ZI9AWwAQhjR6IKoDMT6
-   2ZROjRRCod2uhctE1XO8H+bOogKtN04kXXX7ZWgeiJX1LwiX+pFl9CDko
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="354782633"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="354782633"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 11:13:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="702034801"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="702034801"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 02 Jun 2023 11:13:53 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q59Hc-0000oX-1d;
-        Fri, 02 Jun 2023 18:13:52 +0000
-Date:   Sat, 3 Jun 2023 02:13:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shunsuke Mie <mie@igel.co.jp>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Cc:     oe-kbuild-all@lists.linux.dev, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>
-Subject: Re: [PATCH v4 1/1] vringh: IOMEM support
-Message-ID: <202306030216.bpWr6XV0-lkp@intel.com>
-References: <20230602055211.309960-2-mie@igel.co.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602055211.309960-2-mie@igel.co.jp>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 14:13:47 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6D9123;
+        Fri,  2 Jun 2023 11:13:46 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352Dg9Rw029446;
+        Fri, 2 Jun 2023 18:13:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=UE2Rx1irt7g58Lw65av8HRXfkxaMlYFe/H8y1ZB0miQ=;
+ b=EEBowLTeDOi23kCV6ogPf76qKhh/f3fkLD2wj173SgWhGMNWYsefgY52RT9TaxQtSdH4
+ b+UJ2Yb3S9XkGGNM9w2po2mNGAyTLZ5xYwF5Txm4gqo/QWDKIlUeRSYxTpHrzNbQYqtv
+ Xgpk/1lV1lempWCYVdzCwtpDfMuc/ciDWXt4LLJ12YkSnJOyQgfungYYVCijsy6eN8pT
+ DRW290KeGKP0cABQzjUKBb5UM2+b3/TA34oLArekg9FncytNH4TK0I+raLEQ5sMnG5dP
+ j6vksAckQH1sKBKR8zs1SJ3yp9YF4L5l8vHujxDPb0qLiCJCLQbjn1MIFqgYiCaUs1in jw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qybqeheke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 18:13:41 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 352IACvG008476;
+        Fri, 2 Jun 2023 18:13:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3quaxknu2p-1;
+        Fri, 02 Jun 2023 18:13:37 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 352IDbxj011176;
+        Fri, 2 Jun 2023 18:13:37 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 352IDbIc011175;
+        Fri, 02 Jun 2023 18:13:37 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id A82284B62; Fri,  2 Jun 2023 23:43:36 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] soc: qcom: geni-se: Do not bother about enable/disable of interrupts in secondary sequencer for non-uart modes
+Date:   Fri,  2 Jun 2023 23:43:29 +0530
+Message-Id: <1685729609-26871-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xILEjNoPTC-f7nFT4HVfjCt609Rl4del
+X-Proofpoint-GUID: xILEjNoPTC-f7nFT4HVfjCt609Rl4del
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_13,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=410 mlxscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
+ impostorscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306020139
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shunsuke,
+The select_fifo/dma_mode() functions in geni driver enable/disable
+interrupts (secondary included) conditionally for non-uart modes, while
+uart is supposed to manage this internally.
+However, only uart uses secondary IRQs while spi, i2c do not care about
+these at all making their enablement (or disablement) totally unnecessary
+for these protos.
 
-kernel test robot noticed the following build errors:
+Drop enabling/disabling secondary IRQs for non-uart modes.
+This doesn't solve any observed problem but only gets rid of code pieces
+that are not required.
 
-[auto build test ERROR on mst-vhost/linux-next]
-[also build test ERROR on linus/master horms-ipvs/master v6.4-rc4 next-20230602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ drivers/soc/qcom/qcom-geni-se.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shunsuke-Mie/vringh-IOMEM-support/20230602-135351
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-patch link:    https://lore.kernel.org/r/20230602055211.309960-2-mie%40igel.co.jp
-patch subject: [PATCH v4 1/1] vringh: IOMEM support
-config: i386-randconfig-i003-20230531 (https://download.01.org/0day-ci/archive/20230603/202306030216.bpWr6XV0-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/de2a1f5220c32e953400f225aba6bd294a8d41b8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shunsuke-Mie/vringh-IOMEM-support/20230602-135351
-        git checkout de2a1f5220c32e953400f225aba6bd294a8d41b8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306030216.bpWr6XV0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/vhost/vringh.c: In function 'getu16_iomem':
->> drivers/vhost/vringh.c:1610:37: error: implicit declaration of function 'ioread16' [-Werror=implicit-function-declaration]
-    1610 |         *val = vringh16_to_cpu(vrh, ioread16(p));
-         |                                     ^~~~~~~~
-   drivers/vhost/vringh.c: In function 'putu16_iomem':
->> drivers/vhost/vringh.c:1616:9: error: implicit declaration of function 'iowrite16' [-Werror=implicit-function-declaration]
-    1616 |         iowrite16(cpu_to_vringh16(vrh, val), p);
-         |         ^~~~~~~~~
-   drivers/vhost/vringh.c: In function 'copydesc_iomem':
->> drivers/vhost/vringh.c:1623:9: error: implicit declaration of function 'memcpy_fromio'; did you mean 'memcpy_from_bvec'? [-Werror=implicit-function-declaration]
-    1623 |         memcpy_fromio(dst, src, len);
-         |         ^~~~~~~~~~~~~
-         |         memcpy_from_bvec
-   drivers/vhost/vringh.c: In function 'putused_iomem':
->> drivers/vhost/vringh.c:1630:9: error: implicit declaration of function 'memcpy_toio' [-Werror=implicit-function-declaration]
-    1630 |         memcpy_toio(dst, src, num * sizeof(*dst));
-         |         ^~~~~~~~~~~
-   drivers/vhost/vringh.c: At top level:
-   drivers/vhost/vringh.c:1661:5: warning: no previous prototype for 'vringh_init_iomem' [-Wmissing-prototypes]
-    1661 | int vringh_init_iomem(struct vringh *vrh, u64 features, unsigned int num,
-         |     ^~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1683:5: warning: no previous prototype for 'vringh_getdesc_iomem' [-Wmissing-prototypes]
-    1683 | int vringh_getdesc_iomem(struct vringh *vrh, struct vringh_kiov *riov,
-         |     ^~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1714:9: warning: no previous prototype for 'vringh_iov_pull_iomem' [-Wmissing-prototypes]
-    1714 | ssize_t vringh_iov_pull_iomem(struct vringh *vrh, struct vringh_kiov *riov,
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1729:9: warning: no previous prototype for 'vringh_iov_push_iomem' [-Wmissing-prototypes]
-    1729 | ssize_t vringh_iov_push_iomem(struct vringh *vrh, struct vringh_kiov *wiov,
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1744:6: warning: no previous prototype for 'vringh_abandon_iomem' [-Wmissing-prototypes]
-    1744 | void vringh_abandon_iomem(struct vringh *vrh, unsigned int num)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1759:5: warning: no previous prototype for 'vringh_complete_iomem' [-Wmissing-prototypes]
-    1759 | int vringh_complete_iomem(struct vringh *vrh, u16 head, u32 len)
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1777:6: warning: no previous prototype for 'vringh_notify_enable_iomem' [-Wmissing-prototypes]
-    1777 | bool vringh_notify_enable_iomem(struct vringh *vrh)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1790:6: warning: no previous prototype for 'vringh_notify_disable_iomem' [-Wmissing-prototypes]
-    1790 | void vringh_notify_disable_iomem(struct vringh *vrh)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vhost/vringh.c:1802:5: warning: no previous prototype for 'vringh_need_notify_iomem' [-Wmissing-prototypes]
-    1802 | int vringh_need_notify_iomem(struct vringh *vrh)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/ioread16 +1610 drivers/vhost/vringh.c
-
-  1606	
-  1607	static inline int getu16_iomem(const struct vringh *vrh, u16 *val,
-  1608				       const __virtio16 *p)
-  1609	{
-> 1610		*val = vringh16_to_cpu(vrh, ioread16(p));
-  1611		return 0;
-  1612	}
-  1613	
-  1614	static inline int putu16_iomem(const struct vringh *vrh, __virtio16 *p, u16 val)
-  1615	{
-> 1616		iowrite16(cpu_to_vringh16(vrh, val), p);
-  1617		return 0;
-  1618	}
-  1619	
-  1620	static inline int copydesc_iomem(const struct vringh *vrh, void *dst,
-  1621					 const void *src, size_t len)
-  1622	{
-> 1623		memcpy_fromio(dst, src, len);
-  1624		return 0;
-  1625	}
-  1626	
-  1627	static int putused_iomem(const struct vringh *vrh, struct vring_used_elem *dst,
-  1628				 const struct vring_used_elem *src, unsigned int num)
-  1629	{
-> 1630		memcpy_toio(dst, src, num * sizeof(*dst));
-  1631		return 0;
-  1632	}
-  1633	
-
+diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
+index 795a2e1..7111661 100644
+--- a/drivers/soc/qcom/qcom-geni-se.c
++++ b/drivers/soc/qcom/qcom-geni-se.c
+@@ -281,27 +281,14 @@ static void geni_se_select_fifo_mode(struct geni_se *se)
+ 
+ 	geni_se_irq_clear(se);
+ 
+-	/*
+-	 * The RX path for the UART is asynchronous and so needs more
+-	 * complex logic for enabling / disabling its interrupts.
+-	 *
+-	 * Specific notes:
+-	 * - The done and TX-related interrupts are managed manually.
+-	 * - We don't RX from the main sequencer (we use the secondary) so
+-	 *   we don't need the RX-related interrupts enabled in the main
+-	 *   sequencer for UART.
+-	 */
++	/* UART driver manages enabling / disabling interrupts internally */
+ 	if (proto != GENI_SE_UART) {
++		/* Non-UART use only primary sequencer so dont bother about S_IRQ */
+ 		val_old = val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 		val |= M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN;
+ 		val |= M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN;
+ 		if (val != val_old)
+ 			writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
+-
+-		val_old = val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+-		val |= S_CMD_DONE_EN;
+-		if (val != val_old)
+-			writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
+ 	}
+ 
+ 	val_old = val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
+@@ -317,17 +304,14 @@ static void geni_se_select_dma_mode(struct geni_se *se)
+ 
+ 	geni_se_irq_clear(se);
+ 
++	/* UART driver manages enabling / disabling interrupts internally */
+ 	if (proto != GENI_SE_UART) {
++		/* Non-UART use only primary sequencer so dont bother about S_IRQ */
+ 		val_old = val = readl_relaxed(se->base + SE_GENI_M_IRQ_EN);
+ 		val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN);
+ 		val &= ~(M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+ 		if (val != val_old)
+ 			writel_relaxed(val, se->base + SE_GENI_M_IRQ_EN);
+-
+-		val_old = val = readl_relaxed(se->base + SE_GENI_S_IRQ_EN);
+-		val &= ~S_CMD_DONE_EN;
+-		if (val != val_old)
+-			writel_relaxed(val, se->base + SE_GENI_S_IRQ_EN);
+ 	}
+ 
+ 	val_old = val = readl_relaxed(se->base + SE_GENI_DMA_MODE_EN);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+
