@@ -2,57 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197A17208A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893117208B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236913AbjFBRy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S236742AbjFBSAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjFBRy5 (ORCPT
+        with ESMTP id S236589AbjFBSAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:54:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D2123;
-        Fri,  2 Jun 2023 10:54:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Jun 2023 14:00:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4728F1A2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685728767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2vEfy4ABvbNm71f6wJfPO0YUTrGmZR9PK0H6cIJhbRw=;
+        b=abSWuJysw7fwpk4xV/ySYfNpwdSuqRYLYAUcUa0q4pAfshcQROlA/mfbY43F11nYKg7EOP
+        UciJLWjz4kIVRNgoOlVGGXcjJwIRSmAM/UAnAo6p9MCPmImlSUdbgY50DC0qoFpTVgol4o
+        2FNlNdisUno9tox0oerPLeWNh2bgsks=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-412-nTsWchWkPnyhyWDJbcXr9A-1; Fri, 02 Jun 2023 13:59:24 -0400
+X-MC-Unique: nTsWchWkPnyhyWDJbcXr9A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 173CD61120;
-        Fri,  2 Jun 2023 17:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AD8C433D2;
-        Fri,  2 Jun 2023 17:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685728495;
-        bh=/Fha51BP3sm6ndA/PVNCmNHln36UDvTlLxwLX1uUDlw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xq99a37N4aPyn3Ql9vrjO7E55WnEO+EeZXMiIjGLgPTMAuK0k0rxdT9L7veCohXXS
-         pWmluk0mkA6TCRFcB43Zt+7uaoD45BUj9kDdCr9CFuaIZPM4/0j78bh/V2GcvpAodp
-         PuCQV77RIdi5Nz+nuTgs3LVTOoVmyKGm3LPRY+VyKAe7/Gc253weOjM6ToMeKoZOWY
-         igtriA+1OiTU5A92uBJM7dAcIrAjS5GS5Lzkc652amXeJHcoTqQTA0nA/rBOahlU71
-         ppkGDswLLkIJIkTykQkaOhEN5AG88tXFyR3hcnrG2QKCx5fWSZK2ZygohuDYVW+UBw
-         jsS5HOjIrpQ7A==
-Date:   Fri, 2 Jun 2023 10:54:53 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH] objtool: Add __kunit_abort() to noreturns
-Message-ID: <20230602175453.swsn3ehyochtwkhy@treble>
-References: <20230602131229.3589f3bf@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB2033C14116;
+        Fri,  2 Jun 2023 17:59:23 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 0193FC154D7;
+        Fri,  2 Jun 2023 17:59:08 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Fri,  2 Jun 2023 19:59:02 +0200 (CEST)
+Date:   Fri, 2 Jun 2023 19:58:47 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, stefanha@redhat.com, brauner@kernel.org
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Message-ID: <20230602175846.GC555@redhat.com>
+References: <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
+ <20230522174757.GC22159@redhat.com>
+ <20230523121506.GA6562@redhat.com>
+ <26c87be0-8e19-d677-a51b-e6821e6f7ae4@redhat.com>
+ <20230531072449.GA25046@redhat.com>
+ <CACGkMEv2kB9J1qGYkGkywk1YHV2gU2fMr7qx4vEv9L5f6qL5mg@mail.gmail.com>
+ <20230531091432.GB25046@redhat.com>
+ <CACGkMEvNrC5gc4ppp0QG-SNSbs_snrqwPkNBotffRRDJA1VJjQ@mail.gmail.com>
+ <20230601074315.GA13133@redhat.com>
+ <CACGkMEss2LkUiUKaEkhBWwFDBBz31T3N94a0=zSD1d+Fhb1zyQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230602131229.3589f3bf@canb.auug.org.au>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEss2LkUiUKaEkhBWwFDBBz31T3N94a0=zSD1d+Fhb1zyQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +78,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes a bunch of warnings like:
+On 06/02, Jason Wang wrote:
+>
+> On Thu, Jun 1, 2023 at 3:43 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> >
+> > and the final rewrite:
+> >
+> >         if (work->node) {
+> >                 work_next = work->node->next;
+> >                 if (true)
+> >                         clear_bit(&work->flags);
+> >         }
+> >
+> > so again, I do not see the load-store control dependency.
+>
+> This kind of optimization is suspicious. Especially considering it's
+> the control expression of the loop but not a condition.
 
-  drivers/input/tests/input_test.o: warning: objtool: input_test_init+0x1cb: stack state mismatch: cfa1=4+64 cfa2=4+56
-  lib/kunit/kunit-test.o: warning: objtool: kunit_log_newline_test+0xfb: return with modified stack frame
-  ...
+It is not about optimization,
 
-Fixes: 260755184cbd ("kunit: Move kunit_abort() call out of kunit_do_failed_assertion()")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/noreturns.h | 1 +
- 1 file changed, 1 insertion(+)
+> Looking at the assembly (x86):
+>
+>    0xffffffff81d46c5b <+75>:    callq  0xffffffff81689ac0 <llist_reverse_order>
+>    0xffffffff81d46c60 <+80>:    mov    %rax,%r15
+>    0xffffffff81d46c63 <+83>:    test   %rax,%rax
+>    0xffffffff81d46c66 <+86>:    je     0xffffffff81d46c3a <vhost_worker+42>
+>    0xffffffff81d46c68 <+88>:    mov    %r15,%rdi
+>    0xffffffff81d46c6b <+91>:    mov    (%r15),%r15
+>    0xffffffff81d46c6e <+94>:    lock andb $0xfd,0x10(%rdi)
+>    0xffffffff81d46c73 <+99>:    movl   $0x0,0x18(%rbx)
+>    0xffffffff81d46c7a <+106>:   mov    0x8(%rdi),%rax
+>    0xffffffff81d46c7e <+110>:   callq  0xffffffff821b39a0
+> <__x86_indirect_thunk_array>
+>    0xffffffff81d46c83 <+115>:   callq  0xffffffff821b4d10 <__SCT__cond_resched>
+> ...
+>
+> I can see:
+>
+> 1) The code read node->next (+91) before clear_bit (+94)
 
-diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
-index cede6068ddf6..1514e84d5cc4 100644
---- a/tools/objtool/noreturns.h
-+++ b/tools/objtool/noreturns.h
-@@ -7,6 +7,7 @@
-  * Yes, this is unfortunate.  A better solution is in the works.
-  */
- NORETURN(__invalid_creds)
-+NORETURN(__kunit_abort)
- NORETURN(__module_put_and_kthread_exit)
- NORETURN(__reiserfs_panic)
- NORETURN(__stack_chk_fail)
--- 
-2.40.1
+The code does. but what about CPU ?
+
+> 2) And the it uses a lock prefix to guarantee the execution order
+
+As I said from the very beginning, this code is fine on x86 because
+atomic ops are fully serialised on x86.
+
+OK. we can't convince each other. I'll try to write another email when
+I have time,
+
+If this code is correct, then my understanding of memory barriers is even
+worse than I think. I wouldn't be surprised, but I'd like to understand
+what I have missed.
+
+Oleg.
 
