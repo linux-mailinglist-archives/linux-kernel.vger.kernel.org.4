@@ -2,104 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311927208D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157EB7208DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236323AbjFBSNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S236769AbjFBSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235598AbjFBSNG (ORCPT
+        with ESMTP id S232628AbjFBSN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:13:06 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A6A123;
-        Fri,  2 Jun 2023 11:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1685729585;
-  x=1717265585;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=Cz4/oyVTpm1XtHq2S7r1WKawWesnC6O3HFsEfsnf6Lc=;
-  b=g2JmgrUBqnRzwPqaqFHvkkUUTSoeFCFvNm7YWKOfZAy438F/CQ/MvVqo
-   M9QCSutctNpvCUTjuQPshKKEsdF0OX5Mjsquub67q+RbdZBC0/hblSXDj
-   HCydR318ZjRhC/7+qNObG8F99lO93JREPOovLNfhuFNtBW5WhYsJ5nRdv
-   N1fK0ezs4gHI5kA4UrUjr5sNqEAcZS8fwDL+hlQ1oo4Fi6JJ9yZ7pqwrv
-   3iaVRDGeeLvCRjUbH3X3EY1lNttCs0xJanFIMSNLfN7UDPHwX+a3DsobZ
-   gmQW2uE9UNiwWwrcMP5Xr4jvblzzg8g4BtASGeIQ6q3uhML8ux6H6Jb70
-   A==;
-From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-Date:   Fri, 2 Jun 2023 20:12:54 +0200
-Subject: [PATCH v2] spi: spl022: Probe defer is no error
+        Fri, 2 Jun 2023 14:13:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1D196;
+        Fri,  2 Jun 2023 11:13:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685729636; x=1717265636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yIozrWDl/5hQ5vXZiPITasCQOwSsn+udVyA99ySkQ4Q=;
+  b=LMlhyRSGPVgdVQqJ/a0iR3F2ol5niq/zLCbDcE8VrFHR75vZ63iEtocu
+   pyCvxT020i0dAdsm7DqWDwkvLR3PpMYz+jfNKrlsBgupuCFmYEfp+XCUp
+   QdhnDEP9lgyw88WP6zQa/F7C2ySxJGadqSk5gS0cbKX7uueb0G4/7EbEl
+   hjXIb/S9dtqwIZZH1jKJSbq51D0bSozWKWjLmYlnvY5cA4FWcgmJasJTC
+   2aORBl22e9D+zRmHay4OIfs9rM9A4hAvPesru+ZI9AWwAQhjR6IKoDMT6
+   2ZROjRRCod2uhctE1XO8H+bOogKtN04kXXX7ZWgeiJX1LwiX+pFl9CDko
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="354782633"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="354782633"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 11:13:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="702034801"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="702034801"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 02 Jun 2023 11:13:53 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q59Hc-0000oX-1d;
+        Fri, 02 Jun 2023 18:13:52 +0000
+Date:   Sat, 3 Jun 2023 02:13:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shunsuke Mie <mie@igel.co.jp>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>
+Cc:     oe-kbuild-all@lists.linux.dev, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shunsuke Mie <mie@igel.co.jp>
+Subject: Re: [PATCH v4 1/1] vringh: IOMEM support
+Message-ID: <202306030216.bpWr6XV0-lkp@intel.com>
+References: <20230602055211.309960-2-mie@igel.co.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
-X-B4-Tracking: v=1; b=H4sIACUxemQC/3WNywqDMBBFf0Vm3SlJLCJd9T+Ki0yc1EB9MCOii
- P/e6L7Lcx+cHZQlscKz2EF4SZrGIYO7FRA6P3wYU5sZnHGlqYzD6Wucw5YjC8a0ook11cFQxTF
- CfpFXRhI/hO789V5nlrOYhPP+Ur2bzF3SeZTtMi/2TP9LFosWqTYUgy/Z0uPl16T3MPbQHMfxA
- 8anScjGAAAA
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>,
-        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685729582; l=1403;
- i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
- bh=cVacumkzCzwk4AF23TT8WPfUhn25G7/IQ77V7w4A7lU=;
- b=LUtrFCa49KsO2HEgsR8925P9uaWYYhbLFwAOh/H+pYcGuZyS3Nzb2lw7LgOrscmGy4KDbZMfc
- WYHOFLuPayVDIs9kWyByhbEytIJIp/oCGsG3262RZrukAL0ebqFpt2R
-X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
- pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602055211.309960-2-mie@igel.co.jp>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the spi controller is registered and the cs_gpiods cannot be
-assigned, causing a defer of the probe, there is an error print saying:
-"probe - problem registering spi master"
+Hi Shunsuke,
 
-This should not be announced as an error. Print this message for all
-errors except for the probe defer.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
----
-Changes in v2:
-- Use dev_err_probe instead of standalone check with print.
-- Link to v1: https://lore.kernel.org/r/20230602-pl022-defer-fix-v1-1-b80bfca3e1b4@axis.com
----
- drivers/spi/spi-pl022.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[auto build test ERROR on mst-vhost/linux-next]
+[also build test ERROR on linus/master horms-ipvs/master v6.4-rc4 next-20230602]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
-index 982407bc5d9f..1af75eff26b6 100644
---- a/drivers/spi/spi-pl022.c
-+++ b/drivers/spi/spi-pl022.c
-@@ -2217,8 +2217,8 @@ static int pl022_probe(struct amba_device *adev, const struct amba_id *id)
- 	amba_set_drvdata(adev, pl022);
- 	status = devm_spi_register_master(&adev->dev, master);
- 	if (status != 0) {
--		dev_err(&adev->dev,
--			"probe - problem registering spi master\n");
-+		dev_err_probe(&adev->dev, status,
-+			      "problem registering spi master\n");
- 		goto err_spi_register;
- 	}
- 	dev_dbg(dev, "probe succeeded\n");
+url:    https://github.com/intel-lab-lkp/linux/commits/Shunsuke-Mie/vringh-IOMEM-support/20230602-135351
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20230602055211.309960-2-mie%40igel.co.jp
+patch subject: [PATCH v4 1/1] vringh: IOMEM support
+config: i386-randconfig-i003-20230531 (https://download.01.org/0day-ci/archive/20230603/202306030216.bpWr6XV0-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/de2a1f5220c32e953400f225aba6bd294a8d41b8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shunsuke-Mie/vringh-IOMEM-support/20230602-135351
+        git checkout de2a1f5220c32e953400f225aba6bd294a8d41b8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
----
-base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-change-id: 20230602-pl022-defer-fix-0f8b8c0b6eff
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306030216.bpWr6XV0-lkp@intel.com/
 
-Best regards,
+All errors (new ones prefixed by >>):
+
+   drivers/vhost/vringh.c: In function 'getu16_iomem':
+>> drivers/vhost/vringh.c:1610:37: error: implicit declaration of function 'ioread16' [-Werror=implicit-function-declaration]
+    1610 |         *val = vringh16_to_cpu(vrh, ioread16(p));
+         |                                     ^~~~~~~~
+   drivers/vhost/vringh.c: In function 'putu16_iomem':
+>> drivers/vhost/vringh.c:1616:9: error: implicit declaration of function 'iowrite16' [-Werror=implicit-function-declaration]
+    1616 |         iowrite16(cpu_to_vringh16(vrh, val), p);
+         |         ^~~~~~~~~
+   drivers/vhost/vringh.c: In function 'copydesc_iomem':
+>> drivers/vhost/vringh.c:1623:9: error: implicit declaration of function 'memcpy_fromio'; did you mean 'memcpy_from_bvec'? [-Werror=implicit-function-declaration]
+    1623 |         memcpy_fromio(dst, src, len);
+         |         ^~~~~~~~~~~~~
+         |         memcpy_from_bvec
+   drivers/vhost/vringh.c: In function 'putused_iomem':
+>> drivers/vhost/vringh.c:1630:9: error: implicit declaration of function 'memcpy_toio' [-Werror=implicit-function-declaration]
+    1630 |         memcpy_toio(dst, src, num * sizeof(*dst));
+         |         ^~~~~~~~~~~
+   drivers/vhost/vringh.c: At top level:
+   drivers/vhost/vringh.c:1661:5: warning: no previous prototype for 'vringh_init_iomem' [-Wmissing-prototypes]
+    1661 | int vringh_init_iomem(struct vringh *vrh, u64 features, unsigned int num,
+         |     ^~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1683:5: warning: no previous prototype for 'vringh_getdesc_iomem' [-Wmissing-prototypes]
+    1683 | int vringh_getdesc_iomem(struct vringh *vrh, struct vringh_kiov *riov,
+         |     ^~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1714:9: warning: no previous prototype for 'vringh_iov_pull_iomem' [-Wmissing-prototypes]
+    1714 | ssize_t vringh_iov_pull_iomem(struct vringh *vrh, struct vringh_kiov *riov,
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1729:9: warning: no previous prototype for 'vringh_iov_push_iomem' [-Wmissing-prototypes]
+    1729 | ssize_t vringh_iov_push_iomem(struct vringh *vrh, struct vringh_kiov *wiov,
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1744:6: warning: no previous prototype for 'vringh_abandon_iomem' [-Wmissing-prototypes]
+    1744 | void vringh_abandon_iomem(struct vringh *vrh, unsigned int num)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1759:5: warning: no previous prototype for 'vringh_complete_iomem' [-Wmissing-prototypes]
+    1759 | int vringh_complete_iomem(struct vringh *vrh, u16 head, u32 len)
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1777:6: warning: no previous prototype for 'vringh_notify_enable_iomem' [-Wmissing-prototypes]
+    1777 | bool vringh_notify_enable_iomem(struct vringh *vrh)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1790:6: warning: no previous prototype for 'vringh_notify_disable_iomem' [-Wmissing-prototypes]
+    1790 | void vringh_notify_disable_iomem(struct vringh *vrh)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vhost/vringh.c:1802:5: warning: no previous prototype for 'vringh_need_notify_iomem' [-Wmissing-prototypes]
+    1802 | int vringh_need_notify_iomem(struct vringh *vrh)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/ioread16 +1610 drivers/vhost/vringh.c
+
+  1606	
+  1607	static inline int getu16_iomem(const struct vringh *vrh, u16 *val,
+  1608				       const __virtio16 *p)
+  1609	{
+> 1610		*val = vringh16_to_cpu(vrh, ioread16(p));
+  1611		return 0;
+  1612	}
+  1613	
+  1614	static inline int putu16_iomem(const struct vringh *vrh, __virtio16 *p, u16 val)
+  1615	{
+> 1616		iowrite16(cpu_to_vringh16(vrh, val), p);
+  1617		return 0;
+  1618	}
+  1619	
+  1620	static inline int copydesc_iomem(const struct vringh *vrh, void *dst,
+  1621					 const void *src, size_t len)
+  1622	{
+> 1623		memcpy_fromio(dst, src, len);
+  1624		return 0;
+  1625	}
+  1626	
+  1627	static int putused_iomem(const struct vringh *vrh, struct vring_used_elem *dst,
+  1628				 const struct vring_used_elem *src, unsigned int num)
+  1629	{
+> 1630		memcpy_toio(dst, src, num * sizeof(*dst));
+  1631		return 0;
+  1632	}
+  1633	
+
 -- 
-Mårten Lindahl <marten.lindahl@axis.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
