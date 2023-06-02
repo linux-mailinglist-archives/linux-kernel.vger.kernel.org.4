@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8396F71FC43
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F2071FC59
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbjFBImm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S234763AbjFBIpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234617AbjFBImj (ORCPT
+        with ESMTP id S234135AbjFBIpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:42:39 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FA913D;
-        Fri,  2 Jun 2023 01:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1685695360; x=1717231360;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aqeLaj4InU7hZID0f/fNPIZOwI5sblKIxvQvW1SOYU4=;
-  b=v8tmHRK3rqZV8TNRzzW5asVII4LBRY5tU7l5qGzqKkN5bvPps8sS3t/2
-   H3GhZSCoGdERMAKmlHg+ObTvgmvw/oVx/y5WkzBinxUGKLIOkDsaNqWqO
-   w00hr42Cbaov/UhcqeJ4p3EIyiOq8z9GOxkRQYhMALRQ1umfX8g+6q/YA
-   k=;
-X-IronPort-AV: E=Sophos;i="6.00,212,1681171200"; 
-   d="scan'208";a="336042304"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:42:37 +0000
-Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com (Postfix) with ESMTPS id 4BAF84146A;
-        Fri,  2 Jun 2023 08:42:35 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 2 Jun 2023 08:42:34 +0000
-Received: from b0f1d8753182.ant.amazon.com (10.95.97.250) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 2 Jun 2023 08:42:31 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <seanjc@google.com>
-CC:     <itazur@amazon.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 0/2] KVM: x86: Report actual nent from KVM_GET_CPUID2
-Date:   Fri, 2 Jun 2023 09:42:21 +0100
-Message-ID: <20230602084221.9056-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20230526210340.2799158-1-seanjc@google.com>
-References: <20230526210340.2799158-1-seanjc@google.com>
+        Fri, 2 Jun 2023 04:45:05 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE41E67;
+        Fri,  2 Jun 2023 01:44:32 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aebf4.dynamic.kabel-deutschland.de [95.90.235.244])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2F6E361EA1BFF;
+        Fri,  2 Jun 2023 10:43:27 +0200 (CEST)
+Message-ID: <577f38ed-8532-c32e-07bd-4a3b384d5fe8@molgen.mpg.de>
+Date:   Fri, 2 Jun 2023 10:43:27 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-wired-lan] [PATCH] e1000e: Use PME poll to circumvent
+ unreliable ACPI wake
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Alexander H Duyck <alexander.duyck@gmail.com>
+Cc:     linux-pm@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-pci@vger.kernel.org
+References: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
+ <269262acfcce8eb1b85ee1fe3424a5ef2991f481.camel@gmail.com>
+ <CAAd53p7c6eEqxd3jecfgvpxuYO3nmmmovcqD=3PgbqSVCWFfxA@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAAd53p7c6eEqxd3jecfgvpxuYO3nmmmovcqD=3PgbqSVCWFfxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.95.97.250]
-X-ClientProxiedBy: EX19D033UWA003.ant.amazon.com (10.13.139.42) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,14 +55,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Date:   Fri, 26 May 2023 14:03:38 -0700
-From:   Sean Christopherson <seanjc@google.com>
-> Essentially v3 of Takahiro's patch.  Update cpuid->nent on a successful
-> KVM_GET_CPUID2 so that userspace knows exactly how many entries were
-> filled.  Add a testcase to verify KVM's ABI.
+[Cc: linux-pci@vger.kernel.org]
 
-Sorry for my late reply and thank you for posting this revision!
+Dear Kai,
 
-Best regards,
-Takahiro Itazuri
 
+Thank you for your patch.
+
+Am 02.06.23 um 03:46 schrieb Kai-Heng Feng:
+> On Fri, Jun 2, 2023 at 4:24 AM Alexander H Duyck wrote:
+>>
+>> On Fri, 2023-06-02 at 00:25 +0800, Kai-Heng Feng wrote:
+>>> On some I219 devices, ethernet cable plugging detection only works once
+>>> from PCI D3 state. Subsequent cable plugging does set PME bit correctly,
+>>> but device still doesn't get woken up.
+
+Could you please add the list of all the devices with the firmware 
+version, you know this problem exists on? Please also add the URLs of 
+the bug reports at the end of the commit message.
+
+Is that problem logged somehow? Could a log message be added first?
+
+>> Do we have a root cause on why things don't get woken up? This seems
+>> like an issue where something isn't getting reset after the first
+>> wakeup and so future ones are blocked.
+> 
+> No we don't know the root cause.
+> I guess the D3 wake isn't really tested under Windows because I219
+> doesn't use runtime D3 on Windows.
+
+How do you know? Where you able to look at the Microsoft Windows driver 
+source code?
+
+>>> Since I219 connects to the root complex directly, it relies on platform
+>>> firmware (ACPI) to wake it up. In this case, the GPE from _PRW only
+>>> works for first cable plugging but fails to notify the driver for
+>>> subsequent plugging events.
+>>>
+>>> The issue was originally found on CNP, but the same issue can be found
+>>> on ADL too. So workaround the issue by continuing use PME poll after
+
+The verb is spelled with a space: work around.
+
+>>> first ACPI wake. As PME poll is always used, the runtime suspend
+>>> restriction for CNP can also be removed.
+
+When was that restriction for CNP added?
+
+>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> ---
+>>>   drivers/net/ethernet/intel/e1000e/netdev.c | 4 +++-
+>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+>>> index bd7ef59b1f2e..f0e48f2bc3a2 100644
+>>> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+>>> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+>>> @@ -7021,6 +7021,8 @@ static __maybe_unused int e1000e_pm_runtime_resume(struct device *dev)
+>>>        struct e1000_adapter *adapter = netdev_priv(netdev);
+>>>        int rc;
+>>>
+>>> +     pdev->pme_poll = true;
+>>> +
+>>>        rc = __e1000_resume(pdev);
+>>>        if (rc)
+>>>                return rc;
+>>
+>> Doesn't this enable this too broadly. I know there are a number of
+>> devices that run under the e1000e and I would imagine that we don't
+>> want them all running with "pme_poll = true" do we?
+> 
+> Whack a mole isn't scaling, either.
+> The generation between CNP and ADL are probably affected too.
+> 
+>> It seems like at a minimum we should only be setting this for specific
+>> platofrms or devices instead of on all of them.
+>>
+>> Also this seems like something we should be setting on the suspend side
+>> since it seems to be cleared in the wakeup calls.
+> 
+> pme_poll gets cleared on wakeup, and once it's cleared the device will
+> be removed from pci_pme_list.
+> 
+> To prevent that, reset pme_poll to true immediately on runtime resume.
+> 
+>> Lastly I am not sure the first one is necessarily succeeding. You might
+>> want to check the status of pme_poll before you run your first test.
+>> From what I can tell it looks like the initial state is true in
+>> pci_pm_init. If so it might be getting cleared after the first wakeup
+>> which is what causes your issues.
+> 
+> That's by design. pme_poll gets cleared when the hardware is capable
+> to signal wakeup via PME# or ACPI GPE. For detected hardwares, the
+> pme_poll will never be cleared.
+> So this becomes tricky for the issue, since the ACPI GPE works for
+> just one time, but never again.
+> 
+>>> @@ -7682,7 +7684,7 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>>>
+>>>        dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
+>>>
+>>> -     if (pci_dev_run_wake(pdev) && hw->mac.type != e1000_pch_cnp)
+>>> +     if (pci_dev_run_wake(pdev))
+>>>                pm_runtime_put_noidle(&pdev->dev);
+>>>
+>>>        return 0;
+>>
+>> I assume this is the original workaround that was put in to address
+>> this issue. Perhaps you should add a Fixes tag to this to identify
+>> which workaround this patch is meant to be replacing.
+> 
+> Another possibility is to remove runtime power management completely.
+> I wonder why Windows keep the device at D0 all the time?
+
+Who knows how to contact Intel’s driver developers for Microsoft Windows?
+
+> Can Linux align with Windows?
+
+Before deciding this, the power usage in the different states should be 
+measured.
+
+
+Kind regards,
+
+Paul
