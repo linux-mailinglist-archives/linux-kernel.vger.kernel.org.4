@@ -2,196 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0391C72088C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F6A720892
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236981AbjFBRnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S236958AbjFBRsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236969AbjFBRnA (ORCPT
+        with ESMTP id S232978AbjFBRsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:43:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FFF1A8;
-        Fri,  2 Jun 2023 10:42:58 -0700 (PDT)
-Received: from [192.168.10.48] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9B04F6603219;
-        Fri,  2 Jun 2023 18:42:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685727776;
-        bh=L0+U78HTWagUwT0U3upt9ZPc9drPbE7g2HOGcZx4mCE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=LeJMYY6wKBnv7EDGH62hwm8At5cqeLNlFPvkpvffEz6xuhvDCPrUML8prH4kUTDRR
-         JWO4lQM4PnBtnd4Ie/+Y1VOsOwW6kLMnfVilkXRxe65jBrW3IBDTYTGYTWshApZNbx
-         VL23DSeorVLuptfblOWGCDJzB4owZi6JxtNrBooOmZFEV1TeDdpI1FwWrYrzLgYiGe
-         9a1jZx4e3hzcx6jChuICMDluuWFoWO1ld0oNxypjaXN8FHRoSyTgSbIYdphtLCFrAu
-         H58NQIimv07V0LLPHu4HZYXfl7LTWU6a+CGMcujHO+m0/DHLDw/L29/ZDVFL6LyGEh
-         ncRw+pPm5ykSQ==
-Message-ID: <be70e76a-3875-6e1b-a5aa-b89d2368b904@collabora.com>
-Date:   Fri, 2 Jun 2023 22:42:45 +0500
-MIME-Version: 1.0
+        Fri, 2 Jun 2023 13:48:09 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBD8123
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:48:07 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352Hf9YO002775;
+        Fri, 2 Jun 2023 17:47:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=JV8fhaNO6mas3VSqVtWp625DleQjEW1wBqBwSbGNK64=;
+ b=Kf78yFUpHCDd2IPlmUm9l9abbKxKLChH0FWWj5GZWPsN4gt1NgVf+Mdpl1A+pYKN3RiO
+ AEQZyI0vDkMnD0rHF8FeB7wsc9TdUVAmUNMct25ESXOT5K4DpDLXUG722EViGxjWV25C
+ PqXRmCOOwmkEw9V4Tc5UorQA0p0U72rjId+hvcLSyv9FP6a/loKrHHSnK/b1GrMNGcvp
+ NtCRMCz8oL+x5BUkf8p0jneZPoeag0n5wqi+YdICKjrOyxP4CdevoMhEfVFOoNejkSCO
+ Sqsg3QsEv+vgo5ayskn2pqoCXm/0eqhLcAk6dE9UO7HHAHLoJG9prYB/HobzW0r4XVRH BA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhj53en9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 02 Jun 2023 17:47:44 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 352G0fek035185;
+        Fri, 2 Jun 2023 17:47:43 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qu8a8vj8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 02 Jun 2023 17:47:43 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VLiO9MjaxKYCJc3gb37EV4ehx5Xeb9GnebcCJMzma4R+BUllW1IiByjviilcVnM6ojSlsvtQvMdaKknDIa34fQRiBfskX16IwZ0hmOD7fqxB7dUanu2zn+HWIUtMu4wedkE/uE9EsiP/UtxwU5iWPut1MnyLJC2gXGMhBA3sv92uVxdcwjfDi5XYH0XRh0Jaqb0svzN1HEcZTP6dc43yZL24N7aaj1JARVDVuVZL9omLrCuDFHZGpIjPmBoKIDFSW4U6sEH9mnjsAapw49lz5hqquGWzEGjFDVO+RauanhapizV0XMeNeXtiXnpdikr3r7Z7IBGfRAiy377BDeYBdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JV8fhaNO6mas3VSqVtWp625DleQjEW1wBqBwSbGNK64=;
+ b=g6RPBLcSWCgYsjJPyxNjc4yMjHChSUovRay/7sVfv/WvEBJPZjrObXj87Cc5gjkB/iWFqJ9azlw02XlznIX+5CuRN/dqsSSv3q8gqKpY3dndRcNtVbzUCK5H2Sk44Zsu2UUWgJJA4Aq8X0nH9jNHcojq7k55kU77YJAjJN+uLAOJzu11ZWsdWmTV+tXktf5I2Htxe+Ok1veG6tcoaPfqnQsDKt0uE8q9bsH4X6+haRfjkM3ABA7XaPB9k0+OPBMFzWzWobToDWwTLrSQKwELW3RbHpo2YMbGAZQoQ0uq7Ukv2yv4eq7L+CMRVSzpfEYyI5EdJDN0DwtI7qWfqb4nOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JV8fhaNO6mas3VSqVtWp625DleQjEW1wBqBwSbGNK64=;
+ b=OUV+Y4J5b36WdyoOOwcVOxwEb2DTJ3e1ScEFXKmx3FupE6e11YjP1h92++wN+HcFA6r/5pixC2UFNC9UyrwCknoUeOu7Vtm0+ShS6qcM5D9on/iWbNJvDrY/d1K2WssQdCZFAo+0QCNa+ZNfEcF8BI3JhFqMha9T3m6W1QS6KQU=
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
+ by CY5PR10MB6237.namprd10.prod.outlook.com (2603:10b6:930:43::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26; Fri, 2 Jun
+ 2023 17:47:41 +0000
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::12d3:3f71:5b55:c342]) by CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::12d3:3f71:5b55:c342%7]) with mapi id 15.20.6433.024; Fri, 2 Jun 2023
+ 17:47:41 +0000
+Message-ID: <5a807641-fae7-a727-4922-2e4516ee303d@oracle.com>
+Date:   Fri, 2 Jun 2023 10:47:37 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] mm/hugetlb: Use a folio in hugetlb_wp()
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230525085517.281529-1-usama.anjum@collabora.com>
- <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
- <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com> <ZHj7jmJ5fKla1Rax@x1n>
- <3589803d-5594-71de-d078-ad4499f233b6@collabora.com> <ZHodIFQesrCA53To@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZHodIFQesrCA53To@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Peng Zhang <zhangpeng362@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        willy@infradead.org, mike.kravetz@oracle.com
+Cc:     muchun.song@linux.dev, vishal.moola@gmail.com,
+        wangkefeng.wang@huawei.com, sunnanyong@huawei.com
+References: <20230602015408.376149-1-zhangpeng362@huawei.com>
+ <20230602015408.376149-3-zhangpeng362@huawei.com>
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+In-Reply-To: <20230602015408.376149-3-zhangpeng362@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR04CA0011.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::21) To CH0PR10MB5113.namprd10.prod.outlook.com
+ (2603:10b6:610:c9::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|CY5PR10MB6237:EE_
+X-MS-Office365-Filtering-Correlation-Id: b422bee8-b8e7-4ece-4582-08db63917659
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eoAfCSKeIzwMjktqMIimLw/VXrDLK7rfR9u/xBLXnS9wyoTvRpKtm0KmUmaq44igwVFRS6wlj5vX9LnyMJy8MAbPU5J6quOHQsZoyM4/iwm8PKloMQwqSltbTAtjYGi/wy2sFsGC+yv3kWjVcW9u9yT5VOISRhhE+7VMrVCKcDF8Y3cl4VMF+BgBD7PLwj1EHrQ/HlmI9rWmRSKOYQJmsyyyekAGBW1Hj7TrYRx1P7ZKQGo6iag/6NMu/57/fnle5ZL00JtGXqkwoTObc6+tlLCV963A5ATAN/QsQjwZSVn6rBfsyZvpyAChQKfXGu0GbE7L3e12YttZqJ6S8dxzwntIxeuA++XXYXAYRCyq/OYpXuLyka7EcgpIE/10J9boRrHyMgx4dzwtkNlNvee2ZwZIHAAoZRkVVxkxa/41sFJWMsLzHgJO0h4MTVHLssdZ4iHMnOkMRus+Yc64hGI+boP8GEBVPfIiSRSJBjhRBI1Rx8PcanyneFIKg2vUy024+Jd+be4/QQkVirBztzyrywloWCAbV5KnYDmAPxFh2GDMbOerCl2P5ZtUpdrpV2MAkpnuaMGiIpFIOt139XsPC4o/Bf8l4Zo8JMCJkkXjVT42kFmcBLsAxGZBhr8NPUhBA4QpEaOtS54IFH6oqqIADw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199021)(31696002)(86362001)(44832011)(5660300002)(8936002)(31686004)(8676002)(2906002)(6636002)(38100700002)(316002)(4326008)(66946007)(66556008)(66476007)(41300700001)(478600001)(6666004)(6506007)(6512007)(53546011)(2616005)(83380400001)(6486002)(186003)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T2t4UVhSSDBLV2x4am9BakRoV1FjT3gzN2ZZSlZwVlNEK0lKUUVSN0RrYVhU?=
+ =?utf-8?B?YVpnbnBJVDZTd3c4ZGJBUTdCQ0lPWnppajRhY01zQXA2L2tBampHczBzQVZh?=
+ =?utf-8?B?WHBoM3FKNXFoQmVMc2QwSTluOXcwRVFqRXJzZ0pBaVdTVFE2ZUNHSHRJYVNR?=
+ =?utf-8?B?aTZNbGtXRnhFaFA1UkxoTHgxSi90U282aW9hcXdiRGZtcW9ZMTFVQ0pQK2lC?=
+ =?utf-8?B?VW45YWMxTDNTZmR0amdxUmRqMVZBY3VNOFZ6NzhXZHRkTWtCQWdkdGtvQ25x?=
+ =?utf-8?B?OTBSTFNGTGJiRFFHZ3ZETm9kRkMrWlRGTUx6VjF2cWFmTVg1ZjhRKzF4NC9w?=
+ =?utf-8?B?WlVoWkkwcjJkWGR5TlpHcENJYnJwbnh0MGZWTWtCUGJPQW8rdDBOQW1FNlJ1?=
+ =?utf-8?B?R3o2WXRCZTJ5WXViQTU5YkwxaDlzYU1RTGsvWmtlOTdGY1hkRVNpVjZ3YTB0?=
+ =?utf-8?B?UGFTRXh4aUQzOTl0TSs4U3dWUkpEUXB1dEJNVWdUNGhYM1NLYWtlZlIxaW8z?=
+ =?utf-8?B?eDlmNFkrbzh6MmxqTDRkMk85MjN6YXNzWmozQnJVd0ppNGxmSHVYYzhGaFRQ?=
+ =?utf-8?B?QzFEVkpYT0dROHlETjM2OStTWk1UVERicytPMGQ0RFVQTnoydDhTOG1YTTVY?=
+ =?utf-8?B?Qmw3VElLNTV2S2JFYnpQZUhjRlA0VVREMVovaVp4Y2M3UDEwMmdkUVpWYzVX?=
+ =?utf-8?B?ZFRVNDBBUGRVa1JiYkJ6TW1GTnRNTU04VGd4dVNtS1NXR0g5WEJMK2VmWWhq?=
+ =?utf-8?B?U0VHbWRsMHFjeUh5NjluYkUzeXR6WVpXRU9STC9jK0VHS25Dc08wWHR6eFc5?=
+ =?utf-8?B?MjJOS0FYQmFWVkJ4a0xyb0lZRm5kQWJLYmpNSFl3MEVpRDZUVDVtRmVhMGs3?=
+ =?utf-8?B?OCtrZ1ZCWlk2Ym1pa29BZmlmTW9zZ3lhU09qYjFLNUp2VHNuMlkwQnNJNHNN?=
+ =?utf-8?B?K0xOY1BNVU9uMFl6Yk55aURaSlBXNGZVSnVvdnFTL2xmWk96RnphZ0ZRaFdh?=
+ =?utf-8?B?YUFpN0FIU2drazJudnMvYlMyRlp3UjdJK1FBY2hyazRzVTVwWEdWYTd1ZHVJ?=
+ =?utf-8?B?OVd2eEhNSVdRZ3BHN055cVBBanFmTFVqL1lXNG1NcWNnZysweUtiMC9mRTlP?=
+ =?utf-8?B?RitkOFQxOEQxN2JtYzJGck9pKzY4aENXZXloN1FBWWx0M1A4TXFDM2RoUWhk?=
+ =?utf-8?B?YnlCWmlFd1VpN3JyejRJSE5rY2s3L2Nrc2k0dVlzOWpyL3d2ZTdaU090WG8y?=
+ =?utf-8?B?cEdQQ2NoL2JoTHZzcTFVRXJXa0JGRGVpR255dUhBRzRvRUFISGdSQzJ2b2Ir?=
+ =?utf-8?B?OWtILzI3Yk1tKzRNZStSZVJkeU5LaXhXK0NKK3kyRERvREJQK0JOSkl5Ujli?=
+ =?utf-8?B?TndkeDBML29tYlU5ZzAzekZsWk42ZFFtdjM3T3BmMklBbGltTkRmUnBSTWFw?=
+ =?utf-8?B?MVpKNkZXYW9uT0pLaHVCWXpBTmhHR2t1c3p2OGk3TFZKMWhqRXNOQVAyUmJ2?=
+ =?utf-8?B?VC9DdXBrUHdHbG84L0ZoMGFsaHlPaVJmdHh3UFBxa0VqSWpZWTVxMHdBd1I2?=
+ =?utf-8?B?bW9oNkpHYktEbmYxSWFCRllvL29McVkxYWRINnNic3RXSS9rdkl6SFFJQkhR?=
+ =?utf-8?B?a1JWWTFNcUpFNGI5bi82TlF2U1dLSHJDVTJ3YkVudHFEemVPakRxc0syTGEz?=
+ =?utf-8?B?SUYzQ3ZnbGNPOTNzTzhIVkIxb0F5Vys1dmFBanlZOXl1VGF3OVMyMDFSR1NG?=
+ =?utf-8?B?N25vQ2dORGZ5clhIYWF4eHlIb1RxQytLT2krUkVZcVB2YW5laDJIRVQvMDJz?=
+ =?utf-8?B?MUd5LzVUZWFlc2tadno4TWx1OVB2S1NESHhPemhWVWJBckx1dk1pRjZVa3NQ?=
+ =?utf-8?B?aW1hdk5mZEVRZllBTHZkcWpMWjZmTlFtbnF2R2kyZEJiVzRFYmVWRGdWK01C?=
+ =?utf-8?B?bXdwajg3ZXp3UEVHQUdZZUlDVzlaaFlxMWllNlVac2tLdGtXMEIxbGdRTzFo?=
+ =?utf-8?B?MXh3YXg1UkpJNEdRWlhUdjl2a2xQaGFRaFBYdlVPMFpMNFRmWWFCQlI0S3ds?=
+ =?utf-8?B?ekY2V1h3aldJVFFVNWxsQ25jM3lWcmRDQmRCb1UycEV2VUVwYVB0SmhuaHBG?=
+ =?utf-8?B?QVZyUlVMeHhpVHc3elVnNzB5bzZJaVNSYjZzYjU1VTB6SUhCNzNpVkZXTHEz?=
+ =?utf-8?Q?NTtexKY6PmHsoLGEUYR0jbc=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ZTkyT0haSDY3SmVtaU82YmFlR0I4SFFTWGt4TU41NFhFK2g0SkVpS24zaWZP?=
+ =?utf-8?B?L29PcHYzZlpOY2p3c1pwN3YrandkVjk2MVdrclhScUhzM2h4U1hqbFZzVkRL?=
+ =?utf-8?B?R3BmNEsvMjMyZVhod2NvZUp2N2I0aDVQeE1EazdCRW1HM2h5bW5wOVN0dW9B?=
+ =?utf-8?B?SUdKL0JJVHVXOEEwNjA3QVRtd1VnbmRMUmRXV0RIa3Q0b3pEK1VMUjk2RTFV?=
+ =?utf-8?B?Y3BZRy94Z09FZXBDaWovZk02UHljMlFwaXJ1UXVHR3Q3ZnFoQXpBcHVDTjVO?=
+ =?utf-8?B?Q1NqcUoyS3h2UzcrRHo4eWNrZjUzOG04ZnNDM3FMbXUyczFDd2lNTThrdFYv?=
+ =?utf-8?B?ck84ZVlubHphaXhpdG5EQkZEaEpxMVJSM0phRk5wT0tLNFlvVXFQRVhwYXI3?=
+ =?utf-8?B?dm9FOXNWaTJZREJNK1lSUmN2Z0FlOEJQV0NZV2U5aWhYMDBxSTVnREpDcWdq?=
+ =?utf-8?B?ZWJoYW9NWEozMnNEV24vRkZaY3hrQitxQ2ROalBOQUpzVU9UVzMxS0FTKzFv?=
+ =?utf-8?B?RitQRlBFVjJUT1p6K09jZUN1dGZ1R0NBbTJVTXNYdWFTV1hZdFRSR0I5elBk?=
+ =?utf-8?B?OUMwczZTQzZBaTNrQ3p2S2kzT2M4KzNIWVIvQm1aeW9QWUVjK01BUGtZc2x3?=
+ =?utf-8?B?elJ2RXRUM1lhMjFvZUk4WUN5bTNsOWliY3k0VEQ4U1ZjVGpCN3ZLcCt0Qm9W?=
+ =?utf-8?B?d3h2T0RUMjNiUjNsZ1VqdVY1VURSakdkU0J4YUFSTVRJNGtUR0Rvclc4Kzh0?=
+ =?utf-8?B?NXpnN0JSS2YvMmJWV0dHbHRxZUMyYzNlVU1wRDNGZTc4NXBGdEVIZTR2N0JE?=
+ =?utf-8?B?Tk02blZ2ZjZsQnZPd0xqc0N3ZDRBQmJCUnJ2VHRtcUdUcUZYMmZFQnZVWDZh?=
+ =?utf-8?B?WTFjZDNSc3I5MFRZVUp1TFBFRTBRL0p4cUR2K1A0c1ZVNzlyN05yRUllWGFr?=
+ =?utf-8?B?N0tBNm1ocVZSOWhFYnQ4NklGNzkwcnVvdXVDNDFUSlFheE9hRm4yK0FPZTlC?=
+ =?utf-8?B?TjdPaVg3UHd6OXcwMUtUcnUrdVVHQU9YbjFSNWh6US9XZTNremJWZHMzNW4x?=
+ =?utf-8?B?RE9GU08yVG9PZTdFNnJrZE15anAydjBoVXh3MWZPYmJsUW1mc1dSZjl2Sy83?=
+ =?utf-8?B?cEdyVDdBMWM5eUREMkgrcU9QcEcxUHlpd0p6Um9sS3lNNEdDWFp4UTcrVG1H?=
+ =?utf-8?B?VXpUN1krQnhrS2YrN1Jicjk4NmRIQjlrL2ZaaHZEaG1aL2hpQzVoRHNId0Zt?=
+ =?utf-8?B?cWpDNmFEbXRudzlFekd3SXVqVnRFSFJtak1aQy9tLzFLSDV3Zz09?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b422bee8-b8e7-4ece-4582-08db63917659
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 17:47:41.1851
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yE69L2dCBAGg8s8d/l2jDs7EI9Gs4uzIgqBPl4PX/f0sA1T8w335v48ILdEiIlnJnnNSjcVxMduNxHfM2yLNJ0Iq83ApNOtHFsWZK7pNRmc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6237
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_13,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306020135
+X-Proofpoint-GUID: iHmOke8BU46USwSrnS-2neD0OSLEaqSl
+X-Proofpoint-ORIG-GUID: iHmOke8BU46USwSrnS-2neD0OSLEaqSl
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for reviewing and helping out.
-
-On 6/2/23 9:47 PM, Peter Xu wrote:
-[...]
->>>> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
->>>> 					 unsigned long addr, pte_t *ptep,
->>>> 					 pte_t ptent)
->>>> {
->>>> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
->>>> 		return;
->>>>
->>>> 	if (is_hugetlb_entry_migration(ptent))
->>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
->>>> 				pte_swp_mkuffd_wp(ptent));
->>>> 	else if (!huge_pte_none(ptent))
->>>> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
->>>> 					huge_pte_mkuffd_wp(ptent));
->>>> 	else
->>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
->>>> 				make_pte_marker(PTE_MARKER_UFFD_WP));
->>>> }
->>>
->>> the is_pte_marker() check can be extended to double check
->>> pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
->>> uffd-wp bit currently we only support swapin error which should sigbus when
->>> accessed, so no point in tracking anyway.
->> Yeah, we are good with what we have as even if more bits are supported in
->> pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
->> enabled. So no other bit would be set on the marker.
+On 6/1/23 6:54 PM, Peng Zhang wrote:
+> From: ZhangPeng <zhangpeng362@huawei.com>
 > 
-> I think we don't know?  swapin error bit can be set there afaiu, if someone
-> swapoff -a and found a swap device broken for some swapped out ptes.
-Oops, so I remove returning on pte marker detection. Instead the last else
-is already setting marker wp-ed.
-
+> We can replace nine implict calls to compound_head() with one by using
+> old_folio. However, we still need to keep old_page because we need to
+> know which page in the folio we are copying.
 > 
-> But again I think that's fine for now.
+> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+> ---
+>   mm/hugetlb.c | 22 ++++++++++++----------
+>   1 file changed, 12 insertions(+), 10 deletions(-)
 > 
->>
->>>
->>>>
->>>> As we always set UNPOPULATED, so markers are always set on none ptes
->>>> initially. Is it possible that a none pte becomes present, then swapped and
->>>> finally none again? So I'll do the following addition for make_uffd_wp_pte():
->>>>
->>>> --- a/fs/proc/task_mmu.c
->>>> +++ b/fs/proc/task_mmu.c
->>>> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
->>>> vm_area_struct *vma,
->>>>  	} else if (is_swap_pte(ptent)) {
->>>>  		ptent = pte_swp_mkuffd_wp(ptent);
->>>>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
->>>> +	} else {
->>>> +		set_pte_at(vma->vm_mm, addr, pte,
->>>> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
->>>>  	}
->>>>  }
->>>
->>> Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
->>> should probably keep the protocol (only set the marker when WP_UNPOPULATED
->>> for anon).
->> This function is only reachable when UNPOPULATED + Async WP are set. So we
->> don't need to use userfaultfd_wp_use_markers().
-> 
-> I don't remember where you explicitly checked that to make sure it'll
-> always be the case, but if you do it'll still be nice if you can add a
-> comment right above here explaining.
-I was only testing for WP and WP Async in pagemap_scan_test_walk() as WP
-async can only be enabled if unpopulated is enabled which in turn enables
-the markers. I'll add userfaultfd_wp_use_markers() to pagemap_scan_test_walk().
-
-> 
-> Or, maybe you can still use userfaultfd_wp_use_markers() here, then you can
-> just WARN_ON_ONCE() on it, which looks even better?
-> 
-> [...]
-> 
->>> Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
->>> address range to be scanned to me.  If it skips some unstable pmd without
->>> filling in anything it seems everything later will be shifted with
->>> PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
->>> before return.
->> I don't think this is a bug if this is how it was implemented in the first
->> place. In this task_mmu.c file, we can find several examples of the same
->> pattern that error isn't returned if pmd_trans_unstable() succeeds.
-> 
-> I don't see why multiple same usages mean it's correct.. maybe they're all
-> buggy?
-> 
-> I can post a patch for this to collect opinions to see if I missed
-> something. I'd suggest you figure out what's the right thing to do for the
-> new interface and make it right from the start, no matter how it was
-> implemented elsewhere.
-Alright. At first sight, it seems I should return -EAGAIN here. But there
-maybe a case where there are 3 THPs. I've cleared WP over the first THP and
-put data in the user buffer. If I return -EAGAIN, the data in the user
-buffer would be not used by the user correctly as negative value has been
-returned. So the best way here would be to skip this second VMA and don't
-abort the operation. Thus we'll not be giving any information about the
-second THP as it was in transition.
-
-I'll think about it again before sending next version.
-
-> 
-> Thanks,
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 0b774dd3d57b..f0ab6e8adf6f 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -5543,6 +5543,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   	pte_t pte = huge_ptep_get(ptep);
+>   	struct hstate *h = hstate_vma(vma);
+>   	struct page *old_page;
+> +	struct folio *old_folio;
+>   	struct folio *new_folio;
+>   	int outside_reserve = 0;
+>   	vm_fault_t ret = 0;
+> @@ -5574,6 +5575,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   	}
+>   
+>   	old_page = pte_page(pte);
+> +	old_folio = page_folio(old_page);
+>   
+>   	delayacct_wpcopy_start();
+>   
+> @@ -5582,7 +5584,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   	 * If no-one else is actually using this page, we're the exclusive
+>   	 * owner and can reuse this page.
+>   	 */
+> -	if (page_mapcount(old_page) == 1 && PageAnon(old_page)) {
+> +	if (page_mapcount(old_page) == 1 && folio_test_anon(old_folio)) {
+>   		if (!PageAnonExclusive(old_page))
+>   			page_move_anon_rmap(old_page, vma);
+>   		if (likely(!unshare))
+> @@ -5591,8 +5593,8 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   		delayacct_wpcopy_end();
+>   		return 0;
+>   	}
+> -	VM_BUG_ON_PAGE(PageAnon(old_page) && PageAnonExclusive(old_page),
+> -		       old_page);
+> +	VM_BUG_ON_PAGE(folio_test_anon(old_folio) &&
+> +		       PageAnonExclusive(old_page), old_page);
+>   
+>   	/*
+>   	 * If the process that created a MAP_PRIVATE mapping is about to
+> @@ -5604,10 +5606,10 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   	 * of the full address range.
+>   	 */
+>   	if (is_vma_resv_set(vma, HPAGE_RESV_OWNER) &&
+> -			page_folio(old_page) != pagecache_folio)
+> +			old_folio != pagecache_folio)
+>   		outside_reserve = 1;
+>   
+> -	get_page(old_page);
+> +	folio_get(old_folio);
+>   
+>   	/*
+>   	 * Drop page table lock as buddy allocator may be called. It will
+> @@ -5629,7 +5631,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   			pgoff_t idx;
+>   			u32 hash;
+>   
+> -			put_page(old_page);
+> +			folio_put(old_folio);
+>   			/*
+>   			 * Drop hugetlb_fault_mutex and vma_lock before
+>   			 * unmapping.  unmapping needs to hold vma_lock
+> @@ -5674,7 +5676,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   		goto out_release_all;
+>   	}
+>   
+> -	if (copy_user_large_folio(new_folio, page_folio(old_page), address, vma)) {
+> +	if (copy_user_large_folio(new_folio, old_folio, address, vma)) {
+>   		ret = VM_FAULT_HWPOISON_LARGE;
+>   		goto out_release_all;
+>   	}
+> @@ -5703,7 +5705,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   		set_huge_pte_at(mm, haddr, ptep, newpte);
+>   		folio_set_hugetlb_migratable(new_folio);
+>   		/* Make the old page be freed below */
+> -		new_folio = page_folio(old_page);
+> +		new_folio = old_folio;
+>   	}
+>   	spin_unlock(ptl);
+>   	mmu_notifier_invalidate_range_end(&range);
+> @@ -5712,11 +5714,11 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>   	 * No restore in case of successful pagetable update (Break COW or
+>   	 * unshare)
+>   	 */
+> -	if (new_folio != page_folio(old_page))
+> +	if (new_folio != old_folio)
+>   		restore_reserve_on_error(h, vma, haddr, new_folio);
+>   	folio_put(new_folio);
+>   out_release_old:
+> -	put_page(old_page);
+> +	folio_put(old_folio);
+>   
+>   	spin_lock(ptl); /* Caller expects lock to be held */
+>   
+Reviewed-by Sidhartha Kumar <sidhartha.kumar@oracle.com>
