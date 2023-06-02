@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E3471FA69
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A3F71FA7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbjFBG6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S234162AbjFBHBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbjFBG56 (ORCPT
+        with ESMTP id S234156AbjFBHA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:57:58 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F217184;
-        Thu,  1 Jun 2023 23:57:52 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QXYjQ72lBz4f3l1s;
-        Fri,  2 Jun 2023 14:57:46 +0800 (CST)
-Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbHqknlkL8gCKw--.48920S3;
-        Fri, 02 Jun 2023 14:57:48 +0800 (CST)
-Message-ID: <917d7c23-eefc-efc5-1b12-949a684900bc@huaweicloud.com>
-Date:   Fri, 2 Jun 2023 14:57:46 +0800
+        Fri, 2 Jun 2023 03:00:59 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701651B9;
+        Fri,  2 Jun 2023 00:00:47 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id 6a1803df08f44-628f267aa5aso1177036d6.1;
+        Fri, 02 Jun 2023 00:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685689246; x=1688281246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+Dwvdqn0Nc+03wWkuuIbg+roLTPzxNXIEQmZzt/hu4=;
+        b=GTw6Eipm5S+VJeux5pubyt5ODlplECcBv00WjTFzhxwM5uiLPBp0HMHU+q4PaZYJp4
+         miKnL9tEPl9Cvug/XCS1Fc16h1s6W8QiX6E6xkntXvUYIERJ33BPFreVKg2XDcRZZiV0
+         qNhJr68zq9qeb6eXpqlnEXiGBv0ZzEJfQxRXVSdsP6PM7vssI5SHQFRbxvbnmU+m/Bsb
+         BFDmNI9jagVqSU/+JmIauQ0dOAeSjtXhXHrR6tix5J2EEkUx7okarpNE96agpK6tDjWt
+         tB7eti1gz/rBqPRTb51QofB4KsinH/4dUH8J3KkIO7n1SnWYlD/g8YwonxjAa5vDE4O9
+         3siA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685689246; x=1688281246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5+Dwvdqn0Nc+03wWkuuIbg+roLTPzxNXIEQmZzt/hu4=;
+        b=KRXEayaWpHSh/GOmnoJQ18y/b50aUpZqclrw2EHlccTF22Je2eQBqFadbXulLiWzPE
+         FNlcs+s1H5/61uYVns5yKsqMHCzmhA2GIaeQMOin8tlI8syaLUvLnTbjZ2z6A10QosAC
+         tVJcNkmoNPAotHXmxM/i0y98RlJvjWHPGbFCfC2gr+KI7Quknum2wnex5yqsBPM/1glu
+         mK/5eViUefAMkP2yB1MLm0evkz3Jc/LUV/GbhwoseFJVSZ+6h68JJhkK1wGO0wHbjP5n
+         sVigbqfPkQjEq88z2VCfx1NmndgedtyNWHcAqDif8/yxxd4jWPjSboXW7E4arhmNg3bO
+         5IPA==
+X-Gm-Message-State: AC+VfDzMmTeXTFDB+7a0qL35poJqkZHO9ZJwXqb1CKn6N4hc1ODHHQf/
+        /2lrm0doK39iQWtacN8OTizq2nDvDUU++jyH
+X-Google-Smtp-Source: ACHHUZ6JzhZeLPUw8GX3KsQoF6VZHf0ewEJBuUixnXCbPihdMYOeiS8ui+TZC0md2WulZw7AvUnvTw==
+X-Received: by 2002:a05:6214:c8b:b0:626:1906:bcac with SMTP id r11-20020a0562140c8b00b006261906bcacmr12587680qvr.0.1685689246444;
+        Fri, 02 Jun 2023 00:00:46 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.24])
+        by smtp.gmail.com with ESMTPSA id jk11-20020a170903330b00b001ac7c725c1asm572716plb.6.2023.06.02.00.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 00:00:45 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     olsajiri@gmail.com
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
+        benbjiang@tencent.com, iii@linux.ibm.com, imagedong@tencent.com,
+        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
+        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/5] bpf, x86: allow function arguments up to 14 for TRACING
+Date:   Fri,  2 Jun 2023 14:59:53 +0800
+Message-Id: <20230602065958.2869555-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 1/2] md/raid10: fix incorrect done of recovery
-To:     Paul Menzel <pmenzel@molgen.mpg.de>, linan666@huaweicloud.com
-Cc:     song@kernel.org, neilb@suse.de, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com
-References: <20230601062424.3613218-1-linan666@huaweicloud.com>
- <20230601062424.3613218-2-linan666@huaweicloud.com>
- <2e36d874-4dd3-080c-3499-44f2f09b9169@molgen.mpg.de>
-From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <2e36d874-4dd3-080c-3499-44f2f09b9169@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbHqknlkL8gCKw--.48920S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCrW3WryrAryxur1rKF4rKrg_yoW5Cr17pr
-        4kJrZ8JryUJwn3Jw1UAryUJFy5Ary8Ja4DJr18W3WUXrW3JryjgFWUXr1jgryUXr48tF1U
-        Jw1UXrW5ZF1UKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v
-        4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
-        04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-        CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Menglong Dong <imagedong@tencent.com>
 
+For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+on the kernel functions whose arguments count less than 6. This is not
+friendly at all, as too many functions have arguments count more than 6.
 
-在 2023/6/1 15:06, Paul Menzel 写道:
-> Dear Li,
-> 
-> 
-> Thank you for your patch.
-> 
-> Am 01.06.23 um 08:24 schrieb linan666@huaweicloud.com:
->> From: Li Nan <linan122@huawei.com>
-> 
-> Unfortunately, I do not understand your commit message summary “fix 
-> incorrect done of recovery”. Maybe:
-> 
-> Do not add sparse disk when recovery aborts
-> 
+Therefore, let's enhance it by increasing the function arguments count
+allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
 
-"recovery fail" is better?
+In the 1th patch, we make MAX_BPF_FUNC_ARGS 14, according to our
+statistics.
 
->> In raid10_sync_request(), if data cannot be read from any disk for
->> recovery, it will go to 'giveup' and let 'chunks_skipped' + 1. After
->> multiple 'giveup', when 'chunks_skipped >= geo.raid_disks', it will
->> return 'max_sector', indicating that the recovery has been completed.
->> However, the recovery is just aborted and the data remains inconsistent.
->>
->> Fix it by setting mirror->recovery_disabled, which will prevent the spare
->> disk from being added to this mirror. The same issue also exists during
->> resync, it will be fixed afterwards.
->>
->> Signed-off-by: Li Nan <linan122@huawei.com>
->> ---
->>   drivers/md/raid10.c | 18 +++++++++++++++++-
->>   1 file changed, 17 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->> index d93d8cb2b620..3ba1516ea160 100644
->> --- a/drivers/md/raid10.c
->> +++ b/drivers/md/raid10.c
->> @@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct mddev 
->> *mddev, sector_t sector_nr,
->>       int chunks_skipped = 0;
->>       sector_t chunk_mask = conf->geo.chunk_mask;
->>       int page_idx = 0;
->> +    int error_disk = -1;
->>       /*
->>        * Allow skipping a full rebuild for incremental assembly
->> @@ -3386,7 +3387,20 @@ static sector_t raid10_sync_request(struct 
->> mddev *mddev, sector_t sector_nr,
->>           return reshape_request(mddev, sector_nr, skipped);
->>       if (chunks_skipped >= conf->geo.raid_disks) {
->> -        /* if there has been nothing to do on any drive,
->> +        pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
->> +            test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "resync" 
->> : "recovery");
->> +        if (error_disk >= 0 &&
->> +            !test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
->> +            /*
->> +             * recovery fail, set mirrors.recovory_disabled,
-> 
-> recov*e*ry
-> 
->> +             * device shouldn't be added to there.
->> +             */
->> +            conf->mirrors[error_disk].recovery_disabled =
->> +                        mddev->recovery_disabled;
->> +            return 0;
->> +        }
->> +        /*
->> +         * if there has been nothing to do on any drive,
->>            * then there is nothing to do at all..
-> 
-> Just one dot/period at the end?
->
-Thanks for your suggestion. I will change it in next version.
+In the 2th patch, we make arch_prepare_bpf_trampoline() support to copy
+function arguments in stack for x86 arch. Therefore, the maximum
+arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY and FEXIT.
+
+And the 3-5th patches are for the testcases of the 2th patch.
+
+Changes since v1:
+- change the maximun function arguments to 14 from 12
+- add testcases (Jiri Olsa)
+- instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+
+Menglong Dong (5):
+  bpf: make MAX_BPF_FUNC_ARGS 14
+  bpf, x86: allow function arguments up to 14 for TRACING
+  libbpf: make BPF_PROG support 15 function arguments
+  selftests/bpf: rename bpf_fentry_test{7,8,9} to bpf_fentry_test_ptr*
+  selftests/bpf: add testcase for FENTRY/FEXIT with 6+ arguments
+
+ arch/x86/net/bpf_jit_comp.c                   | 96 ++++++++++++++++---
+ include/linux/bpf.h                           |  9 +-
+ net/bpf/test_run.c                            | 40 ++++++--
+ tools/lib/bpf/bpf_helpers.h                   |  9 +-
+ tools/lib/bpf/bpf_tracing.h                   | 10 +-
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 24 ++---
+ .../bpf/prog_tests/kprobe_multi_test.c        | 16 ++--
+ .../testing/selftests/bpf/progs/fentry_test.c | 50 ++++++++--
+ .../testing/selftests/bpf/progs/fexit_test.c  | 51 ++++++++--
+ .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+ .../selftests/bpf/progs/kprobe_multi.c        | 12 +--
+ .../bpf/progs/verifier_btf_ctx_access.c       |  2 +-
+ .../selftests/bpf/verifier/atomic_fetch_add.c |  4 +-
+ 13 files changed, 249 insertions(+), 76 deletions(-)
 
 -- 
-Thanks,
-Nan
+2.40.1
 
