@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA7171F872
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5609171F87D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjFBCfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 22:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S233179AbjFBChR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFBCfV (ORCPT
+        with ESMTP id S229598AbjFBChP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:35:21 -0400
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85B4184;
-        Thu,  1 Jun 2023 19:35:19 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAC3velSVXlkn7zICQ--.60074S2;
-        Fri, 02 Jun 2023 10:35:00 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     simon.horman@corigine.com
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, davthompson@nvidia.com, asmaa@nvidia.com,
-        mkl@pengutronix.de, limings@nvidia.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] mlxbf_gige: Add missing check for platform_get_irq
-Date:   Fri,  2 Jun 2023 10:34:56 +0800
-Message-Id: <20230602023456.47362-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 22:37:15 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AA0194;
+        Thu,  1 Jun 2023 19:37:13 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6af8127031cso1339888a34.2;
+        Thu, 01 Jun 2023 19:37:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685673433; x=1688265433;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DLZcQ99Ho3580mjuJ5CWs1tHY6kZa+CsdXChVbXnF4A=;
+        b=psulVz7zBKNYrfCozba0IEsN4CJOuZmf3U6tMgv1pbOfQ+pmdFKo5Xdcwf5EI29L6t
+         yX99q7m5obkC7tD1XdZ6oyYiUZXJSJOG7bAnvAcJU8G0UA/WQd6a1wyNIUnpfA88W9Gu
+         BF8IjT7ZT6HMmX0DZFVhke6FuAYvx3DFQzCmWtl2vZGo46RdKaXX2vGZ+PMy8RIKB9ej
+         knHTzmwq5QGoF7ZcaR9Tq6CRoQfYNa8J47CyxMi3un8L355mGxSH2TgSY3MMhbp6qM3/
+         WPJhv3etRYs3mSY9knv5jNFQQaJbAlyCMG6RPti/MHK+4YvF990tlUAcRAY7IRdnoghZ
+         BzTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685673433; x=1688265433;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DLZcQ99Ho3580mjuJ5CWs1tHY6kZa+CsdXChVbXnF4A=;
+        b=dD3zQk3sMr5/VB6r2pFXD7dJIEQ+bFhIfwLPmsVIiL80AhA9+h1qeI7J/NtbmPhhLR
+         JGOFVUl4x1ouhCrWEBL6wXtIhEDN2dYfrmOdNLyVz6bBHxMi7qbHnQU6FY2Abk8UD78f
+         Wle3Z1InJLa+/hCyFoJG/q68O/gBr3zLmqHTSCnEAYL37zqfXrGJ6IrTY3RaaA/x96p1
+         4DMse4ezMzkmz/o8vMjJeVH1l85UlzUzKgHLOgUIppF3A2qwtBXRTfO2f88ZtMEnbip3
+         poyc8DpLKFn+IOag5FR0A6Y3F8Ke5O79ZvmxxtR0a5SqjRMasNpktYtJBhqyLpvv9sUs
+         aTgw==
+X-Gm-Message-State: AC+VfDwlXbZppDFwx9N8MrqxNesx7x0i4QUJsItLkPoOpbujFq2sQw8N
+        A0SZT0OGLm/mSVQtyN2YrusLAw6kmyk=
+X-Google-Smtp-Source: ACHHUZ7TSvI3mc6wX5hxklZq7lCO/C8L/tczNUi88qS6bTKxGKNstpBAbJC93GUNgnAltBTwqqiNcw==
+X-Received: by 2002:a9d:7a98:0:b0:697:ef66:e7f4 with SMTP id l24-20020a9d7a98000000b00697ef66e7f4mr1140605otn.24.1685673432965;
+        Thu, 01 Jun 2023 19:37:12 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-49.three.co.id. [116.206.12.49])
+        by smtp.gmail.com with ESMTPSA id m7-20020aa78a07000000b0064f39c6474fsm808203pfa.56.2023.06.01.19.37.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 19:37:12 -0700 (PDT)
+Message-ID: <e6124947-bc60-660b-a41f-e09256bc5232@gmail.com>
+Date:   Fri, 2 Jun 2023 09:37:08 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAC3velSVXlkn7zICQ--.60074S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1fWw1rtry5CF1ftF4xWFg_yoW8Ar1kp3
-        yrtwn3CFWDJ34xKws7G3W2kFy8Jan8Cr98Wrn09a93Zr9xAr93Xr1S9w4Yvw1UWFs3ur43
-        Jas2gr93tw4UAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
-        7I0E8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUHWlkUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Linux Stable <stable@vger.kernel.org>
+Cc:     =?UTF-8?Q?Samuel_=c4=8cavoj?= <samuel@cavoj.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Null pointer dereference regression introduced by
+ 326e1c208f3f24d14b93f910b8ae32c94923d22c
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 23:08:54 +0800, Simon Horman wrote:
-> Let's take a step back.
-> 
-> The script is here, so you can take a look at what it does.
-> And I dare say that changes can be proposed.
-> 
->   https://github.com/kuba-moo/nipa/blob/master/tests/patch/cc_maintainers/test.py
-> 
-> I'd also say that the problem here is that Liming Sun <limings@nvidia.com>
-> appears in the above mentioned commit that is being fixed.
-> 
-> I think that get_maintainer will dell you this if you run it
-> on your patch. Which is what the script appears to do.
-> 
-> Locally, I see:
-> 
->   $ ./scripts/get_maintainer.pl --git-min-percent 25 this.patch
->   "David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS,blamed_fixes:1/1=100%)
->   Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
->   Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS,commit_signer:5/5=100%)
->   Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
->   Asmaa Mnebhi <asmaa@nvidia.com> (commit_signer:4/5=80%,blamed_fixes:1/1=100%)
->   David Thompson <davthompson@nvidia.com> (commit_signer:4/5=80%,authored:4/5=80%,added_lines:94/95=99%,removed_lines:19/20=95%,blamed_fixes:1/1=100%)
->   Liming Sun <limings@nvidia.com> (blamed_fixes:1/1=100%)
->   netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
->   linux-kernel@vger.kernel.org (open list)
-> 
-> N.B.: The script excludes linux-kernel@vger.kernel.org
+Hi,
 
-I have got it. I will run the script on the patch.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
+> Null pointer deref
 > 
+> after reverting 326e1c208f3f24d14b93f910b8ae32c94923d22c the problem is gone and the kernel does not crash anymore
 > 
-> As an aside. This patch is missing v2.
+> See this discussion for details:
 > 
->   Subject: [PATCH v2] ...
+> https://bbs.archlinux.org/viewtopic.php?pid=2102715#p2102715
+> 
 
-The patch is not changed. I only add a recipient.
-Therefore, I think it is not a v2.
+See Bugzilla for the full thread and attached journal log.
 
-Thanks,
-Jiasheng
+On the other hand, from linked Archlinux forum link:
 
+> Hi,
+> 
+> I am running arch successfully since a couple of years on my Acer ConceptD 7 laptop. Since a kernel update on 24th of May I am having strange issues (never seen this before):
+> 
+> - sometimes I cannot even login (using gdm) - after entering password just a blank screen
+> - if I can login I can start working - after a while commands I enter in the console are accepted but do nothing (i.e. grub-mkconfig -o ..... can enter the command but just no output - it does nothing - happens with most other command then as well....)
+> - Reboot does not work - stuck somewhere - have to switch the machine off the hard way
+> - this happens even when entering runlevel 3 (so no window manager)
+> - same happens on the laptop of a friend (exact same model) - unfortunately I have no other piece of hardware which I could use for testing to potentially reproduce the problem
+> 
+> Managed to trace this down to all kernels after 6.3.3.arch1-1 - so 6.3.3.arch1-1 it the last one which works without any problems
+> Same applies for the LTS kernels - not 100% sure but think 6.1.29 ist the last one which works
+> 
+> Currently I have marked linux linux-headers and nvidia to not upgrade. LTS kernels are upgraded but the latest two kernels (latest from today) up until 6.1.31-1 do NOT work
+> 
+> Problem: Since most of the command fail when using one of the latest kernel - it is almost impossible to debug - at least I am not knowledgable enough to know where to look.
+
+Anyway, I'm adding it to regzbot:
+
+#regzbot introduced: 326e1c208f3f24 https://bugzilla.kernel.org/show_bug.cgi?id=217517
+#regzbot title: USB typec quirk for Asus Zenbook UM325 triggers system freeze on Acer ConceptD 7
+#regzbot link: https://bbs.archlinux.org/viewtopic.php?pid=2102715
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217517
+
+-- 
+An old man doll... just what I always wanted! - Clara
