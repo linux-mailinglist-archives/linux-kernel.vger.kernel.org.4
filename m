@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE7071FEDD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD85C71FEE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbjFBKV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S235247AbjFBKVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235032AbjFBKVY (ORCPT
+        with ESMTP id S234303AbjFBKVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:21:24 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7177D196
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:21:17 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-45d59140bbdso520566e0c.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:21:17 -0700 (PDT)
+        Fri, 2 Jun 2023 06:21:36 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD0118C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:21:35 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b1a86cdec6so14988361fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:21:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685701276; x=1688293276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MBezHgYwRvoy/30efbcqpEXiUeiRogeG+y2B1YMTHYs=;
-        b=edvApyK85bfEP6lS15istJQVTcXW+61AuwurR1ydXgzbRPw9V9Wi9c3zZFqAH56qwv
-         DKaqMV6c7lA5I/TQEhJCw26fEXLGjspw6jMVR6S4905OvndauU1pzxlNUckeghsQb/kE
-         HLstWkln5sf1MGDWlQwqtRkdre65hQhZa8qqFpQ+8enaqKdDR08+hpzHtXZaOrLn8fX7
-         UQQ5gv+Z8Uzayu/spqmJ1sdTn9niaNQjGwSyUXCh/qVL2Z8ZvJewRL1ZI7kJ6nKoNHzU
-         jTBvkBoNVvtonrAZTkg5elU2Dr885tMaCnh/EM7/zHXJnEDgOgGQSZxDgcyFF5rR2KN4
-         SrUQ==
+        d=amarulasolutions.com; s=google; t=1685701293; x=1688293293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3q0SzVmGHZSYA8dRUVFZwmu0+tSDXCd1K6OkYFYtOd8=;
+        b=pjzDmVWrmpv8bNLYLxvaZYL6mxAG3qQGOPJ8xm++RR5BxeesRsXpGhpys5eIzcxcHB
+         rxgB6q/xLenJIRNPnwkVkDzsQhtNqR1+AzfiU/SbEYotGzou+QdALXAT5+qDdwLxo+tz
+         xcdp4bFWejnRiySMy3kFESCse7L+7H5XqwxHM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685701276; x=1688293276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MBezHgYwRvoy/30efbcqpEXiUeiRogeG+y2B1YMTHYs=;
-        b=B5wvkM5MsowQGH2BbByCghAo4nIXmtyl3ApcBWcRMGKrjoUOOjRm4rqxY2bM9z6Qb3
-         4iZ6jHF3N30A946lyu08wHsY/0UJpBKVoekSuOiy75+CFAJNdptPkafRopY1NGphk1fz
-         7FRdFpKcD7Y7qb+6BD3KgwADS8NcJonuHFnyo1EnUpINwmK38WUxMFaj6w0djDUa8xWd
-         tTaFeRTtMK/zdvO4O66N+W2YUWlKHFBtryS2LrYCHr+PWf/iio/KUl1+OW4SnCZ/gu+g
-         VOF8BDzDM5UoY+kZz/oT+8otMYZq86mp/sU768GpQG30H94ZZsrW/ZZ7oidNvuHl8NvG
-         cQgg==
-X-Gm-Message-State: AC+VfDz04XK3ju4GLKLHaqVvd4AxY+hO0Y3PjLH03vtDZhNaf+oR/4A8
-        8pEtQhVIvTjQMXY7w1lLy2kc7SENNCVxVXLW3A8SxA==
-X-Google-Smtp-Source: ACHHUZ5SzZQ7B7ViN1sTkHdQYmF3seIoUX7LhsuMplA0qZUaAgk9t+x3wAgV6V9p/hdrl/KgRfGy5kV5Szao5N2LaWA=
-X-Received: by 2002:a1f:5f48:0:b0:453:8a02:8d8 with SMTP id
- t69-20020a1f5f48000000b004538a0208d8mr2738435vkb.6.1685701276415; Fri, 02 Jun
- 2023 03:21:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685701293; x=1688293293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3q0SzVmGHZSYA8dRUVFZwmu0+tSDXCd1K6OkYFYtOd8=;
+        b=j7at9IuMwXtXQtquHvebA7DXN3zeBPdOcpgf2Rp4k2T3CNsTL8hAcMbUBbYTZTfLx6
+         WcREJCEiE2s1K32CpxEHP0tFxEx1sNHIZdUSQFhVpXfswGV/5/Io3QPN/+Z3sEhBzFzQ
+         PWmAiSn9HIMWVlZCPwMpK0tl44NZnxOq0liDgUgy8ThPbG7dxKNNENPNO/bPOueBRqWL
+         QaJhoI55BKeBVkeVAsnvzizYU1n+xzZY4uwSbnpsjxV6gMYq+JgX7AibBx363qrj9hOQ
+         zxkhqsZ3+/onDYZE3ouX2uLHqsqnOZ9ERSWaDMwqcaHf0CZpmLxlp0auXezlPkGmtE6o
+         319A==
+X-Gm-Message-State: AC+VfDwlGJKWFFUGpHKv0TNfynRmqratsttqad1WCOZj3SJ250kGhQEY
+        F0yq8kO/KT8ym58mNqlQ2BujMFtaS2+yp2u9xm8xUQ==
+X-Google-Smtp-Source: ACHHUZ6co4uO+gVLS2iC+Vv8IBfeCfrH5pWd6DF66wUFf3puiaOUh6G/ryC64nR6uuVEL69eEqSvqw==
+X-Received: by 2002:a2e:9944:0:b0:2ad:8623:a97e with SMTP id r4-20020a2e9944000000b002ad8623a97emr1104584ljj.50.1685701292883;
+        Fri, 02 Jun 2023 03:21:32 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-248-31-20.retail.telecomitalia.it. [95.248.31.20])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa7d398000000b0051499320435sm528887edq.14.2023.06.02.03.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 03:21:32 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v2 0/6] Add display support on the stm32f746-disco board
+Date:   Fri,  2 Jun 2023 12:21:16 +0200
+Message-Id: <20230602102123.3345587-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20230601131933.727832920@linuxfoundation.org>
-In-Reply-To: <20230601131933.727832920@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 2 Jun 2023 15:51:05 +0530
-Message-ID: <CA+G9fYsGZoYD8t_zvrq9VcRhG88HWiVJ3rh_RVLBCi5gc=sSsA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/22] 5.10.182-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -73,167 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 at 18:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.182 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.182-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The series adds support for the display on the stm32f746-disco board,
+along with a generic patch that adds the "bpp" parameter to the stm-drm
+module. The intention is to allow users to size, within certain limits,
+the memory footprint required by the framebuffer.
 
+Changes in v2:
+- Add 'Acked-by' tag of Conor Dooley.
+- Fix build warning reported by kernel test robot.
+- Add 'Reported-by' tag of kernel test robot.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Dario Binacchi (6):
+  ARM: dts: stm32: add ltdc support on stm32f746 MCU
+  ARM: dts: stm32: add pin map for LTDC on stm32f7
+  ARM: dts: stm32: support display on stm32f746-disco board
+  dt-bindings: display: simple: add Rocktech RK043FN48H
+  drm/panel: simple: add support for Rocktech RK043FN48H panel
+  drm/stm: add an option to change FB bpp
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+ .../bindings/display/panel/panel-simple.yaml  |  2 +
+ arch/arm/boot/dts/stm32f7-pinctrl.dtsi        | 35 +++++++++++++
+ arch/arm/boot/dts/stm32f746-disco.dts         | 51 +++++++++++++++++++
+ arch/arm/boot/dts/stm32f746.dtsi              | 10 ++++
+ drivers/gpu/drm/panel/panel-simple.c          | 29 +++++++++++
+ drivers/gpu/drm/stm/drv.c                     |  8 ++-
+ 6 files changed, 134 insertions(+), 1 deletion(-)
 
-## Build
-* kernel: 5.10.182-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: f2a19702506cf5aee6bf44c1a1c48520b2455d75
-* git describe: v5.10.181-23-gf2a19702506c
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.181-23-gf2a19702506c
+-- 
+2.32.0
 
-## Test Regressions (compared to v5.10.181)
-
-## Metric Regressions (compared to v5.10.181)
-
-## Test Fixes (compared to v5.10.181)
-
-## Metric Fixes (compared to v5.10.181)
-
-## Test result summary
-total: 100555, pass: 83695, fail: 2731, skip: 13973, xfail: 156
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 117 total, 116 passed, 1 failed
-* arm64: 45 total, 43 passed, 2 failed
-* i386: 35 total, 33 passed, 2 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 26 total, 20 passed, 6 failed
-* riscv: 12 total, 11 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 38 total, 36 passed, 2 failed
-
-## Test suites summary
-* boot
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
