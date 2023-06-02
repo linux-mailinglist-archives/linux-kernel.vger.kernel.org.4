@@ -2,188 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050D471FA64
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CC271FA6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbjFBGzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S234057AbjFBG6B convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 02:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbjFBGzk (ORCPT
+        with ESMTP id S234040AbjFBG56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:55:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B59EB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:55:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD23761307
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:55:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1BDC4339C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685688938;
-        bh=gz5JtQHEbmj8JNuwGJ+CWBjjHWX++XnPdh1YLHQbeAw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ab4HwLsXEDeByjzHuTmcOkwiyyPXawac2JA2lrtQDJoUuQorY+Ly9nI0FHxL6sDyU
-         BkROVgzp4fqfD4Z4my/FK6hH3VvbhIEHMQy5SvN5yydpcYJjJQFw3q24M4BFGyc6Ng
-         2Zm7yxEwuOUJAzeNXJ5IJR1T/sFcgltmEh5UyKhXNuR+56q6RCO84mPx9aZhEw5BD8
-         IHNjRkaZWSHwCTCy3MWCs1vY+LNM9odlYFGz2Y2zUkhXWfHddm9Mcz9dnB56u4A7jW
-         ftf4IEAsfxJCNL9/woPd9xh2oruy8+5CZy5rOoDffx7ttX8I7tObS8Zk05ujefT2RR
-         UNC3J9sBM8rsQ==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so6271418a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 23:55:38 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwF0zYuIP4eM2NW5plKVuza+cNF/12bczZ4hSkMchbRz0XxOGzT
-        d0Ugh8pXOM2ARe00+UaarZ6g9DFfZ3kXMPfcTuw=
-X-Google-Smtp-Source: ACHHUZ5ZmWVxeDEnl92BnChhmM0USTYEs3cNNm5xY/M+KLGyAI0BTwto/F392XWyAsmDY9jYnJkpXNJ8th7N6GNQb00=
-X-Received: by 2002:aa7:ce07:0:b0:50b:c456:a72a with SMTP id
- d7-20020aa7ce07000000b0050bc456a72amr1611001edv.19.1685688936227; Thu, 01 Jun
- 2023 23:55:36 -0700 (PDT)
+        Fri, 2 Jun 2023 02:57:58 -0400
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1356E18C;
+        Thu,  1 Jun 2023 23:57:55 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2af189d323fso38158861fa.1;
+        Thu, 01 Jun 2023 23:57:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685689072; x=1688281072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3yfrOJnAEtdE9WlO3Gt8PPHN7bIX3lR9BC9c57KaloY=;
+        b=R2rVW+FnkwEdQRMl40aWTxm2z9/O8D4aEgAPIBqFC5+D4cyVKQESmbOdq3x9C8HVpY
+         8xPuLG1VWoVvc42/lxKxvNRwjpF3u/oMun9cFmtyJM0koZGHaU8WFf6vDWw/N6XfqXq9
+         YFbapRkKf0JfvGT0AJSkTKOCnhXdXclbJWo+PwDldnezH6XluEzTvmYsEx2xh4gnripe
+         FBUvkxdrzA/ATxnObD4p5rby3W3tJTksvpDMW8dEEjukPOlFe9yvHJp8PFnyH7kETVkw
+         cCnrlHMgS6ZsoX9slqzzJ/T90lU07rINwmKNhWYvnyfqweGbNCtO5b8IQ8T46Ap54qTQ
+         BJ7Q==
+X-Gm-Message-State: AC+VfDyy6lhhSafTKkg5uGeT5OuZINN0tKGzDEH25j+xZbLQY0ktekD/
+        NuDZHWNh7ajsW3QZQ5YEB793RrJ3F6u1Tb+U
+X-Google-Smtp-Source: ACHHUZ75DCPscSa/X3zlW/WfQIDY02e0JX8sYMVjwdkoNFcgQRiwXeL/JJ/R/fTaidnXMbvXWWlFhQ==
+X-Received: by 2002:a2e:b989:0:b0:2a8:b792:d7cd with SMTP id p9-20020a2eb989000000b002a8b792d7cdmr466562ljp.4.1685689072001;
+        Thu, 01 Jun 2023 23:57:52 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id v11-20020a2e924b000000b002a8e8c776e9sm108023ljg.56.2023.06.01.23.57.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 23:57:51 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f4db9987f8so3751164e87.1;
+        Thu, 01 Jun 2023 23:57:51 -0700 (PDT)
+X-Received: by 2002:a05:6512:131e:b0:4eb:46c2:e771 with SMTP id
+ x30-20020a056512131e00b004eb46c2e771mr776194lfu.14.1685689071688; Thu, 01 Jun
+ 2023 23:57:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230602030732.1047696-1-maobibo@loongson.cn> <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
- <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
-In-Reply-To: <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 2 Jun 2023 14:55:23 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4VHoNQdpDdpcPfDXJxnpoWUtDqmJMhb_r4DS4JtnxvhQ@mail.gmail.com>
-Message-ID: <CAAhV-H4VHoNQdpDdpcPfDXJxnpoWUtDqmJMhb_r4DS4JtnxvhQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Align pci memory base address with page size
-To:     "bibo, mao" <maobibo@loongson.cn>
-Cc:     loongson-kernel@lists.loongnix.cn,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
+ <20220329091126.4730-2-wsa+renesas@sang-engineering.com> <ZHkQDTvk6I2q-9CF@surfacebook>
+ <CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 2 Jun 2023 08:57:36 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWhtVvA4=vh4imMtL+KssybzB57CNcLaNq9oVKkpeS1iA@mail.gmail.com>
+Message-ID: <CAMuHMdWhtVvA4=vh4imMtL+KssybzB57CNcLaNq9oVKkpeS1iA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
+To:     andy.shevchenko@gmail.com
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 2:48=E2=80=AFPM bibo, mao <maobibo@loongson.cn> wrot=
-e:
->
->
->
-> =E5=9C=A8 2023/6/2 12:11, Huacai Chen =E5=86=99=E9=81=93:
-> > +cc Bjorn
+On Fri, Jun 2, 2023 at 8:51 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Thu, Jun 1, 2023 at 11:40 PM <andy.shevchenko@gmail.com> wrote:
+> > Tue, Mar 29, 2022 at 11:11:26AM +0200, Wolfram Sang kirjoitti:
+> > > This is a sloppy logic analyzer using GPIOs. It comes with a script to
+> > > isolate a CPU for polling. While this is definitely not a production
+> > > level analyzer, it can be a helpful first view when remote debugging.
+> > > Read the documentation for details.
 > >
-> > Hi, Bibo,
+> > One note since I have done recent review and realize one issue with debugfs.
 > >
-> > On Fri, Jun 2, 2023 at 11:07=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> =
-wrote:
-> >>
-> >> LoongArch linux kernel uses 16K page size by default, some pci devices=
- have
-> >> only 4K memory size, it is normal in general architectures. However me=
-mory
-> >> space of different pci devices will share one physical page address sp=
-ace.
-> >> This is not safe for mmu protection, also UIO and VFIO requires base
-> >> address of pci memory space page aligned.
-> >>
-> >> This patch adds check with function pcibios_align_resource, and set ba=
-se
-> >> address of resource page aligned.
-> >>
-> >> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> >> ---
-> >>  arch/loongarch/pci/pci.c | 23 +++++++++++++++++++++++
-> >>  1 file changed, 23 insertions(+)
-> >>
-> >> diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
-> >> index 2726639150bc..1380f3672ba2 100644
-> >> --- a/arch/loongarch/pci/pci.c
-> >> +++ b/arch/loongarch/pci/pci.c
-> >> @@ -83,6 +83,29 @@ int pcibios_alloc_irq(struct pci_dev *dev)
-> >>         return acpi_pci_irq_enable(dev);
-> >>  }
-> >>
-> >> +/*
-> >> + * memory space size of some pci cards is 4K, it is separated with
-> >> + * different pages for generic architectures, so that mmu protection =
-can
-> >> + * work with different pci cards. However page size for LoongArch sys=
-tem
-> >> + * is 16K, memory space of different pci cards may share the same pag=
-e
-> >> + * on LoongArch, it is not safe here.
-> >> + * Also uio drivers and vfio drivers sugguests that base address of m=
-emory
-> >> + * space should page aligned. This function aligns base address with =
-page size
-> >> + */
-> >> +resource_size_t pcibios_align_resource(void *data, const struct resou=
-rce *res,
-> >> +               resource_size_t size, resource_size_t align)
-> >> +{
-> >> +       resource_size_t start =3D res->start;
-> >> +
-> >> +       if (res->flags & IORESOURCE_MEM) {
-> >> +               if (align & (PAGE_SIZE - 1)) {
-> >> +                       align =3D PAGE_SIZE;
-> >> +                       start =3D ALIGN(start, align);
-> > I don't know whether this patch is really needed, but the logic here
-> > has some problems.
+> > ...
 > >
-> > For example, if PAGE_SIZE=3D16KB, align=3D18KB, what should we do? Alig=
-n
-> > to 16KB or align to 32KB? IMO it should align to 32KB, but in your
-> > patch it will align to 16KB.
-> In general pci device is aligned by size, and its value is a power of 2 i=
-n value.
-> I do not see such devices with 18K alignment requirements.
-If so, you can simply ignore "align" and use  start =3D ALIGN(start, PAGE_S=
-IZE);
+> > > +     priv->debug_dir = debugfs_create_dir(devname, gpio_la_poll_debug_dir);
+> >
+> > If this fails with NULL...
+> >
+> > > +     debugfs_create_blob("meta_data", 0400, priv->debug_dir, &priv->meta);
+> > > +     debugfs_create_ulong("delay_ns", 0600, priv->debug_dir, &priv->delay_ns);
+> > > +     debugfs_create_ulong("delay_ns_acquisition", 0400, priv->debug_dir, &priv->acq_delay);
+> > > +     debugfs_create_file_unsafe("buf_size", 0600, priv->debug_dir, priv, &fops_buf_size);
+> > > +     debugfs_create_file_unsafe("capture", 0200, priv->debug_dir, priv, &fops_capture);
+> > > +     debugfs_create_file_unsafe("trigger", 0200, priv->debug_dir, priv, &fops_trigger);
+> >
+> > ...and any of these is not, we will end up with the file in a root folder of debugfs...
+> >
+> > > +     dev_info(dev, "initialized");
+> >
+> > ...
+> >
+> > > +static int gpio_la_poll_remove(struct platform_device *pdev)
+> > > +{
+> > > +     struct gpio_la_poll_priv *priv = platform_get_drvdata(pdev);
+> > > +
+> > > +     mutex_lock(&priv->lock);
+> > > +     debugfs_remove_recursive(priv->debug_dir);
+> >
+> > ...and this one won't remove it.
+> >
+> > > +     mutex_unlock(&priv->lock);
+> > > +     mutex_destroy(&priv->lock);
+> > > +
+> > > +     return 0;
+> > > +}
+> >
+> > ...
+> >
+> > However, I haven't checked if it's pure theoretical issue with the current code
+> > base of debugfs or a potential problem. Easy fix is to check an error code and
+>
+> I think debugfs_create_dir() can only fail reasonably due to OOM.
 
->
-> By pci local bus spec, there are such lines:
->
-> "Devices are free to consume more address space than required, but decodi=
-ng down
-> to a 4 KB space for memory is suggested for devices that need less than t=
-hat amount. For
-> instance, a device that has 64 bytes of registers to be mapped into Memor=
-y Space may
-> consume up to 4 KB of address space in order to minimize the number of bi=
-ts in the address
-> decoder."
->
-> I cannot  think whether it is necessary simply from judging whether other
-> architectures have similar code. If so, LoongArch system just  always fol=
-lows others.
-> It is actually one problem since LoongArch uses 16K page size.
-As I know, both MIPS and ARM64 can use non-4K pages, but when I grep
-pcibios_align_resource in the arch directory, none of them do
-PAGE_SIZE alignment.
+Oops, you were talking about NULL, not an error code.
+I don't think that can ever happen.
+And if I did miss something, it would crash when dereferencing a NULL
+pointer in d_really_is_positive() (as called in start_creating())...
 
-Huacai
+Gr{oetje,eeting}s,
 
->
-> Regards
-> Bibo, Mao
-> >
-> > Huacai
-> >> +               }
-> >> +       }
-> >> +       return start;
-> >> +}
-> >> +
-> >>  static void pci_fixup_vgadev(struct pci_dev *pdev)
-> >>  {
-> >>         struct pci_dev *devp =3D NULL;
-> >> --
-> >> 2.27.0
-> >>
-> > _______________________________________________
-> > Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
-> > To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
->
->
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
