@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F49720080
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CCA72007D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbjFBLg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S235132AbjFBLgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235233AbjFBLgy (ORCPT
+        with ESMTP id S232455AbjFBLgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:36:54 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B856D194;
-        Fri,  2 Jun 2023 04:36:52 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1b04706c974so16969305ad.2;
-        Fri, 02 Jun 2023 04:36:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685705812; x=1688297812;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+8V9XaMYituDt7+Ry1Yz1LEHFfSZsiDESteY20tnKzk=;
-        b=Q4A85mLrn14X9FOV42CgmzkR4k+KXvZ53kbaZtqc371x1/6AtR7p3aqNg1/Oa2pzoK
-         Unr9RT5ksJcwuHvnCx2cB4K+RL3IRV23mymRfNz+PYRdAkGOi1KBgGr1OfUru4LHyvnm
-         QidulZlthrn/XkscLqzSvPY7BJHZQAFFMedjZ175ZzvFB2ix5hHQGSGvlVQIWYx0jieq
-         YWE+HFHdJc0x24xr983kxR+kKo7KYwyDpqsXEZdm2vZujT0FrlIMwfvKqKiFNAZsDh6s
-         bj9wHjSUl8suLi+CLlI6ivnrvEbbX2LX2wSfe5S4BcgZneDBDNx54xoXLMfBQ/Lk6g9U
-         8ADA==
-X-Gm-Message-State: AC+VfDwIBFLYgshrQKLSIG5nZzWxlAnHjJad5pXFE5tI4iZciF8jg3+B
-        iCepdz09vw+vYhdNO02ZC2o=
-X-Google-Smtp-Source: ACHHUZ5kW48TS0f90vTRqxS3q8MXbKl4HpGm4tJCgIeeIQepEBZcvvx/c1d2m5+wve9VwXgAoK89/g==
-X-Received: by 2002:a17:902:74c4:b0:1b0:46c:9944 with SMTP id f4-20020a17090274c400b001b0046c9944mr2006230plt.48.1685705812001;
-        Fri, 02 Jun 2023 04:36:52 -0700 (PDT)
-Received: from dev-linux.lan (cpe-70-95-21-110.san.res.rr.com. [70.95.21.110])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902714b00b001a525705aa8sm1159716plm.136.2023.06.02.04.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 04:36:51 -0700 (PDT)
-From:   Sukrut Bellary <sukrut.bellary@linux.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Cc:     Sukrut Bellary <sukrut.bellary@linux.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2] misc: fastrpc: Fix double free of 'buf' in error path
-Date:   Fri,  2 Jun 2023 04:36:02 -0700
-Message-Id: <20230602113602.1271695-1-sukrut.bellary@linux.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 2 Jun 2023 07:36:51 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77313194;
+        Fri,  2 Jun 2023 04:36:44 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 443CE6E0;
+        Fri,  2 Jun 2023 13:36:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685705780;
+        bh=P6UK7gokiOdLMcgnQqxLjRe/2stcZX5OnfxLzLL/M8Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZXkiKfg3l/3Zn5Hs1rF1UqizLbyGjOovKGO5nYDa5CsXVzIhgdO0OuBQ8YgdHm38X
+         Bxyh7d0X1/u80DgGvAuskxBTqQBbfDqWu2lEb7bY4nexWJTb+xXsdfxHTwRxJXd7mU
+         s+9jbaqSxFpevXaFdQHCREWYp9j9SBrCMzFprxoM=
+Date:   Fri, 2 Jun 2023 14:36:40 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] drm: Remove references to removed transitional
+ helpers
+Message-ID: <20230602113640.GG26944@pendragon.ideasonboard.com>
+References: <cover.1685696114.git.geert+renesas@glider.be>
+ <14e091fc522aa63a3e33bda1016e5fa946d47d18.1685696114.git.geert+renesas@glider.be>
+ <20230602110459.GC26944@pendragon.ideasonboard.com>
+ <CAMuHMdXR79TTSAcKb=DA2mRVDgaxBERts5PQLMf+mXpZDQJu=Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <CAMuHMdXR79TTSAcKb=DA2mRVDgaxBERts5PQLMf+mXpZDQJu=Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,55 +60,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch warning:
-drivers/misc/fastrpc.c:1926 fastrpc_req_mmap() error: double free of 'buf'
+Hi Geert,
 
-In fastrpc_req_mmap() error path, the fastrpc buffer is freed in
-fastrpc_req_munmap_impl() if unmap is successful.
+On Fri, Jun 02, 2023 at 01:17:58PM +0200, Geert Uytterhoeven wrote:
+> On Fri, Jun 2, 2023 at 1:05 PM Laurent Pinchart wrote:
+> > On Fri, Jun 02, 2023 at 11:11:35AM +0200, Geert Uytterhoeven wrote:
+> > > The transitional helpers were removed a long time ago, but some
+> > > references stuck.  Remove them.
+> > >
+> > > Fixes: 21ebe615c16994f3 ("drm: Remove transitional helpers")
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> 
+> > > --- a/drivers/gpu/drm/drm_plane_helper.c
+> > > +++ b/drivers/gpu/drm/drm_plane_helper.c
+> > > @@ -51,14 +51,6 @@
+> > >   * planes, and newly merged drivers must not rely upon these transitional
+> > >   * helpers.
+> > >   *
+> >
+> > The first paragraph starts with "This helper library has two parts.". As
+> > you're dropping the mention of the second part, I think you should
+> > rework the first paragraph too.
+> 
+> That was my initial thought, too.
+> However, the code still has a second part, not related to the topic of
+> the first part (primary plane support).
 
-But in the end, there is an unconditional call to fastrpc_buf_free().
-So the above case triggers the double free of fastrpc buf.
+How about mentioning that in the comment then ?
 
-Fixes: 72fa6f7820c4 ("misc: fastrpc: Rework fastrpc_req_munmap")
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
----
-This is based on static analysis. Compilation tested.
----
-Changes in v2: 
-- Fixed the commit message.
-- Addressed the review comment about deleting buf from the list
-  before freeing.
-- Link to v1: https://lore.kernel.org/all/20230518100829.515143-1-sukrut.bellary@linux.com/
----
- drivers/misc/fastrpc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> > > - * The second part also implements transitional helpers which allow drivers to
+> > > - * gradually switch to the atomic helper infrastructure for plane updates. Once
+> > > - * that switch is complete drivers shouldn't use these any longer, instead using
+> > > - * the proper legacy implementations for update and disable plane hooks provided
+> > > - * by the atomic helpers.
+> > > - *
+> > > - * Again drivers are strongly urged to switch to the new interfaces.
+> > > - *
+> > >   * The plane helpers share the function table structures with other helpers,
+> > >   * specifically also the atomic helpers. See &struct drm_plane_helper_funcs for
+> > >   * the details.
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index f48466960f1b..b3b520fcfb75 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1882,7 +1882,8 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- 				      &args[0]);
- 	if (err) {
- 		dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
--		goto err_invoke;
-+		fastrpc_buf_free(buf);
-+		return err;
- 	}
- 
- 	/* update the buffer to be able to deallocate the memory on the DSP */
-@@ -1922,8 +1923,6 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- 
- err_assign:
- 	fastrpc_req_munmap_impl(fl, buf);
--err_invoke:
--	fastrpc_buf_free(buf);
- 
- 	return err;
- }
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
