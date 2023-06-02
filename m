@@ -2,137 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5607F71F923
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF56F71F927
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbjFBEL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 00:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S233233AbjFBEMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 00:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjFBELW (ORCPT
+        with ESMTP id S229542AbjFBEMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 00:11:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C66F1A8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:11:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A9C264BF2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BB0C433D2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685679076;
-        bh=3KKLfYltpP6AwUyqbOu8VcjvJJYpCcqO2cG0S3xy7yY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SlgfWgAV56JNVTapto/Na8Mc+XcKejx1vSpANP4iPldr0tkLvxf4I2sw++NHqWQA0
-         1RcAIcaWGhlQ7doPh7cKjFTf2JSn3t8l0guMOIMzFDBTca19+EskTkljcnU52ufIFS
-         DOuRIRo4hLOkQNkK9T75avolm+MAHsdtTXhvJShIndPniFwFg0AhhhNu9M2YVKzkRp
-         oiiTLdcGEAz7JrwpBmposMoJRoNwqIGj9JAr02SH3GeP9+ayfYS2LgKvcAGJACl/fD
-         TBp1sGWWiM18mp01d1He2EhbgqpUspTUzSI8Wbbfi00EWzR62kpXkQ09pZVZB4n2XR
-         MyAGZK7XLYXPQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so2365058a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 21:11:16 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyqBrDqNxNz3n08d1Zicf3skJzmimxwQ66MBh4HHVDecg4IF0lF
-        o6seC9m+N2aOdinse7Dsm4p4JPDhYdath2HGXdw=
-X-Google-Smtp-Source: ACHHUZ7wzUjaEOG8TGfvCZPI1uTO6uVQKWRMfgbYjNvATi5pmMOSmaY7k+ICTvTurUJBNlapQ4gKt607Nzt+ytsCSJ4=
-X-Received: by 2002:a17:907:94cb:b0:96f:f451:187f with SMTP id
- dn11-20020a17090794cb00b0096ff451187fmr8505251ejc.7.1685679075072; Thu, 01
- Jun 2023 21:11:15 -0700 (PDT)
+        Fri, 2 Jun 2023 00:12:38 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD3D97
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:12:37 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-65055aa4ed7so959317b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 21:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685679156; x=1688271156;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eb+4QTrum6u3laOCC4chpSy2X8fQPYWr/n4Wparj6q0=;
+        b=M35OtoSrfBiRZ0xmZ6cjYaWOCfSBBE48Nre4yAPoGRb+d1kYbPZucMu5NQu4bDcOak
+         S9Pn2wfs7adVu2De/K03KLRBnvAUcK5YZXHZ6w9BHnxuCRKx2wtckBxiTLdFGDt9rOfB
+         aYX6iEhgiJlTKlOpU1QHHri3Cbw7aU75zpD+VIuLTg964N4opcIdvlrwknWvkZqTMgZs
+         19oeEmzJGzPsHbermS1g7pcC+cQKJP22mYKrd7/JSROSV2/ubiAHrbip814JLyxmsBUx
+         rmmU7QfgChfRsUcxCTqftS8fgWD93+zUuKQquII7mSK2xb+ckafve3OcMs4s74MkA4TL
+         12tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685679156; x=1688271156;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eb+4QTrum6u3laOCC4chpSy2X8fQPYWr/n4Wparj6q0=;
+        b=MzcR0RCTlQ8Hdo6zzkypD9bCsVksmZ649FW4DpGtnehjqOdeTXD5AxK9lFtRNL6jab
+         PmFRrrRH+FtxiPEbHis1nePU96eyCYyQv0tiR6wBhwp8anwuHfe/KcHNuaR2chi4vaE7
+         lBWjmiB5CfFE1zzFk2v+W8yXtUlafs593Q8JFGBGjf536FYDlQlkk8DMZ7tI3UwoxvpX
+         1I2nQSzGDzzyGWbwG89RCMj8cadgF6a3cV3yZE6kA4olG49ySVd2PkjlMV8j4oCu45gy
+         9KIT9uSzJqa2St20S58m3bQ7806ufaXtfaM//GC+ZX5jfxWpCxPahDujMakc/31yL5RL
+         ZbGw==
+X-Gm-Message-State: AC+VfDxvxOA+R3ERo2H5CU5jSvLcDaingjjEBS9ER62U67P00oSrTHrh
+        aO+XdKliHeo6bKSwBt2hgcrqAw==
+X-Google-Smtp-Source: ACHHUZ6JRpEW0H2b8f3O/zmPBsFaFOSng23/i7raVXThjx2ODWlDyZiZrERoWczrti+ZkwxjKOX9hw==
+X-Received: by 2002:a05:6a20:8421:b0:10b:97c8:2e16 with SMTP id c33-20020a056a20842100b0010b97c82e16mr9845806pzd.29.1685679156687;
+        Thu, 01 Jun 2023 21:12:36 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id q3-20020a17090311c300b001b0295de9acsm194205plh.179.2023.06.01.21.12.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 21:12:36 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 09:42:34 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpufreq: dt-platdev: Add MODULE_LICENSE
+Message-ID: <20230602041234.sb77clozdjqorz3j@vireshk-i7>
+References: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
 MIME-Version: 1.0
-References: <20230602030732.1047696-1-maobibo@loongson.cn>
-In-Reply-To: <20230602030732.1047696-1-maobibo@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 2 Jun 2023 12:11:02 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
-Message-ID: <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Align pci memory base address with page size
-To:     Bibo Mao <maobibo@loongson.cn>, Bjorn Helgaas <helgaas@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+cc Bjorn
-
-Hi, Bibo,
-
-On Fri, Jun 2, 2023 at 11:07=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
->
-> LoongArch linux kernel uses 16K page size by default, some pci devices ha=
-ve
-> only 4K memory size, it is normal in general architectures. However memor=
-y
-> space of different pci devices will share one physical page address space=
-.
-> This is not safe for mmu protection, also UIO and VFIO requires base
-> address of pci memory space page aligned.
->
-> This patch adds check with function pcibios_align_resource, and set base
-> address of resource page aligned.
->
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+On 24-05-23, 15:34, Zhipeng Wang wrote:
+> Add MODULE_LICENSE to support building as module.
+> 
+> Signed-off-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
 > ---
->  arch/loongarch/pci/pci.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
-> index 2726639150bc..1380f3672ba2 100644
-> --- a/arch/loongarch/pci/pci.c
-> +++ b/arch/loongarch/pci/pci.c
-> @@ -83,6 +83,29 @@ int pcibios_alloc_irq(struct pci_dev *dev)
->         return acpi_pci_irq_enable(dev);
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 338cf6cc6596..54529aa16d53 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -214,3 +214,4 @@ static int __init cpufreq_dt_platdev_init(void)
+>  			       sizeof(struct cpufreq_dt_platform_data)));
 >  }
->
-> +/*
-> + * memory space size of some pci cards is 4K, it is separated with
-> + * different pages for generic architectures, so that mmu protection can
-> + * work with different pci cards. However page size for LoongArch system
-> + * is 16K, memory space of different pci cards may share the same page
-> + * on LoongArch, it is not safe here.
-> + * Also uio drivers and vfio drivers sugguests that base address of memo=
-ry
-> + * space should page aligned. This function aligns base address with pag=
-e size
-> + */
-> +resource_size_t pcibios_align_resource(void *data, const struct resource=
- *res,
-> +               resource_size_t size, resource_size_t align)
-> +{
-> +       resource_size_t start =3D res->start;
-> +
-> +       if (res->flags & IORESOURCE_MEM) {
-> +               if (align & (PAGE_SIZE - 1)) {
-> +                       align =3D PAGE_SIZE;
-> +                       start =3D ALIGN(start, align);
-I don't know whether this patch is really needed, but the logic here
-has some problems.
+>  core_initcall(cpufreq_dt_platdev_init);
+> +MODULE_LICENSE("GPL");
 
-For example, if PAGE_SIZE=3D16KB, align=3D18KB, what should we do? Align
-to 16KB or align to 32KB? IMO it should align to 32KB, but in your
-patch it will align to 16KB.
+Merged both patches and applied. Thanks.
 
-Huacai
-> +               }
-> +       }
-> +       return start;
-> +}
-> +
->  static void pci_fixup_vgadev(struct pci_dev *pdev)
->  {
->         struct pci_dev *devp =3D NULL;
-> --
-> 2.27.0
->
+-- 
+viresh
