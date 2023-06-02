@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B843720BC6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2912A720BD6
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236536AbjFBWMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 18:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S236399AbjFBWUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 18:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236565AbjFBWMm (ORCPT
+        with ESMTP id S235208AbjFBWUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 18:12:42 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7792E1BC
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 15:12:39 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8337ade1cso3507060276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 15:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685743958; x=1688335958;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hZOQLIvJzczYTMAnaTGjzB0ofTaMaErv1XOCluG82ws=;
-        b=ztnEwzy36DzIiYsf21ckOGWKoNk9x0+aF0krJRVhEGILD6FboIXDsRdHNE4nHzs8yQ
-         D0nQnrSycvryY8KmsmF2B9P+c4iKhgxXfpMIAYDhOOw8Z3YfjvifOVAHHXtSc+VA4lcv
-         vtJB58g21yx16+MjcUO0PWPLRYaen/R1GkwQ2R5DygvBCHRATnuSJUlx9qzrWJAfKbuJ
-         PDq3fVh+dV2cn7B7iX8gv4dOVqZwH8Jk56seTtG571ZyY1FT4iGz8sB+Ge3BmXFEKay0
-         2jChpUvDjsXGJDyGTqf9E4tDl+OsuY07liagomRKpZ9cdyEwbNKENiZZMzwTBN9qtJQx
-         Dnzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685743958; x=1688335958;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZOQLIvJzczYTMAnaTGjzB0ofTaMaErv1XOCluG82ws=;
-        b=Fto3IqZIGnuSZ5EuwUD/YOi+0gn2HboQXDN+phz2RgH+q2PcpSjmlA/UBRLkYXJ+FL
-         /hzMFWFtqfFZ4CR9D2Qj8h4O9q2lbkIDtBHlGC3R8EvQ0xAVEvoh9JWsdrV/xDS3WDeZ
-         H/v9RwPq9M2aQVevQVAu3n1R2tJ5Gcjx88CVwhpKeIiGVkpjAQNxpC4ah85sbIipMKEm
-         YH1e1ZlHvilRxXYJju2SKxYQOY69HXYa4Sz89lXjLUVgo9RUQH4dInp9jO4qj3i19BdQ
-         kZ7WeSuQOEqPJHdS+TANOuesZo2tYngideqvmJJPEcSg1NtX/H6fHhvWBKGc0pn+BsH2
-         +A7A==
-X-Gm-Message-State: AC+VfDydlph/mGYMeyFpJ+xkvXxYUCEkEor6W8cIyyqwjsgVjBlbNeC5
-        vPne6xg+U2BWSHPxN9LcV6W4vvxs46E=
-X-Google-Smtp-Source: ACHHUZ5kEM4UotGbjNhuGYnPNZSPFcZdv+PhWsaBh77AzL3xpMn6mZn9HFXaERTjVE4vBhdvz3jiI7Tpz7A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:728:b0:ba1:d0:7f7c with SMTP id
- l8-20020a056902072800b00ba100d07f7cmr1667909ybt.2.1685743958805; Fri, 02 Jun
- 2023 15:12:38 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  2 Jun 2023 15:12:36 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230602221236.952888-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86/pmu: Rename global_ovf_ctrl_mask to global_status_mask
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Fri, 2 Jun 2023 18:20:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DCE1BB;
+        Fri,  2 Jun 2023 15:20:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E1E161EF1;
+        Fri,  2 Jun 2023 22:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDE4C433D2;
+        Fri,  2 Jun 2023 22:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685744433;
+        bh=ARyPoi7kYarpVw7JYT8TRHRJ03CAZL5ro3FtDi8lX58=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=epc/06WTuFNz6XULfL2XX0PsRI7mMHpwrvq9vk/lI9/Ap4q6iEOtMrFkojjUcelfR
+         5ceSMIgZdv07ut21nQw8DZLQQsnPfUF7FufXmCYhTXx7e0Ll6CtMLx3cViEkiJTCn1
+         USlkzO0tO8ptJvrr+0DBbmWBRYCMLLA/+zb/6lXppzCcxI4X6gZLjcCb+DfEWA9N0J
+         6kH2V38VXgpTyKs4bVD9lr+5a+F0COuf94Vu1FLvG5g8nwBsCJMkQY7Idl2h+Kqi29
+         cLts9IDmtU2zYPPAKm4ix7Evpv2svgnBAStyHAkozZ9IyCrg5x6a4ymMjZDp9qfCAe
+         slU6E11r5hyyA==
+Date:   Fri, 2 Jun 2023 17:20:31 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Iain Lane <iain@orangesquash.org.uk>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v5 2/2] PCI: Don't assume root ports are power manageable
+Message-ID: <ZHprL3oavxW+tUsX@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530163947.230418-2-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,85 +62,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename global_ovf_ctrl_mask to global_status_mask to avoid confusion now
-that Intel has renamed GLOBAL_OVF_CTRL to GLOBAL_STATUS_RESET in PMU v4.
-GLOBAL_OVF_CTRL and GLOBAL_STATUS_RESET are the same MSR index, i.e. are
-just different names for the same thing, but the SDM provides different
-entries in the IA-32 Architectural MSRs table, which gets really confusing
-when looking at PMU v4 definitions since it *looks* like GLOBAL_STATUS has
-bits that don't exist in GLOBAL_OVF_CTRL, but in reality the bits are
-simply defined in the GLOBAL_STATUS_RESET entry.
+Hi Mario,
 
-No functional change intended.
+The patch itself looks fine, but since I don't have all the power
+management details in my head, it would help me a lot to make the
+description more concrete.
 
-Cc: Like Xu <like.xu.linux@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm_host.h |  2 +-
- arch/x86/kvm/vmx/pmu_intel.c    | 18 ++++++++++++++----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+On Tue, May 30, 2023 at 11:39:47AM -0500, Mario Limonciello wrote:
+> Using a USB keyboard or mouse to wakeup the system from s2idle fails when
+> that xHCI device is connected to a USB-C port for an AMD USB4 router.
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index fb9d1f2d6136..28bd38303d70 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -523,7 +523,7 @@ struct kvm_pmu {
- 	u64 global_status;
- 	u64 counter_bitmask[2];
- 	u64 global_ctrl_mask;
--	u64 global_ovf_ctrl_mask;
-+	u64 global_status_mask;
- 	u64 reserved_bits;
- 	u64 raw_event_mask;
- 	struct kvm_pmc gp_counters[KVM_INTEL_PMC_MAX_GENERIC];
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 741efe2c497b..fb96cbfc9ae8 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -427,7 +427,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		}
- 		break;
- 	case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
--		if (data & pmu->global_ovf_ctrl_mask)
-+		/*
-+		 * GLOBAL_OVF_CTRL, a.k.a. GLOBAL STATUS_RESET, clears bits in
-+		 * GLOBAL_STATUS, and so the set of reserved bits is the same.
-+		 */
-+		if (data & pmu->global_status_mask)
- 			return 1;
- 
- 		if (!msr_info->host_initiated)
-@@ -531,7 +535,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	pmu->reserved_bits = 0xffffffff00200000ull;
- 	pmu->raw_event_mask = X86_RAW_EVENT_MASK;
- 	pmu->global_ctrl_mask = ~0ull;
--	pmu->global_ovf_ctrl_mask = ~0ull;
-+	pmu->global_status_mask = ~0ull;
- 	pmu->fixed_ctr_ctrl_mask = ~0ull;
- 	pmu->pebs_enable_mask = ~0ull;
- 	pmu->pebs_data_cfg_mask = ~0ull;
-@@ -585,11 +589,17 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	counter_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
- 		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
- 	pmu->global_ctrl_mask = counter_mask;
--	pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
-+
-+	/*
-+	 * GLOBAL_STATUS and GLOBAL_OVF_CONTROL (a.k.a. GLOBAL_STATUS_RESET)
-+	 * share reserved bit definitions.  The kernel just happens to use
-+	 * OVF_CTRL for the names.
-+	 */
-+	pmu->global_status_mask = pmu->global_ctrl_mask
- 			& ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
- 			    MSR_CORE_PERF_GLOBAL_OVF_CTRL_COND_CHGD);
- 	if (vmx_pt_mode_is_host_guest())
--		pmu->global_ovf_ctrl_mask &=
-+		pmu->global_status_mask &=
- 				~MSR_CORE_PERF_GLOBAL_OVF_CTRL_TRACE_TOPA_PMI;
- 
- 	entry = kvm_find_cpuid_entry_index(vcpu, 7, 0);
+It sounds like the real issue is that "Root Ports in D3hot/D3cold may
+not support wakeup", and the USB, xHCI, USB-C, AMD USB4 router bits
+are probably not really relevant.  And hopefully even the "AMD
+platforms" mentioned below is not relevant.
 
-base-commit: b9846a698c9aff4eb2214a06ac83638ad098f33f
--- 
-2.41.0.rc2.161.g9c6817b8e7-goog
+> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> all PCIe ports go into D3 during s2idle.
+> 
+> When specific root ports are put into D3 over s2idle on some AMD platforms
+> it is not possible for the platform to properly identify wakeup sources.
+> This happens whether the root port goes into D3hot or D3cold.
 
+Can we connect this to a spec so it's not just the empirical "some AMD
+platforms work like X" observation?
+
+"s2idle" is meaningful on the power management side of the house, but
+it doesn't appear in PCI or ACPI specs, so I don't know what it means
+here.  I assume the D3hot/D3cold state of the Root Port is the
+critical factor, regardless of how it got there.
+
+> Comparing registers between Linux and Windows 11 this behavior to put
+> these specific root ports into D3 at suspend is unique to Linux. On an
+> affected system Windows does not put those specific root ports into D3
+> over Modern Standby.
+> 
+> Windows avoids putting Root Ports that are not power manageable (e.g do
+> not have platform firmware support) into low power states.
+
+The Windows behavior was probably useful to you in debugging, but I
+don't really care about these Windows details because I don't think
+they help us maintain this in the future.
+
+> Linux shouldn't assume root ports support D3 just because they're on a
+> machine newer than 2015, the ports should also be deemed power manageable.
+> Add an extra check explicitly for root ports to ensure D3 isn't selected
+> for them if they are not power-manageable through platform firmware.
+
+But I *would* like to know specifically what "power manageable" means
+here.  I might naively assume that a device with the PCI Power
+Management Capability is "power manageable", and that if PME_Support
+includes D3hot and D3cold, we're good to go.  But obviously it's more
+complicated than that, and I'd like to cite the spec that mentions the
+actual things we need here.
+
+> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v4->v5:
+>  * Add tags
+>  * Fix title
+>  * Adjust commit message
+> v3->v4:
+>  * Move after refactor
+> ---
+>  drivers/pci/pci.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index d1fa040bcea7..d293db963327 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3015,6 +3015,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+>  	if (dmi_check_system(bridge_d3_blacklist))
+>  		return false;
+>  
+> +	/*
+> +	 * It's not safe to put root ports that don't support power
+> +	 * management into D3.
+
+I assume "it's not safe" really means "Root Ports in D3hot/D3cold may
+not be able to signal PME interrupts unless ... <mumble> platform
+firmware <mumble> e.g., ACPI method <mumble> ..."
+
+Can we include some of those hints here?
+
+> +	 */
+> +	if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
+> +	    !platform_pci_power_manageable(bridge))
+> +		return false;
+> +
+>  	/*
+>  	 * It should be safe to put PCIe ports from 2015 or newer
+>  	 * to D3.
+> -- 
+> 2.34.1
+> 
