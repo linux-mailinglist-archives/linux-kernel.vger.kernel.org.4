@@ -2,87 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E1E720AA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B421E720AB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236158AbjFBU6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S236418AbjFBVAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236351AbjFBU6o (ORCPT
+        with ESMTP id S236010AbjFBVA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:58:44 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CADE44
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:58:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so3680815a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 13:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685739522; x=1688331522;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lEOehxHolb8X5C6iXhr+EWaD62m3RLxWc7FOFaBtkZ8=;
-        b=dHoGUlGb6XDm2/Otv+ZRHMw+mt1C/1deZYgmb1PbQDWcaUrmU2KmSAc2kc2BTjcEz2
-         NVc7Xgvx3W/QvWW+44JfAtHoxd1VbKB7KChHIbhaEnSuiSn2NptrvubUZkLhtXF0Z3N/
-         pLFeC99wzH7h4avZxAHDNCaTWNG66rdKwJospxaGXQ66eg+eDbMAFnTfW6PhYM5bIhR+
-         bFc1eqdXjHS0/bbevi0iBBmuyG5m+Yg1Sjkc5eXPPCP0MIAziQzo5OPzx7bnJLMuPmAH
-         C3m7/33P7BTRIEzOnELysCS3xEzRJY7vIPqDf24y+JQiYVE9kG0cs39LHmSxDbcqGFKO
-         JWdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685739522; x=1688331522;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lEOehxHolb8X5C6iXhr+EWaD62m3RLxWc7FOFaBtkZ8=;
-        b=ZBoBtm9bmN95Gs/B3RQjbQgm3+ZQjPbOcvdhGIHoz/giW3paErdLlbdf/l5HtWyXkF
-         LPNKXuiP0WGo9vcZLC7LZ+7Iy0Cr4pYPFa05mdZVcTXnlO4xwQsurH9Yj/PDGiegt/k2
-         4+GJCl7G5So4RcP2BMHhlPPbuQCaH5w8PEMVWSA09m1HzkbuxCp2GMqgKX4pjP1uhjDs
-         rWiNRrNNKo8hguD3L/VI8AuOpfcovpADd9rAIBcT8ZBoyVKHUDCCEDftjwZSEc+tHPYd
-         zGU03u6qpYcnD9LM1xKl/aSAvP+uHJhxMIIYjxX/38LmD0LWWuajHLCEwc71qQI66IH0
-         I0Rw==
-X-Gm-Message-State: AC+VfDxy4NMPC4d0JElYOO+rVMMixKZx1LXmzFQKZWfiFv0SKx6Pugw2
-        PDirVqermBjREJJPX4/QsYcnsS49QJt0mwn1yzCJkQ==
-X-Google-Smtp-Source: ACHHUZ6T+VfpFr7aausPLCtKE/YyzZKqrUzoefeK1VCPalyfhekvDguhrF2kEC0Zgzs2X2kV0gHIegw+Vf9hSLzZ6Sk=
-X-Received: by 2002:a17:907:9449:b0:96f:608c:5bdf with SMTP id
- dl9-20020a170907944900b0096f608c5bdfmr11859960ejc.64.1685739521701; Fri, 02
- Jun 2023 13:58:41 -0700 (PDT)
+        Fri, 2 Jun 2023 17:00:29 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85C819B;
+        Fri,  2 Jun 2023 14:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
+        Resent-Message-ID:In-Reply-To:References;
+        bh=qRgq5U/n9Ip9t5IBpxq+Q3tveoCjRKpwVurL75b8pPY=; t=1685739626; x=1686949226; 
+        b=vTqJotCK7xpxTZoS9CJTIV358rzDwcnvSD6igpgFCaMBzRGk39c9Nravr0ETyW6xgw35CrsoBbS
+        icIHGA0rNrUb+g1oISrYMCn3vKy+KWoonsg9jLOpTu8GT7r6BSHwwNRwvIlRZOPzwsgUsNVt14GIz
+        eTG6uddN9cbWyGpS/gA0g4FtaEiPO9deac+a0xJ5NSqiKWpotQGKJfiQRS9sb/+rCzxFMMnZyx4OK
+        gGZiUxYBwFYkm2Ip4cadhb5eKEyG03gLvTjEzH7H2zcf+ykLDPrvMQFjFsT6AhenZHV8vGvwr//Wq
+        gd11Fq9D4KbqNx99EIRIXiBj+bnRRCe9HKnw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1q5Bsk-00BgEs-1p;
+        Fri, 02 Jun 2023 23:00:22 +0200
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 1/2] kernel-doc: don't let V=1 change outcome
+Date:   Fri,  2 Jun 2023 23:00:13 +0200
+Message-Id: <20230602230014.a435aab03cee.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230602010550.785722-1-seanjc@google.com> <C8324338-FC07-454E-9A5A-1785141FEAB3@nutanix.com>
- <CALMp9eTtkBL3Fb7Dq60go6CL+zGODNn0TTavr436Q-+=mpVFMA@mail.gmail.com>
-In-Reply-To: <CALMp9eTtkBL3Fb7Dq60go6CL+zGODNn0TTavr436Q-+=mpVFMA@mail.gmail.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Fri, 2 Jun 2023 13:58:05 -0700
-Message-ID: <CAL715WKm4t=y_UZZSZkd2=QPwXL8n-KnWzBS4A-ZJLQaWb0RKQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: Use cpu_feature_enabled() for PKU instead of #ifdef
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Jon Kohler <jon@nutanix.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> As we move towards enabling PKRU on the host, due to some customer
-> requests, I have to wonder if PKRU-disabled is the norm.
->
-> In other words, is this a likely() or unlikely() optimization?
+From: Johannes Berg <johannes.berg@intel.com>
 
-I think it should be likely() as PKU was introduced very early in the
-Skylake-SP server cores many years ago. Today I think all recent
-client CPUs should have PKU on default if I am not mistaken. So yeah,
-adding a likely() probably should help prevent the compiler from
-evicting this code chunk to the end of function.
+The kernel-doc script currently reports a number of issues
+only in "verbose" mode, but that's initialized from V=1
+(via KBUILD_VERBOSE), so if you use KDOC_WERROR=1 then
+adding V=1 might actually break the build. This is rather
+unexpected.
 
-Thanks.
--Mingwei
+Change kernel-doc to not change its behaviour wrt. errors
+(or warnings) when verbose mode is enabled, but rather add
+separate warning flags (and -Wall) for it.
+
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+ scripts/kernel-doc | 41 ++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 36 insertions(+), 5 deletions(-)
+
+diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+index 2486689ffc7b..1eb1819fbe13 100755
+--- a/scripts/kernel-doc
++++ b/scripts/kernel-doc
+@@ -23,7 +23,7 @@ kernel-doc - Print formatted kernel documentation to stdout
+ 
+ =head1 SYNOPSIS
+ 
+- kernel-doc [-h] [-v] [-Werror]
++ kernel-doc [-h] [-v] [-Werror] [-Wreturn] [-Wshort-description] [-Wcontents-before-sections] [-Wall]
+    [ -man |
+      -rst [-sphinx-version VERSION] [-enable-lineno] |
+      -none
+@@ -133,6 +133,9 @@ my $dohighlight = "";
+ 
+ my $verbose = 0;
+ my $Werror = 0;
++my $Wreturn = 0;
++my $Wshort_desc = 0;
++my $Wcontents_before_sections = 0;
+ my $output_mode = "rst";
+ my $output_preformatted = 0;
+ my $no_doc_sections = 0;
+@@ -191,6 +194,24 @@ if (defined($ENV{'KDOC_WERROR'})) {
+ 	$Werror = "$ENV{'KDOC_WERROR'}";
+ }
+ 
++if (defined($ENV{'KDOC_WRETURN'})) {
++	$Wreturn = "$ENV{'KDOC_WRETURN'}";
++}
++
++if (defined($ENV{'KDOC_WSHORT_DESC'})) {
++	$Wshort_desc = "$ENV{'KDOC_WSHORT_DESC'}";
++}
++
++if (defined($ENV{'KDOC_WCONTENTS_BEFORE_SECTION'})) {
++	$Wcontents_before_sections = "$ENV{'KDOC_WCONTENTS_BEFORE_SECTION'}";
++}
++
++if (defined($ENV{'KDOC_WALL'})) {
++	$Wreturn = "$ENV{'KDOC_WALL'}";
++	$Wshort_desc = "$ENV{'KDOC_WALL'}";
++	$Wcontents_before_sections = "$ENV{'KDOC_WALL'}";
++}
++
+ # Generated docbook code is inserted in a template at a point where
+ # docbook v3.1 requires a non-zero sequence of RefEntry's; see:
+ # https://www.oasis-open.org/docbook/documentation/reference/html/refentry.html
+@@ -318,6 +339,16 @@ while ($ARGV[0] =~ m/^--?(.*)/) {
+ 	$verbose = 1;
+     } elsif ($cmd eq "Werror") {
+ 	$Werror = 1;
++    } elsif ($cmd eq "Wreturn") {
++	$Wreturn = 1;
++    } elsif ($cmd eq "Wshort-desc") {
++	$Wshort_desc = 1;
++    } elsif ($cmd eq "Wcontents-before-sections") {
++	$Wcontents_before_sections = 1;
++    } elsif ($cmd eq "Wall") {
++        $Wreturn = 1;
++        $Wshort_desc = 1;
++	$Wcontents_before_sections = 1;
+     } elsif (($cmd eq "h") || ($cmd eq "help")) {
+ 		pod2usage(-exitval => 0, -verbose => 2);
+     } elsif ($cmd eq 'no-doc-sections') {
+@@ -1748,9 +1779,9 @@ sub dump_function($$) {
+     # This check emits a lot of warnings at the moment, because many
+     # functions don't have a 'Return' doc section. So until the number
+     # of warnings goes sufficiently down, the check is only performed in
+-    # verbose mode.
++    # -Wreturn mode.
+     # TODO: always perform the check.
+-    if ($verbose && !$noret) {
++    if ($Wreturn && !$noret) {
+ 	    check_return_section($file, $declaration_name, $return_type);
+     }
+ 
+@@ -2054,7 +2085,7 @@ sub process_name($$) {
+ 	    $state = STATE_NORMAL;
+ 	}
+ 
+-	if (($declaration_purpose eq "") && $verbose) {
++	if (($declaration_purpose eq "") && $Wshort_desc) {
+ 	    emit_warning("${file}:$.", "missing initial short description on line:\n$_");
+ 	}
+ 
+@@ -2103,7 +2134,7 @@ sub process_body($$) {
+ 	}
+ 
+ 	if (($contents ne "") && ($contents ne "\n")) {
+-	    if (!$in_doc_sect && $verbose) {
++	    if (!$in_doc_sect && $Wcontents_before_sections) {
+ 		emit_warning("${file}:$.", "contents before sections\n");
+ 	    }
+ 	    dump_section($file, $section, $contents);
+-- 
+2.40.1
+
