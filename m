@@ -2,195 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08E271F8DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5CA71F8D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbjFBDUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 23:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        id S233350AbjFBDT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 23:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbjFBDUL (ORCPT
+        with ESMTP id S233497AbjFBDTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 23:20:11 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F394136;
-        Thu,  1 Jun 2023 20:20:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685676007; x=1717212007;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tp1pRxIXNV5sIRotnZf5vbQ/Cdchz8UTj+wy3MPNfDo=;
-  b=BMRsMwjj9g/yEPFh94H8/V2vjEaTsOTz6QuKQrfBHJEFdcFyfQW+o0CB
-   El1KF1LclYsUBEENA9jhjrvbfi0QNfmBZ2RdMMeud044+q1uOjE2IUxk/
-   m0yvhMHGmpuXYApll7qOYRoW7wInAjWpvfDqttF7EBQnT3dN2Fic/ei9F
-   OHJ+WS+nWV4FFeHLZJ9WdkrqKF4AMPxqLxAH9L6vsTHwfzB1A3fNFfEXW
-   sn/xxvCJvOmKAdqP2RRh62qfWp5SWJtQ3HJ5Tur45cnCEiwq+62Uw5NTU
-   lDTdN5hRsicZlXMb/kV8oPd1qGCaYvKn0XRanDBDHHxs7Z0uD0GFZTTnr
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="442128806"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="442128806"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 20:20:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="881886189"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="881886189"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2023 20:20:03 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4vKd-000013-03;
-        Fri, 02 Jun 2023 03:20:03 +0000
-Date:   Fri, 2 Jun 2023 11:19:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Rafael Wysocki <rafael@kernel.org>, hdegoede@redhat.com,
-        linus.walleij@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v3 3/4] pinctrl: amd: Use pm_pr_dbg to show debugging
- messages
-Message-ID: <202306021143.5D8Xmq0r-lkp@intel.com>
-References: <20230601232923.1248-3-mario.limonciello@amd.com>
+        Thu, 1 Jun 2023 23:19:51 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACD018C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:19:48 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75b0b5c9eb8so156564385a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685675987; x=1688267987;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tGL4korHyAlLV6EY+V438PKb1cdQIlIg6Ev2NR37sNE=;
+        b=wmmCQNqcXHaJO6QcGvdy0Ry81qgY6h6oGR0kmHf6zQidpqlNra9VDWGh1F0ldbT54d
+         /GS5drcRU0DGjQ0eGaZH3vmbrvJLOGfk5uyD/TWP8RSfu/bwuQfKcmiuKRvCjiDPx6nz
+         k+aFCocudPhxpw1SsopAvCP6ulM8SXQBMhPWR3YpBAYmRjjV3FhdfbpcGuhZYYH4CVww
+         0WEs1sdnMnytxITGhfXdc/ZG6jwstLoXQd68ia7yI11b/oaCtU9BZ4Lbqo+ZDoD+7+/P
+         YFSVocLRhlHrTHW8Jq16ZIKwiFgiFMvdNFyXsofazTKN2S3dUm/DyRyLs+xf0AnXKtV7
+         C5dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685675987; x=1688267987;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tGL4korHyAlLV6EY+V438PKb1cdQIlIg6Ev2NR37sNE=;
+        b=EIDY14jSBTKVww7MhbbIbPbwv/9IjaiTsfe/wLtXTwx2oDFYt1PYgUqZpN8Tyzm94K
+         p0ACexM29m9ZQM+P1nV//bDY/gSErg+P36MTJt1gvYakoirPUNZqCwNYfnWVum2ST7JK
+         xBYjyDP2gYyjvsX599rZrPR8nohBavJ2oilAncNLqVuBydsOYHKxwx78xaC0WIXj0jOw
+         d0AbWviVJ75+y5YuGQ+go/2tfA2pN0xXB+1R3u0I6oRGBdImOAJe95KGlnJGTmnLaO2y
+         XOvQxl7f0u0R1j/mhr+rgKO1zEBCsoUEfaVzhO1Tlcf/crevBsVlNGtne6psl1Rq7NVy
+         pqRw==
+X-Gm-Message-State: AC+VfDwK1qZ78e6apMsRxJjYwUA4OrUhhZi5Z5+wpBfjCJk17LLwiQP4
+        e6msYVVwO5qjR27mTEXzVFIA
+X-Google-Smtp-Source: ACHHUZ4j4fvIpgSAF1Ls4caTohCkARl8PPno9aLi1e7TU+P5kg5Ig/JCHJ6Q8rQdHEHenoCUct7r5A==
+X-Received: by 2002:ac8:5a91:0:b0:3f4:f3e0:ee84 with SMTP id c17-20020ac85a91000000b003f4f3e0ee84mr12437798qtc.9.1685675987492;
+        Thu, 01 Jun 2023 20:19:47 -0700 (PDT)
+Received: from thinkpad ([117.217.186.123])
+        by smtp.gmail.com with ESMTPSA id j20-20020a635954000000b00519c3475f21sm181036pgm.46.2023.06.01.20.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 20:19:46 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 08:49:40 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 3/9] PCI: endpoint: Pass EPF device ID to the probe
+ function
+Message-ID: <20230602031940.GA5341@thinkpad>
+References: <20230601145718.12204-1-manivannan.sadhasivam@linaro.org>
+ <20230601145718.12204-4-manivannan.sadhasivam@linaro.org>
+ <65ed4b9f-a153-7c7b-6462-a5c11024a1f6@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230601232923.1248-3-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <65ed4b9f-a153-7c7b-6462-a5c11024a1f6@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On Fri, Jun 02, 2023 at 08:16:45AM +0900, Damien Le Moal wrote:
+> On 6/1/23 23:57, Manivannan Sadhasivam wrote:
+> > Currently, the EPF probe function doesn't get the device ID argument needed
+> > to correctly identify the device table ID of the EPF device.
+> > 
+> > When multiple entries are added to the "struct pci_epf_device_id" table,
+> > the probe function needs to identify the correct one. This is achieved by
+> > modifying the pci_epf_match_id() function to return the match ID pointer
+> > and passing it to the driver's probe function.
+> > 
+> > pci_epf_device_match() function can return bool based on the return value
+> > of pci_epf_match_id().
+> > 
+> > Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> [...]
+> 
+> >  static int pci_epf_device_match(struct device *dev, struct device_driver *drv)
+> > @@ -510,8 +510,12 @@ static int pci_epf_device_match(struct device *dev, struct device_driver *drv)
+> >  	struct pci_epf *epf = to_pci_epf(dev);
+> >  	struct pci_epf_driver *driver = to_pci_epf_driver(drv);
+> >  
+> > -	if (driver->id_table)
+> > -		return pci_epf_match_id(driver->id_table, epf);
+> > +	if (driver->id_table) {
+> > +		if (pci_epf_match_id(driver->id_table, epf))
+> > +			return true;
+> > +		else
+> > +			return false;
+> 
+> 		return pci_epf_match_id(driver->id_table, epf) != NULL;
+> 
+> is simpler. If you do not like this, at least drop the "else" as it is not
+> necessary at all.
+> 
 
-kernel test robot noticed the following build warnings:
+I settle for simplicity :) Also, there is a theoretical possibility of passing
+NULL as the id->name, so doesn't want to rule out that.
 
-[auto build test WARNING on 7736c431466abb54a2679dc257f739fddfa84295]
+> > +	}
+> >  
+> >  	return !strcmp(epf->name, drv->name);
+> >  }
+> > @@ -520,13 +524,15 @@ static int pci_epf_device_probe(struct device *dev)
+> >  {
+> >  	struct pci_epf *epf = to_pci_epf(dev);
+> >  	struct pci_epf_driver *driver = to_pci_epf_driver(dev->driver);
+> > +	const struct pci_epf_device_id *id;
+> >  
+> >  	if (!driver->probe)
+> >  		return -ENODEV;
+> >  
+> >  	epf->driver = driver;
+> > +	id = pci_epf_match_id(driver->id_table, epf);
+> 
+> Not sure that the id variable is that useful.
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Add-pm_debug_messages-for-LPS0-_DSM-state-tracking/20230602-073044
-base:   7736c431466abb54a2679dc257f739fddfa84295
-patch link:    https://lore.kernel.org/r/20230601232923.1248-3-mario.limonciello%40amd.com
-patch subject: [PATCH v3 3/4] pinctrl: amd: Use pm_pr_dbg to show debugging messages
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230602/202306021143.5D8Xmq0r-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/61f4d28eda8f5bf19179080626ec4f1276c1cbae
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Add-pm_debug_messages-for-LPS0-_DSM-state-tracking/20230602-073044
-        git checkout 61f4d28eda8f5bf19179080626ec4f1276c1cbae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/
+Thought it makes the code clear but looking again, it doesn't hurt to call match
+directly in probe. Will change it in next iteration.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306021143.5D8Xmq0r-lkp@intel.com/
+- Mani
 
-All warnings (new ones prefixed by >>):
-
-   drivers/pinctrl/pinctrl-amd.c: In function 'do_amd_gpio_irq_handler':
->> drivers/pinctrl/pinctrl-amd.c:639:28: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
-     639 |                         if (regval & PIN_IRQ_PENDING)
-         |                            ^
-
-
-vim +/else +639 drivers/pinctrl/pinctrl-amd.c
-
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  608  
-2d54067fcd23aa Mario Limonciello         2021-10-31  609  static bool do_amd_gpio_irq_handler(int irq, void *dev_id)
-dbad75dd1f25e0 Ken Xue                   2015-03-10  610  {
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  611  	struct amd_gpio *gpio_dev = dev_id;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  612  	struct gpio_chip *gc = &gpio_dev->gc;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  613  	unsigned int i, irqnr;
-dbad75dd1f25e0 Ken Xue                   2015-03-10  614  	unsigned long flags;
-10ff58aa3c2e2a Ben Dooks (Codethink      2019-10-22  615) 	u32 __iomem *regs;
-2d54067fcd23aa Mario Limonciello         2021-10-31  616  	bool ret = false;
-10ff58aa3c2e2a Ben Dooks (Codethink      2019-10-22  617) 	u32  regval;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  618  	u64 status, mask;
-dbad75dd1f25e0 Ken Xue                   2015-03-10  619  
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  620  	/* Read the wake status */
-229710fecdd805 Julia Cartwright          2017-03-09  621  	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  622  	status = readl(gpio_dev->base + WAKE_INT_STATUS_REG1);
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  623  	status <<= 32;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  624  	status |= readl(gpio_dev->base + WAKE_INT_STATUS_REG0);
-229710fecdd805 Julia Cartwright          2017-03-09  625  	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-dbad75dd1f25e0 Ken Xue                   2015-03-10  626  
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  627  	/* Bit 0-45 contain the relevant status bits */
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  628  	status &= (1ULL << 46) - 1;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  629  	regs = gpio_dev->base;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  630  	for (mask = 1, irqnr = 0; status; mask <<= 1, regs += 4, irqnr += 4) {
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  631  		if (!(status & mask))
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  632  			continue;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  633  		status &= ~mask;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  634  
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  635  		/* Each status bit covers four pins */
-dbad75dd1f25e0 Ken Xue                   2015-03-10  636  		for (i = 0; i < 4; i++) {
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  637  			regval = readl(regs + i);
-1d66e379731f79 Mario Limonciello         2022-10-13  638  
-1d66e379731f79 Mario Limonciello         2022-10-13 @639  			if (regval & PIN_IRQ_PENDING)
-61f4d28eda8f5b Mario Limonciello         2023-06-01  640  				pm_pr_dbg("GPIO %d is active: 0x%x",
-2d54067fcd23aa Mario Limonciello         2021-10-31  641  					  irqnr + i, regval);
-1d66e379731f79 Mario Limonciello         2022-10-13  642  
-1d66e379731f79 Mario Limonciello         2022-10-13  643  			/* caused wake on resume context for shared IRQ */
-1d66e379731f79 Mario Limonciello         2022-10-13  644  			if (irq < 0 && (regval & BIT(WAKE_STS_OFF)))
-2d54067fcd23aa Mario Limonciello         2021-10-31  645  				return true;
-2d54067fcd23aa Mario Limonciello         2021-10-31  646  
-8bbed1eef001fd Daniel Kurtz              2018-07-16  647  			if (!(regval & PIN_IRQ_PENDING) ||
-8bbed1eef001fd Daniel Kurtz              2018-07-16  648  			    !(regval & BIT(INTERRUPT_MASK_OFF)))
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  649  				continue;
-f460c70125bcb1 Sebastian Andrzej Siewior 2022-09-19  650  			generic_handle_domain_irq_safe(gc->irq.domain, irqnr + i);
-6afb10267c1692 Daniel Drake              2017-10-02  651  
-6afb10267c1692 Daniel Drake              2017-10-02  652  			/* Clear interrupt.
-6afb10267c1692 Daniel Drake              2017-10-02  653  			 * We must read the pin register again, in case the
-6afb10267c1692 Daniel Drake              2017-10-02  654  			 * value was changed while executing
-a9cb09b7be84a7 Marc Zyngier              2021-05-04  655  			 * generic_handle_domain_irq() above.
-d21b8adbd475db Daniel Drake              2019-08-14  656  			 * If we didn't find a mapping for the interrupt,
-d21b8adbd475db Daniel Drake              2019-08-14  657  			 * disable it in order to avoid a system hang caused
-d21b8adbd475db Daniel Drake              2019-08-14  658  			 * by an interrupt storm.
-6afb10267c1692 Daniel Drake              2017-10-02  659  			 */
-6afb10267c1692 Daniel Drake              2017-10-02  660  			raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-6afb10267c1692 Daniel Drake              2017-10-02  661  			regval = readl(regs + i);
-d21b8adbd475db Daniel Drake              2019-08-14  662  			if (irq == 0) {
-d21b8adbd475db Daniel Drake              2019-08-14  663  				regval &= ~BIT(INTERRUPT_ENABLE_OFF);
-d21b8adbd475db Daniel Drake              2019-08-14  664  				dev_dbg(&gpio_dev->pdev->dev,
-d21b8adbd475db Daniel Drake              2019-08-14  665  					"Disabling spurious GPIO IRQ %d\n",
-d21b8adbd475db Daniel Drake              2019-08-14  666  					irqnr + i);
-d21b8adbd475db Daniel Drake              2019-08-14  667  			}
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  668  			writel(regval, regs + i);
-6afb10267c1692 Daniel Drake              2017-10-02  669  			raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-2d54067fcd23aa Mario Limonciello         2021-10-31  670  			ret = true;
-dbad75dd1f25e0 Ken Xue                   2015-03-10  671  		}
-dbad75dd1f25e0 Ken Xue                   2015-03-10  672  	}
-2d54067fcd23aa Mario Limonciello         2021-10-31  673  	/* did not cause wake on resume context for shared IRQ */
-2d54067fcd23aa Mario Limonciello         2021-10-31  674  	if (irq < 0)
-2d54067fcd23aa Mario Limonciello         2021-10-31  675  		return false;
-dbad75dd1f25e0 Ken Xue                   2015-03-10  676  
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  677  	/* Signal EOI to the GPIO unit */
-229710fecdd805 Julia Cartwright          2017-03-09  678  	raw_spin_lock_irqsave(&gpio_dev->lock, flags);
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  679  	regval = readl(gpio_dev->base + WAKE_INT_MASTER_REG);
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  680  	regval |= EOI_MASK;
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  681  	writel(regval, gpio_dev->base + WAKE_INT_MASTER_REG);
-229710fecdd805 Julia Cartwright          2017-03-09  682  	raw_spin_unlock_irqrestore(&gpio_dev->lock, flags);
-dbad75dd1f25e0 Ken Xue                   2015-03-10  683  
-ba714a9c1dea85 Thomas Gleixner           2017-05-23  684  	return ret;
-dbad75dd1f25e0 Ken Xue                   2015-03-10  685  }
-dbad75dd1f25e0 Ken Xue                   2015-03-10  686  
+> >  
+> > -	return driver->probe(epf);
+> > +	return driver->probe(epf, id);
+> >  }
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+மணிவண்ணன் சதாசிவம்
