@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A68720813
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46346720816
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbjFBRCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
+        id S236912AbjFBRC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbjFBRCw (ORCPT
+        with ESMTP id S236913AbjFBRCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:02:52 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515501A4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:02:51 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb0cb2e67c5so3028684276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:02:51 -0700 (PDT)
+        Fri, 2 Jun 2023 13:02:53 -0400
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492BB1AD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:02:52 -0700 (PDT)
+Received: by mail-io1-xd4a.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so117570439f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:02:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685725370; x=1688317370;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yIiKOLGKczROWKwulUVtZ2M9/BiqL1vWmyT9WxaSM60=;
-        b=pgEp6VvqA7aBhrJuKZzQ4zBVM03oPZHiD+4ylV7AFMyKOKMZY+kiaxDz5l0Ypk+iO2
-         MUF7c2eCaBHPpjtDiRh4GgjpTtJsKr/1ezP7uIgCNumlJZWWgEbgxSkLBGDTITBINiP0
-         h/+lY9p5RUWI1mm3RgI0TT6fMDQdeLaT406FqAvUvjluat/s5sl9h9AAkK/1H2Hx1sPb
-         TIkOmqDFjvVeSWe6Fnaup3uBKk9/wxZeRRXAEAdCIgNMknlLeaSgWKp6DPYDAKTDliwK
-         r7EIWTuWCPHj9hwA5oafkO5VzVh8JjN1pTIPxJYZHGvkqCYUIOhocoXxB+jqaTvCi1vw
-         DqAw==
+        d=google.com; s=20221208; t=1685725371; x=1688317371;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZrtPESLe1mA5daPGrUc+60GXQlGnhOLsAUJu36d7rQ=;
+        b=Qq3RLBS2mk0SnALShNCtm+TQlg+XH/AHekNH7/7QlGAv3Kwq/6fPi6+CvfRavpIs4G
+         RjyTeXe+0RGaZAufFJ8EvFNFa8pOjeTTjjb8sD9rItu1zRExurnNtBOtX6w1QJedD+7I
+         afR/Bn/wNwB2NO7fNerz8ES6XgY4MyN711P03otg/ynXmiG0KHjiA/NCjGChETeqa8Sq
+         PPIW2euhDqJ/s3oFviuWT4EcIxz18d4QuSIOimUwO4KwNQ9xdjmAWN3FZO+WhB+n8/fm
+         Z+b1LzGrVLf99x0xH1gni5y4fL0Jf+jIx8h2sro9EeSCJDdt5AbgU5s/l97G1yjsUE5q
+         7IyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685725370; x=1688317370;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yIiKOLGKczROWKwulUVtZ2M9/BiqL1vWmyT9WxaSM60=;
-        b=dAXdyvLNFO+AgEHfMVRMyKmx7F1C2IbIjMZwp0Kw8AFEKRFEoi0zr2L/3sN0M8ij5o
-         pSJPaQP0in9iXxVEo8olTf9MZF8W7r2a8y9VfOmkYhsO793kmrJEpQmsArGBkWoEKvhc
-         rSCRMlkXFwEPzhce5etsCSHgb+M+ljjqCd/iiQOgs55MU9NnUYvtmcMATQvPZo7JleVQ
-         TkEmNb+PNy229rbszZodqXvo/yJZJRv++wtOVYdQiAvy4TPoLO2fQUx1hRO9A+5/uJQ9
-         nwHtHJN1CMoZZlKru2P2fPSiPuxKpS3+6wHFvSnWp3g61I2l+qF9QdQ8WOk3DB8JtZUz
-         chAQ==
-X-Gm-Message-State: AC+VfDyAe0OWhNqvVd2HY+gSOwxDjj81rf+beOdRqWcYXQeQW/lLuG76
-        q/9MLrEhzlYrJEXIlNAlq9IBL+CMVbBvKKtTPQ==
-X-Google-Smtp-Source: ACHHUZ6Vu7NrmZDIrdvPM8A+x+HDDvlXsWN3Wbj3yjrPjyPq4Je9swBQszqmoLNylUJ2YOeY/0U1p8/9fWz27M9x5g==
+        d=1e100.net; s=20221208; t=1685725371; x=1688317371;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZrtPESLe1mA5daPGrUc+60GXQlGnhOLsAUJu36d7rQ=;
+        b=b8l+q3MjEoZExbEeHwSh4MJyHmjBDjz0GWjX10WqsCV4LIRcUo6uRu6G9qyCyn7wGv
+         X80Mnj+hKLHfrv9UwUYyjoUrXMufInvgEkoJ6aAeMR7IRkah1WBzKP87xBLKfhOtOmT1
+         rRgPwf03p65KKAYWUn+WRn13Ip22xY6q3dlzA3LOJmQEOblI6kZ+c6+ayn4JMYVItxcK
+         gmeZMCYQteBweac+ylqdYQEbCk0MPLcNLOULeOxP7qmcBz9NxOc7stR4SA2bVhjoHYum
+         +1Qd/rZn0sBQwbf2EYpDU2QIHQMfrmGdny5JdVv7eTsuGnR0oKBRPREph6yB1Pdbw4nf
+         zGFg==
+X-Gm-Message-State: AC+VfDxuJ7oJ/kVGHxi7tsIVHVrwVU1YSgc0AkeHusVL4zmFDz97m1oP
+        L6MGj4J3RzOE0I9QYOShgocO6C6/oAdQZhqSRg==
+X-Google-Smtp-Source: ACHHUZ7jQlp0MVeJbVOdhempnaGESwJq6ISHR98G4dlzn8EXHZtiMaS3iQFnqJ6k1wVSGZ9JZpTQJ2Y+ISmEsdfLAw==
 X-Received: from coltonlewis-kvm.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:14ce])
- (user=coltonlewis job=sendgmr) by 2002:a05:6902:114b:b0:bad:89:29d5 with SMTP
- id p11-20020a056902114b00b00bad008929d5mr1364181ybu.2.1685725370603; Fri, 02
- Jun 2023 10:02:50 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 17:01:44 +0000
+ (user=coltonlewis job=sendgmr) by 2002:a6b:5904:0:b0:766:6741:8849 with SMTP
+ id n4-20020a6b5904000000b0076667418849mr1203200iob.3.1685725371731; Fri, 02
+ Jun 2023 10:02:51 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 17:01:45 +0000
+In-Reply-To: <20230602170147.1541355-1-coltonlewis@google.com>
 Mime-Version: 1.0
+References: <20230602170147.1541355-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602170147.1541355-1-coltonlewis@google.com>
-Subject: [PATCH 0/3] Relax break-before-make use with FEAT_BBM
+Message-ID: <20230602170147.1541355-2-coltonlewis@google.com>
+Subject: [PATCH 1/3] arm64: Add a capability for FEAT_BBM level 2
 From:   Colton Lewis <coltonlewis@google.com>
 To:     kvm@vger.kernel.org
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -60,7 +62,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Zenghui Yu <yuzenghui@huawei.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, Colton Lewis <coltonlewis@google.com>
+        kvmarm@lists.linux.dev, Ricardo Koller <ricarkol@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,42 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently KVM follows the lengthy break-before-make process every time
-the page size changes, which requires KVM to do a broadcast TLB
-invalidation and data serialization for every affected page table
-entry. This is expensive.
+From: Ricardo Koller <ricarkol@google.com>
 
-FEAT_BBM Level 2 support precludes the need to follow the whole
-process when page size is the only thing that changed. This series
-detects said support and avoids the unnecessary expensive operations,
-speeding up the execution of the stage2 page table walkers.
+Add a new capability to detect "Stage-2 Translation table
+break-before-make" (FEAT_BBM) level 2.
 
-Considerable time and effort has been spent trying to measure the
-performance benefit, mainly using dirty_log_perf_test with huge pages,
-but nothing was seen that stood out from ordinary variation between
-runs. This is puzzling, but getting the series reviewed anyway may
-spark some ideas.
-
-This is based on kvmarm-6.4 + Ricardo's eager page splitting series
-[1] to cover the eager splitting case as well. Similar changes were
-originally part of that series but it was suggested FEAT_BBM should be
-its own series.
-
-[1] https://lore.kernel.org/kvmarm/20230426172330.1439644-1-ricarkol@google.com/
-
-Colton Lewis (2):
-  KVM: arm64: Clear possible conflict aborts
-  KVM: arm64: Skip break phase when we have FEAT_BBM level 2
-
-Ricardo Koller (1):
-  arm64: Add a capability for FEAT_BBM level 2
-
- arch/arm64/include/asm/esr.h   |  1 +
- arch/arm64/kernel/cpufeature.c | 11 +++++++
- arch/arm64/kvm/hyp/pgtable.c   | 58 ++++++++++++++++++++++++++++++----
- arch/arm64/kvm/mmu.c           |  6 ++++
+Signed-off-by: Ricardo Koller <ricarkol@google.com>
+---
+ arch/arm64/kernel/cpufeature.c | 11 +++++++++++
  arch/arm64/tools/cpucaps       |  1 +
- 5 files changed, 70 insertions(+), 7 deletions(-)
+ 2 files changed, 12 insertions(+)
 
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index c331c49a7d19c..c538060f7f66b 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -2455,6 +2455,17 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.min_field_value = 1,
+ 		.matches = has_cpuid_feature,
+ 	},
++	{
++		.desc = "Stage-2 Translation table break-before-make level 2",
++		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
++		.capability = ARM64_HAS_STAGE2_BBM2,
++		.sys_reg = SYS_ID_AA64MMFR2_EL1,
++		.sign = FTR_UNSIGNED,
++		.field_pos = ID_AA64MMFR2_EL1_BBM_SHIFT,
++		.field_width = 4,
++		.min_field_value = 2,
++		.matches = has_cpuid_feature,
++	},
+ 	{
+ 		.desc = "TLB range maintenance instructions",
+ 		.capability = ARM64_HAS_TLB_RANGE,
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 40ba95472594d..010aca1892642 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -41,6 +41,7 @@ HAS_PAN
+ HAS_RAS_EXTN
+ HAS_RNG
+ HAS_SB
++HAS_STAGE2_BBM2
+ HAS_STAGE2_FWB
+ HAS_TIDCP1
+ HAS_TLB_RANGE
 --
 2.41.0.rc0.172.g3f132b7071-goog
