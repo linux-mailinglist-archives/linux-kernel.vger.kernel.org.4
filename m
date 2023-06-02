@@ -2,196 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1441D720A66
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB12720A69
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235937AbjFBUif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S236119AbjFBUiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 16:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbjFBUid (ORCPT
+        with ESMTP id S230341AbjFBUit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:38:33 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6E7E43;
-        Fri,  2 Jun 2023 13:38:32 -0700 (PDT)
+        Fri, 2 Jun 2023 16:38:49 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2071.outbound.protection.outlook.com [40.107.95.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6FE43;
+        Fri,  2 Jun 2023 13:38:47 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L6SEXgzAduki+3jKqWuJNwFILCnx9GELyxmGJN8cZ2b8CmFLnFURI1csyV01KBt+cOSjOd84Sh89FcXw56Asi3KHJw/R7f159Yzm9DlXfg7MMS1l03yceUdexue0R361P/TT9BAmLSDPlz1ZfGhkNN2effW3jiRRgnwDsTwrh6JFG6acyliC0QHzlRVeC+6ZjyR/KFc/eglUU3Xbn5IIcAF3U8ZSa2/rSc3r3AxgmnmYtzWbgNSqPphLqQMaQmHsgX1fNexsd+sLZPMSgT3WKDRvfnxkFKA1rHwA4Y3zt0phB9vpq46oV3fjzhAK88LbQfnUc+AiK84TVJK2kT74vA==
+ b=Bpa1Qz8mQ48C+tccseUuvXb5rPNdxiKz2H7pDe+qr8ge9MaZwwXWPpH+bhkbtT6uXIqnbaz+KPZ05C+kvbYDVKB730aEPzOY7pswfB1ESD2G+k7tvuPG5LSIMcEKr4c1VnjGrgV8ls58RPfXCiK711LmKROrrmzAE6BKal8vRZrSgXqz1F6RZ+tuUjzXBelG/ckyOvvLFLqDpoPLgx7LPkSaoY4h6z9TvjyIqQc/PfjVKQug6kT2YpeLPUWMm85ZQgWEP2Mwt6O885v7TJiQXSYw8jjCd0hXa1nbUGkDd+hif/Gkp06QClw1HHMNPQcbHXCHQWWRWwGtYvRdf4nT6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sfS+amfvbbtv/GkOixS8iB+N/oETZdF4OlJ7YIdYTAE=;
- b=TJ9xdb37/UWw73iaWJYjkuNAdxVF+/VBHvDCrXIbnLXdj8cYE3Rhs852GlqqtgtW7wWjilbFDob3q9IryLNQkpJfEIZQVKfolwqgrGK9l4bXIYIJb3pwQGV0nhhUku8HmEnAgxxtBQVgfdsXzhYH9rwNblrVSFnd/vN2wBSSobEkxG8N5fiI31ZbOl8ImXMf9F/PvHFrIaumujETuXEnKnutKmlxgI3fYwf1RzPCa1dF8Y/Jd2WqPwmzjqFRJggZRJz/ggzRs/C5+ZWVpHExzoLt40LaNjAjiWrsxajX9/uVZ2K3GfWqatI5gT21OCzUP6eso+bRh6tgGcthJqadhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=w8K/2jshE2AUW/bld4yiVdQivxkt4H5/Bftkbr8/0BM=;
+ b=Sfl1KSJgJ8lGOZkLYCvo3rBgkLNDpGhbIosNQXmDp5WzEKsLcvxI90hViaFD0ijq+pbpdmSTUzr+7d0G/8VhNzyWM1DN29J9UTWP5q4GTnrzgsCub7r39s1LI8DKooKxM9RADYpVMedvswRZ32YwZrl+zijtay3jEWd6Q8e70KhqrE8efP/45sfMfmuCOWR+zmNMMuGwutvqQq9EmwnO9F+ZYMa3HNuyMhcDvt/rsLZG9o3nl2O7oBWQ2mvADFfDvQ4T9hN21h7lMqdsxs5inRmfAxWMkijczUyMrWcGA4euIgYmvQw1UwZVuf+ySdFuowaymSYOGmF+Vm4fiO5TsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sfS+amfvbbtv/GkOixS8iB+N/oETZdF4OlJ7YIdYTAE=;
- b=fBug8HOebQavJ1KePa3LO9EczVfLeAFr9WsuYdlWGEqq4dIjERshQ1Z/FSWo5hvPiWU+b1qptBCIWfDPfwHdU21AgrhYXyH9i4Ow4G4HkNFYuo68ksl47Pou0xqwZqHjdimoL7bh954Kj2LVz0QaO3z5hwvn2gqDLz4givEkZFKjnemoNo2sievl9Dxp6z3V0ltM6O0KW6Y5wxlB25jYzKm/cJSQrh85lMfOixlmSl8YUtw8woOq8KZEgdrxGb9ULPy6b9SUGxdXqxlDq/1sxVIHnjNQk+mvfwRD6BG3s2FDOrDYYm0dRafbw3k+JUh9txrTzM9thpjkMD32Orx02Q==
-Received: from BN9PR03CA0382.namprd03.prod.outlook.com (2603:10b6:408:f7::27)
- by CH3PR12MB8755.namprd12.prod.outlook.com (2603:10b6:610:17e::16) with
+ bh=w8K/2jshE2AUW/bld4yiVdQivxkt4H5/Bftkbr8/0BM=;
+ b=fN+l+ww83MZmqz0dDQNlXt1AUdMuJJves74vb5uBGj7D1DdpnhkRIBNEvp08EltBqKAYpqX4xc1FBw8959G4FN0l51xPuo3CV29/ViKCLsOBiHvYEcpQSp1rqffQcPSWpV2qibJC8b7wPCMNgdgpr/i8vV63DfyO5GmgeAACACs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by IA0PR12MB8254.namprd12.prod.outlook.com (2603:10b6:208:408::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26; Fri, 2 Jun
- 2023 20:38:30 +0000
-Received: from BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::e4) by BN9PR03CA0382.outlook.office365.com
- (2603:10b6:408:f7::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
- Transport; Fri, 2 Jun 2023 20:38:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT068.mail.protection.outlook.com (10.13.177.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 20:38:30 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 13:38:23 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 13:38:22 -0700
-Message-ID: <6f845148-e180-822d-a54f-e2bb844d54f8@nvidia.com>
-Date:   Fri, 2 Jun 2023 13:38:21 -0700
-MIME-Version: 1.0
+ 2023 20:38:41 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::61f6:a95e:c41e:bb25]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::61f6:a95e:c41e:bb25%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
+ 20:38:41 +0000
+Message-ID: <bfe5bbac-37e2-6728-606a-c652bafad6b6@amd.com>
+Date:   Fri, 2 Jun 2023 15:38:37 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 05/12] selftests/mm: fix invocation of tests that are run
- via shell scripts
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 20/21] x86/efistub: Perform SNP feature test while
+ running in the firmware
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "Nathan Chancellor" <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-6-jhubbard@nvidia.com>
- <ead7d0db-6104-1d62-b3d0-f9ebb767af4d@redhat.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <ead7d0db-6104-1d62-b3d0-f9ebb767af4d@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+References: <20230602101313.3557775-1-ardb@kernel.org>
+ <20230602101313.3557775-21-ardb@kernel.org>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230602101313.3557775-21-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR2101CA0011.namprd21.prod.outlook.com
+ (2603:10b6:805:106::21) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT068:EE_|CH3PR12MB8755:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3b8d0f0-40f5-4dd3-80f2-08db63a9537b
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|IA0PR12MB8254:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4c42311-6a08-42dc-c6f6-08db63a959cc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I/9ffEllIPuZ1idk5ZqVS4IJKjaryHxWqu5MLTXATsg7NQHZ9+3U5XC6qc5+xe4IICewp1nFWm8HbRdWzdsRnxTidNZKQmg4UzE64Yn6rQGOy1rx6ciVjrYe2BMLQ6XN9SnInNfC6heiL6pbdeEEQesbTRuQuFIEunNENCfore8fXgKakzKLKRC2SpiAKIMomm1Nsvcr5n2NJu/in4upnwm3cIbr02IIJrXySBYbTdBWy6Rd4jWQ+TRtoaGcJT9nDmzRXqOcPvF+AtDZDAGHP9hfDJEhDk/dxL7KB1K3imY7LRe1O4M/x4Ab1LkSgRURNZPN7eUpmaRKSXuayfW6aGrQkTj+XSUf/9hAUfXWmQppVt5ArRKfU2T4o/9elrIPPPHc5R2Qo4dNLowc3Nl8tVEBY2rdx2luCKeYs5OYDHc0DBu4mGbqRYFAhf1dQd7EqjPpyzWH9k3THhSGmQiypP15jn2FTcpqFslpFKUdkdR3ySH/gHjryzc+3yJ7xbxMRoGF4AI0AtU/LkG83GfsD1LW0ksQBz9Dl5JImwD1ocZbkx1d07egdDAPXBxa6EwWM0RviZ1lb+ied6WObaCf79XIpV/T6lPtKMDqEG7ER+YGrjpJcCXq0eGgOvKdW7KJO2u/CAxVwvIJTK9XlL87aNjzcQp7M5tXX52CD/h+PKCuRWM3meHqDRMuTBLJxV7NeBymd2tc6nCanKOKdB/fkJjJrz8Ye/C86yANmmI7vPtmCzLjVtPmKvorNcKW3psiN5kr5wZ3vU6XF3fBe8cmTQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(136003)(451199021)(40470700004)(36840700001)(46966006)(478600001)(47076005)(40480700001)(2616005)(53546011)(36756003)(186003)(16526019)(26005)(83380400001)(426003)(336012)(36860700001)(40460700003)(316002)(8936002)(7636003)(4326008)(356005)(82740400003)(70206006)(70586007)(82310400005)(31696002)(86362001)(2906002)(5660300002)(8676002)(31686004)(16576012)(41300700001)(54906003)(110136005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 20:38:30.2407
+X-Microsoft-Antispam-Message-Info: 4S+yBP1juQV/xSQpWrfmR4iC7Cr9AbT9/mT6+9IgFNf+ZfvqW4M42ecTfJDy0xVD9jfi8R2HllynFugZj6s8MwF5xe2FN8FlAysCwwVDGnTGnZCKvWdPegG9HVCJSjL/wAcRnuYioAZuyDLBbQyzsHUGVcmBShjXXZVNfbhTZ5WThrfB3j0n37Fp2byTdbhEd2fPOLppPYoYu6RM0VtnKFRj1F0D2gL4PBRcsp09lbLbe3PQRntdDDEonFQbbreD+lXcBXHrRHCpR6FVNCm6B3eV2CIDAiWtooSgHLYuIhW+fRKdG7Z8zoLA4y+TKn0RT0kHc4k1mjgQZwuKmniFdTinUz1ATq79p1UjitksKBGgDy7MY+NVTz7jCpVUSHueRBiiHE4wBWg7MD2H6hPD0xR6RvJ9rTmMabiKwbtyvwf2e+M+FZsubOLhMQue7KfOhbj6oYcneorjmQ2rv8pnV3RbIsMtjlS85eAApVecW6WfSsjDAw6zPCtGg/Pcw/aluwneZEYF74Mcs8tFdtH7WZ0FkUPekAXxTERf81ZMXN3kDcT/vLDpvp5TaSDZAM/dk2b3KhUTwLQOwMaY6xfjbI7QACHTAQEubiFvtGEwkrLKlNBBZIxzgtyj87MU2DkKXqW/kQFu99UX8GCogaJmLA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(366004)(39860400002)(396003)(451199021)(36756003)(2616005)(83380400001)(2906002)(86362001)(31696002)(38100700002)(6486002)(41300700001)(316002)(6666004)(5660300002)(8676002)(8936002)(478600001)(54906003)(66476007)(66946007)(4326008)(31686004)(6506007)(6512007)(66556008)(26005)(53546011)(186003)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUxTM3BVRkRRK0lRMC9FMDhodVdpTmtQN1A1eXZKek1WOWhSL0tVNm5ISVds?=
+ =?utf-8?B?QUFPUTAvTXBnakltdG8zbXIxSjBadzIzZ0FIODFOSFhPdTJSblRub0VPcnF3?=
+ =?utf-8?B?WFFwNDNnM0szWWhZcGw3YWpLM1ZlRHBLRUZ2OHlxUUpnckFEaU5UZHJ4aUZ6?=
+ =?utf-8?B?R1B6aFFFcFlOcFppb1pJRDJqSnJ6RE1vb1J5UGxWZnBDRnZWTHlrdHFwTHpj?=
+ =?utf-8?B?N2twcGVCZGFvUURhaGM1K2p4alVTcVFRRHZDMmF6Qnc5UmM5aUh6b0gwQ21y?=
+ =?utf-8?B?WmM1RWJiSktDOVdoQjBVemlaVVBRZk9NV25qcHE5YnJ3SUJNZ0Q2V1ZVVzZV?=
+ =?utf-8?B?N0F3VlhJNUdNR2t6NDB3VHhWejN5cXZ1Skh4a1p2QUNSanhiYndrZW9INi9s?=
+ =?utf-8?B?VktydWw2djBVSGZyaXIrTHk0RmcyaVRBNEozNWlOWlQrK1k2YVk5UEV3eG9E?=
+ =?utf-8?B?Y2ZFMjZIUGlLcS9NSzMwNU42MXY4YTVsRmlvUW5zVzVtNkhwbXUyL3VLSjI5?=
+ =?utf-8?B?T1dKVitPUVIrUG1EblJqYmpNYlpuMy85KzdQdWlhalVmM3pvZk8xMFZSakJ5?=
+ =?utf-8?B?QWJQK1BZTFgzMTZrVE4rbXZyZ3hhR0pxWDI4RDQyQjFwSktIaE5xRTZHbC9x?=
+ =?utf-8?B?YnM1YVZPbDlwSm9SelZqbStPY3d2OWhZa0NCSkVtZExoMkVsSXF0Q2h3SE5x?=
+ =?utf-8?B?ZlBOUXU0K3hLWW4wODRNcHkvcVhSV2pIQStuQStycDNHcTRQYjU3NDdHcElh?=
+ =?utf-8?B?cm5qT09oWEcwYjU4Z3hYYjNkbloxYk4xbmRUWDNBb291VXFGZkxLcXNmbG83?=
+ =?utf-8?B?ZnRLU1FyMlpqZlFJTHJpWEpmQWgrNTFIYmt5QmFPZ2REMzJnQnZ0UHBZQ2E2?=
+ =?utf-8?B?MTBiRFE4VUtmbHcvK3NHOTM2TGtabXFJQmxWekpLL25JQlBWUHExRk5kVmdi?=
+ =?utf-8?B?WER4czRQeXhaMDN6MmV6MEk0RXlTeERFOWQ1QWRBRkw5V05KTndQalRsNEMy?=
+ =?utf-8?B?cVlFVkZpQTVvd3c1cWFBeXQxN24vY3BycEZsT29NVXQ2TnplL3BOQ056UTVK?=
+ =?utf-8?B?aDlIcVIzNWZoanNDR3hYalhoeDhZV2psVE8wdWpzOVZmNWxWdDErL1ZoRDhk?=
+ =?utf-8?B?RldraUc0aWQ1NFdrRnVFM280V3I4dlpxQ1hkQitpRWNDNzVpaUw3eWp6TzVM?=
+ =?utf-8?B?MkJ3TDh3VVQ3Q000Ym9NS1VZbXgySFk0TzYvS2dkTHJSNCtGdTlMUWpYOG9D?=
+ =?utf-8?B?VVA1N0s5L1RTa0tZVWNSRUxvTjRTS0F5QkdPQjVFdFBsdnNES2lsN2FQallO?=
+ =?utf-8?B?NHQyVlhCUVRyK1dUNkVIWjJkNDVxcytlUU9BY0RmRHlKWHFrMDAvZFozSDVK?=
+ =?utf-8?B?QlFvNXd2OHBNU0NsdkxFU1dBZGdmL0YyWW9oWUVsZlZYcjZKNnpJc2xpZ2Qw?=
+ =?utf-8?B?Z1RDN1ZIR0tnWG14TGR1Zk5NdGZ5MmJpWTRKbjNpd1NUMzE3MFpmeG5nZWlx?=
+ =?utf-8?B?RTdIekJrMmRRUlFKNkhYQm55SWUyNEJjWlRWRlIrS3ZjOWZRUE5KN0p0OWpQ?=
+ =?utf-8?B?YmpQSjBKWHJodzJvQWZFOVNtaGEyQjMramxpcW1HcVorcmV4eE1LYWJReFo4?=
+ =?utf-8?B?ZHhNNzJXYWZkZjFuU0FKVkhFcllQTlQ4aEgvVG9QZTB4T0ZaL0R6cHdmbHFF?=
+ =?utf-8?B?WmkwMjl5Mm9XZTVJOGh4MndGLzhzOVBEZGt2ZjMwZ3NkV2NlTitIeXUrenhN?=
+ =?utf-8?B?N2FrNys3eDlsNS9HeGd5bFdsMllVbVpaQ2pDTW4yQkM2WG9RelpjREE2blhn?=
+ =?utf-8?B?U3p6eGM1ZXhSYVBvd3hvSjNlM09abWlCS203YnAzUVRBcTNzeFNtekVGZ3dU?=
+ =?utf-8?B?NWZFUGNTZ3ZqZFZJci91QUdSSUJzbkowUUt3a05HU0E4cW10ZmZDem9LTEZs?=
+ =?utf-8?B?NW5OdXVuVkZYSHNWYkZxMTZQWk94V1lZYmIvbUxWeWptZWZqRUJVWnJZSEhY?=
+ =?utf-8?B?L1BuZWZ6TUxraGFGLzFDd01wVHF3TXQrNlR2by9yb3dubVdYay9JQTU1OG9i?=
+ =?utf-8?B?U3YvUjVqWTBhOE50ZTVvZ0NkVVNSREZSN3NCZytjRTUyRHU5cC9ZTTVEQ3RR?=
+ =?utf-8?Q?NqMs8H00/+NZEVqv8jzK77zjg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4c42311-6a08-42dc-c6f6-08db63a959cc
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 20:38:41.2166
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3b8d0f0-40f5-4dd3-80f2-08db63a9537b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8755
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qlCBZG+8Z61VBP/r3BG/J7Ch47BxFQDv6TaoPIV/nBYyNgTduPHWqf1YPMvErEikSagdZ4F0l3g95j5azb8PdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8254
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/23 03:05, David Hildenbrand wrote:
-> On 02.06.23 03:33, John Hubbard wrote:
->> We cannot depend upon git to reliably retain the executable bit on shell
->> scripts, or so I was told several years ago while working on this same
->> run_vmtests.sh script. And sure enough, things such as test_hmm.sh are
->> lately failing to run, due to lacking execute permissions.
->>
->> A nice clean way to fix this would have been to use TEST_PROGS instead
->> of TEST_FILES for the .sh scripts here. That tells the selftest
->> framework to run these (and emit a warning if the files are not
->> executable, but still run them anyway).
-
-Actually, for the record (and I'll update this in v2), the above is
-inaccurate, because run_vmtests.sh aspires to be the only TEST_PROGS
-item here. And I see that the framework does already work if-and-only-if
-invoked via Make, as in "make run_tests".
-
-However,
-
-a) Many people naturally expect to run test scripts without
-(unnecessarily!) involving Make, and
-
-b) Based on some experience in building and using various test
-frameworks over many years, I'd claim that it's better to use shell
-scripts to collect and manage tests and test scripts, rather than
-involving Make. Make is a limited, specialized language and is better at
-handling builds and dependencies.
-
-So the "make run_tests" is a convenience, but it should not be the only
-way to launch a test run. So we still want to fix this up.
-
->>
->> Unfortunately, run_vmtests.sh has its own run_test() routine, which does
->> *not* do the right thing for shell scripts.
->>
->> Fix this by explicitly adding "bash" to each of the shell script
->> invocations. Leave fixing the overall approach to another day.
->>
->> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
->> ---
->>   tools/testing/selftests/mm/run_vmtests.sh | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index 4893eb60d96d..8f81432e4bac 100644
->> --- a/tools/testing/selftests/mm/run_vmtests.sh
->> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -242,18 +242,18 @@ if [ $VADDR64 -ne 0 ]; then
->>       if [ "$ARCH" == "$ARCH_ARM64" ]; then
->>           echo 6 > /proc/sys/vm/nr_hugepages
->>       fi
->> -    CATEGORY="hugevm" run_test ./va_high_addr_switch.sh
->> +    CATEGORY="hugevm" run_test bash ./va_high_addr_switch.sh
->>       if [ "$ARCH" == "$ARCH_ARM64" ]; then
->>           echo $prev_nr_hugepages > /proc/sys/vm/nr_hugepages
->>       fi
->>   fi # VADDR64
->>   # vmalloc stability smoke test
->> -CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
->> +CATEGORY="vmalloc" run_test bash ./test_vmalloc.sh smoke
->>   CATEGORY="mremap" run_test ./mremap_dontunmap
->> -CATEGORY="hmm" run_test ./test_hmm.sh smoke
->> +CATEGORY="hmm" run_test bash ./test_hmm.sh smoke
->>   # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
->>   CATEGORY="madv_populate" run_test ./madv_populate
+On 6/2/23 05:13, Ard Biesheuvel wrote:
+> Before refactoring the EFI stub boot flow to avoid the legacy bare metal
+> decompressor, duplicate the SNP feature check in the EFI stub before
+> handing over to the kernel proper.
 > 
-> Sounds hacky, but if it gets the job done
+> The SNP feature check can be performed while running under the EFI boot
+> services, which means we can fail gracefully and return an error to the
+> bootloader if the loaded kernel does not implement support for all the
+> features that the hypervisor enabled.
 > 
-
-Yes. It's also hacky that we can't just invoke shell scripts like normal
-programs. This limitation hurts my sense of "things should be more
-perfect!". :)
-
-> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>   arch/x86/boot/compressed/sev.c          | 74 ++++++++++++--------
+>   arch/x86/include/asm/sev.h              |  4 ++
+>   drivers/firmware/efi/libstub/x86-stub.c | 17 +++++
+>   3 files changed, 67 insertions(+), 28 deletions(-)
 > 
+> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+> index 014b89c890887b9a..be021e24f1ece421 100644
+> --- a/arch/x86/boot/compressed/sev.c
+> +++ b/arch/x86/boot/compressed/sev.c
 
-Thanks for the ack.
 
--- 
-John Hubbard
-NVIDIA
+> +void sev_enable(struct boot_params *bp)
+> +{
+> +	unsigned int eax, ebx, ecx, edx;
+>   	bool snp;
+>   
+>   	/*
+> @@ -358,37 +391,14 @@ void sev_enable(struct boot_params *bp)
+>   	 */
+>   	snp = snp_init(bp);
+>   
+> -	/* Check for the SME/SEV support leaf */
+> -	eax = 0x80000000;
+> -	ecx = 0;
+> -	native_cpuid(&eax, &ebx, &ecx, &edx);
+> -	if (eax < 0x8000001f)
+> -		return;
+> -
+> -	/*
+> -	 * Check for the SME/SEV feature:
+> -	 *   CPUID Fn8000_001F[EAX]
+> -	 *   - Bit 0 - Secure Memory Encryption support
+> -	 *   - Bit 1 - Secure Encrypted Virtualization support
+> -	 *   CPUID Fn8000_001F[EBX]
+> -	 *   - Bits 5:0 - Pagetable bit position used to indicate encryption
+> -	 */
+> -	eax = 0x8000001f;
+> -	ecx = 0;
+> -	native_cpuid(&eax, &ebx, &ecx, &edx);
+> -	/* Check whether SEV is supported */
+> -	if (!(eax & BIT(1))) {
+> +	/* Set the SME mask if this is an SEV guest. */
+> +	sev_status = sev_get_status();
+> +	if (!(sev_status & MSR_AMD64_SEV_ENABLED)) {
+>   		if (snp)
+>   			error("SEV-SNP support indicated by CC blob, but not CPUID.");
+>   		return;
+>   	}
+>   
+> -	/* Set the SME mask if this is an SEV guest. */
+> -	boot_rdmsr(MSR_AMD64_SEV, &m);
+> -	sev_status = m.q;
+> -	if (!(sev_status & MSR_AMD64_SEV_ENABLED))
+> -		return;
+> -
+>   	/* Negotiate the GHCB protocol version. */
+>   	if (sev_status & MSR_AMD64_SEV_ES_ENABLED) {
+>   		if (!sev_es_negotiate_protocol())
+> @@ -409,6 +419,14 @@ void sev_enable(struct boot_params *bp)
+>   	if (snp && !(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
+>   		error("SEV-SNP supported indicated by CC blob, but not SEV status MSR.");
+>   
+> +	/*
+> +	 * Check for the SME/SEV feature:
+> +	 *   CPUID Fn8000_001F[EBX]
+> +	 *   - Bits 5:0 - Pagetable bit position used to indicate encryption
+> +	 */
+> +	eax = 0x8000001f;
+> +	ecx = 0;
+> +	native_cpuid(&eax, &ebx, &ecx, &edx);
 
+This causes SEV-ES / SEV-SNP to crash.
+
+This goes back to a previous comment where calling either 
+sev_es_negotiate_protocol() or get_hv_features() blows away the GHCB value 
+in the GHCB MSR and as soon as the CPUID instruction is executed the boot 
+blows up.
+
+Even if we move this up to be done earlier, we can complete this function 
+successfully but then blow up further on.
+
+So you probably have to modify the routines in question to save and 
+restore the GHCB MSR value.
+
+Thanks,
+Tom
+
+>   	sme_me_mask = BIT_ULL(ebx & 0x3f);
+>   }
+>   
