@@ -2,93 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3503171F8F7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CB571F8FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjFBDb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 23:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S233594AbjFBDiy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 23:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjFBDby (ORCPT
+        with ESMTP id S231259AbjFBDiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 23:31:54 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E35FBA;
-        Thu,  1 Jun 2023 20:31:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QXT7p43vbz4x41;
-        Fri,  2 Jun 2023 13:31:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685676710;
-        bh=0iaVf8GJWyfmYi6SHJope2hZ9PMHYHgK1IvlLN/uFJo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Udm+Sm/8CC927+8Sj8+TBpCBkd1+QodKWi4tQUgwG9y15ZeYdJMNRP1q1PvMroh0W
-         7k5Ur73XZpgjDB1eu8AoVt4iOT9uZ6Q+Z9/cVl9g+2suecJItZLaUWtmUooXDyK0cg
-         gZiJF13hZITiSAQktm+0q6IRqFS7Nyq3TTNAIqxjlTwLsQW0hMsDjZRebwz6dFMFFI
-         fQClLAbYXqqee87kjBAKa/O4kGHkLp5T626kspd4K2m3fW2yfREsYz7G/T3VqsB/Co
-         Tor+tPWYKH+UoLJ1qaXp3lEnIia87dBm3E9IBfMlw8D+mtXLm6yJBP7IIBt5XtvEfA
-         mXsmYwWcbZVtQ==
-Date:   Fri, 2 Jun 2023 13:31:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Rosin <peda@axentia.se>, Greg KH <greg@kroah.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the mux tree
-Message-ID: <20230602133148.1fc0b305@canb.auug.org.au>
+        Thu, 1 Jun 2023 23:38:51 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3286B137
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:38:49 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-33bf805e901so12654255ab.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:38:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685677128; x=1688269128;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=npKlXBUECB6tHlzVMPCKFkNyoTojj33sXOKw6OCzR0c=;
+        b=SOGJA+tqNciOkORUkt/sqlK34iBwYsZI1wVgci+xjAtApc8FxI8gSVoMtvktiI/q8Q
+         zpOqj6vrHuLqSXzvswArAHjw5GSYFKrlOR2y9ybnjPK8jWwS/45RCB/Md4sICxrKBW8G
+         yEN0gBIbnC8Wp8fl0ZhCwDel/MLJDHFsFtmnkER7WEVAHoDWlCG67NnLXmjYIXp9zI7f
+         OIKNTO1fUa0KS6S06WhreCI8jFOwx6PKRU6iKzUwyOq9tea2iiEc3BrTb3B528x886j3
+         jyQ6SzcYcJu06mne1bEHYLhLaWc3pIPKH9wISwA1Zn+vY4+JmEdbFkBlMGqsCbVeZFuR
+         Om1w==
+X-Gm-Message-State: AC+VfDy9Hmzb9R+Bv2NZhBcSl7dv82Fh9PQl1GfnE0wvVf+kgLI4pxmZ
+        gyu43LulyPWKTZbfsr20anC3eoikUYmvoSzRinVAbzJ0iKR/
+X-Google-Smtp-Source: ACHHUZ4dm2WIPXh9DeJ2wH4xjdBN79QBGO96FM4c/+Sl5flDXZ8F6fXGjelq2tU6Rb5EXUYmjCzFywXxlXh8C+OImAkCZKAM329n
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NfZc7UN29A4O/UU7sq3zduI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:cc42:0:b0:335:fef6:6b84 with SMTP id
+ t2-20020a92cc42000000b00335fef66b84mr3727931ilq.1.1685677128534; Thu, 01 Jun
+ 2023 20:38:48 -0700 (PDT)
+Date:   Thu, 01 Jun 2023 20:38:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073d32c05fd1d4a6b@google.com>
+Subject: [syzbot] [reiserfs?] general protection fault in account_system_index_time
+ (3)
+From:   syzbot <syzbot+5444b0cc48f4e1939d72@syzkaller.appspotmail.com>
+To:     frederic@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NfZc7UN29A4O/UU7sq3zduI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following issue on:
 
-The following commits are also in the char-misc tree as different
-commits (but the same patches):
+HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12ec7b85280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6a2745d066dda0ec
+dashboard link: https://syzkaller.appspot.com/bug?extid=5444b0cc48f4e1939d72
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17956736280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175da599280000
 
-  213700a8b96f ("dt-bindings: ti-serdes-mux: Add defines for J784S4 SoC")
-  76ac787cd671 ("mux: mmio: drop obsolete dependency on COMPILE_TEST")
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d4d1d06b34b8/disk-715abede.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3ef33a86fdc8/vmlinux-715abede.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e0006b413ed1/bzImage-715abede.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/525b69f4318a/mount_0.gz
 
-These are commits
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5444b0cc48f4e1939d72@syzkaller.appspotmail.com
 
-  8258d997b874 ("dt-bindings: ti-serdes-mux: Add defines for J784S4 SoC")
-  5ccf40288ca0 ("mux: mmio: drop obsolete dependency on COMPILE_TEST")
+general protection fault, probably for non-canonical address 0xdffffc0040000033: 0000 [#1] PREEMPT SMP KASAN
+KASAN: probably user-memory-access in range [0x0000000200000198-0x000000020000019f]
+CPU: 1 PID: 262216 Comm:  Not tainted 6.4.0-rc2-next-20230515-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:get_running_cputimer include/linux/sched/cputime.h:79 [inline]
+RIP: 0010:account_group_system_time include/linux/sched/cputime.h:143 [inline]
+RIP: 0010:account_system_index_time+0x86/0x2f0 kernel/sched/cputime.c:173
+Code: 63 02 00 00 48 8b 9d f8 08 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 98 01 00 00 4c 8d b3 38 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e7 01 00 00 8b 83 98 01 00 00
+RSP: 0018:ffffc900001e0da0 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: 0000000200000001 RCX: 1ffffffff1827d41
+RDX: 0000000040000033 RSI: 000000000097fff6 RDI: 0000000200000199
+RBP: ffff88807638bb80 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: ffffffffffffffff R12: 000000000097fff6
+R13: 0000000000000002 R14: 0000000200000139 R15: ffffffff817770e0
+FS:  00005555556c1300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffca0efd000 CR3: 0000000019395000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ update_process_times+0x26/0x1a0 kernel/time/timer.c:2069
+ tick_sched_handle+0x8e/0x170 kernel/time/tick-sched.c:243
+ tick_sched_timer+0xee/0x110 kernel/time/tick-sched.c:1481
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x1c0/0xa30 kernel/time/hrtimer.c:1749
+ hrtimer_interrupt+0x320/0x7b0 kernel/time/hrtimer.c:1811
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1095 [inline]
+ __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1112
+ sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:get_running_cputimer include/linux/sched/cputime.h:79 [inline]
+RIP: 0010:account_group_system_time include/linux/sched/cputime.h:143 [inline]
+RIP: 0010:account_system_index_time+0x86/0x2f0 kernel/sched/cputime.c:173
+Code: 63 02 00 00 48 8b 9d f8 08 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 98 01 00 00 4c 8d b3 38 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e7 01 00 00 8b 83 98 01 00 00
+RSP: 0018:ffffc900001e0da0 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: 0000000200000001 RCX: 1ffffffff1827d41
+RDX: 0000000040000033 RSI: 000000000097fff6 RDI: 0000000200000199
+RBP: ffff88807638bb80 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: ffffffffffffffff R12: 000000000097fff6
+R13: 0000000000000002 R14: 0000000200000139 R15: ffffffff817770e0
+FS:  00005555556c1300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffca0efd000 CR3: 0000000019395000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	63 02                	movsxd (%rdx),%eax
+   2:	00 00                	add    %al,(%rax)
+   4:	48 8b 9d f8 08 00 00 	mov    0x8f8(%rbp),%rbx
+   b:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  12:	fc ff df
+  15:	48 8d bb 98 01 00 00 	lea    0x198(%rbx),%rdi
+  1c:	4c 8d b3 38 01 00 00 	lea    0x138(%rbx),%r14
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e e7 01 00 00    	jle    0x221
+  3a:	8b 83 98 01 00 00    	mov    0x198(%rbx),%eax
 
-in the char-misc tree.
 
---=20
-Cheers,
-Stephen Rothwell
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---Sig_/NfZc7UN29A4O/UU7sq3zduI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
------BEGIN PGP SIGNATURE-----
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR5YqQACgkQAVBC80lX
-0GyGSAf8Cel/Kkag4AlLZTR0PQy+PWqr36/qpeHzE2DyDB2ZNb6pA0Td6gU6XM9z
-D9g0ErPnqhAe7P+Oqai8F2+ckug76c1O9N7P/KAR98NRle+104GO7r+cBecY8NxT
-dy0x8teyCelXamhLuIRpXpal4c4fgbjP3WU1wvkWOFxX2sI7Z5eJLw2tUtzEZ9ri
-1CcwmIVb3M301+zt1XAOhrllywGrxV7QjeummmWEaWo1QLfYQ7c/3wT3exam4yiC
-xXgtLoewpMkx3MsZoF8w6Rlilhh0VHAHnaZCY2xi9i15ug5kXoBGGI+4ssZ8mEL+
-9nqH0ltK+C0akR0k1a9CM8eU9HiQ9A==
-=qtQh
------END PGP SIGNATURE-----
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
---Sig_/NfZc7UN29A4O/UU7sq3zduI--
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
