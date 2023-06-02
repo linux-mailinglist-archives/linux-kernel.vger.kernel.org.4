@@ -2,164 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B6271FCE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4013171FCE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbjFBJAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S234474AbjFBJA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbjFBJAW (ORCPT
+        with ESMTP id S234099AbjFBJAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:00:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FE78133;
-        Fri,  2 Jun 2023 02:00:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B46E1063;
-        Fri,  2 Jun 2023 02:01:05 -0700 (PDT)
-Received: from [10.57.22.125] (unknown [10.57.22.125])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BD903F663;
-        Fri,  2 Jun 2023 02:00:17 -0700 (PDT)
-Message-ID: <e82d7387-a299-20e5-3176-dce20966a10b@arm.com>
-Date:   Fri, 2 Jun 2023 10:00:16 +0100
+        Fri, 2 Jun 2023 05:00:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD6D1A6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:00:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6FF464DA2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F09D8C4339B;
+        Fri,  2 Jun 2023 09:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685696419;
+        bh=Fk+l9DZKdsNSTjZvKyeObVaDm8wwUDqpLO+9WsZPdEw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IIKmcfkUUlA2fe5Xfh142xIFb6lo27nYLbTfDQTN5/g1FatT1Dqh9Ww6yw8WvDvAd
+         cPkoI5qQlgD+OfAa2EjMjHZim2Hplz31cRwJ8FF09LCAbA48PR6efgsoYqatv5d4ar
+         m9JA8wFlafeZkBhGTYHPQb2jxo45eJjtXgUP3bLnk3niElDBGoldabjmsRF8M9mQHD
+         ZnKGjBaFMCr6wD0a8kCWJz+GyeHjW661/M2xS8HXEeh9ZCS46YF2WxLQ/Fscci5nIj
+         mpXWtPy2rnMLRy90ROg3qUPmz0KxtyCG1dJufficp1tUj04d5UEFCukWPT3IXDUhXF
+         vkuH8JmDeH2ng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D30AFC395E0;
+        Fri,  2 Jun 2023 09:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 07/11] coresight-tpdm: Add nodes for dsb edge control
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-8-git-send-email-quic_taozha@quicinc.com>
- <606b8a25-0468-c310-ccff-1477e2b238b2@arm.com>
- <c5c28ab8-7d6a-f8e7-ad34-8716ac77d2dc@quicinc.com>
- <a2bd3bbf-5512-971a-95a1-3220f31814a2@arm.com>
-In-Reply-To: <a2bd3bbf-5512-971a-95a1-3220f31814a2@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net v3] net/ipv4: ping_group_range: allow GID from 2147483648
+ to 4294967294
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168569641886.3424.10702306383468804424.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Jun 2023 09:00:18 +0000
+References: <20230601031305.55901-1-akihiro.suda.cz@hco.ntt.co.jp>
+In-Reply-To: <20230601031305.55901-1-akihiro.suda.cz@hco.ntt.co.jp>
+To:     Akihiro Suda <suda.gitsendemail@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, segoon@openwall.com, kuniyu@amazon.com,
+        akihiro.suda.cz@hco.ntt.co.jp, suda.kyoto@gmail.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 09:45, Suzuki K Poulose wrote:
-> On 02/06/2023 09:21, Tao Zhang wrote:
->>
->> On 6/1/2023 8:14 PM, Suzuki K Poulose wrote:
->>> On 27/04/2023 10:00, Tao Zhang wrote:
->>>> Add the nodes to set value for DSB edge control and DSB edge
->>>> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
->>>> resgisters to configure edge control. DSB edge detection control
->>>> 00: Rising edge detection
->>>> 01: Falling edge detection
->>>> 10: Rising and falling edge detection (toggle detection)
->>>> And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
->>>> configure mask. Eight 32 bit registers providing DSB interface
->>>> edge detection mask control.
->>>>
->>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>>> ---
->>>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  32 +++++
->>>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 135 
->>>> ++++++++++++++++++++-
->>>>   drivers/hwtracing/coresight/coresight-tpdm.h       |  21 ++++
->>>>   3 files changed, 187 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git 
->>>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->>>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>> index 348e167..a57f000 100644
->>>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>> @@ -60,3 +60,35 @@ Description:
->>>>           Bit[3] : Set to 0 for low performance mode.
->>>>                    Set to 1 for high performance mode.
->>>>           Bit[4:8] : Select byte lane for high performance mode.
->>>> +
->>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
->>>> +Date:        March 2023
->>>> +KernelVersion    6.3
->>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
->>>> Zhang (QUIC) <quic_taozha@quicinc.com>
->>>> +Description:
->>>> +        Read/Write a set of the edge control registers of the DSB
->>>> +        in TPDM.
->>>> +
->>>> +        Expected format is the following:
->>>> +        <integer1> <integer2> <integer3>
->>>> +
->>>> +        Where:
->>>> +        <integer1> : Start EDCR register number
->>>> +        <integer2> : End EDCR register number
->>>> +        <integer3> : The value need to be written
->>>> +
->>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
->>>> +Date:        March 2023
->>>> +KernelVersion    6.3
->>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
->>>> Zhang (QUIC) <quic_taozha@quicinc.com>
->>>> +Description:
->>>> +        Read/Write a set of the edge control mask registers of the
->>>> +        DSB in TPDM.
->>>> +
->>>> +        Expected format is the following:
->>>> +        <integer1> <integer2> <integer3>
->>>> +
->>>> +        Where:
->>>> +        <integer1> : Start EDCMR register number
->>>> +        <integer2> : End EDCMR register number
->>>> +        <integer3> : The value need to be written
->>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->>>> b/drivers/hwtracing/coresight/coresight-tpdm.c
->>>> index 1bacaa5..a40e458 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->>>> @@ -80,7 +80,14 @@ static void set_trigger_type(struct tpdm_drvdata 
->>>> *drvdata, u32 *val)
->>>>     static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->>>>   {
->>>> -    u32 val;
->>>> +    u32 val, i;
->>>> +
->>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
->>>> +        writel_relaxed(drvdata->dsb->edge_ctrl[i],
->>>> +               drvdata->base + TPDM_DSB_EDCR(i));
->>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
->>>> +        writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
->>>> +               drvdata->base + TPDM_DSB_EDCMR(i));
->>>
->>> Do all TPDM DSBs have MAX_EDCR registers ? Or some have less than that ?
->>> If it is latter, do we need special care to avoid writing to inexistent
->>> registers ?
->>>
->> You are right, not all DSB TPDMs have MAX_EDCR registers. In our 
->> design, the inexistent register addresses
->>
->> are not occupied and safe for accessing.
+Hello:
 
-Does the TRM for the component say so ? Or is it by luck ? If the spec
-says it is RAZ/WriteIgnore, then we could keep the code as it is,
-with a comment. Otherwise, we could add a DT property. So please get
-this clarified with the H/W designers.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Suzuki
+On Thu,  1 Jun 2023 12:13:05 +0900 you wrote:
+> With this commit, all the GIDs ("0 4294967294") can be written to the
+> "net.ipv4.ping_group_range" sysctl.
+> 
+> Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
+> include/linux/uidgid.h), and an attempt to register this number will cause
+> -EINVAL.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v3] net/ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
+    https://git.kernel.org/netdev/net/c/e209fee4118f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
