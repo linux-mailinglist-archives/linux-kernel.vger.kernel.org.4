@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861617206BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6D97206C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235603AbjFBQB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S235321AbjFBQCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbjFBQBs (ORCPT
+        with ESMTP id S234982AbjFBQCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:01:48 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18081B1;
-        Fri,  2 Jun 2023 09:01:43 -0700 (PDT)
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 37DD71EC0138;
-        Fri,  2 Jun 2023 18:01:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1685721702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yXwINzbU9Zs+L0XJla9Sp6go4vxnlnsmfbOc7yeYTlg=;
-        b=XjzTNN9dGShPCHk2P3RO/MYH8qxFqVPSbpqSrH0vbSD7bZkoRW072+rG7QuGewjGkRIlYN
-        KYjPwC2zLJdjp33UgxK8HIeMnftgmaPJUet3aj1uKf8P7nInqVhsakdfHTL6UaepT4yy9y
-        B0qgrT+QAEQDhSgThggjTlEdVZx9XR0=
-Date:   Fri, 2 Jun 2023 18:01:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Song, Youquan" <youquan.song@intel.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "chu, jane" <jane.chu@oracle.com>
-Subject: Re: [PATCH v2] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
-Message-ID: <20230602160138.GDZHoSYsWoPAinMszk@fat_crate.local>
-References: <20230526063242.133656-1-wangkefeng.wang@huawei.com>
- <20230526070952.GAZHBbQNAWZJP6tOXv@nazgul.local>
- <e816734d-e6f5-b990-c86d-ac7d5f1c94c0@huawei.com>
- <fa272c15-9f7c-df9c-41dd-bffc19acbf85@huawei.com>
- <SJ1PR11MB6083343FF74CAB54FC2B916AFC4EA@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        Fri, 2 Jun 2023 12:02:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 054E7197
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:02:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F29371063;
+        Fri,  2 Jun 2023 09:03:23 -0700 (PDT)
+Received: from [10.57.22.125] (unknown [10.57.22.125])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89EE83F7BD;
+        Fri,  2 Jun 2023 09:02:37 -0700 (PDT)
+Message-ID: <90979d06-1f6b-90ee-4a68-0f5cc013c82a@arm.com>
+Date:   Fri, 2 Jun 2023 17:02:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB6083343FF74CAB54FC2B916AFC4EA@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH 3/4] perf/arm_cspmu: Clean up ACPI dependency
+To:     Robin Murphy <robin.murphy@arm.com>, will@kernel.org
+Cc:     mark.rutland@arm.com, bwicaksono@nvidia.com,
+        ilkka@os.amperecomputing.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1685619571.git.robin.murphy@arm.com>
+ <70067704d217cd7504d9552d8485a54e5c071c90.1685619571.git.robin.murphy@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <70067704d217cd7504d9552d8485a54e5c071c90.1685619571.git.robin.murphy@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 03:12:30PM +0000, Luck, Tony wrote:
-> > As mentioned above, I am focus on copy_mc_XXX calling, it will
-> > abort if the exception fires when accessing the source, and we
-> > want to isolate the corrupted src page, maybe we could a new flag
-> > to indicate this scenario, the *Final Goals* is to let core
-> > do_machine_check to deal with the corrupted src page.
+On 01/06/2023 12:59, Robin Murphy wrote:
+> Build-wise, the ACPI dependency consists of only a couple of things
+> which could probably stand being factored out into ACPI helpers anyway.
+> However for the immediate concern of working towards Devicetree support
+> here, it's easy enough to make a few tweaks to contain the affected code
+> locally, such that we can relax the Kconfig dependency.
 > 
-> A new flag seems like a good direction.
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>   drivers/perf/arm_cspmu/Kconfig     |  3 +--
+>   drivers/perf/arm_cspmu/arm_cspmu.c | 17 +++++++++++++++--
+>   2 files changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_cspmu/Kconfig b/drivers/perf/arm_cspmu/Kconfig
+> index 0b316fe69a45..25d25ded0983 100644
+> --- a/drivers/perf/arm_cspmu/Kconfig
+> +++ b/drivers/perf/arm_cspmu/Kconfig
+> @@ -4,8 +4,7 @@
+>   
+>   config ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+>   	tristate "ARM Coresight Architecture PMU"
+> -	depends on ARM64 && ACPI
+> -	depends on ACPI_APMT || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>   	help
+>   	  Provides support for performance monitoring unit (PMU) devices
+>   	  based on ARM CoreSight PMU architecture. Note that this PMU
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+> index 72dc7a9e1ca8..3b91115c376d 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+> @@ -28,7 +28,6 @@
+>   #include <linux/module.h>
+>   #include <linux/perf_event.h>
+>   #include <linux/platform_device.h>
+> -#include <acpi/processor.h>
+>   
+>   #include "arm_cspmu.h"
+>   #include "nvidia_cspmu.h"
+> @@ -1075,6 +1074,9 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
+>   	return 0;
+>   }
+>   
+> +#if defined(CONFIG_ACPI) && defined(CONFIG_ARM64)
+> +#include <acpi/processor.h>
+> +
+>   static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
+>   {
+>   	u32 acpi_uid;
+> @@ -1099,7 +1101,7 @@ static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
+>   	return -ENODEV;
+>   }
+>   
+> -static int arm_cspmu_get_cpus(struct arm_cspmu *cspmu)
+> +static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
+>   {
+>   	struct device *dev;
+>   	struct acpi_apmt_node *apmt_node;
+> @@ -1135,6 +1137,17 @@ static int arm_cspmu_get_cpus(struct arm_cspmu *cspmu)
+>   
+>   	return 0;
+>   }
+> +#else
+> +static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
+> +{
+> +	return -ENODEV;
+> +}
+> +#endif
+> +
+> +static int arm_cspmu_get_cpus(struct arm_cspmu *cspmu)
+> +{
+> +	return arm_cspmu_acpi_get_cpus(cspmu);
+> +}
+>   
+>   static int arm_cspmu_register_pmu(struct arm_cspmu *cspmu)
+>   {
 
-Before anything happens here, the fate of the now unused EX_TYPE_COPY
-needs to be decided first. Then new stuff.
 
-Thx.
+Reviewed-and-Tested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
