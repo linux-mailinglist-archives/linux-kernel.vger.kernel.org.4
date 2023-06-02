@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8074171FFE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD5D71FFEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbjFBLDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S235655AbjFBLEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235023AbjFBLDb (ORCPT
+        with ESMTP id S235598AbjFBLEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:03:31 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C3ACE;
-        Fri,  2 Jun 2023 04:03:29 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 35DCA5FD1D;
-        Fri,  2 Jun 2023 14:03:27 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685703807;
-        bh=P21ZCO8cvJf6YwlmF8pYgOOnkYfHNy2KTyAlbb0APBE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=kmylLnV7Csqk12Xvc0Kg+idFZT1QbN8IU3H1rnWJi24+VlEVvT6mFRIIVlprgmIqm
-         7fjR7BL/zgn0viCj8vWO7Vdw2Kjq66n6NME1f2zxetKrwqJrgWat4ClJGF6Myjw/wN
-         D49WKauAxcUcTUyWslpRrsM+6ZZ0O6TZVUI9A/ZtBA1J9k4cRNoQHnGomjAHLGva78
-         8/s7NJ+4dxuNiX3EeFhMewOPtzyXJ2K8gXCu55KAX5D64nS+7spOzdKA8x3XjE6BZs
-         D84N6D0D3f8NrrghoJv34G83VFDkU6zdKcwzb60Zre1iLn+wIkYxoN7Jygj5F+toX6
-         cEOqA7RhIlkXw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Jun 2023 14:03:17 +0300 (MSK)
-Message-ID: <e6302401-7a07-a2fa-621b-29f62ef60261@sberdevices.ru>
-Date:   Fri, 2 Jun 2023 14:03:14 +0300
+        Fri, 2 Jun 2023 07:04:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3402118C;
+        Fri,  2 Jun 2023 04:04:11 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352APYTk012137;
+        Fri, 2 Jun 2023 11:04:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ktJlFLaULAZpuZUg7No7ulmBRAHD7ttLKDsv2gciZRw=;
+ b=kUrsOQf4gndw7v8PNuRt/ZizXcgs8jdBdKE7irB1ijxqEIokKQ3vs+rv2o1ftEMCyG7z
+ 3Ot+VP3iX/YrgU2QHS/NX6BrqPV810f/zFMot55Y4wqOUrBRZr9TfxMVdqXJhFTodtBk
+ biF4qvvABiueKVuDqiTPcqkuzeqLxFYP5pL0ijhaSS0Zo1eNDrYgqKu5Zzt/8nc0huB7
+ QBd3r7S5u2qxHP5pJ5mnbRZR5uyPgZy2p9srzxD8Ydg1yREH6EkraS24IA3aZLn/PvKt
+ sc7TLfHoCoRinV6a5omI2158FVwKEgp08ObJMLYZN/qufqGwZWSD4Ek00ahVS4cAtqju nA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qybnbrebx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 11:04:05 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 352B445u016234
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Jun 2023 11:04:04 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 2 Jun 2023 04:03:59 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v5 0/3] Enable IPQ9574 TSENS support
+Date:   Fri, 2 Jun 2023 16:33:49 +0530
+Message-ID: <cover.1685703605.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v1] leds: trigger: pattern: add support for hrtimer
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>, kernel test robot <lkp@intel.com>
-CC:     Pavel Machek <pavel@ucw.cz>, ye xingchen <ye.xingchen@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <kernel@sberdevices.ru>
-References: <20230522190412.374474-1-mmkurbanov@sberdevices.ru>
- <202305230549.ekneaQ89-lkp@intel.com> <20230601185116.GL449117@google.com>
-From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
-In-Reply-To: <20230601185116.GL449117@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/02 03:06:00 #21401484
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PYwUe1mFMGttagEK6jlrRVxXqNXd75L8
+X-Proofpoint-ORIG-GUID: PYwUe1mFMGttagEK6jlrRVxXqNXd75L8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_08,2023-06-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=800 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ clxscore=1015 mlxscore=0 spamscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306020081
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,20 +79,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Lee,
+This patch set enables tsens in IPQ9574
 
-On 01.06.2023 21:51, Lee Jones wrote:
->>    drivers/leds/trigger/ledtrig-pattern.c: In function 'pattern_init':
->>>> drivers/leds/trigger/ledtrig-pattern.c:454:74: warning: implicit conversion from 'enum <anonymous>' to 'enum pattern_type' [-Wenum-conversion]
->>      454 |         err = pattern_trig_store_patterns(led_cdev, NULL, pattern, size, false);
->>          |                                                                          ^~~~~
->  
-> Did you fix this already? 
-> 
-> I don't see a subsequent submission?
+Depends on
+	https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
+[v5]:
+	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors without removing existing entries
 
-Sure, I intend to send the updated version very soon (hopefully today).
+[v4]:
+	Drop the sm6375-tsens and qcm2290-tsens related bindings
+	fix as it is already posted
+
+	Remove unnecessary changes from previous version
+
+[v3]:
+	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors
+
+[v2]:
+	Drop the driver change (https://lore.kernel.org/lkml/b45d33d38a334aabbd52c83b0d6028af1f4c74c8.1682682753.git.quic_varada@quicinc.com/)
+	since the tsens device is compatible with 8074's tsens
+	and use 8074's compatible itself
+
+	Rename clusterX nodes as cpussX
+
+[v1]:
+	Fix DT node names
+
+[v0]:
+	Initial patch introducing TSENS support
+
+Praveenkumar I (1):
+  dt-bindings: thermal: tsens: Add ipq9574 compatible
+
+Varadarajan Narayanan (2):
+  arm64: dts: qcom: ipq9574: add tsens node
+  arm64: dts: qcom: ipq9574: add thermal zone nodes
+
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   6 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 218 +++++++++++++++++++++
+ 2 files changed, 224 insertions(+)
 
 -- 
-Best Regards,
-Martin Kurbanov
+2.7.4
+
