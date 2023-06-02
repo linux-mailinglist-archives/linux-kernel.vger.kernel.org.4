@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073E272071F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7584720709
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbjFBQLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S236693AbjFBQK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236698AbjFBQKq (ORCPT
+        with ESMTP id S236619AbjFBQKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:10:46 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA400197
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:10:04 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb1e332f648so2298623276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:10:04 -0700 (PDT)
+        Fri, 2 Jun 2023 12:10:05 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE4AE43
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:09:48 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565d1b86a63so31914217b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685722186; x=1688314186;
+        d=google.com; s=20221208; t=1685722188; x=1688314188;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iiQKR5r12cEmfxEtqKB501qQ7U5/inaqlNqkSHrg1Dk=;
-        b=pa3mVvglr9ldo0oASWJgWygRLd3hw8lG1pjLeB+Qzm3K3zOU5BQU88aja7wxcgPXwA
-         AwayadZx6shxLAXjuJFrDzlMtsvb67kGNUVBIz8jQ9pcx5Jd6BF7pMABQixgPuk47qo/
-         QPSMIrvsitPTIbIvBs3Unmlez10KGpvyazPz0vuoWxeM0ddu7MUX6bOpsZv5FX/RHsfI
-         ab0UhQ4BKG9ohwFpekgRN7rsQtHAtMFU2PEbvOsbX5+K7m399sRVLlUcmEJAu36XrUm4
-         MIK72o4Xoc2dnSjS77GyfH7dzmpmSt4gmenJO3sxGLvRMkP8fiKXjBjSppWa9vRlnGfd
-         FwPA==
+        bh=ATfYeV4iZLydVfrv7VkfrrcrF6Iyfqli3wOIB/41cFU=;
+        b=Rqyu16keB0kE0WrdwrfeOOljSmmTEf5ym2HasOLzHF8ArvodVvyp0S6Lr0lp8jhqaO
+         yU7vlRlNbGqDi7zvQpbHT6R5zFRE8DckASYhOzfH9V34Q20hh77zuuNe12GxNtHCZXh5
+         lnbwZ2Svz+2HB81mY68YPRkYswYr7F2GvqW0LS+zjsO1U81VkyPUwY6eD2Ki1IgFqmLS
+         03LcT6Q3zPmFBx5Lk1wR2QR7kJ2u+CVAlb7S/W7GXhPrjwIAChkVcnGC08nkCFgLZ6+3
+         IJyon3TZZUbxyP2iFDZRsS+2chcqzC8RuTMktYv6Efxwhi8TOTgmYLyH3MqqUylTOe6h
+         6cPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722186; x=1688314186;
+        d=1e100.net; s=20221208; t=1685722188; x=1688314188;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iiQKR5r12cEmfxEtqKB501qQ7U5/inaqlNqkSHrg1Dk=;
-        b=VV0aZNM0He5OoOzoAi7L9gqfHVrm2RPmCuF3ovNucFNsAnjbmeNaj+fEVbWIIZ1cnx
-         R5V5lRiQrI3dVmOiV9l9ZvzUDw/5jp3ijkYWmMtmlusNr5l1iylntIBXGPwXELeldGzx
-         yokH4QbvqTkaQqnwOdSy+aRFt1nZP12cEJ7ezkqFC5+s9uq2YyHJWVRNZMNofGRPYmDJ
-         Ecz+DCzSkEAC2lhT37yO0vkmO2g7W8b4WK5ayaQPHR+2BpwaQFWNt4l/QdhUBUtv7T/e
-         QOd0sHmDzl+VOBOaxY4jdSYMZkZd++IJxoBc18qH/NrAHacowhMYc5K9S+iJb6YjRhcO
-         GDeg==
-X-Gm-Message-State: AC+VfDyeqAkH+wZ8vVvkh+Jhw2x3CF2yIF0r7xInaRkfh80t96Nkf477
-        DYd48Y1ina3pD4rfR9gRhg2l3Txd0GbC
-X-Google-Smtp-Source: ACHHUZ4B/VNE5B0Lzqq5kfdIQx5Z2vYuoQBh8/63RZRhZfWL9mTILlGstZ7p9kQje0NOJUJPGy2sE9Fs2xL/
+        bh=ATfYeV4iZLydVfrv7VkfrrcrF6Iyfqli3wOIB/41cFU=;
+        b=gu0d0/TCzfyFcPvNPeUcd/sOl6nUhM8CT/CNN9nItwtw3jKD2bObfK08B+SA8HmxpD
+         V6avQLczs8IRX3h58ZIuZdcflS5JliWnJh+8TTL3qdmdRmJldDuOFhWtoaVU8IhTccDl
+         KlPhHO1IDSdwqiPl1wj4hc9mySAjtV/zX7VlvVPGh2D/PL0H5ZUsSAmSAFtBo0KCOMrx
+         JL+EyS4nCYzmFj0kWOGP+mTPD0pDVqSjxCK8x0yQarRu/0XM3YRIGlUtWCxUv7VJ7dCY
+         AZE/+KVr1Eo3xuUyqwK0Q8SKHe8HDIpdVF9LWtVlbbndX6sZ0qgobFFi9dUU99zmx7J7
+         1/TQ==
+X-Gm-Message-State: AC+VfDyY/064Az9LnXSJkGTEH8z9qRyIz0iPvlLENZJ8EZQGFlCyuaxL
+        9R/yuJNl+30Th6ZGreeTJQC6oTZh+Us+
+X-Google-Smtp-Source: ACHHUZ4IW8kR8j7bn7igS1kcMhvfZS4XncKRF7NLGQ8SgKKpwW4y3+9yGIJ+PiwzD8LO4pWUxsLhYeKpfotT
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6902:1545:b0:ba8:181b:2558 with SMTP
- id r5-20020a056902154500b00ba8181b2558mr2255805ybu.4.1685722186031; Fri, 02
- Jun 2023 09:09:46 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 09:09:11 -0700
+ (user=vipinsh job=sendgmr) by 2002:a25:e706:0:b0:bac:5d2c:844b with SMTP id
+ e6-20020a25e706000000b00bac5d2c844bmr1305917ybh.8.1685722187745; Fri, 02 Jun
+ 2023 09:09:47 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 09:09:12 -0700
 In-Reply-To: <20230602160914.4011728-1-vipinsh@google.com>
 Mime-Version: 1.0
 References: <20230602160914.4011728-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602160914.4011728-14-vipinsh@google.com>
-Subject: [PATCH v2 13/16] KVM: arm64: Run clear-dirty-log under MMU read lock
+Message-ID: <20230602160914.4011728-15-vipinsh@google.com>
+Subject: [PATCH v2 14/16] KVM: arm64: Pass page walker flags from callers of
+ stage 2 split walker
 From:   Vipin Sharma <vipinsh@google.com>
 To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
         suzuki.poulose@arm.com, yuzenghui@huawei.com,
@@ -78,57 +79,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Take MMU read lock for clearing dirty logs and use shared page table
-walker.
+Pass enum kvm_pgtable_walk_flags{} to kvm_pgtable_stage2_split() walker
+from its caller.
 
-Dirty logs are currently cleared using MMU write locks. This
-means vCPUs page faults, which takes MMU read lock,  will
-be blocked while dirty logs are being cleared. This causes guest
-degradation and especially noticeable on VMs with lot of vCPUs.
-
-Taking MMU read lock will allow vCPUs to execute parallelly and reduces
-the impact on vCPUs performance.
+This allows split walker users to specify if they want to run split
+logic via shared walker or non-shared walker.
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- arch/arm64/kvm/mmu.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ arch/arm64/include/asm/kvm_pgtable.h | 4 +++-
+ arch/arm64/kvm/hyp/pgtable.c         | 5 +++--
+ arch/arm64/kvm/mmu.c                 | 2 +-
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 145be12a5fc2..fbf5c6c509fb 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -684,6 +684,7 @@ int kvm_pgtable_stage2_flush(struct kvm_pgtable *pgt, u64 addr, u64 size,
+  * @size:	 Size of the range.
+  * @mc:		 Cache of pre-allocated and zeroed memory from which to allocate
+  *		 page-table pages.
++ * @flags:	 Page walker flags
+  *
+  * The function tries to split any level 1 or 2 entry that overlaps
+  * with the input range (given by @addr and @size).
+@@ -693,7 +694,8 @@ int kvm_pgtable_stage2_flush(struct kvm_pgtable *pgt, u64 addr, u64 size,
+  * blocks in the input range as allowed by @mc_capacity.
+  */
+ int kvm_pgtable_stage2_split(struct kvm_pgtable *pgt, u64 addr, u64 size,
+-			     struct kvm_mmu_memory_cache *mc);
++			     struct kvm_mmu_memory_cache *mc,
++			     enum kvm_pgtable_walk_flags flags);
+ 
+ /**
+  * kvm_pgtable_walk() - Walk a page-table.
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 23cda3de2dd4..7e84be13d76d 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -1408,11 +1408,12 @@ static int stage2_split_walker(const struct kvm_pgtable_visit_ctx *ctx,
+ }
+ 
+ int kvm_pgtable_stage2_split(struct kvm_pgtable *pgt, u64 addr, u64 size,
+-			     struct kvm_mmu_memory_cache *mc)
++			     struct kvm_mmu_memory_cache *mc,
++			     enum kvm_pgtable_walk_flags flags)
+ {
+ 	struct kvm_pgtable_walker walker = {
+ 		.cb	= stage2_split_walker,
+-		.flags	= KVM_PGTABLE_WALK_LEAF,
++		.flags	= flags | KVM_PGTABLE_WALK_LEAF,
+ 		.arg	= mc,
+ 	};
+ 
 diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 356dc4131023..7c966f6f1a41 100644
+index 7c966f6f1a41..34d2bd03cf5f 100644
 --- a/arch/arm64/kvm/mmu.c
 +++ b/arch/arm64/kvm/mmu.c
-@@ -74,8 +74,12 @@ static int stage2_apply_range(struct kvm_s2_mmu *mmu, phys_addr_t addr,
+@@ -153,7 +153,7 @@ static int kvm_mmu_split_huge_pages(struct kvm *kvm, phys_addr_t addr,
+ 			return -EINVAL;
+ 
+ 		next = __stage2_range_addr_end(addr, end, chunk_size);
+-		ret = kvm_pgtable_stage2_split(pgt, addr, next - addr, cache);
++		ret = kvm_pgtable_stage2_split(pgt, addr, next - addr, cache, 0);
  		if (ret)
  			break;
- 
--		if (resched && next != end)
--			cond_resched_rwlock_write(&kvm->mmu_lock);
-+		if (resched && next != end) {
-+			if (flags & KVM_PGTABLE_WALK_SHARED)
-+				cond_resched_rwlock_read(&kvm->mmu_lock);
-+			else
-+				cond_resched_rwlock_write(&kvm->mmu_lock);
-+		}
  	} while (addr = next, addr != end);
- 
- 	return ret;
-@@ -1131,11 +1135,11 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
- 	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
- 	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
- 
--	write_lock(&kvm->mmu_lock);
--	lockdep_assert_held_write(&kvm->mmu_lock);
--
--	stage2_wp_range(&kvm->arch.mmu, start, end, 0);
-+	read_lock(&kvm->mmu_lock);
-+	stage2_wp_range(&kvm->arch.mmu, start, end, KVM_PGTABLE_WALK_SHARED);
-+	read_unlock(&kvm->mmu_lock);
- 
-+	write_lock(&kvm->mmu_lock);
- 	/*
- 	 * Eager-splitting is done when manual-protect is set.  We
- 	 * also check for initially-all-set because we can avoid
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
