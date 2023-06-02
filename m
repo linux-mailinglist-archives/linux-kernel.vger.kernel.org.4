@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F8671FD2F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EAE71FD32
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbjFBJKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S234665AbjFBJKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbjFBJJj (ORCPT
+        with ESMTP id S235122AbjFBJJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:09:39 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162E1729
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:08:05 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2af2db78b38so24770841fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:08:05 -0700 (PDT)
+        Fri, 2 Jun 2023 05:09:58 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AF51B3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:08:19 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af1822b710so26029831fa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685696883; x=1688288883;
+        d=linaro.org; s=google; t=1685696895; x=1688288895;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QzUaWnynIThHp3wYMq9RJrcT9lEzhLBhWFn+M0bToOw=;
-        b=ZAOEvq4sE8gXzvryPEgB8TuxwcXUVOcc5WNP4MU9pZ7Cm85bTB42QxPJBXBT4QUUM/
-         qb32MDwsISGFWjdXkFnjfmMw+P39QAujSCnSI4s/4Wuoz0+xrGzBb+Vq/Zy1dYB94Iye
-         ytOXbB8dXBaQq672qdHYQ9L10FE2wBjBwc8CKKeiUdZmSENEUsLWeWC77QsXZT8q8WFv
-         WVX69ZUem8W96C3T1sN+Ey2FQOD6Y4VCW4AK6+q7vI/8xBNXjSg4cr+7ro+RCJgWNI/W
-         CJ6RKVhdxt06a5CjINrB8QmT32Oeu+0HXkr+D6HPAjX+Q+sV0SDeGWnXrMR1q/9tDiSH
-         RvhA==
+        bh=4e3D8wbEggeQGIo2buFsWrZA498FNn9qdCy/c3SYEoI=;
+        b=Lj8tg9L2//EmP7464jerxxGD595+r3ajL8bIgJlbTBM//lUZelSn2heRoIseqlIwmA
+         n1DvV0j9ZVqn92pZeqJxkEm/q5R4ohwBzr8KLiI9bTy+vtYleq/S+M3BiC++AjqalbNp
+         730Nd8FajEtYvZiXlNByu7qFyT5yRDjZ9Jx2iAPpZwJsejgrW4g5Qhs71WGKC2530SPg
+         MRa1hfSN8TxYwzHl05w0ZkH16nUW/TgpyWIme0sw3ZoSvBWHY5vQNuGsusLsSWvqCMqD
+         OBC/qPSBFRQyy/prk99jjd3s8Pf29zm6bu4nYTe9hMkr7RHiQ1pFYQwYuVundm1tfSaP
+         666g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685696883; x=1688288883;
+        d=1e100.net; s=20221208; t=1685696895; x=1688288895;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzUaWnynIThHp3wYMq9RJrcT9lEzhLBhWFn+M0bToOw=;
-        b=GXNNTDk6vTs7D1eA6OxtNtA5Sz2C2UHqqz0ziZUrQpdwXG8Nwe1PzOhlmHMsUbj6Cp
-         TZIc4FanMrGkFAcwFPIgKYgksTIiQBRFcyWiUhYCA5Igk1p1p8FJmrQYBKbgHw5cMfUu
-         mbzWalL+v6RoUCGkTyI7YNcIqhYmcmzcFNFcpUsGj5hL9ThY5paRekm5CTMCGbCs1ovQ
-         +07G8Cu+v1sFbYjtGfDZstR0Qujd8RoXLfb5nEKA2mjBx080dd/1YsuH+FETX/k0zpnL
-         8IrITTqB0SAFpW+h+DHFskRe201hveoFUShtaKufbYR+PvhOugTHhVajRIQE2GXoVvH2
-         Ijmg==
-X-Gm-Message-State: AC+VfDxcT/LtfLgPsaNMhO63S7FqTtR+oikjCNgqoGmGDgoh9Igxpclr
-        BdHzMcUZvDtN2Q7yxzAn71DCGQ==
-X-Google-Smtp-Source: ACHHUZ6CVTwCKkIVO3jrU3f5xp5gnZ1XgYNwvotAt0SgJIOZpLt/FNEoRI4fgGX7mVnJErOrgqtngA==
-X-Received: by 2002:a2e:b018:0:b0:2a8:c82f:2996 with SMTP id y24-20020a2eb018000000b002a8c82f2996mr1316357ljk.43.1685696882943;
-        Fri, 02 Jun 2023 02:08:02 -0700 (PDT)
+        bh=4e3D8wbEggeQGIo2buFsWrZA498FNn9qdCy/c3SYEoI=;
+        b=BD8J3wNBtqCJOz7IEZekS/uOonC85uwG1suYRjvE/9tEcbuTYBQG3PsOqERUJqkmoK
+         Swmkey7xFMW3nf4EdyE0jmVrubzythJBpshFPbq6dlslysYTFsJC4cH5cOspGPQBa0P5
+         E4uU8az2JWv7UZ1DojOPyNbibz2fKyry6GqXhzQqIa+l3538dmwUsiF844X+PyuxTY/N
+         tfihA1Vok5BJYucN4RU3twZKiVjdp09GW5nIWy/hFXbdUYx/qLU3hVA2LpImvGmAbTw3
+         of8qGModNWP5oF9VEKPdJDinWsZD5vnUms09gStH2Ms+98MiPvcpCF0PWXAt89h1Fidl
+         Ue4Q==
+X-Gm-Message-State: AC+VfDwU9uM3Xo6tAA5Z0BBHbMsQiWgJL29ByW0qx9iogjFfmOUcHHoY
+        g+HRSqGpPvgzSgsLklWFzUr6IA==
+X-Google-Smtp-Source: ACHHUZ4DmXCKy69G7/pkudz8CT8H8TcpLM9+ikGm3f+uy8F4re44Qhm1Bpee8jNZrBLkjGxdlNNOwQ==
+X-Received: by 2002:a2e:3e07:0:b0:2ae:d269:5a1e with SMTP id l7-20020a2e3e07000000b002aed2695a1emr1264044lja.21.1685696894885;
+        Fri, 02 Jun 2023 02:08:14 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id t2-20020a2e7802000000b002ac87c15fd4sm148889ljc.95.2023.06.02.02.08.01
+        by smtp.gmail.com with ESMTPSA id f14-20020a2e9e8e000000b002ad9057fd00sm148934ljk.85.2023.06.02.02.08.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 02:08:02 -0700 (PDT)
-Message-ID: <8f364aac-f9f3-4b85-9718-78f084bdf104@linaro.org>
-Date:   Fri, 2 Jun 2023 11:08:01 +0200
+        Fri, 02 Jun 2023 02:08:14 -0700 (PDT)
+Message-ID: <9da3d4b9-ef0b-01ef-7819-850260f3ce08@linaro.org>
+Date:   Fri, 2 Jun 2023 11:08:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
@@ -90,8 +90,7 @@ On 1.06.2023 17:20, Krzysztof Kozlowski wrote:
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-Should analogous changes be made for all remaining
-obj-$(CONFIG_PINCTRL_VENDOR) entries?
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
 >  drivers/pinctrl/Makefile | 2 +-
