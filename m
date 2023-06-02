@@ -2,181 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCB671F91E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0F971F921
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjFBEIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 00:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S233062AbjFBELD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 00:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjFBEIf (ORCPT
+        with ESMTP id S231241AbjFBELB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 00:08:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B05128;
-        Thu,  1 Jun 2023 21:08:32 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1685678786t4wn6335
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Jun 2023 12:06:25 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: BYUemv+qiN00SL9J7hzmONdu3OZstgKNbrJCS/RRwXSBpL7bT/bRmqMRkg8CW
-        Ub97Boxh6WfawPQfsJhqZEI6F6nZCq6cTRpbyRS8BJWRqrq39Vw1bAp9JdnBRm+ABFCnEbE
-        1yR48jc2hx1tooPYIMDmTEihsV386Mq8NrkyPMqm/HO0fooBT/+XhamhDgH3NvkF0jY1BgQ
-        0wxDHC1iiVtUr9tDMXIDCamjBfFm/TrM2IhBFaFEBZ+Uiks7HIp7ojQ9UGeWdSCCGuKjCz2
-        BCuOaFXSWkIrZhUPm2CQCjLGOiyMCixD//jSlCrcStjvY4g3cWlk/rXEPx0vzqsqDsKqD9p
-        DfAqQ2S8CkI1XvMwTB6/cgeUleZYbvQE+Bf7dGy6h9igC15u98XtBJ1LnaNig==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2670584436313738676
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de, thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Fri,  2 Jun 2023 12:06:25 +0800
-Message-Id: <20230602040625.24373-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
-References: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
+        Fri, 2 Jun 2023 00:11:01 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AC4128;
+        Thu,  1 Jun 2023 21:10:59 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-558565cc59bso1174074eaf.0;
+        Thu, 01 Jun 2023 21:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685679059; x=1688271059;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w3vGr4MbPaoToAJSxQ1XgzEMr0Rv0l9r0UfL6JK0LX0=;
+        b=O3izkDexVYpVytp697sLFBUaDAL3TQBgau0ZtAB2z38rzZvTd2IFvN6d0JK+GqBuey
+         sC6j/Q/VCdxBz3Fq2/y8bpotHg0NxjTuCAEg8UJFJYFWfBuc5AmGwS534Rz4R48FunTq
+         Ysg1q3SGJUilWu2N4VrDEoFLh7QT7ZU5o5KlP+8c+269LwKuvIuH1YskoATT3QCXPjok
+         J2iOiZ19xqPONlSS0f05/2o2c7OWk5tdpMEYdmbGk+z60ZXYHNC5R5tgvpq+sqtXGqnR
+         p4fBtVbg0Feaihk7Yf9aSXE2Q7x3Ko//Ir3VSCb1dKBLgx9w+CN46tUR5UB1KnO2iO5d
+         2ILQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685679059; x=1688271059;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3vGr4MbPaoToAJSxQ1XgzEMr0Rv0l9r0UfL6JK0LX0=;
+        b=gijtxuKIPXKqyGRZYta5Np+RG9bgsBhMlqSm+Nhg7Ie0BDsUThRtSPbmsZ6lXFcr1W
+         QbLwCwjKQJg2dZqSCoxjNyVAQVm1nWJUg/C0PMFuXNJoAm2MZ7Daw0DbOh2LnHOY+5Kg
+         OK0YqiRF8M5xrdxIjv1JDNBvYhfiAGlhZDhsGbikkbx+4RT0WE8visEmc89YfbvMiHp3
+         ldzLr6FcCr8JPC49XfF0Q/6ghl8hQWYTbHNHqE4e68bllWWlUgNi6RM+dOLYMDzKJncb
+         ud1YxtJPw+TJ+Irprq6Nk7g9Mf2I/OCewziGlYrhjthooSF6/1MxE1opdOCUaIYKAnWL
+         RvYw==
+X-Gm-Message-State: AC+VfDz3uiRDJa9OEdnD0RhqwsnaPXU3lCds/pYRhcc4ENhJLaQ/TY2N
+        Y0dxm//qu04jj4Aoskj3ConJVD7zrkuJ5w==
+X-Google-Smtp-Source: ACHHUZ7mLqQADDAStnoyYcPCXJCgP9RkieHihEgYSRjgKP1T2VHn9UZXYlPhaJPWE6mLiAWcff0yjg==
+X-Received: by 2002:a05:6358:3106:b0:125:68c4:572f with SMTP id c6-20020a056358310600b0012568c4572fmr9964351rwe.6.1685679058953;
+        Thu, 01 Jun 2023 21:10:58 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id fa2-20020a17090af0c200b00256353eb8f2sm2205846pjb.5.2023.06.01.21.10.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 21:10:58 -0700 (PDT)
+Message-ID: <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
+Date:   Fri, 2 Jun 2023 11:10:53 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
+ (and 5.15.113)
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
+ <ZHQIFLWvrWUNMVxb@debian.me>
+ <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Willy, Arnd and Thomas
-
-Based on your suggestions, in the comming v3, I plan to split the whole rv32
-support to something like this:
-
-1. Generic part1
-
-   (The old feedbacks are applied with the new Suggested-by lines, welcome your
-    additional feedbacks if there are ;-))
-
-    selftests/nolibc: syscall_args: use generic __NR_statx
-    tools/nolibc: add missing nanoseconds support for __NR_statx
-    selftests/nolibc: allow specify extra arguments for qemu
-    selftests/nolibc: fix up compile warning with glibc on x86_64
-    selftests/nolibc: not include limits.h for nolibc
-    selftests/nolibc: use INT_MAX instead of __INT_MAX__
-    tools/nolibc: arm: add missing my_syscall6
-    tools/nolibc: open: fix up compile warning for arm
-    selftests/nolibc: support two errnos with EXPECT_SYSER2()
-    selftests/nolibc: remove gettimeofday_bad1/2 completely
-    selftests/nolibc: add new gettimeofday test cases
-
-2. Add Compile support for rv32
-
-   (Convert all of the unsupported syscalls to a return of -ENOSYS, this
-    allows us to fix up the test failures one by one not that urgently later)
-
-    tools/nolibc: fix up #error compile failures with -ENOSYS
-    tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-    selftests/nolibc: riscv: customize makefile for rv32
-
-   (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
-
-3. Fix up the left test failures one by one
-
-   (Plan to add everyone as a standalone patchset, which will easier the review
-    and merge progress)
-
-   wait4 -> waitid
-   lseek -> llseek
-   gettimeofday -> clock_gettime/clock_gettime64
-   select -> pselect6/pselect6_time64
-   ppoll -> ppoll_time64
-
-4. Clean up some old test cases one by one
-
-   Like statx ...
-
-Best regards,
-Zhangjin
-
-[1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-
-> Both riscv64 and riscv32 have:
+On 5/29/23 09:37, Chris Packham wrote:
 > 
-> * the same ARCH value, it is riscv
-> * the same arch/riscv source code tree
+> On 29/05/23 14:04, Bagas Sanjaya wrote:
+>> On Sun, May 28, 2023 at 11:42:50PM +0000, Chris Packham wrote:
+>>> Hi,
+>>>
+>>> We have an embedded product with an Infineon SLM9670 TPM. After updating
+>>> to a newer LTS kernel version we started seeing the following warning at
+>>> boot.
+>>>
+>>> [    4.741025] ------------[ cut here ]------------
+>>> [    4.749894] irq 38 handler tis_int_handler+0x0/0x154 enabled interrupts
+>>> [    4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:159
+>>> __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.765557] Modules linked in:
+>>> [    4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.15.113 #1
+>>> [    4.774747] Hardware name: Allied Telesis x250-18XS (DT)
+>>> [    4.780080] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS
+>>> BTYPE=--)
+>>> [    4.787072] pc : __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.792146] lr : __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.797220] sp : ffff800008003e40
+>>> [    4.800547] x29: ffff800008003e40 x28: ffff8000093951c0 x27:
+>>> ffff80000902a9b8
+>>> [    4.807716] x26: ffff800008fe8d28 x25: ffff8000094a62bd x24:
+>>> ffff000001b92400
+>>> [    4.814885] x23: 0000000000000026 x22: ffff800008003ec4 x21:
+>>> 0000000000000000
+>>> [    4.822053] x20: 0000000000000001 x19: ffff000002381200 x18:
+>>> ffffffffffffffff
+>>> [    4.829222] x17: ffff800076962000 x16: ffff800008000000 x15:
+>>> ffff800088003b57
+>>> [    4.836390] x14: 0000000000000000 x13: ffff8000093a5078 x12:
+>>> 000000000000035d
+>>> [    4.843558] x11: 000000000000011f x10: ffff8000093a5078 x9 :
+>>> ffff8000093a5078
+>>> [    4.850727] x8 : 00000000ffffefff x7 : ffff8000093fd078 x6 :
+>>> ffff8000093fd078
+>>> [    4.857895] x5 : 000000000000bff4 x4 : 0000000000000000 x3 :
+>>> 0000000000000000
+>>> [    4.865062] x2 : 0000000000000000 x1 : 0000000000000000 x0 :
+>>> ffff8000093951c0
+>>> [    4.872230] Call trace:
+>>> [    4.874686]  __handle_irq_event_percpu+0xf4/0x180
+>>> [    4.879411]  handle_irq_event+0x64/0xec
+>>> [    4.883264]  handle_level_irq+0xc0/0x1b0
+>>> [    4.887202]  generic_handle_irq+0x30/0x50
+>>> [    4.891229]  mvebu_gpio_irq_handler+0x11c/0x2a0
+>>> [    4.895780]  handle_domain_irq+0x60/0x90
+>>> [    4.899720]  gic_handle_irq+0x4c/0xd0
+>>> [    4.903398]  call_on_irq_stack+0x20/0x4c
+>>> [    4.907338]  do_interrupt_handler+0x54/0x60
+>>> [    4.911538]  el1_interrupt+0x30/0x80
+>>> [    4.915130]  el1h_64_irq_handler+0x18/0x24
+>>> [    4.919244]  el1h_64_irq+0x78/0x7c
+>>> [    4.922659]  arch_cpu_idle+0x18/0x2c
+>>> [    4.926249]  do_idle+0xc4/0x150
+>>> [    4.929404]  cpu_startup_entry+0x28/0x60
+>>> [    4.933343]  rest_init+0xe4/0xf4
+>>> [    4.936584]  arch_call_rest_init+0x10/0x1c
+>>> [    4.940699]  start_kernel+0x600/0x640
+>>> [    4.944375]  __primary_switched+0xbc/0xc4
+>>> [    4.948402] ---[ end trace 940193047b35b311 ]---
+>>>
+>>> Initially I dismissed this as a warning that would probably be cleaned
+>>> up when we did more work on the TPM support for our product but we also
+>>> seem to be getting some new i2c issues and possibly a kernel stack
+>>> corruption that we've conflated with this TPM warning.
+>> Can you reproduce this issue on mainline? Can you also bisect to find
+>> the culprit?
 > 
-> The only differences are:
+> No the error doesn't appear on a recent mainline kernel. I do still get
 > 
-> * riscv64 uses defconfig, riscv32 uses rv32_defconfig
-> * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
-> * riscv32 has different compiler options (-march= and -mabi=)
+> tpm_tis_spi spi1.1: 2.0 TPM (device-id 0x1B, rev-id 22)
+> tpm tpm0: [Firmware Bug]: TPM interrupt not working, polling instead
+> tpm tpm0: A TPM error (256) occurred attempting the self test
 > 
-> So, riscv32 can share most of the settings with riscv64, there is no
-> need to add it as a whole new architecture but just need a flag to
-> record and reflect the difference.
+> but I think I was getting that on v5.15.110
 > 
-> The 32bit mips and loongarch may be able to use the same method, so,
-> let's use a meaningful flag: CONFIG_32BIT. If required in the future,
-> this flag can also be automatically loaded from
-> include/config/auto.conf.
-> 
-> With this patch, it is able to run nolibc test for rv32 like this:
-> 
->     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 44088535682e..ea434a0acdc1 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
->  ARCH = $(SUBARCH)
->  endif
->  
-> +# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
-> +ifneq ($(findstring xriscv,x$(ARCH)),)
-> +  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
-> +  override ARCH := riscv
-> +endif
-> +
->  # kernel image names by architecture
->  IMAGE_i386       = arch/x86/boot/bzImage
->  IMAGE_x86_64     = arch/x86/boot/bzImage
-> @@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
->  DEFCONFIG_arm64      = defconfig
->  DEFCONFIG_arm        = multi_v7_defconfig
->  DEFCONFIG_mips       = malta_defconfig
-> -DEFCONFIG_riscv      = defconfig
-> +DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
->  DEFCONFIG_s390       = defconfig
->  DEFCONFIG_loongarch  = defconfig
->  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-> @@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
->  QEMU_ARCH_arm64      = aarch64
->  QEMU_ARCH_arm        = arm
->  QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
-> -QEMU_ARCH_riscv      = riscv64
-> +QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
->  QEMU_ARCH_s390       = s390x
->  QEMU_ARCH_loongarch  = loongarch64
->  QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-> @@ -76,6 +82,7 @@ else
->  Q=@
->  endif
->  
-> +CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
->  CFLAGS_s390 = -m64
->  CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
->  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-> -- 
-> 2.25.1
+>>
+
+I repeat: Can you bisect between v5.15 and v5.15.112?
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
