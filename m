@@ -2,127 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D007202D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3371E7202CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235510AbjFBNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S234849AbjFBNMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234408AbjFBNNC (ORCPT
+        with ESMTP id S235864AbjFBNMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:13:02 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC3310E9;
-        Fri,  2 Jun 2023 06:12:26 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-6260e771419so12441256d6.1;
-        Fri, 02 Jun 2023 06:12:26 -0700 (PDT)
+        Fri, 2 Jun 2023 09:12:14 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE51AE5B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:11:40 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f60bc818d7so2005787e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685711518; x=1688303518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ry5f5ak9Sr/bZIbtzTWJKvf8qehHNybuYJDF5N8k3cI=;
-        b=QPHM+5/woE/dOdJELOIwis9yJBOUQoJlPPGRdP02SJqMqHI27rC5crLA6aJ+I+IAyk
-         g8SE/QLLi9KBFI6QVazJnlN1/A75T72fCkc2WD6qXVb+/iEFm8ghzYBFWz00iZ56auMH
-         +Lx304AoJRyE/RsOG8vlL+2XlxxJi8Avc8Gfhbm18Oys/Bbvx+OzVC0gKZo2Is5m1ErA
-         Wx2XlDL+Tn9j7p7GXzEg5NFb5U7eeWBs2cXHHnnWfkA7kTL79BUrztBei2k7C3oKS7Ey
-         3tCQabzh8T47rC/pmtQ45/Xnylb59gvgVMKGQdMLy2VoobHctDpkirlJTdouqsFKEhz4
-         MbRA==
+        d=linaro.org; s=google; t=1685711499; x=1688303499;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fdOza1gLCalLSXkYNY4mfvWYzR4Q4eTY/qnCdvd8TFI=;
+        b=OQG6NkGTY8w1iNprv3qIaPBF7ojyVzw2L0LdKDBQuojwW4n/Gwj2GkpkFfrtl4V2gI
+         2xrnUG/TogFtedY6rDXNS9MtJyr9C4KFoLSZayqrqdEBTj0RfS7YeAeJoCCQsmW8cjvs
+         sdMhxEWwbQS0bFCJS/YJCKpxNoQdOEJpHnxSRuzLH2mw4e8rUaP775d897/oBebWdnN9
+         Ads0I/oo/n2vkWTkKmowPFMhpxThhbO5bXQIZZVINcEGx8MQX8qbaz9MGEUjpqhsdOE+
+         tJrzXcx+lLit2xsTI9zZ/hUIMESUEPdWE29IcxYRFqHYh6NpZlTpRY8wRhcxGzuRfQst
+         OYUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711518; x=1688303518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ry5f5ak9Sr/bZIbtzTWJKvf8qehHNybuYJDF5N8k3cI=;
-        b=JEJ4S4m6yVSj4OvZcC0WAjiibqiIGCnqXmt9Kcj2LslpCaZQsn2G3ENnTZ1bJwkuL+
-         XDQ7VzoJDeanAQ5P3wO4Oo06waz7m/9sZk7FPJKEDVaoHWLyN1qknbObKGSXUw3jmD6K
-         edJwVR+/eP9ZjAAOBJemzWCvUD244BS1lvLlff6q6zIQEdFcQaXL73/PxzACkxCq1K03
-         apXGlcw1uPizLPPiRiVx8/QxLTjbjSUeZG3MZuqO5ba8L+Q3vdz0FWaOWEN3zqlR1wot
-         DPHeeIoUL2fhQL/Z7ONRhAYZHGl9hMpC7TO48cQaVQ4wV7SDTb8RKQ+atuedrY2oXdP5
-         2lcA==
-X-Gm-Message-State: AC+VfDym+2Kre7AsobAzAU1qWzefzhXq8fYdLz69XGkxjPFgKju59U2x
-        ctqI+Qi9w60dYPUFrW08qNMzE2Eat4sqY4jyCJe7IjqdIHabOg==
-X-Google-Smtp-Source: ACHHUZ7kMzvAHTkGGwT6hZfhgTh0gjVaS+Sg8f/2ZLTev7/1qspG/QCMLGRPbwovukpVvSzxyIhabkjHVr9LicCFB2s=
-X-Received: by 2002:a05:6214:411b:b0:628:7be8:97b7 with SMTP id
- kc27-20020a056214411b00b006287be897b7mr2694764qvb.23.1685711518207; Fri, 02
- Jun 2023 06:11:58 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685711499; x=1688303499;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fdOza1gLCalLSXkYNY4mfvWYzR4Q4eTY/qnCdvd8TFI=;
+        b=bwCxCL1MZIsXvwWhPFsyyTkHLlWetU061X4JU+aRodBt4zKDfDkfGcJoWCLorC4caA
+         EXM4hQjCedhl0KV7zlJCAky9fH6nWId72ZFB5tcQNPi8gZ4Dm/W31DPbXs2vNpJqoF/n
+         ZzPUw7/eTCRklYhSLQvPqlmWkkfEZYRL8PnYOb5+/IebxAqaqKEN0ID2Wt2QCyk8AY9F
+         5IEa2RP3/m2V7TbpqMG7wELnWRevpQJpwuKOiKQPEKL28jsPVq8wRdHmxgg+NZUpXVoC
+         UBfikoyKISGpqNGLjoy3uC0dvS1cyrhnQkgolsOPcnakUDL5NjUMhb2x74/aZ/tmPwld
+         9hLw==
+X-Gm-Message-State: AC+VfDxJJ98aS6DtJzUmkiGMPmxDjl6OgMa/kUpTFK3ZJocB+pQe8Vqb
+        /idt9HdxC8zM/BzxrRa8WAVBhA==
+X-Google-Smtp-Source: ACHHUZ6pzMnLSLO1Ama3yhQyeYIg1fA+OJjI4CJNmdzdAHVyE5wYPdc1sGelcxVvpPlfy2h5ZJCI+w==
+X-Received: by 2002:a19:7014:0:b0:4f3:982a:8be1 with SMTP id h20-20020a197014000000b004f3982a8be1mr1894490lfc.69.1685711498965;
+        Fri, 02 Jun 2023 06:11:38 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:40f6:d082:aa42:96f0? ([2a05:6e02:1041:c10:40f6:d082:aa42:96f0])
+        by smtp.googlemail.com with ESMTPSA id 24-20020a05600c22d800b003f3e50eb606sm1931739wmg.13.2023.06.02.06.11.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 06:11:38 -0700 (PDT)
+Message-ID: <0eb717ac-82b1-8a76-58a2-394167e69b28@linaro.org>
+Date:   Fri, 2 Jun 2023 15:11:37 +0200
 MIME-Version: 1.0
-References: <20230602082325.1445261-1-quic_srichara@quicinc.com> <20230602082325.1445261-3-quic_srichara@quicinc.com>
-In-Reply-To: <20230602082325.1445261-3-quic_srichara@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Jun 2023 16:11:21 +0300
-Message-ID: <CAHp75Vcfa2cbACEPROuOptPM7c9SOp_TudK-4Rx45OhWPf=iiw@mail.gmail.com>
-Subject: Re: [PATCH V8 2/8] clk: qcom: Add Global Clock controller (GCC)
- driver for IPQ5018
-To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robimarko@gmail.com,
-        krzysztof.kozlowski@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alice Guo <alice.guo@nxp.com>
+References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
+ <20230516083746.63436-3-peng.fan@oss.nxp.com>
+ <3c59c4e0-68eb-b778-6b12-9f9e331f81dd@linaro.org>
+ <PA4PR04MB94165217C8C0D9E8E0087AF988489@PA4PR04MB9416.eurprd04.prod.outlook.com>
+ <01197bb8-da0d-f726-79bc-d8ab7d3ea992@linaro.org>
+ <DU0PR04MB9417D9020578083527FC16C888489@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 11:24=E2=80=AFAM Sricharan Ramabadhran
-<quic_srichara@quicinc.com> wrote:
->
-> Add support for the global clock controller found on IPQ5018
-> based devices.
+On 01/06/2023 11:52, Peng Fan wrote:
+> Hi Daniel,
+> 
+>> Subject: RE: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
+>> sensors
+>>
+>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
+>>> sensors
+>>>
+>>> On 31/05/2023 14:05, Peng Fan wrote:
+>>>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable
+>>>>> supported sensors
+>>>>>
+>>>>> On 16/05/2023 10:37, Peng Fan (OSS) wrote:
+>>>>>> From: Peng Fan <peng.fan@nxp.com>
+>>>>>>
+>>>>>> There are MAX 16 sensors, but not all of them supported. Such as
+>>>>>> i.MX8MQ, there are only 3 sensors. Enabling all 16 sensors will
+>>>>>> touch reserved bits from i.MX8MQ reference mannual, and TMU will
+>>>>>> stuck, temperature will not update anymore.
+>>>>>>
+>>>>>> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before
+>>>>>> registering them")
+>>>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>>>>> ---
+>>>>>>     drivers/thermal/qoriq_thermal.c | 30 +++++++++++++++++++----------
+>> -
+>>>>>>     1 file changed, 19 insertions(+), 11 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/thermal/qoriq_thermal.c
+>>>>>> b/drivers/thermal/qoriq_thermal.c index
+>> b806a0929459..53748c4a5be1
+>>>>>> 100644
+>>>>>> --- a/drivers/thermal/qoriq_thermal.c
+>>>>>> +++ b/drivers/thermal/qoriq_thermal.c
+>>>>>> @@ -31,7 +31,6 @@
+>>>>>>     #define TMR_DISABLE	0x0
+>>>>>>     #define TMR_ME		0x80000000
+>>>>>>     #define TMR_ALPF	0x0c000000
+>>>>>> -#define TMR_MSITE_ALL	GENMASK(15, 0)
+>>>>>>
+>>>>>>     #define REGS_TMTMIR	0x008	/* Temperature measurement
+>>>>> interval Register */
+>>>>>>     #define TMTMIR_DEFAULT	0x0000000f
+>>>>>> @@ -105,6 +104,11 @@ static int tmu_get_temp(struct
+>>>>> thermal_zone_device *tz, int *temp)
+>>>>>>     	 * within sensor range. TEMP is an 9 bit value representing
+>>>>>>     	 * temperature in KelVin.
+>>>>>>     	 */
+>>>>>> +
+>>>>>> +	regmap_read(qdata->regmap, REGS_TMR, &val);
+>>>>>> +	if (!(val & TMR_ME))
+>>>>>> +		return -EAGAIN;
+>>>>>
+>>>>> How is this change related to what is described in the changelog?
+>>>>
+>>>> devm_thermal_zone_of_sensor_register will invoke get temp, since we
+>>>> reverted the 45038e03d633 did, we need to check TMR_ME to avoid
+>>> return
+>>>> invalid temperature.
+>>>
+>>>
+>>>   From a higher perspective if the sensor won't be enabled, then the
+>>> thermal zone should not be registered, the get_temp won't happen on a
+>>> disabled sensor and this test won't be necessary, no ?
+> 
+> After thinking more, I'd prefer current logic.
+> 
+> We rely on devm_thermal_of_zone_register's return value to know
+> whether there is a valid zone, then set sites bit, and after collected
+> all site bits, we enable the thermal IP.
+> 
+> If move the enabling thermal IP before devm_thermal_of_zone_register,
+> We need check dtb thermal zone, to know which zone is valid for current
+> thermal IP. This would complicate the design.
+> 
+> So just checking the enabling bit in get temperature would be much
+> simpler, and there just a small window before enabling thermal IP.
 
-...
 
->  config IPQ_GCC_5332
->         tristate "IPQ5332 Global Clock Controller"
->         depends on ARM64 || COMPILE_TEST
->         help
->           Support for the global clock controller on ipq5332 devices.
-> -         Say Y if you want to use peripheral devices such as UART, SPI,
-> -         i2c, USB, SD/eMMC, etc.
+If the thermal zone is not described, then the thermal zone won't be 
+created as it fails with -ENODEV and thus get_temp won't be called on a 
+disabled site, right?
 
-Nothing in the commit message about this. Please, elaborate.
+Having test in the get_temp() ops is usually the sign there is something 
+wrong with the driver initialization.
 
-...
 
-> +#include <linux/kernel.h>
-> +#include <linux/err.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset-controller.h>
 
-Why not keep this ordered?
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Missing bits.h and maybe others, but in an unordered list it's harder to ch=
-eck.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-...
-
-> +                       &gpll4_main.clkr.hw
-
-Can we keep trailing comma here and in similar cases, like
-
-> +                       &ubi32_pll_main.clkr.hw
-> +                       &gpll0_main.clkr.hw
-
-(and many others)?
-
---=20
-With Best Regards,
-Andy Shevchenko
