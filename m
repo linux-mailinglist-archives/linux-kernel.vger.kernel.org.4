@@ -2,767 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD2171F742
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7216A71F744
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbjFBArL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S233158AbjFBArV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjFBArJ (ORCPT
+        with ESMTP id S229682AbjFBArP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:47:09 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32617F2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:47:04 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230602004659epoutp045b6b776ecaa3e604c4d019ca30a69732~ksQp6aa-j1309013090epoutp04D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:46:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230602004659epoutp045b6b776ecaa3e604c4d019ca30a69732~ksQp6aa-j1309013090epoutp04D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685666819;
-        bh=xSgZBURyT7Eh1KjzV1lIovjVO1j7t+f4rjn9Rcey/WM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lVNYKc6Xmtz2rzPk6fXD65WcCi2lw6Axbx7f1oksN44s6LGQ4VU2j4/bKX6Dyc6FG
-         84BlIqmsa+aAIMi1V1RYJug2SwLni8kCodvMi8X3nUdfYAlsa0TFiDyZTgBAXALYhJ
-         7zjjecP27jJQpVR2JGIhub/WdHMw46YcmSz6Dko0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230602004658epcas2p10244eb12f9b9185257ace9291d5911bd~ksQphHdca2586225862epcas2p15;
-        Fri,  2 Jun 2023 00:46:58 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QXPTZ0QbWz4x9Pw; Fri,  2 Jun
-        2023 00:46:58 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BC.46.11450.10C39746; Fri,  2 Jun 2023 09:46:57 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230602004657epcas2p4fd7fee9f9efa84b57bae43d1897c7a3f~ksQodYZvq2613126131epcas2p4K;
-        Fri,  2 Jun 2023 00:46:57 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230602004657epsmtrp1417a431c6e0e9195be90dbc874b415e0~ksQocqr233254632546epsmtrp16;
-        Fri,  2 Jun 2023 00:46:57 +0000 (GMT)
-X-AuditID: b6c32a45-445fd70000022cba-4e-64793c014dbe
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F9.94.28392.10C39746; Fri,  2 Jun 2023 09:46:57 +0900 (KST)
-Received: from KORCO045595.samsungds.net (unknown [10.229.38.76]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230602004657epsmtip2c0bb26be84bc03f8a71f4e16212a5298~ksQoKyRPl1903919039epsmtip2y;
-        Fri,  2 Jun 2023 00:46:57 +0000 (GMT)
-Date:   Fri, 2 Jun 2023 09:46:57 +0900
-From:   Bongkyu Kim <bongkyu7.kim@samsung.com>
-To:     Waiman Long <longman@redhat.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, jwook1.kim@samsung.com,
-        lakkyung.jung@samsung.com
-Subject: Re: [PATCH] locking/rwsem: Optionally re-enable reader optimistic
- spinning
-Message-ID: <20230602004657.GA8942@KORCO045595.samsungds.net>
+        Thu, 1 Jun 2023 20:47:15 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCD6E4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:47:13 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-65299178ac5so602432b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 17:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685666833; x=1688258833;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NnRu1Ekfwdrg+A5ovmm5zAEOw3CprjRg24Z8Orpw2uQ=;
+        b=G4i8C4zWjxUOnmWFk275VeIb5Nf5EbYvlVFFwXn1P9CavvdsBXavproFw2wDQG4QxW
+         GmRaRZbRzNfj63dNAAbv9OQRD18qR6e4W1cpK8ZKzyRMUvZJmdwSJpgMcKp2SNS0j7Xo
+         q6A4ECaQ/BGboYDydc6kylLtRZrye/YiH6kNScQ1TJMoEYho7SKRf7OUBIQ7jFq4EuzN
+         gsj/eje/a6BwmP62P42E2aIo1dP3k62QOLers62506N4TKHVYuuhDZW99l6cHI/C6wLP
+         HEil1y7R5mH+hPLc6raTBWYSkHlgd5224knKmZ1QyXUKBP+Bm7/7gsaCZGsmLcLDOv6T
+         d7jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685666833; x=1688258833;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NnRu1Ekfwdrg+A5ovmm5zAEOw3CprjRg24Z8Orpw2uQ=;
+        b=JJZRcAYC8cZKy9pwfpDRcFwx7tZNLFxSX5FGPqemxbCW3crFyLCDkzDM3Md++4T5mR
+         4aq3klwuo2XDCJbDqwgGudU0AX1ViJUDH6KcKD1baPAVusIJIrqCXz/cphHuH7gskKDX
+         zRaIUMCuuc30t1iwW84YzJD9mS02WKSPijtTzPl6dAGI9T4ZjwPhiV47cgwqoX9o+TnV
+         KGSyJaGGgysmDzBWsIl4KXwmph5x7gGKwZ4wCJcD9O5vUIKnNLJGtLOP3R2Meh0DhJD9
+         C/iFXDVYzkjBNdIPvp99Np9fFsPzEModxusA4/6n/ew4quda5jDktxnLWpubY16315eW
+         RAHQ==
+X-Gm-Message-State: AC+VfDxjd0AqjO753tLzCWm0kTAFiL9UCIYq4uxIgYu455FSjlaF9u+f
+        Cc4LZoVfspkSyiJohqfb4wiz4Q==
+X-Google-Smtp-Source: ACHHUZ4tCstGkq0nK4V8as/QJveHny4XYvHGVGmmtU2Xd7gEov81zmYTX54nuOiWypaNhQDCM0l01Q==
+X-Received: by 2002:a05:6a00:16c5:b0:64d:5f1d:3d77 with SMTP id l5-20020a056a0016c500b0064d5f1d3d77mr12571067pfc.34.1685666833094;
+        Thu, 01 Jun 2023 17:47:13 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id x21-20020aa784d5000000b0063b86aff031sm5648713pfn.108.2023.06.01.17.47.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 17:47:12 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q4swg-006i6z-0M;
+        Fri, 02 Jun 2023 10:47:10 +1000
+Date:   Fri, 2 Jun 2023 10:47:10 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Chen, Zhiyin" <zhiyin.chen@intel.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Zou, Nanhai" <nanhai.zou@intel.com>,
+        "Feng, Xiaotian" <xiaotian.feng@intel.com>
+Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
+Message-ID: <ZHk8Dmvr1hl/o6+a@dread.disaster.area>
+References: <20230530020626.186192-1-zhiyin.chen@intel.com>
+ <20230530-wortbruch-extra-88399a74392e@brauner>
+ <20230531015549.GA1648@quark.localdomain>
+ <CO1PR11MB4931D767C5277A37F24C824DE4489@CO1PR11MB4931.namprd11.prod.outlook.com>
+ <ZHfKmG5RtgrMb6OT@dread.disaster.area>
+ <CO1PR11MB49317EB3364DB47F1FF6839FE4499@CO1PR11MB4931.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <8e11066a-017f-a190-39de-17f92128e42f@redhat.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEJsWRmVeSWpSXmKPExsWy7bCmhS6jTWWKwee3FhZrtjQyWcy9cI7d
-        4uPtvewWl3fNYbM4fewEi8WlAwuYLI73HmCyaLlj6sDhsXPWXXaPzSu0PDat6mTzeL/vKptH
-        35ZVjB6fN8kFsEU1MNokFiVnZJalKqTmJeenZOal2yqFhrjpWigpZOQXl9gqRRsaGukZGpjr
-        GRkZ6ZkaxVoZmSop5CXmptoqVehC9SopFCUXANXmVhYDDchJ1YOK6xWn5qU4ZOWXgvygV5yY
-        W1yal66XnJ+rpFCWmFMKNEJJP+EbY8ajo9NYC+59YqyYtfwgawPjvC2MXYycHBICJhL73+wH
-        srk4hAR2MEr09WxghXA+MUrs2rOMGcL5zCixsmMTK0zL1a2z2SESuxglmjfuYIJwvjFKdE2d
-        yQJSxSKgIvFp9SWwJWwCOhL/V89gArFFBEolri1oAZvELBAqcf/nL2YQWxjIfvrhOFgvr4Ct
-        xLy5E1khbEGJkzOfgMU5Bewkfja/BtssIdDJIXH8/mdmiJNcJPY97maDsIUlXh3fwg5hS0m8
-        7G+DsrMlztw5D/V1hcTLv3+g4sYSs561M0IclCEx68ZEoDgHUFxZ4sgtFogwn0TH4b9Q5YIS
-        p691M0OU8Ep0tAlBhNUkdj9vhQaQjMTBs2uZIGwPiQkP5oJNFxJYwyQx71X1BEb5WUg+m4Vk
-        MYStJ3Fj6hQ2CFteonnrbOZZQNuYBaQllv/jgDA1Jdbv0l/AyLaKUSy1oDg3PbXYqMAQOfY3
-        MYKTs5brDsbJbz/oHWJk4mA8xCjBwawkwisUVp4ixJuSWFmVWpQfX1Sak1p8iDEZGGUTmaVE
-        k/OB+SGvJN7QzMzSwtLI1MLS1NSCsLCJpYGJmZmhuZGpgbmSOK+07clkIYH0xJLU7NTUgtQi
-        mC1MHJxSDUxr7R9cS34Q+td+D79xWsDks2FHWfe3MLOLpCiGLrj+pywr4hhb5DT17V4fbALn
-        sXy6omrE0Wa1ZrvYd0s9gVU3Gy4FNfy64P5mldTjpK+9dTkiDgrqvO9naq9zLtzOFO29Y/3E
-        +oMHu8JnFHtdWsJuq6wpt3zfyu9+gglRk++LVCTtvHWzUL9x2lcdw6iqz+q3//fUWmrIz5wW
-        KDDBZ+9Pregsv4eKE55/+isXr3bB+Uh5l2NJ2IXbSREiEfpHVvyo3tioM/Op/4fOMqVoZsNV
-        cQriWs+Ms053+5uVrPohw2ud8vdtsljkdauAuUVm23qOzMhr2MfZqMojUyHN0vPb+fT0yap7
-        SqoLus/KK7EUZyQaajEXFScCAFMYyomFBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMLMWRmVeSWpSXmKPExsWy7bCSvC6jTWWKwZZTohZrtjQyWcy9cI7d
-        4uPtvewWl3fNYbM4fewEi8WlAwuYLI73HmCyaLlj6sDhsXPWXXaPzSu0PDat6mTzeL/vKptH
-        35ZVjB6fN8kFsEVx2aSk5mSWpRbp2yVwZdzeF1Tw+z1jxecVL5gbGK9vZOxi5OSQEDCRuLp1
-        NnsXIxeHkMAORol753ewQyRkJA79W8sEYQtL3G85wgpR9IVR4v6bVmaQBIuAisSn1ZfAJrEJ
-        6Ej8Xz0DrEFEoFTi2oIWVhCbWSBU4v7PX2D1wkD20w/HWUBsXgFbiXlzJ0INXcMk8WrHPjaI
-        hKDEyZlPWCCadSR2br0DFOcAsqUllv/jgAjLSzRvnQ02k1PATuJn82v2CYyCs5B0z0LSPQuh
-        exaS7gWMLKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYLjRUtrB+OeVR/0DjEycTAe
-        YpTgYFYS4RUKK08R4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6YklqdmpqQWoRTJaJ
-        g1OqgWnX5UWMzI3ZhucnvYqf/kpi7qPqttDb7RMebXihta2j5Nw2pcJpLommOi2p2vcyQhY/
-        LNp/YMP0Bv+HbAtc7q4y9GqYviHRviB9AUN5pOBczRl9LzpfLNh9XaBWqGbqLP58/ktCS9qL
-        rnv9YkmWtpU/O33+u/dyq10LD3nkqvW3saYfPvnqXNDmztxWGYOc1/x6LE9ZtD5eYvK5f+Tp
-        krq5M5gPXJo2qXjZV476xc4RVh++b5opNVXwnufOK2zTsq78a9s+g2dp22TjfPVnbfH1meXm
-        zp4n3vDfWqR7/fUvy78fON7lvI+5JZxk8XVhSdiZNdsbI9e9C7rPv3rXJqMDoYwf7Sdw3uVv
-        ejp/wnc2JZbijERDLeai4kQAOA1p6wYDAAA=
-X-CMS-MailID: 20230602004657epcas2p4fd7fee9f9efa84b57bae43d1897c7a3f
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----Y9bAoTVPo7TEjNVVx8BuVeRnQePgNsPKB0hZTbOgiEUDqOwX=_6fc13_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-ArchiveUser: EV
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230531003446epcas2p1fc55e0439a9c667685d495cd5f5b2e93
-References: <CGME20230531003446epcas2p1fc55e0439a9c667685d495cd5f5b2e93@epcas2p1.samsung.com>
-        <20230531003436.7082-1-bongkyu7.kim@samsung.com>
-        <d5b65c4b-7232-e5a7-27ae-b8efab037396@redhat.com>
-        <20230601012246.GA8364@KORCO045595.samsungds.net>
-        <8e11066a-017f-a190-39de-17f92128e42f@redhat.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CO1PR11MB49317EB3364DB47F1FF6839FE4499@CO1PR11MB4931.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------Y9bAoTVPo7TEjNVVx8BuVeRnQePgNsPKB0hZTbOgiEUDqOwX=_6fc13_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: inline
+On Thu, Jun 01, 2023 at 10:47:53AM +0000, Chen, Zhiyin wrote:
+> Good questions.
+> perf has been applied to analyze the performance. In the syscall test, the patch can 
+> reduce the CPU cycles for filp_close. Besides, the HITM count is also reduced from 
+> 43182 to 33146.
+> The test is not restricted to a set of adjacent cores. The numactl command is only 
+> used to limit the number of processing cores.
 
-On Thu, Jun 01, 2023 at 10:06:13AM -0400, Waiman Long wrote:
-> On 5/31/23 21:22, Bongkyu Kim wrote:
-> > On Wed, May 31, 2023 at 02:29:54PM -0400, Waiman Long wrote:
-> > > On 5/30/23 20:34, Bongkyu Kim wrote:
-> > > > Remove reader optimistic spinning has a great regression on application
-> > > I won't consider this a great regression if it is just a few % point of
-> > > performance differences.
-> > > 
-> > > BTW, this patch is mostly a revert of commit 617f3ef95177 ("locking/rwsem:
-> > > Remove reader optimistic spinning"). So it should be mentioned here.
-> > > 
-> > I will fix these and resend patch v2.
-> > Thanks for your review.
+And, in doing so, it limits the physical locality of the cores being
+used to 3-18. That effectively puts them all on the socket because
+the test is not using all 16 CPUs and the scheduler tends to put all
+related tasks on the same socket if there are enoguh idle CPUs to do
+so....
+
+> In most situations, only 8/16/32 CPU 
+> cores are used. Performance improvement is still obvious, even if non-adjacent 
+> CPU cores are used.
 > 
-> There is one more point that I forgot to mention. Enabling this option can
-> degrade or improve performance depending on the actual workload. A system
-> administrator that is not familiar with the rwsem code will not know what to
-> do with it. So I would suggest a bit more wording on the documentation part
-> about under what condition should the users try to enable it to see if it
-> helps.
+> No matter what CPU type, cache size, or architecture, false sharing is always 
+> negative on performance. And the read mostly members should be put together.
 > 
-> -Longman
+> To further prove the updated layout effectiveness on some other codes path, 
+> results of fsdisk, fsbuffer, and fstime are also shown in the new commit message. 
 > 
-
-All right. I will add a more wording to the documentation part and resend
-patch v3.
-
-Thanks,
-Bongkyu
-
-> > > > startup performance in android device. In mobile environment, reader
-> > > > optimistic spinning is still useful because there're not many readers.
-> > > > So re-enable reader optimistic spinning and disabled by default. And,
-> > > > can turn on by cmdline.
-> > > > 
-> > > > Test result:
-> > > > This is 15 application startup performance in our s5e8535 soc.
-> > > > - Cortex A78*2 + Cortex A55*6
-> > > > 
-> > > > Application             base  opt_rspin  Diff  Diff(%)
-> > > > --------------------  ------  ---------  ----  -------
-> > > > * Total(geomean)         343        330   -13    +3.8%
-> > > > --------------------  ------  ---------  ----  -------
-> > > > helloworld               110        108    -2    +1.8%
-> > > > Amazon_Seller            397        388    -9    +2.3%
-> > > > Whatsapp                 311        304    -7    +2.3%
-> > > > Simple_PDF_Reader        500        463   -37    +7.4%
-> > > > FaceApp                  330        317   -13    +3.9%
-> > > > Timestamp_Camera_Free    451        443    -8    +1.8%
-> > > > Kindle                   629        597   -32    +5.1%
-> > > > Coinbase                 243        233   -10    +4.1%
-> > > > Firefox                  425        399   -26    +6.1%
-> > > > Candy_Crush_Soda         552        538   -14    +2.5%
-> > > > Hill_Climb_Racing        245        230   -15    +6.1%
-> > > > Call_Recorder            437        426   -11    +2.5%
-> > > > Color_Fill_3D            190        180   -10    +5.3%
-> > > > eToro                    512        505    -7    +1.4%
-> > > > GroupMe                  281        266   -15    +5.3%
-> > > > 
-> > > > Signed-off-by: Bongkyu Kim <bongkyu7.kim@samsung.com>
-> > > > ---
-> > > >    .../admin-guide/kernel-parameters.txt         |   2 +
-> > > >    kernel/locking/lock_events_list.h             |   5 +-
-> > > >    kernel/locking/rwsem.c                        | 292 +++++++++++++++---
-> > > >    3 files changed, 255 insertions(+), 44 deletions(-)
-> > > > 
-> > > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > > > index bb23a36a7ff7..b92a6b3f965f 100644
-> > > > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > > > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > > > @@ -5495,6 +5495,8 @@
-> > > >    	rw		[KNL] Mount root device read-write on boot
-> > > > +	rwsem.opt_rspin= [KNL] Use rwsem reader optimistic spinning
-> > > > +
-> > > >    	S		[KNL] Run init in single mode
-> > > >    	s390_iommu=	[HW,S390]
-> > > > diff --git a/kernel/locking/lock_events_list.h b/kernel/locking/lock_events_list.h
-> > > > index 97fb6f3f840a..270a0d351932 100644
-> > > > --- a/kernel/locking/lock_events_list.h
-> > > > +++ b/kernel/locking/lock_events_list.h
-> > > > @@ -56,9 +56,12 @@ LOCK_EVENT(rwsem_sleep_reader)	/* # of reader sleeps			*/
-> > > >    LOCK_EVENT(rwsem_sleep_writer)	/* # of writer sleeps			*/
-> > > >    LOCK_EVENT(rwsem_wake_reader)	/* # of reader wakeups			*/
-> > > >    LOCK_EVENT(rwsem_wake_writer)	/* # of writer wakeups			*/
-> > > > -LOCK_EVENT(rwsem_opt_lock)	/* # of opt-acquired write locks	*/
-> > > > +LOCK_EVENT(rwsem_opt_rlock)	/* # of opt-acquired read locks		*/
-> > > > +LOCK_EVENT(rwsem_opt_wlock)	/* # of opt-acquired write locks	*/
-> > > >    LOCK_EVENT(rwsem_opt_fail)	/* # of failed optspins			*/
-> > > >    LOCK_EVENT(rwsem_opt_nospin)	/* # of disabled optspins		*/
-> > > > +LOCK_EVENT(rwsem_opt_norspin)	/* # of disabled reader-only optspins	*/
-> > > > +LOCK_EVENT(rwsem_opt_rlock2)	/* # of opt-acquired 2ndary read locks	*/
-> > > >    LOCK_EVENT(rwsem_rlock)		/* # of read locks acquired		*/
-> > > >    LOCK_EVENT(rwsem_rlock_steal)	/* # of read locks by lock stealing	*/
-> > > >    LOCK_EVENT(rwsem_rlock_fast)	/* # of fast read locks acquired	*/
-> > > > diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-> > > > index 9eabd585ce7a..016dbc4312e6 100644
-> > > > --- a/kernel/locking/rwsem.c
-> > > > +++ b/kernel/locking/rwsem.c
-> > > > @@ -33,13 +33,19 @@
-> > > >    #include "lock_events.h"
-> > > >    /*
-> > > > - * The least significant 2 bits of the owner value has the following
-> > > > + * The least significant 3 bits of the owner value has the following
-> > > >     * meanings when set.
-> > > >     *  - Bit 0: RWSEM_READER_OWNED - The rwsem is owned by readers
-> > > > - *  - Bit 1: RWSEM_NONSPINNABLE - Cannot spin on a reader-owned lock
-> > > > + *  - Bit 1: RWSEM_RD_NONSPINNABLE - Readers cannot spin on this lock.
-> > > > + *  - Bit 2: RWSEM_WR_NONSPINNABLE - Writers cannot spin on this lock.
-> > > >     *
-> > > > - * When the rwsem is reader-owned and a spinning writer has timed out,
-> > > > - * the nonspinnable bit will be set to disable optimistic spinning.
-> > > > + * When the rwsem is either owned by an anonymous writer, or it is
-> > > > + * reader-owned, but a spinning writer has timed out, both nonspinnable
-> > > > + * bits will be set to disable optimistic spinning by readers and writers.
-> > > > + * In the later case, the last unlocking reader should then check the
-> > > > + * writer nonspinnable bit and clear it only to give writers preference
-> > > > + * to acquire the lock via optimistic spinning, but not readers. Similar
-> > > > + * action is also done in the reader slowpath.
-> > > >     * When a writer acquires a rwsem, it puts its task_struct pointer
-> > > >     * into the owner field. It is cleared after an unlock.
-> > > > @@ -59,9 +65,47 @@
-> > > >     * is previously owned by a writer and the following conditions are met:
-> > > >     *  - rwsem is not currently writer owned
-> > > >     *  - the handoff isn't set.
-> > > > + *
-> > > > + * Reader optimistic spinning is helpful when the reader critical section
-> > > > + * is short and there aren't that many readers around. It makes readers
-> > > > + * relatively more preferred than writers. When a writer times out spinning
-> > > > + * on a reader-owned lock and set the nospinnable bits, there are two main
-> > > > + * reasons for that.
-> > > > + *
-> > > > + *  1) The reader critical section is long, perhaps the task sleeps after
-> > > > + *     acquiring the read lock.
-> > > > + *  2) There are just too many readers contending the lock causing it to
-> > > > + *     take a while to service all of them.
-> > > > + *
-> > > > + * In the former case, long reader critical section will impede the progress
-> > > > + * of writers which is usually more important for system performance. In
-> > > > + * the later case, reader optimistic spinning tends to make the reader
-> > > > + * groups that contain readers that acquire the lock together smaller
-> > > > + * leading to more of them. That may hurt performance in some cases. In
-> > > > + * other words, the setting of nonspinnable bits indicates that reader
-> > > > + * optimistic spinning may not be helpful for those workloads that cause
-> > > > + * it.
-> > > > + *
-> > > > + * Therefore, any writers that had observed the setting of the writer
-> > > > + * nonspinnable bit for a given rwsem after they fail to acquire the lock
-> > > > + * via optimistic spinning will set the reader nonspinnable bit once they
-> > > > + * acquire the write lock. Similarly, readers that observe the setting
-> > > > + * of reader nonspinnable bit at slowpath entry will set the reader
-> > > > + * nonspinnable bits when they acquire the read lock via the wakeup path.
-> > > > + *
-> > > > + * Once the reader nonspinnable bit is on, it will only be reset when
-> > > > + * a writer is able to acquire the rwsem in the fast path or somehow a
-> > > > + * reader or writer in the slowpath doesn't observe the nonspinable bit.
-> > > > + *
-> > > > + * This is to discourage reader optmistic spinning on that particular
-> > > > + * rwsem and make writers more preferred. This adaptive disabling of reader
-> > > > + * optimistic spinning will alleviate the negative side effect of this
-> > > > + * feature.
-> > > >     */
-> > > >    #define RWSEM_READER_OWNED	(1UL << 0)
-> > > > -#define RWSEM_NONSPINNABLE	(1UL << 1)
-> > > > +#define RWSEM_RD_NONSPINNABLE	(1UL << 1)
-> > > > +#define RWSEM_WR_NONSPINNABLE	(1UL << 2)
-> > > > +#define RWSEM_NONSPINNABLE	(RWSEM_RD_NONSPINNABLE | RWSEM_WR_NONSPINNABLE)
-> > > >    #define RWSEM_OWNER_FLAGS_MASK	(RWSEM_READER_OWNED | RWSEM_NONSPINNABLE)
-> > > >    #ifdef CONFIG_DEBUG_RWSEMS
-> > > > @@ -127,6 +171,12 @@
-> > > >    #define RWSEM_READ_FAILED_MASK	(RWSEM_WRITER_MASK|RWSEM_FLAG_WAITERS|\
-> > > >    				 RWSEM_FLAG_HANDOFF|RWSEM_FLAG_READFAIL)
-> > > > +#ifdef CONFIG_RWSEM_SPIN_ON_OWNER
-> > > > +/* Reader optimistic spinning, default disabled */
-> > > > +static bool rwsem_opt_rspin;
-> > > > +module_param_named(opt_rspin, rwsem_opt_rspin, bool, 0644);
-> > > > +#endif
-> > > The rwsem code isn't really a kernel module. It is a bit odd to use module
-> > > parameter here.
-> > > 
-> > > 
-> > > > +
-> > > >    /*
-> > > >     * All writes to owner are protected by WRITE_ONCE() to make sure that
-> > > >     * store tearing can't happen as optimistic spinners may read and use
-> > > > @@ -171,7 +221,7 @@ static inline void __rwsem_set_reader_owned(struct rw_semaphore *sem,
-> > > >    					    struct task_struct *owner)
-> > > >    {
-> > > >    	unsigned long val = (unsigned long)owner | RWSEM_READER_OWNED |
-> > > > -		(atomic_long_read(&sem->owner) & RWSEM_NONSPINNABLE);
-> > > > +		(atomic_long_read(&sem->owner) & RWSEM_RD_NONSPINNABLE);
-> > > >    	atomic_long_set(&sem->owner, val);
-> > > >    }
-> > > > @@ -341,6 +391,7 @@ struct rwsem_waiter {
-> > > >    	enum rwsem_waiter_type type;
-> > > >    	unsigned long timeout;
-> > > >    	bool handoff_set;
-> > > > +	unsigned long last_rowner;
-> > > >    };
-> > > >    #define rwsem_first_waiter(sem) \
-> > > >    	list_first_entry(&sem->wait_list, struct rwsem_waiter, list)
-> > > > @@ -480,6 +531,10 @@ static void rwsem_mark_wake(struct rw_semaphore *sem,
-> > > >    		 * the reader is copied over.
-> > > >    		 */
-> > > >    		owner = waiter->task;
-> > > > +		if (waiter->last_rowner & RWSEM_RD_NONSPINNABLE) {
-> > > > +			owner = (void *)((unsigned long)owner | RWSEM_RD_NONSPINNABLE);
-> > > > +			lockevent_inc(rwsem_opt_norspin);
-> > > > +		}
-> > > >    		__rwsem_set_reader_owned(sem, owner);
-> > > >    	}
-> > > > @@ -684,6 +739,30 @@ enum owner_state {
-> > > >    };
-> > > >    #ifdef CONFIG_RWSEM_SPIN_ON_OWNER
-> > > > +/*
-> > > > + * Try to acquire read lock before the reader is put on wait queue.
-> > > > + * Lock acquisition isn't allowed if the rwsem is locked or a writer handoff
-> > > > + * is ongoing.
-> > > > + */
-> > > > +static inline bool rwsem_try_read_lock_unqueued(struct rw_semaphore *sem)
-> > > > +{
-> > > > +	long count = atomic_long_read(&sem->count);
-> > > > +
-> > > > +	if (count & (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))
-> > > > +		return false;
-> > > > +
-> > > > +	count = atomic_long_fetch_add_acquire(RWSEM_READER_BIAS, &sem->count);
-> > > > +	if (!(count & (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))) {
-> > > > +		rwsem_set_reader_owned(sem);
-> > > > +		lockevent_inc(rwsem_opt_rlock);
-> > > > +		return true;
-> > > > +	}
-> > > > +
-> > > > +	/* Back out the change */
-> > > > +	atomic_long_add(-RWSEM_READER_BIAS, &sem->count);
-> > > > +	return false;
-> > > > +}
-> > > > +
-> > > >    /*
-> > > >     * Try to acquire write lock before the writer has been put on wait queue.
-> > > >     */
-> > > > @@ -695,14 +774,15 @@ static inline bool rwsem_try_write_lock_unqueued(struct rw_semaphore *sem)
-> > > >    		if (atomic_long_try_cmpxchg_acquire(&sem->count, &count,
-> > > >    					count | RWSEM_WRITER_LOCKED)) {
-> > > >    			rwsem_set_owner(sem);
-> > > > -			lockevent_inc(rwsem_opt_lock);
-> > > > +			lockevent_inc(rwsem_opt_wlock);
-> > > >    			return true;
-> > > >    		}
-> > > >    	}
-> > > >    	return false;
-> > > >    }
-> > > > -static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
-> > > > +static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem,
-> > > > +					   unsigned long nonspinnable)
-> > > >    {
-> > > >    	struct task_struct *owner;
-> > > >    	unsigned long flags;
-> > > > @@ -721,7 +801,7 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
-> > > >    	/*
-> > > >    	 * Don't check the read-owner as the entry may be stale.
-> > > >    	 */
-> > > > -	if ((flags & RWSEM_NONSPINNABLE) ||
-> > > > +	if ((flags & nonspinnable) ||
-> > > >    	    (owner && !(flags & RWSEM_READER_OWNED) && !owner_on_cpu(owner)))
-> > > >    		ret = false;
-> > > > @@ -732,9 +812,9 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
-> > > >    #define OWNER_SPINNABLE		(OWNER_NULL | OWNER_WRITER | OWNER_READER)
-> > > >    static inline enum owner_state
-> > > > -rwsem_owner_state(struct task_struct *owner, unsigned long flags)
-> > > > +rwsem_owner_state(struct task_struct *owner, unsigned long flags, unsigned long nonspinnable)
-> > > >    {
-> > > > -	if (flags & RWSEM_NONSPINNABLE)
-> > > > +	if (flags & nonspinnable)
-> > > >    		return OWNER_NONSPINNABLE;
-> > > >    	if (flags & RWSEM_READER_OWNED)
-> > > > @@ -744,7 +824,7 @@ rwsem_owner_state(struct task_struct *owner, unsigned long flags)
-> > > >    }
-> > > >    static noinline enum owner_state
-> > > > -rwsem_spin_on_owner(struct rw_semaphore *sem)
-> > > > +rwsem_spin_on_owner(struct rw_semaphore *sem, unsigned long nonspinnable)
-> > > >    {
-> > > >    	struct task_struct *new, *owner;
-> > > >    	unsigned long flags, new_flags;
-> > > > @@ -753,7 +833,7 @@ rwsem_spin_on_owner(struct rw_semaphore *sem)
-> > > >    	lockdep_assert_preemption_disabled();
-> > > >    	owner = rwsem_owner_flags(sem, &flags);
-> > > > -	state = rwsem_owner_state(owner, flags);
-> > > > +	state = rwsem_owner_state(owner, flags, nonspinnable);
-> > > >    	if (state != OWNER_WRITER)
-> > > >    		return state;
-> > > > @@ -766,7 +846,7 @@ rwsem_spin_on_owner(struct rw_semaphore *sem)
-> > > >    		 */
-> > > >    		new = rwsem_owner_flags(sem, &new_flags);
-> > > >    		if ((new != owner) || (new_flags != flags)) {
-> > > > -			state = rwsem_owner_state(new, new_flags);
-> > > > +			state = rwsem_owner_state(new, new_flags, nonspinnable);
-> > > >    			break;
-> > > >    		}
-> > > > @@ -816,12 +896,14 @@ static inline u64 rwsem_rspin_threshold(struct rw_semaphore *sem)
-> > > >    	return sched_clock() + delta;
-> > > >    }
-> > > > -static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> > > > +static bool rwsem_optimistic_spin(struct rw_semaphore *sem, bool wlock)
-> > > >    {
-> > > >    	bool taken = false;
-> > > >    	int prev_owner_state = OWNER_NULL;
-> > > >    	int loop = 0;
-> > > >    	u64 rspin_threshold = 0;
-> > > > +	unsigned long nonspinnable = wlock ? RWSEM_WR_NONSPINNABLE
-> > > > +					   : RWSEM_RD_NONSPINNABLE;
-> > > >    	/* sem->wait_lock should not be held when doing optimistic spinning */
-> > > >    	if (!osq_lock(&sem->osq))
-> > > > @@ -836,14 +918,15 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> > > >    	for (;;) {
-> > > >    		enum owner_state owner_state;
-> > > > -		owner_state = rwsem_spin_on_owner(sem);
-> > > > +		owner_state = rwsem_spin_on_owner(sem, nonspinnable);
-> > > >    		if (!(owner_state & OWNER_SPINNABLE))
-> > > >    			break;
-> > > >    		/*
-> > > >    		 * Try to acquire the lock
-> > > >    		 */
-> > > > -		taken = rwsem_try_write_lock_unqueued(sem);
-> > > > +		taken = wlock ? rwsem_try_write_lock_unqueued(sem)
-> > > > +			      : rwsem_try_read_lock_unqueued(sem);
-> > > >    		if (taken)
-> > > >    			break;
-> > > > @@ -851,7 +934,7 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> > > >    		/*
-> > > >    		 * Time-based reader-owned rwsem optimistic spinning
-> > > >    		 */
-> > > > -		if (owner_state == OWNER_READER) {
-> > > > +		if (wlock && (owner_state == OWNER_READER)) {
-> > > >    			/*
-> > > >    			 * Re-initialize rspin_threshold every time when
-> > > >    			 * the owner state changes from non-reader to reader.
-> > > > @@ -860,7 +943,7 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> > > >    			 * the beginning of the 2nd reader phase.
-> > > >    			 */
-> > > >    			if (prev_owner_state != OWNER_READER) {
-> > > > -				if (rwsem_test_oflags(sem, RWSEM_NONSPINNABLE))
-> > > > +				if (rwsem_test_oflags(sem, nonspinnable))
-> > > >    					break;
-> > > >    				rspin_threshold = rwsem_rspin_threshold(sem);
-> > > >    				loop = 0;
-> > > > @@ -935,30 +1018,89 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> > > >    }
-> > > >    /*
-> > > > - * Clear the owner's RWSEM_NONSPINNABLE bit if it is set. This should
-> > > > + * Clear the owner's RWSEM_WR_NONSPINNABLE bit if it is set. This should
-> > > >     * only be called when the reader count reaches 0.
-> > > > + *
-> > > > + * This give writers better chance to acquire the rwsem first before
-> > > > + * readers when the rwsem was being held by readers for a relatively long
-> > > > + * period of time. Race can happen that an optimistic spinner may have
-> > > > + * just stolen the rwsem and set the owner, but just clearing the
-> > > > + * RWSEM_WR_NONSPINNABLE bit will do no harm anyway.
-> > > >     */
-> > > > -static inline void clear_nonspinnable(struct rw_semaphore *sem)
-> > > > +static inline void clear_wr_nonspinnable(struct rw_semaphore *sem)
-> > > >    {
-> > > > -	if (unlikely(rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)))
-> > > > -		atomic_long_andnot(RWSEM_NONSPINNABLE, &sem->owner);
-> > > > +	if (unlikely(rwsem_test_oflags(sem, RWSEM_WR_NONSPINNABLE)))
-> > > > +		atomic_long_andnot(RWSEM_WR_NONSPINNABLE, &sem->owner);
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * This function is called when the reader fails to acquire the lock via
-> > > > + * optimistic spinning. In this case we will still attempt to do a trylock
-> > > > + * when comparing the rwsem state right now with the state when entering
-> > > > + * the slowpath indicates that the reader is still in a valid reader phase.
-> > > > + * This happens when the following conditions are true:
-> > > > + *
-> > > > + * 1) The lock is currently reader owned, and
-> > > > + * 2) The lock is previously not reader-owned or the last read owner changes.
-> > > > + *
-> > > > + * In the former case, we have transitioned from a writer phase to a
-> > > > + * reader-phase while spinning. In the latter case, it means the reader
-> > > > + * phase hasn't ended when we entered the optimistic spinning loop. In
-> > > > + * both cases, the reader is eligible to acquire the lock. This is the
-> > > > + * secondary path where a read lock is acquired optimistically.
-> > > > + *
-> > > > + * The reader non-spinnable bit wasn't set at time of entry or it will
-> > > > + * not be here at all.
-> > > > + */
-> > > > +static inline bool rwsem_reader_phase_trylock(struct rw_semaphore *sem,
-> > > > +					      unsigned long last_rowner)
-> > > > +{
-> > > > +	unsigned long owner = atomic_long_read(&sem->owner);
-> > > > +
-> > > > +	if (!(owner & RWSEM_READER_OWNED))
-> > > > +		return false;
-> > > > +
-> > > > +	if (((owner ^ last_rowner) & ~RWSEM_OWNER_FLAGS_MASK) &&
-> > > > +	    rwsem_try_read_lock_unqueued(sem)) {
-> > > > +		lockevent_inc(rwsem_opt_rlock2);
-> > > > +		lockevent_add(rwsem_opt_fail, -1);
-> > > > +		return true;
-> > > > +	}
-> > > > +	return false;
-> > > > +}
-> > > > +
-> > > > +static inline bool rwsem_no_spinners(struct rw_semaphore *sem)
-> > > > +{
-> > > > +	return !osq_is_locked(&sem->osq);
-> > > >    }
-> > > >    #else
-> > > > -static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
-> > > > +static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem,
-> > > > +					   unsigned long nonspinnable)
-> > > >    {
-> > > >    	return false;
-> > > >    }
-> > > > -static inline bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> > > > +static inline bool rwsem_optimistic_spin(struct rw_semaphore *sem, bool wlock)
-> > > >    {
-> > > >    	return false;
-> > > >    }
-> > > > -static inline void clear_nonspinnable(struct rw_semaphore *sem) { }
-> > > > +static inline void clear_wr_nonspinnable(struct rw_semaphore *sem) { }
-> > > > +
-> > > > +static inline bool rwsem_reader_phase_trylock(struct rw_semaphore *sem,
-> > > > +					      unsigned long last_rowner)
-> > > > +{
-> > > > +	return false;
-> > > > +}
-> > > > +
-> > > > +static inline bool rwsem_no_spinners(sem)
-> > > > +{
-> > > > +	return false;
-> > > > +}
-> > > >    static inline enum owner_state
-> > > > -rwsem_spin_on_owner(struct rw_semaphore *sem)
-> > > > +rwsem_spin_on_owner(struct rw_semaphore *sem, unsigned long nonspinnable)
-> > > >    {
-> > > >    	return OWNER_NONSPINNABLE;
-> > > >    }
-> > > > @@ -984,7 +1126,7 @@ static inline void rwsem_cond_wake_waiter(struct rw_semaphore *sem, long count,
-> > > >    		wake_type = RWSEM_WAKE_READERS;
-> > > >    	} else {
-> > > >    		wake_type = RWSEM_WAKE_ANY;
-> > > > -		clear_nonspinnable(sem);
-> > > > +		clear_wr_nonspinnable(sem);
-> > > >    	}
-> > > >    	rwsem_mark_wake(sem, wake_type, wake_q);
-> > > >    }
-> > > > @@ -995,32 +1137,66 @@ static inline void rwsem_cond_wake_waiter(struct rw_semaphore *sem, long count,
-> > > >    static struct rw_semaphore __sched *
-> > > >    rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int state)
-> > > >    {
-> > > > -	long adjustment = -RWSEM_READER_BIAS;
-> > > > +	long owner, adjustment = -RWSEM_READER_BIAS;
-> > > >    	long rcnt = (count >> RWSEM_READER_SHIFT);
-> > > >    	struct rwsem_waiter waiter;
-> > > >    	DEFINE_WAKE_Q(wake_q);
-> > > >    	/*
-> > > >    	 * To prevent a constant stream of readers from starving a sleeping
-> > > > -	 * waiter, don't attempt optimistic lock stealing if the lock is
-> > > > -	 * currently owned by readers.
-> > > > +	 * waiter, don't attempt optimistic spinning if the lock is currently
-> > > > +	 * owned by readers.
-> > > >    	 */
-> > > > -	if ((atomic_long_read(&sem->owner) & RWSEM_READER_OWNED) &&
-> > > > -	    (rcnt > 1) && !(count & RWSEM_WRITER_LOCKED))
-> > > > +	owner = atomic_long_read(&sem->owner);
-> > > > +	if ((owner & RWSEM_READER_OWNED) && (rcnt > 1) &&
-> > > > +	   !(count & RWSEM_WRITER_LOCKED))
-> > > >    		goto queue;
-> > > >    	/*
-> > > > -	 * Reader optimistic lock stealing.
-> > > > +	 * Reader optimistic lock stealing
-> > > > +	 *
-> > > > +	 * We can take the read lock directly without doing
-> > > > +	 * rwsem_optimistic_spin() if the conditions are right.
-> > > > +	 * Also wake up other readers if it is the first reader.
-> > > >    	 */
-> > > > -	if (!(count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF))) {
-> > > > +	if (!(count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF)) &&
-> > > > +	    rwsem_no_spinners(sem)) {
-> > > >    		rwsem_set_reader_owned(sem);
-> > > >    		lockevent_inc(rwsem_rlock_steal);
-> > > > +		if (rcnt == 1)
-> > > > +			goto wake_readers;
-> > > > +		return sem;
-> > > > +	}
-> > > > +
-> > > > +#ifdef CONFIG_RWSEM_SPIN_ON_OWNER
-> > > > +	if (!rwsem_opt_rspin)
-> > > > +		goto queue;
-> > > > +#endif
-> > > I would suggest changing that to
-> > > 
-> > > if (!IS_ENABLED(CONFIG_RWSEM_SPIN_ON_OWNER) || !rwsem_opt_rspin)
-> > >          goto queue;
-> > > 
-> > > > +	/*
-> > > > +	 * Save the current read-owner of rwsem, if available, and the
-> > > > +	 * reader nonspinnable bit.
-> > > > +	 */
-> > > > +	waiter.last_rowner = owner;
-> > > > +	if (!(waiter.last_rowner & RWSEM_READER_OWNED))
-> > > > +		waiter.last_rowner &= RWSEM_RD_NONSPINNABLE;
-> > > > +
-> > > > +	if (!rwsem_can_spin_on_owner(sem, RWSEM_RD_NONSPINNABLE))
-> > > > +		goto queue;
-> > > > +
-> > > > +	/*
-> > > > +	 * Undo read bias from down_read() and do optimistic spinning.
-> > > > +	 */
-> > > > +	atomic_long_add(-RWSEM_READER_BIAS, &sem->count);
-> > > > +	adjustment = 0;
-> > > > +	if (rwsem_optimistic_spin(sem, false)) {
-> > > > +		/* rwsem_optimistic_spin() implies ACQUIRE on success */
-> > > >    		/*
-> > > > -		 * Wake up other readers in the wait queue if it is
-> > > > -		 * the first reader.
-> > > > +		 * Wake up other readers in the wait list if the front
-> > > > +		 * waiter is a reader.
-> > > >    		 */
-> > > > -		if ((rcnt == 1) && (count & RWSEM_FLAG_WAITERS)) {
-> > > > +wake_readers:
-> > > > +		if ((atomic_long_read(&sem->count) & RWSEM_FLAG_WAITERS)) {
-> > > >    			raw_spin_lock_irq(&sem->wait_lock);
-> > > >    			if (!list_empty(&sem->wait_list))
-> > > >    				rwsem_mark_wake(sem, RWSEM_WAKE_READ_OWNED,
-> > > > @@ -1029,6 +1205,9 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
-> > > >    			wake_up_q(&wake_q);
-> > > >    		}
-> > > >    		return sem;
-> > > > +	} else if (rwsem_reader_phase_trylock(sem, waiter.last_rowner)) {
-> > > > +		/* rwsem_reader_phase_trylock() implies ACQUIRE on success */
-> > > > +		return sem;
-> > > >    	}
-> > > >    queue:
-> > > > @@ -1045,7 +1224,8 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
-> > > >    		 * immediately as its RWSEM_READER_BIAS has already been set
-> > > >    		 * in the count.
-> > > >    		 */
-> > > > -		if (!(atomic_long_read(&sem->count) & RWSEM_WRITER_MASK)) {
-> > > > +		if (adjustment && !(atomic_long_read(&sem->count) &
-> > > > +		     RWSEM_WRITER_MASK)) {
-> > > >    			/* Provide lock ACQUIRE */
-> > > >    			smp_acquire__after_ctrl_dep();
-> > > >    			raw_spin_unlock_irq(&sem->wait_lock);
-> > > > @@ -1058,7 +1238,10 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
-> > > >    	rwsem_add_waiter(sem, &waiter);
-> > > >    	/* we're now waiting on the lock, but no longer actively locking */
-> > > > -	count = atomic_long_add_return(adjustment, &sem->count);
-> > > > +	if (adjustment)
-> > > > +		count = atomic_long_add_return(adjustment, &sem->count);
-> > > > +	else
-> > > > +		count = atomic_long_read(&sem->count);
-> > > >    	rwsem_cond_wake_waiter(sem, count, &wake_q);
-> > > >    	raw_spin_unlock_irq(&sem->wait_lock);
-> > > > @@ -1100,21 +1283,43 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
-> > > >    	return ERR_PTR(-EINTR);
-> > > >    }
-> > > > +/*
-> > > > + * This function is called by the a write lock owner. So the owner value
-> > > > + * won't get changed by others.
-> > > > + */
-> > > > +static inline void rwsem_disable_reader_optspin(struct rw_semaphore *sem,
-> > > > +						bool disable)
-> > > > +{
-> > > > +	if (unlikely(disable)) {
-> > > > +		atomic_long_or(RWSEM_RD_NONSPINNABLE, &sem->owner);
-> > > > +		lockevent_inc(rwsem_opt_norspin);
-> > > > +	}
-> > > > +}
-> > > > +
-> > > >    /*
-> > > >     * Wait until we successfully acquire the write lock
-> > > >     */
-> > > >    static struct rw_semaphore __sched *
-> > > >    rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
-> > > >    {
-> > > > +	bool disable_rspin;
-> > > >    	struct rwsem_waiter waiter;
-> > > >    	DEFINE_WAKE_Q(wake_q);
-> > > >    	/* do optimistic spinning and steal lock if possible */
-> > > > -	if (rwsem_can_spin_on_owner(sem) && rwsem_optimistic_spin(sem)) {
-> > > > +	if (rwsem_can_spin_on_owner(sem, RWSEM_WR_NONSPINNABLE) &&
-> > > > +	    rwsem_optimistic_spin(sem, true)) {
-> > > >    		/* rwsem_optimistic_spin() implies ACQUIRE on success */
-> > > >    		return sem;
-> > > >    	}
-> > > > +	/*
-> > > > +	 * Disable reader optimistic spinning for this rwsem after
-> > > > +	 * acquiring the write lock when the setting of the nonspinnable
-> > > > +	 * bits are observed.
-> > > > +	 */
-> > > > +	disable_rspin = atomic_long_read(&sem->owner) & RWSEM_NONSPINNABLE;
-> > > > +
-> > > >    	/*
-> > > >    	 * Optimistic spinning failed, proceed to the slowpath
-> > > >    	 * and block until we can acquire the sem.
-> > > > @@ -1170,7 +1375,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
-> > > >    		if (waiter.handoff_set) {
-> > > >    			enum owner_state owner_state;
-> > > > -			owner_state = rwsem_spin_on_owner(sem);
-> > > > +			owner_state = rwsem_spin_on_owner(sem, RWSEM_NONSPINNABLE);
-> > > >    			if (owner_state == OWNER_NULL)
-> > > >    				goto trylock_again;
-> > > >    		}
-> > > > @@ -1182,6 +1387,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
-> > > >    		raw_spin_lock_irq(&sem->wait_lock);
-> > > >    	}
-> > > >    	__set_current_state(TASK_RUNNING);
-> > > > +	rwsem_disable_reader_optspin(sem, disable_rspin);
-> > > >    	raw_spin_unlock_irq(&sem->wait_lock);
-> > > >    	lockevent_inc(rwsem_wlock);
-> > > >    	trace_contention_end(sem, 0);
-> > > > @@ -1348,7 +1554,7 @@ static inline void __up_read(struct rw_semaphore *sem)
-> > > >    	DEBUG_RWSEMS_WARN_ON(tmp < 0, sem);
-> > > >    	if (unlikely((tmp & (RWSEM_LOCK_MASK|RWSEM_FLAG_WAITERS)) ==
-> > > >    		      RWSEM_FLAG_WAITERS)) {
-> > > > -		clear_nonspinnable(sem);
-> > > > +		clear_wr_nonspinnable(sem);
-> > > >    		rwsem_wake(sem);
-> > > >    	}
-> > > >    	preempt_enable();
-> > > I don't have a strong feeling pro or against it. It does provide a modest
-> > > improvement in some use cases, but it does make the code a bit more complex
-> > > and harder to understand.
-> > > 
-> > > Cheers,
-> > > Longman
-> > > 
-> > > 
-> > > 
+> Actually, the new layout can only reduce false sharing in high-contention situations. 
+> The performance gain is not obvious, if there are some other bottlenecks. For 
+> instance, if the cores are spread across multiple sockets, memory access may be 
+> the new bottleneck due to NUMA.
 > 
+> Here are the results across NUMA nodes. The patch has no negative effect on the
+> performance result.
 > 
+> Command:  numactl -C 0-3,16-19,63-66,72-75 ./Run -c 16 syscall fstime fsdisk fsbuffer
+> With Patch
+> Benchmark Run: Thu Jun 01 2023 03:13:52 - 03:23:15
+> 224 CPUs in system; running 16 parallel copies of tests
+> 
+> File Copy 1024 bufsize 2000 maxblocks        589958.6 KBps  (30.0 s, 2 samples)
+> File Copy 256 bufsize 500 maxblocks          148779.2 KBps  (30.0 s, 2 samples)
+> File Copy 4096 bufsize 8000 maxblocks       1968023.8 KBps  (30.0 s, 2 samples)
+> System Call Overhead                        5804316.1 lps   (10.0 s, 7 samples)
 
-------Y9bAoTVPo7TEjNVVx8BuVeRnQePgNsPKB0hZTbOgiEUDqOwX=_6fc13_
-Content-Type: text/plain; charset="utf-8"
+Ok, so very small data buffers and file sizes which means the
+working set of the benchmark is almost certainly going to be CPU
+cache resident.
 
+This is a known problem with old IO benchmarks on modern CPUs - the
+data set is small enough that it often fits mostly in the CPU cache
+and so small variations in code layout can make 20-30%
+difference in performance for file copy benchmarks. Use a different
+compiler, or even a different filesystem, and the amazing gain
+goes away and may even result in a regression....
 
-------Y9bAoTVPo7TEjNVVx8BuVeRnQePgNsPKB0hZTbOgiEUDqOwX=_6fc13_--
+For example, this has been a known problem with IOZone for at least
+15 years now, making it largely unreliable as a benchmarking tool.
+Unless, of course, you know exactly what you are doing and can avoid
+all the tests that are susceptible to CPU cache residency
+variations....
+
+> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     589958.6   1489.8
+> File Copy 256 bufsize 500 maxblocks            1655.0     148779.2    899.0
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1968023.8   3393.1
+> System Call Overhead                          15000.0    5804316.1   3869.5
+>                                                                    ========
+> System Benchmarks Index Score (Partial Only)                         2047.8
+> 
+> Without Patch
+> Benchmark Run: Thu Jun 01 2023 02:11:45 - 02:21:08
+> 224 CPUs in system; running 16 parallel copies of tests
+> 
+> File Copy 1024 bufsize 2000 maxblocks        571829.9 KBps  (30.0 s, 2 samples)
+> File Copy 256 bufsize 500 maxblocks          147693.8 KBps  (30.0 s, 2 samples)
+> File Copy 4096 bufsize 8000 maxblocks       1938854.5 KBps  (30.0 s, 2 samples)
+> System Call Overhead                        5791936.3 lps   (10.0 s, 7 samples)
+> 
+> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     571829.9   1444.0
+> File Copy 256 bufsize 500 maxblocks            1655.0     147693.8    892.4
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1938854.5   3342.9
+> System Call Overhead                          15000.0    5791936.3   3861.3
+>                                                                    ========
+> System Benchmarks Index Score (Partial Only)                         2019.5
+
+Yeah, that's what I thought we'd see. i.e. as soon as we go
+off-socket, there's no actual performance change. This generally
+means there is no difference in cacheline sharing across CPUs
+between the two tests. You can likely use `perf stat` to confirm
+this from the hardware l1/l2/llc data cache miss counters; I'd guess
+they are nearly identical with/without the patch.
+
+If this truly was a false cacheline sharing situation, the
+cross-socket test results should measurably increase in perofrmance
+as the frequently accessed read-only data cacheline is shared across
+all CPU caches instead of being bounced exclusively between CPUs.
+The amount of l1/l2/llc data cache misses during the workload should
+reduce measurably if this is happening.
+
+As a technical note, if you want to split data out into different
+cachelines, you should be using annotations like
+'____cacheline_aligned_in_smp' to align structures and variables
+inside structures to the start of a new cacheline. Not only is this
+self documenting, it will pad the structure appropriately to ensure
+that the update-heavy variable(s) you want isolated to a new
+cacheline are actually on a separate cacheline.  It may be that the
+manual cacheline separation isn't quite good enough to show
+improvement on multi-socket machines, so improving the layout via
+explicit alignment directives may show further improvement.
+
+FYI, here's an example of how avoiding false sharing should improve
+performance when we go off-socket. Here's a comparison of the same
+16-way workload, one on a 2x8p dual socket machine (machine A), the
+other running on a single 16p CPU core (machine B). The workload
+used 99% of all available CPU doing bulk file removal.
+
+commit b0dff466c00975a3e3ec97e6b0266bfd3e4805d6
+Author: Dave Chinner <dchinner@redhat.com>
+Date:   Wed May 20 13:17:11 2020 -0700
+
+    xfs: separate read-only variables in struct xfs_mount
+    
+    Seeing massive cpu usage from xfs_agino_range() on one machine;
+    instruction level profiles look similar to another machine running
+    the same workload, only one machine is consuming 10x as much CPU as
+    the other and going much slower. The only real difference between
+    the two machines is core count per socket. Both are running
+    identical 16p/16GB virtual machine configurations
+    
+    Machine A:
+    
+      25.83%  [k] xfs_agino_range
+      12.68%  [k] __xfs_dir3_data_check
+       6.95%  [k] xfs_verify_ino
+       6.78%  [k] xfs_dir2_data_entry_tag_p
+       3.56%  [k] xfs_buf_find
+       2.31%  [k] xfs_verify_dir_ino
+       2.02%  [k] xfs_dabuf_map.constprop.0
+       1.65%  [k] xfs_ag_block_count
+    
+    And takes around 13 minutes to remove 50 million inodes.
+    
+    Machine B:
+    
+      13.90%  [k] __pv_queued_spin_lock_slowpath
+       3.76%  [k] do_raw_spin_lock
+       2.83%  [k] xfs_dir3_leaf_check_int
+       2.75%  [k] xfs_agino_range
+       2.51%  [k] __raw_callee_save___pv_queued_spin_unlock
+       2.18%  [k] __xfs_dir3_data_check
+       2.02%  [k] xfs_log_commit_cil
+    
+    And takes around 5m30s to remove 50 million inodes.
+    
+    Suspect is cacheline contention on m_sectbb_log which is used in one
+    of the macros in xfs_agino_range. This is a read-only variable but
+    shares a cacheline with m_active_trans which is a global atomic that
+    gets bounced all around the machine.
+    
+    The workload is trying to run hundreds of thousands of transactions
+    per second and hence cacheline contention will be occurring on this
+    atomic counter. Hence xfs_agino_range() is likely just be an
+    innocent bystander as the cache coherency protocol fights over the
+    cacheline between CPU cores and sockets.
+    
+    On machine A, this rearrangement of the struct xfs_mount
+    results in the profile changing to:
+    
+       9.77%  [kernel]  [k] xfs_agino_range
+       6.27%  [kernel]  [k] __xfs_dir3_data_check
+       5.31%  [kernel]  [k] __pv_queued_spin_lock_slowpath
+       4.54%  [kernel]  [k] xfs_buf_find
+       3.79%  [kernel]  [k] do_raw_spin_lock
+       3.39%  [kernel]  [k] xfs_verify_ino
+       2.73%  [kernel]  [k] __raw_callee_save___pv_queued_spin_unlock
+    
+    Vastly less CPU usage in xfs_agino_range(), but still 3x the amount
+    of machine B and still runs substantially slower than it should.
+    
+    Current rm -rf of 50 million files:
+    
+                    vanilla         patched
+    machine A       13m20s          6m42s
+    machine B       5m30s           5m02s
+    
+    It's an improvement, hence indicating that separation and further
+    optimisation of read-only global filesystem data is worthwhile, but
+    it clearly isn't the underlying issue causing this specific
+    performance degradation.
+    
+    Signed-off-by: Dave Chinner <dchinner@redhat.com>
+    Reviewed-by: Christoph Hellwig <hch@lst.de>
+    Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
+    Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+
+Notice how much of an improvement occurred on the 2x8p system vs a
+single 16p core when the false sharing was removed? The 16p core
+showed ~10% reduction in CPU time, whilst the 2x8p showed a 50%
+reduction in CPU time. That's the sort of gains I'd expect if false
+sharing was an issue for this workload. The lack of multi-socket
+performance improvement tends to indicate that false sharing is not
+occurring and that something else has resulted in the single socket
+performance increases....
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
