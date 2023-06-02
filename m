@@ -2,110 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2587B71F7E1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD67E71F7E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjFBB15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S231320AbjFBBbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbjFBB1z (ORCPT
+        with ESMTP id S232292AbjFBBb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:27:55 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92051AD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:27:16 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b039168ba0so13350275ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1685669235; x=1688261235;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cLhysu5X9UxQfBGfCZtDhIQQXCqeJE8gI3TdTT5SohA=;
-        b=RnA0/XVZmrABGY0nXyI0+NqS2LXx3RBnn+7SwYDHZzDTF599egBwtCorifk78jxvSO
-         dYs1cJUIhSID98GbKYwqLlME0QGCRd1hZyI46i7q8CCQSZs/s72KqjM/OPcEmRRVmAZg
-         E7u+c1cuHf7pmiqC/mr8FQpBN2dUsmV9i28mdehyEfbXhA7x4TFYup9BaYspiijnoZsf
-         Jj/IBSzjwyQV5EKM3pdEEZ2mACYSIW2H9sxjlKZ8EG9pkegAO1rKDhE2nDSWG3n0Lzjf
-         HwsXeKD5tiY19RVYtz2vcaeoOPT0qTV9CT2Zx2uSu2SRWLEwoqjfPLw285hxoOm4C02B
-         unUQ==
+        Thu, 1 Jun 2023 21:31:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763F6198
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:30:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685669446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/cMHIbrTWtgBUsYlhuC2ZhD157W4Z46c619IAlhaVOY=;
+        b=b1iDfAMJiI7544cv6P8+/ob0/fVsS7mNbJ19KyvUH4PQZdohoeEL0uee4oj64UDBihwrio
+        /tfcGbi9KwRNJaeG9LbCxkxuCZ7bCsI/q1oocmS5Zbg8U0rBupiv4WPrq9hjGRd7eFi97P
+        IwPwS5v12WsQnqU4/VFEjm5unRQ/L3g=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-558-zRBlaODHPZm4kq_rKHyRUA-1; Thu, 01 Jun 2023 21:30:45 -0400
+X-MC-Unique: zRBlaODHPZm4kq_rKHyRUA-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1b024ab0c28so14192055ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:30:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685669235; x=1688261235;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cLhysu5X9UxQfBGfCZtDhIQQXCqeJE8gI3TdTT5SohA=;
-        b=Ljwqv6ATP1XuQuqax2x4tMl8jR2Hi26Pp7NruN+hsLNnKbgeGvoH2qol/Q5GCKHhWJ
-         NDkw4+V1ji7TPrwbbEV9RfYt2TfbZ2lmLY86dhqUX52bQxDP7IQ4ljxz6bF+gmO3vO3N
-         1sOVnlz+Dm/VGX6jZYwvlfoYHaQl92ltqu8ssz+uUy4D9RmbhGj2RPBGfrl4I2pUqPUo
-         lOJUdxCRuljOxTvCffw3klQzrU6K3POvCss3zElNmDsTaA0tU0//OXz4ZI4riLgnCqGP
-         xKkJGqXuceEsI/2QOtElFXHAMNwjVQU1tk5x36iDWWg+0wdl3SGAhoUTisIXxZMzs7zh
-         w0kw==
-X-Gm-Message-State: AC+VfDxR2tFs8y387jVsuIu9rq7ly3qhaSpBRIMfx+msZkAtZVRvGkQE
-        shX68rsh5lQEtB8GCd79+SINypC4rewgzs8Q5d4=
-X-Google-Smtp-Source: ACHHUZ6eY36iEi1lBCEM7QWVAtl+EJLMywA/C1PLyZM8c6+4RjxTX+0vpy32nDqgwClSRQBWr3NpQg==
-X-Received: by 2002:a17:903:1250:b0:1ad:cb4b:1d50 with SMTP id u16-20020a170903125000b001adcb4b1d50mr1269218plh.43.1685669235364;
-        Thu, 01 Jun 2023 18:27:15 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902714b00b001b1a2663e9bsm43640plm.77.2023.06.01.18.27.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 18:27:14 -0700 (PDT)
-Date:   Thu, 01 Jun 2023 18:27:14 -0700 (PDT)
-X-Google-Original-Date: Thu, 01 Jun 2023 18:18:15 PDT (-0700)
-Subject:     Re: linux-next: Fixes tag needs some work in the risc-v-fixes tree
-In-Reply-To: <20230602091245.30a4d4b4@canb.auug.org.au>
-CC:     Paul Walmsley <paul@pwsan.com>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, alexghiti@rivosinc.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-9a6d193c-81d2-4838-94b1-907c14e7639b@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1685669444; x=1688261444;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/cMHIbrTWtgBUsYlhuC2ZhD157W4Z46c619IAlhaVOY=;
+        b=QxdxPpL+PYzaT+TfllQJW1nmbnjVFKg+TF+m3hXjwTvmf1fJi5EQPUHEvBSajBIiHX
+         oNvYJvZ7khUlzzQtqhXz860FIaUoaGta/igDwfUG7z9u4sFcwZatBqddOyB8/XSlkE4a
+         XGMIg3WhgZlSGNeiTgFFRvzYLNma2cQk3jyib0er42ayKMBb0Y0pTSmN+fWikshHuUM3
+         fpN7QTXZALlzhRU+okdcBgsbPCg5HgZmU3WzeFP4g/hEGCOmVRICiJnv7SgTNvoBhW92
+         tD4L60BvQrX1KkXgh/iCHZ8TdSq5PMJcva6C4QE85iaXT3ysSWl8rMix0OERXOVgYkND
+         ZVaw==
+X-Gm-Message-State: AC+VfDxaK2D1f1xJicD+gI4VxK7ZidVIUMJLYjNo8lVANbnpWGkgQHPF
+        rSLI4h8Cyqdk3Jv8NDotfNf2LgRQhTaG4zVsZSwCmhVqjzfVtlbQMOKj3e63Ngz8KFO3S9OKlHV
+        +85FVEW25TuZB1s8XxbCTH6Rk
+X-Received: by 2002:a17:902:e851:b0:1ae:6a3:d058 with SMTP id t17-20020a170902e85100b001ae06a3d058mr1297444plg.36.1685669444423;
+        Thu, 01 Jun 2023 18:30:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6lg4pocoaH90MQ7MXLHYzdEIFqSltD2WuDyfdDq9fVk8AnZlltHqWPspRnTIxhIO54fNxuYA==
+X-Received: by 2002:a17:902:e851:b0:1ae:6a3:d058 with SMTP id t17-20020a170902e85100b001ae06a3d058mr1297430plg.36.1685669444141;
+        Thu, 01 Jun 2023 18:30:44 -0700 (PDT)
+Received: from [10.72.12.188] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170902860700b001acad86ebc5sm47952plo.33.2023.06.01.18.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 18:30:43 -0700 (PDT)
+Message-ID: <b3b1b8dc-9903-c4ff-0a63-9a31a311ff0b@redhat.com>
+Date:   Fri, 2 Jun 2023 09:30:37 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 10/13] ceph: allow idmapped setattr inode op
+Content-Language: en-US
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230524153316.476973-11-aleksandr.mikhalitsyn@canonical.com>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <20230524153316.476973-11-aleksandr.mikhalitsyn@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Jun 2023 16:12:45 PDT (-0700), Stephen Rothwell wrote:
-> Hi all,
->
-> In commit
->
->   073b51fedd87 ("riscv: Implement missing huge_ptep_get")
->
-> Fixes tag
->
->   Fixes: f2aeb0118ddd ("riscv: mm: support Svnapot in hugetlb page")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> In commit
->
->   3e1989a048ec ("riscv: Fix huge_ptep_set_wrprotect when PTE is a NAPOT")
->
-> Fixes tag
->
->   Fixes: f2aeb0118ddd ("riscv: mm: support Svnapot in hugetlb page")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 82a1a1f3bfb6 ("riscv: mm: support Svnapot in hugetlb page")
 
-Sorry about that, these are fixed.
-
+On 5/24/23 23:33, Alexander Mikhalitsyn wrote:
+> From: Christian Brauner <christian.brauner@ubuntu.com>
 >
-> -- 
-> Cheers,
-> Stephen Rothwell
+> Enable __ceph_setattr() to handle idmapped mounts. This is just a matter
+> of passing down the mount's idmapping.
+>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: Ilya Dryomov <idryomov@gmail.com>
+> Cc: ceph-devel@vger.kernel.org
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> ---
+>   fs/ceph/inode.c | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 37e1cbfc7c89..f1f934439be0 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -2050,6 +2050,13 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
+>   
+>   	dout("setattr %p issued %s\n", inode, ceph_cap_string(issued));
+>   
+> +	/*
+> +	 * The attr->ia_{g,u}id members contain the target {g,u}id we're
+> +	 * sending over the wire. The mount idmapping only matters when we
+> +	 * create new filesystem objects based on the caller's mapped
+> +	 * fs{g,u}id.
+> +	 */
+> +	req->r_mnt_idmap = &nop_mnt_idmap;
+
+For example with an idmapping 1000:0 and in the /mnt/idmapped_ceph/.
+
+This means the "__ceph_setattr()" will always use UID 0 to set the 
+caller_uid, right ? If it is then the client auth checking for the 
+setattr requests in cephfs MDS will succeed, since the UID 0 is root. 
+But if you use a different idmapping, such as 1000:2000, it will fail.
+
+So here IMO we should set it to 'idmap' too ?
+
+Thanks
+
+- Xiubo
+
+>   	if (ia_valid & ATTR_UID) {
+>   		dout("setattr %p uid %d -> %d\n", inode,
+>   		     from_kuid(&init_user_ns, inode->i_uid),
+> @@ -2240,7 +2247,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>   	if (ceph_inode_is_shutdown(inode))
+>   		return -ESTALE;
+>   
+> -	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
+> +	err = setattr_prepare(idmap, dentry, attr);
+>   	if (err != 0)
+>   		return err;
+>   
+> @@ -2255,7 +2262,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+>   	err = __ceph_setattr(inode, attr);
+>   
+>   	if (err >= 0 && (attr->ia_valid & ATTR_MODE))
+> -		err = posix_acl_chmod(&nop_mnt_idmap, dentry, attr->ia_mode);
+> +		err = posix_acl_chmod(idmap, dentry, attr->ia_mode);
+>   
+>   	return err;
+>   }
+
