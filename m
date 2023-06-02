@@ -2,440 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E94B71FCDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA81771FCCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbjFBI6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S234828AbjFBI4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbjFBI6k (ORCPT
+        with ESMTP id S232404AbjFBIzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:58:40 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21EC1A5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:58:36 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5221A5FD1C;
-        Fri,  2 Jun 2023 11:58:33 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685696313;
-        bh=abiYipTV/jxNc17GoV9ECjJl5Hlx1HubTOYRAwX0rvo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=nQx/ELG7ta2SBY+irKdO2u0rW2+Yh+ZBcYpzWWjhnmHXn6vEewxEhyeLDRQFgv/O3
-         4KjSpRv2zu4XqR74QqpRwOeUO/5KryT8dfFsVJX2kzDFHvn5ezk7HF0WWSkZbWaNCz
-         +7TYO8hpgaaRKZu4M/J/gFpwNbO/aOZBhDRxVnU0Fmu3e9HBIy/lCE9RCJyMtG3ZvK
-         sTfJlFvdLkCN1LhFh0X44FlDqrNOAdl1/NMG4ymbSmhP8RWrnRmiEknTuofY3oVlRF
-         zbLoWIX0Z/op3Sgpl5wM5FqvY5GOudQAAJdv8XYI6h7HbvjThheLyI8j1QGSOHsClA
-         6U0YhbRMSBRtg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Jun 2023 11:58:31 +0300 (MSK)
-Message-ID: <8242530c-7b6b-29ce-581b-c5644a965b60@sberdevices.ru>
-Date:   Fri, 2 Jun 2023 11:53:47 +0300
+        Fri, 2 Jun 2023 04:55:45 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2120.outbound.protection.outlook.com [40.107.101.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87891725;
+        Fri,  2 Jun 2023 01:54:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lVG8iIaDdOPVkNy43iZjm2rUHVI2skylbrzpv+eFHvLD9adx+BjGzMeiUrmfCRJRnX/eqI5nwkSm+W6rIvDWde1Fyfu++Dq4W68UQkfam1CEb4DiYxC5B1JmBY/Rv3KUl0z1YNfhbdoNp5tIyzYg3qgyjtJ18p5zlIhnguiiH0bQVAyeW37feW29FBWoOiwBws+7MWIMNuphHxiXX4OeOe1TM6Zr+916FdYbchJTcqywFNFNVGzUGB7lF0IMjMTNP4EksW+Hm6frS1k1tygGrIFoer+NGUh3e6jYC1FG/q1lAP8UMKkQP8YVVwPmSbwvOB+vnqlnGOZwEYHbuQRB+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zj6Ei+ljIkxAf0K+7V8QQEKsXXHDWBv01Q5VDqle+Xo=;
+ b=ilTuuoK/Rd7HXPAfkMm6YfV+k/0R7noW/5WOEFXWAEcaCbSMRni2dA76+jBjT/X5Gb9SXpXsQDN39CWXq1LQtO7sjdbuRvMhw8btRBXsdR17GE3Sujt3RIn5ro13SIim9WGfd8NiDc7zOZBxMo4eSFtImMWU9XoLiJZD47Vgi1upnpv0+JC1xfi7z8qej4iG4BcmvIXisykQ/wEi8vTpPRuFajvKTbrCQv2p9cD6R7pnt9PoP+uzeDZT4vOnT2DEsHRX2PPjV3ob0bTsxrIG+C+viXqZO8nhhetWQ67+1yNkTylhTskiC6u4bX+L3qVduWQ7Ir3vfUGq+8A4pPXQsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zj6Ei+ljIkxAf0K+7V8QQEKsXXHDWBv01Q5VDqle+Xo=;
+ b=hnW2MidDOKtKdJmFRnxhAzO5mzA5mDF0T7qCSK+SYmYUyTYPX4LXG9JzGIdNLROBPHsxL2sqTYPDNTKOgP7nSnSMuI0j5p8AX1XNeVIbX+y+dpGJm1a3JlWUIrDlLlT2ChgFIwy4/Kp9OEPYsE7MmwdfzKpPamrnrz2J1d9h/LQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM8PR13MB5174.namprd13.prod.outlook.com (2603:10b6:8:1::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.26; Fri, 2 Jun 2023 08:54:31 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
+ 08:54:31 +0000
+Date:   Fri, 2 Jun 2023 10:54:24 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Justin Chen <justin.chen@broadcom.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com,
+        Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net-next] ethtool: ioctl: improve error checking for
+ set_wol
+Message-ID: <ZHmuQAeP82TuBssK@corigine.com>
+References: <1685566429-2869-1-git-send-email-justin.chen@broadcom.com>
+ <ZHi/aT6vxpdOryD8@corigine.com>
+ <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
+X-ClientProxiedBy: AS4P195CA0014.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e2::10) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 3/6] mtd: rawnand: meson: only expose unprotected
- user OOB bytes
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
- <20230601061850.3907800-4-AVKrasnov@sberdevices.ru>
- <20230601103111.6840acc0@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230601103111.6840acc0@xps-13>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/02 03:06:00 #21401484
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM8PR13MB5174:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93558371-107c-42e8-8460-08db6346fadb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0FKOOcMfpSAGBdMI039v3QSnBFgN5ug23z14BXe870WNxacWQnB3cF2IlrulHI+Bo0B8NJt4MpAxyLqUpzTg6ul/uFzmyBfsdCkooI6fu/IZooLAtWKZZb2B13s7yf3m9x4OXUmmEAetp7TUk6hRGlrw0cB18uqqrW/wBIeQ855UUO2tjfWwa7aM00qVSNeNeAiLia/SoD79bP6fykf4Bu2NCMnBgazfqESHKUHNXbLOt1voOOIoWB98HCgO9gcrEWyB2/ciWoVzC4dI4by6rsmoJTPELmTDDDYLKOQaUjOKUlhA1npyYPYkQpx0E5uRyTtiyBDU6rgUOItRPa7i8KXjZCfd5YsZKP9QG/2zHZb2PiXw0sJraEQ+L5GVasLdw159Sfpm9FLmtVELax+RqJ5IdaGHlBys6GEh15Lqzym7FvRpDIcmULbtetrFK0BmebyXmmWz4Zjd3wtpFcSAWz7WcFKuGC2cAUHaIEkg02orz7IRkxFokMPfmw5shSyRtteBEpsy/PLWjWqWUgbcZQ/I/4W39JWWwEXmvWyy4FR7QX8WmyZTkKzszQ6d8624/PyUsO5mt4gzJvFwvjTPb3vS1QNj2hiimT5C9beZ9MQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(136003)(396003)(376002)(366004)(346002)(451199021)(54906003)(5660300002)(8676002)(8936002)(478600001)(41300700001)(6486002)(86362001)(6666004)(316002)(4326008)(6916009)(53546011)(186003)(7416002)(66476007)(66556008)(66946007)(44832011)(6506007)(26005)(6512007)(2616005)(2906002)(83380400001)(36756003)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DihTHN5m2/L8ibW/mxcyIuhugm44QEJVlczvc4wXpMcYG/iYhZe9VnxVH5uB?=
+ =?us-ascii?Q?F2P20QDPc0XdTTLZ+mQ1qpsBH8lsLou3nRVF65nFh3GFifrUivQLiCkLK/ow?=
+ =?us-ascii?Q?7ckoBwHKYf3ff26bZukp3Sv1OBZEYRGvKkxPXQTuLiSotCgVKwrGZj+nNwQv?=
+ =?us-ascii?Q?zz46mftwNi06yHTV7epAqttXmaCoG1q0TgIATV83Jn6AZH+k9Z9uoWVCScEw?=
+ =?us-ascii?Q?VS9Wp5Xmyp7XxVwDM9fQGOBlBznlJX0Cok1RaPhWgSSXLlbgnJ+kd2jKbDyk?=
+ =?us-ascii?Q?ZeB/8bMFw9yHrQBkk08oAlxbtF92oYVQn7NUmChcn0zMyx/h89wG78y0uaW3?=
+ =?us-ascii?Q?O4UbEhqOozrXkrdi92W1SJNWUQF248VJCho57XY2wgn46xJOJkyG6vMasr2h?=
+ =?us-ascii?Q?H1kp/SVZVoBR91SUT3KisUurLRATGVt3TpLto6GkTyXZZ7Xxsft3lnjeWrJb?=
+ =?us-ascii?Q?0SIRWD2OjJvg/QlwB/5/wPVWeXNceebYNVHXPirCavNVMzQVKX3GWrl1KjZq?=
+ =?us-ascii?Q?7Ggz8ODnn4IVf03LD7NRLKKV4dYVxe1mUlWZgaBi6wYEOpPrt8b7/kDqhmkf?=
+ =?us-ascii?Q?ml/p7186yvSUrS8x3mhaoGB8ndQxZOgc4Rja5y6qTKu9Sg3/JX5qFew+gGYK?=
+ =?us-ascii?Q?GhFn8ifiq64VKMiRQ/s9plclkvS9UU2xQk9fqL5edMbeHD+/i/kpN2Gpv97N?=
+ =?us-ascii?Q?N3WG/VTpBAiGWfOGgAYR9tH057H3ZZ5k7wzuZJud7RiDkdosyaB6rxbcJMsn?=
+ =?us-ascii?Q?gtkMHeNVQ4he3y7rFTsWAxX7EkR3mLIc8UW8raSFaqmN08Xk/nLBFp9NVbTv?=
+ =?us-ascii?Q?+dflnKTtrhFC2LBJ/G8vtVbEoIUr7XUHCwq/La5810zd5DZvUnBNf1XawyVz?=
+ =?us-ascii?Q?qX8fiazPCMSx76rxzSaTTVrRNTK3nMn+dn1AoHyu+89vFp5dlbkj45OP46O6?=
+ =?us-ascii?Q?09ntznz851VPhSjcCYrIyaVDUMRmFvlmmhuarYLA2QXGeiK7Io26184fUpCW?=
+ =?us-ascii?Q?1qe1iXqDx/TkzDCnqIz4vbgSOhIYuWfWGzBqzzIOUoBfeoc04ab+ycdn9iM6?=
+ =?us-ascii?Q?DztzNcGLX2z5EtShBGMb7DXqhQuB8WSFLnuyG6yWy1HVS+Upz54qE+JLXGe9?=
+ =?us-ascii?Q?MBu4i3LzPf76bSpIzGriuOjZWR+T5NTSZYqC5MgRyIUdNYwR84HNuRamcBKj?=
+ =?us-ascii?Q?/dzR5xU9kzalLyQpCauNx0Opkmnwhv05+wrDPJeDiScVSNu5FY5d9puuY2Ge?=
+ =?us-ascii?Q?6hpjUFxwUHzCVuvi2UmARklwZSxUg+Ejisi3VTjEk4eaaU/TpfymgavyRhO9?=
+ =?us-ascii?Q?8H2diX01/DB4oNjomICnNxmH/Sb/golSZc6+jTt70Bo94HIbYzak/mUVWxbW?=
+ =?us-ascii?Q?utvCri0AHGi2h1DcQcxTR6LbmjaN5Gp4DO6komJqbTMIBAB0ajWGj4eSn3F9?=
+ =?us-ascii?Q?f/duZT0TdR5CIWLKQsNxN1uwToF76+R1L9o2d3Dt+VqGeJkjYXiEG+ODQ9Hw?=
+ =?us-ascii?Q?8VHKJhcu4Ww/FaQfBJuE7gUvGxAz3rFXX/CLiNtlbmLpc8gK2aCpJnIp+K2K?=
+ =?us-ascii?Q?jlDQGC2YFjaR1bTI1dzsxXT9zS0N/orvmm2SkC5mGWOBN5Bzx7Ri4G+aCFsX?=
+ =?us-ascii?Q?yQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93558371-107c-42e8-8460-08db6346fadb
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 08:54:31.2609
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 57j6r1h5qPoC45YyVv+TPB7Wf8Kv7oH4ASbNY3++WEE0d+zKl8AR5jXzzXZ1YNnbU7KJ4y4iNCVjzqFTWZBA3F+UfE+zSwljdZciwrFXv4Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR13MB5174
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Miquel, thanks for review!
+On Thu, Jun 01, 2023 at 09:22:50AM -0700, Justin Chen wrote:
+> 
+> 
+> On 6/1/2023 8:55 AM, Simon Horman wrote:
+> > + Daniil Tatianin <d-tatianin@yandex-team.ru>, Andrew Lunn <andrew@lunn.ch>
+> >    as per ./scripts/get_maintainer.pl --git-min-percent 25 net/ethtool/ioctl.c
+> > 
+> > On Wed, May 31, 2023 at 01:53:49PM -0700, Justin Chen wrote:
+> > > The netlink version of set_wol checks for not supported wolopts and avoids
+> > > setting wol when the correct wolopt is already set. If we do the same with
+> > > the ioctl version then we can remove these checks from the driver layer.
+> > 
+> > Hi Justin,
+> > 
+> > Are you planning follow-up patches for the driver layer?
+> > 
+> 
+> I was planning to for the Broadcom drivers since those I can test. But I
+> could do it across the board if that is preferred.
 
-On 01.06.2023 11:31, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> AVKrasnov@sberdevices.ru wrote on Thu, 1 Jun 2023 09:18:46 +0300:
-> 
->> This moves free bytes of OOB to non-protected ECC area. It is needed to
-> 
-> As we discussed, I expect this commit to just change the OOB layout to
-> expose unprotected OOB bytes to the user, that is the only change this
-> commit should carry. If that does not work, you should add a
-> preparation patch.
+I think that would be my suggestion.
+But I'm unsure of the magnitude of change involved.
+Or how risky it is in terms of introducing regressions.
+In any case, perhaps it's best to start small.
 
-Ok, but I thought, if i change only OOB layout, e.g. update 'free' callback of
-mtd_ooblayout_ops, I also need to implement code which performs read/write
-according new layout (it must be done in a single patch)?
+> > > Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+> > > ---
+> > >   net/ethtool/ioctl.c | 14 ++++++++++++--
+> > >   1 file changed, 12 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+> > > index 6bb778e10461..80f456f83db0 100644
+> > > --- a/net/ethtool/ioctl.c
+> > > +++ b/net/ethtool/ioctl.c
+> > > @@ -1436,15 +1436,25 @@ static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
+> > >   static int ethtool_set_wol(struct net_device *dev, char __user *useraddr)
+> > >   {
+> > > -	struct ethtool_wolinfo wol;
+> > > +	struct ethtool_wolinfo wol, cur_wol;
+> > >   	int ret;
+> > > -	if (!dev->ethtool_ops->set_wol)
+> > > +	if (!dev->ethtool_ops->get_wol || !dev->ethtool_ops->set_wol)
+> > >   		return -EOPNOTSUPP;
+> > 
+> > Are there cases where (in-tree) drivers provide set_wol byt not get_wol?
+> > If so, does this break their set_wol support?
+> > 
+> 
+> My original thought was to match netlink set wol behavior. So drivers that
+> do that won't work with netlink set_wol right now. I'll skim around to see
+> if any drivers do this. But I would reckon this should be a driver fix.
 
-Main thing is:
+It seems, from other discussion in a different sub-thread, that we are
+likely clear there :)
 
-I guess that general confuse with this patch is that You consider
-that we change only OOB layout by moving user bytes out of ECC area, but at the same
-time I also increased size of OOB from 4 bytes (e.g. 2 x 2 bytes clean markers)
-to 32 bytes (e.g. tail of page after data and ECC codes), so if this
-assumption is correct, in the next version I won't change size of user area in
-OOB, thus this patch will be reduced as some comments from this review.
+As that was my only real reservation wrt this patch:
 
-> 
->> make JFFS2 works correctly with this NAND controller. Problem fires when
->> JFFS2 driver writes cleanmarker to some page and later it tries to write
->> to this page - write will be done successfully, but after that such page
->> becomes unreadable due to invalid ECC codes. This happens because second
->> write needs to update ECC codes, but it is impossible to do it correctly
->> without block erase. So idea of this patch is to use the unprotected OOB
->> area to store the cleanmarkers, so that they can be written by the
->> filesystem without caring much about the page being empty or not: the
->> ECC codes will not be written anyway.
->>
->> JFFS2 is only useful on tiny NAND devices, where UBI does not fit, which
->> are usually true SLC flashes, with the capability of writing a page with
->> empty (0xFF) data, and still be able to write actual data to it later in
->> a second write.
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->>  Changelog v4->v5:
->>  * Drop cosmetic changes from this patch.
->>  * Do not ignore ECC protected user bytes provided by hw. Even these
->>    bytes are out of user area of OOB, its values are still read from
->>    the provided OOB buffer and written by hardware. Same behaviour is
->>    preserved for read access - such bytes are read from DMA buffer and
->>    placed to OOB buffer.
->>  * OOB read and write become more lightweight because I removed heavy
->>    READ0 and PAGEPROG command from it (both commands are still sent
->>    when OOB access is performed using OOB callbacks). In case of page
->>    read/write OOB data is handled in the internal SRAM of the controller.
->>  * Commit message updated.
->>  * Temporary buffer for OOB read/write is removed. Seems everything
->>    works correctly without it.
->>
->>  drivers/mtd/nand/raw/meson_nand.c | 134 ++++++++++++++++++++++++++----
->>  1 file changed, 117 insertions(+), 17 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->> index 82a629025adc..e42c28be02f3 100644
->> --- a/drivers/mtd/nand/raw/meson_nand.c
->> +++ b/drivers/mtd/nand/raw/meson_nand.c
->> @@ -358,8 +358,11 @@ static u8 *meson_nfc_data_ptr(struct nand_chip *nand, int i)
->>  static void meson_nfc_get_data_oob(struct nand_chip *nand,
->>  				   u8 *buf, u8 *oobbuf)
->>  {
->> +	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
->> +	struct mtd_info *mtd = nand_to_mtd(nand);
->>  	int i, oob_len = 0;
->>  	u8 *dsrc, *osrc;
->> +	u8 *oobtail;
->>  
->>  	oob_len = nand->ecc.bytes + 2;
->>  	for (i = 0; i < nand->ecc.steps; i++) {
->> @@ -368,17 +371,27 @@ static void meson_nfc_get_data_oob(struct nand_chip *nand,
->>  			memcpy(buf, dsrc, nand->ecc.size);
->>  			buf += nand->ecc.size;
->>  		}
->> +
->>  		osrc = meson_nfc_oob_ptr(nand, i);
->>  		memcpy(oobbuf, osrc, oob_len);
->>  		oobbuf += oob_len;
->>  	}
->> +
->> +	oobtail = meson_chip->data_buf + nand->ecc.steps *
->> +		  (nand->ecc.size + oob_len);
->> +
->> +	/* 'oobbuf' points to the start of user area. */
->> +	memcpy(oobbuf, oobtail, mtd->oobsize - nand->ecc.steps * oob_len);
->>  }
->>  
->>  static void meson_nfc_set_data_oob(struct nand_chip *nand,
->>  				   const u8 *buf, u8 *oobbuf)
->>  {
->> +	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
->> +	struct mtd_info *mtd = nand_to_mtd(nand);
->>  	int i, oob_len = 0;
->>  	u8 *dsrc, *osrc;
->> +	u8 *oobtail;
->>  
->>  	oob_len = nand->ecc.bytes + 2;
->>  	for (i = 0; i < nand->ecc.steps; i++) {
->> @@ -391,6 +404,12 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
->>  		memcpy(osrc, oobbuf, oob_len);
->>  		oobbuf += oob_len;
->>  	}
->> +
->> +	oobtail = meson_chip->data_buf + nand->ecc.steps *
->> +		  (nand->ecc.size + oob_len);
-> 
-> This is always targeting the same area, so it looks strange to me.
-> 
->> +
->> +	/* 'oobbuf' points to the start of user area. */
->> +	memcpy(oobtail, oobbuf, mtd->oobsize - nand->ecc.steps * oob_len);
-> 
-> TBH I don't get what you do here.
-
-This code works in raw mode and places OOB data from provided OOB buffer to DMA buffer.
-This is because number of user bytes is increased in this patch.
-
-> 
->>  }
->>  
->>  static int meson_nfc_queue_rb(struct nand_chip *nand, int timeout_ms)
->> @@ -433,7 +452,7 @@ static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
->>  	__le64 *info;
->>  	int i, count;
->>  
->> -	for (i = 0, count = 0; i < nand->ecc.steps; i++, count += 2) {
->> +	for (i = 0, count = 0; i < nand->ecc.steps; i++, count += (nand->ecc.bytes + 2)) {
->>  		info = &meson_chip->info_buf[i];
->>  		*info |= oob_buf[count];
->>  		*info |= oob_buf[count + 1] << 8;
->> @@ -446,7 +465,7 @@ static void meson_nfc_get_user_byte(struct nand_chip *nand, u8 *oob_buf)
->>  	__le64 *info;
->>  	int i, count;
->>  
->> -	for (i = 0, count = 0; i < nand->ecc.steps; i++, count += 2) {
->> +	for (i = 0, count = 0; i < nand->ecc.steps; i++, count += (nand->ecc.bytes + 2)) {
->>  		info = &meson_chip->info_buf[i];
->>  		oob_buf[count] = *info;
->>  		oob_buf[count + 1] = *info >> 8;
->> @@ -638,6 +657,84 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
->>  	return 0;
->>  }
->>  
->> +static u32 meson_nfc_oob_free_bytes(struct nand_chip *nand)
->> +{
->> +	struct mtd_info *mtd = nand_to_mtd(nand);
->> +
->> +	return mtd->oobsize - nand->ecc.steps * (nand->ecc.bytes + 2);
-> 
-> This looks like a static value, just save it somewhere instead of
-> recomputing it?
-
-Ack
-
-> 
->> +}
->> +
->> +static int meson_nfc_write_oob(struct nand_chip *nand, int page)
->> +{
->> +	struct mtd_info *mtd = nand_to_mtd(nand);
->> +	u32 page_size = mtd->writesize + mtd->oobsize;
->> +	u32 oob_bytes = meson_nfc_oob_free_bytes(nand);
->> +	u8 *oob_buf;
->> +	int ret;
->> +
->> +	if (!oob_bytes)
->> +		return 0;
-> 
-> Can this happen?
-
-Ack, seems forget to remove it
-
-> 
->> +
->> +	/* Called as OOB write helper, will send NAND_CMD_PAGEPROG. */
->> +	if (page != -1) {
->> +		ret = nand_prog_page_begin_op(nand, page, 0, NULL, 0);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->> +	oob_buf = nand->oob_poi;
->> +
->> +	ret = nand_change_write_column_op(nand, page_size - oob_bytes,
->> +					  oob_buf + (mtd->oobsize - oob_bytes),
->> +					  oob_bytes, false);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return (page != -1) ? nand_prog_page_end_op(nand) : 0;
->> +}
->> +
->> +static int meson_nfc_read_oob(struct nand_chip *nand, int page)
->> +{
->> +	struct mtd_info *mtd = nand_to_mtd(nand);
->> +	u8 *oob_buf = nand->oob_poi;
->> +	u32 oob_bytes;
->> +	u32 page_size;
->> +	int ret;
->> +	int i;
->> +
->> +	/* Called as OOB read helper, send NAND_CMD_READ0. */
->> +	if (page != -1) {
-> 
-> I don't like this logic with the "-1", it really hides what the
-> controller needs to do, if you need a helper to send a command, then
-> create that helper and give it a decent name.
-
-I see, so I think I need to implement this in the following way:
-1) For OOB callback it always sends NAND_CMD_READ0 (e.g. without any 'if')
-2) For read OOB with data page we don't need to send NAND_CMD_READ0. (also without any 'if')
-
-> 
->> +		ret = nand_read_page_op(nand, page, 0, NULL, 0);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->> +	/* Read ECC codes and user bytes. */
->> +	for (i = 0; i < nand->ecc.steps; i++) {
->> +		u32 ecc_offs = nand->ecc.size * (i + 1) +
->> +			       (nand->ecc.bytes + 2) * i;
->> +
->> +		ret = nand_change_read_column_op(nand, ecc_offs,
->> +						 oob_buf + i * (nand->ecc.bytes + 2),
->> +						 (nand->ecc.bytes + 2), false);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->> +	oob_bytes = meson_nfc_oob_free_bytes(nand);
->> +
->> +	if (!oob_bytes)
->> +		return 0;
->> +
->> +	page_size = mtd->writesize + mtd->oobsize;
->> +
->> +	ret = nand_change_read_column_op(nand, page_size - oob_bytes,
->> +					 oob_buf + (mtd->oobsize - oob_bytes),
->> +					 oob_bytes, false);
->> +
->> +	return ret;
->> +}
->> +
->>  static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>  				    int page, int raw)
->>  {
->> @@ -674,6 +771,12 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
->>  				     NFC_CMD_SCRAMBLER_DISABLE);
->>  	}
->>  
->> +	if (!raw) {
-> 
-> Why this check?
-> 
-> You should instead propagate the oob_required field and check that
-> value I believe.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
 
-This check is for ECC mode, because in this mode we write user bytes of OOB.
-ECC bytes of OOB are written by hardware. I think I made a mistake, because
-I need new callback to write OOB in raw mode - it will write both ECC and user
-parts, in current version I write only user part in raw mode.
 
-> 
->> +		ret = meson_nfc_write_oob(nand, -1);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +
->>  	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
->>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>  	meson_nfc_queue_rb(nand, PSEC_TO_MSEC(sdr->tPROG_max));
->> @@ -834,17 +937,10 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
->>  		memcpy(buf, meson_chip->data_buf, mtd->writesize);
->>  	}
->>  
->> -	return bitflips;
->> -}
->> -
->> -static int meson_nfc_read_oob_raw(struct nand_chip *nand, int page)
->> -{
->> -	return meson_nfc_read_page_raw(nand, NULL, 1, page);
->> -}
->> +	if (oob_required && ret)
-> 
-> Unclear why you check ret here?
-> 
-
-If read was successful, we read OOB. If not - there is no sense in it.
-
->> +		meson_nfc_read_oob(nand, -1);
->>  
->> -static int meson_nfc_read_oob(struct nand_chip *nand, int page)
->> -{
->> -	return meson_nfc_read_page_hwecc(nand, NULL, 1, page);
->> +	return bitflips;
->>  }
->>  
->>  static bool meson_nfc_is_buffer_dma_safe(const void *buffer)
->> @@ -987,12 +1083,16 @@ static int meson_ooblayout_free(struct mtd_info *mtd, int section,
->>  				struct mtd_oob_region *oobregion)
->>  {
->>  	struct nand_chip *nand = mtd_to_nand(mtd);
->> +	u32 oob_bytes = meson_nfc_oob_free_bytes(nand);
->>  
->>  	if (section >= nand->ecc.steps)
->>  		return -ERANGE;
->>  
->> -	oobregion->offset = section * (2 + nand->ecc.bytes);
-> 
-> The first two bytes of OOB are reserved for the bad block markers. This
-> is not related to your controller.
-
-I think first two bytes (in fact there are 4 bytes at positions 0, 1, 16 and 17)
-is considered by hardware as user bytes covered by ECC.
-
-Thanks, Arseniy
-
-> 
->> -	oobregion->length = 2;
->> +	/* Split rest of OOB area (not covered by ECC engine) per each
->> +	 * ECC section. This will be OOB data available to user.
->> +	 */
->> +	oobregion->offset = (section + nand->ecc.steps) * (2 + nand->ecc.bytes);
-> 
-> This is not possible, see above.
-> 
->> +	oobregion->length = oob_bytes / nand->ecc.steps;
->>  
->>  	return 0;
->>  }
->> @@ -1220,12 +1320,12 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
->>  	nand->ecc.engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
->>  	nand->ecc.write_page_raw = meson_nfc_write_page_raw;
->>  	nand->ecc.write_page = meson_nfc_write_page_hwecc;
->> -	nand->ecc.write_oob_raw = nand_write_oob_std;
->> -	nand->ecc.write_oob = nand_write_oob_std;
->>  
->> +	nand->ecc.write_oob_raw = meson_nfc_write_oob;
->> +	nand->ecc.write_oob = meson_nfc_write_oob;
->>  	nand->ecc.read_page_raw = meson_nfc_read_page_raw;
->>  	nand->ecc.read_page = meson_nfc_read_page_hwecc;
->> -	nand->ecc.read_oob_raw = meson_nfc_read_oob_raw;
->> +	nand->ecc.read_oob_raw = meson_nfc_read_oob;
->>  	nand->ecc.read_oob = meson_nfc_read_oob;
->>  
->>  	if (nand->options & NAND_BUSWIDTH_16) {
-> 
-> 
-> Thanks,
-> Miquèl
