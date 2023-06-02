@@ -2,142 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CCA71F822
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC5F71F823
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233134AbjFBBpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S232084AbjFBBpW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 21:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233876AbjFBBpA (ORCPT
+        with ESMTP id S233805AbjFBBpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:45:00 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFC997;
-        Thu,  1 Jun 2023 18:44:58 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QXQg354Tvz18M3R;
-        Fri,  2 Jun 2023 09:40:15 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 2 Jun 2023 09:44:55 +0800
-Message-ID: <fa272c15-9f7c-df9c-41dd-bffc19acbf85@huawei.com>
-Date:   Fri, 2 Jun 2023 09:44:54 +0800
+        Thu, 1 Jun 2023 21:45:14 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154E819A;
+        Thu,  1 Jun 2023 18:45:13 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-ba829e17aacso1656162276.0;
+        Thu, 01 Jun 2023 18:45:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685670312; x=1688262312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L9MJQkBhtwwKWv5RYg7/ssZ/hoTZuhiN+qGeOfkLWAQ=;
+        b=RLRaOIml2mn9su/HRawc1CqNw5odiQOFuZmMWJStMJlQ+a8rjLpW1P48WpTh47L6Q2
+         0Ctghl7yBKakag6Y/upYZZ3uQ+cXM87uaRXQHQC9OfGhhNWABklhYT8/ZoG9V0cW7X8Z
+         //m1OE0n+qftvelIKt50jFlJxVqDxShhkuz3X6jpOTncZ9F2VYD+hE55m/+LLBh9nagx
+         eSwW2sXxpfgZ6XuuP9O3EXPaMYMyDBVWS2PoAe3elLVN/6ZX49f58D/5lnmYSpTLFqm9
+         Isu4Qy3l4e6i8oBmM3SQP3Ut59OgIfnK/N17jhJbBfQMfxjY0/4Q+FCPjhDBVc422PXN
+         X6nQ==
+X-Gm-Message-State: AC+VfDxQ5ZVovHV4iFRfwLZrvUQzkJ9Ykul2vPd/nhOuhDDYfPBHuftn
+        +gL2dph8NtYEK1sZInIQndcw80WCi66LGlPVFeNnmfjA
+X-Google-Smtp-Source: ACHHUZ4A+tgKfJzI54aXqcM8nK42xCurnWJ5rTaeKC7IhFVyPV0klo0TQmsqoYAt025oapu7mgNsPz14d/XbC7g4LaM=
+X-Received: by 2002:a25:507:0:b0:bad:347:cbdf with SMTP id 7-20020a250507000000b00bad0347cbdfmr1514782ybf.65.1685670311958;
+ Thu, 01 Jun 2023 18:45:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
-Content-Language: en-US
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Youquan Song <youquan.song@intel.com>
-CC:     <tony.luck@intel.com>, <naoya.horiguchi@nec.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <akpm@linux-foundation.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <jane.chu@oracle.com>
-References: <20230526063242.133656-1-wangkefeng.wang@huawei.com>
- <20230526070952.GAZHBbQNAWZJP6tOXv@nazgul.local>
- <e816734d-e6f5-b990-c86d-ac7d5f1c94c0@huawei.com>
-In-Reply-To: <e816734d-e6f5-b990-c86d-ac7d5f1c94c0@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230531040428.501523-1-anshuman.khandual@arm.com> <20230531040428.501523-7-anshuman.khandual@arm.com>
+In-Reply-To: <20230531040428.501523-7-anshuman.khandual@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 1 Jun 2023 18:45:00 -0700
+Message-ID: <CAM9d7cgvXwsoZqC8tG=X-rkCWEAeQVdyBFTMjMZg8EiX5Y=5Ew@mail.gmail.com>
+Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via FEAT_BRBE
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+On Tue, May 30, 2023 at 9:21 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+> This enables branch stack sampling events in ARMV8 PMU, via an architecture
+> feature FEAT_BRBE aka branch record buffer extension. This defines required
+> branch helper functions pmuv8pmu_branch_XXXXX() and the implementation here
+> is wrapped with a new config option CONFIG_ARM64_BRBE.
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Tested-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+
+[SNIP]
+> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+> +{
+> +       struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+> +       u64 brbfcr, brbcr;
+> +       int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
+> +
+> +       brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+> +       brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+> +
+> +       /* Ensure pause on PMU interrupt is enabled */
+> +       WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+> +
+> +       /* Pause the buffer */
+> +       write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> +       isb();
+> +
+> +       /* Determine the indices for each loop */
+> +       loop1_idx1 = BRBE_BANK0_IDX_MIN;
+> +       if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+> +               loop1_idx2 = brbe_attr->brbe_nr - 1;
+> +               loop2_idx1 = BRBE_BANK1_IDX_MIN;
+> +               loop2_idx2 = BRBE_BANK0_IDX_MAX;
+
+Is this to disable the bank1?  Maybe need a comment.
 
 
-On 2023/5/26 20:18, Kefeng Wang wrote:
-> 
-> 
-> On 2023/5/26 15:09, Borislav Petkov wrote:
->> On Fri, May 26, 2023 at 02:32:42PM +0800, Kefeng Wang wrote:
->>> The best way to fix them is set MCE_IN_KERNEL_COPYIN for MC-Safe Copy,
->>> then let the core do_machine_check() to isolate corrupted page instead
->>> of doing it one-by-one.
->>
->> No, this whole thing is confused.
->>
->>   * Indicates an MCE that happened in kernel space while copying data
->>   * from user.
->>
->> #define MCE_IN_KERNEL_COPYIN
->>
->> This is a very specific exception type: EX_TYPE_COPY which got added by
->>
->>    278b917f8cb9 ("x86/mce: Add _ASM_EXTABLE_CPY for copy user access")
->>
->> but Linus then removed all such user copy exception points in
->>
->>    034ff37d3407 ("x86: rewrite '__copy_user_nocache' function")
->>
->> So now that EX_TYPE_COPY never happens.
-> 
-> Is this broken the recover when kernel was copying from user space?
-> 
-> + Youquan  could you help to check it?
-> 
->>
->> And what you're doing is lumping the handling for
->> EX_TYPE_DEFAULT_MCE_SAFE and EX_TYPE_FAULT_MCE_SAFE together and saying
->> that the MCE happened while copying data from user.
->>
->> And XSTATE_OP() is one example where this is not really the case.
->>
-> 
-> Oh, for XSTATE_OP(), it uses EX_TYPE_DEFAULT_MCE_SAFE, but I'm focus on 
-> EX_TYPE_DEFAULT_MCE_SAFE, which use copy_mc (arch/x86/lib/copy_mc_64.S),
-> like I maintained in changelog, CoW/Coredump/nvdimm/dax, they use 
-> copy_mc_xxx function,  sorry for mixed them up.
-> 
-> 
->> So no, this is not correct.
-> 
-> so only add MCE_IN_KERNEL_COPYIN for EX_TYPE_DEFAULT_MCE_SAFE?
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/severity.c 
-> b/arch/x86/kernel/cpu/mce/severity.c
-> index c4477162c07d..6d2587994623 100644
-> --- a/arch/x86/kernel/cpu/mce/severity.c
-> +++ b/arch/x86/kernel/cpu/mce/severity.c
-> @@ -293,11 +293,11 @@ static noinstr int error_context(struct mce *m, 
-> struct pt_regs *regs)
->          case EX_TYPE_COPY:
->                  if (!copy_user)
->                          return IN_KERNEL;
-> +               fallthrough;
-> +       case EX_TYPE_DEFAULT_MCE_SAFE:
->                  m->kflags |= MCE_IN_KERNEL_COPYIN;
->                  fallthrough;
+> +       } else {
+> +               loop1_idx2 = BRBE_BANK0_IDX_MAX;
+> +               loop2_idx1 = BRBE_BANK1_IDX_MIN;
+> +               loop2_idx2 = brbe_attr->brbe_nr - 1;
+> +       }
 
-As mentioned above, I am focus on copy_mc_XXX calling, it will
-abort if the exception fires when accessing the source, and we
-want to isolate the corrupted src page, maybe we could a new flag
-to indicate this scenario, the *Final Goals* is to let core
-do_machine_check to deal with the corrupted src page.
+The loop2_idx1 is the same for both cases.  Maybe better
+to move it out of the if statement.
 
-Any suggestiong, thanks
+Thanks,
+Namhyung
 
 
-> -
->          case EX_TYPE_FAULT_MCE_SAFE:
-> -       case EX_TYPE_DEFAULT_MCE_SAFE:
->                  m->kflags |= MCE_IN_KERNEL_RECOV;
->                  return IN_KERNEL_RECOV;
-> 
-> Correct me if I am wrong, thanks for you reviewing.
-> 
-> 
->>
+> +
+> +       /* Loop through bank 0 */
+> +       select_brbe_bank(BRBE_BANK_IDX_0);
+> +       for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+> +               if (!capture_branch_entry(cpuc, event, idx))
+> +                       goto skip_bank_1;
+> +       }
+> +
+> +       /* Loop through bank 1 */
+> +       select_brbe_bank(BRBE_BANK_IDX_1);
+> +       for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+> +               if (!capture_branch_entry(cpuc, event, idx))
+> +                       break;
+> +       }
+> +
+> +skip_bank_1:
+> +       cpuc->branches->branch_stack.nr = idx;
+> +       cpuc->branches->branch_stack.hw_idx = -1ULL;
+> +       process_branch_aborts(cpuc);
+> +
+> +       /* Unpause the buffer */
+> +       write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> +       isb();
+> +       armv8pmu_branch_reset();
+> +}
