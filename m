@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E878471F88D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DA371F888
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbjFBCkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 22:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S233301AbjFBCkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbjFBCkl (ORCPT
+        with ESMTP id S229598AbjFBCkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:40:41 -0400
-X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 19:40:39 PDT
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2186F18D;
-        Thu,  1 Jun 2023 19:40:38 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1685673506t6z2puxi
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Jun 2023 10:38:25 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: rZJGTgY0+YPGzwdzjqt7t/X/3VhreyvgOCYXCo0QKg7NFzI7XTezdNzxMJFju
-        Dcb4D8N/iXPWBhFeou+IcHl/zMt1j6LkDSgdrCx88ZcJ8nV/wEc7POcC7Lk5G8aJR7imUF3
-        sBGcqW9lbc4To4y84j+j4tNkWcQJ1NWg/GTgYTYVtvMT7E2PbaR7623iotEG8+Ux9Rq2dfh
-        TKfjZMjiFnsq5/zninxuVLxAZqku15fJtVJv6pzFclKs/U9yABHDEUdgkEGBTSLSOz/fU7B
-        VmglamnjsEsOVfe0uCpwWxthmIGIqtyLJEMmMdlOII3T+Iz+vNXKN04P6pwNlbm3k279DpO
-        4M9XqwV7RTCscln5DuuojQjct66ZBXJzX6ok0NC
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6246330034441517476
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     linux@weissschuh.net, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [PATCH] selftests/nolibc: remove test gettimeofday_null
-Date:   Fri,  2 Jun 2023 10:38:24 +0800
-Message-Id: <20230602023824.11004-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net>
-References: <20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net>
+        Thu, 1 Jun 2023 22:40:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C49192;
+        Thu,  1 Jun 2023 19:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1kfkyBbEKK9syFELZldrmIs3ddT+2K6uKGsn6AiWLI8=; b=q24oCbf+6Mf6aqjEWKffDVkv58
+        7XPpD+wuDZJJrPfhH6+uv3Lya5UIX8RUyUkeB+gNt1PUXLf1t2sI/MSY8u2kluimZrNhnBS41+duC
+        7iYMzmjIDsIMPc601LDQ8bsBRI2rmRqNlQq7AZcKfoRE8WvSMz504Wqg5mhYZkv90py+6j/VsG8Or
+        ITzIRyQ0JRAOL46nKmuuhXKnTX6mG5FAafSCLIL+OfvdwemegY1yGTAWKWgZPHy/vi5TxxirlMP9p
+        N2bj27ja61VPazB7YZsznS5hJSgNQKAihEl6ym4Sb2Biv3R1ibLjgwsC0p07iyiYnw7lZIcxGP6Mf
+        R+GoQJ/w==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4uhq-005WXd-2l;
+        Fri, 02 Jun 2023 02:39:58 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH] scsi: ufs-mediatek: add dependency for RESET_CONTROLLER
+Date:   Thu,  1 Jun 2023 19:39:57 -0700
+Message-Id: <20230602023957.9187-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
+When RESET_CONTROLLER is not set, kconfig complains about missing
+dependencies for RESET_TI_SYSCON, so add the missing dependency
+just as is done above for SCSI_UFS_QCOM.
 
-I plan to send the v3 of rv32 series, but this patch may conflict with:
+Silences this kconfig warning:
 
-    selftests/nolibc: remove gettimeofday_bad1/2 completely [1]
+WARNING: unmet direct dependencies detected for RESET_TI_SYSCON
+  Depends on [n]: RESET_CONTROLLER [=n] && HAS_IOMEM [=y]
+  Selected by [m]:
+  - SCSI_UFS_MEDIATEK [=m] && SCSI_UFSHCD [=y] && SCSI_UFSHCD_PLATFORM [=y] && ARCH_MEDIATEK [=y]
 
-If this is mergable, perhaps I should wait for your new
-2023xxxx-nolibc-rv32+stkp6 ;-)
+Fixes: de48898d0cb6 ("scsi: ufs-mediatek: Create reset control device_link")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202306020859.1wHg9AaT-lkp@intel.com
+Cc: Stanley Chu <stanley.chu@mediatek.com>
+Cc: Peter Wang <peter.wang@mediatek.com>
+Cc: Paul Gazzillo <paul@pgazz.com>
+Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+---
+ drivers/ufs/host/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-And I plan to add the gettimeofday_tv and gettimeofday_tv_tz in the new generic
-part1.
-
-    selftests/nolibc: add new gettimeofday test cases [2]
-
-Best regards,
-Zhangjin
-
-[1]: https://lore.kernel.org/linux-riscv/485fe4e27c1fd1a84d11e9fc47178a48de39263b.1685387484.git.falcon@tinylab.org/T/#u
-[2]: https://lore.kernel.org/linux-riscv/20230530112806.404017-1-falcon@tinylab.org/T/#u
-
-> gettimeofday() is not guaranteed by posix to handle a NULL value as first
-> argument gracefully.
-> On glibc for example it crashes. (When not going through the vdso)
-> 
-> Link: https://lore.kernel.org/lkml/96f1134d-ce6e-4d82-ae00-1cd4038809c4@t-8ch.de/
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 7de46305f419..0fe615ebb086 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -583,7 +583,6 @@ int run_syscall(int min, int max)
->  		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
->  		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
->  		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
-> -		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
->  #ifdef NOLIBC
->  		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
->  		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-> 
-> ---
-> base-commit: 5b21219d67d3483144d10332709d0c04f733ab93
-> change-id: 20230530-nolibc-gettimeofday-6c72a10ba1a3
-> 
-> Best regards,
-> -- 
-> Thomas Weißschuh <linux@weissschuh.net>
-
-
+diff -- a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+--- a/drivers/ufs/host/Kconfig
++++ b/drivers/ufs/host/Kconfig
+@@ -72,6 +72,7 @@ config SCSI_UFS_QCOM
+ config SCSI_UFS_MEDIATEK
+ 	tristate "Mediatek specific hooks to UFS controller platform driver"
+ 	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
++	depends on RESET_CONTROLLER
+ 	select PHY_MTK_UFS
+ 	select RESET_TI_SYSCON
+ 	help
