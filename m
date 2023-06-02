@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E8C71FA91
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635DA71FA9C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbjFBHDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 03:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S234164AbjFBHFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233964AbjFBHC4 (ORCPT
+        with ESMTP id S234023AbjFBHEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:02:56 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E4AE6D;
-        Fri,  2 Jun 2023 00:02:31 -0700 (PDT)
-X-GND-Sasl: gregory.clement@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685689350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=apbl6ibXzDtLo3IwU3XOOCAze/S/2TUiq/3Tkscqyw8=;
-        b=QNlXX9AQez4mxsXP3+AU5dLvKKLp+zi+dvOXdTl0doYocJjdzu8l8aLepubUE0Ii4L4n9Z
-        hW8uUpbLpFlGAyy2orxWr2yGhfzWv4LyBijW+MytDlh4aQ1D1fZVuhcfFG+isaV36uabxq
-        zAv51Fl3Y4LMqVyxX5l+/rsv5y80ygPW3yckW1XQjlyIjiZH/8BxETXwgo8/LZ1xwmT4Fz
-        792E/MmXkPLyGJv1Jc/pIHJyDdgXD78Ekx1i2HsRchNzkWswg0rFTwkkEozYtfYiorFPsp
-        Ob1Ep95urmzqZse6cbsGgzEdNlc4QhOIUOeWtlHi3YOBhDW0XujOfYo6JIByYA==
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4087724000A;
-        Fri,  2 Jun 2023 07:02:29 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Ben Schneider <ben@bens.haus>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Linux Arm Kernel <linux-arm-kernel@lists.infradead.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: marvell: Fix espressobin-ultra boot failure
- and wifi
-In-Reply-To: <NWmRXzg--3-9@bens.haus>
-References: <NWNpfIn--3-9@bens.haus>
- <f8393f75-ff32-4450-b8d6-b08d43240200@lunn.ch> <NWhH-xL--7-9@bens.haus>
- <877csouaaw.fsf@BL-laptop> <NWmRXzg--3-9@bens.haus>
-Date:   Fri, 02 Jun 2023 09:02:28 +0200
-Message-ID: <87o7lys5x7.fsf@BL-laptop>
+        Fri, 2 Jun 2023 03:04:44 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037B3E71;
+        Fri,  2 Jun 2023 00:04:28 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d24136685so1392452b3a.1;
+        Fri, 02 Jun 2023 00:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685689468; x=1688281468;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zx4FMc0sVk+rwjCWqO76VEczo14IYbRluwgeL4nENPs=;
+        b=PmVs8Q7YIRLQab59Z5PrWLF8LtScAkyvxfEyncKDeQn0VgRQpcn+CzE6E1yxwc8/Ve
+         entQ11T96eUdvRIKVjiR0rd/k53AmAUnKvx4UJmgaHAVki9p9Q5bLjLOeXyTjThQnsbQ
+         q0rYzTgbzEdVZ0A2HFo8ZylTih6paODNKbLwI9HKvGMB+AmSfVuOua5ZmIUCVHpuM4HH
+         cpqxhbwbJQXH/lqswAJjWjaAazXQo3NJ2MDip/1OZaCnsOGV5HftC7x9uahIMsdzScTh
+         kN+vQ2zjk3WpuxZpkxFgDAHYx/b3jArKlZQ7fLjcgm/AXiS1rHWzGsYSF4zwN0YF7zao
+         INpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685689468; x=1688281468;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zx4FMc0sVk+rwjCWqO76VEczo14IYbRluwgeL4nENPs=;
+        b=QiAWDLZHsWmBPlW27NQ7ZveEfvPF6xPoajauv9Eu5ycLXRiQrLe+avSYCg57ZZFdpA
+         amg+Jyz4euIFzfdciw9XDge93eLtE1ChG7FjayrkLEHnpJvlle9TtWGJ/1WG55C/qY8l
+         GFrfShbwWAO++5Nbt68pM00CZm6ebZDwapdebtR5RVvsbPQOC+G3zdlz92XzjsLCqctx
+         7a5a0kIyqtV0VuodjOOSbPUfcqN8UkmaY76CTo0DuxFrcuBtXPQbTMbchbUuRGWg/qNb
+         hBGd+piREA8gDCFDaenOI4itiDfxjM0vo6t6MPNP9onaNLwhPUbrlG7j3jHuxFMD9ia9
+         28xw==
+X-Gm-Message-State: AC+VfDy7HhsVdI+T51PgqywTAqS5JBBr9mu3fTsBq5P3BGdBZ78AnD/u
+        nsrfp/rvXTYWHK3bZntnAlQ=
+X-Google-Smtp-Source: ACHHUZ4d2bX/UI/9TjW/+9fZety85pnDvoU1eN9s8tbpuQPK4d3S5wWBhLVhBjBL5PhUAvm4M56hKw==
+X-Received: by 2002:a05:6a21:7891:b0:10a:eea0:6987 with SMTP id bf17-20020a056a21789100b0010aeea06987mr4999826pzc.26.1685689468352;
+        Fri, 02 Jun 2023 00:04:28 -0700 (PDT)
+Received: from dnptp-9.. ([111.198.57.33])
+        by smtp.gmail.com with ESMTPSA id p30-20020a631e5e000000b00514256c05c2sm570259pgm.7.2023.06.02.00.04.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 00:04:27 -0700 (PDT)
+From:   Yuezhen Luan <eggcar.luan@gmail.com>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jacob.e.keller@intel.com,
+        Yuezhen Luan <eggcar.luan@gmail.com>
+Subject: [PATCHv3 net] igb: Fix extts capture value format for 82580/i354/i350
+Date:   Fri,  2 Jun 2023 07:04:22 +0000
+Message-Id: <20230602070422.1808-1-eggcar.luan@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ben Schneider <ben@bens.haus> writes:
+82580/i354/i350 features circle-counter-like timestamp registers
+that are different with newer i210. The EXTTS capture value in
+AUXTSMPx should be converted from raw circle counter value to
+timestamp value in resolution of 1 nanosec by the driver.
 
-> May 31, 2023, 09:20 by gregory.clement@bootlin.com:
->
->>
->> I don't see the patch so I can't apply it...
->>
->>
-> Hi Gregory, sorry I wasn't sure if I should resend the patch.
+This issue can be reproduced on i350 nics, connecting an 1PPS
+signal to a SDP pin, and run 'ts2phc' command to read external
+1PPS timestamp value. On i210 this works fine, but on i350 the
+extts is not correctly converted.
 
+The i350/i354/82580's SYSTIM and other timestamp registers are
+40bit counters, presenting time range of 2^40 ns, that means these
+registers overflows every about 1099s. This causes all these regs
+can't be used directly in contrast to the newer i210/i211s.
 
-Thanks however it is still not applicable, could you send with git-send
-email ?
+The igb driver needs to convert these raw register values to
+valid time stamp format by using kernel timecounter apis for i350s
+families. Here the igb_extts() just forgot to do the convert.
 
->
-> Boot hangs on EspressoBIN Ultra (Armada 3720) after a message that device
-> vcc_sd1 had been disabled. The device manufacturer patched this issue in
-> their kernel fork noting that vcc_sd1 is used by the EspressoBIN model
-> but not the EspressoBIN Ultra. Removing the device from the tree fixes
-> the boot hang and wifi.
->
-> Link: https://github.com/globalscaletechnologies/linux/commit/b879d560eeb=
-f2766781614a0169a9564f1e0fc06
->
-> Signed-off-by: Ben Schneider <ben@bens.haus>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> ---
-> arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts | 3 +++
-> 1 file changed, 3 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dt=
-s b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-> index d29d2da95..f9abef8dc 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
-> @@ -24,6 +24,8 @@
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 ethernet5 =3D &switch0port4;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> =C2=A0
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /delete-node/ regulator;
-> +
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg_usb3_vbus: usb3-vbus {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 compatible =3D "regulator-fixed";
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 regulator-name =3D "usb3-vbus";
-> @@ -66,6 +68,7 @@
-> };
-> =C2=A0
-> &sdhci1 {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /delete-property/ vqmmc-supply;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 status =3D "disabled";
-> };
+Fixes: 38970eac41db ("igb: support EXTTS on 82580/i354/i350")
+Signed-off-by: Yuezhen Luan <eggcar.luan@gmail.com>
+---
+V2 -> V3: Add 'Fixes' tag, and add 'net' tag in patch title
+V1 -> V2: Fix typo in the source code, and add detailed explanation
 
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+ drivers/net/ethernet/intel/igb/igb_main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 58872a4c2..bb3db387d 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -6947,6 +6947,7 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
+ 	struct e1000_hw *hw = &adapter->hw;
+ 	struct ptp_clock_event event;
+ 	struct timespec64 ts;
++	unsigned long flags;
+ 
+ 	if (pin < 0 || pin >= IGB_N_SDP)
+ 		return;
+@@ -6954,9 +6955,12 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
+ 	if (hw->mac.type == e1000_82580 ||
+ 	    hw->mac.type == e1000_i354 ||
+ 	    hw->mac.type == e1000_i350) {
+-		s64 ns = rd32(auxstmpl);
++		u64 ns = rd32(auxstmpl);
+ 
+-		ns += ((s64)(rd32(auxstmph) & 0xFF)) << 32;
++		ns += ((u64)(rd32(auxstmph) & 0xFF)) << 32;
++		spin_lock_irqsave(&adapter->tmreg_lock, flags);
++		ns = timecounter_cyc2time(&adapter->tc, ns);
++		spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
+ 		ts = ns_to_timespec64(ns);
+ 	} else {
+ 		ts.tv_nsec = rd32(auxstmpl);
+-- 
+2.34.1
+
