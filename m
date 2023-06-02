@@ -2,190 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0279720433
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCEA72043D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbjFBOVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S235609AbjFBOWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235775AbjFBOU7 (ORCPT
+        with ESMTP id S234339AbjFBOWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:20:59 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2139.outbound.protection.outlook.com [40.107.114.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181021B4;
-        Fri,  2 Jun 2023 07:20:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DUL3sj6mAQNsS1UFt5I0Lb8ksK01hkOsUHY9Rl+3nlUeDE3b2yJ6zt03e3IPJG56y+dVPORY4POH7fJjb3f9fvkM4SO/+4OqyUnJ909zZPyJ6IYab9h1IgYXvz6VkMiBEyG6nrTgD+h+bgCmbBeaI24qklRy5N8OVz8npTy0jYeue7V+fTpCyUcLR7RGZr4I/wR5THXjt89v5NYaT4XBP3j1P8mmqFkml3+ZgbFSWCQCwNVWArWKtiIAUf/1HaXekuv39px+eUOo/LwAT9iQNLjQZeLmCbch5pVYEV1j9j/2wAG7PVtX4yNAuXqo9W18R6NsQkO9ZbRCy2gv7JowPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7v6huGb/pYD3lzqcjVnnDl9qjiWm9byj3UFc+emSc6Q=;
- b=elu7vcGCXmW62i5CUm36JKtg72X41hZz9Ed3WxVcYLRqlpCPSjNbaM53xxW1g1GwBrK7SIKKu2+MbecMHPx2skf7wmUvbF+7GMw1Cf3Q69Fd+IWiz7IRvPrEDk+7jJw1iyA978OvvvcYBqScg3RDKB9MfVbs50ISPd4FSdYL+iNdEm7BhmQQJXzckSK0CFtPPs3TsPhs6Pem0DQd936x97tLnJamS0Z+y4Dp5AG+Sk7YB9EKkfccsqGRl/bHPqnQIOh3S/Ui2n/Yl38X2i9bqUwkwhJ05w1gXG0Z8p0J9G/qGz9JF1wc1PqK0hk+noD/1yuSu6SfxCFU1QOXuoAveA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7v6huGb/pYD3lzqcjVnnDl9qjiWm9byj3UFc+emSc6Q=;
- b=rTZzmmAFy32t7VXyv4STFyCUpgVhzAeGLExFdGi37TrArIjduwrWITOYBqIZ0cRfPOjd1jMCpCghLaue+Xqtos2gnZclXBG/mus23U1eNFOpTMya/0NZ21XmWQQQKuycbT9kYGms3qMm/aED9nGmAPfYUvK9JB9nSpHfdR2Ebk8=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB5757.jpnprd01.prod.outlook.com (2603:1096:400:46::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
- 2023 14:20:52 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
- 14:20:52 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display Unit
- support
-Thread-Topic: [PATCH v9 RESEND 0/5] Add RZ/{G2L,G2LC} and RZ/V2L Display Unit
- support
-Thread-Index: AQHZfN4p/b5orSrwk0ai5QpLpQqzGK9bCteAgBAjuzCABkdFgIAAARaggAAYaACABHqVQIABg1YAgAAzrsA=
-Date:   Fri, 2 Jun 2023 14:20:52 +0000
-Message-ID: <OS0PR01MB59228371ED494C3F2968E633864EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230502100912.143114-1-biju.das.jz@bp.renesas.com>
- <OS0PR01MB59220E8306506F3E0B17968A86789@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922CC640A93CF85033FB47086469@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230529141349.GA15264@pendragon.ideasonboard.com>
- <OS0PR01MB5922B66349F301074C51018F864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230529154504.GC15264@pendragon.ideasonboard.com>
- <OS0PR01MB59222EFBB7C6549620192AAF86499@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230602111510.GE26944@pendragon.ideasonboard.com>
-In-Reply-To: <20230602111510.GE26944@pendragon.ideasonboard.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB5757:EE_
-x-ms-office365-filtering-correlation-id: 949f2a64-187f-418c-4e5b-08db63749227
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /SEAFxsa7U6PPOY3fAMOrKVQmjvWRxTl2N3gnj/TfcBUorjhpJihxIAmWiBPHrjs1YukZsVG2KuYpeHh8lazvBiEspo6aolanOP7umh/qcfq3gG4SWap72nS+ucy+oWOVCoEv3NxBNJ6Fw1Usy9jn+4F96q60TJtkyiJnWrKz9jx3H8adzMamflX8+lvzqJLtNQ2H3pd4DbVJlMjGPtBdChxrwu98OpXxqbIFeCzZO+UtPFFgsxam+TMhdICMnqjp44imbAefrziCBlEboIroAu8d44mZnAPiPF2YZEaMkkh+xnDEfuOvfKmdDLWXOFKbXm3/UqrP34KS7hOtWJCc3miARojoEr1f11HE+1ivt6rKm7YGN+feXqdsYQECW740K3ZERyBiZYR7yL42XO6icYgmwglOdovByFL7shRVu5heRGk1ncbmMfTg2joB/VdGxluAnDUv5chAWTtbYZL02Qi/NFQySM8iHUpNGjIi+EhH37ZeYH3w7g4OTpyoLhMVA1M7Kbv2rg3hHqMZ/dVShSfvDPXICcZTLDsVT6my3bk0sy6OxMJuJ3kPgXjq7cltAIOys68Kcgz98JSqpnVFwi4JfTmi4EX9Xd7kT5TUEd0EK+gCZRQ5+yFvdt23E9p
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(346002)(376002)(396003)(451199021)(38100700002)(122000001)(7696005)(86362001)(478600001)(54906003)(66946007)(6916009)(66556008)(76116006)(66446008)(64756008)(66476007)(55016003)(38070700005)(33656002)(4326008)(71200400001)(9686003)(26005)(53546011)(186003)(6506007)(52536014)(316002)(8676002)(5660300002)(2906002)(8936002)(83380400001)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NXJvSWkwU3hZUTNGdXhHNlFEUXB4U0xDa1NjMG84L1RuME5DcGhiUFRCZWtN?=
- =?utf-8?B?QTIxZXNjUk5MaWtWRnN1SVlGYWo5MGJBVCtyV1JYckZENCsyTWZzd2k0L08x?=
- =?utf-8?B?WjJHd1R5VVZna0tDYzZuS21NcFdKN3JCb1JlZ3IxY2g4bktmNkNVQ0pySTB0?=
- =?utf-8?B?bkloVnZ3c1haVjlIbGRZK0NtQkhQZmx5Y3JNcXE2bXZoNE0wNmV3bllrNS9L?=
- =?utf-8?B?ckFFSTc2RklNbjQ4d2czMzJKcVlBamtRL0IxcTJEYjFyMVJuNXl5QUNLelQx?=
- =?utf-8?B?TWQvamlLZGlYNzRrS3gzQUl2czlIMkhEa3Q2QTRiZC8yaFBxa3IwQ3Q2MTVV?=
- =?utf-8?B?Vm5tRVdmNGtaQXhlbjZxdG1uQ3pLWmNENnphOXQ3WEhjUW5FTnh6MHA3anQy?=
- =?utf-8?B?L1dZWklvNHo4THJOMS9NS0JEaVF6bjlKMGdMeHFIdkFRMHZGUDZRYVA1Ujla?=
- =?utf-8?B?cElyeW81VjFvNlFrdDVUNWlYSVR0dmE1emZOTHZSSXBMWW1lRDJxdXNvT1hI?=
- =?utf-8?B?QzZuT2k0L2sybEdQMy9ZaHdjK3hTZVJRb29tTVpWR1dJYkwrVVA3KzI0RnQz?=
- =?utf-8?B?MUl5QUZ1elZYQlZTZDlDeGlEYWh5ZEVGelkveHdieWI2MlpTcGtjUkpGcG9Z?=
- =?utf-8?B?eVZRSmgwcmhYUjN5WGF4d29YUE9XUHBMMEVQWmxKNXhldWhlNDJiR2Z4SFhk?=
- =?utf-8?B?b0pYUjFTZ2FmRmxsSk53ZzlWQ3RKVUN3T212dkhsVVFTcTJkcWhub1ZJNTIw?=
- =?utf-8?B?c01sWXQrQU5paEhocU1vU3hVOGYrZjNvM0FTS2E3cmxKY0ZkTXprenl2VEF6?=
- =?utf-8?B?ait6WU5SMHpTSHJ6M1dza2hRTUMwYU1pOThWSSt0R2dmemh3NFF6MkcxWWVR?=
- =?utf-8?B?ek9aMlJLSEg1Rk0wOUZlYW9YYWg0Ukgxaml3SzZ1Mm84ZXdtNUtSbEdHZDIz?=
- =?utf-8?B?VGZETmVUODFVaHh2NDFJUmpQald3bjV6WnlGM1ExMUplU3A3YmdNUGh2NHRm?=
- =?utf-8?B?T0Y5eWtqYkZVRkFGOC9JRkF6TFpJRXp5U0pvcEp5M05BSzRKUHV3ZWd5SEFX?=
- =?utf-8?B?aTdYRmNwTTJaL2VqYmdKTVR3RnFJMVZ1My82bFRmMHhDOGp3UXpmV2dtdHJs?=
- =?utf-8?B?TU1kcHJyT1dkQUE0aFNFZGFJREdEdEFMelg1TFJvYmhySERKTnV6NHV3ajcv?=
- =?utf-8?B?WlBrUDNUVUxWQnE1U3JkZE9rOVQzZ1ZFMzd1eWErUWhCYTdkOWRvRVZxTWtj?=
- =?utf-8?B?YzlpMGRGdWdoTi9qUTBUbFV6dE9pMXdzZTRMazBTZkxwQ1B5TUNYZ1BDUjEr?=
- =?utf-8?B?MDRCR3FDZkpUZ2RRQk81T2NYU2V6RWV4Y0pzMmgzL2RZNi82TFNKa2dUMWhD?=
- =?utf-8?B?NUlFb0JNd2tJbTFCMW5jcWxYd0J3VTZod0hVL2YzLzhqRXRvSzZBL0JmZGlv?=
- =?utf-8?B?Mi9UUy9NMjhtb05LQVliUlVOOEw5UzM5WDJyYWZMeFVBOHRLaGlrdHBwQlRa?=
- =?utf-8?B?THAvR1RtWEdxc3RvRkJHL3lFVGJmT3QrOFJqamwyTUtINjZYY09sQTljY1NP?=
- =?utf-8?B?NkJLSGs1NGx3cExMNmZTZ3l3NXZGckszWUU1ZU02THYxbDdaMHFUV2p6TmVi?=
- =?utf-8?B?TWhyWEljNFM0Qk9lWFpMeURwS3RvcVFzSVdZU080WUZkUVlFU1ZCcUs1S0VR?=
- =?utf-8?B?cjdWT2thUWZib3RyYzR4WW42azFtT0lkTGxLMEtVMzF1OWxXYUNEb2cvd1V0?=
- =?utf-8?B?ais2NUxjM00vUFgxZUI5am0zeG5PWWxaV0JIaWFVRG9lYzF3b0ZnNzJhQTNm?=
- =?utf-8?B?MjgvTmZBbGR6ZWc0VklpcDFhN3I3RWNJVkNucnVHTUtMRW9QbGlZT0dsQUFU?=
- =?utf-8?B?V2ZON0t6ajJLMm5yL1dFd0xVNW95SC9GNVkyODJMQVdNZlZkUkJ0Q05aZEhS?=
- =?utf-8?B?M2w3SVpSNHROdDRKcHp0YlJqNm9Hd0FuRmJ0V1pOc3BvdWh4VWFEcjk4NVFi?=
- =?utf-8?B?dFJBY0VJSkxrcEJFZndoSzc0Rm56OVI3NjlVRUIvUXlCeXB2dG1vNnhsWnBV?=
- =?utf-8?B?YzJhYWROc3hNQVJJUUp4K3Y5dGZFTlpqaTNjV2tacDRHY1BJTHV3L05OME5U?=
- =?utf-8?Q?h+DtixmeFevhx+7V6xfaU7tum?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 2 Jun 2023 10:22:15 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048901B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:22:13 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-33baee0235cso92905ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685715732; x=1688307732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H7d8d4MCc4onJq8pBQ681DcsEvxdLqedzghklpUu+XE=;
+        b=L79Re62NKLr7jyTpAhcYr+dj4BGT8jlpsciGJ9UqkUTmF1Fp8HF4f7l7PCMx74wnSp
+         Z4MExZDdVvmGr9HZZTldLvGj6yO4f7fmzOW5XHnYGFsp6aMxTvyGOWMjPJ6ywm+1hCxQ
+         OT6t1BPoULN32Prv5c6c7oEpn7DQQMc7OJntv8coVkeidQLUAxq4YWwjm4UCbhaAUkHY
+         CUlzXPTOm1Z7v2fI3l67bBKLhim0lh6AjxhBFfHcW9dOs+LcV01tauSIex0nknLfh486
+         eezgiwL7ika5ondE8vdXjdjqeaYRbUDxv3VyIaZo6ZQgfWFoet5hN9FlE8YQgtwWZQa+
+         l08w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685715732; x=1688307732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H7d8d4MCc4onJq8pBQ681DcsEvxdLqedzghklpUu+XE=;
+        b=e0JeT9qQSR/k4qmDWFFTcfJF2MB7vE7T/v2NE+2GH19L5ktviX67wrc4FV4pTRVez0
+         5mtKZ2LAixfkrcazOjjQcjyZAUgzCPXqYhZrHtsuZCp6OIPNYtSapoKRdzB3gZiGXaw7
+         ZIOEUhrSY3uJXGlLE1JPh43HJGUE7PXYKB6Qw1BRUAxr4uizGGKKKz6YzLj3uDL7EzJS
+         17fczo+Feue5zseRnRFNBRxNvKrrQ/uyUhNf78KmT6wlwPiTHFTRBvwF5HyyxNIV2/k+
+         bIhcfFaThvpUnrhzTqodmMPw41WVRWNJQhFKOABZbA52uXIfEog1bEytInj/6HJalbk/
+         rC9A==
+X-Gm-Message-State: AC+VfDwvypg2MxHpam3kKrQeoyBLavCswil1u/zKeLDds503jfm82AbU
+        mchyMDVIxZ/QhCq8fv9EkNYMeF/CMKZuWLRR82X76w==
+X-Google-Smtp-Source: ACHHUZ6mi6QZprfgUPbDzcJiLe/rOvQrRI5aX2Gu9fS+O4S7pV5L9VHsi7BsweO4BYXLes4rrZUtI27C/96anNWk39g=
+X-Received: by 2002:a92:c56a:0:b0:338:55b9:f1a3 with SMTP id
+ b10-20020a92c56a000000b0033855b9f1a3mr137710ilj.7.1685715732071; Fri, 02 Jun
+ 2023 07:22:12 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 949f2a64-187f-418c-4e5b-08db63749227
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2023 14:20:52.1895
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: c6vJfzDC/TaDANO9pwopBMZ6CFw5Glu73HnNgiFhaXOSrHgtSbzAu1ZGq33Ks3EruJdNgtixHdRMzu+YEf/a64+tVTQUgwwIircoOeL8nB8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5757
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+ <88c445ae-552-5243-31a4-2674bac62d4d@google.com> <CAG48ez0tnYTVjr7zw3Vp4GTcQ=960EodatjqE5bM9a3EVYM16Q@mail.gmail.com>
+ <de1e37c-354c-fb98-1598-7ce6d415f257@google.com>
+In-Reply-To: <de1e37c-354c-fb98-1598-7ce6d415f257@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 2 Jun 2023 16:21:35 +0200
+Message-ID: <CAG48ez3seuiWfiVq0z8weTQV3ZXwo-TXSQWLJ0uxn4eOrq0J0w@mail.gmail.com>
+Subject: Re: [PATCH 01/12] mm/pgtable: add rcu_read_lock() and rcu_read_unlock()s
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTGF1cmVudCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMYXVy
-ZW50IFBpbmNoYXJ0IDxsYXVyZW50LnBpbmNoYXJ0QGlkZWFzb25ib2FyZC5jb20+DQo+IFNlbnQ6
-IEZyaWRheSwgSnVuZSAyLCAyMDIzIDEyOjE1IFBNDQo+IFRvOiBCaWp1IERhcyA8YmlqdS5kYXMu
-anpAYnAucmVuZXNhcy5jb20+DQo+IENjOiBEYXZpZCBBaXJsaWUgPGFpcmxpZWRAZ21haWwuY29t
-PjsgRGFuaWVsIFZldHRlciA8ZGFuaWVsQGZmd2xsLmNoPjsNCj4gUGhpbGlwcCBaYWJlbCA8cC56
-YWJlbEBwZW5ndXRyb25peC5kZT47IEdlZXJ0IFV5dHRlcmhvZXZlbg0KPiA8Z2VlcnQrcmVuZXNh
-c0BnbGlkZXIuYmU+OyBLaWVyYW4gQmluZ2hhbQ0KPiA8a2llcmFuLmJpbmdoYW0rcmVuZXNhc0Bp
-ZGVhc29uYm9hcmQuY29tPjsgZHJpLQ0KPiBkZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5vcmc7IGxp
-bnV4LXJlbmVzYXMtc29jQHZnZXIua2VybmVsLm9yZzsgRmFicml6aW8NCj4gQ2FzdHJvIDxmYWJy
-aXppby5jYXN0cm8uanpAcmVuZXNhcy5jb20+OyBQcmFiaGFrYXIgTWFoYWRldiBMYWQNCj4gPHBy
-YWJoYWthci5tYWhhZGV2LWxhZC5yakBicC5yZW5lc2FzLmNvbT47IGxpbnV4LWtlcm5lbEB2Z2Vy
-Lmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2OSBSRVNFTkQgMC81XSBBZGQgUlov
-e0cyTCxHMkxDfSBhbmQgUlovVjJMIERpc3BsYXkNCj4gVW5pdCBzdXBwb3J0DQo+IA0KPiBIaSBC
-aWp1LA0KPiANCj4gT24gVGh1LCBKdW4gMDEsIDIwMjMgYXQgMTI6MTI6NTlQTSArMDAwMCwgQmlq
-dSBEYXMgd3JvdGU6DQo+ID4gPiBTdWJqZWN0OiBSZTogW1BBVENIIHY5IFJFU0VORCAwLzVdIEFk
-ZCBSWi97RzJMLEcyTEN9IGFuZCBSWi9WMkwNCj4gPiA+IERpc3BsYXkgVW5pdCBzdXBwb3J0DQo+
-ID4gPg0KPiA+ID4gT24gTW9uLCBNYXkgMjksIDIwMjMgYXQgMDI6MjI6MDZQTSArMDAwMCwgQmlq
-dSBEYXMgd3JvdGU6DQo+ID4gPiA+ID4gU3ViamVjdDogUmU6IFtQQVRDSCB2OSBSRVNFTkQgMC81
-XSBBZGQgUlove0cyTCxHMkxDfSBhbmQgUlovVjJMDQo+ID4gPiA+ID4gRGlzcGxheSBVbml0IHN1
-cHBvcnQgT24gVGh1LCBNYXkgMjUsIDIwMjMgYXQgMDI6MzA6MTBQTSArMDAwMCwNCj4gPiA+ID4g
-PiBCaWp1IERhcyB3cm90ZToNCj4gPiA+ID4gPiA+IEhpIERSTSBtYWludGFpbmVycywNCj4gPiA+
-ID4gPiA+DQo+ID4gPiA+ID4gPiBHZW50bGUgcGluZy4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IFNv
-cnJ5LCBJIHdhcyBvbiBob2xpZGF5cyB0aGUgbGFzdCB0d28gd2Vla3MuDQo+ID4gPiA+ID4NCj4g
-PiA+ID4gPiA+IEFyZSB3ZSBoYXBweSB3aXRoIG1vdmluZyBhbGwgUmVuZXNhcyBkcm0gZHJpdmVy
-cyB0byBSZW5lc2FzDQo+ID4gPiA+ID4gPiBzcGVjaWZpYyBkaXJlY3Rvcnkgb3IgcHJlZmVyZW5j
-ZSBpcyBmb3Igc2VwYXJhdGUgb25lPz8NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IFRoaXMgd29ya3Mg
-Zm9yIG1lLg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBJZiBpdCBpcyBsYXRlciwgSSBjYW4gc2Vu
-ZCBSWi9HMkwgZHJtIGRyaXZlciBzZXBhcmF0ZS4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBP
-dGhlcndpc2UsIEkgbmVlZCB0byByZWJhc2UgYW5kIHJlc2VuZC4NCj4gPiA+ID4gPg0KPiA+ID4g
-PiA+IFlvdXIgc2VyaWVzIGFwcGxpZXMgY2xlYW5seSBvbiB0b3Agb2YgdGhlIGxhdGVzdCBkcm0t
-bmV4dA0KPiA+ID4gPiA+IGJyYW5jaC4gSXMgdGhlcmUgYSBzcGVjaWZpYyBuZWVkIHRvIHJlYmFz
-ZSBhbmQgcmVzZW5kID8NCj4gPiA+ID4NCj4gPiA+ID4gTm9wZS4gQWZ0ZXIgbXkgcGF0Y2ggc2Vy
-aWVzIHRoZXJlIHdlcmUgc29tZSBwYXRjaGVzIGZyb20gR2VlcnQgZm9yDQo+ID4gPiA+IGRybS9z
-aG1vYmlsZSBtZXJnZWQgdG8gZHJtLW1pc2MtbmV4dCBieSBUaG9tYXMuDQo+ID4gPiA+DQo+ID4g
-PiA+IE1heWJlIGdpdCBtYW5hZ2VkIHRoaXMgYXV0b21hdGljYWxseT8/DQo+ID4gPg0KPiA+ID4g
-UHJvYmFibHksIGdpdCBpcyBuaWNlIDotKQ0KPiA+ID4NCj4gPiA+ID4gPiBJIGhhdmVuJ3QgaGFk
-IHRpbWUgdG8gcmV2aWV3IHBhdGNoIDQvNSAodGhlIGRyaXZlcikgeWV0LiBBbGwgdGhlDQo+ID4g
-PiA+ID4gcmVzdCBsb29rcyBnb29kIHRvIG1lLiBTaG91bGQgSSBhbHJlYWR5IGluY2x1ZGUgMS81
-IGluIG15IG5leHQNCj4gPiA+ID4gPiBwdWxsDQo+ID4gPiByZXF1ZXN0ID8NCj4gPiA+ID4NCj4g
-PiA+ID4gWWVzLCBwbGVhc2UuDQo+ID4gPg0KPiA+ID4gT0ssIEkgd2lsbCBkbyBzby4gSSd2ZSBy
-ZXZpZXdlZCA0LzUgaW4gdGhlIG1lYW50aW1lLCBidXQgY2hhbmdlcyBhcmUNCj4gPiA+IG5lZWRl
-ZCwgc28gSSB3b24ndCB3YWl0IGZvciB2MTAgYmVmb3JlIGFwcGx5aW5nIDEvNS4NCj4gPg0KPiA+
-IEkgaGF2ZSBpbmNvcnBvcmF0ZWQgcmV2aWV3IGNvbW1lbnRzIGZvciB2OS4gSSBuZWVkIHRvIHJl
-YmFzZSBteQ0KPiBjaGFuZ2VzLg0KPiA+DQo+ID4gSXMgdGhlIHB1bGwgcmVxdWVzdCBiZWluZyBk
-b25lIHRvIGRybS1taXNjLW5leHQ/DQo+IA0KPiBJJ3ZlIGp1c3Qgc2VudCB0aGUgcHVsbCByZXF1
-ZXN0IGZvciBkcm0tbmV4dCwgYW5kIGhhdmUgQ0MnZWQgeW91Lg0KDQpUaGFuayB5b3UuDQoNCkNo
-ZWVycywNCkJpanUNCg==
+On Fri, Jun 2, 2023 at 4:50=E2=80=AFAM Hugh Dickins <hughd@google.com> wrot=
+e:
+> On Wed, 31 May 2023, Jann Horn wrote:
+> > On Mon, May 29, 2023 at 8:15=E2=80=AFAM Hugh Dickins <hughd@google.com>=
+ wrote:
+> > > Before putting them to use (several commits later), add rcu_read_lock=
+()
+> > > to pte_offset_map(), and rcu_read_unlock() to pte_unmap().  Make this=
+ a
+> > > separate commit, since it risks exposing imbalances: prior commits ha=
+ve
+> > > fixed all the known imbalances, but we may find some have been missed=
+.
+> > [...]
+> > > diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+> > > index c7ab18a5fb77..674671835631 100644
+> > > --- a/mm/pgtable-generic.c
+> > > +++ b/mm/pgtable-generic.c
+> > > @@ -236,7 +236,7 @@ pte_t *__pte_offset_map(pmd_t *pmd, unsigned long=
+ addr, pmd_t *pmdvalp)
+> > >  {
+> > >         pmd_t pmdval;
+> > >
+> > > -       /* rcu_read_lock() to be added later */
+> > > +       rcu_read_lock();
+> > >         pmdval =3D pmdp_get_lockless(pmd);
+> > >         if (pmdvalp)
+> > >                 *pmdvalp =3D pmdval;
+> >
+> > It might be a good idea to document that this series assumes that the
+> > first argument to __pte_offset_map() is a pointer into a second-level
+> > page table (and not a local copy of the entry) unless the containing
+> > VMA is known to not be THP-eligible or the page table is detached from
+> > the page table hierarchy or something like that. Currently a bunch of
+> > places pass references to local copies of the entry, and while I think
+> > all of these are fine, it would probably be good to at least document
+> > why these are allowed to do it while other places aren't.
+>
+> Thanks Jann: but I have to guess that here you are showing awareness of
+> an important issue that I'm simply ignorant of.
+>
+> I have been haunted by a dim recollection that there is one architecture
+> (arm-32?) which is fussy about the placement of the pmdval being examined
+> (deduces info missing from the arch-independent interface, by following
+> up the address?), but I couldn't track it down when I tried.
+>
+> Please tell me more; or better, don't spend your time explaining to me,
+> but please just send a link to a good reference on the issue.  I'll be
+> unable to document what you ask there, without educating myself first.
+
+Sorry, I think I was somewhat confused about what was going on when I
+wrote that message.
+
+After this series, __pte_offset_map() looks as follows, with added
+comments describing my understanding of the semantics:
+
+// `pmd` points to one of:
+// case 1: a pmd_t stored outside a page table,
+//         referencing a page table detached by the caller
+// case 2: a pmd_t stored outside a page table, which the caller copied
+//         from a page table in an RCU-critical section that extends
+//         until at least the end of this function
+// case 3: a pmd_t stored inside a page table
+pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+{
+        unsigned long __maybe_unused flags;
+        pmd_t pmdval;
+
+        // begin an RCU section; this is needed for case 3
+        rcu_read_lock();
+        config_might_irq_save(flags);
+        // read the pmd_t.
+        // if the pmd_t references a page table, this page table can not
+        // go away because:
+        //  - in case 1, the caller is the main owner of the page table
+        //  - in case 2, because the caller
+        //    started an RCU read-side critical section before the caller
+        //    read the original pmd_t. (This pmdp_get_lockless() is just
+        //    reading a copied pmd_t off the stack.)
+        //  - in case 3, because we started an RCU section above before
+        //    reading the pmd_t out of the page table here
+        pmdval =3D pmdp_get_lockless(pmd);
+        config_might_irq_restore(flags);
+
+        if (pmdvalp)
+                *pmdvalp =3D pmdval;
+        if (unlikely(pmd_none(pmdval) || is_pmd_migration_entry(pmdval)))
+                goto nomap;
+        if (unlikely(pmd_trans_huge(pmdval) || pmd_devmap(pmdval)))
+                goto nomap;
+        if (unlikely(pmd_bad(pmdval))) {
+                pmd_clear_bad(pmd);
+                goto nomap;
+        }
+        return __pte_map(&pmdval, addr);
+nomap:
+        rcu_read_unlock();
+        return NULL;
+}
+
+case 1 is what happens in __page_table_check_pte_clear_range(),
+__split_huge_zero_page_pmd() and __split_huge_pmd_locked().
+case 2 happens in lockless page table traversal (gup_pte_range() and
+perf_get_pgtable_size()).
+case 3 is normal page table traversal under mmap lock or mapping lock.
+
+I think having a function like this that can run in three different
+contexts in which it is protected in three different ways is somewhat
+hard to understand without comments. Though maybe I'm thinking about
+it the wrong way?
+
+Basically my point is: __pte_offset_map() normally requires that the
+pmd argument points into a page table so that the rcu_read_lock() can
+provide protection starting from the time the pmd_t is read from a
+page table. The exception are cases where the caller has taken its own
+precautions to ensure that the referenced page table can not have been
+freed.
