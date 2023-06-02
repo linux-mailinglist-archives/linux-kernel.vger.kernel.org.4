@@ -2,78 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C6B71F722
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713E071F724
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjFBAf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S229554AbjFBAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjFBAfY (ORCPT
+        with ESMTP id S231241AbjFBAf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:35:24 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE185123
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:35:23 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-258caf97a4eso470193a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 17:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685666123; x=1688258123;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tTnTxLfkvH/gJ5kA9fsR++JqlCYcfT8oB/4PY04nvMI=;
-        b=uXEDUxikT9tErjoPam1H1MfJxrs3mlCVZ/1igIn11ir1+yBdsgyuxPbIXZ3OlfEfao
-         uX2/DiGp8jeXfwcL4vD34Q0814tRMVZ7Ynb96VFwcFEFk0NUwsFYjt5il+eWy1XVb5GT
-         QJ4DcsmsdMzlDOpCZsfjhXe5XZWrMgR2vNM+/4f4qfCJgABZiLx3UBG7etNVIoDxJn4L
-         MEEwFdT4aYcDJ1nlb3ABPRcRIEnywSllc6a4h0KGnpYQ8pOETCxOLCs4eF4fx2VgglR5
-         np/C36i47s1BHItEf43+R7rRzAc6kvRT6fcvZPsYeOT3/yA8GLVFDvjW1cJ5xNnxSBbE
-         Y5Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685666123; x=1688258123;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tTnTxLfkvH/gJ5kA9fsR++JqlCYcfT8oB/4PY04nvMI=;
-        b=MLmleoh/mbliQ/1F4zfNs7k+FhxCKs73SkZeCrQyPWCKeAsIXPd58jQOKR3/qBCJ4R
-         U8ep9mathnutlMdRBzsm3gjWZp8td7y9qZJT47ii0dNvg5i7tXBF0U7YQiHrxTXOYLUM
-         DGldbs7C5JXS8P4ep1FeJRifgOp11FITPXE8zS/aatzQ+tfvoVtaSlmx0pZdQsM7HYCZ
-         o1yRL1/id01QfXaaMAhlfMZrIz4d1b2a+mSNLQ2oYyOlJBGBQARUXv+WhoArLPVT3D/G
-         4DNGcOd+KDDBbV03h8G7bH/19XdQMDV34+TO+EK1CmGTGtvN62k0n5U2sqh3YjsxamyH
-         1RaA==
-X-Gm-Message-State: AC+VfDzkQxqwzU40LcQ9/li7tteC4rJ47PyQiegcrgiwNOTQ9UEPcqax
-        YyHu4YYd7KPlV6vVk5M8I3gOn487TkI=
-X-Google-Smtp-Source: ACHHUZ7KVY71AzRLObpOpEWUNlbUmZYU1696FqjQwmZZ8/LYnx7syxkxmRRoLEOqeZhm9BWKJ1gVa9PU3Qw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:854c:b0:256:8fd6:1280 with SMTP id
- a12-20020a17090a854c00b002568fd61280mr216074pjw.0.1685666123281; Thu, 01 Jun
- 2023 17:35:23 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 17:35:21 -0700
-In-Reply-To: <20230601142309.6307-1-guang.zeng@intel.com>
-Mime-Version: 1.0
-References: <20230601142309.6307-1-guang.zeng@intel.com>
-Message-ID: <ZHk5SRi6bFcHRyxV@google.com>
-Subject: Re: [PATCH v1 0/6] LASS KVM virtualization support
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 20:35:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E8C194
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685666154; x=1717202154;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bWHPZ0685lTcEuTnEgSVLgiuo9YO7pQ+A1jNRHepReE=;
+  b=EkAsMLqFEmDiylyiNyL22dtbNonfx3UVDQ8nucS34Dsqa0+I71fXwKmW
+   zixi56UCYf/13NOyau8UOdCJRwH346tt/7fr3IZeCPekgJNH5Oqz12XOO
+   4pmNE9qoMO05/u4LkcFrrje9Bt9FFvFq4AJdWoJ94KSe7OibukNR/92kM
+   5E9Nc9FMPs2ocPS51gnBfw3B4gL2Jhl+mo/UywlVBkZKnRDdBx/z9pBoA
+   hwWu73FJYvooRplSCen/zLMHSKkGph7j3f2+bCC1jyDJEIt4BMYemjHKd
+   2PnrXOxE9LbTyEghqvjDoVJ9Rq4FYkx272hPP7+U9UbA9ImyMKVSmfzIw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="336092088"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="336092088"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 17:35:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="685067097"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="685067097"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jun 2023 17:35:52 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4slj-0002pO-12;
+        Fri, 02 Jun 2023 00:35:51 +0000
+Date:   Fri, 2 Jun 2023 08:35:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Wang <peter.wang@mediatek.com>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: kismet: WARNING: unmet direct dependencies detected for
+ RESET_TI_SYSCON when selected by SCSI_UFS_MEDIATEK
+Message-ID: <202306020859.1wHg9AaT-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023, Zeng Guang wrote:
-> v0->v1
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9e87b63ed37e202c77aa17d4112da6ae0c7c097c
+commit: de48898d0cb6a3750558f35e14af799eafc3e6db scsi: ufs-mediatek: Create reset control device_link
+date:   2 years ago
+config: arm64-kismet-CONFIG_RESET_TI_SYSCON-CONFIG_SCSI_UFS_MEDIATEK-0-0 (https://download.01.org/0day-ci/archive/20230602/202306020859.1wHg9AaT-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=de48898d0cb6a3750558f35e14af799eafc3e6db
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout de48898d0cb6a3750558f35e14af799eafc3e6db
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_RESET_TI_SYSCON --selectors CONFIG_SCSI_UFS_MEDIATEK -a=arm64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm64 olddefconfig
 
-Heh, the kernel process is a bit of a heathen and starts counting patch versions
-at '1', not '0'.  I.e. this should be v2, not v1.  No need to resend, just an FYI
-for the future.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306020859.1wHg9AaT-lkp@intel.com/
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for RESET_TI_SYSCON when selected by SCSI_UFS_MEDIATEK
+   .config:4634:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
+   
+   WARNING: unmet direct dependencies detected for RESET_TI_SYSCON
+     Depends on [n]: RESET_CONTROLLER [=n] && HAS_IOMEM [=y]
+     Selected by [y]:
+     - SCSI_UFS_MEDIATEK [=y] && SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_UFSHCD_PLATFORM [=y] && ARCH_MEDIATEK [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
