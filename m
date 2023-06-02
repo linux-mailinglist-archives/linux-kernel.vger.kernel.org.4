@@ -2,144 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1C47204FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B607C720501
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbjFBO42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
+        id S236291AbjFBO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbjFBO4V (ORCPT
+        with ESMTP id S236300AbjFBO5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:56:21 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EB1E7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:56:19 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-97392066d04so305958666b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685717778; x=1688309778;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wnzl+oKBQQYlv+ufXrrOrmqqiDIhBJ9gKxeDwPiop2U=;
-        b=GMxQutQqOI2tYKBtzZAaqKIUqU7r+PbwrkxhgYgJ/iORGQqWjNUT689CDWDrVKPob9
-         XKn5G6+X4YG/uBUk6V3WDG1ZKe1Pihx+25lJWj/bIiP3047DfEbvgkYd1qbcubV4u9wP
-         i3yIPb66r8f6GAu5D18gRLF4cz1zhO0XOg1Qw9MZJAfbdhK7B9tMCYXg230OYF/1VcFG
-         nnTG22QXULPNj4Qvx+OSyRySFNN04gaYx34Ll+kkFTbJ/VYPc7oTiL5+fyStGEfvUdmI
-         DaiY0eTy39o/0NEEYBq+Ap7jZICjSb/Ih38Gx/hIYnDufYAWV5NolWjtuMPijXaBDM9O
-         Ub5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717778; x=1688309778;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnzl+oKBQQYlv+ufXrrOrmqqiDIhBJ9gKxeDwPiop2U=;
-        b=QE497Uehw6ebiznjwtaEhR9dXfIuSktmGYtOcg3DHkc+hf2Z/NwcumDKxkI1xainry
-         /NBgaE7sx3kQAQDICaBMFMSFNh+DYGJ0CIvesVlYejY6rkHmqgj1hOjAFAxnXxgO8B4C
-         JNTqS0pa2aeCZrkuWXvgrKn6dulPlMbPfctkGL0CL7dBHiPh9JtlRoHKH7qd2SAi0082
-         Chtj5VdclK1FNE9/PabSU267wUd1S2vlSgBxwn51ZcbG7e+L7/nNtcYZITgtdmIjrJIn
-         dBsIwWbFL50Yr9p7Y7t3pbtROnN4CX8BfCr6NCgLaWWH/xhc30xsooJXQDdu+bhBGNZj
-         Pitw==
-X-Gm-Message-State: AC+VfDwbmC/iR7S7X+fX939Vj7sxJjSu5k4BowtiQszVK6BULo4tk0Zm
-        wWPCNdKahlnpM+Sp7QlK/438Gw==
-X-Google-Smtp-Source: ACHHUZ4hcWFfF0FCaSfbTI+lzp2kZljSmf3H9Wn8b8Dj2qTDyDNjHbvmC3SaZv9TvGPuinNqTX/0LA==
-X-Received: by 2002:a17:907:8a22:b0:969:7739:2eb7 with SMTP id sc34-20020a1709078a2200b0096977392eb7mr11905326ejc.4.1685717778140;
-        Fri, 02 Jun 2023 07:56:18 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id a24-20020a170906245800b009745ecf5438sm839680ejb.193.2023.06.02.07.56.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 07:56:17 -0700 (PDT)
-Message-ID: <c0c0dba2-2d93-9b30-7106-7bf7826844b2@linaro.org>
-Date:   Fri, 2 Jun 2023 16:56:15 +0200
+        Fri, 2 Jun 2023 10:57:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F51E52
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:57:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBAFE650F1
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 14:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0665DC433EF;
+        Fri,  2 Jun 2023 14:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685717829;
+        bh=Z6KkIGntO9yp+lB8wVqWa8YF1x8r+9hlNelCh2cmJ2g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QF/xdJYWLs4nbVbIqMOSZYDqjNFFd7kMojmpRbz+XwMCrSikgMA8PQTcT0ogAkcff
+         NyYnROGZZFEeQekrsVEzY1NPowfgz3GvMMon14EmAwyKY3jocWaV8Qi5Gnh40bTaoT
+         Fgu0KczP+C84Nj40KE0eypm0gQdRlmU2ajc8z34fVQiiQh0Iurlo5EFC3BDYv/ssTR
+         lHbJx/lr66OAS9a7S867fR+UCvfwEBIeXldqBXMJS5MRYjYChKCVFmvksSOb8lwjEJ
+         wkSpjpFTlcBzpwgAuhycHfLVZ05ToiDnJ0E38BqcpTJNnJu0BSVEBiiZHCqX1Amw/r
+         vhC/WCLuAsUqg==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Zack Rusin <zackr@vmware.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, x86@kernel.org,
+        VMware Graphics Reviewers 
+        <linux-graphics-maintainer@vmware.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/vmwgfx: Silence RBP clobber warnings
+Date:   Fri,  2 Jun 2023 07:56:34 -0700
+Message-Id: <e9388b1ad4d955b43b44e8a5dcd6cf6da7d260a0.1685717659.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/4] dt-bindings: power: reset:
- atmel,at91sam9260-shdwc: convert to yaml
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        sre@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
- <20230524123528.439082-3-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230524123528.439082-3-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2023 14:35, Claudiu Beznea wrote:
-> Convert Atmel shutdown controller to YAML.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
+VMware hypercalls take the RBP register as input.  This breaks basic
+frame pointer convention, as RBP should never be clobbered.
 
+So frame pointer unwinding is broken for the instructions surrounding
+the hypercall with the clobbered RBP.  There's nothing that can be done
+about that.  Just tell objtool to ignore it.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,at91sam9260-shdwc
-> +              - atmel,at91sam9rl-shdwc
-> +    then:
-> +      properties:
-> +        atmel,wakeup-rtt-timer:
-> +          description: enable real-time timer wake-up
-> +          type: boolean
+Silences the following warnings:
 
-No, don't define properties in allOf.
+  vmlinux.o: warning: objtool: vmw_port_hb_in+0x1df: return with modified stack frame
+  vmlinux.o: warning: objtool: vmw_port_hb_out+0x1dd: return with modified stack frame
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,at91sam9rl-shdwc
-> +              - atmel,at91sam9x5-shdwc
-> +    then:
-> +      properties:
-> +        atmel,wakeup-rtc-timer:
-> +          description: enable real-time clock wake-up
-> +          type: boolean
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305160135.97q0Elax-lkp@intel.com/
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/x86/include/asm/unwind_hints.h     |  6 ++++++
+ drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h | 14 ++++++++++----
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-Same problem.
-
-> +
-> +unevaluatedProperties: false
-
-This should be additionalProperties: false.
-> +
-> +examples:
-> +  - |
-> +    shdwc: poweroff@fffffd10 {
-> +        compatible = "atmel,at91sam9260-shdwc";
-> +        reg = <0xfffffd10 0x10>;
-> +        clocks = <&clk32k>;
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
+diff --git a/arch/x86/include/asm/unwind_hints.h b/arch/x86/include/asm/unwind_hints.h
+index 01cb9692b160..91ab6e5426c6 100644
+--- a/arch/x86/include/asm/unwind_hints.h
++++ b/arch/x86/include/asm/unwind_hints.h
+@@ -79,6 +79,12 @@
+ #define UNWIND_HINT_FUNC \
+ 	UNWIND_HINT(UNWIND_HINT_TYPE_FUNC, ORC_REG_SP, 8, 0)
+ 
++#define UNWIND_HINT_SAVE \
++	UNWIND_HINT(UNWIND_HINT_TYPE_SAVE, 0, 0, 0)
++
++#define UNWIND_HINT_RESTORE \
++	UNWIND_HINT(UNWIND_HINT_TYPE_RESTORE, 0, 0, 0)
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* _ASM_X86_UNWIND_HINTS_H */
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h b/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
+index 0b74ca2dfb7b..79050a78fa4c 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
+@@ -105,10 +105,13 @@
+                         flags, magic, bp,		\
+                         eax, ebx, ecx, edx, si, di)	\
+ ({							\
+-        asm volatile ("push %%rbp;"			\
++        asm volatile (					\
++		UNWIND_HINT_SAVE			\
++		"push %%rbp;"				\
+                 "mov %12, %%rbp;"			\
+                 VMWARE_HYPERCALL_HB_OUT			\
+-                "pop %%rbp;" :				\
++                "pop %%rbp;"				\
++		UNWIND_HINT_RESTORE :			\
+                 "=a"(eax),				\
+                 "=b"(ebx),				\
+                 "=c"(ecx),				\
+@@ -130,10 +133,13 @@
+                        flags, magic, bp,		\
+                        eax, ebx, ecx, edx, si, di)	\
+ ({							\
+-        asm volatile ("push %%rbp;"			\
++        asm volatile (					\
++		UNWIND_HINT_SAVE			\
++		"push %%rbp;"				\
+                 "mov %12, %%rbp;"			\
+                 VMWARE_HYPERCALL_HB_IN			\
+-                "pop %%rbp" :				\
++                "pop %%rbp;"				\
++		UNWIND_HINT_RESTORE :			\
+                 "=a"(eax),				\
+                 "=b"(ebx),				\
+                 "=c"(ecx),				\
+-- 
+2.40.1
 
