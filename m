@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0425C7208F0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE097208FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236288AbjFBSR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S235692AbjFBSUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236950AbjFBSRo (ORCPT
+        with ESMTP id S235519AbjFBSUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:17:44 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056E194;
-        Fri,  2 Jun 2023 11:17:43 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b1a86cdec6so22272181fa.3;
-        Fri, 02 Jun 2023 11:17:43 -0700 (PDT)
+        Fri, 2 Jun 2023 14:20:38 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB92610F4
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 11:20:11 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-5585f2f070bso1674321eaf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 11:20:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685729861; x=1688321861;
+        d=gmail.com; s=20221208; t=1685729995; x=1688321995;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KLFNCMhv+spGlpOSH+9ycbJCZbcr4uBlI4qw7DshkZ8=;
-        b=KyhHrtcqhrgtW/KY3WyjzLqvw3iKTxgOBu62HKzjvMOn9BR7iU68cHO4y/TP0FAHdp
-         IwGXll8PxV8kEcuM3N4FdFzQLZq/snGmXfLtj4FB2KsfD8aZ24aN98wwXtRwyEreVS64
-         0wq0I78FfdoxTOe2u5aGY/OT8eLcIhFfLI+ev4ayYvi0lByP66uuu3dYwf1lF3AWTuRg
-         ti+1DpvpzO3jFBIWlFSU4+2Xk/Q0TAivuKApBQxY2iSW4KbO70VQoZs2EYjUt/mqSCJ3
-         YfMI5AlU82kYbB85XrUR+n22S3XoZ68wfI5gFhHyfcUhO+/p1JUohp9DlsjPzWWRsPT8
-         IG4w==
+        bh=ruVVANUt1rkl2YltnY0VMnFPVn2MSLuHPa/KLfddOQI=;
+        b=ng8Zqz9Z1hgelGexfypABP0OmFAOwn+FoLkBQJd5NubPZMrM6+uBJiBoyyxH4BOvos
+         gXUAg+J0ixJRyACe9gc/XHgRTcbbWfpjreSweek+yLKHG82udvA4jS53ng3vPPCWF8cb
+         2OfIRljPQApekAOT8I34NH4XTqPFUd6e6E5T8xcPtWFzh7UVhD+xQOgjurqNeqon9rI2
+         Iedhm67TNOQxmGvOkuZzEuB/uLn7dHAn61ZCELCGpyZ10nVhPtnrW2+jBYP1DvMJJ3tZ
+         0STizNX+zxJ6L/pz1Vuay0HpvBCbA30MautyELFz6Wuw8OcdP8fFvcobTW5fOrF1LB+O
+         L1OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685729861; x=1688321861;
+        d=1e100.net; s=20221208; t=1685729995; x=1688321995;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KLFNCMhv+spGlpOSH+9ycbJCZbcr4uBlI4qw7DshkZ8=;
-        b=GMqoJVy7ZZI9uVBQ2QYMPpsltiDEXm/m2SDUO9VvcduflUVoyRrLrR3iKSRdBgISKt
-         eoQtHdTOWXneb42zEUt9xc26m+infNHpHlEV7W6YAX5L4r93aBfsYQnziq1EzLPvgaI9
-         x1rH2p7fPyxJhbfN8iDVxSwoc/dR6QwYIh4wCIUos7NcpKaV5eWJNNAlPT3pYmhrzmj9
-         p1Q/0SaLfX88bFL7LfE2r8mDoAaZjOKM87FkKh4j/hVPfs85umv9geffun1ujWJBrek8
-         2DkSlkSKb/fTabl5Kv8myJaOm24w2pwU6zi3NzINhDiwr0fj8EvlGpFrnJUfvo/Hn5Jq
-         P72A==
-X-Gm-Message-State: AC+VfDwX9gXJ5Hpx0pSBTFo6a2K1bIFiaegI0nvdDNTMc9dTYVuZdsFm
-        k7qhtMJAg8RvtJxKzvzzkgVsIsrVxFfx6Q67SX9iKA/vlRg=
-X-Google-Smtp-Source: ACHHUZ7DxBiO+vgM+60Tryc29RsBRvao4RVTxaqEv4+BPbaOmGl8KbQ1WwBKGLpU/vRqoMEEVd/ddp73Sbng8H1agY4=
-X-Received: by 2002:a2e:800e:0:b0:2ad:95dd:8802 with SMTP id
- j14-20020a2e800e000000b002ad95dd8802mr487855ljg.38.1685729860693; Fri, 02 Jun
- 2023 11:17:40 -0700 (PDT)
+        bh=ruVVANUt1rkl2YltnY0VMnFPVn2MSLuHPa/KLfddOQI=;
+        b=R219ssyEJSh15iT77wKKZCG+i73GETw06hxEWZtOe502N5W5SYqdX1BWsHnOdKR+0h
+         5lGhj/1bjNyrrIvZcu5X35J8kxCu3LKQtG3kF44GGLw5FAqmsJhre8bfChrq1VABFftB
+         ipCHolatwlPVGxEJSbyOsaGIJoa/3T8tAzupwlADfaJmez7qytnggZbw9q0fLqqkFwn8
+         X5l32u+QFveaTXlLv8KrkZIkmggrS0vDIAYYvLT+18B5k01/0OIfqMjQMxLU94NdGtQH
+         2GS/etJbrFCxmQUx52dTOnJQplqYgcH08/al9544KM4IGL10gDypNOISoLABMq61Ze01
+         P2Dg==
+X-Gm-Message-State: AC+VfDxyUAZ3OKpWbj/UjGhzB5DZDkuG6xsVtYNnQlF0JUZgyrNpmRJu
+        A3paVLSuBg31rBYmaVQGNa9preDVTUfeKHIpP8k=
+X-Google-Smtp-Source: ACHHUZ7udrYG+H6UGxo37tXKpSQPyugKYQKqTppilBeQayTPvyvZhtfN9IhTZ+FTexkc9dCzuPanBmgoQnRmCXMNvjM=
+X-Received: by 2002:a4a:45c7:0:b0:555:991b:b340 with SMTP id
+ y190-20020a4a45c7000000b00555991bb340mr7608913ooa.6.1685729995619; Fri, 02
+ Jun 2023 11:19:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230602065958.2869555-1-imagedong@tencent.com> <20230602065958.2869555-2-imagedong@tencent.com>
-In-Reply-To: <20230602065958.2869555-2-imagedong@tencent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 2 Jun 2023 11:17:29 -0700
-Message-ID: <CAADnVQL8F23zxfYBacD9mFt_2uWRXN8Cno3tZGce4W3QC8iSew@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: make MAX_BPF_FUNC_ARGS 14
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        benbjiang@tencent.com, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        Manu Bretelle <chantr4@gmail.com>,
-        Ross Zwisler <zwisler@google.com>, Eddy Z <eddyz87@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+References: <20230601214814.2329224-1-olvaffe@gmail.com>
+In-Reply-To: <20230601214814.2329224-1-olvaffe@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 2 Jun 2023 14:19:43 -0400
+Message-ID: <CADnq5_NQ2zgvRDZ8NWUsCm-8JO6PZSEmQ+WrbjYqjv3vTLfinw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: fix xclk freq on CHIP_STONEY
+To:     Chia-I Wu <olvaffe@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Le Ma <le.ma@amd.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,32 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 12:01=E2=80=AFAM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> According to the current kernel version, below is a statistics of the
-> function arguments count:
->
-> argument count | FUNC_PROTO count
-> 7              | 367
-> 8              | 196
-> 9              | 71
-> 10             | 43
-> 11             | 22
-> 12             | 10
-> 13             | 15
-> 14             | 4
-> 15             | 0
-> 16             | 1
->
-> It's hard to statisics the function count, so I use FUNC_PROTO in the btf
-> of vmlinux instead. The function with 16 arguments is ZSTD_buildCTable(),
-> which I think can be ignored.
->
-> Therefore, let's make the maximum of function arguments count 14. It used
-> to be 12, but it seems that there is no harm to make it big enough.
+Applied.  Thanks!
 
-I think we're just fine at 12.
-People need to fix their code. ZSTD_buildCTable should be first in line.
-Passing arguments on the stack is not efficient from performance pov.
+Alex
+
+On Thu, Jun 1, 2023 at 5:48=E2=80=AFPM Chia-I Wu <olvaffe@gmail.com> wrote:
+>
+> According to Alex, most APUs from that time seem to have the same issue
+> (vbios says 48Mhz, actual is 100Mhz).  I only have a CHIP_STONEY so I
+> limit the fixup to CHIP_STONEY
+> ---
+>  drivers/gpu/drm/amd/amdgpu/vi.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu=
+/vi.c
+> index 770f2d7a371fc..6a8494f98d3ef 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+> @@ -542,8 +542,15 @@ static u32 vi_get_xclk(struct amdgpu_device *adev)
+>         u32 reference_clock =3D adev->clock.spll.reference_freq;
+>         u32 tmp;
+>
+> -       if (adev->flags & AMD_IS_APU)
+> -               return reference_clock;
+> +       if (adev->flags & AMD_IS_APU) {
+> +               switch (adev->asic_type) {
+> +               case CHIP_STONEY:
+> +                       /* vbios says 48Mhz, but the actual freq is 100Mh=
+z */
+> +                       return 10000;
+> +               default:
+> +                       return reference_clock;
+> +               }
+> +       }
+>
+>         tmp =3D RREG32_SMC(ixCG_CLKPIN_CNTL_2);
+>         if (REG_GET_FIELD(tmp, CG_CLKPIN_CNTL_2, MUX_TCLK_TO_XCLK))
+> --
+> 2.41.0.rc0.172.g3f132b7071-goog
+>
