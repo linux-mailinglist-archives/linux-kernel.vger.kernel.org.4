@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541FE71FB2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4D871FB40
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbjFBHlA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 03:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S234476AbjFBHlp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 03:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbjFBHkx (ORCPT
+        with ESMTP id S234393AbjFBHk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:40:53 -0400
+        Fri, 2 Jun 2023 03:40:58 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4C4198;
-        Fri,  2 Jun 2023 00:40:50 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9141E19B;
+        Fri,  2 Jun 2023 00:40:54 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 13F9B8109;
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 7D9A48116;
         Fri,  2 Jun 2023 15:40:49 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
  2023 15:40:49 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
@@ -51,9 +51,9 @@ CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Jack Zhu <jack.zhu@starfivetech.com>,
         Shengyang Chen <shengyang.chen@starfivetech.com>,
         Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: [PATCH 5/9] drm/verisilicon: Add mode config funcs
-Date:   Fri, 2 Jun 2023 15:40:39 +0800
-Message-ID: <20230602074043.33872-6-keith.zhao@starfivetech.com>
+Subject: [PATCH 6/9] drm/verisilicon: Add drm crtc funcs
+Date:   Fri, 2 Jun 2023 15:40:40 +0800
+Message-ID: <20230602074043.33872-7-keith.zhao@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602074043.33872-1-keith.zhao@starfivetech.com>
 References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
@@ -73,259 +73,583 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mode setting functions for JH7110 SoC.
+Add crtc driver which implements crtc related operation functions.
 
 Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
 ---
- drivers/gpu/drm/verisilicon/Makefile |   1 +
- drivers/gpu/drm/verisilicon/vs_drv.c |   3 +
- drivers/gpu/drm/verisilicon/vs_fb.c  | 181 +++++++++++++++++++++++++++
- drivers/gpu/drm/verisilicon/vs_fb.h  |  15 +++
- 4 files changed, 200 insertions(+)
- create mode 100644 drivers/gpu/drm/verisilicon/vs_fb.c
- create mode 100644 drivers/gpu/drm/verisilicon/vs_fb.h
+ drivers/gpu/drm/verisilicon/Makefile  |   1 +
+ drivers/gpu/drm/verisilicon/vs_crtc.c | 388 ++++++++++++++++++++++++++
+ drivers/gpu/drm/verisilicon/vs_crtc.h |  74 +++++
+ drivers/gpu/drm/verisilicon/vs_type.h |  72 +++++
+ 4 files changed, 535 insertions(+)
+ create mode 100644 drivers/gpu/drm/verisilicon/vs_crtc.c
+ create mode 100644 drivers/gpu/drm/verisilicon/vs_crtc.h
+ create mode 100644 drivers/gpu/drm/verisilicon/vs_type.h
 
 diff --git a/drivers/gpu/drm/verisilicon/Makefile b/drivers/gpu/drm/verisilicon/Makefile
-index 30360e370e47..38254dc5d98d 100644
+index 38254dc5d98d..bae5fbab9bbb 100644
 --- a/drivers/gpu/drm/verisilicon/Makefile
 +++ b/drivers/gpu/drm/verisilicon/Makefile
 @@ -1,6 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0
  
  vs_drm-objs := vs_drv.o \
-+		vs_fb.o \
++		vs_crtc.o \
+ 		vs_fb.o \
  		vs_gem.o
  
- obj-$(CONFIG_DRM_VERISILICON) += vs_drm.o
-diff --git a/drivers/gpu/drm/verisilicon/vs_drv.c b/drivers/gpu/drm/verisilicon/vs_drv.c
-index e0a2fc43b55f..d84aacd751bc 100644
---- a/drivers/gpu/drm/verisilicon/vs_drv.c
-+++ b/drivers/gpu/drm/verisilicon/vs_drv.c
-@@ -30,6 +30,7 @@
- #include <drm/drm_vblank.h>
- 
- #include "vs_drv.h"
-+#include "vs_fb.h"
- #include "vs_gem.h"
- 
- #define DRV_NAME	"starfive"
-@@ -118,6 +119,8 @@ static int vs_drm_bind(struct device *dev)
- 	if (ret)
- 		goto err_mode;
- 
-+	vs_mode_config_init(drm_dev);
-+
- 	ret = drm_vblank_init(drm_dev, drm_dev->mode_config.num_crtc);
- 	if (ret)
- 		goto err_bind;
-diff --git a/drivers/gpu/drm/verisilicon/vs_fb.c b/drivers/gpu/drm/verisilicon/vs_fb.c
+diff --git a/drivers/gpu/drm/verisilicon/vs_crtc.c b/drivers/gpu/drm/verisilicon/vs_crtc.c
 new file mode 100644
-index 000000000000..3e85f7365084
+index 000000000000..a9e742d7bd1a
 --- /dev/null
-+++ b/drivers/gpu/drm/verisilicon/vs_fb.c
-@@ -0,0 +1,181 @@
++++ b/drivers/gpu/drm/verisilicon/vs_crtc.c
+@@ -0,0 +1,388 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2023 VeriSilicon Holdings Co., Ltd.
++ *
 + */
 +
-+#include <linux/module.h>
-+#include <linux/version.h>
++#include <linux/clk.h>
++#include <linux/debugfs.h>
++#include <linux/media-bus-format.h>
 +
-+#include <drm/drm_damage_helper.h>
-+#include <drm/drm_fb_helper.h>
++#include <drm/drm_atomic_helper.h>
++#include <drm/drm_atomic.h>
 +#include <drm/drm_crtc.h>
-+#include <drm/drm_crtc_helper.h>
-+#include <drm/drm_fourcc.h>
-+#include <drm/drm_framebuffer.h>
-+#include <drm/drm_gem.h>
-+#include <drm/drm_gem_framebuffer_helper.h>
++#include <drm/drm_gem_atomic_helper.h>
++#include <drm/drm_vblank.h>
++#include <drm/vs_drm.h>
 +
-+#include "vs_fb.h"
-+#include "vs_gem.h"
++#include "vs_crtc.h"
 +
-+#define fourcc_mod_vs_get_type(val) \
-+	(((val) & DRM_FORMAT_MOD_VS_TYPE_MASK) >> 54)
-+
-+static struct drm_framebuffer_funcs vs_fb_funcs = {
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.destroy	= drm_gem_fb_destroy,
-+	.dirty		= drm_atomic_helper_dirtyfb,
-+};
-+
-+static struct drm_framebuffer *
-+vs_fb_alloc(struct drm_device *dev, const struct drm_mode_fb_cmd2 *mode_cmd,
-+	    struct vs_gem_object **obj, unsigned int num_planes)
++void vs_crtc_destroy(struct drm_crtc *crtc)
 +{
-+	struct drm_framebuffer *fb;
-+	int ret, i;
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
 +
-+	fb = kzalloc(sizeof(*fb), GFP_KERNEL);
-+	if (!fb)
-+		return ERR_PTR(-ENOMEM);
-+
-+	drm_helper_mode_fill_fb_struct(dev, fb, mode_cmd);
-+
-+	for (i = 0; i < num_planes; i++)
-+		fb->obj[i] = &obj[i]->base;
-+
-+	ret = drm_framebuffer_init(dev, fb, &vs_fb_funcs);
-+	if (ret) {
-+		dev_err(dev->dev, "Failed to initialize framebuffer: %d\n",
-+			ret);
-+		kfree(fb);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return fb;
++	drm_crtc_cleanup(crtc);
++	kfree(vs_crtc);
 +}
 +
-+static struct drm_framebuffer *vs_fb_create(struct drm_device *dev,
-+					    struct drm_file *file_priv,
-+					    const struct drm_mode_fb_cmd2 *mode_cmd)
++static void vs_crtc_reset(struct drm_crtc *crtc)
 +{
-+	struct drm_framebuffer *fb;
-+	const struct drm_format_info *info;
-+	struct vs_gem_object *objs[MAX_NUM_PLANES];
-+	struct drm_gem_object *obj;
-+	unsigned int height, size;
-+	unsigned char i, num_planes;
-+	int ret = 0;
++	struct vs_crtc_state *state;
 +
-+	info = drm_get_format_info(dev, mode_cmd);
-+	if (!info)
-+		return ERR_PTR(-EINVAL);
++	if (crtc->state) {
++		__drm_atomic_helper_crtc_destroy_state(crtc->state);
 +
-+	num_planes = info->num_planes;
-+	if (num_planes > MAX_NUM_PLANES)
-+		return ERR_PTR(-EINVAL);
-+
-+	for (i = 0; i < num_planes; i++) {
-+		obj = drm_gem_object_lookup(file_priv, mode_cmd->handles[i]);
-+		if (!obj) {
-+			dev_err(dev->dev, "Failed to lookup GEM object.\n");
-+			ret = -ENXIO;
-+			goto err;
-+		}
-+
-+		height = drm_format_info_plane_height(info,
-+						      mode_cmd->height, i);
-+
-+		size = height * mode_cmd->pitches[i] + mode_cmd->offsets[i];
-+
-+		if (obj->size < size) {
-+			drm_gem_object_put(obj);
-+
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+
-+		objs[i] = to_vs_gem_object(obj);
++		state = to_vs_crtc_state(crtc->state);
++		kfree(state);
++		crtc->state = NULL;
 +	}
 +
-+	fb = vs_fb_alloc(dev, mode_cmd, objs, i);
-+	if (IS_ERR(fb)) {
-+		ret = PTR_ERR(fb);
-+		goto err;
-+	}
++	state = kzalloc(sizeof(*state), GFP_KERNEL);
++	if (!state)
++		return;
 +
-+	return fb;
++	__drm_atomic_helper_crtc_reset(crtc, &state->base);
 +
-+err:
-+	for (; i > 0; i--)
-+		drm_gem_object_put(&objs[i - 1]->base);
-+
-+	return ERR_PTR(ret);
++	state->sync_mode = VS_SINGLE_DC;
++	state->output_fmt = MEDIA_BUS_FMT_RBG888_1X24;
++	state->encoder_type = DRM_MODE_ENCODER_NONE;
 +}
 +
-+struct vs_gem_object *vs_fb_get_gem_obj(struct drm_framebuffer *fb,
-+					unsigned char plane)
++static struct drm_crtc_state *
++vs_crtc_atomic_duplicate_state(struct drm_crtc *crtc)
 +{
-+	if (plane > MAX_NUM_PLANES)
++	struct vs_crtc_state *ori_state;
++	struct vs_crtc_state *state;
++
++	if (WARN_ON(!crtc->state))
 +		return NULL;
 +
-+	return to_vs_gem_object(fb->obj[plane]);
++	ori_state = to_vs_crtc_state(crtc->state);
++	state = kzalloc(sizeof(*state), GFP_KERNEL);
++	if (!state)
++		return NULL;
++
++	__drm_atomic_helper_crtc_duplicate_state(crtc, &state->base);
++
++	state->sync_mode = ori_state->sync_mode;
++	state->output_fmt = ori_state->output_fmt;
++	state->encoder_type = ori_state->encoder_type;
++	state->bg_color = ori_state->bg_color;
++	state->bpp = ori_state->bpp;
++	state->sync_enable = ori_state->sync_enable;
++	state->dither_enable = ori_state->dither_enable;
++	state->underflow = ori_state->underflow;
++
++	return &state->base;
 +}
 +
-+static const struct drm_format_info vs_formats[] = {
-+	{.format = DRM_FORMAT_NV12, .depth = 0, .num_planes = 2, .char_per_block = { 20, 40, 0 },
-+	 .block_w = { 4, 4, 0 }, .block_h = { 4, 4, 0 }, .hsub = 2, .vsub = 2, .is_yuv = true},
-+	{.format = DRM_FORMAT_YUV444, .depth = 0, .num_planes = 3, .char_per_block = { 20, 20, 20 },
-+	 .block_w = { 4, 4, 4 }, .block_h = { 4, 4, 4 }, .hsub = 1, .vsub = 1, .is_yuv = true},
++static void vs_crtc_atomic_destroy_state(struct drm_crtc *crtc,
++					 struct drm_crtc_state *state)
++{
++	__drm_atomic_helper_crtc_destroy_state(state);
++	kfree(to_vs_crtc_state(state));
++}
++
++static int vs_crtc_atomic_set_property(struct drm_crtc *crtc,
++				       struct drm_crtc_state *state,
++				       struct drm_property *property,
++				       uint64_t val)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++	struct vs_crtc_state *vs_crtc_state = to_vs_crtc_state(state);
++
++	if (property == vs_crtc->sync_mode)
++		vs_crtc_state->sync_mode = val;
++	else if (property == vs_crtc->mmu_prefetch)
++		vs_crtc_state->mmu_prefetch = val;
++	else if (property == vs_crtc->bg_color)
++		vs_crtc_state->bg_color = val;
++	else if (property == vs_crtc->panel_sync)
++		vs_crtc_state->sync_enable = val;
++	else if (property == vs_crtc->dither)
++		vs_crtc_state->dither_enable = val;
++	else
++		return -EINVAL;
++
++	return 0;
++}
++
++static int vs_crtc_atomic_get_property(struct drm_crtc *crtc,
++				       const struct drm_crtc_state *state,
++				       struct drm_property *property,
++				       uint64_t *val)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++	const struct vs_crtc_state *vs_crtc_state =
++		container_of(state, const struct vs_crtc_state, base);
++
++	if (property == vs_crtc->sync_mode)
++		*val = vs_crtc_state->sync_mode;
++	else if (property == vs_crtc->mmu_prefetch)
++		*val = vs_crtc_state->mmu_prefetch;
++	else if (property == vs_crtc->bg_color)
++		*val = vs_crtc_state->bg_color;
++	else if (property == vs_crtc->panel_sync)
++		*val = vs_crtc_state->sync_enable;
++	else if (property == vs_crtc->dither)
++		*val = vs_crtc_state->dither_enable;
++	else
++		return -EINVAL;
++
++	return 0;
++}
++
++static int vs_crtc_late_register(struct drm_crtc *crtc)
++{
++	return 0;
++}
++
++static int vs_crtc_enable_vblank(struct drm_crtc *crtc)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++
++	vs_crtc->funcs->enable_vblank(vs_crtc->dev, true);
++
++	return 0;
++}
++
++static void vs_crtc_disable_vblank(struct drm_crtc *crtc)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++
++	vs_crtc->funcs->enable_vblank(vs_crtc->dev, false);
++}
++
++static const struct drm_crtc_funcs vs_crtc_funcs = {
++	.set_config		= drm_atomic_helper_set_config,
++	.destroy		= vs_crtc_destroy,
++	.page_flip		= drm_atomic_helper_page_flip,
++	.reset			= vs_crtc_reset,
++	.atomic_duplicate_state = vs_crtc_atomic_duplicate_state,
++	.atomic_destroy_state	= vs_crtc_atomic_destroy_state,
++	.atomic_set_property	= vs_crtc_atomic_set_property,
++	.atomic_get_property	= vs_crtc_atomic_get_property,
++	.late_register		= vs_crtc_late_register,
++	.enable_vblank		= vs_crtc_enable_vblank,
++	.disable_vblank		= vs_crtc_disable_vblank,
 +};
 +
-+static const struct drm_format_info *
-+vs_lookup_format_info(const struct drm_format_info formats[],
-+		      int num_formats, u32 format)
++static u8 cal_pixel_bits(u32 bus_format)
 +{
-+	int i;
++	u8 bpp;
 +
-+	for (i = 0; i < num_formats; i++) {
-+		if (formats[i].format == format)
-+			return &formats[i];
++	switch (bus_format) {
++	case MEDIA_BUS_FMT_RGB565_1X16:
++	case MEDIA_BUS_FMT_UYVY8_1X16:
++		bpp = 16;
++		break;
++	case MEDIA_BUS_FMT_RGB666_1X18:
++	case MEDIA_BUS_FMT_RGB666_1X24_CPADHI:
++		bpp = 18;
++		break;
++	case MEDIA_BUS_FMT_UYVY10_1X20:
++		bpp = 20;
++		break;
++	case MEDIA_BUS_FMT_BGR888_1X24:
++	case MEDIA_BUS_FMT_UYYVYY8_0_5X24:
++	case MEDIA_BUS_FMT_YUV8_1X24:
++		bpp = 24;
++		break;
++	case MEDIA_BUS_FMT_RGB101010_1X30:
++	case MEDIA_BUS_FMT_UYYVYY10_0_5X30:
++	case MEDIA_BUS_FMT_YUV10_1X30:
++		bpp = 30;
++		break;
++	default:
++		bpp = 24;
++		break;
 +	}
 +
++	return bpp;
++}
++
++static bool vs_crtc_mode_fixup(struct drm_crtc *crtc,
++			       const struct drm_display_mode *mode,
++			       struct drm_display_mode *adjusted_mode)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++
++	return vs_crtc->funcs->mode_fixup(vs_crtc->dev, mode, adjusted_mode);
++}
++
++static void vs_crtc_atomic_enable(struct drm_crtc *crtc,
++				  struct drm_atomic_state *state)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++	struct vs_crtc_state *vs_crtc_state = to_vs_crtc_state(crtc->state);
++
++	vs_crtc_state->bpp = cal_pixel_bits(vs_crtc_state->output_fmt);
++
++	vs_crtc->funcs->enable(vs_crtc->dev, crtc);
++	drm_crtc_vblank_on(crtc);
++}
++
++static void vs_crtc_atomic_disable(struct drm_crtc *crtc,
++				   struct drm_atomic_state *state)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++
++	drm_crtc_vblank_off(crtc);
++
++	vs_crtc->funcs->disable(vs_crtc->dev, crtc);
++
++	if (crtc->state->event && !crtc->state->active) {
++		spin_lock_irq(&crtc->dev->event_lock);
++		drm_crtc_send_vblank_event(crtc, crtc->state->event);
++		spin_unlock_irq(&crtc->dev->event_lock);
++
++		crtc->state->event = NULL;
++	}
++}
++
++static void vs_crtc_atomic_begin(struct drm_crtc *crtc,
++				 struct drm_atomic_state *state)
++{
++	struct drm_crtc_state *crtc_state = drm_atomic_get_new_crtc_state(state,
++									  crtc);
++
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++	struct device *dev = vs_crtc->dev;
++	struct drm_property_blob *blob = crtc->state->gamma_lut;
++	struct drm_color_lut *lut;
++
++	if (crtc_state->color_mgmt_changed) {
++		if (blob && blob->length) {
++			lut = blob->data;
++			vs_crtc->funcs->set_gamma(dev, crtc, lut,
++						  blob->length / sizeof(*lut));
++			vs_crtc->funcs->enable_gamma(dev, crtc, true);
++		} else {
++			vs_crtc->funcs->enable_gamma(dev, crtc, false);
++		}
++	}
++}
++
++static void vs_crtc_atomic_flush(struct drm_crtc *crtc,
++				 struct drm_atomic_state *state)
++{
++	struct vs_crtc *vs_crtc = to_vs_crtc(crtc);
++	struct drm_pending_vblank_event *event = crtc->state->event;
++
++	vs_crtc->funcs->commit(vs_crtc->dev);
++
++	if (event) {
++		WARN_ON(drm_crtc_vblank_get(crtc) != 0);
++
++		spin_lock_irq(&crtc->dev->event_lock);
++		drm_crtc_arm_vblank_event(crtc, event);
++		spin_unlock_irq(&crtc->dev->event_lock);
++		crtc->state->event = NULL;
++	}
++}
++
++static const struct drm_crtc_helper_funcs vs_crtc_helper_funcs = {
++	.mode_fixup = vs_crtc_mode_fixup,
++	.atomic_enable	= vs_crtc_atomic_enable,
++	.atomic_disable = vs_crtc_atomic_disable,
++	.atomic_begin	= vs_crtc_atomic_begin,
++	.atomic_flush	= vs_crtc_atomic_flush,
++};
++
++static const struct drm_prop_enum_list vs_sync_mode_enum_list[] = {
++	{ VS_SINGLE_DC,			"single dc mode" },
++	{ VS_MULTI_DC_PRIMARY,		"primary dc for multi dc mode" },
++	{ VS_MULTI_DC_SECONDARY,	"secondary dc for multi dc mode" },
++};
++
++struct vs_crtc *vs_crtc_create(struct drm_device *drm_dev,
++			       struct vs_dc_info *info)
++{
++	struct vs_crtc *crtc;
++	int ret;
++
++	if (!info)
++		return NULL;
++
++	crtc = kzalloc(sizeof(*crtc), GFP_KERNEL);
++	if (!crtc)
++		return NULL;
++
++	ret = drm_crtc_init_with_planes(drm_dev, &crtc->base,
++					NULL, NULL, &vs_crtc_funcs,
++					info->name ? info->name : NULL);
++	if (ret)
++		goto err_free_crtc;
++
++	drm_crtc_helper_add(&crtc->base, &vs_crtc_helper_funcs);
++
++	/* Set up the crtc properties */
++	if (info->pipe_sync) {
++		crtc->sync_mode = drm_property_create_enum(drm_dev, 0,
++							   "SYNC_MODE",
++							    vs_sync_mode_enum_list,
++							    ARRAY_SIZE(vs_sync_mode_enum_list));
++
++		if (!crtc->sync_mode)
++			goto err_cleanup_crts;
++
++		drm_object_attach_property(&crtc->base.base,
++					   crtc->sync_mode,
++					   VS_SINGLE_DC);
++	}
++
++	if (info->gamma_size) {
++		ret = drm_mode_crtc_set_gamma_size(&crtc->base,
++						   info->gamma_size);
++		if (ret)
++			goto err_cleanup_crts;
++
++		drm_crtc_enable_color_mgmt(&crtc->base, 0, false,
++					   info->gamma_size);
++	}
++
++	if (info->background) {
++		crtc->bg_color = drm_property_create_range(drm_dev, 0,
++							   "BG_COLOR", 0, 0xffffffff);
++
++		if (!crtc->bg_color)
++			goto err_cleanup_crts;
++
++		drm_object_attach_property(&crtc->base.base, crtc->bg_color, 0);
++	}
++
++	if (info->panel_sync) {
++		crtc->panel_sync = drm_property_create_bool(drm_dev, 0, "SYNC_ENABLED");
++
++		if (!crtc->panel_sync)
++			goto err_cleanup_crts;
++
++		drm_object_attach_property(&crtc->base.base, crtc->panel_sync, 0);
++	}
++
++	crtc->dither = drm_property_create_bool(drm_dev, 0, "DITHER_ENABLED");
++	if (!crtc->dither)
++		goto err_cleanup_crts;
++
++	drm_object_attach_property(&crtc->base.base, crtc->dither, 0);
++
++	crtc->max_bpc = info->max_bpc;
++	crtc->color_formats = info->color_formats;
++	return crtc;
++
++err_cleanup_crts:
++	drm_crtc_cleanup(&crtc->base);
++
++err_free_crtc:
++	kfree(crtc);
 +	return NULL;
 +}
 +
-+static const struct drm_format_info *
-+vs_get_format_info(const struct drm_mode_fb_cmd2 *cmd)
++void vs_crtc_handle_vblank(struct drm_crtc *crtc, bool underflow)
 +{
-+	if (fourcc_mod_vs_get_type(cmd->modifier[0]) ==
-+		DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT)
-+		return vs_lookup_format_info(vs_formats, ARRAY_SIZE(vs_formats),
-+									 cmd->pixel_format);
-+	else
-+		return NULL;
++	struct vs_crtc_state *vs_crtc_state = to_vs_crtc_state(crtc->state);
++
++	drm_crtc_handle_vblank(crtc);
++
++	vs_crtc_state->underflow = underflow;
 +}
-+
-+static const struct drm_mode_config_funcs vs_mode_config_funcs = {
-+	.fb_create			 = vs_fb_create,
-+	.get_format_info	 = vs_get_format_info,
-+	.output_poll_changed = drm_fb_helper_output_poll_changed,
-+	.atomic_check		 = drm_atomic_helper_check,
-+	.atomic_commit		 = drm_atomic_helper_commit,
-+};
-+
-+static struct drm_mode_config_helper_funcs vs_mode_config_helpers = {
-+	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
-+};
-+
-+void vs_mode_config_init(struct drm_device *dev)
-+{
-+	dev->mode_config.fb_modifiers_not_supported = false;
-+
-+	if (dev->mode_config.max_width == 0 ||
-+	    dev->mode_config.max_height == 0) {
-+		dev->mode_config.min_width  = 0;
-+		dev->mode_config.min_height = 0;
-+		dev->mode_config.max_width  = 4096;
-+		dev->mode_config.max_height = 4096;
-+	}
-+	dev->mode_config.funcs = &vs_mode_config_funcs;
-+	dev->mode_config.helper_private = &vs_mode_config_helpers;
-+}
-diff --git a/drivers/gpu/drm/verisilicon/vs_fb.h b/drivers/gpu/drm/verisilicon/vs_fb.h
+diff --git a/drivers/gpu/drm/verisilicon/vs_crtc.h b/drivers/gpu/drm/verisilicon/vs_crtc.h
 new file mode 100644
-index 000000000000..78dda8e42894
+index 000000000000..33b3b14249ce
 --- /dev/null
-+++ b/drivers/gpu/drm/verisilicon/vs_fb.h
-@@ -0,0 +1,15 @@
++++ b/drivers/gpu/drm/verisilicon/vs_crtc.h
+@@ -0,0 +1,74 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2023 VeriSilicon Holdings Co., Ltd.
 + */
 +
-+#ifndef __VS_FB_H__
-+#define __VS_FB_H__
++#ifndef __VS_CRTC_H__
++#define __VS_CRTC_H__
 +
-+#define MAX_NUM_PLANES		3 /* colour format plane */
++#include <drm/drm_crtc.h>
++#include <drm/drm_crtc_helper.h>
 +
-+struct vs_gem_object *vs_fb_get_gem_obj(struct drm_framebuffer *fb,
-+					unsigned char plane);
++#include "vs_type.h"
 +
-+void vs_mode_config_init(struct drm_device *dev);
-+#endif /* __VS_FB_H__ */
++struct vs_crtc_funcs {
++	void (*enable)(struct device *dev, struct drm_crtc *crtc);
++	void (*disable)(struct device *dev, struct drm_crtc *crtc);
++	bool (*mode_fixup)(struct device *dev,
++			   const struct drm_display_mode *mode,
++			   struct drm_display_mode *adjusted_mode);
++	void (*set_gamma)(struct device *dev, struct drm_crtc *crtc,
++			  struct drm_color_lut *lut, unsigned int size);
++	void (*enable_gamma)(struct device *dev, struct drm_crtc *crtc,
++			     bool enable);
++	void (*enable_vblank)(struct device *dev, bool enable);
++	void (*commit)(struct device *dev);
++};
++
++struct vs_crtc_state {
++	struct drm_crtc_state base;
++
++	u32 sync_mode;
++	u32 output_fmt;
++	u32 bg_color;
++	u8 encoder_type;
++	u8 mmu_prefetch;
++	u8 bpp;
++	bool sync_enable;
++	bool dither_enable;
++	bool underflow;
++};
++
++struct vs_crtc {
++	struct drm_crtc base;
++	struct device *dev;
++	struct drm_pending_vblank_event *event;
++	unsigned int max_bpc;
++	unsigned int color_formats; /* supported color format */
++
++	struct drm_property *sync_mode;
++	struct drm_property *mmu_prefetch;
++	struct drm_property *bg_color;
++	struct drm_property *panel_sync;
++	struct drm_property *dither;
++
++	const struct vs_crtc_funcs *funcs;
++};
++
++void vs_crtc_destroy(struct drm_crtc *crtc);
++
++struct vs_crtc *vs_crtc_create(struct drm_device *drm_dev,
++			       struct vs_dc_info *info);
++void vs_crtc_handle_vblank(struct drm_crtc *crtc, bool underflow);
++
++static inline struct vs_crtc *to_vs_crtc(struct drm_crtc *crtc)
++{
++	return container_of(crtc, struct vs_crtc, base);
++}
++
++static inline struct vs_crtc_state *
++to_vs_crtc_state(struct drm_crtc_state *state)
++{
++	return container_of(state, struct vs_crtc_state, base);
++}
++#endif /* __VS_CRTC_H__ */
+diff --git a/drivers/gpu/drm/verisilicon/vs_type.h b/drivers/gpu/drm/verisilicon/vs_type.h
+new file mode 100644
+index 000000000000..6f8db65a703d
+--- /dev/null
++++ b/drivers/gpu/drm/verisilicon/vs_type.h
+@@ -0,0 +1,72 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2023 VeriSilicon Holdings Co., Ltd.
++ */
++
++#ifndef __VS_TYPE_H__
++#define __VS_TYPE_H__
++
++#include <linux/version.h>
++
++#include <drm/drm_plane.h>
++#include <drm/drm_plane_helper.h>
++
++struct vs_plane_info {
++	const char *name;
++	u8 id;
++	enum drm_plane_type type;
++	unsigned int num_formats;
++	const u32 *formats;
++	u8 num_modifiers;
++	const u64 *modifiers;
++	unsigned int min_width;
++	unsigned int min_height;
++	unsigned int max_width;
++	unsigned int max_height;
++	unsigned int rotation;
++	unsigned int blend_mode;
++	unsigned int color_encoding;
++
++	/* 0 means no de-gamma LUT */
++	unsigned int degamma_size;
++
++	int min_scale; /* 16.16 fixed point */
++	int max_scale; /* 16.16 fixed point */
++
++	/* default zorder value,
++	 * and 255 means unsupported zorder capability
++	 */
++	u8	 zpos;
++
++	bool watermark;
++	bool color_mgmt;
++	bool roi;
++};
++
++struct vs_dc_info {
++	const char *name;
++
++	u8 panel_num;
++
++	/* planes */
++	u8 plane_num;
++	const struct vs_plane_info *planes;
++
++	u8 layer_num;
++	unsigned int max_bpc;
++	unsigned int color_formats;
++
++	/* 0 means no gamma LUT */
++	u16 gamma_size;
++	u8 gamma_bits;
++
++	u16 pitch_alignment;
++
++	bool pipe_sync;
++	bool mmu_prefetch;
++	bool background;
++	bool panel_sync;
++	bool cap_dec;
++};
++
++#endif /* __VS_TYPE_H__ */
 -- 
 2.34.1
 
