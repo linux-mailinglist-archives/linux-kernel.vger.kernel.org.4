@@ -2,134 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3744D71FF97
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2DA71FF9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235807AbjFBKlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S235217AbjFBKn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbjFBKlZ (ORCPT
+        with ESMTP id S235010AbjFBKn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:41:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3473DE7B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685702381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1oIs4hW1Px3lZ0xUVZ1XPcup+O4BGgrBN10BZiIxxqM=;
-        b=CmDoS4cOUmSIwNSh5hRIFg/POk86GeFzTlkzVx6Lvz3zcmEaLJImqEdYM6G1jMwGefI5Pl
-        z9XGtu2BNwT1HgFLzTsHbyaIzluVwAOC3Mz8SdlxMvTMTm1ZkIoeRPf+lxuHIpwACwVZKC
-        cv4NqZko+vdefC3DL/PYMS4Wpy/PI7k=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-222-rCquzA9DM5-uTHnXzJGVvg-1; Fri, 02 Jun 2023 06:39:40 -0400
-X-MC-Unique: rCquzA9DM5-uTHnXzJGVvg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30479b764f9so995238f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:39:40 -0700 (PDT)
+        Fri, 2 Jun 2023 06:43:26 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34205E5A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:43:05 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-777683e803bso86380039f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:43:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685702379; x=1688294379;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1oIs4hW1Px3lZ0xUVZ1XPcup+O4BGgrBN10BZiIxxqM=;
-        b=cSZUCNG+raPoo1j4SHAg+XO16jknyaJAG9b2pdXaKTJ2+ZK2nmHdMuS/iot7WdbYks
-         zeXDU6PDRNy5z7y+YJ5zmxU3SzE9XmG5DiwO4/JXCaeyUcGlxhk9V/NV5iN6NatAm59v
-         l88NC8XaWB6aVT0zK6oS46QURg/NZoSvmW6LUo/37Z9h1OU+xOX5IB5lEzhuqcscwV58
-         zITkUjx0eqpNTh4lUXcsbtlR6B9I/15DZchK30UC2GSyG+s1+dZkml0w5BAJ40KyhLZl
-         LyBc2CFYC4ZG9gubfoMUvMbKMct0kHJeG/KIpXail6Nuh6TKWuSQjVV0iTkvs201Yz8m
-         RtkQ==
-X-Gm-Message-State: AC+VfDyFvOyWOjOuXQYxmbl56Sj46eab1C0hqgYU8/0MnGcoGtxTJGS8
-        AZUKu62UB0RSeWdygy/wNuylQBM4FjovB2ksILHk+6+TldJWPEFTikRUC3wdnMLNheDCkHunlK2
-        8ied4QFumRO97MLSeGF7qVM/5
-X-Received: by 2002:adf:ee8e:0:b0:2f5:930:39b1 with SMTP id b14-20020adfee8e000000b002f5093039b1mr3860430wro.38.1685702379773;
-        Fri, 02 Jun 2023 03:39:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7OG85c64U2efVzPCUJ8A/7RK2BtGqWNJ8vfjLaFCk/P0e6jYLf17E10oKTfMRE/GAF6iGnSw==
-X-Received: by 2002:adf:ee8e:0:b0:2f5:930:39b1 with SMTP id b14-20020adfee8e000000b002f5093039b1mr3860417wro.38.1685702379415;
-        Fri, 02 Jun 2023 03:39:39 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g7-20020a5d5407000000b0030903371ef9sm1310817wrv.22.2023.06.02.03.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 03:39:39 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/3] drm/todo: Add atomic modesetting references
-In-Reply-To: <7cea42cd09540657875a210cd16421125497d690.1685696114.git.geert+renesas@glider.be>
-References: <cover.1685696114.git.geert+renesas@glider.be>
- <7cea42cd09540657875a210cd16421125497d690.1685696114.git.geert+renesas@glider.be>
-Date:   Fri, 02 Jun 2023 12:39:37 +0200
-Message-ID: <878rd2cfme.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1685702556; x=1688294556;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G9TOw2H2TDDn1VQzhH7iezPzkkf4u+p1oMfgUm2gH4s=;
+        b=NcRsd6YYS2t/2CJ8US1O7vqTZaYNsLs+SKpueYE2w5eOdEnaVKn4z7fCU18EeH1mJC
+         MsY2RqgzyOFPMbRawWXJ53624n47jOxcVvT+WlUz5DLN0OcWPltgatjhqe46V80bMI+8
+         3Q0zv++X0EOxrb3j0EOtol9nB9y6dNFaxQrGAKdzPD52CIc69We4mo18MJt5lvUmk/5J
+         qKKYoHeruhYVWtJgrmmbtX7tljkeAGTQcToi7TMJ+yWlTLtmqf5Yw73z0l+PMnMly4J/
+         mRGbwWK6PSP5s7grjjCcTqsBAO5FbexYJmsPpfjmCOTK0bqvttUO3oRGZU1ZUoSJVwtA
+         EB0w==
+X-Gm-Message-State: AC+VfDyBTTEi9sXu6q3UwZ/8GmT7cu2lfk2WTWFr+YDHtVsEhoYsm5LD
+        8Zy9p7UCrQYG3wJSIl7DJW7w5FaHognRCYOZDl33urHgtlzS
+X-Google-Smtp-Source: ACHHUZ5g81UbT0rdYhiZsxkJQRZusYNFheAl9Q2G8/fz5X7oyogzCbJ3gEEO9e7RVn0nSDYkK4N6utNhjlOH6ehZj7UVEKz1AfvE
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:a814:0:b0:774:7cc5:6682 with SMTP id
+ c20-20020a5ea814000000b007747cc56682mr799847ioa.3.1685702556762; Fri, 02 Jun
+ 2023 03:42:36 -0700 (PDT)
+Date:   Fri, 02 Jun 2023 03:42:36 -0700
+In-Reply-To: <00000000000015ac7905e97ebaed@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000017cc6205fd233643@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
+From:   syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, dan.carpenter@oracle.com,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Geert Uytterhoeven <geert+renesas@glider.be> writes:
+This bug is marked as fixed by commit:
+9p: client_create/destroy: only call trans_mod->close after create
 
-Hello Geert,
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-Thanks for your patch.
+#syz fix: exact-commit-title
 
-> The section about converting existing KMS drivers to atomic modesetting
-> mentions the existence of a conversion guide, but does not reference it.
-> While the guide is old and rusty, it still contains useful information,
-> so add a link to it.  Also link to the LWN.net articles that give an
-> overview about the atomic mode setting design.
->
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
-This is a great idea and agree that would be very useful to have these.
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=67d13108d855f451cafc
 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/gpu/todo.rst | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-> index 68bdafa0284f55f6..51eb67f5268c5ec1 100644
-> --- a/Documentation/gpu/todo.rst
-> +++ b/Documentation/gpu/todo.rst
-> @@ -49,14 +49,19 @@ converted over. Modern compositors like Wayland or Surfaceflinger on Android
->  really want an atomic modeset interface, so this is all about the bright
->  future.
->  
-> -There is a conversion guide for atomic and all you need is a GPU for a
-> +There is a conversion guide for atomic[1] and all you need is a GPU for a
->  non-converted driver (again virtual HW drivers for KVM are still all
-> -suitable).
+---
+[1] I expect the commit to be present in:
 
-Are any of the virtual drivers not yet ported to atomic? This sentence
-seems to be outdated and maybe you could remove it on a following patch?
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
 
--- 
-Best regards,
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
 
+The full list of 10 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
