@@ -2,166 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3C3720373
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E910B720379
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbjFBNcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S235437AbjFBNf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbjFBNcb (ORCPT
+        with ESMTP id S235296AbjFBNfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:32:31 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EB9E72;
-        Fri,  2 Jun 2023 06:32:10 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b05e96dabbso12122355ad.2;
-        Fri, 02 Jun 2023 06:32:10 -0700 (PDT)
+        Fri, 2 Jun 2023 09:35:24 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5E51A7;
+        Fri,  2 Jun 2023 06:35:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96f50e26b8bso314712166b.2;
+        Fri, 02 Jun 2023 06:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685712729; x=1688304729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wLcyyQh2yLRZuI0xq1Spx++5r4QAu7H4WRjm1jN0YiM=;
-        b=MVb3eFphqnGFuZnrZa0fkJUiXKJj6PA6qXPXeVimS6DpQ4AxPt/zIIOaLriKK4YM0s
-         OD5TKvqpdHYN3x0/QPosAXtzCAYO/IE9X3t1Maw3pngCYU6/YtF43NYVhpaM5BqMhMv4
-         S2uj6aE89Q1SllxfQB6OIsUB7rgbHTxAD7lbwdu3ByjWg/6hlW7AvjFJcDKVIZLUfnPK
-         H/F9ARWZoV3GO5l9OEIH73Apr9UeXgkqMyy5TEzNJBMiJA23Lzp8RC2vsdStRVoyuQmt
-         VJ/ATsgU8O3UsjCjDRGBbbnEbgKDL1MHMaSDrkjAnbG5W7EMJQ2Id+enPSwzyi5jI7XV
-         m72g==
+        d=googlemail.com; s=20221208; t=1685712921; x=1688304921;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dMh2+arP4Zqusoomno3ivGkTbBUqnESHWGQdrYtjkF8=;
+        b=Z2DLk4fQN4adHOfPFVDfqWHl1ZrpiptyF659TT3a+Y3glNuNRoWDMgdJcNLak2scOY
+         z0j4toa2l16/tRncVOBqbmOvr6OUCyxXtopOO3ozM3Ghm0N4MABer5Kw6pO0vjvcbC7M
+         jaXqIgFz0Lqv158oYCmHG0eC+CXzsnb6m8CfKb7wqKVf1kLT+MJI1qu12TqoX5Ay8o7D
+         sb8BuqYt4VmiCOQZDEswFf4oEPeHSvlImTL6x5jlgfrQcKmyWthmnZ/A8ExbJNc9j04i
+         0BkJNYx4b0GqTJcK2St8IYrA7RfbcJ1qkURNBleMZgFahuvuKF1EtTKuPMMRgAf/OAcH
+         +PZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685712729; x=1688304729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wLcyyQh2yLRZuI0xq1Spx++5r4QAu7H4WRjm1jN0YiM=;
-        b=W/aXkTQZ/0XA7QU7WkADqNP1ty8u3P72YgAiPRZISlus+tA59d4pKk5SOcCsWlJWVK
-         cYS8hY1X8mzTU79CzqiEB9plNHc/58n3F4spBkk9IMtaWmRr4r5lxRvQ0eVRAF48HuOz
-         sycw1Cop7a02QqFlUe63fINidYeREZjgKuiX4Kos4AskIQTRcJBmFxpbtCEM/Xkzf6Ni
-         yceuq1ERhqrPz58DWXIaq0ZRfklhFVkOTAmTTgyvHI6S3EHYS88xMgxkmUN/fyK5X6tF
-         aR2AoB8KXbxSTo+7aeFMN8OfoeSUZDIptFFSwm6G1rg38utYBtvh1JIpDY6K2I0PLLbu
-         /s+w==
-X-Gm-Message-State: AC+VfDwYwi9aO1bdycsYRxq7ZHYKfBecqPpsqgS7UVk1tKSzUMp6UnqG
-        A6XDHpo5fvR5I0E68+1Dt9Q=
-X-Google-Smtp-Source: ACHHUZ5J63g6NUi0y4MlVavRTrgcGPUU1MafIBD3RB7CH7ggN40W6Ah2+s359IQfSJwPB+m8eYrFiw==
-X-Received: by 2002:a17:902:ec81:b0:1ae:4562:14f1 with SMTP id x1-20020a170902ec8100b001ae456214f1mr18105plg.9.1685712729246;
-        Fri, 02 Jun 2023 06:32:09 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-25.three.co.id. [180.214.232.25])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170902ec9000b001aaecc15d66sm1316041plg.289.2023.06.02.06.32.08
+        d=1e100.net; s=20221208; t=1685712921; x=1688304921;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dMh2+arP4Zqusoomno3ivGkTbBUqnESHWGQdrYtjkF8=;
+        b=RqNntVelfeKGc78O5ASVXYQNe8pw99C7gWXazztWDaXxqG/5Mkh5YCgmh50ajw9/Oa
+         qiim3iXLF/uXzBgyaQuUfmYzWZoUSwFwJJYFWuZB7R8+Gr/N0Jbq0lC4IPCSbqDN2gJM
+         fj8/SbdOpYuxdRXGc2PwFr079sqtQVUWae7dT7YhTXeKEfNnfDIMcpRLyEwRwBvKGO/s
+         yXEGLDKo6fQFbIMs9y14zf0pwProeuay3pgl53qVN3561IQCCIbnn1M4fSggxpH3h7il
+         i0xBTBaVDx1moJA+apDLr+l3zr2S2zqMSc9VpJn//x5wRGKc1dM7V1/YKoGMFLEYn3q+
+         kjfw==
+X-Gm-Message-State: AC+VfDx/IRUNpCPxo+l9+pSv/yTXgICDYZxK6BSFrXhPGzDQgUwLk93Z
+        JGT4iZJrTJGvb2BF3usAKtC10JyVJUU4hQ==
+X-Google-Smtp-Source: ACHHUZ7fHqXLlRy0wB+pOx36oQfdLkjO0mg6q1BSyho1Z/EN6yeKs56yVKD7tADaJURRA2f+j57jBg==
+X-Received: by 2002:a17:907:3687:b0:958:cc8:bd55 with SMTP id bi7-20020a170907368700b009580cc8bd55mr2336949ejc.0.1685712920947;
+        Fri, 02 Jun 2023 06:35:20 -0700 (PDT)
+Received: from debian_development.DebianHome (dynamic-095-112-062-107.95.112.pool.telefonica.de. [95.112.62.107])
+        by smtp.gmail.com with ESMTPSA id t7-20020a17090616c700b0096595cc0810sm767838ejd.72.2023.06.02.06.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 06:32:08 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id AE936106A6F; Fri,  2 Jun 2023 20:32:05 +0700 (WIB)
-Date:   Fri, 2 Jun 2023 20:32:05 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] drm/todo: Add atomic modesetting references
-Message-ID: <ZHnvVYM7K4jvP8QK@debian.me>
-References: <cover.1685696114.git.geert+renesas@glider.be>
- <7cea42cd09540657875a210cd16421125497d690.1685696114.git.geert+renesas@glider.be>
+        Fri, 02 Jun 2023 06:35:20 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selinux: avoid bool as identifier name
+Date:   Fri,  2 Jun 2023 15:35:10 +0200
+Message-Id: <20230602133511.30239-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DPoP2WNc/X86Xlln"
-Content-Disposition: inline
-In-Reply-To: <7cea42cd09540657875a210cd16421125497d690.1685696114.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Avoid using the identifier `bool` to improve support with future C
+standards.  C23 is about to make `bool` a predefined macro (see N2654).
 
---DPoP2WNc/X86Xlln
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ security/selinux/ss/conditional.c | 8 ++++----
+ security/selinux/ss/conditional.h | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-On Fri, Jun 02, 2023 at 11:11:34AM +0200, Geert Uytterhoeven wrote:
-> -There is a conversion guide for atomic and all you need is a GPU for a
-> +There is a conversion guide for atomic[1] and all you need is a GPU for a
->  non-converted driver (again virtual HW drivers for KVM are still all
-> -suitable).
-> +suitable).  The "Atomic mode setting design overview" series [2][3] at
-> +LWN.net can also be helpful.
-> =20
->  As part of this drivers also need to convert to universal plane (which m=
-eans
->  exposing primary & cursor as proper plane objects). But that's much easi=
-er to
->  do by directly using the new atomic helper driver callbacks.
-> =20
-> +  - [1] https://blog.ffwll.ch/2014/11/atomic-modeset-support-for-kms-dri=
-vers.html
-> +  - [2] https://lwn.net/Articles/653071/
-> +  - [3] https://lwn.net/Articles/653466/
-> +
+diff --git a/security/selinux/ss/conditional.c b/security/selinux/ss/conditional.c
+index e11219fdf9f7..b156c181c3c1 100644
+--- a/security/selinux/ss/conditional.c
++++ b/security/selinux/ss/conditional.c
+@@ -38,7 +38,7 @@ static int cond_evaluate_expr(struct policydb *p, struct cond_expr *expr)
+ 			if (sp == (COND_EXPR_MAXDEPTH - 1))
+ 				return -1;
+ 			sp++;
+-			s[sp] = p->bool_val_to_struct[node->bool - 1]->state;
++			s[sp] = p->bool_val_to_struct[node->boolean - 1]->state;
+ 			break;
+ 		case COND_NOT:
+ 			if (sp < 0)
+@@ -366,7 +366,7 @@ static int expr_node_isvalid(struct policydb *p, struct cond_expr_node *expr)
+ 		return 0;
+ 	}
+ 
+-	if (expr->bool > p->p_bools.nprim) {
++	if (expr->boolean > p->p_bools.nprim) {
+ 		pr_err("SELinux: conditional expressions uses unknown bool.\n");
+ 		return 0;
+ 	}
+@@ -401,7 +401,7 @@ static int cond_read_node(struct policydb *p, struct cond_node *node, void *fp)
+ 			return rc;
+ 
+ 		expr->expr_type = le32_to_cpu(buf[0]);
+-		expr->bool = le32_to_cpu(buf[1]);
++		expr->boolean = le32_to_cpu(buf[1]);
+ 
+ 		if (!expr_node_isvalid(p, expr))
+ 			return -EINVAL;
+@@ -518,7 +518,7 @@ static int cond_write_node(struct policydb *p, struct cond_node *node,
+ 
+ 	for (i = 0; i < node->expr.len; i++) {
+ 		buf[0] = cpu_to_le32(node->expr.nodes[i].expr_type);
+-		buf[1] = cpu_to_le32(node->expr.nodes[i].bool);
++		buf[1] = cpu_to_le32(node->expr.nodes[i].boolean);
+ 		rc = put_entry(buf, sizeof(u32), 2, fp);
+ 		if (rc)
+ 			return rc;
+diff --git a/security/selinux/ss/conditional.h b/security/selinux/ss/conditional.h
+index e47ec6ddeaf6..5a7b51278dc6 100644
+--- a/security/selinux/ss/conditional.h
++++ b/security/selinux/ss/conditional.h
+@@ -29,7 +29,7 @@ struct cond_expr_node {
+ #define COND_NEQ	7 /* bool != bool */
+ #define COND_LAST	COND_NEQ
+ 	u32 expr_type;
+-	u32 bool;
++	u32 boolean;
+ };
+ 
+ struct cond_expr {
+-- 
+2.40.1
 
-Looks like footnotes better serve these links above:
-
----- >8 ----
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 51eb67f5268c5e..6ea92f48a2e21c 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -49,18 +49,18 @@ converted over. Modern compositors like Wayland or Surf=
-aceflinger on Android
- really want an atomic modeset interface, so this is all about the bright
- future.
-=20
--There is a conversion guide for atomic[1] and all you need is a GPU for a
-+There is a conversion guide for atomic [1]_ and all you need is a GPU for a
- non-converted driver (again virtual HW drivers for KVM are still all
--suitable).  The "Atomic mode setting design overview" series [2][3] at
-+suitable).  The "Atomic mode setting design overview" series [2]_ [3]_ at
- LWN.net can also be helpful.
-=20
- As part of this drivers also need to convert to universal plane (which mea=
-ns
- exposing primary & cursor as proper plane objects). But that's much easier=
- to
- do by directly using the new atomic helper driver callbacks.
-=20
--  - [1] https://blog.ffwll.ch/2014/11/atomic-modeset-support-for-kms-drive=
-rs.html
--  - [2] https://lwn.net/Articles/653071/
--  - [3] https://lwn.net/Articles/653466/
-+  .. [1] https://blog.ffwll.ch/2014/11/atomic-modeset-support-for-kms-driv=
-ers.html
-+  .. [2] https://lwn.net/Articles/653071/
-+  .. [3] https://lwn.net/Articles/653466/
-=20
- Contact: Daniel Vetter, respective driver maintainers
-=20
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---DPoP2WNc/X86Xlln
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHQEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHnvUAAKCRD2uYlJVVFO
-o2R9AQDL0rXdsAZ2q75Un/nud8+9skYIJP+8pCerpXMSUJgTAwD1EbjcCcLx7iqs
-1xk3nWj97FZCR273c6lRVz3Cm5VIDg==
-=gt6j
------END PGP SIGNATURE-----
-
---DPoP2WNc/X86Xlln--
