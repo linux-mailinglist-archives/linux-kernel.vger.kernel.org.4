@@ -2,146 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4932971F72A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFF571F732
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbjFBAgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S233068AbjFBAl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjFBAgi (ORCPT
+        with ESMTP id S231241AbjFBAlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:36:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16869123;
-        Thu,  1 Jun 2023 17:36:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF7C3647BA;
-        Fri,  2 Jun 2023 00:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E5AC433A1;
-        Fri,  2 Jun 2023 00:36:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685666196;
-        bh=8680DMzx0gtVOisbuW5F5FI58VdZiV3S7sDNyC66jIs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XTmFrz6x8P+uu4p7+8CwwHHAR8ToxETybv3aokjIkUt8au2/bliIWtKwA0GAbEtXU
-         35MXE4ZwOYCOUbquOW3LQoZZDXhPbam+LWuZhJ0mqETvOfa2/rMGWxD+GJruYpNbS6
-         ci30bYJW5Xs8iSRMEPad+knzjZDpipv9dxPxlL70NiYXhKXJnUs1HWnqvirj5dSWAN
-         B2cCO/rarwHERSu66gvzGkFtyDmlSmQAJPI3dJJQqihBq56qTMR5zptT8HtrJ2b10S
-         TMFJdORTSry9D8pvsZGiWSqPLVC1lC/A7oq6hOwBZbEcU0/jUM34HuLUgEBSnU29a0
-         P+mvZ51/iQCoA==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f60bc818d7so1269054e87.1;
-        Thu, 01 Jun 2023 17:36:35 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz01X/xqtBxs2VBC7kbZ7774EbwDGMYrk1Mdk03I6HzRaiW0yxT
-        U5plHKTKxbuE+J/FKIt2iVbdgdr0HQJB0Rp5MwY=
-X-Google-Smtp-Source: ACHHUZ4rAYUoiHYEWWqFuntxOuL06QmDCDII8lO4o2SuljgVgQXswY+xn62uFOnPiNtfcw4WXcIV+P9v/6p/Zkld05w=
-X-Received: by 2002:ac2:44ca:0:b0:4f3:b18a:6497 with SMTP id
- d10-20020ac244ca000000b004f3b18a6497mr927744lfm.52.1685666193979; Thu, 01 Jun
- 2023 17:36:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230601101257.530867-1-rppt@kernel.org>
-In-Reply-To: <20230601101257.530867-1-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 1 Jun 2023 17:36:21 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5Em5Sj9uCGyfM6BheTuvA4pviavRTUK-3MbGsd9yCRbQ@mail.gmail.com>
-Message-ID: <CAPhsuW5Em5Sj9uCGyfM6BheTuvA4pviavRTUK-3MbGsd9yCRbQ@mail.gmail.com>
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 20:41:55 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76017195
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685666514; x=1717202514;
+  h=date:from:to:cc:subject:message-id;
+  bh=+qE0WDLsRTdLWVMFDYO58RnlBO1JsnHRABuBoN62iUo=;
+  b=Vpp+3xRC6OOL2ucmEGlrxEZ/pRwULBVKQjRazDPr6ezDh1SfIgVgyNoD
+   02GTn315QxFbZx0svVT0hatJvQTkJYO8ddpjYi26l4nf7/VzjaYyBRBjh
+   Kz4qhU75QIq9nnHqCazfzq3ht0YVzn9aP3dfsDe79Grt7rENkHL1dWfYU
+   8InYv7sTZu0rEgVnbZs+GOaFdorSH0AlNP1uTEB//pXTvPN6dtVZkwoc3
+   n0+WQCyCDA/6DHi30SfuhDyrQa06ZBhsue5a2r05tSxooJZuxCAaGJeV/
+   deaKs5TSkmdTGHZnE8GdeUJYg+abg38FQ6EjDR2vmX40I/4IGJSVicEla
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="354580229"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="354580229"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 17:41:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="954240557"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="954240557"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Jun 2023 17:41:52 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4srX-0002pu-2N;
+        Fri, 02 Jun 2023 00:41:51 +0000
+Date:   Fri, 02 Jun 2023 08:40:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/core] BUILD SUCCESS
+ 52c3a18973d0cb30586d8b316b7dc56b141a32b5
+Message-ID: <20230602004053.k_LXz%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 3:13=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Hi,
->
-> module_alloc() is used everywhere as a mean to allocate memory for code.
->
-> Beside being semantically wrong, this unnecessarily ties all subsystmes
-> that need to allocate code, such as ftrace, kprobes and BPF to modules
-> and puts the burden of code allocation to the modules code.
->
-> Several architectures override module_alloc() because of various
-> constraints where the executable memory can be located and this causes
-> additional obstacles for improvements of code allocation.
->
-> This set splits code allocation from modules by introducing
-> jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> sites of module_alloc() and module_memfree() with the new APIs and
-> implements core text and related allocation in a central place.
->
-> Instead of architecture specific overrides for module_alloc(), the
-> architectures that require non-default behaviour for text allocation must
-> fill jit_alloc_params structure and implement jit_alloc_arch_params() tha=
-t
-> returns a pointer to that structure. If an architecture does not implemen=
-t
-> jit_alloc_arch_params(), the defaults compatible with the current
-> modules::module_alloc() are used.
->
-> The new jitalloc infrastructure allows decoupling of kprobes and ftrace
-> from modules, and most importantly it enables ROX allocations for
-> executable memory.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+branch HEAD: 52c3a18973d0cb30586d8b316b7dc56b141a32b5  sched/fair: Don't balance task to its current running CPU
 
-This set does look cleaner than my version [1]. However, this is
-partially because this set only separates text and data; while [1]
-also separates rw data, ro data, and ro_after_init data. We need
-such separation to fully cover module usage, and to remove
-VM_FLUSH_RESET_PERMS. Once we add these logic to this
-set, the two versions will look similar.
+elapsed time: 724m
 
-OTOH, I do like the fact this version enables kprobes (and
-potentially ftrace and bpf) without CONFIG_MODULES. And
-mm/ seems a better home for the logic.
+configs tested: 92
+configs skipped: 9
 
-That being said, besides comments in a few patches, this
-version looks good to me. With the fix I suggested for patch
-12/13, it passed my tests on x86_64 with modules, kprobes,
-ftrace, and BPF.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If we decided to ship this version, I would appreciate it if I
-could get more credit for my work in [1] and research work
-before that.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r003-20230531   gcc  
+arc                  randconfig-r021-20230531   gcc  
+arc                  randconfig-r043-20230531   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                       imx_v4_v5_defconfig   clang
+arm                  randconfig-r046-20230531   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r032-20230531   clang
+hexagon              randconfig-r041-20230531   clang
+hexagon              randconfig-r045-20230531   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r001-20230602   gcc  
+i386         buildonly-randconfig-r005-20230531   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230531   gcc  
+i386                 randconfig-i002-20230531   gcc  
+i386                 randconfig-i003-20230531   gcc  
+i386                 randconfig-i004-20230531   gcc  
+i386                 randconfig-i005-20230531   gcc  
+i386                 randconfig-i006-20230531   gcc  
+i386                 randconfig-i051-20230531   gcc  
+i386                 randconfig-i052-20230531   gcc  
+i386                 randconfig-i053-20230531   gcc  
+i386                 randconfig-i054-20230531   gcc  
+i386                 randconfig-i055-20230531   gcc  
+i386                 randconfig-i056-20230531   gcc  
+i386                 randconfig-i061-20230531   gcc  
+i386                 randconfig-i062-20230531   gcc  
+i386                 randconfig-i063-20230531   gcc  
+i386                 randconfig-i064-20230531   gcc  
+i386                 randconfig-i065-20230531   gcc  
+i386                 randconfig-i066-20230531   gcc  
+i386                 randconfig-r006-20230531   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r006-20230602   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r024-20230531   gcc  
+loongarch            randconfig-r036-20230531   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r001-20230531   gcc  
+m68k         buildonly-randconfig-r003-20230531   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r002-20230531   gcc  
+m68k                 randconfig-r013-20230601   gcc  
+m68k                 randconfig-r034-20230531   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r012-20230601   gcc  
+openrisc             randconfig-r025-20230531   gcc  
+parisc       buildonly-randconfig-r006-20230531   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r014-20230601   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230531   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230531   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r016-20230601   gcc  
+sparc        buildonly-randconfig-r002-20230531   gcc  
+sparc        buildonly-randconfig-r002-20230602   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r033-20230531   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r005-20230602   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r004-20230531   gcc  
+x86_64               randconfig-r031-20230531   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r001-20230531   gcc  
+xtensa               randconfig-r023-20230531   gcc  
 
-Thanks,
-Song
-
-[1] https://lore.kernel.org/lkml/20230526051529.3387103-1-song@kernel.org/
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
