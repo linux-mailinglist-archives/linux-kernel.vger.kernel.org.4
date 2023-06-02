@@ -2,102 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D819372072E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7607D720731
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236709AbjFBQN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
+        id S236770AbjFBQOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbjFBQNw (ORCPT
+        with ESMTP id S236778AbjFBQOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:13:52 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D094CE4E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:13:20 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-653843401feso233184b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:13:20 -0700 (PDT)
+        Fri, 2 Jun 2023 12:14:11 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B96410DE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:13:52 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-652dd220d67so1043665b3a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685722337; x=1688314337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ftaj+c92Xn+0VrlPMhENnH3kgEcuY1Ij1rlG3ylIX94=;
-        b=SbHV/raSAqNb/ugGPvUx1HpfrpuTKrN34pcklzYzOiTL0F5uRwrctM9lJlVjcPhTyu
-         3glByiMyzb2lNZVG7N3TkU67YWRAom6qiFJ3HwpdBGdq+7o0UzRsgDLA+mvenPfvIPZU
-         +QjHcXFhlVKh81QqwlE54getp85UJALQXIroL6pIGM8IMdHFdfILNYGYn3IxK+BiCVKT
-         J1nbKJkFdB3LsYb3eQGfdAfC/Vdn6HNCrTzp2mSOFIfAp3LSqXx0vC71IAjEICLagiaZ
-         pDCoVvLs1fR5RlRMMP4ZPnjXRMiaurNZTh3CEuEA5xdhWHVToQCFKeIZ1O5CnFtxN2iM
-         Sl+Q==
+        d=linaro.org; s=google; t=1685722373; x=1688314373;
+        h=content-transfer-encoding:author:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhmHRyToIEmAAHnN/IwEZChyqNOsrqiKFOCxgESTvfk=;
+        b=QNqMgXaW84FsS8Ck/A01cCxyIWV84qC3tILHwN+hr/GzQjLA0wd4t3wXIVaxYnnxel
+         QsT4pQmmRs/82EGyBEjvl94cgJTi3sOXjQB2iLGWt1WQs1TBs9j4LwGPQXzSjhslTuvP
+         XQro5oj1YkzyXdWiiMjhuiDZXpvOAW/kQZZQMF40e/RV3z0hfv5SviuOyehzWw1v9ukb
+         7UhpStmtLpjLFSg0Qm8wyYbYAhRqsipubfh6crqw4nMyRS4VGrnugWgxzJJM7EvaWFm0
+         x2GSwpX8E/GVTQSbsWMMeE8g5CnvJ8IwbvzumguJQMI7Ut2qSuoWkWa27rtR5myWANlB
+         fWCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722337; x=1688314337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ftaj+c92Xn+0VrlPMhENnH3kgEcuY1Ij1rlG3ylIX94=;
-        b=JYcNing1+euWuHvqO3DM+N4Y1PzmKlH4jsR3Zq//CwQKNFS+JS1iGa9SkrVn5D43su
-         a9MVLo5UV2LxjLOPet1z8LVIbeaMIGR7UoCwk4scl+tORLqUXkfcD6uhq83zpU8Ri6Sy
-         opD56doINKW/F1qo/CkkwUtH0oWpLk1osW8ZjvcH9dZB9PS9UR2nxtZiHaZLisApD+kw
-         kOvVXB8VFSI22qxts/vL+g4uN7j+NMo4ZE9Bq8Sl+WajN8oV2RcJT7bh7hBZp7JROK/X
-         grY2JwRCsTDIcQBgwhpguB9LFmxKlAiaus6jr9SBUyOxWNMuxgSSxxXkPZXZO7+2IGy6
-         +viQ==
-X-Gm-Message-State: AC+VfDyehKx1sf4RySskaAn7R4kHBikrLY6yAG1y7iAlbYTj1HTKm8b5
-        haKGQwVNW1MziISoiW0eAE1Kj5k=
-X-Google-Smtp-Source: ACHHUZ7COymU82+/Vl32ll+Pu3rSqvalAVsy0BKHkj4J5EjAZEh22ie0WU8LSeyg/SXeoXTYWZoTS8w=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:234f:b0:643:92c0:5dd6 with SMTP id
- j15-20020a056a00234f00b0064392c05dd6mr4703194pfj.6.1685722337597; Fri, 02 Jun
- 2023 09:12:17 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 09:12:16 -0700
-In-Reply-To: <20230602030842.279262-1-gongruiqi@huaweicloud.com>
-Mime-Version: 1.0
-References: <20230602030842.279262-1-gongruiqi@huaweicloud.com>
-Message-ID: <ZHoUyDMJ8xq7ENnX@google.com>
-Subject: Re: [PATCH] bpf: cleanup unused function declaration
-From:   Stanislav Fomichev <sdf@google.com>
-To:     gongruiqi@huaweicloud.com
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685722373; x=1688314373;
+        h=content-transfer-encoding:author:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xhmHRyToIEmAAHnN/IwEZChyqNOsrqiKFOCxgESTvfk=;
+        b=F1n3Yv/1ZfhGlzM20A/KFoNPDqM/O1vSKmzWaSfi8j67hJ893wYY5iLgZz8DwcHkwa
+         agrcpyUkDAcNwLslNBnmhkGpQa3XEbC3pVHSZoMm3QcL5sw9Crib6GgUvwuPltK6qVk+
+         d5Jtr0F3zPg5t3gXPhszEkS8wChpJ0Buobm9eWFhEt6G1s5uMEzQgKvGeEaIT34wo3RC
+         g++ezE7/435/o7/NWQGdjR+Yx5ylrK5qeuIH1G1uJt1oN2lNY0vnaD90BdPCmf6otku5
+         Q4Gk5cycRjiOBa3q8QqRYfnE9fyGAkQc6vdHNpXEbMnp9XJtBAgii16L32betKsRzOk9
+         ENXA==
+X-Gm-Message-State: AC+VfDzeCl9+gq+K5lV15N39CREhjBmIUGDOJ/XMkIA/5B+GeDwIE1ZT
+        pM9qPfzEzk07XMl8DyXwubECAg==
+X-Google-Smtp-Source: ACHHUZ6oiEWSgd6EGNqsh+9/KWnn2XOtzx0RThiCm670UWl9NCNn/53nT/5blXc9/ZCXPcNFLV+mLg==
+X-Received: by 2002:a05:6a00:15c7:b0:646:6cc3:4a52 with SMTP id o7-20020a056a0015c700b006466cc34a52mr16570169pfu.3.1685722373382;
+        Fri, 02 Jun 2023 09:12:53 -0700 (PDT)
+Received: from localhost.localdomain ([49.207.50.231])
+        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b00652a72b89d1sm1197014pfi.170.2023.06.02.09.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 09:12:52 -0700 (PDT)
+From:   Amit Pundir <amit.pundir@linaro.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     regressions <regressions@lists.linux.dev>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes up
+Date:   Fri,  2 Jun 2023 21:42:46 +0530
+Message-Id: <20230602161246.1855448-1-amit.pundir@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Author: Amit Pundir <amit.pundir@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02, GONG, Ruiqi wrote:
-> All usage and the definition of `bpf_prog_free_linfo()` has been removed
-> in commit e16301fbe183 ("bpf: Simplify freeing logic in linfo and
-> jited_linfo"). Clean up its declaration in the header file.
-> 
-> Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
+Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
+list to workaround a boot regression uncovered by the upstream
+commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
+qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Without this fix DB845c fail to boot at times because one of the
+lvs1 or lvs2 regulators fail to turn ON in time.
 
-> ---
->  include/linux/filter.h | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index bbce89937fde..f69114083ec7 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -874,7 +874,6 @@ void bpf_prog_free(struct bpf_prog *fp);
->  
->  bool bpf_opcode_in_insntable(u8 code);
->  
-> -void bpf_prog_free_linfo(struct bpf_prog *prog);
->  void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
->  			       const u32 *insn_to_jit_off);
->  int bpf_prog_alloc_jited_linfo(struct bpf_prog *prog);
-> -- 
-> 2.25.1
-> 
+Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
+Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 24 +++++++++++-----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index e14fe9bbb386..df2fde9063dc 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -301,6 +301,18 @@ regulators-0 {
+ 		vdd-l26-supply = <&vreg_s3a_1p35>;
+ 		vin-lvs-1-2-supply = <&vreg_s4a_1p8>;
+ 
++		vreg_lvs1a_1p8: lvs1 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++
++		vreg_lvs2a_1p8: lvs2 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++
+ 		vreg_s3a_1p35: smps3 {
+ 			regulator-min-microvolt = <1352000>;
+ 			regulator-max-microvolt = <1352000>;
+@@ -381,18 +393,6 @@ vreg_l26a_1p2: ldo26 {
+ 			regulator-max-microvolt = <1200000>;
+ 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+ 		};
+-
+-		vreg_lvs1a_1p8: lvs1 {
+-			regulator-min-microvolt = <1800000>;
+-			regulator-max-microvolt = <1800000>;
+-			regulator-always-on;
+-		};
+-
+-		vreg_lvs2a_1p8: lvs2 {
+-			regulator-min-microvolt = <1800000>;
+-			regulator-max-microvolt = <1800000>;
+-			regulator-always-on;
+-		};
+ 	};
+ 
+ 	regulators-1 {
+-- 
+2.25.1
+
