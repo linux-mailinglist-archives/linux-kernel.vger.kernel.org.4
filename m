@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CB871F80F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A89471F813
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjFBBgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
+        id S233549AbjFBBhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbjFBBgs (ORCPT
+        with ESMTP id S231407AbjFBBhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:36:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA3B1B5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:36:15 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QXQXH4J8JzLmgm;
-        Fri,  2 Jun 2023 09:34:23 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 2 Jun 2023 09:36:00 +0800
-Message-ID: <c222b26f-4671-85db-497b-7122a596870e@huawei.com>
-Date:   Fri, 2 Jun 2023 09:36:00 +0800
+        Thu, 1 Jun 2023 21:37:45 -0400
+Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D4BE5E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:37:13 -0700 (PDT)
+Received: (qmail 10122 invoked by uid 990); 2 Jun 2023 01:36:36 -0000
+Authentication-Results: devico.uberspace.de;
+        auth=pass (plain)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 1/3] genirq: Use hlist for managing resend handlers
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Shanker Donthineni <sdonthineni@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>
-CC:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Walle <michael@walle.cc>,
-        <linux-kernel@vger.kernel.org>, Vikram Sethi <vsethi@nvidia.com>,
-        Jason Sequeira <jsequeira@nvidia.com>
-References: <20230519134902.1495562-1-sdonthineni@nvidia.com>
- <20230519134902.1495562-2-sdonthineni@nvidia.com>
- <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com> <871qiylsc9.ffs@tglx>
- <56c6dc9a-a5a6-368a-abd4-cace43ceaec0@huawei.com> <87a5xmj9km.ffs@tglx>
-From:   "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <87a5xmj9km.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 02 Jun 2023 01:36:35 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+From:   "Leonard Lausen" <leonard@lausen.nl>
+Message-ID: <f98dcffe4b1dc91edf692fbaa766a263910f2c5b@lausen.nl>
+TLS-Required: No
+Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
+To:     "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Bjorn Andersson" <andersson@kernel.org>
+Cc:     freedreno@lists.freedesktop.org,
+        "Sankeerth Billakanti" <quic_sbillaka@quicinc.com>,
+        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
+        regressions@lists.linux.dev, "David Airlie" <airlied@gmail.com>,
+        "Nikita Travkin" <nikita@trvn.ru>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, "Rob Clark" <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        "Sean Paul" <sean@poorly.run>,
+        "Johan Hovold" <johan+linaro@kernel.org>
+In-Reply-To: <932ee149-c524-25e7-ee49-5ea1a7e6708c@quicinc.com>
+References: <932ee149-c524-25e7-ee49-5ea1a7e6708c@quicinc.com>
+ <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
+ <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
+ <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+ <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+ <20230508021536.txtamifw2vkfncnx@ripper>
+ <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
+ <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
+ <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
+ <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
+ <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
+X-Rspamd-Bar: /
+X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-0.653806) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: 0.746193
+Received: from unknown (HELO unkown) (::1)
+        by devico.uberspace.de (Haraka/3.0.1) with ESMTPSA; Fri, 02 Jun 2023 03:36:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=lausen.nl; s=uberspace;
+        h=from;
+        bh=F1dvcx9M5aUHwpLVgbzf/l4rVtHAAaC7rv6RpWusZ5s=;
+        b=wFk1temRwaSxBD9VI5V46NvXc365LyX2Oy2QNyMIivszup70xaT/XGMZU9EImnz2BJ4OAZR/Ng
+        /+LZGTrJC+Vrm93lm6S9PM/qij10wuT53Ig7zCv+9c085Xm+9fxf5fDzKYr05woN1avArs2muKTc
+        +dQytvX5Q7DgjKbcJZtFQkQ7QseKeklh9Qlue7F9wQTLCHfdOqm4Y4qQk2cGlL34GzXda63ViAd5
+        8yfFe5zJjWkTACc5P7Avxr5evqcUzZuolE9tMP76oAtyEu8RCVAOQs47MP3uAUyhLqWJVkSid/h3
+        dnWDVjz4YUH9H878dg0emKksBhR3ZpSi4RQP1CPXanMBcAshgbjBxHGigY+PejnMoOGfw1jJrvqO
+        dubxnpOH3IyfpKlLY+F28N2lSoYyedtoSACiRy59GWHWiiOwkaO51SoFYwU5VM/dYG3RpEiFnoLP
+        n3YP+gMxFqv+UrRpHzz+QulynVDBaFiizMzwpoMiHSvlczC5AUI+aJhlhQyT4nlYf95/UGIs96Ih
+        /try9w4FMiDYKpELz9gP22UMwK5Xi9j27MK2yn3uKcs25g7GIy+87Wbb2b3sp9wwD5jTGq4urLRt
+        8TGdvJxgrlCuiZ9cNuJLk9V7KDF+aseLMe6kLuvoWQXSd/l1Ju+nlTIxaR7GLjuxqscmWxWZeyDe
+        s=
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Abhinav,
 
+June 1, 2023 at 3:20 PM, "Abhinav Kumar" <quic_abhinavk@quicinc.com> wrot=
+e:
+> >=20
+>=20>  [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107=
+)
+> >=20
+>=20
+> We are not able to recreate this on sc7280 chromebooks , will need to c=
+heck on sc7180. This does not seem directly related to any of the hotplug=
+ changes though so needs to be checked separately. So please feel free to=
+ raise a gitlab bug for this and assign to me.
 
-在 2023/5/30 20:19, Thomas Gleixner 写道:
-> On Tue, May 30 2023 at 09:59, Chang Liao wrote:
->> 在 2023/5/30 5:51, Thomas Gleixner 写道:
->>>> What is the benefit of using hlist here? If you want to enjoy the
->>>> low latency of querying elements by key, you must define a hlist table
->>>> with a reasonable number of buckets. Otherwise, I don't think the time
->>>> complexity of hlist is better than a regular double-linked list,
->>>> right?
->>>
->>> What's complex about hlist in this case? Please explain.
->>
->> Honestly, it is not about the complexity. Perhaps I do not understand the
->> usage of hlist very deeply. I have searched some codes in the kernel and
->> found that hlist is always used to speed up arbitrary querying, such as
->> searching a registered kprobe by address. Back to this patch, these resend
->> IRQs are organized in a sequence list actually, and traveled one by one to
->> handle. Further, by comparing the difference between hlist_empty, hlist_add_head,
->> hlist_del_init, and their counterparts in list, it looks like a regular linked
->> list is also good enough.
-> 
-> Sure that works too.
-> 
-> The main difference between regular linked lists and hlist is that the
-> list head of hlist is half the size of a regular double linked list.
-> 
-> The only downside of hlist is that there is no back link in the list
-> head to the tail. Searching for the tail is O(N) while on a double
-> linked list it's O(1).
-> 
-> Nothing in this use case needs to access the tail. So what's your
-> problem?
+Thank you for checking with sc7280. I created https://gitlab.freedesktop.=
+org/drm/msm/-/issues/25 and CCed you. I've also verified that the error p=
+ersists with v6.4.0-rc4 + Kuogee's patch (just in case you may have teste=
+d on sc7280 with 6.4).
+=20
+>=20>  https://patchwork.freedesktop.org/patch/538601/?series=3D118148&re=
+v=3D3
+> >  Apologies if you were not CCed on this, if a next version is CCed,
+> >  will ask kuogee to cc you.
+> >  Meanwhile, will be great if you can verify if it works for you and
+> >  provide Tested-by tags.
 
-Oh, that is the point, your explanation made it all clear, my problem is solved,
-Thanks!
+I see Bjorn also tested the patch. As it fixes a serious USB-C DP regress=
+ion which broke USB-C DP completely on lazor for v6.3, can it be included=
+ in upcoming 6.3.y release?
 
-> 
-> Thanks,
-> 
->         tglx
-
--- 
-BR
-Liao, Chang
+Thank you
+Leonard
