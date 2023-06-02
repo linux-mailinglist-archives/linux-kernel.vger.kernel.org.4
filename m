@@ -2,70 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E077203A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C728E7203A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbjFBNpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S235304AbjFBNpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbjFBNpb (ORCPT
+        with ESMTP id S234629AbjFBNpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:45:31 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4FB136
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:45:29 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53f832298acso1225301a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:45:29 -0700 (PDT)
+        Fri, 2 Jun 2023 09:45:36 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F0136
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:45:35 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30ae61354fbso1947009f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685713529; x=1688305529;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CM3eRbOi3TkUOXU+mIU5eWBw4sPK5X/8OHYMDjf2cns=;
-        b=Bdbt5JnaM8kNcrIXCCvACs+89yLNPiwSJ+zgyIg9k/Kf0oLzHXF6gzCBj2lX5IkNbR
-         Jm2NSkGu/yvyFaShHO6uq+T6QJF272ZhGxlXRPJUjocLndQRPUQQnm0WU8Lxu3iLEePM
-         WluCMbkU0KlGasvIeaIlNJn52BIHPOQxvYGN8R9InVzBeAuIqBDuNymKpBZvw34RN16k
-         xLMf3e57oNWfdmvTvkSYpE398KIptRvagVN0Bc2JPYqJtnOYBET6LMubLVT0v38RjY4o
-         P2myeHAmvB+J95wZjI8QJKV8JLNY+5Avkn+n0tuPDfLxj5QE9cTiNpeUFecMapgs1VNs
-         7cUQ==
+        d=linaro.org; s=google; t=1685713534; x=1688305534;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=gF49zRdU5uYPaFJUudEu7rAmB8Wh16UloOD04JQ8NIs=;
+        b=RVJEO2eVuCuiL1511OFZBGs54XGY4/XZu7MAVL9WepBFRG2JZjVui9DsL7r3zRTsfS
+         AtGDQQzas3aSWpLbtbl6G0ZFPkbaOKdwRUfVLu76hUoIYRUh3MIQSFsy82zLtF1S5PZn
+         zMe2R76tOb/Yv1lAf7Q1FTQi59VTSwVi8ODHs2nn8dyR7k/mhsb1/0zMmK2tjYhfx/25
+         tKJvKlq8j94Sf6vyQwR2SyM93KBsPTp+LY5KnSkOWzN6MKI96mUuhR6cVIeYyFisHsA4
+         zgh0QxEEMbq0Sw7hSZVN73QrgTEdmWhWcioTGzztTTnYGbDoG2UO1Bs7+sxNW6LFUhPf
+         3YfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685713529; x=1688305529;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685713534; x=1688305534;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CM3eRbOi3TkUOXU+mIU5eWBw4sPK5X/8OHYMDjf2cns=;
-        b=UdIQPgxGCotFBthfRq7B96ve6Muhp4zEx3Enw9I66urTvfFS9dcmDnxM2AMsvYn67f
-         Lzk3m1eQL8y4QASBEAx2FZ4lPVknexinbLTENJiijGZhha/i+7Nz9E45acYIv/JyEkO4
-         02KImkWfrc/Py2rX2AX+8LVDMkOWZvVJXLROS2lqWIlLkoFs2qpJElw2B87WjqtKrbPD
-         MDxxtbLVspWM9o6EXcOvkbMwyDIWY4pkstgDqOuusiAEbv+B2XZm3YlaaPaO5k2zLGHb
-         sAAdQ4x8zlLaJeeYLSk7KdrEK0MxX7h3+ANQUOoW2NM1T0kwIXLgMdlkV5KxNzYHGKGX
-         jSMg==
-X-Gm-Message-State: AC+VfDzIdZosglSrWxlPVNoEXGrt1i3PE3d0UqUY4n/TZtn65DeZT1SP
-        WUTRydq8RkDKo2HzQBL4SiSGYt/agsfT4Lj+dKkpqQ==
-X-Google-Smtp-Source: ACHHUZ45wyQJ425gtDHBObBv4j94oRDAUuaOOEdWF18ePLcky/nqZpvLqlx9X9vmr3177rQUeFICl32pfxZdJeK9f6M=
-X-Received: by 2002:a17:90a:358:b0:255:63e0:1248 with SMTP id
- 24-20020a17090a035800b0025563e01248mr83268pjf.0.1685713529220; Fri, 02 Jun
- 2023 06:45:29 -0700 (PDT)
+        bh=gF49zRdU5uYPaFJUudEu7rAmB8Wh16UloOD04JQ8NIs=;
+        b=NUc++EQEP5wfmnO+Muj4n0yU1OgILAggWid5yxGl1N9BrlHgKWHlCzUnv6fb5fq7f6
+         vklzdggdVzXBFRI+cGwRbBjhnIMZjfp+C6PjIScFMKjy6c7QfjBVv++JiztroPhS36qP
+         tn+C9nVVFAfEKww52dynqCmoktMQ2g/iGpAnty9qE3yS9Xid418os1MhnmXETGDETUzc
+         fKvymDUhvFrRG3msjfG98WEfidXEw0Rhr3Hy7dNF3kX6FgxpOA4OavP1BxH0bljWb1ac
+         1KTXeYIZq1l53hP4ZxGdMeP1kCoLt2Itpfvzew6XQ25DC4X4MsjhCMNROFGTMs3p/s6M
+         nztw==
+X-Gm-Message-State: AC+VfDxsG4nnY5Lv1di9aGS2Q6Hw6HYpiqsawkDoEzcXZLy/mVCfrrH5
+        U/fy+xitMTVmQpf57bziL4B8kg==
+X-Google-Smtp-Source: ACHHUZ7e5gX8srqJY3LI2LuOHEcTHAy31A308Z2pNKwyz3Q8cm4AnEw6BqUi6wXA0jx4C2egKv13DA==
+X-Received: by 2002:adf:f2c7:0:b0:309:e24:57aa with SMTP id d7-20020adff2c7000000b003090e2457aamr45060wrp.19.1685713533710;
+        Fri, 02 Jun 2023 06:45:33 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:cabd:b6f:39ae:51a2? ([2a01:e0a:982:cbb0:cabd:b6f:39ae:51a2])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600000cc00b003093a412310sm1741471wrx.92.2023.06.02.06.45.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 06:45:29 -0700 (PDT)
+Message-ID: <cc95cd30-ef3c-63e3-0f44-ad6338c7ed8e@linaro.org>
+Date:   Fri, 2 Jun 2023 15:45:28 +0200
 MIME-Version: 1.0
-References: <20230531115839.089944915@infradead.org> <20230531124604.341527144@infradead.org>
-In-Reply-To: <20230531124604.341527144@infradead.org>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 2 Jun 2023 15:45:18 +0200
-Message-ID: <CAKfTPtCnEdPpZSu3=t4tTEm-nWEwkyTwQuTLngcgABhcMGWvZA@mail.gmail.com>
-Subject: Re: [PATCH 11/15] sched/eevdf: Better handle mixed slice length
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
-        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
-        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org, efault@gmx.de, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/meson: venc: include linux/bitfield.h
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Nicolas Belin <nbelin@baylibre.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Tom Rix <trix@redhat.com>, Carlo Caione <ccaione@baylibre.com>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230602124539.894888-1-arnd@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230602124539.894888-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,113 +85,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 at 14:47, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> In the case where (due to latency-nice) there are different request
-> sizes in the tree, the smaller requests tend to be dominated by the
-> larger. Also note how the EEVDF lag limits are based on r_max.
->
-> Therefore; add a heuristic that for the mixed request size case, moves
-> smaller requests to placement strategy #2 which ensures they're
-> immidiately eligible and and due to their smaller (virtual) deadline
-> will cause preemption.
->
-> NOTE: this relies on update_entity_lag() to impose lag limits above
-> a single slice.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On 02/06/2023 14:45, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Without this header, the use of FIELD_PREP() can cause a build failure:
+> 
+> drivers/gpu/drm/meson/meson_venc.c: In function 'meson_encl_set_gamma_table':
+> drivers/gpu/drm/meson/meson_venc.c:1595:24: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+> 
+> Fixes: 51fc01a03442c ("drm/meson: venc: add ENCL encoder setup for MIPI-DSI output")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  kernel/sched/fair.c     |   30 ++++++++++++++++++++++++++++++
->  kernel/sched/features.h |    1 +
->  kernel/sched/sched.h    |    1 +
->  3 files changed, 32 insertions(+)
->
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -642,6 +642,7 @@ avg_vruntime_add(struct cfs_rq *cfs_rq,
->         s64 key = entity_key(cfs_rq, se);
->
->         cfs_rq->avg_vruntime += key * weight;
-> +       cfs_rq->avg_slice += se->slice * weight;
->         cfs_rq->avg_load += weight;
->  }
->
-> @@ -652,6 +653,7 @@ avg_vruntime_sub(struct cfs_rq *cfs_rq,
->         s64 key = entity_key(cfs_rq, se);
->
->         cfs_rq->avg_vruntime -= key * weight;
-> +       cfs_rq->avg_slice -= se->slice * weight;
->         cfs_rq->avg_load -= weight;
->  }
->
-> @@ -4908,6 +4910,21 @@ static inline void update_misfit_status(
->
->  #endif /* CONFIG_SMP */
->
-> +static inline bool
-> +entity_has_slept(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-> +{
-> +       u64 now;
-> +
-> +       if (!(flags & ENQUEUE_WAKEUP))
-> +               return false;
-> +
-> +       if (flags & ENQUEUE_MIGRATED)
-> +               return true;
-> +
-> +       now = rq_clock_task(rq_of(cfs_rq));
-> +       return (s64)(se->exec_start - now) >= se->slice;
-> +}
-> +
->  static void
->  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->  {
-> @@ -4930,6 +4947,19 @@ place_entity(struct cfs_rq *cfs_rq, stru
->                 lag = se->vlag;
->
->                 /*
-> +                * For latency sensitive tasks; those that have a shorter than
-> +                * average slice and do not fully consume the slice, transition
-> +                * to EEVDF placement strategy #2.
-> +                */
-> +               if (sched_feat(PLACE_FUDGE) &&
-> +                   (cfs_rq->avg_slice > se->slice * cfs_rq->avg_load) &&
-> +                   entity_has_slept(cfs_rq, se, flags)) {
-> +                       lag += vslice;
-> +                       if (lag > 0)
-> +                               lag = 0;
-
-This PLACE_FUDGE looks quite not a good heuristic because it breaks
-the better fair sharing of cpu bandwidth that EEVDF is supposed to
-bring. Furthermore, it breaks the isolation between cpu bandwidth and
-latency because playing with latency_nice will impact your cpu
-bandwidth
-
-> +               }
-> +
-> +               /*
->                  * If we want to place a task and preserve lag, we have to
->                  * consider the effect of the new entity on the weighted
->                  * average and compensate for this, otherwise lag can quickly
-> --- a/kernel/sched/features.h
-> +++ b/kernel/sched/features.h
+>   drivers/gpu/drm/meson/meson_venc.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/meson/meson_venc.c b/drivers/gpu/drm/meson/meson_venc.c
+> index 2bdc2855e249b..3bf0d6e4fc30a 100644
+> --- a/drivers/gpu/drm/meson/meson_venc.c
+> +++ b/drivers/gpu/drm/meson/meson_venc.c
 > @@ -5,6 +5,7 @@
->   * sleep+wake cycles. EEVDF placement strategy #1, #2 if disabled.
->   */
->  SCHED_FEAT(PLACE_LAG, true)
-> +SCHED_FEAT(PLACE_FUDGE, true)
->  SCHED_FEAT(PLACE_DEADLINE_INITIAL, true)
->
->  /*
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -555,6 +555,7 @@ struct cfs_rq {
->         unsigned int            idle_h_nr_running; /* SCHED_IDLE */
->
->         s64                     avg_vruntime;
-> +       u64                     avg_slice;
->         u64                     avg_load;
->
->         u64                     exec_clock;
->
->
+>    * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
+>    */
+>   
+> +#include <linux/bitfield.h>
+>   #include <linux/export.h>
+>   #include <linux/iopoll.h>
+>   
+
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
