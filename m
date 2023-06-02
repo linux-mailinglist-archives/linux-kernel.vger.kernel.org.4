@@ -2,151 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5792E71F764
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAE671F765
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjFBAxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S231745AbjFBAxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFBAw7 (ORCPT
+        with ESMTP id S231279AbjFBAxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:52:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C49E4;
-        Thu,  1 Jun 2023 17:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685667178; x=1717203178;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=2mG5dmg1ZqEtSAK4InmFSMVZWO7LWvd0woXHf/HZ5Ww=;
-  b=aDl2lTjWtyc7EK0iB9wPQ+GpZTO4wVKIK8m1QaANCqgzatce9rNdi+dH
-   XxDIV1JFA6FFYvyDk1QXrwe7kumqX+LnSEtab7CYvdAXr2MxEM4gGi4VE
-   87esuwgmXk6fvRAe+k5FM+2ohP/dtokfK77gDbvqOuoTysM9n2U1scCUD
-   JxiFVaDOxFsf9ZwyjdomavKLyvFxmhyWkBVbSAlXrkA4pjOTw8nhHbVIc
-   oBy6/maNeCTKfpAAm7BUW7SWVM9LJ11/dOx23pbZ28ObnWZp1RO7pmItD
-   v6tey/I+fMH1PH9hSsjBJBffLFVBjlUXL8QgpzyeCwOo9FlRXu6as7tD8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="355744155"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="355744155"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 17:52:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="851925483"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="851925483"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Jun 2023 17:52:55 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 17:52:54 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 1 Jun 2023 17:52:54 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 1 Jun 2023 17:52:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yaz6sGmNJsmAURrDKxEIqjPtRkcmlZ3tWWEhUG8BOKzAircLTQqx/lzpUwn+OijKs0C3JPHVqVxpseIfvrZVi2OuyJxqea9hj2Ylv5UTwaXHETe/NdZM0lminTXfgbm0tWNPMRQ7/8SlWbqWHpHL5wAzcaPY05Ea84P340VYJjlsYw1R/wE1lJIE24FniD41mtZW1n96LSs+pUfYMC24k86smZ6MG4YkrcPQ9coFJL0mjsiC5iOVA66+m7Ct6GDv7iEyD/RvHF29dk+5QPqeECjbMkXSEDZhyOPUs7nzHx1ChyDFCmbfsuYniIm3Nus/TVitB9p1pfdMhUqZjolA2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2mG5dmg1ZqEtSAK4InmFSMVZWO7LWvd0woXHf/HZ5Ww=;
- b=HEVvGdrxBUtfG8IK6JTfFxeuue7IyatqJuXFrBiTIaU0RW4cZ6LkMh6MI6jmonYfed8E5O2HtX47FQFSEnDFmUWIvMG2qt/BIpJPQLpX+o8iQwYgxJwFBC+Z/sRV5IsPvy5vVfYOewfhFw/ik35tJGVabdc6nKlCCMpBc7oFxVNPmVBWYYnHsbM3OwDrJXtLjCV0TsqDyW1JQnRLrLFE+OAC9JNAQSEU+4QpiSGxZrLudAkUZHIAubNLfmiF5PS0xbuU8uOJLhGiCet40MPJGWL9LHrinLK4V8kR8lmJ4rBN+dheorvJSVDQWwkr0nQbV1EUMQM8hZegXp7vMRH9xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
- SN7PR11MB7042.namprd11.prod.outlook.com (2603:10b6:806:299::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.22; Fri, 2 Jun 2023 00:52:51 +0000
-Received: from DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::14c:205:c858:1ef6]) by DS0PR11MB6373.namprd11.prod.outlook.com
- ([fe80::14c:205:c858:1ef6%7]) with mapi id 15.20.6411.021; Fri, 2 Jun 2023
- 00:52:50 +0000
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>
-CC:     "dmatlack@google.com" <dmatlack@google.com>,
-        "mizhang@google.com" <mizhang@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Thread-Topic: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Thread-Index: AQHZUPwYxSWFJqdvM0K0D4p/iJpYU67xiL+AgISXfTCAAIffAIAAi9cA
-Date:   Fri, 2 Jun 2023 00:52:50 +0000
-Message-ID: <DS0PR11MB637327B3D6B42427E372DC8DDC4EA@DS0PR11MB6373.namprd11.prod.outlook.com>
-References: <20230307135233.54684-1-wei.w.wang@intel.com>
- <ZAkZjzQ8pJQXQhJR@google.com>
- <DS0PR11MB6373F567D22270CA3CE86696DC499@DS0PR11MB6373.namprd11.prod.outlook.com>
- <ZHjDra1HbG65o4uH@google.com>
-In-Reply-To: <ZHjDra1HbG65o4uH@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|SN7PR11MB7042:EE_
-x-ms-office365-filtering-correlation-id: 05c09536-8607-4e0a-d308-08db6303b0cc
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VdAPIEbRxRb0QC7DMItFWjzq+7YXaD8txhq9Rjch0B0zfxzJ7C/7mkiDfJWYn5mfGTzQET7lV/TWkAVNpiNM0e89IXUYScs1Cof5YP50XNCJRpRHlbVl/2qdWyOIsJfuCqssgEgCALW3eWp8TdHHkWypXOZKiqDN2RCv9aIvjf/WyuK0tO7bhBJJtIsP2kSkbD0buzqfEozofoEqckuFoNTNiY5W94WwL/URbJ5iPE1Ydo7LgqcS8KYuasJpuUJGksf6pFa9DGNWOiF6YcBD1oNgHH2VfU3cyuIytFYm5bAQ/icLRpnZo+IVfzggnEarKvSUGCJqxXlZ8AsOx6AsSuMk+YGISAqoQ+ECdqG5rkEmLhZKl+HdKVfj2plZ3y+LYEZ1zKoY3XEwSBQKzVZbNvFIfGVcMmhMOiHXWKk4sYHBsbdjn6eVwNoDlOE54j+skZkIM8CEXcpQflfXoNPADOhuSjd/6j7glHmk67IbJDllKWCOyWksKkFmR2EufZrCtiZFOnSwvlQwhKB3CQD8FHlCMZPDWmGdHXIYhVHrltMDNq20eYCQCO8oQcgub7Ex2/GqqpLSUiX+a0dTzaJSnKXCuVgP+i9agl/y36ZCKoMpftzIoajbg4m9RZqOU3ILWUE7Twkgj/48ujDhVTvMSQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(396003)(136003)(39860400002)(451199021)(38070700005)(55016003)(2906002)(122000001)(82960400001)(966005)(38100700002)(41300700001)(86362001)(186003)(7696005)(8676002)(8936002)(33656002)(54906003)(26005)(71200400001)(9686003)(6506007)(478600001)(53546011)(316002)(52536014)(83380400001)(76116006)(4326008)(66946007)(66556008)(66446008)(64756008)(6916009)(66476007)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iLzjQr+TSwNqSC5IB+QeEyLxY6YQFrEz/UiCPNBUIAR6PlvIVVpwTFjwLp84?=
- =?us-ascii?Q?CJXvFM6UVIxiu6OfdI26hvAWDxKd6bfpx1kC5eY6sdGuUknG4OBwxY5u31YF?=
- =?us-ascii?Q?Rj92INIt+k79OiJOFbs0M7T3YFRXaAIGjOrMiPZq/UqOmUg2DKHQGgUFPpt2?=
- =?us-ascii?Q?a2udtSE5LcPHRH6Z+JlEASLtROR149bVh3W0RuM2V5nMSYcjp0EusGpyow0S?=
- =?us-ascii?Q?HIEqOUDR0FEWAYLLWcIsPm9Ge6DpYz/bZ6Z6j1FkJyOwdZnAQXHhd54ycAOO?=
- =?us-ascii?Q?67vFQoqvWsEzOPvpdr9Gq9HXQwP+lUfy6UFFdKnvrr+bEGznrcFffLVtDHVL?=
- =?us-ascii?Q?ntahDn6QkI4P91hEpw0Crac0n/S+m8eWPsTZXc0zNU9VaHmmMprj0sA97URz?=
- =?us-ascii?Q?O+yRZSQ/3/lgkmbF+X0Y9N8RBk0RoETbU8DSmJuQf99CXy12dx0qR4ehnKcE?=
- =?us-ascii?Q?dx/qd5z+gbeiGqwKk5GWsA/zmOyQ0LwaFfsGWApkEuKGgErs4lCLKi75vSYJ?=
- =?us-ascii?Q?jGQp/2OMJeMY7wrxi1MrIbFyJvFJAzWJEmjFIqNZ4Agu+AgTfD01VTVd0DUg?=
- =?us-ascii?Q?qgfWEAUysaCg+0fEDzrioBNe8puvdzZRCvfnfIF3qaIqjct+J1vTvbubTh3C?=
- =?us-ascii?Q?kUWmz/u0g4togryXzqWlMV68tCVE6zmaIRoMkppMVYOVqYj82HEOwQdJuCIb?=
- =?us-ascii?Q?g0tQFWeBN7dvuan+2JRUoi1Rqq/KGr6inaCHxRSG3XadBhp+mvoKzRTycaPr?=
- =?us-ascii?Q?9fPWIGUpto/1wociRJ8TeeIQQNfMSTeP4GzW/Cee8mha/BfbzM2eCQtdrQX3?=
- =?us-ascii?Q?NQ4lTt5ZOQRYYxHgG05SP9MO9zX/3XhmQTM91yd4q34/kqpQC3JgAiHlbHnO?=
- =?us-ascii?Q?TJXXr1RSBxwYAG57p6WYVsGmZgHuYT9kUGe8eeegvtchQk8pcWkui4tHnRy5?=
- =?us-ascii?Q?Qmpw1xjNrAjw0DuKfSJZ2QweXTsr4f1GYG9Wol/QTy/AnwLH1ucX88xW9J5g?=
- =?us-ascii?Q?C9dLTQSa/NYde9iLGWnUHLm0/CG2Vr64a5VrAsXJzGr3sd1IICfVBa5HmcTI?=
- =?us-ascii?Q?VO+xRRDoAbsxpo8MxEsY1nKnPt01qFaLf6TppnhCWl+OJGBQBkui3DDYBp9T?=
- =?us-ascii?Q?Mxat+wTJgBl1/g/BQjyUKxEl6hCWM0u1xVpyRmHmJW3bU7YHij91ranW+YGt?=
- =?us-ascii?Q?AQyTUTcu60mv/QpgZItT9tjEQl6kDj0it5854GvZzwvIppUhVkBuwGWejVtk?=
- =?us-ascii?Q?0ulZ+Uh5aHYRza+nSOw6JjDWXHRjpij+uKn5EkBgYzN+pxY6l9MhaoHpctzO?=
- =?us-ascii?Q?jUzYmDE9mNdukGGPk5aHKQ+UU2+NowKj4R1fZ7cpqt17FQrawGdEHxnoSbrS?=
- =?us-ascii?Q?a0M1a+JCPbXYOtON2h0QkRYKpRpPqo8LgDwOgDXbU+53UKfI4VLSj1NHgg4H?=
- =?us-ascii?Q?IvWCo5c2KFfk/DzmK94XMeQrQ2nnVVDzjESMp+dEK0ZIlZ3MaykR/I2RDuKx?=
- =?us-ascii?Q?Y3nJhfmuk7sLXSw+myXZA6JNWqM5AjFvc++CYD6drEoMYJ0k/J1prrWWOxLK?=
- =?us-ascii?Q?+AjrvOVDoKwYppuIVZT/1W0bsWIld6F+bGssPy51?=
-Content-Type: text/plain; charset="us-ascii"
+        Thu, 1 Jun 2023 20:53:34 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFD6138
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:53:26 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-38dec65ab50so1274726b6e.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 17:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685667206; x=1688259206;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DeEawLUjJLRgdu4kwyGqdCJZV+L8bI8PPgE9UhqJdFM=;
+        b=Ej0Gm6HoaAVNrELRGVf5K4Z0s7qvrVV824R+kmNSiruHtdI2pU3g8r0Yd054Eqq99E
+         iBRc95ObFHcwHPs1V/qlwFgPALbqKQ3v1O+X6s+22k56ADUxczAbBaKIRHCcpTHPEPKo
+         Df4XMxAxq7QwtPmIv5C6jMtNyy8b+9JU+7EjwuY7Wx4bX2tzCJP4Mkrjas5EugfZryWt
+         zkfNdKo+XgsT8feTVCp2sXAz4xLzDPEf7jSC9pjIgiX3ofhnyNee6yqM5+8tqwLygHHC
+         0L1DRQuA3r3m5NiEawEjTvlXr/BCDHX9hB3Ino9DvEYR1irf/EUwT8vXi8t3O1Ad61Zb
+         4Cvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685667206; x=1688259206;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DeEawLUjJLRgdu4kwyGqdCJZV+L8bI8PPgE9UhqJdFM=;
+        b=X4poIItGD3LitavnxRVrO9+7R/Pm2+g4S1w1EDGKjY31NXfj7sci0XxzyHSeovdkiA
+         fgHA0w9y/RstSo4ah5bhj8i4CoDM6/hgAVdcJZr7bQ45y6HHtRh5vZPVCyNdVijc2d5N
+         HTVgKuIAsNep0HHAJ+GZgyP/QdgZDlmgXCc6h2nIYd7MCneVHvNnudaSzjYFlhK5UiAQ
+         3+sw9oD6EqMuEW+gbhrN1Av8Imvbb5Qc7bwBZWam4i86hHTPuySbsT4K5My0nJkcKVyN
+         BdlV/zfN3/euw9rYMRvextI6sNlKP+xX0KWC3i1pnWt/DOqI0PD06kt0D6qqke8TAOAi
+         l6tQ==
+X-Gm-Message-State: AC+VfDw0Er8WRcK4YscBgSsYikPGDGol0xbEV7c/Z6MfZyjxraIBecyz
+        NGXbiOh3ESSkCwuRJ9VpGYHh0KeVQYRrMQ==
+X-Google-Smtp-Source: ACHHUZ5OKpb2dZxlGGO4cejTpskTh0ytJ5c24s7e15fqb0+HaO+HQpt/I1bCSvOAP9iSyctvpi9geg==
+X-Received: by 2002:aca:2105:0:b0:39a:618b:17e2 with SMTP id 5-20020aca2105000000b0039a618b17e2mr946722oiz.21.1685667205727;
+        Thu, 01 Jun 2023 17:53:25 -0700 (PDT)
+Received: from smtpclient.apple ([66.170.99.95])
+        by smtp.gmail.com with ESMTPSA id e19-20020a62ee13000000b0063b898b3502sm5609508pfi.153.2023.06.01.17.53.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 01 Jun 2023 17:53:25 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: Re: [PATCH v2] x86/lib: Do not use local symbols with
+ SYM_CODE_START_LOCAL()
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <20230527122916.GAZHH3nHk7kkUA7CeM@nazgul.local>
+Date:   Thu, 1 Jun 2023 17:53:13 -0700
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05c09536-8607-4e0a-d308-08db6303b0cc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2023 00:52:50.5182
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mG5hyLW2kIG8ug/8jP3EVVZmNGH+md5bxHbljtxbwyV4sWeINsu9tJ6m+x7Mxb+aMclokcHxemZxOqg7s5WpkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7042
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Message-Id: <F5C390E4-8CF7-49EE-A94C-205DB537E1AB@gmail.com>
+References: <38e24fd4-9213-229d-9919-7ae3bfb113bb@intel.com>
+ <24E47178-C177-425F-A8EF-CFFAE22597D4@gmail.com>
+ <20230526155336.GAZHDWAFi1FRqq83TP@nazgul.local>
+ <0F07EEDB-8A3F-4224-9FF1-43A5300B1B8B@gmail.com>
+ <20230526204559.GAZHEahxxnQaHhSUul@nazgul.local>
+ <D63AB9E6-BA52-4E24-B8EF-C7B9DB1595CC@gmail.com>
+ <e6cd1909-2776-28d2-ccc0-4b3d2d09e9ce@intel.com>
+ <49861038-B8CA-4CDD-BD44-73066FF453F3@gmail.com>
+ <20230527072338.GAZHGv+no2LZASyLWM@nazgul.local>
+ <9A302EB1-308A-4904-801C-DC70D9908E11@gmail.com>
+ <20230527122916.GAZHH3nHk7kkUA7CeM@nazgul.local>
+To:     Borislav Petkov <bp@alien8.de>
+X-Mailer: Apple Mail (2.3731.600.7)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,31 +89,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday, June 2, 2023 12:21 AM, Sean Christopherson wrote:
-> On Thu, Jun 01, 2023, Wei W Wang wrote:
-> > On Thursday, March 9, 2023 7:26 AM, Sean Christopherson wrote:
-> > > On Tue, Mar 07, 2023, Wei Wang wrote:
-> > > > Current KVM_BUG and KVM_BUG_ON assume that 'cond' passed from
-> > > callers
-> > > > is 32-bit as it casts 'cond' to the type of int.
-> > >
-> > > You're very generous, I would have led with "Fix a badly done
-> > > copy+paste ..." ;-)
-> > >
-> > > > Fixes: 0b8f11737cff ("KVM: Add infrastructure and macro to mark VM
-> > > > as
-> > > > bugged")
-> > > > Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> > > > ---
-> > >
-> > > Reviewed-by: Sean Christopherson <seanjc@google.com>
-> >
-> > Kind ping on this patch.
-> > Seems it wasn't noticed for months. Just check if it would be good to
-> > be merged or not proper for any reason?
+
+
+> On May 27, 2023, at 5:29 AM, Borislav Petkov <bp@alien8.de> wrote:
 >=20
-> I'll grab it for 6.5.
-=09
-OK, thanks. Please check if these two are ready to go into 6.5 if possible:
-https://lore.kernel.org/kvm/20230315101606.10636-1-wei.w.wang@intel.com/
-https://lore.kernel.org/kvm/20230207123713.3905-1-wei.w.wang@intel.com/
+> As to what you want to address, I'll talk to toolchain folks first and
+> get back to you.
+
+I hope you got the answer you were looking for. I am not sure what is =
+holding
+this simple patch back.
+
+To rehash - we are talking about local two symbols that are not exposed. =
+Based
+on my search they cover the only region of the kernel text (on x86) that =
+is
+not covered by any symbol.
+
+Doing so have two types of impacts. Some tools are affected by the fact =
+the
+closest previous symbol is not related, and as a result the symbol they =
+show
+when they unwind the stack is unrelated. So instead of seeing
+=E2=80=9Cbad_get_user_clac=E2=80=9D, you may see __get_user_nocheck_8 . =
+This is confusing and
+ misleading users.
+
+This should impact perf, ftrace, /proc/[pid]/stack, dump_stack(), BUG().=20=
+
+
+The second type of impact occurs since certain code addresses is not =
+covered
+by any symbol. This mostly results in reduced functionality of tools.
+
+This includes for instance gdb that cannot =E2=80=9Cdisas=E2=80=9D =
+addresses in
+bad_get_user_clac (you can x/i for reduced functionality) or crash in
+which =E2=80=9Cdis=E2=80=9D only disassembles a single instruction. It =
+might also have impact
+on backtraces - I did not try it.
+
+addr2line and llvm-symbolizer also seem to be affected in such a way and =
+they
+do not find the symbol that is associated with addresses in
+bad_get_user_clac. This means that tools that rely such tools, including
+decode_stacktrace.sh are also affected. [*]
+
+There might be other impacts, for instance on kpatch.
+
+Overall, as a general rule, I think it would be best not to have code =
+that is
+not covered by any symbol. It can result in misleading output from the =
+kernel
+or related tools, and in addition in more limited functionality from =
+tools
+such as gdb and crash.
+
+More concretely, I think these two symbols should not be stripped. The =
+fact
+that the code of these symbols runs under relatively complicated =
+conditions
+(exception tables), makes it even more important to let debug/tracing =
+tools
+to see them.
+=20
+I you wish, I can include the gist of these points in the commit log, =
+although
+I think it might be an overkill.
+
+
+
+[*] It is worth noting that tools such as addrline and llvm-symbolizer
+    are able to use DWARF to find the source code location, yet they
+    do not appear to be able to find the relevant symbol.
+
