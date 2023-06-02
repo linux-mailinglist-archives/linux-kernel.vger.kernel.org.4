@@ -2,166 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF0771F919
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9CE71F91C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjFBEFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 00:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S232986AbjFBEGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 00:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjFBEFZ (ORCPT
+        with ESMTP id S231241AbjFBEG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 00:05:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9923F132;
-        Thu,  1 Jun 2023 21:05:23 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3523X2Bn032395;
-        Fri, 2 Jun 2023 04:05:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=g2YsiNDXH7x12Xq/HmkFBsnoCy87pQRc7ageQK0z4nQ=;
- b=Qc02lk/NvNiQBxPeMC3SnIDEoHX+lJdEyFKR2DMLSLwpBpfyVO1qrz37C3EM5mC+oAoL
- GIQ2LYbXwKZpbV+Dvt9SVhE0iVYTyoDHTQvyROO4iqYQsnHnH33nd8m/hhUPwHpWDHFv
- gEry2rMPqDHKVJPjfcdyT6YvbP5ovXV3RVHg4oRo7Bf8KhIKxXjhCV9jG8uRFrHE258O
- +kFjkMeO7VyD8m5XpDTsMsvt3FhA405DTl41lDNao+47eUbZOHsNdrAYkFNYO5h1iqez
- 2FTx753zNMi/4RqU8f4xUlN2Zj5HASgjHgo/fpomzEHUotV4594MHhwyDooInRPBYMmI dw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxs9gt4fx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 04:05:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35245HtZ013574
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 04:05:17 GMT
-Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 21:05:13 -0700
-Message-ID: <2dd8e5be-c5b5-02e7-32d0-587a40cb70cc@quicinc.com>
-Date:   Fri, 2 Jun 2023 09:35:10 +0530
+        Fri, 2 Jun 2023 00:06:27 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21C54128;
+        Thu,  1 Jun 2023 21:06:23 -0700 (PDT)
+Received: from loongson.cn (unknown [223.106.25.146])
+        by gateway (Coremail) with SMTP id _____8AxiPG+anlkVoIDAA--.7810S3;
+        Fri, 02 Jun 2023 12:06:22 +0800 (CST)
+Received: from chenhuacai$loongson.cn ( [223.106.25.146] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Fri, 2 Jun 2023 12:06:20
+ +0800 (GMT+08:00)
+X-Originating-IP: [223.106.25.146]
+Date:   Fri, 2 Jun 2023 12:06:20 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+To:     "Vladimir Oltean" <vladimir.oltean@nxp.com>,
+        lvjianmin <lvjianmin@loongson.cn>
+Cc:     "Bjorn Helgaas" <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org, "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Rob Herring" <robh@kernel.org>,
+        "Claudiu Manoil" <claudiu.manoil@nxp.com>,
+        "Michael Walle" <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        "Liu Peibao" <liupeibao@loongson.cn>,
+        "Binbin Zhou" <zhoubinbin@loongson.cn>
+Subject: Re: Re: [PATCH pci] PCI: don't skip probing entire device if first
+ fn OF node has status = "disabled"
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
+ Copyright (c) 2002-2023 www.mailtech.cn .loongson.cn
+In-Reply-To: <20230601221532.2rfcda4sg5nl7pzp@skbuf>
+References: <20230601163335.6zw4ojbqxz2ws6vx@skbuf>
+ <ZHjaq+TDW/RFcoxW@bhelgaas> <20230601221532.2rfcda4sg5nl7pzp@skbuf>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: Jtcwj2Zvb3Rlcl90eHQ9NzQyMjo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH RESEND 4/4] arm64: dts: qcom: ipq5332: add support for the
- RDP474 variant
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230601042054.29075-1-quic_kathirav@quicinc.com>
- <20230601042054.29075-5-quic_kathirav@quicinc.com>
- <91c63634-eb39-fdca-2c76-6f8182c2d47c@linaro.org>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <91c63634-eb39-fdca-2c76-6f8182c2d47c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: g4DpGIfWTwAKhhT0ZB13JAvySdUUa8i1
-X-Proofpoint-GUID: g4DpGIfWTwAKhhT0ZB13JAvySdUUa8i1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_01,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0
- phishscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020027
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <1a868c8.93c8.1887a48f22a.Coremail.chenhuacai@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf8AxEuW9anlkFEqFAA--.13309W
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAKBmR4ioAT0gAAsa
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKw13XFykZryUJF13CF4Durg_yoW3GF17pF
+        WYqFZIkw4DJF4SywnrWr4UuFyFyws5G3s3GFn8K3s09398ur1Sqr1ftrW3Za48Wr4vgw1j
+        qFWv9ryvka1jy3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACY4xI67k04243AVAKzVAKj4
+        xxM4xvF2IEb7IF0Fy26I8I3I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAYjxAx
+        ZFUvcSsGvfC2KfnxnUUI43ZEXa7IU8sSdPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+K0NjIEppYW5taW4gTHYKCkhpLCBKaWFubWluLAoKWW91IGFyZSB0aGUgbW9zdCBmYW1pbGlhciBw
+ZXJzb24gaW4gdGhpcyBmaWVsZCwgY291bGQgeW91IHBsZWFzZSBnaXZlIHNvbWUgc3VnZ2VzdGlv
+bnM/IFRoYW5rIHlvdS4KCkh1YWNhaQoKCj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7
+tuS6ujogIlZsYWRpbWlyIE9sdGVhbiIgPHZsYWRpbWlyLm9sdGVhbkBueHAuY29tPgo+IOWPkemA
+geaXtumXtDoyMDIzLTA2LTAyIDA2OjE1OjMyICjmmJ/mnJ/kupQpCj4g5pS25Lu25Lq6OiAiQmpv
+cm4gSGVsZ2FhcyIgPGhlbGdhYXNAa2VybmVsLm9yZz4KPiDmioTpgIE6IGxpbnV4LXBjaUB2Z2Vy
+Lmtlcm5lbC5vcmcsIG5ldGRldkB2Z2VyLmtlcm5lbC5vcmcsICJCam9ybiBIZWxnYWFzIiA8Ymhl
+bGdhYXNAZ29vZ2xlLmNvbT4sICJSb2IgSGVycmluZyIgPHJvYmhAa2VybmVsLm9yZz4sICJDbGF1
+ZGl1IE1hbm9pbCIgPGNsYXVkaXUubWFub2lsQG54cC5jb20+LCAiTWljaGFlbCBXYWxsZSIgPG1p
+Y2hhZWxAd2FsbGUuY2M+LCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCAiTGl1IFBlaWJh
+byIgPGxpdXBlaWJhb0Bsb29uZ3Nvbi5jbj4sICJCaW5iaW4gWmhvdSIgPHpob3ViaW5iaW5AbG9v
+bmdzb24uY24+LCAiSHVhY2FpIENoZW4iIDxjaGVuaHVhY2FpQGxvb25nc29uLmNuPgo+IOS4u+mi
+mDogUmU6IFtQQVRDSCBwY2ldIFBDSTogZG9uJ3Qgc2tpcCBwcm9iaW5nIGVudGlyZSBkZXZpY2Ug
+aWYgZmlyc3QgZm4gT0Ygbm9kZSBoYXMgc3RhdHVzID0gImRpc2FibGVkIgo+IAo+IE9uIFRodSwg
+SnVuIDAxLCAyMDIzIGF0IDEyOjUxOjM5UE0gLTA1MDAsIEJqb3JuIEhlbGdhYXMgd3JvdGU6Cj4g
+PiA+ID4gRG9pbmcgaXQgaW4gTGludXggd291bGQgbWluaW1pemUgZGVwZW5kZW5jZXMgb24gdGhl
+IGJvb3Rsb2FkZXIsIHNvCj4gPiA+ID4gdGhhdCBzZWVtcyBkZXNpcmFibGUgdG8gbWUuIFRoYXQg
+bWVhbnMgTGludXggbmVlZHMgdG8gZW51bWVyYXRlCj4gPiA+ID4gRnVuY3Rpb24gMCBzbyBpdCBp
+cyB2aXNpYmxlIHRvIGEgZHJpdmVyIG9yIHBvc3NpYmx5IGEgcXVpcmsuCj4gPiA+IAo+ID4gPiBV
+aG0uLi4gbm8sIHRoYXQgd291bGRuJ3QgYmUgZW5vdWdoLiBPbmx5IGEgc3RyYWlnaHQgcmV2ZXJ0
+IHdvdWxkIHNhdGlzZnkKPiA+ID4gdGhlIHdvcmthcm91bmQgdGhhdCB3ZSBjdXJyZW50bHkgaGF2
+ZSBmb3IgTlhQIEVORVRDIGluIExpbnV4Lgo+ID4gCj4gPiBJIGd1ZXNzIHlvdSBtZWFuIGEgcmV2
+ZXJ0IG9mIDZmZmZiYzdhZTEzNz8KPiAKPiBZZXMuCj4gCj4gPiBUaGlzIHdob2xlIGNvbnZlcnNh
+dGlvbiBpcyBhYm91dCB3aGV0aGVyIHdlIGNhbiByZXdvcmsgNmZmZmJjN2FlMTM3IHRvCj4gPiB3
+b3JrIGJvdGggZm9yIExvb25nc29uIGFuZCBmb3IgeW91LCBzbyBub3RoaW5nIGlzIGRlY2lkZWQg
+eWV0Lgo+IAo+IEFmdGVyIHJlYWRpbmcKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1w
+Y2kvMjAyMjExMTcwMjA5MzUuMzIwODYtMS1saXVwZWliYW9AbG9vbmdzb24uY24vCj4gYW5kCj4g
+aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtcGNpLzIwMjIxMTAzMDkwMDQwLjgzNi0xLWxp
+dXBlaWJhb0Bsb29uZ3Nvbi5jbi8KPiBhbmQgc2VlaW5nIHRoZSBHTUFDIE9GIG5vZGUgYXQgYXJj
+aC9taXBzL2Jvb3QvZHRzL2xvb25nc29uL2xvb25nc29uNjQtMmsxMDAwLmR0c2ksCj4gSSBiZWxp
+ZXZlIHRoYXQgYSBzb2x1dGlvbiB0aGF0IHdvdWxkIHdvcmsgZm9yIGJvdGggTG9vbmdzb24gYW5k
+IE5YUCB3b3VsZCBiZSB0bzoKPiAKPiAtIHBhdGNoIGxvb25nc29uX2R3bWFjX3Byb2JlKCkgdG8g
+Y2hlY2sgZm9yIG9mX2RldmljZV9pc19hdmFpbGFibGUoKQo+IC0gcmV2ZXJ0IGNvbW1pdCA2ZmZm
+YmM3YWUxMzcgKCJQQ0k6IEhvbm9yIGZpcm13YXJlJ3MgZGV2aWNlIGRpc2FibGVkCj4gICBzdGF0
+dXMiKQo+IAo+IEknbSBub3Qgc3VyZSB3aGF0IGVsc2Ugb2Ygd2hhdCB3YXMgY29uY3JldGVseSBw
+cm9wb3NlZCB3b3VsZCB3b3JrLgo+IEFueXRoaW5nIGVsc2UgaXMganVzdCB3aXNoZnVsIHRoaW5r
+aW5nIHRoYXQgdGhlIFBDSSBjb3JlIGNhbiBzdGFydAo+IGVuZm9yY2luZyBhIGNlbnRyYWwgcG9s
+aWN5LCBhZnRlciBsZXR0aW5nIGRldmljZSBkcml2ZXJzIGdldCB0byBjaG9vc2UKPiBob3cgKGFu
+ZCB3aGV0aGVyKSB0byB0cmVhdCB0aGUgInN0YXR1cyIgT0YgcHJvcGVydHkgZm9yIHllYXJzIG9u
+IGVuZC4KPiAKPiBBcyBhbiBhZGRlZCBiZW5lZml0LCB0aGUgZGlzYWJsZWQgR01BQyB3b3VsZCBi
+ZWNvbWUgdmlzaWJsZSBpbiBsc3BjaSBmb3IKPiB0aGUgTG9vbmdzb24gU29DLgo+IAo+ID4gVGhl
+IHBvaW50IGlzLCBJIGFzc3VtZSB5b3UgYWdyZWUgdGhhdCBpdCdzIHByZWZlcmFibGUgaWYgd2Ug
+ZG9uJ3QgaGF2ZQo+ID4gdG8gZGVwZW5kIG9uIGEgYm9vdGxvYWRlciB0byBjbGVhciB0aGUgbWVt
+b3J5Lgo+IAo+IEkgYW0gY29uZnVzZWQgYnkgdGhlIG1lc3NhZ2UgeW91IGFyZSB0cmFuc21pdHRp
+bmcgaGVyZS4KPiAKPiBXaXRoIG15IHVzZXIgaGF0IG9uLCB5ZXMsIG1haW50YWluaW5nIHRoZSBl
+ZmZlY3Qgb2YgY29tbWl0IDMyMjJiNWI2MTNkYgo+IGZyb20gTGludXggaXMgcHJlZmVyYWJsZS4K
+PiAKPiBBbHRob3VnaCBSb2Igd2lsbCBwcm9iYWJseSBub3QgYmUgaGFwcHkgYWJvdXQgdGhlIHdh
+eSBpbiB3aGljaCB0aGF0IHdpbGwKPiBiZSBhY2hpZXZlZC4gQW5kIHlvdSBoYXZlbid0IHByb3Bv
+c2VkIHdheXMgaW4gd2hpY2ggdGhhdCB3b3VsZCByZW1haW4KPiBwb3NzaWJsZSwgc2hvcnQgb2Yg
+YSByZXZlcnQgb2YgY29tbWl0IDZmZmZiYzdhZTEzNy4KPiAKPiA+IEFmdGVyIDZmZmZiYzdhZTEz
+NywgdGhlIHByb2JlIGZ1bmN0aW9uIGlzIG5vdCBjYWxsZWQgaWYgdGhlIGRldmljZSBpcwo+ID4g
+ZGlzYWJsZWQgaW4gRFQgYmVjYXVzZSB0aGVyZSdzIG5vIHBjaV9kZXYgZm9yIGl0IGF0IGFsbC4K
+PiAKPiBDb3JyZWN0LCBidXQgY29tbWl0IDMyMjJiNWI2MTNkYiBwcmUtZGF0ZXMgaXQgYnkgMiB5
+ZWFycywgYW5kIHRodXMsIGl0Cj4gaXMgYnJva2VuIGJ5IFJvYidzIGNoYW5nZS4KPiAKPiA+ID4g
+TXkgcHJvYmxlbSBpcyB0aGF0IEkgZG9uJ3QgcmVhbGx5IHVuZGVyc3RhbmQgd2hhdCB3YXMgdGhl
+IGZ1bmN0aW9uYWwKPiA+ID4gbmVlZCBmb3IgY29tbWl0IDZmZmZiYzdhZTEzNyAoIlBDSTogSG9u
+b3IgZmlybXdhcmUncyBkZXZpY2UgZGlzYWJsZWQKPiA+ID4gc3RhdHVzIikgaW4gdGhlIGZpcnN0
+IHBsYWNlLCBjb25zaWRlcmluZyB0aGF0IGFueSBkZXZpY2UgZHJpdmVyIGNhbgo+ID4gPiBhbHJl
+YWR5IGZhaWwgdG8gcHJvYmUgYmFzZWQgb24gdGhlIHNhbWUgY29uZGl0aW9uIGF0IGl0cyBvd24g
+d2lsbC4KPiA+IAo+ID4gSW4gZ2VuZXJhbCwgUENJIGRyaXZlcnMgc2hvdWxkbid0IHJlbHkgb24g
+RFQuICBJZiB0aGUgYnVzIGRyaXZlciAoUENJCj4gPiBpbiB0aGlzIGNhc2UpIGNhbGxzIGEgZHJp
+dmVyJ3MgcHJvYmUgZnVuY3Rpb24sIHRoZSBkcml2ZXIgY2FuIGFzc3VtZQo+ID4gdGhlIGRldmlj
+ZSBleGlzdHMuCj4gCj4gV2VsbCwgdGhlIGRldmljZSBleGlzdHMuLi4KPiAKPiA+IEJ1dCBlbmV0
+YyBpcyBub3QgYSBnZW5lcmFsLXB1cnBvc2UgZHJpdmVyLCBhbmQgaWYgRFQgaXMgdGhlIG9ubHkg
+d2F5Cj4gPiB0byBkaXNjb3ZlciB0aGlzIHByb3BlcnR5LCBJIGd1ZXNzIHlvdSdyZSBzdHVjayBk
+b2luZyB0aGF0Lgo+IAo+IFNvIHdoYXQgTG9vbmdzb24gdHJpZWQgdG8gZG8gLSBicmVhayBlbnVt
+ZXJhdGlvbiBvZiB0aGUgb24tY2hpcCBHTUFDCj4gUENJZSBkZXZpY2UgYXQgdGhlIGxldmVsIG9m
+IHRoZSBQQ0llIGNvbnRyb2xsZXIsIGlmIHRoZSBHTUFDJ3MgcGlubXV4aW5nCj4gZG9lc24ndCBt
+YWtlIGl0IGF2YWlsYWJsZSBmb3IgbmV0d29ya2luZyAtIGlzIGVuY291cmFnZWQ/Cj4gCj4gRG8g
+eW91IGNvbnNpZGVyIHRoYXQgdGhlaXIgcGF0Y2ggd291bGQgaGF2ZSBiZWVuIGJldHRlciBpbiB0
+aGUgb3JpZ2luYWwKPiBmb3JtLCBpZiBpbnN0ZWFkIG9mIHRoZSAic2tpcC1zY2FuIiBwcm9wZXJ0
+eSwgdGhleSB3b3VsZCBoYXZlIGJ1aWx0IHNvbWUKPiBzbWFydHMgaW50byBkcml2ZXJzL3BjaS9j
+b250cm9sbGVyL3BjaS1sb29uZ3Nvbi5jIHdoaWNoIHdvdWxkIGludGVudGlvbmFsbHkKPiBicmVh
+ayBjb25maWcgc3BhY2UgYWNjZXNzIHRvIGdtYWNAMywwLCB3aXRob3V0IHJlcXVpcmluZyBPRiB0
+byBzcGVjaWZ5IHRoaXM/Cj4gCj4gQXJlIHlvdSBzYXlpbmcgdGhhdCB0aGlzICJwcmVzZW50IGJ1
+dCB1bnVzYWJsZSBkdWUgdG8gcGlubXV4aW5nIiBpcyBhbgo+IGluY29ycmVjdCB1c2Ugb2Ygc3Rh
+dHVzID0gImRpc2FibGVkIj8gV2hhdCB3b3VsZCBpdCBjb25zdGl0dXRlIGNvcnJlY3QKPiB1c2Ug
+b2YsIHRoZW4/Cj4gCj4gVGhlIGFuYWxvZ291cyBzaXR1YXRpb24gZm9yIEVORVRDIHdvdWxkIGJl
+IHRvIHBhdGNoIHRoZSAicGNpLWhvc3QtZWNhbS1nZW5lcmljIgo+IGRyaXZlciB0byByZWFkIHRo
+ZSBTRVJERVMgYW5kIHBpbm11eGluZyBjb25maWd1cmF0aW9uIG9mIHRoZSBTb0MsIGFuZCB0bwo+
+IG1hc2svdW5tYXNrIHRoZSBjb25maWcgYWNjZXNzIHRvIGZ1bmN0aW9uIDAgYmFzZWQgb24gdGhh
+dC4gSSBtZWFuIC0gSSBjb3VsZC4uLgo+IGJ1dCBpcyBpdCByZWFsbHkgYSBnb29kIGlkZWE/IFRo
+ZSBwcmluY2lwbGUgb2Ygc2VwYXJhdGlvbiBvZiBjb25jZXJucwo+IHRlbGxzIG1lIG5vLiBUaGUg
+ZmFjdCB0aGF0IHRoZSBwaW5tdXhpbmcgb2YgdGhlIGRldmljZSBtYWtlcyBpdCB1bmF2YWlsYWJs
+ZQo+IHBlcnRhaW5zIHRvIHRoZSBJUC1zcGVjaWZpYyBsb2dpYywgaXQgZG9lc24ndCBjaGFuZ2Ug
+d2hldGhlciBpdCdzIGVudW1lcmFibGUKPiBvciBhY2Nlc3NpYmxlIG9uIGl0cyBidXMuCj4gCj4g
+PiA+ID4gSXMgRFQgdGhlIG9ubHkgd2F5IHRvIGxlYXJuIHRoZSBOWFAgU0VSREVTIGNvbmZpZ3Vy
+YXRpb24/ICBJIHRoaW5rIGl0Cj4gPiA+ID4gd291bGQgYmUgbXVjaCBiZXR0ZXIgaWYgdGhlcmUg
+d2VyZSBhIHdheSB0byBwcm9ncmFtbWF0aWNhbGx5IGxlYXJuIGl0LAo+ID4gPiA+IGJlY2F1c2Ug
+dGhlbiB5b3Ugd291bGRuJ3QgaGF2ZSB0byB3b3JyeSBhYm91dCBzeW5jaW5nIHRoZSBEVCB3aXRo
+IHRoZQo+ID4gPiA+IHBsYXRmb3JtIGNvbmZpZ3VyYXRpb24sIGFuZCBpdCB3b3VsZCBkZWNvdXBs
+ZSB0aGlzIGZyb20gdGhlIExvb25nc29uCj4gPiA+ID4gc2l0dWF0aW9uLgo+ID4gPiAKPiA+ID4g
+U3luY2luZyB0aGUgRFQgd2l0aCB0aGUgcGxhdGZvcm0gY29uZmlndXJhdGlvbiB3aWxsIGFsd2F5
+cyBiZSBuZWNlc3NhcnksCj4gPiA+IGJlY2F1c2UgZm9yIG5ldHdvcmtpbmcgd2Ugd2lsbCBhbHNv
+IG5lZWQgZXh0cmEgaW5mb3JtYXRpb24gd2hpY2ggaXMKPiA+ID4gY29tcGxldGVseSBub24tZGlz
+Y292ZXJhYmxlLCBsaWtlIGEgcGh5LWhhbmRsZSBvciBzdWNoLCBhbmQgdGhhdCBkZXBlbmRzCj4g
+PiA+IG9uIHRoZSB3aXJpbmcgYW5kIHN0YXRpYyBwaW5tdXhpbmcgb2YgdGhlIFNvQy4gU28gaXQg
+aXMgcHJhY3RpY2FsbHkKPiA+ID4gcmVhc29uYWJsZSB0byBleHBlY3QgdGhhdCB3aGF0IGlzIHVz
+YWJsZSBoYXMgc3RhdHVzID0gIm9rYXkiLCBhbmQgd2hhdAo+ID4gPiBpc24ndCBoYXMgc3RhdHVz
+ID0gImRpc2FibGVkIi4gTm90IHRvIG1lbnRpb24sIHRoZXJlIGFyZSBhbHJlYWR5IGRldmljZQo+
+ID4gPiB0cmVlcyBpbiBjaXJjdWxhdGlvbiB3aGljaCBhcmUgd3JpdHRlbiB0aGF0IHdheSwgYW5k
+IHRob3NlIG5lZWQgdG8KPiA+ID4gY29udGludWUgdG8gd29yay4KPiA+IAo+ID4gSnVzdCBiZWNh
+dXNlIHdlIG5lZWQgRFQgZm9yIG5vbi1kaXNjb3ZlcmFibGUgaW5mbyBBIGRvZXNuJ3QgbWVhbiB3
+ZQo+ID4gc2hvdWxkIGRlcGVuZCBvbiBpdCBmb3IgQiBpZiBCICppcyogZGlzY292ZXJhYmxlLgo+
+IAo+IEJ1dCB0aGUgYXJndW1lbnQgd2FzOiB3ZSBhbHJlYWR5IGhhdmUgZGV2aWNlIHRyZWVzIHdp
+dGggYSBjZXJ0YWluCj4gY29udmVudGlvbiwgYW5kIHRoYXQgaXMgdG8gZXhwZWN0IGhhdmluZyBz
+dGF0dXMgPSAiZGlzYWJsZWQiIGZvcgo+IHVudXNhYmxlIHBvcnRzLiBJIGRvbid0IGJlbGlldmUg
+dGhhdCBjaGFuZ2luZyB0aGF0IGlzIHJlYWxpc3RpY2FsbHkgaW4KPiBzY29wZSBmb3IgZml4aW5n
+IHRoaXMuIEFuZCBpZiB3ZSBoYXZlIGRldmljZSB0cmVlcyB3aXRoIHN0YXR1cyA9Cj4gImRpc2Fi
+bGVkIiBpbiBjaXJjdWxhdGlvbiB3aGljaCB3ZSAoSSkgZG9uJ3Qgd2FudCB0byBicmVhaywgdGhl
+biB3ZSdyZQo+IGJhY2sgdG8gc3F1YXJlIDEgcmVnYXJkaW5nIHRoZSBwcm9iaW5nIG9mIGRpc2Fi
+bGVkIGRldmljZXMuCj4gCj4gPiBUaGlzIHF1ZXN0aW9uIG9mIGRpc2FibGluZyBhIGRldmljZSB2
+aWEgRFQgYnV0IHN0aWxsIG5lZWRpbmcgdG8gZG8KPiA+IHRoaW5ncyB0byB0aGUgZGV2aWNlIGlz
+IC4uLiBraW5kIG9mIGEgc3RpY2t5IHdpY2tldC4KPiAKPiBJdCBib2lscyBkb3duIHRvIHdoZXRo
+ZXIgYWNjZXNzaW5nIGEgZGlzYWJsZWQgZGV2aWNlIGlzIHBlcm1pdHRlZCBvcgo+IG5vdC4gSSBv
+cGVuZWQgdGhlIGRldmljZXRyZWUgc3BlY2lmaWNhdGlvbiBhbmQgaXQgZGlkbid0IHNheSBhbnl0
+aGluZwo+IGNvbmNsdXNpdmUuIFRob3VnaCBpdCdzIGNlcnRhaW5seSBhYm92ZSBteSBwYXkgZ3Jh
+ZGUgdG8gc2F5IGFueXRoaW5nCj4gd2l0aCBjZXJ0YWludHkgaW4gdGhpcyBhcmVhLiBBcGFydCBm
+cm9tICJva2F5IiBhbmQgImRpc2FibGVkIiwgInN0YXR1cyIKPiB0YWtlcyBvdGhlciBkb2N1bWVu
+dGVkIHZhbHVlcyB0b28sIGxpa2UgInJlc2VydmVkIiwgImZhaWwiIGFuZAo+ICJmYWlsLXNzcyIu
+IExpbnV4IHRyZWF0cyBldmVyeXRoaW5nIHRoYXQncyBub3QgIm9rYXkiIHRoZSBzYW1lLgo+IEty
+enlzenRvZiBLb3psb3dza2kgY2FtZSB3aXRoIHRoZSBzdWdnZXN0aW9uIGZvciBMb29uZ3NvbiB0
+byByZXBsYWNlCj4gInNraXAtc2NhbiIgd2l0aCAic3RhdHVzIiwgZHVyaW5nIHRoZSByZXZpZXcg
+b2YgdGhlaXIgdjEgcGF0Y2guCj4gCj4gSW4gYW55IGNhc2UsIHRoYXQgcXVlc3Rpb24gd2lsbCBv
+bmx5IHJlY3VyIG9uZSBsZXZlbCBsb3dlciAtIGluIFUtQm9vdCwKPiB3aGVyZSB3ZSBtYWtlIGFu
+IGVmZm9ydCB0byBrZWVwIGRldmljZSB0cmVlcyBpbiBzeW5jIGluIExpbnV4LiBXaHkgd291bGQK
+PiBVLUJvb3QgbmVlZCB0byBkbyB0aGluZ3MgdG8gYSBkaXNhYmxlZCBkZXZpY2U/IDopCj4gCj4g
+PiBNYXliZSB0aGlzIHNob3VsZCBiZSBhIGRpZmZlcmVudCBEVCBwcm9wZXJ0eSAobm90ICJzdGF0
+dXMiKS4gIFRoZW4gUENJCj4gPiBlbnVtZXJhdGlvbiBjb3VsZCB3b3JrIG5vcm1hbGx5IGFuZCA2
+ZmZmYmM3YWUxMzcgd291bGRuJ3QgYmUgaW4gdGhlCj4gPiB3YXkuCj4gCj4gSSdtIG5vdCBxdWl0
+ZSBzdXJlIHdoZXJlIHlvdSdyZSBnb2luZyB3aXRoIHRoaXMuIE1vcmUgY29uY3JldGVseT8KDQoN
+CuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/
+oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaI
+lue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWM
+heaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WP
+ke+8ieacrOmCruS7tuWPiuWFtumZhOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuac
+rOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWI
+oOmZpOacrOmCruS7tuOAgiANClRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWlu
+IGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGlj
+aCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNz
+IGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhl
+cmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3Ig
+cGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVy
+c29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4g
+SWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2Vu
+ZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA==
 
-On 6/1/2023 10:59 PM, Krzysztof Kozlowski wrote:
-> On 01/06/2023 06:20, Kathiravan T wrote:
->> Add the initial device tree support for the Reference Design
->> Platform(RDP) 474 based on IPQ5332 family of SoC. This patch carries
->> the support for Console UART, eMMC, I2C and GPIO based buttons.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/Makefile           |   1 +
->>   arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts | 112 ++++++++++++++++++++
->>   2 files changed, 113 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
->>
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index 4f9e81253e18..0f8c763a9bd9 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-mi01.2.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp442.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp468.dtb
->> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp474.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
->> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
->> new file mode 100644
->> index 000000000000..085729a0fdf1
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
->> @@ -0,0 +1,112 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +/*
->> + * IPQ5332 RDP474 board device tree source
->> + *
->> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/input/input.h>
->> +#include "ipq5332.dtsi"
->> +
->> +/ {
->> +	model = "Qualcomm Technologies, Inc. IPQ5332 MI01.9";
->> +	compatible = "qcom,ipq5332-ap-mi01.9", "qcom,ipq5332";
->> +
->> +	aliases {
->> +		serial0 = &blsp1_uart0;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path = "serial0";
->> +	};
->> +
->> +	gpio_keys {
-> No, srsly, so not only ignored the tags but also feedback?
-
-
-Please correct me if I am wrong here..
-
-This is RESEND of V1 patches (only minor correction in the subject line 
-in cover letter). Also I don't see review comments as such in original 
-V1 as well 
-https://lore.kernel.org/linux-arm-msm/20230531135048.19164-1-quic_kathirav@quicinc.com/
-
-Can you help to point out your review comments, I couldn't able to find out.
-
-Thanks,
-
-
->
-> Best regards,
-> Krzysztof
->
