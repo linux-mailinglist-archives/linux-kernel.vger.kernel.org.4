@@ -2,125 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE35772064F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF1E72065C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbjFBPgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
+        id S235625AbjFBPhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbjFBPgM (ORCPT
+        with ESMTP id S235527AbjFBPhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:36:12 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA38618D;
-        Fri,  2 Jun 2023 08:36:09 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 352FZwbh118409;
-        Fri, 2 Jun 2023 10:35:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685720158;
-        bh=huPiAoEvdS7zJUZQYpx9KJeHkoC09FKyEF2tnc0eb6o=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=EmMnPUFgCLhPZ1VD6byTwmcIPmPg8kc1wjM1FkVT6PrFqkbU+b+z2Eg3LcBSBoohE
-         Veuqj6HSG0uF++wH7MOMIS3w0/QJbhO2oj3vLLnvUjggKfwnjxXLmRUfkNyOHVqWHx
-         xn49gbm2PXzNtGXH37U0RPIRH5b6rPYAhi4GDcNY=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 352FZwki018088
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 2 Jun 2023 10:35:58 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 2
- Jun 2023 10:35:58 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 2 Jun 2023 10:35:57 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 352FZveY065991;
-        Fri, 2 Jun 2023 10:35:57 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Nishanth Menon <nm@ti.com>,
-        Udit Kumar <u-kumar1@ti.com>, Nitin Yadav <n-yadav@ti.com>,
-        Neha Malcom Francis <n-francis@ti.com>,
-        Sinthu Raja <sinthu.raja@ti.com>
-Subject: [PATCH 6/6] arm64: dts: ti: k3-j721s2-som-p0: Enable wakeup_i2c0 and eeprom
-Date:   Fri, 2 Jun 2023 10:35:54 -0500
-Message-ID: <20230602153554.1571128-7-nm@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230602153554.1571128-1-nm@ti.com>
-References: <20230602153554.1571128-1-nm@ti.com>
+        Fri, 2 Jun 2023 11:37:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DDC10CB;
+        Fri,  2 Jun 2023 08:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685720214; x=1717256214;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0hPfuYfoMsRqAkRODqVWIZIMn7IYodqWK7v0iX9b+kc=;
+  b=KrQLEiWGLYMFsITN7R0zoEKT9A3oEjYke5yhLDBDk2WBuxvs7yOdWfAp
+   7Tniai8t1EsuEGSsO1IYYnDrIOB0g8rMOBGFBdMIXOG4J8X6iCnTybDt3
+   CnnzqDaJyxs4btG3XxPLxO7WViBRfVuhoxrr0vbQyBJk+SBrIGQ+LCNj6
+   yNF/Bb34rGqFE03K+mn4IglE7piPudse/+1D1eWWT47GyG2j+0CPydS/L
+   BIEmMDbcwIivzUcMhko24dxxff5KjV94dZE6RMRevtb+Q2yOX+sa/MDQE
+   L2GvWYbPgqbsUgnQH7iPJ4TlsxP7Sg5qvaVOkyYPkF8Ef7AFzUeLygqYQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="442274003"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="442274003"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:36:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="852202671"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="852202671"
+Received: from sovanbis-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.46.229])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:36:47 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id D02AE10E1DE; Fri,  2 Jun 2023 18:36:44 +0300 (+03)
+Date:   Fri, 2 Jun 2023 18:36:44 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCHv13 4/9] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20230602153644.cbdicj2cc6p6goh3@box.shutemov.name>
+References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
+ <20230601182543.19036-5-kirill.shutemov@linux.intel.com>
+ <20230602140641.GKZHn3caQpYveKxFgU@fat_crate.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602140641.GKZHn3caQpYveKxFgU@fat_crate.local>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable wakeup_i2c and use un-used pinmux. While at it, describe the
-board detection eeprom present on the board.
+On Fri, Jun 02, 2023 at 04:06:41PM +0200, Borislav Petkov wrote:
+> On Thu, Jun 01, 2023 at 09:25:38PM +0300, Kirill A. Shutemov wrote:
+> > diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+> > index 454757fbdfe5..749f0fe7e446 100644
+> > --- a/arch/x86/boot/compressed/kaslr.c
+> > +++ b/arch/x86/boot/compressed/kaslr.c
+> > @@ -672,6 +672,28 @@ static bool process_mem_region(struct mem_vector *region,
+> >  }
+> >  
+> >  #ifdef CONFIG_EFI
+> > +
+> > +/*
+> > + * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if supported) are
+> > + * guaranteed to be free.
+> > + *
+> > + * It is more conservative in picking free memory than the EFI spec allows:
+> 
+> "Pick free memory more conservatively than the EFI spec allows:
+> EFI_BOOT_SERVICES_ ..."
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-New patch
+Okay.
 
- arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi | 22 ++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> > + *
+> > + * According to the spec, EFI_BOOT_SERVICES_{CODE|DATA} are also free memory
+> > + * and thus available to place the kernel image into, but in practice there's
+> > + * firmware where using that memory leads to crashes.
+> 
+> ... because that firmware still scratches into that memory or why?
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-index 6930efff8a5a..ccd69640a5c0 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
-@@ -39,6 +39,15 @@ transceiver0: can-phy0 {
- 	};
- };
- 
-+&wkup_pmx2 {
-+	wkup_i2c0_pins_default: wkup-i2c0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x98, PIN_INPUT, 0) /* (H24) WKUP_I2C0_SCL */
-+			J721S2_WKUP_IOPAD(0x9c, PIN_INPUT, 0) /* (H27) WKUP_I2C0_SDA */
-+		>;
-+	};
-+};
-+
- &main_pmx0 {
- 	main_i2c0_pins_default: main-i2c0-pins-default {
- 		pinctrl-single,pins = <
-@@ -55,6 +64,19 @@ J721S2_IOPAD(0x024, PIN_OUTPUT, 0) /* (Y28) MCAN16_TX */
- 	};
- };
- 
-+&wkup_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wkup_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+
-+	eeprom@50 {
-+		/* CAV24C256WE-GT3 */
-+		compatible = "atmel,24c256";
-+		reg = <0x50>;
-+	};
-+};
-+
- &main_i2c0 {
- 	status = "okay";
- 	pinctrl-names = "default";
+I moved the existing comment. I don't have have any context beyond that.
+
+Relevant commit: 0982adc74673 ("x86/boot/KASLR: Work around firmware bugs
+by excluding EFI_BOOT_SERVICES_* and EFI_LOADER_* from KASLR's choice")
+
+Ard, do you have anything to add here?
+
+> > + */
+> > +static inline bool memory_type_is_free(efi_memory_desc_t *md)
+> > +{
+> > +	if (md->type == EFI_CONVENTIONAL_MEMORY)
+> > +		return true;
+> > +
+> > +	if (md->type == EFI_UNACCEPTED_MEMORY)
+> > +		return IS_ENABLED(CONFIG_UNACCEPTED_MEMORY);
+> 
+> Make it plan and simple:
+> 
+> 	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
+> 	    md->type == EFI_UNACCEPTED_MEMORY)
+> 		return true;
+
+I don't see why it is simpler. It looks unnecessary noisy to me.
+
+But okay.
+
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  /*
+> >   * Returns true if we processed the EFI memmap, which we prefer over the E820
+> >   * table if it is available.
+> > @@ -716,18 +738,7 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
+> >  	for (i = 0; i < nr_desc; i++) {
+> >  		md = efi_early_memdesc_ptr(pmap, e->efi_memdesc_size, i);
+> >  
+> > -		/*
+> > -		 * Here we are more conservative in picking free memory than
+> > -		 * the EFI spec allows:
+> > -		 *
+> > -		 * According to the spec, EFI_BOOT_SERVICES_{CODE|DATA} are also
+> > -		 * free memory and thus available to place the kernel image into,
+> > -		 * but in practice there's firmware where using that memory leads
+> > -		 * to crashes.
+> > -		 *
+> > -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
+> > -		 */
+> > -		if (md->type != EFI_CONVENTIONAL_MEMORY)
+> > +		if (!memory_type_is_free(md))
+> >  			continue;
+> >  
+> >  		if (efi_soft_reserve_enabled() &&
+> > diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+> > index 67594fcb11d9..4ecf26576a77 100644
+> > --- a/arch/x86/boot/compressed/mem.c
+> > +++ b/arch/x86/boot/compressed/mem.c
+> > @@ -1,9 +1,40 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  
+> >  #include "error.h"
+> > +#include "misc.h"
+> >  
+> >  void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+> >  {
+> >  	/* Platform-specific memory-acceptance call goes here */
+> >  	error("Cannot accept memory");
+> >  }
+> > +
+> > +void init_unaccepted_memory(void)
+> > +{
+> > +	guid_t guid =  LINUX_EFI_UNACCEPTED_MEM_TABLE_GUID;
+> 
+> An additional space after the "=".
+
+Okay.
+
+> > +	struct efi_unaccepted_memory *unaccepted_table;
+> > +	unsigned long cfg_table_pa;
+> > +	unsigned int cfg_table_len;
+> > +	enum efi_type et;
+> > +	int ret;
+> > +
+> > +	et = efi_get_type(boot_params);
+> > +	if (et == EFI_TYPE_NONE)
+> > +		return;
+> > +
+> > +	ret = efi_get_conf_table(boot_params, &cfg_table_pa, &cfg_table_len);
+> > +	if (ret)
+> > +		error("EFI config table not found.");
+> 
+> What's the point in erroring out here?
+
+Configuration table suppose to be present, even if unaccepted memory is
+not supported. Something is very wrong if it is missing.
+
+I will downgrade it warn().
+
+> > +	unaccepted_table = (void *)efi_find_vendor_table(boot_params,
+> > +							 cfg_table_pa,
+> > +							 cfg_table_len,
+> > +							 guid);
+> > +	if (!unaccepted_table)
+> > +		return;
+> > +
+> > +	if (unaccepted_table->version != 1)
+> > +		error("Unknown version of unaccepted memory table\n");
+> > +
+> > +	set_unaccepted_table(unaccepted_table);
+> 
+> Why is this a function at all and not a simple assignment?
+
+I wanted to keep unaccepted_table private to the libstub/unaccepted_memory.c.
+The setter provides a good spot for documentation to guide unaccepted
+memory enablers for other archs.
+
+Still want replace it with direct assignment?
+
+> 
+> > diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> > index 014ff222bf4b..36535a3753f5 100644
+> > --- a/arch/x86/boot/compressed/misc.c
+> > +++ b/arch/x86/boot/compressed/misc.c
+> > @@ -455,6 +455,13 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+> >  #endif
+> >  
+> >  	debug_putstr("\nDecompressing Linux... ");
+> > +
+> > +	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
+> > +		debug_putstr("Accepting memory... ");
+> 
+> This needs to happen...
+> 
+> > +		init_unaccepted_memory();
+> 
+> ... after the init, after the init has parsed the config table and has
+> found unaccepted memory.
+> 
+> If not, you don't need to issue anything as that would be wrong.
+
+Okay, I will make init_unaccepted_memory() return true if unaccepted
+memory is present and hide defined it always-false for !UNACCEPTED_MEMORY.
+So this hunk will look this way:
+
+	if (init_unaccepted_memory()) {
+		debug_putstr("Accepting memory... ");
+		accept_memory(__pa(output), __pa(output) + needed_size);
+	}
+
 -- 
-2.40.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
