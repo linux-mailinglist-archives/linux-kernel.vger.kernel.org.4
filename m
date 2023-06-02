@@ -2,190 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2860C720A64
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1441D720A66
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbjFBUiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S235937AbjFBUif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 16:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbjFBUiN (ORCPT
+        with ESMTP id S232032AbjFBUid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:38:13 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD172E42
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:38:11 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba83a9779f3so3578964276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 13:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685738291; x=1688330291;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1pGj2/POBDsIUQ4CnUPDeqZPOZuE4Ae3wEUEXuNv7U=;
-        b=DzFg14PSTYeDYU4F6M2g9LQRKsV9gHH6XLwHWybS8R895s0B8l+3EJBVcsJjijZp7+
-         co51fWzpePtbnqGumiwMU/JssUSD2E8rqA3nJ4FbGs+ao+xlAy92iykBzwEA9vdUpSnn
-         DgpMOqC8QWArpw6Ekdd/hNyIw1qFeEajzxtXcj9CUeX2c1flBw0Uv2FyPdWaRduCvZW7
-         sLIEaVAHbSSmqTNCcid975vW+tNmX/C+cuX00BR9fEKzH0fHBC01RrnP/+dLXjAUnJVt
-         vzvNeJWCBDVoNzyI2Iu8syBCIiDOlMdyIaKaOvhCUt9EiN9RhPEp3D0umdCHtscPwdbq
-         R5/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685738291; x=1688330291;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1pGj2/POBDsIUQ4CnUPDeqZPOZuE4Ae3wEUEXuNv7U=;
-        b=RG0YRBDSD92m9XMbS0Klh00gnYudAGVB2t7iHOJqxtRXypUtTHzXCM6cvq0mmeUdKI
-         UwWowoW8vNJNa4YQwzRPezqyZG87Y7o7rLdoD4gCRpd1JtsMAaDx7baG+xKYsjbFt54k
-         7+EP9qoWHYaQoufUpL+rXbauj2pLp6KT8SvABzyOk4oGeOQRSbJla5HUIFIcr4d+pjfX
-         K+thMuZqbKuioKLnEBeVk9zK7mTred0Gna99jSLBDBApGlp0tjjpTXq2+AFQr7g9wX6y
-         rVZjSV8H64h1BxQCG1fLyfhH6N9xEWU+w+R1GAVYUEO7cHQ5cpfrVXaoAj4eyMNght+h
-         RzzQ==
-X-Gm-Message-State: AC+VfDwUffP6uioh+mur0nwLxnM/mFDF7az/IRKIWf8IaHljZJ9gLsnH
-        DXmVkgFyGOwZlO3cPnx50joYgUgAteR5
-X-Google-Smtp-Source: ACHHUZ46G/eM2Nh8J29QCWhu+a85YACKHWOlw2lV8g79lNZuulXVwgrYSrT7rhGlA+MCFkqwCFyPEkmFB79n
-X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
- (user=arakesh job=sendgmr) by 2002:a25:404f:0:b0:ba8:373e:acf1 with SMTP id
- n76-20020a25404f000000b00ba8373eacf1mr2541157yba.12.1685738291115; Fri, 02
- Jun 2023 13:38:11 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 13:37:46 -0700
-In-Reply-To: <20230602151916.GH26944@pendragon.ideasonboard.com>
-Mime-Version: 1.0
-References: <20230602151916.GH26944@pendragon.ideasonboard.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602203746.288881-1-arakesh@google.com>
-Subject: [PATCH v2] usb: gadget: uvc: queue empty isoc requests if no video
- buffer is available
-From:   Avichal Rakesh <arakesh@google.com>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     Thinh.Nguyen@synopsys.com, arakesh@google.com,
-        dan.scally@ideasonboard.com, etalvala@google.com,
-        gregkh@linuxfoundation.org, jchowdhary@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 16:38:33 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6E7E43;
+        Fri,  2 Jun 2023 13:38:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L6SEXgzAduki+3jKqWuJNwFILCnx9GELyxmGJN8cZ2b8CmFLnFURI1csyV01KBt+cOSjOd84Sh89FcXw56Asi3KHJw/R7f159Yzm9DlXfg7MMS1l03yceUdexue0R361P/TT9BAmLSDPlz1ZfGhkNN2effW3jiRRgnwDsTwrh6JFG6acyliC0QHzlRVeC+6ZjyR/KFc/eglUU3Xbn5IIcAF3U8ZSa2/rSc3r3AxgmnmYtzWbgNSqPphLqQMaQmHsgX1fNexsd+sLZPMSgT3WKDRvfnxkFKA1rHwA4Y3zt0phB9vpq46oV3fjzhAK88LbQfnUc+AiK84TVJK2kT74vA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sfS+amfvbbtv/GkOixS8iB+N/oETZdF4OlJ7YIdYTAE=;
+ b=TJ9xdb37/UWw73iaWJYjkuNAdxVF+/VBHvDCrXIbnLXdj8cYE3Rhs852GlqqtgtW7wWjilbFDob3q9IryLNQkpJfEIZQVKfolwqgrGK9l4bXIYIJb3pwQGV0nhhUku8HmEnAgxxtBQVgfdsXzhYH9rwNblrVSFnd/vN2wBSSobEkxG8N5fiI31ZbOl8ImXMf9F/PvHFrIaumujETuXEnKnutKmlxgI3fYwf1RzPCa1dF8Y/Jd2WqPwmzjqFRJggZRJz/ggzRs/C5+ZWVpHExzoLt40LaNjAjiWrsxajX9/uVZ2K3GfWqatI5gT21OCzUP6eso+bRh6tgGcthJqadhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sfS+amfvbbtv/GkOixS8iB+N/oETZdF4OlJ7YIdYTAE=;
+ b=fBug8HOebQavJ1KePa3LO9EczVfLeAFr9WsuYdlWGEqq4dIjERshQ1Z/FSWo5hvPiWU+b1qptBCIWfDPfwHdU21AgrhYXyH9i4Ow4G4HkNFYuo68ksl47Pou0xqwZqHjdimoL7bh954Kj2LVz0QaO3z5hwvn2gqDLz4givEkZFKjnemoNo2sievl9Dxp6z3V0ltM6O0KW6Y5wxlB25jYzKm/cJSQrh85lMfOixlmSl8YUtw8woOq8KZEgdrxGb9ULPy6b9SUGxdXqxlDq/1sxVIHnjNQk+mvfwRD6BG3s2FDOrDYYm0dRafbw3k+JUh9txrTzM9thpjkMD32Orx02Q==
+Received: from BN9PR03CA0382.namprd03.prod.outlook.com (2603:10b6:408:f7::27)
+ by CH3PR12MB8755.namprd12.prod.outlook.com (2603:10b6:610:17e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26; Fri, 2 Jun
+ 2023 20:38:30 +0000
+Received: from BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::e4) by BN9PR03CA0382.outlook.office365.com
+ (2603:10b6:408:f7::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
+ Transport; Fri, 2 Jun 2023 20:38:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT068.mail.protection.outlook.com (10.13.177.69) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 20:38:30 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
+ 13:38:23 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
+ 13:38:22 -0700
+Message-ID: <6f845148-e180-822d-a54f-e2bb844d54f8@nvidia.com>
+Date:   Fri, 2 Jun 2023 13:38:21 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 05/12] selftests/mm: fix invocation of tests that are run
+ via shell scripts
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-6-jhubbard@nvidia.com>
+ <ead7d0db-6104-1d62-b3d0-f9ebb767af4d@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <ead7d0db-6104-1d62-b3d0-f9ebb767af4d@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT068:EE_|CH3PR12MB8755:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3b8d0f0-40f5-4dd3-80f2-08db63a9537b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I/9ffEllIPuZ1idk5ZqVS4IJKjaryHxWqu5MLTXATsg7NQHZ9+3U5XC6qc5+xe4IICewp1nFWm8HbRdWzdsRnxTidNZKQmg4UzE64Yn6rQGOy1rx6ciVjrYe2BMLQ6XN9SnInNfC6heiL6pbdeEEQesbTRuQuFIEunNENCfore8fXgKakzKLKRC2SpiAKIMomm1Nsvcr5n2NJu/in4upnwm3cIbr02IIJrXySBYbTdBWy6Rd4jWQ+TRtoaGcJT9nDmzRXqOcPvF+AtDZDAGHP9hfDJEhDk/dxL7KB1K3imY7LRe1O4M/x4Ab1LkSgRURNZPN7eUpmaRKSXuayfW6aGrQkTj+XSUf/9hAUfXWmQppVt5ArRKfU2T4o/9elrIPPPHc5R2Qo4dNLowc3Nl8tVEBY2rdx2luCKeYs5OYDHc0DBu4mGbqRYFAhf1dQd7EqjPpyzWH9k3THhSGmQiypP15jn2FTcpqFslpFKUdkdR3ySH/gHjryzc+3yJ7xbxMRoGF4AI0AtU/LkG83GfsD1LW0ksQBz9Dl5JImwD1ocZbkx1d07egdDAPXBxa6EwWM0RviZ1lb+ied6WObaCf79XIpV/T6lPtKMDqEG7ER+YGrjpJcCXq0eGgOvKdW7KJO2u/CAxVwvIJTK9XlL87aNjzcQp7M5tXX52CD/h+PKCuRWM3meHqDRMuTBLJxV7NeBymd2tc6nCanKOKdB/fkJjJrz8Ye/C86yANmmI7vPtmCzLjVtPmKvorNcKW3psiN5kr5wZ3vU6XF3fBe8cmTQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(136003)(451199021)(40470700004)(36840700001)(46966006)(478600001)(47076005)(40480700001)(2616005)(53546011)(36756003)(186003)(16526019)(26005)(83380400001)(426003)(336012)(36860700001)(40460700003)(316002)(8936002)(7636003)(4326008)(356005)(82740400003)(70206006)(70586007)(82310400005)(31696002)(86362001)(2906002)(5660300002)(8676002)(31686004)(16576012)(41300700001)(54906003)(110136005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 20:38:30.2407
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3b8d0f0-40f5-4dd3-80f2-08db63a9537b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8755
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ISOC transfers expect a certain cadence of requests being queued. Not
-keeping up with the expected rate of requests results in missed ISOC
-transfers (EXDEV). The application layer is not required to produce video
-frames to match this expectation, so uvc gadget driver must not rely
-on data from application layer to maintain the ISOC cadence.
+On 6/2/23 03:05, David Hildenbrand wrote:
+> On 02.06.23 03:33, John Hubbard wrote:
+>> We cannot depend upon git to reliably retain the executable bit on shell
+>> scripts, or so I was told several years ago while working on this same
+>> run_vmtests.sh script. And sure enough, things such as test_hmm.sh are
+>> lately failing to run, due to lacking execute permissions.
+>>
+>> A nice clean way to fix this would have been to use TEST_PROGS instead
+>> of TEST_FILES for the .sh scripts here. That tells the selftest
+>> framework to run these (and emit a warning if the files are not
+>> executable, but still run them anyway).
 
-Currently, uvc gadget driver waits for new video buffer to become available
-before queuing up usb requests. With this patch the gadget driver queues up
-0 length usb requests whenever there are no video buffers available. The
-USB controller's complete callback is used as the limiter for how quickly
-the 0 length packets will be queued. Video buffers are still queued as
-soon as they become available.
+Actually, for the record (and I'll update this in v2), the above is
+inaccurate, because run_vmtests.sh aspires to be the only TEST_PROGS
+item here. And I see that the framework does already work if-and-only-if
+invoked via Make, as in "make run_tests".
 
-Link: https://lore.kernel.org/CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com/
-Signed-off-by: Avichal Rakesh <arakesh@google.com>
----
-Changelog:
-v2:
-  - Updated commit message to make it clear that userspace application is not
-    required to match the ISOC rate.
-  - Styling and comment revision based on review
+However,
 
+a) Many people naturally expect to run test scripts without
+(unnecessarily!) involving Make, and
 
- drivers/usb/gadget/function/uvc_video.c | 50 +++++++++++++++++++------
- 1 file changed, 39 insertions(+), 11 deletions(-)
+b) Based on some experience in building and using various test
+frameworks over many years, I'd claim that it's better to use shell
+scripts to collect and manage tests and test scripts, rather than
+involving Make. Make is a limited, specialized language and is better at
+handling builds and dependencies.
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index dd1c6b2ca7c6..91af3b1ef0d4 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -382,9 +382,12 @@ static void uvcg_video_pump(struct work_struct *work)
- {
- 	struct uvc_video *video = container_of(work, struct uvc_video, pump);
- 	struct uvc_video_queue *queue = &video->queue;
-+	/* video->max_payload_size is only set when using bulk transfer */
-+	bool is_bulk = video->max_payload_size;
- 	struct usb_request *req = NULL;
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
-+	bool buf_done;
- 	int ret;
+So the "make run_tests" is a convenience, but it should not be the only
+way to launch a test run. So we still want to fix this up.
 
- 	while (video->ep->enabled) {
-@@ -408,20 +411,47 @@ static void uvcg_video_pump(struct work_struct *work)
- 		 */
- 		spin_lock_irqsave(&queue->irqlock, flags);
- 		buf = uvcg_queue_head(queue);
--		if (buf == NULL) {
-+
-+		if (buf != NULL) {
-+			video->encode(req, video, buf);
-+			buf_done = buf->state == UVC_BUF_STATE_DONE;
-+		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
-+			/*
-+			 * No video buffer available; the queue is still connected and
-+			 * we're transferring over ISOC. Queue a 0 length request to
-+			 * prevent missed ISOC transfers.
-+			 */
-+			req->length = 0;
-+			buf_done = false;
-+		} else {
-+			/*
-+			 * Either the queue has been disconnected or no video buffer
-+			 * available for bulk transfer. Either way, stop processing
-+			 * further.
-+			 */
- 			spin_unlock_irqrestore(&queue->irqlock, flags);
- 			break;
- 		}
+>>
+>> Unfortunately, run_vmtests.sh has its own run_test() routine, which does
+>> *not* do the right thing for shell scripts.
+>>
+>> Fix this by explicitly adding "bash" to each of the shell script
+>> invocations. Leave fixing the overall approach to another day.
+>>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>> ---
+>>   tools/testing/selftests/mm/run_vmtests.sh | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>> index 4893eb60d96d..8f81432e4bac 100644
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -242,18 +242,18 @@ if [ $VADDR64 -ne 0 ]; then
+>>       if [ "$ARCH" == "$ARCH_ARM64" ]; then
+>>           echo 6 > /proc/sys/vm/nr_hugepages
+>>       fi
+>> -    CATEGORY="hugevm" run_test ./va_high_addr_switch.sh
+>> +    CATEGORY="hugevm" run_test bash ./va_high_addr_switch.sh
+>>       if [ "$ARCH" == "$ARCH_ARM64" ]; then
+>>           echo $prev_nr_hugepages > /proc/sys/vm/nr_hugepages
+>>       fi
+>>   fi # VADDR64
+>>   # vmalloc stability smoke test
+>> -CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
+>> +CATEGORY="vmalloc" run_test bash ./test_vmalloc.sh smoke
+>>   CATEGORY="mremap" run_test ./mremap_dontunmap
+>> -CATEGORY="hmm" run_test ./test_hmm.sh smoke
+>> +CATEGORY="hmm" run_test bash ./test_hmm.sh smoke
+>>   # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+>>   CATEGORY="madv_populate" run_test ./madv_populate
+> 
+> Sounds hacky, but if it gets the job done
+> 
 
--		video->encode(req, video, buf);
--
- 		/*
--		 * With usb3 we have more requests. This will decrease the
--		 * interrupt load to a quarter but also catches the corner
--		 * cases, which needs to be handled.
-+		 * With USB3 handling more requests at a higher speed, we can't
-+		 * afford to generate an interrupt for every request. Decide to
-+		 * interrupt:
-+		 *
-+		 * - When no more requests are available in the free queue, as
-+		 *   this may be our last chance to refill the endpoint's
-+		 *   request queue.
-+		 *
-+		 * - When this is request is the last request for the video
-+		 *   buffer, as we want to start sending the next video buffer
-+		 *   ASAP in case it doesn't get started already in the next
-+		 *   iteration of this loop.
-+		 *
-+		 * - Four times over the length of the requests queue (as
-+		 *   indicated by video->uvc_num_requests), as a trade-off
-+		 *   between latency and interrupt load.
- 		 */
--		if (list_empty(&video->req_free) ||
--		    buf->state == UVC_BUF_STATE_DONE ||
-+		if (list_empty(&video->req_free) || buf_done ||
- 		    !(video->req_int_count %
- 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
- 			video->req_int_count = 0;
-@@ -441,8 +471,7 @@ static void uvcg_video_pump(struct work_struct *work)
+Yes. It's also hacky that we can't just invoke shell scripts like normal
+programs. This limitation hurts my sense of "things should be more
+perfect!". :)
 
- 		/* Endpoint now owns the request */
- 		req = NULL;
--		if (buf->state != UVC_BUF_STATE_DONE)
--			video->req_int_count++;
-+		video->req_int_count++;
- 	}
+> Acked-by: David Hildenbrand <david@redhat.com>
+> 
 
- 	if (!req)
-@@ -527,4 +556,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
- 	return 0;
- }
--
---
-2.41.0.rc0.172.g3f132b7071-goog
+Thanks for the ack.
+
+-- 
+John Hubbard
+NVIDIA
 
