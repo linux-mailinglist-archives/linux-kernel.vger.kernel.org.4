@@ -2,122 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B517207F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853907207FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbjFBQz3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 12:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S236560AbjFBQ4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjFBQz1 (ORCPT
+        with ESMTP id S235325AbjFBQ4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:55:27 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9E4196;
-        Fri,  2 Jun 2023 09:55:25 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-974604c1394so23398066b.0;
-        Fri, 02 Jun 2023 09:55:25 -0700 (PDT)
+        Fri, 2 Jun 2023 12:56:53 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8A418D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:56:50 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6af6db17a27so1313013a34.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google; t=1685725009; x=1688317009;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UpFkoBOgIhm6mVYnAm3/uE52vs/uGNgQbLUnzZ8e50A=;
+        b=OYTGcuM33CecRMp0bGXgKRvNrSjIqKgpvkYDOSRdh6fe8CHOCEdAr1Frby7/3YtOWq
+         seQc9WxsFfEXsBsVEPABs2F5x4iUvW4Fju58l4vzqWHstTxWJun+rg22pagiK7Z6HpEA
+         W/72rYdED9jIxY/+FA+YrIo2TEfPcD2bQNRT4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685724924; x=1688316924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685725009; x=1688317009;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pt9VNTeJlFVEV3sIod8cHGTAKd0dmJxzfE9EV8gLQWE=;
-        b=HodPOyJNhYxQ60vwtp4RyfBXr7UskTIgCAEk2wJ/1jYVuesor3MJal4KF6yB1W1FKZ
-         1XSWy5JpREK+undDIkqOfukU154VpavJIkbBV829y5FraqDksaIG/N0h2VaBvRPJkA/l
-         wd4Z0vPSEtP14aV3zkJK3IHFRHT/DGM09zo1v1JgH0aA9uuygUBJ34e+Oeap8yNX6DG8
-         X5/DemQxNHz2zm6bxH9tfTUTv0CR7Xm1Mxebeh89qQ0YJypkmkMroWBHIQ73hTSXtcCG
-         b8dy/eiAMn1TB3hQAFlGTCWHDAeivrJSJ/TOsgiHdSLjAfCHHAMQgXgbS9qww8Y4SGmL
-         Hf6w==
-X-Gm-Message-State: AC+VfDzuSNA53YZ6xGqDvdGgYHjY6wzWRCkyGiMGw9CGUD0FXAI/xnHx
-        UKY30P7Imf8ufjgIU6co7yHXbSD/CfxqDijaFInIxyqfTLE=
-X-Google-Smtp-Source: ACHHUZ6Py3U/a0yFJ9hJFd0xhfSWBcfOZ1zZOLFsSPZRu42PNsWRoF6JOHnKOtYWEcuxqvrGUZPUIF6mO/lz3yYt3mg=
-X-Received: by 2002:a17:906:145:b0:94a:5f0d:d9d6 with SMTP id
- 5-20020a170906014500b0094a5f0dd9d6mr10572995ejh.4.1685724924056; Fri, 02 Jun
- 2023 09:55:24 -0700 (PDT)
+        bh=UpFkoBOgIhm6mVYnAm3/uE52vs/uGNgQbLUnzZ8e50A=;
+        b=C8uO11PqLtIV2maEmJNfAlCvSDhM6Z5cM7gzO07fCpI0mSqJItqrXS6ax3RlkYEyXY
+         MSjwFHwJQRh6NfnOR5E+4Dnds971sicKUOPuNSSt4zHaMPPuT+RG0661Rh1As5uBZIm/
+         9WuU4E9pqmfoEGH7QEHUVtHPLTHGdAZviaEPIBxIjG49nGv7W0TN2tXYcNOAtfgaeIy+
+         2CQGk5eZSAZ+XwwlpZ0uZD9QWLuaCPXT/O6hfXIE8Rl6wk3pcsCkdC062LQXmbJ5HVWg
+         /0JuhpYUGTtiuDqATcrdm9NPO/6G2KaoVUwx/EXWbrnO9n9VGJydmDem7PQMgb6KsNPL
+         0EVQ==
+X-Gm-Message-State: AC+VfDxd5vNMtpfaxjTZ8BWC3FcpOklWeu6zUZqlVvjj2ySmMqoeK0vg
+        1oJ7ORbESdqHXV6aDgqvwbUIiQ==
+X-Google-Smtp-Source: ACHHUZ7/PTjo9k0bGsi3dIeEZREUXDAf8wSbxwJM45eAIKUPenOyP0DS66nNoBJMRzqoRnm6VX+zDg==
+X-Received: by 2002:a05:6830:1042:b0:6af:7493:79be with SMTP id b2-20020a056830104200b006af749379bemr1930925otp.10.1685725009629;
+        Fri, 02 Jun 2023 09:56:49 -0700 (PDT)
+Received: from fedora64.linuxtx.org ([99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id l2-20020a0568301d6200b006ab305429e7sm807579oti.0.2023.06.02.09.56.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 09:56:49 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Fri, 2 Jun 2023 11:56:47 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 00/45] 6.3.6-rc1 review
+Message-ID: <ZHofTwvKfnZmRhww@fedora64.linuxtx.org>
+References: <20230601131938.702671708@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230601213246.3271412-1-arnd@kernel.org> <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
- <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
-In-Reply-To: <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 2 Jun 2023 18:55:12 +0200
-Message-ID: <CAJZ5v0iP+cmcoigiGwv58Hf8_3iM-+_5KZbAqiZyjqZxfBQR6A@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Zhang Rui <rui.zhang@intel.com>, Arnd Bergmann <arnd@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601131938.702671708@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 11:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Jun 2, 2023, at 10:04, Zhang, Rui wrote:
-> > On Thu, 2023-06-01 at 23:32 +0200, Arnd Bergmann wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >>
-> >> When the intel_rapl driver is built-in, but iosf_mbi is a loadable
-> >> module,
-> >> the kernel fails to link:
-> >>
-> >> x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
-> >> intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to
-> >> `iosf_mbi_write'
-> >> x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined
-> >> reference to `iosf_mbi_read'
-> >>
-> >
-> > IMO, it is the intel_rapl_common.c that calls IOSF APIs without
-> > specifying the dependency. Thus it should be fixed by something like
-> > below,
-> >
-> > --- a/drivers/powercap/Kconfig
-> > +++ b/drivers/powercap/Kconfig
-> > @@ -18,10 +18,11 @@ if POWERCAP
-> >  # Client driver configurations go here.
-> >  config INTEL_RAPL_CORE
-> >       tristate
-> > +     select IOSF_MBI
-> >
-> >  config INTEL_RAPL
-> >       tristate "Intel RAPL Support via MSR Interface"
-> > -     depends on X86 && IOSF_MBI
-> > +     depends on X86
-> >       select INTEL_RAPL_CORE
-> >       help
-> >         This enables support for the Intel Running Average Power Limit
->
-> I think that has the logic slightly backwards from a usability point
-> of view: The way I read the arch/x86/Kconfig description, IOSF_MBI
-> is a feature of specific Intel hardware implementations, which
-> gets enabled when any of these SoC platforms are enabled in
-> the build, and the INTEL_RAPL driver specifically only works
-> on those, while the new INTEL_RAPL_TPMI driver works on other
-> hardware.
->
-> More generally speaking, I think it is a mistake for a device
-> driver in one subsystem to use 'select' to enforce a build
-> dependency on a driver in another subsystem when the other
-> symbol is user-visible.
+On Thu, Jun 01, 2023 at 02:20:56PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.6 release.
+> There are 45 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-IOSF_MBI is already selected from multiple places and while you can
-argue that they are all mistakes, this particular new one would not be
-worse than any of them.
+Tested rc1 against the Fedora build system (aarch64, ppc64le, s390x,
+x86_64), and boot tested x86_64. No regressions noted.
 
-IMO it would be better if IOSF_MBI were not user-visible (and
-interestingly enough, whoever selects it should also select PCI or
-depend on it - I'm not really sure if that dependency is taken care of
-in all cases).
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
