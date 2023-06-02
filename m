@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335327205A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1477205B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236229AbjFBPOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S236124AbjFBPPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbjFBPO1 (ORCPT
+        with ESMTP id S235446AbjFBPPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:14:27 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28929E6A;
-        Fri,  2 Jun 2023 08:14:04 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-33d31ab00bdso6054245ab.3;
-        Fri, 02 Jun 2023 08:14:04 -0700 (PDT)
+        Fri, 2 Jun 2023 11:15:16 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A16A136
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 08:15:15 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b038064d97so26855675ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 08:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1685718915; x=1688310915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GLlNdqI6axFbvYJKMCYGXuL8XXPH0s44RaNvUf/xb6U=;
+        b=A62jmKOB1yFlTiUosWU7VYThESPApQWicsGL82YBY5HyRrCmBHSGxhtTsUd7cmxvFP
+         FHVeE2Eg5YibxFL0i+3hqOEr0zDDsphcTMgN8Rn6pvDhWsUGMl5plNzEr9zsL6SpjRjJ
+         RcyWzBtM0z8ZSV2dTIZYNnKCJ4EzHcTC29MBA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685718843; x=1688310843;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lNz7EHfJCZ4aAXNJupCemelGLErGlUkCq/uI3p2KECg=;
-        b=mGN6DKD2642hDOuCB9yKNkoQk5RNghflHBRSJDvQzRhDkg9NxsE9W0cCK19ZY5UJ+e
-         6Tu7528QeY41jsNGUHO0ARre4Ll4bH26sMsV668R61aD/Q1CktPvvipFlBqwHVtM1EEk
-         VBS87jDbbjaMT5Bz+0z+1rpijHMOhG7LVcRI9eWFPQHhuQuyrSWr0aSYyu1352uFVR//
-         CVhOsVaWQFmWVcmipiNxfi2V7KeawiAne2Ep/lj/TfLSONZqHSoDEy98VuT0SA1WH949
-         Yj0iwHrehFYU1N+CswdnUkfyvEcpTg1sMmPKNcmBksoxd8BLJHdtYaSY2g6L31jONGnm
-         WnVw==
-X-Gm-Message-State: AC+VfDzBJ78m7SP0A7ZpD9eEsCHK2C6IAmCB6XV3fSHsVTVuScwae4Rv
-        I4NNZ0M8BbAwmpgzBGOgEFWykFJGew==
-X-Google-Smtp-Source: ACHHUZ5hifGlPbShyifnNwL6jsL1rlCdiGUoMjSlMjkQA5lNYQz6/XQU9zNiJLKcr2k7S4Myxlx1xQ==
-X-Received: by 2002:a92:d1c3:0:b0:33b:6f65:2dd0 with SMTP id u3-20020a92d1c3000000b0033b6f652dd0mr9427113ilg.29.1685718843212;
-        Fri, 02 Jun 2023 08:14:03 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l11-20020a92290b000000b003351835c53fsm357919ilg.19.2023.06.02.08.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 08:14:02 -0700 (PDT)
-Received: (nullmailer pid 1767457 invoked by uid 1000);
-        Fri, 02 Jun 2023 15:14:00 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1685718915; x=1688310915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GLlNdqI6axFbvYJKMCYGXuL8XXPH0s44RaNvUf/xb6U=;
+        b=HibOCW/Uo2enJnDN9M+710M9GZuOIL/l2OVnUdge9M/3stOe7Zl5H36dhsJey8VzgU
+         U/w/rSs6t83m4ONtaWIeMsoE8IKCDSRpFuXFc39VTK9WDkcwPaozKEW794W9uHLN/SFK
+         T4GI6JKnnkcsMJE9GVZ3qE9zK86jViNWEm5pVnGOmdnhu/zeGLFHe6JWcYZYgrOHn8MJ
+         9990GadeumsqkU3CJlvPTDkPXZvL0KZta8KQeaRpMncBg3vzDXxLZU+fqoHA1q5QsqnH
+         IyOzF5wFQ/iCwtNU/cZ34lWkO8CdHRVyGBG5rEh64REkD3M3enj/K6DmZqT7YGT1EhG0
+         53yQ==
+X-Gm-Message-State: AC+VfDzIi7MpnuBEzXwCKoj0SIcitBQ04Ec7tQy9D2PXX71xLcYWEcIt
+        cSOVEbeeTjy0YB9+KRRg7fr3QzaIFyiZRCljifjCcg==
+X-Google-Smtp-Source: ACHHUZ6qwVeiaUsGgqIiu+lEAgHS5+tjGdgegjL/iZBujmGeXFWFIdEf/ajIH1GWOoFyADttfsNBiOOHfP+VvXz7XZY=
+X-Received: by 2002:a17:903:2449:b0:1ad:ea13:1914 with SMTP id
+ l9-20020a170903244900b001adea131914mr61219pls.30.1685718914621; Fri, 02 Jun
+ 2023 08:15:14 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Cc:     dmitry.torokhov@gmail.com, jikos@kernel.org, conor+dt@kernel.org,
-        linux-input@vger.kernel.org, benjamin.tissoires@redhat.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        hsinyi@google.com, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, dianders@chromium.org
-In-Reply-To: <20230602140948.2138668-2-yangcong5@huaqin.corp-partner.google.com>
-References: <20230602140948.2138668-1-yangcong5@huaqin.corp-partner.google.com>
- <20230602140948.2138668-2-yangcong5@huaqin.corp-partner.google.com>
-Message-Id: <168571884052.1767438.8020984972654545636.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: input: touchscreen: Add ilitek 9882T
- touchscreen chip
-Date:   Fri, 02 Jun 2023 09:14:00 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
+ <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
+ <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
+ <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
+ <CAHC9VhReahw8G4Vc0eMdhQMLhGYE53=X48akC13rN4EPkiF3tQ@mail.gmail.com>
+ <CALrw=nFdnSOyfd9X9qzpbTT8R_-m3uBM==FFkNSQ2XZsxUz0Fg@mail.gmail.com> <CAHC9VhR4mnoj=uEEO8ceFvtHAy=ziUROnVHgoNAnH1Gr2+tH5g@mail.gmail.com>
+In-Reply-To: <CAHC9VhR4mnoj=uEEO8ceFvtHAy=ziUROnVHgoNAnH1Gr2+tH5g@mail.gmail.com>
+From:   Ignat Korchagin <ignat@cloudflare.com>
+Date:   Fri, 2 Jun 2023 16:15:03 +0100
+Message-ID: <CALrw=nHJWv+igGK3R23DQXB3UE_b14ES=sFAQqL0GG9Tw=hrMw@mail.gmail.com>
+Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Ivan Babrou <ivan@cloudflare.com>, audit@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
+        Eric Paris <eparis@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 2, 2023 at 3:56=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
+te:
+>
+> On Fri, Jun 2, 2023 at 7:08=E2=80=AFAM Ignat Korchagin <ignat@cloudflare.=
+com> wrote:
+> > On Thu, May 25, 2023 at 3:15=E2=80=AFAM Paul Moore <paul@paul-moore.com=
+> wrote:
+> > > On Wed, May 24, 2023 at 2:05=E2=80=AFPM Ivan Babrou <ivan@cloudflare.=
+com> wrote:
+> > > > On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore=
+.com> wrote:
+> > > > > > Could you elaborate on what exactly you would like to see added=
+? It's
+> > > > > > not clear to me what is missing.
+> > > > >
+> > > > > I should have been more clear, let me try again ...
+> > > > >
+> > > > > From my perspective, this patch adds code and complexity to deal =
+with
+> > > > > the performance impact of auditing.  In some cases that is the ri=
+ght
+> > > > > thing to do, but I would much rather see a more in-depth analysis=
+ of
+> > > > > where the audit hot spots are in this benchmark, and some thought=
+s on
+> > > > > how we might improve that.  In other words, don't just add additi=
+onal
+> > > > > processing to bypass (slower, more involved) processing; look at =
+the
+> > > > > processing that is currently being done and see if you can find a=
+ way
+> > > > > to make it faster.  It will likely take longer, but the results w=
+ill
+> > > > > be much more useful.
+> > > >
+> > > > The fastest way to do something is to not do it to begin with.
+> > >
+> > > While you are not wrong, I believe you and I are focusing on differen=
+t
+> > > things.  From my perspective, you appear primarily concerned with
+> > > improving performance by reducing the overhead of auditing.  I too am
+> > > interested in reducing the audit overhead, but I also place a very
+> > > high value on maintainable code, perhaps more than performance simply
+> > > because the current audit code quality is so very poor.
+> > > Unfortunately, the patch you posted appears to me as yet another
+> > > bolt-on performance tweak that doesn't make an attempt at analyzing
+> > > the current hot spots of syscall auditing, and ideally offering
+> > > solutions.  Perhaps ultimately this approach is the only sane thing
+> > > that can be done, but I'd like to see some analysis first of the
+> > > syscall auditing path.
+> >
+> > Ivan is out of office, but I would like to keep the discussion going.
+> > We do understand your position and we're actually doing a project
+> > right now to investigate audit performance better ...
+>
+> That's great, thank you!
+>
+> > But the way I see it - the audit subsystem performance and the way how
+> > that subsystem plugs into the rest of the kernel code are two somewhat
+> > independent things with the patch proposed here addressing the latter
+> > (with full understanding that the former might be improved as well) ...
+>
+> You've done a good job explaining the reasoning and motivations behind
+> the patch submitted, that is good, but I'm not seeing any recognition
+> or understanding about the perspective I shared with you earlier.  The
+> performance of audit in general does need to be improved, I don't
+> think anyone disagrees with that, but my argument is that we need to
+> focus on changes which not only reduce the processing overhead, but
+> *also* reduce the complexity of the code as well.
 
-On Fri, 02 Jun 2023 22:09:47 +0800, Cong Yang wrote:
-> Add an ilitek touch screen chip ili9882t.
-> 
-> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-> ---
->  .../bindings/input/elan,ekth6915.yaml         | 36 ++++++++++++++-----
->  1 file changed, 27 insertions(+), 9 deletions(-)
-> 
+Ah, sorry. You're right - I paid too much attention to performance and
+didn't quite read your concern about code complexity. But still, I
+think that code complexity improvements fall onto the implementation
+of the audit subsystem itself vs what we try to accomplish here is to
+improve the way how that subsystem plugs into the rest of the kernel.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/input/elan,ekth6915.yaml:20:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/input/elan,ekth6915.yaml: properties:required: ['compatible', 'reg', 'interrupts', 'vcc33-supply'] is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/input/elan,ekth6915.yaml: properties: 'required' should not be valid under {'$ref': '#/definitions/json-schema-prop-names'}
-	hint: A json-schema keyword was found instead of a DT property name.
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/input/elan,ekth6915.yaml: ignoring, error in schema: properties: required
-Documentation/devicetree/bindings/input/elan,ekth6915.example.dtb: /example-0/i2c/touchscreen@10: failed to match any schema with compatible: ['elan,ekth6915']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230602140948.2138668-2-yangcong5@huaqin.corp-partner.google.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Ignat
