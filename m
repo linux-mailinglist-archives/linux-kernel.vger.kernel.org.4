@@ -2,124 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E8671F90B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96CC71F90E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbjFBDyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 23:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S231963AbjFBD7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 23:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjFBDyr (ORCPT
+        with ESMTP id S229524AbjFBD7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 23:54:47 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA8618C;
-        Thu,  1 Jun 2023 20:54:46 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2566f66190dso1345264a91.1;
-        Thu, 01 Jun 2023 20:54:46 -0700 (PDT)
+        Thu, 1 Jun 2023 23:59:15 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BF8194
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:59:13 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f6affdb6ddso16339001cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685678085; x=1688270085;
+        d=gmail.com; s=20221208; t=1685678352; x=1688270352;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AFYRa2oit8Kb04mbuiimeCpNVm02GagiFFjOTHBNe/E=;
-        b=DyjwxaLk7AueeisR6yISmADRKlAHBLdbHCQxJgnZxXyaRSC4Ln0ymZBuV5GNb8izsY
-         BGgRFHURLha9A++oTaDl4vGKpLH3br3cColD7VPoRCL7FFmmQ9+thgITD2irfws1WyP7
-         8z7kq2jO+Q1lqfanDHsw8c6o38bMu2Gv7dWKuEnKtAWBAON6c0cqANMkIkWgoj/La9im
-         AgPIII4nTTAZofuQU0B5FcNGpzOg9Q3BETfrB6RZNzGYBOS25Ae8JUsQNwp7oKsq6qqH
-         JIp6LFPKgHvj8pR5T2aUYszEbnwhSQQgZ9lqiRwAZqD5xjPaXoxNmbB5bQ3tj+LtzNsN
-         BxbA==
+        bh=I6z0pOwW+tzc6u3dQO09lUEAzP/cM45yNrex7nu7vvs=;
+        b=BELBIGFRJ9f9hjm+T7CxnQxnjgbCYKIp+P5u8N616hIvSPC9IAfXUGQ9kMkCQH00mi
+         QX8nx71Zt+iFS7h0BFWanE6Nuplrf6q8AfldzNcYbEPIRGbadURu7Wh+96VQ6YmeRw/U
+         hN2Z3MZbVOeJiGQQJ45k+nwOau5x4Y0eB5GHyEuD7ddslmuy/p2GKvEYvubylnW4x97R
+         q1EVu3G12YRRsbV0/bsuXVq+6aL6UMfLgGLvdvnS8pC4L+cBDHAIDRr0I0j4wdCDFROc
+         887MvHaIsxAzfYLrQqSzBi5re3uaPnG3tflAl3oCBIPZ+vwGAKI5Fvgi34EHiqCcNjYH
+         xNoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685678085; x=1688270085;
+        d=1e100.net; s=20221208; t=1685678352; x=1688270352;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AFYRa2oit8Kb04mbuiimeCpNVm02GagiFFjOTHBNe/E=;
-        b=OCiP3ukFtzLKs0pjo7HTHAKgON3LEjxkoiqiNjQNcNKe02pMnUbVukc4Vc/7FA9TpD
-         awaylnuGoSwV+XnCKlHDMt2AOsLpnYWU3DIaYfcUKNjBj7YY7TtCKcs/S2PAqcEuZ6UI
-         cwtZgYfVyZNCPyz/nwcpu/Hw++BKOtMpEhrpqxOmk2K7/kEDlf4gD4NR6SFSAKpjfUDM
-         +jl/bQGJN5avwP1Iz2j8JjXwymFfbv8VG8R0+12IVZDsRTQ7+lbkohtkRY0bSbiVP4XY
-         r9FLGkavbnAiR0V1udlLrIGfsxS8ceI0DaQD95BChkDQkSTGfZCy/lh+WkK2Ephnw83h
-         AJAg==
-X-Gm-Message-State: AC+VfDzcVKLKo1Dh2hqL8Y8+PG5sLZtQHmX6x/xW1db3RfiHVB0X9UaQ
-        tZdFlBvXMdUhsTXZooVqNNS8pKMT+RyoUdp/IMU=
-X-Google-Smtp-Source: ACHHUZ7bFV1KjjBpBrQzVDLhlCusRk+BBNxv53GfvPOJzwSHNjAxytFtkFPQE+TCkYjIZVWXIk2piLSrw5WZpmltkF4=
-X-Received: by 2002:a17:90a:1d46:b0:256:bc96:45ad with SMTP id
- u6-20020a17090a1d4600b00256bc9645admr1073489pju.40.1685678085392; Thu, 01 Jun
- 2023 20:54:45 -0700 (PDT)
+        bh=I6z0pOwW+tzc6u3dQO09lUEAzP/cM45yNrex7nu7vvs=;
+        b=eI8hyaIC0tYXAzNtCL1Nws/CuZGtg7nVXjft+kUjGS99NqllDXXUGdheTfY69RjvIL
+         VvxL4xvFYBjtD1ft1yjIqh4HoI6VA7ayzwHRMM9rHnuTHlDaUrgTkE6aQ6HZo9J+TALG
+         acU0jpPYsBIfYWHw1yXMKXR8EUtMQJPH5efJNF6MquI4Sc1unrtYAXXsvyE8c1auCoby
+         VVlakQUkrX03suePtZJ17qyhJlg6gPt5r+aWpfyZn0dXQX0OgWUgt6o6FnrWlOUc9n2U
+         DGhVpXrUnFO+bx1Bs3jNBZ0AZ6fMgnwzRl9b9AdvqdNbvrrCd31QuBR2JtQ6q4vdKRKs
+         fltQ==
+X-Gm-Message-State: AC+VfDyQqsT9eEry/2htEuYQonN10G9W2SgGjONdMCiWJTas8T/XnnYf
+        rcr50f4OKgV3EnLjJqKbYHK5Ks2DuI+y3GTEdztwMbgQ
+X-Google-Smtp-Source: ACHHUZ6kDuCppx03TXN8lAXx23C3PZQDmt0gWzCClgDfSZEBsDU7b6eAcCl66q4t0bXJfYb90UxXyxizjKK3erSBdeE=
+X-Received: by 2002:a05:622a:1454:b0:3f6:bb5b:8111 with SMTP id
+ v20-20020a05622a145400b003f6bb5b8111mr15420315qtx.60.1685678352143; Thu, 01
+ Jun 2023 20:59:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230531093206.3893469-1-victor.liu@nxp.com> <20230531093206.3893469-2-victor.liu@nxp.com>
- <bd257ed0-71a7-0504-0bfe-14775ac93571@linaro.org>
-In-Reply-To: <bd257ed0-71a7-0504-0bfe-14775ac93571@linaro.org>
-From:   Ying Liu <gnuiyl@gmail.com>
-Date:   Fri, 2 Jun 2023 11:54:33 +0800
-Message-ID: <CAOcKUNWkubMK1MJS73tpbm4bafQv2GAMuq_JOTFbvB9EVDRvxg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: display: bridge: Add NXP i.MX93
- parallel display format configuration
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, neil.armstrong@linaro.org,
-        conor+dt@kernel.org, rfoss@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jonas@kwiboo.se,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        jernej.skrabec@gmail.com, robh+dt@kernel.org,
-        Laurent.pinchart@ideasonboard.com, andrzej.hajda@intel.com,
-        kernel@pengutronix.de, linux-imx@nxp.com
+References: <20221217001554.554913-1-lstoakes@gmail.com> <Y51L496TjNuiSxsG@casper.infradead.org>
+ <Y51/Mt70d++6Zzzq@lucifer> <20221219100734.jag6zejp4tug77yq@techsingularity.net>
+ <CAA5enKbsmy99-GCNuVcDRbjESZaLuE4=s8+6PzWP8J-wmOZwEg@mail.gmail.com>
+ <CAHbLzkoSC7Q+xAMaSoNihn2eww-+5RZADxe5h7_FidGHELE3BQ@mail.gmail.com> <20230601091002.zl3udcqxmb3tjtri@techsingularity.net>
+In-Reply-To: <20230601091002.zl3udcqxmb3tjtri@techsingularity.net>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 1 Jun 2023 20:59:00 -0700
+Message-ID: <CAHbLzkp3T==kHPq2f562YFdzDMXjZm3ts=V3iPHx6RSZs8ywtA@mail.gmail.com>
+Subject: Re: [PATCH] mm: remove unused alloc_pages_bulk_list()
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>, Marco Elver <elver@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        David Howells <dhowells@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 1:45=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Jun 1, 2023 at 2:10=E2=80=AFAM Mel Gorman <mgorman@techsingularity.=
+net> wrote:
 >
-> On 31/05/2023 11:32, Liu Ying wrote:
-> > NXP i.MX93 mediamix blk-ctrl contains one DISPLAY_MUX register which
-> > configures parallel display format by using the "PARALLEL_DISP_FORMAT"
-> > field. Add device tree bindings for the display format configuration.
+> On Wed, May 31, 2023 at 02:29:01PM -0700, Yang Shi wrote:
+> > On Wed, May 31, 2023 at 8:24???AM Lorenzo Stoakes <lstoakes@gmail.com> =
+wrote:
+> > >
+> > > On Mon, 19 Dec 2022 at 10:07, Mel Gorman <mgorman@techsingularity.net=
+> wrote:
+> > > >
+> > > > On Sat, Dec 17, 2022 at 08:34:58AM +0000, Lorenzo Stoakes wrote:
+> > > > I reckon we should give it another few months until May. There has =
+been
+> > > > one user recently that tried to use list but it turned out arrays w=
+ere
+> > > > more appropriate.
+> > > >
+> > >
+> > > It being May 31st, it feels appropriate to chase this up :)
+> > >
+> > > David's series at [0] did initially use this function, before
+> > > switching to the _array() variant. Other than that it seems that it
+> > > remains unused.
 > >
-> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > ---
-> > v1->v2:
-> > * No change.
->
-> How did you implement Rob's comment?
-
-Should have discussed more in v1 about Rob's comment, but
-let me explain why this dt-binding makes sense here:
-
-Both i.MX8mp SoC and i.MX93 SoC media block control devices
-contain a LVDS Display Bridge(LDB) child device. The i.MX93 block
-control device additionally contains this PDFC child device.
-
-LDB dt-binding [1] is written in a separate file and referenced in
-i.MX8mp block control dt-binding [2].  So, for the sake of consistency,
-it makes sense to keep this PDFC dt-binding and reference it
-together with the LDB one [1] in i.MX93 block control dt-binding [3]
-in future, doesn't it?
-
-It seems good to have a separate PDFC dt-binding in case it can/will
-be referenced by multiple parent device dt-bindings.
-
-[1] Documentation/devicetree/bindings/display/bridge/fsl,ldb.yaml
-[2] Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yam=
-l
-[3] Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-
-Regards,
-Liu Ying
-
->
+> > Thanks for following this up. My patchset (use bulk allocator for
+> > dm-crypt) also switched from list API to a new callback API suggested
+> > by Mel. But I haven't heard anything back from Mel about it yet. I
+> > forgot to follow up due to too many distractions.
 > >
-> >  .../display/bridge/nxp,imx93-pdfc.yaml        | 78 +++++++++++++++++++
-> >  1 file changed, 78 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/display/bridge/nx=
-p,imx93-pdfc.yaml
+>
+> It needs a follow-up. My various inboxes that I get cc'd on currently exc=
+eed
+> 1000 mails due to being offline a lot during the last few months so there
+> could be a lot hiding in there. Conceptually at least I don't recall havi=
+ng
+> any problem with the callback patches as long as the dm-crypt people are
+> happy. I vaguely recall a review disappeared off into the weeds talking
+> about maybe using physically contiguous pages (missing the point of using
+> the bulk allocator at all and ignoring fragmentation concerns affecting
+> allocation success rates) but I'm not certain.
+
+Yes, other than that someone also complained the changeset is too big,
+and suggested just try to allocate compound page and fallback to the
+mempool allocator if that fails instead of creating a dedicated
+mempool API.
+
+Do you prefer follow up in that v2 thread or I send a new v3
+(basically same with v2, just rebased on the latest mm-unstable)?
+
+>
+> --
+> Mel Gorman
+> SUSE Labs
