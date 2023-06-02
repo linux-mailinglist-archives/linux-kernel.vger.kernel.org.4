@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F391871FA1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E2371FA1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbjFBG1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S233943AbjFBGaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjFBG1M (ORCPT
+        with ESMTP id S233890AbjFBG3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:27:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1832FE52
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:27:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 055FA1042;
-        Thu,  1 Jun 2023 23:27:53 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.41.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 111DE3F67D;
-        Thu,  1 Jun 2023 23:27:03 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, broonie@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>, kvmarm@lists.linux.dev,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 14/14] arm64/sysreg: Convert TRBIDR_EL1 register to automatic generation
-Date:   Fri,  2 Jun 2023 11:55:52 +0530
-Message-Id: <20230602062552.565992-15-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230602062552.565992-1-anshuman.khandual@arm.com>
-References: <20230602062552.565992-1-anshuman.khandual@arm.com>
+        Fri, 2 Jun 2023 02:29:33 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C300E10C9;
+        Thu,  1 Jun 2023 23:28:59 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-62603efd2e3so14452386d6.1;
+        Thu, 01 Jun 2023 23:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685687338; x=1688279338;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JP4VtYfTpokhb/xoqxYleHsw/oeIF5+SRkQoPt6gSWw=;
+        b=seMnMYJUUohGcgZxh2SIuvUdPt8SMK5RA3gNuvrselKQlYVOhKv4pU3ycWHlsk+3/r
+         0ZQGY0GK/pqUZUNFChxO9qvZewXJvFFaWYEcbfYmM5//O9lIYWVYSv7oPslaT/ApWk1/
+         ElaTo1UTp/x4JQnxxmBaAsndLnakR4WrNIEWT1/PIo6odpT7pq3qG2L7cC8OurUR8f3u
+         Ff/9YMxyb0IEINcpvAIP++InRR60kAKP8ujup4pF5lztC97W4gb2R5rjapLGW4c5Uvuu
+         5nTQN3ERO5vdNm5oExz7OIcI+utztZYlznaBrrE+somdPw6ZRkQ045BAYcx+xY+pJDgs
+         ksTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685687338; x=1688279338;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JP4VtYfTpokhb/xoqxYleHsw/oeIF5+SRkQoPt6gSWw=;
+        b=dvPhQzqPhc/eQUGKbGVjAofkb3sRYdtwO9+gGHA++i1kcs25f5jXAKWNfzSh8AjIzs
+         v+h5EahmHfI2oLlzEfbs7/3oiwdWE6b49lMLZ0gDplqPiBLKJOoI+9T8UBI9gDobmsyq
+         AiPPACvS9gmHdouhGpKkWf8FgtrvKqkbwle0CHGQTPjl1SMLg7ujm0+tw9FSxCCBf87w
+         UCtPVX5Yl0V2y9moqeeToK3rfpTAcpjDU0eOah433A9EUImaTer/1nyZuC7xeDszlJOi
+         D1zesvy4AZDDLW6NQ51Iu8cVImz8wZqNUDlaQrQfqaW+vN0my1phSRBy40WUl73eg/mf
+         pG0A==
+X-Gm-Message-State: AC+VfDzTShSWnh9D+nuvF+pa+NhGL35VLJV5ky0rQrUSxY2YBAW2skrm
+        WJKoDGkBwVQE8jsTsFWpxeGsaOybtA6tO6Y/mhg=
+X-Google-Smtp-Source: ACHHUZ4pCynEppFlR22bUG60ASi3Bp3h0SiDbE6Ea2qZiFI0YyRf6NsmTNQsSt6SWcwvtzWgdrHbW2oONDgFlWN2zPg=
+X-Received: by 2002:a05:6214:411a:b0:621:1b73:52c9 with SMTP id
+ kc26-20020a056214411a00b006211b7352c9mr11323635qvb.10.1685687338157; Thu, 01
+ Jun 2023 23:28:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230601070058.2117-1-eggcar.luan@gmail.com> <CO1PR11MB5089465F5D37EBA62BB1A123D6499@CO1PR11MB5089.namprd11.prod.outlook.com>
+ <22e193f7-b55d-a31a-0179-4a53af692a89@intel.com>
+In-Reply-To: <22e193f7-b55d-a31a-0179-4a53af692a89@intel.com>
+From:   egg car <eggcar.luan@gmail.com>
+Date:   Fri, 2 Jun 2023 14:28:47 +0800
+Message-ID: <CACMC4jYdZjLKOLW0gFMOwwH-6bjGW1cBroXe6pioh+w4JQa9Bw@mail.gmail.com>
+Subject: Re: [PATCH v2] igb: Fix extts capture value format for 82580/i354/i350
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     "Keller, Jacob E" <jacob.e.keller@intel.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts TRBIDR_EL1 register to automatic generation without
-causing any functional change.
+Dear Tony and Jacob,
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: James Morse <james.morse@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/arm64/include/asm/sysreg.h | 6 ------
- arch/arm64/tools/sysreg         | 9 +++++++++
- 2 files changed, 9 insertions(+), 6 deletions(-)
+Thanks for the review, I'll optimize the patch soon.
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index b3a32a67088f..4f6e60f6c7cf 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -235,14 +235,8 @@
- 
- /*** End of Statistical Profiling Extension ***/
- 
--#define SYS_TRBIDR_EL1			sys_reg(3, 0, 9, 11, 7)
--
- #define TRBSR_EL1_BSC_MASK		GENMASK(5, 0)
- #define TRBSR_EL1_BSC_SHIFT		0
--#define TRBIDR_EL1_F			BIT(5)
--#define TRBIDR_EL1_P			BIT(4)
--#define TRBIDR_EL1_Align_MASK		GENMASK(3, 0)
--#define TRBIDR_EL1_Align_SHIFT		0
- 
- #define SYS_PMINTENSET_EL1		sys_reg(3, 0, 9, 14, 1)
- #define SYS_PMINTENCLR_EL1		sys_reg(3, 0, 9, 14, 2)
-diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-index 98dff7010b86..af823803eca2 100644
---- a/arch/arm64/tools/sysreg
-+++ b/arch/arm64/tools/sysreg
-@@ -2255,3 +2255,12 @@ Sysreg	TRBTRG_EL1	3	0	9	11	6
- Res0	63:32
- Field	31:0	TRG
- EndSysreg
-+
-+Sysreg	TRBIDR_EL1	3	0	9	11	7
-+Res0	63:12
-+Field	11:8	EA
-+Res0	7:6
-+Field	5	F
-+Field	4	P
-+Field	3:0	Align
-+EndSysreg
--- 
-2.25.1
-
+Regards,
+Yuezhen Luan
