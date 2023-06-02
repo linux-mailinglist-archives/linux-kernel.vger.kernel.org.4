@@ -2,161 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32BD720B22
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A34720B28
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbjFBVq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S236250AbjFBVrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236143AbjFBVqZ (ORCPT
+        with ESMTP id S236143AbjFBVrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:46:25 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2051.outbound.protection.outlook.com [40.107.223.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865611A5;
-        Fri,  2 Jun 2023 14:46:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NfwCmPCs6F7OWg2F4tB/gwXPvlvbolFmjtxHxUhkDbYM8hOoeuASsdltCb7DN8wblcPlKNT8gp/SwfXakDINU5inB//FnQoFUotMUk/sOQ6F3wKjimk+i5YdMroDrDfUK4pKAx7W5solNxIkxoTMPq4uZd4i4dMQXI+WBoVEZthjp58thbHbnPwBcdpZfQEQ9Rski2bTWEBY/fEbZsRcSW7gzyR1IIT35Y4+3HaUb3ew155aFs3rQFdTdqMWS9vq+8jmdMpy7imfZR4oru6/zjUkZkOFCTQpLc86xTq00r6ugMPl1QyVmQ0LxAzCwTZ1DHtdzXNHMM0AN5dm8C2wTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1vCQ4Y8ahXkZkLI7ZnWhw5jf5dbga5Zlmxa5WjSkbis=;
- b=m4+9usyC1VJfakblc99fy/PW3cb0oc2g00K2+8VuAdrk98/O1hsLAYby2qLVZw+ATcaPj3GSAhOMkUjEeXNkNTMgE2ZtDPXwzFxsXHUiYiTje3zA27Klzi3ocQLdD8tVKqXG1X6rrMpP5RuFtso3dIY9eGD68hHqgbnZDv42M9Fq2hDmZhXN+SRH5bXyCdeddsMExubJgXChAURcQ27ODkoGtbOqQVe6cp+iTIygYaoGbztSpXmvsuXkt7dJGBLnVszfrvOjNM4R5ZMpNLw/aAdbnnUvsWooHnFyf1nOOcoGL/zKf5oHu9CsyMQeABjttzI3RucYcIhu9enMQNpyHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1vCQ4Y8ahXkZkLI7ZnWhw5jf5dbga5Zlmxa5WjSkbis=;
- b=IauUmEl+mkRx2OhLvqSCzXQG2pa5ckmqXp2y0d8RLdjfT2rDtWli9lG3O9S5cYDYDtvvTBxbpm6+FOr1sO1pNeYExCs96KPcFVjs1RmLi1ABr8rrT4nIjrpO988VKlq3K1m4X1+vnnZ/V1b7bvglju4Sf6K+UG4uwbdvdMMpcSuQhW4NbbcaN+3xmIc1ZCj2accV8+JIYHjzWuc/Ek9pPwBHrFp4sTwVgf7/UdCLjDSdQbml2G69bEHClzwVSFWnLqykTYjkLUoRT3aUjYhcLoSsHWxsBmBl9KkY2yYOSrfW+lUNsRXhy972JyPI2YTOSGkZnlK5Wq1wTgCDDUPPtA==
-Received: from DS7PR03CA0245.namprd03.prod.outlook.com (2603:10b6:5:3b3::10)
- by IA0PR12MB7723.namprd12.prod.outlook.com (2603:10b6:208:431::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Fri, 2 Jun
- 2023 21:46:20 +0000
-Received: from DM6NAM11FT095.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b3:cafe::21) by DS7PR03CA0245.outlook.office365.com
- (2603:10b6:5:3b3::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
- Transport; Fri, 2 Jun 2023 21:46:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT095.mail.protection.outlook.com (10.13.172.180) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 21:46:19 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 14:46:11 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 14:46:10 -0700
-Message-ID: <c1655a88-f07a-0b33-ced4-e96951f6e6fb@nvidia.com>
-Date:   Fri, 2 Jun 2023 14:46:10 -0700
+        Fri, 2 Jun 2023 17:47:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08681A5;
+        Fri,  2 Jun 2023 14:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685742428; x=1717278428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y0Ioa4ug2F0tmnP21rKqZ+B3hDBJzy5cKKM2DR6nBWQ=;
+  b=mPAQb9vnOUl0u7uhwsLLkHBC3YtuVTrLZO1GejVnQtA8teRdQ5FGnRgw
+   ELlQS2Ejr5tG1qB4p3v8rpy/fDdJ5sqJMIpf5iyac8xy45lkAmZP/BhmR
+   tZntq19pu1A79FC2E5wmh/ISHjmbsIAkYjE6rfb6+wRsLnNfTG/CnaJK2
+   vbSlEaTSn0T8Sc7R+3hhjDt6eLIdROQSeybi97SBVabBzl5BRcQrOU43H
+   W7unLFM2EAIlaPHAeWYugCLXhIG0qC55vy03sr5apog7p7y/X/rIpJCV0
+   bYcUq2x8PBxegPIYuyi9BlrmHhdlIqjndzDVCgVFBopjJnrlRe2U6Zb2Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="345560148"
+X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
+   d="scan'208";a="345560148"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 14:47:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="954635144"
+X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
+   d="scan'208";a="954635144"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Jun 2023 14:47:03 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q5Cbv-000109-0f;
+        Fri, 02 Jun 2023 21:47:03 +0000
+Date:   Sat, 3 Jun 2023 05:46:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hugo@hugovil.com, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+Message-ID: <202306030535.SjzsDJSD-lkp@intel.com>
+References: <20230602152626.284324-6-hugo@hugovil.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 05/12] selftests/mm: fix invocation of tests that are run
- via shell scripts
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-6-jhubbard@nvidia.com> <ZHoL8vJPIUzP2RKN@x1n>
- <e31f1411-1986-c25d-af74-05ad73a53c8d@nvidia.com> <ZHpgybHDDAMFsADT@x1n>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <ZHpgybHDDAMFsADT@x1n>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT095:EE_|IA0PR12MB7723:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c19a4ef-4db0-467b-b57d-08db63b2cceb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qRRhLhkMMllEIFULEC3M0BqUy9RWEuoyV37YCHRBcohaazmiQYClP9DzUALiy/O3IiuonhmVgg3v4Wn2N1x7vDqXj2iF6A3KQNVqFNEnQAxkg0PfUAveO4JHiD0qupIzym5MkjaTW83HAjwkRbjxbXejqujRCLfvzO0j3AeSA3vPELcI16Nx2aabEGwvdyKcY7uJeVKHR1g9qq6xyYCPmO0T7VRUExphnb5eh2utJFLD4cT2jHg3IfvENZFraAuSuqYN3qKk789x9IA26eFvTxTrPMU+TPpxpVh6ohOeJR9FgUKzGHJYHmp5tV68/8HA5lKe1HhELVQxTcRI/bdKWfFTih2Bvd1gFVKhHXC9UvNiVlpCzl1I/SBEfeoEePfr46kaHM2mUQr8Y/5E3QupTGrGk9vewNDUhaDAxWZvtIq2YQ1reSZf7nbnjACBOlQyxhlPu7F/SYa/kNAnc712pRW1n3xjUlqJ+na5ejWQOeF53M0JZkjX2t3ZUusBbfTkLaaV90vltw0PdITcorb7H3wJr8jkYQeL9tfVbuw8wTsaItcSlaer8+O/Mwv0GIq/G0m2Jyr4sycrtdoAWexqgb8pztP+JXB7USfThRLks0Is5ybvthhOU4P4soo6E5HLJ6rK5ZK6/hluN7zKy4Z9lM0DsBSai6BNQyNZikFi5XrEAjUdjhNcYmGYQpokjn6qXmtbI75atIahVbLePdPfd3ceIWYH5XWvjaHKZMwM1IhZct1v904Rzx+lTHgFcEiJFkjEqWnv5pZi/ruQOT3uLtRmbtF2arQ52Feit6ktdRc=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(426003)(336012)(40460700003)(47076005)(2616005)(2906002)(36756003)(86362001)(82310400005)(31696002)(7636003)(356005)(82740400003)(36860700001)(40480700001)(316002)(41300700001)(5660300002)(8936002)(8676002)(478600001)(16576012)(54906003)(70206006)(70586007)(4326008)(6916009)(31686004)(26005)(16526019)(186003)(53546011)(66899021)(21314003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 21:46:19.4978
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c19a4ef-4db0-467b-b57d-08db63b2cceb
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT095.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7723
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602152626.284324-6-hugo@hugovil.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/23 14:36, Peter Xu wrote:
-...
->> But here, the run_vmtests.sh file requires bash already, as per the
->> first line:
->>
->>      #!/bin/bash
->>
->> ...which is ultimately why I decided to use bash, rather than sh here.
-> 
-> That one can be easily override with $XXX run_vmtests.sh, hard-coded "bash"
-> in Makefiles can't, afaiu.
+Hi Hugo,
 
-Yes, but then you'd have to deal with the rest of the kernel, and bash
-is just completely woven into the whole thing. Just in the selftests
-alone, there are dozens or hundreds of direct invocations.
+kernel test robot noticed the following build warnings:
 
-$ git grep -w bash | wc -l
-1146
+[auto build test WARNING on 9e87b63ed37e202c77aa17d4112da6ae0c7c097c]
 
-$ cd tools/testing/selftests/
+url:    https://github.com/intel-lab-lkp/linux/commits/Hugo-Villeneuve/serial-sc16is7xx-fix-broken-port-0-uart-init/20230602-232811
+base:   9e87b63ed37e202c77aa17d4112da6ae0c7c097c
+patch link:    https://lore.kernel.org/r/20230602152626.284324-6-hugo%40hugovil.com
+patch subject: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO configuration
+config: microblaze-randconfig-s052-20230531 (https://download.01.org/0day-ci/archive/20230603/202306030535.SjzsDJSD-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.3.0
+reproduce:
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/24626643fe711f447b04a2421ef68e8e8cce86d1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hugo-Villeneuve/serial-sc16is7xx-fix-broken-port-0-uart-init/20230602-232811
+        git checkout 24626643fe711f447b04a2421ef68e8e8cce86d1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/tty/serial/
 
-$ git grep -w bash | wc -l
-560
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306030535.SjzsDJSD-lkp@intel.com/
 
-$ git grep -w bash | grep -v '/bin' | wc -l
-113
+All warnings (new ones prefixed by >>):
 
-That ship really has sailed: it's not practical to expect that kind
-of portability here.
-
-...
-> Just to mention that I was not talking about $(shell ...), but the
-> environment var $(SHELL), or "env | grep SHELL".
-> 
-> Please feel free to have a look at tools/perf/arch/x86/Makefile.
-
-Yes, but that is a *Makefile*. (And only one out of 145, the others do
-not use this.) There is no use of SHELL outside of Makefiles, nor in
-fact anywhere in the kernel.
+   drivers/tty/serial/sc16is7xx.c: In function 'sc16is7xx_probe':
+>> drivers/tty/serial/sc16is7xx.c:1450:12: warning: variable 'mctrl_mask' set but not used [-Wunused-but-set-variable]
+    1450 |         u8 mctrl_mask;
+         |            ^~~~~~~~~~
 
 
-thanks,
+vim +/mctrl_mask +1450 drivers/tty/serial/sc16is7xx.c
+
+  1443	
+  1444	static int sc16is7xx_probe(struct device *dev,
+  1445				   const struct sc16is7xx_devtype *devtype,
+  1446				   struct regmap *regmap, int irq)
+  1447	{
+  1448		unsigned long freq = 0, *pfreq = dev_get_platdata(dev);
+  1449		unsigned int val;
+> 1450		u8 mctrl_mask;
+  1451		u32 uartclk = 0;
+  1452		int i, ret;
+  1453		struct sc16is7xx_port *s;
+  1454	
+  1455		if (IS_ERR(regmap))
+  1456			return PTR_ERR(regmap);
+  1457	
+  1458		/*
+  1459		 * This device does not have an identification register that would
+  1460		 * tell us if we are really connected to the correct device.
+  1461		 * The best we can do is to check if communication is at all possible.
+  1462		 */
+  1463		ret = regmap_read(regmap,
+  1464				  SC16IS7XX_LSR_REG << SC16IS7XX_REG_SHIFT, &val);
+  1465		if (ret < 0)
+  1466			return -EPROBE_DEFER;
+  1467	
+  1468		/* Alloc port structure */
+  1469		s = devm_kzalloc(dev, struct_size(s, p, devtype->nr_uart), GFP_KERNEL);
+  1470		if (!s) {
+  1471			dev_err(dev, "Error allocating port structure\n");
+  1472			return -ENOMEM;
+  1473		}
+  1474	
+  1475		/* Always ask for fixed clock rate from a property. */
+  1476		device_property_read_u32(dev, "clock-frequency", &uartclk);
+  1477	
+  1478		s->clk = devm_clk_get_optional(dev, NULL);
+  1479		if (IS_ERR(s->clk))
+  1480			return PTR_ERR(s->clk);
+  1481	
+  1482		ret = clk_prepare_enable(s->clk);
+  1483		if (ret)
+  1484			return ret;
+  1485	
+  1486		freq = clk_get_rate(s->clk);
+  1487		if (freq == 0) {
+  1488			if (uartclk)
+  1489				freq = uartclk;
+  1490			if (pfreq)
+  1491				freq = *pfreq;
+  1492			if (freq)
+  1493				dev_dbg(dev, "Clock frequency: %luHz\n", freq);
+  1494			else
+  1495				return -EINVAL;
+  1496		}
+  1497	
+  1498		s->regmap = regmap;
+  1499		s->devtype = devtype;
+  1500		dev_set_drvdata(dev, s);
+  1501		mutex_init(&s->efr_lock);
+  1502	
+  1503		kthread_init_worker(&s->kworker);
+  1504		s->kworker_task = kthread_run(kthread_worker_fn, &s->kworker,
+  1505					      "sc16is7xx");
+  1506		if (IS_ERR(s->kworker_task)) {
+  1507			ret = PTR_ERR(s->kworker_task);
+  1508			goto out_clk;
+  1509		}
+  1510		sched_set_fifo(s->kworker_task);
+  1511	
+  1512		/* reset device, purging any pending irq / data */
+  1513		regmap_write(s->regmap, SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
+  1514				SC16IS7XX_IOCONTROL_SRESET_BIT);
+  1515	
+  1516		for (i = 0; i < devtype->nr_uart; ++i) {
+  1517			s->p[i].line		= i;
+  1518			/* Initialize port data */
+  1519			s->p[i].port.dev	= dev;
+  1520			s->p[i].port.irq	= irq;
+  1521			s->p[i].port.type	= PORT_SC16IS7XX;
+  1522			s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
+  1523			s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
+  1524			s->p[i].port.iobase	= i;
+  1525			s->p[i].port.membase	= (void __iomem *)~0;
+  1526			s->p[i].port.iotype	= UPIO_PORT;
+  1527			s->p[i].port.uartclk	= freq;
+  1528			s->p[i].port.rs485_config = sc16is7xx_config_rs485;
+  1529			s->p[i].port.rs485_supported = sc16is7xx_rs485_supported;
+  1530			s->p[i].port.ops	= &sc16is7xx_ops;
+  1531			s->p[i].old_mctrl	= 0;
+  1532			s->p[i].port.line	= sc16is7xx_alloc_line();
+  1533	
+  1534			if (s->p[i].port.line >= SC16IS7XX_MAX_DEVS) {
+  1535				ret = -ENOMEM;
+  1536				goto out_ports;
+  1537			}
+  1538	
+  1539			/* Disable all interrupts */
+  1540			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_IER_REG, 0);
+  1541			/* Disable TX/RX */
+  1542			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFCR_REG,
+  1543					     SC16IS7XX_EFCR_RXDISABLE_BIT |
+  1544					     SC16IS7XX_EFCR_TXDISABLE_BIT);
+  1545	
+  1546			/* Initialize kthread work structs */
+  1547			kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc);
+  1548			kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_proc);
+  1549			kthread_init_delayed_work(&s->p[i].ms_work, sc16is7xx_ms_proc);
+  1550			/* Register port */
+  1551			uart_add_one_port(&sc16is7xx_uart, &s->p[i].port);
+  1552	
+  1553			/* Enable EFR */
+  1554			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_LCR_REG,
+  1555					     SC16IS7XX_LCR_CONF_MODE_B);
+  1556	
+  1557			regcache_cache_bypass(s->regmap, true);
+  1558	
+  1559			/* Enable write access to enhanced features */
+  1560			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFR_REG,
+  1561					     SC16IS7XX_EFR_ENABLE_BIT);
+  1562	
+  1563			regcache_cache_bypass(s->regmap, false);
+  1564	
+  1565			/* Restore access to general registers */
+  1566			sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_LCR_REG, 0x00);
+  1567	
+  1568			/* Go to suspend mode */
+  1569			sc16is7xx_power(&s->p[i].port, 0);
+  1570		}
+  1571	
+  1572		if (dev->of_node) {
+  1573			struct property *prop;
+  1574			const __be32 *p;
+  1575			u32 u;
+  1576	
+  1577			of_property_for_each_u32(dev->of_node, "irda-mode-ports",
+  1578						 prop, p, u)
+  1579				if (u < devtype->nr_uart)
+  1580					s->p[u].irda_mode = true;
+  1581		}
+  1582	
+  1583		mctrl_mask = sc16is7xx_setup_mctrl_ports(dev);
+  1584	
+
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
