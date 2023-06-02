@@ -2,186 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2C47208A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197A17208A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236372AbjFBRxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S236913AbjFBRy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbjFBRxh (ORCPT
+        with ESMTP id S230430AbjFBRy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:53:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435B3123;
-        Fri,  2 Jun 2023 10:53:35 -0700 (PDT)
+        Fri, 2 Jun 2023 13:54:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D2123;
+        Fri,  2 Jun 2023 10:54:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3AD9611D7;
-        Fri,  2 Jun 2023 17:53:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5FBC433D2;
-        Fri,  2 Jun 2023 17:53:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 173CD61120;
+        Fri,  2 Jun 2023 17:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AD8C433D2;
+        Fri,  2 Jun 2023 17:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685728414;
-        bh=b9kqJeL7cB8BeNqJEwvKkD/C4WuuGR4Ka56IkoyPdZI=;
+        s=k20201202; t=1685728495;
+        bh=/Fha51BP3sm6ndA/PVNCmNHln36UDvTlLxwLX1uUDlw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uZ6mOuJVbaEs4cQyr4LZnHZh/yUVRjDOlp1Ioa6RC71KmCQfxKDLraKbbwMGGZj0z
-         G5gtS5y/vq3pkIMIB++bB6fGpe1G5liOJzZj61Z7hSbOPcGZ3MCU+6uA9DlRWzR862
-         MR9umtnYTtIEJcF4A3oaYPPspc2d0ECbtXY46ih2us0zG/LzK32MYl32FjSnW45u8Z
-         MTLQi7K7uQNo9Jq/63FaI6K793namWs0XsMqjCj5dhupydAhKBQ9GCqGukNhOx0Nf5
-         zLWRP+cUJwaG/mUcsKmalR75rd9L+Yp4yijOhZnUwdK8k0ygBp2VCMkQFqdl9YIL+3
-         wrhZUnL4IiOFw==
-Date:   Fri, 2 Jun 2023 18:53:28 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     matthias.bgg@kernel.org
-Cc:     rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: thermal: mediatek: Move auxdac
- binding to yaml
-Message-ID: <20230602-pacify-dares-0989f2c759b2@spud>
-References: <20230601134425.29499-1-matthias.bgg@kernel.org>
+        b=Xq99a37N4aPyn3Ql9vrjO7E55WnEO+EeZXMiIjGLgPTMAuK0k0rxdT9L7veCohXXS
+         pWmluk0mkA6TCRFcB43Zt+7uaoD45BUj9kDdCr9CFuaIZPM4/0j78bh/V2GcvpAodp
+         PuCQV77RIdi5Nz+nuTgs3LVTOoVmyKGm3LPRY+VyKAe7/Gc253weOjM6ToMeKoZOWY
+         igtriA+1OiTU5A92uBJM7dAcIrAjS5GS5Lzkc652amXeJHcoTqQTA0nA/rBOahlU71
+         ppkGDswLLkIJIkTykQkaOhEN5AG88tXFyR3hcnrG2QKCx5fWSZK2ZygohuDYVW+UBw
+         jsS5HOjIrpQ7A==
+Date:   Fri, 2 Jun 2023 10:54:53 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH] objtool: Add __kunit_abort() to noreturns
+Message-ID: <20230602175453.swsn3ehyochtwkhy@treble>
+References: <20230602131229.3589f3bf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/PBB13aRPpKxOFCF"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230601134425.29499-1-matthias.bgg@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230602131229.3589f3bf@canb.auug.org.au>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fixes a bunch of warnings like:
 
---/PBB13aRPpKxOFCF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  drivers/input/tests/input_test.o: warning: objtool: input_test_init+0x1cb: stack state mismatch: cfa1=4+64 cfa2=4+56
+  lib/kunit/kunit-test.o: warning: objtool: kunit_log_newline_test+0xfb: return with modified stack frame
+  ...
 
-On Thu, Jun 01, 2023 at 03:44:24PM +0200, matthias.bgg@kernel.org wrote:
-> From: Matthias Brugger <matthias.bgg@gmail.com>
->=20
-> Convert the older binding to yaml syntax.
-> The thermal IP has several sensors, to reflect that
-> thermal-sensors-cells is set to '1'. Apart optional regulator
-> for bank supply wasn't part of the old binding description,
-> this patch adds them.
->=20
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
->=20
-> ---
->=20
-> Changes in v2:
-> - drop auxadc and apmixedsys nodes
-> - maxItems for clocks
-> - drop obvious description of reset
-> - mention optional regulators in commit message
-> - mention thermal-sensors-cells change in commit message
->=20
->  .../bindings/thermal/mediatek,thermal.yaml    | 152 ++++++++++++++++++
->  .../bindings/thermal/mediatek-thermal.txt     |  52 ------
->  2 files changed, 152 insertions(+), 52 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,th=
-ermal.yaml
->  delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-th=
-ermal.txt
->=20
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,thermal.y=
-aml b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
-> new file mode 100644
-> index 000000000000..bbc9c2935da0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
-> @@ -0,0 +1,152 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek,thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Thermal Sensor
-> +
-> +maintainers:
-> +  - Matthias Brugger <matthias.bgg@gmail.com>
-> +
-> +description: |
-                ^
-You don't need this btw, unless you have formatting to preserve.
+Fixes: 260755184cbd ("kunit: Move kunit_abort() call out of kunit_do_failed_assertion()")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ tools/objtool/noreturns.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +  The MediaTek thermal controller measures the on-SoC temperatures.
-> +  This device does not have its own ADC, instead it directly controls
-> +  the AUXADC via AHB bus accesses. For this reason this device needs
-> +  phandles to the AUXADC. Also it controls a mux in the apmixedsys
-> +  register space via AHB bus accesses, so a phandle to the APMIXEDSYS
-> +  is also needed.
+diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
+index cede6068ddf6..1514e84d5cc4 100644
+--- a/tools/objtool/noreturns.h
++++ b/tools/objtool/noreturns.h
+@@ -7,6 +7,7 @@
+  * Yes, this is unfortunate.  A better solution is in the works.
+  */
+ NORETURN(__invalid_creds)
++NORETURN(__kunit_abort)
+ NORETURN(__module_put_and_kthread_exit)
+ NORETURN(__reiserfs_panic)
+ NORETURN(__stack_chk_fail)
+-- 
+2.40.1
 
-> +  reset-names:
-> +    items:
-> +      - const: therm
-
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: calibration-data
-
-You don't need the "items: - const:", "const:" alone is sufficient.
-
-> +
-> +  mediatek,auxadc:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      A phandle to the AUXADC which the thermal controller uses...
-=2E..to read the on-SoC temperatures as it does not have its own ADC.
-
-Moving the information out of the description down here seems like it
-would be better than what the original text binding does. Sorry for not
-point that out last time around.
-
-> +
-> +  mediatek,apmixedsys:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      A phandle to the APMIXEDSYS controller...
-
-Ideally the information about the purpose of the mux would go here, but
-I don't know the purpose of it :)
-
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  bank0-supply:
-> +    description: Regulator supplying voltage to the first bank
-
-Since I am an eejit, first bank of what? Sensors?
-
-Otherwise, LGTM.
-
-Cheers,
-Conor.
-
-
---/PBB13aRPpKxOFCF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHosmAAKCRB4tDGHoIJi
-0i3eAQDTiUYAwX9JPVS3gO5Z7cj7YBFJT4ql+2b/vG0SvLN9PwEAmPXWtqSLISGI
-EH42+4j4s+1DWnLiQj/R9cdkpYNLeQE=
-=LSEq
------END PGP SIGNATURE-----
-
---/PBB13aRPpKxOFCF--
