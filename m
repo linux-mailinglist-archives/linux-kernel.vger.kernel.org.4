@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E2571FA12
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FC371FA1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbjFBG1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        id S233921AbjFBG1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbjFBG1D (ORCPT
+        with ESMTP id S233784AbjFBG1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:27:03 -0400
+        Fri, 2 Jun 2023 02:27:06 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C439819B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:26:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13382196
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:26:55 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 033221042;
-        Thu,  1 Jun 2023 23:27:36 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45EF212FC;
+        Thu,  1 Jun 2023 23:27:40 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.41.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 88B033F67D;
-        Thu,  1 Jun 2023 23:26:46 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1B08D3F67D;
+        Thu,  1 Jun 2023 23:26:50 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, broonie@kernel.org
 Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
@@ -30,9 +30,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         James Morse <james.morse@arm.com>, kvmarm@lists.linux.dev,
         coresight@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 10/14] arm64/sysreg: Convert TRBBASER_EL1 register to automatic generation
-Date:   Fri,  2 Jun 2023 11:55:48 +0530
-Message-Id: <20230602062552.565992-11-anshuman.khandual@arm.com>
+Subject: [PATCH V2 11/14] arm64/sysreg: Convert TRBSR_EL1 register to automatic generation
+Date:   Fri,  2 Jun 2023 11:55:49 +0530
+Message-Id: <20230602062552.565992-12-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230602062552.565992-1-anshuman.khandual@arm.com>
 References: <20230602062552.565992-1-anshuman.khandual@arm.com>
@@ -47,7 +47,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts TRBBASER_EL1 register to automatic generation without
+This converts TRBSR_EL1 register to automatic generation without
 causing any functional change.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
@@ -61,41 +61,62 @@ Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/arm64/include/asm/sysreg.h | 3 ---
- arch/arm64/tools/sysreg         | 5 +++++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ arch/arm64/include/asm/sysreg.h | 12 ------------
+ arch/arm64/tools/sysreg         | 16 ++++++++++++++++
+ 2 files changed, 16 insertions(+), 12 deletions(-)
 
 diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 13b144075381..27d89b7ea0fa 100644
+index 27d89b7ea0fa..768d12fc4834 100644
 --- a/arch/arm64/include/asm/sysreg.h
 +++ b/arch/arm64/include/asm/sysreg.h
-@@ -235,14 +235,11 @@
+@@ -235,24 +235,12 @@
  
  /*** End of Statistical Profiling Extension ***/
  
--#define SYS_TRBBASER_EL1		sys_reg(3, 0, 9, 11, 2)
- #define SYS_TRBSR_EL1			sys_reg(3, 0, 9, 11, 3)
+-#define SYS_TRBSR_EL1			sys_reg(3, 0, 9, 11, 3)
  #define SYS_TRBMAR_EL1			sys_reg(3, 0, 9, 11, 4)
  #define SYS_TRBTRG_EL1			sys_reg(3, 0, 9, 11, 6)
  #define SYS_TRBIDR_EL1			sys_reg(3, 0, 9, 11, 7)
  
--#define TRBBASER_EL1_BASE_MASK		GENMASK_ULL(63, 12)
--#define TRBBASER_EL1_BASE_SHIFT		12
- #define TRBSR_EL1_EC_MASK		GENMASK(31, 26)
- #define TRBSR_EL1_EC_SHIFT		26
- #define TRBSR_EL1_IRQ			BIT(22)
+-#define TRBSR_EL1_EC_MASK		GENMASK(31, 26)
+-#define TRBSR_EL1_EC_SHIFT		26
+-#define TRBSR_EL1_IRQ			BIT(22)
+-#define TRBSR_EL1_TRG			BIT(21)
+-#define TRBSR_EL1_WRAP			BIT(20)
+-#define TRBSR_EL1_EA			BIT(18)
+-#define TRBSR_EL1_S			BIT(17)
+-#define TRBSR_EL1_MSS_MASK		GENMASK(15, 0)
+-#define TRBSR_EL1_MSS_SHIFT		0
+ #define TRBSR_EL1_BSC_MASK		GENMASK(5, 0)
+ #define TRBSR_EL1_BSC_SHIFT		0
+-#define TRBSR_EL1_FSC_MASK		GENMASK(5, 0)
+-#define TRBSR_EL1_FSC_SHIFT		0
+ #define TRBMAR_EL1_SH_MASK		GENMASK(9, 8)
+ #define TRBMAR_EL1_SH_SHIFT		8
+ #define TRBMAR_EL1_Attr_MASK		GENMASK(7, 0)
 diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-index ad6da3ea1cd5..c58731f69467 100644
+index c58731f69467..6d12980f01c7 100644
 --- a/arch/arm64/tools/sysreg
 +++ b/arch/arm64/tools/sysreg
-@@ -2222,3 +2222,8 @@ EndSysreg
- Sysreg	TRBPTR_EL1	3	0	9	11	1
- Field	63:0	PTR
+@@ -2227,3 +2227,19 @@ Sysreg	TRBBASER_EL1	3	0	9	11	2
+ Field	63:12	BASE
+ Res0	11:0
  EndSysreg
 +
-+Sysreg	TRBBASER_EL1	3	0	9	11	2
-+Field	63:12	BASE
-+Res0	11:0
++Sysreg	TRBSR_EL1	3	0	9	11	3
++Res0	63:56
++Field	55:32	MSS2
++Field	31:26	EC
++Res0	25:24
++Field	23	DAT
++Field	22	IRQ
++Field	21	TRG
++Field	20	WRAP
++Res0	19
++Field	18	EA
++Field	17	S
++Res0	16
++Field	15:0	MSS
 +EndSysreg
 -- 
 2.25.1
