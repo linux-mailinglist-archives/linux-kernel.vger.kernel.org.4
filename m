@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8E771FB0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DFF71FB0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbjFBHfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 03:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S234076AbjFBHeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbjFBHfB (ORCPT
+        with ESMTP id S234295AbjFBHeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:35:01 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8909C0;
-        Fri,  2 Jun 2023 00:34:58 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3527XgK72027076, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3527XgK72027076
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Fri, 2 Jun 2023 15:33:42 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 2 Jun 2023 15:33:56 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 2 Jun 2023 15:33:56 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Fri, 2 Jun 2023 15:33:56 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0/3.0 PHY
-Thread-Topic: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0/3.0 PHY
-Thread-Index: AQHZjrBYcJlLsVj/HkuHUZRifSysgq90OEaAgAGJYxD//9d+gIABRKMg///BZQCAAIkxgA==
-Date:   Fri, 2 Jun 2023 07:33:55 +0000
-Message-ID: <9cf3f726120846fabfcca269155d948c@realtek.com>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
- <20230525022617.30537-3-stanley_chang@realtek.com>
- <0b2143ca-ead7-c8fa-2e80-a94222af51ca@linaro.org>
- <ee65a9d6d40d4099987db5ff1ad1753f@realtek.com>
- <c49f5619-286c-fbb7-0f18-5869527081c8@linaro.org>
- <f53b5c21247c49db8be7071de36c773b@realtek.com>
- <1231d116-ca4b-fb73-d000-d531297343e7@linaro.org>
-In-Reply-To: <1231d116-ca4b-fb73-d000-d531297343e7@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 2 Jun 2023 03:34:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF4D19B;
+        Fri,  2 Jun 2023 00:34:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 173C9616CD;
+        Fri,  2 Jun 2023 07:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88C1C433D2;
+        Fri,  2 Jun 2023 07:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685691246;
+        bh=9mKK9xIT/M/5/jc96vgkpb/vVwKfqaNG0PLckzjbiG4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F16FgOCcSPoEmt05v6oK+gE/WgeGCUBoueZaoq/VqkZdscoUAVuEVZnuUClN4ew/v
+         Q2nOUi8xp/Ql3jqboZ0xVrYwINNEws3Pk2n3YJhhDVl7QFiNuRrM/SkuwTJYkF0NIE
+         gUvNYg35gH5qJ25d1FRg/6okgyJ/+mR3W22YpU3G2Ci4JdMtUSLVi7XzkZRR9BBezg
+         Ynhtsi8C/thkWiT51VYf6Yo0JvsfRFCm8P8m9RMgvyQ5ZpKSzNvDzlk8po+fGpHnJr
+         zoGTeZ7YUh9G5zTEhXt1ecETeKaT8NzWQK5ur1R49ueGY3AdQXOtfDCkAYbHLJ/THD
+         IvK4wfJpkr90g==
+Date:   Fri, 2 Jun 2023 09:34:03 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Frank Oltmanns <frank@oltmanns.dev>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC PATCH 0/3] clk: sunxi-ng: Optimize rate selection for NKM
+ clocks
+Message-ID: <bhjq4yxo7fvddq3kvvvbgefhyaygb5bwkzhsjp3adc5kp7ohtx@iclghpep3zkw>
+References: <20230527132747.83196-1-frank@oltmanns.dev>
+ <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
+ <87mt1jbf18.fsf@oltmanns.dev>
+ <4831731.31r3eYUQgx@jernej-laptop>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mepy56bihzsswzod"
+Content-Disposition: inline
+In-Reply-To: <4831731.31r3eYUQgx@jernej-laptop>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4+IElmIHRoZXNlIGNhbiBiZSBpbiB0aGUgZHJpdmVyLCB3aHkg
-d291bGQgZXZlciB0aGV5IGJlIGluIERUUyBpbiB0aGUgZmlyc3QNCj4gcGxhY2U/DQo+ID4+DQo+
-ID4gT3VyIHBsYXRmb3JtcyBoYXZlIDMgeGhjaSBjb250cm9sbGVycyB3aGljaCBtYXAgdG8gMyBk
-aWZmZXJlbnQgcGh5IHBvcnRzLg0KPiANCj4gWW91IG1lYW4gb24gdGhlIHNhbWUgU29DPw0KDQpZ
-ZXMsIG9uZSBTb0MgaGFzIHRocmVlIHhoY2kgY29udHJvbGxlcnMuDQoNCj4gPiBBbmQgdGhlIHRo
-cmVlIHBoeSBwb3J0cyB1c2UgdGhlIHNhbWUgZHJpdmVyLCBidXQgdGhlIHBhcmFtZXRlcnMgYXJl
-DQo+IGRpZmZlcmVudC4NCj4gPiBTbyBJIHB1dCB0aGUgcGFyYW1ldGVyIHNldHRpbmdzIGluIERU
-Uywgd2UgaGF2ZSAzIHVzYi1waHkgbm9kZXMgcmVwcmVzZW50aW5nDQo+IDMgcGh5IHBvcnRzLg0K
-PiA+IEFsc28sIHNvbWUgcGFyYW1ldGVycyBoYXZlIHRvIGJlIGFkanVzdGVkIGZvciBkaWZmZXJl
-bnQgYm9hcmRzLg0KPiA+IFRoZXJlZm9yZSwgaXQgaXMgbW9yZSBhcHBsaWNhYmxlIGluIERUUyB0
-aGFuIGluIGRyaXZlci4NCj4gDQo+IFRoZW4gaXQgbG9va3MganVzdGlmaWVkIGluIERULCBzbyBw
-bGVhc2Ugd3JpdGUgcHJvcGVyIGRlc2NyaXB0aW9ucyBmb3IgcHJvcGVyDQo+IHByb3BlcnRpZXMu
-IFVuZGVyc2NvcmVzIGFyZSBub3QgYWxsb3dlZCBpbiBub2RlIG5hbWVzLiBObyBmYWtlIG5vZGVz
-Lg0KPiBQcm9wZXJ0aWVzIHNob3VsZCB1c3VhbGx5IGRlc2NyaWJlIHBoeXNpY2FsL2hhcmR3YXJl
-IGVmZmVjdCBub3QgdGhlIHJlZ2lzdGVyDQo+IHZhbHVlLg0KDQpJIHdpbGwgd3JpdGUgbW9yZSBk
-ZXRhaWwgZm9yIHByb3BlcnRpZXMuIA0KDQo+IHFjb20sdXNiLXNucHMtZmVtdG8tdjIueWFtbCBp
-cyBuaWNlIGV4YW1wbGUuIEZldyBNZWRpYXRlayBiaW5kaW5ncyBhbHNvDQo+IHdvdWxkIHdvcmsu
-DQo+ICcNCg0KVGhhbmtzLA0KU3RhbmxleQ0K
+
+--mepy56bihzsswzod
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 01, 2023 at 09:41:30PM +0200, Jernej =C5=A0krabec wrote:
+> Dne =C4=8Detrtek, 01. junij 2023 ob 07:16:45 CEST je Frank Oltmanns napis=
+al(a):
+> > Re: Why speed up factor calculation?
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > I'm not aware that the current implementation of calculating n, k, and m
+> > poses a bottleneck in any situation. Again, while going through the
+> > code, I wondered why not save a few CPU cycles by precalculating the
+> > meaningful combinations. In my opinion, it does not have any side
+> > effects, so we might as well do it. (There is of course the side effect
+> > of using a higher rate, but this is unrelated to precalculation as I
+> > could as well employ a rate comparison that only allows lower rates, or
+> > only optionally higher rates.)
+> >=20
+> > > Clocks in general are very regression-prone, so I'd rather be a bit
+> > > conservative there, and "if it ain't broke, don't fix it".
+> >=20
+> > Sure, I get that.
+> >=20
+> > As I stated in my cover letter:
+> > "The motivation for these proposed changes lies in the current behavior
+> > of rate selection for NKM clocks, which doesn't observe the
+> > CLK_SET_RATE_PARENT flag. I.e. it does not select a different rate for
+> > the parent clock to find the optimal rate."
+> >=20
+> > I thought that this required this optimization to be implemented, but by
+> > now, I'm no longer sure. I'll probably continue investigating different
+> > paths for CLK_SET_RATE_PARENT for NKM clocks and follow up with new
+> > findings.
+>=20
+> Let's leave out any optimizations that are not apparently needed. Most cl=
+ock
+> rates are set only once at boot and others, like video clocks, not that o=
+ften,
+> so a suboptimal code speed doesn't hurt currently.
+
+I'm not even sure we can make that assumption for video clocks. We might
+for a panel, but for a more "dynamic" output like HDMI all bets are off
+and depending on the monitor, the user settings and the userspace stack
+we can definitely expect the video clock to change quite frequently.
+
+Maxime
+
+--mepy56bihzsswzod
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZHmbawAKCRDj7w1vZxhR
+xShKAPwNIDbWuVsfmQMaSWHoQcEXxKCSyuOn0P8yvZSBP9ukvgD+KAz6Y83cu2l3
+Z/9DTMMbQ1AU1SWfM/GStx6AOU9woQA=
+=+40T
+-----END PGP SIGNATURE-----
+
+--mepy56bihzsswzod--
