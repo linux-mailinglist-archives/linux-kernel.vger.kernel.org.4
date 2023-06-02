@@ -2,141 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD51372022B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E71720235
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbjFBMft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S231876AbjFBMhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbjFBMfr (ORCPT
+        with ESMTP id S235552AbjFBMhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:35:47 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9DA1AD;
-        Fri,  2 Jun 2023 05:35:45 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id EC9D36022A;
-        Fri,  2 Jun 2023 14:35:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1685709341; bh=GiY3PCo8QniBGQj8UyN1CTuqS77BAaXgU5sGuqLnEdY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FLnNLs1dcZL5+6rWxY58jjfclTzOGkjXmGlj5p0yNu4qy3DGX6V4QugUz22jOAc2D
-         OZApZNCrULkT3JnEPAE8iSkgir7xUovMMqyrMCO/WfXWKAWSQVhV+rsI095EPX/Eod
-         rSQq0TLMVx32SF2Zrsa6Hj/x54QiOUZWdOjZmnmXiR+u8T7Q0WlEiVf3e3RpYYfSG6
-         6nRen4vk+2HREtDi8BqyjK/IfAX9AA8vFfhUBgIwbB1sW3Nc7CMX0hb5SmpHLteDt4
-         EFRE0881ZZ/EYppYJ/1oUXoD9rmPsdz5g3z9+oQouLTlkD5Uhq8XyqAkq3wY+AQLXI
-         1uAvpClXoyDdQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4Pd8hLSxYaBA; Fri,  2 Jun 2023 14:35:39 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id EB7C560228;
-        Fri,  2 Jun 2023 14:35:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1685709339; bh=GiY3PCo8QniBGQj8UyN1CTuqS77BAaXgU5sGuqLnEdY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RKvZ3VSztT9yChVj5zizTrLrpxx2oTMy1YPAZVIFuGCSG3uaICafD5G6MlwZXIQtC
-         k4x8u3lvcKo01ltXVvBbW3dRBSs0h0muB1OBOPul+EF1J6EufFac5iIqBQkzg0cvdo
-         P5ukL7/mv3ncuGHvN32+P7pIDdPxRsPkQGSbUSAEwTZBv2MP4Kv9VdoRptx2OvjU7V
-         VJvMjTtNRy4ogAnyypHkOkp5SegP8rtDOM8zKXxFaW8bFqA4/LJLxfB5uM7KeCCxM8
-         1hjR9Nwh/CTrRWDPwOcYPL8lHGCQmJjHUX0NqQEyY2Ys6SneMvc/kody3lrOSbtAs8
-         0Kzv+wUkGjVFA==
-Message-ID: <015f6430-f6f3-61e3-25b8-2d989f4f3496@alu.unizg.hr>
-Date:   Fri, 2 Jun 2023 14:35:20 +0200
+        Fri, 2 Jun 2023 08:37:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F91C13D;
+        Fri,  2 Jun 2023 05:37:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D25E65009;
+        Fri,  2 Jun 2023 12:37:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED292C433D2;
+        Fri,  2 Jun 2023 12:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685709452;
+        bh=4s8OXtoTbJZD/v1ujaQ7NAJywfgyjstSkB61QAt8a5U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OjNCw0sWr9gg7Sf0CWsGrIRa2SRJdYq+z4pNxBJnUqq/1PW40XJt0GwlK6EX3VDKs
+         r9S7ibfAoItZHchH337EBcrKbsMEbCNlIamufbI2oMjw/5v9sRujJyS2YOTE8PrgJC
+         8gINrO/Y6ykfuyE5sVVC9JekLLIc81YFu98Kg2Q5rFFDrO0bMRW4/3ukDlbW5HHGhD
+         oFJuZh+ZY36vlW0JKaBu5U9mKZDay3XM/In9hP4FLgd9csO12EnOIrhq71CAj7RHP3
+         d0PfXP+Fx17XaRPq4464opR61hB87JC6KZhKOYVPTstecb064BDqriv6SfeRJPzTqy
+         Y4LWOQ4TqP8Uw==
+Date:   Fri, 2 Jun 2023 13:37:26 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use
+ PROBE_FORCE_SYNCHRONOUS"
+Message-ID: <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk>
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org>
+ <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
+ <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+ <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
- ns-B IPv6 LLA" test
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian>
-Content-Language: en-US
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZHeN3bg28pGFFjJN@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PaqPH2sNW6kiPPjU"
+Content-Disposition: inline
+In-Reply-To: <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+X-Cookie: War is an equal opportunity destroyer.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 20:11, Guillaume Nault wrote:
-> On Wed, May 24, 2023 at 02:17:09PM +0200, Mirsad Todorovac wrote:
->> Hi,
-> 
-> Hi Mirsad,
 
-Hi Guillaume,
+--PaqPH2sNW6kiPPjU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> The very recent 6.4-rc3 kernel build with AlmaLinux 8.7 on LENOVO 10TX000VCR
->> desktop box fails one test:
->>
->> [root@host net]# ./fcnal-test.sh
->> [...]
->> TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
->> TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [FAIL]
->> TEST: ping in - ns-A IPv6                                                     [ OK ]
->> [...]
->> Tests passed: 887
->> Tests failed:   1
->> [root@host net]#
-> 
-> This test also fails on -net. The problem is specific to ping sockets
-> (same test passes with raw sockets). I believe this test has always
-> failed since fcnal-test.sh started using net.ipv4.ping_group_range
-> (commit e71b7f1f44d3 ("selftests: add ping test with ping_group_range
-> tuned")).
-> 
-> The executed command is:
-> 
-> ip netns exec ns-A ip vrf exec red /usr/bin/ping6 -c1 -w1 -I 2001:db8:3::1 fe80::a846:b5ff:fe4c:da4e%eth1
-> 
-> So ping6 is executed inside VRF 'red' and sets .sin6_scope_id to 'eth1'
-> (which is a slave device of VRF 'red'). Therefore, we have
-> sk->sk_bound_dev_if == 'red' and .sin6_scope_id == 'eth1'. This fails
-> because ping_v6_sendmsg() expects them to be equal:
-> 
-> static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-> {
-> ...
->                  if (__ipv6_addr_needs_scope_id(ipv6_addr_type(daddr)))
->                          oif = u->sin6_scope_id;
-> ...
->          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->              (addr_type & IPV6_ADDR_MAPPED) ||
->              (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if)) <-- oif='eth1', but ->sk_bound_dev_if='red'
->                  return -EINVAL;
-> ...
-> }
+On Fri, Jun 02, 2023 at 01:00:52PM +0530, Amit Pundir wrote:
+> On Thu, 1 Jun 2023 at 19:35, Doug Anderson <dianders@chromium.org> wrote:
+> > On Wed, May 31, 2023 at 11:11=E2=80=AFPM Amit Pundir <amit.pundir@linar=
+o.org> wrote:
+> > > On Wed, 17 May 2023 at 02:54, Doug Anderson <dianders@chromium.org> w=
+rote:
+> > > > On Tue, May 16, 2023 at 11:12=E2=80=AFAM Amit Pundir <amit.pundir@l=
+inaro.org> wrote:
+> > > > > On Mon, 15 May 2023 at 20:33, Doug Anderson <dianders@chromium.or=
+g> wrote:
+> > > > > > On Mon, May 15, 2023 at 7:42=E2=80=AFAM Amit Pundir <amit.pundi=
+r@linaro.org> wrote:
+> > > > > > > On Sun, 14 May 2023 at 18:11, Caleb Connolly <caleb.connolly@=
+linaro.org> wrote:
 
-Thank you for your thorough investigation. It helps a great deal to
-understand the issue.
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
-I am really not that into the network stack, though I can always smuggle
-the work on the network stack as a work on high-bandwidth multimedia
-and do it in day hours.
+> > If you reorder the nodes in the device tree, I think it'll change the
+> > probe order. Does that affect anything? I'm wondering if there's some
+> > sort of delayed reaction from a previous regulator.
 
-Probably I need to catch up with the network stack homework.
+> Hi, Bumping lvs1 and lvs2 regulators up to the top of the list in the
+> DTS https://bugs.linaro.org/show_bug.cgi?id=3D5975#c4 does seem to work.
+> I can't reproduce the crash in 125 reboots so far, while I'm still
+> testing with only qcom-rpmh-regulator kernel module. I'll do some more
+> testing with full system running and send this re-ordering fix I can't
+> reproduce the crash further.
 
-> I believe this condition should be relaxed to allow the case where
-> ->sk_bound_dev_if is oif's master device (and maybe there are other
-> VRF cases to also consider).
+So whatever the issue is here it's a timing/race condition - this seems
+like a workaround which works just now but it's not getting to whatever
+the actual issue is and that could come back.
 
-I have looked into the code, but currently my knowledge of the code is
-not sufficient for the intervention.
+--PaqPH2sNW6kiPPjU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thank you,
-Mirsad
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR54oUACgkQJNaLcl1U
+h9BRGQf+NorZBDSfdJgfTx9UsVuZ3dRz/Z4NE1+GHwiFHctMiMjKkdVWR+fPAJu5
+c3CAbS2UqbaLhZYurNvm9vh+nYXObI1FdbI8hjvh2im1kr3697WK7FiJ/E/I2D+/
+5MfZmD1/vl2tazXkv9q0/Bl6tQdsv64G8QBFVkl27JNFRGVl+JTwjsZYowDIygHu
+Jani44nVfJQkZQVRufbbpAYjghJepJPAvhRYf05Gxe4R+EZMTGgle03esHeC/8yP
+nrj0ASpBRE6XOvP077EydxPl/HU/GD32vBpwItEoJ7uqtfKKhDoYg6pIAVXC5B3a
+mDoTPoNymnCIubnX+/uu0azhyRC4rg==
+=cVsb
+-----END PGP SIGNATURE-----
+
+--PaqPH2sNW6kiPPjU--
