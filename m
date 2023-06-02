@@ -2,50 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA65A720102
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD7D720107
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbjFBL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S235659AbjFBL60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbjFBL5i (ORCPT
+        with ESMTP id S235042AbjFBL6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:57:38 -0400
-X-Greylist: delayed 28230 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Jun 2023 04:57:07 PDT
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65D9E51;
-        Fri,  2 Jun 2023 04:57:07 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1685706961t67k8i2u
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 02 Jun 2023 19:56:00 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: k0mQ4ihyJQP+tm91rx4PnDCmNQx5PlLwmtBQSrIufi4NAs5P4d+to5cY+J9hh
-        j6hHs7pOK7V5F+ibUiR11d0sToIwGWe4Ram8/xcpzKIE3vKMmmMNKmt8lz3Wn4olhM06oWt
-        H666d4tbc+l4sQjOCxcsEi5CPTLfiWEy3j8hSQ/HT8sy7+4y/BpjoXyFyUMUIv27G8oBf0X
-        JZ5ho8q4c59oWMl+xPMHaK1TQAAu09sFAG5T37oZv3VC+IXrokEIWxC+2TGn3CXq0W96ggQ
-        PNT9foAp++WO8LIezYegS8gXGU1TuVM0kVqt6u232qWUwFow2Hl6T5UbKHOnBM69z3hc88e
-        Nv8frKO+BPnA3F94Ey691NDgdk66n7I452RQ/xYaGM3PZhOntByV/5svIRIRg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7108637236776978947
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        w@1wt.eu
-Subject: Re: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Fri,  2 Jun 2023 19:56:00 +0800
-Message-Id: <20230602115600.80382-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
-References: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
+        Fri, 2 Jun 2023 07:58:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E21810D3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685706979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b99fVIhvBW0PdWaQkBupcAm5x8dtY13rsZ96awTJ34Q=;
+        b=MNRwJg7e5YM/2JYgqcoehhwC+/3kS4hiTA6ZFzCZ7HGdEkHuO1beWTTykVi58FL2SJshTt
+        GqlHkGIUrgxMM4l4711uUm08FAnA9CIQ4H1rpPEUOiTQQw/3oB+aeGZ/+MfwNqJs7+wuQ8
+        HvSO7HG+AJZp7EbUqBP7VbA0ssRwDso=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-308-WN5KKaKXOtOKKnPZi6NS-A-1; Fri, 02 Jun 2023 07:56:15 -0400
+X-MC-Unique: WN5KKaKXOtOKKnPZi6NS-A-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3078b9943d6so943950f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 04:56:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685706974; x=1688298974;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b99fVIhvBW0PdWaQkBupcAm5x8dtY13rsZ96awTJ34Q=;
+        b=BLxwy4Txyu6uQgF7gRFQOZrLDaX34K4S4jWF63Z+x7sFdnxE4xM5mc0xSlvSKNjGXS
+         a1RSvIME3AbschvINJ6S3w0aOslDpaFVZzddPebEu+O5ggbfnVMweSYHW+9jf6ISFSo0
+         wSieA7ZYSFDknL22Hh8R0rtmMR2iweqNupCwSJjs3onZ9WQ1PsoIcchFwJz1+wkWdDZY
+         kjrS8ti7rxzDiqwbtNFDitFXIVv3V11++SY0IUIEEfnudesdbiATWtF8g9QyNKNFtMTa
+         iy6oZxy/ioH8k/QIlDcWTgmUES3aLtzwJYHZF8UyIu8CMPsxltwRq5nu8FcUf0Jo1AWy
+         3Rqg==
+X-Gm-Message-State: AC+VfDyzIFY1rXzOc5+9cB2GUsdA0wuaHizVGugw2rmhKfMzA9wEzqUk
+        V+KL6VN9s7cto/+53m+h7W2HQG/iFoCtcknATUEmKYQi69NH7cPWX2BjNLgp/qGTsk9glIcEtG2
+        s6XkmRc/irhqiAx6fwWbSF4FyDOiNdFmk
+X-Received: by 2002:a5d:62d1:0:b0:306:30e8:eb34 with SMTP id o17-20020a5d62d1000000b0030630e8eb34mr4348159wrv.48.1685706974794;
+        Fri, 02 Jun 2023 04:56:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6wKKEPkK17gfY9xI4rAOQYLVr7BVRmUH2RF1nWLTvujaDGLxauyOp0F1Yqv3R2qrvO+ktXbQ==
+X-Received: by 2002:a5d:62d1:0:b0:306:30e8:eb34 with SMTP id o17-20020a5d62d1000000b0030630e8eb34mr4348149wrv.48.1685706974402;
+        Fri, 02 Jun 2023 04:56:14 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id d6-20020adff2c6000000b00307b5376b2csm1475261wrp.90.2023.06.02.04.56.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 04:56:14 -0700 (PDT)
+Message-ID: <d92273f6-28be-dc37-3ca5-a9579a75f8c4@redhat.com>
+Date:   Fri, 2 Jun 2023 13:56:13 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     osalvador@suse.de, rppt@kernel.org, mhocko@kernel.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230601162626.1030-2-haifeng.xu@shopee.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 2/2] mm/mm_init.c: remove reset_node_present_pages()
+In-Reply-To: <20230601162626.1030-2-haifeng.xu@shopee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,110 +84,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 2023-06-02 12:06:25+0800, Zhangjin Wu wrote:
-> > Willy, Arnd and Thomas
-> > 
-> > Based on your suggestions, in the comming v3, I plan to split the whole rv32
-> > support to something like this:
+On 01.06.23 18:26, Haifeng Xu wrote:
+> reset_node_present_pages() only get called in hotadd_init_pgdat(), move
+> the action that clear present pages to free_area_init_core_hotplug(), so
+> the helper can be removed.
 > 
-> Is each of these parts a new patchset?
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> ---
 
-Yeah, It is also my plan, just like the v2 series.
+[...]
 
-> I would suggest to do so.
-> 
-> > 1. Generic part1
-> > 
-> >    (The old feedbacks are applied with the new Suggested-by lines, welcome your
-> >     additional feedbacks if there are ;-))
-> > 
-> >     selftests/nolibc: syscall_args: use generic __NR_statx
-> >     tools/nolibc: add missing nanoseconds support for __NR_statx
-> >     selftests/nolibc: allow specify extra arguments for qemu
-> >     selftests/nolibc: fix up compile warning with glibc on x86_64
-> >     selftests/nolibc: not include limits.h for nolibc
-> >     selftests/nolibc: use INT_MAX instead of __INT_MAX__
-> >     tools/nolibc: arm: add missing my_syscall6
-> >     tools/nolibc: open: fix up compile warning for arm
-> >     selftests/nolibc: support two errnos with EXPECT_SYSER2()
-> >     selftests/nolibc: remove gettimeofday_bad1/2 completely
-> >     selftests/nolibc: add new gettimeofday test cases
-> 
-> These all look good and non-controversial.
-> 
-> > 2. Add Compile support for rv32
-> > 
-> >    (Convert all of the unsupported syscalls to a return of -ENOSYS, this
-> >     allows us to fix up the test failures one by one not that urgently later)
-> > 
-> >     tools/nolibc: fix up #error compile failures with -ENOSYS
-> >     tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-> 
-> These should be their own series in my opinion.
-> It will likely generate some discussion.
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 78e67041ae9f..e24ea1db9e26 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -1491,6 +1491,7 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
+>   {
+>   	int nid = pgdat->node_id;
+>   	enum zone_type z;
+> +	struct zone *zone;
 
-The 1st one is not rv32 specific, but the 2nd one requires rv32 compile support
-to be validated.
+You can declare that within the for loop.
 
-> 
-> >     selftests/nolibc: riscv: customize makefile for rv32
-> > 
-> >    (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
-> > 
-> > 3. Fix up the left test failures one by one
-> 
-> I'm not a fan of adding an "official" rv32 support with still failing
-> tests.
->
+>   	int cpu;
+>   
+>   	pgdat_init_internals(pgdat);
+> @@ -1507,6 +1508,8 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
+>   	pgdat->kswapd_order = 0;
+>   	pgdat->kswapd_highest_zoneidx = 0;
+>   	pgdat->node_start_pfn = 0;
+> +	pgdat->node_present_pages = 0;
+> +
+>   	for_each_online_cpu(cpu) {
+>   		struct per_cpu_nodestat *p;
+>   
+> @@ -1514,8 +1517,15 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
+>   		memset(p, 0, sizeof(*p));
+>   	}
+>   
+> -	for (z = 0; z < MAX_NR_ZONES; z++)
+> -		zone_init_internals(&pgdat->node_zones[z], z, nid, 0);
+> +	/* When memory is hot-added, all the memory is in offline state. So
 
-That is reasonable, but in another side, without the rv32 compile support, It
-may be a little hard to test the left patchsets (see below explain).
+/*
+  * When ...
 
-The other reasons for rv32 compile support is:
 
-* Some people may use nolibc without the left syscalls.
-* It is able to detect the new test failures.
+> +	 * clear all zones' present_pages and managed_pages because they will
+> +	 * be updated in online_pages() and offline_pages().
+> +	 */
+> +	for (z = 0; z < MAX_NR_ZONES; z++) {
+> +		zone = &pgdat->node_zones[z];
 
-But anyway, the compile support is not urgent.
+Too bad we don't have something like node_zone(pgdat, z)
 
-> >    (Plan to add everyone as a standalone patchset, which will easier the review
-> >     and merge progress)
-> > 
-> >    wait4 -> waitid
-> >    lseek -> llseek
-> >    gettimeofday -> clock_gettime/clock_gettime64
-> >    select -> pselect6/pselect6_time64
-> >    ppoll -> ppoll_time64
-> 
-> I guess these new codepaths will also be used on non-rv32 architectures
-> and will therefore validated without rv32.
->
+Might be a reasonable cleanup staring at "git grep "pgdat->node_zones"" 
+output ...
 
-Unfortunately, most of them are time32 syscalls related (except the
-llseek), rv32 is the first architecture who has no kernel side time32
-syscalls support, that's why I plan to add compile support at first ;-)
+> +		zone->present_pages = 0;
+> +		zone_init_internals(zone, z, nid, 0);
+> +	}
+>   }
+>   #endif
+>   
 
-If the new time64 syscalls will be added as the first 'branch', then, they will
-be validated on the other 32bit architecture, but some of them may be not added
-as the first 'branch', for example, the waitid() emulated wait4() is bigger
-than the original one.
 
-> So you could submit these before the final rv32 patch in a series.
->
+In general,
 
-Thanks for your suggestion.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-I'm working on cleaning up them independently and carefully, will send them out
-as standalone patchsets.
+-- 
+Thanks,
 
-Best regards,
-Zhangjin
- 
-> > 4. Clean up some old test cases one by one
-> > 
-> >    Like statx ...
-> > 
-> > Best regards,
-> > Zhangjin
-> > 
-> > [1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+David / dhildenb
+
