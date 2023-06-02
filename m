@@ -2,138 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2385C7209E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A2E71FAFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbjFBTdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S234190AbjFBHbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234300AbjFBTc7 (ORCPT
+        with ESMTP id S234092AbjFBHbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:32:59 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2073.outbound.protection.outlook.com [40.107.95.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52D1CE;
-        Fri,  2 Jun 2023 12:32:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eE0EzxJu2hlFbKBtenbzr7x5v4Pjesy88Ial9Ij/9fYOZ2EUE789hi+vUKdytoOjmifNyi6P9hDLYiyKNeLw4wpVuKdmBgJrFJRc5aWRN6tNGJvSL1lAld9tkgOjh/pOtoQ90WNNtu4pfKhDiacZCVXeAwo2WWpeEDDaVO3z/+JhrD2OUVi+0kKDnKjRhwIY1GWHJthJwjgXcHgtgU+qFGx+gKli+ivSKu66B+NWvS5JihichiK8LhU6mG53GyeL5EoZlKXHv+ah4OMdfqFaU9YeJ1xPcHd1M+DXwv5Fp4A2jvsTCs5qYnvopiwd3p7aC+3nefpSIXwZNVdT+f3Ufg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CrHATCoFhmN6yg/azbKKFkcA0h9V7q/tjG0BF8LbZ5Q=;
- b=U0zxVCWnj7yzgCtMTysxpHGglwZ88rddDmdrXGEkMiv8HBsd4i69pa/PoogiD2yHm+BEkHce+3KBc1ELMtR9vnWOuUylWkIGw1CLEsJEDlKL6wpP03jNwy0ccNHzjAiMjfNwNEUj2fZ1BkL8z5vWfKeDJF+JOPpt0tDQPEe4BUZO1sv3gVojG34mNeSq4u96Tpvu7NJeVBb0qgRsEtFVrFoFxP77UWjvND+bkdH7aRyLsmIJR7fQ8Bf/BI9RCHEcQ/t87cYkKaH+8mQRf0KvczCT8yfI2H7T6pamGu3gHn7ugT8ctnxJuk+G5abUeyUWc1kKmBZdV4qvqRIGZ6b8Gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CrHATCoFhmN6yg/azbKKFkcA0h9V7q/tjG0BF8LbZ5Q=;
- b=CTbhX+wnnwRat98xzO+JYGe+emPFKmu9L8Cr30mE/LU922cC+sGRxspDYBJ4r0VVotRgF2n6EyU7lJp68voQGuuYJG79cWMqGfMRBC4nz0r/KCy+ZU5+Nkbp9b5GR8+dxw7As8SLxhiLjDmBVx25Jt7+n6WG1FIE/ippwlFGoKE=
-Received: from MW4PR02CA0025.namprd02.prod.outlook.com (2603:10b6:303:16d::11)
- by DM4PR12MB6638.namprd12.prod.outlook.com (2603:10b6:8:b5::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.24; Fri, 2 Jun 2023 19:32:56 +0000
-Received: from CO1NAM11FT026.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:16d:cafe::e7) by MW4PR02CA0025.outlook.office365.com
- (2603:10b6:303:16d::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.25 via Frontend
- Transport; Fri, 2 Jun 2023 19:32:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT026.mail.protection.outlook.com (10.13.175.67) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 19:32:55 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Jun
- 2023 14:32:53 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Rafael Wysocki <rafael@kernel.org>, <hdegoede@redhat.com>,
-        <linus.walleij@linaro.org>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v4 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend related messages
-Date:   Fri, 2 Jun 2023 02:30:25 -0500
-Message-ID: <20230602073025.22884-4-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602073025.22884-1-mario.limonciello@amd.com>
-References: <20230602073025.22884-1-mario.limonciello@amd.com>
+        Fri, 2 Jun 2023 03:31:31 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C64B132
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:31:30 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-62613b2c8b7so18476606d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 00:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685691089; x=1688283089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=57kliT/w0kNdaW2+YyD6phw/D+om5H8pc/ZbSB/b7Kg=;
+        b=ySAJ/WQNYXuyXXo/1RDuL1+ijOtKpdFZEYOC20f4XlCXFuSxQL9MCglTeZl3vqi7/C
+         7DN48Hd/EygJgVPh4BOg/N/Vrdpkn+I2PZz/naWExQrD47Z+64348n+QH8h+jCf6FRIY
+         cx8dH8OVp5AJ++tkqUyxS1DwjEc03ZGV06jG2XbXWKQ+z6e3Tr8o1FV7XcD3Evtr5j+9
+         8ZSWidhQuYwNAHyAEwWcuLNJoRcYsvtxBCsV1Bxz08Ta1YUiSxWcGSafWi/b+5DJ6OoI
+         kFkE/nwtniQbH6v7Eul0pnbSHBb2W8K4DyCt8E7Fhxgv+4tPmONinn2uLAl6FRlJwzI9
+         6Vcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685691089; x=1688283089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=57kliT/w0kNdaW2+YyD6phw/D+om5H8pc/ZbSB/b7Kg=;
+        b=Ptq/aBraa0vbxjVI3L4VjIFwgcVlyIohKiiKbEBsfntneA7WAOKP4g3c6CEm1QEDyp
+         8zsBmv9evr9XcUxF0UUQGNbU5Y/Cjf83xHryG1Ds7Z2DRP4865pfizNMB987PNKlEn4I
+         kcBA9C3JWZKrwSsP0bBcUFlkdkLy9GwiaD6331++RpLFTTA/xcLU5eN92d9l4NYGpoAC
+         RkbNYGa894DmfKbYOsGpl2OnEMw0lkjtTPpX/GdCRfnRLQnTTprSQ0MSMLtB3FMtLYkB
+         vvl9qF5/R8QWDnY7V98/hiCk8NqN3yD/urXDsxEgPT2FZtqZ8LDbQi10TD15uROtftCR
+         U59w==
+X-Gm-Message-State: AC+VfDxWuyoja8lbpSnmhG8cwln9ytI9zFJjtWcMmNfGxB8hUjTjNw26
+        B5qrDY4pqgjuz9Dgno27pclAkqrq3t5FREt96ZpiAA==
+X-Google-Smtp-Source: ACHHUZ5zi8qblqX5GIT+hO66kxfsnox4scvDsds8+fQYUi77faxrMT5XXeU1Ca/ruc1pBT+bzpbgwDStrMS97vsvLnc=
+X-Received: by 2002:a05:6214:20ed:b0:621:253d:f340 with SMTP id
+ 13-20020a05621420ed00b00621253df340mr16819390qvk.25.1685691089059; Fri, 02
+ Jun 2023 00:31:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT026:EE_|DM4PR12MB6638:EE_
-X-MS-Office365-Filtering-Correlation-Id: c83ef4ba-0437-42c6-0383-08db63a02a20
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /Wjnx4LGAUzrWwUcH5Iwxayk0HtWp7sUL5ANjvlUW64CyV5H0mdBjdR0qhwoXFbg8XPrUPjWUgvFqMmlffKhmMZFU9Q18O88E9SkYlEtEnVoeRLVd416Wfcp3xIViki6jywQbpBEomJr7hFumNGxcVcExER0Jqd4hfcIm62ucONF6wG12nSm69X7P9Ieurm+bkD9HWXhvBEz+xTlImAnp5GkMClayoSRTsWT2eL+sfXkby07SAWb3b925Rt3xsiHuOWN9nURmW1D8k+3rcKE/JwVgIUmCEORPWx9LZmIkqNkMgSLX/MuZWqWrtj/utOwRRFFhbn00GsfpVdDtBZ+v2JNbk5LTKR+ZZMHJwNAs1IHE5eHWWhFMG+7s6fbzjp0Q3C1jqghocRQpypp7ujNa33AaxU5SHPEq5Dgs4P43KZ+XIrg84XxoQ6qvdmREd3DJeZ6eqcZAmy4JOQMWpB6Uc0dbN9SkXnDNp2TMoEdNhjplpMx0ra100faNzM12Y+jiqa0BpcOoPU0ZRtDRkwTTxHGky8xLdwmsViPuA7MxBhvplTPHx7Rjte1fKsFJxcuhxSdFS3PI5BE/DKbVJSE9o74a138hOVThLEWOS1ljSZaeRAMou5ziixxsKCBMO+ap2KByKvH2LciozImEcZ9eeI/dcYds3u/JEHErauRDqAHwXmrrymFKk3gfAT8ekaL8yEz5lAQ52fkWYLXqBhN0sGKvhcIZtJQ8bu9nO3WkpMGfgMdMxYEt7+5WjxqjXRXJBA5zShnD0V0hnOBfVyPhQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(7696005)(478600001)(6666004)(36860700001)(186003)(36756003)(336012)(426003)(47076005)(16526019)(86362001)(82310400005)(2616005)(81166007)(40480700001)(356005)(82740400003)(26005)(1076003)(83380400001)(41300700001)(316002)(4326008)(70586007)(44832011)(70206006)(8676002)(15650500001)(5660300002)(2906002)(110136005)(54906003)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 19:32:55.3528
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c83ef4ba-0437-42c6-0383-08db63a02a20
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT026.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6638
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com> <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+In-Reply-To: <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Fri, 2 Jun 2023 13:00:52 +0530
+Message-ID: <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using pm_pr_dbg() allows users to toggle `/sys/power/pm_debug_messages`
-as a single knob to turn on messages that amd-pmc can emit to aid in
-any s2idle debugging.
+On Thu, 1 Jun 2023 at 19:35, Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Wed, May 31, 2023 at 11:11=E2=80=AFPM Amit Pundir <amit.pundir@linaro.=
+org> wrote:
+> >
+> > On Wed, 17 May 2023 at 02:54, Doug Anderson <dianders@chromium.org> wro=
+te:
+> > >
+> > > Hi,
+> > >
+> > > On Tue, May 16, 2023 at 11:12=E2=80=AFAM Amit Pundir <amit.pundir@lin=
+aro.org> wrote:
+> > > >
+> > > > On Mon, 15 May 2023 at 20:33, Doug Anderson <dianders@chromium.org>=
+ wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On Mon, May 15, 2023 at 7:42=E2=80=AFAM Amit Pundir <amit.pundir@=
+linaro.org> wrote:
+> > > > > >
+> > > > > > On Sun, 14 May 2023 at 18:11, Caleb Connolly <caleb.connolly@li=
+naro.org> wrote:
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > On 13/05/2023 18:08, Amit Pundir wrote:
+> > > > > > > > On Fri, 24 Mar 2023 at 19:05, Douglas Anderson <dianders@ch=
+romium.org> wrote:
+> > > > > > > >>
+> > > > > > > >> This reverts commit 58973046c1bf ("regulator: qcom-rpmh: U=
+se
+> > > > > > > >> PROBE_FORCE_SYNCHRONOUS"). Further digging into the proble=
+ms that
+> > > > > > > >> prompted the us to switch to synchronous probe showed that=
+ the root
+> > > > > > > >> cause was a missing "rootwait" in the kernel command line
+> > > > > > > >> arguments. Let's reinstate asynchronous probe.
+> > > > > > > >
+> > > > > > > > Hi, the asynchronous probe is broken on Dragonboard 845c (S=
+DM845)
+> > > > > > > > running AOSP (Android Open Source Project) with v6.4-rc1
+> > > > > > > > https://bugs.linaro.org/show_bug.cgi?id=3D5975.
+> > > > > > > > Can we please go back to synchronous probe.
+> > > > > > > >
+> > > > > > > > AOSP do not make use of rootwait, IIRC, but it is added by =
+the
+> > > > > > > > bootloader anyway. And the device fails to boot AOSP regard=
+less of
+> > > > > > > > "rootwait" bootarg being present or not.
+> > > > > > >
+> > > > > > > Could you try applying this diff to enable some log spam and =
+let me know
+> > > > > > > what you get? I'm keen to try and figure this one out. My mai=
+l client
+> > > > > > > might crunch this a bit so I have pasted it here too
+> > > > > > > https://p.calebs.dev/ab74b7@raw
+> > > > > >
+> > > > > > These prints add just enough delay for the UFS probe to succeed=
+ that I
+> > > > > > can't reproduce the failure anymore.
+> > > > >
+> > > > > I'd prefer doing at least a little debugging before jumping to a
+> > > > > revert. From looking at your dmesg [1], it looks as if the async =
+probe
+> > > > > is allowing RPMH to probe at the same time as "qcom-vadc-common".
+> > > > > That's something that talks on the SPMI bus and is (potentially)
+> > > > > talking to the same PMICs that RPMH-regulator is, right? I'm by n=
+o
+> > > > > means an expert on how Qualcomm's PMICs work, but it seems plausi=
+ble
+> > > > > that the "qcom-vadc-common" is somehow causing problems and screw=
+ing
+> > > > > up RPMH. Does that seem plausible to you?
+> > > > >
+> > > > > If so, one interesting way to track it down would be to move arou=
+nd
+> > > > > delays. Put ~500ms sleep at the _end_ of vadc_probe(). Presumably=
+ that
+> > > > > _won't_ fix the problem. Now put a ~500ms sleep at the beginning =
+of
+> > > > > vadc_probe(). Maybe that will fix the problem? If so, you can mov=
+e the
+> > > > > delay around to narrow down the conflict. My wild guess would be =
+that
+> > > > > vadc_reset() could be throwing things for a loop?
+> > > > >
+> > > > > If the above doesn't work, maybe we could add more tracing / prin=
+touts
+> > > > > to see what is probing at the same time as RPMH?
+> > > >
+> > > > Tried out a few changes today but none of them worked or were
+> > > > effective enough to debug this crash further, other than setting
+> > > > fw_devlink=3Dpermissive.
+> > > >
+> > > > Adding more tracing / prints (BOOTTIME_TRACING and
+> > > > FUNCTION_GRAPH_TRACER) didn't work and didn't help in reproducing t=
+he
+> > > > crash either. They added just enough delay to boot the device
+> > > > successfully everytime.
+> > > >
+> > > > I tried to reason with the kernel modules which gets loaded before =
+and
+> > > > after the qcom-rpmh-regulator (QCOM_REBOOT_MODE, QCOM_PON, IIO/VADC=
+,
+> > > > SPMI_PMIC* etc) as suggested, but I run into the same crash even if=
+ I
+> > > > disable those driver modules. So I don't think that the other drive=
+r
+> > > > modules which gets loaded at around the same time as
+> > > > qcom-rpmh-regulator by default have any impact on this failure.
+> > >
+> > > Ugh, Heisenbugs are no fun to debug. :( It sorta sounds as if pretty
+> > > much anything you can do to change the timing fixes you. That does
+> > > make reverting the async probe of the regulator less appealing. If, a=
+s
+> > > you said, it's not just some other driver loading at the same time
+> > > that's interfering then the revert "fixes" you in the same way that a
+> > > "msleep" would fix you. That doesn't seem like enough of a
+> > > justification for the revert to me.
+> > >
+> > > It still feels to me like _something_ is happening at the same time a=
+s
+> > > the RPMH regulator driver is loading, though, I'm just not sure how t=
+o
+> > > suggest debugging it. I guess other thoughts:
+> > >
+> > > * When RPMH complains, is it always with the same regulator (lvs1), o=
+r
+> > > sometimes different ones? Any clue there?
+> >
+> > It is always either lvs1 or lvs2.
+>
+> If you reorder the nodes in the device tree, I think it'll change the
+> probe order. Does that affect anything? I'm wondering if there's some
+> sort of delayed reaction from a previous regulator.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/platform/x86/amd/pmc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi, Bumping lvs1 and lvs2 regulators up to the top of the list in the
+DTS https://bugs.linaro.org/show_bug.cgi?id=3D5975#c4 does seem to work.
+I can't reproduce the crash in 125 reboots so far, while I'm still
+testing with only qcom-rpmh-regulator kernel module. I'll do some more
+testing with full system running and send this re-ordering fix I can't
+reproduce the crash further.
 
-diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
-index 427905714f79..1304cd6f13f6 100644
---- a/drivers/platform/x86/amd/pmc.c
-+++ b/drivers/platform/x86/amd/pmc.c
-@@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
- 	}
- 
- 	if (dev)
--		dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
-+		pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
- 
- 	if (s)
- 		seq_printf(s, "SMU idlemask : 0x%x\n", val);
-@@ -769,7 +769,7 @@ static int amd_pmc_verify_czn_rtc(struct amd_pmc_dev *pdev, u32 *arg)
- 
- 	*arg |= (duration << 16);
- 	rc = rtc_alarm_irq_enable(rtc_device, 0);
--	dev_dbg(pdev->dev, "wakeup timer programmed for %lld seconds\n", duration);
-+	pm_pr_dbg("wakeup timer programmed for %lld seconds\n", duration);
- 
- 	return rc;
- }
--- 
-2.34.1
+>
+>
+> > > * How much can you control module loading order? If rpmh-regulator
+> > > module loads first, does it "fix" things? If it does, maybe you could
+> > > bisect to find the place where problems start cropping up. Does that
+> > > give any clues?
+> >
+> > Loading qcom-rpmh-regulator first does make it difficult to reproduce
+> > the crash. I tried a few combinations to narrow down the issue further
+> > and in one case, I managed to reproduce the crash (1 in 20+ reboots)
+> > while loading the qcom-rpmh-regulator (and the dependent cmd-db,
+> > qcom_rpmh) module alone
+> > https://bugs.linaro.org/attachment.cgi?id=3D1140.
+> >
+> > Regards,
+> > Amit Pundir
+>
+> OK, now that's even weirder. If loading the module alone reproduces
+> the problem, I can't imagine why this would be different without
+> "async" probe. In other words, If it reproduces 5% of the time when
+> loading the module alone with async probe, I'd expect it to reproduce
+> 5% of the time when loading the module alone _without_ async probe
+> too.
 
+I don't know the internal workings of forcing an asynchronous or
+synchronous probe, but loading this module alone crashed 60 times in
+350 reboots with this async patch, while it didn't crash at all in
+about 250 reboots if I do PROBE_FORCE_SYNCHRONOUS.
+
+Regards,
+Amit Pundir
+
+>
+> Note: make sure you're careful to collect more than one reproduction
+> before asserting odds. If it reproduced once in 20 reboots, it might
+> be 5%, it might be 20%, or it might be .01%. Ideally you could script
+> this and let it run for a few hours to get a good reproduction rate?
+>
+> -Doug
