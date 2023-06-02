@@ -2,144 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B7071FC90
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1470071FC94
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbjFBIu0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S234123AbjFBIvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234963AbjFBItv (ORCPT
+        with ESMTP id S234942AbjFBIvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:49:51 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EBE1AE;
-        Fri,  2 Jun 2023 01:49:49 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 74D7380C1;
-        Fri,  2 Jun 2023 16:49:48 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
- 2023 16:49:48 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Fri, 2 Jun 2023 16:49:28 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>
-Subject: [PATCH v2 3/3] riscv: dts: starfive: Add QSPI controller node for StarFive JH7110 SoC
-Date:   Fri, 2 Jun 2023 16:49:25 +0800
-Message-ID: <20230602084925.215411-4-william.qiu@starfivetech.com>
+        Fri, 2 Jun 2023 04:51:01 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9296C10EF;
+        Fri,  2 Jun 2023 01:50:48 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id ED5803F181;
+        Fri,  2 Jun 2023 08:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685695846;
+        bh=9iDW23eSDGpAU5YPcKTOrXKlERG4X+SdChKCH7zHRoE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=YeXM7zAYzGpv/Tgh19segV9F0cuncXXVEmaobPJ0MIVMdrRkhjpcmeW2nS1F00BlO
+         lJO2gfE5ZwyDtZQDtlryH4uEzhlsulbaUDjWR/xAioOseUVily8cZkUWHHnxEY829O
+         IZLMWXfBKirAz0Lnc809TPdds3niGmrg0eotgcqptRTf2d95GPxiqrnGacQmBcruGa
+         bTaWkXlW+/VlvlnOPfigL7s2zLXEm6LuyPSB6RdU4fWJ53LIj2HTt5z/CFZjVHDdeY
+         DOZDv4c/CnjpHBJ3mpYW3MWdFnoOsF1geOhhwSVm+Nm6YGCJi04fQ8bqaGCFhF2HC7
+         VA07WFU6wvUDA==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     dlemoal@kernel.org, bblock@linux.ibm.com, acelan.kao@canonical.com,
+        linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6] scsi: core: Wait until device is fully resumed before doing rescan
+Date:   Fri,  2 Jun 2023 16:49:56 +0800
+Message-Id: <20230602084956.1299001-1-kai.heng.feng@canonical.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602084925.215411-1-william.qiu@starfivetech.com>
-References: <20230602084925.215411-1-william.qiu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the quad spi controller node for the StarFive JH7110 SoC.
+During system resuming process, the resuming order is from top to down.
+Namely, the ATA host is resumed before disks connected to it.
 
-Co-developed-by: Ziv Xu <ziv.xu@starfivetech.com>
-Signed-off-by: Ziv Xu <ziv.xu@starfivetech.com>
-Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+When an EH is scheduled while ATA host is resumed and disk device is
+still suspended, the device_lock hold by scsi_rescan_device() is never
+released so the dpm_resume() of the disk is blocked forerver, therefore
+the system can never be resumed back.
+
+That's because scsi_attach_vpd() is expecting the disk device is in
+operational state, as it doesn't work on suspended device.
+
+To avoid such deadlock, wait until the scsi device is fully resumed,
+before continuing the rescan process.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- .../jh7110-starfive-visionfive-2.dtsi         | 32 +++++++++++++++++++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++++
- 2 files changed, 50 insertions(+)
+v6:
+ - Fix !CONFIG_PM_SLEEP compilation error.
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-index 2a6d81609284..22212c1150f9 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-@@ -126,6 +126,38 @@ &i2c6 {
- 	status = "okay";
- };
+v5:
+ - Use a different approach. Wait until the disk device is resumed.
+
+v4: 
+ - No change.
+
+v3:
+ - New patch to resolve undefined pm_suspend_target_state.
+
+v2:
+ - Schedule rescan task at the end of system resume phase.
+ - Wording.
+
+ drivers/scsi/scsi_scan.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index d217be323cc6..092f37464101 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1621,6 +1621,11 @@ void scsi_rescan_device(struct device *dev)
+ {
+ 	struct scsi_device *sdev = to_scsi_device(dev);
  
-+&qspi {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
++#ifdef CONFIG_PM_SLEEP
++	if (dev->power.is_suspended)
++		wait_for_completion(&dev->power.completion);
++#endif
 +
-+	nor_flash: flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg=<0>;
-+		cdns,read-delay = <5>;
-+		spi-max-frequency = <12000000>;
-+		cdns,tshsl-ns = <1>;
-+		cdns,tsd2d-ns = <1>;
-+		cdns,tchsh-ns = <1>;
-+		cdns,tslch-ns = <1>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			spl@0 {
-+				reg = <0x0 0x20000>;
-+			};
-+			uboot@100000 {
-+				reg = <0x100000 0x300000>;
-+			};
-+			data@f00000 {
-+				reg = <0xf00000 0x100000>;
-+			};
-+		};
-+	};
-+};
-+
- &sysgpio {
- 	i2c0_pins: i2c0-0 {
- 		i2c-pins {
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 4c5fdb905da8..e1a51e57a851 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -440,6 +440,24 @@ i2c6: i2c@12060000 {
- 			status = "disabled";
- 		};
+ 	device_lock(dev);
  
-+		qspi: spi@13010000 {
-+			compatible = "starfive,jh7110-qspi", "cdns,qspi-nor";
-+			reg = <0x0 0x13010000 0x0 0x10000
-+				0x0 0x21000000 0x0 0x400000>;
-+			interrupts = <25>;
-+			clocks = <&syscrg JH7110_SYSCLK_QSPI_REF>,
-+				 <&syscrg JH7110_SYSCLK_QSPI_AHB>,
-+				 <&syscrg JH7110_SYSCLK_QSPI_APB>;
-+			clock-names = "ref_clk", "hclk", "pclk";
-+			resets = <&syscrg JH7110_SYSRST_QSPI_APB>,
-+				 <&syscrg JH7110_SYSRST_QSPI_AHB>,
-+				 <&syscrg JH7110_SYSRST_QSPI_REF>;
-+			reset-names = "qspi", "qspi-ocp", "rstc_ref";
-+			cdns,fifo-depth = <256>;
-+			cdns,fifo-width = <4>;
-+			cdns,trigger-address = <0x0>;
-+		};
-+
- 		syscrg: clock-controller@13020000 {
- 			compatible = "starfive,jh7110-syscrg";
- 			reg = <0x0 0x13020000 0x0 0x10000>;
+ 	scsi_attach_vpd(sdev);
 -- 
 2.34.1
 
