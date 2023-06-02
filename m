@@ -2,147 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFC5720A30
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43A2720A35
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbjFBUVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
+        id S235456AbjFBUY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 16:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjFBUVW (ORCPT
+        with ESMTP id S231676AbjFBUY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0621F1B5;
-        Fri,  2 Jun 2023 13:21:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C7D660C55;
-        Fri,  2 Jun 2023 20:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B27C433D2;
-        Fri,  2 Jun 2023 20:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685737276;
-        bh=gy+GKIB8wBKms5xw12H7bdeX00I9GSSZF+zA2BKmxPE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jRNmjODirwoXcqf5yVLu4jP3gVFM69xE3sq/5l2zU+95FFFj3mfji/kM4+ekfh3uo
-         EJyJQMbItTYkA1obSrK/qVCgjxn/ARrLoQX0zX+DBVJHvRNQrtHf95WDAzK0GZU/2y
-         A5W5YsQuWcr4nqqqke1CoaACHC+TyY+ooHL//++BOdI7cB7urAT30pXFCSSuHimsUA
-         uSc6DsTNqkxcx1kE4bpj/tZzHnp5TLSQr8BdsXXli2zGDQnHNe5Wtd7OW23RZbmiEp
-         2RoZtlRaL82BaL/BmkmaTDTkrRHrnE7WcvwCEPg5lBNoN1Qc1LDy2yECN3vA4783tN
-         VrqVVKcQAyPBQ==
-Date:   Fri, 2 Jun 2023 15:21:15 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH] PCI: Call _REG when saving/restoring PCI state
-Message-ID: <ZHpPOzT0nm+vddPq@bhelgaas>
+        Fri, 2 Jun 2023 16:24:57 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988721BE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:24:55 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6260f03b76dso22112156d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 13:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685737495; x=1688329495;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5E5GkZMJuW4S28Szy/Oiu1DB4/4/yZIXoSGZ+cVyKrM=;
+        b=CcEwhKFq4C09UdNDJLKS3xKQ2YpG1V8wO7cOX4LjgFxE/BEXogGRXvcweFFe4m/mIq
+         BTtxAjo1bATUJ7+N5qRRZHa4WCG78QJEeTjYlEkA907sJWry62DknsS4DoTOGkf85Ow4
+         04fjdghA9FkHzN+qpLcZ3TUKMa0jvihKfVr3VF7o0AJ81fnA0Ro5xOgy0JqtApNtaQTQ
+         I7GZZ+6UAiZXqZ+hVWjCarhqFaKmDds2G1fFdsCWUs7zUFXOybQeG0ICmkS52K1heo2o
+         1jjCcXTf4IcyW2E/MWaWPEJbPXr4wdqJobNIuxLQlzgbTK0FkNtpoZSfIn9ixpjjPSqP
+         v/hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685737495; x=1688329495;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5E5GkZMJuW4S28Szy/Oiu1DB4/4/yZIXoSGZ+cVyKrM=;
+        b=Wk9DIzuZ+MnE3MgIXNB3AhexjwAttHjGhdAuRDVrRPQ93CsK7ZKDVowNOnWEYgh73X
+         G2gOciEjY0gg3CBHuYtPzHBDqd0bNx2HBGAEopgHV1sgZGBBxMY8g/SsATJsd8PtDjPP
+         W89xbZgHGRohp2F59O74tIykFxgKArY7mt7U+8yHtO1mU/tXvYkYxadGzq9xwPJZI0HG
+         ubrpRgBgOZV1MLZgG0m+vbtapLqQZppWOVGeTDnNgh+taKWevYG8SF/Gp9kggadKZbVj
+         ibstH/1Oztc3UFIu39KT+S80kCHRh0nXCl+gV94Gyz2pgExPC8gJU4PB7dZBJFwPWyF3
+         6scQ==
+X-Gm-Message-State: AC+VfDzVUqutDqarl6SsAgKssfUn0zfXHgd+CWmw35CIH1x2PpyLzWej
+        POjxV7JGBXgI+RZnw4mx0xyOHQ==
+X-Google-Smtp-Source: ACHHUZ5+4QuSSR8wlZlWxqM4/zwDcD0EB1Jc8W0AgqxX0h2Cacrhrci3cimhmpr6dJ8zDlXc4dY6sg==
+X-Received: by 2002:a05:6214:aca:b0:625:b849:fa3 with SMTP id g10-20020a0562140aca00b00625b8490fa3mr15635613qvi.30.1685737494770;
+        Fri, 02 Jun 2023 13:24:54 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:ec58])
+        by smtp.gmail.com with ESMTPSA id d18-20020ac847d2000000b003e4ee0f5234sm1180984qtr.87.2023.06.02.13.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 13:24:54 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 16:24:53 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: zswap: multiple zpool support
+Message-ID: <20230602202453.GA218605@cmpxchg.org>
+References: <20230531022911.1168524-1-yosryahmed@google.com>
+ <20230601155825.GF102494@cmpxchg.org>
+ <CAJD7tkaFSfpTtB_ua_9QzR2voE1-hixv6RMJZd=WqpGmY93dSw@mail.gmail.com>
+ <20230602164942.GA215355@cmpxchg.org>
+ <CAJD7tkbp96S8MdrcH8y0V2G5Q-Zq6U4DAuweYhP-MjUWgcmjsQ@mail.gmail.com>
+ <20230602183410.GB215355@cmpxchg.org>
+ <CAJD7tka18Vw7HpA1gh6wWJcaCJ_U6jNfCC696pX=UkbiXKZMvQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230602031122.18350-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tka18Vw7HpA1gh6wWJcaCJ_U6jNfCC696pX=UkbiXKZMvQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Rafael, Len, linux-acpi]
-
-Hi Mario,
-
-On Thu, Jun 01, 2023 at 10:11:22PM -0500, Mario Limonciello wrote:
-> ASMedia PCIe GPIO controllers connected to AMD SOC fail functional tests
-> after returning from s2idle. This is because the BIOS checks whether the
-> OSPM has called the _REG method to determine whether it can interact with
-> the OperationRegion assigned to the device.
-
-"s2idle" is a Linux term; I'd prefer something that we can relate to
-the ACPI spec.
-
-Maybe a pointer to the specific function in the driver that has a
-problem?  Based on the patch, I assume the driver uses some control
-method that looks at PCI config space?
-
-> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
-> state of PCI devices.
-
-Please include the spec citation: ACPI r6.5, sec 6.5.4.  The URL has
-changed in the past and may change in the future, but the name/section
-number will not.
-
-> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/pci/pci.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+On Fri, Jun 02, 2023 at 12:14:28PM -0700, Yosry Ahmed wrote:
+> On Fri, Jun 2, 2023 at 11:34 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Fri, Jun 02, 2023 at 09:59:20AM -0700, Yosry Ahmed wrote:
+> > > On Fri, Jun 2, 2023 at 9:49 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > > Again, what about the zswap_tree.lock and swap_info_struct.lock?
+> > > > They're the same scope unless you use multiple swap files. Would it
+> > > > make sense to tie pools to trees, so that using multiple swapfiles for
+> > > > concurrency purposes also implies this optimization?
+> > >
+> > > Yeah, using multiple swapfiles helps with those locks, but it doesn't
+> > > help with the zpool lock.
+> > >
+> > > I am reluctant to take this path because I am trying to get rid of
+> > > zswap's dependency on swapfiles to begin with, and have it act as its
+> > > own standalone swapping backend. If I am successful, then having one
+> > > zpool per zswap_tree is just a temporary fix.
+> >
+> > What about making the pools per-cpu?
+> >
+> > This would scale nicely with the machine size. And we commonly deal
+> > with for_each_cpu() loops and per-cpu data structures, so have good
+> > developer intuition about what's reasonable to squeeze into those.
+> >
+> > It would eliminate the lock contention, for everybody, right away, and
+> > without asking questions.
+> >
+> > It would open the door to all kinds of locking optimizations on top.
 > 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index e38c2f6eebd4..071ecba548b0 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1068,6 +1068,12 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
->  	return acpi_pci_bridge_d3(dev);
->  }
->  
-> +static inline int platform_toggle_reg(struct pci_dev *dev, int c)
-> +{
-> +	return acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
-> +				 ACPI_ADR_SPACE_PCI_CONFIG, c);
-> +}
-
-You never check the return value, so why return it?
-
-The function actually doesn't *toggle*; it connects or disconnects
-based on "c".
-
-This looks like it only builds when CONFIG_ACPI=y?
-
->  /**
->   * pci_update_current_state - Read power state of given device and cache it
->   * @dev: PCI device to handle.
-> @@ -1645,6 +1651,9 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
->  int pci_save_state(struct pci_dev *dev)
->  {
->  	int i;
-> +
-> +	platform_toggle_reg(dev, ACPI_REG_DISCONNECT);
-
-I would expect these to be in the PM code near the power state
-transitions, not in the state save/restore code.  These functions
-*are* used during suspend/resume, but are used in other places as
-well, where we probably don't want _REG executed.
-
-Cc'd Rafael and PM folks, who can give much better feedback.
-
->  	/* XXX: 100% dword access ok here? */
->  	for (i = 0; i < 16; i++) {
->  		pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
-> @@ -1790,6 +1799,8 @@ void pci_restore_state(struct pci_dev *dev)
->  	pci_enable_acs(dev);
->  	pci_restore_iov_state(dev);
->  
-> +	platform_toggle_reg(dev, ACPI_REG_CONNECT);
-> +
->  	dev->state_saved = false;
->  }
->  EXPORT_SYMBOL(pci_restore_state);
-> @@ -3203,6 +3214,7 @@ void pci_pm_init(struct pci_dev *dev)
->  	pci_read_config_word(dev, PCI_STATUS, &status);
->  	if (status & PCI_STATUS_IMM_READY)
->  		dev->imm_ready = 1;
-> +	platform_toggle_reg(dev, ACPI_REG_CONNECT);
->  }
->  
->  static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
-> -- 
-> 2.34.1
+> The page can get swapped out on one cpu and swapped in on another, no?
 > 
+> We will need to store which zpool the page is stored in in its zswap
+> entry, and potentially grab percpu locks from other cpus in the swap
+> in path. The lock contention would probably be less, but certainly not
+> eliminated.
+> 
+> Did I misunderstand?
+
+Sorry, I should have been more precise.
+
+I'm saying that using NR_CPUS pools, and replacing the hash with
+smp_processor_id(), would accomplish your goal of pool concurrency.
+But it would do so with a broadly-used, well-understood scaling
+factor. We might not need a config option at all.
+
+The lock would still be there, but contention would be reduced fairly
+optimally (barring preemption) for store concurrency at least. Not
+fully eliminated due to frees and compaction, though, yes.
+
+I'm not proposing more than that at this point. I only wrote the last
+line because already having per-cpu data structures might help with
+fast path optimizations down the line, if contention is still an
+issue. But unlikely. So it's not so important. Let's forget it.
