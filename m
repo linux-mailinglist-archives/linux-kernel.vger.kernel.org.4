@@ -2,130 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508CE720C3D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 01:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8311F720C42
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 01:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236668AbjFBXQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 19:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S236739AbjFBXTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 19:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234452AbjFBXQy (ORCPT
+        with ESMTP id S234452AbjFBXTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 19:16:54 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3413123;
-        Fri,  2 Jun 2023 16:16:50 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565ba2c7554so27244987b3.3;
-        Fri, 02 Jun 2023 16:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685747810; x=1688339810;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pNwliMKobCXtdO/si4Y3A+t6CcwMuWL8q/4P8sFnIjA=;
-        b=UckfgwmKQA2cSEHE/6i4sgkEzADXF/46J2goOgxBCeKZKabFUdJzQUxAUAkovnWpXN
-         diw/xMi18QdbsSUmdbYw++khW3L1wXD9wFAAfRelW2rCaPVzmr9eoEOfJXJy2bDxBNVR
-         hCj42Ad/xNnBo/pqyr7kP4r4ETk9inlTuKYTm/1N3d7uLIQt5nLyOt7IoG1HtRs3Voxb
-         Crw4HCoQO/8GLDwFWuhlUIc5iFsyJwSl2boL6uVfjWUQPTVRP4eH416L1GwCjYEHrGoK
-         /D2NqV2xWGiEySnB/w1SvGY0GUUenmoJGjrChPqCUhq0XvjPdCbPAavP5jhthv28bf0i
-         j21w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685747810; x=1688339810;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pNwliMKobCXtdO/si4Y3A+t6CcwMuWL8q/4P8sFnIjA=;
-        b=E4xcQ3+4c8j1l4rSMigfENCEp48XYDex9FjjAWGDjtkvZv7jgei8zVHbf8Y1RlQyLk
-         1myx5Af/bY2OHaj7p+IG2U2S3q5rkOQtu3ipmlA+xgwmUIaqTDysTLs5NdeCwcr0fEWx
-         uKW8IbO5j8VkteE4YyVztVSu5YPhNkLAYxMjmO5yHoxcoSW1cx87wGfA/b6qUD+RMf06
-         /ew0eRiHCQrLmPNFygnZVSE/odleo1yaOmwVWkmTQNsZd/K73CBAiO6E41vDJx47GexN
-         JrTlqOuFcOToo7tpE7SAaBohXssyV3iZMbvD4OwnnTXapdIhxqE9GQnPxgHVUUM7bAgE
-         /yzQ==
-X-Gm-Message-State: AC+VfDwOLoCn2MDhEdefLhPkXDnGK/XB2wDCygkQQuaR+r0RRZJG/Byx
-        2bwPsu/08Jiwl0RvcazKC43lWvZcSWRdrnd2ges=
-X-Google-Smtp-Source: ACHHUZ7KF11sXYnchuLIO7iEqA9qCfIeWUKuJtkhh9/sOhxKMMi5qIlXuVPaZo3kIBFs/5VX9w4MsBPiAbizE7XrSv0=
-X-Received: by 2002:a81:48cc:0:b0:54f:752e:9e60 with SMTP id
- v195-20020a8148cc000000b0054f752e9e60mr1425182ywa.37.1685747809851; Fri, 02
- Jun 2023 16:16:49 -0700 (PDT)
+        Fri, 2 Jun 2023 19:19:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792FD123;
+        Fri,  2 Jun 2023 16:19:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0906760F63;
+        Fri,  2 Jun 2023 23:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25563C4339B;
+        Fri,  2 Jun 2023 23:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685747943;
+        bh=Eo339TE/OLsLyXEWbF4WtJJQ5NxP+CiAHuGpf6j8be0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Xms/Aas6bnAwHlZsqnmshBtNnizBEgfnRy9Upaqj+Ok2ydwdPFONGhRBjSMGj/L7i
+         pQKTbB+IxGs2Crpx7MaioICa749MruUVUqzblRe9ojbd+fm+rfwzuh5IoHBiBKLzqG
+         Wf9wscM17MFH+NqpYuv1KqsleXgjjkxmMfddbTAwKm81uJNAi3Hvjvk5k7YRp49quQ
+         qpwbpGYBIWGqt1Ga/4JPgkqAOnmaySwke2jk84yPH0RybDLiZfxi4mVHo+rW7fqDZY
+         H+QDsiwJfVWc1/PJUZk6fACRTOd0HPON3OV4mhZeirdvVrQJjTBEonm8vMgWeKRwmb
+         SeuFDBbxN6Ctg==
+Date:   Fri, 2 Jun 2023 18:19:01 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Iain Lane <iain@orangesquash.org.uk>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v5 2/2] PCI: Don't assume root ports are power manageable
+Message-ID: <ZHp45fNGuPUWPnO7@bhelgaas>
 MIME-Version: 1.0
-References: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com> <ZHoHfcMgYqO3l7Np@corigine.com>
-In-Reply-To: <ZHoHfcMgYqO3l7Np@corigine.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Fri, 2 Jun 2023 19:16:09 -0400
-Message-ID: <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
-Subject: Re: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is enabled
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amakhalov@vmware.com, vsirnapalli@vmware.com, akaher@vmware.com,
-        tkundu@vmware.com, keerthanak@vmware.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af1bbb31-36d4-4924-e02a-bc22b938c7e4@amd.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 11:15=E2=80=AFAM Simon Horman <simon.horman@corigine=
-.com> wrote:
->
-> + Xin Long
->
-> On Thu, Jun 01, 2023 at 11:47:54PM +0530, Ashwin Dayanand Kamat wrote:
-> > MD5 is not FIPS compliant. But still md5 was used as the
-> > default algorithm for sctp if fips was enabled.
-> > Due to this, listen() system call in ltp tests was
-> > failing for sctp in fips environment, with below error message.
+On Fri, Jun 02, 2023 at 05:38:37PM -0500, Limonciello, Mario wrote:
+> On 6/2/2023 5:20 PM, Bjorn Helgaas wrote:
+> > On Tue, May 30, 2023 at 11:39:47AM -0500, Mario Limonciello wrote:
+> > > Using a USB keyboard or mouse to wakeup the system from s2idle fails when
+> > > that xHCI device is connected to a USB-C port for an AMD USB4 router.
 > >
-> > [ 6397.892677] sctp: failed to load transform for md5: -2
-> >
-> > Fix is to not assign md5 as default algorithm for sctp
-> > if fips_enabled is true. Instead make sha1 as default algorithm.
-> > The issue fixes ltp testcase failure "cve-2018-5803 sctp_big_chunk"
-Hi, Ashwin,
-
-I have the same question as Paolo about "this patch gets fips compliance
-_disabling_ the encryption", is it from any standard?
-
-If not,  can't you fix the ltp testcase for fips environment by sysctl?
-or set 'CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1=3Dy' instead in config.
-
-Sorry if I don't understand this well. You're trying to avoid SCTP code
-calling crypto_alloc_shash(MD5), right? What about other places
-where it may also do it in kernel? (where ltp just doesn't cover)
-
-I don't think it makes sense to let SCTP have some code reply on
-FIPS only to make ltp testcase happy, while we can actually fix it
-in ltp by "sysctl".
-
-Thanks.
-
-
-> >
-> > Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-> > ---
-> > v3:
-> > * Resolved hunk failures.
-> > * Changed the ratelimited notice to be more meaningful.
-> > * Used ternary condition for if/else condtion.
-> > v2:
-> > * The listener can still fail if fips mode is enabled after
-> >   that the netns is initialized.
-> > * Fixed this in sctp_listen_start() as suggested by
-> >   Paolo Abeni <pabeni@redhat.com>
+> > It sounds like the real issue is that "Root Ports in D3hot/D3cold may
+> > not support wakeup", and the USB, xHCI, USB-C, AMD USB4 router bits
+> > are probably not really relevant.  And hopefully even the "AMD
+> > platforms" mentioned below is not relevant.
 >
-> FWIIW, this seems reasonable to me.
+> Yeah.  It comes down to how much you want in the commit
+> about how we got to this conclusion versus a generic
+> fix.  I generally like to be verbose about a specific case
+> something fixes so that when distros decide what to pull
+> in to their older maintenance kernels they can understand
+> what's important.
+
+That's actually my point.  I think this problem probably affects
+non-USB devices, non-xHCI devices, non-USB4 routers, etc.
+
+If we can say "Any device below a Root Port in D3hot/D3cold may not
+support wakeup if X, Y, Z.  Root Ports may be put in D3hot/D3cold for
+sleep/hibernate/s2idle/...",  that's much more actionable.
+
+> > > Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> > > all PCIe ports go into D3 during s2idle.
+> > > 
+> > > When specific root ports are put into D3 over s2idle on some AMD platforms
+> > > it is not possible for the platform to properly identify wakeup sources.
+> > > This happens whether the root port goes into D3hot or D3cold.
+> >
+> > Can we connect this to a spec so it's not just the empirical "some AMD
+> > platforms work like X" observation?
+> > 
+> > "s2idle" is meaningful on the power management side of the house, but
+> > it doesn't appear in PCI or ACPI specs, so I don't know what it means
+> > here.  I assume the D3hot/D3cold state of the Root Port is the
+> > critical factor, regardless of how it got there.
+> 
+> Unfortunately (?) for this particular issue it's only a
+> critical factor when the system is in s2idle.
+> 
+> PME works fine to wake up the device if the root port is
+> in either D3hot or D3cold when the system isn't in s2idle.
+
+So that must mean something other than the Root Port has to be in some
+specific state.  "System in s2idle" is not actionable in terms of PCI
+maintenance.  It sounds like we just haven't really gotten to the root
+cause yet.
+
+> > > Linux shouldn't assume root ports support D3 just because they're on a
+> > > machine newer than 2015, the ports should also be deemed power manageable.
+> > > Add an extra check explicitly for root ports to ensure D3 isn't selected
+> > > for them if they are not power-manageable through platform firmware.
+> >
+> > But I *would* like to know specifically what "power manageable" means
+> > here.  I might naively assume that a device with the PCI Power
+> > Management Capability is "power manageable", and that if PME_Support
+> > includes D3hot and D3cold, we're good to go.  But obviously it's more
+> > complicated than that, and I'd like to cite the spec that mentions the
+> > actual things we need here.
 >
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Power manageable through platform firmware means the device
+> has ACPI methods like like _PR0, _PS0.
+
+What's the connection to wakeup?
+
+> > > +	 * It's not safe to put root ports that don't support power
+> > > +	 * management into D3.
+> >
+> > I assume "it's not safe" really means "Root Ports in D3hot/D3cold may
+> > not be able to signal PME interrupts unless ... <mumble> platform
+> > firmware <mumble> e.g., ACPI method <mumble> ..."
+> > 
+> > Can we include some of those hints here?
+> 
+> I'm cautious about hardcoding logic used by
+> acpi_bus_get_power_flags() in a comment in case it changes.
+> 
+> How about:
+> 
+> "Root ports in D3 may not be able to reliably signal wakeup
+> events unless platform firmware signals power management
+> capabilities".
+
+I'm really looking hard for that spec citation :)  Without that, this
+just devolves into "this seems to work on these systems."
+
+> > > +	 */
+> > > +	if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
+> > > +	    !platform_pci_power_manageable(bridge))
+> > > +		return false;
+> > > +
+> > >   	/*
+> > >   	 * It should be safe to put PCIe ports from 2015 or newer
+> > >   	 * to D3.
+> > > -- 
+> > > 2.34.1
+> > > 
