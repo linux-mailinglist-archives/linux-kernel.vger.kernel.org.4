@@ -2,213 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474C0720083
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B42720084
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbjFBLig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S235370AbjFBLiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbjFBLie (ORCPT
+        with ESMTP id S235335AbjFBLio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:38:34 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1986218D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:38:33 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so2855325a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 04:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685705911; x=1688297911;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=g4pVi7VOBRFaULLi4SVb4N0TF+UwJd4kFrSgP2liy+0=;
-        b=SRBOfRjcMUxkwQmK+GMU6ugb72NtsDBOdlKm2/+NDhdflQR5OD8Virae/S2OrpTlwO
-         ZjTzB626ks47GxAxK84SDSj1Tc3sIqO1dbzcOou0RHHXUCGn0cb7BIjMcEWsKOCQ9C4M
-         tPhbIcfhih3eRF0vixDhbxQ1z8D+GAZFZgazYUGZUEXQl1jcIZLxQobWdCQXF5m1xTjV
-         9Id59zqHmc9JcD2zUVHT1rQMIjhf0+5Sh5eTFyFHd9wjCd8xD8MBix6alPUWxr1ddJcW
-         2+eDvfzxDxwzpdyR1+lIogaHYzwAvkMe/Hizzbc7+CmakKaBvxuQxlfBQ35oFTKJTHqK
-         kOaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685705911; x=1688297911;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4pVi7VOBRFaULLi4SVb4N0TF+UwJd4kFrSgP2liy+0=;
-        b=dALEGecRzX4oo3iNZ0DjFuRWRtqgBc3GUdadY8hMJp2r0FW1VPFeM0PDtK5xGPYI64
-         Pp3/5vFaKWiGO1p7YgTOW7iMHU/GyHRB2WN3xuFdiohyIi6RUY7xYixlTJzosnLMwcYh
-         KooyguHqA4Wd5NeVsBiZnh9ONC6mmkT/1L8jMiu4/LQnme5DZlVWOW+XohKWTtDv8/bC
-         oUv8X0e/ykPNqCGgUzJ9PxXCqSe/MrN9lMc5fwgyAvpCYMyvJsZcVoIZfU/E06MC0jZy
-         31hh9QHOdHFTCwAM/wfS294r5YCZzzUZCi0lppJcMQQNB8Pq9MANH4+5YzIJO4nFngr2
-         j5ZQ==
-X-Gm-Message-State: AC+VfDxj0Suh95m0EdgNycvbAwuNIHlZS8oAEIa2IbvdOc/X+eR1Y0w6
-        o/2hj+JUakBDHbrMlo85JWcG
-X-Google-Smtp-Source: ACHHUZ6VUn698+qtREhO6oDsLHHVh8G2t6Kbo1RoMnm9smgysN+NtVSs8CbNvZvvDyoAZ8jpv79wzA==
-X-Received: by 2002:a05:6402:b34:b0:50c:9582:e968 with SMTP id bo20-20020a0564020b3400b0050c9582e968mr1801501edb.36.1685705911452;
-        Fri, 02 Jun 2023 04:38:31 -0700 (PDT)
-Received: from thinkpad ([117.217.186.79])
-        by smtp.gmail.com with ESMTPSA id w15-20020a056402070f00b00514bb73b8casm602807edx.57.2023.06.02.04.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 04:38:31 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 17:08:20 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 9/9] PCI: endpoint: Add PCI Endpoint function driver
- for MHI bus
-Message-ID: <20230602113820.GA34855@thinkpad>
-References: <20230601145718.12204-1-manivannan.sadhasivam@linaro.org>
- <20230601145718.12204-10-manivannan.sadhasivam@linaro.org>
- <c13b5771-e619-60cb-791d-1458f7adc9ac@kernel.org>
+        Fri, 2 Jun 2023 07:38:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7A4198
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:38:42 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q5373-0008Tr-84; Fri, 02 Jun 2023 13:38:33 +0200
+Message-ID: <6084703a-aaba-4069-0d11-48782d016bdd@leemhuis.info>
+Date:   Fri, 2 Jun 2023 13:38:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     nicolas.dichtel@6wind.com,
+        Mike Christie <michael.christie@oracle.com>, hch@infradead.org,
+        stefanha@redhat.com, jasowang@redhat.com, mst@redhat.com,
+        sgarzare@redhat.com, virtualization@lists.linux-foundation.org,
+        brauner@kernel.org, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <20230202232517.8695-1-michael.christie@oracle.com>
+ <20230202232517.8695-9-michael.christie@oracle.com>
+ <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
+ <17726d05-91bb-55da-e2f9-a9ba5b8d2223@leemhuis.info>
+Content-Language: en-US, de-DE
+In-Reply-To: <17726d05-91bb-55da-e2f9-a9ba5b8d2223@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c13b5771-e619-60cb-791d-1458f7adc9ac@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685705922;3c14e3aa;
+X-HE-SMSGID: 1q5373-0008Tr-84
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 08:31:31AM +0900, Damien Le Moal wrote:
-> On 6/1/23 23:57, Manivannan Sadhasivam wrote:
-> > Add PCI Endpoint driver for the Qualcomm MHI (Modem Host Interface) bus.
-> > The driver implements the MHI function over PCI in the endpoint device
-> > such as SDX55 modem. The MHI endpoint function driver acts as a
-> > controller driver for the MHI Endpoint stack and carries out all PCI
-> > related activities like mapping the host memory using iATU, triggering
-> > MSIs etc...
-> > 
-> > Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> Looks good, but not knowing this hardware, I only did a style review. I added
-> some nits below.
-> 
-> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-> 
-> 
-> > ---
-> >  drivers/pci/endpoint/functions/Kconfig       |  10 +
-> >  drivers/pci/endpoint/functions/Makefile      |   1 +
-> >  drivers/pci/endpoint/functions/pci-epf-mhi.c | 462 +++++++++++++++++++
-> >  3 files changed, 473 insertions(+)
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-mhi.c
-> > 
-> > diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpoint/functions/Kconfig
-> > index 9fd560886871..f5171b4fabbe 100644
-> > --- a/drivers/pci/endpoint/functions/Kconfig
-> > +++ b/drivers/pci/endpoint/functions/Kconfig
-> > @@ -37,3 +37,13 @@ config PCI_EPF_VNTB
-> >  	  between PCI Root Port and PCIe Endpoint.
-> >  
-> >  	  If in doubt, say "N" to disable Endpoint NTB driver.
-> > +
-> > +config PCI_EPF_MHI
-> > +	tristate "PCI Endpoint driver for MHI bus"
-> > +	depends on PCI_ENDPOINT && MHI_BUS_EP
-> > +	help
-> > +	   Enable this configuration option to enable the PCI Endpoint
-> > +	   driver for Modem Host Interface (MHI) bus in Qualcomm Endpoint
-> > +	   devices such as SDX55.
-> > +
-> > +	   If in doubt, say "N" to disable Endpoint driver for MHI bus.
-> > diff --git a/drivers/pci/endpoint/functions/Makefile b/drivers/pci/endpoint/functions/Makefile
-> > index 5c13001deaba..696473fce50e 100644
-> > --- a/drivers/pci/endpoint/functions/Makefile
-> > +++ b/drivers/pci/endpoint/functions/Makefile
-> > @@ -6,3 +6,4 @@
-> >  obj-$(CONFIG_PCI_EPF_TEST)		+= pci-epf-test.o
-> >  obj-$(CONFIG_PCI_EPF_NTB)		+= pci-epf-ntb.o
-> >  obj-$(CONFIG_PCI_EPF_VNTB) 		+= pci-epf-vntb.o
-> > +obj-$(CONFIG_PCI_EPF_MHI)		+= pci-epf-mhi.o
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
-> > new file mode 100644
-> > index 000000000000..98f0d96cfd46
-> > --- /dev/null
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+[TLDR: This mail in primarily relevant for Linux regression tracking. A
+change or fix related to the regression discussed in this thread was
+posted or applied, but it did not use a Link: tag to point to the
+report, as Linus and the documentation call for. Things happen, no
+worries -- but now the regression tracking bot needs to be told manually
+about the fix. See link in footer if these mails annoy you.]
 
-[...]
-
-> > +static int pci_epf_mhi_write_to_host(struct mhi_ep_cntrl *mhi_cntrl,
-> > +				     void __iomem *from, u64 to, size_t size)
-> > +{
-> > +	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
-> > +	struct pci_epf *epf = epf_mhi->epf;
-> > +	struct pci_epc *epc = epf_mhi->epf->epc;
-> > +	void __iomem *tre_buf;
-> > +	phys_addr_t tre_phys;
-> > +	size_t offset = to % SZ_4K;
-> > +	int ret;
-> > +
-> > +	mutex_lock(&epf_mhi->lock);
-> > +
-> > +	tre_buf = pci_epc_mem_alloc_addr(epc, &tre_phys, size + offset);
-> > +	if (!tre_buf) {
-> > +		ret = -ENOMEM;
-> > +		goto err_unlock;
-> > +	}
-> > +
-> > +	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, tre_phys,
-> > +			       to - offset, size + offset);
-> > +	if (ret) {
-> > +		pci_epc_mem_free_addr(epc, tre_phys, tre_buf, size + offset);
-> > +		goto err_unlock;
-> > +	}
+On 16.05.23 16:06, Linux regression tracking #adding (Thorsten Leemhuis)
+wrote:
+> On 05.05.23 15:40, Nicolas Dichtel wrote:
+>> Le 03/02/2023 à 00:25, Mike Christie a écrit :
+>>> For vhost workers we use the kthread API which inherit's its values from
+>>> and checks against the kthreadd thread. This results in the wrong RLIMITs
+>>> being checked, so while tools like libvirt try to control the number of
+>>> threads based on the nproc rlimit setting we can end up creating more
+>>> threads than the user wanted.
+>>
+>> I have a question about (a side effect of?) this patch. The output of the 'ps'
+>> command has changed. Here is an example:
+>> [...]
 > 
-> The above 2 hunks are that same as in pci_epf_mhi_read_from_host(). May be pack
-> these in a helper function ? E.g. pci_epf_mhi_map() ?
-> Note that I have a patch series in the work that does that at the pci_epc API
-> level (pci_epc_map() + pci_epc_unmap()) to simplify function drivers.
+> Thanks for the report. This is already dealt with, but to be sure the
+> issue doesn't fall through the cracks unnoticed, I'm adding it to
+> regzbot, the Linux kernel regression tracking bot:
 > 
-> > +
-> > +	memcpy_toio(tre_buf + offset, from, size);
-> > +
-> > +	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, tre_phys);
-> > +	pci_epc_mem_free_addr(epc, tre_phys, tre_buf, size + offset);
-> 
-> Same here: pci_epf_mhi_unmap() ?
-> 
+> #regzbot ^introduced 6e890c5d502
 
-Agree with both of the above comments. At have this change in my local tree but
-that's not part of this series. Will merge it to this patch itself.
+#regzbot fix: f9010dbdce911ee1f1af1398a24b1f9f992e0080
+#regzbot ignore-activity
 
-> > +
-> > +err_unlock:
-> > +	mutex_unlock(&epf_mhi->lock);
-> > +
-> > +	return ret;
-> > +}
-> > +
+BTW, if anyone cares: just checked, it fixes my suspend problem. Thx
+everyone!
 
-[...]
-
-> > +static int pci_epf_mhi_bind(struct pci_epf *epf)
-> > +{
-> > +	struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
-> > +	struct pci_epc *epc = epf->epc;
-> > +	struct platform_device *pdev = to_platform_device(epc->dev.parent);
-> > +	struct device *dev = &epf->dev;
-> > +	struct resource *res;
-> > +	int ret;
-> > +
-> > +	if (WARN_ON_ONCE(!epc))
-> > +		return -EINVAL;
-> 
-> This should never happen. If there is a possibility that the EPC core code calls
-> bind with epc == NULL, we need to fix that there.
-> 
-
-Right, this seems to be redundant.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
