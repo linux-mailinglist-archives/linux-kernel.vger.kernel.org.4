@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1383871FF6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E74271FF6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbjFBKf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S234131AbjFBKfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235531AbjFBKeg (ORCPT
+        with ESMTP id S235834AbjFBKe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:34:36 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2073.outbound.protection.outlook.com [40.107.105.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1306819B1;
-        Fri,  2 Jun 2023 03:33:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XUhscyZzPcSur0UKeZm/Ei4ltv2Z6ZjGry/LI+E5sUyw1KiR3EcCocvQSHAd7zUYvje5kJP9GN24HFMO2zXs0zqrnU66i+41AI+WLSwhSRTftaCT1uER4tr9WvjIS/XCk9OI7TuzRQUl5f+yKgSGpW9dsLopvufSP/YN482KZV8VLggSogYUWte24KQ7AK20YA5QNJ/lBAx/6Uasnz2zTVlkc5onxSwrCM2pFhEKOGM95muwSufupRsMGJ3/8Ki4vwNDAtD6frNs8tKxAqnqw8tplFOZis9TTcP1qJdUIMgjZRffVsIXVjKhrlvOI1ygbYxG0ebn7nt7lPOVkdAZcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rWhAzx6e62j5U77nvmt9CfHklLCm36tbD++vVk7tqaA=;
- b=XDP5unsqmXC27f5l3BuvOFGJMQsUehXhLc/qEcBXaI7N8LfrYi/rsms8QLPgGLfJDx5pKKKqrFw++HvwIISgv2uIGpFM1+GhccJYUqhz/Hbx+sO2WoqEcmST2i9QTiFbQ03EuRNCGRmHO/tq9Uzh9kEo6vUGN8epl5eaTHj6vGOOTtq3v3ODnksiugEU+4921QEWFBHlmJQdOma9aUweuvMhU7Ngw/kyBiGEavIF6gYTaJwRs1GL1ToHYp44xn78vN9VbN68plYs8KEgLWdFJtFaleUJk/PpuM7EKOZyWyh6V5lrqr5b0YvemgIkkMlDlj3zqjOi3cFX3vfc5rst+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rWhAzx6e62j5U77nvmt9CfHklLCm36tbD++vVk7tqaA=;
- b=UoPA8SoCW75X0seM2B5te4OW8tiolR07eSKC+op8RPr03q8w2Z8S43hK/bbU49gC4E30aGf5sxzu+M4Y0Dqowdtsgxs4PsnPM9C0fvcrE2WCUF3j+D/Lv7g/lL29L8oKMXo3l/JwXEUcIe/nnzhlSm5cmZFqkKhuGGXIagATwzE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by PA4PR04MB7502.eurprd04.prod.outlook.com (2603:10a6:102:ef::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Fri, 2 Jun
- 2023 10:31:46 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::47e4:eb1:e83c:fa4a]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::47e4:eb1:e83c:fa4a%4]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
- 10:31:46 +0000
-Date:   Fri, 2 Jun 2023 13:31:42 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     wei.fang@nxp.com
-Cc:     claudiu.manoil@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net: enetc: correct the statistics of rx bytes
-Message-ID: <20230602103142.ryesgb7ykamtzxnx@skbuf>
-References: <20230602094659.965523-1-wei.fang@nxp.com>
- <20230602094659.965523-2-wei.fang@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602094659.965523-2-wei.fang@nxp.com>
-X-ClientProxiedBy: BE1P281CA0310.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:85::16) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Fri, 2 Jun 2023 06:34:58 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0312910E3;
+        Fri,  2 Jun 2023 03:33:40 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 2390C5FD03;
+        Fri,  2 Jun 2023 13:32:30 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685701950;
+        bh=U2UnoUMYRs9m/BLycNQ2iLq6bQeVm56LTFKDcGw5E4A=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=dDpfb4nspYq2IX79ggRqGaSgsWFxQt9B9+ivAjCuKkPYK+q/bDLe82NvRXQUIoP+J
+         1UgfCSEnRVAf5ne/aOauc+fEm69F8FQcHNj3jabszSu48HnRuxfrN2df70IxJudXUL
+         EbvNvDia+9mnO4Yc2jgEksvdVUhgVqGchpdhHZ3m6PqX55BggvX0jUK6f9Y8poxFpZ
+         cWQX7YPm52iN0PKBRwsknc5qKJgZX6pM4h4ofywpJyYrEW003YvZ8+H+HYySWIge0D
+         wMaJq5LKgKm+TuCkbyW0xzWe44pGE7/VvS1mPdJvdQtxM6Wr43p6CZh8SGtVssXyPz
+         w2WiIR79N/Yvg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri,  2 Jun 2023 13:32:29 +0300 (MSK)
+From:   George Stark <gnstark@sberdevices.ru>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <hkallweit1@gmail.com>
+CC:     <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
+        George Stark <GNStark@sberdevices.ru>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH] pwm: meson: compute cnt register value in proper way
+Date:   Fri, 2 Jun 2023 13:32:11 +0300
+Message-ID: <20230602103211.2199283-1-gnstark@sberdevices.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PA4PR04MB7502:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb22fe5b-30f6-4f6d-0d4c-08db635490ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vn8KwAqdZ331LJT1YklbrjihPmT3jWK3pYh2MzzBEXTVB2NJrwhNpI1RpsEOsQAJHVepf1E3WZkJllSd1fG+niXD8FYWqONCkLnCV3ysV2o2Y35V65kTMvTF86zhgaYpcUT8AEaFSpGXJeGrDf7ThOWdlyeDhYZGAo5UpVGv4CaFzNibBhRovI3R8r/i6b146IoC4tG77X7q/9R4qtNxgVSrnJS7SfJYwrg+5ekLVpJA6gOyWwCx4rKrwMI7dqDCTCnI9SlsXg6+vRfU6bk9GESTfg0bHh+3ScbfJHoN8ukBrj0FG8A3NUqVlhnt0bRfp3g1yUTfia0N7NwoJONes94meRCPVb162cuxjQK1TvjhZdCv+N1L6utS/0wXcTGpPKeZUjGF4Msl804hPBjTgsQcrsUWf7xharkSF9vZQreWpJW6NNei7A9+7QSrAYTQjhUJEPIaU7SGRiofMmTH+hQaUZs+hu4DoAkLGX5hxXVuw6XjLbHtZaDPp6z3PjQyxncJGobBgLDNg75p1NQuoQGCss7HS48yZmQnes4cZ7eLyBDIa6NFflqB3E7N50uP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(136003)(396003)(366004)(376002)(346002)(39860400002)(451199021)(86362001)(7416002)(5660300002)(6666004)(6636002)(4326008)(66946007)(66556008)(66476007)(33716001)(8676002)(38100700002)(41300700001)(316002)(6486002)(8936002)(34206002)(6512007)(44832011)(2906002)(4744005)(6506007)(186003)(478600001)(9686003)(26005)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dK2idyzXApJtUuANMEEwOHrR2gt3VUp0mO0a4ziY37zqiMrEZNJlRkPlJkpi?=
- =?us-ascii?Q?4jD31vgs9+g+TG4Rttjngq+zh4DY99krSr0dFa3Az2/Vr5+w2vucDuKlTDAD?=
- =?us-ascii?Q?LhgQeXAXWRhqeSq3CQr72VNcUuhuWQqeuQeGTOExTp/1hGx/CqNJSLP1NfVH?=
- =?us-ascii?Q?Hpl/xiZNtPyr5z8XzYO15nXKSuUmu4XnozCvCILMEO0zD5EJkd7Vcuq7bPx/?=
- =?us-ascii?Q?IQP3ePAnMq3IliITOpC/u7hqXQOoNs6p0XCxtHHPW6Hnb4xo1t3ucESj3Dqk?=
- =?us-ascii?Q?ImYRkXnEAbZcfcI7ZtlzLhHtXsxY3ISpXgDP9oH0lxAGgXLyzJ+6z3G3yf7H?=
- =?us-ascii?Q?1gsHsfNRZbFnGBSC/ZNaXtbyP5Mq7XhC8p8QKAiqJ8Nr+K+MGUc1DBqIt104?=
- =?us-ascii?Q?q9QnzNJm5YAwVd9gTWx2pZV3+HXcsCvyIkmpcZHjYcDYtjQYoQZoJnHEAlhj?=
- =?us-ascii?Q?zdRVJWQzgTlL+JO4w8KBSoqFr2NY+xVwzyRNWjphQkisumdF9nEAG8w+R3kw?=
- =?us-ascii?Q?irKBjcRkacMfyVsZuklemsFVNmvgsQxIpg+HXLv04pbbxlMeEtk3xuJK+gnJ?=
- =?us-ascii?Q?j5MfgzDnrNZaF1SsnKY4dD+y9cMnvi6QP19j5XgW+6PuTMtXCQJbJDjc/cc1?=
- =?us-ascii?Q?hjyeDxXlxXw9MZtpzbh1QBbCCpXzBf4nBQf0fmEDvGHkNNp9iHvA6uiPeFIK?=
- =?us-ascii?Q?du1hvzCd0xwAwn34OGqt0YwW1feSzR2D5192Xg9J+0bbz+vdmgD0Yr4gwby2?=
- =?us-ascii?Q?N8A79AlnnpFZe8ez55Wc3mUDIE/VinJWLtH/nWvQIzrK26ETmGZQC0S/pHVm?=
- =?us-ascii?Q?VNxrjKgvJOdaurK+AqMtTMtB7eHFz/f97bWJJttydWvCxyKNrClkVsm31j9O?=
- =?us-ascii?Q?aEJdONTu3NTV2wEK96bQF2Sur0m/+3VhCWDTWLJtHQ1qa8UApLrS8RAXwjYN?=
- =?us-ascii?Q?DKv34XPxVGiZFdltgEgKDRmScRQZQKJHQcWYCed9pV7LZMztzYHXs4B1P2oU?=
- =?us-ascii?Q?yfily4ca4WPCPXWt17XoaLtJYZTNNaCCD8Mg45sPkrTCrGj0R4dGmHGdWAG4?=
- =?us-ascii?Q?D3DoVzaSp87LnGLkV9mm5depueveA2qfx14Jl21F6xkCU0yM/Lu6Tg1wlczl?=
- =?us-ascii?Q?LpJgqlmlGjwaqkzSgg8+Yvfv9hWVDNHJHg+vclKEzaBT92SNPxBwGA084GIA?=
- =?us-ascii?Q?EIbPvc7Nkga1kq39MY+ZbxLm01df9Qb3JfUSKMNTm422Yf05N79izaF2kOjx?=
- =?us-ascii?Q?17wbLEJ7iI6++9Zeit1L0mlKal3xPDou03bbfhYdvPmg53kRXYV4D5CFdkvM?=
- =?us-ascii?Q?Tt7qrkiE+o3FpPHho7/OSrT41thHuac+IIiK4bKQfX9LTAxGn2EW8equ6e+o?=
- =?us-ascii?Q?Ig4Df1goAORtxaViVdmm1NgBEIobfEp3LohX61M23/rJp81f1mf7Ce8Qorvi?=
- =?us-ascii?Q?DLA9KJYeyAjG1Svy5ivSRV7dJuJM8IQ+hPdA8hsKIKa2iQu2PSuu0BZ+t/Wg?=
- =?us-ascii?Q?16aQ/hMY24y0PoEn7v4z9pkyETBVhZeW5gEh4R6hRwT8wyRAPlR3jfSFbu42?=
- =?us-ascii?Q?QoVT0ySD8f0csXNfmht6jhm+BR/nA1NqHAc6R0ey5n5NAj5hsyBGs2muQ4wf?=
- =?us-ascii?Q?Lg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb22fe5b-30f6-4f6d-0d4c-08db635490ac
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 10:31:46.0252
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8S4SQb+4N/KU2Wj7sFTX+XAo6U8EY2AWjk6ZSUst+Jrd2jZEE/eDvAVDXn6VOi9lMtf/tdN63LoZtRtDeuuo4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7502
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/02 03:06:00 #21401484
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 05:46:58PM +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> The rx_bytes of struct net_device_stats should count the length of
-> ethernet frames excluding the FCS. However, there are two problems
-> with the rx_bytes statistics of the current enetc driver. one is
-> that the length of VLAN header is not counted if the VLAN extraction
-> feature is enabled. The other is that the length of L2 header is not
-> counted, because eth_type_trans() is invoked before updating rx_bytes
-> which will subtract the length of L2 header from skb->len.
-> BTW, the rx_bytes statistics of XDP path also have similar problem,
-> I will fix it in another patch.
-> 
-> Fixes: a800abd3ecb9 ("net: enetc: move skb creation into enetc_build_skb")
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
-> ---
+According to the datasheet, the PWM high and low clock count values
+should be set to at least one. Therefore, setting the clock count
+register to 0 actually means 1 clock count.
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-
-By the way, you mangled Jakub's email (kuba@kernel.or) - I've fixed it up.
+Signed-off-by: George Stark <GNStark@sberdevices.ru>
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+This patch is based on currently unmerged patch by Heiner Kallweit
+https://lore.kernel.org/linux-amlogic/23fe625e-dc23-4db8-3dce-83167cd3b206@gmail.com
+---
+diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
+index 834acd7..57e7d9c 100644
+--- a/drivers/pwm/pwm-meson.c
++++ b/drivers/pwm/pwm-meson.c
+@@ -206,6 +206,11 @@
+ 		channel->pre_div = pre_div;
+ 		channel->hi = duty_cnt;
+ 		channel->lo = cnt - duty_cnt;
++
++		if (channel->hi)
++			channel->hi--;
++		if (channel->lo)
++			channel->lo--;
+ 	}
+ 
+ 	return 0;
+@@ -340,7 +345,8 @@
+ 	channel->lo = FIELD_GET(PWM_LOW_MASK, value);
+ 	channel->hi = FIELD_GET(PWM_HIGH_MASK, value);
+ 
+-	state->period = meson_pwm_cnt_to_ns(chip, pwm, channel->lo + channel->hi);
++	state->period = meson_pwm_cnt_to_ns(chip, pwm,
++					    channel->lo + 1 + channel->hi + 1);
+ 	state->duty_cycle = meson_pwm_cnt_to_ns(chip, pwm, channel->hi);
+ 
+ 	return 0;
