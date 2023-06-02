@@ -2,158 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7B771FA29
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738FC71FA2F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbjFBGfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S233925AbjFBGhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbjFBGfG (ORCPT
+        with ESMTP id S233867AbjFBGhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:35:06 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59078128
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:34:50 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7773997237cso68832439f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 23:34:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685687689; x=1688279689;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5b7iEhBjTo1Ves8ZzP/4rVoIwOo9NZWo7v0xLyd34nY=;
-        b=MXD9D52pbVBXoWvY5rPIAkzbWmBWUGJV+alV12AKib0WZ20HAbCdJqt7wgIyse7QDC
-         iShAQC9ls2e2SkfwfABAJvBOOHY55kNkGN4vBAsgFR29/JPMcV3OOGIZaeeqR7b9YTVw
-         pdGoN/MpMgGEGaG+RHACytN106jfPrU5H1Ir1b26OV4MBtgalYtPQHCCQt6LjXNeQ1ja
-         YQa/YW2yIUvfykmqc2Qy7BkUARaFnaK+BYK5GCOwYyXBkPPTyyugHxox7ov8nmOeMdt+
-         B5dlRgtKaWIgSDm/mcimn1jlX/mGoup9RnulD7MY+9qtGb5pB7YnTDh/KzJ6xP2BafeE
-         Vkng==
-X-Gm-Message-State: AC+VfDzKt0YHHtt9/iJgFZPIE9f0cSBoREaJHbX27VqyYn8nq8yqWY1d
-        uZL3MOu6vY53js1E1HDXD9OaiTl4nyRrj7qK8CML2SZtZedd
-X-Google-Smtp-Source: ACHHUZ7n80/krafk/iHXl8GT2tMFWJPpPId2uOH4QdAV+7RopdhyK7JjhpenFpRjMCJTb92MkSSycrM6KMMUTvsyL6XJYE5luN3/
-MIME-Version: 1.0
-X-Received: by 2002:a02:630a:0:b0:416:7e77:bb5f with SMTP id
- j10-20020a02630a000000b004167e77bb5fmr4576946jac.0.1685687689687; Thu, 01 Jun
- 2023 23:34:49 -0700 (PDT)
-Date:   Thu, 01 Jun 2023 23:34:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f23a0505fd1fbfc1@google.com>
-Subject: [syzbot] [xfs?] WARNING in xfs_buf_get_map
-From:   syzbot <syzbot+f1b6cf577de987741ca4@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 02:37:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E993A19B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685687836; x=1717223836;
+  h=date:from:to:cc:subject:message-id;
+  bh=0ngopru3qi2B7ssBZMgeeJYf1kFuNNhzY646plCK4Hg=;
+  b=DKUcfYNRHN0rk8P5Q7YGuAYr3OGiii7PTca7xvb8P6/MZ92Dl+S+mqrq
+   sLN9XkpucjBFnA2aW9iY4yIpS2zzm3Nt9Q8alxGb7sbWt3MvW3RhGO03t
+   t2utt7kLzjiuPOcS2anf4i7XzKNROxbK8+Vg1iljIUN4t+3NknIapuawM
+   YjT6uPwWVtG5AuPVYuo7GxqWm8xQRFL1aw1CgRMef9XRHJylwWpgY0Vhm
+   GLYA15feNfRVJcb7h6hrI3+EsBvNlr3sXa0SxC1bWvpd5cwslM1f+cZs3
+   0Kw99+hhMsOoWP2lDgG2JGgB8CFVfYMtEUdIwkRupT+xmGfXBwT0g7rCd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="354640417"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="354640417"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 23:37:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="831857896"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="831857896"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2023 23:37:15 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4yPS-0000Aq-2c;
+        Fri, 02 Jun 2023 06:37:14 +0000
+Date:   Fri, 02 Jun 2023 14:36:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230601] BUILD SUCCESS
+ 9660c8acc7a78dbad1faf1af23b381986022221f
+Message-ID: <20230602063636.YbkJ3%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230601
+branch HEAD: 9660c8acc7a78dbad1faf1af23b381986022221f  firewire: Replace zero-length array with flexible-array member
 
-syzbot found the following issue on:
+elapsed time: 722m
 
-HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=171fe7bd280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6a2745d066dda0ec
-dashboard link: https://syzkaller.appspot.com/bug?extid=f1b6cf577de987741ca4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=115992ed280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fae015280000
+configs tested: 113
+configs skipped: 6
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d4d1d06b34b8/disk-715abede.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3ef33a86fdc8/vmlinux-715abede.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e0006b413ed1/bzImage-715abede.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/d857490c5037/mount_0.gz
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f1b6cf577de987741ca4@syzkaller.appspotmail.com
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230531   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm                                 defconfig   gcc  
+arm                       imx_v4_v5_defconfig   clang
+arm                             mxs_defconfig   clang
+arm                        neponset_defconfig   clang
+arm                  randconfig-r001-20230531   clang
+arm                  randconfig-r046-20230531   gcc  
+arm                           sunxi_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             alldefconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r036-20230531   gcc  
+hexagon      buildonly-randconfig-r001-20230531   clang
+hexagon              randconfig-r031-20230531   clang
+hexagon              randconfig-r041-20230531   clang
+hexagon              randconfig-r045-20230531   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230531   gcc  
+i386                 randconfig-i002-20230531   gcc  
+i386                 randconfig-i003-20230531   gcc  
+i386                 randconfig-i004-20230531   gcc  
+i386                 randconfig-i005-20230531   gcc  
+i386                 randconfig-i006-20230531   gcc  
+i386                 randconfig-i051-20230531   gcc  
+i386                 randconfig-i052-20230531   gcc  
+i386                 randconfig-i053-20230531   gcc  
+i386                 randconfig-i054-20230531   gcc  
+i386                 randconfig-i055-20230531   gcc  
+i386                 randconfig-i056-20230531   gcc  
+i386                 randconfig-i061-20230531   gcc  
+i386                 randconfig-i062-20230531   gcc  
+i386                 randconfig-i063-20230531   gcc  
+i386                 randconfig-i064-20230531   gcc  
+i386                 randconfig-i065-20230531   gcc  
+i386                 randconfig-i066-20230531   gcc  
+i386                 randconfig-r004-20230531   gcc  
+ia64                            zx1_defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r025-20230531   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r013-20230601   gcc  
+microblaze           randconfig-r003-20230531   gcc  
+microblaze           randconfig-r035-20230531   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r006-20230531   clang
+mips                           ci20_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r012-20230601   gcc  
+openrisc     buildonly-randconfig-r003-20230531   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r024-20230531   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      arches_defconfig   gcc  
+powerpc                       holly_defconfig   gcc  
+powerpc                  iss476-smp_defconfig   gcc  
+powerpc                      pmac32_defconfig   clang
+powerpc              randconfig-r014-20230601   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r005-20230531   gcc  
+riscv                randconfig-r021-20230531   clang
+riscv                randconfig-r042-20230531   clang
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r033-20230531   gcc  
+s390                 randconfig-r044-20230531   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230531   gcc  
+sh                        edosk7705_defconfig   gcc  
+sh                   randconfig-r016-20230601   gcc  
+sh                          sdk7780_defconfig   gcc  
+sh                           se7751_defconfig   gcc  
+sh                              ul2_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r002-20230531   gcc  
+sparc64      buildonly-randconfig-r002-20230531   gcc  
+sparc64      buildonly-randconfig-r004-20230531   gcc  
+sparc64              randconfig-r023-20230531   gcc  
+sparc64              randconfig-r032-20230531   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230531   gcc  
+x86_64               randconfig-a002-20230531   gcc  
+x86_64               randconfig-a003-20230531   gcc  
+x86_64               randconfig-a004-20230531   gcc  
+x86_64               randconfig-a005-20230531   gcc  
+x86_64               randconfig-a006-20230531   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa               randconfig-r034-20230531   gcc  
 
-XFS (loop0): Ending clean mount
-XFS (loop0): Quotacheck needed: Please wait.
-XFS (loop0): Quotacheck: Done.
-XFS (loop0): xfs_buf_map_verify: daddr 0x7ffffffffff0 out of range, EOFS 0x8000
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5005 at fs/xfs/xfs_buf.c:535 xfs_buf_map_verify fs/xfs/xfs_buf.c:532 [inline]
-WARNING: CPU: 1 PID: 5005 at fs/xfs/xfs_buf.c:535 xfs_buf_get_map+0x1db3/0x2fd0 fs/xfs/xfs_buf.c:688
-Modules linked in:
-CPU: 1 PID: 5005 Comm: syz-executor273 Not tainted 6.4.0-rc2-next-20230515-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:xfs_buf_map_verify fs/xfs/xfs_buf.c:535 [inline]
-RIP: 0010:xfs_buf_get_map+0x1db3/0x2fd0 fs/xfs/xfs_buf.c:688
-Code: eb 75 fe 48 8b b5 50 ff ff ff 49 89 d9 4d 89 f8 48 c7 c1 e0 81 8b 8a 48 c7 c2 40 7e 8b 8a 48 c7 c7 a0 7e 8b 8a e8 7d 22 06 00 <0f> 0b 41 bd 8b ff ff ff e9 cf ee ff ff e8 4b eb 75 fe 4c 89 e7 e8
-RSP: 0018:ffffc90003a0f560 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000008000 RCX: 0000000000000000
-RDX: ffff888028141dc0 RSI: ffffffff83145c36 RDI: 0000000000000005
-RBP: ffffc90003a0f6a8 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000ffffffea R11: 0000000000000001 R12: 0000000000000001
-R13: 0000000000000003 R14: dffffc0000000000 R15: 00007ffffffffff0
-FS:  000055555688d300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000066c7e0 CR3: 0000000076741000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- xfs_trans_get_buf_map+0x298/0x710 fs/xfs/xfs_trans_buf.c:156
- xfs_trans_get_buf fs/xfs/xfs_trans.h:189 [inline]
- xfs_dquot_disk_alloc+0x859/0xb80 fs/xfs/xfs_dquot.c:346
- xfs_qm_dqread+0x4dd/0x570 fs/xfs/xfs_dquot.c:665
- xfs_qm_dqget+0x141/0x4b0 fs/xfs/xfs_dquot.c:869
- xfs_qm_vop_dqalloc+0x5f2/0xe70 fs/xfs/xfs_qm.c:1724
- xfs_setattr_nonsize+0xab1/0xd30 fs/xfs/xfs_iops.c:702
- xfs_vn_setattr+0x1fb/0x260 fs/xfs/xfs_iops.c:1023
- notify_change+0xb2c/0x1180 fs/attr.c:483
- chown_common+0x57f/0x650 fs/open.c:774
- vfs_fchown fs/open.c:842 [inline]
- vfs_fchown fs/open.c:834 [inline]
- ksys_fchown+0x115/0x170 fs/open.c:853
- __do_sys_fchown fs/open.c:861 [inline]
- __se_sys_fchown fs/open.c:859 [inline]
- __x64_sys_fchown+0x73/0xb0 fs/open.c:859
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd290b4b969
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff36598308 EFLAGS: 00000246 ORIG_RAX: 000000000000005d
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd290b4b969
-RDX: 000000000000ee00 RSI: 0000000000000000 RDI: 0000000000000006
-RBP: 00007fd290b0b200 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd290b0b290
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
