@@ -2,132 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7214B7206DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686497206E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbjFBQJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S236598AbjFBQJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236410AbjFBQJE (ORCPT
+        with ESMTP id S236561AbjFBQJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:09:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09127BC;
-        Fri,  2 Jun 2023 09:09:03 -0700 (PDT)
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 092F01EC0333;
-        Fri,  2 Jun 2023 18:09:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1685722141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Xu4XCvM1sAiwB/WfAq5MbMKHo8Vx2G01mpn67g5+mLc=;
-        b=XNFq0zyeMW0Rzi8qdgeGXSA3AM7MDd19unhJsTI0DQezaVNRgx0+TUvw6/qhFDedLPY4XM
-        wkZnKYWcXoIP+yql921r/5tJ9amPai4rDZiK02xaMyVnjo9hXgW4Dzh/X07T0kNLWVBzXq
-        dH1lwHdt6qW1gzCnVhUSoieE8MKsZ4A=
-Date:   Fri, 2 Jun 2023 18:09:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liam Merwick <liam.merwick@oracle.com>
-Subject: Re: [PATCHv13 4/9] x86/boot/compressed: Handle unaccepted memory
-Message-ID: <20230602160900.GEZHoUHHpPKMnzV3bs@fat_crate.local>
-References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
- <20230601182543.19036-5-kirill.shutemov@linux.intel.com>
- <20230602140641.GKZHn3caQpYveKxFgU@fat_crate.local>
- <20230602153644.cbdicj2cc6p6goh3@box.shutemov.name>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230602153644.cbdicj2cc6p6goh3@box.shutemov.name>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 12:09:28 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AAD132
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:09:26 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2566b668cc5so1567374a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685722166; x=1688314166;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U16a7SsqQ7yjyv5J8Y2N4u7Ylkl11H9qatwpuhmZUgo=;
+        b=636YoGkhL1EaD07rsMfPK9rB926Ht76M8pVZszNcRp8cSFBaHFxW4ESJErvKH1m1wQ
+         b8SVVb+49Lm4c7lpuGUxvabzksatMUh3aHtTfXuucGjqsfAbB7x8jB5X+IIkfWd/B+pM
+         hI1Jypk91JlkfEFB2dbGzi8Bjd9QmphZBvbPzeFfXopwyd64oFIEk7hcFeTi49fzsYb0
+         jMhjapC0h8n44W4QCQ7q/RI4lKIJPywJjobPFbGliUK4+jwpyLj3v9rdAbRrHTavotzv
+         jSbTLKdo3Rd++6WRrKKX3ZluUSmLDy9wL6sxwwb/x/fXUrLPPNX7BCJ2JivFRXiwGY+V
+         XR9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685722166; x=1688314166;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U16a7SsqQ7yjyv5J8Y2N4u7Ylkl11H9qatwpuhmZUgo=;
+        b=j8TsfQiCqClzJoCwWB0J6H0nT2RL3YDiL48roj3ah1+OPLhSgYfArdzeYpbSCGNRAq
+         LsM65gYyRL5mCKSDnaF8k7CcSb1uJBy8wDMOsiuC0Yx/BJ2lIxQ0Chgr97cyQwjG252t
+         Ubyi99NpXpbkCUZkzSvpTSw8eeWDPhMTQBL6k2+nBRM2d61ex0Cl/ABKnk7DaAUFKcet
+         RjMKYMNlAdr3Qf038gPhYwEYojYLb5LcjtRzyy60kFR3d4e4qFr0qivYuZfUQFIyvhWF
+         Md6N+ruPaSrdDRreIRyks0ib2o8Zhe5omtbN//8ygPpAKKp0gVJH562hDASeYZHUNMwa
+         35ag==
+X-Gm-Message-State: AC+VfDz5GVzUhSVwpfw2H3L7kR5UsoBBW3pS7AFqGZZ+A4ugNSoB0U6A
+        20ReweYnPLmFLWXzrqFvHwKr0Rvy6QTc
+X-Google-Smtp-Source: ACHHUZ5ZPLDaNjdv6ql0/d9oDMUgHRd2fE1fBqzKriMYD3yXbiA53bpGux4rVDyMUkeRamgRC/kjMfQm5qU6
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a17:90a:de04:b0:24e:18ff:5bad with SMTP id
+ m4-20020a17090ade0400b0024e18ff5badmr42850pjv.0.1685722165847; Fri, 02 Jun
+ 2023 09:09:25 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 09:09:01 -0700
+In-Reply-To: <20230602160914.4011728-1-vipinsh@google.com>
+Mime-Version: 1.0
+References: <20230602160914.4011728-1-vipinsh@google.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230602160914.4011728-4-vipinsh@google.com>
+Subject: [PATCH v2 03/16] KVM: selftests: Pass the count of read and write
+ accesses from guest to host
+From:   Vipin Sharma <vipinsh@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 06:36:44PM +0300, Kirill A. Shutemov wrote:
-> I don't see why it is simpler. It looks unnecessary noisy to me.
+Pass the number of read and write accesses done in the memstress guest
+code to userspace.
 
-Noisy?
+These counts will provide a  way to measure vCPUs performance during
+memstress and dirty logging related tests. For example, in
+dirty_log_perf_test this can be used to measure how much progress vCPUs
+are able to do while VMM is getting and clearing dirty logs.
 
-I have no clue what you mean.
+In dirty_log_perf_test, each vCPU runs once and then waits until
+iteration value is incremented by main thread, therefore, these access
+counts will not provide much useful information except for observing
+read vs write counts.
 
-It is regular:
+However, in future commits, dirty_log_perf_test behavior will be changed
+to allow vCPUs to execute independent of userspace iterations. This will
+mimic real world workload where guest keeps on executing while VMM is
+collecting and clearing dirty logs separately. With read and write
+accesses known for each vCPU, impact of get and clear dirty log APIs can
+be quantified.
 
-	if (bla && flu)
+Note that access counts will not be 100% reliable in knowing vCPUs
+performances. Few things which can affect vCPU progress:
+1. vCPUs are scheduled less by host
+2. Userspace operations run for longer time which end up giving vCPUs
+   more time to execute.
 
-vs
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+---
+ tools/testing/selftests/kvm/lib/memstress.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-	if (bla)
-		return flu();
-
-It is about having regular patterns which can be recognized at a quick
-glance by those who get to stare at that code constantly.
-
-> Configuration table suppose to be present, even if unaccepted memory is
-> not supported. Something is very wrong if it is missing.
-
-I am not sure if it is the decompressor's job to do such validation
-- I guess this is something the EFI code should do.
-
-> I will downgrade it warn().
-
-Yes, or simply return here without accepting memory - plain and simple.
-
-> I wanted to keep unaccepted_table private to the libstub/unaccepted_memory.c.
-> The setter provides a good spot for documentation to guide unaccepted
-> memory enablers for other archs.
-> 
-> Still want replace it with direct assignment?
-
-No clue. Why would you want to keep a variable in the libstub private
-which is not even in kernel proper, AFAICT?
-
-> Okay, I will make init_unaccepted_memory() return true if unaccepted
-> memory is present and hide defined it always-false for !UNACCEPTED_MEMORY.
-> So this hunk will look this way:
-> 
-> 	if (init_unaccepted_memory()) {
-> 		debug_putstr("Accepting memory... ");
-> 		accept_memory(__pa(output), __pa(output) + needed_size);
-> 	}
-
-Yap, thanks.
-
+diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/selftests/kvm/lib/memstress.c
+index 5f1d3173c238..ac53cc6e36d7 100644
+--- a/tools/testing/selftests/kvm/lib/memstress.c
++++ b/tools/testing/selftests/kvm/lib/memstress.c
+@@ -49,6 +49,8 @@ void memstress_guest_code(uint32_t vcpu_idx)
+ 	struct memstress_args *args = &memstress_args;
+ 	struct memstress_vcpu_args *vcpu_args = &args->vcpu_args[vcpu_idx];
+ 	struct guest_random_state rand_state;
++	uint64_t write_access;
++	uint64_t read_access;
+ 	uint64_t gva;
+ 	uint64_t pages;
+ 	uint64_t addr;
+@@ -64,6 +66,8 @@ void memstress_guest_code(uint32_t vcpu_idx)
+ 	GUEST_ASSERT(vcpu_args->vcpu_idx == vcpu_idx);
+ 
+ 	while (true) {
++		write_access = 0;
++		read_access = 0;
+ 		for (i = 0; i < pages; i++) {
+ 			if (args->random_access)
+ 				page = guest_random_u32(&rand_state) % pages;
+@@ -72,13 +76,16 @@ void memstress_guest_code(uint32_t vcpu_idx)
+ 
+ 			addr = gva + (page * args->guest_page_size);
+ 
+-			if (guest_random_u32(&rand_state) % 100 < args->write_percent)
++			if (guest_random_u32(&rand_state) % 100 < args->write_percent) {
+ 				*(uint64_t *)addr = 0x0123456789ABCDEF;
+-			else
++				write_access++;
++			} else {
+ 				READ_ONCE(*(uint64_t *)addr);
++				read_access++;
++			}
+ 		}
+ 
+-		GUEST_SYNC(1);
++		GUEST_SYNC_ARGS(1, read_access, write_access, 0, 0);
+ 	}
+ }
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.41.0.rc0.172.g3f132b7071-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette
