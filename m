@@ -2,323 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C27C71F6F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699E671F6F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbjFBABY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S232626AbjFBABp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjFBABU (ORCPT
+        with ESMTP id S231279AbjFBABn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:01:20 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF29112C;
-        Thu,  1 Jun 2023 17:01:18 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75b01944dd6so17238985a.1;
-        Thu, 01 Jun 2023 17:01:18 -0700 (PDT)
+        Thu, 1 Jun 2023 20:01:43 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407981A5;
+        Thu,  1 Jun 2023 17:01:41 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-53f70f7c2d2so922918a12.3;
+        Thu, 01 Jun 2023 17:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685664078; x=1688256078;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UCg8WzwXak17NTUJxpDTh99QdG7Lc6KzqCJOD2KYiTA=;
-        b=mVnyUIjngL9CJuUS5Oq12mXGDGONPm6FcjRZiywI/dZZsWlioXrx9SFfIzvBG9Hvgy
-         pTmvf5lVUlpQPFOASlePXDxVSOlR+b+ONKm2E7FxS99nk4/AEHK0/WNql1DzusWXiyCb
-         vGUVaXDJPxM2EvYTV0DrWvCLDmLFi6TrBlEeoY+tUNObdjMjHLEocTtDADZXj0LGFLLs
-         Qu+gn+Q2q8LICPTlNsTx0dC+kbUwb5CTPNCJ7f3PJx7UxiMNXTjlrESdUTs5uSAHGvzH
-         7hGZdzytrS55qHkNhOpw8WSWuE8/1VfOHS8usrVTybtgcdjrcuiRsbW8La2KDsm6NI2R
-         0wow==
+        d=gmail.com; s=20221208; t=1685664100; x=1688256100;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=93AdyG83HyxVnXaMo7sA8WZyZkxYZ/RccX4TOVu/C4s=;
+        b=VV0r3rsC+gzwtZhbR6SRIxP1YPYMh+vFr7XPIKHPLYgkaOzVPSjxk3jmTVNMx3JuyZ
+         rsVBXKADShH2J/xdvbmHEQ4CB2fj9Soow/U8DnbcS3BBqBIwzh8JspOHPFUCknxF7kYR
+         RC9C+nYQgTVLUOBGfrB2PjLUCaPOSA184pINCYMY7Qo/3wzmoAVd2aiLvmqAolRIONqh
+         u1g19En54Ao1tyBydYgHq2W21O/wg3lzwyhAmB7XAe66nSPXQkvx3XIhRbm3wM5hxfcu
+         0kAio9s7taW6rnglYLpB93vPgYdWzh9QT5cQzZCS9mWVszrh5b4B4EgmB0i7I8cwkGL9
+         arxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685664078; x=1688256078;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1685664100; x=1688256100;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UCg8WzwXak17NTUJxpDTh99QdG7Lc6KzqCJOD2KYiTA=;
-        b=G7WQuW5i4lnqEpDRTsf1taNhboYL+Tk/1gfyGNj4ndVf+pMg7OHVnqKjsevlzvNqli
-         W6sjGafhVlDg8OZKyQ4wPDurwDLxnWzaiwnMpGiNsiRn3gQsh8wdVQv2my0VB29mSXZi
-         C3Q5hNmnnFlupDh2pln9PvNlorl1ru9XFyoiVq+cYV+S+MhhTzb1HbRHpN4BeDzEIQfg
-         HQUo33F1A0oAQnMxahLH9VOjPpJ3qzTwKt4FR2tAvZYxgsuEA0YZTN/yvS8c6E9NvDwM
-         Djzw95tzgRCiNSYvC9ujqHykiB5RanfC2/fdKkHUlGFaZu4ilu4bfYN09ZE9OtEHlD+t
-         W7Wg==
-X-Gm-Message-State: AC+VfDyf8JvLhoIVfXK0FRkEe1DenONUCbaBnqQXPhY8FntmtqKd0ANB
-        gPZCz9kecf8Ay8a04KTzq7I=
-X-Google-Smtp-Source: ACHHUZ4Hvfb6JsqkWlR9ZbmLdULxFDLb0tHiNU/Xkd2eAOZNtG9TNNRR9kw66ZzxP4ORIEcic8d7Tg==
-X-Received: by 2002:a05:620a:17ab:b0:75b:23a1:829f with SMTP id ay43-20020a05620a17ab00b0075b23a1829fmr8311812qkb.0.1685664077619;
-        Thu, 01 Jun 2023 17:01:17 -0700 (PDT)
-Received: from [192.168.75.211] ([173.23.87.62])
-        by smtp.gmail.com with ESMTPSA id y184-20020a0dd6c1000000b00565e57e6662sm4792656ywd.55.2023.06.01.17.01.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 17:01:17 -0700 (PDT)
-Message-ID: <b97242cf-33cf-66b8-4816-ba1f90df41a4@gmail.com>
-Date:   Thu, 1 Jun 2023 19:01:15 -0500
+        bh=93AdyG83HyxVnXaMo7sA8WZyZkxYZ/RccX4TOVu/C4s=;
+        b=eRLOs5ATlb5yVBy9czLkNCs+nraUyGxGGr8oT0WiBMa/ko9wtSkyRdZVRGxVXrjdhm
+         u1BbWLG52gDPmxKX9KeiKfH1gqlq8ofBuW7CYCS4XXqOmycpaETyQXpeq7SD83ymNKul
+         ydExSU8Zfyij7rgfRFCWQP99xQB/A31GwOf5Ut5A30O52J8wA9URLqS/ggxBXnQ+oEQ1
+         MsNWWW2RkVHBB5WwyV67iqzu1yAesGrMtREFb5TmiFPn02UMomxtHplWz8tSW1tZSTxv
+         v71x2KwTwLl83OZwOG+CoNuDkik8r1ku5X53Wf4so0XO04zvgAhtQ8ReKLivZfYU31SX
+         kOFg==
+X-Gm-Message-State: AC+VfDxeAYbAQl8hVWBuPA9ixsrVY8CLUjbIvDXyT73Dxl/51swMzGuY
+        UJUh93dBOfDUIXP4vXJPhxQ=
+X-Google-Smtp-Source: ACHHUZ5THhBGMCfAmSzS/ioq25KBw5L0O65vhmB+0J8a4/fpA8qair3Z0fIPhVFMX+By3qAv9ZgXLw==
+X-Received: by 2002:a17:902:e884:b0:1b0:7c3c:31f9 with SMTP id w4-20020a170902e88400b001b07c3c31f9mr840365plg.53.1685664100488;
+        Thu, 01 Jun 2023 17:01:40 -0700 (PDT)
+Received: from localhost ([2405:6581:d4e0:1600:c494:2aca:bc01:6f7b])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902ea8b00b001ab1b7bae5asm4072981plb.184.2023.06.01.17.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 17:01:40 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 09:01:38 +0900
+From:   Nick Hastings <nicholaschastings@gmail.com>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Lyude Paul <lyude@redhat.com>, Lukas Wunner <lukas@wunner.de>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        "1036530@bugs.debian.org" <1036530@bugs.debian.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+ string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+Message-ID: <ZHkxYo/a+/uInkLG@xps>
+References: <ZHUt9xQKCwCflvVC@xps>
+ <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
+ <ZHWfMBeAONerAJmd@xps>
+ <ZHfa/wQlaVCeUC22@xps>
+ <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
+ <CACO55tsuO1kQUFfPdPFUHm4WEQseCR2tQSDhFRzR+8wOECZCyA@mail.gmail.com>
+ <MN0PR12MB61017541F5AC55485A490BCDE2499@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CACO55tudULtvt_Hcdg+uqXeYkSAR_NZ1oD=R_KhuE_THSRe88g@mail.gmail.com>
+ <MN0PR12MB6101DE067CF85E59AF187763E2499@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CACO55tuqAH5Zt+X9pjLFZ-RcFgxpgjpqmrAHPvm4=fb_DMBHyw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] ACPI: resource: Remove "Zen" specific match and quirks
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
-Cc:     gch981213@gmail.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@leemhuis.info,
-        ofenfisch@googlemail.com, wse@tuxedocomputers.com,
-        adam.niederer@gmail.com, adrian@freund.io, jirislaby@kernel.org,
-        Renjith.Pananchikkal@amd.com, anson.tsao@amd.com,
-        Richard.Gong@amd.com, evilsnoo@proton.me
-References: <20230515213822.1277-1-mario.limonciello@amd.com>
-From:   Matthew Anderson <ruinairas1992@gmail.com>
-In-Reply-To: <20230515213822.1277-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACO55tuqAH5Zt+X9pjLFZ-RcFgxpgjpqmrAHPvm4=fb_DMBHyw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tested Patch v3 and it still works on the Aya Neo Air Plus.
+Hi,
 
-Tested-by: Matthew Anderson<ruinairas1992@gmail.com>
+* Karol Herbst <kherbst@redhat.com> [230602 03:10]:
+> On Thu, Jun 1, 2023 at 7:21 PM Limonciello, Mario
+> <Mario.Limonciello@amd.com> wrote:
+> > > -----Original Message-----
+> > > From: Karol Herbst <kherbst@redhat.com>
+> > > Sent: Thursday, June 1, 2023 12:19 PM
+> > > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > > Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
+> > > <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+> > > Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
+> > > Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+> > > acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > > regressions@lists.linux.dev
+> > > Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+> > > string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+> > >
+> > > On Thu, Jun 1, 2023 at 6:54 PM Limonciello, Mario
+> > > <Mario.Limonciello@amd.com> wrote:
+> > > >
+> > > > [AMD Official Use Only - General]
+> > > >
+> > > > > -----Original Message-----
+> > > > > From: Karol Herbst <kherbst@redhat.com>
+> > > > > Sent: Thursday, June 1, 2023 11:33 AM
+> > > > > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > > > > Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
+> > > > > <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+> > > > > Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
+> > > > > Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+> > > > > acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > > > > regressions@lists.linux.dev
+> > > > > Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+> > > > > string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of
+> > > system)
+> > > > >
+> > > > > On Thu, Jun 1, 2023 at 6:18 PM Limonciello, Mario
+> > > > > >
+> > > > > > Lyude, Lukas, Karol
+> > > > > >
+> > > > > > This thread is in relation to this commit:
+> > > > > >
+> > > > > > 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string")
+> > > > > >
+> > > > > > Nick has found that runtime PM is *not* working for nouveau.
+> > > > > >
+> > > > >
+> > > > > keep in mind we have a list of PCIe controllers where we apply a
+> > > > > workaround:
+> > > > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers
+> > > > > /gpu/drm/nouveau/nouveau_drm.c?h=v6.4-rc4#n682
+> > > > >
+> > > > > And I suspect there might be one or two more IDs we'll have to add
+> > > > > there. Do we have any logs?
+> > > >
+> > > > There's some archived onto the distro bug.  Search this page for
+> > > "journalctl.log.gz"
+> > > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1036530
+> > > >
+> > >
+> > > interesting.. It seems to be the same controller used here. I wonder
+> > > if the pci topology is different or if the workaround is applied at
+> > > all.
+> >
+> > I didn't see the message in the log about the workaround being applied
+> > in that log, so I guess PCI topology difference is a likely suspect.
+> >
+>
+> yeah, but I also couldn't see a log with the usual nouveau messages,
+> so it's kinda weird.
+>
+> Anyway, the output of `lspci -tvnn` would help
 
-On 5/15/23 4:38 PM, Mario Limonciello wrote:
-> commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
-> AMD Zen platforms") attempted to overhaul the override logic so it
-> didn't apply on X86 AMD Zen systems.  This was intentional so that
-> systems would prefer DSDT values instead of default MADT value for
-> IRQ 1 on Ryzen 6000 systems which use ActiveLow for IRQ1.
->
-> This turned out to be a bad assumption because several vendors seem
-> to add Interrupt Source Override but don't fix the DSDT. A pile of
-> quirks was collecting that proved this wasn't sustaintable.
->
-> Adjust the logic so that only IRQ1 is overridden in Ryzen 6000 case.
->
-> This effectively reverts the following commits:
-> commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
-> GMxRGxx")
-> commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
-> commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
-> commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
->
-> Cc: ofenfisch@googlemail.com
-> Cc: gch981213@gmail.com
-> Cc: wse@tuxedocomputers.com
-> Cc: adam.niederer@gmail.com
-> Cc: adrian@freund.io
-> Cc: jirislaby@kernel.org
-> Tested-by: Renjith.Pananchikkal@amd.com
-> Tested-by: anson.tsao@amd.com
-> Tested-by: Richard.Gong@amd.com
-> Reported-by: evilsnoo@proton.me
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217394
-> Reported-by: ruinairas1992@gmail.com
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217406
-> Fixes: 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen platforms")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->   drivers/acpi/resource.c | 154 +++++++++++++++++-----------------------
->   1 file changed, 65 insertions(+), 89 deletions(-)
->
-> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-> index e8492b3a393a..828adb4be721 100644
-> --- a/drivers/acpi/resource.c
-> +++ b/drivers/acpi/resource.c
-> @@ -470,53 +470,7 @@ static const struct dmi_system_id asus_laptop[] = {
->   	{ }
->   };
->   
-> -static const struct dmi_system_id lenovo_laptop[] = {
-> -	{
-> -		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
-> -		},
-> -	},
-> -	{
-> -		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
-> -		},
-> -	},
-> -	{ }
-> -};
-> -
-> -static const struct dmi_system_id tongfang_gm_rg[] = {
-> -	{
-> -		.ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
-> -		.matches = {
-> -			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
-> -		},
-> -	},
-> -	{ }
-> -};
-> -
-> -static const struct dmi_system_id maingear_laptop[] = {
-> -	{
-> -		.ident = "MAINGEAR Vector Pro 2 15",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
-> -		}
-> -	},
-> -	{
-> -		.ident = "MAINGEAR Vector Pro 2 17",
-> -		.matches = {
-> -			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
-> -			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
-> -		},
-> -	},
-> -	{ }
-> -};
-> -
-> -struct irq_override_cmp {
-> +struct irq_override_dmi_cmp {
->   	const struct dmi_system_id *system;
->   	unsigned char irq;
->   	unsigned char triggering;
-> @@ -525,49 +479,85 @@ struct irq_override_cmp {
->   	bool override;
->   };
->   
-> -static const struct irq_override_cmp override_table[] = {
-> +struct irq_override_acpi_cmp {
-> +	const char *id;
-> +	unsigned char irq;
-> +	unsigned char triggering;
-> +	unsigned char polarity;
-> +};
-> +
-> +static const struct irq_override_dmi_cmp dmi_override_table[] = {
->   	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
->   	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
-> -	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
-> -	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
-> -	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
-> -	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
->   };
->   
-> -static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
-> -				  u8 shareable)
-> +/*
-> + * Ryzen 6000 requires ActiveLow for keyboard, but a number of machines
-> + * seem to get it wrong in DSDT or don't have an Interrupt Source
-> + * Override.
-> + */
-> +static const struct irq_override_acpi_cmp acpi_override_table[] = {
-> +	{ "AMDI0007", 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW },
-> +};
-> +
-> +static void acpi_dev_irq_override(u32 gsi, u8 *triggering, u8 *polarity,
-> +				  u8 *shareable)
->   {
-> -	int i;
-> +	int i, p, t;
-> +	int check_override = true;
->   
-> -	for (i = 0; i < ARRAY_SIZE(override_table); i++) {
-> -		const struct irq_override_cmp *entry = &override_table[i];
-> +	for (i = 0; i < ARRAY_SIZE(dmi_override_table); i++) {
-> +		const struct irq_override_dmi_cmp *entry = &dmi_override_table[i];
->   
->   		if (dmi_check_system(entry->system) &&
->   		    entry->irq == gsi &&
-> -		    entry->triggering == triggering &&
-> -		    entry->polarity == polarity &&
-> -		    entry->shareable == shareable)
-> -			return entry->override;
-> +		    entry->triggering == *triggering &&
-> +		    entry->polarity == *polarity &&
-> +		    entry->shareable == *shareable)
-> +			check_override = entry->override;
->   	}
->   
-> -#ifdef CONFIG_X86
-> -	/*
-> -	 * IRQ override isn't needed on modern AMD Zen systems and
-> -	 * this override breaks active low IRQs on AMD Ryzen 6000 and
-> -	 * newer systems. Skip it.
-> -	 */
-> -	if (boot_cpu_has(X86_FEATURE_ZEN))
-> -		return false;
-> -#endif
-> +	if (!check_override)
-> +		return;
->   
-> -	return true;
-> +	if (!acpi_get_override_irq(gsi, &t, &p)) {
-> +		u8 trig = t ? ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
-> +		u8 pol = p ? ACPI_ACTIVE_LOW : ACPI_ACTIVE_HIGH;
-> +
-> +		if (*triggering != trig || *polarity != pol) {
-> +			pr_warn("ACPI: IRQ %d override to %s%s, %s%s\n", gsi,
-> +				t ? "level" : "edge",
-> +				trig == *triggering ? "" : "(!)",
-> +				p ? "low" : "high",
-> +				pol == *polarity ? "" : "(!)");
-> +			*triggering = trig;
-> +			*polarity = pol;
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < ARRAY_SIZE(acpi_override_table); i++) {
-> +		const struct irq_override_acpi_cmp *entry = &acpi_override_table[i];
-> +
-> +		if (acpi_dev_found(entry->id) && gsi == entry->irq &&
-> +		   (*polarity != entry->polarity || *triggering != entry->triggering)) {
-> +			pr_warn("ACPI: IRQ %d override to %s%s, %s%s due to %s\n",
-> +				gsi,
-> +				entry->triggering ? "level" : "edge",
-> +				entry->triggering == *triggering ? "" : "(!)",
-> +				entry->polarity ? "low" : "high",
-> +				entry->polarity == *polarity ? "" : "(!)",
-> +				entry->id);
-> +			*polarity = entry->polarity;
-> +			*triggering = entry->triggering;
-> +		}
-> +	}
->   }
->   
->   static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
->   				     u8 triggering, u8 polarity, u8 shareable,
->   				     u8 wake_capable, bool check_override)
->   {
-> -	int irq, p, t;
-> +	int irq;
->   
->   	if (!valid_IRQ(gsi)) {
->   		irqresource_disabled(res, gsi);
-> @@ -580,26 +570,12 @@ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
->   	 * 2. BIOS uses IO-APIC mode Interrupt Source Override
->   	 *
->   	 * We do this only if we are dealing with IRQ() or IRQNoFlags()
-> -	 * resource (the legacy ISA resources). With modern ACPI 5 devices
-> +	 * resource (the legacy ISA resources). With ACPI devices
->   	 * using extended IRQ descriptors we take the IRQ configuration
->   	 * from _CRS directly.
->   	 */
-> -	if (check_override &&
-> -	    acpi_dev_irq_override(gsi, triggering, polarity, shareable) &&
-> -	    !acpi_get_override_irq(gsi, &t, &p)) {
-> -		u8 trig = t ? ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
-> -		u8 pol = p ? ACPI_ACTIVE_LOW : ACPI_ACTIVE_HIGH;
-> -
-> -		if (triggering != trig || polarity != pol) {
-> -			pr_warn("ACPI: IRQ %d override to %s%s, %s%s\n", gsi,
-> -				t ? "level" : "edge",
-> -				trig == triggering ? "" : "(!)",
-> -				p ? "low" : "high",
-> -				pol == polarity ? "" : "(!)");
-> -			triggering = trig;
-> -			polarity = pol;
-> -		}
-> -	}
-> +	if (check_override)
-> +		acpi_dev_irq_override(gsi, &triggering, &polarity, &shareable);
->   
->   	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
->   	irq = acpi_register_gsi(NULL, gsi, triggering, polarity);
+% lspci -tvnn
+-[0000:00]-+-00.0  Intel Corporation Device [8086:3e20]
+           +-01.0-[01]----00.0  NVIDIA Corporation TU117M [GeForce GTX 1650 Mobile / Max-Q] [10de:1f91]
+           +-02.0  Intel Corporation CoffeeLake-H GT2 [UHD Graphics 630] [8086:3e9b]
+           +-04.0  Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Thermal Subsystem [8086:1903]
+           +-08.0  Intel Corporation Xeon E3-1200 v5/v6 / E3-1500 v5 / 6th/7th/8th Gen Core Processor Gaussian Mixture Model [8086:1911]
+           +-12.0  Intel Corporation Cannon Lake PCH Thermal Controller [8086:a379]
+           +-14.0  Intel Corporation Cannon Lake PCH USB 3.1 xHCI Host Controller [8086:a36d]
+           +-14.2  Intel Corporation Cannon Lake PCH Shared SRAM [8086:a36f]
+           +-15.0  Intel Corporation Cannon Lake PCH Serial IO I2C Controller #0 [8086:a368]
+           +-15.1  Intel Corporation Cannon Lake PCH Serial IO I2C Controller #1 [8086:a369]
+           +-16.0  Intel Corporation Cannon Lake PCH HECI Controller [8086:a360]
+           +-17.0  Intel Corporation Cannon Lake Mobile PCH SATA AHCI Controller [8086:a353]
+           +-1b.0-[02-3a]----00.0-[03-3a]--+-00.0-[04]----00.0  Intel Corporation JHL6340 Thunderbolt 3 NHI (C step) [Alpine Ridge 2C 2016] [8086:15d9]
+           |                               +-01.0-[05-39]--
+           |                               \-02.0-[3a]----00.0  Intel Corporation JHL6340 Thunderbolt 3 USB 3.1 Controller (C step) [Alpine Ridge 2C 2016] [8086:15db]
+           +-1c.0-[3b]----00.0  Intel Corporation Wi-Fi 6 AX200 [8086:2723]
+           +-1c.4-[3c]----00.0  Realtek Semiconductor Co., Ltd. RTS525A PCI Express Card Reader [10ec:525a]
+           +-1d.0-[3d]----00.0  Samsung Electronics Co Ltd NVMe SSD Controller SM981/PM981/PM983 [144d:a808]
+           +-1f.0  Intel Corporation Cannon Lake LPC Controller [8086:a30e]
+           +-1f.3  Intel Corporation Cannon Lake PCH cAVS [8086:a348]
+           +-1f.4  Intel Corporation Cannon Lake PCH SMBus Controller [8086:a323]
+           \-1f.5  Intel Corporation Cannon Lake PCH SPI Controller
+           [8086:a324]
+
+
+Regards,
+
+Nick.
+
