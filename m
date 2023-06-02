@@ -2,366 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D62771FF83
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE9F71FF91
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbjFBKit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
+        id S235201AbjFBKkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235761AbjFBKi3 (ORCPT
+        with ESMTP id S235691AbjFBKjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:38:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37990E41
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:37:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=huZfoHHG3cp4Nm17RjoMlhrTlqRkwWxH2aF6LllRQqU=; b=JTw7f0JezMgvZ5YXLW/XbYxsct
-        HGX9HWYoDWdXOUga2zAkfkASQ1jumYYatsU8o1MKAqjnQLvPGWGMZEJyRGbCV0XyREtnX4zvU1d0n
-        kqQZcMyDfV3UihcgYyTC8GwDPqOoSCfHvIf8NL7JF+taxBjGhNw078lFYXGG+/CD343n7RrBrfv5/
-        j5fS/dYyUUnvGe6SPJo3jQcaUpziOSOULKY8WWTUQZQ27IRPXDJB6elpNQKH2bLTXPTaQU5Cmvok4
-        SGSuzwOYM6CSJaigt8Lfobndt+e+uk9NorPKabf79OrtkRRJKr9IHwsNvYOhoAk3NHRfUrSCR56NW
-        0Lw13XNA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q52A2-0098Sn-G7; Fri, 02 Jun 2023 10:37:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1A6943002F0;
-        Fri,  2 Jun 2023 12:37:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E1869241F9E4E; Fri,  2 Jun 2023 12:37:31 +0200 (CEST)
-Date:   Fri, 2 Jun 2023 12:37:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
- wait_task_inactive().
-Message-ID: <20230602103731.GA630648@hirez.programming.kicks-ass.net>
-References: <Y++UzubyNavLKFDP@linutronix.de>
- <20230525165244.GV83892@hirez.programming.kicks-ass.net>
- <20230526080543.GF38236@hirez.programming.kicks-ass.net>
- <20230526151335.oPeFiIdq@linutronix.de>
- <20230601091234.GW83892@hirez.programming.kicks-ass.net>
- <20230602082503.GA624418@hirez.programming.kicks-ass.net>
+        Fri, 2 Jun 2023 06:39:32 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C96E63;
+        Fri,  2 Jun 2023 03:39:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FQvpGxnUBVHAoDtVVqifZtfl/7hs8N0Iw5EQWCehdnRnGywMVZgxj/jVTku2WLczB/yjkbRA7UqGlGkon8Gc+njHglGQk7FDkEMf9svaTdJaN8tRNDz85BHhoJ6AW50JppaRVTiEInn53ZUffg/N2hCsERdBfrR0gdWAiejWR13qBlf5rELNa8AimxbfmVbBheCXSp6l1moxRg/tUQCPX7GHsCBQirPVPECHF6KUSuc/K0iJo5t/CVZqDAjRhZL9ysWiUMTeGeRdmK3obdKReACJJDspTarjyNG0nIjO3JYonWsRw5mZ58YI834ZbmmyaRQ/jJ2oyLs7bHaGMGJxHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H0MGORJcCTGs5zbRwB6zqDXpNBFUcyabH8AIGWtnHX4=;
+ b=Q2oKR0nTKh8voHDPGqdzxuUQv3ix5PTH8dBbY0hhzZ9I5BZZFm078zaxkPWQVFSqOm3ziBBT6J4tlCWtaxAuc88N7W/+xvZ+7OEW7mAkeaX4NIKcdBzWDyt4Ty8kc1HA/UOBfAGHMXK8Mt3EkYmE/w1eD1MvM0SX9bczsJleq53iVcXlZ0a9zdmc52lqppos/nZb3WP3LLD1uPXh91ZqYHFd/lg7ULxLbic78Zj1k26se4ycj+pyLnESlzxH8IZk1Ij9Kb+uHQhYXpyRuo3qbk+DbyWTeV69NO6nRPR85e4DGlhP5dD5oWbSrx05M8ZI1WqPhsKsxfwcOjfHy6rYfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H0MGORJcCTGs5zbRwB6zqDXpNBFUcyabH8AIGWtnHX4=;
+ b=rRamzo1CT+4YLXO13F44dBl2rwQp0LnZdqAB6si2bZEDCcvRx5ba4nyzyp4Z+tUsg1OcP3kfVqSqDWQo4D1vlprGeBpZafKbTGYu/VBTZQTqmjCq5MmWl2QsBy9DnvXEhSq7aTudD6N5gbYyb1A1geSuNwfSDi0HgAw5DWovxSw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by PAXPR04MB8926.eurprd04.prod.outlook.com (2603:10a6:102:20d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
+ 2023 10:38:17 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::47e4:eb1:e83c:fa4a]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::47e4:eb1:e83c:fa4a%4]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
+ 10:38:17 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+Subject: [PATCH RESEND net-next 0/5] Improve the taprio qdisc's relationship with its children
+Date:   Fri,  2 Jun 2023 13:37:45 +0300
+Message-Id: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BE1P281CA0095.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:79::10) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602082503.GA624418@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PAXPR04MB8926:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b29d556-4d77-47a3-a55d-08db635579b4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ga9Nm2SAeU7fW+IEYDOM4lteH7CXYCl1Parx0pgXu6vTUbLAP8GTO7ZM6EPrhUSfgIfNW2yyGbLyKaw4MB7XHo8W/ZcJkIjSrhO6YXn8u2uvgmKw83/n4yyWql6/LSbswla0Xsk9cD3zvhsqlTHoLMgRdvWcmY/QFPw8YEJV/VYwIjH1+/aFye8mVXYNlB77MSBxx84CiXlhEjQf6drWHZKNKW58AB0L5Ob6wcJLWnkFIkgUcVy/QpvAEDhvHmDk5gY4+Q5F89WZ1arwiot0p+kTzevmPKQCqPYYTU4dx8lEspvzLOtK4+UENLyY7qOFr57etPWjpSv16h0Eefp/e6Nw9+TXSAZOQ83EJRDGbfowXrP79xwkW+w7k1vqFUBqZ3SlY7AnpSPYgsMzDBkJ83dcWs7uVMUKdUtVSGFQty64y563WY7UKZHgHCNfREbpHokA+AC8Rdu29yUUi2l1qxsRNarFHulbqYF0iihykao8bmWQHb090a2n+inOTbvC5xlk208/LGhmHW5H+CJxJIg6AxVOwO7TPHsgBPBYY+2Da592smd9TmFYueym3HjFpdyNGv7qUpXEJcwfYAnH9uQ5WeOAGrgQtbiFPQW/6CY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(39860400002)(136003)(396003)(451199021)(8676002)(478600001)(6506007)(1076003)(26005)(186003)(6512007)(6666004)(966005)(52116002)(6486002)(2616005)(41300700001)(83380400001)(316002)(2906002)(44832011)(8936002)(5660300002)(7416002)(66476007)(66556008)(66946007)(6916009)(54906003)(86362001)(36756003)(4326008)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6J6+iuRlUQ080NeWSZtcHEqBrVdDdhKA5tvsWTbNrU+99rgBZ/B22GpKJ3DE?=
+ =?us-ascii?Q?IUwgcj+KAeLWibt0y6Zqw967UJ4vfUfroq1IOP+5dr+7d1TP8rhfEafqZ9Ac?=
+ =?us-ascii?Q?g27pJC6qJuBVF9KoGdeTwQdu8Ot6aRMNy5qkDYJef741+yE6xqw4/FevNRXa?=
+ =?us-ascii?Q?h2hyutgg2kwIPMWUpeOz20mJnYwToNcu1cQ6nDr1wSLfcJz4xsWpQzn6e1cZ?=
+ =?us-ascii?Q?Oo81/8v3+rzfB8+2zaXqWxeO7EkdXmhPEJ3TMlLfniMFe6dka7kVweNwrBQM?=
+ =?us-ascii?Q?H4BpOHLuOQI1G5AnvRtttgx93fvPJ8h+y4xVZwHm/H1ITz18GoLf7340QrmR?=
+ =?us-ascii?Q?NCOZCnxfgE5n5yGakq5WziSKtOqbOHq4Iy+a8cCeZeLbz2FzRlw+kXoKc2qb?=
+ =?us-ascii?Q?X/EhpSEHrYBoYu3arpEKPRGNOep3fUnj+WysG8QCdOgiALn6AQoN+PEg4XKh?=
+ =?us-ascii?Q?MT3cyTgvNgY3iToQtZMnwdI3zSqtFSaG0EohaeJ/sXWNEvG8cuDZqdKc/Law?=
+ =?us-ascii?Q?lu2qX9mKyzVp6hmLn7t4XMtoLlBvqEEK4LVyceyUBJjG1E5Hjbk3Cb6vsneg?=
+ =?us-ascii?Q?8IzUguNVcHULyi/Wx+zaBD8tVXZ06qaQ2813FYGkEvbDtkPj/M8r5noPyYgq?=
+ =?us-ascii?Q?rm6sYxzVF7MREnF13CuJrZtgpcv59yut0o8vX+MK3lZwKXj0MbpUx5+o1xJo?=
+ =?us-ascii?Q?G+opErLThXuf6mgYzDPrt6lJ3EdITddlpSIYrPKjn2VYur6BeQ+uCXp0Ufhm?=
+ =?us-ascii?Q?o4ejyqvaZ0Y+1YaAPhnhQxhQsqH22UGbkNxOksQQY1MBiSUmjBF7PHOhPOfN?=
+ =?us-ascii?Q?oHneD/DsJys9yV4vmTgQrl01yflp95IVM4Ou1zYqdm7+FrhSlQcScWiiDJJ6?=
+ =?us-ascii?Q?7OY4G5Jx3wlTZA7ebdVUdG9WORApFnBwvfpsaWK30PE9hrt0N9qYQeR96nTa?=
+ =?us-ascii?Q?hSv4mDmrAKPthydAQT7oXnOJO0EH6sqvzn6cr45gKDOf9JSOz5UxeZMz+Lqc?=
+ =?us-ascii?Q?mKP/7FBiBcRe/FeG/BpmR7ag5i44EnDwM0KZTZdJU5x1ouMvRfBKLbs2fm3r?=
+ =?us-ascii?Q?COE+fMOj9UcgW3TtWKaor6IGNJyxrBxg3+uxlZ4MyGKY78f4RuQSF8XumGfa?=
+ =?us-ascii?Q?SIDKoMLko8DSMQBWuIeQcupuDuhLVXVwIuoJvvV53F/MlQiKTPLNXwNOlQXn?=
+ =?us-ascii?Q?KP0ZlcwKJqEykpa9k6HgX+xfWBOIhjmsMhN4YcrtNlDBDvcUo6M8gMrWd6lv?=
+ =?us-ascii?Q?CYI6U2mx8cIrooxLAUADFQqEytAi+rRtSmSSaizUj7VAUyZmIVdt41NABjhR?=
+ =?us-ascii?Q?QDqYkqdnHKIkTQjrk77BSPNGdHmQYOuGm1ZgdxVPFmASJr4e9YVM1WY8wW5Q?=
+ =?us-ascii?Q?h5t3XpKteL/uGXZLbOCvhgi7p0pNO73vC48DN3jlp636O4p64JR1shBgkJaM?=
+ =?us-ascii?Q?X0dAznWDQEcbQ6uakmHuak8+8PzqbcOxp3ilDMTvextqwHqye/rVIE6xlOHb?=
+ =?us-ascii?Q?+sUmu4A4xXsXIglcuDoYcf+Lt3WaPnWxsdbEEi3PCoN5bBJqwaxxsvjN+Kwj?=
+ =?us-ascii?Q?zGYyitO4mf5OOYFoJP0YcGp5DY9M/V9oz2io1IflyGXwA52OTNJAalLRCHpQ?=
+ =?us-ascii?Q?4A=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b29d556-4d77-47a3-a55d-08db635579b4
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 10:38:16.9814
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qFgIYnM8vOsm2Ot6d4/zbI9XchE7DyKjinFoHIRbvbSHc9mUCPzxcrZbZ98VnxGKZ1J8Oq81FfsVDkCVjpLWdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8926
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 10:25:03AM +0200, Peter Zijlstra wrote:
-> On Thu, Jun 01, 2023 at 11:12:34AM +0200, Peter Zijlstra wrote:
-> > On Fri, May 26, 2023 at 05:13:35PM +0200, Sebastian Andrzej Siewior wrote:
-> > > On 2023-05-26 10:05:43 [+0200], Peter Zijlstra wrote:
-> > > > New day, new chances... How's this? Code-gen doesn't look totally
-> > > > insane, but then, making sense of an optimizing compiler's output is
-> > > > always a wee challenge.
-> > > 
-> > > Noticed it too late but looks good. Tested, works.
-> > 
-> > Excellent; full patch below. Will go stick in tip/sched/core soonish.
-> 
-> Urgh, so robot kicked me for breaking !SMP. And that made me realize
-> that UP wait_task_inactive() is broken on PREEMPT_RT.
-> 
-> Let me figure out what best to do about that..
+[ Original patch set was lost due to an apparent transient problem with
+kernel.org's DNSBL setup. This is an identical resend. ]
 
-I'll stick this in front -- see what happens ;-)
+Prompted by Vinicius' request to consolidate some child Qdisc
+dereferences in taprio:
+https://lore.kernel.org/netdev/87edmxv7x2.fsf@intel.com/
 
----
-Subject: sched: Unconditionally use full-fat wait_task_inactive()
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri Jun  2 10:42:53 CEST 2023
+I remembered that I had left some unfinished work in this Qdisc, namely
+commit af7b29b1deaa ("Revert "net/sched: taprio: make qdisc_leaf() see
+the per-netdev-queue pfifo child qdiscs"").
 
-While modifying wait_task_inactive() for PREEMPT_RT; the build robot
-noted that UP got broken. This led to audit and consideration of the
-UP implementation of wait_task_inactive().
+This patch set represents another stab at, essentially, what's in the
+title. Not only does taprio not properly detect when it's grafted as a
+non-root qdisc, but it also returns incorrect per-class stats.
+Eventually, Vinicius' request is addressed too, although in a different
+form than the one he requested (which was purely cosmetic).
 
-It looks like the UP implementation is also broken for PREEMPT;
-consider task_current_syscall() getting preempted between the two
-calls to wait_task_inactive().
+Review from people more experienced with Qdiscs than me would be
+appreciated. I tried my best to explain what I consider to be problems.
+I am deliberately targeting net-next because the changes are too
+invasive for net - they were reverted from stable once already.
 
-Therefore move the wait_task_inactive() implementation out of
-CONFIG_SMP and unconditionally use it.
+Vladimir Oltean (5):
+  net/sched: taprio: don't access q->qdiscs[] in unoffloaded mode during
+    attach()
+  net/sched: taprio: keep child Qdisc refcount elevated at 2 in offload
+    mode
+  net/sched: taprio: try again to report q->qdiscs[] to qdisc_leaf()
+  net/sched: taprio: delete misleading comment about preallocating child
+    qdiscs
+  net/sched: taprio: dump class stats for the actual q->qdiscs[]
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/linux/sched.h |    7 -
- kernel/sched/core.c   |  216 +++++++++++++++++++++++++-------------------------
- 2 files changed, 110 insertions(+), 113 deletions(-)
+ net/sched/sch_taprio.c | 60 ++++++++++++++++++++++++------------------
+ 1 file changed, 35 insertions(+), 25 deletions(-)
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2006,15 +2006,12 @@ static __always_inline void scheduler_ip
- 	 */
- 	preempt_fold_need_resched();
- }
--extern unsigned long wait_task_inactive(struct task_struct *, unsigned int match_state);
- #else
- static inline void scheduler_ipi(void) { }
--static inline unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
--{
--	return 1;
--}
- #endif
- 
-+extern unsigned long wait_task_inactive(struct task_struct *, unsigned int match_state);
-+
- /*
-  * Set thread flags in other task's structures.
-  * See asm/thread_info.h for TIF_xxxx flags available:
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2213,6 +2213,114 @@ void check_preempt_curr(struct rq *rq, s
- 		rq_clock_skip_update(rq);
- }
- 
-+/*
-+ * wait_task_inactive - wait for a thread to unschedule.
-+ *
-+ * Wait for the thread to block in any of the states set in @match_state.
-+ * If it changes, i.e. @p might have woken up, then return zero.  When we
-+ * succeed in waiting for @p to be off its CPU, we return a positive number
-+ * (its total switch count).  If a second call a short while later returns the
-+ * same number, the caller can be sure that @p has remained unscheduled the
-+ * whole time.
-+ *
-+ * The caller must ensure that the task *will* unschedule sometime soon,
-+ * else this function might spin for a *long* time. This function can't
-+ * be called with interrupts off, or it may introduce deadlock with
-+ * smp_call_function() if an IPI is sent by the same process we are
-+ * waiting to become inactive.
-+ */
-+unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
-+{
-+	int running, queued;
-+	struct rq_flags rf;
-+	unsigned long ncsw;
-+	struct rq *rq;
-+
-+	for (;;) {
-+		/*
-+		 * We do the initial early heuristics without holding
-+		 * any task-queue locks at all. We'll only try to get
-+		 * the runqueue lock when things look like they will
-+		 * work out!
-+		 */
-+		rq = task_rq(p);
-+
-+		/*
-+		 * If the task is actively running on another CPU
-+		 * still, just relax and busy-wait without holding
-+		 * any locks.
-+		 *
-+		 * NOTE! Since we don't hold any locks, it's not
-+		 * even sure that "rq" stays as the right runqueue!
-+		 * But we don't care, since "task_on_cpu()" will
-+		 * return false if the runqueue has changed and p
-+		 * is actually now running somewhere else!
-+		 */
-+		while (task_on_cpu(rq, p)) {
-+			if (!(READ_ONCE(p->__state) & match_state))
-+				return 0;
-+			cpu_relax();
-+		}
-+
-+		/*
-+		 * Ok, time to look more closely! We need the rq
-+		 * lock now, to be *sure*. If we're wrong, we'll
-+		 * just go back and repeat.
-+		 */
-+		rq = task_rq_lock(p, &rf);
-+		trace_sched_wait_task(p);
-+		running = task_on_cpu(rq, p);
-+		queued = task_on_rq_queued(p);
-+		ncsw = 0;
-+		if (READ_ONCE(p->__state) & match_state)
-+			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
-+		task_rq_unlock(rq, p, &rf);
-+
-+		/*
-+		 * If it changed from the expected state, bail out now.
-+		 */
-+		if (unlikely(!ncsw))
-+			break;
-+
-+		/*
-+		 * Was it really running after all now that we
-+		 * checked with the proper locks actually held?
-+		 *
-+		 * Oops. Go back and try again..
-+		 */
-+		if (unlikely(running)) {
-+			cpu_relax();
-+			continue;
-+		}
-+
-+		/*
-+		 * It's not enough that it's not actively running,
-+		 * it must be off the runqueue _entirely_, and not
-+		 * preempted!
-+		 *
-+		 * So if it was still runnable (but just not actively
-+		 * running right now), it's preempted, and we should
-+		 * yield - it could be a while.
-+		 */
-+		if (unlikely(queued)) {
-+			ktime_t to = NSEC_PER_SEC / HZ;
-+
-+			set_current_state(TASK_UNINTERRUPTIBLE);
-+			schedule_hrtimeout(&to, HRTIMER_MODE_REL_HARD);
-+			continue;
-+		}
-+
-+		/*
-+		 * Ahh, all good. It wasn't running, and it wasn't
-+		 * runnable, which means that it will never become
-+		 * running in the future either. We're all done!
-+		 */
-+		break;
-+	}
-+
-+	return ncsw;
-+}
-+
- #ifdef CONFIG_SMP
- 
- static void
-@@ -3341,114 +3449,6 @@ int migrate_swap(struct task_struct *cur
- }
- #endif /* CONFIG_NUMA_BALANCING */
- 
--/*
-- * wait_task_inactive - wait for a thread to unschedule.
-- *
-- * Wait for the thread to block in any of the states set in @match_state.
-- * If it changes, i.e. @p might have woken up, then return zero.  When we
-- * succeed in waiting for @p to be off its CPU, we return a positive number
-- * (its total switch count).  If a second call a short while later returns the
-- * same number, the caller can be sure that @p has remained unscheduled the
-- * whole time.
-- *
-- * The caller must ensure that the task *will* unschedule sometime soon,
-- * else this function might spin for a *long* time. This function can't
-- * be called with interrupts off, or it may introduce deadlock with
-- * smp_call_function() if an IPI is sent by the same process we are
-- * waiting to become inactive.
-- */
--unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
--{
--	int running, queued;
--	struct rq_flags rf;
--	unsigned long ncsw;
--	struct rq *rq;
--
--	for (;;) {
--		/*
--		 * We do the initial early heuristics without holding
--		 * any task-queue locks at all. We'll only try to get
--		 * the runqueue lock when things look like they will
--		 * work out!
--		 */
--		rq = task_rq(p);
--
--		/*
--		 * If the task is actively running on another CPU
--		 * still, just relax and busy-wait without holding
--		 * any locks.
--		 *
--		 * NOTE! Since we don't hold any locks, it's not
--		 * even sure that "rq" stays as the right runqueue!
--		 * But we don't care, since "task_on_cpu()" will
--		 * return false if the runqueue has changed and p
--		 * is actually now running somewhere else!
--		 */
--		while (task_on_cpu(rq, p)) {
--			if (!(READ_ONCE(p->__state) & match_state))
--				return 0;
--			cpu_relax();
--		}
--
--		/*
--		 * Ok, time to look more closely! We need the rq
--		 * lock now, to be *sure*. If we're wrong, we'll
--		 * just go back and repeat.
--		 */
--		rq = task_rq_lock(p, &rf);
--		trace_sched_wait_task(p);
--		running = task_on_cpu(rq, p);
--		queued = task_on_rq_queued(p);
--		ncsw = 0;
--		if (READ_ONCE(p->__state) & match_state)
--			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
--		task_rq_unlock(rq, p, &rf);
--
--		/*
--		 * If it changed from the expected state, bail out now.
--		 */
--		if (unlikely(!ncsw))
--			break;
--
--		/*
--		 * Was it really running after all now that we
--		 * checked with the proper locks actually held?
--		 *
--		 * Oops. Go back and try again..
--		 */
--		if (unlikely(running)) {
--			cpu_relax();
--			continue;
--		}
--
--		/*
--		 * It's not enough that it's not actively running,
--		 * it must be off the runqueue _entirely_, and not
--		 * preempted!
--		 *
--		 * So if it was still runnable (but just not actively
--		 * running right now), it's preempted, and we should
--		 * yield - it could be a while.
--		 */
--		if (unlikely(queued)) {
--			ktime_t to = NSEC_PER_SEC / HZ;
--
--			set_current_state(TASK_UNINTERRUPTIBLE);
--			schedule_hrtimeout(&to, HRTIMER_MODE_REL_HARD);
--			continue;
--		}
--
--		/*
--		 * Ahh, all good. It wasn't running, and it wasn't
--		 * runnable, which means that it will never become
--		 * running in the future either. We're all done!
--		 */
--		break;
--	}
--
--	return ncsw;
--}
--
- /***
-  * kick_process - kick a running thread to enter/exit the kernel
-  * @p: the to-be-kicked thread
+-- 
+2.34.1
+
