@@ -2,186 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BF271FF80
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E963F71FF7B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbjFBKim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S234303AbjFBKhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbjFBKiM (ORCPT
+        with ESMTP id S235379AbjFBKhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:38:12 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE00173A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:37:24 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30ae4ec1ac7so1699827f8f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685702237; x=1688294237;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=9p+yTt6cvg8vUG2ftzRzXYP4tvdzivt6ek/MD3BvSqg=;
-        b=kMiA0W7FHdz+uujDyp0kMsyzJlr0kkcny33kPt906dUVlKCKD83JF+0PCWCCjGNQOQ
-         Vg2ngl7CN+L4oz8hEMY0vJa5jNykeoNYEkyntjxLl7hOZUOp8TUpwFzvrOpFWdXFsctr
-         nczNfwOEQLhUKGHlJ8b/edYweXe+1pSa6IEGolmPpSL+Y/YUxpPJRaKwVBnVJYTvv9w8
-         WSrhb45ryLpEUm0PPLn/XvevfdZ8cNiN4R4+h32FfSrIycN+Hf8z1pMWkPfkU5pldWX8
-         V5NuW9oYeN+2TtsOcuJKNcKvOH2zKIL2+IQnUkaymEQzBeTlwxsOalSM1FoeBVH6z5Ar
-         eYhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685702237; x=1688294237;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9p+yTt6cvg8vUG2ftzRzXYP4tvdzivt6ek/MD3BvSqg=;
-        b=ZXefS3988HIoGEY3Y6+pBTDPImWu0K4hOSrUP0qYwES70TtKzhG3pXIvIpgVrhUC+p
-         emt9o4CP3A7Xz89cw1dD8OHV9xe1h8g6tOp9vVZN9lKTORBInkBSYH6OuO7DnnCtjFHO
-         ghV0xBBZN9SI9pPMjTVXogP4/GQ+UpPTwMai7R1ykANSCEivN9Cv9pd24+UNkRrlh4xS
-         VgpvQ40aL4+PBsqx7pK/nGzs8VHhyln3lpVMAuC05Fqib8QwJ8U8/Z48aOPPMTfJW2lQ
-         C4B0m6EMSUab9XZ79MK6rU88s1kpChAM+zQa1vmIpZyfwbaoq366pd+e5qax/PLuT123
-         ICXA==
-X-Gm-Message-State: AC+VfDwjV+gPEMYbFSvKPekMfp3qS/hUh97V8y7fQY70cew7lu61bC+F
-        CXl7QS8xRlueT1OZt6G3hwXJDA==
-X-Google-Smtp-Source: ACHHUZ4HwsJe1KA49rn8/TM8DLfaBgWKcx6yNCY8IZEEFTpdXwm5jYa5kA5SGOfYUFHM0lNuBWAkLQ==
-X-Received: by 2002:a05:6000:1043:b0:30a:e542:c5c9 with SMTP id c3-20020a056000104300b0030ae542c5c9mr4017690wrx.24.1685702237707;
-        Fri, 02 Jun 2023 03:37:17 -0700 (PDT)
-Received: from localhost ([147.161.155.99])
-        by smtp.gmail.com with ESMTPSA id k9-20020a056000004900b002c71b4d476asm1279740wrx.106.2023.06.02.03.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 03:37:17 -0700 (PDT)
-References: <20230601134946.3887870-1-aliceryhl@google.com>
- <20230601134946.3887870-3-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v2 2/8] rust: add offset_of! macro
-Date:   Fri, 02 Jun 2023 12:33:51 +0200
-In-reply-to: <20230601134946.3887870-3-aliceryhl@google.com>
-Message-ID: <875y862lr7.fsf@metaspace.dk>
+        Fri, 2 Jun 2023 06:37:36 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2060b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7d00::60b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A833710C4;
+        Fri,  2 Jun 2023 03:36:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U9nXqIBHw9djSsU+JFn3jCszLmaF9YOvlQa2ADUB6+qBeGoLs1HCE8rNpPrCvvZ7drW5i+TxwTLO2hX3XAUARcJHtiGeJOssdZ8pgFFuo9L4NlxPFpf+ZVJUSoSezajC7dJimloUHfJ0lQfJ62Of6F+RcGr8Km6Es0ZVcBdv+yVq0LzQx3IYVpOM3dhr6ytCbDP2p7KwUULPaKJ+y7gtT+22yiQ+n04pBkdokz3hB6d/hbt2dVhoR0vnQ198s00PB3tEh493Lf7vhi5qNUMIEIXdjgOa6TBCIXUPfW484c78CE6ifjvMHEpi5RrBbxEZROgAp1u3tGhBuiTukLy8cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L3kA/wtloeSeYgTmTCgtivfSLN2skVQshiPOgGckeIw=;
+ b=DGvrajESfmW0ZoqQE6AW5nJx1ftQClWPeR/3BAB4AWKsbQe4AgZ/n5c/mAyRN1/8NEkWlDBTiYNNBaA7bJLVW4/W5w+MoTx8uIZfLXzSBGa6FkoTsBtIwb4hwyDN7iIGrngvokv1UMCOGlcPswyptDYiMfC9yVCmm3goxbYjg3IcarXf/JikdItuMhd9C2TCJsdOyAJm/HOxePaTZr/JNRGl0N+w5gq67qT4y70K5bkDv98neaL4ZQxv+Wf/KKNOutDro7D8Mx5nQRmV/Vg4QyMtJP+gui/dJ2v5Ylszyc9g5bnhuQsfRMEBZRND/ZqDimaomFKlShM3kD0pvrr0zg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L3kA/wtloeSeYgTmTCgtivfSLN2skVQshiPOgGckeIw=;
+ b=pOfv8b7ZMPgiCxI4ofAeELoBtlgEELvOswFJ5JCBdJF44zfnhszQnXejFZLy8RUnqu4GgyyBXkyC/UcnB+ZRCutcCsp9ZO0stbKJBr7bOULlrQwdhe9iY8mnYH2kzBXvpsSGqG3H6IMWHK+rA0dgsvKlm6bu1VUonfM2rJGOjoc=
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
+ by DBBPR04MB7819.eurprd04.prod.outlook.com (2603:10a6:10:1e9::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
+ 2023 10:35:53 +0000
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2]) by AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2%4]) with mapi id 15.20.6433.018; Fri, 2 Jun 2023
+ 10:35:53 +0000
+From:   Wei Fang <wei.fang@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+CC:     Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net 1/2] net: enetc: correct the statistics of rx bytes
+Thread-Topic: [PATCH net 1/2] net: enetc: correct the statistics of rx bytes
+Thread-Index: AQHZlTffhwfuU54qiEe0/Kj0J7gVa693UGgAgAAAIZA=
+Date:   Fri, 2 Jun 2023 10:35:53 +0000
+Message-ID: <AM5PR04MB3139F0649E36BB4AB25B0B80884EA@AM5PR04MB3139.eurprd04.prod.outlook.com>
+References: <20230602094659.965523-1-wei.fang@nxp.com>
+ <20230602094659.965523-2-wei.fang@nxp.com>
+ <20230602103142.ryesgb7ykamtzxnx@skbuf>
+In-Reply-To: <20230602103142.ryesgb7ykamtzxnx@skbuf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM5PR04MB3139:EE_|DBBPR04MB7819:EE_
+x-ms-office365-filtering-correlation-id: 5fa25987-e203-4c07-88dc-08db63552424
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rB9aIR/6UDt6QYhRXihiXzF09+s3I0NjLWSX/xTDmA2QF1SY3Z+APgWMr11xYfIKzrtNH5yAXU8e/eDSeKdb2RbutXd1QJodY7fr9McRIxvRXg9U1qXBMckks1S5DtQk1PaQvDigvN7CRj5QSoA8NuoNMYg3n6xLwDWG+HxfAEeZDH1efWtiWNW+0kKFf/EyE+K0850qPI4Fr7fGEJLGIe0M33bJVvJihyl61+P5ZlhOaCHCGe3P6sZvYxfi+uLl0SrlD5vmWT+fIRpDvXxI1NOmjGy/kLAalpJWccVPEN5G+aF5Hui6CX+yq2s6cdz5UqNSf1GDDBFzeOPspDs/KsTsSt4Su5CKD+5izo2Uh+IjTEnz+IOZjb67DyRZXIKHanKLwf4XfYbupm+B/ss6vsTZss7Wc27nh1NX4oaggevSZdVCwRPYB+QMOfHyIr2FxxqqxamDpZp8iP0ny45We1l2iD39Lts8f5iErDhd3ilEDu2F9nfw7+/n1KHxCjDsyAQyhkVKTl6qganWNFdIjNeSjA0qtQqjEPIwk7LTOHyuzsvJg+Vr96DXDA8oXYNa3rOU0nu/b8vxZ3AnTD6Pw5XGj1u84Gbw1cL3xjXyvKM7IwuBC0QwB2AkvWL57dQp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(136003)(39860400002)(346002)(451199021)(6506007)(53546011)(9686003)(86362001)(186003)(66946007)(66556008)(66476007)(66446008)(64756008)(4326008)(7416002)(38070700005)(6636002)(33656002)(5660300002)(52536014)(8936002)(8676002)(478600001)(6862004)(83380400001)(2906002)(76116006)(7696005)(38100700002)(44832011)(122000001)(316002)(54906003)(41300700001)(26005)(55016003)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?N1FnNFpjdk4wRk1JK1BGWWI1cTNRTHVDNFp2Nk8yTWZPQVQwdEpOL0xWQXNm?=
+ =?gb2312?B?OTg5aEdDUzNaU2J1TzBybjBhVEMzVE16dUNDTWVBcFNCNEkranB3NnJQWFJQ?=
+ =?gb2312?B?ZzFIOWdyOFYvWFB3NGxhN0FYZ1FNaDVwQ1cyOHVHL2pjcll4RkhFMHRIaStO?=
+ =?gb2312?B?VHFockl0cDErZ2RCQ09NRjVJTGVVYXVzN1hLQ21PeFRMR2RDVFlKWCtKZ05H?=
+ =?gb2312?B?OEdUVWZEOVZLTkx5WjU3a3VUUVR4UzBqQjI0Z1dnYnYwZ3FuTEhheVFUVWZv?=
+ =?gb2312?B?QTQ4R2llalNmMmZuN3hzM2w4OGJNTzJDMWFDeERxS25UNWFlSmxlKzVUd1Nk?=
+ =?gb2312?B?Y2hpWDJ4QTVmbWpLZHVaLzRFUVpNOVdyK1BZRFJ2UUVxdWhtbUNYR1ppNnRj?=
+ =?gb2312?B?RjhZSnhETGFFNnpiZjA2cnJqQnRQSHdmTnF0YVA0VFdRZlJ1UGJQQXhjREFV?=
+ =?gb2312?B?T1pBUU5oSVhKbTViSkJlOURndk9KSE8xTmcwSXBVQWhCajNPcWIvYXJHT2c4?=
+ =?gb2312?B?ZmJreXJtNWZHUHVyU3lCVHlqQTcvaHQ0UkQ0ek5obSs5K1h1czF1SXNCQTg2?=
+ =?gb2312?B?eEZ3TWNrQ3BhSDdpdEJvRzM5c21HellFdHlnenl5aUUzSWcraTArWnVyaDEr?=
+ =?gb2312?B?NXF3dFVicWVaNlpIUDNBNHpWZDdmNWdxalZ0Rm9wSWlNQjhHUzB3bUFEUU4w?=
+ =?gb2312?B?QkVZbTRISExzbmdCb3lsbmx0OVRmeld1bHcrMEMvelFxUWpHeVU0RmlNRGlo?=
+ =?gb2312?B?dzQvVUpjc1hZMEJDZXE5ZHpDcjBHQkppWTZMdWZ2blJ5QkhXaXhReXJYdkg5?=
+ =?gb2312?B?OTdqbmJ2dGhOV1Z0K2tYWHZ1MXE5Wm4wSEhnQytVdDRrLytGbkx4SUtrRzc3?=
+ =?gb2312?B?cm0zWlZ4RVRHNnBuRjlwd1hUa0hSYVZ0NFA5cG9oTnFMNkZQNjFCcTdudGVD?=
+ =?gb2312?B?czQxUWpkY3h5UExzcmpjUmdQaFFsZUJOVWdZMjdObGJlWHJjRkdtTytDbHRv?=
+ =?gb2312?B?bjNIK0o5VDIxQXl0K013VXlSZVdkajh3end1a3hWb1QvZXhGQkNqMlZTL2tQ?=
+ =?gb2312?B?UUFaNElvdEEyWXc3d0dua2Y5TVB4Y3FOMkUwb3B6aXRCZk00VDZBaWdJS3h4?=
+ =?gb2312?B?L2hjT3hXckc5T1R6RGI1VUw3WmNMc2lzSDZFNjBWVit4ZGEwNGJqZDV3Smh1?=
+ =?gb2312?B?NzcrSi80S2JFRjZzR2E2dzEvSFoxVVg4aEN0UkxlZEZhbnhWdUt4ejhES2VI?=
+ =?gb2312?B?VzJaYTFTQXdWRFBBakJoRHE2WEd3VTJkK0twRXlCdW5McndPVS9KWjh2Z0dV?=
+ =?gb2312?B?dG90UnhrTHpnTVE3Ymhqd2d5UTh0Y1oyeVh6dS9GRG0zTGcvcmxORHF0R05w?=
+ =?gb2312?B?SjFheTdMWHhmc0RyVjIyUjJKemY4SUNDVDJwRTU0anNTWktjaVdSZmh3UXhX?=
+ =?gb2312?B?NEZpeEE1Qm9kcTRPT0F1NXl5bmxROUhKaCtLcjc3TXo5Q2lZLzNUL3ptOWIx?=
+ =?gb2312?B?TUtlU0Fnck9tSkNncGwxLzFwTFlZTWc2OG12WXVWcUIraGR2MUR6S3U2Mk1V?=
+ =?gb2312?B?aFNzUitnQnEyWk1Xdk9MWnFTSmtEV242MFZaUEN5RFFWdVpkSElTcVl2WXg3?=
+ =?gb2312?B?ZnQrNGo3S0pGd3I4MnBRWDVKZlJEVGFoYWZiR2J3ZEM2Q1gvS21pUlgyc25F?=
+ =?gb2312?B?NkJjZGhOSTlDL2FERnV4ZHlxQjBYUVprV2pRVzNHbUJIV2xGY1pVK1JGUDNP?=
+ =?gb2312?B?bStaRUtteEJxQjhrclg4ZVMwVFBjYWYzZzFLUEFiOVR3NHhiY3NaRklxZks5?=
+ =?gb2312?B?N0k3NXNleGJ5T2xWN1NhcVpFUUw5L2ZrMGt6WXJ3aG84YXVLdEZtMTg5a1pI?=
+ =?gb2312?B?TmVGL3FISjdrTmVwS0NzZ2Z4dWkzeGMzMGFqVnpCMEJqK09ranpOTG5LdHNp?=
+ =?gb2312?B?Tmk5Z3NGWVpiYzJNTEpVcVd1SnAzSTVmNG9JaS9oWGRzVERtTG0yTXMyVENF?=
+ =?gb2312?B?K1JOVjJKbnZMcW82czFFdGVLSUI3TmNqTDE3SVVtQUxPNWg0T0FJenBaT3VQ?=
+ =?gb2312?B?amJhSzczUzJoVGxqT0kvcEdsM2FoSFkwanE3U29iNU1EWjBHQjRXMjdkM2lB?=
+ =?gb2312?Q?VndY=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5fa25987-e203-4c07-88dc-08db63552424
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2023 10:35:53.2273
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: u8aMA/tPa4BGt+jEvaFEFmNy5gbIwIDklzQiJVywFlYz4J/nAzuHNo74hy4T3Y8vLhbZzc/UyeE8YpDqFsGfNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7819
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Alice Ryhl <aliceryhl@google.com> writes:
-
-> From: Wedson Almeida Filho <walmeida@microsoft.com>
->
-> This macro is used to compute the offset of a field in a struct.
->
-> This commit enables an unstable feature that is necessary for using
-> the macro in a constant. However, this is not a problem as the macro
-> will become available from the Rust standard library soon [1]. The
-> unstable feature can be disabled again once that happens.
->
-> The macro in this patch does not support sub-fields. That is, you cannot
-> write `offset_of!(MyStruct, field.sub_field)` to get the offset of
-> `sub_field` with `field`'s type being a struct with a field called
-> `sub_field`. This is because `field` might be a `Box<SubStruct>`, which
-> means that you would be trying to compute the offset to something in an
-> entirely different allocation. There's no easy way to fix the current
-> macro to support subfields, but the version being added to the standard
-> library should support it, so the limitation is temporary and not a big
-> deal.
->
-> Link: https://github.com/rust-lang/rust/issues/106655 [1]
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Co-developed-by: Alice Ryhl <aliceryhl@google.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> ---
->  rust/kernel/lib.rs     | 35 +++++++++++++++++++++++++++++++++++
->  scripts/Makefile.build |  2 +-
->  2 files changed, 36 insertions(+), 1 deletion(-)
->
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index eaded02ffb01..7ea777b731e6 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -14,6 +14,7 @@
->  #![no_std]
->  #![feature(allocator_api)]
->  #![feature(coerce_unsized)]
-> +#![feature(const_refs_to_cell)]
->  #![feature(dispatch_from_dyn)]
->  #![feature(new_uninit)]
->  #![feature(receiver_trait)]
-> @@ -98,3 +99,37 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
->      // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/issues/2094>.
->      loop {}
->  }
-> +
-> +/// Calculates the offset of a field from the beginning of the struct it belongs to.
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// #[repr(C)]
-> +/// struct Test {
-> +///     a: u64,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// assert_eq!(kernel::offset_of!(Test, b), 8);
-> +/// ```
-> +#[macro_export]
-> +macro_rules! offset_of {
-> +    ($type:path, $field:ident) => {{
-
-Could we add a descriptive comment?
-
-           // Prevent deref coersion to `$field` by requiring `$type`
-           // has a field named `$field`
-
-BR Andreas
-
-> +        let $type { $field: _, .. };
-> +        let tmp = ::core::mem::MaybeUninit::<$type>::uninit();
-> +        let outer = tmp.as_ptr();
-> +        // To avoid warnings when nesting `unsafe` blocks.
-> +        #[allow(unused_unsafe)]
-> +        // SAFETY: The pointer is valid and aligned, just not initialised; `addr_of` ensures that
-> +        // we don't actually read from `outer` (which would be UB) nor create an intermediate
-> +        // reference.
-> +        let inner = unsafe { ::core::ptr::addr_of!((*outer).$field) } as *const u8;
-> +        // To avoid warnings when nesting `unsafe` blocks.
-> +        #[allow(unused_unsafe)]
-> +        // SAFETY: The two pointers are within the same allocation block.
-> +        unsafe {
-> +            inner.offset_from(outer as *const u8) as usize
-> +        }
-> +    }};
-> +}
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 78175231c969..819510694769 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
->  # Compile Rust sources (.rs)
->  # ---------------------------------------------------------------------------
->  
-> -rust_allowed_features := new_uninit
-> +rust_allowed_features := const_refs_to_cell,new_uninit
->  
->  rust_common_cmd = \
->  	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
-
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFZsYWRpbWlyIE9sdGVhbiA8
+dmxhZGltaXIub2x0ZWFuQG54cC5jb20+DQo+IFNlbnQ6IDIwMjPE6jbUwjLI1SAxODozMg0KPiBU
+bzogV2VpIEZhbmcgPHdlaS5mYW5nQG54cC5jb20+DQo+IENjOiBDbGF1ZGl1IE1hbm9pbCA8Y2xh
+dWRpdS5tYW5vaWxAbnhwLmNvbT47IGRhdmVtQGRhdmVtbG9mdC5uZXQ7DQo+IGVkdW1hemV0QGdv
+b2dsZS5jb207IGt1YmFAa2VybmVsLm9yZzsgcGFiZW5pQHJlZGhhdC5jb207DQo+IGFzdEBrZXJu
+ZWwub3JnOyBkYW5pZWxAaW9nZWFyYm94Lm5ldDsgaGF3a0BrZXJuZWwub3JnOw0KPiBqb2huLmZh
+c3RhYmVuZEBnbWFpbC5jb207IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5l
+bEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCBuZXQgMS8yXSBuZXQ6IGVu
+ZXRjOiBjb3JyZWN0IHRoZSBzdGF0aXN0aWNzIG9mIHJ4IGJ5dGVzDQo+IA0KPiBPbiBGcmksIEp1
+biAwMiwgMjAyMyBhdCAwNTo0Njo1OFBNICswODAwLCB3ZWkuZmFuZ0BueHAuY29tIHdyb3RlOg0K
+PiA+IEZyb206IFdlaSBGYW5nIDx3ZWkuZmFuZ0BueHAuY29tPg0KPiA+DQo+ID4gVGhlIHJ4X2J5
+dGVzIG9mIHN0cnVjdCBuZXRfZGV2aWNlX3N0YXRzIHNob3VsZCBjb3VudCB0aGUgbGVuZ3RoIG9m
+DQo+ID4gZXRoZXJuZXQgZnJhbWVzIGV4Y2x1ZGluZyB0aGUgRkNTLiBIb3dldmVyLCB0aGVyZSBh
+cmUgdHdvIHByb2JsZW1zDQo+ID4gd2l0aCB0aGUgcnhfYnl0ZXMgc3RhdGlzdGljcyBvZiB0aGUg
+Y3VycmVudCBlbmV0YyBkcml2ZXIuIG9uZSBpcyB0aGF0DQo+ID4gdGhlIGxlbmd0aCBvZiBWTEFO
+IGhlYWRlciBpcyBub3QgY291bnRlZCBpZiB0aGUgVkxBTiBleHRyYWN0aW9uDQo+ID4gZmVhdHVy
+ZSBpcyBlbmFibGVkLiBUaGUgb3RoZXIgaXMgdGhhdCB0aGUgbGVuZ3RoIG9mIEwyIGhlYWRlciBp
+cyBub3QNCj4gPiBjb3VudGVkLCBiZWNhdXNlIGV0aF90eXBlX3RyYW5zKCkgaXMgaW52b2tlZCBi
+ZWZvcmUgdXBkYXRpbmcgcnhfYnl0ZXMNCj4gPiB3aGljaCB3aWxsIHN1YnRyYWN0IHRoZSBsZW5n
+dGggb2YgTDIgaGVhZGVyIGZyb20gc2tiLT5sZW4uDQo+ID4gQlRXLCB0aGUgcnhfYnl0ZXMgc3Rh
+dGlzdGljcyBvZiBYRFAgcGF0aCBhbHNvIGhhdmUgc2ltaWxhciBwcm9ibGVtLCBJDQo+ID4gd2ls
+bCBmaXggaXQgaW4gYW5vdGhlciBwYXRjaC4NCj4gPg0KPiA+IEZpeGVzOiBhODAwYWJkM2VjYjkg
+KCJuZXQ6IGVuZXRjOiBtb3ZlIHNrYiBjcmVhdGlvbiBpbnRvDQo+ID4gZW5ldGNfYnVpbGRfc2ti
+IikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBXZWkgRmFuZyA8d2VpLmZhbmdAbnhwLmNvbT4NCj4gPiAt
+LS0NCj4gDQo+IFJldmlld2VkLWJ5OiBWbGFkaW1pciBPbHRlYW4gPHZsYWRpbWlyLm9sdGVhbkBu
+eHAuY29tPg0KPiANCj4gQnkgdGhlIHdheSwgeW91IG1hbmdsZWQgSmFrdWIncyBlbWFpbCAoa3Vi
+YUBrZXJuZWwub3IpIC0gSSd2ZSBmaXhlZCBpdCB1cC4NCg0KWWVzLCBJIHJlYWxpemVkIHRoaXMg
+YWZ0ZXIgc2VuZGluZyB0aGUgZW1haWwuIFRoYW5rIHlvdSBzbyBtdWNoIQ0K
