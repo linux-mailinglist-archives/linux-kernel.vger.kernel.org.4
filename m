@@ -2,156 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3707971FA59
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAB771FA5C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbjFBGtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
+        id S234009AbjFBGvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjFBGsz (ORCPT
+        with ESMTP id S233850AbjFBGvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:48:55 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2D0B1A2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:48:41 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8CxJvHIkHlk7ogDAA--.7871S3;
-        Fri, 02 Jun 2023 14:48:40 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxD7_HkHlkSXqFAA--.19214S3;
-        Fri, 02 Jun 2023 14:48:40 +0800 (CST)
-Message-ID: <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
-Date:   Fri, 2 Jun 2023 14:48:39 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] LoongArch: Align pci memory base address with page size
-Content-Language: en-US
-To:     loongson-kernel@lists.loongnix.cn,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
+        Fri, 2 Jun 2023 02:51:04 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA1AEB;
+        Thu,  1 Jun 2023 23:51:03 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id C816D8111;
+        Fri,  2 Jun 2023 06:51:02 +0000 (UTC)
+Date:   Fri, 2 Jun 2023 09:51:01 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230602030732.1047696-1-maobibo@loongson.cn>
- <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxD7_HkHlkSXqFAA--.19214S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFW8Zr15GF4xuFy7uw15Jwb_yoW5urWDpF
-        WfAFsxCrs5Gr17CwsIqw1DuF4ru392kFW3ArWfAry3CryDZ34fZry3Jry5ZFWUArs8Gr10
-        vr4YkFW8WF4UZaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bIxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcV
-        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8vApUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] serial: core: Fix error handling for
+ serial_core_ctrl_device_add()
+Message-ID: <20230602065101.GG14287@atomide.com>
+References: <20230602064104.41508-1-tony@atomide.com>
+ <20230602064652.GF14287@atomide.com>
+ <ca22d4ad-fd07-2733-a4c4-e6ed9c5ebe3f@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca22d4ad-fd07-2733-a4c4-e6ed9c5ebe3f@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/2 12:11, Huacai Chen 写道:
-> +cc Bjorn
+* Jiri Slaby <jirislaby@kernel.org> [230602 06:48]:
+> On 02. 06. 23, 8:46, Tony Lindgren wrote:
+> > * Tony Lindgren <tony@atomide.com> [230602 06:41]:
+> > > Checking for NULL is not enough as serial_base_ctrl_add() uses ERR_PTR().
+> > > 
+> > > Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
+> > > Signed-off-by: Tony Lindgren <tony@atomide.com>
+> > > ---
+> > >   drivers/tty/serial/serial_core.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> > > --- a/drivers/tty/serial/serial_core.c
+> > > +++ b/drivers/tty/serial/serial_core.c
+> > > @@ -3342,7 +3342,7 @@ int serial_core_register_port(struct uart_driver *drv, struct uart_port *port)
+> > >   	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
+> > >   	if (!ctrl_dev) {
+> > >   		new_ctrl_dev = serial_core_ctrl_device_add(port);
+> > > -		if (!new_ctrl_dev) {
+> > > +		if (IS_ERR_OR_NULL(new_ctrl_dev)) {
+> > >   			ret = -ENODEV;
+> > >   			goto err_unlock;
+> > >   		}
+> > 
+> > Hmm actually we should also change to use ret = PTR_ERR(new_ctrl_dev) here
+> > instead of translating all the errors to -ENODEV. Will send out v2 version.
 > 
-> Hi, Bibo,
-> 
-> On Fri, Jun 2, 2023 at 11:07 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> LoongArch linux kernel uses 16K page size by default, some pci devices have
->> only 4K memory size, it is normal in general architectures. However memory
->> space of different pci devices will share one physical page address space.
->> This is not safe for mmu protection, also UIO and VFIO requires base
->> address of pci memory space page aligned.
->>
->> This patch adds check with function pcibios_align_resource, and set base
->> address of resource page aligned.
->>
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> ---
->>  arch/loongarch/pci/pci.c | 23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->>
->> diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
->> index 2726639150bc..1380f3672ba2 100644
->> --- a/arch/loongarch/pci/pci.c
->> +++ b/arch/loongarch/pci/pci.c
->> @@ -83,6 +83,29 @@ int pcibios_alloc_irq(struct pci_dev *dev)
->>         return acpi_pci_irq_enable(dev);
->>  }
->>
->> +/*
->> + * memory space size of some pci cards is 4K, it is separated with
->> + * different pages for generic architectures, so that mmu protection can
->> + * work with different pci cards. However page size for LoongArch system
->> + * is 16K, memory space of different pci cards may share the same page
->> + * on LoongArch, it is not safe here.
->> + * Also uio drivers and vfio drivers sugguests that base address of memory
->> + * space should page aligned. This function aligns base address with page size
->> + */
->> +resource_size_t pcibios_align_resource(void *data, const struct resource *res,
->> +               resource_size_t size, resource_size_t align)
->> +{
->> +       resource_size_t start = res->start;
->> +
->> +       if (res->flags & IORESOURCE_MEM) {
->> +               if (align & (PAGE_SIZE - 1)) {
->> +                       align = PAGE_SIZE;
->> +                       start = ALIGN(start, align);
-> I don't know whether this patch is really needed, but the logic here
-> has some problems.
-> 
-> For example, if PAGE_SIZE=16KB, align=18KB, what should we do? Align
-> to 16KB or align to 32KB? IMO it should align to 32KB, but in your
-> patch it will align to 16KB.
-In general pci device is aligned by size, and its value is a power of 2 in value.
-I do not see such devices with 18K alignment requirements.
+> Why OR_NULL at all, actually?
 
-By pci local bus spec, there are such lines:
+Yup there should be no need for that thanks.
 
-"Devices are free to consume more address space than required, but decoding down
-to a 4 KB space for memory is suggested for devices that need less than that amount. For
-instance, a device that has 64 bytes of registers to be mapped into Memory Space may
-consume up to 4 KB of address space in order to minimize the number of bits in the address
-decoder."
+Regards,
 
-I cannot  think whether it is necessary simply from judging whether other
-architectures have similar code. If so, LoongArch system just  always follows others.
-It is actually one problem since LoongArch uses 16K page size.
-
-Regards
-Bibo, Mao
-> 
-> Huacai
->> +               }
->> +       }
->> +       return start;
->> +}
->> +
->>  static void pci_fixup_vgadev(struct pci_dev *pdev)
->>  {
->>         struct pci_dev *devp = NULL;
->> --
->> 2.27.0
->>
-> _______________________________________________
-> Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
-> To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
-
+Tony
