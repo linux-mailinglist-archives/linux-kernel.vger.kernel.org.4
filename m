@@ -2,108 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14C371F9FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D197671FA07
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbjFBGUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
+        id S233488AbjFBGWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjFBGUe (ORCPT
+        with ESMTP id S233739AbjFBGWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:20:34 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5C0196
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:20:31 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30c55d2b9f3so756770f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 23:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685686830; x=1688278830;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8SZlmBe4W9vLL73H/TTCi5vs76P5q4kfXo4iNUwpvog=;
-        b=vldA/uo1C/WVXoGzKY60oskUqNZSBc5PIaJaSHedAZruZQNfEEC/5c7lC+IPwwKZ7B
-         MC9xryptPH1N7ZnIkxCgLonLM9/+sYmnt8EC+K/HSUunMtNo4h876oxyQqYbjMOy9yNO
-         wu11ICLWPUQNoy11RwpGO1xJUEmab1ItDVuUlq8jVNegl+vMwIXHnHluX0P/dOpQFRAi
-         0hiETtiw/gnNJOFtYu9R2rpDjma+exd6nlkH3+Obut/hYfSrhTd7Hls4wfjPRKzuOy6d
-         VmEkPhqfV4kKAdRYmpPwc1gJzcg18pTJCm1W4DRfOdxVhW1vhHDYbzNZDsdv0OjxexHf
-         geCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685686830; x=1688278830;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8SZlmBe4W9vLL73H/TTCi5vs76P5q4kfXo4iNUwpvog=;
-        b=BSVDxL0m7NfVDtOzBlyhyFM1zGkHDIQRBnYknsTrLtplnfCzfdXYsqRR1if1vVyiHh
-         NmJcINz75apZ+3RJWyVyzkdTugASrADhXlpBrIwtx/fRdVBEZJL0fL9a5oE/bG1f+GjQ
-         bxp6LYzhZXk0SdpaEjg4P1RcGPwBXD8ykQAQu7sBrWhn6dTNvfFYuukdYHZQARDi5T5J
-         o9DHczYzGncmT10vp5931OHqO/BDN/AH5ywjuBwNAj1IEa6a6QVy/HPvQsR442ZrfSyo
-         zuoR6dAT6XnhT7lkpUVJGGt8FRymfePfsEMJUEnBZCeo7x+AgH6ajIEict3EtX2qOUjC
-         M2Zw==
-X-Gm-Message-State: AC+VfDwJLAIXeSXzstcLtdQaDdpdkZUTbjJoX1TYw4MQ0B/9fzUmtT3s
-        O7gcEGvpXzn3Kjj6XN94G9S0NA==
-X-Google-Smtp-Source: ACHHUZ4/ldsWeZTvk36B4VbWR7NbgEGMgA3p73P73jjsRLaF9rzYgCqJ8+hZKo55x6eQfrlgMRnbTA==
-X-Received: by 2002:adf:dd81:0:b0:309:51ec:9ce0 with SMTP id x1-20020adfdd81000000b0030951ec9ce0mr3321475wrl.69.1685686829989;
-        Thu, 01 Jun 2023 23:20:29 -0700 (PDT)
-Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id 23-20020a05600c229700b003f42894ebe2sm4388213wmf.23.2023.06.01.23.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 23:20:29 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 6/6] arm64: dts: qcom: sm8450: Add missing interconnect paths to USB HC
-Date:   Fri,  2 Jun 2023 09:20:16 +0300
-Message-Id: <20230602062016.1883171-6-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602062016.1883171-1-abel.vesa@linaro.org>
-References: <20230602062016.1883171-1-abel.vesa@linaro.org>
+        Fri, 2 Jun 2023 02:22:17 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA7A195;
+        Thu,  1 Jun 2023 23:22:16 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3525pDpF013692;
+        Fri, 2 Jun 2023 06:22:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=jh/p4dQmUfabXWYxGavPyEaY3XOY8kwt0BdtVT7uXik=;
+ b=iDwb3BqDY+T2o80FU0bhdsOijNWuBGLcNOT8OUNm90EHWQOEvHUa/9jwojkk3zKRtjwT
+ nclB1l7LztxtLNx3pXyh5C7by5VdOfONW+Lz/H5RVdrQP4k3Llv1ui/jeicd+YGTiQb/
+ vjNElJn/lC8yjysmVdQ5vYEnqHaAqbFWbw4JJDlWlJ5GlUMRb6zqMo89+1wIhCMTgBaT
+ CImWEuA0lfMdHOFt36tXqzmBb7TKqXcy6TEOaSFG/LTEyJO/ddQlYuP93sgGgv5ncPSf
+ BS9y/fcvs96zjY0+UJPtD8uvuQAXGDZ80VVerJfMRRK2ys/w8IUvalU9AoGJRmhxSfv+ JA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qyan3gmb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 06:22:11 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35268RZh032281;
+        Fri, 2 Jun 2023 06:22:11 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qyan3gmaq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 06:22:11 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3524ijkZ016863;
+        Fri, 2 Jun 2023 06:22:10 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3qu9g763b6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 06:22:10 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3526M8N427001558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Jun 2023 06:22:08 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8ECF58056;
+        Fri,  2 Jun 2023 06:22:08 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27E885805D;
+        Fri,  2 Jun 2023 06:22:07 +0000 (GMT)
+Received: from [9.171.8.37] (unknown [9.171.8.37])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Jun 2023 06:22:06 +0000 (GMT)
+Message-ID: <4e4f539c-0c74-675c-74fe-52a64e3fb365@linux.ibm.com>
+Date:   Fri, 2 Jun 2023 08:22:06 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH net] net/smc: Avoid to access invalid RMBs' MRs in SMCRv1
+ ADD LINK CONT
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1685608912-124996-1-git-send-email-guwen@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <1685608912-124996-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Z_iAv_AAS-0_1IxPjPdD1rSDmZ9ng0p2
+X-Proofpoint-GUID: 7N-ofvtFxjONRqBJYyn2LyCAxn3ZU4UC
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_03,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ mlxlogscore=862 spamscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306020044
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The USB HC node is missing the interconnect paths, so add them.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
 
-Changes since v1:
- * Added Konrad's R-b tag
+On 01.06.23 10:41, Wen Gu wrote:
+> SMCRv1 has a similar issue to SMCRv2 (see link below) that may access
+> invalid MRs of RMBs when construct LLC ADD LINK CONT messages.
+> 
+>   BUG: kernel NULL pointer dereference, address: 0000000000000014
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+>   PGD 0 P4D 0
+>   Oops: 0000 [#1] PREEMPT SMP PTI
+>   CPU: 5 PID: 48 Comm: kworker/5:0 Kdump: loaded Tainted: G W   E      6.4.0-rc3+ #49
+>   Workqueue: events smc_llc_add_link_work [smc]
+>   RIP: 0010:smc_llc_add_link_cont+0x160/0x270 [smc]
+>   RSP: 0018:ffffa737801d3d50 EFLAGS: 00010286
+>   RAX: ffff964f82144000 RBX: ffffa737801d3dd8 RCX: 0000000000000000
+>   RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff964f81370c30
+>   RBP: ffffa737801d3dd4 R08: ffff964f81370000 R09: ffffa737801d3db0
+>   R10: 0000000000000001 R11: 0000000000000060 R12: ffff964f82e70000
+>   R13: ffff964f81370c38 R14: ffffa737801d3dd3 R15: 0000000000000001
+>   FS:  0000000000000000(0000) GS:ffff9652bfd40000(0000) knlGS:0000000000000000
+>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   CR2: 0000000000000014 CR3: 000000008fa20004 CR4: 00000000003706e0
+>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>   Call Trace:
+>    <TASK>
+>    smc_llc_srv_rkey_exchange+0xa7/0x190 [smc]
+>    smc_llc_srv_add_link+0x3ae/0x5a0 [smc]
+>    smc_llc_add_link_work+0xb8/0x140 [smc]
+>    process_one_work+0x1e5/0x3f0
+>    worker_thread+0x4d/0x2f0
+>    ? __pfx_worker_thread+0x10/0x10
+>    kthread+0xe5/0x120
+>    ? __pfx_kthread+0x10/0x10
+>    ret_from_fork+0x2c/0x50
+>    </TASK>
+> 
+> When an alernate RNIC is available in system, SMC will try to add a new
+> link based on the RNIC for resilience. All the RMBs in use will be mapped
+> to the new link. Then the RMBs' MRs corresponding to the new link will
+> be filled into LLC messages. For SMCRv1, they are ADD LINK CONT messages.
+> 
+> However smc_llc_add_link_cont() may mistakenly access to unused RMBs which
+> haven't been mapped to the new link and have no valid MRs, thus causing a
+> crash. So this patch fixes it.
+> 
+> Fixes: 87f88cda2128 ("net/smc: rkey processing for a new link as SMC client")
+> Link: https://lore.kernel.org/r/1685101741-74826-3-git-send-email-guwen@linux.alibaba.com
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> ---
+>   net/smc/smc_llc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
+> index 7a8d916..90f0b60 100644
+> --- a/net/smc/smc_llc.c
+> +++ b/net/smc/smc_llc.c
+> @@ -851,6 +851,8 @@ static int smc_llc_add_link_cont(struct smc_link *link,
+>   	addc_llc->num_rkeys = *num_rkeys_todo;
+>   	n = *num_rkeys_todo;
+>   	for (i = 0; i < min_t(u8, n, SMC_LLC_RKEYS_PER_CONT_MSG); i++) {
+> +		while (*buf_pos && !(*buf_pos)->used)
+> +			*buf_pos = smc_llc_get_next_rmb(lgr, buf_lst, *buf_pos);
+>   		if (!*buf_pos) {
+>   			addc_llc->num_rkeys = addc_llc->num_rkeys -
+>   					      *num_rkeys_todo;
+> @@ -867,8 +869,6 @@ static int smc_llc_add_link_cont(struct smc_link *link,
+>   
+>   		(*num_rkeys_todo)--;
+>   		*buf_pos = smc_llc_get_next_rmb(lgr, buf_lst, *buf_pos);
+> -		while (*buf_pos && !(*buf_pos)->used)
+> -			*buf_pos = smc_llc_get_next_rmb(lgr, buf_lst, *buf_pos);
+>   	}
+>   	addc_llc->hd.common.llc_type = SMC_LLC_ADD_LINK_CONT;
+>   	addc_llc->hd.length = sizeof(struct smc_llc_msg_add_link_cont);
 
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+looks good to me! Thank you for fixing that!
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 11560ec9f182..5cd7296c7660 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -4306,6 +4306,10 @@ usb_1: usb@a6f8800 {
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
-+			interconnects = <&aggre1_noc MASTER_USB3_0 0 &mc_virt SLAVE_EBI1 0>,
-+					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
-+			interconnect-names = "usb-ddr", "apps-usb";
-+
- 			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xcd00>;
--- 
-2.34.1
-
+Reviewed-by: Wenjia Zhang <wenjia@linux.ibm.com>
