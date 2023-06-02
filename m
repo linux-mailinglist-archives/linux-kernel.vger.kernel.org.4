@@ -2,209 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8B571F9DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0829C71F9E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbjFBGHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S233697AbjFBGHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbjFBGHA (ORCPT
+        with ESMTP id S233702AbjFBGHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:07:00 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4367019A;
-        Thu,  1 Jun 2023 23:06:59 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-650c89c7e4fso1405212b3a.0;
-        Thu, 01 Jun 2023 23:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685686019; x=1688278019;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AJMzvO4E/sXaVzE/6bU7plmF8MfXT5VBc3za1rua5WE=;
-        b=C47aROV7ljKY88UQwUDEuIQHv3lyGAciOwzl3vXALRo3gQPAHnoc4h7avhSHzNA8qL
-         LqxyjJMmdNpFlWPsPFR/SqrzpFaHpcKdQvsRwv1xPhOdO5skAowMF/V1YzrTYHhnLG/9
-         JxF5vQg0HG/sBd4xohDqLRgG7NVEkslA7uzXy9htOvc+tISPSdWOEU72c1wPQ9sgepOB
-         kCgcC3lOmcnzLrNNBYEoG3Y6qMFFyDv/U7aFGfENMt3eArPr4CkQV4+KfAZXWPNMdTsp
-         n4TcikBCBoZw48kkt+h71tjkdI+WLvLJMQgdZzDDQBYDdk+NkwZKC8h+GMJfRzGGnQEK
-         vYaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685686019; x=1688278019;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AJMzvO4E/sXaVzE/6bU7plmF8MfXT5VBc3za1rua5WE=;
-        b=RYKZJl68fojHoDpO/CnlTiOzM2JwphrlZyhv2A1iEnMW9DB2UOfrADHK9CjjmiNsIB
-         fQT/C0rXIJhJIQWQA6jm/+IS1TllQw0PjxP+F+TW+GSNk6DEeP4f+xItM52LkpZSAN1z
-         OaFs1C8+sWMStz+kjKADgQTDmemex1Y3iyDY7n+xDnzNCtrx7EPJiYfZAD5ccKZ72XIk
-         hh8ZTmZNAq3yCeodO849u6zJPXpk56A9yJbkoUtPUPaERlffJ0c8JWaxRWvCJXZDOgLn
-         wpbEeCBAx9ZKJx7jDjR3wVRDaok2dFZFc/uerneSpiJw3iUW99SUycvQ7c27cAWQ39AD
-         PurA==
-X-Gm-Message-State: AC+VfDxotmwwcydjcsVkwWDTfN3L9Zu0jkDifdE1z1Kspj0zZqDe2hlv
-        Isns8bTX31W5l2IodMVRpcY=
-X-Google-Smtp-Source: ACHHUZ5xvCYxxt1Wg4wY/zJbGVqUSdUcj6pNS0JXhYCT4EpUjBPnxGj22wV9QHEkDpuJnWzMl797FA==
-X-Received: by 2002:a05:6a00:14c1:b0:650:9ee:c6c6 with SMTP id w1-20020a056a0014c100b0065009eec6c6mr11271572pfu.19.1685686018716;
-        Thu, 01 Jun 2023 23:06:58 -0700 (PDT)
-Received: from [172.27.224.14] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
-        by smtp.gmail.com with ESMTPSA id m15-20020aa7900f000000b00652f5bd894esm248590pfo.177.2023.06.01.23.06.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 23:06:58 -0700 (PDT)
-Message-ID: <28bd9d11-282f-bb22-66f5-d3d9165d4adf@gmail.com>
-Date:   Fri, 2 Jun 2023 14:06:53 +0800
+        Fri, 2 Jun 2023 02:07:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FADE41
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:07:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0E3863704
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:07:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93339C433EF;
+        Fri,  2 Jun 2023 06:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685686029;
+        bh=Fd98bz6la1JS45Pi/qYDuRzDrW1OhKruM3EXxfTsvdI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a18P7VRW/PpZVNN4e16GTVFjjOokoDV3waQyZ0/nV2Z2jejoH1tKFhuTwhUhSo2E2
+         r9HgsWxri8waD/oXndTvbpOA7paBS7UJABoLfBRU/ZgZQTaSE4J7KU8shbJ3yvUXxf
+         6M6/U3aBeqyb3FnOR+09YIYxFiei8kiX7QWdz0Ty+8pO68AvQQEAD+7+i3zCHCi94B
+         XrHaZ6G0Je9x2491nEfLOytr/RLbAJkQwrJg06BZ3n+EW2zffXZOre1LHnoFeNIsAF
+         VLxP+JtxFS79oUGzLM9SZ+ld0U1vi1J8aBWdDFOTqiPJ2gI3oBDlwLo33KhEJmaQsn
+         fbwrl88azE+Uw==
+Date:   Thu, 1 Jun 2023 23:07:06 -0700
+From:   Chris Li <chrisl@kernel.org>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH -V3 3/5] swap: remove __swp_swapcount()
+Message-ID: <ZHmHCqV8qaCEymI1@google.com>
+References: <20230529061355.125791-1-ying.huang@intel.com>
+ <20230529061355.125791-4-ying.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky
- disabling of nx_huge_pages
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li RongQing <lirongqing@baidu.com>,
-        Yong He <zhuangel570@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
-References: <20230602005859.784190-1-seanjc@google.com>
-Content-Language: en-US
-From:   Robert Hoo <robert.hoo.linux@gmail.com>
-In-Reply-To: <20230602005859.784190-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529061355.125791-4-ying.huang@intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/2023 8:58 AM, Sean Christopherson wrote:
-> Add a "never" option to the nx_huge_pages module param to allow userspace
-> to do a one-way hard disabling of the mitigation, and don't create the
-> per-VM recovery threads when the mitigation is hard disabled.  Letting
-> userspace pinky swear that userspace doesn't want to enable NX mitigation
-> (without reloading KVM) allows certain use cases to avoid the latency
-> problems associated with spawning a kthread for each VM.
+On Mon, May 29, 2023 at 02:13:53PM +0800, Huang Ying wrote:
+> __swp_swapcount() just encloses the calling to swap_swapcount() with
+> get/put_swap_device().  It is called in __read_swap_cache_async()
+> only, which encloses the calling with get/put_swap_device() already.
+> So, __read_swap_cache_async() can call swap_swapcount() directly.
 > 
-> E.g. in FaaS use cases, the guest kernel is trusted and the host may
-> create 100+ VMs per logical CPU, which can result in 100ms+ latencies when
-> a burst of VMs is created.
-> 
-> Reported-by: Li RongQing <lirongqing@baidu.com>
-> Closes: https://lore.kernel.org/all/1679555884-32544-1-git-send-email-lirongqing@baidu.com
-> Cc: Yong He <zhuangel570@gmail.com>
-> Cc: Robert Hoo <robert.hoo.linux@gmail.com>
-> Cc: Kai Huang <kai.huang@intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Chris Li <chrisl@kernel.org>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
 > ---
->   arch/x86/kvm/mmu/mmu.c | 41 ++++++++++++++++++++++++++++++++++++-----
->   1 file changed, 36 insertions(+), 5 deletions(-)
+>  include/linux/swap.h |  4 ++--
+>  mm/swap_state.c      |  2 +-
+>  mm/swapfile.c        | 20 +-------------------
+>  3 files changed, 4 insertions(+), 22 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index c8961f45e3b1..2ed38916b904 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -58,6 +58,8 @@
->   
->   extern bool itlb_multihit_kvm_mitigation;
->   
-> +static bool nx_hugepage_mitigation_hard_disabled;
-> +
->   int __read_mostly nx_huge_pages = -1;
->   static uint __read_mostly nx_huge_pages_recovery_period_ms;
->   #ifdef CONFIG_PREEMPT_RT
-> @@ -67,12 +69,13 @@ static uint __read_mostly nx_huge_pages_recovery_ratio = 0;
->   static uint __read_mostly nx_huge_pages_recovery_ratio = 60;
->   #endif
->   
-> +static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp);
->   static int set_nx_huge_pages(const char *val, const struct kernel_param *kp);
->   static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel_param *kp);
->   
->   static const struct kernel_param_ops nx_huge_pages_ops = {
->   	.set = set_nx_huge_pages,
-> -	.get = param_get_bool,
-> +	.get = get_nx_huge_pages,
->   };
->   
->   static const struct kernel_param_ops nx_huge_pages_recovery_param_ops = {
-> @@ -6844,6 +6847,14 @@ static void mmu_destroy_caches(void)
->   	kmem_cache_destroy(mmu_page_header_cache);
->   }
->   
-> +static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp)
-> +{
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return sprintf(buffer, "never\n");
-> +
-> +	return param_get_bool(buffer, kp);
-> +}
-> +
->   static bool get_nx_auto_mode(void)
->   {
->   	/* Return true when CPU has the bug, and mitigations are ON */
-> @@ -6860,15 +6871,29 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
->   	bool old_val = nx_huge_pages;
->   	bool new_val;
->   
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return -EPERM;
-> +
->   	/* In "auto" mode deploy workaround only if CPU has the bug. */
-> -	if (sysfs_streq(val, "off"))
-> +	if (sysfs_streq(val, "off")) {
->   		new_val = 0;
-> -	else if (sysfs_streq(val, "force"))
-> +	} else if (sysfs_streq(val, "force")) {
->   		new_val = 1;
-> -	else if (sysfs_streq(val, "auto"))
-> +	} else if (sysfs_streq(val, "auto")) {
->   		new_val = get_nx_auto_mode();
-> -	else if (kstrtobool(val, &new_val) < 0)
-> +	} else if (sysfs_streq(val, "never")) {
-> +		new_val = 0;
-> +
-> +		mutex_lock(&kvm_lock);
-> +		if (!list_empty(&vm_list)) {
-> +			mutex_unlock(&kvm_lock);
-> +			return -EBUSY;
-> +		}
-> +		nx_hugepage_mitigation_hard_disabled = true;
-> +		mutex_unlock(&kvm_lock);
-> +	} else if (kstrtobool(val, &new_val) < 0) {
->   		return -EINVAL;
-> +	}
-> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 3c69cb653cb9..f6bd51aa05ea 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -512,7 +512,7 @@ int find_first_swap(dev_t *device);
+>  extern unsigned int count_swap_pages(int, int);
+>  extern sector_t swapdev_block(int, pgoff_t);
+>  extern int __swap_count(swp_entry_t entry);
+> -extern int __swp_swapcount(swp_entry_t entry);
+> +extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry);
+>  extern int swp_swapcount(swp_entry_t entry);
+>  extern struct swap_info_struct *page_swap_info(struct page *);
+>  extern struct swap_info_struct *swp_swap_info(swp_entry_t entry);
+> @@ -590,7 +590,7 @@ static inline int __swap_count(swp_entry_t entry)
+>  	return 0;
+>  }
+>  
+> -static inline int __swp_swapcount(swp_entry_t entry)
+> +static inline int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>  {
+>  	return 0;
+>  }
+> diff --git a/mm/swap_state.c b/mm/swap_state.c
+> index a8450b4a110c..ef32353c18a6 100644
+> --- a/mm/swap_state.c
+> +++ b/mm/swap_state.c
+> @@ -447,7 +447,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  		 * as SWAP_HAS_CACHE.  That's done in later part of code or
+>  		 * else swap_off will be aborted if we return NULL.
+>  		 */
+> -		if (!__swp_swapcount(entry) && swap_slot_cache_enabled)
+> +		if (!swap_swapcount(si, entry) && swap_slot_cache_enabled)
+>  			goto fail_put_swap;
+>  
+>  		/*
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 8419cba9c192..e9cce775fb25 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1443,7 +1443,7 @@ int __swap_count(swp_entry_t entry)
+>   * This does not give an exact answer when swap count is continued,
+>   * but does include the high COUNT_CONTINUED flag to allow for that.
+>   */
+> -static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+> +int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>  {
+>  	pgoff_t offset = swp_offset(entry);
+>  	struct swap_cluster_info *ci;
+> @@ -1455,24 +1455,6 @@ static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+>  	return count;
+>  }
+>  
+> -/*
+> - * How many references to @entry are currently swapped out?
+> - * This does not give an exact answer when swap count is continued,
+> - * but does include the high COUNT_CONTINUED flag to allow for that.
+> - */
+> -int __swp_swapcount(swp_entry_t entry)
+> -{
+> -	int count = 0;
+> -	struct swap_info_struct *si;
+> -
+> -	si = get_swap_device(entry);
+> -	if (si) {
+> -		count = swap_swapcount(si, entry);
+> -		put_swap_device(si);
+> -	}
+> -	return count;
+> -}
+> -
+>  /*
+>   * How many references to @entry are currently swapped out?
+>   * This considers COUNT_CONTINUED so it returns exact answer.
+> -- 
+> 2.39.2
+>
 
-IIUC, (Initially) "auto_off"/"off" --> create some VM --> turn to "never", 
-the created VMs still have those kthreads, but can never be used, until 
-destroyed with VM.
+Reviewed-by: Chris Li (Google) <chrisl@kernel.org>
 
-Is this designed/accepted pattern?
-
->   	__set_nx_huge_pages(new_val);
->   
-> @@ -7006,6 +7031,9 @@ static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel
->   	uint old_period, new_period;
->   	int err;
->   
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return -EPERM;
-> +
->   	was_recovery_enabled = calc_nx_huge_pages_recovery_period(&old_period);
->   
->   	err = param_set_uint(val, kp);
-> @@ -7161,6 +7189,9 @@ int kvm_mmu_post_init_vm(struct kvm *kvm)
->   {
->   	int err;
->   
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return 0;
-> +
->   	err = kvm_vm_create_worker_thread(kvm, kvm_nx_huge_page_recovery_worker, 0,
->   					  "kvm-nx-lpage-recovery",
->   					  &kvm->arch.nx_huge_page_recovery_thread);
-> 
-> base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
-
+Chris
+ 
