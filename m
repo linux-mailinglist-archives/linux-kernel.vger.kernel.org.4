@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C96671FF18
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC8D71FEAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbjFBKXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S235226AbjFBKNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235388AbjFBKWz (ORCPT
+        with ESMTP id S235000AbjFBKNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:22:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02A71A2;
-        Fri,  2 Jun 2023 03:22:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 479C764E6C;
-        Fri,  2 Jun 2023 10:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A38C4339E;
-        Fri,  2 Jun 2023 10:22:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685701366;
-        bh=opd5H6IVQawxAyaERFSxkNMBcud1PLTZeWa/VKUckUQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HMziCQIVqQGPlxVhREtKOQUKNdUzCNaj8norH3m8d9ok64s2AgSIVPGbFwGC8pTNZ
-         8fBlaSBOkbDaNKchiVuUcX2LI96YhWaKKvNkP+59H1H+RskBg0f7qqZ7lDrefC7VVF
-         mHhH+6of6LC/Nrcoofc3CB7IFfsztqW1VUnc1iBNsQHguqko7vpVJFVad6h/ghnWc4
-         bAaNQqvhisciRrf0UBwxtXappXKZJqaHyQLE4D+QYwRlmE2n6084qz0ER8eLxmOYqF
-         rPKZNXpQYn0aiIQdNj0JdD1cahzAACVGXITO+7+1/PFvxxGSN4drTlzYx4vJE1mLZB
-         kLq95up9Nk59g==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH v4 09/21] x86/decompressor: Avoid the need for a stack in the 32-bit trampoline
-Date:   Fri,  2 Jun 2023 12:13:01 +0200
-Message-Id: <20230602101313.3557775-10-ardb@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230602101313.3557775-1-ardb@kernel.org>
-References: <20230602101313.3557775-1-ardb@kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6184; i=ardb@kernel.org; h=from:subject; bh=opd5H6IVQawxAyaERFSxkNMBcud1PLTZeWa/VKUckUQ=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIaXywKrD16I62NpYrdcd4c0/OFVmC+uFDfX//6yR3fBXM Kcl3reuo5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAEzEMomRYYHD/GJBbqcbry4d D+vusGev3NSrOXWX8qPTTV8tFp3bpsfwT1tiIa9iwh7tqdET1x2dzqHVVd2+/7bt/QUP4x7NWsP 6gh8A
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+        Fri, 2 Jun 2023 06:13:06 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3816D197;
+        Fri,  2 Jun 2023 03:13:05 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7747df5b674so35863839f.3;
+        Fri, 02 Jun 2023 03:13:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685700784; x=1688292784;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=l/PIFR+ZIA9eZqhv8ThRSE/EHs2TLrNkw8dWpu4ejEo=;
+        b=EWgZyOouIxS5i+8MJ02WPWOlmN3P37zHI8h5KSEzVXKyg5gH6K4SYQPUXrmuiNO3T9
+         Xjc5eiPV44Y0McnGAxz+r8BAk1s5maeJyzpoitepdIHkp+ktx6/MPXnqJQOjnTJ9Wbpr
+         KoyZdVRVTdqhhWXolXGiKTYU22KK8kWXfnvThXo/V4ED3Oe7GlZQ5OuT48eOTc75q0Wy
+         LYvSCKoVhghOqoMeiTujy+Ju68mvZ+itUc9j+CXcbYY9VUzMA6nXI44Wabm48er3VNao
+         yQGbBKFodZCmIeL02XeK6CZulkZR311ssw99VvfpYEzXjPhhYho5hmn9xlXdIotIBd6E
+         SMHA==
+X-Gm-Message-State: AC+VfDxJyEbZsO98yq5eDA0WV7x6YjqZlMugM41pKNbm26d0Oam8sNv4
+        +Euk5dn9ekwpOIG145hyXHCG5wVMMA==
+X-Google-Smtp-Source: ACHHUZ6CYRer4ThVGQY100UimlMmqDeEPZXk9gl/qzrUD8+oKZRBwxw0FiZma7Yt5Kk1HtF3Qk5qGA==
+X-Received: by 2002:a6b:db17:0:b0:76c:71dc:55f3 with SMTP id t23-20020a6bdb17000000b0076c71dc55f3mr2219262ioc.6.1685700784312;
+        Fri, 02 Jun 2023 03:13:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id z3-20020a029f03000000b0040f94261ab1sm208404jal.12.2023.06.02.03.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 03:13:03 -0700 (PDT)
+Received: (nullmailer pid 1359772 invoked by uid 1000);
+        Fri, 02 Jun 2023 10:13:02 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230602090322.1876359-2-alvin@pqrs.dk>
+References: <20230602090322.1876359-1-alvin@pqrs.dk>
+ <20230602090322.1876359-2-alvin@pqrs.dk>
+Message-Id: <168570078201.1359749.10287160624641352834.robh@kernel.org>
+Subject: Re: [PATCH 1/4] ASoC: dt-bindings: document new
+ symmetric-clock-role flag
+Date:   Fri, 02 Jun 2023 04:13:02 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,177 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 32-bit trampoline no longer uses the stack for anything except
-performing a far return back to long mode. Currently, this stack is
-placed in the same page that carries the trampoline code, which means
-this page must be mapped writable and executable, and the stack is
-therefore executable as well.
 
-Replace the far return with a far jump, so that the return address can
-be pre-calculated and patched into the code before it is called. This
-removes the need for a stack entirely, and in a later patch, this will
-be taken advantage of by removing writable permissions from (and adding
-executable permissions to) this code page explicitly when booting via
-the EFI stub.
+On Fri, 02 Jun 2023 11:03:18 +0200, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> 
+> The new flag specifies that both ends of the dai-link have the same
+> clock consumer/provider role. This should be used to describe hardware
+> where e.g. the CPU and codec both receive their bit- and frame-clocks
+> from an external source.
+> 
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> ---
+>  .../devicetree/bindings/sound/simple-card.yaml        | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
 
-Not touching the stack pointer also makes it more straight-forward to
-call the trampoline code as an ordinary 64-bit function from C code.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/boot/compressed/head_64.S    | 45 ++++++++------------
- arch/x86/boot/compressed/pgtable.h    |  6 +--
- arch/x86/boot/compressed/pgtable_64.c | 12 +++++-
- 3 files changed, 32 insertions(+), 31 deletions(-)
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/sound/simple-card.yaml:33:5: [error] syntax error: could not find expected ':' (syntax)
 
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index a387cd80964e1a1e..741b4e8fefc915ea 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -449,9 +449,6 @@ SYM_CODE_START(startup_64)
- 	leaq	TRAMPOLINE_32BIT_CODE_OFFSET(%rax), %rax
- 	call	*%rax
- 
--	/* Restore the stack, the 32-bit trampoline uses its own stack */
--	leaq	rva(boot_stack_end)(%rbx), %rsp
--
- 	/*
- 	 * cleanup_trampoline() would restore trampoline memory.
- 	 *
-@@ -537,24 +534,22 @@ SYM_FUNC_END(.Lrelocated)
-  * EDI contains the base address of the trampoline memory.
-  * Non-zero ESI means trampoline needs to enable 5-level paging.
-  */
-+	.section ".rodata", "a", @progbits
- SYM_CODE_START(trampoline_32bit_src)
--	popq	%r8
- 	/* Switch to compatibility mode (CS.L = 0 CS.D = 1) via far return */
- 	pushq	$__KERNEL32_CS
- 	leaq	0f(%rip), %rax
- 	pushq	%rax
- 	lretq
- 
-+	/*
-+	 * The 32-bit code below will do a far jump back to long mode and end
-+	 * up here after reconfiguring the number of paging levels.
-+	 */
-+.Lret:	retq
-+
- 	.code32
--0:	/* Set up data and stack segments */
--	movl	$__KERNEL_DS, %eax
--	movl	%eax, %ds
--	movl	%eax, %ss
--
--	/* Set up new stack */
--	leal	TRAMPOLINE_32BIT_STACK_END(%edi), %esp
--
--	/* Disable paging */
-+0:	/* Disable paging */
- 	movl	%cr0, %eax
- 	btrl	$X86_CR0_PG_BIT, %eax
- 	movl	%eax, %cr0
-@@ -608,26 +603,22 @@ SYM_CODE_START(trampoline_32bit_src)
- 1:
- 	movl	%eax, %cr4
- 
--	/* Calculate address of paging_enabled() once we are executing in the trampoline */
--	leal	.Lpaging_enabled - trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_OFFSET(%edi), %eax
--
--	/* Prepare the stack for far return to Long Mode */
--	pushl	$__KERNEL_CS
--	pushl	%eax
--
- 	/* Enable paging again. */
- 	movl	%cr0, %eax
- 	btsl	$X86_CR0_PG_BIT, %eax
- 	movl	%eax, %cr0
- 
--	lret
-+	/*
-+	 * Return to the 64-bit calling code using LJMP rather than LRET, to
-+	 * avoid the need for a 32-bit addressable stack. The destination
-+	 * address will be adjusted after the template code is copied into a
-+	 * 32-bit addressable buffer.
-+	 */
-+.Ljmp:	ljmpl	$__KERNEL_CS, $(.Lret - trampoline_32bit_src)
- SYM_CODE_END(trampoline_32bit_src)
- 
--	.code64
--SYM_FUNC_START_LOCAL_NOALIGN(.Lpaging_enabled)
--	/* Return from the trampoline */
--	jmp	*%r8
--SYM_FUNC_END(.Lpaging_enabled)
-+/* keep this right after trampoline_32bit_src() so we can infer its size */
-+SYM_DATA(trampoline_ljmp_imm_offset, .word  .Ljmp + 1 - trampoline_32bit_src)
- 
- 	/*
-          * The trampoline code has a size limit.
-@@ -636,7 +627,7 @@ SYM_FUNC_END(.Lpaging_enabled)
- 	 */
- 	.org	trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_SIZE
- 
--	.code32
-+	.text
- SYM_FUNC_START_LOCAL_NOALIGN(.Lno_longmode)
- 	/* This isn't an x86-64 CPU, so hang intentionally, we cannot continue */
- 1:
-diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
-index 4e8cef135226bcbb..131488f50af55d0a 100644
---- a/arch/x86/boot/compressed/pgtable.h
-+++ b/arch/x86/boot/compressed/pgtable.h
-@@ -6,9 +6,7 @@
- #define TRAMPOLINE_32BIT_PGTABLE_OFFSET	0
- 
- #define TRAMPOLINE_32BIT_CODE_OFFSET	PAGE_SIZE
--#define TRAMPOLINE_32BIT_CODE_SIZE	0xA0
--
--#define TRAMPOLINE_32BIT_STACK_END	TRAMPOLINE_32BIT_SIZE
-+#define TRAMPOLINE_32BIT_CODE_SIZE	0x80
- 
- #ifndef __ASSEMBLER__
- 
-@@ -16,5 +14,7 @@ extern unsigned long *trampoline_32bit;
- 
- extern void trampoline_32bit_src(void *trampoline, bool enable_5lvl);
- 
-+extern const u16 trampoline_ljmp_imm_offset;
-+
- #endif /* __ASSEMBLER__ */
- #endif /* BOOT_COMPRESSED_PAGETABLE_H */
-diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
-index 2ac12ff4111bf8c0..09fc18180929fab3 100644
---- a/arch/x86/boot/compressed/pgtable_64.c
-+++ b/arch/x86/boot/compressed/pgtable_64.c
-@@ -109,6 +109,7 @@ static unsigned long find_trampoline_placement(void)
- struct paging_config paging_prepare(void *rmode)
- {
- 	struct paging_config paging_config = {};
-+	void *tramp_code;
- 
- 	/* Initialize boot_params. Required for cmdline_find_option_bool(). */
- 	boot_params = rmode;
-@@ -143,9 +144,18 @@ struct paging_config paging_prepare(void *rmode)
- 	memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
- 
- 	/* Copy trampoline code in place */
--	memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
-+	tramp_code = memcpy(trampoline_32bit +
-+			TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
- 			&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
- 
-+	/*
-+	 * Avoid the need for a stack in the 32-bit trampoline code, by using
-+	 * LJMP rather than LRET to return back to long mode. LJMP takes an
-+	 * immediate absolute address, so we have to adjust that based on the
-+	 * placement of the trampoline.
-+	 */
-+	*(u32 *)(tramp_code + trampoline_ljmp_imm_offset) += (unsigned long)tramp_code;
-+
- 	/*
- 	 * The code below prepares page table in trampoline memory.
- 	 *
--- 
-2.39.2
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/sound/simple-card.example.dts'
+Documentation/devicetree/bindings/sound/simple-card.yaml:33:5: could not find expected ':'
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/sound/simple-card.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/sound/simple-card.yaml:33:5: could not find expected ':'
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/simple-card.yaml: ignoring, error parsing file
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230602090322.1876359-2-alvin@pqrs.dk
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
