@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFBB71FFAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6AC71FFB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235455AbjFBKs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S235514AbjFBKuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbjFBKs1 (ORCPT
+        with ESMTP id S234799AbjFBKuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:48:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FEAC0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:48:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D7D671FDB1;
-        Fri,  2 Jun 2023 10:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685702903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 2 Jun 2023 06:50:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD5EC0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:50:02 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 12:49:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685703000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UgWJVTzmoM3MLxltAlpxs/WWqyZsaCJhRFMlwGbVEes=;
-        b=FQ6O/d/U3tTFiEz360WaAHfm+gHQ4wQG0WHXQgXTGh2L1FB4LxMl6R5LopM6y9a61bhIF5
-        /a6FpXDwHcqBKgNOeKnSVl/iNZC8/Iy0gwgor5Sj1tFI5pDE4oFSqGWZYXXydIThX4GMZC
-        nOy0AHJjsaOqBJUsncey9mdtIgAJFCQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A95D713A2E;
-        Fri,  2 Jun 2023 10:48:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id c8MPJ/fIeWSfYAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 02 Jun 2023 10:48:23 +0000
-Date:   Fri, 2 Jun 2023 12:48:23 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH 3/4] workqueue: add schedule_on_each_cpumask helper
-Message-ID: <ZHnI93EMp+Aq8UAA@dhcp22.suse.cz>
-References: <20230530145234.968927611@redhat.com>
- <20230530145335.930262644@redhat.com>
+        bh=fbksIU3JUlXkEO7MjUhZpBXWqwFd5LCsyXZ1/Ew4uKM=;
+        b=XHnU+dMEh789VExWhaT99Prt+X5alCCKCe7QpKMF+JmC5sclABZ+DQbzx0igzBb3SjnyE+
+        CUiDXW9g3LyIJrv4W1IdPV/+n2/kBt95a0AJg0UjnddeEiqkVu6mqYv3+gGX5DDoHXgXNT
+        cK0AOCxwwSbZuZQX3XVQ+Z4UP9pRu3/oI6W2LuZtkApBTJJ53z+4htZuyyh3aMp5JSXKMP
+        tF9GooEUBPCz2UVChj4UvhC+qYDLsUfuUBv0e85BIjR/D4E45N4iRc+vMv2qb9K9EKlfxq
+        fQtOAjnPZLx0Ym8tEzKZhTfHkmPT+h5UpawwwYirx4HCDKxK+qtpJAKmlrGEew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685703000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fbksIU3JUlXkEO7MjUhZpBXWqwFd5LCsyXZ1/Ew4uKM=;
+        b=WtJZLwdX+3+JjXqTwdEYQQUNp/Wde6FkPO6BBWq2BoAFlZ9srg4ZTfvEp3sugrdidTLmlo
+        eiXldH1saadXzABw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
+ wait_task_inactive().
+Message-ID: <20230602104958._mDE_6c6@linutronix.de>
+References: <Y++UzubyNavLKFDP@linutronix.de>
+ <20230525165244.GV83892@hirez.programming.kicks-ass.net>
+ <20230526080543.GF38236@hirez.programming.kicks-ass.net>
+ <20230526151335.oPeFiIdq@linutronix.de>
+ <20230601091234.GW83892@hirez.programming.kicks-ass.net>
+ <20230602082503.GA624418@hirez.programming.kicks-ass.net>
+ <20230602103731.GA630648@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230530145335.930262644@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230602103731.GA630648@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -67,102 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You should be CCing WQ maintainers on changes like this one (now added).
-
-On Tue 30-05-23 11:52:37, Marcelo Tosatti wrote:
-> Add a schedule_on_each_cpumask function, equivalent to
-> schedule_on_each_cpu but accepting a cpumask to operate.
-
-IMHO it is preferable to add a new function along with its user so that
-the usecase is more clear.
- 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> 
+On 2023-06-02 12:37:31 [+0200], Peter Zijlstra wrote:
 > ---
-> 
-> Index: linux-vmstat-remote/kernel/workqueue.c
-> ===================================================================
-> --- linux-vmstat-remote.orig/kernel/workqueue.c
-> +++ linux-vmstat-remote/kernel/workqueue.c
-> @@ -3455,6 +3455,56 @@ int schedule_on_each_cpu(work_func_t fun
->  	return 0;
->  }
->  
-> +
-> +/**
-> + * schedule_on_each_cpumask - execute a function synchronously on each
-> + * CPU in "cpumask", for those which are online.
-> + *
-> + * @func: the function to call
-> + * @mask: the CPUs which to call function on
-> + *
-> + * schedule_on_each_cpu() executes @func on each specified CPU that is online,
-> + * using the system workqueue and blocks until all such CPUs have completed.
-> + * schedule_on_each_cpu() is very slow.
-> + *
-> + * Return:
-> + * 0 on success, -errno on failure.
-> + */
-> +int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask)
-> +{
-> +	int cpu;
-> +	struct work_struct __percpu *works;
-> +	cpumask_var_t effmask;
-> +
-> +	works = alloc_percpu(struct work_struct);
-> +	if (!works)
-> +		return -ENOMEM;
-> +
-> +	if (!alloc_cpumask_var(&effmask, GFP_KERNEL)) {
-> +		free_percpu(works);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	cpumask_and(effmask, cpumask, cpu_online_mask);
-> +
-> +	cpus_read_lock();
-> +
-> +	for_each_cpu(cpu, effmask) {
+> Subject: sched: Unconditionally use full-fat wait_task_inactive()
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Fri Jun  2 10:42:53 CEST 2023
+>=20
+> While modifying wait_task_inactive() for PREEMPT_RT; the build robot
+> noted that UP got broken. This led to audit and consideration of the
+> UP implementation of wait_task_inactive().
+>=20
+> It looks like the UP implementation is also broken for PREEMPT;
 
-Is the cpu_online_mask dance really necessary? Why cannot you simply do
-for_each_online_cpu here? flush_work on unqueued work item should just
-return, no?
+If UP is broken for PREEMPT, shouldn't it get a fixes or stable tag?
 
-Also there is no synchronization with the cpu hotplug so cpu_online_mask
-can change under your feet so this construct seem unsafe to me.
+Eitherway, I will try to stuff this in RT today and give feedback. I
+actually never booted this on UP, will try to do so today=E2=80=A6
 
-> +		struct work_struct *work = per_cpu_ptr(works, cpu);
-> +
-> +		INIT_WORK(work, func);
-> +		schedule_work_on(cpu, work);
-> +	}
-> +
-> +	for_each_cpu(cpu, effmask)
-> +		flush_work(per_cpu_ptr(works, cpu));
-> +
-> +	cpus_read_unlock();
-> +	free_percpu(works);
-> +	free_cpumask_var(effmask);
-> +	return 0;
-> +}
-> +
->  /**
->   * execute_in_process_context - reliably execute the routine with user context
->   * @fn:		the function to execute
-> Index: linux-vmstat-remote/include/linux/workqueue.h
-> ===================================================================
-> --- linux-vmstat-remote.orig/include/linux/workqueue.h
-> +++ linux-vmstat-remote/include/linux/workqueue.h
-> @@ -450,6 +450,7 @@ extern void __flush_workqueue(struct wor
->  extern void drain_workqueue(struct workqueue_struct *wq);
->  
->  extern int schedule_on_each_cpu(work_func_t func);
-> +extern int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask);
->  
->  int execute_in_process_context(work_func_t fn, struct execute_work *);
->  
-> 
-
--- 
-Michal Hocko
-SUSE Labs
+Sebastian
