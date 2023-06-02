@@ -2,303 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4511E72050B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74479720513
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236321AbjFBPAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S236340AbjFBPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236314AbjFBPAN (ORCPT
+        with ESMTP id S236338AbjFBPAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:00:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42311BD;
-        Fri,  2 Jun 2023 08:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685718011; x=1717254011;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=V9sLuH+8IQ/Ika7mvXVBVV2ehXzIOipelj6cZtL2v0E=;
-  b=GBfxFXOe9zZVi1L297ejKlaKiSefxq6qiA3/JZFaPi2dperxfuw9fuAL
-   1ro6tgSu38isZ24d6BPMYbCeCXmeoOQY5oqbWiD3eBM1L7FRzaJ9I2UVo
-   kbhuEx/LuctttpUCLS9IO5kclruH9Z0M8x7gK+9iFqKGJ3S/QYHuNdtzI
-   EsysSeWDmoHnY6CZOTyYvI0k0VY1tdP/KzaRi+zS2mRO4LqKgxhEKbWHd
-   Q25FHoNPrzEBkXThrn8t1T4uZ2k5clSsqOLK9nCTMxu8av/fxBQewjLYN
-   4N/Aeqm1QUhfMU6o8nV0X6UhIJsOzs49/NP/M2wffDJWbq1f6Nq+gS0aN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="354737148"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="354737148"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:00:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="740851728"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="740851728"
-Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([10.214.199.26])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:00:07 -0700
-Message-ID: <2eef3b075da7e91b938222a345e3f18f3765619f.camel@intel.com>
-Subject: Re: [PATCH v4] media: uapi: v4l: Intel metadata format update
-From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, sakari.ailus@intel.com,
-        Evgeni Raikhel <evgeni.raikhel@intel.com>, demisrael@gmail.com,
-        Nir Azkiel <nir.azkiel@intel.com>
-Date:   Fri, 02 Jun 2023 18:00:04 +0300
-In-Reply-To: <20230602144624.GA3343@pendragon.ideasonboard.com>
-References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
-         <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
-         <20230602144624.GA3343@pendragon.ideasonboard.com>
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 2 Jun 2023 11:00:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5851E56;
+        Fri,  2 Jun 2023 08:00:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E16E650FE;
+        Fri,  2 Jun 2023 15:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 71A95C433A1;
+        Fri,  2 Jun 2023 15:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685718025;
+        bh=pa+sw7piReDEjInKXKqjGINHz86IV7DvHVj4nDWYvdg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bi1ioK3XvJ+q3Rle2fRqVnvW64r4HT8l9zsDWx2N6bHMb5QqsnpQCIOMcyY9Hw848
+         Xqg2oqOYe6wkErfYpqyvP8jlZPPlmo0Wumcgle7dFw27lEz/gaQbCj2gaKCdGVzaFf
+         uvJ0LWXz2QpSe9R+7XtwbPIRUxs5EI23BhpgxxrDiAAjqpaGhhGknFjehuO/54fMUE
+         sd7S43jlfkmhLMf+L7AjrFZT70ek2YzNkN/kEZnOIsOyREwA0veeqVsD1k256/LjFB
+         RUi29jySWu1mxRgDYpEgjof6CwLCXLIWY+mywg/AOpAjR1ItHueuzhqH8nbkHuvZFL
+         65Hw2cciOpK4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 421D5C395E5;
+        Fri,  2 Jun 2023 15:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V6 00/21] Add basic ACPI support for RISC-V
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168571802526.11683.10109882495660507850.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Jun 2023 15:00:25 +0000
+References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        llvm@lists.linux.dev, qianweili@huawei.com, aou@eecs.berkeley.edu,
+        daniel.lezcano@linaro.org, trix@redhat.com, rafael@kernel.org,
+        maz@kernel.org, corbet@lwn.net, ndesaulniers@google.com,
+        markgross@kernel.org, hdegoede@redhat.com, wangzhou1@hisilicon.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        herbert@gondor.apana.org.au, tglx@linutronix.de,
+        luzmaximilian@gmail.com, davem@davemloft.net, nathan@kernel.org,
+        lenb@kernel.org
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hello:
 
-Thanks for review!
-I will gladly accept your proposed changes.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Comments inline.
+On Mon, 15 May 2023 11:19:07 +0530 you wrote:
+> This patch series enables the basic ACPI infrastructure for RISC-V.
+> Supporting external interrupt controllers is in progress and hence it is
+> tested using poll based HVC SBI console and RAM disk.
+> 
+> The first patch in this series is one of the patch from Jisheng's
+> series [1] which is not merged yet. This patch is required to support
+> ACPI since efi_init() which gets called before sbi_init() can enable
+> static branches and hits a panic.
+> 
+> [...]
 
-On Fri, 2023-06-02 at 17:46 +0300, Laurent Pinchart wrote:
-> Hi Dmitry,
-> =
+Here is the summary with links:
+  - [V6,01/21] riscv: move sbi_init() earlier before jump_label_init()
+    https://git.kernel.org/riscv/c/24fc18087f42
+  - [V6,02/21] platform/surface: Disable for RISC-V
+    https://git.kernel.org/riscv/c/7f2e20459b28
+  - [V6,03/21] crypto: hisilicon/qm: Fix to enable build with RISC-V clang
+    https://git.kernel.org/riscv/c/fbb995a7b27c
+  - [V6,04/21] ACPI: tables: Print RINTC information when MADT is parsed
+    https://git.kernel.org/riscv/c/4d02d88d2b92
+  - [V6,05/21] ACPI: OSL: Make should_use_kmap() 0 for RISC-V
+    https://git.kernel.org/riscv/c/214c236223b8
+  - [V6,06/21] RISC-V: Add support to build the ACPI core
+    https://git.kernel.org/riscv/c/a91a9ffbd3a5
+  - [V6,07/21] ACPI: processor_core: RISC-V: Enable mapping processor to the hartid
+    https://git.kernel.org/riscv/c/8b7809e28952
+  - [V6,08/21] RISC-V: Add ACPI initialization in setup_arch()
+    https://git.kernel.org/riscv/c/724f4c0df766
+  - [V6,09/21] RISC-V: ACPI: Cache and retrieve the RINTC structure
+    https://git.kernel.org/riscv/c/f99561199470
+  - [V6,10/21] drivers/acpi: RISC-V: Add RHCT related code
+    https://git.kernel.org/riscv/c/e6b9d8eddb17
+  - [V6,11/21] RISC-V: smpboot: Create wrapper setup_smp()
+    https://git.kernel.org/riscv/c/61946127ab49
+  - [V6,12/21] RISC-V: smpboot: Add ACPI support in setup_smp()
+    https://git.kernel.org/riscv/c/ce92546cd637
+  - [V6,13/21] RISC-V: only iterate over possible CPUs in ISA string parser
+    https://git.kernel.org/riscv/c/914d6f44fc50
+  - [V6,14/21] RISC-V: cpufeature: Add ACPI support in riscv_fill_hwcap()
+    https://git.kernel.org/riscv/c/396c018332a1
+  - [V6,15/21] RISC-V: cpu: Enable cpuinfo for ACPI systems
+    https://git.kernel.org/riscv/c/0b144c818989
+  - [V6,16/21] irqchip/riscv-intc: Add ACPI support
+    https://git.kernel.org/riscv/c/7023b9d83f03
+  - [V6,17/21] clocksource/timer-riscv: Refactor riscv_timer_init_dt()
+    https://git.kernel.org/riscv/c/cd12d206685a
+  - [V6,18/21] clocksource/timer-riscv: Add ACPI support
+    https://git.kernel.org/riscv/c/21f4f92410dc
+  - [V6,19/21] RISC-V: time.c: Add ACPI support for time_init()
+    https://git.kernel.org/riscv/c/714aa1d1c8ca
+  - [V6,20/21] RISC-V: Enable ACPI in defconfig
+    https://git.kernel.org/riscv/c/0b8e15ca0082
+  - [V6,21/21] MAINTAINERS: Add entry for drivers/acpi/riscv
+    https://git.kernel.org/riscv/c/cc9e654a7e81
 
-> Thank you for the patch.
-> =
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> On Thu, Jun 01, 2023 at 07:08:46PM +0300, Dmitry Perchanov wrote:
-> > Update metadata structure for Intel RealSense UVC/MIPI cameras.
-> > Compliant to Intel Configuration version 3.
-> > =
-
-> > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
-> > ---
-> >  .../media/v4l/pixfmt-meta-d4xx.rst            | 52 ++++++++++++++++---
-> >  1 file changed, 46 insertions(+), 6 deletions(-)
-> > =
-
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst=
- b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> > index 4e437ba97a0e..7482f298d0cc 100644
-> > --- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> > @@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
-> >  Description
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >  =
-
-> > -Intel D4xx (D435 and other) cameras include per-frame metadata in thei=
-r UVC
-> > +Intel D4xx (D435, D455 and others) cameras include per-frame metadata =
-in their UVC
-> >  payload headers, following the Microsoft(R) UVC extension proposal [1_=
-]. That
-> >  means, that the private D4XX metadata, following the standard UVC head=
-er, is
-> >  organised in blocks. D4XX cameras implement several standard block typ=
-es,
-> > @@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it a=
-lso includes proprietary
-> >  payload header data. D4xx cameras use bulk transfers and only send one=
- payload
-> >  per frame, therefore their headers cannot be larger than 255 bytes.
-> >  =
-
-> > +This document implements Intel Configuration version 3 [9_].
-> > +
-> >  Below are proprietary Microsoft style metadata types, used by D4xx cam=
-eras,
-> >  where all fields are in little endian order:
-> >  =
-
-> > @@ -43,7 +45,7 @@ where all fields are in little endian order:
-> >      * - __u32 ID
-> >        - 0x80000000
-> >      * - __u32 Size
-> > -      - Size in bytes (currently 56)
-> > +      - Size in bytes, include ID (all protocol versions: 60)
-> >      * - __u32 Version
-> >        - Version of this structure. The documentation herein correspond=
-s to
-> >          version xxx. The version number will be incremented when new f=
-ields are
-> =
-
-> Should this read "version 3" instead of "version xxx" ?
-
-This can read 1, 2 or 3, depends on firmware version.
-All cameras have same firmware. The latest will report 3.
-> =
-
-
-
-> > @@ -72,13 +74,17 @@ where all fields are in little endian order:
-> >        - Bottom border of the AE Region of Interest
-> >      * - __u32 Preset
-> >        - Preset selector value, default: 0, unless changed by the user
-> > -    * - __u32 Laser mode
-> > -      - 0: off, 1: on
-> > +    * - __u8 Emitter mode (v3 only) (__u32 Laser mode for v1) [8_]
-> > +      - 0: off, 1: on, same as __u32 Laser mode for v1
-> > +    * - __u8 RFU byte (v3 only)
-> > +      - Spare byte for future use
-> > +    * - __u16 LED Power (v3 only)
-> > +      - Led power value 0-360 (F416 SKU)
-> >      * - :cspan:`1` *Capture Timing*
-> >      * - __u32 ID
-> >        - 0x80000001
-> >      * - __u32 Size
-> > -      - Size in bytes (currently 40)
-> > +      - Size in bytes, include ID (all protocol versions: 40)
-> >      * - __u32 Version
-> >        - Version of this structure. The documentation herein correspond=
-s to
-> >          version xxx. The version number will be incremented when new f=
-ields are
-> > @@ -101,7 +107,7 @@ where all fields are in little endian order:
-> >      * - __u32 ID
-> >        - 0x80000002
-> >      * - __u32 Size
-> > -      - Size in bytes (currently 40)
-> > +      - Size in bytes, include ID (v1:36, v3:40)
-> >      * - __u32 Version
-> >        - Version of this structure. The documentation herein correspond=
-s to
-> >          version xxx. The version number will be incremented when new f=
-ields are
-> > @@ -124,6 +130,14 @@ where all fields are in little endian order:
-> >        - Requested frame rate per second
-> >      * - __u16 Trigger
-> >        - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external=
- trigger
-> > +    * - __u16 Calibration count (v3 only)
-> > +      - Calibration counter, see [4_] below
-> > +    * - __u8 GPIO input data (v3 only)
-> > +      - GPIO readout, see [4_] below (Supported from FW 5.12.7.0)
-> > +    * - __u32 Sub-preset info (v3 only)
-> > +      - Sub-preset choice information, see [4_] below
-> > +    * - __u8 reserved (v3 only)
-> > +      - RFU byte.
-> >  =
-
-> >  .. _1:
-> >  =
-
-> > @@ -140,6 +154,8 @@ where all fields are in little endian order:
-> >    0x00000010 Exposure priority
-> >    0x00000020 AE ROI
-> >    0x00000040 Preset
-> > +  0x00000080 Emitter mode
-> > +  0x00000100 LED Power
-> >  =
-
-> >  .. _3:
-> >  =
-
-> > @@ -165,6 +181,8 @@ where all fields are in little endian order:
-> >    0x00000040 Framerate
-> >    0x00000080 Trigger
-> >    0x00000100 Cal count
-> > +  0x00000200 GPIO Input Data
-> > +  0x00000400 Sub-preset Info
-> >  =
-
-> >  .. _5:
-> >  =
-
-> > @@ -211,3 +229,25 @@ Left sensor: ::
-> >  Fish Eye sensor: ::
-> >  =
-
-> >    1 RAW8
-> > +
-> > +.. _8:
-> > +
-> > +[8] The "Laser mode" is replaced by three different fields.
-> =
-
-> "... has been replaced in version 3 by ..."
-> =
-
-> > +"Laser" renamed to "Emitter" as there multiple technologies
-> =
-
-> s/there/there are/
-Accepted. Thanks!
-
-> =
-
-> > +for camera projectors. As we have another field for "Laser Power"
-> > +we introduced "LED Power" for extra emitter.
-> > +
-> > +The __u32 "Laser mode" integer is divided by two bytes and short: ::
-> =
-
-> The "Laser mode" __u32 field has been split into: ::
-> =
-
-> =
-
-Accepted. Thanks!
-
-> > +   1 __u8 Emitter mode
-> > +   2 __u8 RFU byte
-> > +   3 __u16 LED Power
-> > +
-> > +This is a change between versions 1 and 3. All versions 1,2 and 3
-> =
-
-> s/1,2/1, 2/
-> =
-
-Accepted. Thanks!
-
-> > +are backward compatible with same data format and they are supported.
-> > +See [2_] for which attributes are valid.
-> > +
-> > +.. _9:
-> > +
-> > +[9]
-> > +LibRealSense SDK metadata source:
-> =
-
-> I'll remove the blank line after '[9]', that is
-> =
-
-> > +[9] LibRealSense SDK metadata source:
-> =
-
-Accepted. Thanks!
-
-> I can fix all this when applying if you're fine with the changes.
-> =
-
-Yes, I agree. Thank You for your effort!
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> =
-
-> > +https://github.com/IntelRealSense/librealsense/blob/master/src/metadat=
-a.h
-
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
 
