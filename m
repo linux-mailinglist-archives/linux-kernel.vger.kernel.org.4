@@ -2,86 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAB771FA5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2EC71FA5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbjFBGvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S233876AbjFBGwm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 02:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbjFBGvE (ORCPT
+        with ESMTP id S233473AbjFBGwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:51:04 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA1AEB;
-        Thu,  1 Jun 2023 23:51:03 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id C816D8111;
-        Fri,  2 Jun 2023 06:51:02 +0000 (UTC)
-Date:   Fri, 2 Jun 2023 09:51:01 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: core: Fix error handling for
- serial_core_ctrl_device_add()
-Message-ID: <20230602065101.GG14287@atomide.com>
-References: <20230602064104.41508-1-tony@atomide.com>
- <20230602064652.GF14287@atomide.com>
- <ca22d4ad-fd07-2733-a4c4-e6ed9c5ebe3f@kernel.org>
+        Fri, 2 Jun 2023 02:52:11 -0400
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A60EEB;
+        Thu,  1 Jun 2023 23:52:10 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so2245966e87.1;
+        Thu, 01 Jun 2023 23:52:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685688728; x=1688280728;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T9DWVlf1ssnI9gx+MVSnTE5Fm8P+7zFjGjwuixjorcE=;
+        b=PCOqk2ns7tyP4Bo88GqKNiSL5aLD4DswOnPGtNzMHmY7xBwgove5qbW7KmQnT/X1Zn
+         nm7pNNek0LqEDlGvSUo61MLNu91bSu9fCzbDEYsFCNP+UuROQa5dbQK7WxUG7UhiuIc2
+         1/ezreUgEWhMEXVjXez1GgQYRHK1HoS5VVsYRjZ2gsLdux6G+L7qN/Qzqk074D2lwBoL
+         8LuCyzpFn/gbu2uGeUvs8EInI92n9tEh+CkPZi6gEGhhgIoMM1IxRNO7KujPVGoFIr5C
+         J5B/sFS+QGUUrkNR/PdUuM4v9GC82C6zxBuf6VNoC6XgPDXZKv85VAS3PPHXYzZToP0j
+         N26Q==
+X-Gm-Message-State: AC+VfDwIqWQN2Q+ELNldiF+acdPonxJeReyesMZ9/EsxdFeO9m2ppIqX
+        IM0bSyzqX1UcAFWwG8gxGxMA/aQMDg4wo61z
+X-Google-Smtp-Source: ACHHUZ6299qgCzP4n9ikrNBatD5GiNuvjlQOfLgk8dtIHX4b06fzaN9YZhz6NVv89G42ZOKAsfJHhQ==
+X-Received: by 2002:ac2:46d0:0:b0:4f1:30cc:3dae with SMTP id p16-20020ac246d0000000b004f130cc3daemr1405815lfo.10.1685688727739;
+        Thu, 01 Jun 2023 23:52:07 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id a14-20020a056512390e00b004f5e681eec1sm64898lfu.92.2023.06.01.23.52.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 23:52:06 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4f6148f9679so64861e87.3;
+        Thu, 01 Jun 2023 23:52:06 -0700 (PDT)
+X-Received: by 2002:a05:6512:11ef:b0:4f3:b49b:e246 with SMTP id
+ p15-20020a05651211ef00b004f3b49be246mr1353520lfs.5.1685688726700; Thu, 01 Jun
+ 2023 23:52:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca22d4ad-fd07-2733-a4c4-e6ed9c5ebe3f@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
+ <20220329091126.4730-2-wsa+renesas@sang-engineering.com> <ZHkQDTvk6I2q-9CF@surfacebook>
+In-Reply-To: <ZHkQDTvk6I2q-9CF@surfacebook>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 2 Jun 2023 08:51:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com>
+Message-ID: <CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com>
+Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
+To:     andy.shevchenko@gmail.com
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Jiri Slaby <jirislaby@kernel.org> [230602 06:48]:
-> On 02. 06. 23, 8:46, Tony Lindgren wrote:
-> > * Tony Lindgren <tony@atomide.com> [230602 06:41]:
-> > > Checking for NULL is not enough as serial_base_ctrl_add() uses ERR_PTR().
-> > > 
-> > > Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
-> > > Signed-off-by: Tony Lindgren <tony@atomide.com>
-> > > ---
-> > >   drivers/tty/serial/serial_core.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> > > --- a/drivers/tty/serial/serial_core.c
-> > > +++ b/drivers/tty/serial/serial_core.c
-> > > @@ -3342,7 +3342,7 @@ int serial_core_register_port(struct uart_driver *drv, struct uart_port *port)
-> > >   	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
-> > >   	if (!ctrl_dev) {
-> > >   		new_ctrl_dev = serial_core_ctrl_device_add(port);
-> > > -		if (!new_ctrl_dev) {
-> > > +		if (IS_ERR_OR_NULL(new_ctrl_dev)) {
-> > >   			ret = -ENODEV;
-> > >   			goto err_unlock;
-> > >   		}
-> > 
-> > Hmm actually we should also change to use ret = PTR_ERR(new_ctrl_dev) here
-> > instead of translating all the errors to -ENODEV. Will send out v2 version.
-> 
-> Why OR_NULL at all, actually?
+Hi Andy,
 
-Yup there should be no need for that thanks.
+CC GregKH
 
-Regards,
+On Thu, Jun 1, 2023 at 11:40 PM <andy.shevchenko@gmail.com> wrote:
+> Tue, Mar 29, 2022 at 11:11:26AM +0200, Wolfram Sang kirjoitti:
+> > This is a sloppy logic analyzer using GPIOs. It comes with a script to
+> > isolate a CPU for polling. While this is definitely not a production
+> > level analyzer, it can be a helpful first view when remote debugging.
+> > Read the documentation for details.
+>
+> One note since I have done recent review and realize one issue with debugfs.
+>
+> ...
+>
+> > +     priv->debug_dir = debugfs_create_dir(devname, gpio_la_poll_debug_dir);
+>
+> If this fails with NULL...
+>
+> > +     debugfs_create_blob("meta_data", 0400, priv->debug_dir, &priv->meta);
+> > +     debugfs_create_ulong("delay_ns", 0600, priv->debug_dir, &priv->delay_ns);
+> > +     debugfs_create_ulong("delay_ns_acquisition", 0400, priv->debug_dir, &priv->acq_delay);
+> > +     debugfs_create_file_unsafe("buf_size", 0600, priv->debug_dir, priv, &fops_buf_size);
+> > +     debugfs_create_file_unsafe("capture", 0200, priv->debug_dir, priv, &fops_capture);
+> > +     debugfs_create_file_unsafe("trigger", 0200, priv->debug_dir, priv, &fops_trigger);
+>
+> ...and any of these is not, we will end up with the file in a root folder of debugfs...
+>
+> > +     dev_info(dev, "initialized");
+>
+> ...
+>
+> > +static int gpio_la_poll_remove(struct platform_device *pdev)
+> > +{
+> > +     struct gpio_la_poll_priv *priv = platform_get_drvdata(pdev);
+> > +
+> > +     mutex_lock(&priv->lock);
+> > +     debugfs_remove_recursive(priv->debug_dir);
+>
+> ...and this one won't remove it.
+>
+> > +     mutex_unlock(&priv->lock);
+> > +     mutex_destroy(&priv->lock);
+> > +
+> > +     return 0;
+> > +}
+>
+> ...
+>
+> However, I haven't checked if it's pure theoretical issue with the current code
+> base of debugfs or a potential problem. Easy fix is to check an error code and
 
-Tony
+I think debugfs_create_dir() can only fail reasonably due to OOM.
+
+> skip the files creation. Not sure if driver will be useful in that case.
+
+Having to add such error checks would really be unfortunate, because
+one of the design principles of debugfs is that there is never a need
+to check for errors.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
