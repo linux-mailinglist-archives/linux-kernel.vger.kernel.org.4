@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC83720721
+	by mail.lfdr.de (Postfix) with ESMTP id 073E272071F
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236797AbjFBQLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S236456AbjFBQLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236798AbjFBQK6 (ORCPT
+        with ESMTP id S236698AbjFBQKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:10:58 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40763E43
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:10:12 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3b314b1d7so2975310e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:10:12 -0700 (PDT)
+        Fri, 2 Jun 2023 12:10:46 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA400197
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:10:04 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb1e332f648so2298623276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:10:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685722191; x=1688314191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AeFT72TXfXAwhYRh1W0GvqbmonxTxhIBsAfBN2yDsw0=;
-        b=Xvi/ClXZ5/5C7Un8m11hnm+n2IRojdqgmlLtynis7i1EXsgEP4GaZ+po4+frH+0Q8w
-         fvCRel3QdWYe6SrZLfwR4Jtf1Qov56zTJmITbpnH/gHVNnnOhIrLgwdDC4UffS+Oh8YN
-         s2SsLr1Pbi2J79iiXth9Ax/nqsxK8IgbjbkgE=
+        d=google.com; s=20221208; t=1685722186; x=1688314186;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iiQKR5r12cEmfxEtqKB501qQ7U5/inaqlNqkSHrg1Dk=;
+        b=pa3mVvglr9ldo0oASWJgWygRLd3hw8lG1pjLeB+Qzm3K3zOU5BQU88aja7wxcgPXwA
+         AwayadZx6shxLAXjuJFrDzlMtsvb67kGNUVBIz8jQ9pcx5Jd6BF7pMABQixgPuk47qo/
+         QPSMIrvsitPTIbIvBs3Unmlez10KGpvyazPz0vuoWxeM0ddu7MUX6bOpsZv5FX/RHsfI
+         ab0UhQ4BKG9ohwFpekgRN7rsQtHAtMFU2PEbvOsbX5+K7m399sRVLlUcmEJAu36XrUm4
+         MIK72o4Xoc2dnSjS77GyfH7dzmpmSt4gmenJO3sxGLvRMkP8fiKXjBjSppWa9vRlnGfd
+         FwPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722191; x=1688314191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AeFT72TXfXAwhYRh1W0GvqbmonxTxhIBsAfBN2yDsw0=;
-        b=EwUVOKD2agIUXdrlZTpJTx35z6fLDJTPU2zTngZO4ZAsw8FEmKOSlU6/s9ll4uhRUI
-         79vsxSXAbme6+i1M8wzedo1+cSMCq65MwLDORjEOUzIQvK+El0B/ohCK+kMpWjF21VVz
-         jCyoWU2EdSE0O8UWiCqingN9ENfSrbi0Oe3PjWBTEQDupbGuHlhoo6hBOcZgp6tDnHII
-         i+r4KSKfE9ITW0VuHlwfHDMERPD1NQAYlBTLWbuYM4y93EvQDSjjR/m70edYYrgWCRga
-         2i8bHvhzcKgV5L/ZcpYtC2CXKc7f/IGv2P2mkdNpAhoWGBkVfmh/s5+Soqws0FkYya4E
-         lsJw==
-X-Gm-Message-State: AC+VfDzf0cNA2tZ7pOZODfum+6ZUHqeyZF/J9SF4Twpjlt1P/9aysOGr
-        gBf+Uwca1Q9B7msdJM0sdOn5AsbPKSxEHjUj1uP8rGGb
-X-Google-Smtp-Source: ACHHUZ6g0wkH4hKy0+/ZIKMm8M4uM2yzx3utavn3ANJIwKd9NvfWw+m8ubmt7YisycfsxcbKnA6EIw==
-X-Received: by 2002:a19:a413:0:b0:4ed:c639:54cd with SMTP id q19-20020a19a413000000b004edc63954cdmr2280145lfc.35.1685722190972;
-        Fri, 02 Jun 2023 09:09:50 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id q7-20020ac25a07000000b004d40e22c1eesm203354lfn.252.2023.06.02.09.09.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 09:09:50 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so2564667e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:09:49 -0700 (PDT)
-X-Received: by 2002:ac2:5d6c:0:b0:4f2:509b:87ba with SMTP id
- h12-20020ac25d6c000000b004f2509b87bamr2034590lft.50.1685722168361; Fri, 02
- Jun 2023 09:09:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org>
- <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net>
- <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de> <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
- <20230602143912.GI620383@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230602143912.GI620383@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Jun 2023 12:09:11 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wj7K3Q9WbBtQHiOXKc04SRjeOF+TRopkwVoQh_CFU+kvg@mail.gmail.com>
-Message-ID: <CAHk-=wj7K3Q9WbBtQHiOXKc04SRjeOF+TRopkwVoQh_CFU+kvg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of __SIZEOF_INT128__
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Helge Deller <deller@gmx.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org,
-        John David Anglin <dave.anglin@bell.net>,
-        Sam James <sam@gentoo.org>
+        d=1e100.net; s=20221208; t=1685722186; x=1688314186;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iiQKR5r12cEmfxEtqKB501qQ7U5/inaqlNqkSHrg1Dk=;
+        b=VV0aZNM0He5OoOzoAi7L9gqfHVrm2RPmCuF3ovNucFNsAnjbmeNaj+fEVbWIIZ1cnx
+         R5V5lRiQrI3dVmOiV9l9ZvzUDw/5jp3ijkYWmMtmlusNr5l1iylntIBXGPwXELeldGzx
+         yokH4QbvqTkaQqnwOdSy+aRFt1nZP12cEJ7ezkqFC5+s9uq2YyHJWVRNZMNofGRPYmDJ
+         Ecz+DCzSkEAC2lhT37yO0vkmO2g7W8b4WK5ayaQPHR+2BpwaQFWNt4l/QdhUBUtv7T/e
+         QOd0sHmDzl+VOBOaxY4jdSYMZkZd++IJxoBc18qH/NrAHacowhMYc5K9S+iJb6YjRhcO
+         GDeg==
+X-Gm-Message-State: AC+VfDyeqAkH+wZ8vVvkh+Jhw2x3CF2yIF0r7xInaRkfh80t96Nkf477
+        DYd48Y1ina3pD4rfR9gRhg2l3Txd0GbC
+X-Google-Smtp-Source: ACHHUZ4B/VNE5B0Lzqq5kfdIQx5Z2vYuoQBh8/63RZRhZfWL9mTILlGstZ7p9kQje0NOJUJPGy2sE9Fs2xL/
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a05:6902:1545:b0:ba8:181b:2558 with SMTP
+ id r5-20020a056902154500b00ba8181b2558mr2255805ybu.4.1685722186031; Fri, 02
+ Jun 2023 09:09:46 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 09:09:11 -0700
+In-Reply-To: <20230602160914.4011728-1-vipinsh@google.com>
+Mime-Version: 1.0
+References: <20230602160914.4011728-1-vipinsh@google.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230602160914.4011728-14-vipinsh@google.com>
+Subject: [PATCH v2 13/16] KVM: arm64: Run clear-dirty-log under MMU read lock
+From:   Vipin Sharma <vipinsh@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:40=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Something like so then?
+Take MMU read lock for clearing dirty logs and use shared page table
+walker.
 
-Ack. I think it would be much cleaner if we would have it as part of
-the Kconfig file and architectures could just override some
-GCC_MIN_VERSION value, but that's not the universe we currently have,
-so your patch looks like the best thing to do.
+Dirty logs are currently cleared using MMU write locks. This
+means vCPUs page faults, which takes MMU read lock,  will
+be blocked while dirty logs are being cleared. This causes guest
+degradation and especially noticeable on VMs with lot of vCPUs.
 
-              Linus
+Taking MMU read lock will allow vCPUs to execute parallelly and reduces
+the impact on vCPUs performance.
+
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+---
+ arch/arm64/kvm/mmu.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 356dc4131023..7c966f6f1a41 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -74,8 +74,12 @@ static int stage2_apply_range(struct kvm_s2_mmu *mmu, phys_addr_t addr,
+ 		if (ret)
+ 			break;
+ 
+-		if (resched && next != end)
+-			cond_resched_rwlock_write(&kvm->mmu_lock);
++		if (resched && next != end) {
++			if (flags & KVM_PGTABLE_WALK_SHARED)
++				cond_resched_rwlock_read(&kvm->mmu_lock);
++			else
++				cond_resched_rwlock_write(&kvm->mmu_lock);
++		}
+ 	} while (addr = next, addr != end);
+ 
+ 	return ret;
+@@ -1131,11 +1135,11 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
+ 	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
+ 	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
+ 
+-	write_lock(&kvm->mmu_lock);
+-	lockdep_assert_held_write(&kvm->mmu_lock);
+-
+-	stage2_wp_range(&kvm->arch.mmu, start, end, 0);
++	read_lock(&kvm->mmu_lock);
++	stage2_wp_range(&kvm->arch.mmu, start, end, KVM_PGTABLE_WALK_SHARED);
++	read_unlock(&kvm->mmu_lock);
+ 
++	write_lock(&kvm->mmu_lock);
+ 	/*
+ 	 * Eager-splitting is done when manual-protect is set.  We
+ 	 * also check for initially-all-set because we can avoid
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
