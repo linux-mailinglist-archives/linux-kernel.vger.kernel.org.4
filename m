@@ -2,139 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2B57202D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D007202D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236076AbjFBNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S235510AbjFBNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbjFBNMC (ORCPT
+        with ESMTP id S234408AbjFBNNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:12:02 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8195BE4D;
-        Fri,  2 Jun 2023 06:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OTouvSUz3z0SuKPd9GjaAkReu68Py/wYa5z+M99zv4Y=; b=jLaAHwh0koGGv0TijZOPa7Zpjd
-        u9HlyFtdBXnU8uDysZ4jP3IzvPkgG3WsEC3+H55cDEbUJ1lqB7hVutURkgmZhs6WOdbs5g+eV0TAx
-        j53GumEW7Tkv0M2FpXjRlgSAt5KUo4mREmFsuJxJSBAdhvs9bNN+AeZcljmbmH2Q8t1xXpimSEEqU
-        JZEnzOwaSN5bMQ58Z98CTd2sDNTyhDo8eBvjLRa0sJlTy+7T4aOnTRyD9SUQp/hku7KWouFJ5WsQF
-        XL6NXHGwqpvsQOI9CsCPHEGDcAnym1YZ/irS/6Kik3yBSX5/hi9Hk4Bt/T0rfVH6+6b8pJHnLKUZb
-        CEYj8t0g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50514)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q54Yn-00081X-GQ; Fri, 02 Jun 2023 14:11:17 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q54Yk-0002yf-QK; Fri, 02 Jun 2023 14:11:14 +0100
-Date:   Fri, 2 Jun 2023 14:11:14 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc:     msmulski2@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
-        kabel@kernel.org, Michal Smulski <michal.smulski@ooma.com>
-Subject: Re: [PATCH net-next v6 1/1] net: dsa: mv88e6xxx: implement USXGMII
- mode for mv88e6393x
-Message-ID: <ZHnqcvP8hv19RBr8@shell.armlinux.org.uk>
-References: <20230602001705.2747-1-msmulski2@gmail.com>
- <20230602001705.2747-2-msmulski2@gmail.com>
- <ZHnEzPadBBbfwj18@shell.armlinux.org.uk>
- <20230602112804.32ffi7mpk5xfzvq4@LXL00007.wbi.nxp.com>
+        Fri, 2 Jun 2023 09:13:02 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC3310E9;
+        Fri,  2 Jun 2023 06:12:26 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-6260e771419so12441256d6.1;
+        Fri, 02 Jun 2023 06:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685711518; x=1688303518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ry5f5ak9Sr/bZIbtzTWJKvf8qehHNybuYJDF5N8k3cI=;
+        b=QPHM+5/woE/dOdJELOIwis9yJBOUQoJlPPGRdP02SJqMqHI27rC5crLA6aJ+I+IAyk
+         g8SE/QLLi9KBFI6QVazJnlN1/A75T72fCkc2WD6qXVb+/iEFm8ghzYBFWz00iZ56auMH
+         +Lx304AoJRyE/RsOG8vlL+2XlxxJi8Avc8Gfhbm18Oys/Bbvx+OzVC0gKZo2Is5m1ErA
+         Wx2XlDL+Tn9j7p7GXzEg5NFb5U7eeWBs2cXHHnnWfkA7kTL79BUrztBei2k7C3oKS7Ey
+         3tCQabzh8T47rC/pmtQ45/Xnylb59gvgVMKGQdMLy2VoobHctDpkirlJTdouqsFKEhz4
+         MbRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685711518; x=1688303518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ry5f5ak9Sr/bZIbtzTWJKvf8qehHNybuYJDF5N8k3cI=;
+        b=JEJ4S4m6yVSj4OvZcC0WAjiibqiIGCnqXmt9Kcj2LslpCaZQsn2G3ENnTZ1bJwkuL+
+         XDQ7VzoJDeanAQ5P3wO4Oo06waz7m/9sZk7FPJKEDVaoHWLyN1qknbObKGSXUw3jmD6K
+         edJwVR+/eP9ZjAAOBJemzWCvUD244BS1lvLlff6q6zIQEdFcQaXL73/PxzACkxCq1K03
+         apXGlcw1uPizLPPiRiVx8/QxLTjbjSUeZG3MZuqO5ba8L+Q3vdz0FWaOWEN3zqlR1wot
+         DPHeeIoUL2fhQL/Z7ONRhAYZHGl9hMpC7TO48cQaVQ4wV7SDTb8RKQ+atuedrY2oXdP5
+         2lcA==
+X-Gm-Message-State: AC+VfDym+2Kre7AsobAzAU1qWzefzhXq8fYdLz69XGkxjPFgKju59U2x
+        ctqI+Qi9w60dYPUFrW08qNMzE2Eat4sqY4jyCJe7IjqdIHabOg==
+X-Google-Smtp-Source: ACHHUZ7kMzvAHTkGGwT6hZfhgTh0gjVaS+Sg8f/2ZLTev7/1qspG/QCMLGRPbwovukpVvSzxyIhabkjHVr9LicCFB2s=
+X-Received: by 2002:a05:6214:411b:b0:628:7be8:97b7 with SMTP id
+ kc27-20020a056214411b00b006287be897b7mr2694764qvb.23.1685711518207; Fri, 02
+ Jun 2023 06:11:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602112804.32ffi7mpk5xfzvq4@LXL00007.wbi.nxp.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230602082325.1445261-1-quic_srichara@quicinc.com> <20230602082325.1445261-3-quic_srichara@quicinc.com>
+In-Reply-To: <20230602082325.1445261-3-quic_srichara@quicinc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 2 Jun 2023 16:11:21 +0300
+Message-ID: <CAHp75Vcfa2cbACEPROuOptPM7c9SOp_TudK-4Rx45OhWPf=iiw@mail.gmail.com>
+Subject: Re: [PATCH V8 2/8] clk: qcom: Add Global Clock controller (GCC)
+ driver for IPQ5018
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
+        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        p.zabel@pengutronix.de, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, robimarko@gmail.com,
+        krzysztof.kozlowski@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:28:04PM +0300, Ioana Ciornei wrote:
-> On Fri, Jun 02, 2023 at 11:30:36AM +0100, Russell King (Oracle) wrote:
-> > On Thu, Jun 01, 2023 at 05:17:04PM -0700, msmulski2@gmail.com wrote:
-> > > +/* USXGMII registers for Marvell switch 88e639x are undocumented and this function is based
-> > > + * on some educated guesses. It appears that there are no status bits related to
-> > > + * autonegotiation complete or flow control.
-> > > + */
-> > > +static int mv88e639x_serdes_pcs_get_state_usxgmii(struct mv88e6xxx_chip *chip,
-> > > +						  int port, int lane,
-> > > +						  struct phylink_link_state *state)
-> > > +{
-> > > +	u16 status, lp_status;
-> > > +	int err;
-> > > +
-> > > +	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-> > > +				    MV88E6390_USXGMII_PHY_STATUS, &status);
-> > > +	if (err) {
-> > > +		dev_err(chip->dev, "can't read Serdes USXGMII PHY status: %d\n", err);
-> > > +		return err;
-> > > +	}
-> > > +	dev_dbg(chip->dev, "USXGMII PHY status: 0x%x\n", status);
-> > > +
-> > > +	state->link = !!(status & MDIO_USXGMII_LINK);
-> > > +
-> > > +	if (state->link) {
-> > > +		err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-> > > +					    MV88E6390_USXGMII_LP_STATUS, &lp_status);
-> > 
-> > What's the difference between these two registers? Specifically, what
-> > I'm asking is why the USXGMII partner status seems to be split between
-> > two separate registers.
-> > 
-> > Note that I think phylink_decode_usxgmii_word() is probably missing a
-> > check for MDIO_USXGMII_LINK, based on how Cisco SGMII works (and
-> > USXGMII is pretty similar.)
-> > 
-> > MDIO_USXGMII_LINK indicates whether the attached PHY has link on the
-> > media side or not. It's entirely possible for the USXGMII link to be
-> > up (thus allowing us to receive the "LPA" from the PHY) but for the
-> > PHY to be reporting to us that it has no media side link.
-> > 
-> > So, I think phylink_decode_usxgmii_word() at least needs at the
-> > beginning this added:
-> > 
-> > 	if (!(lpa & MDIO_USXGMII_LINK)) {
-> > 		state->link = false;
-> > 		return;
-> > 	}
-> > 
-> > The only user of this has been the Lynx PCS, so I'll add Ioana to this
-> > email as well to see whether there's any objection from Lynx PCS users
-> > to adding it.
-> >
-> 
-> I just tested this snippet on a LX2160ARDB that has USXGMII on two of
-> its lanes which go to Aquantia AQR113C PHYs.
-> 
-> The lpa read is 0x5601 and, with the patch, the interface does not link
-> up. I am not sure what is happening, if it's this PHY in particular that
-> does not properly set MDIO_USXGMII_LINK.
+On Fri, Jun 2, 2023 at 11:24=E2=80=AFAM Sricharan Ramabadhran
+<quic_srichara@quicinc.com> wrote:
+>
+> Add support for the global clock controller found on IPQ5018
+> based devices.
 
-Thanks for testing. I wonder if the USXGMII control word that the PHY
-transmits can be read from one of its registers?
+...
 
-If the PHY is correctly setting the link bit, but it's not appearing
-in the Lynx PCS registers as set, that would be weird, and suggest the
-PCS is handling that itself. Does the Lynx link status bit change
-according to the media link status, while the AN complete bit stays
-set?
+>  config IPQ_GCC_5332
+>         tristate "IPQ5332 Global Clock Controller"
+>         depends on ARM64 || COMPILE_TEST
+>         help
+>           Support for the global clock controller on ipq5332 devices.
+> -         Say Y if you want to use peripheral devices such as UART, SPI,
+> -         i2c, USB, SD/eMMC, etc.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Nothing in the commit message about this. Please, elaborate.
+
+...
+
+> +#include <linux/kernel.h>
+> +#include <linux/err.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset-controller.h>
+
+Why not keep this ordered?
+
+Missing bits.h and maybe others, but in an unordered list it's harder to ch=
+eck.
+
+...
+
+> +                       &gpll4_main.clkr.hw
+
+Can we keep trailing comma here and in similar cases, like
+
+> +                       &ubi32_pll_main.clkr.hw
+> +                       &gpll0_main.clkr.hw
+
+(and many others)?
+
+--=20
+With Best Regards,
+Andy Shevchenko
