@@ -2,166 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A0F7204C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8037204C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbjFBOnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S236188AbjFBOoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbjFBOnu (ORCPT
+        with ESMTP id S236109AbjFBOoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:43:50 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F721B3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:43:48 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9741caaf9d4so302204166b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685717027; x=1688309027;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=HiT9+FOvSDgrU3EvO2uC6SOYObLJTSqPECXVlks7Q4s=;
-        b=fksRSXQg0xd3o1gTujB1C0oLz9ZjsAd3ALsBJe5SOmG8a7VsgwnlpGsy+0b0Dr4n/U
-         A4xJkyFLkDK6juw5/aZ2kwz5HO2LE9pilpukOvPJnIISikBNmK3rx+9SWwDP005MOXW7
-         t6/VW6H02HYL4IcsB2Xjsp//RX6Dj75OYqSaMqXolzbcaYJ9sEZsCbC8ydd+NfgXn14E
-         CJF7yDuNXWygqVKFAyodAQaUg8IhnemQjQAYBLmaWZk9Dz22/E7hqH9IDFmrorcnV9g5
-         o3QvyeLNBiVlBTBUd1G2cEW4AUlipOG1mLgjiEWLoE/+Qc/7JzOSkBN0SmJ6uJ8WkzPw
-         PxUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717027; x=1688309027;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HiT9+FOvSDgrU3EvO2uC6SOYObLJTSqPECXVlks7Q4s=;
-        b=BdDkMuEDZ8Fcmq3/SskxRRJGFXNXvtwngvT+A1cnONWzEfiOufIgcrBsHnSkM49Uan
-         ZE2gXKIToxSYtrSNZHuOA//w/DqicqjyPr7ethPBfr8D7D+0+Jb7g6PVh7fXIww/B8yl
-         z9xTUVPa2HWqCzhHgEYFY3/ydX3KKkwzLBEyzkCVXp1Pbji1tLb6cYS5UqbpZDuLVVIu
-         eoyoJEcEyg39b1pBKlE3hUZP6BQypNuxrOsyrStfJDVEkwBHJOpLAYyKOwftstWI59i1
-         AdMy7DEtaOii19qeQGXXKsU8CT+6sSBIDNnXyEn8oMisd1WrgEJZzkYmsfsABMWxFx2O
-         Cb/A==
-X-Gm-Message-State: AC+VfDzveWpVdm6UOlwAgT3PYPbFnlrD+Wi3SgcrldSghYT6u4H21jl9
-        E7v/+eDBJsWY/WMqEV9VuqyMeg==
-X-Google-Smtp-Source: ACHHUZ4vu/ybbB860ST000hxSx+G25W11XyrRD4vZ7zPqf4TWeGuIiYRh2boQPz9XQfe7pptwDHqGA==
-X-Received: by 2002:a17:907:7b98:b0:973:940e:a01b with SMTP id ne24-20020a1709077b9800b00973940ea01bmr12464509ejc.60.1685717027127;
-        Fri, 02 Jun 2023 07:43:47 -0700 (PDT)
-Received: from localhost ([194.62.217.2])
-        by smtp.gmail.com with ESMTPSA id a22-20020a1709063e9600b0096637a19dccsm816565ejj.210.2023.06.02.07.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 07:43:46 -0700 (PDT)
-References: <20230601134946.3887870-1-aliceryhl@google.com>
- <20230601134946.3887870-8-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2 7/8] rust: workqueue: add `try_spawn` helper method
-Date:   Fri, 02 Jun 2023 16:43:33 +0200
-In-reply-to: <20230601134946.3887870-8-aliceryhl@google.com>
-Message-ID: <87bkhx2acd.fsf@metaspace.dk>
+        Fri, 2 Jun 2023 10:44:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FD6E43
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:44:03 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C2FAD1EC026E;
+        Fri,  2 Jun 2023 16:44:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685717041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2AOFicJwTPgUdcHfcpeKSndwQkStqIz6/wMMCYd0H1E=;
+        b=ogLDfweyKnYTGaSj85WYz31gQ/v2w7nHloTwxh2YY6RBQVWC/SaOuntubLbpuc9p0svdWH
+        LalG3+Q/DaurBrLWBXgV7Jgz6a8URUEYtts6cQJKS03Bf3kndHAjMh5+AW/8AL2g9ccS1X
+        4UysctKv5AnrBwgPz7GnDYkdGF2kj/M=
+Date:   Fri, 2 Jun 2023 16:43:57 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
+ protection modify mask
+Message-ID: <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
+References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
+ <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
+ <cfd19da7-4148-f277-0cf8-507b94d214a3@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cfd19da7-4148-f277-0cf8-507b94d214a3@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Alice Ryhl <aliceryhl@google.com> writes:
-
-> This adds a convenience method that lets you spawn a closure for
-> execution on a workqueue. This will be the most convenient way to use
-> workqueues, but it is fallible because it needs to allocate memory.
+On Thu, Jun 01, 2023 at 10:47:39AM +0200, Juergen Gross wrote:
+> As described in the commit message, this only works on bare metal due to the
+> PAT bit not being needed for WC mappings.
 >
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Making this patch Xen specific would try to cure the symptoms without fixing
+> the underlying problem: _PAGE_PAT should be regarded the same way as the bits
+> for caching mode (_PAGE_CHG_MASK).
 
-Reviewed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+So why isn't _PAGE_PAT part of _PAGE_CHG_MASK?
 
-> ---
->  rust/kernel/workqueue.rs | 43 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
->
-> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index f06a2f036d8b..c302e8b8624b 100644
-> --- a/rust/kernel/workqueue.rs
-> +++ b/rust/kernel/workqueue.rs
-> @@ -29,6 +29,7 @@
->  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
->  
->  use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
-> +use alloc::alloc::AllocError;
->  use alloc::boxed::Box;
->  use core::marker::{PhantomData, PhantomPinned};
->  use core::pin::Pin;
-> @@ -87,6 +88,44 @@ pub fn enqueue<W, const ID: u64>(&self, w: W) -> W::EnqueueOutput
->              })
->          }
->      }
-> +
-> +    /// Tries to spawn the given function or closure as a work item.
-> +    ///
-> +    /// This method can fail because it allocates memory to store the work item.
-> +    pub fn try_spawn<T: 'static + Send + FnOnce()>(&self, func: T) -> Result<(), AllocError> {
-> +        let init = pin_init!(ClosureWork {
-> +            work <- Work::new(),
-> +            func: Some(func),
-> +        });
-> +
-> +        self.enqueue(Box::pin_init(init).map_err(|_| AllocError)?);
-> +        Ok(())
-> +    }
-> +}
-> +
-> +/// A helper type used in `try_spawn`.
-> +#[pin_data]
-> +struct ClosureWork<T> {
-> +    #[pin]
-> +    work: Work<ClosureWork<T>>,
-> +    func: Option<T>,
-> +}
-> +
-> +impl<T> ClosureWork<T> {
-> +    fn project(self: Pin<&mut Self>) -> &mut Option<T> {
-> +        // SAFETY: The `func` field is not structurally pinned.
-> +        unsafe { &mut self.get_unchecked_mut().func }
-> +    }
-> +}
-> +
-> +impl<T: FnOnce()> WorkItem for ClosureWork<T> {
-> +    type Pointer = Pin<Box<Self>>;
-> +
-> +    fn run(mut this: Pin<Box<Self>>) {
-> +        if let Some(func) = this.as_mut().project().take() {
-> +            (func)()
-> +        }
-> +    }
->  }
->  
->  /// A raw work item.
-> @@ -325,6 +364,10 @@ unsafe fn raw_get_work(ptr: *mut Self) -> *mut $crate::workqueue::Work<$work_typ
->      )*};
->  }
->  
-> +impl_has_work! {
-> +    impl<T> HasWork<Self> for ClosureWork<T> { self.work }
-> +}
-> +
->  unsafe impl<T, const ID: u64> WorkItemPointer<ID> for Arc<T>
->  where
->      T: WorkItem<ID, Pointer = Self>,
+It says above it "Set of bits not changed in pte_modify."
 
+And I don't see pte_modify() changing that bit either.
+
+Right now this "fix" looks like, "let's OR these two masks so that we
+can take care of _PAGE_PAT too". But it doesn't make a whole lotta sense
+to me...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
