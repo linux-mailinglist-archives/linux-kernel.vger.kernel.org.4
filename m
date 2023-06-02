@@ -2,335 +2,913 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE127204E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B017204EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbjFBOxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S235980AbjFBOyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjFBOxa (ORCPT
+        with ESMTP id S230430AbjFBOyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:53:30 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2087.outbound.protection.outlook.com [40.107.96.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADAAE7;
-        Fri,  2 Jun 2023 07:53:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CoGcUJn/Z9iQQMFnpp3hDj+wQel5ArmZWSJc4Yk6wzmWcy2K1iLnI/ZLdwnkh0Ca4c6dZpnPhdecCPHy8PSbvcLybYtZx0T62SWQOFsv8nlq/oryK78GPtzb0yZpbBZFfpHWoFwXrpBVP2hwy14yTfjoN9V+Gvwezxvxmp9ozUwV5bHr7KJXprIRCUdgYfvrf564MBgbqSerG+/ZaQJwH0ovSnOgdmM2mO4gtuvuSqUDem0xRQnHLCffKqgTEQISIFdhGWZrScw1MdY9sUAtOiX1cJG3SdmkwpHmr8BWSWM6rxoFNo02QtxvG6fAfww8mWyp8t4D5bVcb/BX44pgDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DltpAT3RdFVNdUpx492pedzQ1cdWNt1+L/Fc7B/ZxbU=;
- b=jn/v8mp3HFi6sppmCsUMCEhiQJihwvObr8h44e8V3lHvI7YY9HLKF/dUBhOzJimbo1ZBvwDgWWFyZ2fQoFaEvAp16/wIavUlRORRCTTYlunIml3tJHYZlBjvjKkrCM7d5HoRDiepC3a8HhFj//r7Wk4O6N8k8s2vZ7EJCbuH2BD29G4FUwtwREzxo3sAdORMiKwS+3sU5t7eb2cKtub7YPOfX78vHYCptHISExsQTgxjoxpuCRzdwxIDdBRDVjZ3zGhZkgoKBLKHDNDIvROdG05Z5EQ6fpMu14uixC0g29VoY3d4TQS10qoASxQEijqmGgKDJGJDRkJCTbbn1ZoBQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DltpAT3RdFVNdUpx492pedzQ1cdWNt1+L/Fc7B/ZxbU=;
- b=WM4O6QIlp+7LEzdKHgqQLL+zccJ1AHg0DHZmyPRH+jWqGjvOQDMTnSby9kaPbD7QrHFEbtpxSyirC+JV1UPKfMMsL3+l4ZlSi4eDGTWT+RnUU7UDJAUQVyo66N1ZsbxECaX+Tfgtm2IJcdM6wWD75mzxBFJceeu0Rj4ULvpUESY=
-Received: from MW4PR03CA0298.namprd03.prod.outlook.com (2603:10b6:303:b5::33)
- by BL1PR12MB5336.namprd12.prod.outlook.com (2603:10b6:208:314::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
- 2023 14:53:23 +0000
-Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b5:cafe::9f) by MW4PR03CA0298.outlook.office365.com
- (2603:10b6:303:b5::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.25 via Frontend
- Transport; Fri, 2 Jun 2023 14:53:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.26 via Frontend Transport; Fri, 2 Jun 2023 14:53:21 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Jun
- 2023 09:53:18 -0500
-Date:   Fri, 2 Jun 2023 16:53:15 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: Re: [PATCH v4 02/23] cxl/rch: Prepare for caching the MMIO mapped
- PCIe AER capability
-Message-ID: <ZHoCW9DsUwGQVKpB@rric.localdomain>
-References: <20230523232214.55282-1-terry.bowman@amd.com>
- <20230523232214.55282-3-terry.bowman@amd.com>
- <20230601113811.00006cd5@Huawei.com>
+        Fri, 2 Jun 2023 10:54:09 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E76E51
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:53:53 -0700 (PDT)
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 59BEB3F438
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 14:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685717628;
+        bh=+TEn++1FW1Z3dt2mhwAhGWWJnV3mdP3I8Bqgf47FNWc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=RpcQod/dJg1gAZtiK3DF3JUnBdIZYIXGI8nUb8VmZr9r6RyD9ZpbAWE5Z2FhHISZ9
+         n7sOPFBEnC0B57dAlRB71cdMpF899+7vGsiu5zb77cDbR3PsUMFtLlKdu7dOcykVBQ
+         q/R5hOP/E4ZTnccHCWH+Jxq9Tl4USE5aewr8r6qibn19Wwe2rMtPnCohuELSYzRh2T
+         OboB6wr16gCH+RLL4po6xEElUkwOuydNnakuSqS4ojt8w5gZq+nKjn9+/bh8zCaI0C
+         j6dlbOft1Y0iUVjhMMcMu+KELuJ8F5XBLXn0YVdetjHkROSD62LXuNyl4Jka5BrbW6
+         C6ubk8yqV95SA==
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2b058775453so19167071fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:53:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685717628; x=1688309628;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+TEn++1FW1Z3dt2mhwAhGWWJnV3mdP3I8Bqgf47FNWc=;
+        b=T3eAt8P3WNhEGbZyaLEsEN3Js+uNBbxVGWr6xPTFWOG1LFcMsokXM4Iu9LwbY4ziZt
+         lFfNULt+BWw4DIovWw5lSC9KhXJBa/sikJ8I8QUuGWneA5bVE+LeCsH5VIb2p/Niud1E
+         8vcdBmPoqK6x05I8d+vfwKeSoABTMYC5xQ2AvclRM3iSh9J8G0Op3HsvzhOMEexo5Egm
+         QeJ8Q/ndnEQ/3mk+wiQLONO6wZStmlZ9z/e2DfRGXqIll/zvAc+skKoNuubu/V6NB8Y5
+         DWaf/94TReGx5epoIyXg5rVnVN8bbIugEkrcEhIgLmKt/11Y4YstXP3SOf+59M+Jq/CA
+         Vveg==
+X-Gm-Message-State: AC+VfDxOHiKZeYpSuMM8XnR6s6vxDLu2WiLKt2B/ND9Ta67X/MsPL5VF
+        O7KBxgq6k/v1v309teLRSPCnh2UpD+7LYrJoH6ns+idHbmYHkxyhWDGkP8KxHDwjCW9KmsXWjUV
+        F9lFHsZfu+YUIKgsRCwbaHRPC8MUfShCDjkKNOD/KL+ra1qm6i8vY3pFfMw==
+X-Received: by 2002:a2e:918b:0:b0:2b1:b186:142c with SMTP id f11-20020a2e918b000000b002b1b186142cmr19131ljg.14.1685717627630;
+        Fri, 02 Jun 2023 07:53:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4NQTkMTxSOYotHd3pqASS7SzGXK3s6MTAjivKEVxuA6WoCaXMdRQEKDzpVtYjmt0AQtAJYg7cakYGIbSvvv7g=
+X-Received: by 2002:a2e:918b:0:b0:2b1:b186:142c with SMTP id
+ f11-20020a2e918b000000b002b1b186142cmr19128ljg.14.1685717627187; Fri, 02 Jun
+ 2023 07:53:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230601113811.00006cd5@Huawei.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT031:EE_|BL1PR12MB5336:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76c587e7-a9fe-4477-db2c-08db63791c5f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N60QBTkg333uZMbu4D/TSam1dkM/LfCOlMv4hJKVveQcvdg4HNIN6yMmZI37dus+8a7eB0g3t7MdS0+IDyau/ZwM5R4obY3/Dv0+eN4cthMC5YGZCLLYqQJsziffVdJtGs9WLtklSOKzUtdgZ/j8P6/pn6M/VAXXli5EY77XAudBJuWbaXBtU2gZo5b1uy0y29kmUWfanFtg/nmJ9EO2CnAZGuvTwxgPXCeHs1tF6zTuH62Azo4dZv9sguMLpEqhFvRNDC42Tfc46TAH2+uqv1DJaiOOdBdB5xkHrjucVkn6uUaxlo4GAaSd5rkziB09G/KuSfqNS4ZYc6CeXOlHqce1X6g73gs0HGYl7fma6UHrNiFK52W4yLohcMzpicZ9rNx5WU9ilw0dakCQBnu1xQXSB/wisha1plXwAqmr81ytxRlbM0lo8lZvn+jM0DIr1zoeEpWOCogEG5Hn9Hq3KEn6J2gKxzh1SWiX16v0k0qHu9w+aOj82u5NYYB376nW+5PKJv9ypVNtVEiQHHZLTrSjFxznX8upLv1ZFxtiytHd195Qcu8rX+tpuVAXL5ARJJyOGqKSqMILrnce908FV4J8yaPCL642cMnHxAqo7KDEQeN3w1M/6qzmFtLzrB3LRpCkSKvudBcWTym+P6lBNP6FJaBuOrujJn9tN4LI7LxnDOGVuhGNB+WhuNPJOzxgilFcNvsr4Pj6ckDMqzP09yGK81BPxlbEX05/REGXssRAKM9DP8yYGUjYMOUhJZuXCz5kvpbJT8g+1M6wd6urvg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199021)(40470700004)(46966006)(36840700001)(82740400003)(82310400005)(356005)(81166007)(66899021)(40460700003)(8676002)(54906003)(6916009)(70206006)(70586007)(4326008)(40480700001)(55016003)(6666004)(7696005)(478600001)(53546011)(26005)(186003)(16526019)(9686003)(316002)(7416002)(8936002)(5660300002)(36860700001)(41300700001)(47076005)(2906002)(426003)(83380400001)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 14:53:21.9106
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76c587e7-a9fe-4477-db2c-08db63791c5f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5336
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
+ <20230512022036.97987-3-xingyu.wu@starfivetech.com> <CAJM55Z_0UZ2+c=y_GLoZMnLnLVTSaTBLJG9Tpvbq6wDGn31dpg@mail.gmail.com>
+ <889f1ce5-1487-a712-02e1-1b90cc4d851f@starfivetech.com>
+In-Reply-To: <889f1ce5-1487-a712-02e1-1b90cc4d851f@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 2 Jun 2023 16:53:28 +0200
+Message-ID: <CAJM55Z8Yc6qYBoWqmOwqTSHWOsoea5qDEYyR17tCGqf7gr7fNQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] clk: starfive: Add StarFive JH7110 PLL clock driver
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.06.23 11:38:11, Jonathan Cameron wrote:
-> On Tue, 23 May 2023 18:21:53 -0500
-> Terry Bowman <terry.bowman@amd.com> wrote:
-> 
-> > From: Dan Williams <dan.j.williams@intel.com>
-> > 
-> > Prepare cxl_probe_rcrb() for retrieving more than just the component
-> > register block. The RCH AER handling code wants to get back to the AER
-> > capability that happens to be MMIO mapped rather then configuration
-> > cycles.
-> > 
-> > Move RCRB specific downstream port data, like the RCRB base and the
-> > AER capability offset, into its own data structure ('struct
-> > cxl_rcrb_info') for cxl_probe_rcrb() to fill. Extend 'struct
-> > cxl_dport' to include a 'struct cxl_rcrb_info' attribute.
+On Fri, 2 Jun 2023 at 11:41, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+>
+> On 2023/6/1 19:02, Emil Renner Berthing wrote:
+> > Hi Xingyu,
 > >
-> There are several other refactors going on in here. I'd rather
-> see it broken down into a few separate patches. See inline.
+> > Thanks for working on this.
+> >
+> > On Fri, 12 May 2023 at 04:24, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+> >>
+> >> Add driver for the StarFive JH7110 PLL clock controller
+> >> and they work by reading and setting syscon registers.
+> >>
+> >> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> >> ---
+> >>  MAINTAINERS                                   |   6 +
+> >>  drivers/clk/starfive/Kconfig                  |   8 +
+> >>  drivers/clk/starfive/Makefile                 |   1 +
+> >>  .../clk/starfive/clk-starfive-jh7110-pll.c    | 309 ++++++++++++++++
+> >>  .../clk/starfive/clk-starfive-jh7110-pll.h    | 331 ++++++++++++++++++
+> >>  5 files changed, 655 insertions(+)
+> >>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.c
+> >>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.h
+> >>
+> >> diff --git a/MAINTAINERS b/MAINTAINERS
+> >> index 7e0b87d5aa2e..0fb4a703f66f 100644
+> >> --- a/MAINTAINERS
+> >> +++ b/MAINTAINERS
+> >> @@ -20087,6 +20087,12 @@ S:     Supported
+> >>  F:     Documentation/devicetree/bindings/mmc/starfive*
+> >>  F:     drivers/mmc/host/dw_mmc-starfive.c
+> >>
+> >> +STARFIVE JH7110 PLL CLOCK DRIVER
+> >> +M:     Xingyu Wu <xingyu.wu@starfivetech.com>
+> >> +S:     Supported
+> >> +F:     Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
+> >> +F:     drivers/clk/starfive/clk-starfive-jh7110-pll.*
+> >> +
+> >>  STARFIVE JH71X0 CLOCK DRIVERS
+> >>  M:     Emil Renner Berthing <kernel@esmil.dk>
+> >>  M:     Hal Feng <hal.feng@starfivetech.com>
+> >> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
+> >> index 5d2333106f13..5195f7be5213 100644
+> >> --- a/drivers/clk/starfive/Kconfig
+> >> +++ b/drivers/clk/starfive/Kconfig
+> >> @@ -21,6 +21,14 @@ config CLK_STARFIVE_JH7100_AUDIO
+> >>           Say Y or M here to support the audio clocks on the StarFive JH7100
+> >>           SoC.
+> >>
+> >> +config CLK_STARFIVE_JH7110_PLL
+> >> +       bool "StarFive JH7110 PLL clock support"
+> >> +       depends on ARCH_STARFIVE || COMPILE_TEST
+> >> +       default ARCH_STARFIVE
+> >> +       help
+> >> +         Say yes here to support the PLL clock controller on the
+> >> +         StarFive JH7110 SoC.
+> >> +
+> >>  config CLK_STARFIVE_JH7110_SYS
+> >>         bool "StarFive JH7110 system clock support"
+> >>         depends on ARCH_STARFIVE || COMPILE_TEST
+> >> diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
+> >> index f3df7d957b1e..b48e539e52b0 100644
+> >> --- a/drivers/clk/starfive/Makefile
+> >> +++ b/drivers/clk/starfive/Makefile
+> >> @@ -4,5 +4,6 @@ obj-$(CONFIG_CLK_STARFIVE_JH71X0)       += clk-starfive-jh71x0.o
+> >>  obj-$(CONFIG_CLK_STARFIVE_JH7100)      += clk-starfive-jh7100.o
+> >>  obj-$(CONFIG_CLK_STARFIVE_JH7100_AUDIO)        += clk-starfive-jh7100-audio.o
+> >>
+> >> +obj-$(CONFIG_CLK_STARFIVE_JH7110_PLL)  += clk-starfive-jh7110-pll.o
+> >>  obj-$(CONFIG_CLK_STARFIVE_JH7110_SYS)  += clk-starfive-jh7110-sys.o
+> >>  obj-$(CONFIG_CLK_STARFIVE_JH7110_AON)  += clk-starfive-jh7110-aon.o
+> >> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-pll.c b/drivers/clk/starfive/clk-starfive-jh7110-pll.c
+> >> new file mode 100644
+> >> index 000000000000..f86deddd4bef
+> >> --- /dev/null
+> >> +++ b/drivers/clk/starfive/clk-starfive-jh7110-pll.c
+> >> @@ -0,0 +1,309 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * StarFive JH7110 PLL Clock Generator Driver
+> >> + *
+> >> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> >> + *
+> >> + * This driver is about to register JH7110 PLL clock generator and support ops.
+> >> + * The JH7110 have three PLL clock, PLL0, PLL1 and PLL2.
+> >> + * Each PLL clocks work in integer mode or fraction mode by some dividers,
+> >> + * and the configuration registers and dividers are set in several syscon registers.
+> >> + * The formula for calculating frequency is:
+> >> + * Fvco = Fref * (NI + NF) / M / Q1
+> >> + * Fref: OSC source clock rate
+> >> + * NI: integer frequency dividing ratio of feedback divider, set by fbdiv[11:0].
+> >> + * NF: fractional frequency dividing ratio, set by frac[23:0]. NF = frac[23:0] / 2^24 = 0 ~ 0.999.
+> >> + * M: frequency dividing ratio of pre-divider, set by prediv[5:0].
+> >> + * Q1: frequency dividing ratio of post divider, set by postdiv1[1:0], Q1= 1,2,4,8.
+> >> + */
+> >> +
+> >> +#include <linux/clk-provider.h>
+> >> +#include <linux/debugfs.h>
+> >> +#include <linux/device.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/mfd/syscon.h>
+> >> +#include <linux/platform_device.h>
+> >> +#include <linux/regmap.h>
+> >> +
+> >> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+> >> +
+> >> +#include "clk-starfive-jh7110-pll.h"
+> >> +
+> >> +struct jh7110_pll_conf_variant {
+> >> +       unsigned int pll_nums;
+> >> +       struct jh7110_pll_syscon_conf conf[];
+> >> +};
+> >> +
+> >> +static const struct jh7110_pll_conf_variant jh7110_pll_variant = {
+> >> +       .pll_nums = JH7110_PLLCLK_END,
+> >> +       .conf = {
+> >> +               JH7110_PLL(JH7110_CLK_PLL0_OUT, "pll0_out",
+> >> +                          JH7110_PLL0_FREQ_MAX, jh7110_pll0_syscon_val_preset),
+> >> +               JH7110_PLL(JH7110_CLK_PLL1_OUT, "pll1_out",
+> >> +                          JH7110_PLL1_FREQ_MAX, jh7110_pll1_syscon_val_preset),
+> >> +               JH7110_PLL(JH7110_CLK_PLL2_OUT, "pll2_out",
+> >> +                          JH7110_PLL2_FREQ_MAX, jh7110_pll2_syscon_val_preset),
+> >> +       },
+> >> +};
+> >> +
+> >> +static struct jh7110_clk_pll_data *jh7110_pll_data_from(struct clk_hw *hw)
+> >> +{
+> >> +       return container_of(hw, struct jh7110_clk_pll_data, hw);
+> >> +}
+> >> +
+> >> +static struct jh7110_clk_pll_priv *jh7110_pll_priv_from(struct jh7110_clk_pll_data *data)
+> >> +{
+> >> +       return container_of(data, struct jh7110_clk_pll_priv, data[data->idx]);
+> >> +}
+> >> +
+> >> +/* Read register value from syscon and calculate PLL(x) frequency */
+> >> +static unsigned long jh7110_pll_get_freq(struct jh7110_clk_pll_data *data,
+> >> +                                        unsigned long parent_rate)
+> >> +{
+> >> +       struct jh7110_clk_pll_priv *priv = jh7110_pll_priv_from(data);
+> >> +       struct jh7110_pll_syscon_offset *offset = &data->conf.offsets;
+> >> +       struct jh7110_pll_syscon_mask *mask = &data->conf.masks;
+> >> +       struct jh7110_pll_syscon_shift *shift = &data->conf.shifts;
+> >> +       unsigned long frac_cal;
+> >> +       u32 dacpd;
+> >> +       u32 dsmpd;
+> >> +       u32 fbdiv;
+> >> +       u32 prediv;
+> >> +       u32 postdiv1;
+> >> +       u32 frac;
+> >> +       u32 reg_val;
+> >> +
+> >> +       regmap_read(priv->syscon_regmap, offset->dacpd, &reg_val);
+> >> +       dacpd = (reg_val & mask->dacpd) >> shift->dacpd;
+> >> +
+> >> +       regmap_read(priv->syscon_regmap, offset->dsmpd, &reg_val);
+> >> +       dsmpd = (reg_val & mask->dsmpd) >> shift->dsmpd;
+> >> +
+> >> +       regmap_read(priv->syscon_regmap, offset->fbdiv, &reg_val);
+> >> +       fbdiv = (reg_val & mask->fbdiv) >> shift->fbdiv;
+> >> +
+> >> +       regmap_read(priv->syscon_regmap, offset->prediv, &reg_val);
+> >> +       prediv = (reg_val & mask->prediv) >> shift->prediv;
+> >> +
+> >> +       regmap_read(priv->syscon_regmap, offset->postdiv1, &reg_val);
+> >> +       /* postdiv1 = 2 ^ reg_val */
+> >> +       postdiv1 = 1 << ((reg_val & mask->postdiv1) >> shift->postdiv1);
+> >> +
+> >> +       regmap_read(priv->syscon_regmap, offset->frac, &reg_val);
+> >> +       frac = (reg_val & mask->frac) >> shift->frac;
+> >> +
+> >> +       /*
+> >> +        * Integer Mode (Both 1) or Fraction Mode (Both 0).
+> >> +        * And the decimal places are counted by expanding them by
+> >> +        * a factor of STARFIVE_PLL_FRAC_PATR_SIZE.
+> >> +        */
+> >> +       if (dacpd == 1 && dsmpd == 1)
+> >> +               frac_cal = 0;
+> >> +       else if (dacpd == 0 && dsmpd == 0)
+> >> +               frac_cal = (unsigned long)frac * STARFIVE_PLL_FRAC_PATR_SIZE / (1 << 24);
+> >> +       else
+> >> +               return 0;
+> >> +
+> >> +       /* Fvco = Fref * (NI + NF) / M / Q1 */
+> >> +       return (parent_rate / STARFIVE_PLL_FRAC_PATR_SIZE *
+> >> +               (fbdiv * STARFIVE_PLL_FRAC_PATR_SIZE + frac_cal) / prediv / postdiv1);
+> >
+> > You have
+> >
+> >   rate = parent * (fbdiv + frac/2^24) / prediv / 2^postdiv1regval
+> >
+> > Where postdiv1regval is the raw postdiv1 register value. This can also
+> > be written
+> >
+> >   rate = (parent * fbdiv + parent * frac / 2^24) / (prediv * 2^postdiv1regval)
+> >
+> > so how about
+> >
+> > if (dacpd == 1 && dsmpd == 1)
+> >   rate = 0;
+> > else if (dacpd == 0 && dsmpd == 0)
+> >   rate = parent * frac / (1UL << 24);
+> > else
+> >   return 0;
+> >
+> > rate += parent * fbdiv;
+> > rate /= prediv << postdiv1regval;
+> > return rate;
+> >
+> Thanks for you suggestions. I will modify this.
+> And I have a question, should I keep the 'STARFIVE_PLL_FRAC_PATR_SIZE ' as integer to calculate the fractional part of 'frac'?
 
-I didn't want to split Dan's patch here and just started with it as a
-base.
+Again, please just use the version I linked. It has all this taken
+care of already:
 
->  
-> > This centralizes all RCRB scanning in one routine.
-> > 
-> > Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-> > Co-developed-by: Robert Richter <rrichter@amd.com>
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> > ---
-> >  drivers/cxl/core/port.c       |  7 ++++---
-> >  drivers/cxl/core/regs.c       | 10 ++++++----
-> >  drivers/cxl/cxl.h             | 19 ++++++++++++-------
-> >  drivers/cxl/mem.c             | 16 +++++++++-------
-> >  tools/testing/cxl/Kbuild      |  2 +-
-> >  tools/testing/cxl/test/cxl.c  | 10 ++++++----
-> >  tools/testing/cxl/test/mock.c | 12 ++++++------
-> >  tools/testing/cxl/test/mock.h |  7 ++++---
-> >  8 files changed, 48 insertions(+), 35 deletions(-)
-> > 
-> > diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> > index 1a3f8729a616..618865ca6a9f 100644
-> > --- a/drivers/cxl/core/port.c
-> > +++ b/drivers/cxl/core/port.c
-> > @@ -939,8 +939,9 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
-> >  		return ERR_PTR(-ENOMEM);
-> >  
-> >  	if (rcrb != CXL_RESOURCE_NONE) {
-> > -		component_reg_phys = cxl_rcrb_to_component(dport_dev,
-> > -						rcrb, CXL_RCRB_DOWNSTREAM);
-> > +		component_reg_phys =
-> > +			cxl_probe_rcrb(dport_dev, rcrb, &dport->rcrb,
-> > +				       CXL_RCRB_DOWNSTREAM);
-> >  		if (component_reg_phys == CXL_RESOURCE_NONE) {
-> >  			dev_warn(dport_dev, "Invalid Component Registers in RCRB");
-> >  			return ERR_PTR(-ENXIO);
-> > @@ -957,7 +958,7 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
-> >  	dport->port_id = port_id;
-> >  	dport->component_reg_phys = component_reg_phys;
-> >  	dport->port = port;
-> > -	dport->rcrb = rcrb;
-> > +	dport->rcrb.base = rcrb;
-> >  
-> >  	cond_cxl_root_lock(port);
-> >  	rc = add_dport(port, dport);
-> > diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-> > index 1476a0299c9b..08da4c917f99 100644
-> > --- a/drivers/cxl/core/regs.c
-> > +++ b/drivers/cxl/core/regs.c
-> > @@ -332,9 +332,8 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(cxl_find_regblock, CXL);
-> >  
-> > -resource_size_t cxl_rcrb_to_component(struct device *dev,
-> > -				      resource_size_t rcrb,
-> > -				      enum cxl_rcrb which)
-> > +resource_size_t cxl_probe_rcrb(struct device *dev, resource_size_t rcrb,
-> > +			       struct cxl_rcrb_info *ri, enum cxl_rcrb which)
-> >  {
-> >  	resource_size_t component_reg_phys;
-> >  	void __iomem *addr;
-> > @@ -344,6 +343,8 @@ resource_size_t cxl_rcrb_to_component(struct device *dev,
-> >  
-> >  	if (which == CXL_RCRB_UPSTREAM)
-> >  		rcrb += SZ_4K;
-> > +	else if (ri)
-> > +		ri->base = rcrb;
-> 
-> I'm struggling a bit to follow flow, but I 'think' you set this to the same
-> address here and at the end of __devm_cxl_add_dport()
+https://github.com/esmil/linux/commit/9b7f325267c9a760eda6612c7ffbf22366790878
 
-Yes, that is a duplicate assignment, good catch.
-
-> 
-> >  
-> >  	/*
-> >  	 * RCRB's BAR[0..1] point to component block containing CXL
-> > @@ -364,6 +365,7 @@ resource_size_t cxl_rcrb_to_component(struct device *dev,
-> >  	cmd = readw(addr + PCI_COMMAND);
-> >  	bar0 = readl(addr + PCI_BASE_ADDRESS_0);
-> >  	bar1 = readl(addr + PCI_BASE_ADDRESS_1);
-> > +
-> 
-> Trivial but I love to moan about these :)
-> Stray change that shouldn't be in this patch...
-
-I think it is ok to also add such trivial changes in a patch like
-this. A separate patch for trivial things (to improve) like this would
-just spam the patch queue and isn't it worth.
-
-But, there are no other changes in that area, so just keep it as is
-and simply drop the change.
-
-> 
-> >  	iounmap(addr);
-> >  	release_mem_region(rcrb, SZ_4K);
-> >  
-> > @@ -395,4 +397,4 @@ resource_size_t cxl_rcrb_to_component(struct device *dev,
-> >  
-> >  	return component_reg_phys;
-> >  }
-> > -EXPORT_SYMBOL_NS_GPL(cxl_rcrb_to_component, CXL);
-> > +EXPORT_SYMBOL_NS_GPL(cxl_probe_rcrb, CXL);
-> > diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> > index a5cd661face2..29e0bd2b8f2a 100644
-> > --- a/drivers/cxl/cxl.h
-> > +++ b/drivers/cxl/cxl.h
-> > @@ -267,9 +267,9 @@ enum cxl_rcrb {
-> >  	CXL_RCRB_DOWNSTREAM,
-> >  	CXL_RCRB_UPSTREAM,
-> >  };
-> > -resource_size_t cxl_rcrb_to_component(struct device *dev,
-> > -				      resource_size_t rcrb,
-> > -				      enum cxl_rcrb which);
-> > +struct cxl_rcrb_info;
-> > +resource_size_t cxl_probe_rcrb(struct device *dev, resource_size_t rcrb,
-> > +			       struct cxl_rcrb_info *ri, enum cxl_rcrb which);
-> >  
-> >  #define CXL_RESOURCE_NONE ((resource_size_t) -1)
-> >  #define CXL_TARGET_STRLEN 20
-> > @@ -587,22 +587,27 @@ cxl_find_dport_by_dev(struct cxl_port *port, const struct device *dport_dev)
-> >  	return xa_load(&port->dports, (unsigned long)dport_dev);
-> >  }
-> >  
-> > +struct cxl_rcrb_info {
-> > +	resource_size_t base;
-> > +	u16 aer_cap;
-> > +};
-> > +
-> >  /**
-> >   * struct cxl_dport - CXL downstream port
-> >   * @dport: PCI bridge or firmware device representing the downstream link
-> > + * @port: reference to cxl_port that contains this downstream port
-> >   * @port_id: unique hardware identifier for dport in decoder target list
-> >   * @component_reg_phys: downstream port component registers
-> > - * @rcrb: base address for the Root Complex Register Block
-> >   * @rch: Indicate whether this dport was enumerated in RCH or VH mode
-> > - * @port: reference to cxl_port that contains this downstream port
-> > + * @rcrb: Data about the Root Complex Register Block layout
-> >   */
-> >  struct cxl_dport {
-> >  	struct device *dport;
-> > +	struct cxl_port *port;
-> 
-> Why the reorder?  It's adding noise we don't need in this patch...
-
-There is some rework of the struct anyway. @port is essential for that
-object as it reflects the hierarchy. Also, having 64 bit pointers in
-the beginning improves padding of the struct. Not a big deal but good
-reasons to change the order.
-
-> 
-> >  	int port_id;
-> >  	resource_size_t component_reg_phys;
-> > -	resource_size_t rcrb;
-> >  	bool rch;
-> > -	struct cxl_port *port;
-> > +	struct cxl_rcrb_info rcrb;
-> >  };
-> >  
-> >  /**
-> > diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> > index 519edd0eb196..7ecdaa7f9315 100644
-> > --- a/drivers/cxl/mem.c
-> > +++ b/drivers/cxl/mem.c
-> > @@ -51,7 +51,6 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
-> >  	struct cxl_port *parent_port = parent_dport->port;
-> >  	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> >  	struct cxl_port *endpoint, *iter, *down;
-> > -	resource_size_t component_reg_phys;
-> >  	int rc;
-> >  
-> >  	/*
-> > @@ -71,12 +70,15 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
-> >  	 * host-bridge RCRB if they are not already mapped via the
-> >  	 * typical register locator mechanism.
-> >  	 */
-> > -	if (parent_dport->rch && cxlds->component_reg_phys == CXL_RESOURCE_NONE)
-> > -		component_reg_phys = cxl_rcrb_to_component(
-> > -			&cxlmd->dev, parent_dport->rcrb, CXL_RCRB_UPSTREAM);
-> > -	else
-> > -		component_reg_phys = cxlds->component_reg_phys;
-> > -	endpoint = devm_cxl_add_port(host, &cxlmd->dev, component_reg_phys,
-> > +	if (parent_dport->rch &&
-> > +	    cxlds->component_reg_phys == CXL_RESOURCE_NONE) {
-> > +		cxlds->component_reg_phys =
-> > +			cxl_probe_rcrb(&cxlmd->dev, parent_dport->rcrb.base,
-> > +				       NULL, CXL_RCRB_UPSTREAM);
-> 
-> This use of the component_reg_phys pointer in cxlds isn't closely related
-> to the other changes. This patch would (I think) be more readable
-> if that change was done in a precursor patch.
-
-This is an intermediate change and removed later. I will check if the
-local component_reg_phys var could be kept here until removal.
-
-Thanks,
-
--Robert
-
-> 
-> > +	}
-> > +
-> > +	endpoint = devm_cxl_add_port(host, &cxlmd->dev,
-> > +				     cxlds->component_reg_phys,
-> >  				     parent_dport);
-> >  	if (IS_ERR(endpoint))
-> >  		return PTR_ERR(endpoint);
-> 
+> >> +}
+> >> +
+> >> +static unsigned long jh7110_pll_rate_sub_fabs(unsigned long rate1, unsigned long rate2)
+> >> +{
+> >> +       return rate1 > rate2 ? (rate1 - rate2) : (rate2 - rate1);
+> >> +}
+> >> +
+> >> +/* Select the appropriate frequency from the already configured registers value */
+> >> +static void jh7110_pll_select_near_freq_id(struct jh7110_clk_pll_data *data,
+> >> +                                          unsigned long rate)
+> >> +{
+> >> +       const struct jh7110_pll_syscon_val *val;
+> >> +       unsigned int id;
+> >> +       unsigned long rate_diff;
+> >> +
+> >> +       /* compare the frequency one by one from small to large in order */
+> >> +       for (id = 0; id < data->conf.preset_val_nums; id++) {
+> >> +               val = &data->conf.preset_val[id];
+> >> +
+> >> +               if (rate == val->freq)
+> >> +                       goto match_end;
+> >> +
+> >> +               /* select near frequency */
+> >
+> > Is there any reason we can't just pick the highest rate <= the
+> > requested rate, just like we do for the regular clock dividers?
+>
+> It sounds like rounding down. This is a good idea and I will fix it.
+>
+> >
+> >> +               if (rate < val->freq) {
+> >> +                       /* The last frequency is closer to the target rate than this time. */
+> >> +                       if (id > 0)
+> >> +                               if (rate_diff < jh7110_pll_rate_sub_fabs(rate, val->freq))
+> >> +                                       id--;
+> >> +
+> >> +                       goto match_end;
+> >> +               } else {
+> >> +                       rate_diff = jh7110_pll_rate_sub_fabs(rate, val->freq);
+> >> +               }
+> >> +       }
+> >> +
+> >> +match_end:
+> >> +       data->freq_select_idx = id;
+> >> +}
+> >> +
+> >> +static int jh7110_pll_set_freq_syscon(struct jh7110_clk_pll_data *data)
+> >> +{
+> >> +       struct jh7110_clk_pll_priv *priv = jh7110_pll_priv_from(data);
+> >> +       struct jh7110_pll_syscon_offset *offset = &data->conf.offsets;
+> >> +       struct jh7110_pll_syscon_mask *mask = &data->conf.masks;
+> >> +       struct jh7110_pll_syscon_shift *shift = &data->conf.shifts;
+> >> +       const struct jh7110_pll_syscon_val *val = &data->conf.preset_val[data->freq_select_idx];
+> >> +
+> >> +       /* frac: Integer Mode (Both 1) or Fraction Mode (Both 0) */
+> >> +       if (val->dacpd == 0 && val->dsmpd == 0)
+> >> +               regmap_update_bits(priv->syscon_regmap, offset->frac, mask->frac,
+> >> +                                  (val->frac << shift->frac));
+> >> +       else if (val->dacpd != val->dsmpd)
+> >> +               return -EINVAL;
+> >> +
+> >> +       /* fbdiv value should be 8 to 4095 */
+> >> +       if (val->fbdiv < 8)
+> >> +               return -EINVAL;
+> >> +
+> >> +       regmap_update_bits(priv->syscon_regmap, offset->dacpd, mask->dacpd,
+> >> +                          (val->dacpd << shift->dacpd));
+> >> +       regmap_update_bits(priv->syscon_regmap, offset->dsmpd, mask->dsmpd,
+> >> +                          (val->dsmpd << shift->dsmpd));
+> >> +       regmap_update_bits(priv->syscon_regmap, offset->prediv, mask->prediv,
+> >> +                          (val->prediv << shift->prediv));
+> >> +       regmap_update_bits(priv->syscon_regmap, offset->fbdiv, mask->fbdiv,
+> >> +                          (val->fbdiv << shift->fbdiv));
+> >> +       regmap_update_bits(priv->syscon_regmap, offset->postdiv1, mask->postdiv1,
+> >> +                          ((val->postdiv1 >> 1) << shift->postdiv1));
+> >
+> > It seems like you're storing the divider and not the register value in
+> > the presets. Since the divider is 2^regval it means you need to write
+> > log2 (divider) into the register, but here you store divider >> 1 aka
+> > divider / 2.
+>
+> Oh, It's my mistake. The values of post divider are 1,2,4, and 8, which pass when it equals 1, 2, and 4, but is failed when it equals 8.
+>
+> >
+> > I'd strongly suggest you just store the register value, and just use
+> > 2^regval when you need the divider. This way you won't need to ever
+> > calculate log2 of anything.
+>
+> Great. Using the register value directly avoid some calculations.
+>
+> >
+> >> +
+> >> +       return 0;
+> >> +}
+> >> +
+> >> +static unsigned long jh7110_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> >> +{
+> >> +       struct jh7110_clk_pll_data *data = jh7110_pll_data_from(hw);
+> >> +
+> >> +       return jh7110_pll_get_freq(data, parent_rate);
+> >> +}
+> >> +
+> >> +static int jh7110_pll_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
+> >> +{
+> >> +       struct jh7110_clk_pll_data *data = jh7110_pll_data_from(hw);
+> >
+> > What happens if the parent rate != 24MHz? Then all your presets will
+> > be wrong. We probably want to guard against that.
+>
+> Will fix and add a check for parent rate.
+>
+> >
+> >> +       jh7110_pll_select_near_freq_id(data, req->rate);
+> >> +       req->rate = data->conf.preset_val[data->freq_select_idx].freq;
+> >> +
+> >> +       return 0;
+> >> +}
+> >> +
+> >> +static int jh7110_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+> >> +                              unsigned long parent_rate)
+> >> +{
+> >> +       struct jh7110_clk_pll_data *data = jh7110_pll_data_from(hw);
+> >> +
+> >> +       return jh7110_pll_set_freq_syscon(data);
+> >> +}
+> >> +
+> >> +#ifdef CONFIG_DEBUG_FS
+> >> +static void jh7110_pll_debug_init(struct clk_hw *hw, struct dentry *dentry)
+> >> +{
+> >> +       static const struct debugfs_reg32 jh7110_clk_pll_reg = {
+> >> +               .name = "CTRL",
+> >> +               .offset = 0,
+> >> +       };
+> >> +       struct jh7110_clk_pll_data *data = jh7110_pll_data_from(hw);
+> >> +       struct jh7110_clk_pll_priv *priv = jh7110_pll_priv_from(data);
+> >> +       struct debugfs_regset32 *regset;
+> >> +
+> >> +       regset = devm_kzalloc(priv->dev, sizeof(*regset), GFP_KERNEL);
+> >> +       if (!regset)
+> >> +               return;
+> >> +
+> >> +       regset->regs = &jh7110_clk_pll_reg;
+> >> +       regset->nregs = 1;
+> >
+> > You never set regset->base, so this function creates a registers file
+> > that just shows the contents of address 0. I don't think you tested
+> > this.
+>
+> Will add the regset->base.
+>
+> >
+> >> +
+> >> +       debugfs_create_regset32("registers", 0400, dentry, regset);
+> >> +}
+> >> +#else
+> >> +#define jh7110_pll_debug_init NULL
+> >> +#endif
+> >> +
+> >> +static const struct clk_ops jh7110_pll_ops = {
+> >> +       .recalc_rate = jh7110_pll_recalc_rate,
+> >> +       .determine_rate = jh7110_pll_determine_rate,
+> >> +       .set_rate = jh7110_pll_set_rate,
+> >> +       .debug_init = jh7110_pll_debug_init,
+> >> +};
+> >> +
+> >> +static struct clk_hw *jh7110_pll_get(struct of_phandle_args *clkspec, void *data)
+> >> +{
+> >> +       struct jh7110_clk_pll_priv *priv = data;
+> >> +       unsigned int idx = clkspec->args[0];
+> >> +
+> >> +       if (idx < priv->pll_nums)
+> >> +               return &priv->data[idx].hw;
+> >> +
+> >> +       return ERR_PTR(-EINVAL);
+> >> +}
+> >> +
+> >> +static int jh7110_pll_probe(struct platform_device *pdev)
+> >> +{
+> >> +       const struct jh7110_pll_conf_variant *variant;
+> >> +       struct jh7110_clk_pll_priv *priv;
+> >> +       struct jh7110_clk_pll_data *data;
+> >> +       int ret;
+> >> +       unsigned int idx;
+> >> +
+> >> +       variant = of_device_get_match_data(&pdev->dev);
+> >> +       if (!variant)
+> >> +               return -ENOMEM;
+> >> +
+> >> +       priv = devm_kzalloc(&pdev->dev, struct_size(priv, data, variant->pll_nums),
+> >> +                           GFP_KERNEL);
+> >> +       if (!priv)
+> >> +               return -ENOMEM;
+> >> +
+> >> +       priv->dev = &pdev->dev;
+> >> +       priv->syscon_regmap = syscon_node_to_regmap(priv->dev->of_node->parent);
+> >> +       if (IS_ERR(priv->syscon_regmap))
+> >> +               return PTR_ERR(priv->syscon_regmap);
+> >> +
+> >> +       priv->pll_nums = variant->pll_nums;
+> >> +       for (idx = 0; idx < priv->pll_nums; idx++) {
+> >> +               struct clk_parent_data parents = {
+> >> +                       .index = 0,
+> >> +               };
+> >> +               struct clk_init_data init = {
+> >> +                       .name = variant->conf[idx].name,
+> >> +                       .ops = &jh7110_pll_ops,
+> >> +                       .parent_data = &parents,
+> >> +                       .num_parents = 1,
+> >> +                       .flags = 0,
+> >> +               };
+> >> +
+> >> +               data = &priv->data[idx];
+> >> +               data->conf = variant->conf[idx];
+> >
+> > Why do you need to copy all this static data? Can't you just reference
+> > the static const version you already have?
+>
+> Will use the address variable to reference it.
+>
+> >
+> >> +               data->hw.init = &init;
+> >> +               data->idx = idx;
+> >> +
+> >> +               ret = devm_clk_hw_register(&pdev->dev, &data->hw);
+> >> +               if (ret)
+> >> +                       return ret;
+> >> +       }
+> >> +
+> >> +       return devm_of_clk_add_hw_provider(&pdev->dev, jh7110_pll_get, priv);
+> >> +}
+> >> +
+> >> +static const struct of_device_id jh7110_pll_match[] = {
+> >> +       { .compatible = "starfive,jh7110-pll", .data = &jh7110_pll_variant },
+> >> +       { /* sentinel */ }
+> >> +};
+> >> +MODULE_DEVICE_TABLE(of, jh7110_pll_match);
+> >> +
+> >> +static struct platform_driver jh7110_pll_driver = {
+> >> +       .driver = {
+> >> +               .name = "clk-starfive-jh7110-pll",
+> >> +               .of_match_table = jh7110_pll_match,
+> >> +       },
+> >> +};
+> >> +builtin_platform_driver_probe(jh7110_pll_driver, jh7110_pll_probe);
+> >> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-pll.h b/drivers/clk/starfive/clk-starfive-jh7110-pll.h
+> >> new file mode 100644
+> >> index 000000000000..526f21670fe3
+> >> --- /dev/null
+> >> +++ b/drivers/clk/starfive/clk-starfive-jh7110-pll.h
+> >
+> > This header is never used outside of clk-starfive-jh7110-pll.c. Please
+> > just merge it into that file.
+>
+> Will fix.
+>
+> >
+> >> @@ -0,0 +1,331 @@
+> >> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+> >> +/*
+> >> + * StarFive JH7110 PLL Clock Generator Driver
+> >> + *
+> >> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> >> + */
+> >> +
+> >> +#ifndef _CLK_STARFIVE_JH7110_PLL_H_
+> >> +#define _CLK_STARFIVE_JH7110_PLL_H_
+> >> +
+> >> +#include <linux/bits.h>
+> >> +
+> >> +/* The decimal places are counted by expanding them by a factor of STARFIVE_PLL_FRAC_PATR_SIZE */
+> >> +#define STARFIVE_PLL_FRAC_PATR_SIZE            1000
+> >> +
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_DACPD_OFFSET      0x18
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_DACPD_SHIFT       24
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_DACPD_MASK                BIT(24)
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_DSMPD_OFFSET      0x18
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_DSMPD_SHIFT       25
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_DSMPD_MASK                BIT(25)
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_FBDIV_OFFSET      0x1c
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_FBDIV_SHIFT       0
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_FBDIV_MASK                GENMASK(11, 0)
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_FRAC_OFFSET       0x20
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_FRAC_SHIFT                0
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_FRAC_MASK         GENMASK(23, 0)
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_POSTDIV1_OFFSET   0x20
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_POSTDIV1_SHIFT    28
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_POSTDIV1_MASK     GENMASK(29, 28)
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_PREDIV_OFFSET     0x24
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_PREDIV_SHIFT      0
+> >> +#define STARFIVE_JH7110_CLK_PLL0_OUT_PREDIV_MASK       GENMASK(5, 0)
+> >> +
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_DACPD_OFFSET      0x24
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_DACPD_SHIFT       15
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_DACPD_MASK                BIT(15)
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_DSMPD_OFFSET      0x24
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_DSMPD_SHIFT       16
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_DSMPD_MASK                BIT(16)
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_FBDIV_OFFSET      0x24
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_FBDIV_SHIFT       17
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_FBDIV_MASK                GENMASK(28, 17)
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_FRAC_OFFSET       0x28
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_FRAC_SHIFT                0
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_FRAC_MASK         GENMASK(23, 0)
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_POSTDIV1_OFFSET   0x28
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_POSTDIV1_SHIFT    28
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_POSTDIV1_MASK     GENMASK(29, 28)
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_PREDIV_OFFSET     0x2c
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_PREDIV_SHIFT      0
+> >> +#define STARFIVE_JH7110_CLK_PLL1_OUT_PREDIV_MASK       GENMASK(5, 0)
+> >> +
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_DACPD_OFFSET      0x2c
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_DACPD_SHIFT       15
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_DACPD_MASK                BIT(15)
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_DSMPD_OFFSET      0x2c
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_DSMPD_SHIFT       16
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_DSMPD_MASK                BIT(16)
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_FBDIV_OFFSET      0x2c
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_FBDIV_SHIFT       17
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_FBDIV_MASK                GENMASK(28, 17)
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_FRAC_OFFSET       0x30
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_FRAC_SHIFT                0
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_FRAC_MASK         GENMASK(23, 0)
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_POSTDIV1_OFFSET   0x30
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_POSTDIV1_SHIFT    28
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_POSTDIV1_MASK     GENMASK(29, 28)
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_PREDIV_OFFSET     0x34
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_PREDIV_SHIFT      0
+> >> +#define STARFIVE_JH7110_CLK_PLL2_OUT_PREDIV_MASK       GENMASK(5, 0)
+> >> +
+> >> +#define JH7110_PLL(_idx, _name, _nums, _val)                   \
+> >> +[_idx] = {                                                     \
+> >> +       .name = _name,                                          \
+> >> +       .offsets = {                                            \
+> >> +               .dacpd = STARFIVE_##_idx##_DACPD_OFFSET,        \
+> >> +               .dsmpd = STARFIVE_##_idx##_DSMPD_OFFSET,        \
+> >> +               .fbdiv = STARFIVE_##_idx##_FBDIV_OFFSET,        \
+> >> +               .frac = STARFIVE_##_idx##_FRAC_OFFSET,          \
+> >> +               .prediv = STARFIVE_##_idx##_PREDIV_OFFSET,      \
+> >> +               .postdiv1 = STARFIVE_##_idx##_POSTDIV1_OFFSET,  \
+> >> +       },                                                      \
+> >> +       .masks = {                                              \
+> >> +               .dacpd = STARFIVE_##_idx##_DACPD_MASK,          \
+> >> +               .dsmpd = STARFIVE_##_idx##_DSMPD_MASK,          \
+> >> +               .fbdiv = STARFIVE_##_idx##_FBDIV_MASK,          \
+> >> +               .frac = STARFIVE_##_idx##_FRAC_MASK,            \
+> >> +               .prediv = STARFIVE_##_idx##_PREDIV_MASK,        \
+> >> +               .postdiv1 = STARFIVE_##_idx##_POSTDIV1_MASK,    \
+> >> +       },                                                      \
+> >> +       .shifts = {                                             \
+> >> +               .dacpd = STARFIVE_##_idx##_DACPD_SHIFT,         \
+> >> +               .dsmpd = STARFIVE_##_idx##_DSMPD_SHIFT,         \
+> >> +               .fbdiv = STARFIVE_##_idx##_FBDIV_SHIFT,         \
+> >> +               .frac = STARFIVE_##_idx##_FRAC_SHIFT,           \
+> >> +               .prediv = STARFIVE_##_idx##_PREDIV_SHIFT,       \
+> >> +               .postdiv1 = STARFIVE_##_idx##_POSTDIV1_SHIFT,   \
+> >> +       },                                                      \
+> >> +       .preset_val_nums = _nums,                               \
+> >> +       .preset_val = _val,                                     \
+> >> +}
+> >> +
+> >> +struct jh7110_pll_syscon_offset {
+> >> +       unsigned int dacpd;
+> >> +       unsigned int dsmpd;
+> >> +       unsigned int fbdiv;
+> >> +       unsigned int frac;
+> >> +       unsigned int prediv;
+> >> +       unsigned int postdiv1;
+> >> +};
+> >> +
+> >> +struct jh7110_pll_syscon_mask {
+> >> +       u32 dacpd;
+> >> +       u32 dsmpd;
+> >> +       u32 fbdiv;
+> >> +       u32 frac;
+> >> +       u32 prediv;
+> >> +       u32 postdiv1;
+> >> +};
+> >> +
+> >> +struct jh7110_pll_syscon_shift {
+> >> +       char dacpd;
+> >> +       char dsmpd;
+> >> +       char fbdiv;
+> >> +       char frac;
+> >> +       char prediv;
+> >> +       char postdiv1;
+> >> +};
+> >> +
+> >> +struct jh7110_pll_syscon_val {
+> >> +       unsigned long freq;
+> >> +       u32 prediv;
+> >> +       u32 fbdiv;
+> >> +       u32 postdiv1;
+> >> +/* Both daxpd and dsmpd set 1 while integer mode */
+> >> +/* Both daxpd and dsmpd set 0 while fraction mode */
+> >> +       u32 dacpd;
+> >> +       u32 dsmpd;
+> >> +/* frac value should be decimals multiplied by 2^24 */
+> >> +       u32 frac;
+> >> +};
+> >> +
+> >> +struct jh7110_pll_syscon_conf {
+> >> +       char *name;
+> >> +       struct jh7110_pll_syscon_offset offsets;
+> >> +       struct jh7110_pll_syscon_mask masks;
+> >> +       struct jh7110_pll_syscon_shift shifts;
+> >> +       unsigned int preset_val_nums;
+> >> +       const struct jh7110_pll_syscon_val *preset_val;
+> >> +};
+> >> +
+> >> +struct jh7110_clk_pll_data {
+> >> +       struct clk_hw hw;
+> >> +       unsigned int idx;
+> >> +       unsigned int freq_select_idx;
+> >> +       struct jh7110_pll_syscon_conf conf;
+> >> +};
+> >> +
+> >> +struct jh7110_clk_pll_priv {
+> >> +       unsigned int pll_nums;
+> >> +       struct device *dev;
+> >> +       struct regmap *syscon_regmap;
+> >> +       struct jh7110_clk_pll_data data[];
+> >> +};
+> >> +
+> >> +enum jh7110_pll0_freq_index {
+> >> +       JH7110_PLL0_FREQ_375 = 0,
+> >> +       JH7110_PLL0_FREQ_500,
+> >> +       JH7110_PLL0_FREQ_625,
+> >> +       JH7110_PLL0_FREQ_750,
+> >> +       JH7110_PLL0_FREQ_875,
+> >> +       JH7110_PLL0_FREQ_1000,
+> >> +       JH7110_PLL0_FREQ_1250,
+> >> +       JH7110_PLL0_FREQ_1375,
+> >> +       JH7110_PLL0_FREQ_1500,
+> >> +       JH7110_PLL0_FREQ_MAX
+> >> +};
+> >> +
+> >> +enum jh7110_pll1_freq_index {
+> >> +       JH7110_PLL1_FREQ_1066 = 0,
+> >> +       JH7110_PLL1_FREQ_1200,
+> >> +       JH7110_PLL1_FREQ_1400,
+> >> +       JH7110_PLL1_FREQ_1600,
+> >> +       JH7110_PLL1_FREQ_MAX
+> >> +};
+> >> +
+> >> +enum jh7110_pll2_freq_index {
+> >> +       JH7110_PLL2_FREQ_1188 = 0,
+> >> +       JH7110_PLL2_FREQ_12288,
+> >> +       JH7110_PLL2_FREQ_MAX
+> >> +};
+> >> +
+> >> +/*
+> >> + * Because the pll frequency is relatively fixed,
+> >> + * it cannot be set arbitrarily, so it needs a specific configuration.
+> >> + * PLL0 frequency should be multiple of 125MHz (USB frequency).
+> >> + */
+> >> +static const struct jh7110_pll_syscon_val
+> >> +       jh7110_pll0_syscon_val_preset[] = {
+> >> +       [JH7110_PLL0_FREQ_375] = {
+> >> +               .freq = 375000000,
+> >> +               .prediv = 8,
+> >> +               .fbdiv = 125,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_500] = {
+> >> +               .freq = 500000000,
+> >> +               .prediv = 6,
+> >> +               .fbdiv = 125,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_625] = {
+> >> +               .freq = 625000000,
+> >> +               .prediv = 24,
+> >> +               .fbdiv = 625,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_750] = {
+> >> +               .freq = 750000000,
+> >> +               .prediv = 4,
+> >> +               .fbdiv = 125,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_875] = {
+> >> +               .freq = 875000000,
+> >> +               .prediv = 24,
+> >> +               .fbdiv = 875,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_1000] = {
+> >> +               .freq = 1000000000,
+> >> +               .prediv = 3,
+> >> +               .fbdiv = 125,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_1250] = {
+> >> +               .freq = 1250000000,
+> >> +               .prediv = 12,
+> >> +               .fbdiv = 625,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_1375] = {
+> >> +               .freq = 1375000000,
+> >> +               .prediv = 24,
+> >> +               .fbdiv = 1375,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL0_FREQ_1500] = {
+> >> +               .freq = 1500000000,
+> >> +               .prediv = 2,
+> >> +               .fbdiv = 125,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +};
+> >> +
+> >> +static const struct jh7110_pll_syscon_val
+> >> +       jh7110_pll1_syscon_val_preset[] = {
+> >> +       [JH7110_PLL1_FREQ_1066] = {
+> >> +               .freq = 1066000000,
+> >> +               .prediv = 12,
+> >> +               .fbdiv = 533,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL1_FREQ_1200] = {
+> >> +               .freq = 1200000000,
+> >> +               .prediv = 1,
+> >> +               .fbdiv = 50,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL1_FREQ_1400] = {
+> >> +               .freq = 1400000000,
+> >> +               .prediv = 6,
+> >> +               .fbdiv = 350,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL1_FREQ_1600] = {
+> >> +               .freq = 1600000000,
+> >> +               .prediv = 3,
+> >> +               .fbdiv = 200,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +};
+> >> +
+> >> +static const struct jh7110_pll_syscon_val
+> >> +       jh7110_pll2_syscon_val_preset[] = {
+> >> +       [JH7110_PLL2_FREQ_1188] = {
+> >> +               .freq = 1188000000,
+> >> +               .prediv = 2,
+> >> +               .fbdiv = 99,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +       [JH7110_PLL2_FREQ_12288] = {
+> >> +               .freq = 1228800000,
+> >> +               .prediv = 5,
+> >> +               .fbdiv = 256,
+> >> +               .postdiv1 = 1,
+> >> +               .dacpd = 1,
+> >> +               .dsmpd = 1,
+> >> +       },
+> >> +};
+> >> +
+> >> +#endif
+> >> --
+> >> 2.25.1
+> >
+> > In general this driver is overly generic even though it is a driver
+> > specific to the JH7110 SoC. Rather than try to explain all the ways
+> > you can simplify it, I decided it would be easier to show you:
+> >
+> > https://github.com/esmil/linux/commit/9b7f325267c9a760eda6612c7ffbf22366790878
+> >
+> > It has all the same functionality, fixes all of the above and saves
+> > more than 100 lines of code, so please use that for your next
+> > revision.
+> >
+>
+> Thanks for you suggestions. I will fix it by referring to these.
+>
+> Best regards,
+> Xingyu Wu
