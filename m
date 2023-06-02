@@ -2,223 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BCF71FD3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B1A71FD48
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbjFBJML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S233800AbjFBJM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbjFBJLk (ORCPT
+        with ESMTP id S235000AbjFBJMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:11:40 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F62E10F1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:10:16 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so2396813e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685697014; x=1688289014;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PhUweK3MrTmGnE3rIz5Y4GwtiIWH03ocYNQvN700a+k=;
-        b=dBFV/LvpLULuahatBG7pkyT25KZbjPW4rwC4qWew/loLA+yaCVla5gHKtotpLn/t41
-         UJV/HVDkrCz3i9kIL1473ialF11BmJwV5J8B+HSLRcKNg9zFaCMWvfT1fZA82DuDcyiu
-         R24I3hcInTr7jnmZwNqmlYXGY9gOektdVFUvc5yYEXkYYYgsh9qKeVaNQxMmoXTBoNtL
-         egsbOHkKVvMGemwEqp4BkE1QEgT3WEj/wZCW/LFlMnVmwFSwk4bt9QoBaRnarM+Iv+4Q
-         udYinK32K6rDeAeSZTreVW0qp/UNjxConNTa9n6qsAZ+EeubIghCRDq5O4T1qh1dzqT+
-         dI2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685697014; x=1688289014;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PhUweK3MrTmGnE3rIz5Y4GwtiIWH03ocYNQvN700a+k=;
-        b=CPwKbeJYyEihrNV/oH5LG/HSZl7VnKdwgEBsVt0s4FWAZtcvEZSMHY85PWcrg26NT2
-         sDbCtn9ECofshSykNxBouaphicvgmOS+r3+g2lfKb/3pDv3iGYzxJnxwdZywVOdsmZof
-         rlAnscacnIYnnxLEdglQGWxKEg18Z/82booQ3cH6Yq/pW0j3hzUqrRgDzeQAStsrOWXz
-         kBJxqhNVM8TspAjXYFhCuk/SSgEG6eT0JAhXmV9KKlYaDg1+rxUyVLa4VI37+S0Y84OT
-         PK1nORS8pDrakTZHps7zTAts9KVf9Q67yJxSTcAGHR8Fqe8eW7hYA9Q5TKxjx3/IfIN1
-         hopw==
-X-Gm-Message-State: AC+VfDxzHzhtmBqUD1h40N3DKlOwZ4L6r54fR4UybMTbsVuQ/yRXSTLZ
-        hntGF6qaFpF6QKztUn3jZPzrYA==
-X-Google-Smtp-Source: ACHHUZ4uOxiawkp4T5MNwtGac+PuGeNfQjMldLdTtBkDICVqI7WZjCVAG7q+W2hXqCW9Oy4aOa23NQ==
-X-Received: by 2002:ac2:4294:0:b0:4f0:1124:8b2a with SMTP id m20-20020ac24294000000b004f011248b2amr1221204lfh.46.1685697014575;
-        Fri, 02 Jun 2023 02:10:14 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id d15-20020ac24c8f000000b004eb4357122bsm97399lfl.259.2023.06.02.02.10.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 02:10:14 -0700 (PDT)
-Message-ID: <2879254a-cd62-9f97-2c64-aa5151b19d82@linaro.org>
-Date:   Fri, 2 Jun 2023 11:10:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 1/3] drm/msm/adreno: Add Adreno A690 support
-Content-Language: en-US
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, johan@kernel.org, mani@kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-References: <20230531030945.4109453-1-quic_bjorande@quicinc.com>
- <20230531030945.4109453-2-quic_bjorande@quicinc.com>
- <57ffc7d9-c767-df36-d91f-8949993b1cdf@linaro.org>
- <z6usdzbvqxt6q7siff6qucyywafb6k4yh6qdpignqatowjb4c6@z3az35e3abs3>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <z6usdzbvqxt6q7siff6qucyywafb6k4yh6qdpignqatowjb4c6@z3az35e3abs3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 05:12:30 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B26FE52;
+        Fri,  2 Jun 2023 02:11:24 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 258945C007F;
+        Fri,  2 Jun 2023 05:11:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 02 Jun 2023 05:11:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685697082; x=1685783482; bh=AP
+        AvZ+7IxRhfLRjzPSOa/K0myZhAJEYLPd6OAOyyhBE=; b=snQVbPZ5si+eWAoLyH
+        1Ta1hjw0H9HLebxhopTdG1vEEJdJ6oqUuCEyuEH5q7/MC0eHZPZ2ujKMKoPFjfdd
+        /9pDzi2yBt7LvkjcGJPxw38duY+ZNmfydn4cnNfgNfuiGyrj4xo83TwO3Wue1YBe
+        nl7ebcZ/stOKNIyYQOruFzAtdEwGAuSqMLOWziI2kE2SpUUJhGuH1O12M3+83/Kh
+        mq3+5kvoWeSxsWQ1xwa7IFapPiDKnPaQ2Z2BQAlT29YdGaw56ljfUOHlMsKqKosS
+        dyemSxWg+8BWQfin31u7vLkMlmdvguSjRUt6p0jLA3wyAYJzS4Ajt6OZVe4S4rkj
+        cQ1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685697082; x=1685783482; bh=APAvZ+7IxRhfL
+        RjzPSOa/K0myZhAJEYLPd6OAOyyhBE=; b=uOn5XeP6ZPV6FOIZBzvvUsqRTFqIu
+        yYDgLHoQpGKVYy64B8t5IG6K5WLmzR0WfTjRdM6FhVcnm158F32X/m5W7O24Qxjb
+        2+oP+gobwGRWLOgTQs2/1QKrSC4DVrCMaKKDBSDcRNVcrS4f8foVqyIkwr+j7a9Y
+        LLuJQiaeb+ov/uNoL/rQ1qFLxf3nd/0oydtRAOTJADRuPb9tmXbE8suLs1BZ7UU7
+        +W9wQhR5FlFsqsW1F1MKe0G87yQIePEqzbID+noG7xDozWpkCwXK+tgK1fb6up4B
+        lgHYUpYXGHKFtEGKeap1iE/afgQCUVKpUqhne7av2XiDyyv5MBAeLkLSA==
+X-ME-Sender: <xms:ObJ5ZMQEog263-qA1fp65RtwtSqpQgEwUjeJ6OkcZVVvExnmSeXW4g>
+    <xme:ObJ5ZJw76gLUgl8EnMNgebe441QSixgT4p9e-gXpD2RotHndxxGu0zBa9ilH0pxzm
+    YgX1Wb1V990ssjd6lQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelfedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ObJ5ZJ3heeJkJwZecF6tYDIfvvW6ODHZWjAqRfFN6KsIyW_f5jEN9w>
+    <xmx:ObJ5ZACKN1btlqbPbGCXvrHY6BunWtzI5y7FWLVXhnfIrbiWlvY2yQ>
+    <xmx:ObJ5ZFiG5Q92PcPsWmQZLqiNy_P7NJn-OKyOOSn7MHkpBTOQRbJaqw>
+    <xmx:OrJ5ZDbbWMoRSGhAB5y7mcDNkd6YNjptZ_mQAS7_UTJ7G2gmZc2eRg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D2DEFB60086; Fri,  2 Jun 2023 05:11:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
+In-Reply-To: <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
+References: <20230601213246.3271412-1-arnd@kernel.org>
+ <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
+Date:   Fri, 02 Jun 2023 11:11:01 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhang Rui" <rui.zhang@intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     "Sudeep Holla" <sudeep.holla@arm.com>,
+        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Cristian Marussi" <cristian.marussi@arm.com>
+Subject: Re: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1.06.2023 20:30, Akhil P Oommen wrote:
-> On Wed, May 31, 2023 at 10:30:09PM +0200, Konrad Dybcio wrote:
->>
->>
->>
->> On 31.05.2023 05:09, Bjorn Andersson wrote:
->>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
->>>
->>> Introduce support for the Adreno A690, found in Qualcomm SC8280XP.
->>>
->>> Tested-by: Steev Klimaszewski <steev@kali.org>
->>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->>> ---
->> Couple of additional nits that you may or may not incorporate:
->>
->> [...]
->>
->>> +	{REG_A6XX_RBBM_CLOCK_HYST_SP0, 0x0000F3CF},
->> It would be cool if we could stop adding uppercase hex outside preprocessor
->> defines..
->>
->>
->> [...]
->>> +	A6XX_PROTECT_RDONLY(0x0fc00, 0x01fff),
->>> +	A6XX_PROTECT_NORDWR(0x11c00, 0x00000), /*note: infiite range */
->> typo
->>
->>
->>
->> -- Questions to Rob that don't really concern this patch --
->>
->>> +static void a690_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
->> Rob, I'll be looking into reworking these into dynamic tables.. would you
->> be okay with two more additions (A730, A740) on top of this before I do that?
->> The number of these funcs has risen quite a bit and we're abusing the fact
->> that so far there's a 1-1 mapping of SoC-Adreno (at the current state of
->> mainline, not in general)..
+On Fri, Jun 2, 2023, at 10:04, Zhang, Rui wrote:
+> On Thu, 2023-06-01 at 23:32 +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> When the intel_rapl driver is built-in, but iosf_mbi is a loadable
+>> module,
+>> the kernel fails to link:
+>> 
+>> x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
+>> intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to
+>> `iosf_mbi_write'
+>> x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined
+>> reference to `iosf_mbi_read'
+>> 
+>
+> IMO, it is the intel_rapl_common.c that calls IOSF APIs without
+> specifying the dependency. Thus it should be fixed by something like
+> below,
+>
+> --- a/drivers/powercap/Kconfig
+> +++ b/drivers/powercap/Kconfig
+> @@ -18,10 +18,11 @@ if POWERCAP
+>  # Client driver configurations go here.
+>  config INTEL_RAPL_CORE
+>  	tristate
+> +	select IOSF_MBI
 > 
-> +1. But please leave a618 and 7c3 as it is.
-OK I'll note that
+>  config INTEL_RAPL
+>  	tristate "Intel RAPL Support via MSR Interface"
+> -	depends on X86 && IOSF_MBI
+> +	depends on X86
+>  	select INTEL_RAPL_CORE
+>  	help
+>  	  This enables support for the Intel Running Average Power Limit 
 
-Konrad
-> 
-> -Akhil
-> 
->>
->>> +{
->>> +	/*
->>> +	 * Send a single "off" entry just to get things running
->>> +	 * TODO: bus scaling
->>> +	 */
->> Also something I'll be looking into in the near future..
->>
->>> @@ -531,6 +562,8 @@ static int a6xx_hfi_send_bw_table(struct a6xx_gmu *gmu)
->>>  		adreno_7c3_build_bw_table(&msg);
->>>  	else if (adreno_is_a660(adreno_gpu))
->>>  		a660_build_bw_table(&msg);
->>> +	else if (adreno_is_a690(adreno_gpu))
->>> +		a690_build_bw_table(&msg);
->>>  	else
->>>  		a6xx_build_bw_table(&msg);
->> I think changing the is_adreno_... to switch statements with a gpu_model
->> var would make it easier to read.. Should I also rework that?
->>
->> Konrad
->>
->>>  
->>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> index 8cff86e9d35c..e5a865024e94 100644
->>> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
->>> @@ -355,6 +355,20 @@ static const struct adreno_info gpulist[] = {
->>>  		.init = a6xx_gpu_init,
->>>  		.zapfw = "a640_zap.mdt",
->>>  		.hwcg = a640_hwcg,
->>> +	}, {
->>> +		.rev = ADRENO_REV(6, 9, 0, ANY_ID),
->>> +		.revn = 690,
->>> +		.name = "A690",
->>> +		.fw = {
->>> +			[ADRENO_FW_SQE] = "a660_sqe.fw",
->>> +			[ADRENO_FW_GMU] = "a690_gmu.bin",
->>> +		},
->>> +		.gmem = SZ_4M,
->>> +		.inactive_period = DRM_MSM_INACTIVE_PERIOD,
->>> +		.init = a6xx_gpu_init,
->>> +		.zapfw = "a690_zap.mdt",
->>> +		.hwcg = a690_hwcg,
->>> +		.address_space_size = SZ_16G,
->>>  	},
->>>  };
->>>  
->>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>> index f62612a5c70f..ac9c429ca07b 100644
->>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>> @@ -55,7 +55,7 @@ struct adreno_reglist {
->>>  	u32 value;
->>>  };
->>>  
->>> -extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[], a650_hwcg[], a660_hwcg[];
->>> +extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[], a650_hwcg[], a660_hwcg[], a690_hwcg[];
->>>  
->>>  struct adreno_info {
->>>  	struct adreno_rev rev;
->>> @@ -272,6 +272,11 @@ static inline int adreno_is_a660(struct adreno_gpu *gpu)
->>>  	return gpu->revn == 660;
->>>  }
->>>  
->>> +static inline int adreno_is_a690(struct adreno_gpu *gpu)
->>> +{
->>> +	return gpu->revn == 690;
->>> +};
->>> +
->>>  /* check for a615, a616, a618, a619 or any derivatives */
->>>  static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
->>>  {
->>> @@ -280,13 +285,13 @@ static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
->>>  
->>>  static inline int adreno_is_a660_family(struct adreno_gpu *gpu)
->>>  {
->>> -	return adreno_is_a660(gpu) || adreno_is_7c3(gpu);
->>> +	return adreno_is_a660(gpu) || adreno_is_a690(gpu) || adreno_is_7c3(gpu);
->>>  }
->>>  
->>>  /* check for a650, a660, or any derivatives */
->>>  static inline int adreno_is_a650_family(struct adreno_gpu *gpu)
->>>  {
->>> -	return gpu->revn == 650 || gpu->revn == 620 || adreno_is_a660_family(gpu);
->>> +	return gpu->revn == 650 || gpu->revn == 620  || adreno_is_a660_family(gpu);
->>>  }
->>>  
->>>  u64 adreno_private_address_space_size(struct msm_gpu *gpu);
+I think that has the logic slightly backwards from a usability point
+of view: The way I read the arch/x86/Kconfig description, IOSF_MBI
+is a feature of specific Intel hardware implementations, which
+gets enabled when any of these SoC platforms are enabled in
+the build, and the INTEL_RAPL driver specifically only works
+on those, while the new INTEL_RAPL_TPMI driver works on other
+hardware.
+
+More generally speaking, I think it is a mistake for a device
+driver in one subsystem to use 'select' to enforce a build
+dependency on a driver in another subsystem when the other
+symbol is user-visible.
+
+>> The driver can work with iosf_mbi completely disabled, so add a
+>> dependency
+>> that still allows this configuration, but otherwise forces it to not
+>> be
+>> built-in when iosf_mbi is a loadable module.
+>
+> On the other side, I agree with you that the TPMI driver should work
+> with iosf_mbi completely disabled.
+>
+> A cleaner way to do this is to move the rapl_defaults setting (even the
+> rapl_primitive_info setting) from intel_rapl_common.c to the I/F
+> drivers, as this is really interface specific.
+>
+> Maybe we can use the above patch as a quick fix, and remove the
+> IOSF_MBI dependency from RAPL common code as a long term solution?
+
+I agree that your long-term solution is the best way to avoid the
+build dependency, but for the short-term fix I think my patch
+makes a little more sense than yours. 
+
+Either approach is of course enough to address the build
+regression, so no objections to your patch if you still
+prefer that.
+
+     Arnd
