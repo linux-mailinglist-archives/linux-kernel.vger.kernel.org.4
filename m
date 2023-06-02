@@ -2,138 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F6D7203EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BED7203F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235909AbjFBOBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S235272AbjFBOGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234687AbjFBOBl (ORCPT
+        with ESMTP id S235107AbjFBOGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:01:41 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E58518C;
-        Fri,  2 Jun 2023 07:01:40 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-62614f2eee1so18142136d6.0;
-        Fri, 02 Jun 2023 07:01:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685714499; x=1688306499;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tkyZNYaRvjb5OIxj50rRSjMVw65g+0jak5ymUtIvvTU=;
-        b=hCHVodpdLg+1FlAM0XucKOoUbYSJ/O6Y0QWPnbCKlXAdIj1k9TcnwiRsLejXGLNKJm
-         T8ivnvFga6Tx/ePxAAv09d6S4AqhZYkMIhF/4Knn4/JDMui9wIeAv/9fdTA0oKvy+M1O
-         O0j12w5fWzNIyQpdwgQnTOqpQWnR2vCLcmH+3u+sXIoFkGPVDqk6Ijv43mx17xlq8axP
-         jKQ60z3HFbDEnlLMSjruPuf+ADpV3cnRlm/4yhZp8LQpoEfjMkrFazHfJaT3aWFGomiK
-         /UipjRsyS3jvDbupgZTJP109gmrnNWyl+OCLmolKbSCxrvJ6jCXZq6PWxTJq3k25idXY
-         Uv+w==
-X-Gm-Message-State: AC+VfDxduLz8/nDxidJ60GSLZgPdzlyTYSnI/liU/v/zysA+nz/aG6Co
-        2pUGvPSdUZBzMHr3nJrMuJTU2kZ5s8KJvfoP
-X-Google-Smtp-Source: ACHHUZ4APRqV07DOqsV0OXwtg8oqUsKPVJUXIw31CKeY7n/G6tXYGG/Xhd9O13qxjXBxA7dHbYxzFA==
-X-Received: by 2002:ad4:5dee:0:b0:626:3bf8:aef0 with SMTP id jn14-20020ad45dee000000b006263bf8aef0mr15970160qvb.23.1685714498625;
-        Fri, 02 Jun 2023 07:01:38 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:1317])
-        by smtp.gmail.com with ESMTPSA id q6-20020a0ce9c6000000b005dd8b9345besm835218qvo.86.2023.06.02.07.01.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 07:01:25 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH] selftests/bpf: Add missing selftests kconfig options
-Date:   Fri,  2 Jun 2023 09:01:08 -0500
-Message-Id: <20230602140108.1177900-1-void@manifault.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 2 Jun 2023 10:06:50 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F9C9D;
+        Fri,  2 Jun 2023 07:06:48 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E62EC1EC04C0;
+        Fri,  2 Jun 2023 16:06:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685714807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=SaB33qhFEqrdCT6iIUaEkSg4Qpuj6zHhoEehkyjEY1c=;
+        b=bjEuZJCQAOHdx2PC1qQgfnK8bMM8qb06oVkLOaQrckNzHkqIuwUXgHUsRIQ/53gdIvDp5m
+        CfPpDY0XDi4CSIR+pLIcgPlYKn/rkeIn3kjcKmniKO3jnKWC4nb3+2WEjTlqAJKY2VxLjz
+        iHPJ5OqkjrwFucFRYI/K3ll2AK7X4m4=
+Date:   Fri, 2 Jun 2023 16:06:41 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCHv13 4/9] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20230602140641.GKZHn3caQpYveKxFgU@fat_crate.local>
+References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
+ <20230601182543.19036-5-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230601182543.19036-5-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our selftests of course rely on the kernel being built with
-CONFIG_DEBUG_INFO_BTF=y, though this (nor its dependencies of
-CONFIG_DEBUG_INFO=y and CONFIG_DEBUG_INFO_DWARF4=y) are not specified.
-This causes the wrong kernel to be built, and selftests to similarly
-fail to build.
+On Thu, Jun 01, 2023 at 09:25:38PM +0300, Kirill A. Shutemov wrote:
+> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+> index 454757fbdfe5..749f0fe7e446 100644
+> --- a/arch/x86/boot/compressed/kaslr.c
+> +++ b/arch/x86/boot/compressed/kaslr.c
+> @@ -672,6 +672,28 @@ static bool process_mem_region(struct mem_vector *region,
+>  }
+>  
+>  #ifdef CONFIG_EFI
+> +
+> +/*
+> + * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if supported) are
+> + * guaranteed to be free.
+> + *
+> + * It is more conservative in picking free memory than the EFI spec allows:
 
-Additionally, in the BPF selftests kconfig file,
-CONFIG_NF_CONNTRACK_MARK=y is specified, so that the 'u_int32_t mark'
-field will be present in the definition of struct nf_conn.  While a
-dependency of CONFIG_NF_CONNTRACK_MARK=y, CONFIG_NETFILTER_ADVANCED=y,
-should be enabled by default, I've run into instances of
-CONFIG_NF_CONNTRACK_MARK not being set because CONFIG_NETFILTER_ADVANCED
-isn't set, and have to manually enable them with make menuconfig.
+"Pick free memory more conservatively than the EFI spec allows:
+EFI_BOOT_SERVICES_ ..."
 
-Let's add these missing kconfig options to the file so that the
-necessary dependencies are in place to build vmlinux. Otherwise, we'll
-get errors like this when we try to compile selftests and generate
-vmlinux.h:
+> + *
+> + * According to the spec, EFI_BOOT_SERVICES_{CODE|DATA} are also free memory
+> + * and thus available to place the kernel image into, but in practice there's
+> + * firmware where using that memory leads to crashes.
 
-$ cd /path/to/bpf-next
-$ make mrproper; make defconfig
-$ cat tools/testing/selftests/config >> .config
-$ make -j
-...
-$ cd tools/testing/selftests/bpf
-$ make clean
-$ make -j
-...
-  LD [M]
-  tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.ko
-  tools/testing/selftests/bpf/tools/build/bpftool/bootstrap/bpftool
-  btf dump file vmlinux format c >
-  tools/testing/selftests/bpf/tools/build/bpftool/vmlinux.h
-  libbpf: failed to find '.BTF' ELF section in
-  vmlinux
-  Error: failed to load BTF from bpf-next/vmlinux:
-  No data available
-  make[1]: *** [Makefile:208:
-  tools/testing/selftests/bpf/tools/build/bpftool/vmlinux.h]
-  Error 195
-  make[1]: *** Deleting file
-  'tools/testing/selftests/bpf/tools/build/bpftool/vmlinux.h'
-  make: *** [Makefile:261:
-  tools/testing/selftests/bpf/tools/sbin/bpftool]
-  Error 2
+... because that firmware still scratches into that memory or why?
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- tools/testing/selftests/bpf/config | 4 ++++
- 1 file changed, 4 insertions(+)
+> + */
+> +static inline bool memory_type_is_free(efi_memory_desc_t *md)
+> +{
+> +	if (md->type == EFI_CONVENTIONAL_MEMORY)
+> +		return true;
+> +
+> +	if (md->type == EFI_UNACCEPTED_MEMORY)
+> +		return IS_ENABLED(CONFIG_UNACCEPTED_MEMORY);
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 63cd4ab70171..3b350bc31343 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -13,6 +13,9 @@ CONFIG_CGROUP_BPF=y
- CONFIG_CRYPTO_HMAC=y
- CONFIG_CRYPTO_SHA256=y
- CONFIG_CRYPTO_USER_API_HASH=y
-+CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_BTF=y
-+CONFIG_DEBUG_INFO_DWARF4=y
- CONFIG_DYNAMIC_FTRACE=y
- CONFIG_FPROBE=y
- CONFIG_FTRACE_SYSCALLS=y
-@@ -60,6 +63,7 @@ CONFIG_NET_SCH_INGRESS=y
- CONFIG_NET_SCHED=y
- CONFIG_NETDEVSIM=y
- CONFIG_NETFILTER=y
-+CONFIG_NETFILTER_ADVANCED=y
- CONFIG_NETFILTER_SYNPROXY=y
- CONFIG_NETFILTER_XT_CONNMARK=y
- CONFIG_NETFILTER_XT_MATCH_STATE=y
+Make it plan and simple:
+
+	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
+	    md->type == EFI_UNACCEPTED_MEMORY)
+		return true;
+
+> +
+> +	return false;
+> +}
+> +
+>  /*
+>   * Returns true if we processed the EFI memmap, which we prefer over the E820
+>   * table if it is available.
+> @@ -716,18 +738,7 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
+>  	for (i = 0; i < nr_desc; i++) {
+>  		md = efi_early_memdesc_ptr(pmap, e->efi_memdesc_size, i);
+>  
+> -		/*
+> -		 * Here we are more conservative in picking free memory than
+> -		 * the EFI spec allows:
+> -		 *
+> -		 * According to the spec, EFI_BOOT_SERVICES_{CODE|DATA} are also
+> -		 * free memory and thus available to place the kernel image into,
+> -		 * but in practice there's firmware where using that memory leads
+> -		 * to crashes.
+> -		 *
+> -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
+> -		 */
+> -		if (md->type != EFI_CONVENTIONAL_MEMORY)
+> +		if (!memory_type_is_free(md))
+>  			continue;
+>  
+>  		if (efi_soft_reserve_enabled() &&
+> diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+> index 67594fcb11d9..4ecf26576a77 100644
+> --- a/arch/x86/boot/compressed/mem.c
+> +++ b/arch/x86/boot/compressed/mem.c
+> @@ -1,9 +1,40 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  
+>  #include "error.h"
+> +#include "misc.h"
+>  
+>  void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+>  {
+>  	/* Platform-specific memory-acceptance call goes here */
+>  	error("Cannot accept memory");
+>  }
+> +
+> +void init_unaccepted_memory(void)
+> +{
+> +	guid_t guid =  LINUX_EFI_UNACCEPTED_MEM_TABLE_GUID;
+
+An additional space after the "=".
+
+> +	struct efi_unaccepted_memory *unaccepted_table;
+> +	unsigned long cfg_table_pa;
+> +	unsigned int cfg_table_len;
+> +	enum efi_type et;
+> +	int ret;
+> +
+> +	et = efi_get_type(boot_params);
+> +	if (et == EFI_TYPE_NONE)
+> +		return;
+> +
+> +	ret = efi_get_conf_table(boot_params, &cfg_table_pa, &cfg_table_len);
+> +	if (ret)
+> +		error("EFI config table not found.");
+
+What's the point in erroring out here?
+
+> +	unaccepted_table = (void *)efi_find_vendor_table(boot_params,
+> +							 cfg_table_pa,
+> +							 cfg_table_len,
+> +							 guid);
+> +	if (!unaccepted_table)
+> +		return;
+> +
+> +	if (unaccepted_table->version != 1)
+> +		error("Unknown version of unaccepted memory table\n");
+> +
+> +	set_unaccepted_table(unaccepted_table);
+
+Why is this a function at all and not a simple assignment?
+
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index 014ff222bf4b..36535a3753f5 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -455,6 +455,13 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>  #endif
+>  
+>  	debug_putstr("\nDecompressing Linux... ");
+> +
+> +	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
+> +		debug_putstr("Accepting memory... ");
+
+This needs to happen...
+
+> +		init_unaccepted_memory();
+
+... after the init, after the init has parsed the config table and has
+found unaccepted memory.
+
+If not, you don't need to issue anything as that would be wrong.
+
+> +		accept_memory(__pa(output), __pa(output) + needed_size);
+> +	}
+> +
+>  	__decompress(input_data, input_len, NULL, NULL, output, output_len,
+>  			NULL, error);
+>  	entry_offset = parse_elf(output);
+
 -- 
-2.40.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
