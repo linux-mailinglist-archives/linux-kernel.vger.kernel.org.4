@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CF9720775
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E848472053A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236826AbjFBQXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S236435AbjFBPCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236384AbjFBQXR (ORCPT
+        with ESMTP id S236377AbjFBPBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:23:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995FB197
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:23:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685722995; x=1717258995;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2vScx9xL+4WATF6N210Q9YVlE3QByB+nFbRWxvKBxXE=;
-  b=QqcmMyqkXPCoRexgXZY7R/n/rkpI2zsxelTBs6pvBxvEVnge9P6XWITz
-   /7O9umXxMau7jixmA3vFLpbionrOoz7nfnyh1BFwCYueREewb+r/IxWmF
-   1Zo6U71rm6aXxiGthF3mAjF2XjzbNBWnf3C0PeSdgSanPwdbXc61P/aEw
-   Frkz6WwtHn8udXhY/GhR5kWd906NCHH8AxOU065oG7cY2W9mf6ymvTTw7
-   xhwVFUsVBKuZFkslAF23f6/1WSUnkU3Fb8UOXYX3Km+5lqW1j6MOHy9e3
-   d+dDkXke64E5rWb5c3dfaZ/gHyBJLhv/5I6J4kmey9uSj6ao2uvIFe617
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="442285455"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="442285455"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 09:23:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="685367783"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="685367783"
-Received: from joshkuo-mobl.amr.corp.intel.com (HELO [10.209.39.242]) ([10.209.39.242])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 09:23:14 -0700
-Message-ID: <8ad62f37-8cf7-6bd0-3d4d-d04d5def893c@linux.intel.com>
-Date:   Fri, 2 Jun 2023 10:01:20 -0500
+        Fri, 2 Jun 2023 11:01:53 -0400
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E803E62;
+        Fri,  2 Jun 2023 08:01:48 -0700 (PDT)
+Received: from [IPV6:240e:3b7:327f:140:44b0:a08f:963d:32cc] (unknown [IPV6:240e:3b7:327f:140:44b0:a08f:963d:32cc])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id 801F02804F5;
+        Fri,  2 Jun 2023 23:01:44 +0800 (CST)
+Message-ID: <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
+Date:   Fri, 2 Jun 2023 23:01:43 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 4/5] soundwire: stream: Invert logic on runtime alloc
- flags
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Cc:     dinghui@sangfor.com.cn,
+        Alexander H Duyck <alexander.duyck@gmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+To:     Andrew Lunn <andrew@lunn.ch>
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+ <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+ <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn>
+ <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
 Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20230602101140.2040141-1-ckeepax@opensource.cirrus.com>
- <20230602101140.2040141-4-ckeepax@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230602101140.2040141-4-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+From:   Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDGkIeVkIdHkIfSklCTk9LQlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BSk9LQU9PGUtBGktDHUFCTUgfQUhJGBhZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVKS0tVS1kG
+X-HM-Tid: 0a887ca0fb072eb1kusn801f02804f5
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6P1E6PAw5OT1WTTNWOjg1SEwU
+        NwlPCxBVSlVKTUNOTEpDSktOSENLVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUwdQUpPS0FPTxlLQRpLQx1BQk1IH0FISRgYWVdZCAFZQUlDQ0I3Bg++
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,118 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/6/2 8:26 下午, Andrew Lunn wrote:
+>>> Changing the copy size would not fix this. The problem is the driver
+>>> will be overwriting with the size that it thinks it should be using.
+>>> Reducing the value that is provided for the memory allocations will
+>>> cause the driver to corrupt memory.
+>>>
+>>
+>> I noticed that, in fact I did use the returned length to allocate
+>> kernel memory, and only use adjusted length to copy to user.
+> 
+> This is also something i checked when quickly looking at the patch. It
+> does look correct.
+> 
 
+Thanks.
 
-On 6/2/23 05:11, Charles Keepax wrote:
-> sdw_stream_add_slave/master have flags to indicate if the master or
-> slave runtime where allocated in that call to the function. Currently
-> these flags are cleared on all the paths where the runtime is not
-> allocated, it is more logic and simpler to set the flag on the one path
-> where the runtime is allocated.
+> Also, RTNL should be held during the time both calls are made into the
+> driver. So nothing from userspace should be able to get in the middle
+> of these calls to change the number of queues.
 > 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Much easier to review indeed, thanks!
+The RTNL lock is already be held during every each ioctl in dev_ethtool().
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+     rtnl_lock();
+     rc = __dev_ethtool(net, ifr, useraddr, ethcmd, state);
+     rtnl_unlock();
 
-> ---
-> 
-> Changes since v1:
->  - Split out of the goto patch to ease review
-> 
-> Also worth noting I guess this patch could be squashed with patch 1 in
-> the series really, but I opted to leave them separate as patch 1 is a
-> much simpler fix to be cherry-picked back to older kernels if someone
-> needs the fixup, rather than mixing the fixup and tidy up.
-> 
-> Thanks,
-> Charles
-> 
->  drivers/soundwire/stream.c | 25 ++++++++++++-------------
->  1 file changed, 12 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
-> index 6595f47b403b5..df5600a80c174 100644
-> --- a/drivers/soundwire/stream.c
-> +++ b/drivers/soundwire/stream.c
-> @@ -1854,7 +1854,7 @@ int sdw_stream_add_master(struct sdw_bus *bus,
->  			  struct sdw_stream_runtime *stream)
->  {
->  	struct sdw_master_runtime *m_rt;
-> -	bool alloc_master_rt = true;
-> +	bool alloc_master_rt = false;
->  	int ret;
->  
->  	mutex_lock(&bus->bus_lock);
-> @@ -1876,10 +1876,8 @@ int sdw_stream_add_master(struct sdw_bus *bus,
->  	 * it first), if so skip allocation and go to configuration
->  	 */
->  	m_rt = sdw_master_rt_find(bus, stream);
-> -	if (m_rt) {
-> -		alloc_master_rt = false;
-> +	if (m_rt)
->  		goto skip_alloc_master_rt;
-> -	}
->  
->  	m_rt = sdw_master_rt_alloc(bus, stream);
->  	if (!m_rt) {
-> @@ -1888,6 +1886,8 @@ int sdw_stream_add_master(struct sdw_bus *bus,
->  		ret = -ENOMEM;
->  		goto unlock;
->  	}
-> +
-> +	alloc_master_rt = true;
->  skip_alloc_master_rt:
->  
->  	if (sdw_master_port_allocated(m_rt))
-> @@ -1980,8 +1980,8 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
->  {
->  	struct sdw_slave_runtime *s_rt;
->  	struct sdw_master_runtime *m_rt;
-> -	bool alloc_master_rt = true;
-> -	bool alloc_slave_rt = true;
-> +	bool alloc_master_rt = false;
-> +	bool alloc_slave_rt = false;
->  
->  	int ret;
->  
-> @@ -1992,10 +1992,8 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
->  	 * and go to configuration
->  	 */
->  	m_rt = sdw_master_rt_find(slave->bus, stream);
-> -	if (m_rt) {
-> -		alloc_master_rt = false;
-> +	if (m_rt)
->  		goto skip_alloc_master_rt;
-> -	}
->  
->  	/*
->  	 * If this API is invoked by Slave first then m_rt is not valid.
-> @@ -2009,21 +2007,22 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
->  		goto unlock;
->  	}
->  
-> +	alloc_master_rt = true;
-> +
->  skip_alloc_master_rt:
->  	s_rt = sdw_slave_rt_find(slave, stream);
-> -	if (s_rt) {
-> -		alloc_slave_rt = false;
-> +	if (s_rt)
->  		goto skip_alloc_slave_rt;
-> -	}
->  
->  	s_rt = sdw_slave_rt_alloc(slave, m_rt);
->  	if (!s_rt) {
->  		dev_err(&slave->dev, "Slave runtime alloc failed for stream:%s\n", stream->name);
-> -		alloc_slave_rt = false;
->  		ret = -ENOMEM;
->  		goto alloc_error;
->  	}
->  
-> +	alloc_slave_rt = true;
-> +
->  skip_alloc_slave_rt:
->  	if (sdw_slave_port_allocated(s_rt))
->  		goto skip_port_alloc;
+-- 
+Thanks,
+-dinghui
+
