@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB0671FD7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD3871FDC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235040AbjFBJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S234352AbjFBJZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235138AbjFBJSU (ORCPT
+        with ESMTP id S234122AbjFBJYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:18:20 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8051725
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:17:33 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33bc0618941so15526585ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:17:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685697448; x=1688289448;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AuxfesV2mPlW/l31sNPK0qS4J6i6ybe/ktRDhYC5dGY=;
-        b=F890hXWZsRF4/ZBzXtg2FNjPvvIwgv4pI5i52qGJpwvaDKWAwOB6phN+OSepbt69iy
-         jc/NjJPj75i7rekkdu9N1RBHzKVFyj4Ch4tPr9XuzNsx78k16j8gNoN1VD77BwdfJUIO
-         caduprv535EQ4CwALpiUPbnV61zdR9e48hRyrSQ1pYXCYam3ajg90tsq0/r9Om0kWYBn
-         uAb1pPIZobfDgjhcpCtT3JxMYuR7XDpQmWU/7S+vZx7HNVeViGYq5vcG17+VZBN7/9mg
-         TqnqxK5m+xIDrQRv4Ujj1LU1wwWDsmUdGICoVsVRMZLJZdw2mKpvBbUm6ExbiIvArVtf
-         mBDQ==
-X-Gm-Message-State: AC+VfDzX+9GZMpXCzT2c3mHWZHMetDrLRJ637VDQSOn8TIfEHER/zafX
-        6fEygKggV1MMaf3LL7ap4ljvS7LURPggWMC070oxoKMimJbq
-X-Google-Smtp-Source: ACHHUZ6PrrPccCLLqhjvMPqVcJ09RH2oN6qZjU14NNHk0BLRnmjkdIqN3eAT6rsZSocr698Ro1lJbItecytN8+uEC+2QXev7r1LK
+        Fri, 2 Jun 2023 05:24:21 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BCA10C4;
+        Fri,  2 Jun 2023 02:22:34 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXcwQ0SMXz4f3wtH;
+        Fri,  2 Jun 2023 17:22:30 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7PVtHlkS1cKKw--.42263S4;
+        Fri, 02 Jun 2023 17:22:30 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     song@kernel.org, neilb@suse.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+        houtao1@huawei.com, yangerkun@huawei.com
+Subject: [PATCH v7 0/2] raid10 bugfix
+Date:   Fri,  2 Jun 2023 17:18:37 +0800
+Message-Id: <20230602091839.743798-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:c048:0:b0:338:16ae:c8ca with SMTP id
- o8-20020a92c048000000b0033816aec8camr3790651ilf.2.1685697448454; Fri, 02 Jun
- 2023 02:17:28 -0700 (PDT)
-Date:   Fri, 02 Jun 2023 02:17:28 -0700
-In-Reply-To: <6bb51cd9afb95f2a5bd9bd2a5113f6dcbf4aea07.camel@huaweicloud.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009d322605fd22054a@google.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
-From:   syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, jack@suse.cz, jeffm@suse.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, paul@paul-moore.com, peterz@infradead.org,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
-        roberto.sassu@huaweicloud.com, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3X7PVtHlkS1cKKw--.42263S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYw7kC6x804xWl14x267AKxVW8JVW5JwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr
+        0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0E
+        wIxGrwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x07UKoGdUUUUU=
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Li Nan <linan122@huawei.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Changes in v7:
+ - in patch 1, change "fail" to "fails".
 
-Reported-and-tested-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
+Changes in v6:
+ - in patch 1, improve commit message summary and comment.
 
-Tested on:
+Changes in v5:
+ - v4 send wrong patch, correct and resend.
 
-commit:         4432b507 lsm: fix a number of misspellings
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git next
-console output: https://syzkaller.appspot.com/x/log.txt?x=166c541d280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=38526bf24c8d961b
-dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1095cd79280000
+Changes in v4:
+ - improve commit log
+ - removed applied patches
 
-Note: testing is done by a robot and is best-effort only.
+
+Li Nan (2):
+  md/raid10: Do not add spare disk when recovery fails
+  md/raid10: fix io loss while replacement replace rdev
+
+ drivers/md/raid10.c | 42 ++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 36 insertions(+), 6 deletions(-)
+
+-- 
+2.39.2
+
