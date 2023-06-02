@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CE87207E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780C7207DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbjFBQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S236726AbjFBQpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236765AbjFBQp5 (ORCPT
+        with ESMTP id S236232AbjFBQpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:45:57 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDA51A5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:45:54 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-119-27.bstnma.fios.verizon.net [173.48.119.27])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 352GjMfp008777
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 12:45:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1685724324; bh=fQX3HEZV3KIskpFARmPelBT88Aj1ZdbBSbJ5xbiBv/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=UcR0PExUqSSgpGNR5fBjNDAbhuXYHLDvQrDCJiet2+f73mOXSbzNwuMip4+Nu5MJt
-         XFRb7FVgPUH5DVaXYC5lISiYdoy1bBhBFmjDDMP9+eMmm8BX7y+0RCsoB9bCgOu99e
-         zj1KlthqmQg9lIQZyN3pGo6Pt2p5XQebD0uxMOKwS8XCnSJegUw8K2UVyFpod+3dKT
-         t1E/gNnErXCke1dc3862gYAQWzf0IIBUacIrWnUQlS532xxdfHEptSfob2mn/PDWxi
-         yIG1gJeaPKQhvkTZ3yV6povDLlxnqHwc1vW6f15Zb6sqXC7EVCiwgOHX1Gl+8Dajsg
-         KN0AeE+zWk0Vw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 112B415C02EE; Fri,  2 Jun 2023 12:45:22 -0400 (EDT)
-Date:   Fri, 2 Jun 2023 12:45:22 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-ext4@vger.kernel.org, Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Kemeng Shi <shikemeng@huaweicloud.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [PATCH v2 01/12] Revert "ext4: remove ac->ac_found >
- sbi->s_mb_min_to_scan dead check in ext4_mb_check_limits"
-Message-ID: <20230602164522.GD1069561@mit.edu>
-References: <cover.1685449706.git.ojaswin@linux.ibm.com>
- <ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com>
- <CA+icZUXDFbxRvx8-pvEwsZAu+-28bX4VDTj6ZTPtvn4gWqGnCg@mail.gmail.com>
- <ZHcMCGO5zW/P8LHh@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <29895f4d-9492-4572-d6f3-30d028cdcbe3@leemhuis.info>
+        Fri, 2 Jun 2023 12:45:40 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F7913E;
+        Fri,  2 Jun 2023 09:45:39 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B6F841EC04C0;
+        Fri,  2 Jun 2023 18:45:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685724337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=v+iZQvcIZDIr0NXpJZ+ESGpCVBA4dbOR+2khS5CocZ0=;
+        b=ThydF2AnQAysnFBmv2YYs+RDGPGHzgRBIIBQlVAWX9f10VmQMPW5+cBfpzcBqgpcxdCkAT
+        Ur6UEZeQCMbhtKUepfXBNC+Qa46D+yYdomMT2niOsGaKNbX652i0N/Ttl4kJSGqFlL6DEO
+        UW+S+DBYC52QtY32EEQ28rsG3vuW9z8=
+Date:   Fri, 2 Jun 2023 18:45:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCHv13 4/9] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20230602164533.GHZHocre9bsQsU5L4+@fat_crate.local>
+References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
+ <20230601182543.19036-5-kirill.shutemov@linux.intel.com>
+ <20230602140641.GKZHn3caQpYveKxFgU@fat_crate.local>
+ <20230602153644.cbdicj2cc6p6goh3@box.shutemov.name>
+ <20230602160900.GEZHoUHHpPKMnzV3bs@fat_crate.local>
+ <CAMj1kXENJ6VJMDtVmKqozRb6NMU7Y-fhYJWiCbRd2aQ_tmXHMg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <29895f4d-9492-4572-d6f3-30d028cdcbe3@leemhuis.info>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMj1kXENJ6VJMDtVmKqozRb6NMU7Y-fhYJWiCbRd2aQ_tmXHMg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 03:45:52PM +0200, Thorsten Leemhuis wrote:
-> > 
-> > Since this patch fixes a regression I think it should ideally go in
-> > Linux 6.4
+On Fri, Jun 02, 2023 at 06:17:13PM +0200, Ard Biesheuvel wrote:
+> 'EFI code' is ambiguous here.
 > 
-> Ted can speak up for himself, but maybe this might speed things up:
+> Most of the decompressor code is constructed in a way that permits
+> - booting 'native EFI' via the EFI stub
+> - booting 'pseudo-EFI' where GRUB or another Linux/x86 specific
+> bootloader populates boot_params with all the EFI specific information
+> (system table, memory map, etc)
 > 
-> A lot of maintainers in a case like this want fixes (like this)
-> submitted separately from other changes (like the rest of this series).
+> This distinction has been abstracted away here, and so we might be
+> dealing with the second case, and booting from a GRUB that does not
+> understand accepted memory, but simply copied the EFI memory map
+> (including unaccepted regions) as it normally does. (Note that the
+> second case also covers kexec boot, so we do need to support it)
 
-While it's nice to do that in the future (since I would have noticed
-this earlier, it could have gone into my regression fixes push to
-Linus last week), in this particular case I've already noted this
-particular issue, and per the discussion in the last weekly ext4 video
-conference chat, I will be reordering the pashes so I can send a
-secondary regression fix to Linus very shortly.
+Right, I was hoping there to be some glue which sanity-checks
+boot_params.efi_info instead relying on users to do so and thus have
+a bunch of duplicated code.
 
-Thanks,
+So, yes, right after populating the boot_params pointer...
 
-						- Ted
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
