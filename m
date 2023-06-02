@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC0971F86D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0035571F86F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjFBCa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 22:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S233197AbjFBCbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFBCa0 (ORCPT
+        with ESMTP id S229524AbjFBCbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:30:26 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DCF180;
-        Thu,  1 Jun 2023 19:30:24 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35229dS6021413;
-        Fri, 2 Jun 2023 02:30:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=z4PGhJicd64CLNRAi7yXlmeie/hBJ8KiRE5vR6dLI3Y=;
- b=T2gk7s76YivrQKBkE42kHbX1hXBSu4BZf4lz4nzRN1H9+76Ky8RmfH4DfSr0YKaUQ5nm
- bw5cbPEmCXTNFZBrlIbQ76L30rXIwBc11teMqdFVSjsei5W+kF7BG7hlFDesifPMY5Jc
- eFqNUf90GimokCeOAiZDgovy6FAqQV+idj7Z+eCH8OSNhNpNixzF8b2DmvNilMvzBsKD
- MoulHlXy7WSXojT8itrZhWo8WYzhqEWX5kJPcRJ1GJBulhVbQ/nyZl59kKSte0ue8uva
- hVpDpQ1cp+ys8q8pYH3wRNsYJd4nPa9OoG4f/wMEBfFB1u3tD8G7qLZ8+EIuDZAJOwx7 bA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxqyda8hy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 02:29:59 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3522Tw2T019651
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 02:29:58 GMT
-Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 19:29:52 -0700
-Message-ID: <e7909578-6538-b3bd-7bca-3e19015cfdef@quicinc.com>
-Date:   Fri, 2 Jun 2023 10:29:50 +0800
+        Thu, 1 Jun 2023 22:31:17 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964F2180
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 19:31:16 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bacf5b89da7so1640620276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 19:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685673076; x=1688265076;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SF8Aly25fzS1LbEgHf3gEAMX1PFPP+yipG6c4kJY9FQ=;
+        b=Rk5FbB+oAsrW8gZLb52SCCgKNsAmEqKYhOWM8mNovBu8VmM2uqP80AqT4JPjGmAkeF
+         VCtjMjWEtncedQVl2suK2B9fG0YSu8ZDA/tlOrxLqonUjBDQrJOxs3lbfBBI/7Sfd52T
+         F79+e4SbJdZWyOrach4YIr3gP3pRI1VMsJQiaCKv9seUQXwDdTbO8u52AhRq3Z9QMf95
+         kPtCWY4hlVNHWYQvyoIEOMRbI+1a3QdcLlXwIu/X6EycrGuwLME9rtPwCQwbUpoqvelY
+         438yqErUCjUNHPjps7KhCyOa0fzNX7M1hAaywgxQzZmew+OtFGVSCWpsqVFUU1qJ+4gm
+         4+KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685673076; x=1688265076;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SF8Aly25fzS1LbEgHf3gEAMX1PFPP+yipG6c4kJY9FQ=;
+        b=VOSNaq6g/gAsC3wnF1fEZ8X0R6ZIHwYjnYMg+BOHSy1z7cEM6ZABvU1xcqWTsoe6n/
+         vPL5Rhg4t5cR3xD85uejHD6UD7z+Jh6r+QlmaZDgVKObnT0BZEtdh/nOJDwj3VRoL2Dq
+         QgQwp26mN/aHihl46upSCcDYk+RsHS1T7oPH/AThs1voJPHwyTNcHeurzzyE4/3awyMz
+         +37uWpWKGDDHebKvLn4nA1HXnfa8c3AF3e50gwTugaZyNUkE9fz4AILnkNjsVnNtkEoy
+         jJ5KzNa/eNzonWputSFDFwK8uuHY008ijOEdc+049MDJsDjWGOgIMnf64AeWNLEYz4Lv
+         66LA==
+X-Gm-Message-State: AC+VfDydpYx87BECmD/35XjUd/RjHljG7zyhq7sOKN1lYnjyXDG58p01
+        QJtt2DbLHZ7zUTXZSE3LhceuGg==
+X-Google-Smtp-Source: ACHHUZ4cgTUzJ+I9GJTslrfb2kQp5ZIcpj6rwg2qfGWXxU6xTSlqIS15v9Ch7w6GF0mPj/rbe8cH6g==
+X-Received: by 2002:a81:6c48:0:b0:559:e954:edf8 with SMTP id h69-20020a816c48000000b00559e954edf8mr11588651ywc.6.1685673075667;
+        Thu, 01 Jun 2023 19:31:15 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id l190-20020a0de2c7000000b0055a7ff0a5cdsm54005ywe.27.2023.06.01.19.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 19:31:15 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 19:31:05 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Peter Xu <peterx@redhat.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 01/31] mm: use pmdp_get_lockless() without surplus
+ barrier()
+In-Reply-To: <ZHDi8q6N9BPElAMH@x1n>
+Message-ID: <e4d03b98-c83-96a6-2e6e-b9b9f5e18c@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <34467cca-58b6-3e64-1ee7-e3dc43257a@google.com> <ZG6PwAvIO4Z7lpkq@x1n> <427ea01f-345a-6086-d145-fe573894dbe@google.com> <ZHDi8q6N9BPElAMH@x1n>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 05/11] coresight-tpdm: Add nodes to set trigger
- timestamp and type
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-6-git-send-email-quic_taozha@quicinc.com>
- <ccdc58ff-f86b-6ca8-cdf6-299cc454873c@arm.com>
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <ccdc58ff-f86b-6ca8-cdf6-299cc454873c@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4ewbk22m80blD3fl4BtDufLGKaIwIPuf
-X-Proofpoint-GUID: 4ewbk22m80blD3fl4BtDufLGKaIwIPuf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 bulkscore=0 spamscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306020017
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,195 +100,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 26 May 2023, Peter Xu wrote:
+> 
+> The other confusing thing on this _lockless trick on PAE is, I think it
+> _might_ go wrong with devmap..
+> 
+> The problem is here we assumed even if high & low may not match, we still
+> can rely on most pte/pmd checks are done only on low bits (except _none()
+> check) to guarantee at least the checks are still atomic on low bits.
+> 
+> But it seems to me it's not true anymore if with pmd_trans_huge() after
+> devmap introduced, e.g.:
 
-On 6/1/2023 5:05 PM, Suzuki K Poulose wrote:
-> On 27/04/2023 10:00, Tao Zhang wrote:
->> The nodes are needed to set or show the trigger timestamp and
->> trigger type. This change is to add these nodes to achieve these
->> function.
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> ---
->>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 24 ++++++
->>   drivers/hwtracing/coresight/coresight-tpdm.c       | 95 
->> ++++++++++++++++++++++
->>   2 files changed, 119 insertions(+)
->>
->> diff --git 
->> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> index 686bdde..77e67f2 100644
->> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->> @@ -21,3 +21,27 @@ Description:
->>             Accepts only one value -  1.
->>           1 : Reset the dataset of the tpdm
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_trig_type
->> +Date:        March 2023
->> +KernelVersion    6.3
->
-> This would need updating. We are not sure if this can make it to 6.5, 
-> with dependency on James' series. Fix this with 6.5 here and we can take
-> a shot.
-Sure, I will update this in the next patch series.
->
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the trigger type of DSB tpdm. Read the trigger
->> +        type of DSB tpdm.
->> +
->> +        Accepts only one of the 2 values -  0 or 1.
->> +        0 : Set the DSB trigger type to false
->> +        1 : Set the DSB trigger type to true
->> +
->> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_trig_ts
->> +Date:        March 2023
->> +KernelVersion    6.3
->
-> Same here
-Sure, I will update this in the next patch series.
->> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->> (QUIC) <quic_taozha@quicinc.com>
->> +Description:
->> +        (Write) Set the trigger timestamp of DSB tpdm. Read the
->> +        trigger timestamp of DSB tpdm.
->> +
->> +        Accepts only one of the 2 values -  0 or 1.
->> +        0 : Set the DSB trigger type to false
->> +        1 : Set the DSB trigger type to true
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->> b/drivers/hwtracing/coresight/coresight-tpdm.c
->> index 2e64cfd..14f4352 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->> @@ -20,6 +20,19 @@
->>     DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
->>   +static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
->> +                                   struct attribute *attr, int n)
->
-> minor nit: alignment ?
-Sure, I will update this in the next patch series.
->
->> +{
->> +    struct device *dev = kobj_to_dev(kobj);
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +
->> +    if (drvdata)
->> +        if (drvdata && (drvdata->datasets & TPDM_PIDR0_DS_DSB))
->> +            return attr->mode;
->
-> Duplicate check for drvdata ?
->
->     if (drvdata && (drvdata->datasets & TPDM_PIDR0_DS_DSB))
->         return attr->mode;
+I agree that there would likely be a problem for p??_devmap() on 32-bit
+PAE: but (I hope I followed the chain correctly!) I had earlier found
+that pmd_devmap() can only return true when CONFIG_ZONE_DEVICE=y, and
+config ZONE_DEVICE depends on ARCH_HAS_PTE_DEVMAP, and ARCH_HAS_PTE_DEVMAP
+is only selected (in some cases) by arm64, powerpc if PPC_BOOK3S_64, and
+x86 if X86_64.
 
-Don't need double check here, I will change this in the next patch series.
+So I stopped worrying about devmap.
 
-
-Best,
-
-Tao
-
->> +
->> +    return 0;
->> +}
->> +
->>   static void tpdm_reset_datasets(struct tpdm_drvdata *drvdata)
->>   {
->>       if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
->> @@ -239,8 +252,90 @@ static struct attribute_group tpdm_attr_grp = {
->>       .attrs = tpdm_attrs,
->>   };
->>   +static ssize_t dsb_trig_type_show(struct device *dev,
->> +                     struct device_attribute *attr, char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +
->> +    return sysfs_emit(buf, "%u\n",
->> +             (unsigned int)drvdata->dsb->trig_type);
->> +}
->> +
->> +/*
->> + * Trigger type (boolean):
->> + * false - Disable trigger type.
->> + * true  - Enable trigger type.
->> + */
->> +static ssize_t dsb_trig_type_store(struct device *dev,
->> +                      struct device_attribute *attr,
->> +                      const char *buf,
->> +                      size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long val;
->> +
->> +    if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
->> +        return -EINVAL;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    if (val)
->> +        drvdata->dsb->trig_type = true;
->> +    else
->> +        drvdata->dsb->trig_type = false;
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_trig_type);
->> +
->> +static ssize_t dsb_trig_ts_show(struct device *dev,
->> +                     struct device_attribute *attr, char *buf)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +
->> +    return sysfs_emit(buf, "%u\n",
->> +             (unsigned int)drvdata->dsb->trig_ts);
->> +}
->> +
->> +/*
->> + * Trigger timestamp (boolean):
->> + * false - Disable trigger timestamp.
->> + * true  - Enable trigger timestamp.
->> + */
->> +static ssize_t dsb_trig_ts_store(struct device *dev,
->> +                      struct device_attribute *attr,
->> +                      const char *buf,
->> +                      size_t size)
->> +{
->> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->> +    unsigned long val;
->> +
->> +    if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
->> +        return -EINVAL;
->> +
->> +    spin_lock(&drvdata->spinlock);
->> +    if (val)
->> +        drvdata->dsb->trig_ts = true;
->> +    else
->> +        drvdata->dsb->trig_ts = false;
->> +    spin_unlock(&drvdata->spinlock);
->> +    return size;
->> +}
->> +static DEVICE_ATTR_RW(dsb_trig_ts);
->> +
->> +static struct attribute *tpdm_dsb_attrs[] = {
->> +    &dev_attr_dsb_trig_ts.attr,
->> +    &dev_attr_dsb_trig_type.attr,
->> +    NULL,
->> +};
->> +
->> +static struct attribute_group tpdm_dsb_attr_grp = {
->> +    .attrs = tpdm_dsb_attrs,
->> +    .is_visible = tpdm_dsb_is_visible,
->> +};
->> +
->>   static const struct attribute_group *tpdm_attr_grps[] = {
->>       &tpdm_attr_grp,
->> +    &tpdm_dsb_attr_grp,
->>       NULL,
->>   };
->
-> Rest looks fine to me
->
-> Suzuki
->
+Hugh
