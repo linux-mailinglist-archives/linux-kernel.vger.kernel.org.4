@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE51720278
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F02A72027A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235119AbjFBM7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S235339AbjFBM7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjFBM7V (ORCPT
+        with ESMTP id S235236AbjFBM7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:59:21 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577B180;
-        Fri,  2 Jun 2023 05:59:20 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6260a2522d9so17539346d6.3;
-        Fri, 02 Jun 2023 05:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685710759; x=1688302759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L3QUfce8qvCYzZvATTACM5GanFIR9TxGWV5NW5fx1Uc=;
-        b=doJ3dcsc9mWKT8YTAuerxjrr8h3c0tz3RzYoCZP252gI1cbb59iwC1PrSlqWfd+ZLd
-         wu8X1MayospFP4NQJcezwwmUgbwpTuQVGxppnuJl4g9zaZrnl9FL/3bD62qnXWfvHAER
-         ixdYF0QsoJ3YqMDc2KE0DdS0asKF9/SORqCEvBvXt+4lqaNyWBFNY4HoNt41XyLF+H4i
-         CSQJV/I+2eNuFZF5v0EYw7Gbt4PoFNCG+voH2ApX1j9PL+JbjkBd6YgY8RRN+9ZjnUH8
-         cflzCihvBmxoDXFgZuy+AzNp+9jdvO+NnvPTJKuIiimECms6jUxYo2c7BhOGTZD2OjRe
-         YZeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685710759; x=1688302759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L3QUfce8qvCYzZvATTACM5GanFIR9TxGWV5NW5fx1Uc=;
-        b=SgLEKQTI8T6eV0Pcnx+aCLx/vKv64Kuar04XI3la5wRJM0V6XrZrTtv20OVhHu2sON
-         jwDbqMKXLqOi/Kog/mhze4V/wWMxWQc0++g5XUVShTyQ624unW6C0e02eDvAOHNG7RuE
-         PP9LdSselQskeA2v42TSTNfaUDcQJfzJU4F93w8dunDi/dzeWCoACU2Bfq9dzZFfaT+O
-         IgqrzmljDh/JUyOeljlZnjqR2lspqoMkzTLINMfhxsMFBtKd6hYpeM7K594BmSWrPscR
-         9eT+HilX5XqdFChbzL+4ELjWBlk/qFidBXvTyNhLcuUDnbolNIPN20ev13TgBry7EPtc
-         MTrw==
-X-Gm-Message-State: AC+VfDylYtfpL6gZCQSZxE0EbVhhi3ZJFEOnPY3KWpRnEuiDOHEsoiTb
-        0uqgK7TzCX6eKHaik/x0yo0YRpgvwa5TLiox9USUK3TAXEvX5g==
-X-Google-Smtp-Source: ACHHUZ56t5eDsg4Bk5FefwJatBcex4lr70jUToJngwCOnFYsrPpb472scmS1PBD5ipf40wgvCRRYtHVogx+HNCtfYi8=
-X-Received: by 2002:ad4:5ae4:0:b0:625:aa1a:9384 with SMTP id
- c4-20020ad45ae4000000b00625aa1a9384mr15516313qvh.64.1685710759620; Fri, 02
- Jun 2023 05:59:19 -0700 (PDT)
+        Fri, 2 Jun 2023 08:59:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2AA1A5;
+        Fri,  2 Jun 2023 05:59:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E43164F2F;
+        Fri,  2 Jun 2023 12:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AC9C4339B;
+        Fri,  2 Jun 2023 12:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685710775;
+        bh=hgQ+jcnBRg7Kz5BV/YLx0DsJ02rSu8vuSyPtdfEMiRI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kvu0pWSsado4ksDKBBw9DqrCuvKkxBZQ64tWb9c5McH56AqRdnsX1Ax7JvIodHsvL
+         2qwkQSkSPiqunr/lwIUwWm28u1m9lR/hArDc/aVgVu7VTF2JxHt+2AU7ypaGi8QuLP
+         CnvQ50M2Rl9e7kPVZl5mtL0zlVaM+kaMgixLO3xLpovW2FdHk5t+o3Xg8jwEFl7Vsh
+         j5+wLRFXI3lSalEGWjSf6e6Gr97KiRuGchqBaRKhEieHWRsoO/5jLAcX2JYgGQIVPv
+         meTWbbGd4qHMabnJ4hTeD7Bw4iC4khZvWYB5XW61IfbEIG8idNLQ+TVQIRa5O2uL70
+         KBLYNgsXB672g==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso2652513e87.1;
+        Fri, 02 Jun 2023 05:59:35 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwdFnY9O+dlwHFoOEUQp1Q5pLimRysDj/HbajwWn3QF+1FiU8tN
+        ioEJf+ulxciVI5bvqHAYf+NiEQwXLLHzJ1lvd3A=
+X-Google-Smtp-Source: ACHHUZ60ZaYZ6HTdyybNTMhnhXuFiOk76bJEGNaKp6z6pG3Kz0xJwO0AFSRHiI2iT4sCoq1Hh6ohnJvwrT37cPMUDRI=
+X-Received: by 2002:ac2:53ab:0:b0:4f6:13f1:38a4 with SMTP id
+ j11-20020ac253ab000000b004f613f138a4mr759648lfh.41.1685710773672; Fri, 02 Jun
+ 2023 05:59:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601201844.3739926-1-hugo@hugovil.com> <20230601201844.3739926-6-hugo@hugovil.com>
- <ZHkN5kEa6yqHdDeL@surfacebook> <20230601204140.3b45c9b97efb36431d058ba7@hugovil.com>
- <20230601212514.28914aee77ae9a513904ee6b@hugovil.com>
-In-Reply-To: <20230601212514.28914aee77ae9a513904ee6b@hugovil.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Jun 2023 15:58:43 +0300
-Message-ID: <CAHp75VcLNRQyeo4H-auDvk+CxZ0hz+2pysqP3bBgW-uZB_2vPw@mail.gmail.com>
-Subject: Re: [PATCH v6 5/9] serial: sc16is7xx: fix regression with GPIO configuration
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org
+References: <20230512194302.1662230-1-nicholasbishop@google.com> <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
+In-Reply-To: <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 2 Jun 2023 14:59:22 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFkJGUzksNRwMv1nBb-b3=ZOXb0xD=ZfA1RQvWZBHMBXQ@mail.gmail.com>
+Message-ID: <CAMj1kXFkJGUzksNRwMv1nBb-b3=ZOXb0xD=ZfA1RQvWZBHMBXQ@mail.gmail.com>
+Subject: Re: [PATCH] efi/esrt: Allow ESRT access without CAP_SYS_ADMIN
+To:     Nicholas Bishop <nicholasbishop@google.com>,
+        Peter Jones <pjones@redhat.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 4:25=E2=80=AFAM Hugo Villeneuve <hugo@hugovil.com> w=
-rote:
-> On Thu, 1 Jun 2023 20:41:40 -0400
-> Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > On Fri, 2 Jun 2023 00:30:14 +0300
-> > andy.shevchenko@gmail.com wrote:
-> > > Thu, Jun 01, 2023 at 04:18:40PM -0400, Hugo Villeneuve kirjoitti:
-
-...
-
-> > > Maybe positive one?
-> > >     if (mctrl_mask)
-> > >             regmap_update_bits(...);
+On Mon, 22 May 2023 at 10:11, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Fri, 12 May 2023 at 21:43, Nicholas Bishop <nicholasbishop@google.com> wrote:
 > >
-> > I used negative to save on indentation, but it also fits by converting =
-it to positive, so done.
+> > Access to the files in /sys/firmware/efi/esrt has been restricted to
+> > CAP_SYS_ADMIN since support for ESRT was added, but this seems overly
+> > restrictive given that the files are read-only and just provide
+> > information about UEFI firmware updates.
+> >
+> > Remove the CAP_SYS_ADMIN restriction so that a non-root process can read
+> > the files, provided a suitably-privileged process changes the file
+> > ownership first. The files are still read-only and still owned by root by
+> > default.
+> >
+> > Signed-off-by: Nicholas Bishop <nicholasbishop@google.com>
+>
+> Seems reasonable to me. Peter?
+>
 
-I understand, but in this case it is slightly more weird to have
-negative conditional and in either case return the value of the local
-variable.
+I've queued this up now.
 
-...
 
-> Greg did not yet respond to my email about the proposed tags, but if the =
-new order of the patches and the stable tags I added seems ok to you, I wil=
-l resend V7. It will then probably easier for Greg to comment directly on V=
-7 for the stable tags (Cc:).
-
-They look fine to me, but Greg is the maintainer, he decides if it's
-really okay or not.
-
---=20
-With Best Regards,
-Andy Shevchenko
+> > ---
+> >  drivers/firmware/efi/esrt.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+> >
+> > diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
+> > index d5915272141f..aab96ab64a1a 100644
+> > --- a/drivers/firmware/efi/esrt.c
+> > +++ b/drivers/firmware/efi/esrt.c
+> > @@ -95,10 +95,6 @@ static ssize_t esre_attr_show(struct kobject *kobj,
+> >         struct esre_entry *entry = to_entry(kobj);
+> >         struct esre_attribute *attr = to_attr(_attr);
+> >
+> > -       /* Don't tell normal users what firmware versions we've got... */
+> > -       if (!capable(CAP_SYS_ADMIN))
+> > -               return -EACCES;
+> > -
+> >         return attr->show(entry, buf);
+> >  }
+> >
+> > --
+> > 2.40.1.606.ga4b1b128d6-goog
+> >
