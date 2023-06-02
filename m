@@ -2,91 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9214720880
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1243720884
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236944AbjFBRlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S236968AbjFBRlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbjFBRlQ (ORCPT
+        with ESMTP id S236965AbjFBRlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:41:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341621B9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685727627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wbtd2XCVq+/sFLE2jxa6+mJAIWTP4JlHCpeKfF2/aOU=;
-        b=FL0FZSB8o/TqIo7SPRvxchPKqz1PmRTQjBJ84FaRyK/FcwTe6zmcPKLh4IkVjlIz2o0HJW
-        2UMvKupEq9o55pUGJr1nrWlq6cZO6dO8S0VN2UYPVIWQ7DKux4Q4t+WVBfn1mhZ/nN6IwV
-        DiqqrikJo5rEWvp9wAegp4Me3jMrrN0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-Y5BaPcR8NzKjlfIPcJuT6A-1; Fri, 02 Jun 2023 13:40:23 -0400
-X-MC-Unique: Y5BaPcR8NzKjlfIPcJuT6A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 2 Jun 2023 13:41:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1641BD;
+        Fri,  2 Jun 2023 10:41:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF386800B35;
-        Fri,  2 Jun 2023 17:40:22 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
-        by smtp.corp.redhat.com (Postfix) with SMTP id C9F649E63;
-        Fri,  2 Jun 2023 17:40:17 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri,  2 Jun 2023 19:40:01 +0200 (CEST)
-Date:   Fri, 2 Jun 2023 19:39:56 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Brian Cain <bcain@quicinc.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB58060C43;
+        Fri,  2 Jun 2023 17:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D55EC433D2;
+        Fri,  2 Jun 2023 17:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685727694;
+        bh=MeJZHg99CKlydE+P+L7Y5wugVA7dLNcMZaQ+hUjc8g4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=qX0DiatAjw/Q9ngbWfH9L6nnWRXtnrJdY/HwPUm5CCz1iEplVI/81N5HjzBPmYQLS
+         +0MBC1J6VV0tkLDObWXStpgtuNnSaJ+JW2v70EYUI0+4KrGRiGg8zL/RC7gW5LtJSI
+         3+BkX+AlVeu+UVZwHtgXXZwhQSS7Gt1vT0zCzOtjIGvi9Nn2disn5rQEuaJ32nvvKL
+         AV3ahf60IYlvcvjp4IFE5FdT/geG9jdqfbj6ual+KRqK3RSfwrCCZnoPaAjW7VejUT
+         EyH18F6kELV2ELR4i5GZbAhM99LkSFvaJtC3KvbSyDtFAd1Z5HqLbJK5nj62KUUJMZ
+         KRzSJKivmQ8lQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B258E52BF5;
+        Fri,  2 Jun 2023 17:41:34 +0000 (UTC)
+Subject: Re: [GIT PULL] nfsd fixes for v6.4-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <10156F3D-A4B8-4462-80EC-65ECDECE7B44@oracle.com>
+References: <10156F3D-A4B8-4462-80EC-65ECDECE7B44@oracle.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <10156F3D-A4B8-4462-80EC-65ECDECE7B44@oracle.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.4-2
+X-PR-Tracked-Commit-Id: c034203b6a9dae6751ef4371c18cb77983e30c28
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a746ca666a8486a04b6c0584966bfce16f6b1e1a
+Message-Id: <168572769417.31437.2089839050320893526.pr-tracker-bot@kernel.org>
+Date:   Fri, 02 Jun 2023 17:41:34 +0000
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: Re: [PATCH v9] kernel/fork: beware of __put_task_struct calling
- context
-Message-ID: <20230602173955.GA555@redhat.com>
-References: <20230516191441.34377-1-wander@redhat.com>
- <20230517152632.GC1286@redhat.com>
- <CAAq0SUkE_4qF5RuWE7MxnzcbchE4SHkyMvJxHAQeJ+=ZTEwdgg@mail.gmail.com>
- <20230529122256.GA588@redhat.com>
- <CAAq0SUkjFiN3Xap-S2awymDqDWZceCnAWBQnESVMVya7RpFFUw@mail.gmail.com>
- <20230601181359.GA23852@redhat.com>
- <CAAq0SUk3c5H8YCVAfRAU=pZFNLrA90mNMq=k5BohTutM7cfcvg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAq0SUk3c5H8YCVAfRAU=pZFNLrA90mNMq=k5BohTutM7cfcvg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Jeff Layton <jlayton@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,40 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01, Wander Lairson Costa wrote:
->
-> On Thu, Jun 1, 2023 at 3:14 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> >
-> > > but only in the RT kernel
-> >
-> > this again suggests that your testing was wrong or I am totally confused (quite
-> > possible, I know nothing about RT). I did the testing without CONFIG_PREEMPT_RT.
-> >
->
-> Hrm, could you please share your .config?
+The pull request you sent on Fri, 2 Jun 2023 14:42:30 +0000:
 
-Sure. I do not want to spam the list, I'll send you a private email.
+> https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.4-2
 
-Can you share your kernel module code?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a746ca666a8486a04b6c0584966bfce16f6b1e1a
 
-Did you verify that debug_locks != 0 as I asked in my previous email ?
+Thank you!
 
-> > > But running the reproducer for put_task_struct(), works fine.
-> >
-> > which reproducer ?
-> >
->
-> Only now I noticed I didn't add the reproducer to the commit message:
->
-> while true; do
->     stress-ng --sched deadline --sched-period 1000000000
-> --sched-runtime 800000000 --sched-deadline 1000000000 --mmapfork 23 -t
-> 20
-> done
-
-Cough ;) I think we need something more simple to ensure that
-refcount_sub_and_test(nr, &t->usage) returns true under raw_spin_lock()
-and then __put_task_struct() actually takes spin_lock().
-
-Oleg.
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
