@@ -2,97 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA22720C00
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72085720C06
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbjFBWgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 18:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S236567AbjFBWjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 18:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbjFBWgQ (ORCPT
+        with ESMTP id S234960AbjFBWjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 18:36:16 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC741A2;
-        Fri,  2 Jun 2023 15:36:16 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-38e04d1b2b4so2121968b6e.3;
-        Fri, 02 Jun 2023 15:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685745375; x=1688337375;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=of674XRvlx3/FzSHdFSRdMppyBXBB7Firiv2U8wT/bU=;
-        b=cYOr6LStbQ3rQIrtdbTdHjzgR5m6u66Bo5p+KO8lEDSsdK8HUE0hUIuzQhYafkDwix
-         xPzTdY14ks52OKikb5o2jLwC48FeqNWi1t/OK84cHM+EcKQLvrtlqZVRaj+5LuJoFdQu
-         72uoCT0nbZlxTA6co0a9D6H+nB2Jdu4BEsoxCz8DBJzk2FZzN4RTHtP+hxo1Xhe1pjBm
-         hfTHp4S4rxZ5uzvR0FY+BXZoAzdHEJHh8mjm1naOlRZ0day1BL9FwysO+cefR0O6JRNO
-         1KsBRF91rqOg9a/CFBEXzkiwarjUl0FNrnp8vy1eZD1xo2bmcqH2ZpUzaAw76bhITfJD
-         xPPw==
+        Fri, 2 Jun 2023 18:39:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DC21BC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 15:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685745513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oR1X1ew3x0HcJtcEhJmoN8Cw49Yjt6Fdc1YyTgyzmkA=;
+        b=NSF7Qyc9yDQIMQ6Ek+N7TBhFAs0uL3fOA3sbAMzywiJHJ1UF8YSpA3emQpS2hPBg7qxaVK
+        Hj0pJWz1xRZ6bdHTzq0xRuG24fF7kuFJp4VuJaME6v4UZXJ3pjYUymllRws6IGkqVTRtGE
+        V2THc03NyRxi7wsAJovjaH1YL7cGY9s=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-556-Kw4ngPf0Me-1N-0LU2gQAw-1; Fri, 02 Jun 2023 18:38:32 -0400
+X-MC-Unique: Kw4ngPf0Me-1N-0LU2gQAw-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62632620f00so2998476d6.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 15:38:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685745375; x=1688337375;
+        d=1e100.net; s=20221208; t=1685745511; x=1688337511;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=of674XRvlx3/FzSHdFSRdMppyBXBB7Firiv2U8wT/bU=;
-        b=iM6Lw3LD2Yj3fAvH8rDUUqJyaxngzgTZeotSD3c2DMJxY1Uq0GOe/Pd1KBVUMtVyeN
-         xflWM6jRg0m508SAeJwOB0Fb/0DKFzrwPn6K+4HrHb1U0RUme3/BEVd1bb4s5txFMMKJ
-         jy8OaQ1s5nZVI4OGWKigACUId5MWvGau7aTA8fOeW1qz+hOeU8YrlTQMpGqodweGBNTo
-         yUiEuzEriqFeda05ox8EYmizd5Q8LOd+g4m1Y/1464KZeQjxhWvUPaVx2jxbWe6c5jEM
-         +qW/3rD65j7NPEq5gd6SVU0HAJPLadBSRjKF7CvaKex776nyrj+wt7fd7xSV8XuKp2jp
-         SRKg==
-X-Gm-Message-State: AC+VfDwVGTrPzv8+aaN3aAdNS/q6/0/N5X6Xqcb/TiNNe61DqbkePdTC
-        IoRX+poQwl/w1rPTqZ0yyok=
-X-Google-Smtp-Source: ACHHUZ7lSmvU5fH9/0RO8nspGwMqr/NGHrSuB7aPRrWM4oGtYd3eyKrAsG/6f17WVxdltdL/VQJFYA==
-X-Received: by 2002:a05:6808:8c5:b0:398:59fe:6ee3 with SMTP id k5-20020a05680808c500b0039859fe6ee3mr1106424oij.54.1685745375577;
-        Fri, 02 Jun 2023 15:36:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x4-20020a170902ea8400b001a2104d706fsm1835249plb.225.2023.06.02.15.36.14
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oR1X1ew3x0HcJtcEhJmoN8Cw49Yjt6Fdc1YyTgyzmkA=;
+        b=A3rSisifhqa1mmBKkJLiyV8fR8pdn6ZL/PNv8r0EBJiDSqQ2UGU2fO7IgtgAk64ubR
+         D40S2HVvUW0SIrO/LS5N/dHrlD7ReV+crOilSv3xVOOgxvPexqw8sEReS+cbyAAqL/Iz
+         PxTJ/GG7MV9W6o7/leX7Nfntl/jJPIkDGjPY2yNFBaJ5/LOeDdS583v6ZvZl85xAvp8r
+         4zYVtgwTj0dTJTyRkoaa0e42xF/adjuCaWhu5j9cmw6gwlpPGgEDTry0VC/nOgC/4Lul
+         bEWIuhwCta2f0XwkZLNuR3V9n/dP80gSGfR544PRSTl1zLm6xsD1uagPYIjFNrmhQdTm
+         47mA==
+X-Gm-Message-State: AC+VfDyENXmD5ItklpsKjo5yxCP4VySJyim0m9xPIt40knAPRgGjnqLM
+        9xo/SvMBXWSurVgr3quCL2DBU49Y03mioDCv9r+oKcWtHZ5fRc7QqqUi9+/QJ3BqvUK4fl8gZU4
+        DMb0Spq8YSm3/h5RVThPdzpoTC7MX5Mc8
+X-Received: by 2002:a05:6214:27c9:b0:624:dcc5:819f with SMTP id ge9-20020a05621427c900b00624dcc5819fmr15407064qvb.1.1685745511421;
+        Fri, 02 Jun 2023 15:38:31 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5VLyjLhxGDa0J7wRASxrELVhhJQx7mVt3rBA+n4AUox7ksSWXu86KLUY3aX97s9xRph/GrnQ==
+X-Received: by 2002:a05:6214:27c9:b0:624:dcc5:819f with SMTP id ge9-20020a05621427c900b00624dcc5819fmr15407047qvb.1.1685745511171;
+        Fri, 02 Jun 2023 15:38:31 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id f19-20020ac84713000000b003f543cbb698sm1317948qtp.23.2023.06.02.15.38.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 15:36:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 2 Jun 2023 15:36:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 00/45] 6.3.6-rc1 review
-Message-ID: <f3c90f5e-696f-4458-9fef-ff82f5d41e1c@roeck-us.net>
-References: <20230601131938.702671708@linuxfoundation.org>
+        Fri, 02 Jun 2023 15:38:30 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 18:38:29 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/12] selftests/mm: move uffd* routines from vm_util.c
+ to uffd-common.c
+Message-ID: <ZHpvZcdik7VPsEcL@x1n>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-11-jhubbard@nvidia.com>
+ <ZHoR+3v+zUENBhi4@x1n>
+ <68549f29-fe41-04d4-f648-245f399c350b@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230601131938.702671708@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <68549f29-fe41-04d4-f648-245f399c350b@nvidia.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 02:20:56PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.6 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Jun 02, 2023 at 03:11:52PM -0700, John Hubbard wrote:
+> On 6/2/23 08:59, Peter Xu wrote:
+> > On Thu, Jun 01, 2023 at 06:33:56PM -0700, John Hubbard wrote:
+> > > This is where they belong, and this makes it cleaner to apply a
+> > > follow-up fix to the uffd builds.
+> > > 
+> > > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> > 
+> > Thanks for further looking into this.
+> > 
+> > I'm fine to move it over if you think proper, but just to mention I had
+> > those in vm_utils.h just because I left all uffd specific tests shared code
+> > in uffd-common.h, so my plan was uffd-common.h shouldn't be included in
+> > most test cases except uffd tests.
 > 
-> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
-> Anything received after that time might be too late.
+> I think we're in agreement that we want to only include uffd-common.h
+> where it's actually required. Likewise with the uffd*() routines. So I
+> would like to still move this over, yes, just to have things in their
+> best-named location.
+
+Sorry I didn't get it - e.g. I'm confused why we need to export
+uffd_test_ops into ksm unit test, it doesn't make much sense to me..
+
+If you think vm_util.h is a name too common to contain uffd helpers, shall
+we create another vm_util_uffd.h just to put the uffd helpers?
+
+Just see what's there in uffd-common.h, which is still ugly (I could look
+into it some other day):
+
+extern unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size;
+extern char *area_src, *area_src_alias, *area_dst, *area_dst_alias, *area_remap;
+extern int uffd, uffd_flags, finished, *pipefd, test_type;
+extern bool map_shared;
+extern bool test_uffdio_wp;
+extern unsigned long long *count_verify;
+extern volatile bool test_uffdio_copy_eexist;
+
+extern uffd_test_ops_t anon_uffd_test_ops;
+extern uffd_test_ops_t shmem_uffd_test_ops;
+extern uffd_test_ops_t hugetlb_uffd_test_ops;
+extern uffd_test_ops_t *uffd_test_ops;
+
+and more.
+
+That's why I think this header should not better be included by anyone else
+besides uffd-stress.c and uffd-unit-tests.c for now.
+
 > 
+> > 
+> > I'm not sure whether we can just make your next patch of "ifndef.." into
+> > vm_utils.h to avoid the movement, or is it a must?
+> > 
+> 
+> Actually, I think I can drop the next patch entirely, based on
+> Muhammad's observation that we should be doing a "make headers"
+> to pull in those items. I'll have more to say over on that thread.
 
-Build results:
-	total: 153 pass: 153 fail: 0
-Qemu test results:
-	total: 520 pass: 520 fail: 0
+Sure, great if the local headers will work.  Thanks.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+-- 
+Peter Xu
 
-Guenter
