@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF47720A8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA35720A1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236232AbjFBUrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S235924AbjFBUCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 16:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236189AbjFBUrf (ORCPT
+        with ESMTP id S235676AbjFBUCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:47:35 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC15E43;
-        Fri,  2 Jun 2023 13:47:33 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-19f454bd2c8so2775472fac.3;
-        Fri, 02 Jun 2023 13:47:33 -0700 (PDT)
+        Fri, 2 Jun 2023 16:02:40 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CE31A2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:02:38 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-565cd2fc9acso25161807b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 13:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685738852; x=1688330852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2+c2BilUm/fvWdview7xXjg65zJu3iciUS3T9hzkbg0=;
-        b=ASgnE86cFIMmWdXg0AtjqI3pw3YI6ieAqyhG0TS+KK4uMBet1oYMYV6h9cQcPAaBpR
-         8T1kMjPn/8suVGegK8JokDLXeoxm6aE76OdWOHkn3E6P3y4ylsjmfZ+p83Bm0IhTH/XJ
-         e8z1LcIr2wEU+Vt8Q1xSKO/xjaGa8SljW6z90eg6VDMaJPvvLKwuOpriS5jWJ1cgvKwQ
-         W0/MRf3HE7qhek/4uWPiqpQCyIzMrOMfW73besimU60VyJnkftR5Qlr1JDhlqgDdkD0Z
-         P92SmT1hbx4q4OOG4w8hJzrHg/wzF3FWIhDplQOBTGMHl1UmKF4WvG2oa3DOZxfH/b2/
-         VQFw==
+        d=linaro.org; s=google; t=1685736158; x=1688328158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uKpM70iut4VL/i/tNwIJ6FRXcVMH8A9pJiWYgjw70Z4=;
+        b=LBXEr0Gz9/jSE2IzPO1IS6zEcw7CKaf7ShCxPcbfHiIRcMVyHJE6jlqruEdXiPRhsN
+         t7QPfE21VrMd0e5MA4poZyXSWlKz99pmyuZ6nbFlYITw+zQkkxJGt3TyoBe3wj5pp0G+
+         7cgf49PL2G5mDCbvxlJU07M9gTI6xB+pea5jYuRjypx2zECLDS0EG1/tCMgyrB7uZL9L
+         UdCaMZyGf4wccXYxJT6yNVSM2SPeNbRVfjFCNVB9r/EOaeU9nlYCW0FOc653YJu3+x3X
+         i9g99X8wWPuNiGo4+NndFkSh9qXz23oUBbP+QALXauKfyDT5PPViUFxTGt+AV6EIDvxK
+         05sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685738852; x=1688330852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+c2BilUm/fvWdview7xXjg65zJu3iciUS3T9hzkbg0=;
-        b=Sc+Q9Ib8GQl2saCQMr1M7sgn4fffXpBWBUXvpaL8XsA+Xn8OBVFzLlmC860lGDaYcZ
-         dTVB0jISxh3Xu02Bu/rI89R/My24mTD6kP0p6AnwHlXF6uePy24kWUuzeJm0HoZwUoip
-         AObKZomEYnGwW9Rl9+eCn4yjmV+5XOv0km2UJFUhMawl6zx7/sfPik68kclpAX5Tk6Pk
-         Sl+ktd2qG2yMv/2Wjfva0uuh9r0h89oW7odGJblToB70cO+57rFKQV7Mm7Q4yYgykXnk
-         G9EXCbBE7xGnvAodiLupK7yYJa+ce36WGExl9Vnr1EMfPK/HcOFUZKJcxC0fRHj0/2z/
-         H0OQ==
-X-Gm-Message-State: AC+VfDyXv/UufcX3mOdioGFD3E49R2/T2EPTmnsrmNPHXXCCVqnPxs0o
-        MQ47t9KyIdS46VDzHFCZZYaanoZ22fg=
-X-Google-Smtp-Source: ACHHUZ6AKO4H4ka7VuZByjFB71vAva0g7j+L6gasLyAf8EMFMc0uQV2A64T9j2vaXYK57VEwdl+gGg==
-X-Received: by 2002:a05:6871:6a82:b0:1a0:2fd1:8b1a with SMTP id zf2-20020a0568716a8200b001a02fd18b1amr3066802oab.14.1685738851948;
-        Fri, 02 Jun 2023 13:47:31 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id ee16-20020a056870c81000b0019e59515a0bsm1015557oab.33.2023.06.02.13.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 13:47:31 -0700 (PDT)
-Message-ID: <b792c9d8-3250-4dd6-19ba-06bb7cb9bc51@gmail.com>
-Date:   Fri, 2 Jun 2023 16:59:47 -0300
+        d=1e100.net; s=20221208; t=1685736158; x=1688328158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uKpM70iut4VL/i/tNwIJ6FRXcVMH8A9pJiWYgjw70Z4=;
+        b=EKlaqVMGAT6RGJHbmlOd3528M5jzthuN7kDRfGGQkfR+vEj1uwRjFuD+VXZcqJKmi7
+         xugtlHRgXIbRa2Np1EOu7jAaOWd4TCZZfSQSa/cUFDOA8k6DQ4MXW2Fzlp2MG41UEM6+
+         Gk8ewkzsTlLF4QxgkJfwDc4zw3vYgsHP1xiRsD5G3vh85gFiTeFJUvYyld9oXKAtBNC7
+         pMEcYqTAxk/D6YcPcWwy966M7fCttq/3vtAuZn1CaN29OvKiUnJkn8A/nUEKw2W3Lf8i
+         YCzdZ1GzE6u5QKaaqlJtOP7dIsJDF5sgxxxAmW7ANz7aYxqiMSPGTcPsKBf9zyB2+i45
+         P9tw==
+X-Gm-Message-State: AC+VfDyZ30XYUQzfJhVoGw9nNDhIPnqL6X+MFU6RToKnIFrriSpzx2XQ
+        UmBAjaVS0v2ds07LWYv07XIf+qp5uWhiW+gGeHq6hw==
+X-Google-Smtp-Source: ACHHUZ4jOpJdukkSCa5e3qroZIItg8oz58sxAOAyc2Z3apFXdNJNcmOUzPtJWFFQmuHO/M0hskfAOw+6OPoF+v3C4Kk=
+X-Received: by 2002:a0d:e0c1:0:b0:566:584e:5ce with SMTP id
+ j184-20020a0de0c1000000b00566584e05cemr1045478ywe.34.1685736157943; Fri, 02
+ Jun 2023 13:02:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/3] rust: kernel: implement iterators for ScatterList
-Content-Language: en-US
-To:     Qingsong Chen <changxian.cqs@antgroup.com>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org
-References: <20230602101819.2134194-1-changxian.cqs@antgroup.com>
- <20230602101819.2134194-3-changxian.cqs@antgroup.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230602101819.2134194-3-changxian.cqs@antgroup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
+In-Reply-To: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 2 Jun 2023 22:02:26 +0200
+Message-ID: <CACRpkda53synLQCyRPVHA20CFMOUVo6c11-m_ckdvru5iOf0Og@mail.gmail.com>
+Subject: Re: [PATCH v2] spi: spl022: Probe defer is no error
+To:     =?UTF-8?Q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@axis.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/23 07:18, Qingsong Chen wrote:
-> ScatterList could be transmuted from raw pointers of a valid
-> `sg_table`. Then we can use those iterators to access the
-> following normal entries.
-> 
-> Signed-off-by: Qingsong Chen <changxian.cqs@antgroup.com>
-> ---
-> [...]
-> +    /// Get an iterator for immutable references.
-> +    pub fn iter(&self) -> Iter<'_> {
-> +        Iter(ScatterList::as_ref(self.opaque.get()))
-> +    }
-> +
-> +    /// Get an iterator for mutable references.
-> +    pub fn iter_mut(&mut self) -> IterMut<'_> {
-> +        IterMut(ScatterList::as_mut(self.opaque.get()))
-> +    }
+On Fri, Jun 2, 2023 at 8:13=E2=80=AFPM M=C3=A5rten Lindahl <marten.lindahl@=
+axis.com> wrote:
 
-Per the previous commit, because both methods are unsafe you should put
-the `SAFETY` comment on them.
+> When the spi controller is registered and the cs_gpiods cannot be
+> assigned, causing a defer of the probe, there is an error print saying:
+> "probe - problem registering spi master"
+>
+> This should not be announced as an error. Print this message for all
+> errors except for the probe defer.
+>
+> Signed-off-by: M=C3=A5rten Lindahl <marten.lindahl@axis.com>
 
-> +}
-> +
-> [...]
+Excellent, thanks!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
