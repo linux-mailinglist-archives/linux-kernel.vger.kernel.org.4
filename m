@@ -2,183 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440937203BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB027203CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235832AbjFBNvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S235963AbjFBNwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbjFBNvI (ORCPT
+        with ESMTP id S236071AbjFBNwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:51:08 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1934136;
-        Fri,  2 Jun 2023 06:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685713866; x=1717249866;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=Jou8NJa4PMD3hg2/IZSFNEroRYPh0O3Ceo84qQTSaVo=;
-  b=bdmbsZF2nw2fRD+XAb4DPD0ois8FZULIVxmY//HeawS5qomJY9AuN3wh
-   xhBRmNkX0fTtPCaSGPL8PPhGvR6DpwQ9HO5kIX3jspJ56CcR8h0Crmyn+
-   o32YbXE6aZG3BheNk9SDxDBbQfjwDPBMNIIWJrDrjQjBUri8EzNa9mxRB
-   j+6l4xJV3YfCkRwlNUeuo0EWnaWhyy2kES5ncJU0NKlhxP0ym0O5PO3ee
-   JyXvBI6TzgVdvAZpbRMxr87a+6huR0+YEUrObVfrixV8G8zEGVAbIlvW/
-   kyMwcxe9wrrvfDt2kcpw+LpmKCWXy8C6N8O6RaAmV0CqTXFT2fHbnYNdm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="340498690"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="340498690"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 06:51:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="954508328"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="954508328"
-Received: from rspatil-mobl3.gar.corp.intel.com ([10.251.208.112])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 06:51:03 -0700
-Date:   Fri, 2 Jun 2023 16:51:01 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
- to defeat prefetch optimizations
-In-Reply-To: <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Message-ID: <6d9933e7-63a4-dcb0-9128-12bcf77bb725@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com> <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com> <c21fb16d-d3ad-bbcb-daed-28f153b64525@linux.intel.com>
- <TYAPR01MB6330025B5E6537F94DA49ACB8B499@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+        Fri, 2 Jun 2023 09:52:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4EC1BC;
+        Fri,  2 Jun 2023 06:52:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BAC263A95;
+        Fri,  2 Jun 2023 13:52:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E15CC4339E;
+        Fri,  2 Jun 2023 13:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685713934;
+        bh=l9HG5P8Qd6Wr+3LEYGkZIQIMQcfaIEmBnIRnSUKc62s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qMpxihOBFcD/U/TFoX9KUlVMY5WVHnctv9snGxSa5c3kNqaATlaF5OsSD18GdYidh
+         kfB/9L8OEkdHKcCOsOtp+FL5oVLk2V+Hhk/z3Do9O7z2Pr60Q3lfNqnMZKDGV5bq3t
+         kD/lJeW2KxV2+PL/62dFmijptDIn8DkGLFxbVSEAg4sfKy/Oeu0wSl6oW8PpZv2KMv
+         KnkAQiBb+W5TmnfQTBluk2NTAnYLxaBLrUbasu7za7Vc9eXz+SUk4Jglf+aPi8jyK8
+         /kr7aSru1TX7hj3dK5DhiYHUVFPN1q1Igv2K0xY3QrRdWEV4UuhnWVU8YGUU3SeBbh
+         fS14dOrhQcIaA==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-557ca32515eso1447374eaf.3;
+        Fri, 02 Jun 2023 06:52:14 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwfnjQi2UyFMZSZTCcc/fEzQ74yyc/HGYmi02y7PNqxTZU3t9Vk
+        +k0L96UualEyC0Q7tgIz8yfB8C6aYy6RxnXs2e0=
+X-Google-Smtp-Source: ACHHUZ4XW1RTGMMcWueed48obinkZDyxW4RgCtMqLtJY0uApavZQW1+6jMgG025ituWzJBpmO7OGrstbidgCRSSUW9g=
+X-Received: by 2002:a4a:52d1:0:b0:555:6518:7043 with SMTP id
+ d200-20020a4a52d1000000b0055565187043mr7791498oob.3.1685713933831; Fri, 02
+ Jun 2023 06:52:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1056856236-1685608788=:2050"
-Content-ID: <de12fff4-bf18-6158-4b48-bcef256c804d@linux.intel.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
+ <20230521160426.1881124-11-masahiroy@kernel.org> <CAKwvOdmZmtu4j11s3VKgcoK7riu=+QmXpcw1GuvG9vf-A=EWrQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmZmtu4j11s3VKgcoK7riu=+QmXpcw1GuvG9vf-A=EWrQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 2 Jun 2023 22:51:37 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATRW0YXfgq5Tf_ZcHGUAoUgc8G7KPawdZOcCusnoYKj=g@mail.gmail.com>
+Message-ID: <CAK7LNATRW0YXfgq5Tf_ZcHGUAoUgc8G7KPawdZOcCusnoYKj=g@mail.gmail.com>
+Subject: Re: [PATCH v6 10/20] kbuild: generate KSYMTAB entries by modpost
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1056856236-1685608788=:2050
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <7e3d44f9-f469-a266-3c4e-5881ec25e4ca@linux.intel.com>
-
-On Thu, 1 Jun 2023, Shaopeng Tan (Fujitsu) wrote:
+On Fri, May 26, 2023 at 2:51=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> > > > When reading memory in order, HW prefetching optimizations will
-> > > > interfere with measuring how caches and memory are being accessed.
-> > > > This adds noise into the results.
-> > > >
-> > > > Change the fill_buf reading loop to not use an obvious in-order
-> > > > access using multiply by a prime and modulo.
-> > > >
-> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > > ---
-> > > >  tools/testing/selftests/resctrl/fill_buf.c | 17 ++++++++++-------
-> > > >  1 file changed, 10 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
-> > > > b/tools/testing/selftests/resctrl/fill_buf.c
-> > > > index 7e0d3a1ea555..049a520498a9 100644
-> > > > --- a/tools/testing/selftests/resctrl/fill_buf.c
-> > > > +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> > > > @@ -88,14 +88,17 @@ static void *malloc_and_init_memory(size_t s)
-> > > >
-> > > >  static int fill_one_span_read(unsigned char *start_ptr, unsigned
-> > > > char
-> > > > *end_ptr)  {
-> > > > -	unsigned char sum, *p;
-> > > > -
-> > > > +	unsigned int size = (end_ptr - start_ptr) / (CL_SIZE / 2);
-> > > > +	unsigned int count = size;
-> > > > +	unsigned char sum;
-> > > > +
-> > > > +	/*
-> > > > +	 * Read the buffer in an order that is unexpected by HW prefetching
-> > > > +	 * optimizations to prevent them interfering with the caching pattern.
-> > > > +	 */
-> > > >  	sum = 0;
-> > > > -	p = start_ptr;
-> > > > -	while (p < end_ptr) {
-> > > > -		sum += *p;
-> > > > -		p += (CL_SIZE / 2);
-> > > > -	}
-> > > > +	while (count--)
-> > > > +		sum += start_ptr[((count * 59) % size) * CL_SIZE / 2];
-> > >
-> > > Could you please elaborate why 59 is used?
-> > 
-> > The main reason is that it's a prime number ensuring the whole buffer gets read.
-> > I picked something that doesn't make it to wrap on almost every iteration.
-> 
-> Thanks for your explanation. It seems there is no problem.
-> 
-> Perhaps you have already tested this patch in your environment and got a 
-> test result of "ok".  
-
-Yes, it was tested :-) and all looked fine here. But my testing was more 
-focused on the systems which come with CAT and on all those, this change 
-clearly improved MBA/MBM results (they became almost always diff=0 except 
-for the smallest ones in the MBA test).
-
-> Because HW prefetching does not work well,
-> the IMC counter fluctuates a lot in my environment,
-> and the test result is "not ok". 
+> On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
+> > CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
+> > whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 >
-> In order to ensure this test set runs in any environments and gets "ok",
-> would you consider changing the value of MAX_DIFF_PERCENT of each test?
-> or changing something else?
+> Patch LGTM, but two questions, below.
 >
-> ```
-> Environment:
->  Kernel: 6.4.0-rc2
->  CPU: Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz
-> 
-> Test result(MBM as an example):
-> # # Starting MBM BW change ...
-> # # Mounting resctrl to "/sys/fs/resctrl"
-> # # Benchmark PID: 8671
-> # # Writing benchmark parameters to resctrl FS
-> # # Write schema "MB:0=100" to resctrl FS
-> # # Checking for pass/fail
-> # # Fail: Check MBM diff within 5%
-> # # avg_diff_per: 9%
-> # # Span in bytes: 262144000
-> # # avg_bw_imc: 6202
-> # # avg_bw_resc: 5585
-> # not ok 1 MBM: bw change
+> > diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.=
+c
+> > index 9b62a9d352b3..0b3a82aedbfa 100644
+> > --- a/arch/um/os-Linux/user_syms.c
+> > +++ b/arch/um/os-Linux/user_syms.c
+> > @@ -38,10 +38,15 @@ EXPORT_SYMBOL(vsyscall_end);
+> >  #endif
+> >
+> >  /* Export symbols used by GCC for the stack protector. */
+> > -extern void __stack_smash_handler(void *) __attribute__((weak));
+> > +/*
+> > + * REVISIT:
+> > + *   ARCH=3Dum cannot enable CONFIG_STACKPROTECTOR because
+> > + *   'select HAVE_STACKPROTECTOR' is missing. Is this already broken?
+>
+> ^ Is there something better we can do here?
+>
+> Maybe this code should be deleted first?
 
-Oh, I see. It seems that these CPUs break the trend and get much worse 
-and more unstable for some reason. It might be that some i9 I recently 
-got a lkp report from could have the same problem. I'll look more into 
-this, thanks a lot for testing and bringing it up.
-
-So to answer your question above, I've no intention to tweak 
-MAX_DIFF_PERCENT because of this issue but I'll instead try to improve the 
-approach to defeat the HW prefetcher.
-
-If HW prefetcher is not defeated, the CAT test LLC misses have a slowly 
-converging ramp which is not very useful unless number of runs is 
-increased by much (and perhaps the first samples dropped entirely). So
-it is kinda needed and it would be nice if an approach that is non-HW 
-specific could be used for this.
-
-It will probably take some time... Should I send a v3 with only the fixes 
-and useful refactors at the head of this series while I try to sort these 
-problems with the test changes out?
+Yes, we can delete the lines first.
 
 
--- 
- i.
---8323329-1056856236-1685608788=:2050--
+>
+> > diff --git a/include/asm-generic/export.h b/include/asm-generic/export.=
+h
+> > index 5e4b1f2369d2..0ae9f38a904c 100644
+> > --- a/include/asm-generic/export.h
+> > +++ b/include/asm-generic/export.h
+> > @@ -3,86 +3,12 @@
+> >  #define __ASM_GENERIC_EXPORT_H
+> >
+> >  /*
+> > - * This comment block is used by fixdep. Please do not remove.
+>
+> ^ Sounds ominous. What are the implications of removing this comment bloc=
+k?
+
+The same comment existed in <linux/export.h> and <asm-generic/export.h>
+because they were independent from each other.
+
+
+This commit changes <asm-generic/export.h> to a wrapper of <linux/export.h>=
+.
+So, the comment in <linux/export.h> triggers rebuilding when
+CONFIG_MODVERSIONS is toggled.
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
