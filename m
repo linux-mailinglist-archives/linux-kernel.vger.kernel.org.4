@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADC971FB57
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D36571FB63
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbjFBHsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 03:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S233836AbjFBHx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbjFBHsJ (ORCPT
+        with ESMTP id S232674AbjFBHx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:48:09 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7D4197
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:48:07 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565ca65e7ffso17266327b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 00:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685692087; x=1688284087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YvKbLs2r6JPjvHYaqbpBSfWMO9ELDdpgKZ199OCUnN0=;
-        b=eMkIv4uJJ0pcLg2uBFyJUdOnS1LUD9tqzovRH7qjVZE7Eb5xTsemA7Cx6FoNb36tfQ
-         erAjpIWl6NNYjcsmwCQGbJBOYFvotY+UiCpNShWVkikDhDGGAx5M4yBv3g4e8qgpZiKM
-         8ZYESUJcVII4AYI5qOk3LNy/3mAh4sNmot2Ds39HYeUVLQQS/zSL/nscS2fQypZq1yJ9
-         B/NgntqVGcUAasdAYUE2PtzIMaGhkFZYdA3DbwTlgawdOvt+2i1ZiT7kjPmZ5WFQCe9i
-         nCj3mxSBz/kClPK84oXKYliZoJufxxwagiyhfnpMMSTc5McwZfd5RILv+QchDRNlw+Gt
-         lI3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685692087; x=1688284087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YvKbLs2r6JPjvHYaqbpBSfWMO9ELDdpgKZ199OCUnN0=;
-        b=OV0/EhntCiBf8CnWvgbjBfRUy8tkfkn2gpyH918Ru2GN2ean6zLdAkVKqvk8cBWABU
-         rBZXSxJHW4Ar0VcDkyfNfKqGFUbmIOrvDE2jLxnaKKUxoipDO6TFgrewurD9IzWBsal7
-         +9FJZ13DIRgRDfNDP8ojwAzUYsL4KNqyxJzTzJK4Y9N0vnrpX+Qm6o6d0BRje+Yz0LJB
-         KnbumW07YON2KDb4O2fi85FS1nG06ZbwNwhgsohMcsn6KZGeK9XqtTYdTV4AAdaL8Nmy
-         8FA/yJvq/yox5Ht3BjSM8YZ3OlZZSTQzC34KDQ4TkVHi71O9we8AcHLNhtl/26JgaZKn
-         Zg8g==
-X-Gm-Message-State: AC+VfDxfgmUVSKKMaLW9Y/6jmbPX1wlyoCcnxpQJRkIDUTunQ/xG8MbY
-        GRu+1BmFJfUqUnc1mTGTmOSyfApmGr0bUeUZL76/Ig==
-X-Google-Smtp-Source: ACHHUZ69gxClkmiksXQX8sjlRTdOQo8hftIoEDxtpra+6UljIWPKkHEHblNpu41lJoSN0j9xow4szqJB4BRov4DsRlc=
-X-Received: by 2002:a0d:d1c7:0:b0:54f:9cd0:990 with SMTP id
- t190-20020a0dd1c7000000b0054f9cd00990mr11133762ywd.18.1685692087002; Fri, 02
- Jun 2023 00:48:07 -0700 (PDT)
+        Fri, 2 Jun 2023 03:53:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E44123
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:53:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 912CC60EE9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:53:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EF9C433D2;
+        Fri,  2 Jun 2023 07:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685692435;
+        bh=XH5l+kAhJj2RsYxYAcPm2mIoXZkoLae+HowrUKup1UQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AeNLt/fCvTQ0N19RKQBtqbYxgE6fQDZAzEj6n5CWmZQBpn69YD1RCefmkQi8VI1Te
+         k92FEzgP6HyjFgmxz2zLhXrwKnMPbPzEBKy8dbQJwRfA0yGi0gbGW+9JjE7LsILOZz
+         YxPYWJ1FEpu7ASvlR+9yVLUrx4QQc5EkUvgGlNGz3418QztSgdGQC0xTHdhcc/HrAa
+         g3ZyD3ET5+dWyanokzuJGojr/C9NN1MNeXKAoEzHPZHejMpHAwA4Pu23E+9xa5h/Hz
+         9KRy49AjnBpyix20mT02pjEpgU6pk+Jhee91zgxgCpiS1VwkOUziVGAcrgI3L2Oocn
+         NzC41kU9ziCvQ==
+Date:   Fri, 2 Jun 2023 09:53:49 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     msmulski2@gmail.com
+Cc:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
+        Michal Smulski <michal.smulski@ooma.com>
+Subject: Re: [PATCH net-next v6 1/1] net: dsa: mv88e6xxx: implement USXGMII
+ mode for mv88e6393x
+Message-ID: <20230602095349.2ab53919@dellmb>
+In-Reply-To: <20230602001705.2747-2-msmulski2@gmail.com>
+References: <20230602001705.2747-1-msmulski2@gmail.com>
+        <20230602001705.2747-2-msmulski2@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230601152026.1182648-1-krzysztof.kozlowski@linaro.org> <20230601152026.1182648-7-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601152026.1182648-7-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 2 Jun 2023 09:47:56 +0200
-Message-ID: <CACRpkdbq3_g+i7Rn4QsXkSYv=sSeTHR3Mr7H02AaeGtsMoe5Qw@mail.gmail.com>
-Subject: Re: [PATCH 7/8] pinctrl: qcom: organize main SoC drivers in new Kconfig.msm
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 5:21=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu,  1 Jun 2023 17:17:04 -0700
+msmulski2@gmail.com wrote:
 
-> In menuconfig, some entries depending on PINCTRL_MSM are indented and
-> expressed as dependening but some not, because of other Kconfig entries
-> in between,
->
-> Move all main Qualcomm SoC pin controller driver entries into new
-> Kconfig.msm file so they will be nicely ordered in Kconfig file (by
-> CONFIG_ name) and properly indented as PINCTRL_MSM dependency in
-> menuconfig.
->
-> Functionally this is the same, but since entire file is guarded with "if
-> PINCTRL_MSM" drop this dependency from individual entries.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  				config->mac_capabilities |= MAC_5000FD |
+>  					MAC_10000FD;
+>  			}
+> -			/* FIXME: USXGMII is not supported yet */
+> -			/* __set_bit(PHY_INTERFACE_MODE_USXGMII, supported); */
+> +			__set_bit(PHY_INTERFACE_MODE_USXGMII, supported);
+>  		}
+>  	}
 
-This makes things look much better.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The set_bit() should go into the if statement above, since 6361 does not support usxgmii:
 
-Yours,
-Linus Walleij
+ /* 6361 only supports up to 2500BaseX */
+ if (!is_6361) {
+ 	__set_bit(PHY_INTERFACE_MODE_5GBASER, supported);
+ 	__set_bit(PHY_INTERFACE_MODE_10GBASER, supported);
++	__set_bit(PHY_INTERFACE_MODE_USXGMII, supported);
+ 	config->mac_capabilities |= MAC_5000FD |
+ 		MAC_10000FD;
+ }
+-/* FIXME: USXGMII is not supported yet */
+-/* __set_bit(PHY_INTERFACE_MODE_USXGMII, supported); */
+
+
+
+
+Marek
