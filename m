@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741CC71FD12
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2B171FCFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbjFBJFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S234483AbjFBJDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235065AbjFBJEd (ORCPT
+        with ESMTP id S233800AbjFBJDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:04:33 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B58110E7;
-        Fri,  2 Jun 2023 02:04:02 -0700 (PDT)
-X-UUID: 66ca45e2012411eeb20a276fd37b9834-20230602
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WAJ2o6kU78PW/7eLlzQGy7bFMtxgPtNfkF99eG3UxIc=;
-        b=djzpUyopvXCZ4sMpFFof33xRhwWfF5kDHGHMykzzNZUPf4wLGx5qpXoy+z4ty1ibizozwB5tKiyRv5KRB2f7tuKxMB1AZzgnE+w1heqJLxhXfLnMndjrbSTfqFh/6nAWg8fdNr5ETuXCXGkcdxY1RfLJxYTO3bYpUYB6k2nIIuI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:c0d50cca-8be6-4816-82d7-4992a9991391,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:70c7d36d-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 66ca45e2012411eeb20a276fd37b9834-20230602
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 588402449; Fri, 02 Jun 2023 17:03:55 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 2 Jun 2023 17:03:53 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 2 Jun 2023 17:03:52 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <iommu@lists.linux.dev>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
-        <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
-        <chengci.xu@mediatek.com>
-Subject: [PATCH v12 7/7] MAINTAINERS: iommu/mediatek: Update the header file name
-Date:   Fri, 2 Jun 2023 17:02:27 +0800
-Message-ID: <20230602090227.7264-8-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230602090227.7264-1-yong.wu@mediatek.com>
-References: <20230602090227.7264-1-yong.wu@mediatek.com>
+        Fri, 2 Jun 2023 05:03:17 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1240EE58;
+        Fri,  2 Jun 2023 02:03:02 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-650a9ba426fso1557062b3a.1;
+        Fri, 02 Jun 2023 02:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685696581; x=1688288581;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8RSGExj07+kDKOGpTsWDuktSIgSKFw+xrB/fF73oAsI=;
+        b=oz/hc9HZWDXBpBQp+hRcHEF+P+HV+mFdFnaDXYh1U3PRTV4K830iowYqzX8ggrmnFd
+         wdwMzWDandHE050UjGq6cuIRqCABq+lt01gX0tGH1mW+UjFjgGC47p6R6rGymopak4o/
+         dCwIUhE0BsTaKSeGYxaSDDEIihzt1PYBWvBqGlUKfPGg8IGQ4um9ZBLJwcPu17dGhtx4
+         5Kgz0PzVplSOciLmKq8lZ7/wppUdoaJqCCJS5mHXIUv4Nifc93g8c2czKU3X2l4T+Df7
+         XkcITJ1V0OruTz2AAPK+iIlcQ6zcbrB519DoEH6i6t15PIKGyfxInrlIrbGZCNQbw4cM
+         Woag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685696581; x=1688288581;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8RSGExj07+kDKOGpTsWDuktSIgSKFw+xrB/fF73oAsI=;
+        b=HXCfsvQxgrrAh56nzqL1AKkh5Qx7NSJZPtc6RefNa9AKfydzXGheT5C9MVTwutxYr6
+         PBbsDSN4Q4VC9GwgEThCZgN/L8lV+edOkOhOX2Df1RwTNQEk+4U6vF9MYSZh1R7cHAOZ
+         NcCSlk7RpfMDdRoKSIfOpI9PMZcFWzTOI/7QaBSkCGCeG1JV9NLjwWLDc6DyJBbALqoR
+         7s+v+RdopbqR5R/L2sDag+a0uKFrMH6ExljItXriDFVd3Dp4RapRQsXkjODcVUX5pimo
+         3b1zdKocMc9DqEXduIlO1gFHOpUkogRR1W5hxbMqr/gUcpdh/I0YLjIqgeLPkFATFr9L
+         Aung==
+X-Gm-Message-State: AC+VfDwpOvHYCY9CgBEFg6s3vF2staBtXEorlGv4XAl3VoG59qB8MdN4
+        HUdx54OB3qcNVXfJCODspnI=
+X-Google-Smtp-Source: ACHHUZ5Ql6bYjAeNjsJaT/31JEizBoAZV6YmEI+qm4jxUoBJP9ohRom/8RPGg0qNoZHeZE96pfbtkA==
+X-Received: by 2002:a05:6a20:a127:b0:10b:a9ca:97ca with SMTP id q39-20020a056a20a12700b0010ba9ca97camr14075082pzk.51.1685696581160;
+        Fri, 02 Jun 2023 02:03:01 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-3.three.co.id. [180.214.232.3])
+        by smtp.gmail.com with ESMTPSA id n13-20020a170902e54d00b001af98dcf958sm791129plf.288.2023.06.02.02.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 02:03:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 55691106A05; Fri,  2 Jun 2023 16:02:58 +0700 (WIB)
+Date:   Fri, 2 Jun 2023 16:02:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 00/45] 6.3.6-rc1 review
+Message-ID: <ZHmwQrgb5ljgyd-G@debian.me>
+References: <20230601131938.702671708@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sX5zVEfKkJ80vx6Q"
+Content-Disposition: inline
+In-Reply-To: <20230601131938.702671708@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We add the prefix "mediatek," for the lastest ports header file name,
-For example, include/dt-bindings/memory/mediatek,mt8188-memory-port.h.
-Add a new entry for this.
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+--sX5zVEfKkJ80vx6Q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 250518fc70ff..dee99e000177 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13151,6 +13151,7 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/iommu/mediatek*
- F:	drivers/iommu/mtk_iommu*
-+F:	include/dt-bindings/memory/mediatek,mt*-port.h
- F:	include/dt-bindings/memory/mt*-port.h
- 
- MEDIATEK JPEG DRIVER
--- 
-2.25.1
+On Thu, Jun 01, 2023 at 02:20:56PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.6 release.
+> There are 45 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
+Successfully compiled and installed bindeb-pkgs on my computer (Acer
+Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--sX5zVEfKkJ80vx6Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHmwQgAKCRD2uYlJVVFO
+o/2IAP9JTqZ2cMARmce8gUY0sPGsCmpqfJ+0Zfbr93tg/ixEhQD+Oc1EH1y30UzD
+2waw3v36fYhMML++2wpkvbBFmsDYVwo=
+=RKny
+-----END PGP SIGNATURE-----
+
+--sX5zVEfKkJ80vx6Q--
