@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6737971FD0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642F971FD1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbjFBJEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S234261AbjFBJGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbjFBJD7 (ORCPT
+        with ESMTP id S234996AbjFBJEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:03:59 -0400
+        Fri, 2 Jun 2023 05:04:08 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFC3E40;
-        Fri,  2 Jun 2023 02:03:35 -0700 (PDT)
-X-UUID: 58951f56012411ee9cb5633481061a41-20230602
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5967D10C4;
+        Fri,  2 Jun 2023 02:03:47 -0700 (PDT)
+X-UUID: 5f30ea70012411ee9cb5633481061a41-20230602
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=hccH12XQDvu+D9MxMZdtGRvYZ6XWWknJx4CuX0wSWWc=;
-        b=urLKSV7KuHijLDPSj1W86UJNgDyUysczDr0I8LlEopA3uIbB2o7/GrgNpB/oSU6H98jXXwtqHzibWRAd4g9MjzqMU7mFimXL5iE5iEi/Pp5/w+w0HnzmnIkKWJ1B5Pnezcw0FLJtmfoGI7n0d68V+R9AE9IKK1m9y/Oq0kY35fQ=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=KlonPEHaL5hW+egl6HkPGACSHVt3397EgMV9NrpZd8g=;
+        b=vH7U8YGKMCKmfMYT4S5xtPO/9GQ08TCxNWWNLXuqnoJY7RoTWlIMvKQ44wbLyAGSM00lpHyJT21pCzbwcRjXs9O/c7cKycsAWyzaZFjOGmh6ubsMwKUPNSE8xP0L7SNdRWuxsREtWpZzH+CMJQDlSqnUi/13gIGYizvYe916WWc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:2911a58a-8ad4-4598-81ac-642b7cd2703b,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:bcf12e3d-de1e-4348-bc35-c96f92f1dcbb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-O-INFO: VERSION:1.1.25,REQID:4a8f3e4a-3017-4f39-8cec-f358385bab6c,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:95
+X-CID-INFO: VERSION:1.1.25,REQID:4a8f3e4a-3017-4f39-8cec-f358385bab6c,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:95
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:a7f32e3d-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:230602170344Q3GZY88O,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-UUID: 58951f56012411ee9cb5633481061a41-20230602
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-UUID: 5f30ea70012411ee9cb5633481061a41-20230602
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 595060889; Fri, 02 Jun 2023 17:03:31 +0800
+        with ESMTP id 1880723219; Fri, 02 Jun 2023 17:03:42 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 2 Jun 2023 17:03:30 +0800
+ 15.2.1118.26; Fri, 2 Jun 2023 17:03:41 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 2 Jun 2023 17:03:29 +0800
+ 15.2.1118.26 via Frontend Transport; Fri, 2 Jun 2023 17:03:40 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -54,9 +58,9 @@ CC:     Robin Murphy <robin.murphy@arm.com>,
         <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
         <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
         <chengci.xu@mediatek.com>
-Subject: [PATCH v12 4/7] iommu/mediatek: Add enable IOMMU SMC command for INFRA masters
-Date:   Fri, 2 Jun 2023 17:02:24 +0800
-Message-ID: <20230602090227.7264-5-yong.wu@mediatek.com>
+Subject: [PATCH v12 5/7] iommu/mediatek: Add MT8188 IOMMU Support
+Date:   Fri, 2 Jun 2023 17:02:25 +0800
+Message-ID: <20230602090227.7264-6-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230602090227.7264-1-yong.wu@mediatek.com>
 References: <20230602090227.7264-1-yong.wu@mediatek.com>
@@ -76,110 +80,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Chengci.Xu" <chengci.xu@mediatek.com>
 
-Prepare for MT8188. In MT8188, the register which enables IOMMU for
-INFRA masters are in the secure world for security concerns, therefore we
-add a SMC command for INFRA masters to enable IOMMU in ATF.
+MT8188 has 3 IOMMU, containing 2 MM IOMMUs, one is for vdo, the other
+is for vpp. and 1 INFRA IOMMU.
 
 Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c  | 32 ++++++++++++++++++++++----------
- include/soc/mediatek/smi.h |  1 +
- 2 files changed, 23 insertions(+), 10 deletions(-)
+ drivers/iommu/mtk_iommu.c | 49 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 8cff85615d5e..9c89cf894a4d 100644
+index 9c89cf894a4d..5c66af0c45a8 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2015-2016 MediaTek Inc.
-  * Author: Yong Wu <yong.wu@mediatek.com>
-  */
-+#include <linux/arm-smccc.h>
- #include <linux/bitfield.h>
- #include <linux/bug.h>
- #include <linux/clk.h>
-@@ -27,6 +28,7 @@
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/soc/mediatek/infracfg.h>
-+#include <linux/soc/mediatek/mtk_sip_svc.h>
- #include <asm/barrier.h>
- #include <soc/mediatek/smi.h>
- 
-@@ -143,6 +145,7 @@
- #define PGTABLE_PA_35_EN		BIT(17)
- #define TF_PORT_TO_ADDR_MT8173		BIT(18)
- #define INT_ID_PORT_WIDTH_6		BIT(19)
-+#define CFG_IFA_MASTER_IN_ATF		BIT(20)
- 
- #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
- 				((((pdata)->flags) & (mask)) == (_x))
-@@ -580,6 +583,7 @@ static int mtk_iommu_config(struct mtk_iommu_data *data, struct device *dev,
- 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
- 	const struct mtk_iommu_iova_region *region;
- 	unsigned long portid_msk = 0;
-+	struct arm_smccc_res res;
- 	int i, ret = 0;
- 
- 	for (i = 0; i < fwspec->num_ids; ++i) {
-@@ -605,17 +609,24 @@ static int mtk_iommu_config(struct mtk_iommu_data *data, struct device *dev,
- 		else
- 			larb_mmu->mmu &= ~portid_msk;
- 	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
--		/* PCI dev has only one output id, enable the next writing bit for PCIe */
--		if (dev_is_pci(dev)) {
--			if (fwspec->num_ids != 1) {
--				dev_err(dev, "PCI dev can only have one port.\n");
--				return -ENODEV;
-+		if (MTK_IOMMU_HAS_FLAG(data->plat_data, CFG_IFA_MASTER_IN_ATF)) {
-+			arm_smccc_smc(MTK_SIP_KERNEL_IOMMU_CONTROL,
-+				      IOMMU_ATF_CMD_CONFIG_INFRA_IOMMU,
-+				      portid_msk, enable, 0, 0, 0, 0, &res);
-+			ret = res.a0;
-+		} else {
-+			/* PCI dev has only one output id, enable the next writing bit for PCIe */
-+			if (dev_is_pci(dev)) {
-+				if (fwspec->num_ids != 1) {
-+					dev_err(dev, "PCI dev can only have one port.\n");
-+					return -ENODEV;
-+				}
-+				portid_msk |= BIT(portid + 1);
- 			}
--			portid_msk |= BIT(portid + 1);
--		}
- 
--		ret = regmap_update_bits(data->pericfg, PERICFG_IOMMU_1,
--					 (u32)portid_msk, enable ? (u32)portid_msk : 0);
-+			ret = regmap_update_bits(data->pericfg, PERICFG_IOMMU_1,
-+						 (u32)portid_msk, enable ? (u32)portid_msk : 0);
-+		}
- 		if (ret)
- 			dev_err(dev, "%s iommu(%s) inframaster 0x%lx fail(%d).\n",
- 				enable ? "enable" : "disable",
-@@ -1329,7 +1340,8 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 			dev_err_probe(dev, ret, "mm dts parse fail\n");
- 			goto out_runtime_disable;
- 		}
--	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA)) {
-+	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
-+		   !MTK_IOMMU_HAS_FLAG(data->plat_data, CFG_IFA_MASTER_IN_ATF)) {
- 		p = data->plat_data->pericfg_comp_str;
- 		data->pericfg = syscon_regmap_lookup_by_compatible(p);
- 		if (IS_ERR(data->pericfg)) {
-diff --git a/include/soc/mediatek/smi.h b/include/soc/mediatek/smi.h
-index dfd8efca5e60..000eb1cf68b7 100644
---- a/include/soc/mediatek/smi.h
-+++ b/include/soc/mediatek/smi.h
-@@ -13,6 +13,7 @@
- 
- enum iommu_atf_cmd {
- 	IOMMU_ATF_CMD_CONFIG_SMI_LARB,		/* For mm master to en/disable iommu */
-+	IOMMU_ATF_CMD_CONFIG_INFRA_IOMMU,	/* For infra master to enable iommu */
- 	IOMMU_ATF_CMD_MAX,
+@@ -170,6 +170,7 @@ enum mtk_iommu_plat {
+ 	M4U_MT8173,
+ 	M4U_MT8183,
+ 	M4U_MT8186,
++	M4U_MT8188,
+ 	M4U_MT8192,
+ 	M4U_MT8195,
+ 	M4U_MT8365,
+@@ -1593,6 +1594,51 @@ static const struct mtk_iommu_plat_data mt8186_data_mm = {
+ 	.iova_region_larb_msk = mt8186_larb_region_msk,
  };
  
++static const struct mtk_iommu_plat_data mt8188_data_infra = {
++	.m4u_plat         = M4U_MT8188,
++	.flags            = WR_THROT_EN | DCM_DISABLE | STD_AXI_MODE | PM_CLK_AO |
++			    MTK_IOMMU_TYPE_INFRA | IFA_IOMMU_PCIE_SUPPORT |
++			    PGTABLE_PA_35_EN | CFG_IFA_MASTER_IN_ATF,
++	.inv_sel_reg      = REG_MMU_INV_SEL_GEN2,
++	.banks_num        = 1,
++	.banks_enable     = {true},
++	.iova_region      = single_domain,
++	.iova_region_nr   = ARRAY_SIZE(single_domain),
++};
++
++static const struct mtk_iommu_plat_data mt8188_data_vdo = {
++	.m4u_plat       = M4U_MT8188,
++	.flags          = HAS_BCLK | HAS_SUB_COMM_3BITS | OUT_ORDER_WR_EN |
++			  WR_THROT_EN | IOVA_34_EN | SHARE_PGTABLE |
++			  PGTABLE_PA_35_EN | MTK_IOMMU_TYPE_MM,
++	.hw_list        = &m4ulist,
++	.inv_sel_reg    = REG_MMU_INV_SEL_GEN2,
++	.banks_num      = 1,
++	.banks_enable   = {true},
++	.iova_region    = mt8192_multi_dom,
++	.iova_region_nr = ARRAY_SIZE(mt8192_multi_dom),
++	.larbid_remap   = {{2}, {0}, {21}, {0}, {19}, {9, 10,
++			   11 /* 11a */, 25 /* 11c */},
++			   {13, 0, 29 /* 16b */, 30 /* 17b */, 0}, {5}},
++};
++
++static const struct mtk_iommu_plat_data mt8188_data_vpp = {
++	.m4u_plat       = M4U_MT8188,
++	.flags          = HAS_BCLK | HAS_SUB_COMM_3BITS | OUT_ORDER_WR_EN |
++			  WR_THROT_EN | IOVA_34_EN | SHARE_PGTABLE |
++			  PGTABLE_PA_35_EN | MTK_IOMMU_TYPE_MM,
++	.hw_list        = &m4ulist,
++	.inv_sel_reg    = REG_MMU_INV_SEL_GEN2,
++	.banks_num      = 1,
++	.banks_enable   = {true},
++	.iova_region    = mt8192_multi_dom,
++	.iova_region_nr = ARRAY_SIZE(mt8192_multi_dom),
++	.larbid_remap   = {{1}, {3}, {23}, {7}, {MTK_INVALID_LARBID},
++			   {12, 15, 24 /* 11b */}, {14, MTK_INVALID_LARBID,
++			   16 /* 16a */, 17 /* 17a */, MTK_INVALID_LARBID,
++			   27, 28 /* ccu0 */, MTK_INVALID_LARBID}, {4, 6}},
++};
++
+ static const unsigned int mt8192_larb_region_msk[MT8192_MULTI_REGION_NR_MAX][MTK_LARB_NR_MAX] = {
+ 	[0] = {~0, ~0},				/* Region0: larb0/1 */
+ 	[1] = {0, 0, 0, 0, ~0, ~0, 0, ~0},	/* Region1: larb4/5/7 */
+@@ -1701,6 +1747,9 @@ static const struct of_device_id mtk_iommu_of_ids[] = {
+ 	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
+ 	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
+ 	{ .compatible = "mediatek,mt8186-iommu-mm",    .data = &mt8186_data_mm}, /* mm: m4u */
++	{ .compatible = "mediatek,mt8188-iommu-infra", .data = &mt8188_data_infra},
++	{ .compatible = "mediatek,mt8188-iommu-vdo",   .data = &mt8188_data_vdo},
++	{ .compatible = "mediatek,mt8188-iommu-vpp",   .data = &mt8188_data_vpp},
+ 	{ .compatible = "mediatek,mt8192-m4u", .data = &mt8192_data},
+ 	{ .compatible = "mediatek,mt8195-iommu-infra", .data = &mt8195_data_infra},
+ 	{ .compatible = "mediatek,mt8195-iommu-vdo",   .data = &mt8195_data_vdo},
 -- 
 2.25.1
 
