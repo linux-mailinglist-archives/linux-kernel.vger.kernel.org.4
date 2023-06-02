@@ -2,172 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957D271F928
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE9D71F92C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbjFBENQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 00:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S233286AbjFBENw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 00:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFBENO (ORCPT
+        with ESMTP id S233276AbjFBENh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 00:13:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3788997
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:13:13 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f5d651170so617117466b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 21:13:13 -0700 (PDT)
+        Fri, 2 Jun 2023 00:13:37 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32781AC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:13:30 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b041cceb16so14253675ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 21:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685679191; x=1688271191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VIR8w9cgDXzXi7+1iKlCaAfcvOlfkoacHFLlw4+WQ2A=;
-        b=LEHsExU4DVP+TUT5BXfeNgTtpxcaJOulSTjhhLWA8N3BT/YoGXKt86L7/Y+8jzGzkE
-         bht0W80Ci1f9uuPcd7UjPpy2D0kb2M5ccCT6JNAr+8oCusxgQXb/4y60NKkp37asEown
-         78msb8alKOlX7uzUgxri7VILKrTMLJ3VgJTs3XcBnH4lrHy802UsqXIFWXRg/N2PQSCi
-         UG2zO7fd3Uh7GRxqqOUg5t8uUmXsGfXtw455gm9567fYiQNpoepuV8wDjif0wQOVnK8+
-         AAkwtN3UzDxkByCAY+cgOzQRNeEs7znMCqAK8xV7lvb9NifZ0YWXLDQrCMGiQnD4r7H5
-         05lQ==
+        d=linaro.org; s=google; t=1685679210; x=1688271210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CEV47gt+ZCZAA8du0k/DRIUXH34XMcva/BFXCCGFINc=;
+        b=XuwSId57gjd8r07z06gEvKOJy7AhpKGKpbN238DHatkKvVPw5ZqvBupXh1owDImg8/
+         KDMNQJrf10NXVNMbAJFy8W/oe6/buICZnojYYykjKrAVrhvPZASaQy/lSFoESFEZ+vXt
+         I+emnc9KjBi1gSDvMsPi2P6RKqWGfZUpSD45I1Tlzl04D+XCLta/luk3K99tzO+othxz
+         qHveZIELIiM7ET0h7pTtN2Iammc1GNhFIU8jUZXoWFfuJz+nbcNimueLXBbAJ0D1dYJr
+         GLjbi108pvoUmcXA6mBru20GFY88sjFAKY3PEqVtgb9CynZ3KZoJgFe1IxyVxskB2lRR
+         RDcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685679191; x=1688271191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VIR8w9cgDXzXi7+1iKlCaAfcvOlfkoacHFLlw4+WQ2A=;
-        b=atehH6UBs3+JycKsLc5xVaxJjxbC8n+OatKaZBIv2CBYtrlRZpWxldxMPgU/KAnhra
-         zfYHuO6Q82jLOk0qgqZxFicr9MKUQKQNv82/I3eAW6uImPKxJz/xq4p0Ispq/1JXzNDj
-         eykR/AQONGzAdgkPdyqa0raSB2xDRGGlMn592hDo+70Z/m8IvxJD0Ey+EIPjT6l/fvih
-         9N7disNbXCtlEpARSgELk5h1njKOG7cMrTSx5cbhIXn2u+b9XfQdk5L2pTsj8q0JC2KO
-         b6RUGZIRDJVsUaaMSZi84PtsD77+tzTeFX/LcY213CHJvweyi6UVvObX5C9PSaU0xTYA
-         OEFg==
-X-Gm-Message-State: AC+VfDwP7Gy4CK8HdTbuPlCYevbiKLO8ksfM66eTDy2sr9VeHIZIRFBK
-        kY8pVPXP6QhAdRC2burz/wZkU3sg7h6J+r6bxv0sQmt4wkz4sg==
-X-Google-Smtp-Source: ACHHUZ4rbz+JEdNRv4AU0sSdE8gqFvZJ4o6EWuNPRzcMgNzr0FUIlsrkJgw32WWDPPsFL8l6CDbOh7NVAvDfdeGCypI=
-X-Received: by 2002:a17:907:6e8e:b0:96f:b40a:c85f with SMTP id
- sh14-20020a1709076e8e00b0096fb40ac85fmr4132435ejc.23.1685679191267; Thu, 01
- Jun 2023 21:13:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685679210; x=1688271210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CEV47gt+ZCZAA8du0k/DRIUXH34XMcva/BFXCCGFINc=;
+        b=PGei0B1NJe8+NnSaSWBfK6Qni3EcfmLs5VbfV7+D8OETXPTKBcMQ7Me9jEKd6bUNDT
+         sMLzcPqlbjFyrqj3ftREKaY8yivAkcymbtq26NYYhzZCCderOF00U9DXcw5Hp0BKNQTf
+         U/ptZBf18OYxh/QYigXGt5bmnpsS/B1XASe6e39ppG+yujeyX6Bz6wqlFvjT1AgNnl6D
+         TxMPpHloqg9CFKBQMj6BFHoD+swrnCAFnrw1uX0khAetqz8Km7PzbtGf2L2wYQB8qtoz
+         vnCmM9+ooKoJHpac8Of9eNsVLD/YosZtnSY+HMBLD5kH53WyahA+8N73C1C4rJm3doCv
+         +8ig==
+X-Gm-Message-State: AC+VfDybry7nWXTyZbmpNQjDmmhtgGwI8fdNtmQKqSq+qIm2LzcH19UL
+        exaXsgDWdqKp/Tn7bHbOhfqKaV9ENJl8SRAxEKA=
+X-Google-Smtp-Source: ACHHUZ62tXR3tRhbGClnMrXrJBv4svBg6ZDY81NDJr5a+svSbolCg1mmUaznB+ELePuz5sRaQK1smg==
+X-Received: by 2002:a17:903:249:b0:1b0:522d:8ff4 with SMTP id j9-20020a170903024900b001b0522d8ff4mr1360769plh.21.1685679210408;
+        Thu, 01 Jun 2023 21:13:30 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902904500b001ae365072cfsm187707plz.219.2023.06.01.21.13.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 21:13:29 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 09:43:27 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     rafael@kernel.org, ilia.lin@kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, ansuelsmth@gmail.com
+Subject: Re: [PATCH 1/2] cpufreq: qcom-nvmem: add support for IPQ8074
+Message-ID: <20230602041327.klyjs4cevmzn6vs7@vireshk-i7>
+References: <20230530165409.641661-1-robimarko@gmail.com>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 2 Jun 2023 14:12:59 +1000
-Message-ID: <CAPM=9tyD7t3pBvY9PN5g8M3KN-y7i-cNHwtoR3x5-f=-U+fAEw@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.4-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530165409.641661-1-robimarko@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 30-05-23, 18:54, Robert Marko wrote:
+> IPQ8074 comes in 2 families:
+> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
+> 
+> So, in order to be able to share one OPP table lets add support for IPQ8074
+> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
+> 
+> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+> will get created by NVMEM CPUFreq driver.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-Quiet enough week, though the misc fixes tree didn't get to me when I
-was sending this, so maybe it'll be a bit bigger next week, just one
-i915 fix and some scattered amdgpu fixes.
+I am waiting for someone from Qcom to review this stuff.
 
-Dave.
-
-drm-fixes-2023-06-02:
-drm fixes for v6.4-rc5
-
-amdgpu:
-- Fix mclk and fclk output ordering on some APUs
-- Fix display regression with 5K VRR
-- VCN, JPEG spurious interrupt warning fixes
-- Fix SI DPM on some ARM64 platforms
-- Fix missing TMZ enablement on GC 11.0.1
-
-i915:
-- Fix for OA reporting to allow detecting non-power-of-two reports
-The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4=
-:
-
-  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-06-02
-
-for you to fetch changes up to b6ccf213d95e9373ac1f7fbcb5de3b52eec0ddb3:
-
-  Merge tag 'drm-intel-fixes-2023-06-01' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2023-06-02
-10:33:29 +1000)
-
-----------------------------------------------------------------
-drm fixes for v6.4-rc5
-
-amdgpu:
-- Fix mclk and fclk output ordering on some APUs
-- Fix display regression with 5K VRR
-- VCN, JPEG spurious interrupt warning fixes
-- Fix SI DPM on some ARM64 platforms
-- Fix missing TMZ enablement on GC 11.0.1
-
-i915:
-- Fix for OA reporting to allow detecting non-power-of-two reports
-
-----------------------------------------------------------------
-Ashutosh Dixit (1):
-      drm/i915/perf: Clear out entire reports after reading if not
-power of 2 size
-
-Dave Airlie (2):
-      Merge tag 'amd-drm-fixes-6.4-2023-05-31' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2023-06-01' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-
-Guchun Chen (1):
-      drm/amd/pm: resolve reboot exception for si oland
-
-Horatio Zhang (6):
-      drm/amdgpu: separate ras irq from vcn instance irq for UVD_POISON
-      drm/amdgpu: add RAS POISON interrupt funcs for vcn_v2_6
-      drm/amdgpu: add RAS POISON interrupt funcs for vcn_v4_0
-      drm/amdgpu: separate ras irq from jpeg instance irq for UVD_POISON
-      drm/amdgpu: add RAS POISON interrupt funcs for jpeg_v2_6
-      drm/amdgpu: add RAS POISON interrupt funcs for jpeg_v4_0
-
-Ikshwaku Chauhan (1):
-      drm/amdgpu: enable tmz by default for GC 11.0.1
-
-Michel D=C3=A4nzer (2):
-      Revert "drm/amd/display: Block optimize on consecutive FAMS enables"
-      Revert "drm/amd/display: Do not set drr on pipe commit"
-
-Tim Huang (5):
-      drm/amd/pm: reverse mclk and fclk clocks levels for SMU v13.0.4
-      drm/amd/pm: reverse mclk clocks levels for SMU v13.0.5
-      drm/amd/pm: reverse mclk and fclk clocks levels for yellow carp
-      drm/amd/pm: reverse mclk and fclk clocks levels for vangogh
-      drm/amd/pm: reverse mclk and fclk clocks levels for renoir
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gmc.c            |  3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_jpeg.c           | 27 +++++++++++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_jpeg.h           |  3 ++
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c            | 27 +++++++++++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.h            |  3 ++
- drivers/gpu/drm/amd/amdgpu/jpeg_v2_5.c             | 28 +++++++++++++----
- drivers/gpu/drm/amd/amdgpu/jpeg_v4_0.c             | 28 ++++++++++++-----
- drivers/gpu/drm/amd/amdgpu/vcn_v2_5.c              | 25 ++++++++++++---
- drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c              | 36 ++++++++++++++++++=
-----
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c |  9 ------
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c | 25 +--------------
- drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c         | 29 -----------------
- drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c   | 10 +++---
- drivers/gpu/drm/amd/pm/swsmu/smu12/renoir_ppt.c    |  5 +--
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_4_ppt.c   |  5 +--
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_5_ppt.c   |  5 +--
- .../gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c   |  5 +--
- drivers/gpu/drm/i915/i915_perf.c                   | 17 ++++++----
- 18 files changed, 184 insertions(+), 106 deletions(-)
+-- 
+viresh
