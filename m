@@ -2,48 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF72C71F8A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAF071F8A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbjFBC4K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 22:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S232090AbjFBC6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbjFBC4H (ORCPT
+        with ESMTP id S229724AbjFBC6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:56:07 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CEB1A1;
-        Thu,  1 Jun 2023 19:56:02 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 194D58022;
-        Fri,  2 Jun 2023 10:56:01 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
- 2023 10:56:01 +0800
-Received: from ubuntu.localdomain (202.188.176.82) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
- 2023 10:55:58 +0800
-From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>
-Subject: [PATCH v2 2/2] crypto: starfive - Add RSA algo support
-Date:   Fri, 2 Jun 2023 10:55:51 +0800
-Message-ID: <20230602025551.874280-3-jiajie.ho@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230602025551.874280-1-jiajie.ho@starfivetech.com>
-References: <20230602025551.874280-1-jiajie.ho@starfivetech.com>
+        Thu, 1 Jun 2023 22:58:46 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC9018C;
+        Thu,  1 Jun 2023 19:58:44 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3522ufZV005417;
+        Fri, 2 Jun 2023 02:58:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=qFQIB/ud71JvDuFvq/x/CQyt3uSRPcDLl1prAsYYBnE=;
+ b=ens7thHThozt54paO/XmTgaydS6ODCFCHiXNRGrX+nnfWQnPwFYvQJSf/guZScsCx1j1
+ T+or8JweGqbqHo5LmEhvFLURVWONrA5oINoCO/Pqn0rNxyLAQLaCpOcyxJmRQ31CbVnC
+ 96ez8IGZ3l9TPC3JOiw9Co8iMsKGQk/iFqcU79P+h9dfZXOFCp0l5meLc5I+HHUd9ezB
+ ZLGIxnKtg7PBPqlMCo399a46abUEq2zMSqpQ83PaDjyoTGxvP417DeWDm8cmAI88DEZO
+ EIShevWaPQIOqgQdUK9Olqn2NtI5OckQ7bheHBltddQB8snKZDbrlId3xxMcFaZDPuBp yw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qy8390020-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 02:58:17 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3522wGKA010839
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Jun 2023 02:58:16 GMT
+Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 19:58:11 -0700
+Message-ID: <053da70b-3d01-a3e5-4703-4e5cf23831ed@quicinc.com>
+Date:   Fri, 2 Jun 2023 10:58:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [202.188.176.82]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 06/11] coresight-tpdm: Add node to set dsb programming
+ mode
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>
+References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+ <1682586037-25973-7-git-send-email-quic_taozha@quicinc.com>
+ <4e413a50-001d-cfbf-99a4-7e612f44ed38@arm.com>
+From:   Tao Zhang <quic_taozha@quicinc.com>
+In-Reply-To: <4e413a50-001d-cfbf-99a4-7e612f44ed38@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RdUqhFOlz8R1FSzXjiZGiCIgPMjsMA1t
+X-Proofpoint-ORIG-GUID: RdUqhFOlz8R1FSzXjiZGiCIgPMjsMA1t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306020020
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,823 +97,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding RSA enc/dec and sign/verify feature for StarFive cryptographic
-module. The module only supports mod sizes up to 2048, therefore
-calculations more than that will use fallback algo.
 
-Co-developed-by: Huan Feng <huan.feng@starfivetech.com>
-Signed-off-by: Huan Feng <huan.feng@starfivetech.com>
-Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
----
- drivers/crypto/starfive/Kconfig       |   1 +
- drivers/crypto/starfive/Makefile      |   2 +-
- drivers/crypto/starfive/jh7110-cryp.c |  20 +-
- drivers/crypto/starfive/jh7110-cryp.h |  45 ++
- drivers/crypto/starfive/jh7110-rsa.c  | 617 ++++++++++++++++++++++++++
- 5 files changed, 683 insertions(+), 2 deletions(-)
- create mode 100644 drivers/crypto/starfive/jh7110-rsa.c
+On 6/1/2023 5:23 PM, Suzuki K Poulose wrote:
+> On 27/04/2023 10:00, Tao Zhang wrote:
+>> Add node to set and show programming mode for TPDM DSB subunit.
+>> Once the DSB programming mode is set, it will be written to the
+>> register DSB_CR.
+>>
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> ---
+>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 15 ++++++
+>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 62 
+>> ++++++++++++++++++++++
+>>   drivers/hwtracing/coresight/coresight-tpdm.h       | 16 ++++++
+>>   3 files changed, 93 insertions(+)
+>>
+>> diff --git 
+>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
+>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>> index 77e67f2..348e167 100644
+>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>> @@ -45,3 +45,18 @@ Description:
+>>           Accepts only one of the 2 values -  0 or 1.
+>>           0 : Set the DSB trigger type to false
+>>           1 : Set the DSB trigger type to true
+>> +
+>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_mode
+>> +Date:        March 2023
+>> +KernelVersion    6.3
+>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
+>> (QUIC) <quic_taozha@quicinc.com>
+>> +Description:
+>> +        (Write) Set the mode of DSB tpdm. Read the mode of DSB
+>> +        tpdm.
+>> +
+>> +        Accepts the value needs to be greater than 0. What data
+>> +        bits do is listed below.
+>> +        Bit[0:1] : Test mode control bit for choosing the inputs.
+>> +        Bit[3] : Set to 0 for low performance mode.
+>> +                 Set to 1 for high performance mode.
+>> +        Bit[4:8] : Select byte lane for high performance mode.
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
+>> b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> index 14f4352..1bacaa5 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> @@ -4,6 +4,7 @@
+>>    */
+>>     #include <linux/amba/bus.h>
+>> +#include <linux/bitfield.h>
+>>   #include <linux/bitmap.h>
+>>   #include <linux/coresight.h>
+>>   #include <linux/coresight-pmu.h>
+>> @@ -43,6 +44,32 @@ static void tpdm_reset_datasets(struct 
+>> tpdm_drvdata *drvdata)
+>>       }
+>>   }
+>>   +static void set_dsb_test_mode(struct tpdm_drvdata *drvdata, u32 *val)
+>> +{
+>> +    u32 mode;
+>> +
+>> +    mode = TPDM_DSB_MODE_TEST(drvdata->dsb->mode);
+>> +    *val &= ~TPDM_DSB_TEST_MODE;
+>> +    *val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
+>> +}
+>> +
+>> +static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
+>> +{
+>> +    u32 mode;
+>> +
+>> +    mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
+>> +    *val &= ~TPDM_DSB_HPSEL;
+>> +    *val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
+>> +}
+>> +
+>> +static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
+>> +{
+>> +    if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
+>> +        *val |= TPDM_DSB_CR_MODE;
+>> +    else
+>> +        *val &= ~TPDM_DSB_CR_MODE;
+>> +}
+>> +
+>>   static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
+>>   {
+>>       if (drvdata->dsb->trig_type)
+>> @@ -64,6 +91,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata 
+>> *drvdata)
+>>       writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
+>>         val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+>> +    /* Set the test accurate mode */
+>> +    set_dsb_test_mode(drvdata, &val);
+>> +    /* Set the byte lane for high-performance mode */
+>> +    set_dsb_hpsel_mode(drvdata, &val);
+>> +    /* Set the performance mode */
+>> +    set_dsb_perf_mode(drvdata, &val);
+>>       /* Set trigger type */
+>>       set_trigger_type(drvdata, &val);
+>>       /* Set the enable bit of DSB control register to 1 */
+>> @@ -252,6 +285,34 @@ static struct attribute_group tpdm_attr_grp = {
+>>       .attrs = tpdm_attrs,
+>>   };
+>>   +static ssize_t dsb_mode_show(struct device *dev,
+>> +                  struct device_attribute *attr,
+>> +                  char *buf)
+>> +{
+>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>> +
+>> +    return sysfs_emit(buf, "%lx\n",
+>> +             (unsigned long)drvdata->dsb->mode);
+>> +}
+>> +
+>> +static ssize_t dsb_mode_store(struct device *dev,
+>> +                   struct device_attribute *attr,
+>> +                   const char *buf,
+>> +                   size_t size)
+>> +{
+>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>> +    unsigned long val;
+>> +
+>> +    if ((kstrtoul(buf, 0, &val)) || val < 0)
+>> +        return -EINVAL;
+>> +
+>> +    spin_lock(&drvdata->spinlock);
+>> +    drvdata->dsb->mode = val & TPDM_MODE_ALL;
+>> +    spin_unlock(&drvdata->spinlock);
+>> +    return size;
+>> +}
+>> +static DEVICE_ATTR_RW(dsb_mode);
+>> +
+>>   static ssize_t dsb_trig_type_show(struct device *dev,
+>>                        struct device_attribute *attr, char *buf)
+>>   {
+>> @@ -323,6 +384,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
+>>   static DEVICE_ATTR_RW(dsb_trig_ts);
+>>     static struct attribute *tpdm_dsb_attrs[] = {
+>> +    &dev_attr_dsb_mode.attr,
+>>       &dev_attr_dsb_trig_ts.attr,
+>>       &dev_attr_dsb_trig_type.attr,
+>>       NULL,
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
+>> b/drivers/hwtracing/coresight/coresight-tpdm.h
+>> index 68f33bd..79df07e 100644
+>> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
+>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+>> @@ -15,11 +15,25 @@
+>>     /* Enable bit for DSB subunit */
+>>   #define TPDM_DSB_CR_ENA        BIT(0)
+>> +/* Enable bit for DSB subunit perfmance mode */
+>> +#define TPDM_DSB_CR_MODE        BIT(1)
+>>   /* Enable bit for DSB subunit trigger type */
+>>   #define TPDM_DSB_CR_TRIG_TYPE        BIT(12)
+>> +
+>>   /* Enable bit for DSB subunit trigger timestamp */
+>>   #define TPDM_DSB_TIER_XTRIG_TSENAB        BIT(1)
+>>   +/* DSB programming modes */
+>> +/* Test mode control bit*/
+>> +#define TPDM_DSB_MODE_TEST(val)    (val & GENMASK(1, 0))
+>> +/* Perforceman mode */
+>
+> minor nit: typo ^^
+I will update this in the next patch series.
+>
+>> +#define TPDM_DSB_MODE_PERF        BIT(3)
+>> +/* High performance mode */
+>> +#define TPDM_DSB_MODE_HPBYTESEL(val)    (val & GENMASK(8, 4))
+>> +#define TPDM_MODE_ALL            (0xFFFFFFF)
+>
+> GENMASK(27, 0) ?
+>
+> Also, why do we cover bits 27-0 ?
 
-diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
-index 59002abcc0ad..df745fcb09df 100644
---- a/drivers/crypto/starfive/Kconfig
-+++ b/drivers/crypto/starfive/Kconfig
-@@ -11,6 +11,7 @@ config CRYPTO_DEV_JH7110
- 	select CRYPTO_SHA256
- 	select CRYPTO_SHA512
- 	select CRYPTO_SM3_GENERIC
-+	select CRYPTO_RSA
- 	help
- 	  Support for StarFive JH7110 crypto hardware acceleration engine.
- 	  This module provides acceleration for public key algo,
-diff --git a/drivers/crypto/starfive/Makefile b/drivers/crypto/starfive/Makefile
-index 2af49062e36d..98b01d2f1ccf 100644
---- a/drivers/crypto/starfive/Makefile
-+++ b/drivers/crypto/starfive/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_CRYPTO_DEV_JH7110) += jh7110-crypto.o
--jh7110-crypto-objs := jh7110-cryp.o jh7110-hash.o
-+jh7110-crypto-objs := jh7110-cryp.o jh7110-hash.o jh7110-rsa.o
-diff --git a/drivers/crypto/starfive/jh7110-cryp.c b/drivers/crypto/starfive/jh7110-cryp.c
-index 279b19f51cb4..cc43556b6c80 100644
---- a/drivers/crypto/starfive/jh7110-cryp.c
-+++ b/drivers/crypto/starfive/jh7110-cryp.c
-@@ -86,10 +86,19 @@ static irqreturn_t starfive_cryp_irq(int irq, void *priv)
- 
- 	status = readl(cryp->base + STARFIVE_IE_FLAG_OFFSET);
- 	if (status & STARFIVE_IE_FLAG_HASH_DONE) {
--		writel(STARFIVE_IE_MASK_HASH_DONE, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+		status = readl(cryp->base + STARFIVE_IE_MASK_OFFSET);
-+		status |= STARFIVE_IE_MASK_HASH_DONE;
-+		writel(status, cryp->base + STARFIVE_IE_MASK_OFFSET);
- 		tasklet_schedule(&cryp->hash_done);
- 	}
- 
-+	if (status & STARFIVE_IE_FLAG_PKA_DONE) {
-+		status = readl(cryp->base + STARFIVE_IE_MASK_OFFSET);
-+		status |= STARFIVE_IE_MASK_PKA_DONE;
-+		writel(status, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+		complete(&cryp->pka_done);
-+	}
-+
- 	return IRQ_HANDLED;
- }
- 
-@@ -132,6 +141,8 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(cryp->rst),
- 				     "Error getting hardware reset line\n");
- 
-+	init_completion(&cryp->pka_done);
-+
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
- 		return irq;
-@@ -173,8 +184,14 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_algs_hash;
- 
-+	ret = starfive_rsa_register_algs();
-+	if (ret)
-+		goto err_algs_rsa;
-+
- 	return 0;
- 
-+err_algs_rsa:
-+	starfive_hash_unregister_algs();
- err_algs_hash:
- 	crypto_engine_stop(cryp->engine);
- err_engine_start:
-@@ -200,6 +217,7 @@ static int starfive_cryp_remove(struct platform_device *pdev)
- 	struct starfive_cryp_dev *cryp = platform_get_drvdata(pdev);
- 
- 	starfive_hash_unregister_algs();
-+	starfive_rsa_unregister_algs();
- 
- 	tasklet_kill(&cryp->hash_done);
- 
-diff --git a/drivers/crypto/starfive/jh7110-cryp.h b/drivers/crypto/starfive/jh7110-cryp.h
-index 021d6e24bc86..0cdcffc0d7d4 100644
---- a/drivers/crypto/starfive/jh7110-cryp.h
-+++ b/drivers/crypto/starfive/jh7110-cryp.h
-@@ -18,7 +18,9 @@
- #define STARFIVE_DMA_OUT_LEN_OFFSET		0x14
- 
- #define STARFIVE_IE_MASK_HASH_DONE		0x4
-+#define STARFIVE_IE_MASK_PKA_DONE		0x8
- #define STARFIVE_IE_FLAG_HASH_DONE		0x4
-+#define STARFIVE_IE_FLAG_PKA_DONE		0x8
- 
- #define STARFIVE_MSG_BUFFER_SIZE		SZ_16K
- #define MAX_KEY_SIZE				SHA512_BLOCK_SIZE
-@@ -54,6 +56,39 @@ union starfive_hash_csr {
- 	};
- };
- 
-+union starfive_pka_cacr {
-+	u32 v;
-+	struct {
-+		u32 start			:1;
-+		u32 reset			:1;
-+		u32 ie				:1;
-+		u32 rsvd_0			:1;
-+		u32 fifo_mode			:1;
-+		u32 not_r2			:1;
-+		u32 ecc_sub			:1;
-+		u32 pre_expf			:1;
-+		u32 cmd				:4;
-+		u32 rsvd_1			:1;
-+		u32 ctrl_dummy			:1;
-+		u32 ctrl_false			:1;
-+		u32 cln_done			:1;
-+		u32 opsize			:6;
-+		u32 rsvd_2			:2;
-+		u32 exposize			:6;
-+		u32 rsvd_3			:1;
-+		u32 bigendian			:1;
-+	};
-+};
-+
-+struct starfive_rsa_key {
-+	u8	*n;
-+	u8	*e;
-+	u8	*d;
-+	int	e_bitlen;
-+	int	d_bitlen;
-+	int	bitlen;
-+	size_t	key_sz;
-+};
- 
- union starfive_alg_cr {
- 	u32 v;
-@@ -78,6 +113,8 @@ struct starfive_cryp_ctx {
- 	u8					key[MAX_KEY_SIZE];
- 	int					keylen;
- 	bool					is_hmac;
-+	struct starfive_rsa_key			rsa_key;
-+	struct crypto_akcipher			*akcipher_fbk;
- 	struct crypto_ahash			*ahash_fbk;
- };
- 
-@@ -98,6 +135,7 @@ struct starfive_cryp_dev {
- 	struct dma_slave_config			cfg_out;
- 	struct crypto_engine			*engine;
- 	struct tasklet_struct			hash_done;
-+	struct completion			pka_done;
- 	int					err;
- 	union starfive_alg_cr			alg_cr;
- 	union {
-@@ -108,14 +146,18 @@ struct starfive_cryp_dev {
- struct starfive_cryp_request_ctx {
- 	union {
- 		union starfive_hash_csr		hash;
-+		union starfive_pka_cacr		pka;
- 	} csr;
- 
- 	struct scatterlist			*in_sg;
-+	struct scatterlist			*out_sg;
- 	struct ahash_request			ahash_fbk_req;
- 	size_t					total;
-+	size_t					nents;
- 	unsigned int				blksize;
- 	unsigned int				digsize;
- 	unsigned long				in_sg_len;
-+	u8 rsa_data[] __aligned(sizeof(u32));
- };
- 
- struct starfive_cryp_dev *starfive_cryp_find_dev(struct starfive_cryp_ctx *ctx);
-@@ -123,5 +165,8 @@ struct starfive_cryp_dev *starfive_cryp_find_dev(struct starfive_cryp_ctx *ctx);
- int starfive_hash_register_algs(void);
- void starfive_hash_unregister_algs(void);
- 
-+int starfive_rsa_register_algs(void);
-+void starfive_rsa_unregister_algs(void);
-+
- void starfive_hash_done_task(unsigned long param);
- #endif
-diff --git a/drivers/crypto/starfive/jh7110-rsa.c b/drivers/crypto/starfive/jh7110-rsa.c
-new file mode 100644
-index 000000000000..e3f32a25c147
---- /dev/null
-+++ b/drivers/crypto/starfive/jh7110-rsa.c
-@@ -0,0 +1,617 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * StarFive Public Key Algo acceleration driver
-+ *
-+ * Copyright (c) 2022 StarFive Technology
-+ */
-+
-+#include <linux/crypto.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/dma-direct.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
-+#include <linux/io.h>
-+#include <linux/mod_devicetable.h>
-+#include <crypto/akcipher.h>
-+#include <crypto/algapi.h>
-+#include <crypto/internal/akcipher.h>
-+#include <crypto/internal/rsa.h>
-+#include <crypto/scatterwalk.h>
-+
-+#include "jh7110-cryp.h"
-+
-+#define STARFIVE_PKA_REGS_OFFSET	0x400
-+#define STARFIVE_PKA_CACR_OFFSET	(STARFIVE_PKA_REGS_OFFSET + 0x0)
-+#define STARFIVE_PKA_CASR_OFFSET	(STARFIVE_PKA_REGS_OFFSET + 0x4)
-+#define STARFIVE_PKA_CAAR_OFFSET	(STARFIVE_PKA_REGS_OFFSET + 0x8)
-+#define STARFIVE_PKA_CAER_OFFSET	(STARFIVE_PKA_REGS_OFFSET + 0x108)
-+#define STARFIVE_PKA_CANR_OFFSET	(STARFIVE_PKA_REGS_OFFSET + 0x208)
-+
-+// R^2 mod N and N0'
-+#define CRYPTO_CMD_PRE			0x0
-+// A * R mod N   ==> A
-+#define CRYPTO_CMD_ARN			0x5
-+// A * E * R mod N ==> A
-+#define CRYPTO_CMD_AERN			0x6
-+// A * A * R mod N ==> A
-+#define CRYPTO_CMD_AARN			0x7
-+
-+#define STARFIVE_RSA_MAX_KEYSZ		256
-+#define STARFIVE_RSA_RESET		0x2
-+
-+static inline int starfive_pka_wait_done(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+
-+	return wait_for_completion_timeout(&cryp->pka_done,
-+					   usecs_to_jiffies(100000));
-+}
-+
-+static inline void starfive_pka_irq_mask_clear(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	u32 stat;
-+
-+	reinit_completion(&cryp->pka_done);
-+
-+	stat = readl(cryp->base + STARFIVE_IE_MASK_OFFSET);
-+	stat &= ~STARFIVE_IE_MASK_PKA_DONE;
-+	writel(stat, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+}
-+
-+static void starfive_rsa_free_key(struct starfive_rsa_key *key)
-+{
-+	if (key->d)
-+		kfree_sensitive(key->d);
-+	if (key->e)
-+		kfree_sensitive(key->e);
-+	if (key->n)
-+		kfree_sensitive(key->n);
-+	memset(key, 0, sizeof(*key));
-+}
-+
-+static unsigned int starfive_rsa_get_nbit(u8 *pa, u32 snum, int key_sz)
-+{
-+	u32 i;
-+	u8 value;
-+
-+	i = snum >> 3;
-+
-+	value = pa[key_sz - i - 1];
-+	value >>= snum & 0x7;
-+	value &= 0x1;
-+
-+	return value;
-+}
-+
-+static int starfive_rsa_montgomery_form(struct starfive_cryp_ctx *ctx,
-+					u32 *out, u32 *in, u8 mont,
-+					u32 *mod, int bit_len)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	int count = rctx->total / sizeof(u32) - 1;
-+	int loop;
-+	u32 temp;
-+	u8 opsize;
-+
-+	opsize = (bit_len - 1) >> 5;
-+	rctx->csr.pka.v = 0;
-+
-+	writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+	for (loop = 0; loop <= opsize; loop++)
-+		writel(mod[opsize - loop], cryp->base + STARFIVE_PKA_CANR_OFFSET + loop * 4);
-+
-+	if (mont) {
-+		rctx->csr.pka.v = 0;
-+		rctx->csr.pka.cln_done = 1;
-+		rctx->csr.pka.opsize = opsize;
-+		rctx->csr.pka.exposize = opsize;
-+		rctx->csr.pka.cmd = CRYPTO_CMD_PRE;
-+		rctx->csr.pka.start = 1;
-+		rctx->csr.pka.not_r2 = 1;
-+		rctx->csr.pka.ie = 1;
-+
-+		starfive_pka_irq_mask_clear(ctx);
-+		writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+		if (!starfive_pka_wait_done(ctx))
-+			return -ETIMEDOUT;
-+
-+		for (loop = 0; loop <= opsize; loop++)
-+			writel(in[opsize - loop], cryp->base + STARFIVE_PKA_CAAR_OFFSET + loop * 4);
-+
-+		writel(0x1000000, cryp->base + STARFIVE_PKA_CAER_OFFSET);
-+
-+		for (loop = 1; loop <= opsize; loop++)
-+			writel(0, cryp->base + STARFIVE_PKA_CAER_OFFSET + loop * 4);
-+
-+		rctx->csr.pka.v = 0;
-+		rctx->csr.pka.cln_done = 1;
-+		rctx->csr.pka.opsize = opsize;
-+		rctx->csr.pka.exposize = opsize;
-+		rctx->csr.pka.cmd = CRYPTO_CMD_AERN;
-+		rctx->csr.pka.start = 1;
-+		rctx->csr.pka.ie = 1;
-+
-+		starfive_pka_irq_mask_clear(ctx);
-+		writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+		if (!starfive_pka_wait_done(ctx))
-+			return -ETIMEDOUT;
-+	} else {
-+		rctx->csr.pka.v = 0;
-+		rctx->csr.pka.cln_done = 1;
-+		rctx->csr.pka.opsize = opsize;
-+		rctx->csr.pka.exposize = opsize;
-+		rctx->csr.pka.cmd = CRYPTO_CMD_PRE;
-+		rctx->csr.pka.start = 1;
-+		rctx->csr.pka.pre_expf = 1;
-+		rctx->csr.pka.ie = 1;
-+
-+		starfive_pka_irq_mask_clear(ctx);
-+		writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+		if (!starfive_pka_wait_done(ctx))
-+			return -ETIMEDOUT;
-+
-+		for (loop = 0; loop <= count; loop++)
-+			writel(in[count - loop], cryp->base + STARFIVE_PKA_CAER_OFFSET + loop * 4);
-+
-+		/*pad with 0 up to opsize*/
-+		for (loop = count + 1; loop <= opsize; loop++)
-+			writel(0x0, cryp->base + STARFIVE_PKA_CAER_OFFSET + loop * 4);
-+
-+		rctx->csr.pka.v = 0;
-+		rctx->csr.pka.cln_done = 1;
-+		rctx->csr.pka.opsize = opsize;
-+		rctx->csr.pka.exposize = opsize;
-+		rctx->csr.pka.cmd = CRYPTO_CMD_ARN;
-+		rctx->csr.pka.start = 1;
-+		rctx->csr.pka.ie = 1;
-+
-+		starfive_pka_irq_mask_clear(ctx);
-+		writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+		if (!starfive_pka_wait_done(ctx))
-+			return -ETIMEDOUT;
-+	}
-+
-+	for (loop = 0; loop <= opsize; loop++) {
-+		temp = readl(cryp->base + STARFIVE_PKA_CAAR_OFFSET + 0x4 * loop);
-+		out[opsize - loop] = temp;
-+	}
-+
-+	return 0;
-+}
-+
-+static int starfive_rsa_cpu_start(struct starfive_cryp_ctx *ctx, u32 *result,
-+				  u8 *de, u32 *n, int key_sz)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_rsa_key *key = &ctx->rsa_key;
-+	u32 temp;
-+	int ret = 0;
-+	int opsize, mlen, loop;
-+	unsigned int *mta;
-+
-+	opsize = (key_sz - 1) >> 2;
-+
-+	mta = kmalloc(key_sz, GFP_KERNEL);
-+	if (!mta)
-+		return -ENOMEM;
-+
-+	ret = starfive_rsa_montgomery_form(ctx, mta, (u32 *)rctx->rsa_data,
-+					   0, n, key_sz << 3);
-+	if (ret) {
-+		dev_err_probe(cryp->dev, ret, "Conversion to Montgomery failed");
-+		goto rsa_err;
-+	}
-+
-+	for (loop = 0; loop <= opsize; loop++)
-+		writel(mta[opsize - loop],
-+		       cryp->base + STARFIVE_PKA_CAER_OFFSET + loop * 4);
-+
-+	for (loop = key->bitlen - 1; loop > 0; loop--) {
-+		mlen = starfive_rsa_get_nbit(de, loop - 1, key_sz);
-+
-+		rctx->csr.pka.v = 0;
-+		rctx->csr.pka.cln_done = 1;
-+		rctx->csr.pka.opsize = opsize;
-+		rctx->csr.pka.exposize = opsize;
-+		rctx->csr.pka.cmd = CRYPTO_CMD_AARN;
-+		rctx->csr.pka.start = 1;
-+		rctx->csr.pka.ie = 1;
-+
-+		starfive_pka_irq_mask_clear(ctx);
-+		writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+		ret = -ETIMEDOUT;
-+		if (!starfive_pka_wait_done(ctx))
-+			goto rsa_err;
-+
-+		if (mlen) {
-+			rctx->csr.pka.v = 0;
-+			rctx->csr.pka.cln_done = 1;
-+			rctx->csr.pka.opsize = opsize;
-+			rctx->csr.pka.exposize = opsize;
-+			rctx->csr.pka.cmd = CRYPTO_CMD_AERN;
-+			rctx->csr.pka.start = 1;
-+			rctx->csr.pka.ie = 1;
-+
-+			starfive_pka_irq_mask_clear(ctx);
-+			writel(rctx->csr.pka.v, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+			if (!starfive_pka_wait_done(ctx))
-+				goto rsa_err;
-+		}
-+	}
-+
-+	for (loop = 0; loop <= opsize; loop++) {
-+		temp = readl(cryp->base + STARFIVE_PKA_CAAR_OFFSET + 0x4 * loop);
-+		result[opsize - loop] = temp;
-+	}
-+
-+	ret = starfive_rsa_montgomery_form(ctx, result, result, 1, n, key_sz << 3);
-+	if (ret)
-+		dev_err_probe(cryp->dev, ret, "Conversion from Montgomery failed");
-+rsa_err:
-+	kfree(mta);
-+	return ret;
-+}
-+
-+static int starfive_rsa_start(struct starfive_cryp_ctx *ctx, u8 *result,
-+			      u8 *de, u8 *n, int key_sz)
-+{
-+	return starfive_rsa_cpu_start(ctx, (u32 *)result, de, (u32 *)n, key_sz);
-+}
-+
-+static int starfive_rsa_enc_core(struct starfive_cryp_ctx *ctx, int enc)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_rsa_key *key = &ctx->rsa_key;
-+	int ret = 0;
-+
-+	writel(STARFIVE_RSA_RESET, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+
-+	rctx->total = sg_copy_to_buffer(rctx->in_sg, rctx->nents,
-+					rctx->rsa_data, rctx->total);
-+
-+	if (enc) {
-+		key->bitlen = key->e_bitlen;
-+		ret = starfive_rsa_start(ctx, rctx->rsa_data, key->e,
-+					 key->n, key->key_sz);
-+	} else {
-+		key->bitlen = key->d_bitlen;
-+		ret = starfive_rsa_start(ctx, rctx->rsa_data, key->d,
-+					 key->n, key->key_sz);
-+	}
-+
-+	if (ret)
-+		goto err_rsa_crypt;
-+
-+	sg_copy_buffer(rctx->out_sg, sg_nents(rctx->out_sg),
-+		       rctx->rsa_data, key->key_sz, 0, 0);
-+
-+err_rsa_crypt:
-+	writel(STARFIVE_RSA_RESET, cryp->base + STARFIVE_PKA_CACR_OFFSET);
-+	kfree(rctx->rsa_data);
-+	return ret;
-+}
-+
-+static int starfive_rsa_enc(struct akcipher_request *req)
-+{
-+	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_rsa_key *key = &ctx->rsa_key;
-+	struct starfive_cryp_request_ctx *rctx = akcipher_request_ctx(req);
-+	int ret;
-+
-+	if (!key->key_sz) {
-+		akcipher_request_set_tfm(req, ctx->akcipher_fbk);
-+		ret = crypto_akcipher_encrypt(req);
-+		akcipher_request_set_tfm(req, tfm);
-+		return ret;
-+	}
-+
-+	if (unlikely(!key->n || !key->e))
-+		return -EINVAL;
-+
-+	if (req->dst_len < key->key_sz)
-+		return dev_err_probe(cryp->dev, -EOVERFLOW,
-+				     "Output buffer length less than parameter n\n");
-+
-+	rctx->in_sg = req->src;
-+	rctx->out_sg = req->dst;
-+	rctx->total = req->src_len;
-+	rctx->nents = sg_nents(rctx->in_sg);
-+	ctx->rctx = rctx;
-+
-+	return starfive_rsa_enc_core(ctx, 1);
-+}
-+
-+static int starfive_rsa_dec(struct akcipher_request *req)
-+{
-+	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_rsa_key *key = &ctx->rsa_key;
-+	struct starfive_cryp_request_ctx *rctx = akcipher_request_ctx(req);
-+	int ret;
-+
-+	if (!key->key_sz) {
-+		akcipher_request_set_tfm(req, ctx->akcipher_fbk);
-+		ret = crypto_akcipher_decrypt(req);
-+		akcipher_request_set_tfm(req, tfm);
-+		return ret;
-+	}
-+
-+	if (unlikely(!key->n || !key->d))
-+		return -EINVAL;
-+
-+	if (req->dst_len < key->key_sz)
-+		return dev_err_probe(cryp->dev, -EOVERFLOW,
-+				     "Output buffer length less than parameter n\n");
-+
-+	rctx->in_sg = req->src;
-+	rctx->out_sg = req->dst;
-+	ctx->rctx = rctx;
-+	rctx->total = req->src_len;
-+
-+	return starfive_rsa_enc_core(ctx, 0);
-+}
-+
-+static int starfive_rsa_set_n(struct starfive_rsa_key *rsa_key,
-+			      const char *value, size_t vlen)
-+{
-+	const char *ptr = value;
-+	unsigned int bitslen;
-+	int ret;
-+
-+	while (!*ptr && vlen) {
-+		ptr++;
-+		vlen--;
-+	}
-+	rsa_key->key_sz = vlen;
-+	bitslen = rsa_key->key_sz << 3;
-+
-+	/* check valid key size */
-+	if (bitslen & 0x1f)
-+		return -EINVAL;
-+
-+	ret = -ENOMEM;
-+	rsa_key->n = kmemdup(ptr, rsa_key->key_sz, GFP_KERNEL);
-+	if (!rsa_key->n)
-+		goto err;
-+
-+	return 0;
-+ err:
-+	rsa_key->key_sz = 0;
-+	rsa_key->n = NULL;
-+	starfive_rsa_free_key(rsa_key);
-+	return ret;
-+}
-+
-+static int starfive_rsa_set_e(struct starfive_rsa_key *rsa_key,
-+			      const char *value, size_t vlen)
-+{
-+	const char *ptr = value;
-+	unsigned char pt;
-+	int loop;
-+
-+	while (!*ptr && vlen) {
-+		ptr++;
-+		vlen--;
-+	}
-+	pt = *ptr;
-+
-+	if (!rsa_key->key_sz || !vlen || vlen > rsa_key->key_sz) {
-+		rsa_key->e = NULL;
-+		return -EINVAL;
-+	}
-+
-+	rsa_key->e = kzalloc(rsa_key->key_sz, GFP_KERNEL);
-+	if (!rsa_key->e)
-+		return -ENOMEM;
-+
-+	for (loop = 8; loop > 0; loop--) {
-+		if (pt >> (loop - 1))
-+			break;
-+	}
-+
-+	rsa_key->e_bitlen = (vlen - 1) * 8 + loop;
-+
-+	memcpy(rsa_key->e + (rsa_key->key_sz - vlen), ptr, vlen);
-+
-+	return 0;
-+}
-+
-+static int starfive_rsa_set_d(struct starfive_rsa_key *rsa_key,
-+			      const char *value, size_t vlen)
-+{
-+	const char *ptr = value;
-+	unsigned char pt;
-+	int loop;
-+	int ret;
-+
-+	while (!*ptr && vlen) {
-+		ptr++;
-+		vlen--;
-+	}
-+	pt = *ptr;
-+
-+	ret = -EINVAL;
-+	if (!rsa_key->key_sz || !vlen || vlen > rsa_key->key_sz)
-+		goto err;
-+
-+	ret = -ENOMEM;
-+	rsa_key->d = kzalloc(rsa_key->key_sz, GFP_KERNEL);
-+	if (!rsa_key->d)
-+		goto err;
-+
-+	for (loop = 8; loop > 0; loop--) {
-+		if (pt >> (loop - 1))
-+			break;
-+	}
-+
-+	rsa_key->d_bitlen = (vlen - 1) * 8 + loop;
-+
-+	memcpy(rsa_key->d + (rsa_key->key_sz - vlen), ptr, vlen);
-+
-+	return 0;
-+ err:
-+	rsa_key->d = NULL;
-+	return ret;
-+}
-+
-+static int starfive_rsa_setkey(struct crypto_akcipher *tfm, const void *key,
-+			       unsigned int keylen, bool private)
-+{
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct rsa_key raw_key = {NULL};
-+	struct starfive_rsa_key *rsa_key = &ctx->rsa_key;
-+	int ret;
-+
-+	if (private)
-+		ret = rsa_parse_priv_key(&raw_key, key, keylen);
-+	else
-+		ret = rsa_parse_pub_key(&raw_key, key, keylen);
-+	if (ret < 0)
-+		goto err;
-+
-+	starfive_rsa_free_key(rsa_key);
-+
-+	/* Use fallback for mod > 256 + 1 byte prefix */
-+	if (raw_key.n_sz > STARFIVE_RSA_MAX_KEYSZ + 1)
-+		return 0;
-+
-+	ret = starfive_rsa_set_n(rsa_key, raw_key.n, raw_key.n_sz);
-+	if (ret)
-+		return ret;
-+
-+	ret = starfive_rsa_set_e(rsa_key, raw_key.e, raw_key.e_sz);
-+	if (ret)
-+		goto err;
-+
-+	if (private) {
-+		ret = starfive_rsa_set_d(rsa_key, raw_key.d, raw_key.d_sz);
-+		if (ret)
-+			goto err;
-+	}
-+
-+	if (!rsa_key->n || !rsa_key->e) {
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
-+	if (private && !rsa_key->d) {
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
-+	return 0;
-+ err:
-+	starfive_rsa_free_key(rsa_key);
-+	return ret;
-+}
-+
-+static int starfive_rsa_set_pub_key(struct crypto_akcipher *tfm, const void *key,
-+				    unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	int ret;
-+
-+	ret = crypto_akcipher_set_pub_key(ctx->akcipher_fbk, key, keylen);
-+	if (ret)
-+		return ret;
-+
-+	return starfive_rsa_setkey(tfm, key, keylen, false);
-+}
-+
-+static int starfive_rsa_set_priv_key(struct crypto_akcipher *tfm, const void *key,
-+				     unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	int ret;
-+
-+	ret = crypto_akcipher_set_priv_key(ctx->akcipher_fbk, key, keylen);
-+	if (ret)
-+		return ret;
-+
-+	return starfive_rsa_setkey(tfm, key, keylen, true);
-+}
-+
-+static unsigned int starfive_rsa_max_size(struct crypto_akcipher *tfm)
-+{
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+
-+	if (ctx->rsa_key.key_sz)
-+		return ctx->rsa_key.key_sz;
-+
-+	return crypto_akcipher_maxsize(ctx->akcipher_fbk);
-+}
-+
-+static int starfive_rsa_init_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+
-+	ctx->akcipher_fbk = crypto_alloc_akcipher("rsa-generic", 0, 0);
-+	if (IS_ERR(ctx->akcipher_fbk))
-+		return PTR_ERR(ctx->akcipher_fbk);
-+
-+	ctx->cryp = starfive_cryp_find_dev(ctx);
-+	if (!ctx->cryp) {
-+		crypto_free_akcipher(ctx->akcipher_fbk);
-+		return -ENODEV;
-+	}
-+
-+	akcipher_set_reqsize(tfm, sizeof(struct starfive_cryp_request_ctx) +
-+			     sizeof(struct crypto_akcipher) + 32);
-+
-+	return 0;
-+}
-+
-+static void starfive_rsa_exit_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct starfive_cryp_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct starfive_rsa_key *key = (struct starfive_rsa_key *)&ctx->rsa_key;
-+
-+	crypto_free_akcipher(ctx->akcipher_fbk);
-+	starfive_rsa_free_key(key);
-+}
-+
-+static struct akcipher_alg starfive_rsa = {
-+	.encrypt = starfive_rsa_enc,
-+	.decrypt = starfive_rsa_dec,
-+	.sign = starfive_rsa_dec,
-+	.verify = starfive_rsa_enc,
-+	.set_pub_key = starfive_rsa_set_pub_key,
-+	.set_priv_key = starfive_rsa_set_priv_key,
-+	.max_size = starfive_rsa_max_size,
-+	.init = starfive_rsa_init_tfm,
-+	.exit = starfive_rsa_exit_tfm,
-+	.base = {
-+		.cra_name = "rsa",
-+		.cra_driver_name = "starfive-rsa",
-+		.cra_flags = CRYPTO_ALG_TYPE_AKCIPHER |
-+			     CRYPTO_ALG_NEED_FALLBACK,
-+		.cra_priority = 3000,
-+		.cra_module = THIS_MODULE,
-+		.cra_ctxsize = sizeof(struct starfive_cryp_ctx),
-+	},
-+};
-+
-+int starfive_rsa_register_algs(void)
-+{
-+	return crypto_register_akcipher(&starfive_rsa);
-+}
-+
-+void starfive_rsa_unregister_algs(void)
-+{
-+	crypto_unregister_akcipher(&starfive_rsa);
-+}
--- 
-2.34.1
+The TPDM mode is only represented by [0:8]bits.
 
+Can I replace it with "#define TPDM_DSB_MODE(val)    (VAL & GENMASK(8, 0))"?
+
+
+Best,
+
+Tao
+
+>
+> Suzuki
