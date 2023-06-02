@@ -2,237 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9596C7207ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE4D7207EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbjFBQs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S236863AbjFBQsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236867AbjFBQsW (ORCPT
+        with ESMTP id S235692AbjFBQsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:48:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE0D1BB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685724455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dm8pZyID0DwwOZmALxTgNoRgAXLQPRwJQSjRfV59sYQ=;
-        b=gt4uGD0xNifJJrCIsEsK4n/YbFSJ/KfpsXOtNHVkQ8EKpwqrdCkH1JlsSSa290/Pnt1wOU
-        RvXR8sZwU7p2WCYOvueHWbj3LD7AhAlF0MUz6ii349Nzzrf1ZONtGt+hUdyxBDIVQ2MlNz
-        2xMpTeC0cPFycmFJ3yWBKd4VOVk5RlE=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-180-dX_IA_zoNqWO_AYM51SjXQ-1; Fri, 02 Jun 2023 12:47:32 -0400
-X-MC-Unique: dX_IA_zoNqWO_AYM51SjXQ-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62849c5e9f0so2445506d6.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:47:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685724452; x=1688316452;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dm8pZyID0DwwOZmALxTgNoRgAXLQPRwJQSjRfV59sYQ=;
-        b=BNjvobzcCjNxi7AGmwxnu1J5nRHgivWngc4tLRMQuc53zkcB180J+kS6H2HQmopqTn
-         ZfKrsaWNNWkatOJxQ1ISGyIfF5GTIBnQeysyPLtAXrUxF+OzNdXM83b+6j2Il6a3oFsG
-         Scym5sFRAUpVWG1d5jqaTRfGui+hqmK+vztQjoqZawVarDwiEbQfUSxJwrJYPcZHkbyD
-         3bjTUvHJ1yUTfeZRK5fdq16VkDaSXYihMWQL926BCFYk5tjFM6vbUB0uFO3B7CC5EbpV
-         8mft37BMawwoGzyiHgGBq+ag/dlCVnWKqMxCP5fp6t0IQvsyRny2dRD1mE5UoJnic6CT
-         eTmQ==
-X-Gm-Message-State: AC+VfDwSlImpqpRBdnp7xT0mu5SZlFWWQQWnX+bNGKE4+/60VcmHF06+
-        5E4Xw6c0FWqEIMyDaWkcJ/4dP6hNKgS1xAFYwAqmgc12D5nj8LyaMTyNvrlLqv89+Qn4aTGmWS0
-        TeiqtJo3YbFD6cbai9SEpNM6g
-X-Received: by 2002:a05:6214:5014:b0:628:7a68:2642 with SMTP id jo20-20020a056214501400b006287a682642mr3688995qvb.3.1685724452221;
-        Fri, 02 Jun 2023 09:47:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ54KeNLZV0UMqQZP4PlWtn06PwaLBFJmlpLuCSXJewKcqJipYhNs9jEzcrf2f96OkjZJioGrw==
-X-Received: by 2002:a05:6214:5014:b0:628:7a68:2642 with SMTP id jo20-20020a056214501400b006287a682642mr3688973qvb.3.1685724451847;
-        Fri, 02 Jun 2023 09:47:31 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id mx11-20020a0562142e0b00b005fe4a301350sm1027353qvb.48.2023.06.02.09.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 09:47:31 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 12:47:28 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZHodIFQesrCA53To@x1n>
-References: <20230525085517.281529-1-usama.anjum@collabora.com>
- <20230525085517.281529-3-usama.anjum@collabora.com>
- <ZHfAOAKj1ZQJ+zSy@x1n>
- <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
- <ZHj7jmJ5fKla1Rax@x1n>
- <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
+        Fri, 2 Jun 2023 12:48:02 -0400
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF14196;
+        Fri,  2 Jun 2023 09:48:00 -0700 (PDT)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mhal@rbox.co>)
+        id 1q57wR-00464D-Dj; Fri, 02 Jun 2023 18:47:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+        s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+        bh=y+oDM7P40Ajk2tIw2Ui3M7/s/FajTZA8gaZHZh/VWfw=; b=WNxkiE6sjpiLZOmiKDqq3kJ1Ns
+        yKbMf6EKcvkb8rcMwANtGqBE830cfL7YhKePNYkDvxJE63IYo9MdckFWaEUqQnD6lVVN8PAelRdR+
+        DHiwbd5kV8hbHmMxFowSc+Vf+Zvv65ns5ds5OUR33H3rKqacIU0nUaWd/oWO9tCWAV8Z0mUWrr4ER
+        53hAo+sPSI9/36MfboCM+0Q8/8GqwkJ4IZDd1HUgYoVERElqDEG+8MskNX4cF8rJhz6y9s7OLP3sJ
+        OImlJAJQiKPNTII2badxB6eVvp9mgKyrO+S7LvVu3fgXvtOhnvvvi3zvG0RERlrRXwUq9VBiQ81Eu
+        wm5wXOYQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <mhal@rbox.co>)
+        id 1q57wQ-0004QY-J1; Fri, 02 Jun 2023 18:47:54 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1q57wG-0002Bx-FY; Fri, 02 Jun 2023 18:47:44 +0200
+Message-ID: <8f319a1e-a869-b666-b606-c0b4764ef7b1@rbox.co>
+Date:   Fri, 2 Jun 2023 18:47:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Thunderbird
+Subject: Re: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+Content-Language: pl-PL, en-GB
+To:     Sean Christopherson <seanjc@google.com>, dmatlack@google.com,
+        mizhang@google.com, isaku.yamahata@gmail.com, pbonzini@redhat.com,
+        Wei Wang <wei.w.wang@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230307135233.54684-1-wei.w.wang@intel.com>
+ <168565180722.660019.15543226381784798973.b4-ty@google.com>
+From:   Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <168565180722.660019.15543226381784798973.b4-ty@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 04:18:38PM +0500, Muhammad Usama Anjum wrote:
-> On 6/2/23 1:11 AM, Peter Xu wrote:
-> > On Thu, Jun 01, 2023 at 01:16:14PM +0500, Muhammad Usama Anjum wrote:
-> >> On 6/1/23 2:46 AM, Peter Xu wrote:
-> >>> Muhammad,
-> >>>
-> >>> Sorry, I probably can only review the non-interface part, and leave the
-> >>> interface/buffer handling, etc. review for others and real potential users
-> >>> of it..
-> >> Thank you so much for the review. I think mostly we should be okay with
-> >> interface as everybody has been making suggestions over the past revisions.
-> >>
-> >>>
-> >>> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
-> >>>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
-> >>>> +					 unsigned long addr, pte_t *ptep,
-> >>>> +					 pte_t ptent)
-> >>>> +{
-> >>>> +	pte_t old_pte;
-> >>>> +
-> >>>> +	if (!huge_pte_none(ptent)) {
-> >>>> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
-> >>>> +		ptent = huge_pte_mkuffd_wp(old_pte);
-> >>>> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
-> >>>
-> >>> huge_ptep_modify_prot_start()?
-> >> Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
-> >> from its pte version.
-> > 
-> > Here I meant huge_ptep_modify_prot_commit()..
-> I'll update.
+On 6/2/23 03:20, Sean Christopherson wrote:
+> On Tue, 07 Mar 2023 21:52:33 +0800, Wei Wang wrote:
+>> Current KVM_BUG and KVM_BUG_ON assume that 'cond' passed from callers is
+>> 32-bit as it casts 'cond' to the type of int. This will be wrong if 'cond'
+>> provided by a caller is 64-bit, e.g. an error code of 0xc0000d0300000000
+>> will be converted to 0, which is not expected.
+>>
+>> Improves the implementation by using bool in KVM_BUG and KVM_BUG_ON.
+>> 'bool' is preferred to 'int' as __ret is essentially used as a boolean
+>> and coding-stytle.rst documents that use of bool is encouraged to improve
+>> readability and is often a better option than 'int' for storing boolean
+>> values.
+>>
+>> [...]
 > 
-> > 
-> >>
-> >>>
-> >>> The other thing is what if it's a pte marker already?  What if a hugetlb
-> >>> migration entry?  Please check hugetlb_change_protection().
-> >> I've updated it in more better way. Please let me know what do you think
-> >> about the following:
-> >>
-> >> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
-> >> 					 unsigned long addr, pte_t *ptep,
-> >> 					 pte_t ptent)
-> >> {
-> >> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
-> >> 		return;
-> >>
-> >> 	if (is_hugetlb_entry_migration(ptent))
-> >> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
-> >> 				pte_swp_mkuffd_wp(ptent));
-> >> 	else if (!huge_pte_none(ptent))
-> >> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
-> >> 					huge_pte_mkuffd_wp(ptent));
-> >> 	else
-> >> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
-> >> 				make_pte_marker(PTE_MARKER_UFFD_WP));
-> >> }
-> > 
-> > the is_pte_marker() check can be extended to double check
-> > pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
-> > uffd-wp bit currently we only support swapin error which should sigbus when
-> > accessed, so no point in tracking anyway.
-> Yeah, we are good with what we have as even if more bits are supported in
-> pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
-> enabled. So no other bit would be set on the marker.
-
-I think we don't know?  swapin error bit can be set there afaiu, if someone
-swapoff -a and found a swap device broken for some swapped out ptes.
-
-But again I think that's fine for now.
-
+> Applied to kvm-x86 generic, thanks!
 > 
-> > 
-> >>
-> >> As we always set UNPOPULATED, so markers are always set on none ptes
-> >> initially. Is it possible that a none pte becomes present, then swapped and
-> >> finally none again? So I'll do the following addition for make_uffd_wp_pte():
-> >>
-> >> --- a/fs/proc/task_mmu.c
-> >> +++ b/fs/proc/task_mmu.c
-> >> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
-> >> vm_area_struct *vma,
-> >>  	} else if (is_swap_pte(ptent)) {
-> >>  		ptent = pte_swp_mkuffd_wp(ptent);
-> >>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
-> >> +	} else {
-> >> +		set_pte_at(vma->vm_mm, addr, pte,
-> >> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
-> >>  	}
-> >>  }
-> > 
-> > Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
-> > should probably keep the protocol (only set the marker when WP_UNPOPULATED
-> > for anon).
-> This function is only reachable when UNPOPULATED + Async WP are set. So we
-> don't need to use userfaultfd_wp_use_markers().
+> [1/1] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+>       https://github.com/kvm-x86/linux/commit/c9d601548603
 
-I don't remember where you explicitly checked that to make sure it'll
-always be the case, but if you do it'll still be nice if you can add a
-comment right above here explaining.
+I guess this makes the !! in kvm_vm_ioctl_create_vcpu() unnecessary:
 
-Or, maybe you can still use userfaultfd_wp_use_markers() here, then you can
-just WARN_ON_ONCE() on it, which looks even better?
+KVM_BUG_ON(!!xa_store(&kvm->vcpu_array, vcpu->vcpu_idx, vcpu, 0)...
 
-[...]
-
-> > Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
-> > address range to be scanned to me.  If it skips some unstable pmd without
-> > filling in anything it seems everything later will be shifted with
-> > PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
-> > before return.
-> I don't think this is a bug if this is how it was implemented in the first
-> place. In this task_mmu.c file, we can find several examples of the same
-> pattern that error isn't returned if pmd_trans_unstable() succeeds.
-
-I don't see why multiple same usages mean it's correct.. maybe they're all
-buggy?
-
-I can post a patch for this to collect opinions to see if I missed
-something. I'd suggest you figure out what's the right thing to do for the
-new interface and make it right from the start, no matter how it was
-implemented elsewhere.
-
-Thanks,
-
--- 
-Peter Xu
-
+Is it worth a patch (perhaps along with chopping off !! in
+kvm_msr_allowed() and few other places)?
