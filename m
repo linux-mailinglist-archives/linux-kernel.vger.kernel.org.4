@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC8D71FEAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6AC71FF1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbjFBKNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S235169AbjFBKYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbjFBKNG (ORCPT
+        with ESMTP id S235470AbjFBKXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:13:06 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3816D197;
-        Fri,  2 Jun 2023 03:13:05 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7747df5b674so35863839f.3;
-        Fri, 02 Jun 2023 03:13:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685700784; x=1688292784;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=l/PIFR+ZIA9eZqhv8ThRSE/EHs2TLrNkw8dWpu4ejEo=;
-        b=EWgZyOouIxS5i+8MJ02WPWOlmN3P37zHI8h5KSEzVXKyg5gH6K4SYQPUXrmuiNO3T9
-         Xjc5eiPV44Y0McnGAxz+r8BAk1s5maeJyzpoitepdIHkp+ktx6/MPXnqJQOjnTJ9Wbpr
-         KoyZdVRVTdqhhWXolXGiKTYU22KK8kWXfnvThXo/V4ED3Oe7GlZQ5OuT48eOTc75q0Wy
-         LYvSCKoVhghOqoMeiTujy+Ju68mvZ+itUc9j+CXcbYY9VUzMA6nXI44Wabm48er3VNao
-         yQGbBKFodZCmIeL02XeK6CZulkZR311ssw99VvfpYEzXjPhhYho5hmn9xlXdIotIBd6E
-         SMHA==
-X-Gm-Message-State: AC+VfDxJyEbZsO98yq5eDA0WV7x6YjqZlMugM41pKNbm26d0Oam8sNv4
-        +Euk5dn9ekwpOIG145hyXHCG5wVMMA==
-X-Google-Smtp-Source: ACHHUZ6CYRer4ThVGQY100UimlMmqDeEPZXk9gl/qzrUD8+oKZRBwxw0FiZma7Yt5Kk1HtF3Qk5qGA==
-X-Received: by 2002:a6b:db17:0:b0:76c:71dc:55f3 with SMTP id t23-20020a6bdb17000000b0076c71dc55f3mr2219262ioc.6.1685700784312;
-        Fri, 02 Jun 2023 03:13:04 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z3-20020a029f03000000b0040f94261ab1sm208404jal.12.2023.06.02.03.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 03:13:03 -0700 (PDT)
-Received: (nullmailer pid 1359772 invoked by uid 1000);
-        Fri, 02 Jun 2023 10:13:02 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 2 Jun 2023 06:23:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55397E62;
+        Fri,  2 Jun 2023 03:22:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6F5164E4E;
+        Fri,  2 Jun 2023 10:22:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29891C433A1;
+        Fri,  2 Jun 2023 10:22:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685701371;
+        bh=hFZ/SCviIEc1YZbiLBLlEDyweQ6PGSxYwFHksamIzHs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Nfff8boM+8RvgzsdhvHcWIJlC+g8g4Wq7plDTW+pSwMYIQ+FA/pQdAwR9wmQEH9Hu
+         tozvIv+dHkPk86T9EBsrWvOOuGTPKW7gZ1ZHFUVu2k6Ovt3PHh+gxoR8+qQPsVhlDW
+         I6Y/rXYNtS0G3JWI7pYAWi7AWH91sSo+67RvGTNLsw5fRCo9oURHj2UeXSnUhWALgD
+         JPnuP1Y3H72MpzNEBpqLfzxVt5VauFyizJ1+959HL6IdT4uP5VmAQ8c1oz24VJVXBI
+         nCzjaghvF4ZqJNjwJRi87HnpiVPxe0xMZ/kWrnWUBOv80HiGGxF9Se1bYlP7zMhhrY
+         WEN/khJAwidrA==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-efi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH v4 10/21] x86/decompressor: Call trampoline directly from C code
+Date:   Fri,  2 Jun 2023 12:13:02 +0200
+Message-Id: <20230602101313.3557775-11-ardb@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230602101313.3557775-1-ardb@kernel.org>
+References: <20230602101313.3557775-1-ardb@kernel.org>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230602090322.1876359-2-alvin@pqrs.dk>
-References: <20230602090322.1876359-1-alvin@pqrs.dk>
- <20230602090322.1876359-2-alvin@pqrs.dk>
-Message-Id: <168570078201.1359749.10287160624641352834.robh@kernel.org>
-Subject: Re: [PATCH 1/4] ASoC: dt-bindings: document new
- symmetric-clock-role flag
-Date:   Fri, 02 Jun 2023 04:13:02 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4966; i=ardb@kernel.org; h=from:subject; bh=hFZ/SCviIEc1YZbiLBLlEDyweQ6PGSxYwFHksamIzHs=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIaXywJrzy7b+fukf7pKxUXarwbGeLatCFi5a9qu7hWG6Y BHjqmPzO0pZGMQ4GGTFFFkEZv99t/P0RKla51myMHNYmUCGMHBxCsBE2NYwMvQlzjl3wOv7IbPb G1zn37z3xyPONlq48lbd/YbFa+5dmvWK4X+69v0z8yrf/xZ/78K/z/ENe0idEl+Imabpz9+VvoJ OAewA
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,50 +72,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Instead of returning to the asm calling code to invoke the trampoline,
+call it straight from the C code that sets the scene. That way, the
+struct return type is no longer needed for returning two values, and the
+call can be made conditional more cleanly in a subsequent patch.
 
-On Fri, 02 Jun 2023 11:03:18 +0200, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
-> 
-> The new flag specifies that both ends of the dai-link have the same
-> clock consumer/provider role. This should be used to describe hardware
-> where e.g. the CPU and codec both receive their bit- and frame-clocks
-> from an external source.
-> 
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-> ---
->  .../devicetree/bindings/sound/simple-card.yaml        | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ arch/x86/boot/compressed/head_64.S    | 20 +++-----------
+ arch/x86/boot/compressed/pgtable_64.c | 28 ++++++++------------
+ 2 files changed, 15 insertions(+), 33 deletions(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/sound/simple-card.yaml:33:5: [error] syntax error: could not find expected ':' (syntax)
-
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/sound/simple-card.example.dts'
-Documentation/devicetree/bindings/sound/simple-card.yaml:33:5: could not find expected ':'
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/sound/simple-card.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/sound/simple-card.yaml:33:5: could not find expected ':'
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/simple-card.yaml: ignoring, error parsing file
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230602090322.1876359-2-alvin@pqrs.dk
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index 741b4e8fefc915ea..a60ec9283bd760e3 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -430,24 +430,12 @@ SYM_CODE_START(startup_64)
+ #endif
+ 
+ 	/*
+-	 * paging_prepare() sets up the trampoline and checks if we need to
+-	 * enable 5-level paging.
+-	 *
+-	 * paging_prepare() returns a two-quadword structure which lands
+-	 * into RDX:RAX:
+-	 *   - Address of the trampoline is returned in RAX.
+-	 *   - Non zero RDX means trampoline needs to enable 5-level
+-	 *     paging.
+-	 *
++	 * set_paging_levels() updates the number of paging levels using a
++	 * trampoline in 32-bit addressable memory if the current number does
++	 * not match the desired number.
+ 	 */
+ 	movq	%r15, %rdi		/* pass struct boot_params pointer */
+-	call	paging_prepare
+-
+-	/* Pass the trampoline address and boolean flag as args #1 and #2 */
+-	movq	%rax, %rdi
+-	movq	%rdx, %rsi
+-	leaq	TRAMPOLINE_32BIT_CODE_OFFSET(%rax), %rax
+-	call	*%rax
++	call	set_paging_levels
+ 
+ 	/*
+ 	 * cleanup_trampoline() would restore trampoline memory.
+diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
+index 09fc18180929fab3..b62b6819dcdd01be 100644
+--- a/arch/x86/boot/compressed/pgtable_64.c
++++ b/arch/x86/boot/compressed/pgtable_64.c
+@@ -16,11 +16,6 @@ unsigned int __section(".data") pgdir_shift = 39;
+ unsigned int __section(".data") ptrs_per_p4d = 1;
+ #endif
+ 
+-struct paging_config {
+-	unsigned long trampoline_start;
+-	unsigned long l5_required;
+-};
+-
+ /* Buffer to preserve trampoline memory */
+ static char trampoline_save[TRAMPOLINE_32BIT_SIZE];
+ 
+@@ -106,10 +101,10 @@ static unsigned long find_trampoline_placement(void)
+ 	return bios_start - TRAMPOLINE_32BIT_SIZE;
+ }
+ 
+-struct paging_config paging_prepare(void *rmode)
++asmlinkage void set_paging_levels(void *rmode)
+ {
+-	struct paging_config paging_config = {};
+-	void *tramp_code;
++	void (*toggle_la57)(void *trampoline, bool enable_5lvl);
++	bool l5_required = false;
+ 
+ 	/* Initialize boot_params. Required for cmdline_find_option_bool(). */
+ 	boot_params = rmode;
+@@ -130,12 +125,10 @@ struct paging_config paging_prepare(void *rmode)
+ 			!cmdline_find_option_bool("no5lvl") &&
+ 			native_cpuid_eax(0) >= 7 &&
+ 			(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31)))) {
+-		paging_config.l5_required = 1;
++		l5_required = true;
+ 	}
+ 
+-	paging_config.trampoline_start = find_trampoline_placement();
+-
+-	trampoline_32bit = (unsigned long *)paging_config.trampoline_start;
++	trampoline_32bit = (unsigned long *)find_trampoline_placement();
+ 
+ 	/* Preserve trampoline memory */
+ 	memcpy(trampoline_save, trampoline_32bit, TRAMPOLINE_32BIT_SIZE);
+@@ -144,7 +137,7 @@ struct paging_config paging_prepare(void *rmode)
+ 	memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
+ 
+ 	/* Copy trampoline code in place */
+-	tramp_code = memcpy(trampoline_32bit +
++	toggle_la57 = memcpy(trampoline_32bit +
+ 			TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
+ 			&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
+ 
+@@ -154,7 +147,8 @@ struct paging_config paging_prepare(void *rmode)
+ 	 * immediate absolute address, so we have to adjust that based on the
+ 	 * placement of the trampoline.
+ 	 */
+-	*(u32 *)(tramp_code + trampoline_ljmp_imm_offset) += (unsigned long)tramp_code;
++	*(u32 *)((u8 *)toggle_la57 + trampoline_ljmp_imm_offset) +=
++						(unsigned long)toggle_la57;
+ 
+ 	/*
+ 	 * The code below prepares page table in trampoline memory.
+@@ -170,10 +164,10 @@ struct paging_config paging_prepare(void *rmode)
+ 	 * We are not going to use the page table in trampoline memory if we
+ 	 * are already in the desired paging mode.
+ 	 */
+-	if (paging_config.l5_required == !!(native_read_cr4() & X86_CR4_LA57))
++	if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
+ 		goto out;
+ 
+-	if (paging_config.l5_required) {
++	if (l5_required) {
+ 		/*
+ 		 * For 4- to 5-level paging transition, set up current CR3 as
+ 		 * the first and the only entry in a new top-level page table.
+@@ -196,7 +190,7 @@ struct paging_config paging_prepare(void *rmode)
+ 	}
+ 
+ out:
+-	return paging_config;
++	toggle_la57(trampoline_32bit, l5_required);
+ }
+ 
+ void cleanup_trampoline(void *pgtable)
+-- 
+2.39.2
 
