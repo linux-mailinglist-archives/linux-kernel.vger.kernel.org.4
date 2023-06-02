@@ -2,246 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4C77208B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7785B7208B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbjFBSAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S236988AbjFBSBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbjFBSAp (ORCPT
+        with ESMTP id S236323AbjFBSA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:00:45 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9A123;
-        Fri,  2 Jun 2023 11:00:44 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-256e1d87a46so1154304a91.0;
-        Fri, 02 Jun 2023 11:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685728844; x=1688320844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=przK18vRT0zCHgc2Ms43sB7BY+Y+MRlKaT+sSKUYQsQ=;
-        b=Mj/Y1Tfg9CZxODZpoMOuAnXyJ4VhAtOZZGFtAX+LvE9mbVPXA0PkHvSbrijeuMeQ9Q
-         7GiI5Zkl8D49H97hX3Z5lZfxX83kQA1DTpcEGSbgDWVbi6AN0ySdJZSko9kIGUId4BpU
-         kLSXu46ldxN5SCTqzbVqcacDKSmcvx2mr6d6YDtj0CyiENntTYlBLAOxJeJheWqjx2on
-         eXpFxLltZN+wGmfs1KMWH9ESZejYhtMzy4GRbg5IAbTe1rlznN6yuqfRd9fd7jmJPW3z
-         ZEbbwYTbU1zHVkVbx8G/vw2WZ0pbNYhKQ3NkuAytOb583DvFHnJskFWSMl5yO67MQMvr
-         MFhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685728844; x=1688320844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=przK18vRT0zCHgc2Ms43sB7BY+Y+MRlKaT+sSKUYQsQ=;
-        b=Gz93kt45Gs6plPRPZC2EvuOm6RZwetJGpIV1ATXS19Phmx75k4VlVw7hAjNE4rbGBp
-         8IrxQOrNEduDatieGJA9VxM5vN1ZCsNB1YlUSMk+yAbulTvXWyZA1B/ZmV2oqwfMnLco
-         y/PUcpo7yf9YC0p4OXQUbgiijxPr0u6poyPrhbhQ2l3PAxHgZnm/fQTrDDAJDcSuZjqa
-         au9vtvmku1y78lQ9cWJRh3xk07WE3Kqx2eeMuzK+zqrPuXvD6rkZOHZPpP4wOhZCwzAf
-         9An7sJZZVkmObV6Hyy//z8hsYEmIE4335jl/TXGFUyUqtXaZErHvBxP97hDS9t3xIzmE
-         gCIg==
-X-Gm-Message-State: AC+VfDwcQFlWVSOGaFdPZ4OhS5BnfowZ+uHe+CqqOIeOPdfvOUjrcbKL
-        11hWc/WumQz8pngh6mf16URo/CvJN6/gnzfnc14=
-X-Google-Smtp-Source: ACHHUZ72UIMKwVCWqtcz2aAXhMbLxbQwkCTiu6JUWlIeuEo95vb2MDtYIVmCLhICRk8Uvv7sApPWNeKNJdWyFNc2p9Q=
-X-Received: by 2002:a17:90a:2f04:b0:258:fe26:9721 with SMTP id
- s4-20020a17090a2f0400b00258fe269721mr396310pjd.17.1685728843506; Fri, 02 Jun
- 2023 11:00:43 -0700 (PDT)
+        Fri, 2 Jun 2023 14:00:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8131BF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 11:00:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 611DF64C7D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF8CC433EF;
+        Fri,  2 Jun 2023 18:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685728855;
+        bh=cpg2kA4m9ecom4a4wqNDBo51WrTY4aWxfzQcoCpx8B8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=cJLFnmyWPDpafmJQC8eEVQXtNqUKiBoo16PYhumNiCbdsMV4xqfgQo6Sd30hr7i9H
+         QyrS8Lxe+/1ZXE1/VmSjFXHhNL6ClrkGDUGPbVkP3cMzTZIFB7T3t7qZpS+7TTcdxx
+         7ctXtVY7PCOajePIS1OrWboMcq0B+c5crMAFdQszjQslXfoeMFkYjfmj16lZo2dDgp
+         7rHJ8llwsCdZpW7q8sFGa6VZff1BnXhRv4pMMbbNrHmYh89pZ8zV75Fl1iH7UOGdfe
+         Fed26dLi5Y51Ss0wI7s4etuLiE3zM7sY9cMhUnugnnUqOACd5crB9++IQSckhqA9b5
+         Al18l7+61qdkA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 530CBCE3B00; Fri,  2 Jun 2023 11:00:55 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 11:00:55 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        tim.c.chen@intel.com, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        liaoyu15@huawei.com
+Subject: Re: [PATCH v1 2/2] x86/tsc: Extend watchdog check exemption to
+ 4-Sockets platform
+Message-ID: <06df410c-2177-4671-832f-339cff05b1d9@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20221021062131.1826810-1-feng.tang@intel.com>
+ <20221021062131.1826810-2-feng.tang@intel.com>
 MIME-Version: 1.0
-References: <20230530150035.1943669-1-aleksander.lobakin@intel.com>
- <20230530150035.1943669-10-aleksander.lobakin@intel.com> <0962a8a8493f0c892775cda8affb93c20f8b78f7.camel@gmail.com>
- <51f558e3-7ccd-45cd-d944-73997765fd12@intel.com>
-In-Reply-To: <51f558e3-7ccd-45cd-d944-73997765fd12@intel.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Fri, 2 Jun 2023 11:00:07 -0700
-Message-ID: <CAKgT0Ue7US2wwZXXU6HcGPBZWg+pSZ=PE_HWxJHgF8bmLymkfg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 09/12] iavf: switch to Page Pool
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021062131.1826810-2-feng.tang@intel.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 9:31=E2=80=AFAM Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
->
-> From: Alexander H Duyck <alexander.duyck@gmail.com>
-> Date: Wed, 31 May 2023 09:19:06 -0700
->
-> > On Tue, 2023-05-30 at 17:00 +0200, Alexander Lobakin wrote:
-> >> Now that the IAVF driver simply uses dev_alloc_page() + free_page() wi=
-th
-> >> no custom recycling logics and one whole page per frame, it can easily
-> >> be switched to using Page Pool API instead.
->
-> [...]
->
-> >> @@ -691,8 +690,6 @@ int iavf_setup_tx_descriptors(struct iavf_ring *tx=
-_ring)
-> >>   **/
-> >>  void iavf_clean_rx_ring(struct iavf_ring *rx_ring)
-> >>  {
-> >> -    u16 i;
-> >> -
-> >>      /* ring already cleared, nothing to do */
-> >>      if (!rx_ring->rx_pages)
-> >>              return;
-> >> @@ -703,28 +700,17 @@ void iavf_clean_rx_ring(struct iavf_ring *rx_rin=
-g)
-> >>      }
-> >>
-> >>      /* Free all the Rx ring sk_buffs */
-> >> -    for (i =3D 0; i < rx_ring->count; i++) {
-> >> +    for (u32 i =3D 0; i < rx_ring->count; i++) {
-> >
-> > Did we make a change to our coding style to allow declaration of
-> > variables inside of for statements? Just wondering if this is a change
-> > since the recent updates to the ISO C standard, or if this doesn't
-> > match up with what we would expect per the coding standard.
->
-> It's optional right now, nobody would object declaring it either way.
-> Doing it inside is allowed since we switched to C11, right.
-> Here I did that because my heart was breaking to see this little u16
-> alone (and yeah, u16 on the stack).
+On Fri, Oct 21, 2022 at 02:21:31PM +0800, Feng Tang wrote:
+> There is report again that the tsc clocksource on a 4 sockets x86
+> Skylake server was wrongly judged as 'unstable' by 'jiffies' watchdog,
+> and disabled [1].
+> 
+> Commit b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC
+> on qualified platorms") was introduce to deal with these false
+> alarms of tsc unstable issues, covering qualified platforms for 2
+> sockets or smaller ones.
+> 
+> Extend the exemption to 4 sockets to fix the issue.
+> 
+> We also got similar reports on 8 sockets platform from internal test,
+> but as Peter pointed out, there was tsc sync issues for 8-sockets
+> platform, and it'd better be handled architecture by architecture,
+> instead of directly changing the threshold to 8 here.
+> 
+> Rui also proposed another way to disable 'jiffies' as clocksource
+> watchdog [2], which can also solve this specific problem in an
+> architecture independent way, with one limitation that there are
+> also some tsc false alarms which were reported by other hardware
+> watchdogs like HPET/PMTIMER, while 'jiffies' watchdog is mostly
+> used in kernel boot phase.
+> 
+> [1]. https://lore.kernel.org/all/9d3bf570-3108-0336-9c52-9bee15767d29@huawei.com/
+> [2]. https://lore.kernel.org/all/bd5b97f89ab2887543fc262348d1c7cafcaae536.camel@intel.com/
+> 
+> Reported-by: Yu Liao <liaoyu15@huawei.com>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
 
-Yeah, that was back when I was declaring stack variables the exact
-same size as the ring parameters. So u16 should match the size of
-rx_ring->count not that it matters. It was just a quirk I had at the
-time.
+We have a number of four-socket systems whose TSCs seem to be reliable.
+We do see issues where high memory load forces the TSC to be marked
+unstable, but that is because those systems are using an older kernel.
 
-> >
-> >>              struct page *page =3D rx_ring->rx_pages[i];
-> >> -            dma_addr_t dma;
-> >>
-> >>              if (!page)
-> >>                      continue;
-> >>
-> >> -            dma =3D page_pool_get_dma_addr(page);
-> >> -
-> >>              /* Invalidate cache lines that may have been written to b=
-y
-> >>               * device so that we avoid corrupting memory.
-> >>               */
-> >> -            dma_sync_single_range_for_cpu(rx_ring->dev, dma,
-> >> -                                          LIBIE_SKB_HEADROOM,
-> >> -                                          LIBIE_RX_BUF_LEN,
-> >> -                                          DMA_FROM_DEVICE);
-> >> -
-> >> -            /* free resources associated with mapping */
-> >> -            dma_unmap_page_attrs(rx_ring->dev, dma, LIBIE_RX_TRUESIZE=
-,
-> >> -                                 DMA_FROM_DEVICE, IAVF_RX_DMA_ATTR);
-> >> -
-> >> -            __free_page(page);
-> >> +            page_pool_dma_sync_full_for_cpu(rx_ring->pool, page);
-> >> +            page_pool_put_full_page(rx_ring->pool, page, false);
-> >>      }
-> >>
-> >>      rx_ring->next_to_clean =3D 0;
-> >> @@ -739,10 +725,15 @@ void iavf_clean_rx_ring(struct iavf_ring *rx_rin=
-g)
-> >>   **/
-> >>  void iavf_free_rx_resources(struct iavf_ring *rx_ring)
-> >>  {
-> >> +    struct device *dev =3D rx_ring->pool->p.dev;
-> >> +
-> >>      iavf_clean_rx_ring(rx_ring);
-> >>      kfree(rx_ring->rx_pages);
-> >>      rx_ring->rx_pages =3D NULL;
-> >>
-> >> +    page_pool_destroy(rx_ring->pool);
-> >> +    rx_ring->dev =3D dev;
-> >> +
-> >>      if (rx_ring->desc) {
-> >>              dma_free_coherent(rx_ring->dev, rx_ring->size,
-> >>                                rx_ring->desc, rx_ring->dma);
-> >
-> > Not a fan of this switching back and forth between being a page pool
-> > pointer and a dev pointer. Seems problematic as it is easily
-> > misinterpreted. I would say that at a minimum stick to either it is
-> > page_pool(Rx) or dev(Tx) on a ring type basis.
->
-> The problem is that page_pool has lifetime from ifup to ifdown, while
-> its ring lives longer. So I had to do something with this, but also I
-> didn't want to have 2 pointers at the same time since it's redundant and
-> +8 bytes to the ring for nothing.
+If the TSCs do start to misbehave, I will of course let you all know.
+But in the meantime:
 
-It might be better to just go with NULL rather than populating it w/
-two different possible values. Then at least you know if it is an
-rx_ring it is a page_pool and if it is a tx_ring it is dev. You can
-reset to the page pool when you repopulate the rest of the ring.
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
-> > This setup works for iavf, however for i40e/ice you may run into issues
-> > since the setup_rx_descriptors call is also used to setup the ethtool
-> > loopback test w/o a napi struct as I recall so there may not be a
-> > q_vector.
->
-> I'll handle that. Somehow :D Thanks for noticing, I'll take a look
-> whether I should do something right now or it can be done later when
-> switching the actual mentioned drivers.
->
-> [...]
->
-> >> @@ -240,7 +237,10 @@ struct iavf_rx_queue_stats {
-> >>  struct iavf_ring {
-> >>      struct iavf_ring *next;         /* pointer to next ring in q_vect=
-or */
-> >>      void *desc;                     /* Descriptor ring memory */
-> >> -    struct device *dev;             /* Used for DMA mapping */
-> >> +    union {
-> >> +            struct page_pool *pool; /* Used for Rx page management */
-> >> +            struct device *dev;     /* Used for DMA mapping on Tx */
-> >> +    };
-> >>      struct net_device *netdev;      /* netdev ring maps to */
-> >>      union {
-> >>              struct iavf_tx_buffer *tx_bi;
-> >
-> > Would it make more sense to have the page pool in the q_vector rather
-> > than the ring? Essentially the page pool is associated per napi
-> > instance so it seems like it would make more sense to store it with the
-> > napi struct rather than potentially have multiple instances per napi.
->
-> As per Page Pool design, you should have it per ring. Plus you have
-> rxq_info (XDP-related structure), which is also per-ring and
-> participates in recycling in some cases. So I wouldn't complicate.
-> I went down the chain and haven't found any place where having more than
-> 1 PP per NAPI would break anything. If I got it correctly, Jakub's
-> optimization discourages having 1 PP per several NAPIs (or scheduling
-> one NAPI on different CPUs), but not the other way around. The goal was
-> to exclude concurrent access to one PP from different threads, and here
-> it's impossible.
+The previous patch that changes the definition of "socket" I have no
+opinion on.  I must let you guys work that out.  However, I do note that
+this patch can be rebased so as to no longer depend on that patch.
 
-The xdp_rxq can be mapped many:1 to the page pool if I am not mistaken.
+						Thanx, Paul
 
-The only reason why I am a fan of trying to keep the page_pool tightly
-associated with the napi instance is because the napi instance is what
-essentially is guaranteeing the page_pool is consistent as it is only
-accessed by that one napi instance.
-
-> Lemme know. I can always disable NAPI optimization for cases when one
-> vector is shared by several queues -- and it's not a usual case for
-> these NICs anyway -- but I haven't found a reason for that.
-
-I suppose we should be fine if we have a many to one mapping though I
-suppose. As you said the issue would be if multiple NAPI were
-accessing the same page pool.
+> ---
+>  arch/x86/kernel/tsc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> index 178448ef00c7..356f06287034 100644
+> --- a/arch/x86/kernel/tsc.c
+> +++ b/arch/x86/kernel/tsc.c
+> @@ -1400,7 +1400,7 @@ static int __init init_tsc_clocksource(void)
+>  	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+>  	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+>  	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
+> -	    logical_packages <= 2)
+> +	    logical_packages <= 4)
+>  		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+>  
+>  	/*
+> -- 
+> 2.34.1
+> 
