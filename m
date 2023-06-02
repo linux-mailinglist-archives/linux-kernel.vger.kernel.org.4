@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF4B7202E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08377202EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235190AbjFBNPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        id S235820AbjFBNQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236131AbjFBNO6 (ORCPT
+        with ESMTP id S235933AbjFBNP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:14:58 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5B1E42
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:14:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-97448470403so279259166b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685711650; x=1688303650;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NM7E2bhPISEHbBlp1H32wp1Q4VWvkt2UL0EOlnHQmhw=;
-        b=EMRhYGqE0xvmt/e3UTWvucXGuihMx3qxy93kVgcdl0JaBC6zfPxxlaYtyG7CwUnPK2
-         IsW2bmeGb79p0HFI+crVf0iOrCWPNAhG9UOuCkjRL6BvZMYjr/Hb6lCCCG4v61L2/ewA
-         xb1is/o+4n4jOMiVzInw5czw6lMNOK3tQkbgv9IpldCx0bcp5AtRNXpC2l00j5Fu/1/e
-         EGbvr+JPC2XX+1gjobhAKXk1sIQW8c9CWk7dFN5jEWVCLQrDTF5BZOw5TUmxEYP9FbFv
-         7FN1w7pWbEwKqAebcSuJPJMmRFC5mN6YtIm0uKG95FNaYi5DuTPFC57WclQSrrJ2bh8H
-         fgJw==
+        Fri, 2 Jun 2023 09:15:59 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A0410DB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:15:39 -0700 (PDT)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 199DE3F438
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685711725;
+        bh=u076fhLtJeSydB1XIua93PO8nclzPCMG3IiM+N6xDS8=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=kWGDVJRgzz6h+HbGDS4r2OgUX+5XzrWiNqZhK10d4sHtz4xxWRRPU0DZuifVxJeBz
+         St6VknRDISntoKcr6mDQKVrqPKfaIApi5XjVhkuyjTWQPmuaB2o4a9Nox0h7vlAo2z
+         x72omyr0LtZfAydeZTrpjHUVTa5uFU3BePP9qB5f3Ra5Kc0ZaKN/neWKPcARgpB/M0
+         U1dng0r+UxQaoQ27xnhwVX4JxUFhZe7YqW38CeWnJRneqVdulfyXQi3pTgr0VzNT42
+         LM1DSYVEI4tx7IM3QOWTFjJU3Sb1QRlSJCAmClaTeqMGSLYo12LbF8oiKFRLRkePNS
+         il7V8vM76ws8g==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-5693861875fso22239907b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:15:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711650; x=1688303650;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NM7E2bhPISEHbBlp1H32wp1Q4VWvkt2UL0EOlnHQmhw=;
-        b=E+G2eMVnyOCxyiUbC/RvFBJTuLslqlh7T3xuMSLU+5TNUffONVdvKUCHuboZfrEcW2
-         V8mS9kjufwKRfjdwgXVhKAeeFJNC6OQAGKemUyBqsF3KYTZqQQ/uO+vx43jJ4pnDMQI4
-         eyoa/LdFl0xUKJPih+3gw2skmwAg1ZwdxJC2SiESJvVs6kqoXk0GVevjE/CTPfYMwqWD
-         wIDrqAwEvqLOSo0NgL1KLjc2Bm246ABKx/71KvPAfMf/QcEPUpJf0MaFSd+MwjPWvTtj
-         +nCuG9bhIVtjuc1agLcngy9r/fxgBUE1l6G4MbDcbDYvQdi0nXc6mg18bdOYy33vkEvL
-         U73Q==
-X-Gm-Message-State: AC+VfDxgitLqXoJpsIiXZ32TXnu196rBlVDZHQoOjwe9XY00noPZ1vT0
-        J5Tr7kPS/fwcZywSpOFaHj5etA==
-X-Google-Smtp-Source: ACHHUZ4uIIsfu5hfYvBBUXo02QYm4Gt9O+H37x3tBrXc8NtwSrPZ6PnJax9nm8arEBESNAAtPajQbQ==
-X-Received: by 2002:a17:906:fe43:b0:973:e69d:c720 with SMTP id wz3-20020a170906fe4300b00973e69dc720mr10021680ejb.51.1685711650410;
-        Fri, 02 Jun 2023 06:14:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id bi1-20020a170906a24100b009664cdb3fc5sm737006ejb.138.2023.06.02.06.14.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 06:14:09 -0700 (PDT)
-Message-ID: <de4aa846-c609-b0c3-a04a-2ad5ffaec815@linaro.org>
-Date:   Fri, 2 Jun 2023 15:14:07 +0200
+        d=1e100.net; s=20221208; t=1685711723; x=1688303723;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u076fhLtJeSydB1XIua93PO8nclzPCMG3IiM+N6xDS8=;
+        b=jTCDws7SB8fUksYSa1NftBZU/8eCJJYKZK8vu1ZchXnRcUW/QdUhWP1A6L6dmEkQWE
+         f+6LfKYsedkZeeHb5V6E97Cion+KsthGj/0jo1NGmD4NtJtIk3OAbk9EaRGi+ZAuWED1
+         J4DRmcYcNQh9nqpUBgM6u6TMcKZv8wZ9RHHNO01v5xy2ccIy2aHPMZNgqLEean2ozO9E
+         wY+XnRe2TTgdrdE4CLUOSg9lJYzPw+Ci5k08KC97gvhiGzwkiqgvYXKjDT8rguIaL5pc
+         hlUKjNNW2Ol4hzpIY6zDBBhiKY8InTUz0JjFUxd4i815LoemaQDRsl+QUGdme206nQBE
+         fzrw==
+X-Gm-Message-State: AC+VfDw42b2k3dWPRHztS/S3kRUWnfVBAfKJZU8tuOc0p/8/a+tgD3m6
+        BG/77U+LbMPr8QzwTntvKtFtVZxwIciJsg8XVEWdC6WiAynsN1b6/GtjIA6ugjJFl0eI2VPijwN
+        mWuEb6jKCuDux9Hqrz5y07gHH4ns66WUdbwUllBEOKfDdgtSV3rO+snvkJQ==
+X-Received: by 2002:a0d:cb45:0:b0:556:c778:9d60 with SMTP id n66-20020a0dcb45000000b00556c7789d60mr12955450ywd.43.1685711723666;
+        Fri, 02 Jun 2023 06:15:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7oZ/NVBPuMJSPOzTFYcxMNqX02acJ4tHzsSIhKQcaPHczl7hdPQkv16vSee4HRNWpEn0VuAGnCxbSkIY+f9fU=
+X-Received: by 2002:a0d:cb45:0:b0:556:c778:9d60 with SMTP id
+ n66-20020a0dcb45000000b00556c7789d60mr12955426ywd.43.1685711723387; Fri, 02
+ Jun 2023 06:15:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 03/11] dt-bindings: stm32: add st,stm32mp25-syscfg
- compatible for syscon
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
- <20230529162034.20481-4-alexandre.torgue@foss.st.com>
-Content-Language: en-US
-In-Reply-To: <20230529162034.20481-4-alexandre.torgue@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230524153316.476973-11-aleksandr.mikhalitsyn@canonical.com>
+ <b3b1b8dc-9903-c4ff-0a63-9a31a311ff0b@redhat.com> <CAEivzxfxug8kb7_SzJGvEZMcYwGM8uW25gKa_osFqUCpF_+Lhg@mail.gmail.com>
+ <20230602-vorzeichen-praktikum-f17931692301@brauner> <CAEivzxcwTbOUrT2ha8fR=wy-bU1+ZppapnMsqVXBXAc+C0gwhw@mail.gmail.com>
+ <20230602-behoben-tauglich-b6ecd903f2a9@brauner>
+In-Reply-To: <20230602-behoben-tauglich-b6ecd903f2a9@brauner>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Fri, 2 Jun 2023 15:15:12 +0200
+Message-ID: <CAEivzxfOgiQjXob+J1S5MsBFJjDGX_hApD_xR1s7q-S9eQh_bw@mail.gmail.com>
+Subject: Re: [PATCH v2 10/13] ceph: allow idmapped setattr inode op
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Xiubo Li <xiubli@redhat.com>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,32 +83,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resending as my previous email probably got lost. If you got it twice,
-apologies.
+On Fri, Jun 2, 2023 at 3:08=E2=80=AFPM Christian Brauner <brauner@kernel.or=
+g> wrote:
+>
+> On Fri, Jun 02, 2023 at 03:05:50PM +0200, Aleksandr Mikhalitsyn wrote:
+> > On Fri, Jun 2, 2023 at 2:54=E2=80=AFPM Christian Brauner <brauner@kerne=
+l.org> wrote:
+> > >
+> > > On Fri, Jun 02, 2023 at 02:45:30PM +0200, Aleksandr Mikhalitsyn wrote=
+:
+> > > > On Fri, Jun 2, 2023 at 3:30=E2=80=AFAM Xiubo Li <xiubli@redhat.com>=
+ wrote:
+> > > > >
+> > > > >
+> > > > > On 5/24/23 23:33, Alexander Mikhalitsyn wrote:
+> > > > > > From: Christian Brauner <christian.brauner@ubuntu.com>
+> > > > > >
+> > > > > > Enable __ceph_setattr() to handle idmapped mounts. This is just=
+ a matter
+> > > > > > of passing down the mount's idmapping.
+> > > > > >
+> > > > > > Cc: Jeff Layton <jlayton@kernel.org>
+> > > > > > Cc: Ilya Dryomov <idryomov@gmail.com>
+> > > > > > Cc: ceph-devel@vger.kernel.org
+> > > > > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > > > > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@can=
+onical.com>
+> > > > > > ---
+> > > > > >   fs/ceph/inode.c | 11 +++++++++--
+> > > > > >   1 file changed, 9 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> > > > > > index 37e1cbfc7c89..f1f934439be0 100644
+> > > > > > --- a/fs/ceph/inode.c
+> > > > > > +++ b/fs/ceph/inode.c
+> > > > > > @@ -2050,6 +2050,13 @@ int __ceph_setattr(struct inode *inode, =
+struct iattr *attr)
+> > > > > >
+> > > > > >       dout("setattr %p issued %s\n", inode, ceph_cap_string(iss=
+ued));
+> > > > > >
+> > > > > > +     /*
+> > > > > > +      * The attr->ia_{g,u}id members contain the target {g,u}i=
+d we're
+> > >
+> > > This is now obsolete... In earlier imlementations attr->ia_{g,u}id wa=
+s
+> > > used and contained the filesystem wide value, not the idmapped mount
+> > > value.
+> > >
+> > > However, this was misleading and we changed that in commit b27c82e129=
+65
+> > > ("attr: port attribute changes to new types") and introduced dedicate=
+d
+> > > new types into struct iattr->ia_vfs{g,u}id. So the you need to use
+> > > attr->ia_vfs{g,u}id as documented in include/linux/fs.h and you need =
+to
+> > > transform them into filesystem wide values and then to raw values you
+> > > send over the wire.
+> > >
+> > > Alex should be able to figure this out though.
+> >
+> > Hi Christian,
+> >
+> > Thanks for pointing this out. Unfortunately I wasn't able to notice
+> > that. I'll take a look closer and fix that.
+>
+> Just to clarify: I wasn't trying to imply that you should've figured
+> this out on your own. I was just trying to say that you should be able
+> figure out the exact details how to implement this in ceph after I told
+> you about the attr->ia_vfs{g,u}id change.
 
-On 29/05/2023 18:20, Alexandre Torgue wrote:
-> From: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> 
-> Add the new syscon compatible for STM32MP25 syscfg = "st,stm32mp25-syscfg".
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-> index ad8e51aa01b0..9ed5b121cea9 100644
-> --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-> +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-> @@ -16,6 +16,7 @@ properties:
->        - items:
->            - enum:
->                - st,stm32mp157-syscfg
-> +              - st,stm32mp25-syscfg
-
-You should rather keep some (alphabetical?) order.
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+No problem, I've got your idea the same as you explained it ;-)
+I'll rework that place and I will recheck that we pass xfstests after that.
