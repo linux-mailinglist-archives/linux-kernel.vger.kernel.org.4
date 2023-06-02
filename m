@@ -2,76 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1243720884
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9051D720888
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236968AbjFBRlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S236767AbjFBRmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236965AbjFBRlj (ORCPT
+        with ESMTP id S235274AbjFBRmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:41:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1641BD;
-        Fri,  2 Jun 2023 10:41:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB58060C43;
-        Fri,  2 Jun 2023 17:41:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D55EC433D2;
-        Fri,  2 Jun 2023 17:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685727694;
-        bh=MeJZHg99CKlydE+P+L7Y5wugVA7dLNcMZaQ+hUjc8g4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=qX0DiatAjw/Q9ngbWfH9L6nnWRXtnrJdY/HwPUm5CCz1iEplVI/81N5HjzBPmYQLS
-         +0MBC1J6VV0tkLDObWXStpgtuNnSaJ+JW2v70EYUI0+4KrGRiGg8zL/RC7gW5LtJSI
-         3+BkX+AlVeu+UVZwHtgXXZwhQSS7Gt1vT0zCzOtjIGvi9Nn2disn5rQEuaJ32nvvKL
-         AV3ahf60IYlvcvjp4IFE5FdT/geG9jdqfbj6ual+KRqK3RSfwrCCZnoPaAjW7VejUT
-         EyH18F6kELV2ELR4i5GZbAhM99LkSFvaJtC3KvbSyDtFAd1Z5HqLbJK5nj62KUUJMZ
-         KRzSJKivmQ8lQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B258E52BF5;
-        Fri,  2 Jun 2023 17:41:34 +0000 (UTC)
-Subject: Re: [GIT PULL] nfsd fixes for v6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <10156F3D-A4B8-4462-80EC-65ECDECE7B44@oracle.com>
-References: <10156F3D-A4B8-4462-80EC-65ECDECE7B44@oracle.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <10156F3D-A4B8-4462-80EC-65ECDECE7B44@oracle.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.4-2
-X-PR-Tracked-Commit-Id: c034203b6a9dae6751ef4371c18cb77983e30c28
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a746ca666a8486a04b6c0584966bfce16f6b1e1a
-Message-Id: <168572769417.31437.2089839050320893526.pr-tracker-bot@kernel.org>
-Date:   Fri, 02 Jun 2023 17:41:34 +0000
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 13:42:35 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD502133;
+        Fri,  2 Jun 2023 10:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685727754; x=1717263754;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pKlkspNOzWL1+VLdgFmqTg/cLWhdIZxOrJGpOZ10YD0=;
+  b=hWUr5qDOkbD3nEl3i/8qitoQI4jdHYAOqZv4dx2hYsFNZ4VDBgULKYUx
+   sCIFk6Y0R1ZHvOOgqnUYXL9BcVMNIV7YEfgLSfjw0Hx6Lkn5inbB1fsK5
+   HMOYovmlQt5PkifP8zBZPVGAOtELkPNrA7c0UACa+65l+eWeI/R77EdPb
+   NnRVjyyymylz1oPhoV3gYeRpfowEE+H4cd6QCrqtwbUj8qw9zc8mlLKXR
+   NONxT8kA68TCTnEKOpLdOFeHk5D5HntUgJqmCayuNTIbxXOjlo2DTZOYC
+   DzCDM4aPaFvaj+DAvUPA15O+poF5TMkOgFIuG18H418zAn/7L+KzGmj6I
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="336289400"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="336289400"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 10:42:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="702030729"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="702030729"
+Received: from pingshi-mobl.amr.corp.intel.com (HELO [10.251.23.169]) ([10.251.23.169])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 10:42:34 -0700
+Message-ID: <d73d41cc-0578-7bf3-46a2-b47eea44bdd0@intel.com>
+Date:   Fri, 2 Jun 2023 10:42:33 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCHv2 2/3] x86/tdx: Fix race between set_memory_encrypted()
+ and load_unaligned_zeropad()
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Dexuan Cui <decui@microsoft.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
+ <20230526120225.31936-3-kirill.shutemov@linux.intel.com>
+ <19d9977f-bf07-2948-1b45-456af9c09e2f@linux.intel.com>
+ <20230530005736.ndwza2i5n7wrki5h@box.shutemov.name>
+ <9d679d3f-8db9-80ef-292a-9ca5b860579b@amd.com>
+ <2d8ae093-dd9e-ea49-d6f9-3fdb2fb84e4d@linux.intel.com>
+ <BYAPR21MB1688EF2A57E90FCE02B82F84D748A@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <9fbc3760-7239-2323-ed90-210a0de9e286@amd.com>
+ <BYAPR21MB168826D6C870542E5BD3372BD74EA@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <BYAPR21MB168826D6C870542E5BD3372BD74EA@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 2 Jun 2023 14:42:30 +0000:
+On 6/2/23 09:11, Michael Kelley (LINUX) wrote:
+> Tom -- Does the above sequence *depend* on the hypervisor doing anything
+> to make it work?  I'm not clear on why KVM would automatically change the
+> page over to private.  If there's a dependency on the hypervisor doing
+> something, then it seems like we'll need to standardize that "something"
+> across hypervisors, lest we end up with per-hypervisor code in Linux to handle
+> this scenario.  And running SEV-SNP with multiple VMPLs probably makes it
+> even more complicated.
+> 
+> Kirill -- Same question about TDX.  Does making load_unaligned_zeropad()
+> work in a TDX VM depend on the hypervisor doing anything?  Or is the
+> behavior seen by the guest dependent only on architected behavior of
+> the TDX processor?
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.4-2
+No, there's no active help from the hypervisor here.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a746ca666a8486a04b6c0584966bfce16f6b1e1a
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Also, fwiw, the "architected behavior" here is really just the TDX
+module policy and _arguably_ the hardware Secure-EPT controlled by the
+TDX module.
