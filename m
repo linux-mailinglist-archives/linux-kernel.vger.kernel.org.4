@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002CF720B3A
+	by mail.lfdr.de (Postfix) with ESMTP id A926A720B39
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236754AbjFBVuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S236359AbjFBVuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236665AbjFBVtw (ORCPT
+        with ESMTP id S236580AbjFBVtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:49:52 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18791E40;
-        Fri,  2 Jun 2023 14:49:50 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 352LndGD072497;
-        Fri, 2 Jun 2023 16:49:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685742579;
-        bh=XmH/7b2jgWDrCo4pqahu53GTXlvcTm6dtDowrecpg8I=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=GmuFXIMYpl5ojMmuJdJ/qmrNtwwaaYf2WEQVii+gpaDIzaS3qxSWtCZEo+ZJAou8B
-         WlGnPToRaTyUveH6CZbHf9WUwI33/QobZN8vkq3SuHPlwmRzG0zUlLReDVjShNVaW8
-         hY07WNaCnqBQ0Lt+qPxOav7NoKgl06ET73wWtBmA=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 352Lndvj028993
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 2 Jun 2023 16:49:39 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 2
- Jun 2023 16:49:39 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 2 Jun 2023 16:49:38 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 352LndbS001305;
-        Fri, 2 Jun 2023 16:49:39 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Nishanth Menon <nm@ti.com>,
-        Udit Kumar <u-kumar1@ti.com>, Nitin Yadav <n-yadav@ti.com>,
-        Neha Malcom Francis <n-francis@ti.com>,
-        Sinthu Raja <sinthu.raja@ti.com>,
-        Thejasvi Konduru <t-konduru@ti.com>,
-        Dasnavis Sabiya <sabiya.d@ti.com>
-Subject: [PATCH 8/8] arm64: dts: ti: k3-am69-sk: Add pinmux for RPi Header
-Date:   Fri, 2 Jun 2023 16:49:37 -0500
-Message-ID: <20230602214937.2349545-9-nm@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230602214937.2349545-1-nm@ti.com>
-References: <20230602214937.2349545-1-nm@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Fri, 2 Jun 2023 17:49:50 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFDD1A5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 14:49:48 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5659c7dad06so39219167b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 14:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685742588; x=1688334588;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nefBGxsNaEMoqb2mC8n3j2OvjLQc0K598TL3kgSXzFU=;
+        b=aurBhqbKeOJz/AyMRAeO/7yWA5uxveScJZDdPbJybfzRJXg5iNEY5FZtEV7uSUvzCU
+         PtiChI5pW/pP6OFoY63g3yXEQyjmcXN2hwcZpKKkWFZvcEXYFOkXFWlbLPW29jRLfKQb
+         +u4blAhi4jofaqKLqN8X27ittdB8oe0nXaYmbQjzTXdwQSFkywSd5Otp5phYr6G78xao
+         IYKc3WsSxqVyRJZqSylJOpBqoyF0QXpgXt0GZwK98gzhGpF1vKze4/wrmShW8+ZlueOz
+         oeZZTRIS1SIRWW60Bdq5uVIv2M4e5yHlD8HQUTXXJAj9oMGDGTniLJfqvMbpRV+8l4yD
+         opVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685742588; x=1688334588;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nefBGxsNaEMoqb2mC8n3j2OvjLQc0K598TL3kgSXzFU=;
+        b=jNJQ1IgoJ0p9Fdm1KqWwV/X/hPLRZK3NdykQcriisahWaK2O10QZ5h0zC7d1gszPh1
+         ve93QTufErOw+84WgIbDVWqCMKkT2rdlO9yuJa9q4jJWE/PQsywU7wdfpSRKACve6LUW
+         +irWMZtjUgyHBmIJBlOAfBsk6/H2XBhutC9j5SEMVo4YKijcxRmFU40UMSi/onqVKwhg
+         OIHXEEZA0n8uH+nJMkmykWKPK+vD0G5F3iluh+4NcjDgCy+9lr9wLOLh+QbyDmggBFcM
+         50do0RjxlNElZoZ4Y2qo4JMXsfGaQUTZiDb/lYF4x9SxeDIFVj6BMKRGIwDsEovgxP0m
+         0jQQ==
+X-Gm-Message-State: AC+VfDw8mlWojl79Jo8jylXTAySpa3YkUbD2MbIy6erWyU6ulew+oJE/
+        BbdQyTDhsu2aUuvALfWa/7y+jKs4e9w=
+X-Google-Smtp-Source: ACHHUZ5egV/UIPDs3RgIUBEXXI8beMvTpFWkwRh8/lCmke0ndg+wwSUO5jvBndae09dX3oizTe2mi7Dhp9M=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:af64:0:b0:559:f161:f052 with SMTP id
+ x36-20020a81af64000000b00559f161f052mr639983ywj.2.1685742588103; Fri, 02 Jun
+ 2023 14:49:48 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 14:49:46 -0700
+In-Reply-To: <CALMp9eTtkBL3Fb7Dq60go6CL+zGODNn0TTavr436Q-+=mpVFMA@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230602010550.785722-1-seanjc@google.com> <C8324338-FC07-454E-9A5A-1785141FEAB3@nutanix.com>
+ <CALMp9eTtkBL3Fb7Dq60go6CL+zGODNn0TTavr436Q-+=mpVFMA@mail.gmail.com>
+Message-ID: <ZHpj+j5Cs1vOXgyP@google.com>
+Subject: Re: [PATCH] KVM: x86: Use cpu_feature_enabled() for PKU instead of #ifdef
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Jon Kohler <jon@nutanix.com>, Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,133 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dasnavis Sabiya <sabiya.d@ti.com>
+On Fri, Jun 02, 2023, Jim Mattson wrote:
+> On Fri, Jun 2, 2023 at 8:51=E2=80=AFAM Jon Kohler <jon@nutanix.com> wrote=
+:
+> > > On Jun 1, 2023, at 9:05 PM, Sean Christopherson <seanjc@google.com> w=
+rote:
+> > > @@ -1032,15 +1030,13 @@ void kvm_load_host_xsave_state(struct kvm_vcp=
+u *vcpu)
+> > >       if (vcpu->arch.guest_state_protected)
+> > >               return;
+> > >
+> > > -#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+> > > -     if (static_cpu_has(X86_FEATURE_PKU) &&
+> > > +     if (cpu_feature_enabled(X86_FEATURE_PKU) &&
+> > >           ((vcpu->arch.xcr0 & XFEATURE_MASK_PKRU) ||
+> > >            kvm_is_cr4_bit_set(vcpu, X86_CR4_PKE))) {
+> > >               vcpu->arch.pkru =3D rdpkru();
+> > >               if (vcpu->arch.pkru !=3D vcpu->arch.host_pkru)
+> > >                       write_pkru(vcpu->arch.host_pkru);
+> > >       }
+> > > -#endif /* CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS */
+> > >
+> > >       if (kvm_is_cr4_bit_set(vcpu, X86_CR4_OSXSAVE)) {
+> > >
+> > >
+> > > base-commit: a053a0e4a9f8c52f3acf8a9d2520c4bf39077a7e
+> > > --
+> > > 2.41.0.rc2.161.g9c6817b8e7-goog
+> > >
+> >
+> > Thanks for the cleanup!
+> >
+> > Reviewed-by: Jon Kohler <jon@nutanix.com>
+>=20
+> +Mingwei Zhang
+>=20
+> As we move towards enabling PKRU on the host, due to some customer
+> requests, I have to wonder if PKRU-disabled is the norm.
+>=20
+> In other words, is this a likely() or unlikely() optimization?
 
-Add pinmux required to bring out the i2c and gpios on 40 pin RPi
-expansion header on AM69 SK board.
-
-Signed-off-by: Dasnavis Sabiya <sabiya.d@ti.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-Depends on https://lore.kernel.org/linux-arm-kernel/20230503083143.32369-1-t-konduru@ti.com/
-
-Changes since V1:
-* Rebased on the pinmux split up done from the dependency.
-* Some minor style fixups.
-
-V1: https://lore.kernel.org/linux-arm-kernel/20230316104743.482972-3-sabiya.d@ti.com/
-
- arch/arm64/boot/dts/ti/k3-am69-sk.dts | 63 +++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am69-sk.dts b/arch/arm64/boot/dts/ti/k3-am69-sk.dts
-index a0e7872f31f2..093c6f8391e4 100644
---- a/arch/arm64/boot/dts/ti/k3-am69-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am69-sk.dts
-@@ -141,6 +141,25 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
- 			J784S4_IOPAD(0x0C4, PIN_INPUT, 7) /* (AD36) ECAP0_IN_APWM_OUT.GPIO0_49 */
- 		>;
- 	};
-+
-+	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_IOPAD(0x0BC, PIN_INPUT, 7) /* (AD33) MCASP1_AFSX.GPIO0_47 */
-+			J784S4_IOPAD(0x06C, PIN_INPUT, 7) /* (AJ37) MCASP4_AFSX.GPIO0_27 */
-+			J784S4_IOPAD(0x0B4, PIN_INPUT, 7) /* (AL34) MCASP1_AXR4.GPIO0_45 */
-+			J784S4_IOPAD(0x0C0, PIN_INPUT, 7) /* (AD38) MCASP1_AXR0.GPIO0_48 */
-+			J784S4_IOPAD(0x00C, PIN_INPUT, 7) /* (AF33) MCAN13_TX.GPIO0_3 */
-+			J784S4_IOPAD(0x0B8, PIN_INPUT, 7) /* (AC34) MCASP1_ACLKX.GPIO0_46 */
-+			J784S4_IOPAD(0x090, PIN_INPUT, 7) /* (AC35) MCASP0_AXR8.GPIO0_36 */
-+			J784S4_IOPAD(0x0A8, PIN_INPUT, 7) /* (AF34) MCASP0_AXR14.GPIO0_42 */
-+			J784S4_IOPAD(0x0A4, PIN_INPUT, 7) /* (AJ36) MCASP0_AXR13.GPIO0_41 */
-+			J784S4_IOPAD(0x034, PIN_INPUT, 7) /* (AJ34) PMIC_WAKE0n.GPIO0_13 */
-+			J784S4_IOPAD(0x0CC, PIN_INPUT, 7) /* (AM37) SPI0_CS0.GPIO0_51 */
-+			J784S4_IOPAD(0x08C, PIN_INPUT, 7) /* (AE35) MCASP0_AXR7.GPIO0_35 */
-+			J784S4_IOPAD(0x008, PIN_INPUT, 7) /* (AJ33) MCAN12_RX.GPIO0_2 */
-+			J784S4_IOPAD(0x004, PIN_INPUT, 7) /* (AG36) MCAN12_TX.GPIO0_1 */
-+		>;
-+	};
- };
- 
- &wkup_pmx2 {
-@@ -167,6 +186,13 @@ J784S4_WKUP_IOPAD(0x088, PIN_OUTPUT, 0) /* (J37) WKUP_GPIO0_12.MCU_UART0_TXD */
- 		>;
- 	};
- 
-+	mcu_i2c0_pins_default: mcu-i2c0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x0a0, PIN_INPUT_PULLUP, 0) /* (M35) MCU_I2C0_SCL */
-+			J784S4_WKUP_IOPAD(0x0a4, PIN_INPUT_PULLUP, 0) /* (G34) MCU_I2C0_SDA */
-+		>;
-+	};
-+
- 	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
- 		pinctrl-single,pins = <
- 			J784S4_WKUP_IOPAD(0x02c, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
-@@ -190,6 +216,28 @@ J784S4_WKUP_IOPAD(0x034, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
- 			J784S4_WKUP_IOPAD(0x030, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
- 		>;
- 	};
-+
-+	mcu_rpi_hdr1_gpio0_pins_default: mcu-rpi-hdr1-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x118, PIN_INPUT, 7) /* (N34) WKUP_GPIO0_66 */
-+			J784S4_WKUP_IOPAD(0x05c, PIN_INPUT, 7) /* (J34) WKUP_GPIO0_1 */
-+			J784S4_WKUP_IOPAD(0x060, PIN_INPUT, 7) /* (J35) WKUP_GPIO0_2 */
-+			J784S4_WKUP_IOPAD(0x058, PIN_INPUT, 7) /* (H38) WKUP_GPIO0_0 */
-+			J784S4_WKUP_IOPAD(0x0b8, PIN_INPUT, 7) /* (M37) WKUP_GPIO0_56 */
-+			J784S4_WKUP_IOPAD(0x114, PIN_INPUT, 7) /* (M36) WKUP_GPIO0_57 */
-+			J784S4_WKUP_IOPAD(0x094, PIN_INPUT, 7) /* (K37) WKUP_GPIO0_15 */
-+			J784S4_WKUP_IOPAD(0x064, PIN_INPUT, 7) /* (J36) WKUP_GPIO0_3 */
-+			J784S4_WKUP_IOPAD(0x11c, PIN_INPUT, 7) /* (M34) WKUP_GPIO0_67 */
-+		>;
-+	};
-+};
-+
-+&wkup_pmx3 {
-+	mcu_rpi_hdr2_gpio0_pins_default: mcu-rpi-hdr2-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x0, PIN_INPUT, 7) /* (M33) WKUP_GPIO0_49 */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -212,12 +260,25 @@ eeprom@51 {
- 	};
- };
- 
-+&wkup_gpio0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_rpi_hdr1_gpio0_pins_default>, <&mcu_rpi_hdr2_gpio0_pins_default>;
-+};
-+
- &mcu_uart0 {
- 	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&mcu_uart0_pins_default>;
- };
- 
-+&mcu_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+};
-+
- &main_uart8 {
- 	status = "okay";
- 	pinctrl-names = "default";
-@@ -256,6 +317,8 @@ &main_sdhci1 {
- 
- &main_gpio0 {
- 	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
- };
- 
- &mcu_cpsw {
--- 
-2.40.0
-
+Neither?  I don't see any reason to speculate on guest state.  I'll bet dol=
+lars
+to donuts that adding (un)likely() is negligible in terms of performance.
