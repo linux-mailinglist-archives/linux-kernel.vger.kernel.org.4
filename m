@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B5771F908
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E8671F90B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbjFBDyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 23:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S233226AbjFBDyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 23:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFBDyJ (ORCPT
+        with ESMTP id S229598AbjFBDyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 23:54:09 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86302180
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:54:08 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8337a5861so3982212276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:54:08 -0700 (PDT)
+        Thu, 1 Jun 2023 23:54:47 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA8618C;
+        Thu,  1 Jun 2023 20:54:46 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2566f66190dso1345264a91.1;
+        Thu, 01 Jun 2023 20:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685678047; x=1688270047;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4rpaRYhp9pezQBgGgl7jQUhQdvTwr6KJlRlk+rOPp+4=;
-        b=oy7uyJW5kSVKl5JSZ/Uud8NxX96LuyPz1MBYWsWFDACRtnYfZ1CykuEc2PuIU66iaC
-         nPGpUMcz+eLB6jycjZt1gVbGp4FGxaTUDJbaAWFE9qLsiXIPMFlFNTs7ymDceTA3fszR
-         T52SUG0LFVyp50KWfFp4BrB78tpk+y11glHpxWmJ0IOh6CcMCPlkb957vcAWhEs/KT3K
-         cXrSV9Y4YNMOWee17PUB5H+ggHFhVEqXycwu25L/+KLR/bWyA1nqzOeG2rbG7Kvudu4s
-         R5vrkEk5r6zFr9seW2+eyeZp/02I+rUHk8MMYmq11yLTl/47oyZCUKm68jpRxRlnCyis
-         GFXA==
+        d=gmail.com; s=20221208; t=1685678085; x=1688270085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AFYRa2oit8Kb04mbuiimeCpNVm02GagiFFjOTHBNe/E=;
+        b=DyjwxaLk7AueeisR6yISmADRKlAHBLdbHCQxJgnZxXyaRSC4Ln0ymZBuV5GNb8izsY
+         BGgRFHURLha9A++oTaDl4vGKpLH3br3cColD7VPoRCL7FFmmQ9+thgITD2irfws1WyP7
+         8z7kq2jO+Q1lqfanDHsw8c6o38bMu2Gv7dWKuEnKtAWBAON6c0cqANMkIkWgoj/La9im
+         AgPIII4nTTAZofuQU0B5FcNGpzOg9Q3BETfrB6RZNzGYBOS25Ae8JUsQNwp7oKsq6qqH
+         JIp6LFPKgHvj8pR5T2aUYszEbnwhSQQgZ9lqiRwAZqD5xjPaXoxNmbB5bQ3tj+LtzNsN
+         BxbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685678047; x=1688270047;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4rpaRYhp9pezQBgGgl7jQUhQdvTwr6KJlRlk+rOPp+4=;
-        b=RMBxJOuXkXZcT/3U1MrlP41X5YQC+xby2K4pc8sJbvyAE3SLe4YGzqFThk92YhLZ9T
-         MHEXHZNSpoUUier1JvT4L5AmRFVRuEcykfiv9f38mkPgktuxntS88jJotrVl1P1K+xAF
-         P2jHt22YO8FeliSIuXSloC7dqQ2jT7UFwRelLi8qPbvW8+udu6WaDMP74hsfJF5QjEfC
-         4vCdxDQtSaoSEJtUfrN33Ncc2wt6E5OXspZXejLupA1U537ITU7UV/0oc26WQQUM6Uog
-         PVXsqS+gB3Y0X6oA6CPn1v0V+sKsaggCPUESAHBAcv/A3s9wWFSZdy6IYcMIpUvyAkfy
-         0Utg==
-X-Gm-Message-State: AC+VfDwF43umcuV2pCQLxPU2mfMEf7FauSZO5Gp+dW15TPeykByKceQb
-        ABCrXngchbTwtFMRfiNuJC21ZGJ5L2TPAQ==
-X-Google-Smtp-Source: ACHHUZ4kDJe2xZPeYgvJPMDUZ6UocdXCqm7Vq9ZTHKGva9YUiMBK+nsyd/mpj/y1ZSiphFIx6Cj3S9zv926dBQ==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:d404:0:b0:bad:2828:479 with SMTP id
- m4-20020a25d404000000b00bad28280479mr1058303ybf.6.1685678047749; Thu, 01 Jun
- 2023 20:54:07 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 11:53:59 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230602035400.2333527-1-davidgow@google.com>
-Subject: [PATCH] Documentation: kunit: Rename references to kunit_abort()
-From:   David Gow <davidgow@google.com>
-To:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Rae Moar <rmoar@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
+        d=1e100.net; s=20221208; t=1685678085; x=1688270085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AFYRa2oit8Kb04mbuiimeCpNVm02GagiFFjOTHBNe/E=;
+        b=OCiP3ukFtzLKs0pjo7HTHAKgON3LEjxkoiqiNjQNcNKe02pMnUbVukc4Vc/7FA9TpD
+         awaylnuGoSwV+XnCKlHDMt2AOsLpnYWU3DIaYfcUKNjBj7YY7TtCKcs/S2PAqcEuZ6UI
+         cwtZgYfVyZNCPyz/nwcpu/Hw++BKOtMpEhrpqxOmk2K7/kEDlf4gD4NR6SFSAKpjfUDM
+         +jl/bQGJN5avwP1Iz2j8JjXwymFfbv8VG8R0+12IVZDsRTQ7+lbkohtkRY0bSbiVP4XY
+         r9FLGkavbnAiR0V1udlLrIGfsxS8ceI0DaQD95BChkDQkSTGfZCy/lh+WkK2Ephnw83h
+         AJAg==
+X-Gm-Message-State: AC+VfDzcVKLKo1Dh2hqL8Y8+PG5sLZtQHmX6x/xW1db3RfiHVB0X9UaQ
+        tZdFlBvXMdUhsTXZooVqNNS8pKMT+RyoUdp/IMU=
+X-Google-Smtp-Source: ACHHUZ7bFV1KjjBpBrQzVDLhlCusRk+BBNxv53GfvPOJzwSHNjAxytFtkFPQE+TCkYjIZVWXIk2piLSrw5WZpmltkF4=
+X-Received: by 2002:a17:90a:1d46:b0:256:bc96:45ad with SMTP id
+ u6-20020a17090a1d4600b00256bc9645admr1073489pju.40.1685678085392; Thu, 01 Jun
+ 2023 20:54:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230531093206.3893469-1-victor.liu@nxp.com> <20230531093206.3893469-2-victor.liu@nxp.com>
+ <bd257ed0-71a7-0504-0bfe-14775ac93571@linaro.org>
+In-Reply-To: <bd257ed0-71a7-0504-0bfe-14775ac93571@linaro.org>
+From:   Ying Liu <gnuiyl@gmail.com>
+Date:   Fri, 2 Jun 2023 11:54:33 +0800
+Message-ID: <CAOcKUNWkubMK1MJS73tpbm4bafQv2GAMuq_JOTFbvB9EVDRvxg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: bridge: Add NXP i.MX93
+ parallel display format configuration
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, neil.armstrong@linaro.org,
+        conor+dt@kernel.org, rfoss@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jonas@kwiboo.se,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        jernej.skrabec@gmail.com, robh+dt@kernel.org,
+        Laurent.pinchart@ideasonboard.com, andrzej.hajda@intel.com,
+        kernel@pengutronix.de, linux-imx@nxp.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kunit_abort() function has been renamed __kunit_abort(), update the
-references to it in the documentation.
+On Fri, Jun 2, 2023 at 1:45=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 31/05/2023 11:32, Liu Ying wrote:
+> > NXP i.MX93 mediamix blk-ctrl contains one DISPLAY_MUX register which
+> > configures parallel display format by using the "PARALLEL_DISP_FORMAT"
+> > field. Add device tree bindings for the display format configuration.
+> >
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > ---
+> > v1->v2:
+> > * No change.
+>
+> How did you implement Rob's comment?
 
-Suggested-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
- Documentation/dev-tools/kunit/architecture.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Should have discussed more in v1 about Rob's comment, but
+let me explain why this dt-binding makes sense here:
 
-diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation/dev-tools/kunit/architecture.rst
-index e95ab05342bb..f335f883f8f6 100644
---- a/Documentation/dev-tools/kunit/architecture.rst
-+++ b/Documentation/dev-tools/kunit/architecture.rst
-@@ -119,9 +119,9 @@ All expectations/assertions are formatted as:
- 	  terminated immediately.
- 
- 		- Assertions call the function:
--		  ``void __noreturn kunit_abort(struct kunit *)``.
-+		  ``void __noreturn __kunit_abort(struct kunit *)``.
- 
--		- ``kunit_abort`` calls the function:
-+		- ``__kunit_abort`` calls the function:
- 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)``.
- 
- 		- ``kunit_try_catch_throw`` calls the function:
--- 
-2.41.0.rc2.161.g9c6817b8e7-goog
+Both i.MX8mp SoC and i.MX93 SoC media block control devices
+contain a LVDS Display Bridge(LDB) child device. The i.MX93 block
+control device additionally contains this PDFC child device.
 
+LDB dt-binding [1] is written in a separate file and referenced in
+i.MX8mp block control dt-binding [2].  So, for the sake of consistency,
+it makes sense to keep this PDFC dt-binding and reference it
+together with the LDB one [1] in i.MX93 block control dt-binding [3]
+in future, doesn't it?
+
+It seems good to have a separate PDFC dt-binding in case it can/will
+be referenced by multiple parent device dt-bindings.
+
+[1] Documentation/devicetree/bindings/display/bridge/fsl,ldb.yaml
+[2] Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yam=
+l
+[3] Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
+
+Regards,
+Liu Ying
+
+>
+> >
+> >  .../display/bridge/nxp,imx93-pdfc.yaml        | 78 +++++++++++++++++++
+> >  1 file changed, 78 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/display/bridge/nx=
+p,imx93-pdfc.yaml
