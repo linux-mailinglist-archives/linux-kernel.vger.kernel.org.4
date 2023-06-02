@@ -2,528 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D54720323
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AB6720336
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbjFBNWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        id S235784AbjFBN03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235775AbjFBNWr (ORCPT
+        with ESMTP id S235284AbjFBN01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:22:47 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2058.outbound.protection.outlook.com [40.107.100.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35001B3;
-        Fri,  2 Jun 2023 06:22:44 -0700 (PDT)
+        Fri, 2 Jun 2023 09:26:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A5CC0;
+        Fri,  2 Jun 2023 06:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685712386; x=1717248386;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=F+jFBPjA2PM/zdWr/IN8gpY1bay6RM6w6vmRW4jfL3Y=;
+  b=YPhf69GZdDaG89GLqAgrqST1qSFIzqr/j/VKgpmGTyR7DX2fpFzplTBv
+   7aHlozJk7ya3vesW0JqmIS75S/vooiQxQrmy9+1oBBihA4xDnIaoZxDfx
+   BVuyyMwp91B1IL+qLgn6BqSGLKFcIQdMO1fLWvwKGBXTNraUWwBAXSdKo
+   6Ry91lVHgxxdoCfvnHtvr65pxLC6hUbcCbxz9dMhqW8twMYW5NjRCkksv
+   gxmIxyTGG4sdwZs0SF+yW5HDDTaIRZuY8+harbApD8EIFKKbAG8b+0hgR
+   rF0ODdrUhLI+tbePjIHng32OMMbCevzbT9SOuL1b2PhzlkJlfHyGIfqTO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="353361341"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="353361341"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 06:26:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="658274186"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="658274186"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2023 06:26:23 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 2 Jun 2023 06:26:23 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 2 Jun 2023 06:26:23 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.171)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 2 Jun 2023 06:26:21 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NLEIZeQ9LZEPQou7/8PAN2ckuWPOrlWFn9zlI6+qCQ18FhqIILZnzfJQq7xvoLJwVhd1Hv25aFTBBwOQt1/wDD44F9sh/lv2U9TCUyYYoFHH/zn0nWKrepOeSnCscOnWZ30Btrxwwn6+OCu9d9i7pLBNEpOE76o7os+aCrinXfxN9/Xbut5MyoUzTYcCJE+thxE2jDU0r/L3OmND9ZUtwdvv0g3N+Hq4xbyuUabzuXviXHGUUu3C9hKVf8qpEvMaB8YA8Li0hYCL1q8llAqWTviUyEfVnGvwEJO1QxLKOWs6qn0cYKVrawNhVvn6pCH0Se1d9chXfNqrFRhKNiUoSg==
+ b=JP1MJohTvHZ62+DtnIc5EQKxcGGT1wKeNeCRscgxDn3ZumEjLkYODy2rPC3X2usUF4D9kqh8fxYEnlluYxcKESLvJF5kIVCy/m5+PCT8LliC799axaJzKzTYnGiJz2HUdPMRQ6pI0Tk+/x/C6gPfuIIH6VSuBl8vrxp7IpHSa6TqXqJ/DQ8P1sJF/1bpzhThneLxyXE77iuHf/4TAokPJOY1dsZkBRG0Rkcz9pPRGCNH3K5kyFE6ob2ab+ifYT6hAgidnFA9q7YSOGd9I/CK4nd0rwy5++Lr7df7/VK0mEhIH+BGCG9dqSYwRsdv+7QG5wVqCykihN/V5QF6A2EOOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YUcdsWUkJlzIffh+SI2DASfLgk3SmkkjrwJlioT2YP8=;
- b=ke6MlyQv49Y8MaCYMb1ZmLja4gmh0yh3ek/1WqKrsRFtyg6EF8flCE2V/siQrY2G9liHAbDHky747JUgjVl6aG+k14VBkuRj3UUdlgsj95aiI6rPIeIskOtaEwPiDJmFHAu1AcfLOTmHzEUO8eWuRFXL8HTSN85YKtOB7kBy7wjhm7TOCrPe4ZoldmXeEBT/4eYAxFskogTsbU+PjTSMIrVx6XXvNDQ2rtbDyLDcImZMPq82xfbx7obQXFTvFr7lkw1LB8eOpP5OleYRrX/I8rfpce9JKwBTRxEygjpwp4uELQexejouCn7QVhJc9D9tgrXh+hLio+Hm4qBRhKJ5Vg==
+ bh=okOuT5Oezjntbf8muW8Ukvmp+r+/bMXhJdwL1kwKXrE=;
+ b=dYNkaZ7o2DIg9eJ3zIeq7VqUeHyTtRLnHHcfe4ybKoHVooTuPzVCq6R28qDv5TGeAMJalSQFTz9TSQ8HLtxuU452JPLkTuBLYTyF0osznQSXbKYnw/Dgb0hu8HmT/gZcEmwoBoOSBB7fG6yx6L/3CSesjC/yIwxyW3YMDTovDs3UHiYkbp2no9t3qAvS3t5wsn0Na4GoKwMIc7crY2KsGWzTlqiX8fdLtcC0TXTuST6zIfoxFu2GaebazJXGSakJSnvOKcFZPsxCQJlEoVdMJMUaMQk2FsuVnD/OwnYtNL4+06acxowuQ0Fv0ZGxF8iiPj/ufCdAe3b8liUjhPDvtQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YUcdsWUkJlzIffh+SI2DASfLgk3SmkkjrwJlioT2YP8=;
- b=tUiAbvk/PGBGcCTwYFAcawBgRS2FIDg5V6tl/FJVkX2cbnY7DoSYBxz372dvNJmQ/ZhCSw27reTwh7pbU3UxGhOnpIeyvgIcmBie573qF9lyqA8gCd9h1FQUBw41ctrfVRRcJZKs30bD3PoZttTh1JkwVqm2wakeVHo1DXn2u24=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DS0PR12MB7629.namprd12.prod.outlook.com (2603:10b6:8:13e::13) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by BL1PR11MB5541.namprd11.prod.outlook.com (2603:10b6:208:31f::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Fri, 2 Jun
- 2023 13:22:40 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::61f6:a95e:c41e:bb25]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::61f6:a95e:c41e:bb25%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
- 13:22:39 +0000
-Message-ID: <4d8d6fc4-99b5-29ba-7f81-12e7d57907ea@amd.com>
-Date:   Fri, 2 Jun 2023 08:22:35 -0500
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26; Fri, 2 Jun
+ 2023 13:26:20 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::82b6:7b9d:96ce:9325]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::82b6:7b9d:96ce:9325%6]) with mapi id 15.20.6455.024; Fri, 2 Jun 2023
+ 13:26:20 +0000
+Message-ID: <069f9d40-d72f-0357-f2d1-69defd16d327@intel.com>
+Date:   Fri, 2 Jun 2023 15:25:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCHv13 9/9] x86/tdx: Add unaccepted memory support
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
- <20230601182543.19036-10-kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH net-next 08/11] iavf: switch to Page Pool
 Content-Language: en-US
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230601182543.19036-10-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9PR13CA0104.namprd13.prod.outlook.com
- (2603:10b6:806:24::19) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+To:     David Christensen <drc@linux.vnet.ibm.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>, <netdev@vger.kernel.org>,
+        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-9-aleksander.lobakin@intel.com>
+ <4c6723df-5d40-2504-fcdc-dfdc2047f92c@linux.vnet.ibm.com>
+ <8302be1b-416a-de32-c43b-73bd378f8122@intel.com>
+ <002e833e-33b0-54d4-8584-9366850a7956@linux.vnet.ibm.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <002e833e-33b0-54d4-8584-9366850a7956@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0139.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:95::13) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|DS0PR12MB7629:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5fbd56f2-5984-4211-e640-08db636c7040
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|BL1PR11MB5541:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12d48a30-37ca-4ebb-5df3-08db636cf339
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NMa5+mGVhi1mpbNrQqlqL2Bk3j5tWuqt1xoxp0JtjyMb1wK4JiNxR95mRvTELYeN0DY+dnFZf1TMPLiGZOEa1B9wTUXVdD79yMyPBtY5MIC4ykyRfrgFmqqXHDG1M2ZkIM7PdQ0i17X4XDjGJRiRAZ4362jsnWJlAJxk2aYN/N6gntOV8DktuBU6Ci6sSmv4dSfTHa+qFZsHFiunXE4or0+neA3y7VWfZalyrwaA3Rlj5EhBshRpLX9EYIbQURIStWW44f/U3Y5RXBXpDYs9hDOATHpYRNa1OhoJZdSL4hl1Yj7z1p+CdpjEl9GcVQkSyj5e+McudHOc6ZpsrTn5z4JFLO7JfDu609QlrxaTLwm10tiXvoWtjEb/u5Y7eOMGDupNVL0PP0GXyJMSozFA0SDaKwsdEMjPXnyY/zntDuPctRQa3/gd+oZ8IBvQfifz3FF+qw1Ta3FnIm/fw7EczeIEoSAU1+62bZbTeF7fnjEfbcAQeq3tOlJ/SLE3p2ZyHd00+xt07+/nChd1aFZ6NL7o5LkY4M5OtD/oJAxsUeNThwW3MXfAScMjb6m67dgK2yGz1fMh0kC+Fh02jZVunsiqle6YfyUKH2193VRu/aB87WqUoJoapttYLUK6lzv8prU5sTzV6tJ4IfYFtw5mCQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(366004)(346002)(396003)(451199021)(8936002)(6506007)(53546011)(186003)(6512007)(26005)(6666004)(83380400001)(2906002)(30864003)(2616005)(41300700001)(7406005)(5660300002)(8676002)(316002)(6486002)(66556008)(478600001)(4326008)(66476007)(66946007)(110136005)(54906003)(86362001)(31696002)(36756003)(7416002)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Lmd/00Y0baYiMit5+I3Z7OF9lwAvURTNgRP1Gjk3+iSGD3yyri/nxiCvJwelv9bsOom1TThWn/QHHGVjk/mCkw0wmOSgiGxWfa9UAITvLUX6XsygNts/2jMwyBOkhfZ7sB9omf8fL0jYQtjoVoFcQTAPSLM7QhVPYgs5lvKmJXYTP9HHiVNdQGCidYR7HDvSX/HKcMgxQk80lwme2FFjgPq05scmvtQB9yyz8bP0Ve5ngQtLaLK+3qUoVLKOOMqaRHGRYF4q3aToGMRGEbqIvc43RE9IhQw52S+vr1UBKiSup5ODo39NIn/bQgZfhM3jS2detqLP1VpHBO+8MASq3YEQzvZR+xAjxVR9dTuo47PeyL7o0EH2RmR8N5BaCLbLEhL04Ih3bC7G6s+feaF8reR2mz0LHENj3pCk+eFwToFPrEr2VxrtycDs0IFWfF0AJqocmRTklolGPPhIBtQgQqxWnBoSTTRyQ4aSCw0WksOHG/mv4JamMTE+HWXTIBDbfOIdQ1iY1oe6q5kpJvr2Zx+i33uPoAqPxLXDhUhNdZaXpkiG4HO4ToMgqPi6jDL9khE5wNHGw9hr4AlJ0dYjVIo+/dPqm5qrKK5OEkOenBXjxn7n0Dfv4ofcJewUHlwBUN/DvyYiaD5A86eDfGT0lA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199021)(8936002)(8676002)(66946007)(31686004)(5660300002)(7416002)(4326008)(6916009)(66556008)(316002)(66476007)(41300700001)(2906002)(54906003)(6666004)(478600001)(6486002)(6512007)(6506007)(26005)(53546011)(186003)(2616005)(36756003)(82960400001)(83380400001)(38100700002)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TER4NEFDSnYvenc5Q0tSVWZ6SittQTA0eXlPRUZscjVPNzFlQUdXOGtlYnhR?=
- =?utf-8?B?ZEJ1TnN2NFZ5Y2VUNGRPVG80U1l5UnNtTU9TUzZXMi9tQlpHcEV2T0ViRUl6?=
- =?utf-8?B?Q0dRNk5WN2s4Z2dTajh0ZnJaam5wUFlxVG10QVFVQmthbHlSU0sxVTJEQ005?=
- =?utf-8?B?eHVDSlQrSUdrcGQwdDVCbXhTMTJ5bG5LbGRldm1RL0RaL3ZDSUNFM0o0Z0RO?=
- =?utf-8?B?c05DTkgvQ1RWdTVxem9acU1TTWNEUHI3QytzOTZ1NW9wMGNlNi9qVUVTL2dC?=
- =?utf-8?B?ejZMR0xtaE9MS1IwdXJTbGhjL3M1U1RVUVI5OXBRZS9kTWZqaGFxSW5TMllZ?=
- =?utf-8?B?RG1STk9ZaUIyTTJBcHhYcm41dTZPSStHV3d6N0FvTng2bHZqdlhWcTU0TUla?=
- =?utf-8?B?MzVDVVZic05wVGkyMUVqNjhJSDhzeXhKaU00Qk1EbHM0dzU1cGx2MzFpdUp6?=
- =?utf-8?B?eVRqRlhaRjZZbjZSM3pSZDJjUFRDbUFGazgzejdSTnNzbm1hVWUwREZ4b25y?=
- =?utf-8?B?UDNndG8rdUVnYWo2NllMTC93SGZramhENEVwcU81ZlF0QVZPSThOTC9sODE4?=
- =?utf-8?B?bko2NzlETmVOWjhtN3VrQW1yQU5yTjl2Wmd5MmxoQnJjdUVmcDg4S3RPRFZ3?=
- =?utf-8?B?NHZiVThyMU5jTk5LVmZFQzIyWm5uVDl5WTNrdDVUS3JCRWtEVEUrdFVpYkcv?=
- =?utf-8?B?VXJmQ3ZZOXdhSU43Mk1ld3pEeWJtVzM3RmFweGV5S0F3WHo5MEcvaGdwOWhL?=
- =?utf-8?B?Z1dzckhhOWI2MzAxTzYyaC9MR2hWWnR5amh2djB1UEd2ODN6eGRFa1llak5Q?=
- =?utf-8?B?ZVFjT05rVlo3QmVBTHIzUWUxMmpUWkY0S3JtSFFCejVqUXZjMVFDcUVvQXhy?=
- =?utf-8?B?bTJFNENudjc1eGFJUDFyYnhIMlZSTGhHRE9DYWZ3VG9DZGY0bGNieVhhQWVq?=
- =?utf-8?B?bVphc2JCaVlUSElNZEJ6UFFaV1pKU1FjeDRMRXdwN0xDY1RhMVVmbDRjNkVn?=
- =?utf-8?B?Tmk2cVZIenVzU3o2blhlSWRTQmdyVk0vTk01b2syQS92S3hFb05aUVRrcWQy?=
- =?utf-8?B?NDdlbm9EbE40c0M3WTAxQTlWN3dVaWpkOStTY2lqZWJXWnp0SEFBMEd6a0V5?=
- =?utf-8?B?S0ZNT3I1M3R1VVZoOEFuaVljcEk4N2t5Z05UZHc0N0RMWlJHdnZJck1RSndZ?=
- =?utf-8?B?YVNrSmFJSk8zdlNLeEtrY3JaYk1BNjRkOStGY2NJOFRyb0dOOUtPd0l4dzEx?=
- =?utf-8?B?VndqQjlPVzNBek5MTCtLTTBsYXZ3cjcrNEs1NzV3VFFqcTQ4cFRXUVliNnI3?=
- =?utf-8?B?YmJITkhyQTAzYUJ3VzJkZXA4SlpneU1KTy9RQjUwT1ZxVzdPUjJ5RmVvVXFh?=
- =?utf-8?B?bjNtOHJJUlZmNCswZERkMHVWdlhmb0wrOHFYZXp1OEJIcHpNUnYrOXJGVlRw?=
- =?utf-8?B?VEF0ZVVZc0hPYXdCVFBVZ0t0cEFoY0sxQ01aN2VXZll1WWtxYk51dlluMTQ4?=
- =?utf-8?B?SXl6U0lWeVBSck5mdjB4ZXhpTm5GeWJzcmp3clAzWXc2MW5PenArMlFCUUtl?=
- =?utf-8?B?VUlITm1MbEM3Q2Yyb2RYYmpCZW5nQjV1VDl1QXBpd1F5QVRPa0VpeUt1QVRV?=
- =?utf-8?B?eU5ndi9HYkZSUUsySlc3VmtzOFZQcGl0QVVqcjBycFBxbEp1VjRQT05pbERY?=
- =?utf-8?B?NGNwUUtYbzJHWmhNQ0V0eVhuUndvVkVCcFVUaFM1a1ROR3hTbHdiZXpHMlNM?=
- =?utf-8?B?YXJQSGV3b1hCZ3ZXYWhjQUUzRWdMYnlxRDBuZllGMENsckJPWENkQVhNN3h4?=
- =?utf-8?B?MzZRM2VoMUM3TTlLc2ZFV0JtaVZKdWZ2MTFqOWcwREViQWxITURscUVVUlgz?=
- =?utf-8?B?dk5TbmNzQVFFOTFYNDhLQnhWVUJqME51bUhvdUhVbm0zYmlDc3JnZFEva20x?=
- =?utf-8?B?aGxJNkt6Q25hUm1rQnRZdVJnOXY4ajZHS1VmdjJtY1JsSFBHcFJ6c3B3N1F0?=
- =?utf-8?B?eE5jWmZKV0VLNVZUbnRpeDJiWjVpaGZ2SzJQZ1RBY3pBQWxYRXQyRmZqcUs0?=
- =?utf-8?B?bmZySjZvS2RqWjRqMHhwQjRTZm9OTm1tLy96OU4rd01SUnpFaEZJbSs0cUFa?=
- =?utf-8?Q?37dafOsgyT4dDhiyBRXGmdrEv?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fbd56f2-5984-4211-e640-08db636c7040
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V3V5OVJZTjFyQktvam9lYTQ0dU8vQTk0aTAzSW1oSXVTN1czY3NzM2hTNkxs?=
+ =?utf-8?B?TTZMUkdienRXMWlaUE5yMElJeDczc1dMcVQrYzR3VTI3MVlXdkNoclB5YTJr?=
+ =?utf-8?B?QUxWa0JXaUZwVUR0UWdVb25rSTNBYWZRbkltdk1kRmtoY05wVHN5REUwMklS?=
+ =?utf-8?B?Qmo5bnZabHJ5WWVzbm91QUx5MEQ2Sm5JQWs1QWxvVUluOFB6WGRHdnFGUDVx?=
+ =?utf-8?B?TlEzZzhDSkpRNmRvdE54SmdxYVBhRnVRUGprODhNb056dTB1UEJBNWxlMmFV?=
+ =?utf-8?B?NjBvbElUMjlhVllSNmQ0ckVrbFM4WGlaYldkNGFMMVRwT0dUV21oM2E5OVB4?=
+ =?utf-8?B?ZFV3VWpSelhPc1V3VElvS00xOXo0QkJKdlQzNEZ0Zk15RzF1TnRKSzk0ZDdC?=
+ =?utf-8?B?bTFDVWM2dDJ0bENQb1EyUUJKVkF4ZXNZbGhWSHpRL3AwcXo1c04vZUZKYlcv?=
+ =?utf-8?B?bEsrVzlOMmFnazFQR25yTHBKTURWcWNqTTh5b1VneGpzNnBBTndSa0J0TGlJ?=
+ =?utf-8?B?RnVvazZIYmxUVlp2Ni96TVo4WVI3bHYwU0t4eWc0MHhHTW9McjN6emZzZGJ3?=
+ =?utf-8?B?UWcramp0djVoU0MzL0szUGloaFZSelBsTXRRN21LL2E5cm1uZTB2NFlCNmFW?=
+ =?utf-8?B?c2NoS3poOFRhejVzUlFYSUg2NzJXU09KSmVwejFJM2FKcjlkKzlua09KbHZo?=
+ =?utf-8?B?T1c1Z29CVGNwcjN3L0Z4bU42MGo2VG1EaUhaOTZWYTYwUldNQllabk9QN2tF?=
+ =?utf-8?B?aVUvdHNuZU83SGxtd0NTUlp6L1lqVUdPa1RYSjBkQ21yamorYnhsVUZzOEph?=
+ =?utf-8?B?bjc0RTFwRDhaeUpzTERBMmNyR01sL0wxSGpUZXE0WjF4Rm5PL2hnNmFEclRo?=
+ =?utf-8?B?MXI2d0Y0R3FBL3BUTmNBbFQxSm9SU2FlSDByeHAvNnBGWWNZZEhCa216OHJ4?=
+ =?utf-8?B?QTNJNWVWNkFmaW5wdXVad3NleTRoa2xNV09PSEF6aVk0eTdPY003V3Z3SDF4?=
+ =?utf-8?B?Y2t4Sldza1VRUHNjYmt1b2tucUFucG1OUnpsKzhWaDdsbWxnRXloMmxKdCtw?=
+ =?utf-8?B?N3lPQTRpUEhoZktTVG9QTXk5M0IyckdseTUzT0w2TytzMlMvK0NVOEJ1NlY3?=
+ =?utf-8?B?bU9MRy80ZjVhZWNubzlyK056UkZhb2VVRTlWUjZFTjhDOWpsek5IaFhvdmNM?=
+ =?utf-8?B?T3BYc0JrV3o1bWxub2JMR3hKL3dFQlM5M1prM29zaWJyOHdyQnlyNXpETFlU?=
+ =?utf-8?B?RzhQRThYeENRWmowV2twdDZndFU0VFlyUUwwcTh1M1J2NTRrd3FmTi8wNEdz?=
+ =?utf-8?B?Ty9tTHZaaUQ5V1ZlUE5JTC9qREltRE4xSXVSS1F4RjZFZnB2UXlvc3hDUmFj?=
+ =?utf-8?B?WFAwZlZvR3FRcVVWekVHRURyRzY1eks2WllYNWFQWXN6ZkRRemNjWXBQMU81?=
+ =?utf-8?B?YlppRWhlOWo2UDdORWYrY0ZhSkd3NmVpQTZ4aXZTeGpYWk1mNElLZjFXbW1v?=
+ =?utf-8?B?ZkZaOFFUcFlmWWxaNTF1cWVwNFVDZnZvdWxmR3dTRkxYbFg3Vnd6MC92NzBW?=
+ =?utf-8?B?Zjc1N2hsZWhOclcyYVJPZThISitkaVRFS1V0aXNXNmVnNG1tWWtMSFgxckxG?=
+ =?utf-8?B?MzA4MEJuVW42bzAyMDFseGFxMnVhTHU0UkZ6NUZtQnltYTRyYmRaMXNTT1k4?=
+ =?utf-8?B?NkhQQWxMdEE3OXhTMUM0cUJQTkVCZnhTYnp2KzBHRHpLTUM2ejU0dURDZkV0?=
+ =?utf-8?B?bWUwbWI0YU5QWXBZcjJkM0NiSlpvMUU2Rmo4VGFhVmd6K3FCcVBqQ2NCbUZr?=
+ =?utf-8?B?U25JZVdjb0dFVDNyODI4Y2VnMGpjQXBrR3FTV2x4VDJEWTZZYmpNTHlLL3lU?=
+ =?utf-8?B?ZGNWeG9iam03R2Z0cmFtTm82TW9qelVWK3ZDWE1SVDk5WXpwTlFJdmpGUUdE?=
+ =?utf-8?B?d3lhZjVuNU1WaVpKMTRDcHVSRUhjejhNeC93OFlPQnBsNlJzOW9uS1lmcUtq?=
+ =?utf-8?B?Mlc0anpQeHFpR0p1ZG1WQUEvbmZlaUdOZGpyV0ZmbGZiMWJyYXdmNzFsbVVm?=
+ =?utf-8?B?V0g0Z2UwUjRZdjlqcDRyZWRvb09aR0IycjhRRTVRdlFQR2l1cVkybkJyT3dT?=
+ =?utf-8?B?TTU2M25Ddk9iN0doWmVFcm1RQUlEbWErR0QyUnJPM09Md1lROVNQdkVwQUMv?=
+ =?utf-8?B?S0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12d48a30-37ca-4ebb-5df3-08db636cf339
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 13:22:39.7405
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 13:26:19.6860
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jPRKDSnTSG7Fi71JZ+SyZhfyazlrGxxV7TJpZVtEFn6fTc9ogKipiJQ0YJ1mvAU1sIyFIPaFSw3VY5y5rWd9jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7629
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: wCxyTFhcvHKffoUjIWeyGZ/TL4FIyC0ZBRD4p4XCZYUXw/KNFwcWPW9iM4KZLfJBkI41urht27YaggmsjXvFFK5lXTualAKTjoJIs3pJ3kM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5541
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 13:25, Kirill A. Shutemov wrote:
-> Hookup TDX-specific code to accept memory.
-> 
-> Accepting the memory is done with ACCEPT_PAGE module call on every page
-> in the range. MAP_GPA hypercall is not required as the unaccepted memory
-> is considered private already.
-> 
-> Extract the part of tdx_enc_status_changed() that does memory acceptance
-> in a new helper. Move the helper tdx-shared.c. It is going to be used by
-> both main kernel and decompressor.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->   arch/x86/Kconfig                         |  2 +
->   arch/x86/boot/compressed/Makefile        |  2 +-
->   arch/x86/boot/compressed/error.c         | 19 +++++++
->   arch/x86/boot/compressed/error.h         |  1 +
->   arch/x86/boot/compressed/mem.c           | 35 +++++++++++-
->   arch/x86/boot/compressed/tdx-shared.c    |  2 +
->   arch/x86/coco/tdx/Makefile               |  2 +-
->   arch/x86/coco/tdx/tdx-shared.c           | 71 ++++++++++++++++++++++++
->   arch/x86/coco/tdx/tdx.c                  | 70 +----------------------
->   arch/x86/include/asm/shared/tdx.h        |  2 +
->   arch/x86/include/asm/unaccepted_memory.h | 24 ++++++++
->   11 files changed, 160 insertions(+), 70 deletions(-)
->   create mode 100644 arch/x86/boot/compressed/tdx-shared.c
->   create mode 100644 arch/x86/coco/tdx/tdx-shared.c
->   create mode 100644 arch/x86/include/asm/unaccepted_memory.h
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 53bab123a8ee..5c72067c06d4 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -884,9 +884,11 @@ config INTEL_TDX_GUEST
->   	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
->   	depends on X86_64 && CPU_SUP_INTEL
->   	depends on X86_X2APIC
-> +	depends on EFI_STUB
->   	select ARCH_HAS_CC_PLATFORM
->   	select X86_MEM_ENCRYPT
->   	select X86_MCE
-> +	select UNACCEPTED_MEMORY
->   	help
->   	  Support running as a guest under Intel TDX.  Without this support,
->   	  the guest kernel can not boot or run under TDX.
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index cc4978123c30..b13a58021086 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -106,7 +106,7 @@ ifdef CONFIG_X86_64
->   endif
->   
->   vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
-> -vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-> +vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o $(obj)/tdx-shared.o
->   vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/mem.o
->   
->   vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
-> diff --git a/arch/x86/boot/compressed/error.c b/arch/x86/boot/compressed/error.c
-> index c881878e56d3..5313c5cb2b80 100644
-> --- a/arch/x86/boot/compressed/error.c
-> +++ b/arch/x86/boot/compressed/error.c
-> @@ -22,3 +22,22 @@ void error(char *m)
->   	while (1)
->   		asm("hlt");
->   }
-> +
-> +/* EFI libstub  provides vsnprintf() */
-> +#ifdef CONFIG_EFI_STUB
-> +void panic(const char *fmt, ...)
-> +{
-> +	static char buf[1024];
-> +	va_list args;
-> +	int len;
-> +
-> +	va_start(args, fmt);
-> +	len = vsnprintf(buf, sizeof(buf), fmt, args);
-> +	va_end(args);
-> +
-> +	if (len && buf[len - 1] == '\n')
-> +		buf[len - 1] = '\0';
-> +
-> +	error(buf);
-> +}
-> +#endif
-> diff --git a/arch/x86/boot/compressed/error.h b/arch/x86/boot/compressed/error.h
-> index 1de5821184f1..86fe33b93715 100644
-> --- a/arch/x86/boot/compressed/error.h
-> +++ b/arch/x86/boot/compressed/error.h
-> @@ -6,5 +6,6 @@
->   
->   void warn(char *m);
->   void error(char *m) __noreturn;
-> +void panic(const char *fmt, ...) __noreturn __cold;
->   
->   #endif /* BOOT_COMPRESSED_ERROR_H */
-> diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
-> index 4ecf26576a77..d2b6948a7801 100644
-> --- a/arch/x86/boot/compressed/mem.c
-> +++ b/arch/x86/boot/compressed/mem.c
-> @@ -2,11 +2,44 @@
->   
->   #include "error.h"
->   #include "misc.h"
-> +#include "tdx.h"
-> +#include <asm/shared/tdx.h>
-> +
-> +/*
-> + * accept_memory() and process_unaccepted_memory() called from EFI stub which
-> + * runs before decompresser and its early_tdx_detect().
-> + *
-> + * Enumerate TDX directly from the early users.
-> + */
-> +static bool early_is_tdx_guest(void)
-> +{
-> +	static bool once;
-> +	static bool is_tdx;
-> +
-> +	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
-> +		return false;
-> +
-> +	if (!once) {
-> +		u32 eax, sig[3];
-> +
-> +		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
-> +			    &sig[0], &sig[2],  &sig[1]);
-> +		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
-> +		once = true;
-> +	}
-> +
-> +	return is_tdx;
-> +}
->   
->   void arch_accept_memory(phys_addr_t start, phys_addr_t end)
->   {
->   	/* Platform-specific memory-acceptance call goes here */
-> -	error("Cannot accept memory");
-> +	if (early_is_tdx_guest()) {
-> +		if (tdx_accept_memory(start, end))
-> +			return;
-> +	}
-> +
-> +	error("Cannot accept memory: unknown platform\n");
+From: David Christensen <drc@linux.vnet.ibm.com>
+Date: Wed, 31 May 2023 13:18:59 -0700
 
-So this is a change in this version. If tdx_accept_memory() fails, you'll 
-report unknown platform. Wouldn't it be better to have an error message 
-that indicates a failure in the accept path?
+> 
+> 
+> On 5/25/23 4:08 AM, Alexander Lobakin wrote:
+>>> Any plans to add page pool fragmentation support (i.e.
+>>> PP_FLAG_PAGE_FRAG) in the future to better support architectures with
+>>> larger page sizes such as 64KB on ppc64le?
+>>
+>> Currently no, we resigned from page fragmentation due to the complexity
+>> and restrictions it provides for no benefits on x86_64. But I remember
+>> that pages > 4 Kb exist (I have a couple MIPS boards where I have fun
+>> sometimes and page size is set to 16 Kb there. But still always use 1
+>> page per frame).
+>> By "better support" you mean reducing memory usage or something else?
+> 
+> Yes, reducing memory waste.  Current generation P10 systems default to
+> quad-port, 10Gb copper i40e NICs.  When you combine a large number of
+> CPUs, and therefore a large number of RX queues, with a 64KB page
+> allocation per packet, memory usage can balloon very quickly as you add
+> additional ports.
+
+Yeah, I got it. Unfortunately, page split adds a bunch of overhead for
+no benefit on 4k systems. There's a small series here on netdev which
+tries to combine frag and non-frag allocations in Page Pool, so that
+there will be no overhead on 4k systems and no memory waste on 8k+ ones.
+
+> 
+> Would you be open to patches to address this further down the road as
+> your refactoring effort gets closer to completion?
+
+Let's see how the abovementioned effort goes. I feel like a generic
+solution would be better than trying to handle that per-driver.
+
+> 
+> Dave
 
 Thanks,
-Tom
-
->   }
->   
->   void init_unaccepted_memory(void)
-> diff --git a/arch/x86/boot/compressed/tdx-shared.c b/arch/x86/boot/compressed/tdx-shared.c
-> new file mode 100644
-> index 000000000000..5ac43762fe13
-> --- /dev/null
-> +++ b/arch/x86/boot/compressed/tdx-shared.c
-> @@ -0,0 +1,2 @@
-> +#include "error.h"
-> +#include "../../coco/tdx/tdx-shared.c"
-> diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
-> index 46c55998557d..2c7dcbf1458b 100644
-> --- a/arch/x86/coco/tdx/Makefile
-> +++ b/arch/x86/coco/tdx/Makefile
-> @@ -1,3 +1,3 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
-> -obj-y += tdx.o tdcall.o
-> +obj-y += tdx.o tdx-shared.o tdcall.o
-> diff --git a/arch/x86/coco/tdx/tdx-shared.c b/arch/x86/coco/tdx/tdx-shared.c
-> new file mode 100644
-> index 000000000000..ef20ddc37b58
-> --- /dev/null
-> +++ b/arch/x86/coco/tdx/tdx-shared.c
-> @@ -0,0 +1,71 @@
-> +#include <asm/tdx.h>
-> +#include <asm/pgtable.h>
-> +
-> +static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
-> +				    enum pg_level pg_level)
-> +{
-> +	unsigned long accept_size = page_level_size(pg_level);
-> +	u64 tdcall_rcx;
-> +	u8 page_size;
-> +
-> +	if (!IS_ALIGNED(start, accept_size))
-> +		return 0;
-> +
-> +	if (len < accept_size)
-> +		return 0;
-> +
-> +	/*
-> +	 * Pass the page physical address to the TDX module to accept the
-> +	 * pending, private page.
-> +	 *
-> +	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
-> +	 */
-> +	switch (pg_level) {
-> +	case PG_LEVEL_4K:
-> +		page_size = 0;
-> +		break;
-> +	case PG_LEVEL_2M:
-> +		page_size = 1;
-> +		break;
-> +	case PG_LEVEL_1G:
-> +		page_size = 2;
-> +		break;
-> +	default:
-> +		return 0;
-> +	}
-> +
-> +	tdcall_rcx = start | page_size;
-> +	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
-> +		return 0;
-> +
-> +	return accept_size;
-> +}
-> +
-> +bool tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +	/*
-> +	 * For shared->private conversion, accept the page using
-> +	 * TDX_ACCEPT_PAGE TDX module call.
-> +	 */
-> +	while (start < end) {
-> +		unsigned long len = end - start;
-> +		unsigned long accept_size;
-> +
-> +		/*
-> +		 * Try larger accepts first. It gives chance to VMM to keep
-> +		 * 1G/2M Secure EPT entries where possible and speeds up
-> +		 * process by cutting number of hypercalls (if successful).
-> +		 */
-> +
-> +		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
-> +		if (!accept_size)
-> +			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-> +		if (!accept_size)
-> +			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-> +		if (!accept_size)
-> +			return false;
-> +		start += accept_size;
-> +	}
-> +
-> +	return true;
-> +}
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 0d5fe6e24e45..a9c4ba6c5c5d 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -713,46 +713,6 @@ static bool tdx_cache_flush_required(void)
->   	return true;
->   }
->   
-> -static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
-> -				    enum pg_level pg_level)
-> -{
-> -	unsigned long accept_size = page_level_size(pg_level);
-> -	u64 tdcall_rcx;
-> -	u8 page_size;
-> -
-> -	if (!IS_ALIGNED(start, accept_size))
-> -		return 0;
-> -
-> -	if (len < accept_size)
-> -		return 0;
-> -
-> -	/*
-> -	 * Pass the page physical address to the TDX module to accept the
-> -	 * pending, private page.
-> -	 *
-> -	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
-> -	 */
-> -	switch (pg_level) {
-> -	case PG_LEVEL_4K:
-> -		page_size = 0;
-> -		break;
-> -	case PG_LEVEL_2M:
-> -		page_size = 1;
-> -		break;
-> -	case PG_LEVEL_1G:
-> -		page_size = 2;
-> -		break;
-> -	default:
-> -		return 0;
-> -	}
-> -
-> -	tdcall_rcx = start | page_size;
-> -	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
-> -		return 0;
-> -
-> -	return accept_size;
-> -}
-> -
->   /*
->    * Inform the VMM of the guest's intent for this physical page: shared with
->    * the VMM or private to the guest.  The VMM is expected to change its mapping
-> @@ -777,33 +737,9 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->   	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
->   		return false;
->   
-> -	/* private->shared conversion  requires only MapGPA call */
-> -	if (!enc)
-> -		return true;
-> -
-> -	/*
-> -	 * For shared->private conversion, accept the page using
-> -	 * TDX_ACCEPT_PAGE TDX module call.
-> -	 */
-> -	while (start < end) {
-> -		unsigned long len = end - start;
-> -		unsigned long accept_size;
-> -
-> -		/*
-> -		 * Try larger accepts first. It gives chance to VMM to keep
-> -		 * 1G/2M Secure EPT entries where possible and speeds up
-> -		 * process by cutting number of hypercalls (if successful).
-> -		 */
-> -
-> -		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
-> -		if (!accept_size)
-> -			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-> -		if (!accept_size)
-> -			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-> -		if (!accept_size)
-> -			return false;
-> -		start += accept_size;
-> -	}
-> +	/* shared->private conversion requires memory to be accepted before use */
-> +	if (enc)
-> +		return tdx_accept_memory(start, end);
->   
->   	return true;
->   }
-> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-> index 1ff0ee822961..19228beb4894 100644
-> --- a/arch/x86/include/asm/shared/tdx.h
-> +++ b/arch/x86/include/asm/shared/tdx.h
-> @@ -91,5 +91,7 @@ struct tdx_module_output {
->   u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->   		      struct tdx_module_output *out);
->   
-> +bool tdx_accept_memory(phys_addr_t start, phys_addr_t end);
-> +
->   #endif /* !__ASSEMBLY__ */
->   #endif /* _ASM_X86_SHARED_TDX_H */
-> diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
-> new file mode 100644
-> index 000000000000..f0ab217b566f
-> --- /dev/null
-> +++ b/arch/x86/include/asm/unaccepted_memory.h
-> @@ -0,0 +1,24 @@
-> +#ifndef _ASM_X86_UNACCEPTED_MEMORY_H
-> +#define _ASM_X86_UNACCEPTED_MEMORY_H
-> +
-> +#include <linux/efi.h>
-> +#include <asm/tdx.h>
-> +
-> +static inline void arch_accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +	/* Platform-specific memory-acceptance call goes here */
-> +	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-> +		if (tdx_accept_memory(start, end))
-> +			return;
-> +	}
-> +
-> +	panic("Cannot accept memory: unknown platform\n");
-> +}
-> +
-> +static inline struct efi_unaccepted_memory *efi_get_unaccepted_table(void)
-> +{
-> +	if (efi.unaccepted == EFI_INVALID_TABLE_ADDR)
-> +		return NULL;
-> +	return __va(efi.unaccepted);
-> +}
-> +#endif
+Olek
