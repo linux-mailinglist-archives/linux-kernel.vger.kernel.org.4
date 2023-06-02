@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05F171FEA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3623871FEA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbjFBKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S235163AbjFBKKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234752AbjFBKMG (ORCPT
+        with ESMTP id S235187AbjFBKJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:12:06 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F38E7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:12:04 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3529pNL6008786;
-        Fri, 2 Jun 2023 05:11:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=ekNDg+VFCiYjY12i1sso3YR2oeivSEZ1eM5g+XhkXVk=;
- b=NwA0aBf3TP7NpVjiw0EJV/RbeZGd/UWQBsdeOCVAoHm2dIV1bdvQGWLFpj+QmDsv0Elx
- rm7ePWFnD3/nRGRpNgikcS0BhQZIlcMXnHS3FDqc4gtTrps94rGMRjRgGGwICe+05tHb
- BjBzgzZlugbEjjnvPNZxdwUu4YKS+fVjp1am948cd5MhcRFRhDZeCBV5dxpPSd7JVyDQ
- atsunAqrrWB9YkOsNBU1/qkfUguMiuYm+y0o2IGzChlwAD1MGnLhe2b3rJDI7nIXB70x
- dn9S5y/4EOVRrAACMbbOuapNl5Eh2NO4w8zzqwnQt6+CgvFzDOTR5kJwMhAVk7105suK fg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3quf90y83v-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 05:11:44 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 2 Jun
- 2023 11:11:40 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 2 Jun 2023 11:11:40 +0100
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D662E15A4;
-        Fri,  2 Jun 2023 10:11:40 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <vkoul@kernel.org>
-CC:     <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH v2 5/5] soundwire: stream: Remove unnecessary gotos
-Date:   Fri, 2 Jun 2023 11:11:40 +0100
-Message-ID: <20230602101140.2040141-5-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230602101140.2040141-1-ckeepax@opensource.cirrus.com>
-References: <20230602101140.2040141-1-ckeepax@opensource.cirrus.com>
+        Fri, 2 Jun 2023 06:09:47 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F5CE5B
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:09:28 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXdyV3qRyz4f3jqc
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:09:22 +0800 (CST)
+Received: from ubuntu20.huawei.com (unknown [10.67.174.33])
+        by APP1 (Coremail) with SMTP id cCh0CgCH8iy2v3lkYWubKA--.54066S2;
+        Fri, 02 Jun 2023 18:09:23 +0800 (CST)
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
+Subject: [PATCH] drm/amd/display: fix compilation error due to shifting negative value
+Date:   Fri,  2 Jun 2023 18:12:33 +0800
+Message-Id: <20230602101233.1255276-1-gongruiqi@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: uhKsbTLYac5TE4X8JYzcO27_iefRGppW
-X-Proofpoint-ORIG-GUID: uhKsbTLYac5TE4X8JYzcO27_iefRGppW
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-CM-TRANSID: cCh0CgCH8iy2v3lkYWubKA--.54066S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw15JF1fXFyxZw47ZrW5KFg_yoW8Gr1rpF
+        sxJry8WF1UuF4IyFyxCa9ru3W3Jas5XFWqyrZrW3sIk3W7tF15W39xKr1Dtryj9FWjywsx
+        tFZ2gr47JwnrAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,198 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a lot of code using gotos to skip small sections of code, this
-is a fairly dubious use of a goto, especially when the level of
-intentation is really low. Most of this code doesn't even breach 80
-characters when naively shifted over.
+Currently compiling linux-next with allmodconfig triggers the following
+error:
 
-Simplify the code a bit, by replacing these unnecessary gotos with
-simple ifs.
+./drivers/gpu/drm/amd/amdgpu/../display/include/fixed31_32.h: In function ‘dc_fixpt_truncate’:
+./drivers/gpu/drm/amd/amdgpu/../display/include/fixed31_32.h:528:22: error: left shift of negative value [-Werror=shift-negative-value]
+  528 |  arg.value &= (~0LL) << (FIXED31_32_BITS_PER_FRACTIONAL_PART - frac_bits);
+      |                      ^~
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Use `unsigned long long` instead.
+
+Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
 ---
+ drivers/gpu/drm/amd/display/include/fixed31_32.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v1:
- - Split out the inversion of the alloc_*_rt logic
-
-Worth noting this patch has no functional corrections it is just a
-stylistic change, so as Pierre said on v1 we could just leave things
-as is. Personally, I would prefer to merge it though, whilst the diff
-is a little more of a pain to review (hopefully eased somewhat by
-splitting out the alloc_*_rt logic into a separate patch), the
-resulting code reads much nicer and the code will be read a lot more
-times than this patch will be.
-
-Thanks,
-Charles
-
- drivers/soundwire/stream.c | 124 +++++++++++++++++--------------------
- 1 file changed, 56 insertions(+), 68 deletions(-)
-
-diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
-index df5600a80c174..93baca08a0dea 100644
---- a/drivers/soundwire/stream.c
-+++ b/drivers/soundwire/stream.c
-@@ -1355,25 +1355,23 @@ static int _sdw_prepare_stream(struct sdw_stream_runtime *stream,
- 			return -EINVAL;
- 		}
+diff --git a/drivers/gpu/drm/amd/display/include/fixed31_32.h b/drivers/gpu/drm/amd/display/include/fixed31_32.h
+index ece97ae0e826..d4cf7ead1d87 100644
+--- a/drivers/gpu/drm/amd/display/include/fixed31_32.h
++++ b/drivers/gpu/drm/amd/display/include/fixed31_32.h
+@@ -525,7 +525,7 @@ static inline struct fixed31_32 dc_fixpt_truncate(struct fixed31_32 arg, unsigne
  
--		if (!update_params)
--			goto program_params;
--
--		/* Increment cumulative bus bandwidth */
--		/* TODO: Update this during Device-Device support */
--		bus->params.bandwidth += m_rt->stream->params.rate *
--			m_rt->ch_count * m_rt->stream->params.bps;
--
--		/* Compute params */
--		if (bus->compute_params) {
--			ret = bus->compute_params(bus);
--			if (ret < 0) {
--				dev_err(bus->dev, "Compute params failed: %d\n",
--					ret);
--				goto restore_params;
-+		if (update_params) {
-+			/* Increment cumulative bus bandwidth */
-+			/* TODO: Update this during Device-Device support */
-+			bus->params.bandwidth += m_rt->stream->params.rate *
-+				m_rt->ch_count * m_rt->stream->params.bps;
-+
-+			/* Compute params */
-+			if (bus->compute_params) {
-+				ret = bus->compute_params(bus);
-+				if (ret < 0) {
-+					dev_err(bus->dev, "Compute params failed: %d\n",
-+						ret);
-+					goto restore_params;
-+				}
- 			}
- 		}
- 
--program_params:
- 		/* Program params */
- 		ret = sdw_program_params(bus, true);
- 		if (ret < 0) {
-@@ -1876,30 +1874,25 @@ int sdw_stream_add_master(struct sdw_bus *bus,
- 	 * it first), if so skip allocation and go to configuration
- 	 */
- 	m_rt = sdw_master_rt_find(bus, stream);
--	if (m_rt)
--		goto skip_alloc_master_rt;
--
--	m_rt = sdw_master_rt_alloc(bus, stream);
- 	if (!m_rt) {
--		dev_err(bus->dev, "%s: Master runtime alloc failed for stream:%s\n",
--			__func__, stream->name);
--		ret = -ENOMEM;
--		goto unlock;
--	}
--
--	alloc_master_rt = true;
--skip_alloc_master_rt:
--
--	if (sdw_master_port_allocated(m_rt))
--		goto skip_alloc_master_port;
-+		m_rt = sdw_master_rt_alloc(bus, stream);
-+		if (!m_rt) {
-+			dev_err(bus->dev, "%s: Master runtime alloc failed for stream:%s\n",
-+				__func__, stream->name);
-+			ret = -ENOMEM;
-+			goto unlock;
-+		}
- 
--	ret = sdw_master_port_alloc(m_rt, num_ports);
--	if (ret)
--		goto alloc_error;
-+		alloc_master_rt = true;
-+	}
- 
--	stream->m_rt_count++;
-+	if (!sdw_master_port_allocated(m_rt)) {
-+		ret = sdw_master_port_alloc(m_rt, num_ports);
-+		if (ret)
-+			goto alloc_error;
- 
--skip_alloc_master_port:
-+		stream->m_rt_count++;
-+	}
- 
- 	ret = sdw_master_rt_config(m_rt, stream_config);
- 	if (ret < 0)
-@@ -1992,46 +1985,41 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
- 	 * and go to configuration
- 	 */
- 	m_rt = sdw_master_rt_find(slave->bus, stream);
--	if (m_rt)
--		goto skip_alloc_master_rt;
--
--	/*
--	 * If this API is invoked by Slave first then m_rt is not valid.
--	 * So, allocate m_rt and add Slave to it.
--	 */
--	m_rt = sdw_master_rt_alloc(slave->bus, stream);
- 	if (!m_rt) {
--		dev_err(&slave->dev, "%s: Master runtime alloc failed for stream:%s\n",
--			__func__, stream->name);
--		ret = -ENOMEM;
--		goto unlock;
--	}
-+		/*
-+		 * If this API is invoked by Slave first then m_rt is not valid.
-+		 * So, allocate m_rt and add Slave to it.
-+		 */
-+		m_rt = sdw_master_rt_alloc(slave->bus, stream);
-+		if (!m_rt) {
-+			dev_err(&slave->dev, "%s: Master runtime alloc failed for stream:%s\n",
-+				__func__, stream->name);
-+			ret = -ENOMEM;
-+			goto unlock;
-+		}
- 
--	alloc_master_rt = true;
-+		alloc_master_rt = true;
-+	}
- 
--skip_alloc_master_rt:
- 	s_rt = sdw_slave_rt_find(slave, stream);
--	if (s_rt)
--		goto skip_alloc_slave_rt;
--
--	s_rt = sdw_slave_rt_alloc(slave, m_rt);
- 	if (!s_rt) {
--		dev_err(&slave->dev, "Slave runtime alloc failed for stream:%s\n", stream->name);
--		ret = -ENOMEM;
--		goto alloc_error;
--	}
--
--	alloc_slave_rt = true;
-+		s_rt = sdw_slave_rt_alloc(slave, m_rt);
-+		if (!s_rt) {
-+			dev_err(&slave->dev, "Slave runtime alloc failed for stream:%s\n",
-+				stream->name);
-+			ret = -ENOMEM;
-+			goto alloc_error;
-+		}
- 
--skip_alloc_slave_rt:
--	if (sdw_slave_port_allocated(s_rt))
--		goto skip_port_alloc;
-+		alloc_slave_rt = true;
-+	}
- 
--	ret = sdw_slave_port_alloc(slave, s_rt, num_ports);
--	if (ret)
--		goto alloc_error;
-+	if (!sdw_slave_port_allocated(s_rt)) {
-+		ret = sdw_slave_port_alloc(slave, s_rt, num_ports);
-+		if (ret)
-+			goto alloc_error;
-+	}
- 
--skip_port_alloc:
- 	ret =  sdw_master_rt_config(m_rt, stream_config);
- 	if (ret)
- 		goto unlock;
+ 	if (negative)
+ 		arg.value = -arg.value;
+-	arg.value &= (~0LL) << (FIXED31_32_BITS_PER_FRACTIONAL_PART - frac_bits);
++	arg.value &= (~0ULL) << (FIXED31_32_BITS_PER_FRACTIONAL_PART - frac_bits);
+ 	if (negative)
+ 		arg.value = -arg.value;
+ 	return arg;
 -- 
-2.30.2
+2.25.1
 
