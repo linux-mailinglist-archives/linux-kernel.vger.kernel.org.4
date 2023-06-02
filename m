@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03ADE71F76C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EB171F770
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjFBA7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        id S232616AbjFBBBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFBA7E (ORCPT
+        with ESMTP id S229524AbjFBBBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:59:04 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FC4E2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:59:02 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb5e91ab4so2153799276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 17:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685667542; x=1688259542;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0u7y5QK/IUNVLjf4PP/AE2dTkQWeXWOPAwDPk1OpCag=;
-        b=wIQaJ+pMgik/b6GJwDHzo6Jgj2/3eBSKUPtjVYobTGqnFrLpg+apm6uFGdvnH/0xTq
-         6pyYMcvEboxUZ90nuhRIKotL3IA4OWwkUUf2t8INbGwAEsuL2S4Mm6q7GMUGr2TPlk4D
-         Yz29+TXn6p8x8afCO7EwW6HA6rR0EXmSkyvgmKtUzusZ3+u0hwfAxP3YkK6D0iGB+HdT
-         5Ly1lWrLuW1C8AIAVCnrt0e/O8wLfm1OV3N7gIwdxpSz9kD/q5Gbjv48KPYoGrXnz9VM
-         ao0x13kkeffb0FL+kXWrDhl5QNu1B6Ea/0VayqPjbseL8m2x6OVv4PSQ8mddGx8HNB0V
-         JxDg==
+        Thu, 1 Jun 2023 21:01:10 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2DAE2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:01:07 -0700 (PDT)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 43B1D3F42E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:01:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685667665;
+        bh=wCbPB1ZDTWLt/oEJv6P7qx4Cdd8dnV7Y9TrZ5aVJ2o0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=qf/XcOkaa1ZekfrU8e8pefIvLAuErEBq2vbDuJeLl8UfohcxPbe53BJdfDpOaKIzc
+         3qRU+g4B1JsDXDPhbh90sNjTLaj5i+nwDJm1VJ0+HzUKXFjgfLx4nm/ycnHVD8Y4S9
+         XRW+jb9MagLpnuaBrpEceiDDB/W319ytSabXGMyavt8guDZF7yTbMlJHvGu4qBbPMt
+         1PLRK+TJNUBKBuKyZJA0ZGzT9u71UlUk02E6+Mx9dY3cl6oL745QR+VQCuBdw2U1y2
+         0uB+z+iW0Ofu/T04g9FzsTlSeMlpmAjV6F0UFmJ7+ic8AXIyg09xQBN7SomdQu16Zl
+         ZURwHdFUk1h+g==
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-5428d1915acso294653a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:01:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685667542; x=1688259542;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0u7y5QK/IUNVLjf4PP/AE2dTkQWeXWOPAwDPk1OpCag=;
-        b=Qzf9tCNoFxoMpSvkGybUHorDGHiP7btrn/B1NxcoGWGPghnpT5MZxBb9/ssvy71CqK
-         CfaMrg7K/149nN4W4DcboKCCT/bZqN/wIv+y69qa1ZBvGOU2IpcWk7guIhDu1wZZooyB
-         nWsEYREfG7PYmqkg6x5ygd69tgNRUgF6iao8z4EOdkwNh5sEjBxoG8WivPHYUIDNr88u
-         JgS9pu80aj0n92Eah3Uh97AlzRRxoC7eVmegh/MHKpTJMFpgSzv7F9n4/bA1d9jFiiYk
-         Jlm/G0Wc9N6QWR5XV2F/WqFAQq9OZJuUq26SmZB+souUb/1xZwOxWldolJivVZS78hHM
-         eDgA==
-X-Gm-Message-State: AC+VfDx1HN9tYvw0zBKsGdWXYi3KuU1uBc0WA1ruRKS5zMijg0wCpUEE
-        Xkxfdq2zedJ+yIGI1H+yNpUR0JPqcc0=
-X-Google-Smtp-Source: ACHHUZ4Wrm/D2X9Qznpq2Wz0ZUzUu5A5UFlVyVWNyUsItS+gbX8jjJDG8zEIrqDN3RdhbIHZokkWdSGF6FE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:5d6:0:b0:ba7:d142:eada with SMTP id
- 205-20020a2505d6000000b00ba7d142eadamr952269ybf.7.1685667542036; Thu, 01 Jun
- 2023 17:59:02 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  1 Jun 2023 17:58:59 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230602005859.784190-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky disabling of nx_huge_pages
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li RongQing <lirongqing@baidu.com>,
-        Yong He <zhuangel570@gmail.com>,
-        Robert Hoo <robert.hoo.linux@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
+        d=1e100.net; s=20221208; t=1685667663; x=1688259663;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wCbPB1ZDTWLt/oEJv6P7qx4Cdd8dnV7Y9TrZ5aVJ2o0=;
+        b=CRP+Ss6Hqik+Ac9YceluNxvj9NiPkN/XAfJfpwHrBNKEu0fAnKZJQ2wgD4LD4fgSTQ
+         4VXPzXJwBsHC7pGoIXSyP1ebPYTsxuVy9P2MCM2Kw8xb8Y8kTAEprNuXojcTjeNg5l7F
+         32f6farSeV8ZcRbDVeujT6ISN32v5bLPqOUz84RZ337tQPHVGUwKRuhSV2oaEcnNNmZa
+         xNHapGcpqcGzuL/5L0bylU8ZUp1W+TFz8QA4LUswYCDUE/ZEyUEh/54YKK05kBiP8ww3
+         DlN7q4NrU9BKfdaviqMbAyz/p3CH1fEYzVaksKV14oQuAtM740ENHUNnQBQSsvYl/7UN
+         W+vQ==
+X-Gm-Message-State: AC+VfDzS05XfhE3j84kq1+FXdaHJh5wSfSpZOJNrVBIBfmTVMqlrQhWx
+        4KJgzKAcrcsbVdk+7Q/35at4Fn+mhy0afAeU1g+P47D4ZLuHB7tIKkERUILQd57pCxopqLFGMHA
+        72t3v7qEgzadgH8HPspD7yVCl5RWWo4kqnAr0URZjuQehxYlxyJu9jgbOiQ==
+X-Received: by 2002:a05:6a20:101a:b0:103:b436:aef7 with SMTP id gs26-20020a056a20101a00b00103b436aef7mr3265573pzc.16.1685667663270;
+        Thu, 01 Jun 2023 18:01:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6VYL0KZ+3iS8gCc9F1FccQPyYsJMympHRukppGkxqbJhX/s/Mr1+03VnVxAzE9Sg4EziYgwHd5k/dOBTS9O0k=
+X-Received: by 2002:a05:6a20:101a:b0:103:b436:aef7 with SMTP id
+ gs26-20020a056a20101a00b00103b436aef7mr3265549pzc.16.1685667662942; Thu, 01
+ Jun 2023 18:01:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230601155652.1157611-1-kai.heng.feng@canonical.com> <164576ab-4e68-ca5d-0c9e-d756588cdbb5@acm.org>
+In-Reply-To: <164576ab-4e68-ca5d-0c9e-d756588cdbb5@acm.org>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 2 Jun 2023 09:00:51 +0800
+Message-ID: <CAAd53p6S=nzxgwBky6daJZ8wa-HaBODpjwLPYZ52g8FPXbbACw@mail.gmail.com>
+Subject: Re: [PATCH v5] scsi: core: Wait until device is fully resumed before
+ doing rescan
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, dlemoal@kernel.org,
+        bblock@linux.ibm.com, acelan.kao@canonical.com,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,126 +80,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a "never" option to the nx_huge_pages module param to allow userspace
-to do a one-way hard disabling of the mitigation, and don't create the
-per-VM recovery threads when the mitigation is hard disabled.  Letting
-userspace pinky swear that userspace doesn't want to enable NX mitigation
-(without reloading KVM) allows certain use cases to avoid the latency
-problems associated with spawning a kthread for each VM.
+On Fri, Jun 2, 2023 at 3:48=E2=80=AFAM Bart Van Assche <bvanassche@acm.org>=
+ wrote:
+>
+> On 6/1/23 08:56, Kai-Heng Feng wrote:
+> > During system resuming process, the resuming order is from top to down.
+> > Namely, the ATA host is resumed before disks connected to it.
+> >
+> > When an EH is scheduled while ATA host is resumed and disk device is
+> > still suspended, the device_lock hold by scsi_rescan_device() is never
+> > released so the dpm_resume() of the disk is blocked forerver, therefore
+> > the system can never be resumed back.
+> >
+> > That's because scsi_attach_vpd() is expecting the disk device is in
+> > operational state, as it doesn't work on suspended device.
+> >
+> > To avoid such deadlock, wait until the scsi device is fully resumed,
+> > before continuing the rescan process.
+>
+> Why doesn't scsi_attach_vpd() support runtime power management? Calling
+> scsi_attach_vpd() should result in a call of sdev_runtime_resume(),
 
-E.g. in FaaS use cases, the guest kernel is trusted and the host may
-create 100+ VMs per logical CPU, which can result in 100ms+ latencies when
-a burst of VMs is created.
+It's system-wide resume in this context, so it's dpm_resume() waiting
+for the lock to be released by scsi_rescan_device().
 
-Reported-by: Li RongQing <lirongqing@baidu.com>
-Closes: https://lore.kernel.org/all/1679555884-32544-1-git-send-email-lirongqing@baidu.com
-Cc: Yong He <zhuangel570@gmail.com>
-Cc: Robert Hoo <robert.hoo.linux@gmail.com>
-Cc: Kai Huang <kai.huang@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 41 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 36 insertions(+), 5 deletions(-)
+Kai-Heng
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index c8961f45e3b1..2ed38916b904 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -58,6 +58,8 @@
- 
- extern bool itlb_multihit_kvm_mitigation;
- 
-+static bool nx_hugepage_mitigation_hard_disabled;
-+
- int __read_mostly nx_huge_pages = -1;
- static uint __read_mostly nx_huge_pages_recovery_period_ms;
- #ifdef CONFIG_PREEMPT_RT
-@@ -67,12 +69,13 @@ static uint __read_mostly nx_huge_pages_recovery_ratio = 0;
- static uint __read_mostly nx_huge_pages_recovery_ratio = 60;
- #endif
- 
-+static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp);
- static int set_nx_huge_pages(const char *val, const struct kernel_param *kp);
- static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel_param *kp);
- 
- static const struct kernel_param_ops nx_huge_pages_ops = {
- 	.set = set_nx_huge_pages,
--	.get = param_get_bool,
-+	.get = get_nx_huge_pages,
- };
- 
- static const struct kernel_param_ops nx_huge_pages_recovery_param_ops = {
-@@ -6844,6 +6847,14 @@ static void mmu_destroy_caches(void)
- 	kmem_cache_destroy(mmu_page_header_cache);
- }
- 
-+static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp)
-+{
-+	if (nx_hugepage_mitigation_hard_disabled)
-+		return sprintf(buffer, "never\n");
-+
-+	return param_get_bool(buffer, kp);
-+}
-+
- static bool get_nx_auto_mode(void)
- {
- 	/* Return true when CPU has the bug, and mitigations are ON */
-@@ -6860,15 +6871,29 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
- 	bool old_val = nx_huge_pages;
- 	bool new_val;
- 
-+	if (nx_hugepage_mitigation_hard_disabled)
-+		return -EPERM;
-+
- 	/* In "auto" mode deploy workaround only if CPU has the bug. */
--	if (sysfs_streq(val, "off"))
-+	if (sysfs_streq(val, "off")) {
- 		new_val = 0;
--	else if (sysfs_streq(val, "force"))
-+	} else if (sysfs_streq(val, "force")) {
- 		new_val = 1;
--	else if (sysfs_streq(val, "auto"))
-+	} else if (sysfs_streq(val, "auto")) {
- 		new_val = get_nx_auto_mode();
--	else if (kstrtobool(val, &new_val) < 0)
-+	} else if (sysfs_streq(val, "never")) {
-+		new_val = 0;
-+
-+		mutex_lock(&kvm_lock);
-+		if (!list_empty(&vm_list)) {
-+			mutex_unlock(&kvm_lock);
-+			return -EBUSY;
-+		}
-+		nx_hugepage_mitigation_hard_disabled = true;
-+		mutex_unlock(&kvm_lock);
-+	} else if (kstrtobool(val, &new_val) < 0) {
- 		return -EINVAL;
-+	}
- 
- 	__set_nx_huge_pages(new_val);
- 
-@@ -7006,6 +7031,9 @@ static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel
- 	uint old_period, new_period;
- 	int err;
- 
-+	if (nx_hugepage_mitigation_hard_disabled)
-+		return -EPERM;
-+
- 	was_recovery_enabled = calc_nx_huge_pages_recovery_period(&old_period);
- 
- 	err = param_set_uint(val, kp);
-@@ -7161,6 +7189,9 @@ int kvm_mmu_post_init_vm(struct kvm *kvm)
- {
- 	int err;
- 
-+	if (nx_hugepage_mitigation_hard_disabled)
-+		return 0;
-+
- 	err = kvm_vm_create_worker_thread(kvm, kvm_nx_huge_page_recovery_worker, 0,
- 					  "kvm-nx-lpage-recovery",
- 					  &kvm->arch.nx_huge_page_recovery_thread);
-
-base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
--- 
-2.41.0.rc2.161.g9c6817b8e7-goog
-
+> isn't it?
+>
+> Thanks,
+>
+> Bart.
+>
