@@ -2,323 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E2071FFF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEF471FFFC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233639AbjFBLEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S235380AbjFBLFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235549AbjFBLE1 (ORCPT
+        with ESMTP id S234410AbjFBLFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:04:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7D18D;
-        Fri,  2 Jun 2023 04:04:26 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352AkOaD023391;
-        Fri, 2 Jun 2023 11:04:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=gM0DDxKPzyI61z+wl1A5wOzmSM5QqZdd04x7K7mtZ/M=;
- b=j3EbV2/ltfHZBWsDHeSHszRQnD83AHI3PjIt0Bo0GkDrEQ07Ui/8pOskARA/iRqgIS3b
- VSwKYCrbZJsqY9YUTnwsi31ucwdcrDZ1MyvaDewbjYXuBs6XKpc6D9Ubme+pCkymaqQQ
- zOiwBoaH8PmQZFZej3YmxjEiwQ8oyimllpkgK+tlk/nmypF+qi10UIYG6HRrB7OvY6Ly
- sZeec7P78BXzaXPV5FJZxSjtd2TULtIfBa8xrcE3vHMCvDGsMj4PVVSWxDpAVARHs8X4
- aGNwuObhp+fAb7RxXeb5DEoiH2qr5kDtVNV0s11DLHzwytHTeeQOzvydlBmrRuZ1ZGqZ GA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxugraeeq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 11:04:20 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 352B4Ks1006589
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 11:04:20 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 2 Jun 2023 04:04:15 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: [PATCH v5 3/3] arm64: dts: qcom: ipq9574: add thermal zone nodes
-Date:   Fri, 2 Jun 2023 16:33:52 +0530
-Message-ID: <4cc3aa1c93aacfc8ddf236a3d6ed07bfe75da1a4.1685703605.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1685703605.git.quic_varada@quicinc.com>
-References: <cover.1685703605.git.quic_varada@quicinc.com>
+        Fri, 2 Jun 2023 07:05:06 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97313CE;
+        Fri,  2 Jun 2023 04:05:04 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2ECCF6E0;
+        Fri,  2 Jun 2023 13:04:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685703879;
+        bh=8Ej7wcIutR5WCUQ1LWvTNh+N/cYkKVA3SIv/HoFFDlA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MfhvjUXKPe2VCQbcUOwdFnE4mo/ngKUA+QS3gaJ5DF+7tM2RBeGdr1s5W5pHcoGlz
+         hfQZh978Az3ng2eu6b1D61scH2Eqj5wbHi6Eu2ead3TFCpY/9OrI/Ug4UhQLiI3YvT
+         pNcBJuLkhItb3L8VRA0nMxzOiNHRz2+Vv/JELdMQ=
+Date:   Fri, 2 Jun 2023 14:04:59 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] drm: Remove references to removed transitional
+ helpers
+Message-ID: <20230602110459.GC26944@pendragon.ideasonboard.com>
+References: <cover.1685696114.git.geert+renesas@glider.be>
+ <14e091fc522aa63a3e33bda1016e5fa946d47d18.1685696114.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Yt3P0_MHZ9SlF2KKejSyxuOLm2gGktFk
-X-Proofpoint-ORIG-GUID: Yt3P0_MHZ9SlF2KKejSyxuOLm2gGktFk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_08,2023-06-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 mlxscore=0 clxscore=1015 impostorscore=0 adultscore=0
- malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020082
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <14e091fc522aa63a3e33bda1016e5fa946d47d18.1685696114.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds thermal zone nodes for the various
-sensors present in IPQ9574
+Hi Geert,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
-[v2]:
-	Rename clusterX nodes as cpussX nodes
+Thank you for the patch.
 
-[v1]:
-	Fix node names
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
- 1 file changed, 208 insertions(+)
+On Fri, Jun 02, 2023 at 11:11:35AM +0200, Geert Uytterhoeven wrote:
+> The transitional helpers were removed a long time ago, but some
+> references stuck.  Remove them.
+> 
+> Fixes: 21ebe615c16994f3 ("drm: Remove transitional helpers")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> It doesn't look like the drm_encoder_helper_funcs were ever used by the
+> transitional plane helpers?
+> ---
+>  drivers/gpu/drm/drm_plane_helper.c       |  8 ----
+>  include/drm/drm_crtc.h                   |  5 ---
+>  include/drm/drm_modeset_helper_vtables.h | 48 +++++++++++-------------
+>  3 files changed, 21 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_plane_helper.c b/drivers/gpu/drm/drm_plane_helper.c
+> index c91e454eba097942..be45bdb58d849653 100644
+> --- a/drivers/gpu/drm/drm_plane_helper.c
+> +++ b/drivers/gpu/drm/drm_plane_helper.c
+> @@ -51,14 +51,6 @@
+>   * planes, and newly merged drivers must not rely upon these transitional
+>   * helpers.
+>   *
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index cda3fd4..392dbe5 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -592,6 +592,214 @@
- 		};
- 	};
- 
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 3>;
-+
-+			trips {
-+				nss-top-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 4>;
-+
-+			trips {
-+				ubi_0-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 5>;
-+
-+			trips {
-+				ubi_1-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 6>;
-+
-+			trips {
-+				ubi_2-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 7>;
-+
-+			trips {
-+				ubi_3-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 8>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 9>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 10>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 11>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 12>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 13>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		wcss-phyb-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 14>;
-+
-+			trips {
-+				wcss_phyb-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		top-glue-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 15>;
-+
-+			trips {
-+				top_glue-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+The first paragraph starts with "This helper library has two parts.". As
+you're dropping the mention of the second part, I think you should
+rework the first paragraph too.
+
+> - * The second part also implements transitional helpers which allow drivers to
+> - * gradually switch to the atomic helper infrastructure for plane updates. Once
+> - * that switch is complete drivers shouldn't use these any longer, instead using
+> - * the proper legacy implementations for update and disable plane hooks provided
+> - * by the atomic helpers.
+> - *
+> - * Again drivers are strongly urged to switch to the new interfaces.
+> - *
+>   * The plane helpers share the function table structures with other helpers,
+>   * specifically also the atomic helpers. See &struct drm_plane_helper_funcs for
+>   * the details.
+> diff --git a/include/drm/drm_crtc.h b/include/drm/drm_crtc.h
+> index 8e1cbc75143ef216..8b48a1974da3143c 100644
+> --- a/include/drm/drm_crtc.h
+> +++ b/include/drm/drm_crtc.h
+> @@ -77,11 +77,6 @@ struct drm_plane_helper_funcs;
+>   * intended to indicate whether a full modeset is needed, rather than strictly
+>   * describing what has changed in a commit. See also:
+>   * drm_atomic_crtc_needs_modeset()
+> - *
+> - * WARNING: Transitional helpers (like drm_helper_crtc_mode_set() or
+> - * drm_helper_crtc_mode_set_base()) do not maintain many of the derived control
+> - * state like @plane_mask so drivers not converted over to atomic helpers should
+> - * not rely on these being accurate!
+>   */
+>  struct drm_crtc_state {
+>  	/** @crtc: backpointer to the CRTC */
+> diff --git a/include/drm/drm_modeset_helper_vtables.h b/include/drm/drm_modeset_helper_vtables.h
+> index 965faf082a6d1acb..e3c3ac615909474b 100644
+> --- a/include/drm/drm_modeset_helper_vtables.h
+> +++ b/include/drm/drm_modeset_helper_vtables.h
+> @@ -59,8 +59,8 @@ enum mode_set_atomic {
+>  /**
+>   * struct drm_crtc_helper_funcs - helper operations for CRTCs
+>   *
+> - * These hooks are used by the legacy CRTC helpers, the transitional plane
+> - * helpers and the new atomic modesetting helpers.
+> + * These hooks are used by the legacy CRTC helpers and the new atomic
+> + * modesetting helpers.
+>   */
+>  struct drm_crtc_helper_funcs {
+>  	/**
+> @@ -216,9 +216,7 @@ struct drm_crtc_helper_funcs {
+>  	 *
+>  	 * This callback is used to update the display mode of a CRTC without
+>  	 * changing anything of the primary plane configuration. This fits the
+> -	 * requirement of atomic and hence is used by the atomic helpers. It is
+> -	 * also used by the transitional plane helpers to implement a
+> -	 * @mode_set hook in drm_helper_crtc_mode_set().
+> +	 * requirement of atomic and hence is used by the atomic helpers.
+>  	 *
+>  	 * Note that the display pipe is completely off when this function is
+>  	 * called. Atomic drivers which need hardware to be running before they
+> @@ -333,8 +331,8 @@ struct drm_crtc_helper_funcs {
+>  	 * all updated. Again the recommendation is to just call check helpers
+>  	 * until a maximal configuration is reached.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional.
+>  	 *
+>  	 * NOTE:
+>  	 *
+> @@ -373,8 +371,8 @@ struct drm_crtc_helper_funcs {
+>  	 * has picked. See drm_atomic_helper_commit_planes() for a discussion of
+>  	 * the tradeoffs and variants of plane commit helpers.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional.
+>  	 */
+>  	void (*atomic_begin)(struct drm_crtc *crtc,
+>  			     struct drm_atomic_state *state);
+> @@ -397,8 +395,8 @@ struct drm_crtc_helper_funcs {
+>  	 * has picked. See drm_atomic_helper_commit_planes() for a discussion of
+>  	 * the tradeoffs and variants of plane commit helpers.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional.
+>  	 */
+>  	void (*atomic_flush)(struct drm_crtc *crtc,
+>  			     struct drm_atomic_state *state);
+> @@ -507,8 +505,8 @@ static inline void drm_crtc_helper_add(struct drm_crtc *crtc,
+>  /**
+>   * struct drm_encoder_helper_funcs - helper operations for encoders
+>   *
+> - * These hooks are used by the legacy CRTC helpers, the transitional plane
+> - * helpers and the new atomic modesetting helpers.
+> + * These hooks are used by the legacy CRTC helpers and the new atomic
+> + * modesetting helpers.
+>   */
+>  struct drm_encoder_helper_funcs {
+>  	/**
+> @@ -1185,8 +1183,7 @@ static inline void drm_connector_helper_add(struct drm_connector *connector,
+>  /**
+>   * struct drm_plane_helper_funcs - helper operations for planes
+>   *
+> - * These functions are used by the atomic helpers and by the transitional plane
+> - * helpers.
+> + * These functions are used by the atomic helpers.
+>   */
+>  struct drm_plane_helper_funcs {
+>  	/**
+> @@ -1221,9 +1218,8 @@ struct drm_plane_helper_funcs {
+>  	 * The helpers will call @cleanup_fb with matching arguments for every
+>  	 * successful call to this hook.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional. See @begin_fb_access
+> -	 * for preparing per-commit resources.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional. See @begin_fb_access for preparing per-commit resources.
+>  	 *
+>  	 * RETURNS:
+>  	 *
+> @@ -1240,8 +1236,8 @@ struct drm_plane_helper_funcs {
+>  	 * This hook is called to clean up any resources allocated for the given
+>  	 * framebuffer and plane configuration in @prepare_fb.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional.
+>  	 */
+>  	void (*cleanup_fb)(struct drm_plane *plane,
+>  			   struct drm_plane_state *old_state);
+> @@ -1295,8 +1291,8 @@ struct drm_plane_helper_funcs {
+>  	 * all updated. Again the recommendation is to just call check helpers
+>  	 * until a maximal configuration is reached.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional.
+>  	 *
+>  	 * NOTE:
+>  	 *
+> @@ -1326,8 +1322,7 @@ struct drm_plane_helper_funcs {
+>  	 * has picked. See drm_atomic_helper_commit_planes() for a discussion of
+>  	 * the tradeoffs and variants of plane commit helpers.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional.
+> +	 * This callback is used by the atomic modeset helpers, but it is optional.
+>  	 */
+>  	void (*atomic_update)(struct drm_plane *plane,
+>  			      struct drm_atomic_state *state);
+> @@ -1376,9 +1371,8 @@ struct drm_plane_helper_funcs {
+>  	 * has picked. See drm_atomic_helper_commit_planes() for a discussion of
+>  	 * the tradeoffs and variants of plane commit helpers.
+>  	 *
+> -	 * This callback is used by the atomic modeset helpers and by the
+> -	 * transitional plane helpers, but it is optional. It's intended to
+> -	 * reverse the effects of @atomic_enable.
+> +	 * This callback is used by the atomic modeset helpers, but it is
+> +	 * optional. It's intended to reverse the effects of @atomic_enable.
+>  	 */
+>  	void (*atomic_disable)(struct drm_plane *plane,
+>  			       struct drm_atomic_state *state);
+
 -- 
-2.7.4
+Regards,
 
+Laurent Pinchart
