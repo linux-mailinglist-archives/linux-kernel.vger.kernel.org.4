@@ -2,308 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACC97206CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5E47206D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236315AbjFBQF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S236357AbjFBQGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbjFBQFX (ORCPT
+        with ESMTP id S236314AbjFBQGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:05:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3D671B8;
-        Fri,  2 Jun 2023 09:05:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B4A81063;
-        Fri,  2 Jun 2023 09:06:06 -0700 (PDT)
-Received: from [10.57.22.125] (unknown [10.57.22.125])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 007AE3F7BD;
-        Fri,  2 Jun 2023 09:05:17 -0700 (PDT)
-Message-ID: <9d724c1d-ef76-8a9f-a55b-814ba8ceb83a@arm.com>
-Date:   Fri, 2 Jun 2023 17:05:16 +0100
+        Fri, 2 Jun 2023 12:06:13 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37131AB;
+        Fri,  2 Jun 2023 09:06:10 -0700 (PDT)
+Received: from fpc (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 3501944C1018;
+        Fri,  2 Jun 2023 16:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 3501944C1018
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1685721967;
+        bh=WkPGlu7uffOzFW2P46Q5YpneXdP5+zaFtMiibuBD29Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yse7c51SyzN8q/E8cM0ipBIcESp3+C0rv5qr0XNh/6eOFSBsbq5QSJUyepQaO28qF
+         Ds51W+ICQFdCXn43F7cMawr2HLQVj3jM6QeUF7pMSBvbMj1U7+KVNpyMF8gIt+QLWn
+         /olPNqlpTvmGDHJ6hrLn7fXoLgc4wTIYdXp0YU7Q=
+Date:   Fri, 2 Jun 2023 19:06:02 +0300
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        lvc-project@linuxtesting.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-can@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] can: j1939: avoid possible use-after-free when
+ j1939_can_rx_register fails
+Message-ID: <20230602160602.myfk52mxs25mekzb@fpc>
+References: <20230526171910.227615-1-pchelkin@ispras.ru>
+ <20230526171910.227615-3-pchelkin@ispras.ru>
+ <20230602123519.GH17237@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 07/11] coresight-tpdm: Add nodes for dsb edge control
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-8-git-send-email-quic_taozha@quicinc.com>
- <606b8a25-0468-c310-ccff-1477e2b238b2@arm.com>
- <c5c28ab8-7d6a-f8e7-ad34-8716ac77d2dc@quicinc.com>
- <a2bd3bbf-5512-971a-95a1-3220f31814a2@arm.com>
- <19bd262c-9063-5c7c-02b2-aa507c8c2a31@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <19bd262c-9063-5c7c-02b2-aa507c8c2a31@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602123519.GH17237@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 15:38, Tao Zhang wrote:
+On Fri, Jun 02, 2023 at 02:35:19PM +0200, Oleksij Rempel wrote:
+> On Fri, May 26, 2023 at 08:19:10PM +0300, Fedor Pchelkin wrote:
+> > Syzkaller reports the following failure:
+> > 
+> > BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
+> > BUG: KASAN: use-after-free in j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
+> > Write of size 4 at addr ffff888141c15058 by task swapper/3/0
+> > 
+> > CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.10.144-syzkaller #0
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> > Call Trace:
+> >  <IRQ>
+> >  __dump_stack lib/dump_stack.c:77 [inline]
+> >  dump_stack+0x107/0x167 lib/dump_stack.c:118
+> >  print_address_description.constprop.0+0x1c/0x220 mm/kasan/report.c:385
+> >  __kasan_report mm/kasan/report.c:545 [inline]
+> >  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
+> >  check_memory_region_inline mm/kasan/generic.c:186 [inline]
+> >  check_memory_region+0x145/0x190 mm/kasan/generic.c:192
+> >  instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+> >  atomic_fetch_sub_release include/asm-generic/atomic-instrumented.h:220 [inline]
+> >  __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+> >  __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+> >  refcount_dec_and_test include/linux/refcount.h:333 [inline]
+> >  kref_put include/linux/kref.h:64 [inline]
+> >  j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
+> >  j1939_sk_sock_destruct+0x44/0x90 net/can/j1939/socket.c:374
+> >  __sk_destruct+0x4e/0x820 net/core/sock.c:1784
+> >  rcu_do_batch kernel/rcu/tree.c:2485 [inline]
+> >  rcu_core+0xb35/0x1a30 kernel/rcu/tree.c:2726
+> >  __do_softirq+0x289/0x9a3 kernel/softirq.c:298
+> >  asm_call_irq_on_stack+0x12/0x20
+> >  </IRQ>
+> >  __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+> >  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+> >  do_softirq_own_stack+0xaa/0xe0 arch/x86/kernel/irq_64.c:77
+> >  invoke_softirq kernel/softirq.c:393 [inline]
+> >  __irq_exit_rcu kernel/softirq.c:423 [inline]
+> >  irq_exit_rcu+0x136/0x200 kernel/softirq.c:435
+> >  sysvec_apic_timer_interrupt+0x4d/0x100 arch/x86/kernel/apic/apic.c:1095
+> >  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:635
+> > 
+> > Allocated by task 1141:
+> >  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+> >  kasan_set_track mm/kasan/common.c:56 [inline]
+> >  __kasan_kmalloc.constprop.0+0xc9/0xd0 mm/kasan/common.c:461
+> >  kmalloc include/linux/slab.h:552 [inline]
+> >  kzalloc include/linux/slab.h:664 [inline]
+> >  j1939_priv_create net/can/j1939/main.c:131 [inline]
+> >  j1939_netdev_start+0x111/0x860 net/can/j1939/main.c:268
+> >  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
+> >  __sys_bind+0x1f2/0x260 net/socket.c:1645
+> >  __do_sys_bind net/socket.c:1656 [inline]
+> >  __se_sys_bind net/socket.c:1654 [inline]
+> >  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
+> >  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> > 
+> > Freed by task 1141:
+> >  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+> >  kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
+> >  kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
+> >  __kasan_slab_free+0x112/0x170 mm/kasan/common.c:422
+> >  slab_free_hook mm/slub.c:1542 [inline]
+> >  slab_free_freelist_hook+0xad/0x190 mm/slub.c:1576
+> >  slab_free mm/slub.c:3149 [inline]
+> >  kfree+0xd9/0x3b0 mm/slub.c:4125
+> >  j1939_netdev_start+0x5ee/0x860 net/can/j1939/main.c:300
+> >  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
+> >  __sys_bind+0x1f2/0x260 net/socket.c:1645
+> >  __do_sys_bind net/socket.c:1656 [inline]
+> >  __se_sys_bind net/socket.c:1654 [inline]
+> >  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
+> >  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+> >  entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> > 
+> > It can be caused by this scenario:
+> > 
+> > CPU0					CPU1
+> > j1939_sk_bind(socket0, ndev0, ...)
+> >   j1939_netdev_start()
+> > 					j1939_sk_bind(socket1, ndev0, ...)
+> >                                           j1939_netdev_start()
+> >   mutex_lock(&j1939_netdev_lock)
+> >   j1939_priv_set(ndev0, priv)
+> >   mutex_unlock(&j1939_netdev_lock)
+> > 					  if (priv_new)
+> > 					    kref_get(&priv_new->rx_kref)
+> > 					    return priv_new;
+> > 					  /* inside j1939_sk_bind() */
+> > 					  jsk->priv = priv
+> >   j1939_can_rx_register(priv) // fails
+> >   j1939_priv_set(ndev, NULL)
+> >   kfree(priv)
+> > 					j1939_sk_sock_destruct()
+> > 					j1939_priv_put() // <- uaf
+> > 
+> > To avoid this, call j1939_can_rx_register() under j1939_netdev_lock so
+> > that a concurrent thread cannot process j1939_priv before
+> > j1939_can_rx_register() returns.
+> > 
+> > Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> > 
+> > Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> > Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 > 
-> On 6/2/2023 4:45 PM, Suzuki K Poulose wrote:
->> On 02/06/2023 09:21, Tao Zhang wrote:
->>>
->>> On 6/1/2023 8:14 PM, Suzuki K Poulose wrote:
->>>> On 27/04/2023 10:00, Tao Zhang wrote:
->>>>> Add the nodes to set value for DSB edge control and DSB edge
->>>>> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
->>>>> resgisters to configure edge control. DSB edge detection control
->>>>> 00: Rising edge detection
->>>>> 01: Falling edge detection
->>>>> 10: Rising and falling edge detection (toggle detection)
->>>>> And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
->>>>> configure mask. Eight 32 bit registers providing DSB interface
->>>>> edge detection mask control.
->>>>>
->>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>>>> ---
->>>>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  32 +++++
->>>>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 135 
->>>>> ++++++++++++++++++++-
->>>>>   drivers/hwtracing/coresight/coresight-tpdm.h       |  21 ++++
->>>>>   3 files changed, 187 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git 
->>>>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->>>>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>>> index 348e167..a57f000 100644
->>>>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>>> @@ -60,3 +60,35 @@ Description:
->>>>>           Bit[3] : Set to 0 for low performance mode.
->>>>>                    Set to 1 for high performance mode.
->>>>>           Bit[4:8] : Select byte lane for high performance mode.
->>>>> +
->>>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
->>>>> +Date:        March 2023
->>>>> +KernelVersion    6.3
->>>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
->>>>> Zhang (QUIC) <quic_taozha@quicinc.com>
->>>>> +Description:
->>>>> +        Read/Write a set of the edge control registers of the DSB
->>>>> +        in TPDM.
->>>>> +
->>>>> +        Expected format is the following:
->>>>> +        <integer1> <integer2> <integer3>
->>>>> +
->>>>> +        Where:
->>>>> +        <integer1> : Start EDCR register number
->>>>> +        <integer2> : End EDCR register number
->>>>> +        <integer3> : The value need to be written
->>>>> +
->>>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
->>>>> +Date:        March 2023
->>>>> +KernelVersion    6.3
->>>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
->>>>> Zhang (QUIC) <quic_taozha@quicinc.com>
->>>>> +Description:
->>>>> +        Read/Write a set of the edge control mask registers of the
->>>>> +        DSB in TPDM.
->>>>> +
->>>>> +        Expected format is the following:
->>>>> +        <integer1> <integer2> <integer3>
->>>>> +
->>>>> +        Where:
->>>>> +        <integer1> : Start EDCMR register number
->>>>> +        <integer2> : End EDCMR register number
->>>>> +        <integer3> : The value need to be written
->>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->>>>> b/drivers/hwtracing/coresight/coresight-tpdm.c
->>>>> index 1bacaa5..a40e458 100644
->>>>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->>>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->>>>> @@ -80,7 +80,14 @@ static void set_trigger_type(struct tpdm_drvdata 
->>>>> *drvdata, u32 *val)
->>>>>     static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->>>>>   {
->>>>> -    u32 val;
->>>>> +    u32 val, i;
->>>>> +
->>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
->>>>> +        writel_relaxed(drvdata->dsb->edge_ctrl[i],
->>>>> +               drvdata->base + TPDM_DSB_EDCR(i));
->>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
->>>>> + writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
->>>>> +               drvdata->base + TPDM_DSB_EDCMR(i));
->>>>
->>>> Do all TPDM DSBs have MAX_EDCR registers ? Or some have less than 
->>>> that ?
->>>> If it is latter, do we need special care to avoid writing to inexistent
->>>> registers ?
->>>>
->>> You are right, not all DSB TPDMs have MAX_EDCR registers. In our 
->>> design, the inexistent register addresses
->>>
->>> are not occupied and safe for accessing.
->>>
->>> Currently we don't have a good way to know the quantity of EDCR/EDCMR 
->>> registers for DSB TPDMs.
->>>
->>> The only way we can think of is to set it in device tree manually.
->>>
->>> Do you have other suggestion for this?
->>>
->>>>>         val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->>>>>       /* Set trigger timestamp */
->>>>> @@ -313,6 +320,130 @@ static ssize_t dsb_mode_store(struct device 
->>>>> *dev,
->>>>>   }
->>>>>   static DEVICE_ATTR_RW(dsb_mode);
->>>>>   +static ssize_t dsb_edge_ctrl_show(struct device *dev,
->>>>> +                       struct device_attribute *attr,
->>>>> +                       char *buf)
->>>>> +{
->>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>> +    ssize_t size = 0;
->>>>> +    int i;
->>>>> +
->>>>> +    spin_lock(&drvdata->spinlock);
->>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
->>>>> +        size += sysfs_emit_at(buf, size,
->>>>> +                  "Index:0x%x Val:0x%x\n", i,
->>>>> +                  drvdata->dsb->edge_ctrl[i]);
->>>>
->>>> It may be safe, but please add a check to make sure that we don't
->>>> overflow. At least bail out when we hit a return of 0, indicating
->>>> reached the end of buffer.
->>>>
->>> Can I add the following check to replace the current code??
->>>
->>> int ret = 0;
->>>
->>>
->>> for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
->>>
->>>      ret = sysfs_emit_at(buf, size, "Index:0x%x Val:0x%x\n", i, 
->>> drvdata->dsb->edge_ctrl[i]);
->>>
->>>      if (!ret) {
->>>
->>>          dev_warn(drvdata->dev, "The buffer has been overflowed\n");
->>
->> You don't need this, it already triggers a WARN() in sysfs_emit_at().
->> So you could do:
->>
->>     for (....) {
->>         unsigned long bytes = sysfs_emit_at(buf, size, ....);
->>
->>         if (bytes <= 0)
->>             break;
->>         size += bytes;
->>     }
->>
-> Sure, I will update in the next patch series.
->>
->>>
->>>          spin_unlock(&drvdata->spinlock);
->>>
->>>          return size;
->>>
->>>      } else
->>>
->>>          size += ret;
->>>
->>> }
->>>
->>>>> +    }
->>>>> +    spin_unlock(&drvdata->spinlock);
->>>>> +    return size;
->>>>> +}
->>>>> +
->>>>> +/*
->>>>> + * value 1: Start EDCR register number
->>>>> + * value 2: End EDCR register number
->>>>> + * value 3: The value need to be written
->>>>> + * The EDCR registers can include up to 16 32-bit registers, and each
->>>>> + * one can be configured to control up to 16 edge detections(2 bits
->>>>> + * control one edge detection). So a total 256 edge detections can be
->>>>> + * configured. So the starting number(value 1) and ending 
->>>>> number(value 2)
->>>>> + * cannot be greater than 256, and value 1 should be less than 
->>>>> value 2.
->>>>> + * The following values are the rage of value 3.
->>>>> + * 0 - Rising edge detection
->>>>> + * 1 - Falling edge detection
->>>>> + * 2 - Rising and falling edge detection (toggle detection)
->>>>> + */
->>>>> +static ssize_t dsb_edge_ctrl_store(struct device *dev,
->>>>> +                    struct device_attribute *attr,
->>>>> +                    const char *buf,
->>>>> +                    size_t size)
->>>>> +{
->>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>>>> +    unsigned long val, mask, start, end, edge_ctrl, edge_ctrl_shift;
->>>>> +    int i, reg;
->>>>> +
->>>>> +    if (sscanf(buf, "%lx %lx %lx", &start, &end, &edge_ctrl) != 3)
->>>>> +        return -EINVAL;
->>>>> +    if ((start >= TPDM_DSB_MAX_LINES) || (end >= 
->>>>> TPDM_DSB_MAX_LINES) ||
->>>>> +        (start > end) || (edge_ctrl > 0x2))
->>>>> +        return -EPERM;
->>>>> +
->>>>> +    spin_lock(&drvdata->spinlock);
->>>>> +    for (i = start; i <= end; i++) {
->>>>> +        /*
->>>>> +         * There are 2 bit per DSB Edge Control line.
->>>>> +         * Thus we have 16 lines in a 32bit word.
->>>>> +         */
->>>>> +        reg = EDCR_TO_WORD_IDX(i);
->>>>> +        mask = EDCR_TO_WORD_MASK(i);
->>>>> +        val = drvdata->dsb->edge_ctrl[reg];
->>>>
->>>>> +        edge_ctrl_shift = EDCR_TO_WORD_VAL(edge_ctrl, i);
->>>>> +        bitmap_replace(&val, &val, &edge_ctrl_shift, &mask, 32);
->>>>
->>>> Could we simply do :
->>>>
->>>>         reg &= ~mask;
->>>>         reg |= FIELD_PREP(mask, edge_ctrl);
->>>>
->>> Perhaps "FIELD_PREP" cannot be used here since "mask" must be 
->>> constant in this macro.
->>
->> Ah, you are right. Sorry about that.
->>
->>>
->>> But in our code, the variable "mask" is not constant.
->>
->> Still I think using the bitmap_replace is an overkill. We could simply
->> do:
->>         val &= ~mask;
->>         val |= EDCR_TO_WORD_VAL(edge_ctrl, i);
+> Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> Thank you!
+> 
 
-Since we don't need mask any longer we could even do :
+Great!
 
-	   val &= ~EDCR_TO_WORD_MASK(i);
-	   val |= EDCR_TO_WORD_VAL(edge_ctrl, i);
-
-
-Suzuki
-
-
+Thanks for testing the patches!
