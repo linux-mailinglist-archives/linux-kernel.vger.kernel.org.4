@@ -2,119 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2318720304
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6AD720306
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbjFBNSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S236125AbjFBNSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236106AbjFBNR7 (ORCPT
+        with ESMTP id S236086AbjFBNSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:17:59 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0813FE46
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:17:46 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-97392066d04so290053566b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:17:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685711864; x=1688303864;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JwF8cKHicld7kwqHMzUbVeRLWFJ7BH702LKOXAuZJco=;
-        b=zoY+NU5Y6PiNfdLA/h3+RX2B6aQxqApaIJuCIQBXUKQQNOyCMbc4wvlkTW3Jdz8KzV
-         CW1bMcKbal5t6u9JEX1aw98ZqjEkgFDvWYq4m+rSlKG4atUXtQx+1jI65AqgUa0cG8hx
-         lpmJ525GUXJJuHzOQ6gzwvn+JeUqVL6AuIQIK8axZWdH+pOvOU9vU0kjWOzihh2S1kQc
-         6Zo0spJEJCU4FAuvHJRR2YTCQNvmZUUdBjgFO5TkB8QD1/jIyh7uOjbe6jlgxyhx81mo
-         gfBZ9AT2ZB/rf8tLMZhBujuxWLfDghppXexU+xqSB9crZsqxTWANzlerLLKruOHjjK1A
-         Gq/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711864; x=1688303864;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JwF8cKHicld7kwqHMzUbVeRLWFJ7BH702LKOXAuZJco=;
-        b=SIAsAZpSQ66FZr7Ca52UXzdWijHQcbQ+4URwGZbPPmuGh3sBi/5SJSH2zzDjT4+nE3
-         uW7Xc74r3xyP1nneemuZFiJiYC7mQfVtooVqyCG3ywuoapn8EMehZ/QtpGdTfQc0+XzV
-         +eG6l2Y8lOm4mdGqY+a/3saGbjIpw4rIc6hl/LDN5cnb2g3m8B+Vv4FXq1IJuwOd8tOF
-         cjrJW+G5NX3t2ruizmTi5Kf/n2xeV/vBFwxElnijbPCOW8S7ND2rUZ522pXeGsp/eCcw
-         oNXTjNbA97d2wJ/zoZtmPkH0NfJkELULSyLpefQzU/XTBvkGvgN3II9bwIDqxz+TKTKg
-         LugA==
-X-Gm-Message-State: AC+VfDx4lvIFiaK3swDgpjXCPOjclQa6aRTYAoo9HOCP88OoieDf98kB
-        bpflqZ0Ud9tHU3JS/yYzTHM7xA==
-X-Google-Smtp-Source: ACHHUZ4g96v6Peh4kQ0OBC9/PyT6SdBvBNAAHB9J6XRtu9uVD3Y96twKtow4Pg4xSokDPdAldMJeIQ==
-X-Received: by 2002:a17:906:9755:b0:974:1ced:6a56 with SMTP id o21-20020a170906975500b009741ced6a56mr12569506ejy.32.1685711864497;
-        Fri, 02 Jun 2023 06:17:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id dk7-20020a170906f0c700b00974e7559fbfsm483707ejb.144.2023.06.02.06.17.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 06:17:43 -0700 (PDT)
-Message-ID: <894a5ed1-71aa-d9ef-1301-54f4e3583cf3@linaro.org>
-Date:   Fri, 2 Jun 2023 15:17:41 +0200
+        Fri, 2 Jun 2023 09:18:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B808BE43;
+        Fri,  2 Jun 2023 06:18:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F82262660;
+        Fri,  2 Jun 2023 13:18:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F0BC433D2;
+        Fri,  2 Jun 2023 13:18:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685711884;
+        bh=P5Dc29mxMGV428PPMJZilBV2F/4XqbL5kx2gF5NwrrE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sQvQJR2lrQhcWaforw0/Bh3AIx4bMkLCS8067SVYMMH9ml2X+5/fHWDlArDX82LC0
+         6bUVDnL5sR+4foxZ+Ood383frthkLp+wvOA6MGjj4FwEqbbtMemoktaTtCHgGvI8Kb
+         1h9q+m5FCUHptAEDMn2KsGZC9OiR+pBUta63YRJLyeLLZ4MgUaxgcP3mj/HKFVsdW/
+         DSYVBtpkFyDZbDmbXAzb5PT+94gCBYmwA1dau5Zia8Y+4VHOr8pWe67E+sz2E2cNmH
+         vovJ+0fKZvf7Ezu6Kcm4MwlOPrvof9c12mPCCsNPkEGEK3+v+NLT6oNeqpZdgpAVjZ
+         QRsF4kW6NLrTw==
+Date:   Fri, 2 Jun 2023 06:18:01 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Peter Collingbourne <pcc@google.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] highmem: Rename put_and_unmap_page() to
+ unmap_and_put_page()
+Message-ID: <20230602131801.GB628@quark.localdomain>
+References: <20230602103307.5637-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 3/6] clk: qcom: Add lpass clock controller driver for
- SC8280XP
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     johan+linaro@kernel.org, agross@kernel.org,
-        konrad.dybcio@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230525122930.17141-1-srinivas.kandagatla@linaro.org>
- <20230525122930.17141-4-srinivas.kandagatla@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20230525122930.17141-4-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602103307.5637-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resending as my previous email probably got lost. If you got it twice,
-apologies.
-
-On 25/05/2023 14:29, Srinivas Kandagatla wrote:
-> Add support for the lpass clock controller found on SC8280XP based devices.
-> This would allow lpass peripheral loader drivers to control the clocks and
-> bring the subsystems out of reset.
+On Fri, Jun 02, 2023 at 12:33:07PM +0200, Fabio M. De Francesco wrote:
+> With commit 849ad04cf562a ("new helper: put_and_unmap_page()"), Al Viro
+> introduced the put_and_unmap_page() to use in those many places where we
+> have a common pattern consisting of calls to kunmap_local() +
+> put_page().
 > 
-> Currently this patch only supports resets as the Q6DSP is in control of
-> LPASS IP which manages most of the clocks via Q6PRM service on GPR rpmsg
-> channel.
+> Obviously, first we unmap and then we put pages. Instead, the original
+> name of this helper seems to imply that we first put and then unmap.
 > 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  drivers/clk/qcom/Kconfig            |  8 ++++
->  drivers/clk/qcom/Makefile           |  1 +
->  drivers/clk/qcom/lpasscc-sc8280xp.c | 63 +++++++++++++++++++++++++++++
->  3 files changed, 72 insertions(+)
->  create mode 100644 drivers/clk/qcom/lpasscc-sc8280xp.c
+> Therefore, rename the helper and change the only known upstreamed user
+> (i.e., fs/sysv) before this helper enters common use and might become
+> difficult to find all call sites and instead easy to break the builds.
 > 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 85869e7a9f16..e25993abb519 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -523,6 +523,14 @@ config SC_LPASSCC_7280
->  	  Say Y if you want to use the LPASS branch clocks of the LPASS clock
->  	  controller to reset the LPASS subsystem.
->  
-> +config SC_LPASSCC_8280XP
-> +	tristate "SC8280 Low Power Audio Subsystem (LPASS) Clock Controller"
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-depends on ARM64 || COMPILE_TEST
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-Best regards,
-Krzysztof
-
+- Eric
