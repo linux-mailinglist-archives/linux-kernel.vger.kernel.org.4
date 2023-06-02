@@ -2,138 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CC271FA6A
+	by mail.lfdr.de (Postfix) with ESMTP id 08E3471FA69
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbjFBG6B convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 02:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S234069AbjFBG6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234040AbjFBG56 (ORCPT
+        with ESMTP id S234043AbjFBG56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Jun 2023 02:57:58 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1356E18C;
-        Thu,  1 Jun 2023 23:57:55 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2af189d323fso38158861fa.1;
-        Thu, 01 Jun 2023 23:57:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685689072; x=1688281072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3yfrOJnAEtdE9WlO3Gt8PPHN7bIX3lR9BC9c57KaloY=;
-        b=R2rVW+FnkwEdQRMl40aWTxm2z9/O8D4aEgAPIBqFC5+D4cyVKQESmbOdq3x9C8HVpY
-         8xPuLG1VWoVvc42/lxKxvNRwjpF3u/oMun9cFmtyJM0koZGHaU8WFf6vDWw/N6XfqXq9
-         YFbapRkKf0JfvGT0AJSkTKOCnhXdXclbJWo+PwDldnezH6XluEzTvmYsEx2xh4gnripe
-         FBUvkxdrzA/ATxnObD4p5rby3W3tJTksvpDMW8dEEjukPOlFe9yvHJp8PFnyH7kETVkw
-         cCnrlHMgS6ZsoX9slqzzJ/T90lU07rINwmKNhWYvnyfqweGbNCtO5b8IQ8T46Ap54qTQ
-         BJ7Q==
-X-Gm-Message-State: AC+VfDyy6lhhSafTKkg5uGeT5OuZINN0tKGzDEH25j+xZbLQY0ktekD/
-        NuDZHWNh7ajsW3QZQ5YEB793RrJ3F6u1Tb+U
-X-Google-Smtp-Source: ACHHUZ75DCPscSa/X3zlW/WfQIDY02e0JX8sYMVjwdkoNFcgQRiwXeL/JJ/R/fTaidnXMbvXWWlFhQ==
-X-Received: by 2002:a2e:b989:0:b0:2a8:b792:d7cd with SMTP id p9-20020a2eb989000000b002a8b792d7cdmr466562ljp.4.1685689072001;
-        Thu, 01 Jun 2023 23:57:52 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id v11-20020a2e924b000000b002a8e8c776e9sm108023ljg.56.2023.06.01.23.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 23:57:51 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f4db9987f8so3751164e87.1;
-        Thu, 01 Jun 2023 23:57:51 -0700 (PDT)
-X-Received: by 2002:a05:6512:131e:b0:4eb:46c2:e771 with SMTP id
- x30-20020a056512131e00b004eb46c2e771mr776194lfu.14.1685689071688; Thu, 01 Jun
- 2023 23:57:51 -0700 (PDT)
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F217184;
+        Thu,  1 Jun 2023 23:57:52 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QXYjQ72lBz4f3l1s;
+        Fri,  2 Jun 2023 14:57:46 +0800 (CST)
+Received: from [10.174.179.247] (unknown [10.174.179.247])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbHqknlkL8gCKw--.48920S3;
+        Fri, 02 Jun 2023 14:57:48 +0800 (CST)
+Message-ID: <917d7c23-eefc-efc5-1b12-949a684900bc@huaweicloud.com>
+Date:   Fri, 2 Jun 2023 14:57:46 +0800
 MIME-Version: 1.0
-References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
- <20220329091126.4730-2-wsa+renesas@sang-engineering.com> <ZHkQDTvk6I2q-9CF@surfacebook>
- <CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Jun 2023 08:57:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWhtVvA4=vh4imMtL+KssybzB57CNcLaNq9oVKkpeS1iA@mail.gmail.com>
-Message-ID: <CAMuHMdWhtVvA4=vh4imMtL+KssybzB57CNcLaNq9oVKkpeS1iA@mail.gmail.com>
-Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
-To:     andy.shevchenko@gmail.com
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 1/2] md/raid10: fix incorrect done of recovery
+To:     Paul Menzel <pmenzel@molgen.mpg.de>, linan666@huaweicloud.com
+Cc:     song@kernel.org, neilb@suse.de, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com
+References: <20230601062424.3613218-1-linan666@huaweicloud.com>
+ <20230601062424.3613218-2-linan666@huaweicloud.com>
+ <2e36d874-4dd3-080c-3499-44f2f09b9169@molgen.mpg.de>
+From:   Li Nan <linan666@huaweicloud.com>
+In-Reply-To: <2e36d874-4dd3-080c-3499-44f2f09b9169@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnHbHqknlkL8gCKw--.48920S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCrW3WryrAryxur1rKF4rKrg_yoW5Cr17pr
+        4kJrZ8JryUJwn3Jw1UAryUJFy5Ary8Ja4DJr18W3WUXrW3JryjgFWUXr1jgryUXr48tF1U
+        Jw1UXrW5ZF1UKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+        4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+        04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUOlksUUUUU
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 8:51 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, Jun 1, 2023 at 11:40 PM <andy.shevchenko@gmail.com> wrote:
-> > Tue, Mar 29, 2022 at 11:11:26AM +0200, Wolfram Sang kirjoitti:
-> > > This is a sloppy logic analyzer using GPIOs. It comes with a script to
-> > > isolate a CPU for polling. While this is definitely not a production
-> > > level analyzer, it can be a helpful first view when remote debugging.
-> > > Read the documentation for details.
-> >
-> > One note since I have done recent review and realize one issue with debugfs.
-> >
-> > ...
-> >
-> > > +     priv->debug_dir = debugfs_create_dir(devname, gpio_la_poll_debug_dir);
-> >
-> > If this fails with NULL...
-> >
-> > > +     debugfs_create_blob("meta_data", 0400, priv->debug_dir, &priv->meta);
-> > > +     debugfs_create_ulong("delay_ns", 0600, priv->debug_dir, &priv->delay_ns);
-> > > +     debugfs_create_ulong("delay_ns_acquisition", 0400, priv->debug_dir, &priv->acq_delay);
-> > > +     debugfs_create_file_unsafe("buf_size", 0600, priv->debug_dir, priv, &fops_buf_size);
-> > > +     debugfs_create_file_unsafe("capture", 0200, priv->debug_dir, priv, &fops_capture);
-> > > +     debugfs_create_file_unsafe("trigger", 0200, priv->debug_dir, priv, &fops_trigger);
-> >
-> > ...and any of these is not, we will end up with the file in a root folder of debugfs...
-> >
-> > > +     dev_info(dev, "initialized");
-> >
-> > ...
-> >
-> > > +static int gpio_la_poll_remove(struct platform_device *pdev)
-> > > +{
-> > > +     struct gpio_la_poll_priv *priv = platform_get_drvdata(pdev);
-> > > +
-> > > +     mutex_lock(&priv->lock);
-> > > +     debugfs_remove_recursive(priv->debug_dir);
-> >
-> > ...and this one won't remove it.
-> >
-> > > +     mutex_unlock(&priv->lock);
-> > > +     mutex_destroy(&priv->lock);
-> > > +
-> > > +     return 0;
-> > > +}
-> >
-> > ...
-> >
-> > However, I haven't checked if it's pure theoretical issue with the current code
-> > base of debugfs or a potential problem. Easy fix is to check an error code and
+
+
+在 2023/6/1 15:06, Paul Menzel 写道:
+> Dear Li,
+> 
+> 
+> Thank you for your patch.
+> 
+> Am 01.06.23 um 08:24 schrieb linan666@huaweicloud.com:
+>> From: Li Nan <linan122@huawei.com>
+> 
+> Unfortunately, I do not understand your commit message summary “fix 
+> incorrect done of recovery”. Maybe:
+> 
+> Do not add sparse disk when recovery aborts
+> 
+
+"recovery fail" is better?
+
+>> In raid10_sync_request(), if data cannot be read from any disk for
+>> recovery, it will go to 'giveup' and let 'chunks_skipped' + 1. After
+>> multiple 'giveup', when 'chunks_skipped >= geo.raid_disks', it will
+>> return 'max_sector', indicating that the recovery has been completed.
+>> However, the recovery is just aborted and the data remains inconsistent.
+>>
+>> Fix it by setting mirror->recovery_disabled, which will prevent the spare
+>> disk from being added to this mirror. The same issue also exists during
+>> resync, it will be fixed afterwards.
+>>
+>> Signed-off-by: Li Nan <linan122@huawei.com>
+>> ---
+>>   drivers/md/raid10.c | 18 +++++++++++++++++-
+>>   1 file changed, 17 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+>> index d93d8cb2b620..3ba1516ea160 100644
+>> --- a/drivers/md/raid10.c
+>> +++ b/drivers/md/raid10.c
+>> @@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct mddev 
+>> *mddev, sector_t sector_nr,
+>>       int chunks_skipped = 0;
+>>       sector_t chunk_mask = conf->geo.chunk_mask;
+>>       int page_idx = 0;
+>> +    int error_disk = -1;
+>>       /*
+>>        * Allow skipping a full rebuild for incremental assembly
+>> @@ -3386,7 +3387,20 @@ static sector_t raid10_sync_request(struct 
+>> mddev *mddev, sector_t sector_nr,
+>>           return reshape_request(mddev, sector_nr, skipped);
+>>       if (chunks_skipped >= conf->geo.raid_disks) {
+>> -        /* if there has been nothing to do on any drive,
+>> +        pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
+>> +            test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "resync" 
+>> : "recovery");
+>> +        if (error_disk >= 0 &&
+>> +            !test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
+>> +            /*
+>> +             * recovery fail, set mirrors.recovory_disabled,
+> 
+> recov*e*ry
+> 
+>> +             * device shouldn't be added to there.
+>> +             */
+>> +            conf->mirrors[error_disk].recovery_disabled =
+>> +                        mddev->recovery_disabled;
+>> +            return 0;
+>> +        }
+>> +        /*
+>> +         * if there has been nothing to do on any drive,
+>>            * then there is nothing to do at all..
+> 
+> Just one dot/period at the end?
 >
-> I think debugfs_create_dir() can only fail reasonably due to OOM.
-
-Oops, you were talking about NULL, not an error code.
-I don't think that can ever happen.
-And if I did miss something, it would crash when dereferencing a NULL
-pointer in d_really_is_positive() (as called in start_creating())...
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Thanks for your suggestion. I will change it in next version.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thanks,
+Nan
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
