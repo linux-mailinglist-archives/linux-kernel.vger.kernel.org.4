@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A517202BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114027202C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236051AbjFBNLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S235899AbjFBNLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbjFBNLH (ORCPT
+        with ESMTP id S235982AbjFBNLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:11:07 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585731BB;
-        Fri,  2 Jun 2023 06:10:54 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-38e3228d120so1276320b6e.3;
-        Fri, 02 Jun 2023 06:10:54 -0700 (PDT)
+        Fri, 2 Jun 2023 09:11:10 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216FA1BF;
+        Fri,  2 Jun 2023 06:10:56 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3909756b8b1so895729b6e.1;
+        Fri, 02 Jun 2023 06:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685711453; x=1688303453;
+        d=gmail.com; s=20221208; t=1685711455; x=1688303455;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VhMNElMcD96BiWO7VwSZ4kHuPne7boxpbc3pYu3wsd0=;
-        b=c/QdU1O9EMqQkb24x1xAOOkYfgty/smk0nAdhU6DqgF7gcdOhCh5Q2SGuCBX00bdOa
-         Dm0VumgpdX2rShNHPcyKl7myI5e4CbMaj340p2rPyJSKOduku28OLONDtnmfA0gWx4Xp
-         DStqTigqBs9jmW8vqzqFeLGUx9+tq/B4gVLjJwufz+XD2te8LcJ67OkojKVqCTwopokN
-         LBOE4priAeAFvYdp9wBwEfW16bz+HlrS9wgHvURU/vlNkP9xeraqMlETEMaFF37VAi90
-         qL8ni1KsrYP2j134p1AOQcRsAnFLqZQP/l/8Hi8uAAZBwn2d15uYdGoflYcbq9fN0iFG
-         b2ZQ==
+        bh=G49atfAQCgSCYBfeGPg2LE9mmP22glB+FYscmE+VeHo=;
+        b=V3y8xygPuKwntv2luacIZqYS5YXadR5C40+Z/oZE4540GHYzZb3QcxtnRs9H1vojVm
+         6yRYN32/mwpJJB1Yge7Yfdq/afgmsyLsdi6mDg4VDD81Ol+3tPWwVTqLKkg4JTRih8rj
+         tZuTdYkjw/9DUK87VQNISVuRlpy+QkTeW3rsSLg2y62Wo/CwMtoOHYTtMmmbfpR9U/Wc
+         vnIJDMcTkVsryiU5QJuFQMVx+KRT02cNVNqd5VL0O4DkvjdCNWVwAHaCn8ZDRSRe1h/K
+         BdIIRTbvPekR9Gzq7N8CmK00h2ta4YDOsDSq6EjTPUt/XRjXzZIaFOpXzjVnhSd35MrL
+         8zqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711453; x=1688303453;
+        d=1e100.net; s=20221208; t=1685711455; x=1688303455;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VhMNElMcD96BiWO7VwSZ4kHuPne7boxpbc3pYu3wsd0=;
-        b=SNCnEI5a8IxkNGPD4sh8yujNB+nkzPjhcNo4wy+DmL98uImNZ506wNrvZjfVcsxomT
-         UiP1/Jvm+7S+cWE0LWoMyTtTR9BQLDI6XBsvSkFDyIUqykfMOuQGKDXlRJCEO5+8kN6G
-         5eFoS3IoS06KNhN0sMow+GHc5lzlIIpLG/cIKNThPeBgGKnk100opYFnZtNNebBb5VUr
-         7eGhM9aSgOoIgVKoXG6DGctOX+ZcyyOpU/vxjx8NFlEbTFHGXH8R0qoPNT7UUpr0RV/o
-         4sTtGC412NeQQouzTk1ZFJViJvajqL1exl8nEemFTuN7XqPIU6PHw0mdV98R5X8AcZlg
-         KNlA==
-X-Gm-Message-State: AC+VfDyuxOblTJDxSIVudys+CJ8WGcuY3/m6TZIREVq/MxHdC0llDy+0
-        FJETCakYoI+EfmdwCr0eDtY=
-X-Google-Smtp-Source: ACHHUZ4zAaZWpxVK7cEJg4Id61Vo59khBEyMdjn41MXorY08M77AS/sh5uq+lzWpOZbDhARQyb+rCg==
-X-Received: by 2002:a54:410f:0:b0:398:41b4:5b2 with SMTP id l15-20020a54410f000000b0039841b405b2mr1817981oic.23.1685711453512;
-        Fri, 02 Jun 2023 06:10:53 -0700 (PDT)
+        bh=G49atfAQCgSCYBfeGPg2LE9mmP22glB+FYscmE+VeHo=;
+        b=bjeOAA02Mm5HXdWSy90s2HwthUMOSRuXtKz8r7S3gBq4s2OHjbPGvOm49XtRVOMglc
+         KV/btdTiPyq7qqrZna1QsY/ZaCpZvSwQG2TUosyt4XVRvUAiv+IA2HWGU4TXnxu/ITV8
+         YfZ9k6PE/nrYSeQY6w8OuhPJuOg97YsR67mN81efhu4/pLRuvvteu+7uN+IOIRsZDAs+
+         DEc3D/vBo6mq2yahbeyd/d/rk0LzDHHE48DRaqPXutcl+JCZfy/whDEFuG7dedkh8Oxx
+         7n10YwviIP4hjWalZEsAHWBZfdmcLGkCf5RTlrJkMQLtZnv85M9SPCGarilLI/F8Wiy9
+         VYpg==
+X-Gm-Message-State: AC+VfDyuUFn9LBw7TM0M8stHvchEH7RT+VqAMTlaRDPXaRPC0EhFi5Yx
+        kGEFfIFckkQvwfr4P1ve3VA=
+X-Google-Smtp-Source: ACHHUZ6CNgEZPSrzXw36MTbhl32T1ti10S+QwiuuQkQgb5f0Halk+Tif3zQgJ4fcjUwbAVxBC1KAEw==
+X-Received: by 2002:a54:4691:0:b0:39a:815d:8ab6 with SMTP id k17-20020a544691000000b0039a815d8ab6mr607187oic.34.1685711455246;
+        Fri, 02 Jun 2023 06:10:55 -0700 (PDT)
 Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:125c:6b6d:18e9:9361])
-        by smtp.gmail.com with ESMTPSA id k17-20020a544691000000b0039a531d9b92sm483762oic.56.2023.06.02.06.10.52
+        by smtp.gmail.com with ESMTPSA id k17-20020a544691000000b0039a531d9b92sm483762oic.56.2023.06.02.06.10.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 06:10:53 -0700 (PDT)
+        Fri, 02 Jun 2023 06:10:54 -0700 (PDT)
 From:   Jorge Lopez <jorgealtxwork@gmail.com>
 X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
 To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, thomas@t-8ch.de,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v16 06/13] hp-bioscfg: int-attributes
-Date:   Fri,  2 Jun 2023 08:10:37 -0500
-Message-Id: <20230602131044.3297-7-jorge.lopez2@hp.com>
+Subject: [PATCH v16 07/13] hp-bioscfg: order-list-attributes
+Date:   Fri,  2 Jun 2023 08:10:38 -0500
+Message-Id: <20230602131044.3297-8-jorge.lopez2@hp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602131044.3297-1-jorge.lopez2@hp.com>
 References: <20230602131044.3297-1-jorge.lopez2@hp.com>
@@ -117,140 +117,131 @@ Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
 ---
 Based on the latest platform-drivers-x86.git/for-next
 ---
- .../x86/hp/hp-bioscfg/int-attributes.c        | 437 ++++++++++++++++++
- 1 file changed, 437 insertions(+)
- create mode 100644 drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
+ .../x86/hp/hp-bioscfg/order-list-attributes.c | 451 ++++++++++++++++++
+ 1 file changed, 451 insertions(+)
+ create mode 100644 drivers/platform/x86/hp/hp-bioscfg/order-list-attributes.c
 
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
+diff --git a/drivers/platform/x86/hp/hp-bioscfg/order-list-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/order-list-attributes.c
 new file mode 100644
-index 000000000000..87aa72eae4f2
+index 000000000000..6a4cb8e53108
 --- /dev/null
-+++ b/drivers/platform/x86/hp/hp-bioscfg/int-attributes.c
-@@ -0,0 +1,437 @@
++++ b/drivers/platform/x86/hp/hp-bioscfg/order-list-attributes.c
+@@ -0,0 +1,451 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Functions corresponding to integer type attributes under
-+ * BIOS Enumeration GUID for use with hp-bioscfg driver.
++ * Functions corresponding to ordered list type attributes under
++ * BIOS ORDERED LIST GUID for use with hp-bioscfg driver.
 + *
-+ * Copyright (c) 2022 Hewlett-Packard Inc.
++ * Copyright (c) 2022 HP Development Company, L.P.
 + */
 +
 +#include "bioscfg.h"
 +
-+GET_INSTANCE_ID(integer);
++GET_INSTANCE_ID(ordered_list);
 +
 +static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
 +{
-+	int instance_id = get_integer_instance_id(kobj);
++	int instance_id = get_ordered_list_instance_id(kobj);
 +
 +	if (instance_id < 0)
 +		return -EIO;
 +
-+	return sysfs_emit(buf, "%d\n",
-+			  bioscfg_drv.integer_data[instance_id].current_value);
++	return sysfs_emit(buf, "%s\n",
++			 bioscfg_drv.ordered_list_data[instance_id].current_value);
 +}
 +
-+/**
-+ * validate_integer_input() -
-+ * Validate input of current_value against lower and upper bound
-+ *
-+ * @instance_id: The instance on which input is validated
-+ * @buf: Input value
-+ */
-+static int validate_integer_input(int instance_id, char *buf)
++static int replace_char_str(u8 *buffer, char *repl_char, char *repl_with)
 +{
-+	int in_val;
-+	int ret;
-+	struct integer_data *integer_data = &bioscfg_drv.integer_data[instance_id];
++	char *src = buffer;
++	int buflen = strlen(buffer);
++	int item;
 +
-+	/* BIOS treats it as a read only attribute */
-+	if (integer_data->common.is_readonly)
-+		return -EIO;
++	if (buflen < 1)
++		return -EINVAL;
 +
-+	ret = kstrtoint(buf, 10, &in_val);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (in_val < integer_data->lower_bound ||
-+	    in_val > integer_data->upper_bound)
-+		return -ERANGE;
++	for (item = 0; item < buflen; item++)
++		if (src[item] == *repl_char)
++			src[item] = *repl_with;
 +
 +	return 0;
 +}
 +
-+static void update_integer_value(int instance_id, char *attr_value)
++/**
++ * validate_ordered_list_input() -
++ * Validate input of current_value against possible values
++ *
++ * @instance: The instance on which input is validated
++ * @buf: Input value
++ */
++static int validate_ordered_list_input(int instance, char *buf)
 +{
-+	int in_val;
-+	int ret;
-+	struct integer_data *integer_data = &bioscfg_drv.integer_data[instance_id];
-+
-+	ret = kstrtoint(attr_value, 10, &in_val);
-+	if (ret == 0)
-+		integer_data->current_value = in_val;
-+	else
-+		pr_warn("Invalid integer value found: %s\n", attr_value);
++	/* validation is done by BIOS. This validation function will
++	 * convert semicolon to commas. BIOS uses commas as
++	 * separators when reporting ordered-list values.
++	 */
++	return replace_char_str(buf, SEMICOLON_SEP, COMMA_SEP);
 +}
 +
-+ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, integer);
-+static struct kobj_attribute integer_display_name =
++static void update_ordered_list_value(int instance, char *attr_value)
++{
++	struct ordered_list_data *ordered_list_data = &bioscfg_drv.ordered_list_data[instance];
++
++	strscpy(ordered_list_data->current_value,
++		attr_value,
++		sizeof(ordered_list_data->current_value));
++}
++
++ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, ordered_list);
++static struct kobj_attribute ordered_list_display_name =
 +	__ATTR_RO(display_name);
 +
-+ATTRIBUTE_PROPERTY_STORE(current_value, integer);
-+static struct kobj_attribute integer_current_val =
++ATTRIBUTE_PROPERTY_STORE(current_value, ordered_list);
++static struct kobj_attribute ordered_list_current_val =
 +	__ATTR_RW_MODE(current_value, 0644);
 +
-+ATTRIBUTE_N_PROPERTY_SHOW(lower_bound, integer);
-+static struct kobj_attribute integer_lower_bound =
-+	__ATTR_RO(lower_bound);
-+
-+ATTRIBUTE_N_PROPERTY_SHOW(upper_bound, integer);
-+static struct kobj_attribute integer_upper_bound =
-+	__ATTR_RO(upper_bound);
-+
-+ATTRIBUTE_N_PROPERTY_SHOW(scalar_increment, integer);
-+static struct kobj_attribute integer_scalar_increment =
-+	__ATTR_RO(scalar_increment);
++ATTRIBUTE_VALUES_PROPERTY_SHOW(elements, ordered_list, SEMICOLON_SEP);
++static struct kobj_attribute ordered_list_elements_val =
++	__ATTR_RO(elements);
 +
 +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
 +			 char *buf)
 +{
-+	return sysfs_emit(buf, "integer\n");
++	return sysfs_emit(buf, "ordered-list\n");
 +}
 +
-+static struct kobj_attribute integer_type =
++static struct kobj_attribute ordered_list_type =
 +	__ATTR_RO(type);
 +
-+static struct attribute *integer_attrs[] = {
++static struct attribute *ordered_list_attrs[] = {
 +	&common_display_langcode.attr,
-+	&integer_display_name.attr,
-+	&integer_current_val.attr,
-+	&integer_lower_bound.attr,
-+	&integer_upper_bound.attr,
-+	&integer_scalar_increment.attr,
-+	&integer_type.attr,
++	&ordered_list_display_name.attr,
++	&ordered_list_current_val.attr,
++	&ordered_list_elements_val.attr,
++	&ordered_list_type.attr,
 +	NULL
 +};
 +
-+static const struct attribute_group integer_attr_group = {
-+	.attrs = integer_attrs,
++static const struct attribute_group ordered_list_attr_group = {
++	.attrs = ordered_list_attrs,
 +};
 +
-+int hp_alloc_integer_data(void)
++int hp_alloc_ordered_list_data(void)
 +{
-+	bioscfg_drv.integer_instances_count = hp_get_instance_count(HP_WMI_BIOS_INTEGER_GUID);
-+	bioscfg_drv.integer_data = kcalloc(bioscfg_drv.integer_instances_count,
-+					   sizeof(*bioscfg_drv.integer_data), GFP_KERNEL);
-+
-+	if (!bioscfg_drv.integer_data) {
-+		bioscfg_drv.integer_instances_count = 0;
++	bioscfg_drv.ordered_list_instances_count =
++		hp_get_instance_count(HP_WMI_BIOS_ORDERED_LIST_GUID);
++	bioscfg_drv.ordered_list_data = kcalloc(bioscfg_drv.ordered_list_instances_count,
++						sizeof(*bioscfg_drv.ordered_list_data),
++						GFP_KERNEL);
++	if (!bioscfg_drv.ordered_list_data) {
++		bioscfg_drv.ordered_list_instances_count = 0;
 +		return -ENOMEM;
 +	}
 +	return 0;
 +}
 +
 +/* Expected Values types associated with each element */
-+static const acpi_object_type expected_integer_types[] = {
-+	[NAME] = ACPI_TYPE_STRING,
++static const acpi_object_type expected_order_types[] = {
++	[NAME]	= ACPI_TYPE_STRING,
 +	[VALUE] = ACPI_TYPE_STRING,
 +	[PATH] = ACPI_TYPE_STRING,
 +	[IS_READONLY] = ACPI_TYPE_INTEGER,
@@ -260,84 +251,89 @@ index 000000000000..87aa72eae4f2
 +	[PREREQUISITES_SIZE] = ACPI_TYPE_INTEGER,
 +	[PREREQUISITES] = ACPI_TYPE_STRING,
 +	[SECURITY_LEVEL] = ACPI_TYPE_INTEGER,
-+	[INT_LOWER_BOUND] = ACPI_TYPE_INTEGER,
-+	[INT_UPPER_BOUND] = ACPI_TYPE_INTEGER,
-+	[INT_SCALAR_INCREMENT] = ACPI_TYPE_INTEGER,
++	[ORD_LIST_SIZE] = ACPI_TYPE_INTEGER,
++	[ORD_LIST_ELEMENTS] = ACPI_TYPE_STRING,
 +};
 +
-+static int hp_populate_integer_elements_from_package(union acpi_object *integer_obj,
-+						     int integer_obj_count,
-+						     int instance_id)
++static int hp_populate_ordered_list_elements_from_package(union acpi_object *order_obj,
++							  int order_obj_count,
++							  int instance_id)
 +{
 +	char *str_value = NULL;
 +	int value_len;
 +	int ret;
++	u32 size;
 +	u32 int_value;
 +	int elem;
 +	int reqs;
 +	int eloc;
-+	int size;
-+	struct integer_data *integer_data = &bioscfg_drv.integer_data[instance_id];
++	char *tmpstr = NULL;
++	char *part_tmp = NULL;
++	int tmp_len = 0;
++	char *part = NULL;
++	struct ordered_list_data *ordered_list_data = &bioscfg_drv.ordered_list_data[instance_id];
 +
-+	if (!integer_obj)
++	if (!order_obj)
 +		return -EINVAL;
 +
-+	for (elem = 1, eloc = 1; elem < integer_obj_count; elem++, eloc++) {
-+		/* ONLY look at the first INTEGER_ELEM_CNT elements */
-+		if (eloc == INT_ELEM_CNT)
-+			goto exit_integer_package;
++	for (elem = 1, eloc = 1; elem < order_obj_count; elem++, eloc++) {
++		/* ONLY look at the first ORDERED_ELEM_CNT elements */
++		if (eloc == ORD_ELEM_CNT)
++			goto exit_list;
 +
-+		switch (integer_obj[elem].type) {
++		switch (order_obj[elem].type) {
 +		case ACPI_TYPE_STRING:
-+			if (elem != PREREQUISITES) {
-+				ret = hp_convert_hexstr_to_str(integer_obj[elem].string.pointer,
-+							       integer_obj[elem].string.length,
++			if (elem != PREREQUISITES && elem != ORD_LIST_ELEMENTS) {
++				ret = hp_convert_hexstr_to_str(order_obj[elem].string.pointer,
++							       order_obj[elem].string.length,
 +							       &str_value, &value_len);
 +				if (ret)
 +					continue;
 +			}
 +			break;
 +		case ACPI_TYPE_INTEGER:
-+			int_value = (u32)integer_obj[elem].integer.value;
++			int_value = (u32)order_obj[elem].integer.value;
 +			break;
 +		default:
-+			pr_warn("Unsupported object type [%d]\n", integer_obj[elem].type);
++			pr_warn("Unsupported object type [%d]\n", order_obj[elem].type);
 +			continue;
 +		}
++
 +		/* Check that both expected and read object type match */
-+		if (expected_integer_types[eloc] != integer_obj[elem].type) {
++		if (expected_order_types[eloc] != order_obj[elem].type) {
 +			pr_err("Error expected type %d for elem %d, but got type %d instead\n",
-+			       expected_integer_types[eloc], elem, integer_obj[elem].type);
++			       expected_order_types[eloc], elem, order_obj[elem].type);
 +			return -EIO;
 +		}
++
 +		/* Assign appropriate element value to corresponding field*/
 +		switch (eloc) {
 +		case VALUE:
-+			ret = kstrtoint(str_value, 10, &int_value);
-+			if (ret)
-+				continue;
-+
-+			integer_data->current_value = int_value;
++			strscpy(ordered_list_data->current_value,
++				str_value, sizeof(ordered_list_data->current_value));
++			replace_char_str(ordered_list_data->current_value, COMMA_SEP, SEMICOLON_SEP);
 +			break;
 +		case PATH:
-+			strscpy(integer_data->common.path, str_value,
-+				sizeof(integer_data->common.path));
++			strscpy(ordered_list_data->common.path, str_value,
++				sizeof(ordered_list_data->common.path));
 +			break;
 +		case IS_READONLY:
-+			integer_data->common.is_readonly = int_value;
++			ordered_list_data->common.is_readonly = int_value;
 +			break;
 +		case DISPLAY_IN_UI:
-+			integer_data->common.display_in_ui = int_value;
++			ordered_list_data->common.display_in_ui = int_value;
 +			break;
 +		case REQUIRES_PHYSICAL_PRESENCE:
-+			integer_data->common.requires_physical_presence = int_value;
++			ordered_list_data->common.requires_physical_presence = int_value;
 +			break;
 +		case SEQUENCE:
-+			integer_data->common.sequence = int_value;
++			ordered_list_data->common.sequence = int_value;
 +			break;
 +		case PREREQUISITES_SIZE:
-+			if (integer_data->common.prerequisites_size > MAX_PREREQUISITES_SIZE)
++			ordered_list_data->common.prerequisites_size = int_value;
++			if (int_value > MAX_PREREQUISITES_SIZE)
 +				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
++
 +			/*
 +			 * This HACK is needed to keep the expected
 +			 * element list pointing to the right obj[elem].type
@@ -345,102 +341,119 @@ index 000000000000..87aa72eae4f2
 +			 * object is omitted by BIOS when the size is
 +			 * zero.
 +			 */
-+			if (integer_data->common.prerequisites_size == 0)
++			if (int_value == 0)
 +				eloc++;
 +			break;
 +		case PREREQUISITES:
-+			size = min_t(u32, integer_data->common.prerequisites_size, MAX_PREREQUISITES_SIZE);
-+
++			size = min_t(u32, ordered_list_data->common.prerequisites_size,
++				     MAX_PREREQUISITES_SIZE);
 +			for (reqs = 0; reqs < size; reqs++) {
-+				if (elem >= integer_obj_count) {
-+					pr_err("Error elem-objects package is too small\n");
-+					return -EINVAL;
-+				}
-+
-+				ret = hp_convert_hexstr_to_str(integer_obj[elem + reqs].string.pointer,
-+							       integer_obj[elem + reqs].string.length,
++				ret = hp_convert_hexstr_to_str(order_obj[elem + reqs].string.pointer,
++							       order_obj[elem + reqs].string.length,
 +							       &str_value, &value_len);
 +
 +				if (ret)
 +					continue;
 +
-+				strscpy(integer_data->common.prerequisites[reqs],
++				strscpy(ordered_list_data->common.prerequisites[reqs],
 +					str_value,
-+					sizeof(integer_data->common.prerequisites[reqs]));
++					sizeof(ordered_list_data->common.prerequisites[reqs]));
++
 +				kfree(str_value);
 +			}
 +			break;
 +
 +		case SECURITY_LEVEL:
-+			integer_data->common.security_level = int_value;
++			ordered_list_data->common.security_level = int_value;
 +			break;
-+		case INT_LOWER_BOUND:
-+			integer_data->lower_bound = int_value;
++
++		case ORD_LIST_SIZE:
++			ordered_list_data->elements_size = int_value;
++			if (int_value > MAX_ELEMENTS_SIZE)
++				pr_warn("Ordered List size value exceeded the maximum number of elements supported or data may be malformed\n");
++			/*
++			 * This HACK is needed to keep the expected
++			 * element list pointing to the right obj[elem].type
++			 * when the size is zero. ORD_LIST_ELEMENTS
++			 * object is omitted by BIOS when the size is
++			 * zero.
++			 */
++			if (int_value == 0)
++				eloc++;
 +			break;
-+		case INT_UPPER_BOUND:
-+			integer_data->upper_bound = int_value;
-+			break;
-+		case INT_SCALAR_INCREMENT:
-+			integer_data->scalar_increment = int_value;
++		case ORD_LIST_ELEMENTS:
++			size = ordered_list_data->elements_size;
++
++			/*
++			 * Ordered list data is stored in hex and comma separated format
++			 * Convert the data and split it to show each element
++			 */
++			ret = hp_convert_hexstr_to_str(str_value, value_len, &tmpstr, &tmp_len);
++			if (ret)
++				goto exit_list;
++
++			part_tmp = tmpstr;
++			part = strsep(&part_tmp, COMMA_SEP);
++			if (!part)
++				strscpy(ordered_list_data->elements[0],
++					tmpstr,
++					sizeof(ordered_list_data->elements[0]));
++
++			for (elem = 1; elem < MAX_ELEMENTS_SIZE && part; elem++) {
++				strscpy(ordered_list_data->elements[elem],
++					part,
++					sizeof(ordered_list_data->elements[elem]));
++				part = strsep(&part_tmp, SEMICOLON_SEP);
++			}
++
 +			break;
 +		default:
-+			pr_warn("Invalid element: %d found in Integer attribute or data may be malformed\n", elem);
++			pr_warn("Invalid element: %d found in Ordered_List attribute or data may be malformed\n", elem);
 +			break;
 +		}
++		kfree(tmpstr);
++		kfree(str_value);
 +	}
-+exit_integer_package:
++
++exit_list:
++	kfree(tmpstr);
 +	kfree(str_value);
 +	return 0;
 +}
 +
 +/**
-+ * hp_populate_integer_package_data() -
-+ * Populate all properties of an instance under integer attribute
++ * hp_populate_ordered_list_package_data() -
++ * Populate all properties of an instance under ordered_list attribute
 + *
-+ * @integer_obj: ACPI object with integer data
++ * @order_obj: ACPI object with ordered_list data
 + * @instance_id: The instance to enumerate
 + * @attr_name_kobj: The parent kernel object
 + */
-+int hp_populate_integer_package_data(union acpi_object *integer_obj,
-+				     int instance_id,
-+				     struct kobject *attr_name_kobj)
++int hp_populate_ordered_list_package_data(union acpi_object *order_obj, int instance_id,
++					  struct kobject *attr_name_kobj)
 +{
-+	struct integer_data *integer_data = &bioscfg_drv.integer_data[instance_id];
++	struct ordered_list_data *ordered_list_data = &bioscfg_drv.ordered_list_data[instance_id];
 +
-+	integer_data->attr_name_kobj = attr_name_kobj;
-+	hp_populate_integer_elements_from_package(integer_obj,
-+						  integer_obj->package.count,
-+						  instance_id);
-+	hp_update_attribute_permissions(integer_data->common.is_readonly,
-+					&integer_current_val);
-+	hp_friendly_user_name_update(integer_data->common.path,
++	ordered_list_data->attr_name_kobj = attr_name_kobj;
++
++	hp_populate_ordered_list_elements_from_package(order_obj,
++						       order_obj->package.count,
++						       instance_id);
++	hp_update_attribute_permissions(ordered_list_data->common.is_readonly,
++					&ordered_list_current_val);
++	hp_friendly_user_name_update(ordered_list_data->common.path,
 +				     attr_name_kobj->name,
-+				     integer_data->common.display_name,
-+				     sizeof(integer_data->common.display_name));
-+	return sysfs_create_group(attr_name_kobj, &integer_attr_group);
++				     ordered_list_data->common.display_name,
++				     sizeof(ordered_list_data->common.display_name));
++	return sysfs_create_group(attr_name_kobj, &ordered_list_attr_group);
 +}
 +
-+static int hp_populate_integer_elements_from_buffer(u8 *buffer_ptr, u32 *buffer_size,
-+						    int instance_id)
++static int hp_populate_ordered_list_elements_from_buffer(u8 *buffer_ptr, u32 *buffer_size,
++							 int instance_id)
 +{
-+	char *dst = NULL;
 +	int reqs;
-+	int ret;
-+	int dst_size = *buffer_size / sizeof(u16);
-+	struct integer_data *integer_data = &bioscfg_drv.integer_data[instance_id];
-+
-+	dst = kcalloc(dst_size, sizeof(char), GFP_KERNEL);
-+	if (!dst)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Only data relevant to this driver and its functionality is
-+	 * read. BIOS defines the order in which each * element is
-+	 * read. Element 0 data is not relevant to this
-+	 * driver hence it is ignored. For clarity, all element names
-+	 * (DISPLAY_IN_UI) which defines the order in which is read
-+	 * and the name matches the variable where the data is stored.
-+	 */
++	int values;
++	struct ordered_list_data *ordered_list_data = &bioscfg_drv.ordered_list_data[instance_id];
 +
 +	/*
 +	 * In earlier implementation, reported errors were ignored
@@ -450,119 +463,120 @@ index 000000000000..87aa72eae4f2
 +	 */
 +
 +	// VALUE:
-+	integer_data->current_value = 0;
-+
-+	hp_get_string_from_buffer(&buffer_ptr, buffer_size, dst, dst_size);
-+	ret = kstrtoint(dst, 10, &integer_data->current_value);
-+	if (ret)
-+		pr_warn("Unable to convert string to integer: %s\n", dst);
-+	kfree(dst);
++	hp_get_string_from_buffer(&buffer_ptr, buffer_size, ordered_list_data->current_value,
++				  sizeof(ordered_list_data->current_value));
++	replace_char_str(ordered_list_data->current_value, COMMA_SEP, SEMICOLON_SEP);
 +
 +	// PATH:
-+	hp_get_string_from_buffer(&buffer_ptr, buffer_size, integer_data->common.path,
-+				  sizeof(integer_data->common.path));
++	hp_get_string_from_buffer(&buffer_ptr, buffer_size, ordered_list_data->common.path,
++				  sizeof(ordered_list_data->common.path));
 +
 +	// IS_READONLY:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->common.is_readonly);
++				   &ordered_list_data->common.is_readonly);
 +
 +	//DISPLAY_IN_UI:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->common.display_in_ui);
++				   &ordered_list_data->common.display_in_ui);
 +
 +	// REQUIRES_PHYSICAL_PRESENCE:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->common.requires_physical_presence);
++				   &ordered_list_data->common.requires_physical_presence);
 +
 +	// SEQUENCE:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->common.sequence);
++				   &ordered_list_data->common.sequence);
 +
 +	// PREREQUISITES_SIZE:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->common.prerequisites_size);
++				   &ordered_list_data->common.prerequisites_size);
 +
-+	if (integer_data->common.prerequisites_size > MAX_PREREQUISITES_SIZE) {
++	if (ordered_list_data->common.prerequisites_size > MAX_PREREQUISITES_SIZE) {
 +		/* Report a message and limit prerequisite size to maximum value */
-+		pr_warn("Integer Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-+		integer_data->common.prerequisites_size = MAX_PREREQUISITES_SIZE;
++		pr_warn("String Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
++		ordered_list_data->common.prerequisites_size = MAX_PREREQUISITES_SIZE;
 +	}
 +
 +	// PREREQUISITES:
-+	for (reqs = 0; reqs < integer_data->common.prerequisites_size; reqs++)
++	for (reqs = 0; reqs < ordered_list_data->common.prerequisites_size; reqs++)
 +		hp_get_string_from_buffer(&buffer_ptr, buffer_size,
-+					  integer_data->common.prerequisites[reqs],
-+					  sizeof(integer_data->common.prerequisites[reqs]));
++					  ordered_list_data->common.prerequisites[reqs],
++					  sizeof(ordered_list_data->common.prerequisites[reqs]));
 +
 +	// SECURITY_LEVEL:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->common.security_level);
++				   &ordered_list_data->common.security_level);
 +
-+	// INT_LOWER_BOUND:
++	// ORD_LIST_SIZE:
 +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->lower_bound);
++				   &ordered_list_data->elements_size);
 +
-+	// INT_UPPER_BOUND:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->upper_bound);
++	if (ordered_list_data->elements_size > MAX_ELEMENTS_SIZE) {
++		/* Report a message and limit elements size to maximum value */
++		pr_warn("Ordered List size value exceeded the maximum number of elements supported or data may be malformed\n");
++		ordered_list_data->elements_size = MAX_ELEMENTS_SIZE;
++	}
 +
-+	// INT_SCALAR_INCREMENT:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &integer_data->scalar_increment);
++	// ORD_LIST_ELEMENTS:
++	for (values = 0; values < ordered_list_data->elements_size; values++)
++		hp_get_string_from_buffer(&buffer_ptr, buffer_size,
++					  ordered_list_data->elements[values],
++					  sizeof(ordered_list_data->elements[values]));
 +
 +	return 0;
 +}
 +
 +/**
-+ * hp_populate_integer_buffer_data() -
-+ * Populate all properties of an instance under integer attribute
++ * hp_populate_ordered_list_buffer_data() - Populate all properties of an
++ * instance under ordered list attribute
 + *
 + * @buffer_ptr: Buffer pointer
 + * @buffer_size: Buffer size
 + * @instance_id: The instance to enumerate
 + * @attr_name_kobj: The parent kernel object
 + */
-+int hp_populate_integer_buffer_data(u8 *buffer_ptr, u32 *buffer_size, int instance_id,
-+				    struct kobject *attr_name_kobj)
++int hp_populate_ordered_list_buffer_data(u8 *buffer_ptr, u32 *buffer_size, int instance_id,
++					 struct kobject *attr_name_kobj)
 +{
-+	struct integer_data *integer_data = &bioscfg_drv.integer_data[instance_id];
++	struct ordered_list_data *ordered_list_data = &bioscfg_drv.ordered_list_data[instance_id];
 +
-+	integer_data->attr_name_kobj = attr_name_kobj;
++	ordered_list_data->attr_name_kobj = attr_name_kobj;
 +
-+	/* Populate integer elements */
-+	hp_populate_integer_elements_from_buffer(buffer_ptr, buffer_size,
-+						 instance_id);
-+	hp_update_attribute_permissions(integer_data->common.is_readonly,
-+					&integer_current_val);
-+	hp_friendly_user_name_update(integer_data->common.path,
++	/* Populate ordered list elements */
++	hp_populate_ordered_list_elements_from_buffer(buffer_ptr, buffer_size,
++						      instance_id);
++	hp_update_attribute_permissions(ordered_list_data->common.is_readonly,
++					&ordered_list_current_val);
++	hp_friendly_user_name_update(ordered_list_data->common.path,
 +				     attr_name_kobj->name,
-+				     integer_data->common.display_name,
-+				     sizeof(integer_data->common.display_name));
++				     ordered_list_data->common.display_name,
++				     sizeof(ordered_list_data->common.display_name));
 +
-+	return sysfs_create_group(attr_name_kobj, &integer_attr_group);
++	return sysfs_create_group(attr_name_kobj, &ordered_list_attr_group);
 +}
 +
 +/**
-+ * hp_exit_integer_attributes() - Clear all attribute data
++ * hp_exit_ordered_list_attributes() - Clear all attribute data
 + *
 + * Clears all data allocated for this group of attributes
 + */
-+void hp_exit_integer_attributes(void)
++void hp_exit_ordered_list_attributes(void)
 +{
 +	int instance_id;
 +
-+	for (instance_id = 0; instance_id < bioscfg_drv.integer_instances_count;
++	for (instance_id = 0; instance_id < bioscfg_drv.ordered_list_instances_count;
 +	     instance_id++) {
 +		struct kobject *attr_name_kobj =
-+			bioscfg_drv.integer_data[instance_id].attr_name_kobj;
++			bioscfg_drv.ordered_list_data[instance_id].attr_name_kobj;
 +
 +		if (attr_name_kobj)
-+			sysfs_remove_group(attr_name_kobj, &integer_attr_group);
++			sysfs_remove_group(attr_name_kobj,
++					   &ordered_list_attr_group);
 +	}
-+	bioscfg_drv.integer_instances_count = 0;
++	bioscfg_drv.ordered_list_instances_count = 0;
 +
-+	kfree(bioscfg_drv.integer_data);
-+	bioscfg_drv.integer_data = NULL;
++	kfree(bioscfg_drv.ordered_list_data);
++	bioscfg_drv.ordered_list_data = NULL;
 +}
 -- 
 2.34.1
