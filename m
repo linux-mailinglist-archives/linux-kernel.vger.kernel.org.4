@@ -2,107 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D9971FE57
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6167F71FE63
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbjFBJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S234924AbjFBJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235005AbjFBJwD (ORCPT
+        with ESMTP id S233971AbjFBJzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:52:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8F7132
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:52:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 2 Jun 2023 05:55:49 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2273AF2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:55:48 -0700 (PDT)
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74CDF64E25
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D62D4C4339C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685699519;
-        bh=LwTZxULyEKfOlJX2hcZvEWgQuLprY+dwV1T2krSleFg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ExpJrV+2My5cWFwWwkOzlOGqB2bNqZb66f6XVUYZ9BGsA9SWBgGqpBN4JXrgLPkMM
-         l2XRfkfg9m8y4LlbSSxvOH9FlcIUsiNfPEkQ7ByLTunxx199TufBo2G5wwgV2SBZrb
-         T3fLrUcdV9ldH3MZImXUaLIEQZLYoqj8Jn0cp/xelMmuLdbmljdOyKdQS0WEO0dGHQ
-         ZaeGfOjahYDQT0sonjdwiETEGTiqWuMExAov6zrmOXRp/3e7TEn6QobnZQv/npWQQt
-         4h12ggNulsg9EemRdGgBaUeHdhwQxzChKJME1rhxYD8FIlkFPGiZkzASpISivZ4CM8
-         D+VMGCzgfUN7A==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2b1a6777dd8so19267851fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:51:59 -0700 (PDT)
-X-Gm-Message-State: AC+VfDy3Z+YIWlGWgrX6cblrKtYhB6PBEA7+8Y3gRKj6eID/cJjrnhF8
-        f3lIQLTnhhgfwYgjxzlhd4ZybPNTg0MCD0kIpwI=
-X-Google-Smtp-Source: ACHHUZ4jjKVW81hW61XG8nqmpMu7vzkziJeORytqbbmvNM1osXeXdoDYLLwbjx6CrXdMy0NN7ToOxhkRdcCXYZzfA8Q=
-X-Received: by 2002:a2e:860c:0:b0:2af:1d17:7f98 with SMTP id
- a12-20020a2e860c000000b002af1d177f98mr1425264lji.41.1685699517892; Fri, 02
- Jun 2023 02:51:57 -0700 (PDT)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 939E03F4DF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:55:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685699745;
+        bh=QspZhkhWQdQD4gUpwkhMOqtT5VUHoWWx+XNQWeKyt9w=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=KOSr1/OJnvLrqBe2Q7dz7yusG49kznQGHJMtgu06eiuQBp5u1WVo4X+OoECvl0ocv
+         v7DFYvMk3N1Ig3PNny2CnZNi9j0lTTf79I/7ngXE0mQI2L7qui2Gx8JGmc5c3d0Hps
+         eG+8SYjZskjnDrAYQbRxukRC3TS7R8hD2SzJQ1X5lXz8eyFdM3WRZqlQ5CS10oWVBp
+         /nLJMw1zBjvLGIJcPFSus3th36GwrDSbkQfyhk72XyJ+kaCnG0zmaINrydUBxCqYBE
+         7CSmEpVy2YnlyuVlO5UggvqQ30e5O/4filBEUwHCkSjagwUpvCcRWh5Rj61sJlPJSi
+         gpj3yDL95hFUg==
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-564fb1018bcso29039157b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:55:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685699744; x=1688291744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QspZhkhWQdQD4gUpwkhMOqtT5VUHoWWx+XNQWeKyt9w=;
+        b=D8Mo2iu2hquHmMPbP4QOgEkpePFRyvV/djMCuESkwgpTj/y0rPuwOLX/aBRLBqDc5/
+         C6jToAXPaP3jNiXvScy/6zaaPpnNwNm7hxM8vn2jJsIrYUgGmH+THHGgf4Vg6FTAYkKN
+         i7z+z4+LffM01DOpDJbJXra2f7TGEutMt0kYuH9g6/c7VqMNi0rS7/HtssNhnSB6mh5N
+         Q63CqnKoIApY0BDRFc8wK2GkLoxGjFCeJR/IU5l0rtQC4cWniTVN9GcZNy8zSMBzbOHu
+         pcUOmVm/RnUQ48uCEuD+h6IqIvIzVDk63ncI/7UviCjDkVbQESmhsaZKLTAmzaF7uEkE
+         Jd6A==
+X-Gm-Message-State: AC+VfDxHydD2rjDXEAjynLrGuTxtMqmSljj9B4RxAL+UOleetuHjDY3s
+        P5+WlOzSpzkm12gFSb3ni1ODvrrePiaBnz7i40ADJu+HBp0Do082lzkEqAj72xsdGs9+W00Uxud
+        zcyL9bGAMiEunR7TM3nuRSNYykHORpNYP6YdIHOb/VB6GyRc0k7qqTIVtfA==
+X-Received: by 2002:a25:e7c6:0:b0:bad:1131:97bc with SMTP id e189-20020a25e7c6000000b00bad113197bcmr2366568ybh.41.1685699744721;
+        Fri, 02 Jun 2023 02:55:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7xqfL1hiKe4JZ/3nKmZFmT86k0j0WRUaU81ssaYFKnGfEyCwmCVtufdRzhBHmNUG0gg9Jp58iN+OC4DNkHnaQ=
+X-Received: by 2002:a25:e7c6:0:b0:bad:1131:97bc with SMTP id
+ e189-20020a25e7c6000000b00bad113197bcmr2366559ybh.41.1685699744492; Fri, 02
+ Jun 2023 02:55:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210529034138.83384-1-wangkefeng.wang@huawei.com>
- <20210529034138.83384-2-wangkefeng.wang@huawei.com> <20210601143125.GB30436@shell.armlinux.org.uk>
- <CAMj1kXF9crOKFaGfzcj9T4n58XAr7n85YZO0x7J1DcRG2JrfcQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXF9crOKFaGfzcj9T4n58XAr7n85YZO0x7J1DcRG2JrfcQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 2 Jun 2023 11:51:46 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHXB4a6ug0kUSJpNrtpgQ_p1w52P=5JZthZGiuPCCqM0w@mail.gmail.com>
-Message-ID: <CAMj1kXHXB4a6ug0kUSJpNrtpgQ_p1w52P=5JZthZGiuPCCqM0w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ARM: mm: Refactor __do_page_fault()
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jungseung Lee <js07.lee@gmail.com>
+References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230524153316.476973-2-aleksandr.mikhalitsyn@canonical.com> <64672c51-498a-2a0c-4d4e-caca145fa744@redhat.com>
+In-Reply-To: <64672c51-498a-2a0c-4d4e-caca145fa744@redhat.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Fri, 2 Jun 2023 11:55:33 +0200
+Message-ID: <CAEivzxepeiBa+uwRKuddCZaxvzqLEj9ZDp4byr0jZkUA94CxSw@mail.gmail.com>
+Subject: Re: [PATCH v2 01/13] fs: export mnt_idmap_get/mnt_idmap_put
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Seth Forshee <sforshee@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Jun 2023 at 11:49, Ard Biesheuvel <ardb@kernel.org> wrote:
+On Fri, Jun 2, 2023 at 3:17=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
 >
-> On Tue, 1 Jun 2021 at 16:32, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
+>
+> On 5/24/23 23:33, Alexander Mikhalitsyn wrote:
+> > These helpers are required to support idmapped mounts in the Cephfs.
 > >
-> > On Sat, May 29, 2021 at 11:41:37AM +0800, Kefeng Wang wrote:
-> > > 1. cleanup access_error(), make vma flags set and check into
-> > >    __do_page_fault() and do_page_fault() directly.
-> > >
-> > > 2. drop fsr and task argument, instead, using vm_flags in
-> > >    __do_page_fault().
-> > >
-> > > 3. cleans up the multiple goto statements in __do_page_fault().
-> > >
-> > > 4. use current->mm directly in do_page_fault().
-> > >
-> > > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+> >   fs/mnt_idmapping.c            | 2 ++
+> >   include/linux/mnt_idmapping.h | 3 +++
+> >   2 files changed, 5 insertions(+)
 > >
-> > This patch is a really good example of something that is very difficult
-> > to review and see that there are no unintended changes.
+> > diff --git a/fs/mnt_idmapping.c b/fs/mnt_idmapping.c
+> > index 4905665c47d0..5a579e809bcf 100644
+> > --- a/fs/mnt_idmapping.c
+> > +++ b/fs/mnt_idmapping.c
+> > @@ -256,6 +256,7 @@ struct mnt_idmap *mnt_idmap_get(struct mnt_idmap *i=
+dmap)
 > >
-> > Many people have complained about my patches, where I create a series of
-> > many patches where each patch does exactly _one_ simple transformation to
-> > the code. This is a good example _why_ I do that - a step by step single
-> > transformation approach is way easier to review.
+> >       return idmap;
+> >   }
+> > +EXPORT_SYMBOL(mnt_idmap_get);
 > >
-> > Sorry, but I'm not able to sensibly review this patch, and therefore
-> > I won't apply it. Please split it into smaller changes.
+> >   /**
+> >    * mnt_idmap_put - put a reference to an idmapping
+> > @@ -271,3 +272,4 @@ void mnt_idmap_put(struct mnt_idmap *idmap)
+> >               kfree(idmap);
+> >       }
+> >   }
+> > +EXPORT_SYMBOL(mnt_idmap_put);
+> > diff --git a/include/linux/mnt_idmapping.h b/include/linux/mnt_idmappin=
+g.h
+> > index 057c89867aa2..b8da2db4ecd2 100644
+> > --- a/include/linux/mnt_idmapping.h
+> > +++ b/include/linux/mnt_idmapping.h
+> > @@ -115,6 +115,9 @@ static inline bool vfsgid_eq_kgid(vfsgid_t vfsgid, =
+kgid_t kgid)
+> >
+> >   int vfsgid_in_group_p(vfsgid_t vfsgid);
+> >
+> > +struct mnt_idmap *mnt_idmap_get(struct mnt_idmap *idmap);
+> > +void mnt_idmap_put(struct mnt_idmap *idmap);
+> > +
+> >   vfsuid_t make_vfsuid(struct mnt_idmap *idmap,
+> >                    struct user_namespace *fs_userns, kuid_t kuid);
 > >
 >
-> Agreed. If your commit message contains an enumeration of things the
-> patch does, it is a very strong hint that each of those things needs
-> to be a separate patch if at all possible.
+> Hi Alexander,
 
-Also, apologies for digging up this 2 year old thread :-) I did so
-unintentionally.
+Hi, Xiubo!
 
-(Somehow, it turned up as new/unread in my LAKML folder)
+>
+> This needs the "fs/mnt_idmapping.c" maintainer's ack.
+
+Sure, I hope that Christian will take a look.
+
+Thanks,
+Alex
+
+>
+> Thanks
+>
+> - Xiubo
+>
