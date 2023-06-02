@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E54E71F9E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE8971F9EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbjFBGKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S233430AbjFBGPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbjFBGKF (ORCPT
+        with ESMTP id S233220AbjFBGPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:10:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59FE19A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:10:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35AB3636D6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC3DC433D2;
-        Fri,  2 Jun 2023 06:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685686203;
-        bh=VEgyKFf172jYb5rXa1Yhw5aH3Ng0UE/Y4wpRvGCLU54=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sSNccwcUEAiE0z5n1fVv6tegZ2SYCD7RW6bf8jDQpxUDGIt2f3aKA6KFU+Vt11Q74
-         6nEu2+0ty813Wtv+o2O7UU6gNwtQqlfgDSrDfMP3bFFjoz0mXmRSQQMS5bPKQGdmQ6
-         9Gyiqm2bANIrzjDoDNIGDI9ZqjvB9+ds6h83GWbi1dHIqlcLXrN5mt+Qtaobg0lqrr
-         rUE7ci8/CAd3UQ/DBPXWapSzH22AKYd4dY334rjBE/MUVU9lRn7juDIi4VydouLF8a
-         e/c5lWpf1AZL16Tk7fBPvhpXSeeIweE1nYrBDX8W9XHIN+GwTqfwGH6n5awm93rWZo
-         sZuvOOGYUAeeA==
-Date:   Thu, 1 Jun 2023 23:10:01 -0700
-From:   Chris Li <chrisl@kernel.org>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH -V3 5/5] swap: comments get_swap_device() with usage rule
-Message-ID: <ZHmHuW42JV95Uohj@google.com>
-References: <20230529061355.125791-1-ying.huang@intel.com>
- <20230529061355.125791-6-ying.huang@intel.com>
+        Fri, 2 Jun 2023 02:15:50 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BF113E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:15:48 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 2D1A310047C17
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:15:48 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 4y4hqjz2T0K9w4y4iqjM5X; Fri, 02 Jun 2023 06:15:48 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Xf5McK15 c=1 sm=1 tr=0 ts=64798914
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=tq3W9Zwk1ITRXLIn4wcA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Z9YACtn3APw63uNJMrXQcH1Znn82RQampwROBRfCZhg=; b=afI5Xlr8U0JgoiP3z4jpnUHeLY
+        kTKS79kAK20W07hq+aIiIEEHwgoBCcV26e6AX9m4KTo8LVP5eTG4ZWYbzQGcFWIjSucqTs0y4h5OD
+        7642CIZAUEeZtcPRpDTXL+zyi8d4wm3FhPU4Z6Y3HRVA7AbpEULkXQ3G5/ReLlGfbe//Mc9tDuAOd
+        NGuTp8tBSTWegYP+6b8EMYcghLYVALl+A/ejmLI3PwxmEjccuU94kSNEUvrz9kSRxv6qWJ8/focF8
+        nPc4WVG3Kb4747Phyd6z3r19w8jVuiLIOeAGSWU2vpOb03zMrfUH2KH0dpNKbjIhaHfc5s+/gJiMZ
+        sxgaBJ1A==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:42506 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1q4y4h-001JeX-2U;
+        Fri, 02 Jun 2023 00:15:47 -0600
+Subject: Re: [PATCH 6.3 00/45] 6.3.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230601131938.702671708@linuxfoundation.org>
+In-Reply-To: <20230601131938.702671708@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <153fa9ca-776b-088c-b4ba-49e143f0e59e@w6rz.net>
+Date:   Thu, 1 Jun 2023 23:15:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529061355.125791-6-ying.huang@intel.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1q4y4h-001JeX-2U
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:42506
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 02:13:55PM +0800, Huang Ying wrote:
-> The general rule to use a swap entry is as follows.
-> 
-> When we get a swap entry, if there aren't some other ways to prevent
-> swapoff, such as the folio in swap cache is locked, page table lock is
-> held, etc., the swap entry may become invalid because of swapoff.
-> Then, we need to enclose all swap related functions with
-> get_swap_device() and put_swap_device(), unless the swap functions
-> call get/put_swap_device() by themselves.
-> 
-> Add the rule as comments of get_swap_device().
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Minchan Kim <minchan@kernel.org>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Yu Zhao <yuzhao@google.com>
-> Cc: Chris Li <chrisl@kernel.org>
-> ---
->  mm/swapfile.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 4dbaea64635d..3d0e932497f0 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1219,6 +1219,13 @@ static unsigned char __swap_entry_free_locked(struct swap_info_struct *p,
->  }
->  
->  /*
-> + * When we get a swap entry, if there aren't some other ways to
-> + * prevent swapoff, such as the folio in swap cache is locked, page
-> + * table lock is held, etc., the swap entry may become invalid because
-> + * of swapoff.  Then, we need to enclose all swap related functions
-> + * with get_swap_device() and put_swap_device(), unless the swap
-> + * functions call get/put_swap_device() by themselves.
-> + *
->   * Check whether swap entry is valid in the swap device.  If so,
->   * return pointer to swap_info_struct, and keep the swap entry valid
->   * via preventing the swap device from being swapoff, until
-> @@ -1227,9 +1234,8 @@ static unsigned char __swap_entry_free_locked(struct swap_info_struct *p,
->   * Notice that swapoff or swapoff+swapon can still happen before the
->   * percpu_ref_tryget_live() in get_swap_device() or after the
->   * percpu_ref_put() in put_swap_device() if there isn't any other way
-> - * to prevent swapoff, such as page lock, page table lock, etc.  The
-> - * caller must be prepared for that.  For example, the following
-> - * situation is possible.
-> + * to prevent swapoff.  The caller must be prepared for that.  For
-> + * example, the following situation is possible.
->   *
->   *   CPU1				CPU2
->   *   do_swap_page()
-> -- 
-> 2.39.2
+On 6/1/23 6:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.6 release.
+> There are 45 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
+> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Chris Li (Google) <chrisl@kernel.org>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Chris
- 
+Tested-by: Ron Economos <re@w6rz.net>
+
