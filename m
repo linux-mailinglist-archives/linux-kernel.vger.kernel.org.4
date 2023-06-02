@@ -2,77 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DE871FF3B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8AF71FF3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbjFBK0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S235674AbjFBK0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235628AbjFBKY6 (ORCPT
+        with ESMTP id S235531AbjFBKZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:24:58 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93151A7;
-        Fri,  2 Jun 2023 03:24:09 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1q51wh-00G2zk-Jk; Fri, 02 Jun 2023 18:23:48 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 02 Jun 2023 18:23:47 +0800
-Date:   Fri, 2 Jun 2023 18:23:47 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: marvell/cesa - Fix type mismatch warning
-Message-ID: <ZHnDM50EpLwpXNvS@gondor.apana.org.au>
-References: <20230523083313.899332-1-arnd@kernel.org>
+        Fri, 2 Jun 2023 06:25:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E47E1B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685701432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pkvu8Jzh1WTkXWcQkQ56qL406K+KbKZMazpgBAdDI3Y=;
+        b=JNMmCiJIJ2TG1yuKvauNPHtBQN1JkTf+qcN4OOKXrwJLIpBsCPIGT72M0iHm36PzcpL5rp
+        qOO2FsFz4J/YA4GiJzwS48bRbXPOzJ/HMmkpWQlruVg1MWGpOiLA5o+G9yNKelHnXQtNer
+        YCHPs9GnbpjJ3kREtm6EB69UR+gnlHY=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-649-Tan00AIIOTSTUnLUMPZWjA-1; Fri, 02 Jun 2023 06:23:51 -0400
+X-MC-Unique: Tan00AIIOTSTUnLUMPZWjA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30af779d6e6so1041417f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:23:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685701430; x=1688293430;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pkvu8Jzh1WTkXWcQkQ56qL406K+KbKZMazpgBAdDI3Y=;
+        b=XMqloJ/q958D2hXW4xf10pIeZfcLRpSxPLu/gBueJfzOV9IrXkgeKIWt89UHKxnQai
+         YIFzXMRfLUyFc65PmGGGnJ1NNbRG+JjUK7tQdC3Gypsds+j9lG8p48C88S7X/apkB+IX
+         iUDOGWagjll2iL0MYTu81eq4m//NPAJZssWzsPpZrQ+Y+wiBwiNlvSoM/SISIohqVTkG
+         RvmseUpD95+FJUJaNWBARwHHtwQy9KgLNkjwRIb0ibNcHYOPrjCv2EbZXrc9pZQKKeDu
+         Jny5EqXU9B2Jl0a3IAY3ACT1VfHPTYTgTcLyQ4jKw3Ob3m43S4RMU8cGGFPqwOp07YH/
+         K62g==
+X-Gm-Message-State: AC+VfDz6iCrI7aBgIItK7EqvAQ2+PnixGm/pNomPcgGtJ40uWW66saZ3
+        Vd5UWN85sirkBDksdRX/tzqKwpit5XbuRD6xbAFSl6Y3JrAm6ZHkmrLURK188dVyM+CuEC2URAm
+        9GMgllqXu3gSPed34i4ZbrkUV
+X-Received: by 2002:a5d:5388:0:b0:309:49e6:9047 with SMTP id d8-20020a5d5388000000b0030949e69047mr3343097wrv.16.1685701430153;
+        Fri, 02 Jun 2023 03:23:50 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4rOM+7YVpGv4YuqoHKVbMsATvwXbHiDehLJ7cyCcbErOZ/UZLOKYIVv1Qxrb9F4LYHp1H2VQ==
+X-Received: by 2002:a5d:5388:0:b0:309:49e6:9047 with SMTP id d8-20020a5d5388000000b0030949e69047mr3343087wrv.16.1685701429944;
+        Fri, 02 Jun 2023 03:23:49 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id e12-20020a5d594c000000b0030ae16132besm1268322wri.12.2023.06.02.03.23.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 03:23:49 -0700 (PDT)
+Message-ID: <989cca4f-f928-b739-5225-3f7e1c5de0e5@redhat.com>
+Date:   Fri, 2 Jun 2023 12:23:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523083313.899332-1-arnd@kernel.org>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 12/12] selftests/mm: fix uffd-unit-tests.c build failure
+ due to missing MADV_COLLAPSE
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-13-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230602013358.900637-13-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:33:04AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 02.06.23 03:33, John Hubbard wrote:
+> MADV_PAGEOUT, MADV_POPULATE_READ, MADV_COLLAPSE are conditionally
+> defined as necessary. However, that was being done in .c files, and a
+> new build failure came up that would have been automatically avoided had
+> these been in a common header file.
 > 
-> Commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3") uncovered
-> a type mismatch in cesa 3des support that leads to a memcpy beyond the
-> end of a structure:
+> So consolidate and move them all to vm_util.h, which fixes the build
+> failure.
 > 
-> In function 'fortify_memcpy_chk',
->     inlined from 'mv_cesa_des3_ede_setkey' at drivers/crypto/marvell/cesa/cipher.c:307:2:
-> include/linux/fortify-string.h:583:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   583 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This is probably harmless as the actual data that is copied has the correct
-> type, but clearly worth fixing nonetheless.
-> 
-> Fixes: 4ada48397823 ("crypto: marvell/cesa - add Triple-DES support")
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > ---
->  drivers/crypto/marvell/cesa/cipher.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   tools/testing/selftests/mm/cow.c        |  7 -------
+>   tools/testing/selftests/mm/khugepaged.c | 10 ----------
+>   tools/testing/selftests/mm/vm_util.h    | 10 ++++++++++
+>   3 files changed, 10 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index dc9d6fe86028..8882b05ec9c8 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -30,13 +30,6 @@
+>   #include "../kselftest.h"
+>   #include "vm_util.h"
+>   
+> -#ifndef MADV_PAGEOUT
+> -#define MADV_PAGEOUT 21
+> -#endif
+> -#ifndef MADV_COLLAPSE
+> -#define MADV_COLLAPSE 25
+> -#endif
+> -
+>   static size_t pagesize;
+>   static int pagemap_fd;
+>   static size_t thpsize;
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 97adc0f34f9c..e88ee039d0eb 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -22,16 +22,6 @@
+>   
+>   #include "vm_util.h"
+>   
+> -#ifndef MADV_PAGEOUT
+> -#define MADV_PAGEOUT 21
+> -#endif
+> -#ifndef MADV_POPULATE_READ
+> -#define MADV_POPULATE_READ 22
+> -#endif
+> -#ifndef MADV_COLLAPSE
+> -#define MADV_COLLAPSE 25
+> -#endif
+> -
+>   #define BASE_ADDR ((void *)(1UL << 30))
+>   static unsigned long hpage_pmd_size;
+>   static unsigned long page_size;
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 7f5aac0ac680..f04f82771cd0 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -41,3 +41,13 @@ unsigned long default_huge_page_size(void);
+>   
+>   #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+>   #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+> +
+> +#ifndef MADV_PAGEOUT
+> +#define MADV_PAGEOUT 21
+> +#endif
+> +#ifndef MADV_POPULATE_READ
+> +#define MADV_POPULATE_READ 22
+> +#endif
+> +#ifndef MADV_COLLAPSE
+> +#define MADV_COLLAPSE 25
+> +#endif
 
-Patch applied.  Thanks.
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Thanks,
+
+David / dhildenb
+
