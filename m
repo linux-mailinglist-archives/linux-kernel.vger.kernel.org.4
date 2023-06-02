@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40DD71FAE3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4164E71FAE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbjFBHVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 03:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S234369AbjFBHVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbjFBHVU (ORCPT
+        with ESMTP id S233956AbjFBHVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:21:20 -0400
+        Fri, 2 Jun 2023 03:21:19 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1791B3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F80B1AD;
         Fri,  2 Jun 2023 00:21:18 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXZDV1ZKBz4f3tqJ;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXZDV3B4jz4f3kk7;
         Fri,  2 Jun 2023 15:21:14 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP2 (Coremail) with SMTP id Syh0CgA33epimHlkYdujKg--.62283S5;
+        by APP2 (Coremail) with SMTP id Syh0CgA33epimHlkYdujKg--.62283S6;
         Fri, 02 Jun 2023 15:21:15 +0800 (CST)
 From:   linan666@huaweicloud.com
 To:     song@kernel.org, neilb@suse.de
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
         houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v6 1/2] md/raid10: Do not add spare disk when recovery fail
-Date:   Fri,  2 Jun 2023 15:17:16 +0800
-Message-Id: <20230602071717.503287-2-linan666@huaweicloud.com>
+Subject: [PATCH v6 2/2] md/raid10: fix io loss while replacement replace rdev
+Date:   Fri,  2 Jun 2023 15:17:17 +0800
+Message-Id: <20230602071717.503287-3-linan666@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230602071717.503287-1-linan666@huaweicloud.com>
 References: <20230602071717.503287-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgA33epimHlkYdujKg--.62283S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw17JF4kCrykXr13Kw48WFg_yoW8Kr1Upa
-        nrJF93t34DXw4fJ3Z8AryUXFWFy348Ja47KryxW34j93y3tryDZFWxXF4UXFWUWF1FqFWY
-        qw4DJr45CFykKaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBlb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+X-CM-TRANSID: Syh0CgA33epimHlkYdujKg--.62283S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWfAF4fWF1DArWrGF17Wrg_yoW5Jr1fpF
+        4Dt3Z5ZryUAwsrKFs8JF4DJa4S9rWxtayrJry3W345ua15trWUAa47G3y3Zrs8ZFZ8Xry5
+        Xa13Kws5ua429FDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
         w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
         W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
         6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
@@ -50,7 +50,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Cw17JF4kCrykXr13Kw48WFg_yoW8Kr1Upa
         Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
         xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
         JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1mFAPUUUUU==
+        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU847K7UUUUU==
 X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -64,66 +64,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Li Nan <linan122@huawei.com>
 
-In raid10_sync_request(), if data cannot be read from any disk for
-recovery, it will go to 'giveup' and let 'chunks_skipped' + 1. After
-multiple 'giveup', when 'chunks_skipped >= geo.raid_disks', it will
-return 'max_sector', indicating that the recovery has been completed.
-However, the recovery is just aborted and the data remains inconsistent.
+When removing a disk with replacement, the replacement will be used to
+replace rdev. During this process, there is a brief window in which both
+rdev and replacement are read as NULL in raid10_write_request(). This
+will result in io not being submitted but it should be.
 
-Fix it by setting mirror->recovery_disabled, which will prevent the spare
-disk from being added to this mirror. The same issue also exists during
-resync, it will be fixed afterwards.
+  //remove				//write
+  raid10_remove_disk			raid10_write_request
+   mirror->rdev = NULL
+					 read rdev -> NULL
+   mirror->rdev = mirror->replacement
+   mirror->replacement = NULL
+					 read replacement -> NULL
 
+Fix it by reading replacement first and rdev later, meanwhile, use smp_mb()
+to prevent memory reordering.
+
+Fixes: 475b0321a4df ("md/raid10: writes should get directed to replacement as well as original.")
 Signed-off-by: Li Nan <linan122@huawei.com>
+Reviewed-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/raid10.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ drivers/md/raid10.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index d93d8cb2b620..9fb55902e58a 100644
+index 9fb55902e58a..317f53e9ce03 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
- 	int chunks_skipped = 0;
- 	sector_t chunk_mask = conf->geo.chunk_mask;
- 	int page_idx = 0;
-+	int error_disk = -1;
- 
- 	/*
- 	 * Allow skipping a full rebuild for incremental assembly
-@@ -3386,8 +3387,21 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
- 		return reshape_request(mddev, sector_nr, skipped);
- 
- 	if (chunks_skipped >= conf->geo.raid_disks) {
--		/* if there has been nothing to do on any drive,
--		 * then there is nothing to do at all..
-+		pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
-+			test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "resync" : "recovery");
-+		if (error_disk >= 0 &&
-+		    !test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
+@@ -779,8 +779,16 @@ static struct md_rdev *read_balance(struct r10conf *conf,
+ 		disk = r10_bio->devs[slot].devnum;
+ 		rdev = rcu_dereference(conf->mirrors[disk].replacement);
+ 		if (rdev == NULL || test_bit(Faulty, &rdev->flags) ||
+-		    r10_bio->devs[slot].addr + sectors > rdev->recovery_offset)
++		    r10_bio->devs[slot].addr + sectors >
++		    rdev->recovery_offset) {
 +			/*
-+			 * recovery fail, set mirrors.recovery_disabled,
-+			 * device shouldn't be added to there.
++			 * Read replacement first to prevent reading both rdev
++			 * and replacement as NULL during replacement replace
++			 * rdev.
 +			 */
-+			conf->mirrors[error_disk].recovery_disabled =
-+						mddev->recovery_disabled;
-+			return 0;
++			smp_mb();
+ 			rdev = rcu_dereference(conf->mirrors[disk].rdev);
 +		}
+ 		if (rdev == NULL ||
+ 		    test_bit(Faulty, &rdev->flags))
+ 			continue;
+@@ -1479,9 +1487,15 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
+ 
+ 	for (i = 0;  i < conf->copies; i++) {
+ 		int d = r10_bio->devs[i].devnum;
+-		struct md_rdev *rdev = rcu_dereference(conf->mirrors[d].rdev);
+-		struct md_rdev *rrdev = rcu_dereference(
+-			conf->mirrors[d].replacement);
++		struct md_rdev *rdev, *rrdev;
++
++		rrdev = rcu_dereference(conf->mirrors[d].replacement);
 +		/*
-+		 * if there has been nothing to do on any drive,
-+		 * then there is nothing to do at all.
- 		 */
- 		*skipped = 1;
- 		return (max_sector - sector_nr) + sectors_skipped;
-@@ -3638,6 +3652,8 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
- 						       mdname(mddev));
- 					mirror->recovery_disabled
- 						= mddev->recovery_disabled;
-+				} else {
-+					error_disk = i;
- 				}
- 				put_buf(r10_bio);
- 				if (rb2)
++		 * Read replacement first to Prevent reading both rdev and
++		 * replacement as NULL during replacement replace rdev.
++		 */
++		smp_mb();
++		rdev = rcu_dereference(conf->mirrors[d].rdev);
+ 		if (rdev == rrdev)
+ 			rrdev = NULL;
+ 		if (rdev && (test_bit(Faulty, &rdev->flags)))
 -- 
 2.39.2
 
