@@ -2,84 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1D771F821
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CCA71F822
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbjFBBpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S233134AbjFBBpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbjFBBok (ORCPT
+        with ESMTP id S233876AbjFBBpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:44:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66961107
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685670233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qm3YBUUay/A3pBxQ63hdSOGk63jXLzGv+Yj/C0QgPBo=;
-        b=Mr9dwRRJfQNGv2j06MCPIvgoSDkLm2WcJwzFSjZqhEHrS2cdudCY+vDsIJh38VBCUinBd7
-        B8OveAdlEn7OlvHLYQLEa18Cz/NDiPjm4FCMKUyYVORq4b+6AuuauSZ2IFTT29ABXBGMDQ
-        7Ud9myKKkPfLGtCakZsCdwteB+sDxuM=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-F5O-SuqZM-uIDL0bbt2qBQ-1; Thu, 01 Jun 2023 21:43:50 -0400
-X-MC-Unique: F5O-SuqZM-uIDL0bbt2qBQ-1
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6af87ea95c6so1637246a34.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:43:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685670230; x=1688262230;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qm3YBUUay/A3pBxQ63hdSOGk63jXLzGv+Yj/C0QgPBo=;
-        b=MuGpAtiiamdVrLKyZAmd/1XxZoy+tiYtL5Dijlliu5PbhUwQClh7ak0yc1DrBrZc0U
-         wb+2+kicw3uvK4pJ/DNZUBYxEOiczB3Yl7/9w8KAjevwB8hA8ivpCC/x38RUkkSIcSzM
-         QwO4H6k2xnG4O2ca4rQBgGDSar4XLzXs+LSPsAugHzaFqoAsPX0cCcGL7ROEvzpiOfnC
-         VmK9Ax45iZejGpKPqMx9yFjpfM8SsTvWPQDoyc9G1W6xEbwk86nINu/yZwgK4aZKB3Gl
-         XsjH2kja78t3B4PGJb530W2IFFOw0D83OXaOAnf1LW7DMmnCnXiyU6MyDfN/L0Cer3fo
-         j2rw==
-X-Gm-Message-State: AC+VfDzzZ45OqJd/kQ1TmsDt5d83KoY+TaMMYv6rBw2eV7FDdtq9v75H
-        THRcBO0MU9r1vqRJnuuZNZoOUiSyHYLFwEaayZROuXzRzm22PiUgEVU7jQg3PFhfOu+Kwi6UQ1t
-        jMDXdnZtrC32IvXmTJqsdLzRq
-X-Received: by 2002:a05:6830:1144:b0:6ab:1b58:f408 with SMTP id x4-20020a056830114400b006ab1b58f408mr1165852otq.19.1685670229963;
-        Thu, 01 Jun 2023 18:43:49 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6dXe+qWoYjYqWymPBlKMBkzayyp1ngY7RaWquL6mNcLpLBSiviFYZu9RyuAqcMvnhIoxOw2A==
-X-Received: by 2002:a05:6830:1144:b0:6ab:1b58:f408 with SMTP id x4-20020a056830114400b006ab1b58f408mr1165844otq.19.1685670229730;
-        Thu, 01 Jun 2023 18:43:49 -0700 (PDT)
-Received: from [10.72.12.188] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id u6-20020a634706000000b0053b8a4f9465sm103388pga.45.2023.06.01.18.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 18:43:49 -0700 (PDT)
-Message-ID: <539de53d-729b-118e-1f2f-6dd2f6dccb71@redhat.com>
-Date:   Fri, 2 Jun 2023 09:43:36 +0800
+        Thu, 1 Jun 2023 21:45:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFC997;
+        Thu,  1 Jun 2023 18:44:58 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QXQg354Tvz18M3R;
+        Fri,  2 Jun 2023 09:40:15 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 2 Jun 2023 09:44:55 +0800
+Message-ID: <fa272c15-9f7c-df9c-41dd-bffc19acbf85@huawei.com>
+Date:   Fri, 2 Jun 2023 09:44:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 08/13] ceph: allow idmapped getattr inode op
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
 Content-Language: en-US
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
- <20230524153316.476973-9-aleksandr.mikhalitsyn@canonical.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230524153316.476973-9-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Youquan Song <youquan.song@intel.com>
+CC:     <tony.luck@intel.com>, <naoya.horiguchi@nec.com>,
+        <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <akpm@linux-foundation.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <jane.chu@oracle.com>
+References: <20230526063242.133656-1-wangkefeng.wang@huawei.com>
+ <20230526070952.GAZHBbQNAWZJP6tOXv@nazgul.local>
+ <e816734d-e6f5-b990-c86d-ac7d5f1c94c0@huawei.com>
+In-Reply-To: <e816734d-e6f5-b990-c86d-ac7d5f1c94c0@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,48 +58,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/24/23 23:33, Alexander Mikhalitsyn wrote:
-> From: Christian Brauner <christian.brauner@ubuntu.com>
->
-> Enable ceph_getattr() to handle idmapped mounts. This is just a matter
-> of passing down the mount's idmapping.
->
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Ilya Dryomov <idryomov@gmail.com>
-> Cc: ceph-devel@vger.kernel.org
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
->   fs/ceph/inode.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-> index 8e5f41d45283..2e988612ed6c 100644
-> --- a/fs/ceph/inode.c
-> +++ b/fs/ceph/inode.c
-> @@ -2465,7 +2465,7 @@ int ceph_getattr(struct mnt_idmap *idmap, const struct path *path,
->   			return err;
->   	}
->   
-> -	generic_fillattr(&nop_mnt_idmap, inode, stat);
-> +	generic_fillattr(idmap, inode, stat);
->   	stat->ino = ceph_present_inode(inode);
->   
->   	/*
 
-As mentioned in my comment in "[PATCH v2 10/13] ceph: allow idmapped 
-setattr inode op". The getattr requests may fail too in the MDS when 
-doing the client auth checking.
+On 2023/5/26 20:18, Kefeng Wang wrote:
+> 
+> 
+> On 2023/5/26 15:09, Borislav Petkov wrote:
+>> On Fri, May 26, 2023 at 02:32:42PM +0800, Kefeng Wang wrote:
+>>> The best way to fix them is set MCE_IN_KERNEL_COPYIN for MC-Safe Copy,
+>>> then let the core do_machine_check() to isolate corrupted page instead
+>>> of doing it one-by-one.
+>>
+>> No, this whole thing is confused.
+>>
+>>   * Indicates an MCE that happened in kernel space while copying data
+>>   * from user.
+>>
+>> #define MCE_IN_KERNEL_COPYIN
+>>
+>> This is a very specific exception type: EX_TYPE_COPY which got added by
+>>
+>>    278b917f8cb9 ("x86/mce: Add _ASM_EXTABLE_CPY for copy user access")
+>>
+>> but Linus then removed all such user copy exception points in
+>>
+>>    034ff37d3407 ("x86: rewrite '__copy_user_nocache' function")
+>>
+>> So now that EX_TYPE_COPY never happens.
+> 
+> Is this broken the recover when kernel was copying from user space?
+> 
+> + Youquan  could you help to check it?
+> 
+>>
+>> And what you're doing is lumping the handling for
+>> EX_TYPE_DEFAULT_MCE_SAFE and EX_TYPE_FAULT_MCE_SAFE together and saying
+>> that the MCE happened while copying data from user.
+>>
+>> And XSTATE_OP() is one example where this is not really the case.
+>>
+> 
+> Oh, for XSTATE_OP(), it uses EX_TYPE_DEFAULT_MCE_SAFE, but I'm focus on 
+> EX_TYPE_DEFAULT_MCE_SAFE, which use copy_mc (arch/x86/lib/copy_mc_64.S),
+> like I maintained in changelog, CoW/Coredump/nvdimm/dax, they use 
+> copy_mc_xxx function,  sorry for mixed them up.
+> 
+> 
+>> So no, this is not correct.
+> 
+> so only add MCE_IN_KERNEL_COPYIN for EX_TYPE_DEFAULT_MCE_SAFE?
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/severity.c 
+> b/arch/x86/kernel/cpu/mce/severity.c
+> index c4477162c07d..6d2587994623 100644
+> --- a/arch/x86/kernel/cpu/mce/severity.c
+> +++ b/arch/x86/kernel/cpu/mce/severity.c
+> @@ -293,11 +293,11 @@ static noinstr int error_context(struct mce *m, 
+> struct pt_regs *regs)
+>          case EX_TYPE_COPY:
+>                  if (!copy_user)
+>                          return IN_KERNEL;
+> +               fallthrough;
+> +       case EX_TYPE_DEFAULT_MCE_SAFE:
+>                  m->kflags |= MCE_IN_KERNEL_COPYIN;
+>                  fallthrough;
 
-So for all the requests we should always get the correct UID/GID instead 
-of only for the creating requests, then we can make sure that the idmap 
-is only a feature in client side and then in cephfs MDS side it will 
-always get a consistent UID/GID no matter what idmappings the clients 
-are using.
+As mentioned above, I am focus on copy_mc_XXX calling, it will
+abort if the exception fires when accessing the source, and we
+want to isolate the corrupted src page, maybe we could a new flag
+to indicate this scenario, the *Final Goals* is to let core
+do_machine_check to deal with the corrupted src page.
 
-Right ?
+Any suggestiong, thanks
 
-Thanks
 
-- Xiubo
-
+> -
+>          case EX_TYPE_FAULT_MCE_SAFE:
+> -       case EX_TYPE_DEFAULT_MCE_SAFE:
+>                  m->kflags |= MCE_IN_KERNEL_RECOV;
+>                  return IN_KERNEL_RECOV;
+> 
+> Correct me if I am wrong, thanks for you reviewing.
+> 
+> 
+>>
