@@ -2,191 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3371E7202CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39CD7202DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbjFBNMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
+        id S235200AbjFBNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235864AbjFBNMO (ORCPT
+        with ESMTP id S234965AbjFBNOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:12:14 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE51AE5B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:11:40 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f60bc818d7so2005787e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:11:40 -0700 (PDT)
+        Fri, 2 Jun 2023 09:14:39 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD012E4E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:14:14 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-626149fbc8eso20351176d6.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685711499; x=1688303499;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fdOza1gLCalLSXkYNY4mfvWYzR4Q4eTY/qnCdvd8TFI=;
-        b=OQG6NkGTY8w1iNprv3qIaPBF7ojyVzw2L0LdKDBQuojwW4n/Gwj2GkpkFfrtl4V2gI
-         2xrnUG/TogFtedY6rDXNS9MtJyr9C4KFoLSZayqrqdEBTj0RfS7YeAeJoCCQsmW8cjvs
-         sdMhxEWwbQS0bFCJS/YJCKpxNoQdOEJpHnxSRuzLH2mw4e8rUaP775d897/oBebWdnN9
-         Ads0I/oo/n2vkWTkKmowPFMhpxThhbO5bXQIZZVINcEGx8MQX8qbaz9MGEUjpqhsdOE+
-         tJrzXcx+lLit2xsTI9zZ/hUIMESUEPdWE29IcxYRFqHYh6NpZlTpRY8wRhcxGzuRfQst
-         OYUQ==
+        d=linaro.org; s=google; t=1685711595; x=1688303595;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lbyPb51PUU9vujG848UEmxA9BGlz0whFY4MV5fQj0w0=;
+        b=qGWH/1bXYEzE2F7UnnX96OoaTmbGGJoVpNHNDFD6Y+H1xZ6vjQZNHXXfIhwYOX0RS9
+         ZZCQi5K921TAc7mdOgNuJbweg/epBmeb/4+6kvnw2JgVQ9y0iqh0aUT6PW+ua6VLm/xK
+         ssEorZY+F5LrTXa0TT7gZ1cIc3/sNneEdJW839DsWU/YEhuFycg7V+fbEoSEiT2WTUJA
+         bVGEy7eDqB+sk8kD38d3+vEKtCgPZmEwuRH8WSbEgPIB79cIrBTVH1+kgpbHAPl5otsC
+         UcjL1y96nGQGFubjtAPcWaTMCFNhyBi2Hg1vkHP0IoxZodRYbBwiROPT0+6LiQjiJld3
+         7sfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711499; x=1688303499;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdOza1gLCalLSXkYNY4mfvWYzR4Q4eTY/qnCdvd8TFI=;
-        b=bwCxCL1MZIsXvwWhPFsyyTkHLlWetU061X4JU+aRodBt4zKDfDkfGcJoWCLorC4caA
-         EXM4hQjCedhl0KV7zlJCAky9fH6nWId72ZFB5tcQNPi8gZ4Dm/W31DPbXs2vNpJqoF/n
-         ZzPUw7/eTCRklYhSLQvPqlmWkkfEZYRL8PnYOb5+/IebxAqaqKEN0ID2Wt2QCyk8AY9F
-         5IEa2RP3/m2V7TbpqMG7wELnWRevpQJpwuKOiKQPEKL28jsPVq8wRdHmxgg+NZUpXVoC
-         UBfikoyKISGpqNGLjoy3uC0dvS1cyrhnQkgolsOPcnakUDL5NjUMhb2x74/aZ/tmPwld
-         9hLw==
-X-Gm-Message-State: AC+VfDxJJ98aS6DtJzUmkiGMPmxDjl6OgMa/kUpTFK3ZJocB+pQe8Vqb
-        /idt9HdxC8zM/BzxrRa8WAVBhA==
-X-Google-Smtp-Source: ACHHUZ6pzMnLSLO1Ama3yhQyeYIg1fA+OJjI4CJNmdzdAHVyE5wYPdc1sGelcxVvpPlfy2h5ZJCI+w==
-X-Received: by 2002:a19:7014:0:b0:4f3:982a:8be1 with SMTP id h20-20020a197014000000b004f3982a8be1mr1894490lfc.69.1685711498965;
-        Fri, 02 Jun 2023 06:11:38 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:40f6:d082:aa42:96f0? ([2a05:6e02:1041:c10:40f6:d082:aa42:96f0])
-        by smtp.googlemail.com with ESMTPSA id 24-20020a05600c22d800b003f3e50eb606sm1931739wmg.13.2023.06.02.06.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 06:11:38 -0700 (PDT)
-Message-ID: <0eb717ac-82b1-8a76-58a2-394167e69b28@linaro.org>
-Date:   Fri, 2 Jun 2023 15:11:37 +0200
+        d=1e100.net; s=20221208; t=1685711595; x=1688303595;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lbyPb51PUU9vujG848UEmxA9BGlz0whFY4MV5fQj0w0=;
+        b=luvRjSrzMmwLzFfL+KWfsx9IUx9uLFWqqy6nls20gwQejjwcR3f0TbfN8Fm3c2gTOC
+         5Furlm/07YVS1s3MlwGritf3eVc70DwXyqaWYxykYyo06cdGn2eRJzOvz2yTG93Qqm81
+         NEJxh/9VWIWnCRiwFP97E3k3Yehy1OiG40vElLhvSkm0F0n3GwxYKNb8NvHnk9lCdcvL
+         1Ue6cS5V0osajKPRw4nJ/COimPnhG90fl8UWDwNQDVGk0Mb+xaSzkC7ai8YVxMf+dT6O
+         CcFxNN0NkCNbXBwUO1Icw1csl0yUeBoS8oIyG4WGA43iMZ3K9LRtV7OYqN/bjM/DkbcR
+         WWnA==
+X-Gm-Message-State: AC+VfDxS1WUaphvCJHhX17dpLir93zlxi691UazPzhbkAyIeyyaqO2B6
+        uTU46ZCjacFD0HmtmI2NlgwDlAAWeVytz5zwcQo9Dg==
+X-Google-Smtp-Source: ACHHUZ4Pd8rkTYRSbfpRv+e7lK1HpfUnzaQipyvb44jP7vvORuNcC4OW6/uX3ZUCF3mEX9y84D3H/Jv5R8kjk8GpAwU=
+X-Received: by 2002:ad4:5fc9:0:b0:5ef:8c79:fe92 with SMTP id
+ jq9-20020ad45fc9000000b005ef8c79fe92mr18248218qvb.3.1685711594910; Fri, 02
+ Jun 2023 06:13:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alice Guo <alice.guo@nxp.com>
-References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
- <20230516083746.63436-3-peng.fan@oss.nxp.com>
- <3c59c4e0-68eb-b778-6b12-9f9e331f81dd@linaro.org>
- <PA4PR04MB94165217C8C0D9E8E0087AF988489@PA4PR04MB9416.eurprd04.prod.outlook.com>
- <01197bb8-da0d-f726-79bc-d8ab7d3ea992@linaro.org>
- <DU0PR04MB9417D9020578083527FC16C888489@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
+ <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+ <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com> <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk>
+In-Reply-To: <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Fri, 2 Jun 2023 18:42:38 +0530
+Message-ID: <CAMi1Hd2BLB6H3QRLB5svRTkGoXaUeEsakNsmfCOjbDBcCEeqkA@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 11:52, Peng Fan wrote:
-> Hi Daniel,
-> 
->> Subject: RE: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
->> sensors
->>
->>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
->>> sensors
->>>
->>> On 31/05/2023 14:05, Peng Fan wrote:
->>>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable
->>>>> supported sensors
->>>>>
->>>>> On 16/05/2023 10:37, Peng Fan (OSS) wrote:
->>>>>> From: Peng Fan <peng.fan@nxp.com>
->>>>>>
->>>>>> There are MAX 16 sensors, but not all of them supported. Such as
->>>>>> i.MX8MQ, there are only 3 sensors. Enabling all 16 sensors will
->>>>>> touch reserved bits from i.MX8MQ reference mannual, and TMU will
->>>>>> stuck, temperature will not update anymore.
->>>>>>
->>>>>> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before
->>>>>> registering them")
->>>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>>>>> ---
->>>>>>     drivers/thermal/qoriq_thermal.c | 30 +++++++++++++++++++----------
->> -
->>>>>>     1 file changed, 19 insertions(+), 11 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/thermal/qoriq_thermal.c
->>>>>> b/drivers/thermal/qoriq_thermal.c index
->> b806a0929459..53748c4a5be1
->>>>>> 100644
->>>>>> --- a/drivers/thermal/qoriq_thermal.c
->>>>>> +++ b/drivers/thermal/qoriq_thermal.c
->>>>>> @@ -31,7 +31,6 @@
->>>>>>     #define TMR_DISABLE	0x0
->>>>>>     #define TMR_ME		0x80000000
->>>>>>     #define TMR_ALPF	0x0c000000
->>>>>> -#define TMR_MSITE_ALL	GENMASK(15, 0)
->>>>>>
->>>>>>     #define REGS_TMTMIR	0x008	/* Temperature measurement
->>>>> interval Register */
->>>>>>     #define TMTMIR_DEFAULT	0x0000000f
->>>>>> @@ -105,6 +104,11 @@ static int tmu_get_temp(struct
->>>>> thermal_zone_device *tz, int *temp)
->>>>>>     	 * within sensor range. TEMP is an 9 bit value representing
->>>>>>     	 * temperature in KelVin.
->>>>>>     	 */
->>>>>> +
->>>>>> +	regmap_read(qdata->regmap, REGS_TMR, &val);
->>>>>> +	if (!(val & TMR_ME))
->>>>>> +		return -EAGAIN;
->>>>>
->>>>> How is this change related to what is described in the changelog?
->>>>
->>>> devm_thermal_zone_of_sensor_register will invoke get temp, since we
->>>> reverted the 45038e03d633 did, we need to check TMR_ME to avoid
->>> return
->>>> invalid temperature.
->>>
->>>
->>>   From a higher perspective if the sensor won't be enabled, then the
->>> thermal zone should not be registered, the get_temp won't happen on a
->>> disabled sensor and this test won't be necessary, no ?
-> 
-> After thinking more, I'd prefer current logic.
-> 
-> We rely on devm_thermal_of_zone_register's return value to know
-> whether there is a valid zone, then set sites bit, and after collected
-> all site bits, we enable the thermal IP.
-> 
-> If move the enabling thermal IP before devm_thermal_of_zone_register,
-> We need check dtb thermal zone, to know which zone is valid for current
-> thermal IP. This would complicate the design.
-> 
-> So just checking the enabling bit in get temperature would be much
-> simpler, and there just a small window before enabling thermal IP.
+On Fri, 2 Jun 2023 at 18:07, Mark Brown <broonie@kernel.org> wrote:
+>
+> > > If you reorder the nodes in the device tree, I think it'll change the
+> > > probe order. Does that affect anything? I'm wondering if there's some
+> > > sort of delayed reaction from a previous regulator.
+>
+> > Hi, Bumping lvs1 and lvs2 regulators up to the top of the list in the
+> > DTS https://bugs.linaro.org/show_bug.cgi?id=5975#c4 does seem to work.
+> > I can't reproduce the crash in 125 reboots so far, while I'm still
+> > testing with only qcom-rpmh-regulator kernel module. I'll do some more
+> > testing with full system running and send this re-ordering fix I can't
+> > reproduce the crash further.
+>
+> So whatever the issue is here it's a timing/race condition - this seems
+> like a workaround which works just now but it's not getting to whatever
+> the actual issue is and that could come back.
 
+Hi, I'm happy to debug this issue further or test run any
+patches/ideas if that helps.
 
-If the thermal zone is not described, then the thermal zone won't be 
-created as it fails with -ENODEV and thus get_temp won't be called on a 
-disabled site, right?
-
-Having test in the get_temp() ops is usually the sign there is something 
-wrong with the driver initialization.
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Regards,
+Amit Pundir
