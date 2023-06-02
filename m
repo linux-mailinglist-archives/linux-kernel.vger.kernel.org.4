@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1C071FC76
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A43D71FC7B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbjFBIsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
+        id S234423AbjFBItN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbjFBIsS (ORCPT
+        with ESMTP id S233820AbjFBIs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:48:18 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225A310D9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:47:38 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f4f89f71b8so2395281e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:47:37 -0700 (PDT)
+        Fri, 2 Jun 2023 04:48:26 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C29E46;
+        Fri,  2 Jun 2023 01:48:06 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-bacf685150cso1947533276.3;
+        Fri, 02 Jun 2023 01:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685695656; x=1688287656;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oYR18ZMkSgeDGw1wy03UTm2hI/2CDrWky4kqWDiBOMU=;
-        b=cQdSo/7m771fssHra9Xn9v7OIxfU8dvwiBjiN3vjvguKROTPra/NRA8DwPtxdr0MN1
-         WddfU24wzwdcH6Rri3lHS78vPN0G7DFrscoo4uMPibq0z/SVmTcSN4jDBpmIqanOcixc
-         8DEADyvrzWfr7OdywN+gEy0ht91de8X9OQF4oyGbqxRo6624uAwJPTkr0e/NYhN5cSZe
-         6eQv5FkleqM4Q24gc9OhabqZeQIFXoJ+1U5dXN6Th4plk3R/XQN1XFoKzAvtFRxuwaDW
-         JLQoA8HlF/nB+Qbm0L0qPWJPsRE0ujb33t0pDCS1KbGZpK0nRw8xu1fq7UnQXueXHlbu
-         1MtA==
+        d=gmail.com; s=20221208; t=1685695686; x=1688287686;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eheHZP8cKp+sdwSIjhX5j/WsObGvLb/DF1UbUOwIt7I=;
+        b=jOmsxqUo2frjiadNp+Wq4gGj+0bwTjeG5B38UXc9OlNsCz+2Nhy31EABVLzGc0TbZ8
+         tkezj9qxu1Uy7z5NjqByZX4upmIJIwM5SVGyK/+MMa2bWUQCDUy9/FRFSxpt5tXS2wah
+         DtDSMoVidwF1Pja7vO5yAtCvoaPj908lByJhyMd/op4/OJ2YqwkF+P2qkJhGGZu/s+5x
+         ie2PT2qndP7C/l2XSmT/Y1T2tWVZQ5qS0iVW//Qj45Y08blaK9tzVuU6WI/KGgY0rTSI
+         OCzsJ6eJfd0MePPs8HTHFY9wTVYyNZmQzZNPw766JB86tshr1Dz1wYkL27Q8aMonPptA
+         UNmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685695656; x=1688287656;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oYR18ZMkSgeDGw1wy03UTm2hI/2CDrWky4kqWDiBOMU=;
-        b=FfdHN/zvUCInsTZv0lPtrO4j4zLswy1bJrQPv1jDXJbt/jMxwi9dVjDd7VfKXyJnaD
-         HH3zXYaoNnLGkOru9Nj5xpLSx1OTdN8dTzZgTdo0uewN30p/8hlktyR8kBnTUHAdyFRS
-         s2vvf92dQr4Z8JTcoZi9OBmGizV9IzmW8Aso1PtQaPOyDMY/LUAHN5MtvYKTtSD/Xu2Z
-         SYuZwJLEgO42lkAplONz3o93tSad3Ben6tJSxRyOztlrzdEdY2ReWLNSbGvdr8xNqx83
-         NmV+um47BF5aXxtoBLBpQzQDDxJdyZd/1z6K3SfPaxKeWm1aMYoCcsi8M7ox9+5VwqXb
-         5ZXg==
-X-Gm-Message-State: AC+VfDy1uCh+x783+BHDJJENiQl3ca/AT4+O4rMkJkEysG4czx2MbAVK
-        CJhOpkt/hjKr2xuTYQIOeMNp2uUFt6NHG84shQQ=
-X-Google-Smtp-Source: ACHHUZ6H97AUwpEGg3mXKew7H84MpDUbBUkunLJSspBCNnwbiwMnbcPPL8kHo6zyJbkElQaRQxqI8w==
-X-Received: by 2002:a19:c511:0:b0:4ec:89d3:a8ac with SMTP id w17-20020a19c511000000b004ec89d3a8acmr1142743lfe.30.1685695656244;
-        Fri, 02 Jun 2023 01:47:36 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id d14-20020ac2544e000000b004f3830143f2sm91635lfn.253.2023.06.02.01.47.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 01:47:35 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v6.4-rc5
-Date:   Fri,  2 Jun 2023 10:47:33 +0200
-Message-Id: <20230602084733.40750-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1685695686; x=1688287686;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eheHZP8cKp+sdwSIjhX5j/WsObGvLb/DF1UbUOwIt7I=;
+        b=XzK3uYRgixAlcKDiPs3ch+HCKnC+v2xz8jHdFVltkN6UaS9b83ZWqmMf9pP8b5VA9l
+         G6A8T5IwUMaAZYeZhL1R1TXQw6pkhznmkFEp3oKrAZVTH7FERoSAAcskh6tW5s0DgA3X
+         jVG/wmwen2q8SfEGlalAqBxybcEUTIZMXcwG2v9BF+0i9bSLlKECxG1Ts4Q5o3xJnKPK
+         COHY5BhTB0X63B5WMCFSxFBTN1KaLUXJOYnull6KTqeO2x+HiB2xZFP9kfYukdjTZyXq
+         4nqQCZ/dgzlp4xwIvBnuaDqBp0FSShsekB766F/3yWZygrhewwKc9Qr9AyNyAI+DJg1S
+         +Njw==
+X-Gm-Message-State: AC+VfDw1JPRLoC+1P0tUj4Daz862Rp4Qo5/1BuGKz23H4/i/UUQhEASN
+        OwalWTCWTPWDqFZnb4JIOzuxpbpRtdOmYmWcM4XzPr0nnM6m+A==
+X-Google-Smtp-Source: ACHHUZ5ZRiZ3evxYl3PDPH5kOW8kA9DTwBFIDbz1j/ffQgg/vdI3dYl9C0mP0XRvVy3PWFK8xxHYGbDTbc/CHDn9TSI=
+X-Received: by 2002:a0d:ea05:0:b0:568:f2c:ee43 with SMTP id
+ t5-20020a0dea05000000b005680f2cee43mr13449240ywe.2.1685695685750; Fri, 02 Jun
+ 2023 01:48:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230602065958.2869555-1-imagedong@tencent.com>
+ <20230602065958.2869555-6-imagedong@tencent.com> <69103b6f490309c381432cae5fdabf02d80a4397.camel@linux.ibm.com>
+In-Reply-To: <69103b6f490309c381432cae5fdabf02d80a4397.camel@linux.ibm.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 2 Jun 2023 16:47:54 +0800
+Message-ID: <CADxym3bc-jY=My6iHivuani1PH838yHjdVejAcXwWk0N5Qomkg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: add testcase for
+ FENTRY/FEXIT with 6+ arguments
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     olsajiri@gmail.com, davem@davemloft.net, dsahern@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
+        shuah@kernel.org, benbjiang@tencent.com, imagedong@tencent.com,
+        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
+        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Jun 2, 2023 at 4:24=E2=80=AFPM Ilya Leoshkevich <iii@linux.ibm.com>=
+ wrote:
+>
+> On Fri, 2023-06-02 at 14:59 +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Add test7/test12/test14 in fexit_test.c and fentry_test.c to test the
+> > fentry and fexit whose target function have 7/12/14 arguments.
+> >
+> > And the testcases passed:
+> >
+> > ./test_progs -t fexit
+> > $71      fentry_fexit:OK
+> > $73/1    fexit_bpf2bpf/target_no_callees:OK
+> > $73/2    fexit_bpf2bpf/target_yes_callees:OK
+> > $73/3    fexit_bpf2bpf/func_replace:OK
+> > $73/4    fexit_bpf2bpf/func_replace_verify:OK
+> > $73/5    fexit_bpf2bpf/func_sockmap_update:OK
+> > $73/6    fexit_bpf2bpf/func_replace_return_code:OK
+> > $73/7    fexit_bpf2bpf/func_map_prog_compatibility:OK
+> > $73/8    fexit_bpf2bpf/func_replace_multi:OK
+> > $73/9    fexit_bpf2bpf/fmod_ret_freplace:OK
+> > $73/10   fexit_bpf2bpf/func_replace_global_func:OK
+> > $73/11   fexit_bpf2bpf/fentry_to_cgroup_bpf:OK
+> > $73/12   fexit_bpf2bpf/func_replace_progmap:OK
+> > $73      fexit_bpf2bpf:OK
+> > $74      fexit_sleep:OK
+> > $75      fexit_stress:OK
+> > $76      fexit_test:OK
+> > Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > ./test_progs -t fentry
+> > $71      fentry_fexit:OK
+> > $72      fentry_test:OK
+> > $140     module_fentry_shadow:OK
+> > Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  net/bpf/test_run.c                            | 30 +++++++++++++++-
+> >  .../testing/selftests/bpf/progs/fentry_test.c | 34
+> > ++++++++++++++++++
+> >  .../testing/selftests/bpf/progs/fexit_test.c  | 35
+> > +++++++++++++++++++
+> >  3 files changed, 98 insertions(+), 1 deletion(-)
+>
+> Don't you also need
+>
+> --- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+> @@ -34,7 +34,7 @@ void test_fentry_fexit(void)
+>         fentry_res =3D (__u64 *)fentry_skel->bss;
+>         fexit_res =3D (__u64 *)fexit_skel->bss;
+>         printf("%lld\n", fentry_skel->bss->test1_result);
+> -       for (i =3D 0; i < 8; i++) {
+> +       for (i =3D 0; i < 11; i++) {
+>                 ASSERT_EQ(fentry_res[i], 1, "fentry result");
+>                 ASSERT_EQ(fexit_res[i], 1, "fexit result");
+>         }
+>
+> to verify the results of the new tests?
 
-Here's a PR with a couple of MMC fixes intended for v6.4-rc5. Details about the
-highlights are as usual found in the signed tag.
+Oops, I missed this part......Thank you for reminding,
+and I'll fix it in V3.
 
-Please pull this in!
-
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit 81dce1490e28439c3cd8a8650b862a712f3061ba:
-
-  mmc: sdhci-esdhc-imx: make "no-mmc-hs400" works (2023-05-09 11:55:02 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.4-rc1-2
-
-for you to fetch changes up to 0b5d5c436a5c572a45f976cfd34a6741e143e5d9:
-
-  mmc: pwrseq: sd8787: Fix WILC CHIP_EN and RESETN toggling order (2023-05-24 14:33:32 +0200)
-
-----------------------------------------------------------------
-MMC core:
- - Fix pwrseq for WILC1000/WILC3000 SDIO card
-
-MMC host:
- - vub300: Fix invalid response handling
-
-----------------------------------------------------------------
-Deren Wu (1):
-      mmc: vub300: fix invalid response handling
-
-Marek Vasut (1):
-      mmc: pwrseq: sd8787: Fix WILC CHIP_EN and RESETN toggling order
-
- drivers/mmc/core/pwrseq_sd8787.c | 34 ++++++++++++++++++++++++++--------
- drivers/mmc/host/vub300.c        |  3 +++
- 2 files changed, 29 insertions(+), 8 deletions(-)
+Thanks!
+Menglong Dong
