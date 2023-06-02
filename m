@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33E57209C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E6E7209C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237203AbjFBTYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
+        id S234812AbjFBT04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235251AbjFBTYN (ORCPT
+        with ESMTP id S232213AbjFBT0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:24:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3321BE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685733804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hl/Yio++/nUxex1lxp6/0KZZRVMOQifT21+LBrMdJ5A=;
-        b=dDibgMqJfHY9EacCDw9HaMdM6UMfkAAp8zCrNvBXj9IQB+EhzjdJ5IeQsYP5h29a+qqLYg
-        9UgRrvTZWwKyTeEgzxVVgNGRYFkRIfBNYB6Hf1n6IfvzyYzBwuHSE+uGjps+Gc9nVJw6US
-        Cd7+Ncj1NIvl/hGEF4AtzLgAlSOcXHU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-136-s9DeVHr9PSiNgf7LjKdAhw-1; Fri, 02 Jun 2023 15:23:20 -0400
-X-MC-Unique: s9DeVHr9PSiNgf7LjKdAhw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 2 Jun 2023 15:26:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C948BCE;
+        Fri,  2 Jun 2023 12:26:53 -0700 (PDT)
+Received: from arisu.localnet (unknown [23.233.251.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD4BD85A5BA;
-        Fri,  2 Jun 2023 19:23:19 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
-        by smtp.corp.redhat.com (Postfix) with SMTP id B8E9CC154D7;
-        Fri,  2 Jun 2023 19:23:16 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri,  2 Jun 2023 21:22:58 +0200 (CEST)
-Date:   Fri, 2 Jun 2023 21:22:55 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        ebiederm@xmission.com, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [PATCH 1/1] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230602192254.GD555@redhat.com>
-References: <20230601183232.8384-1-michael.christie@oracle.com>
+        (Authenticated sender: detlev)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0850C66066EC;
+        Fri,  2 Jun 2023 20:26:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685734012;
+        bh=K2VKtEmDpy08yDsNjAgi61u3CcMiqyOtI/vNCwLfGaU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MpgWdHN9Xowv7q0wPCaVOGHELi+gsTTsQR8A2pIbhFfJEghkY56y493jFVDarsu7O
+         dRUAaEXzj8CUwQPgY1VkbBuCgME3IsDFpWJOWDDXip9TIY98ikv2rtJnW7tSWk0QJf
+         WenvFzPMDo73fivy4/tfFQRfBbP5w81N9/mX9Lv8PfHV5moA23Jy6YISpiAWsAgLfk
+         kvARRnZLQ+CTHCl3VStLQG6SVXPi3F1QxZ5jNul8LqjiSg/EFgrbVEmU28s8Kj2wtT
+         GKkb3KNUbPdO+Gapiou/O8ldel0unGq6pR0Juj5q+WZxZApylc4ZjggzuUUh6SX5DD
+         yKmMOgA6tZgEA==
+From:   Detlev Casanova <detlev.casanova@collabora.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: net: phy: Document support for external PHY
+ clk
+Date:   Fri, 02 Jun 2023 15:26:53 -0400
+Message-ID: <2288019.ElGaqSPkdT@arisu>
+In-Reply-To: <4255bc0a-491c-4fbb-88ea-ec1d864a1a24@lunn.ch>
+References: <20230602182659.307876-1-detlev.casanova@collabora.com>
+ <20230602182659.307876-3-detlev.casanova@collabora.com>
+ <4255bc0a-491c-4fbb-88ea-ec1d864a1a24@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601183232.8384-1-michael.christie@oracle.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+On Friday, June 2, 2023 2:42:38 P.M. EDT Andrew Lunn wrote:
+> On Fri, Jun 02, 2023 at 02:26:58PM -0400, Detlev Casanova wrote:
+> > Ethern PHYs can have external an clock that needs to be activated before
+> > probing the PHY.
+> 
+> `Ethernet PHYs can have an external clock.`
+> 
+> We need to be careful with 'activated before probing the PHY'. phylib
+> itself will not activate the clock. You must be putting the IDs into
+> the compatible string, so the correct driver is loaded, and its probe
+> function is called. The probe itself enables the clock, so it is not
+> before probe, but during probe.
+> 
+> I'm picky about this because we have issues with enumerating the MDIO
+> bus to find PHYs. Some boards needs the PHY taking out of reset,
+> regulators enabled, clocks enabled etc, before the PHY will respond on
+> the bus. It is hard for the core to do this, before the probe. So we
+> recommend putting IDs in the compatible, so the driver probe function
+> to do any additional setup needed.
 
-sorry, but somehow I can't understand this patch...
+That makes sense, In my head, "probing" == calling phy_write/read() functions. 
+But I get how this could be confused with the _probe() function. (And I just 
+realised that there are typos)
 
-I'll try to read it with a fresh head on Weekend, but for example,
+What about "Ethernet PHYs can have an external clock that needs to be 
+activated before communicating with the PHY" ?
 
-On 06/01, Mike Christie wrote:
->
->  static int vhost_task_fn(void *data)
->  {
->  	struct vhost_task *vtsk = data;
-> -	int ret;
-> +	bool dead = false;
-> +
-> +	for (;;) {
-> +		bool did_work;
-> +
-> +		/* mb paired w/ vhost_task_stop */
-> +		if (test_bit(VHOST_TASK_FLAGS_STOP, &vtsk->flags))
-> +			break;
-> +
-> +		if (!dead && signal_pending(current)) {
-> +			struct ksignal ksig;
-> +			/*
-> +			 * Calling get_signal will block in SIGSTOP,
-> +			 * or clear fatal_signal_pending, but remember
-> +			 * what was set.
-> +			 *
-> +			 * This thread won't actually exit until all
-> +			 * of the file descriptors are closed, and
-> +			 * the release function is called.
-> +			 */
-> +			dead = get_signal(&ksig);
-> +			if (dead)
-> +				clear_thread_flag(TIF_SIGPENDING);
+> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> > ---
+> > 
+> >  Documentation/devicetree/bindings/net/ethernet-phy.yaml | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > b/Documentation/devicetree/bindings/net/ethernet-phy.yaml index
+> > 4f574532ee13..c1241c8a3b77 100644
+> > --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> > 
+> > @@ -93,6 +93,12 @@ properties:
+> >        the turn around line low at end of the control phase of the
+> >        MDIO transaction.
+> > 
+> > +  clocks:
+> > +    maxItems: 1
+> > +    description:
+> > +      External clock connected to the PHY. If not specified it is assumed
+> > +      that the PHY uses a fixed crystal or an internal oscillator.
+> 
+> This text is good.
 
-this can't be right or I am totally confused.
-
-Another signal_wake_up() can come right after clear(SIGPENDING).
+Detlev
 
 
-Again, I'll try to re-read this patch, but let me ask anyway...
 
-Do we have a plan B? I mean... iirc you have mentioned that you can
-change these code paths to do something like
-
-	if (killed)
-		tell_the_drivers_that_all_callbacks_will_fail();
-
-
-so that vhost_worker() can exit after get_signal() returns SIGKILL.
-
-Probably I misunderstood you, but it would be nice to avoid the changes
-in coredump/etc code just to add a temporary (iiuc!) fix.
-
-Oleg.
 
