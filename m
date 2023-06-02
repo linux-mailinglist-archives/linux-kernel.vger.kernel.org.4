@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D9D72002A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FEC72002C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbjFBLL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S235203AbjFBLMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFBLL5 (ORCPT
+        with ESMTP id S234872AbjFBLMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:11:57 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CFFCE;
-        Fri,  2 Jun 2023 04:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1685704316;
-  x=1717240316;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=HAYerDlgV9aVzcCAwUf44mPymd1bdfq886ZinB7URNU=;
-  b=MvM8keXrHoN5BSLztZdg9/JsbAf0v6m9v4luIhaSyB0nf64EJpW6Att8
-   WeGFpLw4aG8xRjtOsQUOPq4C/sp0DTvFdZHjvUOr4icfulIZALM41KoGa
-   E2DN5wMXB/XExnTbiJW+wZvCCXnmkw6jEDoe6RF+mt5jUWR8W0Fu1/YSF
-   GAdqLYPCh7OZWBLWt5FPgBlWzjLGoGviOkd1h+0CUt9QN1NCKhKYXRlf6
-   ZE5ccPuo8B6hK3S+CF33ysIwwmnfMk1ZnxZ6EGfYcQhn5dpijyOs+JU4m
-   V3sI+PJ5F1Tw8+5NDkEjv/doTMeX9tOAmox2JemODACYz8F3DAoOyOcCZ
-   A==;
-From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-Date:   Fri, 2 Jun 2023 13:11:51 +0200
-Subject: [PATCH] spi: spl022: Probe defer is no error
+        Fri, 2 Jun 2023 07:12:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E901134;
+        Fri,  2 Jun 2023 04:12:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685704326; x=1717240326;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=6uwS5tU3VpEDdfZFPP/2f6PZZV0Smc/JVe9SKo6EP0U=;
+  b=kgfUVigWwiBgk7h3sO9ucMaN7nekA/O+Qjdu23s61jQGF74ncuVyK4uW
+   o850aPzovWgxiEoC/tLQOxUwInHgnWH4hI6dKwfm+n9kHZSqzLWDRIN5k
+   l+f3QswtMIQnTG/DYjG2/VQd+lhhNKnm36/+OhAVplI8AmVZlTuD0dfQw
+   Gmwe0UkkS44TDtLpA5M1fb8gYXmtSKyN6YiikBJ8Yu5Soylff50loYt3M
+   2aC2OW2IQB6RTB6bz602fRuAFwGFPItzn7LC60MENJJcGEXYFZ4tjuPUC
+   5IULj3PChOcxeOnKT2djBEWYMn2W6cSStzPwAHvlQ4uGWP6/Qu2De2P5R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353339188"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="353339188"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:12:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="820250604"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="820250604"
+Received: from rspatil-mobl3.gar.corp.intel.com ([10.251.208.112])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:12:03 -0700
+Date:   Fri, 2 Jun 2023 14:12:01 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>
+cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 8/8] platform/x86: think-lmi: Don't display unnecessary
+ authentication settings
+In-Reply-To: <20230601200552.4396-8-mpearson-lenovo@squebb.ca>
+Message-ID: <bec3684e-d9d1-d88b-846a-46a1fc481ffb@linux.intel.com>
+References: <mpearson-lenovo@squebb.ca> <20230601200552.4396-1-mpearson-lenovo@squebb.ca> <20230601200552.4396-8-mpearson-lenovo@squebb.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20230602-pl022-defer-fix-v1-1-b80bfca3e1b4@axis.com>
-X-B4-Tracking: v=1; b=H4sIAHbOeWQC/x2NQQqDQAxFryJZN5CmINKrlC5mxkQD7VSSUgTx7
- h1dPt5//A1C3CTg3m3g8rOwT21wvXRQ5lQnQRsbAxPfqCfG5UXMOIqKo9qKpEMeCuVeVKFVOYV
- g9lTLfHTvFF/xQywubX9ePZ77/gcsbRW5egAAAA==
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>,
-        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685704313; l=1252;
- i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
- bh=jQmw6Hv0CHzSP4IR3Cic/x0BJQN8cQk+MMfyUTJIvp4=;
- b=4fqQqkaAMTKgQmiutciZ4xy/njINhRTGW0CGAsJgyTQZCA1kwaBML1P6FZaTE4OxOSQH148k5
- vrPXTT817obDyhE2mkJftGjlCkKdUEiF3uHzTRwGn6a+rr9mySbMj0w
-X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
- pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/mixed; BOUNDARY="8323329-295843162-1685703976=:1742"
+Content-ID: <cf3f9d85-437a-1f94-72f-b3edfd943b19@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,40 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the spi controller is registered and the cs_gpiods cannot be
-assigned, causing a defer of the probe, there is an error print saying:
-"probe - problem registering spi master"
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This should not be announced as an error. Print this message for all
-errors except for the probe defer.
+--8323329-295843162-1685703976=:1742
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <4f5bd94-fe6b-2043-c5f3-a71a7bdebb4a@linux.intel.com>
 
-Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
----
- drivers/spi/spi-pl022.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Thu, 1 Jun 2023, Mark Pearson wrote:
 
-diff --git a/drivers/spi/spi-pl022.c b/drivers/spi/spi-pl022.c
-index 982407bc5d9f..520471dfeb11 100644
---- a/drivers/spi/spi-pl022.c
-+++ b/drivers/spi/spi-pl022.c
-@@ -2217,8 +2217,9 @@ static int pl022_probe(struct amba_device *adev, const struct amba_id *id)
- 	amba_set_drvdata(adev, pl022);
- 	status = devm_spi_register_master(&adev->dev, master);
- 	if (status != 0) {
--		dev_err(&adev->dev,
--			"probe - problem registering spi master\n");
-+		if (status != -EPROBE_DEFER)
-+			dev_err(&adev->dev,
-+				"probe - problem registering spi master\n");
- 		goto err_spi_register;
- 	}
- 	dev_dbg(dev, "probe succeeded\n");
+> If Opcode support is available (which is the standard for all platforms
+> going forward) then there is no need to have the encoding and kbdlang
+> attributes visible.
+> 
+> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 
----
-base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-change-id: 20230602-pl022-defer-fix-0f8b8c0b6eff
+Thanks a lot, the patches look good now. One small thing for future: next 
+time, try to arrange a series such that the patches with Fixes tags are 
+the first patches, in here I think it's not a big deal since 2/8 doesn't 
+seem to conflict with 3/8.
 
-Best regards,
+For all patches 1-8:
+
+Reviewed-by: Ilpo J�rvinen <ilpo.jarvinen@linux.intel.com>
+
 -- 
-Mårten Lindahl <marten.lindahl@axis.com>
-
+ i.
+--8323329-295843162-1685703976=:1742--
