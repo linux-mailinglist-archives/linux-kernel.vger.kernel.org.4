@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890B7720662
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E45472065F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236497AbjFBPiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S236411AbjFBPiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235527AbjFBPiO (ORCPT
+        with ESMTP id S235527AbjFBPiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:38:14 -0400
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4272110C8
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 08:37:51 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QXnFC0cSVzMpncH;
-        Fri,  2 Jun 2023 17:37:35 +0200 (CEST)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QXnF773rkzMq0fs;
-        Fri,  2 Jun 2023 17:37:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1685720254;
-        bh=pmg5REnYahOAeRBIXRcdMqruvN/VKQG83JV72Nx/0eM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=u2I2lq5CiYrmhn2vQqUA4w+jgY/uqSy97lFZP9ORKu2gcdykyjDg7OH4ViXRcDRA5
-         ke3Gs2ZXYAnhRNbdVzkn8t0gZgtwwNu2oZyoGMjcaoBKKQg/XtVALqtqHQ+k7yvyBp
-         +dOM3GM9HroiCCeyG8M2OZNBXkyG9s6k61rrII3E=
-Message-ID: <d8afcd26-af64-b062-8e40-b59eff9b4180@digikod.net>
-Date:   Fri, 2 Jun 2023 17:37:31 +0200
+        Fri, 2 Jun 2023 11:38:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FAAE43;
+        Fri,  2 Jun 2023 08:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685720270; x=1717256270;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cwfKHUGheGmWX/6NJ3Q4upa4hm8kRxBOVBJ1aPacf9c=;
+  b=JsOLd7sdoaDOLCYkKizqKTwatkwN44XUEf/SIuWAXEvN6dwBIyPevGuL
+   doosycksTfIfTmhA4204q4BkDsFzMWPvDNlujsc1Nt0SUJ5xcDkXrX3Xg
+   lSgvQg70mxyIipadOBkCJZrxLnT3NcezyGNk0XontiCUhggpsm0CLfgem
+   HqcKaabQ7Pl0vt5eBPPG0EzfQxCT+m5VIDcbcRnx2noIKrvGhFLhB6Xoo
+   eFBle5/zPE9oGYoM2sHvVr/KZvxbRzNg72QfY2BnLRJuL8ygxrhusQbn2
+   +Qtbo9D2dQKp09d/v4HwEkNozyPtsHUIO1MqSyzfmIiSH22nftzWLaR3D
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="419429897"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="419429897"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:37:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="882111549"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="882111549"
+Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([10.214.199.26])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 08:37:36 -0700
+Message-ID: <72e73b8e1e90c77d3f1968aca5eef8aa9a167e5e.camel@intel.com>
+Subject: Re: [PATCH v4] media: uapi: v4l: Intel metadata format update
+From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, sakari.ailus@intel.com,
+        Evgeni Raikhel <evgeni.raikhel@intel.com>, demisrael@gmail.com,
+        Nir Azkiel <nir.azkiel@intel.com>
+Date:   Fri, 02 Jun 2023 18:37:33 +0300
+In-Reply-To: <20230602152543.GJ26944@pendragon.ideasonboard.com>
+References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
+         <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
+         <20230602144624.GA3343@pendragon.ideasonboard.com>
+         <2eef3b075da7e91b938222a345e3f18f3765619f.camel@intel.com>
+         <20230602152543.GJ26944@pendragon.ideasonboard.com>
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
-Content-Language: en-US
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>,
-        ojeda@kernel.org, danny@kdrag0n.dev
-Cc:     masahiroy@kernel.org, jgg@nvidia.com, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, joe@perches.com, linux@rasmusvillemoes.dk,
-        willy@infradead.org, mailhol.vincent@wanadoo.fr
-References: <20230601075333.14021-1-ihuguet@redhat.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20230601075333.14021-1-ihuguet@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,146 +68,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good to me, thanks!
+Hi Laurent,
 
-Acked-by: Mickaël Salaün <mic@digikod.net>
+On Fri, 2023-06-02 at 18:25 +0300, Laurent Pinchart wrote:
+> Hi Dmitry,
+> =
 
-It would be nice to have a script to check files and output a diff if 
-they are not in line with this configuration. That could also be used to 
-measure how many files are compliant with these rules, and add this 
-stats in the commit message.
+> On Fri, Jun 02, 2023 at 06:00:04PM +0300, Dmitry Perchanov wrote:
+> > Hi Laurent,
+> > =
 
-For some reasons, maintainers may want to exclude some files from these 
-constraints. It would be useful to add some documentation explaining how 
-to do it.
+> > Thanks for review!
+> > I will gladly accept your proposed changes.
+> > =
+
+> > Comments inline.
+> > =
+
+> > On Fri, 2023-06-02 at 17:46 +0300, Laurent Pinchart wrote:
+> > > On Thu, Jun 01, 2023 at 07:08:46PM +0300, Dmitry Perchanov wrote:
+> > > > Update metadata structure for Intel RealSense UVC/MIPI cameras.
+> > > > Compliant to Intel Configuration version 3.
+> > > > =
+
+> > > > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> > > > ---
+> > > >  .../media/v4l/pixfmt-meta-d4xx.rst            | 52 +++++++++++++++=
++---
+> > > >  1 file changed, 46 insertions(+), 6 deletions(-)
+> > > > =
+
+> > > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx=
+.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+> > > > index 4e437ba97a0e..7482f298d0cc 100644
+> > > > --- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+> > > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
+> > > > @@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
+> > > >  Description
+> > > >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > >  =
+
+> > > > -Intel D4xx (D435 and other) cameras include per-frame metadata in =
+their UVC
+> > > > +Intel D4xx (D435, D455 and others) cameras include per-frame metad=
+ata in their UVC
+> > > >  payload headers, following the Microsoft(R) UVC extension proposal=
+ [1_]. That
+> > > >  means, that the private D4XX metadata, following the standard UVC =
+header, is
+> > > >  organised in blocks. D4XX cameras implement several standard block=
+ types,
+> > > > @@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that =
+it also includes proprietary
+> > > >  payload header data. D4xx cameras use bulk transfers and only send=
+ one payload
+> > > >  per frame, therefore their headers cannot be larger than 255 bytes.
+> > > >  =
+
+> > > > +This document implements Intel Configuration version 3 [9_].
+> > > > +
+> > > >  Below are proprietary Microsoft style metadata types, used by D4xx=
+ cameras,
+> > > >  where all fields are in little endian order:
+> > > >  =
+
+> > > > @@ -43,7 +45,7 @@ where all fields are in little endian order:
+> > > >      * - __u32 ID
+> > > >        - 0x80000000
+> > > >      * - __u32 Size
+> > > > -      - Size in bytes (currently 56)
+> > > > +      - Size in bytes, include ID (all protocol versions: 60)
+> > > >      * - __u32 Version
+> > > >        - Version of this structure. The documentation herein corres=
+ponds to
+> > > >          version xxx. The version number will be incremented when n=
+ew fields are
+> > > =
+
+> > > Should this read "version 3" instead of "version xxx" ?
+> > =
+
+> > This can read 1, 2 or 3, depends on firmware version.
+> > All cameras have same firmware. The latest will report 3.
+> =
+
+> The sentence reads
+> =
+
+> "The documentation herein corresponds to version xxx."
+> =
+
+> As you're updating the documentation to correspond to version 3, I
+> thought it would be best to make that explicit. Another option would be
+> =
+
+> "The documentation herein covers versions 1, 2 and 3."
+> =
+
+> I think I like that better. What do you think ?
+That is correct, my bad.
+Let's change:
+"This document implements Intel Configuration version 3"
+To:
+"The documentation herein covers versions 1, 2 and 3."
 
 
-On 01/06/2023 09:53, Íñigo Huguet wrote:
-> EditorConfig is a specification to define the most basic code formatting
-> stuff, and it's supported by many editors and IDEs, either directly or
-> via plugins, including VSCode/VSCodium, Vim, emacs and more.
-> 
-> It allows to define formatting style related to indentation, charset,
-> end of lines and trailing whitespaces. It also allows to apply different
-> formats for different files based on wildcards, so for example it is
-> possible to apply different configs to *.{c,h}, *.py and *.rs.
-> 
-> In linux project, defining a .editorconfig might help to those people
-> that work on different projects with different indentation styles, so
-> they cannot define a global style. Now they will directly see the
-> correct indentation on every fresh clone of the project.
-> 
-> See https://editorconfig.org
-> 
-> Co-developed-by: Danny Lin <danny@kdrag0n.dev>
-> Signed-off-by: Danny Lin <danny@kdrag0n.dev>
-> Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-> ---
-> v2:
-> - added special rule for patch files so it doesn't remove
->    trailing whitespaces, making them unusable.
-> v3:
-> - moved all rules from [*] section to all the individual
->    sections so they doesn't affect to unexpected files.
-> - added some extensions and files from a patch from Danny
->    Lin that didn't get to be merged:
->    https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdrag0n.dev/
->    However, the following file types hasn't been added
->    because they don't have a clear common style:
->    rst,pl,cocci,tc,bconf,svg,xsl,manual pages
-> v4:
-> - Analyzed with a script the styles used by different file types
-> - Added rules for awd, dts, dtsi, dtso, s, S
-> - Removed rules for rb and pm that has very few files in the tree
-> - Removed rules for tools/perf/scripts/*/bin/*
-> - Changed rules for py to better match the 2 styles that are present in
->    the tree: 4 spaces by default and tabs for files in subdirectories
->    tools/{perf,power,rcu,testing/kunit}
-> ---
->   .editorconfig                          | 32 ++++++++++++++++++++++++++
->   .gitignore                             |  1 +
->   Documentation/process/4.Coding.rst     |  4 ++++
->   Documentation/process/coding-style.rst |  4 ++++
->   4 files changed, 41 insertions(+)
->   create mode 100644 .editorconfig
-> 
-> diff --git a/.editorconfig b/.editorconfig
-> new file mode 100644
-> index 000000000000..854773350cc5
-> --- /dev/null
-> +++ b/.editorconfig
-> @@ -0,0 +1,32 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +root = true
-> +
-> +[{*.{awk,c,dts,dtsi,dtso,h,mk,s,S},Kconfig,Makefile,Makefile.*}]
-> +charset = utf-8
-> +end_of_line = lf
-> +trim_trailing_whitespace = true
-> +insert_final_newline = true
-> +indent_style = tab
-> +indent_size = 8
-> +
-> +[*.{json,py,rs}]
-> +charset = utf-8
-> +end_of_line = lf
-> +trim_trailing_whitespace = true
-> +insert_final_newline = true
-> +indent_style = space
-> +indent_size = 4
-> +
-> +# this must be below the general *.py to overwrite it
-> +[tools/{perf,power,rcu,testing/kunit}/**.py,]
-> +indent_style = tab
-> +indent_size = 8
-> +
-> +[*.yaml]
-> +charset = utf-8
-> +end_of_line = lf
-> +trim_trailing_whitespace = unset
-> +insert_final_newline = true
-> +indent_style = space
-> +indent_size = 2
-> diff --git a/.gitignore b/.gitignore
-> index 70ec6037fa7a..e4b3fe1d029b 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -100,6 +100,7 @@ modules.order
->   #
->   !.clang-format
->   !.cocciconfig
-> +!.editorconfig
->   !.get_maintainer.ignore
->   !.gitattributes
->   !.gitignore
-> diff --git a/Documentation/process/4.Coding.rst b/Documentation/process/4.Coding.rst
-> index 1f0d81f44e14..c2046dec0c2f 100644
-> --- a/Documentation/process/4.Coding.rst
-> +++ b/Documentation/process/4.Coding.rst
-> @@ -66,6 +66,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
->   See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
->   for more details.
->   
-> +Some basic editor settings, such as indentation and line endings, will be
-> +set automatically if you are using an editor that is compatible with
-> +EditorConfig. See the official EditorConfig website for more information:
-> +https://editorconfig.org/
->   
->   Abstraction layers
->   ******************
-> diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-> index 007e49ef6cec..ec96462fa8be 100644
-> --- a/Documentation/process/coding-style.rst
-> +++ b/Documentation/process/coding-style.rst
-> @@ -735,6 +735,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
->   See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
->   for more details.
->   
-> +Some basic editor settings, such as indentation and line endings, will be
-> +set automatically if you are using an editor that is compatible with
-> +EditorConfig. See the official EditorConfig website for more information:
-> +https://editorconfig.org/
->   
->   10) Kconfig configuration files
->   -------------------------------
+> =
+
+> > > > @@ -72,13 +74,17 @@ where all fields are in little endian order:
+> > > >        - Bottom border of the AE Region of Interest
+> > > >      * - __u32 Preset
+> > > >        - Preset selector value, default: 0, unless changed by the u=
+ser
+> > > > -    * - __u32 Laser mode
+> > > > -      - 0: off, 1: on
+> > > > +    * - __u8 Emitter mode (v3 only) (__u32 Laser mode for v1) [8_]
+> > > > +      - 0: off, 1: on, same as __u32 Laser mode for v1
+> > > > +    * - __u8 RFU byte (v3 only)
+> > > > +      - Spare byte for future use
+> > > > +    * - __u16 LED Power (v3 only)
+> > > > +      - Led power value 0-360 (F416 SKU)
+> > > >      * - :cspan:`1` *Capture Timing*
+> > > >      * - __u32 ID
+> > > >        - 0x80000001
+> > > >      * - __u32 Size
+> > > > -      - Size in bytes (currently 40)
+> > > > +      - Size in bytes, include ID (all protocol versions: 40)
+> > > >      * - __u32 Version
+> > > >        - Version of this structure. The documentation herein corres=
+ponds to
+> > > >          version xxx. The version number will be incremented when n=
+ew fields are
+> > > > @@ -101,7 +107,7 @@ where all fields are in little endian order:
+> > > >      * - __u32 ID
+> > > >        - 0x80000002
+> > > >      * - __u32 Size
+> > > > -      - Size in bytes (currently 40)
+> > > > +      - Size in bytes, include ID (v1:36, v3:40)
+> > > >      * - __u32 Version
+> > > >        - Version of this structure. The documentation herein corres=
+ponds to
+> > > >          version xxx. The version number will be incremented when n=
+ew fields are
+> > > > @@ -124,6 +130,14 @@ where all fields are in little endian order:
+> > > >        - Requested frame rate per second
+> > > >      * - __u16 Trigger
+> > > >        - Byte 0: bit 0: depth and RGB are synchronised, bit 1: exte=
+rnal trigger
+> > > > +    * - __u16 Calibration count (v3 only)
+> > > > +      - Calibration counter, see [4_] below
+> > > > +    * - __u8 GPIO input data (v3 only)
+As i see from the source, the GPIO input data supported from v2, so this ca=
+n be modified from "v3 only: to "v2, v3"
+Here is data from source:
+=3D=3D=3D CUT =3D=3D=3D
+Intel Configuration:
+version 2: gpioInputData added to md_configuration (with its flag)
+version 3: sub_preset_info added to md_configuration (with its flag)
+=3D=3D=3D CUT =3D=3D=3D
+Unfortunately there is no information when "Calibration counter" introduced=
+ but i can extrapolate it was from version 2.
+
+
+> > > > +      - GPIO readout, see [4_] below (Supported from FW 5.12.7.0)
+> > > > +    * - __u32 Sub-preset info (v3 only)
+> > > > +      - Sub-preset choice information, see [4_] below
+> > > > +    * - __u8 reserved (v3 only)
+"Sub-preset info" from version 3.
+> > > > +      - RFU byte.
+> > > >  =
+
+> > > >  .. _1:
+> > > >  =
+
+> > > > @@ -140,6 +154,8 @@ where all fields are in little endian order:
+> > > >    0x00000010 Exposure priority
+> > > >    0x00000020 AE ROI
+> > > >    0x00000040 Preset
+> > > > +  0x00000080 Emitter mode
+> > > > +  0x00000100 LED Power
+> > > >  =
+
+> > > >  .. _3:
+> > > >  =
+
+> > > > @@ -165,6 +181,8 @@ where all fields are in little endian order:
+> > > >    0x00000040 Framerate
+> > > >    0x00000080 Trigger
+> > > >    0x00000100 Cal count
+> > > > +  0x00000200 GPIO Input Data
+> > > > +  0x00000400 Sub-preset Info
+Here we mark which fields are relevant, there cannot be confusion from vers=
+ion 1, 2 or 3.
+> > > >  =
+
+> > > >  .. _5:
+> > > >  =
+
+> > > > @@ -211,3 +229,25 @@ Left sensor: ::
+> > > >  Fish Eye sensor: ::
+> > > >  =
+
+> > > >    1 RAW8
+> > > > +
+> > > > +.. _8:
+> > > > +
+> > > > +[8] The "Laser mode" is replaced by three different fields.
+> > > =
+
+> > > "... has been replaced in version 3 by ..."
+> > > =
+
+> > > > +"Laser" renamed to "Emitter" as there multiple technologies
+> > > =
+
+> > > s/there/there are/
+> > =
+
+> > Accepted. Thanks!
+> > =
+
+> > > > +for camera projectors. As we have another field for "Laser Power"
+> > > > +we introduced "LED Power" for extra emitter.
+> > > > +
+> > > > +The __u32 "Laser mode" integer is divided by two bytes and short: =
+::
+> > > =
+
+> > > The "Laser mode" __u32 field has been split into: ::
+> > =
+
+> > Accepted. Thanks!
+> > =
+
+> > > > +   1 __u8 Emitter mode
+> > > > +   2 __u8 RFU byte
+> > > > +   3 __u16 LED Power
+> > > > +
+> > > > +This is a change between versions 1 and 3. All versions 1,2 and 3
+> > > =
+
+> > > s/1,2/1, 2/
+> > =
+
+> > Accepted. Thanks!
+> > =
+
+> > > > +are backward compatible with same data format and they are support=
+ed.
+> > > > +See [2_] for which attributes are valid.
+> > > > +
+> > > > +.. _9:
+> > > > +
+> > > > +[9]
+> > > > +LibRealSense SDK metadata source:
+> > > =
+
+> > > I'll remove the blank line after '[9]', that is
+> > > =
+
+> > > > +[9] LibRealSense SDK metadata source:
+> > =
+
+> > Accepted. Thanks!
+> > =
+
+> > > I can fix all this when applying if you're fine with the changes.
+> > =
+
+> > Yes, I agree. Thank You for your effort!
+> > =
+
+> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > =
+
+> > > > +https://github.com/IntelRealSense/librealsense/blob/master/src/met=
+adata.h
+
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
+
