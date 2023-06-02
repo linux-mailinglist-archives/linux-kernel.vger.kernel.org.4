@@ -2,72 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DBE720953
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732BF720958
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbjFBSnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
+        id S236589AbjFBSoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236969AbjFBSnm (ORCPT
+        with ESMTP id S234942AbjFBSom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:43:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EF51B3;
-        Fri,  2 Jun 2023 11:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=jfneblYBOjYYxA0NKH+Vqb9gSU5XXDjXlUQAlaqb8HI=; b=HoI0OAuACVkzKpgJWsKJbktIJD
-        jfegeMLt39LgEMSUbh27959JFDxXgl3RUwFN1PUuIPXhOnrLGp2TWssNB9zGNJskvwnh/3yAYrXuY
-        uv0h7baMMsmjSX1J4gzNTPoH3/k8GLkt/bimnnsHQIRLZKafpPNKrwP9Jue7VAom2Uy0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q59kJ-00Ehgl-Fg; Fri, 02 Jun 2023 20:43:31 +0200
-Date:   Fri, 2 Jun 2023 20:43:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Detlev Casanova <detlev.casanova@collabora.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] net: phy: realtek: Add optional external PHY clock
-Message-ID: <f009ffe1-a72a-4910-b705-5b633bac12a6@lunn.ch>
-References: <20230602182659.307876-1-detlev.casanova@collabora.com>
- <20230602182659.307876-2-detlev.casanova@collabora.com>
+        Fri, 2 Jun 2023 14:44:42 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9BF1B6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 11:44:39 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9745ba45cd1so216999966b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 11:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685731478; x=1688323478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VS2PPB5+6vCBsSxepSbGKCuyaQT9nPsi9usTi72Jayc=;
+        b=Dh5hdhHUskk0dJUgRg/dHNjcoQaoFcCqqW49L8C4cxOuUHd7A5klJumDFALbc77kfN
+         TOe0SZh9Dxxkx8+yCDim6XmVdsfaY+BAN/Pm0iZaRA5iIdCJ7AcEHtdbfhfKBnMbqXKg
+         IrjS0jeZ4gkJK0nbaCc7bGKUFbSb6IaEGqIDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685731478; x=1688323478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VS2PPB5+6vCBsSxepSbGKCuyaQT9nPsi9usTi72Jayc=;
+        b=Jtj3FcsH2cz766ZC8RI7nOvK/7ebEaHHPY5Ho5UdrxE5lz2QALaOOeIZxrTUZ1rAsx
+         v6H+rWTdacQbj0xOXwGUiNDKYKhp9uJm4gcoK/NA320Mh5inxG6iHGwTC+tquBf1Is3E
+         2eAbZkRXTHUoEqfNMEbIgToD2BBCTm1Jn0941T5hCz0Hu/cwM9JiIX1Ss/ui8uvtt936
+         lLYY5ClsCpwUuGmVSkAXbyvKnXRK2pL3NnNdUTW5y64s0ONfNA9PPjHl3PVgCHEoSdrQ
+         yV6nUROLOjmjOVhfAt/qM1LyWb5dj5QDPUPAfhw1sNKd6YjaTt9bJhBOE50nxRch1T88
+         77hQ==
+X-Gm-Message-State: AC+VfDww/U1sKA010vy7JEkq7XKsIzZYV5TN+4Js8sIcsItBEL+bAe9r
+        f4HPIKk/932JAJutIvRY6Yp2+Hean9m34h8XJuNKOQ==
+X-Google-Smtp-Source: ACHHUZ7H8ymmvsuV8pIQreDZRzT1x8Q5ySH7cuWVFpH38pUlAJ9sGk9vksaBVqGaNtyGZXGewzGH8jOcPNcYXgPHGa4=
+X-Received: by 2002:a17:906:eec8:b0:970:c9f:2db6 with SMTP id
+ wu8-20020a170906eec800b009700c9f2db6mr11444588ejb.63.1685731478182; Fri, 02
+ Jun 2023 11:44:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602182659.307876-2-detlev.casanova@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZGzIJlCE2pcqQRFJ@bfoster> <ZGzbGg35SqMrWfpr@redhat.com>
+ <ZG1dAtHmbQ53aOhA@dread.disaster.area> <ZG+KoxDMeyogq4J0@bfoster>
+ <ZHB954zGG1ag0E/t@dread.disaster.area> <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
+ <ZHFEfngPyUOqlthr@dread.disaster.area> <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+ <ZHYB/6l5Wi+xwkbQ@redhat.com> <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+ <ZHYWAGmKhwwmTjW/@redhat.com>
+In-Reply-To: <ZHYWAGmKhwwmTjW/@redhat.com>
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+Date:   Fri, 2 Jun 2023 11:44:27 -0700
+Message-ID: <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Joe Thornber <thornber@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, dm-devel@redhat.com,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Joe Thornber <ejt@redhat.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:26:57PM -0400, Detlev Casanova wrote:
-> In some cases, the PHY can use an external clock source instead of a
-> crystal.
-> 
-> Add an optional clock in the phy node to make sure that the clock source
-> is enabled, if specified, before probing.
-> 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+On Tue, May 30, 2023 at 8:28=E2=80=AFAM Mike Snitzer <snitzer@kernel.org> w=
+rote:
+>
+> On Tue, May 30 2023 at 10:55P -0400,
+> Joe Thornber <thornber@redhat.com> wrote:
+>
+> > On Tue, May 30, 2023 at 3:02=E2=80=AFPM Mike Snitzer <snitzer@kernel.or=
+g> wrote:
+> >
+> > >
+> > > Also Joe, for you proposed dm-thinp design where you distinquish
+> > > between "provision" and "reserve": Would it make sense for REQ_META
+> > > (e.g. all XFS metadata) with REQ_PROVISION to be treated as an
+> > > LBA-specific hard request?  Whereas REQ_PROVISION on its own provides
+> > > more freedom to just reserve the length of blocks? (e.g. for XFS
+> > > delalloc where LBA range is unknown, but dm-thinp can be asked to
+> > > reserve space to accomodate it).
+> > >
+> >
+> > My proposal only involves 'reserve'.  Provisioning will be done as part=
+ of
+> > the usual io path.
+>
+> OK, I think we'd do well to pin down the top-level block interfaces in
+> question. Because this patchset's block interface patch (2/5) header
+> says:
+>
+> "This patch also adds the capability to call fallocate() in mode 0
+> on block devices, which will send REQ_OP_PROVISION to the block
+> device for the specified range,"
+>
+> So it wires up blkdev_fallocate() to call blkdev_issue_provision(). A
+> user of XFS could then use fallocate() for user data -- which would
+> cause thinp's reserve to _not_ be used for critical metadata.
+>
+> The only way to distinquish the caller (between on-behalf of user data
+> vs XFS metadata) would be REQ_META?
+>
+> So should dm-thinp have a REQ_META-based distinction? Or just treat
+> all REQ_OP_PROVISION the same?
+>
+I'm in favor of a REQ_META-based distinction. Does that imply that
+REQ_META also needs to be passed through the block/filesystem stack
+(eg. REQ_OP_PROVION + REQ_META on a loop device translates to a
+fallocate(<insert meta flag name>) to the underlying file)?
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+<bikeshed>
+I think that might have applications beyond just provisioning:
+currently, for stacked filesystems (eg filesystems residing in a file
+on top of another filesystem), even if the upper filesystem issues
+read/write requests with REQ_META | REQ_PRIO, these flags are lost in
+translation at the loop device layer.  A flag like the above would
+allow the prioritization of stacked filesystem metadata requests.
+</bikeshed>
 
-    Andrew
+Bringing the discussion back to this series for a bit, I'm still
+waiting on feedback from the Block maintainers before sending out v8
+(which at the moment, only have a
+s/EXPORT_SYMBOL/EXPORT_SYMBOL_GPL/g). I believe from the conversation
+most of the above is follow up work, but please let me know if you'd
+prefer I add some of this to the current series!
+
+Best
+Sarthak
+
+> Mike
