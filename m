@@ -2,41 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A5E71FF77
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BF271FF80
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjFBKg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        id S235638AbjFBKim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234751AbjFBKf5 (ORCPT
+        with ESMTP id S234679AbjFBKiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:35:57 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB84E43;
-        Fri,  2 Jun 2023 03:34:41 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 12:33:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685702025; bh=BFaP0Bc5Ii+o8/5LmJhFs9l0FX4Zgrji4nYoQeGg2r0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sHe2c8Yid9GaHV+KwNK8KEx8ByjVCeqLMVJHyFuOswJWYF7lxAheuxCdbPVZBJ8zQ
-         ZCVi7YO2XrKDvrNnHIna/35ybCrpPHeBHdUXjUcq4OrCz36FadA9lrew7Fyp9QUQp8
-         ta6kDxFR/V+huCFYFPUYSaq0vN5VS2aV8lyx2tJ8=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, w@1wt.eu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for
- rv32
-Message-ID: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
-References: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
- <20230602040625.24373-1-falcon@tinylab.org>
+        Fri, 2 Jun 2023 06:38:12 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE00173A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:37:24 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30ae4ec1ac7so1699827f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685702237; x=1688294237;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=9p+yTt6cvg8vUG2ftzRzXYP4tvdzivt6ek/MD3BvSqg=;
+        b=kMiA0W7FHdz+uujDyp0kMsyzJlr0kkcny33kPt906dUVlKCKD83JF+0PCWCCjGNQOQ
+         Vg2ngl7CN+L4oz8hEMY0vJa5jNykeoNYEkyntjxLl7hOZUOp8TUpwFzvrOpFWdXFsctr
+         nczNfwOEQLhUKGHlJ8b/edYweXe+1pSa6IEGolmPpSL+Y/YUxpPJRaKwVBnVJYTvv9w8
+         WSrhb45ryLpEUm0PPLn/XvevfdZ8cNiN4R4+h32FfSrIycN+Hf8z1pMWkPfkU5pldWX8
+         V5NuW9oYeN+2TtsOcuJKNcKvOH2zKIL2+IQnUkaymEQzBeTlwxsOalSM1FoeBVH6z5Ar
+         eYhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685702237; x=1688294237;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9p+yTt6cvg8vUG2ftzRzXYP4tvdzivt6ek/MD3BvSqg=;
+        b=ZXefS3988HIoGEY3Y6+pBTDPImWu0K4hOSrUP0qYwES70TtKzhG3pXIvIpgVrhUC+p
+         emt9o4CP3A7Xz89cw1dD8OHV9xe1h8g6tOp9vVZN9lKTORBInkBSYH6OuO7DnnCtjFHO
+         ghV0xBBZN9SI9pPMjTVXogP4/GQ+UpPTwMai7R1ykANSCEivN9Cv9pd24+UNkRrlh4xS
+         VgpvQ40aL4+PBsqx7pK/nGzs8VHhyln3lpVMAuC05Fqib8QwJ8U8/Z48aOPPMTfJW2lQ
+         C4B0m6EMSUab9XZ79MK6rU88s1kpChAM+zQa1vmIpZyfwbaoq366pd+e5qax/PLuT123
+         ICXA==
+X-Gm-Message-State: AC+VfDwjV+gPEMYbFSvKPekMfp3qS/hUh97V8y7fQY70cew7lu61bC+F
+        CXl7QS8xRlueT1OZt6G3hwXJDA==
+X-Google-Smtp-Source: ACHHUZ4HwsJe1KA49rn8/TM8DLfaBgWKcx6yNCY8IZEEFTpdXwm5jYa5kA5SGOfYUFHM0lNuBWAkLQ==
+X-Received: by 2002:a05:6000:1043:b0:30a:e542:c5c9 with SMTP id c3-20020a056000104300b0030ae542c5c9mr4017690wrx.24.1685702237707;
+        Fri, 02 Jun 2023 03:37:17 -0700 (PDT)
+Received: from localhost ([147.161.155.99])
+        by smtp.gmail.com with ESMTPSA id k9-20020a056000004900b002c71b4d476asm1279740wrx.106.2023.06.02.03.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 03:37:17 -0700 (PDT)
+References: <20230601134946.3887870-1-aliceryhl@google.com>
+ <20230601134946.3887870-3-aliceryhl@google.com>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: Re: [PATCH v2 2/8] rust: add offset_of! macro
+Date:   Fri, 02 Jun 2023 12:33:51 +0200
+In-reply-to: <20230601134946.3887870-3-aliceryhl@google.com>
+Message-ID: <875y862lr7.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602040625.24373-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,149 +81,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-02 12:06:25+0800, Zhangjin Wu wrote:
-> Willy, Arnd and Thomas
-> 
-> Based on your suggestions, in the comming v3, I plan to split the whole rv32
-> support to something like this:
 
-Is each of these parts a new patchset?
-I would suggest to do so.
+Alice Ryhl <aliceryhl@google.com> writes:
 
-> 1. Generic part1
-> 
->    (The old feedbacks are applied with the new Suggested-by lines, welcome your
->     additional feedbacks if there are ;-))
-> 
->     selftests/nolibc: syscall_args: use generic __NR_statx
->     tools/nolibc: add missing nanoseconds support for __NR_statx
->     selftests/nolibc: allow specify extra arguments for qemu
->     selftests/nolibc: fix up compile warning with glibc on x86_64
->     selftests/nolibc: not include limits.h for nolibc
->     selftests/nolibc: use INT_MAX instead of __INT_MAX__
->     tools/nolibc: arm: add missing my_syscall6
->     tools/nolibc: open: fix up compile warning for arm
->     selftests/nolibc: support two errnos with EXPECT_SYSER2()
->     selftests/nolibc: remove gettimeofday_bad1/2 completely
->     selftests/nolibc: add new gettimeofday test cases
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> This macro is used to compute the offset of a field in a struct.
+>
+> This commit enables an unstable feature that is necessary for using
+> the macro in a constant. However, this is not a problem as the macro
+> will become available from the Rust standard library soon [1]. The
+> unstable feature can be disabled again once that happens.
+>
+> The macro in this patch does not support sub-fields. That is, you cannot
+> write `offset_of!(MyStruct, field.sub_field)` to get the offset of
+> `sub_field` with `field`'s type being a struct with a field called
+> `sub_field`. This is because `field` might be a `Box<SubStruct>`, which
+> means that you would be trying to compute the offset to something in an
+> entirely different allocation. There's no easy way to fix the current
+> macro to support subfields, but the version being added to the standard
+> library should support it, so the limitation is temporary and not a big
+> deal.
+>
+> Link: https://github.com/rust-lang/rust/issues/106655 [1]
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> Co-developed-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> ---
+>  rust/kernel/lib.rs     | 35 +++++++++++++++++++++++++++++++++++
+>  scripts/Makefile.build |  2 +-
+>  2 files changed, 36 insertions(+), 1 deletion(-)
+>
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index eaded02ffb01..7ea777b731e6 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -14,6 +14,7 @@
+>  #![no_std]
+>  #![feature(allocator_api)]
+>  #![feature(coerce_unsized)]
+> +#![feature(const_refs_to_cell)]
+>  #![feature(dispatch_from_dyn)]
+>  #![feature(new_uninit)]
+>  #![feature(receiver_trait)]
+> @@ -98,3 +99,37 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+>      // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/issues/2094>.
+>      loop {}
+>  }
+> +
+> +/// Calculates the offset of a field from the beginning of the struct it belongs to.
+> +///
+> +/// # Examples
+> +///
+> +/// ```
+> +/// #[repr(C)]
+> +/// struct Test {
+> +///     a: u64,
+> +///     b: u32,
+> +/// }
+> +///
+> +/// assert_eq!(kernel::offset_of!(Test, b), 8);
+> +/// ```
+> +#[macro_export]
+> +macro_rules! offset_of {
+> +    ($type:path, $field:ident) => {{
 
-These all look good and non-controversial.
+Could we add a descriptive comment?
 
-> 2. Add Compile support for rv32
-> 
->    (Convert all of the unsupported syscalls to a return of -ENOSYS, this
->     allows us to fix up the test failures one by one not that urgently later)
-> 
->     tools/nolibc: fix up #error compile failures with -ENOSYS
->     tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
+           // Prevent deref coersion to `$field` by requiring `$type`
+           // has a field named `$field`
 
-These should be their own series in my opinion.
-It will likely generate some discussion.
+BR Andreas
 
->     selftests/nolibc: riscv: customize makefile for rv32
-> 
->    (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
-> 
-> 3. Fix up the left test failures one by one
+> +        let $type { $field: _, .. };
+> +        let tmp = ::core::mem::MaybeUninit::<$type>::uninit();
+> +        let outer = tmp.as_ptr();
+> +        // To avoid warnings when nesting `unsafe` blocks.
+> +        #[allow(unused_unsafe)]
+> +        // SAFETY: The pointer is valid and aligned, just not initialised; `addr_of` ensures that
+> +        // we don't actually read from `outer` (which would be UB) nor create an intermediate
+> +        // reference.
+> +        let inner = unsafe { ::core::ptr::addr_of!((*outer).$field) } as *const u8;
+> +        // To avoid warnings when nesting `unsafe` blocks.
+> +        #[allow(unused_unsafe)]
+> +        // SAFETY: The two pointers are within the same allocation block.
+> +        unsafe {
+> +            inner.offset_from(outer as *const u8) as usize
+> +        }
+> +    }};
+> +}
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 78175231c969..819510694769 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
+>  # Compile Rust sources (.rs)
+>  # ---------------------------------------------------------------------------
+>  
+> -rust_allowed_features := new_uninit
+> +rust_allowed_features := const_refs_to_cell,new_uninit
+>  
+>  rust_common_cmd = \
+>  	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
 
-I'm not a fan of adding an "official" rv32 support with still failing
-tests.
-
->    (Plan to add everyone as a standalone patchset, which will easier the review
->     and merge progress)
-> 
->    wait4 -> waitid
->    lseek -> llseek
->    gettimeofday -> clock_gettime/clock_gettime64
->    select -> pselect6/pselect6_time64
->    ppoll -> ppoll_time64
-
-I guess these new codepaths will also be used on non-rv32 architectures
-and will therefore validated without rv32.
-
-So you could submit these before the final rv32 patch in a series.
-
-> 4. Clean up some old test cases one by one
-> 
->    Like statx ...
-> 
-> Best regards,
-> Zhangjin
-> 
-> [1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-> 
-> > Both riscv64 and riscv32 have:
-> > 
-> > * the same ARCH value, it is riscv
-> > * the same arch/riscv source code tree
-> > 
-> > The only differences are:
-> > 
-> > * riscv64 uses defconfig, riscv32 uses rv32_defconfig
-> > * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
-> > * riscv32 has different compiler options (-march= and -mabi=)
-> > 
-> > So, riscv32 can share most of the settings with riscv64, there is no
-> > need to add it as a whole new architecture but just need a flag to
-> > record and reflect the difference.
-> > 
-> > The 32bit mips and loongarch may be able to use the same method, so,
-> > let's use a meaningful flag: CONFIG_32BIT. If required in the future,
-> > this flag can also be automatically loaded from
-> > include/config/auto.conf.
-> > 
-> > With this patch, it is able to run nolibc test for rv32 like this:
-> > 
-> >     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
-> >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 44088535682e..ea434a0acdc1 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
-> >  ARCH = $(SUBARCH)
-> >  endif
-> >  
-> > +# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
-> > +ifneq ($(findstring xriscv,x$(ARCH)),)
-> > +  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
-> > +  override ARCH := riscv
-> > +endif
-> > +
-> >  # kernel image names by architecture
-> >  IMAGE_i386       = arch/x86/boot/bzImage
-> >  IMAGE_x86_64     = arch/x86/boot/bzImage
-> > @@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
-> >  DEFCONFIG_arm64      = defconfig
-> >  DEFCONFIG_arm        = multi_v7_defconfig
-> >  DEFCONFIG_mips       = malta_defconfig
-> > -DEFCONFIG_riscv      = defconfig
-> > +DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
-> >  DEFCONFIG_s390       = defconfig
-> >  DEFCONFIG_loongarch  = defconfig
-> >  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-> > @@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
-> >  QEMU_ARCH_arm64      = aarch64
-> >  QEMU_ARCH_arm        = arm
-> >  QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
-> > -QEMU_ARCH_riscv      = riscv64
-> > +QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
-> >  QEMU_ARCH_s390       = s390x
-> >  QEMU_ARCH_loongarch  = loongarch64
-> >  QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-> > @@ -76,6 +82,7 @@ else
-> >  Q=@
-> >  endif
-> >  
-> > +CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
-> >  CFLAGS_s390 = -m64
-> >  CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
-> >  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-> > -- 
-> > 2.25.1
-> 
