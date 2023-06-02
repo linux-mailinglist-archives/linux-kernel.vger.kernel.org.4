@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091A871FCEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4355371FCED
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234475AbjFBJAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S234623AbjFBJBm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 05:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234055AbjFBJAV (ORCPT
+        with ESMTP id S234774AbjFBJBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:00:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254471A7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF56F64DA3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E30BC433D2;
-        Fri,  2 Jun 2023 09:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685696419;
-        bh=uOErDDWPpio4SFtiIgvWQbN5603ru0tviyKBLEbh4bI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=I1W3BB8jE3g9JzxzApKrTtUrf0IA42fYwsVNO6dZhMmIBmimm6bSgdFld9t/Q29M/
-         S8NW6B5mcvRGR7w7rqp14C9g112VLzSnssnHQDbfkcQFS0U46RWK2YKKqmdrZ9KXDh
-         rQRCqbDsmPWLrk8B8BaCgXEHBqZVCGhq/rTdS3RUbM5nHFC7Zjnr2FD/DNmTOML3oC
-         IYbqwKr6HHFntXTlCGRtYUh26dReFPibSPpPUNQJOKOlqjC4sR9uYhOE+7Lf9yXk6y
-         X7Iio2xrnYrvQHIa0OZVwinGBkw6rOYaUAUuppIRymO4Q/imO40rN6u0i48CAd6+0i
-         aSl7p2Gd9LcMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DD9F4E49FA9;
-        Fri,  2 Jun 2023 09:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 2 Jun 2023 05:01:13 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C054CE51;
+        Fri,  2 Jun 2023 02:01:11 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1q50eh-001crI-3l; Fri, 02 Jun 2023 11:01:07 +0200
+Received: from ip5b40320d.dynamic.kabel-deutschland.de ([91.64.50.13] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1q50eg-0036yt-To; Fri, 02 Jun 2023 11:01:07 +0200
+Message-ID: <1df63fac0075558850331210c28cb8fa534dc116.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v6] sh: avoid using IRQ0 on SH3/4
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>, Rich Felker <dalias@libc.org>,
+        linux-sh@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 02 Jun 2023 11:01:06 +0200
+In-Reply-To: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
+References: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: systemport: Replace platform_get_irq with
- platform_get_irq_optional
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168569641890.3424.4096762437597839432.git-patchwork-notify@kernel.org>
-Date:   Fri, 02 Jun 2023 09:00:18 +0000
-References: <20230601033002.869-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230601033002.869-1-jiasheng@iscas.ac.cn>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     justin.chen@broadcom.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.64.50.13
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Sergey!
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu,  1 Jun 2023 11:30:02 +0800 you wrote:
-> Replace platform_get_irq with platform_get_irq_optional because wol_irq
-> is optional.
+On Thu, 2023-06-01 at 23:22 +0300, Sergey Shtylyov wrote:
+> IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
+> return -EINVAL instead.  However, the kernel code supporting SH3/4 based
+> SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
+> IRQ #s from 16 instead.
 > 
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/ethernet/broadcom/bcmsysport.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+> indeed are using IRQ0 for the SMSC911x compatible Ethernet chip...
 
-Here is the summary with links:
-  - net: systemport: Replace platform_get_irq with platform_get_irq_optional
-    https://git.kernel.org/netdev/net/c/f93b30e50a81
+I don't have time today, but I will look at all current SH patches over the
+weekend. Thanks a lot for being so persistent.
 
-You are awesome, thank you!
+Adrian
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
