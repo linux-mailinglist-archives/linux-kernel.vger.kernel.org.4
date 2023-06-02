@@ -2,244 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6857871FBF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1B071FC01
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbjFBI02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S234604AbjFBI0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234532AbjFBIZz (ORCPT
+        with ESMTP id S234601AbjFBI0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:25:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3459D1B6;
-        Fri,  2 Jun 2023 01:25:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C91F41063;
-        Fri,  2 Jun 2023 01:26:14 -0700 (PDT)
-Received: from [10.57.22.125] (unknown [10.57.22.125])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA7D83F67D;
-        Fri,  2 Jun 2023 01:25:26 -0700 (PDT)
-Message-ID: <222b86c9-2a6f-cb9f-8803-406a724614c7@arm.com>
-Date:   Fri, 2 Jun 2023 09:25:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 06/11] coresight-tpdm: Add node to set dsb programming
- mode
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-7-git-send-email-quic_taozha@quicinc.com>
- <4e413a50-001d-cfbf-99a4-7e612f44ed38@arm.com>
- <053da70b-3d01-a3e5-4703-4e5cf23831ed@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <053da70b-3d01-a3e5-4703-4e5cf23831ed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 04:26:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFD71A7;
+        Fri,  2 Jun 2023 01:25:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5897B64D23;
+        Fri,  2 Jun 2023 08:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8C8C433D2;
+        Fri,  2 Jun 2023 08:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685694341;
+        bh=bNXlHhXedmdPPe/K+SVuaWMGRNYLUdQRKj6I74qlBrs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Xh7HYTpo4nMXKVmRIlBMtVQZAaJZlNJh8oodxpQMfUiZ7i03OAMyDN6rcJW+6KY67
+         nFaj4Vgy3gV2SAs2FFrgj6veNIZOhDoJBNnP+gW0309syLC6bxyNhZjS8BB+8BjgPa
+         vd/Wyj63PV1mkMuLUcHOdc+11P6LnkRWvaMJeMz+rwX4zO5CBLJ3Oldw+R5XCKeh0g
+         J/AdtophrHNobHJnSMOeV0fOALs6427GzA8qHOW81xwLuZH+XAUX/cNXavI4+kQI5+
+         HKc5qB9ke7zuoPIFMapN9VOS0jgv332F8kDDJ86FZUpZgRQ0zjwzaypZIvIkeg0BBA
+         bd40/xlROVi0A==
+Received: from 90.4.23.109.rev.sfr.net ([109.23.4.90] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q506N-002H9j-8n;
+        Fri, 02 Jun 2023 09:25:39 +0100
+Date:   Fri, 02 Jun 2023 09:25:37 +0100
+Message-ID: <875y86p8xq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+In-Reply-To: <CAJHc60wKDbfQsjmxkv9A6h56NXtU=DapDynFLDtdvChX_ueQeA@mail.gmail.com>
+References: <20230519005231.3027912-1-rananta@google.com>
+        <20230519005231.3027912-4-rananta@google.com>
+        <87v8gbjkzn.wl-maz@kernel.org>
+        <CAJHc60x0iFWOFxcCYpH6bG+CinBM2TmYxvADKwOqDsUFJCr0AA@mail.gmail.com>
+        <86zg5kc2ho.wl-maz@kernel.org>
+        <CAJHc60wKDbfQsjmxkv9A6h56NXtU=DapDynFLDtdvChX_ueQeA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 109.23.4.90
+X-SA-Exim-Rcpt-To: rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, ricarkol@google.com, pbonzini@redhat.com, jingzhangos@google.com, coltonlewis@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 03:58, Tao Zhang wrote:
-> 
-> On 6/1/2023 5:23 PM, Suzuki K Poulose wrote:
->> On 27/04/2023 10:00, Tao Zhang wrote:
->>> Add node to set and show programming mode for TPDM DSB subunit.
->>> Once the DSB programming mode is set, it will be written to the
->>> register DSB_CR.
->>>
->>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>> ---
->>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 15 ++++++
->>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 62 
->>> ++++++++++++++++++++++
->>>   drivers/hwtracing/coresight/coresight-tpdm.h       | 16 ++++++
->>>   3 files changed, 93 insertions(+)
->>>
->>> diff --git 
->>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
->>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>> index 77e67f2..348e167 100644
->>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>> @@ -45,3 +45,18 @@ Description:
->>>           Accepts only one of the 2 values -  0 or 1.
->>>           0 : Set the DSB trigger type to false
->>>           1 : Set the DSB trigger type to true
->>> +
->>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_mode
->>> +Date:        March 2023
->>> +KernelVersion    6.3
->>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang 
->>> (QUIC) <quic_taozha@quicinc.com>
->>> +Description:
->>> +        (Write) Set the mode of DSB tpdm. Read the mode of DSB
->>> +        tpdm.
->>> +
->>> +        Accepts the value needs to be greater than 0. What data
->>> +        bits do is listed below.
->>> +        Bit[0:1] : Test mode control bit for choosing the inputs.
->>> +        Bit[3] : Set to 0 for low performance mode.
->>> +                 Set to 1 for high performance mode.
->>> +        Bit[4:8] : Select byte lane for high performance mode.
->>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->>> b/drivers/hwtracing/coresight/coresight-tpdm.c
->>> index 14f4352..1bacaa5 100644
->>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->>> @@ -4,6 +4,7 @@
->>>    */
->>>     #include <linux/amba/bus.h>
->>> +#include <linux/bitfield.h>
->>>   #include <linux/bitmap.h>
->>>   #include <linux/coresight.h>
->>>   #include <linux/coresight-pmu.h>
->>> @@ -43,6 +44,32 @@ static void tpdm_reset_datasets(struct 
->>> tpdm_drvdata *drvdata)
->>>       }
->>>   }
->>>   +static void set_dsb_test_mode(struct tpdm_drvdata *drvdata, u32 *val)
->>> +{
->>> +    u32 mode;
->>> +
->>> +    mode = TPDM_DSB_MODE_TEST(drvdata->dsb->mode);
->>> +    *val &= ~TPDM_DSB_TEST_MODE;
->>> +    *val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
->>> +}
->>> +
->>> +static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
->>> +{
->>> +    u32 mode;
->>> +
->>> +    mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
->>> +    *val &= ~TPDM_DSB_HPSEL;
->>> +    *val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
->>> +}
->>> +
->>> +static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
->>> +{
->>> +    if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
->>> +        *val |= TPDM_DSB_CR_MODE;
->>> +    else
->>> +        *val &= ~TPDM_DSB_CR_MODE;
->>> +}
->>> +
->>>   static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
->>>   {
->>>       if (drvdata->dsb->trig_type)
->>> @@ -64,6 +91,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata 
->>> *drvdata)
->>>       writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
->>>         val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
->>> +    /* Set the test accurate mode */
->>> +    set_dsb_test_mode(drvdata, &val);
->>> +    /* Set the byte lane for high-performance mode */
->>> +    set_dsb_hpsel_mode(drvdata, &val);
->>> +    /* Set the performance mode */
->>> +    set_dsb_perf_mode(drvdata, &val);
->>>       /* Set trigger type */
->>>       set_trigger_type(drvdata, &val);
->>>       /* Set the enable bit of DSB control register to 1 */
->>> @@ -252,6 +285,34 @@ static struct attribute_group tpdm_attr_grp = {
->>>       .attrs = tpdm_attrs,
->>>   };
->>>   +static ssize_t dsb_mode_show(struct device *dev,
->>> +                  struct device_attribute *attr,
->>> +                  char *buf)
->>> +{
->>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>> +
->>> +    return sysfs_emit(buf, "%lx\n",
->>> +             (unsigned long)drvdata->dsb->mode);
->>> +}
->>> +
->>> +static ssize_t dsb_mode_store(struct device *dev,
->>> +                   struct device_attribute *attr,
->>> +                   const char *buf,
->>> +                   size_t size)
->>> +{
->>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
->>> +    unsigned long val;
->>> +
->>> +    if ((kstrtoul(buf, 0, &val)) || val < 0)
->>> +        return -EINVAL;
->>> +
->>> +    spin_lock(&drvdata->spinlock);
->>> +    drvdata->dsb->mode = val & TPDM_MODE_ALL;
->>> +    spin_unlock(&drvdata->spinlock);
->>> +    return size;
->>> +}
->>> +static DEVICE_ATTR_RW(dsb_mode);
->>> +
->>>   static ssize_t dsb_trig_type_show(struct device *dev,
->>>                        struct device_attribute *attr, char *buf)
->>>   {
->>> @@ -323,6 +384,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
->>>   static DEVICE_ATTR_RW(dsb_trig_ts);
->>>     static struct attribute *tpdm_dsb_attrs[] = {
->>> +    &dev_attr_dsb_mode.attr,
->>>       &dev_attr_dsb_trig_ts.attr,
->>>       &dev_attr_dsb_trig_type.attr,
->>>       NULL,
->>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
->>> b/drivers/hwtracing/coresight/coresight-tpdm.h
->>> index 68f33bd..79df07e 100644
->>> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
->>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
->>> @@ -15,11 +15,25 @@
->>>     /* Enable bit for DSB subunit */
->>>   #define TPDM_DSB_CR_ENA        BIT(0)
->>> +/* Enable bit for DSB subunit perfmance mode */
->>> +#define TPDM_DSB_CR_MODE        BIT(1)
->>>   /* Enable bit for DSB subunit trigger type */
->>>   #define TPDM_DSB_CR_TRIG_TYPE        BIT(12)
->>> +
->>>   /* Enable bit for DSB subunit trigger timestamp */
->>>   #define TPDM_DSB_TIER_XTRIG_TSENAB        BIT(1)
->>>   +/* DSB programming modes */
->>> +/* Test mode control bit*/
->>> +#define TPDM_DSB_MODE_TEST(val)    (val & GENMASK(1, 0))
->>> +/* Perforceman mode */
->>
->> minor nit: typo ^^
-> I will update this in the next patch series.
->>
->>> +#define TPDM_DSB_MODE_PERF        BIT(3)
->>> +/* High performance mode */
->>> +#define TPDM_DSB_MODE_HPBYTESEL(val)    (val & GENMASK(8, 4))
->>> +#define TPDM_MODE_ALL            (0xFFFFFFF)
->>
->> GENMASK(27, 0) ?
->>
->> Also, why do we cover bits 27-0 ?
-> 
-> The TPDM mode is only represented by [0:8]bits.
-> 
-> Can I replace it with "#define TPDM_DSB_MODE(val)    (VAL & GENMASK(8, 
-> 0))"?
+On Fri, 02 Jun 2023 02:37:28 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
+>=20
+> On Wed, May 31, 2023 at 1:46=E2=80=AFAM Marc Zyngier <maz@kernel.org> wro=
+te:
+> >
+> > On Tue, 30 May 2023 22:22:23 +0100,
+> > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > >
+> > > On Mon, May 29, 2023 at 7:00=E2=80=AFAM Marc Zyngier <maz@kernel.org>=
+ wrote:
+> > > >
+> > > > On Fri, 19 May 2023 01:52:28 +0100,
+> > > > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > > > >
+> > > > > Implement kvm_arch_flush_remote_tlbs_range() for arm64
+> > > > > to invalidate the given range in the TLB.
+> > > > >
+> > > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > > ---
+> > > > >  arch/arm64/include/asm/kvm_host.h |  3 +++
+> > > > >  arch/arm64/kvm/hyp/nvhe/tlb.c     |  4 +---
+> > > > >  arch/arm64/kvm/mmu.c              | 11 +++++++++++
+> > > > >  3 files changed, 15 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/inclu=
+de/asm/kvm_host.h
+> > > > > index 81ab41b84f436..343fb530eea9c 100644
+> > > > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > > > @@ -1081,6 +1081,9 @@ struct kvm *kvm_arch_alloc_vm(void);
+> > > > >  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+> > > > >  int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+> > > > >
+> > > > > +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> > > > > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t star=
+t_gfn, u64 pages);
+> > > > > +
+> > > > >  static inline bool kvm_vm_is_protected(struct kvm *kvm)
+> > > > >  {
+> > > > >       return false;
+> > > > > diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/n=
+vhe/tlb.c
+> > > > > index d4ea549c4b5c4..d2c7c1bc6d441 100644
+> > > > > --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > > > > +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > > > > @@ -150,10 +150,8 @@ void __kvm_tlb_flush_vmid_range(struct kvm_s=
+2_mmu *mmu,
+> > > > >               return;
+> > > > >       }
+> > > > >
+> > > > > -     dsb(ishst);
+> > > > > -
+> > > > >       /* Switch to requested VMID */
+> > > > > -     __tlb_switch_to_guest(mmu, &cxt);
+> > > > > +     __tlb_switch_to_guest(mmu, &cxt, false);
+> > > >
+> > > > This hunk is in the wrong patch, isn't it?
+> > > >
+> > > Ah, you are right. It should be part of the previous patch. I think I
+> > > introduced it accidentally when I rebased the series. I'll remove it
+> > > in the next spin.
+> > >
+> > >
+> > > > >
+> > > > >       __flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0,=
+ false);
+> > > > >
+> > > > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > > > index d0a0d3dca9316..e3673b4c10292 100644
+> > > > > --- a/arch/arm64/kvm/mmu.c
+> > > > > +++ b/arch/arm64/kvm/mmu.c
+> > > > > @@ -92,6 +92,17 @@ int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+> > > > >       return 0;
+> > > > >  }
+> > > > >
+> > > > > +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t star=
+t_gfn, u64 pages)
+> > > > > +{
+> > > > > +     phys_addr_t start, end;
+> > > > > +
+> > > > > +     start =3D start_gfn << PAGE_SHIFT;
+> > > > > +     end =3D (start_gfn + pages) << PAGE_SHIFT;
+> > > > > +
+> > > > > +     kvm_call_hyp(__kvm_tlb_flush_vmid_range, &kvm->arch.mmu, st=
+art, end);
+> > > >
+> > > > So that's the point that I think is not right. It is the MMU code t=
+hat
+> > > > should drive the invalidation method, and not the HYP code. The HYP
+> > > > code should be as dumb as possible, and the logic should be kept in
+> > > > the MMU code.
+> > > >
+> > > > So when a range invalidation is forwarded to HYP, it's a *valid* ra=
+nge
+> > > > invalidation. not something that can fallback to VMID-wide invalida=
+tion.
+> > > >
+> > > I'm guessing that you are referring to patch-2. Do you recommend
+> > > moving the 'pages >=3D MAX_TLBI_RANGE_PAGES' logic here and simply
+> > > return an error? How about for the other check:
+> > > system_supports_tlb_range()?
+> > > The idea was for __kvm_tlb_flush_vmid_range() to also implement a
+> > > fallback mechanism in case the system doesn't support the range-based
+> > > instructions. But if we end up calling __kvm_tlb_flush_vmid_range()
+> > > from multiple cases, we'd end up duplicating the checks. WDYT?
+> >
+> > My take is that there should be a single helper deciding to issue
+> > either a number of range-based TLBIs depending on start/end, or a
+> > single VMID-based TLBI. Having multiple calling sites is not a
+> > problem, and even if that code gets duplicated, big deal.
+> >
+> Hypothetically, if I move the check to this patch and return an error
+> if this situation occurs, since I'm dependending on David's common MMU
+> code [1], kvm_main.c would end of calling kvm_flush_remote_tlbs() and
+> we'd be doing a VMID-based TLBI.
+> One idea would be to issue a WARN_ON() and return 0 so that we don't
+> issue any TLBIs. Thoughts?
 
-#define TPDM_DSB_MODE_MASK		GENMASK(8, 0) ?
+Then we should fix the infrastructure. And no, not issuing TLBs is
+not an acceptable outcome. Might as well panic the kernel, because
+silent memory corruption is not something I'm willing to entertain.
 
-Suzuki
+My take is as follows:
+
+- either the core code doesn't specify a range, and we blow the whole
+  thing as we do today
+
+- or it specifies a range, and we apply range invalidation as permitted
+  by the architecture and the implementation (either a *series* of
+  range invalidation, or a full VMID invalidation).
+
+As for the "common MMU" stuff, something such as "flush_remote_tlbs"
+really shows that this code isn't common at all. It is just x86 creep,
+and I have zero problem ignoring it.
+
+>=20
+> > But a hypercall that falls back to global invalidation based on a
+> > range evaluation error (more than MAX_TLBI_RANGE_PAGES) is papering
+> > over a latent bug.
+> >
+> If I understand this correctly, MAX_TLBI_RANGE_PAGES is specifically
+> the capacity of the range-based instructions itself, isn't it? Is it
+> incorrect for the caller to request a higher range be invalidated even
+> on systems that do not support these instructions? Probably that's why
+> __flush_tlb_range() falls back to a global flush when the range
+> request is exceeded?
+
+This is indeed the architectural limit. But invalidating the whole
+VMID isn't necessarily the right thing either. If you can preserve
+some of the TLBs by only issuing a couple of range invalidation that
+span *in total* more than MAX_TLBI_RANGE_PAGES.
+
+Again, what I'm objecting to is the silent upgrading to VMID-wide
+invalidation being hidden away in the HYP code. That's just wrong. The
+HYP code is not the place for abstraction.
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
