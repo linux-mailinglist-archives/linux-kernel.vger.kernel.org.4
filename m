@@ -2,214 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32B47204CB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E18B7204D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbjFBOqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S236206AbjFBOr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjFBOq3 (ORCPT
+        with ESMTP id S236197AbjFBOr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:46:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DA01B7;
-        Fri,  2 Jun 2023 07:46:28 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 15DF7A38;
-        Fri,  2 Jun 2023 16:46:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685717163;
-        bh=z/vm94G9pboNeuxHnoe0X3eCylqTCzoyopeJfwySy4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rLcjM3UHoR8TDLwZ43XxWuLnQyc5w33fCl78265PubKClB4hf6RxcFyZUNT10qQir
-         IhGBYChANaRgesRcT3uy7f9wFdrJT1ij9G6BYtW5StUh/Cb3QDPZDXCvHr7wDlxqko
-         v4KQfoU76+TCjWjFwjAJNWprWumUY22vyudxcJt4=
-Date:   Fri, 2 Jun 2023 17:46:24 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dmitry Perchanov <dmitry.perchanov@intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, sakari.ailus@intel.com,
-        Evgeni Raikhel <evgeni.raikhel@intel.com>, demisrael@gmail.com,
-        Nir Azkiel <nir.azkiel@intel.com>
-Subject: Re: [PATCH v4] media: uapi: v4l: Intel metadata format update
-Message-ID: <20230602144624.GA3343@pendragon.ideasonboard.com>
-References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
- <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
+        Fri, 2 Jun 2023 10:47:58 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0C8134
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:47:56 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5162d2373cdso2917396a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685717275; x=1688309275;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JdxTAevbk4TrZwXy2RvR6ovA+aybdENi1veBE5Q3fDQ=;
+        b=xQSX6nM0mw6zNL0oYQTsIQeZ+7Yu0xosRKBKsmzk3/ODQZN5Bnz7cavJU2RQql9GKX
+         XRMipKfbLyctWZj117wp9cCWylc5DNbku1S+r/lF4tVzFEzGlwP9ALeaDFTH5ro9Pp9N
+         urpPkvs/Quoko/hU6iDZeiaySRr7vYBSyG2rghh35Y0TUK78kH7eAdKa2oolImkGOycd
+         Gsks1rsZACS4Y8zOwyfcmprKs3SadCYo4UM+srOb6colSgiJwemy05q5Iv7oB84emdwF
+         MRMVQfyjzukWKAEvywY5sHBXIe3NfO8CbInjCJ8+NDsRBeIQV7fyuOtQcTYCmsploI+a
+         NZ9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685717275; x=1688309275;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JdxTAevbk4TrZwXy2RvR6ovA+aybdENi1veBE5Q3fDQ=;
+        b=Tc3UdcainHetN9nhn7e9g204CI2xkLeLcYgFNJcYAhpvcmJjLhgsFRH4Vbqxr5pXkB
+         ucAmPWDNvuw5gEBJJ1u9zMBBtTN6X+MkS4OOvXpKirHS0BrJH+SkV7gAC6Uo/aQtX3ah
+         acgkS1rfWtKfqkBJi5Fl0d4H7MC1uoK/uu2SyeBB2GMWnCpRx+9f/zyfNkMzG/2HMW3q
+         RxmDgwaVU9hhM160walxrSFIbOwOjuREAi5e9Eu59iBzoWRJ5qfMKCEIMo26Vmvp0QYz
+         lv+JnaMaZiSZuOz3nSbyUtI5T/XE1tO0z9OvdFDMUZAq3OCa9mVr1GdHinatZlRKKowB
+         UdCg==
+X-Gm-Message-State: AC+VfDwLnkOpTV94onZ8wZo9gydOInijccVm2t4wokjO9rXglItXI4o7
+        yABAi8sIwy/xCCgLUMzAn/REhg==
+X-Google-Smtp-Source: ACHHUZ5uj5NnGeM0VTBE5KmNrbFQ5DPxvKmLdHypfhk7mUlzG/TS3HCyQT8tTBJJV/F4zLhSAQNr7w==
+X-Received: by 2002:a17:907:74d:b0:96f:cb23:daf6 with SMTP id xc13-20020a170907074d00b0096fcb23daf6mr9886320ejb.40.1685717275152;
+        Fri, 02 Jun 2023 07:47:55 -0700 (PDT)
+Received: from localhost ([194.62.217.2])
+        by smtp.gmail.com with ESMTPSA id lx5-20020a170906af0500b00965c6c63ea3sm855185ejb.35.2023.06.02.07.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 07:47:54 -0700 (PDT)
+References: <20230601134946.3887870-1-aliceryhl@google.com>
+ <20230601134946.3887870-5-aliceryhl@google.com>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: Re: [PATCH v2 4/8] rust: workqueue: define built-in queues
+Date:   Fri, 02 Jun 2023 16:46:50 +0200
+In-reply-to: <20230601134946.3887870-5-aliceryhl@google.com>
+Message-ID: <8735392a5h.fsf@metaspace.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
 
-Thank you for the patch.
+Alice Ryhl <aliceryhl@google.com> writes:
 
-On Thu, Jun 01, 2023 at 07:08:46PM +0300, Dmitry Perchanov wrote:
-> Update metadata structure for Intel RealSense UVC/MIPI cameras.
-> Compliant to Intel Configuration version 3.
-> 
-> Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> We provide these methods because it lets us access these queues from
+> Rust without using unsafe code.
+>
+> These methods return `&'static Queue`. References annotated with the
+> 'static lifetime are used when the referent will stay alive forever.
+> That is ok for these queues because they are global variables and cannot
+> be destroyed.
+>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> Co-developed-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+
+I would suggest adding the description to freezable:
+
+"A freezable wq participates in the freeze phase of the system suspend
+operations. Work items on the wq are drained and no new work item starts
+execution until thawed."
+
+But otherwise =F0=9F=91=8D
+
+Reviewed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+
 > ---
->  .../media/v4l/pixfmt-meta-d4xx.rst            | 52 ++++++++++++++++---
->  1 file changed, 46 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> index 4e437ba97a0e..7482f298d0cc 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> @@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
->  Description
->  ===========
->  
-> -Intel D4xx (D435 and other) cameras include per-frame metadata in their UVC
-> +Intel D4xx (D435, D455 and others) cameras include per-frame metadata in their UVC
->  payload headers, following the Microsoft(R) UVC extension proposal [1_]. That
->  means, that the private D4XX metadata, following the standard UVC header, is
->  organised in blocks. D4XX cameras implement several standard block types,
-> @@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it also includes proprietary
->  payload header data. D4xx cameras use bulk transfers and only send one payload
->  per frame, therefore their headers cannot be larger than 255 bytes.
->  
-> +This document implements Intel Configuration version 3 [9_].
+>  rust/kernel/workqueue.rs | 65 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>
+> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+> index 9c630840039b..e37820f253f6 100644
+> --- a/rust/kernel/workqueue.rs
+> +++ b/rust/kernel/workqueue.rs
+> @@ -105,3 +105,68 @@ unsafe fn __enqueue<F>(self, queue_work_on: F) -> Se=
+lf::EnqueueOutput
+>      where
+>          F: FnOnce(*mut bindings::work_struct) -> bool;
+>  }
 > +
->  Below are proprietary Microsoft style metadata types, used by D4xx cameras,
->  where all fields are in little endian order:
->  
-> @@ -43,7 +45,7 @@ where all fields are in little endian order:
->      * - __u32 ID
->        - 0x80000000
->      * - __u32 Size
-> -      - Size in bytes (currently 56)
-> +      - Size in bytes, include ID (all protocol versions: 60)
->      * - __u32 Version
->        - Version of this structure. The documentation herein corresponds to
->          version xxx. The version number will be incremented when new fields are
-
-Should this read "version 3" instead of "version xxx" ?
-
-> @@ -72,13 +74,17 @@ where all fields are in little endian order:
->        - Bottom border of the AE Region of Interest
->      * - __u32 Preset
->        - Preset selector value, default: 0, unless changed by the user
-> -    * - __u32 Laser mode
-> -      - 0: off, 1: on
-> +    * - __u8 Emitter mode (v3 only) (__u32 Laser mode for v1) [8_]
-> +      - 0: off, 1: on, same as __u32 Laser mode for v1
-> +    * - __u8 RFU byte (v3 only)
-> +      - Spare byte for future use
-> +    * - __u16 LED Power (v3 only)
-> +      - Led power value 0-360 (F416 SKU)
->      * - :cspan:`1` *Capture Timing*
->      * - __u32 ID
->        - 0x80000001
->      * - __u32 Size
-> -      - Size in bytes (currently 40)
-> +      - Size in bytes, include ID (all protocol versions: 40)
->      * - __u32 Version
->        - Version of this structure. The documentation herein corresponds to
->          version xxx. The version number will be incremented when new fields are
-> @@ -101,7 +107,7 @@ where all fields are in little endian order:
->      * - __u32 ID
->        - 0x80000002
->      * - __u32 Size
-> -      - Size in bytes (currently 40)
-> +      - Size in bytes, include ID (v1:36, v3:40)
->      * - __u32 Version
->        - Version of this structure. The documentation herein corresponds to
->          version xxx. The version number will be incremented when new fields are
-> @@ -124,6 +130,14 @@ where all fields are in little endian order:
->        - Requested frame rate per second
->      * - __u16 Trigger
->        - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external trigger
-> +    * - __u16 Calibration count (v3 only)
-> +      - Calibration counter, see [4_] below
-> +    * - __u8 GPIO input data (v3 only)
-> +      - GPIO readout, see [4_] below (Supported from FW 5.12.7.0)
-> +    * - __u32 Sub-preset info (v3 only)
-> +      - Sub-preset choice information, see [4_] below
-> +    * - __u8 reserved (v3 only)
-> +      - RFU byte.
->  
->  .. _1:
->  
-> @@ -140,6 +154,8 @@ where all fields are in little endian order:
->    0x00000010 Exposure priority
->    0x00000020 AE ROI
->    0x00000040 Preset
-> +  0x00000080 Emitter mode
-> +  0x00000100 LED Power
->  
->  .. _3:
->  
-> @@ -165,6 +181,8 @@ where all fields are in little endian order:
->    0x00000040 Framerate
->    0x00000080 Trigger
->    0x00000100 Cal count
-> +  0x00000200 GPIO Input Data
-> +  0x00000400 Sub-preset Info
->  
->  .. _5:
->  
-> @@ -211,3 +229,25 @@ Left sensor: ::
->  Fish Eye sensor: ::
->  
->    1 RAW8
+> +/// Returns the system work queue (`system_wq`).
+> +///
+> +/// It is the one used by `schedule[_delayed]_work[_on]()`. Multi-CPU mu=
+lti-threaded. There are
+> +/// users which expect relatively short queue flush time.
+> +///
+> +/// Callers shouldn't queue work items which can run for too long.
+> +pub fn system() -> &'static Queue {
+> +    // SAFETY: `system_wq` is a C global, always available.
+> +    unsafe { Queue::from_raw(bindings::system_wq) }
+> +}
 > +
-> +.. _8:
+> +/// Returns the system high-priority work queue (`system_highpri_wq`).
+> +///
+> +/// It is similar to the one returned by [`system`] but for work items w=
+hich require higher
+> +/// scheduling priority.
+> +pub fn system_highpri() -> &'static Queue {
+> +    // SAFETY: `system_highpri_wq` is a C global, always available.
+> +    unsafe { Queue::from_raw(bindings::system_highpri_wq) }
+> +}
 > +
-> +[8] The "Laser mode" is replaced by three different fields.
-
-"... has been replaced in version 3 by ..."
-
-> +"Laser" renamed to "Emitter" as there multiple technologies
-
-s/there/there are/
-
-> +for camera projectors. As we have another field for "Laser Power"
-> +we introduced "LED Power" for extra emitter.
+> +/// Returns the system work queue for potentially long-running work item=
+s (`system_long_wq`).
+> +///
+> +/// It is similar to the one returned by [`system`] but may host long ru=
+nning work items. Queue
+> +/// flushing might take relatively long.
+> +pub fn system_long() -> &'static Queue {
+> +    // SAFETY: `system_long_wq` is a C global, always available.
+> +    unsafe { Queue::from_raw(bindings::system_long_wq) }
+> +}
 > +
-> +The __u32 "Laser mode" integer is divided by two bytes and short: ::
-
-The "Laser mode" __u32 field has been split into: ::
-
-
-> +   1 __u8 Emitter mode
-> +   2 __u8 RFU byte
-> +   3 __u16 LED Power
+> +/// Returns the system unbound work queue (`system_unbound_wq`).
+> +///
+> +/// Workers are not bound to any specific CPU, not concurrency managed, =
+and all queued work items
+> +/// are executed immediately as long as `max_active` limit is not reache=
+d and resources are
+> +/// available.
+> +pub fn system_unbound() -> &'static Queue {
+> +    // SAFETY: `system_unbound_wq` is a C global, always available.
+> +    unsafe { Queue::from_raw(bindings::system_unbound_wq) }
+> +}
 > +
-> +This is a change between versions 1 and 3. All versions 1,2 and 3
-
-s/1,2/1, 2/
-
-> +are backward compatible with same data format and they are supported.
-> +See [2_] for which attributes are valid.
+> +/// Returns the system freezable work queue (`system_freezable_wq`).
+> +///
+> +/// It is equivalent to the one returned by [`system`] except that it's =
+freezable.
+> +pub fn system_freezable() -> &'static Queue {
+> +    // SAFETY: `system_freezable_wq` is a C global, always available.
+> +    unsafe { Queue::from_raw(bindings::system_freezable_wq) }
+> +}
 > +
-> +.. _9:
+> +/// Returns the system power-efficient work queue (`system_power_efficie=
+nt_wq`).
+> +///
+> +/// It is inclined towards saving power and is converted to "unbound" va=
+riants if the
+> +/// `workqueue.power_efficient` kernel parameter is specified; otherwise=
+, it is similar to the one
+> +/// returned by [`system`].
+> +pub fn system_power_efficient() -> &'static Queue {
+> +    // SAFETY: `system_power_efficient_wq` is a C global, always availab=
+le.
+> +    unsafe { Queue::from_raw(bindings::system_power_efficient_wq) }
+> +}
 > +
-> +[9]
-> +LibRealSense SDK metadata source:
+> +/// Returns the system freezable power-efficient work queue (`system_fre=
+ezable_power_efficient_wq`).
+> +///
+> +/// It is similar to the one returned by [`system_power_efficient`] exce=
+pt that is freezable.
+> +pub fn system_freezable_power_efficient() -> &'static Queue {
+> +    // SAFETY: `system_freezable_power_efficient_wq` is a C global, alwa=
+ys available.
+> +    unsafe { Queue::from_raw(bindings::system_freezable_power_efficient_=
+wq) }
+> +}
 
-I'll remove the blank line after '[9]', that is
-
-> +[9] LibRealSense SDK metadata source:
-
-I can fix all this when applying if you're fine with the changes.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +https://github.com/IntelRealSense/librealsense/blob/master/src/metadata.h
-
--- 
-Regards,
-
-Laurent Pinchart
