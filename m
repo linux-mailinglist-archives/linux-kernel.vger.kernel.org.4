@@ -2,298 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E15871FE1D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02CD71FE26
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234554AbjFBJme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S235052AbjFBJox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbjFBJm2 (ORCPT
+        with ESMTP id S233639AbjFBJot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:42:28 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF9E48
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:42:14 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6af74ca9f4aso1821651a34.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1685698933; x=1688290933;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KDrhfzHICQN9ayaPuS0DNQLuInOilyGOWl7DR14+R70=;
-        b=lshe2T0z3OCvdGuihY2E2siz79o3hWdAOOHEoR8opOvVyP+2SC9F+oklcAQmh+5rRZ
-         Ox9nQGsra2mYv1vzX86ZN7daTbYatroMRQwv37RhxZQwZT298tbwvm6JQNhjDrxZVTOZ
-         Lu2CCcyA8DO6jG6hgb6tMvCcGnRaRoptWT3bpN2oW6ZeASh6AAxrcneoVuCD57h9L2Sp
-         AObqCeN6Pk6xoVWqbL8aL4hVXXMS+ovHsTiaZoVeypNPogKnvkOwtTQf6c3Gy92SfHl+
-         UE+WXY2TCWekGLIGaVJuRWaG8C1IOxaICACYQP9euiMQugHD7yF+bacwRdmKlQQSTiun
-         Jgow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685698933; x=1688290933;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KDrhfzHICQN9ayaPuS0DNQLuInOilyGOWl7DR14+R70=;
-        b=JtED2QGrs2bR5q2TyCZNXL7x6MJZJqgJ5yoxIgGY729A+9vBCGUQ5BphGuf4OeJnLd
-         1+2IRJGTwP6pyyQzDp2Y95a28V4CWD28ySTzbY494io/jA18yr3yHFL6qI1AYZrCNt1q
-         HblsWk+a4/XyAj+YpHo8bNVKGZU7q2DdZOm+Gak7lvHdcrgVQfqtmN5uiRwojaQwnjZY
-         vSHu8oEvRL1vLYnlw/EFaVCjw6FpeUDCikcfC9ET/uBUN3IUi/Arp6TS07y02AlqJErd
-         Ueihk9t8kkqvNRrPMLVnLcdSNOrEuNABtJ99MXNkCn9p0lBJEETMmBZN1qm7GZJRJ7/G
-         J8Qw==
-X-Gm-Message-State: AC+VfDyLqBESWjC6jOourqgP1RGro4hjySkmY0KGi3I4Gscny8osa1BY
-        T0rCRVNw9MPmWfG7s85kKef/CQ==
-X-Google-Smtp-Source: ACHHUZ7WLiOMxS7DeVjZ9HpgKW2Cy5XQG9WC87Hw5WaH7gQC4b+eBkqSYYqxQM6ENRqdrA2YEzm/Ug==
-X-Received: by 2002:a9d:6c90:0:b0:6af:a1d3:e7f1 with SMTP id c16-20020a9d6c90000000b006afa1d3e7f1mr2127525otr.31.1685698933551;
-        Fri, 02 Jun 2023 02:42:13 -0700 (PDT)
-Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id n10-20020a170902968a00b001b03f208323sm924463plp.64.2023.06.02.02.42.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 02:42:13 -0700 (PDT)
-Message-ID: <8bc9affb-7b72-0495-16de-c0867a141f9f@igel.co.jp>
-Date:   Fri, 2 Jun 2023 18:42:08 +0900
+        Fri, 2 Jun 2023 05:44:49 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DF4B3;
+        Fri,  2 Jun 2023 02:44:47 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5D1E980F8;
+        Fri,  2 Jun 2023 17:44:46 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
+ 2023 17:44:46 +0800
+Received: from [192.168.125.128] (183.27.98.75) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
+ 2023 17:44:44 +0800
+Message-ID: <712ffab1-5b25-f8bb-79a0-e2c0693e4c35@starfivetech.com>
+Date:   Fri, 2 Jun 2023 17:42:42 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [RFC PATCH 1/3] PCI: endpoint: support an alignment aware
- map/unmaping
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Add StarFive JH7110 PLL clock
+ generator
 Content-Language: en-US
-To:     Damien Le Moal <dlemoal@kernel.org>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        Jingoo Han <jingoohan1@gmail.com>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Frank Li <Frank.Li@nxp.com>, Li Chen <lchen@ambarella.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230113090350.1103494-1-mie@igel.co.jp>
- <20230113090350.1103494-2-mie@igel.co.jp>
- <e417f2c9-1fcb-cf57-3524-1408c9aae5fa@amd.com>
- <978b63ac-90b5-b909-d259-0668b77f1cc8@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <978b63ac-90b5-b909-d259-0668b77f1cc8@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Torsten Duwe <duwe@lst.de>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <yanhong.wang@starfivetech.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Hal Feng" <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <u-boot@lists.denx.de>
+References: <20230512022036.97987-2-xingyu.wu@starfivetech.com>
+ <20230519135733.GA10188@lst.de>
+ <20230519-smokeless-guileless-2a71cae06509@wendy>
+ <df43411e-8982-74f5-6148-e7281c37dada@starfivetech.com>
+ <20230523-fondue-monotype-0c751a8f0c13@wendy>
+ <20230523131006.46997d84@blackhole.lan>
+ <20230523-saturate-axis-f46b78b7b82b@wendy>
+ <38a9cb77-18b3-4daa-724b-9f2282f7d948@starfivetech.com>
+ <20230524-jittery-sway-41b578b24153@wendy>
+ <20230526093432.4682eab8@blackhole.lan>
+ <20230526-unwashed-musty-dee883f1d6a7@wendy>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <20230526-unwashed-musty-dee883f1d6a7@wendy>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [183.27.98.75]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Damien,
+On 2023/5/26 20:23, Conor Dooley wrote:
+> On Fri, May 26, 2023 at 09:34:32AM +0200, Torsten Duwe wrote:
+>> On Wed, 24 May 2023 11:19:48 +0100
+>> Conor Dooley <conor.dooley@microchip.com> wrote:
+>> 
+>> > On Wed, May 24, 2023 at 05:00:02PM +0800, Xingyu Wu wrote:
+>> > > On 2023/5/23 19:28, Conor Dooley wrote:
+>> > > > On Tue, May 23, 2023 at 01:10:06PM +0200, Torsten Duwe wrote:
+>> > > >> On Tue, 23 May 2023 09:28:39 +0100
+>> > > >> Conor Dooley <conor.dooley@microchip.com> wrote:
+>> > > >> 
+>> > > >> > On Tue, May 23, 2023 at 10:56:43AM +0800, Xingyu Wu wrote:
+>> > > >> > > On 2023/5/19 22:16, Conor Dooley wrote:
+>> > > >> > > > On Fri, May 19, 2023 at 03:57:33PM +0200, Torsten Duwe
+>> > > >> > > > wrote:
+>> > > >> > > >> On Fri, May 12, 2023 at 10:20:30AM +0800, Xingyu Wu wrote:
+>> [...]
+>> 
+>> > > >> > > Because PLL driver is separated from SYSCRG drivers in
+>> > > >> > > Linux, the numbering starts from 0. But in Uboot, the PLL
+>> > > >> > > driver is included in the SYSCRG driver, and the number
+>> > > >> > > follows the SYSCRG.
+>> > > >> > 
+>> > > >> > Unfortunately, how you choose to construct your drivers has
+>> > > >> > nothing to do with this.
+>> 
+>> Exactly. As I wrote (quote below), the PLLx frequencies are controlled
+>> by the I/O block SYS_SYSCON (starting there at offset 0x18), according
+>> to the public datasheets. All(?) other clocks are derived from those in
+>> the *_CRG units. That *is* the hardware to be described, in *the* (one
+>> and only!) DT. U-Boot, and any OS, are free to reorganise their driver
+>> framework around that, but the hardware description is quite clear.
+> 
+> The dt-binding that is in this series specifies that the pll clock
+> controller is a child of the syscon:
+> https://lore.kernel.org/linux-riscv/20230512022036.97987-1-xingyu.wu@starfivetech.com/T/#Z2e.:..:20230512022036.97987-6-xingyu.wu::40starfivetech.com:1soc:starfive:starfive::2cjh7110-syscon.yaml
+> 
+> That seems correct to me & U-Boot's devicetree is not compliant.
+> 
+>> > > >> > These defines/numbers appear in the dts and are part of the DT
+>> > > >> > ABI. The same dts is supposed to work for Linux & U-Boot.
+>> > > >> 
+>> > > >> The JH7110 has 6 blocks of 64k iomem in that functional area:
+>> > > >> {SYS,STG,AON} x {CRG,SYSCON}. None of these has 190 clocks.
+>> > > >> The good news: the current DTS, as proposed here and in U-Boot
+>> > > >> master, provides nodes for all 6 entities. The bad news is that
+>> > > >> the clock assignments to those nodes and their numbering is
+>> > > >> messed up.
+>> > > >> 
+>> > > >> AFAICT PLL{0,1,2} _are_ generated in SYS_SYSCON and thus U-Boot
+>> > > >> gets it wrong, in addition to the erroneous DTS.
+>> > > > 
+>> > > > The numbers are kinda hocus-pocus anyway, they are just made up
+>> > > > since the clock numbering usually isn't something with a nice TRM
+>> > > > to go and reference (unlike interrupts which usually are
+>> > > > documented in that way). It is very helpful to make them aligned
+>> > > > some register/bit positions or, but that is not required.
+>> > > > IOW U-Boot is not wrong per se to use 190 instead of 0, but it is
+>> > > > wrong to have different numbers in both places.
+>> 
+>> U-Boot reuses the Common Clock Framework from Linux, and I'm not sure
+>> whether the clock IDs need to be unique in order for the appropriate
+>> clock to be found.
+> 
+> Unique within the clock controller, otherwise it is impossible to tell
+> the difference between <&cctrl 1> and <&cctrl 1> apart! (The same
+> follows even with increased #clock-cells, something must be unique).
+> That's besides the point of this particular issue though.
+> 
+>> But that would be the only restriction, if it
+>> applies. Even then, each driver could register a clock with its own,
+>> arbitrarily chosen base offset with the CCF, so each CRG unit could
+>> still have its own clocks enumerated starting with 0 in the DTB.
+>> 
+>> > > > It sounds like you're saying that (and I have not looked) the
+>> > > > U-Boot dts actually has structural difference w.r.t. what
+>> > > > provides which clock? If so, that'll need to be fixed
+>> > > > independently of the numbering problem.
+>> 
+>> > > 
+>> > > Oh, unfortunately, the 7110 can not support to mix the uboot dtb
+>> > > and linux dtb up.
+>> > 
+>> > What does "cannot support" mean? It's normal and desirable for the
+>> 
+>> IMHO "desirable" is too weak.
+> 
+> Yeah, agreed. I just don't like being prescriptive about what happens in
+> projects that I do not maintain things for I guess.
+> 
+>> > same dtb to be usable for both. The Linux kernel's dt-bindings are
+>> > used for multiple projects, not just Linux - it'd be silly for
+>> > U-Boot, FreeBSD etc etc to go off and each have their open set of
+>> > (incompatible) bindings.
+>> > 
+>> > > If boot the Linux and should use the linux dtb instead of the uboot
+>> > > dtb. Because all clock ids and reset ids in Linux and Uboot are
+>> > > different include PLL, and some modules can work in Linux but not
+>> > > in uboot.
+>> [...]
+>> > 
+>> > > I suggest to boot Linux with its own linux dtb.
+>> 
+>> This is a fragile band-aid, to be used only as a last resort. It
+>> creates more problems than it solves. Your DTB will then match your
+>> kernel, but whether it describes the actual hardware is a game of
+>> chance. Doesn't the VisionFive2 have an RPi connector... ?
+>> 
+>> One of the IMO few valid use cases of adding a DTB to the kernel
+>> at boot is OpenWRT, when you build an OS Image for a particular piece
+>> of hardware you have at hand.
+>> 
+>> > I suggest to make sure that you can use the same dtb for both.
+>> 
+>> Interestingly enough, U-Boot already has the PLL driver in a separate
+>> file. I have a half-baked patch here that moves the sys_syscon DT
+>> matching into that file...
+> 
+> If you have patches that fix the devicetree & drivers in U-Boot, please
+> post them. I don't really care at all which set of arbitrary numbers are
+> chosen (as long as there is one and one only) but it looks like U-Boot's
+> devicetree has an incorrect description of the clock controllers.
+> 
 
-On 2023/06/02 8:43, Damien Le Moal wrote:
-> On 6/2/23 00:06, Kishon Vijay Abraham I wrote:
->> Hi Shunsuke,
->>
->> On 1/13/2023 2:33 PM, Shunsuke Mie wrote:
->>> Add an align_mem operation to the EPC ops, which function is used to
->>> pci_epc_map/unmap_addr(). These change to enable mapping for any alignment
->>> restriction of EPC. The map function maps an aligned memory to include a
->>> requested memory region.
->> I'd prefer all the PCIe address alignment restriction be handled in the
->> endpoint function drivers and not inside the core layer (esp in map and
->> unmap calls).
-> That is a really *bad* idea ! Most function drivers should be able to work with
-> any EP controller hardware. Asking these drivers to support all the alignment
-> peculiarities of every possible EP controller is impossible.
->
->> IMO, get the pci address alignment restriction using pci_epc_features.
->> And use a bigger size (based on alignment restriction) in
->> pci_epc_mem_alloc_addr() and access the allocated window using an offset
->> (based on alignment value). You can add separate helpers if required.
-> That is too simplistic and not enough. Example: Rick and I working on an nvme
-> function driver are facing a lot of issues with the EPC API for mem & mapping
-> management because we have 0 control over the PCI address that the host will
-> use. Alignment is all over the place, and the current EPC memory API
-> restrictions (window size limitations) make it impossible to transparently
-> handle all cases. We endup with NVMe command failures simply because of the API
-> limitations.
-
-I think so to.
-
-I'm also proposing virtio-console function driver[1]. I suppose the 
-virtio function
-driver and your nvme function driver are the same in that the spec is 
-defined and
-host side driver must work as is.
-
-[1] 
-https://lore.kernel.org/linux-pci/20230427104428.862643-4-mie@igel.co.jp/
-
->
-> And sure, we can modify that driver to better support the EP controller we are
-> using (rockchip). But we need to support other EP controllers as well. So API
-> changes are definitely needed. Working on that. That is not easy as the mapping
-> API and its semantic impacts data transfers (memcpy_from|toio and DMA).
->
-> I do have a patch that does something similar as this one, but at a much higher
-> level with a helper function that gives the function driver the offset into the
-> allocated memory region to use for mapping a particular PCI address. And then
-> this helper is then in turn used into a new pci_epc_map() function which does
-> mem alloc + mapping in one go based on the EPC constraints. That hides all
-> alignment details to the function drivers, which greatlyu simplyfies the code.
-> But that is not enough as alignment also implies that we have to deal with
-> boundaries (due to limited window size) and so sometimes endpu failing a mapping
-> that is too large because the host used a PCI address close to the boundary.
-> More work is needed to have pci_epc_map() also hide that with tricks like
-> allowing the allocation and mapping of multiple contiguous windows. So EPC ops
-> API changes are also needed.
-
-Could you submit the your changes if you can?
-
-I'd like to solve the current EPC limitation for the mapping in a better 
-way and avoid doing similar work.
-
->
->
->> Thanks,
->> Kishon
->>
->>> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
->>> ---
->>>    drivers/pci/endpoint/pci-epc-core.c | 57 ++++++++++++++++++++++++-----
->>>    include/linux/pci-epc.h             | 10 +++--
->>>    2 files changed, 53 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
->>> index 2542196e8c3d..60d586e05e7d 100644
->>> --- a/drivers/pci/endpoint/pci-epc-core.c
->>> +++ b/drivers/pci/endpoint/pci-epc-core.c
->>> @@ -430,8 +430,12 @@ EXPORT_SYMBOL_GPL(pci_epc_set_msix);
->>>     * Invoke to unmap the CPU address from PCI address.
->>>     */
->>>    void pci_epc_unmap_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>> -			phys_addr_t phys_addr)
->>> +			phys_addr_t phys_addr, void __iomem *virt_addr, size_t size)
->>>    {
->>> +	u64 aligned_phys;
->>> +	void __iomem *aligned_virt;
->>> +	size_t offset;
->>> +
->>>    	if (IS_ERR_OR_NULL(epc) || func_no >= epc->max_functions)
->>>    		return;
->>>    
->>> @@ -441,9 +445,22 @@ void pci_epc_unmap_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>>    	if (!epc->ops->unmap_addr)
->>>    		return;
->>>    
->>> +	if (epc->ops->align_mem) {
->>> +		mutex_lock(&epc->lock);
->>> +		aligned_phys = epc->ops->align_mem(epc, phys_addr, &size);
->>> +		mutex_unlock(&epc->lock);
->>> +	} else {
->>> +		aligned_phys = phys_addr;
->>> +	}
->>> +
->>> +	offset = phys_addr - aligned_phys;
->>> +	aligned_virt = virt_addr - offset;
->>> +
->>>    	mutex_lock(&epc->lock);
->>> -	epc->ops->unmap_addr(epc, func_no, vfunc_no, phys_addr);
->>> +	epc->ops->unmap_addr(epc, func_no, vfunc_no, aligned_phys);
->>>    	mutex_unlock(&epc->lock);
->>> +
->>> +	pci_epc_mem_free_addr(epc, aligned_phys, aligned_virt, size);
->>>    }
->>>    EXPORT_SYMBOL_GPL(pci_epc_unmap_addr);
->>>    
->>> @@ -458,26 +475,46 @@ EXPORT_SYMBOL_GPL(pci_epc_unmap_addr);
->>>     *
->>>     * Invoke to map CPU address with PCI address.
->>>     */
->>> -int pci_epc_map_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>> -		     phys_addr_t phys_addr, u64 pci_addr, size_t size)
->>> +void __iomem *pci_epc_map_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>> +		u64 pci_addr, phys_addr_t *phys_addr, size_t size)
->>>    {
->>>    	int ret;
->>> +	u64 aligned_addr;
->>> +	size_t offset;
->>> +	void __iomem *virt_addr;
->>>    
->>>    	if (IS_ERR_OR_NULL(epc) || func_no >= epc->max_functions)
->>> -		return -EINVAL;
->>> +		return ERR_PTR(-EINVAL);
->>>    
->>>    	if (vfunc_no > 0 && (!epc->max_vfs || vfunc_no > epc->max_vfs[func_no]))
->>> -		return -EINVAL;
->>> +		return ERR_PTR(-EINVAL);
->>>    
->>>    	if (!epc->ops->map_addr)
->>> -		return 0;
->>> +		return ERR_PTR(-ENOPTSUPP);
->>> +
->>> +	if (epc->ops->align_mem) {
->>> +		mutex_lock(&epc->lock);
->>> +		aligned_addr = epc->ops->align_mem(epc, pci_addr, &size);
->>> +		mutex_unlock(&epc->lock);
->>> +	} else {
->>> +		aligned_addr = pci_addr;
->>> +	}
->>> +
->>> +	offset = pci_addr - aligned_addr;
->>> +
->>> +	virt_addr = pci_epc_mem_alloc_addr(epc, phys_addr, size);
->>> +	if (!virt_addr)
->>> +		return ERR_PTR(-ENOMEM);
->>>    
->>>    	mutex_lock(&epc->lock);
->>> -	ret = epc->ops->map_addr(epc, func_no, vfunc_no, phys_addr, pci_addr,
->>> -				 size);
->>> +	ret = epc->ops->map_addr(epc, func_no, vfunc_no, *phys_addr, aligned_addr, size);
->>>    	mutex_unlock(&epc->lock);
->>> +	if (ret)
->>> +		return ERR_PTR(ret);
->>>    
->>> -	return ret;
->>> +	*phys_addr += offset;
->>> +
->>> +	return virt_addr + offset;
->>>    }
->>>    EXPORT_SYMBOL_GPL(pci_epc_map_addr);
->>>    
->>> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
->>> index a48778e1a4ee..8f29161bce80 100644
->>> --- a/include/linux/pci-epc.h
->>> +++ b/include/linux/pci-epc.h
->>> @@ -84,6 +84,7 @@ struct pci_epc_ops {
->>>    			       phys_addr_t phys_addr, u8 interrupt_num,
->>>    			       u32 entry_size, u32 *msi_data,
->>>    			       u32 *msi_addr_offset);
->>> +	u64	(*align_mem)(struct pci_epc *epc, u64 addr, size_t *size);
->>>    	int	(*start)(struct pci_epc *epc);
->>>    	void	(*stop)(struct pci_epc *epc);
->>>    	const struct pci_epc_features* (*get_features)(struct pci_epc *epc,
->>> @@ -218,11 +219,12 @@ int pci_epc_set_bar(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>>    		    struct pci_epf_bar *epf_bar);
->>>    void pci_epc_clear_bar(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>>    		       struct pci_epf_bar *epf_bar);
->>> -int pci_epc_map_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>> -		     phys_addr_t phys_addr,
->>> -		     u64 pci_addr, size_t size);
->>> +void __iomem *pci_epc_map_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>> +			       u64 pci_addr, phys_addr_t *phys_addr,
->>> +			       size_t size);
->>>    void pci_epc_unmap_addr(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>> -			phys_addr_t phys_addr);
->>> +			phys_addr_t phys_addr, void __iomem *virt_addr,
->>> +			size_t size);
->>>    int pci_epc_set_msi(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
->>>    		    u8 interrupts);
->>>    int pci_epc_get_msi(struct pci_epc *epc, u8 func_no, u8 vfunc_no);
+Thank you for your suggestions. I will discuss with my partners how to solve this problem.
 
 Best regards,
-
-Shunsuke
+Xingyu Wu
 
