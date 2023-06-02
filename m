@@ -2,136 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4DE7207E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9596C7207ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236821AbjFBQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        id S236873AbjFBQs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236840AbjFBQrB (ORCPT
+        with ESMTP id S236867AbjFBQsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:47:01 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18D91B3;
-        Fri,  2 Jun 2023 09:47:00 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f8008cb772so20788301cf.3;
-        Fri, 02 Jun 2023 09:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685724420; x=1688316420;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
-        b=qjGHtXZxoBBdS2HT2JkrKSST/yA4++3X0V+xwfmvFh9WP4br4vOwfY/p02/dOh/Hti
-         /d1coxNhXhmoHYQzGJIHccxZqRwqCIPpKsul96SdosuIgxQxByyWX8RWqLk1fVYlKLkw
-         uZlLU0Q1KKvaa0Gy0W5plYTHm9Upu2tHq5ovT8rmmRUfcw4mOiMZp9QicqJZIVNo7hhA
-         0KBsx/tOCH9SwmmSQMSOPaKlrLXBDoYRAzV3jw8crDS8C9KgKPaAs+AQ4GcQqX97+m0B
-         Q+UaZ76XrVuuVQLkp0VYh5OIQxYEtEupMTxHK2atoSEFgywcvAMTB47ukoaYqEApW+MG
-         3VnA==
+        Fri, 2 Jun 2023 12:48:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE0D1BB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685724455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dm8pZyID0DwwOZmALxTgNoRgAXLQPRwJQSjRfV59sYQ=;
+        b=gt4uGD0xNifJJrCIsEsK4n/YbFSJ/KfpsXOtNHVkQ8EKpwqrdCkH1JlsSSa290/Pnt1wOU
+        RvXR8sZwU7p2WCYOvueHWbj3LD7AhAlF0MUz6ii349Nzzrf1ZONtGt+hUdyxBDIVQ2MlNz
+        2xMpTeC0cPFycmFJ3yWBKd4VOVk5RlE=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-180-dX_IA_zoNqWO_AYM51SjXQ-1; Fri, 02 Jun 2023 12:47:32 -0400
+X-MC-Unique: dX_IA_zoNqWO_AYM51SjXQ-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62849c5e9f0so2445506d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:47:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685724420; x=1688316420;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
-        b=lGsFds7RLC3O5bjTuafItI0k/JvXmDTwYfaDXwIRJqF4QRbgkZRcD/XrxkLjx3KxUt
-         vmcg+2BMnhCiR/wYSj0sS9DJKGwiTcfknIteTKzrpBLvOCWi/j5usksj+ty3WyYNgVmT
-         8mVYNBR3RRkjVvd5YDEoXjUDRChvTymGFPpeKETkYfAsnCan+Opx9GwWfCipfRcBX65x
-         L2w2NDWYmqh0JmY+bHeESMkJmLHkB12OpFTDrI5HVrkRyEglCXvUBhixCQCaxbUfDxyF
-         s1C/vjNuaqVbltG/nvtmVhZOP+o5aM65KtvInhscibmuVLugxxv4r1y0xPMTwfI/DraL
-         lp6A==
-X-Gm-Message-State: AC+VfDyTm/v1e15LMjSWEFu4f8CXlOj0rsLGUwhEn4Ieq9FzFqfyhxNO
-        vLrXEZ5ISprrlYVd8pH4qQ==
-X-Google-Smtp-Source: ACHHUZ7EOoJZ6L7R1UJCRQzjWBBZWjNY4vgxY0heC6yYd/8OioyvT8szOiU6EybWHfv5vJbwiyYBEg==
-X-Received: by 2002:a05:622a:181b:b0:3e4:e430:94e with SMTP id t27-20020a05622a181b00b003e4e430094emr16704854qtc.64.1685724419595;
-        Fri, 02 Jun 2023 09:46:59 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id y28-20020ac87c9c000000b003e89e2b3c23sm963638qtv.58.2023.06.02.09.46.58
+        d=1e100.net; s=20221208; t=1685724452; x=1688316452;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dm8pZyID0DwwOZmALxTgNoRgAXLQPRwJQSjRfV59sYQ=;
+        b=BNjvobzcCjNxi7AGmwxnu1J5nRHgivWngc4tLRMQuc53zkcB180J+kS6H2HQmopqTn
+         ZfKrsaWNNWkatOJxQ1ISGyIfF5GTIBnQeysyPLtAXrUxF+OzNdXM83b+6j2Il6a3oFsG
+         Scym5sFRAUpVWG1d5jqaTRfGui+hqmK+vztQjoqZawVarDwiEbQfUSxJwrJYPcZHkbyD
+         3bjTUvHJ1yUTfeZRK5fdq16VkDaSXYihMWQL926BCFYk5tjFM6vbUB0uFO3B7CC5EbpV
+         8mft37BMawwoGzyiHgGBq+ag/dlCVnWKqMxCP5fp6t0IQvsyRny2dRD1mE5UoJnic6CT
+         eTmQ==
+X-Gm-Message-State: AC+VfDwSlImpqpRBdnp7xT0mu5SZlFWWQQWnX+bNGKE4+/60VcmHF06+
+        5E4Xw6c0FWqEIMyDaWkcJ/4dP6hNKgS1xAFYwAqmgc12D5nj8LyaMTyNvrlLqv89+Qn4aTGmWS0
+        TeiqtJo3YbFD6cbai9SEpNM6g
+X-Received: by 2002:a05:6214:5014:b0:628:7a68:2642 with SMTP id jo20-20020a056214501400b006287a682642mr3688995qvb.3.1685724452221;
+        Fri, 02 Jun 2023 09:47:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ54KeNLZV0UMqQZP4PlWtn06PwaLBFJmlpLuCSXJewKcqJipYhNs9jEzcrf2f96OkjZJioGrw==
+X-Received: by 2002:a05:6214:5014:b0:628:7a68:2642 with SMTP id jo20-20020a056214501400b006287a682642mr3688973qvb.3.1685724451847;
+        Fri, 02 Jun 2023 09:47:31 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id mx11-20020a0562142e0b00b005fe4a301350sm1027353qvb.48.2023.06.02.09.47.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 09:46:58 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:27c2:60bf:3f0f:e3a1])
-        by serve.minyard.net (Postfix) with ESMTPSA id B29E41800C3;
-        Fri,  2 Jun 2023 16:46:57 +0000 (UTC)
-Date:   Fri, 2 Jun 2023 11:46:56 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Craig Shelley <craig@microtron.org.uk>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Break doesn't work on a CP2105
-Message-ID: <ZHodALMLTWk72Vvm@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <ZEmDs0ASdnEAnpsL@minyard.net>
- <ZGtZKCvo71woGf9T@hovoldconsulting.com>
- <ZGtlnWGSc31Wdhxa@mail.minyard.net>
- <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+        Fri, 02 Jun 2023 09:47:31 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 12:47:28 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZHodIFQesrCA53To@x1n>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com>
+ <ZHfAOAKj1ZQJ+zSy@x1n>
+ <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
+ <ZHj7jmJ5fKla1Rax@x1n>
+ <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:53:31PM +0200, Johan Hovold wrote:
-> On Mon, May 22, 2023 at 07:52:45AM -0500, Corey Minyard wrote:
-> > On Mon, May 22, 2023 at 01:59:36PM +0200, Johan Hovold wrote:
-> 
-> > > I just verified that break works on the first port of my cp2105 but not
-> > > on the second one (I seem to receive the last characters sent instead).
-> > > 
-> > > Apparently this is expected as the datasheet (AN571) says the following
-> > > about the SET_BREAK command:
-> > > 
-> > > 	This command is not supported on the second CP2105 interface.
-> > > 
-> > > Which port are you seeing this behaviour with?
+On Fri, Jun 02, 2023 at 04:18:38PM +0500, Muhammad Usama Anjum wrote:
+> On 6/2/23 1:11 AM, Peter Xu wrote:
+> > On Thu, Jun 01, 2023 at 01:16:14PM +0500, Muhammad Usama Anjum wrote:
+> >> On 6/1/23 2:46 AM, Peter Xu wrote:
+> >>> Muhammad,
+> >>>
+> >>> Sorry, I probably can only review the non-interface part, and leave the
+> >>> interface/buffer handling, etc. review for others and real potential users
+> >>> of it..
+> >> Thank you so much for the review. I think mostly we should be okay with
+> >> interface as everybody has been making suggestions over the past revisions.
+> >>
+> >>>
+> >>> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
+> >>>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+> >>>> +					 unsigned long addr, pte_t *ptep,
+> >>>> +					 pte_t ptent)
+> >>>> +{
+> >>>> +	pte_t old_pte;
+> >>>> +
+> >>>> +	if (!huge_pte_none(ptent)) {
+> >>>> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
+> >>>> +		ptent = huge_pte_mkuffd_wp(old_pte);
+> >>>> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
+> >>>
+> >>> huge_ptep_modify_prot_start()?
+> >> Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
+> >> from its pte version.
 > > 
-> > I'm guessing this is it.  From the schematic I think this is the
-> > TXD_ECI pin, though I'm not 100% sure.  I'd have to dig through the
-> > device tree and SOC manual to be sure which port is which.
+> > Here I meant huge_ptep_modify_prot_commit()..
+> I'll update.
 > 
-> It should be the second SCI interface which do not support break.
-> 
-> > Would it be possible to return an error in this situation instead of it
-> > silently not working?  Just to avoid others having the same issue.
-> 
-> I just posted a patch series which does that. The USB serial drivers do
-> not currently return any errors related to break signalling even though
-> this has been possible since 2008.
-> 
-> The same mechanism can be used to report that break signalling is not
-> supported by a device or driver, but the USB serial drivers would be the
-> first tty drivers that actually do this. If it turns out to cause any
-> trouble we can still use this series to avoid the unnecessary wait.
-> 
-> Care to give the series a try?
-> 
-> 	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
+> > 
+> >>
+> >>>
+> >>> The other thing is what if it's a pte marker already?  What if a hugetlb
+> >>> migration entry?  Please check hugetlb_change_protection().
+> >> I've updated it in more better way. Please let me know what do you think
+> >> about the following:
+> >>
+> >> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+> >> 					 unsigned long addr, pte_t *ptep,
+> >> 					 pte_t ptent)
+> >> {
+> >> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+> >> 		return;
+> >>
+> >> 	if (is_hugetlb_entry_migration(ptent))
+> >> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >> 				pte_swp_mkuffd_wp(ptent));
+> >> 	else if (!huge_pte_none(ptent))
+> >> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+> >> 					huge_pte_mkuffd_wp(ptent));
+> >> 	else
+> >> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >> 				make_pte_marker(PTE_MARKER_UFFD_WP));
+> >> }
+> > 
+> > the is_pte_marker() check can be extended to double check
+> > pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
+> > uffd-wp bit currently we only support swapin error which should sigbus when
+> > accessed, so no point in tracking anyway.
+> Yeah, we are good with what we have as even if more bits are supported in
+> pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
+> enabled. So no other bit would be set on the marker.
 
-I have tested this series.  I can verify that one of the CP2105 ports
-(ttyUSB0) does not return an error on sending the break, and the other
-(ttyUSB1) does.  This is the only USB serial device on the system.
+I think we don't know?  swapin error bit can be set there afaiu, if someone
+swapoff -a and found a swap device broken for some swapped out ptes.
 
-However, the device hooked to the remote console (ttyUSB0), the one not
-returning an error on sending a break, still doesn't send a break.  So
-my problem isn't fixed :-(.
-
-# ls -l /dev/serial/by-path
-total 0
-lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
-lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.1-port0 -> ../../ttyUSB1
-
--corey
+But again I think that's fine for now.
 
 > 
-> Johan
+> > 
+> >>
+> >> As we always set UNPOPULATED, so markers are always set on none ptes
+> >> initially. Is it possible that a none pte becomes present, then swapped and
+> >> finally none again? So I'll do the following addition for make_uffd_wp_pte():
+> >>
+> >> --- a/fs/proc/task_mmu.c
+> >> +++ b/fs/proc/task_mmu.c
+> >> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+> >> vm_area_struct *vma,
+> >>  	} else if (is_swap_pte(ptent)) {
+> >>  		ptent = pte_swp_mkuffd_wp(ptent);
+> >>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
+> >> +	} else {
+> >> +		set_pte_at(vma->vm_mm, addr, pte,
+> >> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
+> >>  	}
+> >>  }
+> > 
+> > Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
+> > should probably keep the protocol (only set the marker when WP_UNPOPULATED
+> > for anon).
+> This function is only reachable when UNPOPULATED + Async WP are set. So we
+> don't need to use userfaultfd_wp_use_markers().
+
+I don't remember where you explicitly checked that to make sure it'll
+always be the case, but if you do it'll still be nice if you can add a
+comment right above here explaining.
+
+Or, maybe you can still use userfaultfd_wp_use_markers() here, then you can
+just WARN_ON_ONCE() on it, which looks even better?
+
+[...]
+
+> > Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
+> > address range to be scanned to me.  If it skips some unstable pmd without
+> > filling in anything it seems everything later will be shifted with
+> > PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
+> > before return.
+> I don't think this is a bug if this is how it was implemented in the first
+> place. In this task_mmu.c file, we can find several examples of the same
+> pattern that error isn't returned if pmd_trans_unstable() succeeds.
+
+I don't see why multiple same usages mean it's correct.. maybe they're all
+buggy?
+
+I can post a patch for this to collect opinions to see if I missed
+something. I'd suggest you figure out what's the right thing to do for the
+new interface and make it right from the start, no matter how it was
+implemented elsewhere.
+
+Thanks,
+
+-- 
+Peter Xu
+
