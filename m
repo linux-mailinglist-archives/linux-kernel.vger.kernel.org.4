@@ -2,191 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8688271F6F0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C27C71F6F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjFAX7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S232343AbjFBABY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFAX7S (ORCPT
+        with ESMTP id S231279AbjFBABU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:59:18 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D406C18C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 16:59:16 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351MLVQC008025;
-        Thu, 1 Jun 2023 23:58:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=1vRck28B72IdPmgUABTLokFsObGKW3UKhz/9Z8iq608=;
- b=FZWOJpLqrdYW0eY1Fbvcik/fOAk4PzQGuy1W2lXKX1tJPjP0BVgti7MWNqhFB7f5Sc69
- vroW5/xARmvdfL+08x+fdbM3r03DEwBrdnUchnqSA1S2dawWMnL/JzqloUBVINnB4/3b
- 7fqraFqSdV0MoIDKEaar7fntX1UEGui04NvXuUWySQ1E1ZYGDavJTSdK3DOmLxAmMsgb
- Jyks7Buwea3EIQ6huFEfdEkW+/iBD75CRti9zHl4rr0JhRCxmgoQ6FED2YdMoFyi3xvm
- ZbBilcv8cS+mfkeYeNIeG7iwFWl3DKbfZX+wGVmhMl/4mQBxnRCgncqEVfvZffYP3JO1 Ug== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhda22cn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Jun 2023 23:58:21 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 351NZHKT030024;
-        Thu, 1 Jun 2023 23:58:20 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qu8a8mdr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Jun 2023 23:58:20 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TDI5eM12v/MfZ8gD+8WUPpf2hoMrUbtsvNnAmHTJWb4Xzb+3RXctmHMhiUOoWLn3RWLKEqnbZP21M3/oM1xgNiKptGoV9HtVmfkuASDLBDLheip2KdPxRu4b8MdsZddULZnSNf/qTWeG8OfEdkSpcJVih91G/aMKZVyPSN7etUg4VrEuRVIUfh3IEDQx9jP1RLAzdn9YG8JYhrGvlai+pawVOmNT4e7gCijnh4vbFxex7S4e4ft9/J+YxKc7oITiHF/TWIejWZsIO5RT9eleKbi55QIO4j1uTeVQBtkC/bA6L3i9U+XfpeY04wd/8GF0UavaMaXSrYlSnfTPEmYgFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1vRck28B72IdPmgUABTLokFsObGKW3UKhz/9Z8iq608=;
- b=MnEwIVLEAbzj10tCK8zRmIwOecyamNrhr4zqFMp1nt0EJV9EKqm5VsBRzGPM5iiVudHNHntt9X99GfkEWbTY+8xF17dgMoJ/Wxi4p0fo75x+4iJkOv8cWDtHXdUH69BlHfkA1Ifx74K9aqLvcLR+uzQrrI6Pe7cPpdJfglWBiS5lk8ELjMmntEaCylS+9aITx595neV2wd9nS2h/DG56k1G0KmkDkJAs6OTdBoPkOViqz6BBjm2ZqXSXhxtrdNkHu0DdjJxJj0UytdDZaTSc5oD+7MbPjLJ96hc0M1jeTjw0gp5wLUIrualYh0sLyTGIRGbUbMsxCaNBVo1safl7Hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 1 Jun 2023 20:01:20 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF29112C;
+        Thu,  1 Jun 2023 17:01:18 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75b01944dd6so17238985a.1;
+        Thu, 01 Jun 2023 17:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1vRck28B72IdPmgUABTLokFsObGKW3UKhz/9Z8iq608=;
- b=uxCKGKEj/KM9W3fIGh1DRSBu7SSXZJuInsDrSC1EFpNhgCG8iNZwzgjEvm/rWoXfS0XNSU5gNrP6uU0N9TQZiIu+ZwvP6CmnEIUi1MURlmsYhmhFqcoh4FJAHOLMBRV38Y2eZirU8GBU0fSE3mXod9GK/AKRKl4g5MQkiEXSmtU=
-Received: from BYAPR10MB2438.namprd10.prod.outlook.com (2603:10b6:a02:aa::22)
- by IA1PR10MB6241.namprd10.prod.outlook.com (2603:10b6:208:3a3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
- 2023 23:58:15 +0000
-Received: from BYAPR10MB2438.namprd10.prod.outlook.com
- ([fe80::df1e:af95:f443:470f]) by BYAPR10MB2438.namprd10.prod.outlook.com
- ([fe80::df1e:af95:f443:470f%2]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 23:58:15 +0000
-Message-ID: <ffbfc4be-4013-574f-0ec1-f05982887775@oracle.com>
-Date:   Thu, 1 Jun 2023 16:58:09 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [RFC v3 00/21] Preserved-over-Kexec RAM
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, rppt@kernel.org, akpm@linux-foundation.org,
-        ebiederm@xmission.com, keescook@chromium.org, graf@amazon.com,
-        jason.zeng@intel.com, lei.l.li@intel.com,
-        steven.sistare@oracle.com, fam.zheng@bytedance.com,
-        mgalaxy@akamai.com, kexec@lists.infradead.org
-References: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
- <ZHf/Os9v2cx97Maw@MiWiFi-R3L-srv>
-Content-Language: en-US
-From:   Anthony Yznaga <anthony.yznaga@oracle.com>
-In-Reply-To: <ZHf/Os9v2cx97Maw@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR04CA0005.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::15) To BYAPR10MB2438.namprd10.prod.outlook.com
- (2603:10b6:a02:aa::22)
+        d=gmail.com; s=20221208; t=1685664078; x=1688256078;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UCg8WzwXak17NTUJxpDTh99QdG7Lc6KzqCJOD2KYiTA=;
+        b=mVnyUIjngL9CJuUS5Oq12mXGDGONPm6FcjRZiywI/dZZsWlioXrx9SFfIzvBG9Hvgy
+         pTmvf5lVUlpQPFOASlePXDxVSOlR+b+ONKm2E7FxS99nk4/AEHK0/WNql1DzusWXiyCb
+         vGUVaXDJPxM2EvYTV0DrWvCLDmLFi6TrBlEeoY+tUNObdjMjHLEocTtDADZXj0LGFLLs
+         Qu+gn+Q2q8LICPTlNsTx0dC+kbUwb5CTPNCJ7f3PJx7UxiMNXTjlrESdUTs5uSAHGvzH
+         7hGZdzytrS55qHkNhOpw8WSWuE8/1VfOHS8usrVTybtgcdjrcuiRsbW8La2KDsm6NI2R
+         0wow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685664078; x=1688256078;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UCg8WzwXak17NTUJxpDTh99QdG7Lc6KzqCJOD2KYiTA=;
+        b=G7WQuW5i4lnqEpDRTsf1taNhboYL+Tk/1gfyGNj4ndVf+pMg7OHVnqKjsevlzvNqli
+         W6sjGafhVlDg8OZKyQ4wPDurwDLxnWzaiwnMpGiNsiRn3gQsh8wdVQv2my0VB29mSXZi
+         C3Q5hNmnnFlupDh2pln9PvNlorl1ru9XFyoiVq+cYV+S+MhhTzb1HbRHpN4BeDzEIQfg
+         HQUo33F1A0oAQnMxahLH9VOjPpJ3qzTwKt4FR2tAvZYxgsuEA0YZTN/yvS8c6E9NvDwM
+         Djzw95tzgRCiNSYvC9ujqHykiB5RanfC2/fdKkHUlGFaZu4ilu4bfYN09ZE9OtEHlD+t
+         W7Wg==
+X-Gm-Message-State: AC+VfDyf8JvLhoIVfXK0FRkEe1DenONUCbaBnqQXPhY8FntmtqKd0ANB
+        gPZCz9kecf8Ay8a04KTzq7I=
+X-Google-Smtp-Source: ACHHUZ4Hvfb6JsqkWlR9ZbmLdULxFDLb0tHiNU/Xkd2eAOZNtG9TNNRR9kw66ZzxP4ORIEcic8d7Tg==
+X-Received: by 2002:a05:620a:17ab:b0:75b:23a1:829f with SMTP id ay43-20020a05620a17ab00b0075b23a1829fmr8311812qkb.0.1685664077619;
+        Thu, 01 Jun 2023 17:01:17 -0700 (PDT)
+Received: from [192.168.75.211] ([173.23.87.62])
+        by smtp.gmail.com with ESMTPSA id y184-20020a0dd6c1000000b00565e57e6662sm4792656ywd.55.2023.06.01.17.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 17:01:17 -0700 (PDT)
+Message-ID: <b97242cf-33cf-66b8-4816-ba1f90df41a4@gmail.com>
+Date:   Thu, 1 Jun 2023 19:01:15 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2438:EE_|IA1PR10MB6241:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2bd7372a-1597-409c-e7f7-08db62fc1034
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OwIKxRVYQYL9vwBj19Rj0cUpvgLYPv7r+KN6SL2Xm/adnN/OPZCXM69zhjuCW+K3UX9fDBt21Or7hsznQTWaovk7wBZBDXnP1xxo96EiN1M5YfgIEsda8MGx/5SHCSXzg5CGRzQ0yKhsLt9hMkIAdSVGsCxc9WyACcIfLgEueuDFAQxnORi0HAsqBMUsdkrveAnKpIH1woz9bRxsEgO0Tj9/LeR+dmoZSp6dmMUXOdCFRyNtmgLxtebrqQX1gOP8SUNA4ptEWOE+/+D6F0M7jlXqb0a8piE5ldmbeq2wZOdbKBdvDpALB0rqlmUS4WIPQ7F4D9b8+s4hzKipWFBa0J2Y++iOD3LGLezNg3AQhL9Z1E6RHu7F78SV9ClwNKGKW2ES5vKyi56uU6W+ejfr4UhOKm6xJNfnLvodQWQrSEe150vkKJMUNYJ90Ca4rbbAb8JQmGY5zySbmGiTGBqRO44oI2xlcFWCoAbwLF+/ICRow5kvrMurAi1zLmaz7IsHlqMCw9+b7qKhIHR1xJerwqjbY5GVQxttOLCe55LqLUU5YVXtHYYqA9BNpRO9zblEiwVIr80gU4qdLQlST+3eHPdwNXp2l4G0wRiLjrNRjTwDiSvuaJ/RpS05bmYZPYplTH65H53J0h+rl2bBdJdnBQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2438.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(451199021)(6506007)(508600001)(6666004)(6486002)(36756003)(186003)(53546011)(83380400001)(86362001)(2616005)(38100700002)(31696002)(26005)(6512007)(4326008)(8936002)(7416002)(6916009)(31686004)(66476007)(66946007)(66556008)(44832011)(5660300002)(8676002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UVZzWWtDR1g2MnFvQTRLbHN5YUJjRm5KSjVHdHVzdFFwTERQdnd6RVJxN3Bv?=
- =?utf-8?B?VkJOOUYwM1dNVTAvTEhoOVdTKzJ0SDRJQ0RNUm1iWll4RXdEYjhFVWMvaUNB?=
- =?utf-8?B?WjMrSjdscUIzUnl2eFdhbUhkSHdjS0JtVHlxS0pvaEFKNm5jNmFPWVNmL3J5?=
- =?utf-8?B?WjllbHZKRmo0SWtQa0dGY0dzYmh1T2Y1a1huRktNNTlzcjBYSXhxb0tpSnpS?=
- =?utf-8?B?N0tYWXBUZTFtTVVUWDVuNk0vOHNLS2g1bU91NFUweithTWYvOXZPYnhHLzZC?=
- =?utf-8?B?MTRGaDcwTTdZTUF0bWw4WHV2VkRGYUl1M2NnOW04RDNnaEhwYmZEQXF0MXIv?=
- =?utf-8?B?MmM5QnV2dHplTmtnMURNUVA3emorc3RXV2NsQU5BMnZTOVhCVnJMK0ZSYVBK?=
- =?utf-8?B?SFlRMHJ1MzVaMC84dnllejRpWmx3STBGcVM4aXVHdENYSlZPWkJVY0FvMkV3?=
- =?utf-8?B?YXR2U1ZBZzl3U0k1QUFacnBZemxid3pBK0F1R1dzT2hjZzc2cWFnV28rUWVE?=
- =?utf-8?B?S0tzRGJoNDJXK0xVcjI3WFdCSEdiQTM3RHNZQ1RMZlcxZDFmNUVMRi9hM1pV?=
- =?utf-8?B?TjV3VGdNZHNFOVhmUWt0MityNEh5UzY0UWNhR0VXcnZ1N21FMXNGZWNjc1FS?=
- =?utf-8?B?TnZ2TERDOFd1UUlsRDZaeE1weGp1WmZrYnJITmlkTkg0SUdHdlhmWDN4Ky9s?=
- =?utf-8?B?YWN4Mzg1YWhoWFRkdjNJTXNhWHkzcXA3dmdSNmUxanZtamcweEtaSmUySlBG?=
- =?utf-8?B?N3VQNVA3MkV2TmdvQmtMQWVjeUR2dFZmUlI1WThOeWxQRlQ4dnZ6UXFRQ3Bp?=
- =?utf-8?B?a3V0WUpicFhna0FqcEwxQzdoZ1RXWk1UUVkzYU5IOG9RWFdBRGtDY2pxdzFH?=
- =?utf-8?B?V2llZ0hGaUF6N0tZN2FzMURIa1M4bVFqclFlcWx0bFlDMkdqbEZncTRNRHFO?=
- =?utf-8?B?ZitFWW93WFRFREw3U0txLzc3QTRyNEMrcEhPV2lJOEQyNWJBK3k5dFpibWY1?=
- =?utf-8?B?WlovaVI2UEJxZXl1c0dDaisvQjZBc2YrZksvdUIrU2dhSy9ZM21qKzZIMTZU?=
- =?utf-8?B?by9YR01FQitkOXU4QVBkUlV5blJzTlVjWThueHV6WkFnbUNON21td1kzOG85?=
- =?utf-8?B?elFjdEJDendNcElBb0VESzZmc0VjbEpDS285RGRnY1VDNXZDcHQ5SzJ6TkZz?=
- =?utf-8?B?Zmt6M3c2WEhzQXB2TGp5T0xyMWdrdU1YOUFVSCtENVdqSWpEYU10OGxlRzRj?=
- =?utf-8?B?eHAvZTJIaXdkNGlreUM4Yk90aFlBZmJWMVZpVXpWUnBJR2dCa29ucmJ5K29E?=
- =?utf-8?B?K2NIYVhNdXhjMlFGL1RLMWFTSU5xbks4SHRSQ0ZKM29XdnBmaUl3TzR1aU1w?=
- =?utf-8?B?SHUvYzd1OXNUZ3h0UERaS3J1N2RBTjhWanpibkROQXBSMjU3QWZwaDlsdFJX?=
- =?utf-8?B?ZDVRZXRqU1dEZXlMcGZ1eVNnRFAyL2JSMTFNWG0wY1NSQXJsYWhETVBvUE04?=
- =?utf-8?B?OTB6VnA0Z2htU0pIUWtuLzBldVhWQXcxeVpURDBrUk9FWENaNmhMRzl5WG9M?=
- =?utf-8?B?K2t6cG96THEwaENaVVhQZ3dCUnc2NkdVVmdEbFZhVnYrMHA3RldPZzJHczk2?=
- =?utf-8?B?RU55cjFrcXVzQisxQWZneWxybkU4WWUxYXdTc0FNdThQN0VsZjBzZEdvYUVR?=
- =?utf-8?B?SzVRaFdXd29XSVpZdTd2Sk41S0NzSHZxTnRJaVlwQ21BUy80bmYrQ2FObm05?=
- =?utf-8?B?c0N5Vjc0VUcyU2VVSTcwT2tBd1hveVFOcDkrSSs2Sm53cGVsVXE4bXVyVTBK?=
- =?utf-8?B?RGpJNWQ1OE5mOEtpNWRoVlJDR3RFTW4vNzJINWNxUDIyWE9aWFlkeWswdjd4?=
- =?utf-8?B?OXFoVllpT243SDBxZE1FS0RzRWE2RDl3SW1vRUlkSTk3RmFmT0QrdnIwNkZr?=
- =?utf-8?B?SlNjK0JFMFpieEdiaVFLSTZ3SjlPNUo1MWIwVHRpWWF1dmVYMldiY2F2UWhz?=
- =?utf-8?B?eEJKVGdBVW83T0hzbWFpT3JVSDg4U1U0dElxdUhmRk5IbGlhcXh1WWNtL1Jm?=
- =?utf-8?B?c3VlQU5vTjFoODJsNTRaWXRmQjZWUlBSekFLdDZYeTFxaEp1eDVTZ3EvZ0px?=
- =?utf-8?B?UXFsY3BMR0V0enQvZXREbTEzTXpDRjdsSXBVMk91YnROUytlL3dPQStMaW9s?=
- =?utf-8?B?SVE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?K1ZZZ3cyOUVRb1lYQVVTUFZIWVpOdnFSUFFYUzB5RHQyMjBNMG91WHZtbFNL?=
- =?utf-8?B?UldUNmV2cmFmNG5XNE11UGZIemQ0bHRmRGMwZTJWZytQMzd0VmxLd1dseGMr?=
- =?utf-8?B?OWovUXZxM0F4VDdLVk53bnhGeFc3SVJnaDJxRDJvc1NieGtFanhRMHNUMkkx?=
- =?utf-8?B?TkxBZ3c5NllaVms4QzhmUEtzRTVIRHh1THNSWS9vb2hjaFJDYzNnYVFuaWRT?=
- =?utf-8?B?dS93dlV5ZjFGSTFKckkvT0VLdkk2bHNCS2RGMEhMbkFhamFjVWZBN2JTYjYy?=
- =?utf-8?B?amp4U3hzVGorTGpkR0l3K1NJcVBoWWk3VnRtZ2RxSkpPV1kyYmhqUFg2dW1R?=
- =?utf-8?B?WFpRZmpJTFV5U3JYcHFqOCt5OGdZTGN5TmNHL21BMTRiMGE5NGF1QWhGVnlK?=
- =?utf-8?B?N2o4MVZmNDlIaUI2ZlVkVFdNRjMvcU42QmdHMW1jalA5Ym1iQ1VHd0d2MEVW?=
- =?utf-8?B?V092dVVGWDRtODgrYTRZak9qbzhLMXdiVWZZdGxsRk80TXR2UnhMbW9NQUxj?=
- =?utf-8?B?cC9CRXlTZml2YjQzM25oS1Z6VVJuS2toTUpzK3ZWbVR1aUpJNzJVbllXYkIw?=
- =?utf-8?B?MEJtdFFpNWdaUXN6ajJuZDE4YnVmMmNGekdRblE5Y0tWVWIrSVNRdnM4Z2w0?=
- =?utf-8?B?bDhnMXZsMUg2UFJFb2VVRW5XOVgzcmZWYTE3RlJNd1IwK21RYWxNUUVDMEtS?=
- =?utf-8?B?UGJEekU5TjZqVGoxREF3aE0vNGlhM1QweTk1cnlUQ3dtZkx2TXFjcnNkT25L?=
- =?utf-8?B?OTFyY2VmbjY2L2QxQU9Ia2lSMTdlQVQwTDVJTmJ2RGVwVUV3Y1p2bk5ZdUVz?=
- =?utf-8?B?NkxqQlpYNXF6MjVXMjNpZUErZ082SC9Ub2x3cU95cUlQaW94VGF6Q052Zkh6?=
- =?utf-8?B?amM4d1lkaGF0OStKdHpUMnNldVZLdzFlSTlMaTlXUnlEOU9QcDlwbkV6V0xD?=
- =?utf-8?B?dDFFaHZ5MVUwV3o2NlJtYVNSRDlDdDBRTWpjZjZ0djBGVWVWK1RXQXFxb2N0?=
- =?utf-8?B?eTBmNjlYK1MxbnVhOEF6MjNOUFQ2VDUyYm15U2hYU25XMFhZZlg4OVphRFVt?=
- =?utf-8?B?aXdYUElIbEFQaC91dTZPa3pGbUdlWmNGZjZEZ3dEUWFNeUhOa3I2Tlk5ZUZD?=
- =?utf-8?B?MVJaMEZ0RXRQeGkzRjFoZWNWMUhLQkNqQkViVlFSR2Z3MGNTU1JhV2JxSmhV?=
- =?utf-8?B?bE5MS0NYSjc4Z2cyakFjaGppVmc4emg0amRVWm43VG5PUm1xVUZNYmtUazhY?=
- =?utf-8?B?dVF5RC91bDAvSSt3RlJTQVB4WmNSQTRlVzBpSnVoeFlMOHkyRXphc2NYUXFK?=
- =?utf-8?B?N2dQMm5LSC9nZmhoK3M3OUlRNXVmUi8wSXVlcUx2dElsdzZjbFo4K2xYR1hP?=
- =?utf-8?B?TGp6UHlFSVlWOXNYbTUvREl6OFNpcHY5KzA4SGpRcFJKMnI2eC9zYWlteVdH?=
- =?utf-8?B?S1RyOVNBNUlXN3BYOW9reEw3L0JheFp3TXpkMUVIbzR1bVJaZkJKMXBkV3FI?=
- =?utf-8?B?eFFSYW85aFVJNXpnVTk3T0EvZS9yNDFyYzVBcklDN0FEVWJlNlR5R1hnWUgv?=
- =?utf-8?B?aTFQRnhVcUdHa3VBeXJFcFd4cFVnZGNBek9DMEUzNGhXeWo5Z3p3UGl4L3dx?=
- =?utf-8?B?Y2ppNjY0SmpBaTdGenNPT2xENktxSFhsQ0hqNms1YkhqZDZ6Z0IzSHdtbFV0?=
- =?utf-8?B?aUVCN1VoSi9PK3lTRWZXQnNZTXhrZjNNcHlPMFAwSGNEckFBL2NwalErblVr?=
- =?utf-8?Q?nL7M36q4GuA+hY7+6Iz5IUSkOyLKGtzw0cYTXHG?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bd7372a-1597-409c-e7f7-08db62fc1034
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2438.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 23:58:15.0417
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: erhsGZt7rHJWHlQ0jXPqrV57JelAW3CKab3+WJFR4sI4NVRh81XliBVYUheAtvIMqTuY/blAUQopYNVq4S4VEzKPKZqluTXSMl35Ux6m9gg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6241
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306010206
-X-Proofpoint-GUID: z3GtW8Vr6caa7NvLKmdKfHXirhhJwEl0
-X-Proofpoint-ORIG-GUID: z3GtW8Vr6caa7NvLKmdKfHXirhhJwEl0
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] ACPI: resource: Remove "Zen" specific match and quirks
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
+Cc:     gch981213@gmail.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, regressions@leemhuis.info,
+        ofenfisch@googlemail.com, wse@tuxedocomputers.com,
+        adam.niederer@gmail.com, adrian@freund.io, jirislaby@kernel.org,
+        Renjith.Pananchikkal@amd.com, anson.tsao@amd.com,
+        Richard.Gong@amd.com, evilsnoo@proton.me
+References: <20230515213822.1277-1-mario.limonciello@amd.com>
+From:   Matthew Anderson <ruinairas1992@gmail.com>
+In-Reply-To: <20230515213822.1277-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -194,47 +79,246 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I tested Patch v3 and it still works on the Aya Neo Air Plus.
 
-On 5/31/23 7:15 PM, Baoquan He wrote:
-> On 04/26/23 at 05:08pm, Anthony Yznaga wrote:
->> Sending out this RFC in part to guage community interest.
->> This patchset implements preserved-over-kexec memory storage or PKRAM as a
->> method for saving memory pages of the currently executing kernel so that
->> they may be restored after kexec into a new kernel. The patches are adapted
->> from an RFC patchset sent out in 2013 by Vladimir Davydov [1]. They
->> introduce the PKRAM kernel API.
->>
->> One use case for PKRAM is preserving guest memory and/or auxillary
->> supporting data (e.g. iommu data) across kexec to support reboot of the
->> host with minimal disruption to the guest. PKRAM provides a flexible way
->> for doing this without requiring that the amount of memory used by a fixed
->> size created a priori.  Another use case is for databases to preserve their
->> block caches in shared memory across reboot.
-> If so, I have confusions, who can help clarify:
-> 1) Why kexec reboot was introduced, what do we expect kexec reboot to
->     do?
+Tested-by: Matthew Anderson<ruinairas1992@gmail.com>
+
+On 5/15/23 4:38 PM, Mario Limonciello wrote:
+> commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
+> AMD Zen platforms") attempted to overhaul the override logic so it
+> didn't apply on X86 AMD Zen systems.  This was intentional so that
+> systems would prefer DSDT values instead of default MADT value for
+> IRQ 1 on Ryzen 6000 systems which use ActiveLow for IRQ1.
 >
-> 2) If we need keep these data and those data, can we not reboot? They
->     are definitely located there w/o any concern.
+> This turned out to be a bad assumption because several vendors seem
+> to add Interrupt Source Override but don't fix the DSDT. A pile of
+> quirks was collecting that proved this wasn't sustaintable.
 >
-> 3) What if systems of AI, edge computing, HPC etc also want to carry
->     kinds of data from userspace or kernel, system status, registers
->     etc when kexec reboot is needed, while enligntened by this patch?
-
-Hi Baoquan,
-
-Avoiding a more significant disruption from having to halt or migrate
-
-VMs, failover services, etc. when a reboot is necessary to pick up
-
-security fixes is one motivation for exploring preserving memory
-
-across the reboot.
-
-
-Anthony
-
+> Adjust the logic so that only IRQ1 is overridden in Ryzen 6000 case.
 >
-> Thanks
-> Baoquan
+> This effectively reverts the following commits:
+> commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
+> GMxRGxx")
+> commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
+> commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
+> commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
 >
+> Cc: ofenfisch@googlemail.com
+> Cc: gch981213@gmail.com
+> Cc: wse@tuxedocomputers.com
+> Cc: adam.niederer@gmail.com
+> Cc: adrian@freund.io
+> Cc: jirislaby@kernel.org
+> Tested-by: Renjith.Pananchikkal@amd.com
+> Tested-by: anson.tsao@amd.com
+> Tested-by: Richard.Gong@amd.com
+> Reported-by: evilsnoo@proton.me
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217394
+> Reported-by: ruinairas1992@gmail.com
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217406
+> Fixes: 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen platforms")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>   drivers/acpi/resource.c | 154 +++++++++++++++++-----------------------
+>   1 file changed, 65 insertions(+), 89 deletions(-)
+>
+> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+> index e8492b3a393a..828adb4be721 100644
+> --- a/drivers/acpi/resource.c
+> +++ b/drivers/acpi/resource.c
+> @@ -470,53 +470,7 @@ static const struct dmi_system_id asus_laptop[] = {
+>   	{ }
+>   };
+>   
+> -static const struct dmi_system_id lenovo_laptop[] = {
+> -	{
+> -		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
+> -		},
+> -	},
+> -	{
+> -		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
+> -		},
+> -	},
+> -	{ }
+> -};
+> -
+> -static const struct dmi_system_id tongfang_gm_rg[] = {
+> -	{
+> -		.ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
+> -		.matches = {
+> -			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
+> -		},
+> -	},
+> -	{ }
+> -};
+> -
+> -static const struct dmi_system_id maingear_laptop[] = {
+> -	{
+> -		.ident = "MAINGEAR Vector Pro 2 15",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
+> -		}
+> -	},
+> -	{
+> -		.ident = "MAINGEAR Vector Pro 2 17",
+> -		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
+> -		},
+> -	},
+> -	{ }
+> -};
+> -
+> -struct irq_override_cmp {
+> +struct irq_override_dmi_cmp {
+>   	const struct dmi_system_id *system;
+>   	unsigned char irq;
+>   	unsigned char triggering;
+> @@ -525,49 +479,85 @@ struct irq_override_cmp {
+>   	bool override;
+>   };
+>   
+> -static const struct irq_override_cmp override_table[] = {
+> +struct irq_override_acpi_cmp {
+> +	const char *id;
+> +	unsigned char irq;
+> +	unsigned char triggering;
+> +	unsigned char polarity;
+> +};
+> +
+> +static const struct irq_override_dmi_cmp dmi_override_table[] = {
+>   	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+>   	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+> -	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+> -	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+> -	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+> -	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+>   };
+>   
+> -static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+> -				  u8 shareable)
+> +/*
+> + * Ryzen 6000 requires ActiveLow for keyboard, but a number of machines
+> + * seem to get it wrong in DSDT or don't have an Interrupt Source
+> + * Override.
+> + */
+> +static const struct irq_override_acpi_cmp acpi_override_table[] = {
+> +	{ "AMDI0007", 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW },
+> +};
+> +
+> +static void acpi_dev_irq_override(u32 gsi, u8 *triggering, u8 *polarity,
+> +				  u8 *shareable)
+>   {
+> -	int i;
+> +	int i, p, t;
+> +	int check_override = true;
+>   
+> -	for (i = 0; i < ARRAY_SIZE(override_table); i++) {
+> -		const struct irq_override_cmp *entry = &override_table[i];
+> +	for (i = 0; i < ARRAY_SIZE(dmi_override_table); i++) {
+> +		const struct irq_override_dmi_cmp *entry = &dmi_override_table[i];
+>   
+>   		if (dmi_check_system(entry->system) &&
+>   		    entry->irq == gsi &&
+> -		    entry->triggering == triggering &&
+> -		    entry->polarity == polarity &&
+> -		    entry->shareable == shareable)
+> -			return entry->override;
+> +		    entry->triggering == *triggering &&
+> +		    entry->polarity == *polarity &&
+> +		    entry->shareable == *shareable)
+> +			check_override = entry->override;
+>   	}
+>   
+> -#ifdef CONFIG_X86
+> -	/*
+> -	 * IRQ override isn't needed on modern AMD Zen systems and
+> -	 * this override breaks active low IRQs on AMD Ryzen 6000 and
+> -	 * newer systems. Skip it.
+> -	 */
+> -	if (boot_cpu_has(X86_FEATURE_ZEN))
+> -		return false;
+> -#endif
+> +	if (!check_override)
+> +		return;
+>   
+> -	return true;
+> +	if (!acpi_get_override_irq(gsi, &t, &p)) {
+> +		u8 trig = t ? ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
+> +		u8 pol = p ? ACPI_ACTIVE_LOW : ACPI_ACTIVE_HIGH;
+> +
+> +		if (*triggering != trig || *polarity != pol) {
+> +			pr_warn("ACPI: IRQ %d override to %s%s, %s%s\n", gsi,
+> +				t ? "level" : "edge",
+> +				trig == *triggering ? "" : "(!)",
+> +				p ? "low" : "high",
+> +				pol == *polarity ? "" : "(!)");
+> +			*triggering = trig;
+> +			*polarity = pol;
+> +		}
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(acpi_override_table); i++) {
+> +		const struct irq_override_acpi_cmp *entry = &acpi_override_table[i];
+> +
+> +		if (acpi_dev_found(entry->id) && gsi == entry->irq &&
+> +		   (*polarity != entry->polarity || *triggering != entry->triggering)) {
+> +			pr_warn("ACPI: IRQ %d override to %s%s, %s%s due to %s\n",
+> +				gsi,
+> +				entry->triggering ? "level" : "edge",
+> +				entry->triggering == *triggering ? "" : "(!)",
+> +				entry->polarity ? "low" : "high",
+> +				entry->polarity == *polarity ? "" : "(!)",
+> +				entry->id);
+> +			*polarity = entry->polarity;
+> +			*triggering = entry->triggering;
+> +		}
+> +	}
+>   }
+>   
+>   static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
+>   				     u8 triggering, u8 polarity, u8 shareable,
+>   				     u8 wake_capable, bool check_override)
+>   {
+> -	int irq, p, t;
+> +	int irq;
+>   
+>   	if (!valid_IRQ(gsi)) {
+>   		irqresource_disabled(res, gsi);
+> @@ -580,26 +570,12 @@ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
+>   	 * 2. BIOS uses IO-APIC mode Interrupt Source Override
+>   	 *
+>   	 * We do this only if we are dealing with IRQ() or IRQNoFlags()
+> -	 * resource (the legacy ISA resources). With modern ACPI 5 devices
+> +	 * resource (the legacy ISA resources). With ACPI devices
+>   	 * using extended IRQ descriptors we take the IRQ configuration
+>   	 * from _CRS directly.
+>   	 */
+> -	if (check_override &&
+> -	    acpi_dev_irq_override(gsi, triggering, polarity, shareable) &&
+> -	    !acpi_get_override_irq(gsi, &t, &p)) {
+> -		u8 trig = t ? ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
+> -		u8 pol = p ? ACPI_ACTIVE_LOW : ACPI_ACTIVE_HIGH;
+> -
+> -		if (triggering != trig || polarity != pol) {
+> -			pr_warn("ACPI: IRQ %d override to %s%s, %s%s\n", gsi,
+> -				t ? "level" : "edge",
+> -				trig == triggering ? "" : "(!)",
+> -				p ? "low" : "high",
+> -				pol == polarity ? "" : "(!)");
+> -			triggering = trig;
+> -			polarity = pol;
+> -		}
+> -	}
+> +	if (check_override)
+> +		acpi_dev_irq_override(gsi, &triggering, &polarity, &shareable);
+>   
+>   	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
+>   	irq = acpi_register_gsi(NULL, gsi, triggering, polarity);
