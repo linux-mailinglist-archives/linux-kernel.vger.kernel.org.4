@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E0171F9CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 07:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BACB71F9CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 07:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbjFBFwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 01:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S233683AbjFBFxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 01:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbjFBFwY (ORCPT
+        with ESMTP id S232941AbjFBFxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 01:52:24 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1A71A7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 22:52:22 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b075e13a5eso14733385ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 22:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1685685141; x=1688277141;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5GCePBdWXtBGYcoJipdFjk82+G+HbJP6dJaNoy4y9gA=;
-        b=gRIQO7hFIR2EHATIAzCy8elrkjY2wVObzk1CLTouTOp5DBamLY/rb6kTRRrRJ+G+6I
-         5+PAF4ir/ymf0aIMnBLojlAI5IcHGJ+sVlrqKxP6lntkskwUPgUDIYepgTtc65RiYPwp
-         c1wqNPRiTCTaoN+QPdph574zcMnaZB/r8/WOJWsVE8FrtuOhscvQ8b4lXu0gVsLAvnEB
-         WEVD+HcMd5dLA2wPEIVbM/ZiDFL1+Ga1Mo85yh8sbpJxcAIp4U1MMQms7GvaOid4mRhR
-         pAC81zeHTH+9HZUvNhVL/a4QzngtVYANaDMM/nuvyDPTrj+WD4f7IihUSLz3KS3MjRH4
-         I8Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685685141; x=1688277141;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5GCePBdWXtBGYcoJipdFjk82+G+HbJP6dJaNoy4y9gA=;
-        b=NEaNj/LYeDwc0mxs2xig4BR9HjjqEMpmLPITPDiHs13OgfjvV9vctLRrmMN/iiiack
-         6yayAo9+Hh9fZBQ64Gl1hyh+yWxnQu4XxqGNY9N06nSWIEbVkP7yq+mpW39MEcXfdHpV
-         H1xaD1KNpG64VF0QIk9sv29B9tL4LjGcHsjdlfEUYozdGbc5BvwG9aEsZj7OXT7GoITx
-         UAAQEMJhUGEmFuL3/2N444C3SxM5bj1ya8eTMIh8scNFNcr9rf+TeXrKJ6tkCeWoFNox
-         Zb9eS5QU9QLgoSpS9IwB4g9n5Q/C3OcqRWsi4Y5eIcBHMy2ELKZjlNhOA8iWoTbvu1ve
-         9QlA==
-X-Gm-Message-State: AC+VfDyEdjkJMepZqyE7Q8ZKOlUhKzhXKXgSZ1cXIb5uWBma4k8XcD1d
-        jSPeMrrSAebgsfKCcAJ2zQ0xEw==
-X-Google-Smtp-Source: ACHHUZ4btD8YOS/GYYUL0u3559LorSX3J9Z5RMRNRkl3EcWjjogZGHn1C/BXLyfF3WHO28zgQEytSg==
-X-Received: by 2002:a17:902:b702:b0:1af:b682:7a78 with SMTP id d2-20020a170902b70200b001afb6827a78mr1234001pls.52.1685685141624;
-        Thu, 01 Jun 2023 22:52:21 -0700 (PDT)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170902d48b00b0019e60c645b1sm358789plg.305.2023.06.01.22.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 22:52:21 -0700 (PDT)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shunsuke Mie <mie@igel.co.jp>
-Subject: [PATCH v4 1/1] vringh: IOMEM support
-Date:   Fri,  2 Jun 2023 14:52:11 +0900
-Message-Id: <20230602055211.309960-2-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230602055211.309960-1-mie@igel.co.jp>
-References: <20230602055211.309960-1-mie@igel.co.jp>
+        Fri, 2 Jun 2023 01:53:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267FF19A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 22:53:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80F8264C5A
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B96C433D2;
+        Fri,  2 Jun 2023 05:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685685198;
+        bh=JkCLgSoY6/mH3spjDh4/wCaWaV2J+a3C8TmXVA/eMyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DaxkSclIHjvLETuxnwisvEI5KvnhgJQMGKhGZ9VfWO0jiKgAQkOGCNcgZdl575Ary
+         MJxCkBoGiAfGkzMOmjG/FkX+Hli+uK856rdeTB8edZQk1/EwytR+p151JNP12e5vA2
+         XukY8epZx3dPSVQoyYOs+6oIe9gjtMkgLuWpOgYFFnzbeSnCaoyKhDRNZNH0imk/XZ
+         Klsg2cnIFa/QYnBCvXDumnVKLUd4WGDngBD6zB1eZ1pZ15iYPkvGqzGmxxkMHj8gV8
+         OWNREb8KjvKc1wEgxk0cj78OFdVEYfBQm0pm0kPX/cQgCv7p/qvSmSspSGoVsX+SZ8
+         2FW3MyqRMq28g==
+Date:   Thu, 1 Jun 2023 22:53:16 -0700
+From:   Chris Li <chrisl@kernel.org>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH -V3 1/5] swap: Remove get/put_swap_device() in
+ __swap_count()
+Message-ID: <ZHmDzF4sPxlqUMBE@google.com>
+References: <20230529061355.125791-1-ying.huang@intel.com>
+ <20230529061355.125791-2-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529061355.125791-2-ying.huang@intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,266 +64,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a new memory accessor for vringh. It is able to use vringh to
-virtio rings located on io-memory region.
+On Mon, May 29, 2023 at 02:13:51PM +0800, Huang Ying wrote:
+> get/put_swap_device() are added to __swap_count() in commit
+> eb085574a752 ("mm, swap: fix race between swapoff and some swap
+> operations").  Later, in commit 2799e77529c2 ("swap: fix
+> do_swap_page() race with swapoff"), get/put_swap_device() are added to
+> do_swap_page().  And they enclose the only call site of
+> __swap_count().  So, it's safe to remove get/put_swap_device() in
+> __swap_count() now.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Chris Li <chrisl@kernel.org>
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- drivers/vhost/vringh.c | 201 +++++++++++++++++++++++++++++++++++++++++
- include/linux/vringh.h |  32 +++++++
- 2 files changed, 233 insertions(+)
+Reviewed-By: Chris Li (Google) <chrisl@kernel.org>
 
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 955d938eb663..6e89dcd871b4 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -1604,4 +1604,205 @@ EXPORT_SYMBOL(vringh_need_notify_iotlb);
- 
- #endif
- 
-+static inline int getu16_iomem(const struct vringh *vrh, u16 *val,
-+			       const __virtio16 *p)
-+{
-+	*val = vringh16_to_cpu(vrh, ioread16(p));
-+	return 0;
-+}
-+
-+static inline int putu16_iomem(const struct vringh *vrh, __virtio16 *p, u16 val)
-+{
-+	iowrite16(cpu_to_vringh16(vrh, val), p);
-+	return 0;
-+}
-+
-+static inline int copydesc_iomem(const struct vringh *vrh, void *dst,
-+				 const void *src, size_t len)
-+{
-+	memcpy_fromio(dst, src, len);
-+	return 0;
-+}
-+
-+static int putused_iomem(const struct vringh *vrh, struct vring_used_elem *dst,
-+			 const struct vring_used_elem *src, unsigned int num)
-+{
-+	memcpy_toio(dst, src, num * sizeof(*dst));
-+	return 0;
-+}
-+
-+static inline int xfer_from_iomem(const struct vringh *vrh, void *src,
-+				  void *dst, size_t len)
-+{
-+	memcpy_fromio(dst, src, len);
-+	return 0;
-+}
-+
-+static inline int xfer_to_iomem(const struct vringh *vrh, void *dst, void *src,
-+				size_t len)
-+{
-+	memcpy_toio(dst, src, len);
-+	return 0;
-+}
-+
-+/**
-+ * vringh_init_iomem - initialize a vringh for a vring on io-memory.
-+ * @vrh: the vringh to initialize.
-+ * @features: the feature bits for this ring.
-+ * @num: the number of elements.
-+ * @weak_barriers: true if we only need memory barriers, not I/O.
-+ * @desc: the userspace descriptor pointer.
-+ * @avail: the userspace avail pointer.
-+ * @used: the userspace used pointer.
-+ *
-+ * Returns an error if num is invalid: you should check pointers
-+ * yourself!
-+ */
-+int vringh_init_iomem(struct vringh *vrh, u64 features, unsigned int num,
-+		      bool weak_barriers, struct vring_desc *desc,
-+		      struct vring_avail *avail, struct vring_used *used)
-+{
-+	return vringh_init_kern(vrh, features, num, weak_barriers, desc, avail,
-+				used);
-+}
-+EXPORT_SYMBOL(vringh_init_iomem);
-+
-+/**
-+ * vringh_getdesc_iomem - get next available descriptor from vring on io-memory.
-+ * @vrh: the vring on io-memory.
-+ * @riov: where to put the readable descriptors (or NULL)
-+ * @wiov: where to put the writable descriptors (or NULL)
-+ * @head: head index we received, for passing to vringh_complete_iomem().
-+ * @gfp: flags for allocating larger riov/wiov.
-+ *
-+ * Returns 0 if there was no descriptor, 1 if there was, or -errno.
-+ *
-+ * There some notes, and those are same with vringh_getdesc_kern(). Please see
-+ * it.
-+ */
-+int vringh_getdesc_iomem(struct vringh *vrh, struct vringh_kiov *riov,
-+			 struct vringh_kiov *wiov, u16 *head, gfp_t gfp)
-+{
-+	int err;
-+
-+	err = __vringh_get_head(vrh, getu16_iomem, &vrh->last_avail_idx);
-+	if (err < 0)
-+		return err;
-+
-+	/* Empty... */
-+	if (err == vrh->vring.num)
-+		return 0;
-+
-+	*head = err;
-+	err = __vringh_iov(vrh, *head, riov, wiov, no_range_check, NULL, gfp,
-+			   copydesc_iomem);
-+	if (err)
-+		return err;
-+
-+	return 1;
-+}
-+EXPORT_SYMBOL(vringh_getdesc_iomem);
-+
-+/**
-+ * vringh_iov_pull_iomem - copy bytes from vring_iov.
-+ * @riov: the riov as passed to vringh_getdesc_iomem() (updated as we consume)
-+ * @dst: the place to copy.
-+ * @len: the maximum length to copy.
-+ *
-+ * Returns the bytes copied <= len or a negative errno.
-+ */
-+ssize_t vringh_iov_pull_iomem(struct vringh *vrh, struct vringh_kiov *riov,
-+			      void *dst, size_t len)
-+{
-+	return vringh_iov_xfer(vrh, riov, dst, len, xfer_from_iomem);
-+}
-+EXPORT_SYMBOL(vringh_iov_pull_iomem);
-+
-+/**
-+ * vringh_iov_push_iomem - copy bytes into vring_iov.
-+ * @wiov: the wiov as passed to vringh_getdesc_iomem() (updated as we consume)
-+ * @src: the place to copy from.
-+ * @len: the maximum length to copy.
-+ *
-+ * Returns the bytes copied <= len or a negative errno.
-+ */
-+ssize_t vringh_iov_push_iomem(struct vringh *vrh, struct vringh_kiov *wiov,
-+			      const void *src, size_t len)
-+{
-+	return vringh_iov_xfer(vrh, wiov, (void *)src, len, xfer_to_iomem);
-+}
-+EXPORT_SYMBOL(vringh_iov_push_iomem);
-+
-+/**
-+ * vringh_abandon_iomem - we've decided not to handle the descriptor(s).
-+ * @vrh: the vring.
-+ * @num: the number of descriptors to put back (ie. num
-+ *	 vringh_getdesc_iomem() to undo).
-+ *
-+ * The next vringh_get_kern() will return the old descriptor(s) again.
-+ */
-+void vringh_abandon_iomem(struct vringh *vrh, unsigned int num)
-+{
-+	vringh_abandon_kern(vrh, num);
-+}
-+EXPORT_SYMBOL(vringh_abandon_iomem);
-+
-+/**
-+ * vringh_complete_iomem - we've finished with descriptor, publish it.
-+ * @vrh: the vring.
-+ * @head: the head as filled in by vringh_getdesc_iomem().
-+ * @len: the length of data we have written.
-+ *
-+ * You should check vringh_need_notify_iomem() after one or more calls
-+ * to this function.
-+ */
-+int vringh_complete_iomem(struct vringh *vrh, u16 head, u32 len)
-+{
-+	struct vring_used_elem used;
-+
-+	used.id = cpu_to_vringh32(vrh, head);
-+	used.len = cpu_to_vringh32(vrh, len);
-+
-+	return __vringh_complete(vrh, &used, 1, putu16_iomem, putused_iomem);
-+}
-+EXPORT_SYMBOL(vringh_complete_iomem);
-+
-+/**
-+ * vringh_notify_enable_iomem - we want to know if something changes.
-+ * @vrh: the vring.
-+ *
-+ * This always enables notifications, but returns false if there are
-+ * now more buffers available in the vring.
-+ */
-+bool vringh_notify_enable_iomem(struct vringh *vrh)
-+{
-+	return __vringh_notify_enable(vrh, getu16_iomem, putu16_iomem);
-+}
-+EXPORT_SYMBOL(vringh_notify_enable_iomem);
-+
-+/**
-+ * vringh_notify_disable_iomem - don't tell us if something changes.
-+ * @vrh: the vring.
-+ *
-+ * This is our normal running state: we disable and then only enable when
-+ * we're going to sleep.
-+ */
-+void vringh_notify_disable_iomem(struct vringh *vrh)
-+{
-+	__vringh_notify_disable(vrh, putu16_iomem);
-+}
-+EXPORT_SYMBOL(vringh_notify_disable_iomem);
-+
-+/**
-+ * vringh_need_notify_iomem - must we tell the other side about used buffers?
-+ * @vrh: the vring we've called vringh_complete_iomem() on.
-+ *
-+ * Returns -errno or 0 if we don't need to tell the other side, 1 if we do.
-+ */
-+int vringh_need_notify_iomem(struct vringh *vrh)
-+{
-+	return __vringh_need_notify(vrh, getu16_iomem);
-+}
-+EXPORT_SYMBOL(vringh_need_notify_iomem);
-+
- MODULE_LICENSE("GPL");
-diff --git a/include/linux/vringh.h b/include/linux/vringh.h
-index c3a8117dabe8..4130e5302ee6 100644
---- a/include/linux/vringh.h
-+++ b/include/linux/vringh.h
-@@ -330,4 +330,36 @@ int vringh_need_notify_iotlb(struct vringh *vrh);
- 
- #endif /* CONFIG_VHOST_IOTLB */
- 
-+#if IS_REACHABLE(CONFIG_VHOST_RING_IOMEM)
-+
-+int vringh_init_iomem(struct vringh *vrh, u64 features,
-+		      unsigned int num, bool weak_barriers,
-+		      struct vring_desc *desc,
-+		      struct vring_avail *avail,
-+		      struct vring_used *used);
-+
-+int vringh_getdesc_iomem(struct vringh *vrh,
-+			 struct vringh_kiov *riov,
-+			 struct vringh_kiov *wiov,
-+			 u16 *head,
-+			 gfp_t gfp);
-+
-+ssize_t vringh_iov_pull_iomem(struct vringh *vrh,
-+			      struct vringh_kiov *riov,
-+			      void *dst, size_t len);
-+ssize_t vringh_iov_push_iomem(struct vringh *vrh,
-+			      struct vringh_kiov *wiov,
-+			      const void *src, size_t len);
-+
-+void vringh_abandon_iomem(struct vringh *vrh, unsigned int num);
-+
-+int vringh_complete_iomem(struct vringh *vrh, u16 head, u32 len);
-+
-+bool vringh_notify_enable_iomem(struct vringh *vrh);
-+void vringh_notify_disable_iomem(struct vringh *vrh);
-+
-+int vringh_need_notify_iomem(struct vringh *vrh);
-+
-+#endif /* CONFIG_VHOST_RING_IOMEM */
-+
- #endif /* _LINUX_VRINGH_H */
--- 
-2.25.1
+Chris
 
+> ---
+>  mm/swapfile.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 274bbf797480..8419cba9c192 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1432,16 +1432,10 @@ void swapcache_free_entries(swp_entry_t *entries, int n)
+>  
+>  int __swap_count(swp_entry_t entry)
+>  {
+> -	struct swap_info_struct *si;
+> +	struct swap_info_struct *si = swp_swap_info(entry);
+>  	pgoff_t offset = swp_offset(entry);
+> -	int count = 0;
+>  
+> -	si = get_swap_device(entry);
+> -	if (si) {
+> -		count = swap_count(si->swap_map[offset]);
+> -		put_swap_device(si);
+> -	}
+> -	return count;
+> +	return swap_count(si->swap_map[offset]);
+>  }
+>  
+>  /*
+> -- 
+> 2.39.2
+> 
