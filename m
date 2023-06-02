@@ -2,127 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2187271FECA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9681671FECE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235252AbjFBKRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S234882AbjFBKSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbjFBKRA (ORCPT
+        with ESMTP id S234826AbjFBKSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:17:00 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2090.outbound.protection.outlook.com [40.107.113.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3171AB;
-        Fri,  2 Jun 2023 03:16:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XUEJ61tdgw7S7l8tmGqSZM7Ke/Bl6BlV4WJM6RYM+MAcPVbC0AF8ntHPtDxfAo1v07ti/sRmktf5Eg/UYQgjVu9Gfdyx5BEuyL0tjmfYdJSN6ZpK3FnfhOQkSgezvdGuieg8D/08rfaeMJkitN+PiA8SA0tMT6l98RwHDpmv3oIYPu8gY3exBBZl2yDNJPD3Z7JJ51jBpVskYcF4KrQrRKAJo7OQl2CLTqFgjp2ufkSwNGpZHnK4Jc1xATFJu1MuD0OPc1Uwfd+mC4H3mr+9c70k3Rhk3uXhRsqpBTki1SlS+vR6uL43mMeK8kFw0eJYpFf7sXCRBj/PVYSzRldMYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UaXI2bhk0GUXb3r/L7pleNe4Lb1pA/cv+9bUiNWwkQY=;
- b=VoknoE3KBf5WXgXJGFWPOGxQoNC9TWxyU4u2x8cdAetRq19brMQN6QkgarWCAtr9RxMtaIxsGrq14+/qOx9lgPmQZU4S6vqpt0Gkg1PBEgMgvmPYRoDZSBfoYGFy1HsRAnSdRDZJaaJ7Y3qLylLRr4raC4/zpTPfmJmDrgaLXISkPCyBP7IES4P36yUWpew64S8ZQHimstGcexnQHnSQSK2CYnWKgYuv/fTywSAlaMm1NJRWZ8I0bQHE9H10rTZhXlqslqkRoou2twuUrAW19zbLcKO8b+Gel5Crap1IpSm4JNA2olHwQaIzh7prkF6EP1akWLP572UtIg+/Rx2/ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UaXI2bhk0GUXb3r/L7pleNe4Lb1pA/cv+9bUiNWwkQY=;
- b=fsN5MSF671egRT0TluNv2VHTe2smhfdn9BSZWLKQhaI+763Ius1Cz+LjxSym376WWixo2ugQO0CtIlKGfZlC9Nyv3wFAZa+fw30gVIQ6wmcEldi6oQIqRqVEEMRTRJYoMXPmUB1QFj8hWEV6F4LEXfgK3DYTQ8uvRpdrBjty5Rw=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OS0PR01MB5361.jpnprd01.prod.outlook.com (2603:1096:604:a0::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
- 2023 10:16:51 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
- 10:16:50 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/3] drm: Fix references to drm_plane_helper_check_state()
-Thread-Topic: [PATCH 3/3] drm: Fix references to
- drm_plane_helper_check_state()
-Thread-Index: AQHZlTJEuVN3WjOI50uBFusv3IV2Yq93S5lg
-Date:   Fri, 2 Jun 2023 10:16:50 +0000
-Message-ID: <OS0PR01MB59225B787D7F3B179840CA6A864EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <cover.1685696114.git.geert+renesas@glider.be>
- <2408d7841c91e98e9a2b24b1b4df9b2b865519a6.1685696114.git.geert+renesas@glider.be>
-In-Reply-To: <2408d7841c91e98e9a2b24b1b4df9b2b865519a6.1685696114.git.geert+renesas@glider.be>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OS0PR01MB5361:EE_
-x-ms-office365-filtering-correlation-id: f62386c3-c074-40fc-84ec-08db63527b3c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VyV42jO54TYrchljLIODw8tfF+vVS0ri1Fvtdglrr6BQKkDs4or++DGX0R5buYKfgrtPUrqfM65t4f0bPMXuxIW7nxb1C0O9LKBU0lrrArb9hFCr4Ue5CsPmuMRFRD+34IAPJ6+nqOSNJt4CTMqHp153Mzp8vwwcrmeRBwvExZoPOh4EnZXl7wIzVt/m+n86C4InMEUtJW0FgCllfrddJgfctHLkMY6CwREndBHvvOBFXYOyayUKXeVjMVtVQEx2ZijIwiXCbvubrDm1UjYGs8IZsPmJzTVmRx48nNSaQFIOJGiQtVTIS7TdJaHAlbZb0rW93Bcj2p/fmL8/MjigE0J6QscXDEYJRZHnpkYW/6vmTxooEnhbsbA8GEkLAzOjwJb9BH4dp6srPufcqF7HnjWU5wphSsbD+F0py3KyFrTQVNHOI1oupOscC6xI2+Wl8AcDGkey5/Eqg8TbOrce5E9SR033y3JSlHSirGnsAEY1vK1kF2iXzMQrDtNNijahkMPVovbTE9wSPOW8woUPhJB//7AEW1JFOXGUxL1vc07s2w9EFAFUrFNfiZ/kOF7Cj2WoMIuW4fVS+/hkRrU5bqzNsZ9J1rLddbBHmyvWNR2UE2kc0yNB1AMn/pJIHcFXRZR52qVsKAzgIcwyjUN3TQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(346002)(39860400002)(396003)(451199021)(2906002)(86362001)(33656002)(7416002)(52536014)(38070700005)(5660300002)(55016003)(7696005)(186003)(83380400001)(71200400001)(26005)(9686003)(6506007)(478600001)(921005)(54906003)(110136005)(66556008)(66476007)(66446008)(66946007)(4326008)(38100700002)(64756008)(316002)(41300700001)(122000001)(8676002)(76116006)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DEkgYUhpt920N3yB9WqkCFFChRtC6yvA38SV0sx19Eg4dfj2jW9ryM1A42vF?=
- =?us-ascii?Q?UndsSpq+MpfX/fv4KvECG6c/qioNwbLKQjGPCjt6T9MsSudcdthX2+yBoRGp?=
- =?us-ascii?Q?7NjhVY5d1CXc3CDTRbpYZKLoHvjwXqN7+oBs2ZDV6R1AVLyvbqfyxrgPkUyy?=
- =?us-ascii?Q?BjkvVjLYwZ7HiTr1kYkadyQDGPox5zMIHA+ZPb+el4U9OJ/YVLnEt5A+kHn5?=
- =?us-ascii?Q?qKdJ9eEhY3+7KJPccLrGtmTLY1sxkewvARLkNR3VXEJBsj20Fo1pQaemMMvH?=
- =?us-ascii?Q?eDEM2u4R2ERAwkbis+lklUTfWARiWMiaZJ1TNQijij2mPP+Ee81PI+XAxsah?=
- =?us-ascii?Q?T8Kp7QdSfcq9UHaLT5WDmlRbDKnXZdFXIeCUAMOE7h4x8NRUjAw+GdVQQhV8?=
- =?us-ascii?Q?oDqn2ICykY81FZm4Oa+GHfOEw0M3vKkf2JvZdQUl+cvBMClPyXQwKBXf+u79?=
- =?us-ascii?Q?Mh0lbZ1olPLXtN3NmW8QpY/Em/jfTlmBC5UfSomX4IaU27d5PIy8OsQml8x4?=
- =?us-ascii?Q?ZkKKxp7ng6WNNEzD7kMx6H2OPTOjw+T7Pfhp6z8M2+5H0SFHIW8E2XAudVuc?=
- =?us-ascii?Q?OJao/TNHX5lmrorPMtf4FRGhv4sZ7ZhplgS+G6oH15+Rr+c3L8B2IVT7xJC4?=
- =?us-ascii?Q?v+CSO4Fk0N1fh4O+7tCbypt/hmAhCUkfMouLS4CIV9C1UcL5XbRW4iLeKP7L?=
- =?us-ascii?Q?CzeRh6ChgAeD5s1E7FOlTX8byf6KLKA2Nc8XwD4+uugGSVYZtDaYl31u9Fad?=
- =?us-ascii?Q?mo+oYgP+Ie9saAcooEM2o2APY2inU+JX75YQjR0TXfQF30TYb62hQcbFxckV?=
- =?us-ascii?Q?hYRKEqG3qXSnUtqU9W1GzizsBCybbVi0+LOudngoJGRivlX1qWbZz6U0H/GE?=
- =?us-ascii?Q?6+Esbu5PogM1eWT2QlTIaa2Wlp3maeRzi0cJP2QpVjbe6eysVvuFZgsLkupc?=
- =?us-ascii?Q?jJBfGV+EWyY3NaVycT2QQvSi8Ts/8K7qmJoYcvc/ZhGonf5KVHbfWDlS/VE5?=
- =?us-ascii?Q?9pfHiolJanaCmBOVlLMwdO9sM+VwI/qmRC1g4HRgWC5bPWPpxvTx9yw2EH2w?=
- =?us-ascii?Q?UX0tqkM+BHCE5BQMQ8lCB97g9GiKrEQZcPFHNmgeFHA1Ek/oYpO0xLxQIPru?=
- =?us-ascii?Q?87WFmhdEmilEh0xy/iYD0eiOarrSiclUId5P1B/xJgzGJxxuvYQ7By9IkF7i?=
- =?us-ascii?Q?u2cJUqccb8RTdjM17PyfS0Hqtkd1gHOmPZmx+eDGAdnuQsQgNsExkdPl0uYb?=
- =?us-ascii?Q?Dc7LL97mRpUakwzdkCNv468va+SFEhu+kRoy7vOJV9723DAmxO+S7okJTk1k?=
- =?us-ascii?Q?eJVUy9XAg5bZVRussmEIIzZdWRJ1a6Hh7rGoV8VjB2K+mgjc4cMcruP0iJzo?=
- =?us-ascii?Q?s4xVRgiJq/WO/iH2OQV9+vi0HovXj0tok+Qk1GEsRCcooh3odhzIi1iO0dU5?=
- =?us-ascii?Q?e0QXtyNDVK+9YVm7/OrC4Pnv4Kw2tlVe/rhTlZmnAnieL8d65gdTbInIahmm?=
- =?us-ascii?Q?5FSfOdKYvOVvPVO/B4sa94iHn25vrlk2k9BPujpVqXIvDKlxWB6eLvup8kCh?=
- =?us-ascii?Q?WhAEIw3MyHBaIuGGf7cXavvEoz5nQ+FfrZOO1GWv?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 2 Jun 2023 06:18:32 -0400
+Received: from out0-199.mail.aliyun.com (out0-199.mail.aliyun.com [140.205.0.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE62E7;
+        Fri,  2 Jun 2023 03:18:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047202;MF=changxian.cqs@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.TJK9myK_1685701102;
+Received: from localhost(mailfrom:changxian.cqs@antgroup.com fp:SMTPD_---.TJK9myK_1685701102)
+          by smtp.aliyun-inc.com;
+          Fri, 02 Jun 2023 18:18:23 +0800
+From:   "Qingsong Chen" <changxian.cqs@antgroup.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "=?UTF-8?B?55Sw5rSq5Lqu?=" <tate.thl@antgroup.com>,
+        "Qingsong Chen" <changxian.cqs@antgroup.com>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
+        "Benno Lossin" <benno.lossin@proton.me>,
+        <rust-for-linux@vger.kernel.org>
+Subject: [PATCH v2 0/3] Rust scatterlist abstractions
+Date:   Fri, 02 Jun 2023 18:18:16 +0800
+Message-Id: <20230602101819.2134194-1-changxian.cqs@antgroup.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f62386c3-c074-40fc-84ec-08db63527b3c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2023 10:16:50.8642
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: byb7UcXXUcFotvkgePGdSVouQrOcsRlB9lXEObQicbDdb1ok1X0NfejYdG/eeQaFSduFJSQgMZzmTi1itF0ytS0tGeh5IZs1su4ngBMvZJw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5361
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,75 +45,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Hi All!
 
-Thanks for the feedback.
+This is a version of scatterlist abstractions for Rust drivers.
 
-> Subject: [PATCH 3/3] drm: Fix references to
-> drm_plane_helper_check_state()
->=20
-> As of commit a01cb8ba3f628293 ("drm: Move drm_plane_helper_check_state()
-> into drm_atomic_helper.c"), drm_plane_helper_check_state() no longer
-> exists, but is part of drm_atomic_helper_check_plane_state().
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Interestingly, all these comments appeared only after the commit that
-> removed the function...
->=20
-> This is against next-20230602, which does not have the drivers/gpu/drm/{
-> =3D> renesas}/rcar-du move yet.
->=20
-> Biju: you're adding a new copy in
-> drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.c
+Scatterlist is used for efficient management of memory buffers, which is
+essential for many kernel-level operations such as Direct Memory Access
+(DMA) transfers and crypto APIs.
 
-OK, will update the comment in __rzg2l_du_vsp_plane_atomic_check()=20
+This patch should be a good start to introduce the crypto APIs for Rust
+drivers and to develop cipher algorithms in Rust later.
 
-as it is moved to drivers/gpu/drm/renesas/rz-du/rzg2l_du_vsp.c=20
-based on Laurent's review comment.
+Changelog:
+----------
+v1 -> v2:
+- Split the old patch into smaller parts.
+- Remove the selftest module, and place those use cases in the doc.
+- Repair some invalid hyperlinks in the doc.
+- Put some `cfgs` inside functions to avoid boilerplate.
+====================
 
-Cheers,
-Biju
+Qingsong Chen (3):
+  rust: kernel: add ScatterList abstraction
+  rust: kernel: implement iterators for ScatterList
+  rust: kernel: add SgTable abstraction
 
-> ---
->  drivers/gpu/drm/rcar-du/rcar_du_plane.c | 3 ++-
->  drivers/gpu/drm/tidss/tidss_plane.c     | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_plane.c
-> b/drivers/gpu/drm/rcar-du/rcar_du_plane.c
-> index d759e019218181ce..e445fac8e0b46c21 100644
-> --- a/drivers/gpu/drm/rcar-du/rcar_du_plane.c
-> +++ b/drivers/gpu/drm/rcar-du/rcar_du_plane.c
-> @@ -600,7 +600,8 @@ int __rcar_du_plane_atomic_check(struct drm_plane
-> *plane,
->  	if (!state->crtc) {
->  		/*
->  		 * The visible field is not reset by the DRM core but only
-> -		 * updated by drm_plane_helper_check_state(), set it
-> manually.
-> +		 * updated by drm_atomic_helper_check_plane_state(), set it
-> +		 * manually.
->  		 */
->  		state->visible =3D false;
->  		*format =3D NULL;
-> diff --git a/drivers/gpu/drm/tidss/tidss_plane.c
-> b/drivers/gpu/drm/tidss/tidss_plane.c
-> index 6bdd6e4a955ab3cc..e1c0ef0c3894c855 100644
-> --- a/drivers/gpu/drm/tidss/tidss_plane.c
-> +++ b/drivers/gpu/drm/tidss/tidss_plane.c
-> @@ -38,7 +38,8 @@ static int tidss_plane_atomic_check(struct drm_plane
-> *plane,
->  	if (!new_plane_state->crtc) {
->  		/*
->  		 * The visible field is not reset by the DRM core but only
-> -		 * updated by drm_plane_helper_check_state(), set it
-> manually.
-> +		 * updated by drm_atomic_helper_check_plane_state(), set it
-> +		 * manually.
->  		 */
->  		new_plane_state->visible =3D false;
->  		return 0;
-> --
-> 2.34.1
+ rust/bindings/bindings_helper.h |   1 +
+ rust/helpers.c                  |  14 +
+ rust/kernel/lib.rs              |   1 +
+ rust/kernel/scatterlist.rs      | 502 ++++++++++++++++++++++++++++++++
+ 4 files changed, 518 insertions(+)
+ create mode 100644 rust/kernel/scatterlist.rs
+
+-- 
+2.40.1
 
