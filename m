@@ -2,218 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF08B71FE9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077B971FE9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbjFBKIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S235232AbjFBKJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235198AbjFBKIX (ORCPT
+        with ESMTP id S235228AbjFBKJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:08:23 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618B21AB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:08:19 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230602100817euoutp02779ec5fff6b576f5ecd9518ce419902a~kz6vKs2OQ3191731917euoutp02j
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:08:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230602100817euoutp02779ec5fff6b576f5ecd9518ce419902a~kz6vKs2OQ3191731917euoutp02j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685700497;
-        bh=f1HjrLD6njVVPjduaddJfi5+Ds9joRkOIy3esLq1bnY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=ZpZ8dW85nTYstRrklw7jGepnTiGBveS5HeGJPFdQ2cdTyjfCrydvKtCVD8AaS40hm
-         +cMvD7ssylGvBGm7rzHBkH5ANmlLZtNYJRH021nPz1PPu+LzDuAEbV5w6zTQHGGq+8
-         MzWlo+UULNbe3B+64ZUKHH5gMa3GJ+Swv1lK0Sd4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230602100817eucas1p2a857bad455aa25270c84dfb1ff6ee0a5~kz6vDIJOP1995219952eucas1p2x;
-        Fri,  2 Jun 2023 10:08:17 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id F1.30.42423.19FB9746; Fri,  2
-        Jun 2023 11:08:17 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42~kz6uvPKLb1573615736eucas1p29;
-        Fri,  2 Jun 2023 10:08:16 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230602100816eusmtrp13ae771f8a5597a66fa213d5326d501b4~kz6usXowp1803818038eusmtrp1U;
-        Fri,  2 Jun 2023 10:08:16 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-bc-6479bf914b3b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 5C.34.14344.09FB9746; Fri,  2
-        Jun 2023 11:08:16 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230602100816eusmtip19e65f13776df3900286781284b8272be~kz6uf3oq-0246202462eusmtip1I;
-        Fri,  2 Jun 2023 10:08:16 +0000 (GMT)
-Received: from localhost (106.210.248.205) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 2 Jun 2023 11:08:15 +0100
-From:   Joel Granados <j.granados@samsung.com>
-To:     <mcgrof@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Joel Granados <j.granados@samsung.com>
-Subject: [PATCH 4/8] test_sysctl: Add an unregister sysctl test
-Date:   Fri, 2 Jun 2023 12:08:01 +0200
-Message-ID: <20230602100805.777917-5-j.granados@samsung.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230602100805.777917-1-j.granados@samsung.com>
+        Fri, 2 Jun 2023 06:09:00 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63F81B6;
+        Fri,  2 Jun 2023 03:08:55 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-256712d65ceso869457a91.1;
+        Fri, 02 Jun 2023 03:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685700535; x=1688292535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KJXA2dF12j4Fb3Ta+K6rkvK8zj4+C8MbngTwWrfwo10=;
+        b=pKozTKg8bkqoQRAw4Or1/2O3jhNTORXzV0T2l2OubLw3KGl5/I6zCtOTsidD9yC5ZN
+         kynmkimoC6akMvLQ7qppsxXl9hUbACdXysk4pUXwE8mvIMLOefP7b6G/w1eY5dgCXSJ9
+         gOzN/3y8qFFgzT5xx3v8Zkm1YN5YqH5s2OEPxQuBYFrwsXb8lzoEeEeO6Hou7xwCYYAh
+         JrilTMh66/iRuPtRJIWL0+X/jZmsUtj8muQHWh5m4rrBLE0TU8UMRAFifbNXJVdx+mjp
+         EJyYdBASIrnkttxOgDlgjYSJWsEYyEgLFx+M8XYPxai2fAKsIonHyE9TOkvPxAAb11pQ
+         nxeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685700535; x=1688292535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KJXA2dF12j4Fb3Ta+K6rkvK8zj4+C8MbngTwWrfwo10=;
+        b=aOLFrn0YoMWAGf1HJMCXjpCBUf8e5cehsNPotgQ/d1tILgv0VPwOrVlhncPh4+j/6H
+         MF3V5fdIxkizLJQ2z/hlnwLHboZG4+9qjjVKULYiDmbgmiBfVVh+CULny/dVFKEUB7JS
+         ifVjh3Sbb5QnCrSKRHZSINZ3LzhtisCJ8cja+63rmM0wKWTkPNJT2WMtZpBxfBgZfW6S
+         1xxZ94f8RHfIEOVWNDpsIUout1hk5u4Ol8kCSfwEisvA69V1SAWPvo4DlvluZVB+yAc3
+         yzrshaJZE+nNC7DfavDCh/WeHyC/wbTiURz8CgNQ9n/tLmeHYFStMFPTbiJbUkjhi+MI
+         2ajQ==
+X-Gm-Message-State: AC+VfDxjYQYcovHbhR81ZF3EubXVmrKUIcTdPSD+RalcAjMLmeXVshVr
+        9yU7hpsYHhL7HJ7oXG9QexVtaGxNtmU=
+X-Google-Smtp-Source: ACHHUZ5NMghrvOYiQcrgDDURUUe2m+/zTpIzGsO5lBtXx5es280eqgOGpqaD3QSBm4mosQoHfp0YSg==
+X-Received: by 2002:a17:902:bb10:b0:1ab:63e:67b0 with SMTP id im16-20020a170902bb1000b001ab063e67b0mr899784plb.54.1685700534901;
+        Fri, 02 Jun 2023 03:08:54 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-3.three.co.id. [180.214.232.3])
+        by smtp.gmail.com with ESMTPSA id ik29-20020a170902ab1d00b001b19d14a3d5sm992095plb.68.2023.06.02.03.08.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 03:08:54 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 93BBC106A05; Fri,  2 Jun 2023 17:08:51 +0700 (WIB)
+Date:   Fri, 2 Jun 2023 17:08:51 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Costa Shulyupin <costa.shul@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux BPF <bpf@vger.kernel.org>
+Subject: Re: [PATCH v3] Documentation: subsystem-apis: Categorize remaining
+ subsystems
+Message-ID: <ZHm_s7kQP6kilBtO@debian.me>
+References: <ZHgM0qKWP3OusjUW@debian.me>
+ <20230601145556.3927838-1-costa.shul@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [106.210.248.205]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBIsWRmVeSWpSXmKPExsWy7djPc7oT91emGLxpYLHYs/cki8XlXXPY
-        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgiuKySUnNySxLLdK3S+DKONSyhLHgtEjFqv67LA2M
-        bwS6GDk5JARMJE5daWTpYuTiEBJYwSgx781FZgjnC6PEiT1v2SGcz4wS/2dPZ4RpaV4zGapq
-        OaPEs8enGeGqju18D5XZwijx4eFHVpAWNgEdifNv7jCD2CIC4hInTm8GG8UsMIFRYtYhDhBb
-        WMBeYt6xa0wgNouAisSKX+/ZQGxeARuJtzf3s0Oslpdouw5xBqeArcSyGU+ZIGoEJU7OfMIC
-        MVNeonnrbGYIW0Li4IsXzBC9yhIT1v1mhbBrJU5tucUEcqiEwB4OiSW7VkMVuUjsnfUDqkhY
-        4tXxLVCLZSROT+5hgWiYzCix/98HdghnNaPEssavTBBV1hItV55AdThK/J71FuhUDiCbT+LG
-        W0GIi/gkJm2bzgwR5pXoaBOawKgyC8kPs5D8MAvJDwsYmVcxiqeWFuempxYb5qWW6xUn5haX
-        5qXrJefnbmIEJo7T/45/2sE499VHvUOMTByMhxglOJiVRHiFwspThHhTEiurUovy44tKc1KL
-        DzFKc7AoifNq255MFhJITyxJzU5NLUgtgskycXBKNTCllCYxfN0W415uU8gR++7KpbLXcVP+
-        Om2ZKCW+6Vfv/riI2+Y6Bz3Wr0yf4KB16+C+XzYf19fqPz8SISkuYDpZ5iObaYvG/gTb689F
-        Lu2VqfwX94/HqmFDh8aZqCyx9p+3jrzbu3z+7Ve/X962P/gm32rKXla1rmbbjvW/hQuMnLj3
-        xuRc1eHoC10WncPnW/5E8L32on0Nhc+KPnvOiWLvY9NzykhJWqfemvZy/ebT8qLboiSVJ216
-        9n9+lJWb8o0Dh3NSW4+ocvpvW5lpYzIv0Sh5qoNo9OLiLaG7fHtCOOLYza5MYVZ4YPbtgfi/
-        hNsr502ZN2mb9H2Fs71Hw25eVj3jbHzJU4m1++sxXSklluKMREMt5qLiRACa29ZmiwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsVy+t/xu7oT9lemGPzu1rTYs/cki8XlXXPY
-        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgitKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0
-        No+1MjJV0rezSUnNySxLLdK3S9DLONSyhLHgtEjFqv67LA2MbwS6GDk5JARMJJrXTGbuYuTi
-        EBJYyihx8sFVNoiEjMTGL1dZIWxhiT/Xutggij4ySkzZehHK2cIo0bl1IVgVm4COxPk3d5hB
-        bBEBcYkTpzczgtjMAhMYJWYd4gCxhQXsJeYdu8YEYrMIqEis+PUebBuvgI3E25v72SG2yUu0
-        XZ8O1sspYCuxbMZTsHohoJrzjyYxQ9QLSpyc+YQFYr68RPPW2cwQtoTEwRcvmCHmKEtMWPcb
-        6oNaic9/nzFOYBSZhaR9FpL2WUjaFzAyr2IUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAiMqW3H
-        fm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeIXCylOEeFMSK6tSi/Lji0pzUosPMZoC/TmRWUo0OR8Y
-        1Xkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUyl8nIHRKRnxDqs
-        nRudve7986SADffllJ6Hz9/+fTvLLMlDIRfSPBv4zppMa9m1bOmtx59WezcGJdue0WLoKZtr
-        kMq4yymKw0CM3XnvK/X5/44nFeUelrvP8FQsfj7nARefMq/1LC86wn1tFoSEGs3bclTlNm/9
-        z0LlqSwJRbu4Si76+bLo5DBXsSkslf236E+TxWrt9zv7LIJbDzql9s74ePnOovup3ftf3p83
-        v07rAZ9jhB/nDve2Uo0nu4Uzk298MX3VcOAUq8CsstCGb0biXf7hS32lnDIvWiq1HQ3RSBVZ
-        9JyZy1clvXJij/Gj0IutpbNal206Erd/C9/HDfG8vkWLmOfzXnpc4MpqpMRSnJFoqMVcVJwI
-        AKZM7RIyAwAA
-X-CMS-MailID: 20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42
-X-Msg-Generator: CA
-X-RootMTR: 20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42
-References: <20230602100805.777917-1-j.granados@samsung.com>
-        <CGME20230602100816eucas1p2c945884b8fd81603dbb39f65f1189f42@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rQ+siVK50HQ8TR+2"
+Content-Disposition: inline
+In-Reply-To: <20230601145556.3927838-1-costa.shul@redhat.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test that checks that the unregistered directory is removed from
-/proc/sys/debug
 
-Signed-off-by: Joel Granados <j.granados@samsung.com>
----
- lib/test_sysctl.c                        | 30 ++++++++++++++++++++++++
- tools/testing/selftests/sysctl/sysctl.sh | 16 +++++++++++++
- 2 files changed, 46 insertions(+)
+--rQ+siVK50HQ8TR+2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 0cf7c547d61a..555244687443 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -170,12 +170,42 @@ static int test_sysctl_setup_node_tests(void)
- 	return 0;
- }
- 
-+/* Used to test that unregister actually removes the directory */
-+static struct ctl_table test_table_unregister[] = {
-+	{
-+		.procname	= "unregister_error",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+	},
-+	{}
-+};
-+
-+static int test_sysctl_run_unregister_nested(void)
-+{
-+	struct ctl_table_header *unregister;
-+
-+	unregister = register_sysctl("debug/test_sysctl/unregister_error",
-+				   test_table_unregister);
-+	if (!unregister)
-+		return -ENOMEM;
-+
-+	unregister_sysctl_table(unregister);
-+	return 0;
-+}
-+
- static int __init test_sysctl_init(void)
- {
- 	int err;
- 
- 	err = test_sysctl_setup_node_tests();
-+	if (err)
-+		goto out;
- 
-+	err = test_sysctl_run_unregister_nested();
-+
-+out:
- 	return err;
- }
- module_init(test_sysctl_init);
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index cb8f83dfe16b..a6d79d7a36e4 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -31,6 +31,7 @@ ALL_TESTS="$ALL_TESTS 0005:3:1:int_0003"
- ALL_TESTS="$ALL_TESTS 0006:50:1:bitmap_0001"
- ALL_TESTS="$ALL_TESTS 0007:1:1:boot_int"
- ALL_TESTS="$ALL_TESTS 0008:1:1:match_int"
-+ALL_TESTS="$ALL_TESTS 0009:1:1:unregister_error"
- 
- function allow_user_defaults()
- {
-@@ -797,6 +798,20 @@ sysctl_test_0008()
- 	return 0
- }
- 
-+sysctl_test_0009()
-+{
-+	TARGET="${SYSCTL}/$(get_test_target 0009)"
-+	echo -n "Testing if $TARGET unregistered correctly ..."
-+	if [ -d $TARGET ]; then
-+		echo "TEST FAILED"
-+		rc=1
-+		test_rc
-+	fi
-+
-+	echo "ok"
-+	return 0
-+}
-+
- list_tests()
- {
- 	echo "Test ID list:"
-@@ -813,6 +828,7 @@ list_tests()
- 	echo "0006 x $(get_test_count 0006) - tests proc_do_large_bitmap()"
- 	echo "0007 x $(get_test_count 0007) - tests setting sysctl from kernel boot param"
- 	echo "0008 x $(get_test_count 0008) - tests sysctl macro values match"
-+	echo "0009 x $(get_test_count 0009) - tests sysct unregister"
- }
- 
- usage()
--- 
-2.30.2
+On Thu, Jun 01, 2023 at 05:55:55PM +0300, Costa Shulyupin wrote:
+> From: Bagas Sanjaya <bagasdotme@gmail.com>
+>=20
+> Add classes:
+> * Core subsystems
+> * Storage
+> * Networking
+> * Peripherals and devices
+> * Embedded systems
+> * Integrity
+> * Virtualization
+> * Miscellaneous
 
+Above list is unnecessary, because the diff should clearly show those
+categories.
+
+>=20
+> There is a FIXME that says to organize subsystems listed in
+> subsystem-apis.rst. Fulfill it by categorize remaining subsytems
+> by purpose/themes, while sorting entries in each category.
+>=20
+> HID devices are already categorized in 3c591cc954d56e ("docs:
+> consolidate human interface subsystems").
+>=20
+> Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+
+Thanks for picking my version from v2 [1]. However, From: address in the
+patch message doesn't match one from message header nor your Signed-off-by
+address. Conversely, if you handle someone else's patch (in this case mine),
+you need to also add SoB from him/her.
+
+As you're still newbie here, I'd recommend you to try contributing to
+drivers/staging/ first in order to gain experience on kernel developement
+workflow. Also, you use your RedHat address, so I expect you have been
+given kernel development training from your company (and doesn't make
+trivial errors like these ones).
+
+Anyway, I'd like to send my own version instead (incorporating feedback
+=66rom this version) if you still reroll with trivial sending mistakes.
+
+Thanks.
+
+[1]: https://lore.kernel.org/linux-doc/ZHgM0qKWP3OusjUW@debian.me/
+=20
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--rQ+siVK50HQ8TR+2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHm/rwAKCRD2uYlJVVFO
+o/ZUAQCtuYTGyPA8AC22WDnO5aWuZ+KGuo0KtrmJ+gIcaexwRgD9HOoqQ0SMGUaV
+mZzZ+Di26FcMIUJgp8EMYc0VwvrZXw4=
+=vBk8
+-----END PGP SIGNATURE-----
+
+--rQ+siVK50HQ8TR+2--
