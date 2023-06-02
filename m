@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710FB71F708
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B72071F70A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbjFBAKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S233056AbjFBAOU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 20:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjFBAKe (ORCPT
+        with ESMTP id S229545AbjFBAOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:10:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AD5192
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685664589;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IQBTL4KWFtPVFbs25Ot9x0LJbTVOUU336wX1+2B8Rjk=;
-        b=KRpQ4p0lsShjgPrAistGE/q1NYddVokZjzPFvH4uYqcHDmRVzEnRJo780JG87vyGphuLt7
-        i258NdJqtQKHW3iIoWOt6OJj53De3Y/lciw+ZK4Yr2tXHpj7gvN18a4LKkupNqo7vBa7Em
-        Od1Zak1Irl8wtzAl6tsLUdpGWoO8u70=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-569-bkhrC-83MXW-CYPiVx5WNw-1; Thu, 01 Jun 2023 20:09:43 -0400
-X-MC-Unique: bkhrC-83MXW-CYPiVx5WNw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59A152932493;
-        Fri,  2 Jun 2023 00:09:43 +0000 (UTC)
-Received: from [10.22.8.52] (unknown [10.22.8.52])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1B0A40C6EC4;
-        Fri,  2 Jun 2023 00:09:42 +0000 (UTC)
-Message-ID: <f0cf5dd9-47fa-742d-a23c-42602dc3b89e@redhat.com>
-Date:   Thu, 1 Jun 2023 20:09:42 -0400
+        Thu, 1 Jun 2023 20:14:18 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EB912C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:14:17 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:38966)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q4sQp-00Ew6R-PT; Thu, 01 Jun 2023 18:14:15 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:54766 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q4sQo-003HU4-La; Thu, 01 Jun 2023 18:14:15 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     "~akihirosuda" <suda.kyoto@gmail.com>,
+        linux-kernel@vger.kernel.org, containers@lists.linux.dev,
+        serge@hallyn.com, brauner@kernel.org, akihiro.suda.cz@hco.ntt.co.jp
+References: <168547265011.24337.4306067683997517082-0@git.sr.ht>
+        <CAHC9VhQhBBPyZE24LM6KvYrET2huW-W_YYsyPndpNkn70Mu3Ug@mail.gmail.com>
+Date:   Thu, 01 Jun 2023 19:14:08 -0500
+In-Reply-To: <CAHC9VhQhBBPyZE24LM6KvYrET2huW-W_YYsyPndpNkn70Mu3Ug@mail.gmail.com>
+        (Paul Moore's message of "Tue, 30 May 2023 17:58:48 -0400")
+Message-ID: <87fs7abu0f.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] Documentation: Clarify usage of memory limits
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Dan Schatzberg <schatzberg.dan@gmail.com>,
-        Tejun Heo <tj@kernel.org>, Chris Down <chris@chrisdown.name>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
- <e6ae97f4-cdae-e655-d118-a11b3d679fd6@redhat.com>
- <20230601195345.GB157732@cmpxchg.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230601195345.GB157732@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1q4sQo-003HU4-La;;;mid=<87fs7abu0f.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19DIiVSRQ5BpipU+RbDjDyU5NgJlxnB9UQ=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 541 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 11 (2.1%), b_tie_ro: 10 (1.8%), parse: 0.96
+        (0.2%), extract_message_metadata: 20 (3.7%), get_uri_detail_list: 1.60
+        (0.3%), tests_pri_-2000: 19 (3.4%), tests_pri_-1000: 2.5 (0.5%),
+        tests_pri_-950: 1.29 (0.2%), tests_pri_-900: 1.08 (0.2%),
+        tests_pri_-200: 0.90 (0.2%), tests_pri_-100: 6 (1.1%), tests_pri_-90:
+        68 (12.6%), check_bayes: 67 (12.3%), b_tokenize: 6 (1.2%),
+        b_tok_get_all: 8 (1.5%), b_comp_prob: 2.4 (0.4%), b_tok_touch_all: 47
+        (8.7%), b_finish: 0.93 (0.2%), tests_pri_0: 227 (42.0%),
+        check_dkim_signature: 0.58 (0.1%), check_dkim_adsp: 2.5 (0.5%),
+        poll_dns_idle: 164 (30.4%), tests_pri_10: 2.1 (0.4%), tests_pri_500:
+        178 (32.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH linux 0/3] [PATCH] userns: add sysctl
+ "kernel.userns_group_range"
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 15:53, Johannes Weiner wrote:
-> On Thu, Jun 01, 2023 at 03:15:28PM -0400, Waiman Long wrote:
->> On 6/1/23 14:38, Dan Schatzberg wrote:
->>> The existing documentation refers to memory.high as the "main mechanism
->>> to control memory usage." This seems incorrect to me - memory.high can
->>> result in reclaim pressure which simply leads to stalls unless some
->>> external component observes and actions on it (e.g. systemd-oomd can be
->>> used for this purpose). While this is feasible, users are unaware of
->>> this interaction and are led to believe that memory.high alone is an
->>> effective mechanism for limiting memory.
->>>
->>> The documentation should recommend the use of memory.max as the
->>> effective way to enforce memory limits - it triggers reclaim and results
->>> in OOM kills by itself.
->> That is not how my understanding of memory.high works. When memory usage
->> goes past memory.high, memory reclaim will be initiated to reclaim the
->> memory back. Stall happens when memory.usage keep increasing like by
->> consuming memory faster than what memory reclaim can recover. When
->> memory.max is reached, OOM killer will then kill off the tasks.
-> This was the initial plan indeed: Slow down the workload and thus slow
-> the growth; hope that the workload recovers with voluntary frees; set
-> memory.max as a safety if it keeps going beyond.
->
-> This never panned out. Once workloads are stuck, they might not back
-> down on their own. By increasingly slowing growth, it becomes harder
-> and harder for them to reach the memory.max intervention point.
->
-> It's a very brittle configuration strategy. Unless you very carefully
-> calibrate memory.high and memory.max together with awareness of the
-> throttling algorithm, workloads that hit memory.high will just go to
-> sleep indefinitely. They require outside intervention that either
-> adjusts limits or implements kill policies based on observed sleeps
-> (they're reported as pressure via psi).
->
-> So the common usecases today end up being that memory.max is for
-> enforcing kernel OOM kills, and memory.high is a tool to implement
-> userspace OOM killing policies.
->
-> Dan is right to point out the additional expectations for userspace
-> management when memory.high is in used. And memory.max is still the
-> primary, works-out-of-the-box method of memory containment.
+Paul Moore <paul@paul-moore.com> writes:
 
-Thanks for clarification. I have to reset my false assumption.
+> On Tue, May 30, 2023 at 2:50 PM ~akihirosuda <akihirosuda@git.sr.ht> wrote:
+>>
+>> This sysctl limits groups who can create a new userns without
+>> CAP_SYS_ADMIN in the current userns, so as to mitigate potential kernel
+>> vulnerabilities around userns.
+>>
+>> The sysctl value format is same as "net.ipv4.ping_group_range".
+>>
+>> To disable creating new unprivileged userns, set the sysctl value to "1
+>> 0" in the initial userns.
+>>
+>> To allow everyone to create new userns, set the sysctl value to "0
+>> 4294967294". This is the default value.
+>>
+>> This sysctl replaces "kernel.unprivileged_userns_clone" that is found in
+>> Ubuntu [1] and Debian GNU/Linux.
+>>
+>> Link: https://git.launchpad.net/~ubuntu-
+>> kernel/ubuntu/+source/linux/+git/jammy/commit?id=3422764 [1]
+>
+> Given the challenges around adding access controls to userns
+> operations, have you considered using the LSM support that was added
+> upstream last year?  The relevant LSM hook can be found in commit
+> 7cd4c5c2101c ("security, lsm: Introduce security_create_user_ns()"),
 
-Cheers,
-Longman
 
+Paul how have you handled the real world regression I reported against
+chromium?
+
+Paul are you aware that the LSM hook can not be used to achieve the
+objective of this patchset?
+
+> and although only SELinux currently provides an access control
+> implementation, there is no reason you couldn't add support for your
+> favorite LSM, or even just a simple BPF LSM to enforce the group
+> controls as you've described them here.
+
+Is there a publicly available SELinux policy that uses that LSM hook?
+
+Eric
