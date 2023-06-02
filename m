@@ -2,293 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC0F720C2E
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 01:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46AB720C37
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 01:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236900AbjFBXHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 19:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S236618AbjFBXPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 19:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236833AbjFBXGy (ORCPT
+        with ESMTP id S234452AbjFBXPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 19:06:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF67E43
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 16:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685747168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g6wkyDZjE3AkPJxDBxHTBEFEzJVoOQ4nWaImAmEi0sc=;
-        b=aqePeWpru3LXVdZKoBm87b0ERXzgXoP2A5VtWC0+DDPI3ApDEKF8XXU5BKQQhsmhF0l1oJ
-        JxJwAHlejvvK8zdVSJf697LOdmzoUx/NbPX7YLdpq0Ae3JFIDuCeChxAm5MXv36xoeXB2S
-        KY9Mg4bhfO/Hcrq0ZeZans2DCd0rh5c=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-434-HxqvD66iMJSIa2WdzzSNMQ-1; Fri, 02 Jun 2023 19:06:07 -0400
-X-MC-Unique: HxqvD66iMJSIa2WdzzSNMQ-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-626204b0663so5584996d6.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 16:06:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685747166; x=1688339166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g6wkyDZjE3AkPJxDBxHTBEFEzJVoOQ4nWaImAmEi0sc=;
-        b=WgOEWhzRJErbvF+MbNB2WT10QGVg9s6JbN/0y8Lq0Mzl6MoBqdHmlwdjloNRAai/GT
-         LvAZKPt//RcpG2KtvhmDeKynbedzxpZQLnxfxNCGkezCnRI4N8i7uZ056eTDH2HM4v2k
-         y++Jl4qfGzmBRUkzTAiaibdJ5AnnSVBOJf8CjKyS3qZqpGeWCMs8rgbesftsqJTks516
-         mMrg/0WaI3/HDK9amjJz9D7ZeWtx1iTkKh/uNe4GsZhU0hADOKlILRtTkvoFH9UPNCaa
-         pkOfNasj+OJcVn9AxGDRy3F/GhrQPtYI5SmSZ6oUh3WJXg7cFEHADLAN0YQJh6XFPL/L
-         FtKQ==
-X-Gm-Message-State: AC+VfDzNoJ1m0dSkCscJEfAsTuuUGiTDSL6vmoA6nfXON3Y2Q+gtD3Id
-        ktg1XaAc9AhKNVWb6P7NASen6NJtsqfn5cK/CWQK3gXUWRpwgiuJ7nRD5qMAr3qOhLhRW3Lxito
-        vLpBdgyKgptwYj9CpSfrmRcdryXJTiWmGwHXqdf4RWh6Zzg5J1DapsQB+vpeXeBn78R1yEdUH0v
-        8GHnLOVA==
-X-Received: by 2002:a05:6214:5182:b0:625:aa49:c182 with SMTP id kl2-20020a056214518200b00625aa49c182mr11538756qvb.6.1685747166301;
-        Fri, 02 Jun 2023 16:06:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5inHsA1r7fWdyWc5XKfTSPD/IdY8jLR96FRCb15whPmG7ALRLYp3r+GW9iNxru7TlNqwqvFQ==
-X-Received: by 2002:a05:6214:5182:b0:625:aa49:c182 with SMTP id kl2-20020a056214518200b00625aa49c182mr11538709qvb.6.1685747165861;
-        Fri, 02 Jun 2023 16:06:05 -0700 (PDT)
-Received: from x1n.. (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id px13-20020a056214050d00b0062607ea6d01sm1400792qvb.50.2023.06.02.16.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 16:06:04 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>, peterx@redhat.com,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH 4/4] mm: Make most walk page paths with pmd_trans_unstable() to retry
-Date:   Fri,  2 Jun 2023 19:05:52 -0400
-Message-Id: <20230602230552.350731-5-peterx@redhat.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230602230552.350731-1-peterx@redhat.com>
-References: <20230602230552.350731-1-peterx@redhat.com>
+        Fri, 2 Jun 2023 19:15:23 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78971E40
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 16:15:18 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352MgZFL028367
+        for <linux-kernel@vger.kernel.org>; Fri, 2 Jun 2023 16:15:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : mime-version; s=s2048-2021-q4;
+ bh=XwxraOzOTsc37FVMG1KJQGJbdmNPpUJLHRCwudNIQ0c=;
+ b=AOtZuaE7/fBFnTMWpNqDHlGIcAY+Oc3rUshaJQxu7gcP/p7Y8Bh8rs9AZRTLDld/Bqww
+ jJPtJt/wAEmwQRFRZdS/5ZttBAl/1AcY/x9aIrV6NddYGPrKSVv3KK59IcwHKFYYr8g3
+ k+LVLz08jaUVS87O9pRY/EYh3xevIzxRxsSyonc0YjNCiTmhmTKqWz/qeroVrL6Wvzoc
+ I6hluI81kbM0fqUiUN6b1hJe3qGIAlFDHoJAZZzjXIfm3BzG7Ir0iPA7dhWbJ7UCkSDT
+ +JuVfBRhFqb4CjUlEvzIX0duYFBN7mkaMe+uV+dehm8g3jVhAFSMLD4xLvhPIwqAXnZo 2Q== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2171.outbound.protection.outlook.com [104.47.56.171])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qykxhbf6t-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 16:15:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KUdZCNW67b99z0L4pLDwb1NnbMQfLJtFRPfwXrrOBw4TI7s87adhStV7mw5H62s5Qay/ErzaMndSOpbtiEbdWkMSZYR48sB8dOYES6KwtdCogq0xZsE18LwlrMuw7/Era5Q5ACM4Eai1XjrLhkU/MZzAkAwDejAmAsXOqwkFgxUAxBqX2zjegsrdg3GhQdxzr7b4s+DCO/rCHKe1B9E+L0kUogglkcx6OmpI5xWG9wQmnlmlc2wTL0MN4vkV9uCkolHce+TyDnkaESTbGaXz1vgXDYo2fx70IaJ7/espwLdn/WVIz0ZOeRdmX+KOkOZ4tV1arSH7dUkai2Q3OnEnJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XwxraOzOTsc37FVMG1KJQGJbdmNPpUJLHRCwudNIQ0c=;
+ b=dpaf+vZIqQJM++w2G2jdKzFdQ6YAXVOY5izeW3Aw8Ll2X7/t4ppZAH5alogc02EIry8Xqhvxv1yaiijnOAWgJXJW7EARdVOtIAl2g7lAl4VETvVN2bIH+/H3yIKD3ZxImbVqlObThHZ+JcLhwOEnw/+EGz7ro7PLHSqUsOxjRJLC3/li1SaeFU0KbAl7rH2F+4L7krBcvEE3WPPEdU4EAMlT1sbKlc4WVe1k2wUg9rz+5buUXJAaTgidjGUQIsHegEKmCXrGiKP4ctVseDm52fBwscrCM4kTWVUtP35QJKRMxlv9KPyVYnPcu5kJ9fGLGiToR7d86Z3DiL1qdfQMsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from PH0PR15MB5117.namprd15.prod.outlook.com (2603:10b6:510:c4::8)
+ by DS0PR15MB5621.namprd15.prod.outlook.com (2603:10b6:8:13e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Fri, 2 Jun
+ 2023 23:15:15 +0000
+Received: from PH0PR15MB5117.namprd15.prod.outlook.com
+ ([fe80::2c21:3ce4:979d:ace0]) by PH0PR15MB5117.namprd15.prod.outlook.com
+ ([fe80::2c21:3ce4:979d:ace0%7]) with mapi id 15.20.6455.027; Fri, 2 Jun 2023
+ 23:15:14 +0000
+From:   Song Liu <songliubraving@meta.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v4] watchdog: Allow nmi watchdog to use "ref-cycles" event
+Thread-Topic: [PATCH v4] watchdog: Allow nmi watchdog to use "ref-cycles"
+ event
+Thread-Index: AQHZiR9WEaR3xoFFfEGCLaxGjWAWL694Nj4AgAAHooA=
+Date:   Fri, 2 Jun 2023 23:15:14 +0000
+Message-ID: <DCF269A8-4C64-4FDE-AFAC-92B6029EA3BA@fb.com>
+References: <20230518002555.1114189-1-song@kernel.org>
+ <20230602224744.GC695361@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230602224744.GC695361@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.500.231)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR15MB5117:EE_|DS0PR15MB5621:EE_
+x-ms-office365-filtering-correlation-id: 2ed56d17-07fc-4507-8bd6-08db63bf389d
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qceNfjMX53wQ1h0lhcjhD/h0kgrC/J+8JOUb1pXlCMUhls2kR+GvrsdEbj9oT9hGREUuICnw/Qdd2hIRE6HXzamKzKETA5UvFjq7j0Cn1N5ndTlTgl9NBx/qj9d6WwzPDSI0lMjlxoLL+EZoy2f8wZ5uMhDZWQlTrYUsLXUFkA0uCtwg9CchEsMctWINgat+zGTO/BL+9NDt6WgDBXZcV5wL0oeLtCY+fZIlIk43feVVj3HEMSTdy4YZgiGX2/NeEU9fXvna7Qu0iPbIV/Wk1TIbmpWaSOg2DXyv7FEx3p5Sa5mIrTNpPrXCBdnqBF20wXIa0Ok0PjHxd9tvKG8QezNL4DRkI+6DFDBIYAGzjc/K/PB1t+TXEhD7YQHLok27xCwsphSe3l+OfwzhHWVOcGr1KltVw5yipli54sXnD0IRZDpt/BI6eDogYnoQNNykAX9YPgM0jKc9dOGvo26nZlu5WslK1IaK8oIyrgjS1EPeSnX++MSkRaeZ0SV7mqNlP/+jHnHqV6985C+NdocV5tUQvSKC69/W13cFr4/ZBZjoSFl+PwojI34kkX0APrf9wbVE81d/D+S1IZ6Ar3qKJW/awJwl1fq1/PVmFx34QN/O+AhMMb7FNtfxerNeglfFMcb+R7Lzokquvm/BqKXdfw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR15MB5117.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(136003)(376002)(396003)(451199021)(83380400001)(2906002)(36756003)(86362001)(33656002)(38070700005)(38100700002)(122000001)(6486002)(41300700001)(316002)(5660300002)(8676002)(8936002)(54906003)(478600001)(64756008)(66446008)(66556008)(66946007)(66476007)(71200400001)(4326008)(6916009)(76116006)(91956017)(6512007)(9686003)(6506007)(53546011)(186003)(461764006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u55c0nlbp327VE2llZlKGxGoGgec8wOjqWW5iURb4QehkF4pxmfqRZsuo1oj?=
+ =?us-ascii?Q?YJd81Y1TdlRMYE5tgU27Vg1Ij39tU/M8Tm/9+KrtunYbHZB/z95fFBoS3kPK?=
+ =?us-ascii?Q?GTrlAUh5gzBuwl+iG/wwe8xbt90CwbL4K7DQSPRzIU+QUF1q0xMerjQv3szd?=
+ =?us-ascii?Q?tkPsx01M7/2yToUDZmw2D2lpQu6+PLJjluQZArYvkci+bbeGJCOqC/ElEhDr?=
+ =?us-ascii?Q?Mwd0Lqkd6TChmnwHmUrqr7xrpZIt9TdAdKjzDDKH8DPt6Bo+2cRxe21N73P5?=
+ =?us-ascii?Q?+B0PyIIrNoZKDos3G1uhmLP1zDnFI50HwE/EqdsfcIXc6G1/ZmC5q9o+Sk8C?=
+ =?us-ascii?Q?qHo/WY0jclGC+NJg7WkB5UlRQFU1/1JKsCFHDCRQ3aySwn5oz6RESpiHM5I1?=
+ =?us-ascii?Q?H9ReyzNvRWSP2P4KC/CuhOIRRODUXqC6GRg1ZCQTMSYuHP7x71CHPL8Q2Bkm?=
+ =?us-ascii?Q?jYmqs0SJgvbJtj3XE6hyNpbnnUO0souMZxyvpHobOyoF8ZRKnqwNOFaO/n7S?=
+ =?us-ascii?Q?PhcKGHVo9SMo/GkAhFAPaxKS5oaZF7cg6V71DJPnQgp13UVHaIlL6Kyxa9C1?=
+ =?us-ascii?Q?vnHTs+7e8EvDyb/AagWA6z1U+cglM6Aiv+61ta3MoBxHk2werd6xuQcOEK8r?=
+ =?us-ascii?Q?M7rRPeVI2ZK9xtM71eYZrSiXqcMkFYLQAAdgCl3V0o2b3hm3FWlIxRqhZuQt?=
+ =?us-ascii?Q?9HJVuHw4n77+jByiBWLuH41unmWho5aWu+aYvWJcY2oM9iQIrHdhkwQKaw56?=
+ =?us-ascii?Q?Y/638hNFaVvV7VRwktdf5dR9wFa7mZ910yPZwX3yjDeU/T++BzjHL9+qqsiv?=
+ =?us-ascii?Q?BvPSCErkEm8UWHV44OJmnf8jKDljSEaQym19ZvSAFp6qWFc2HFqJHnGK1NLM?=
+ =?us-ascii?Q?VkpHXqMtlgGp1ZXsZzkznMvyXCmNUswbMVpVaBINaQzX0KLNKlSF+3DKqtHY?=
+ =?us-ascii?Q?owta5vKCF7MEFyVsC8aVDedlBb9IYwCW5sR+X+SQ/tJMxyF6+X8bYrtViHfo?=
+ =?us-ascii?Q?jxxka5lpDNGblzqfpaeh671RxN26+xwtWJxZ/jzQRRgjQqxB+K7oU4PgHLNI?=
+ =?us-ascii?Q?llW0cSCtJIyKCDemX7B0YKU5rZ8wIQUAQ+5lWKGKR0NGt7slJdk4u5CFt8ZY?=
+ =?us-ascii?Q?MGgar0jXHQNqfVdkg1YRhsBrlWTqTne9QAeGst9C5EGz9UQu7wE1Vlqq+Czu?=
+ =?us-ascii?Q?dG77kudflqG7XghYcYd8vGaCE8G3tfiCPZ+yfHbz98SRQgEqX+nnDRgVf3sN?=
+ =?us-ascii?Q?9P2iRSK6SHXqNW3COO9PNmMfRwqn6R1fzz1HMmgDSA2KWyyqcBk5pJgL8vkp?=
+ =?us-ascii?Q?Ky7eCt5zGa+CmVNrChbEPVKncYeyT15h6Y/PYnBamFEwGsBB524jz6R/QZI6?=
+ =?us-ascii?Q?0ODHjTS4PdlNIib//ZIVAczW2ds0Y6YYIpsOE4TecPuQXwn7UPHh9HBQFS6E?=
+ =?us-ascii?Q?L1bSDOYvH7LBm5tN1ahdtMoSbXkk0ILQuSFCE049hBTJ8RlexnVMlPp20ndz?=
+ =?us-ascii?Q?7qRvNWQX2VkxLjZgM8tXg28S0luzWu2KibGKUxxebnKXCsv/DGYugpB/TRbW?=
+ =?us-ascii?Q?rQ99MPKBsYjx1vBgkhXsIsz81dr5WIXZ12vsKw5au4EHra+FMV3/3I5D9ecQ?=
+ =?us-ascii?Q?aLFJyhZmE7dBmMVXY2m0N37BTbZOGZCIpNB4mHTIftPN?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B830001C016CE841BDDFBCA2E11D1E52@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR15MB5117.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ed56d17-07fc-4507-8bd6-08db63bf389d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2023 23:15:14.2750
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ou/P0grCifkULDSgIwjtdSxFbtmjJfGV68SIfvWAQqPWLfayaBzpAi0KNw9SnusquB3w2BuYgsDQXgJwF4OGAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB5621
+X-Proofpoint-GUID: X9ztUn_h22_Svi2dMpr_Rlv5V3Uu-5sN
+X-Proofpoint-ORIG-GUID: X9ztUn_h22_Svi2dMpr_Rlv5V3Uu-5sN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_17,2023-06-02_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For most of the page walk paths, logically it'll always be good to have the
-pmd retries if hit pmd_trans_unstable() race.  We can treat it as none
-pmd (per comment above pmd_trans_unstable()), but in most cases we're not
-even treating that as a none pmd.  If to fix it anyway, a retry will be the
-most accurate.
 
-I've went over all the pmd_trans_unstable() special cases and this patch
-should cover all the rest places where we should retry properly with
-unstable pmd.  With the newly introduced ACTION_AGAIN since 2020 we can
-easily achieve that.
 
-These are the call sites that I think should be fixed with it:
+> On Jun 2, 2023, at 3:47 PM, Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> On Wed, May 17, 2023 at 05:25:55PM -0700, Song Liu wrote:
+>> NMI watchdog permanently consumes one hardware counters per CPU on the
+>> system. For systems that use many hardware counters, this causes more
+>> aggressive time multiplexing of perf events.
+>> 
+>> OTOH, some CPUs (mostly Intel) support "ref-cycles" event, which is rarely
+>> used. Add kernel cmdline arg nmi_watchdog=ref-cycles to configure the
+>> watchdog to use "ref-cycles" event instead of "cycles".
+>> 
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Signed-off-by: Song Liu <song@kernel.org>
+>> 
+>> ---
+>> Changes in v4:
+>> Fix compile error for !CONFIG_HARDLOCKUP_DETECTOR_PERF. (kernel test bot)
+>> 
+>> Changes in v3:
+>> 
+>> Pivot the design to use kernel arg nmi_watchdog=ref-cycles (Peter)
+>> ---
+>> Documentation/admin-guide/kernel-parameters.txt | 5 +++--
+>> include/linux/nmi.h                             | 2 ++
+>> kernel/watchdog.c                               | 2 ++
+>> kernel/watchdog_hld.c                           | 9 +++++++++
+>> 4 files changed, 16 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 9e5bab29685f..d378e23dad7c 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -3593,10 +3593,12 @@
+>> Format: [state][,regs][,debounce][,die]
+>> 
+>> nmi_watchdog= [KNL,BUGS=X86] Debugging features for SMP kernels
+>> - Format: [panic,][nopanic,][num]
+>> + Format: [panic,][nopanic,][ref-cycles][num]
+>> Valid num: 0 or 1
+>> 0 - turn hardlockup detector in nmi_watchdog off
+>> 1 - turn hardlockup detector in nmi_watchdog on
+>> + ref-cycles - configure the watchdog with perf event
+>> +             "ref-cycles" instead of "cycles"
+>> When panic is specified, panic when an NMI watchdog
+>> timeout occurs (or 'nopanic' to not panic on an NMI
+>> watchdog, if CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is set)
+> 
+> I still hate the whole ref-cycles thing, at the very least powerpc also
+> has HAVE_HARDLOCKUP_DETECTOR_PERF and they don't have ref-cycles, but
+> perhaps them wants to use a different event when the moon is just so...
+> 
+> What again was wrong with the option of specifying a raw event value and
+> falling back to cpu-cycles if that fails?
 
-*** fs/proc/task_mmu.c:
-smaps_pte_range[634]           if (pmd_trans_unstable(pmd))
-clear_refs_pte_range[1194]     if (pmd_trans_unstable(pmd))
-pagemap_pmd_range[1542]        if (pmd_trans_unstable(pmdp))
-gather_pte_stats[1891]         if (pmd_trans_unstable(pmd))
-*** mm/memcontrol.c:
-mem_cgroup_count_precharge_pte_range[6024] if (pmd_trans_unstable(pmd))
-mem_cgroup_move_charge_pte_range[6244] if (pmd_trans_unstable(pmd))
-*** mm/memory-failure.c:
-hwpoison_pte_range[794]        if (pmd_trans_unstable(pmdp))
-*** mm/mempolicy.c:
-queue_folios_pte_range[517]    if (pmd_trans_unstable(pmd))
-*** mm/madvise.c:
-madvise_cold_or_pageout_pte_range[425] if (pmd_trans_unstable(pmd))
-madvise_free_pte_range[625]    if (pmd_trans_unstable(pmd))
+The same raw event number may mean different events on different hardware. 
+So it is more likely to make mistakes in configurations. For example, r300 
+means ref-cycles on Intel CPUs, but it also means something else on AMD 
+CPUs. I need to be very careful which hosts to run with nmi_watchdog=r300, 
+as it may cause surprises. OTOH, nmi_watchdog=ref-cycles won't have this 
+issue. Of course, this won't work for powerpc. 
 
-IIUC most of them may or may not be a big issue even without a retry,
-either because they're already not strict (smaps, pte_stats, MADV_COLD,
-.. it can mean e.g. the statistic may be inaccurate or one less 2M chunk to
-cold worst case), but some of them could have functional error without the
-retry afaiu (e.g. pagemap, where we can have the output buffer shifted over
-the unstable pmd range.. so IIUC the pagemap result can be wrong).
+Does this make sense?
 
-While these call sites all look fine, and don't need any change:
-
-*** include/linux/pgtable.h:
-pmd_devmap_trans_unstable[1418] return pmd_devmap(*pmd) || pmd_trans_unstable(pmd);
-*** mm/gup.c:
-follow_pmd_mask[695]           if (pmd_trans_unstable(pmd))
-*** mm/mapping_dirty_helpers.c:
-wp_clean_pmd_entry[131]        if (!pmd_trans_unstable(&pmdval))
-*** mm/memory.c:
-do_anonymous_page[4060]        if (unlikely(pmd_trans_unstable(vmf->pmd)))
-*** mm/migrate_device.c:
-migrate_vma_insert_page[616]   if (unlikely(pmd_trans_unstable(pmdp)))
-*** mm/mincore.c:
-mincore_pte_range[116]         if (pmd_trans_unstable(pmd)) {
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- fs/proc/task_mmu.c  | 17 +++++++++++++----
- mm/madvise.c        |  8 ++++++--
- mm/memcontrol.c     |  8 ++++++--
- mm/memory-failure.c |  4 +++-
- mm/mempolicy.c      |  4 +++-
- 5 files changed, 31 insertions(+), 10 deletions(-)
-
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 6259dd432eeb..823eaba5c6bf 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -631,8 +631,11 @@ static int smaps_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
- 		goto out;
- 	}
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		goto out;
-+	}
-+
- 	/*
- 	 * The mmap_lock held all the way back in m_start() is what
- 	 * keeps khugepaged out of here and from collapsing things
-@@ -1191,8 +1194,10 @@ static int clear_refs_pte_range(pmd_t *pmd, unsigned long addr,
- 		return 0;
- 	}
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- 
- 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	for (; addr != end; pte++, addr += PAGE_SIZE) {
-@@ -1539,8 +1544,10 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
- 		return err;
- 	}
- 
--	if (pmd_trans_unstable(pmdp))
-+	if (pmd_trans_unstable(pmdp)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- 
- 	/*
-@@ -1888,8 +1895,10 @@ static int gather_pte_stats(pmd_t *pmd, unsigned long addr,
- 		return 0;
- 	}
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- #endif
- 	orig_pte = pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
- 	do {
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 78cd12581628..0fd81712022c 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -424,8 +424,10 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
- 	}
- 
- regular_folio:
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- #endif
- 	tlb_change_page_size(tlb, PAGE_SIZE);
- 	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-@@ -626,8 +628,10 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
- 		if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
- 			goto next;
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- 
- 	tlb_change_page_size(tlb, PAGE_SIZE);
- 	orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 6ee433be4c3b..15e50f033e41 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -6021,8 +6021,10 @@ static int mem_cgroup_count_precharge_pte_range(pmd_t *pmd,
- 		return 0;
- 	}
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	for (; addr != end; pte++, addr += PAGE_SIZE)
- 		if (get_mctgt_type(vma, addr, *pte, NULL))
-@@ -6241,8 +6243,10 @@ static int mem_cgroup_move_charge_pte_range(pmd_t *pmd,
- 		return 0;
- 	}
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- retry:
- 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	for (; addr != end; addr += PAGE_SIZE) {
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 004a02f44271..c97fb2b7ab4a 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -791,8 +791,10 @@ static int hwpoison_pte_range(pmd_t *pmdp, unsigned long addr,
- 		goto out;
- 	}
- 
--	if (pmd_trans_unstable(pmdp))
-+	if (pmd_trans_unstable(pmdp)) {
-+		walk->action = ACTION_AGAIN;
- 		goto out;
-+	}
- 
- 	mapped_pte = ptep = pte_offset_map_lock(walk->vma->vm_mm, pmdp,
- 						addr, &ptl);
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index f06ca8c18e62..af8907b4aad1 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -514,8 +514,10 @@ static int queue_folios_pte_range(pmd_t *pmd, unsigned long addr,
- 	if (ptl)
- 		return queue_folios_pmd(pmd, ptl, addr, end, walk);
- 
--	if (pmd_trans_unstable(pmd))
-+	if (pmd_trans_unstable(pmd)) {
-+		walk->action = ACTION_AGAIN;
- 		return 0;
-+	}
- 
- 	mapped_pte = pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
- 	for (; addr != end; pte++, addr += PAGE_SIZE) {
--- 
-2.40.1
+Thanks,
+Song
 
