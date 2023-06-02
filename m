@@ -2,140 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A515720227
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D1A72022E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbjFBMf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S235335AbjFBMf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234443AbjFBMf0 (ORCPT
+        with ESMTP id S235190AbjFBMfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:35:26 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230E918C;
-        Fri,  2 Jun 2023 05:35:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685709325; x=1717245325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RFn4lE0CnHg+BrpP8BhtcKygS1L2eOihwOiPLsc1C4Y=;
-  b=a4+vzQw4d8FHqp8ptwFER1BFbTbiYG2oJ+d+BfVy8OgCiaSQVpn8UnXT
-   8lUeUHxSzSGAMlpjqgmBGbwelTB2gp2RfqTwVPu5oD2LsMrKbogKj3nD5
-   s4ddlGLMPe43zImRnDyl3Lx45LyTsRo3IZvy3ry8g/D2THg8Pf/8uQ6Zj
-   CG8X5pBB0DowR/t+VqsLkcHdQ5Xsy6jQVlloAV2DP0zS6OpO5R/TVioGI
-   LRsW3onPt7o9l+iFzGgmHoIJRWZ0uSsvnpl2tR3nWYf8hJcluTmc38dP0
-   XKA+M0zJah0DZK5lOdl/N9eOlkzrSXGJx39jLplhUzhbENWll5imIRetQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="353352674"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="353352674"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 05:34:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737515174"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="737515174"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 Jun 2023 05:34:30 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q53zB-0000RJ-16;
-        Fri, 02 Jun 2023 12:34:29 +0000
-Date:   Fri, 2 Jun 2023 20:33:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>
-Subject: Re: [PATCH v2 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Message-ID: <202306022017.UbwjjWRN-lkp@intel.com>
-References: <20230602084925.215411-3-william.qiu@starfivetech.com>
+        Fri, 2 Jun 2023 08:35:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8291AD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:35:53 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q5400-0001aC-Bd; Fri, 02 Jun 2023 14:35:20 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q53zz-00016I-Rw; Fri, 02 Jun 2023 14:35:19 +0200
+Date:   Fri, 2 Jun 2023 14:35:19 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        lvc-project@linuxtesting.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-can@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] can: j1939: avoid possible use-after-free when
+ j1939_can_rx_register fails
+Message-ID: <20230602123519.GH17237@pengutronix.de>
+References: <20230526171910.227615-1-pchelkin@ispras.ru>
+ <20230526171910.227615-3-pchelkin@ispras.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230602084925.215411-3-william.qiu@starfivetech.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230526171910.227615-3-pchelkin@ispras.ru>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On Fri, May 26, 2023 at 08:19:10PM +0300, Fedor Pchelkin wrote:
+> Syzkaller reports the following failure:
+> 
+> BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
+> BUG: KASAN: use-after-free in j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
+> Write of size 4 at addr ffff888141c15058 by task swapper/3/0
+> 
+> CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.10.144-syzkaller #0
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> Call Trace:
+>  <IRQ>
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x107/0x167 lib/dump_stack.c:118
+>  print_address_description.constprop.0+0x1c/0x220 mm/kasan/report.c:385
+>  __kasan_report mm/kasan/report.c:545 [inline]
+>  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
+>  check_memory_region_inline mm/kasan/generic.c:186 [inline]
+>  check_memory_region+0x145/0x190 mm/kasan/generic.c:192
+>  instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
+>  atomic_fetch_sub_release include/asm-generic/atomic-instrumented.h:220 [inline]
+>  __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+>  __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+>  refcount_dec_and_test include/linux/refcount.h:333 [inline]
+>  kref_put include/linux/kref.h:64 [inline]
+>  j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
+>  j1939_sk_sock_destruct+0x44/0x90 net/can/j1939/socket.c:374
+>  __sk_destruct+0x4e/0x820 net/core/sock.c:1784
+>  rcu_do_batch kernel/rcu/tree.c:2485 [inline]
+>  rcu_core+0xb35/0x1a30 kernel/rcu/tree.c:2726
+>  __do_softirq+0x289/0x9a3 kernel/softirq.c:298
+>  asm_call_irq_on_stack+0x12/0x20
+>  </IRQ>
+>  __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+>  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+>  do_softirq_own_stack+0xaa/0xe0 arch/x86/kernel/irq_64.c:77
+>  invoke_softirq kernel/softirq.c:393 [inline]
+>  __irq_exit_rcu kernel/softirq.c:423 [inline]
+>  irq_exit_rcu+0x136/0x200 kernel/softirq.c:435
+>  sysvec_apic_timer_interrupt+0x4d/0x100 arch/x86/kernel/apic/apic.c:1095
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:635
+> 
+> Allocated by task 1141:
+>  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+>  kasan_set_track mm/kasan/common.c:56 [inline]
+>  __kasan_kmalloc.constprop.0+0xc9/0xd0 mm/kasan/common.c:461
+>  kmalloc include/linux/slab.h:552 [inline]
+>  kzalloc include/linux/slab.h:664 [inline]
+>  j1939_priv_create net/can/j1939/main.c:131 [inline]
+>  j1939_netdev_start+0x111/0x860 net/can/j1939/main.c:268
+>  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
+>  __sys_bind+0x1f2/0x260 net/socket.c:1645
+>  __do_sys_bind net/socket.c:1656 [inline]
+>  __se_sys_bind net/socket.c:1654 [inline]
+>  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
+>  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> 
+> Freed by task 1141:
+>  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+>  kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
+>  kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
+>  __kasan_slab_free+0x112/0x170 mm/kasan/common.c:422
+>  slab_free_hook mm/slub.c:1542 [inline]
+>  slab_free_freelist_hook+0xad/0x190 mm/slub.c:1576
+>  slab_free mm/slub.c:3149 [inline]
+>  kfree+0xd9/0x3b0 mm/slub.c:4125
+>  j1939_netdev_start+0x5ee/0x860 net/can/j1939/main.c:300
+>  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
+>  __sys_bind+0x1f2/0x260 net/socket.c:1645
+>  __do_sys_bind net/socket.c:1656 [inline]
+>  __se_sys_bind net/socket.c:1654 [inline]
+>  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
+>  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> 
+> It can be caused by this scenario:
+> 
+> CPU0					CPU1
+> j1939_sk_bind(socket0, ndev0, ...)
+>   j1939_netdev_start()
+> 					j1939_sk_bind(socket1, ndev0, ...)
+>                                           j1939_netdev_start()
+>   mutex_lock(&j1939_netdev_lock)
+>   j1939_priv_set(ndev0, priv)
+>   mutex_unlock(&j1939_netdev_lock)
+> 					  if (priv_new)
+> 					    kref_get(&priv_new->rx_kref)
+> 					    return priv_new;
+> 					  /* inside j1939_sk_bind() */
+> 					  jsk->priv = priv
+>   j1939_can_rx_register(priv) // fails
+>   j1939_priv_set(ndev, NULL)
+>   kfree(priv)
+> 					j1939_sk_sock_destruct()
+> 					j1939_priv_put() // <- uaf
+> 
+> To avoid this, call j1939_can_rx_register() under j1939_netdev_lock so
+> that a concurrent thread cannot process j1939_priv before
+> j1939_can_rx_register() returns.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> 
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 
-kernel test robot noticed the following build warnings:
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on linus/master v6.4-rc4 next-20230602]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/William-Qiu/dt-bindings-qspi-cdns-qspi-nor-Add-clocks-for-StarFive-JH7110-SoC/20230602-165251
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20230602084925.215411-3-william.qiu%40starfivetech.com
-patch subject: [PATCH v2 2/3] spi: cadence-quadspi: Add clock configuration for StarFive JH7110 QSPI
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230602/202306022017.UbwjjWRN-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6bbd49e32d407d210b6ea322696cef2e49bf3fa1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review William-Qiu/dt-bindings-qspi-cdns-qspi-nor-Add-clocks-for-StarFive-JH7110-SoC/20230602-165251
-        git checkout 6bbd49e32d407d210b6ea322696cef2e49bf3fa1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306022017.UbwjjWRN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_resume':
->> drivers/spi/spi-cadence-quadspi.c:1873:17: warning: ignoring return value of 'clk_bulk_prepare_enable' declared with attribute 'warn_unused_result' [-Wunused-result]
-    1873 |                 clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +1873 drivers/spi/spi-cadence-quadspi.c
-
-  1865	
-  1866	static int cqspi_resume(struct device *dev)
-  1867	{
-  1868		struct cqspi_st *cqspi = dev_get_drvdata(dev);
-  1869		struct spi_master *master = dev_get_drvdata(dev);
-  1870	
-  1871		clk_prepare_enable(cqspi->clk);
-  1872		if (of_device_is_compatible(dev->of_node, "starfive,jh7110-qspi"))
-> 1873			clk_bulk_prepare_enable(cqspi->num_clks, cqspi->clks);
-  1874		cqspi_wait_idle(cqspi);
-  1875		cqspi_controller_init(cqspi);
-  1876	
-  1877		cqspi->current_cs = -1;
-  1878		cqspi->sclk = 0;
-  1879	
-  1880		return spi_master_resume(master);
-  1881	}
-  1882	
+> ---
+>  net/can/j1939/main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+> index 6ed79afe19a5..ecff1c947d68 100644
+> --- a/net/can/j1939/main.c
+> +++ b/net/can/j1939/main.c
+> @@ -290,16 +290,18 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+>  		return priv_new;
+>  	}
+>  	j1939_priv_set(ndev, priv);
+> -	mutex_unlock(&j1939_netdev_lock);
+>  
+>  	ret = j1939_can_rx_register(priv);
+>  	if (ret < 0)
+>  		goto out_priv_put;
+>  
+> +	mutex_unlock(&j1939_netdev_lock);
+>  	return priv;
+>  
+>   out_priv_put:
+>  	j1939_priv_set(ndev, NULL);
+> +	mutex_unlock(&j1939_netdev_lock);
+> +
+>  	dev_put(ndev);
+>  	kfree(priv);
+>  
+> -- 
+> 2.34.1
+> 
+> 
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
