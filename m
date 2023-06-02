@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FD471FDC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C3B71FD88
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbjFBJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S235035AbjFBJUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbjFBJYW (ORCPT
+        with ESMTP id S235239AbjFBJT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:24:22 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAE610C9;
-        Fri,  2 Jun 2023 02:22:34 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXcwQ4wm0z4f403f;
-        Fri,  2 Jun 2023 17:22:30 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7PVtHlkS1cKKw--.42263S6;
-        Fri, 02 Jun 2023 17:22:31 +0800 (CST)
-From:   linan666@huaweicloud.com
-To:     song@kernel.org, neilb@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
-        houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v7 2/2] md/raid10: fix io loss while replacement replace rdev
-Date:   Fri,  2 Jun 2023 17:18:39 +0800
-Message-Id: <20230602091839.743798-3-linan666@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230602091839.743798-1-linan666@huaweicloud.com>
-References: <20230602091839.743798-1-linan666@huaweicloud.com>
+        Fri, 2 Jun 2023 05:19:57 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EA5E60
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:18:55 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51496f57e59so2529697a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685697534; x=1688289534;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XMDHAGot5D61eQSkGibzV4peKRC+G0XEae9mhUtejFk=;
+        b=SWo66ZpCpzIDSReogD23fr1upaHouMk8ctCEJXZZFHQawN6X5YMLCMQ+LErP9XZ0Gx
+         OWfjvHU6TwaixSPmCyiJtZj2KGaWG2o5YAfsQejIw73Ovmx7nhURisel9qkit2BZJVPB
+         Cfw9SqfcrYJ5z/5sU+mz28kc2nGHW0ZxG8Xy3GWUsrk0Yr2LGBFNsSDWP/jfrtpyOUzl
+         NS9DE/L90Ixa1p2ifQgndqAGYMnZeC3nslWziHlX7FmBzH1aOqZCdhBWitOEnI+uDuMk
+         rp+n5pKzTaqUC+wKpz1drDn9EEZCkKJtK+YiICvuvtq+CecAiCmpIVzF6fIJIOBbkHvW
+         Drrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685697534; x=1688289534;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMDHAGot5D61eQSkGibzV4peKRC+G0XEae9mhUtejFk=;
+        b=EkPompYG0pSxewhs+7AjB2D1ogSOmOSBRaD10QoPXRNGnEn6/LNcKn/xtFgnKkZTQ2
+         HxtorngF51NCll+IsFAby6wXYz2+NJ1kXvH09LYkTRnEy8Q1tIwYXFU+NeQiaknU2Nob
+         bh7BtkIB7TMxk5I1W04oJzCU+A6BzVJNE3gEd3Yr9iAYOtiuuTXPC4AU4pLSBXxV0vQM
+         mK5myX+W2jqxk45k5hWY1bUyIeeVVdoq9KQAYotHMeTdmakihT+Dx6yVZ60G7nRPRfdw
+         gl+L3C/FX+iyDLkSMBDoZEccH09gnykckbx29vwqVdfrhs9OfK/gbco/ALzkLjcffBZe
+         5ejg==
+X-Gm-Message-State: AC+VfDzuoNvl6KhZOlAuGevd8xmY60XKTPjPTw/MZ3IdoTnMNR95byR0
+        AD8E7Sq+OVLyq5H7K37QMSuYGWeGMo7SxeDFTDU=
+X-Google-Smtp-Source: ACHHUZ4NJQgef5nT4Z3jxZmxleaCikSv6tIBeaJXkxMfQ/O97sFDw1/UnRNbuS/+gtZmvOZlY6994FLcBFPbMTrTVMI=
+X-Received: by 2002:aa7:da42:0:b0:510:e80f:fa4e with SMTP id
+ w2-20020aa7da42000000b00510e80ffa4emr1741336eds.1.1685697533866; Fri, 02 Jun
+ 2023 02:18:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7PVtHlkS1cKKw--.42263S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWfAF4fWF1DArWrGF17Wrg_yoW5Jr1fpF
-        4Dt3Z5ZryUAwsrKFs8JF4UJa4SvrWxta1rJry3W343u3W5trWUAa47G3y3Zrs8ZFZ5Xry5
-        Xa13Kws5ua429FDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
-        ACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWU
-        JVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU89L05UUUUU==
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7208:10bc:b0:6b:3f71:39b1 with HTTP; Fri, 2 Jun 2023
+ 02:18:53 -0700 (PDT)
+Reply-To: mrs.sophialorence853@gmail.com
+From:   "mrs. sophia lorence" <mrsaichagaddafi222@gmail.com>
+Date:   Fri, 2 Jun 2023 02:18:53 -0700
+Message-ID: <CAKMfHD7Cubkid22yBW+1ZYCc2oNBXoankwXx_nd=xiGW2uja_g@mail.gmail.com>
+Subject: HELLO DEAR
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:534 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.sophialorence853[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrsaichagaddafi222[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsaichagaddafi222[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Nan <linan122@huawei.com>
+HELLO DEAR
 
-When removing a disk with replacement, the replacement will be used to
-replace rdev. During this process, there is a brief window in which both
-rdev and replacement are read as NULL in raid10_write_request(). This
-will result in io not being submitted but it should be.
+I'm a dying woman here in the hospital, I was diagnosed as a Cancer
+patient over 2 Years ago. I am a business woman
+dealing with Gold Exportation. I Am from Us California
+I have a charitable and unfulfillment
 
-  //remove				//write
-  raid10_remove_disk			raid10_write_request
-   mirror->rdev = NULL
-					 read rdev -> NULL
-   mirror->rdev = mirror->replacement
-   mirror->replacement = NULL
-					 read replacement -> NULL
+project that am about to handover to you, if you are interested please
+Reply, hope to hear from you.
 
-Fix it by reading replacement first and rdev later, meanwhile, use smp_mb()
-to prevent memory reordering.
+Please Reply Me with my private Email for Faster Communication
 
-Fixes: 475b0321a4df ("md/raid10: writes should get directed to replacement as well as original.")
-Signed-off-by: Li Nan <linan122@huawei.com>
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/md/raid10.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ mrs.sophialorence853@gmail.com
 
-diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 3d52fb618571..c867efbc6197 100644
---- a/drivers/md/raid10.c
-+++ b/drivers/md/raid10.c
-@@ -779,8 +779,16 @@ static struct md_rdev *read_balance(struct r10conf *conf,
- 		disk = r10_bio->devs[slot].devnum;
- 		rdev = rcu_dereference(conf->mirrors[disk].replacement);
- 		if (rdev == NULL || test_bit(Faulty, &rdev->flags) ||
--		    r10_bio->devs[slot].addr + sectors > rdev->recovery_offset)
-+		    r10_bio->devs[slot].addr + sectors >
-+		    rdev->recovery_offset) {
-+			/*
-+			 * Read replacement first to prevent reading both rdev
-+			 * and replacement as NULL during replacement replace
-+			 * rdev.
-+			 */
-+			smp_mb();
- 			rdev = rcu_dereference(conf->mirrors[disk].rdev);
-+		}
- 		if (rdev == NULL ||
- 		    test_bit(Faulty, &rdev->flags))
- 			continue;
-@@ -1479,9 +1487,15 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
- 
- 	for (i = 0;  i < conf->copies; i++) {
- 		int d = r10_bio->devs[i].devnum;
--		struct md_rdev *rdev = rcu_dereference(conf->mirrors[d].rdev);
--		struct md_rdev *rrdev = rcu_dereference(
--			conf->mirrors[d].replacement);
-+		struct md_rdev *rdev, *rrdev;
-+
-+		rrdev = rcu_dereference(conf->mirrors[d].replacement);
-+		/*
-+		 * Read replacement first to prevent reading both rdev and
-+		 * replacement as NULL during replacement replace rdev.
-+		 */
-+		smp_mb();
-+		rdev = rcu_dereference(conf->mirrors[d].rdev);
- 		if (rdev == rrdev)
- 			rrdev = NULL;
- 		if (rdev && (test_bit(Faulty, &rdev->flags)))
--- 
-2.39.2
-
+From mrs.sophia lorence
