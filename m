@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0345371F771
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1155071F773
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbjFBBBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S232984AbjFBBCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFBBBl (ORCPT
+        with ESMTP id S229689AbjFBBCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:01:41 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEB2E4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:01:40 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b1bd4fcc22so841335ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:01:40 -0700 (PDT)
+        Thu, 1 Jun 2023 21:02:14 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEAF19F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:02:07 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-19a13476ffeso1717964fac.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:02:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685667700; x=1688259700;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nbf2YY9JgvSR1isDO4f+1dVMAPGRxAlaP3N8pZvTMnM=;
-        b=NTu3RQc/jBKHO9MZ6qOtzpgygscxYYJv1uhntZv9YZJ+aS9lg11DuZKYikquoDjv0T
-         VxYaKjTdzHfMASf4ahZyEBibdY/+SP+kHRTItKffWfHcVU+/Chf47HtLQWh1TLf9AJVm
-         sbaKU3bH5OLrETrrb/t+0OXzj+juO1iyhZe2UKsb0ywusnKh8WdQmrcoUzV4oVwN6lzJ
-         7H7pzT7syiMdpSQWzHqeGm5j1IHgvEuqffDYN9UXji9zCt8LIwy5I4dekA5ULmroDxe4
-         xocWeBDRecCm/PxI1uFHi7UV0XUftNoT2veHu+HSrUxyM1gi5FJOsf5q59ua3HNsWhn3
-         fhng==
+        d=paul-moore.com; s=google; t=1685667726; x=1688259726;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9o3/2D9pqXQu0Kja08e1hU2rc3ztUxCY4Eps47VldFo=;
+        b=KNkEPCsbkJxvJYdvTrUPo8kiFxyN3E0oTIVRNgXzBZ+/0ECQSM+jKwqtWrysFcjw6a
+         DZyYom+T006pCCnXmWAqmmb2A5pJTinU18kAUM5QVhz+0QwucHpSGiqUt7p4K5CTp65m
+         4/0oyu60fV247yyWntwJKLXfavATpkxPNIOeA9vbm7Wxr6sVcttB9XTUAb9aZebN9FK3
+         Y8G09YaYrtHFLmhTVtOijFcYZkKUNBmR+hco1cQ/uP9eEQDxdmofwDaCkTgocKzFRW5Y
+         ux4AIt4qlQGTwUnnRMG+GYwJ5Ssnwib6KYmA6fZphSCC2wT60LGkHKkIaq7Fn143dD5r
+         X8qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685667700; x=1688259700;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nbf2YY9JgvSR1isDO4f+1dVMAPGRxAlaP3N8pZvTMnM=;
-        b=SIzS8va0zpBWOiyZiJ09/lnnZyagG8URR5rfJj53XErheVFRtaPTDOUhlbo8nY4qH4
-         z3RptcI28/0hGgd1t0PtZHTG6OqOfNWv6z003cOuQbuPMXaf8WiOw4Yiv6rmePgXjX0h
-         iYa3clRLoHhtkGdjW9rTCuC+bX+1Ppeb/X2vKrqW2uzPwLUDNOH3UtZZUVbPN3jCNRj/
-         p2cn3z1DzW3mFRI4PELSSIYx5pFrOicM9U+pDN4ybRHyuPPdpzrjAZKJaPdgnjbtBvAZ
-         VA1nhvsAT8ZjbN+PpkXBh9q83Jx4y4XLwb99Npz0oDzMcnKzEFjcx7xn9N7qdlAyWh+j
-         Uwnw==
-X-Gm-Message-State: AC+VfDxdONG54TF4+Qx1rDiJhjxFk/ENSIZ0Gis0DXJcA3KiWU9rifEA
-        CiiJqhYwy3FNWaXdiIO1xFIxbHSc9vY=
-X-Google-Smtp-Source: ACHHUZ6PixROVRiD0d09qoKBuv2/hAT8sl7ON6bIyuLhSadb1FPDwByLKB3+rJ4v9xCkzE7nauuhhN2LCC4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:bf4c:b0:1ac:af80:5a8a with SMTP id
- u12-20020a170902bf4c00b001acaf805a8amr252587pls.9.1685667700010; Thu, 01 Jun
- 2023 18:01:40 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  1 Jun 2023 18:01:37 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230602010137.784664-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86/mmu: Grab memslot for correct address space in NX
- recovery worker
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fabio Coatti <fabio.coatti@gmail.com>
+        d=1e100.net; s=20221208; t=1685667726; x=1688259726;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9o3/2D9pqXQu0Kja08e1hU2rc3ztUxCY4Eps47VldFo=;
+        b=hTHrHKjFK+YIgK29VZyCmGJRfSRruiFO17f7GBBPZSwZVvserCaVJScsSfDWDevOSi
+         tB7Zv+dPYOaeLx8vn9Bqqdtn0CcP32sEZlgOv/eF9ezlDzZYKo94ktWCmOUjDg/160Dq
+         i4JBNRngw2JzXLZK85nNFn+6XhMD5sm8yhwKXVpl1WVypLajpVgTa8tAq+Ii+YnmwakB
+         LKFsRcFjK6Zq88aVL2BqncLf2ieuo9MACg1J6OgFfFEmglvCC5HxSH/uLTVaKXdTJrU0
+         YekaUXfV+FRw5ocWNYjPhUFAK2cVF1VdkiYohIliEfa8rGTY6jm49nHMLSwGsOCIKzsV
+         8F2A==
+X-Gm-Message-State: AC+VfDysAIKSpliUB2ODfpovnSi6Tl1tTezx9NgP5uVlMEtYtI/r14BX
+        KrdlTrnfcuYn9ZQ2XtVrcNOiO0+uH+wEJMVk6gZIiUO/6OyRk3A=
+X-Google-Smtp-Source: ACHHUZ6BFLtcpI/8pyU4ctzfJ+V7wPvO8tH2XND3faYj8YEVhBvhnKC7TofGwk7sr16sLm3J/vAdhLUnJrx8pfgPRGI=
+X-Received: by 2002:a05:6870:3491:b0:19f:6711:8dfc with SMTP id
+ n17-20020a056870349100b0019f67118dfcmr629339oah.31.1685667726423; Thu, 01 Jun
+ 2023 18:02:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <168547265011.24337.4306067683997517082-0@git.sr.ht>
+ <CAHC9VhQhBBPyZE24LM6KvYrET2huW-W_YYsyPndpNkn70Mu3Ug@mail.gmail.com> <87fs7abu0f.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87fs7abu0f.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 1 Jun 2023 21:01:55 -0400
+Message-ID: <CAHC9VhRk3WhXh-GTDSKFW3PujXiQCDy3xk4Xb9_Lo4szgQ5G6Q@mail.gmail.com>
+Subject: Re: [PATCH linux 0/3] [PATCH] userns: add sysctl "kernel.userns_group_range"
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     "~akihirosuda" <suda.kyoto@gmail.com>,
+        linux-kernel@vger.kernel.org, containers@lists.linux.dev,
+        serge@hallyn.com, brauner@kernel.org, akihiro.suda.cz@hco.ntt.co.jp
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,79 +71,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Factor in the address space (non-SMM vs. SMM) of the target shadow page
-when recovering potential NX huge pages, otherwise KVM will retrieve the
-wrong memslot when zapping shadow pages that were created for SMM.  The
-bug most visibly manifests as a WARN on the memslot being non-NULL, but
-the worst case scenario is that KVM could unaccount the shadow page
-without ensuring KVM won't install a huge page, i.e. if the non-SMM slot
-is being dirty logged, but the SMM slot is not.
+On Thu, Jun 1, 2023 at 8:14=E2=80=AFPM Eric W. Biederman <ebiederm@xmission=
+.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> > On Tue, May 30, 2023 at 2:50=E2=80=AFPM ~akihirosuda <akihirosuda@git.s=
+r.ht> wrote:
+> >>
+> >> This sysctl limits groups who can create a new userns without
+> >> CAP_SYS_ADMIN in the current userns, so as to mitigate potential kerne=
+l
+> >> vulnerabilities around userns.
+> >>
+> >> The sysctl value format is same as "net.ipv4.ping_group_range".
+> >>
+> >> To disable creating new unprivileged userns, set the sysctl value to "=
+1
+> >> 0" in the initial userns.
+> >>
+> >> To allow everyone to create new userns, set the sysctl value to "0
+> >> 4294967294". This is the default value.
+> >>
+> >> This sysctl replaces "kernel.unprivileged_userns_clone" that is found =
+in
+> >> Ubuntu [1] and Debian GNU/Linux.
+> >>
+> >> Link: https://git.launchpad.net/~ubuntu-
+> >> kernel/ubuntu/+source/linux/+git/jammy/commit?id=3D3422764 [1]
+> >
+> > Given the challenges around adding access controls to userns
+> > operations, have you considered using the LSM support that was added
+> > upstream last year?  The relevant LSM hook can be found in commit
+> > 7cd4c5c2101c ("security, lsm: Introduce security_create_user_ns()"),
+>
+> Paul how have you handled the real world regression I reported against
+> chromium?
 
- ------------[ cut here ]------------
- WARNING: CPU: 1 PID: 3911 at arch/x86/kvm/mmu/mmu.c:7015
- kvm_nx_huge_page_recovery_worker+0x38c/0x3d0 [kvm]
- CPU: 1 PID: 3911 Comm: kvm-nx-lpage-re
- RIP: 0010:kvm_nx_huge_page_recovery_worker+0x38c/0x3d0 [kvm]
- RSP: 0018:ffff99b284f0be68 EFLAGS: 00010246
- RAX: 0000000000000000 RBX: ffff99b284edd000 RCX: 0000000000000000
- RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
- RBP: ffff9271397024e0 R08: 0000000000000000 R09: ffff927139702450
- R10: 0000000000000000 R11: 0000000000000001 R12: ffff99b284f0be98
- R13: 0000000000000000 R14: ffff9270991fcd80 R15: 0000000000000003
- FS:  0000000000000000(0000) GS:ffff927f9f640000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007f0aacad3ae0 CR3: 000000088fc2c005 CR4: 00000000003726e0
- Call Trace:
-  <TASK>
-__pfx_kvm_nx_huge_page_recovery_worker+0x10/0x10 [kvm]
-  kvm_vm_worker_thread+0x106/0x1c0 [kvm]
-  kthread+0xd9/0x100
-  ret_from_fork+0x2c/0x50
-  </TASK>
- ---[ end trace 0000000000000000 ]---
+I don't track chromium development.
 
-This bug was exposed by commit edbdb43fc96b ("KVM: x86: Preserve TDP MMU
-roots until they are explicitly invalidated"), which allowed KVM to retain
-SMM TDP MMU roots effectively indefinitely.  Before commit edbdb43fc96b,
-KVM would zap all SMM TDP MMU roots and thus all SMM TDP MMU shadow pages
-once all vCPUs exited SMM, which made the window where this bug (recovering
-an SMM NX huge page) could be encountered quite tiny.  To hit the bug, the
-NX recovery thread would have to run while at least one vCPU was in SMM.
-Most VMs typically only use SMM during boot, and so the problematic shadow
-pages were gone by the time the NX recovery thread ran.
+> Paul are you aware that the LSM hook can not be used to achieve the
+> objective of this patchset?
 
-Now that KVM preserves TDP MMU roots until they are explicitly invalidated
-(e.g. by a memslot deletion), the window to trigger the bug is effectively
-never closed because most VMMs don't delete memslots after boot (except
-for a handful of special scenarios).
+/me shrugs
 
-Fixes: eb298605705a ("KVM: x86/mmu: Do not recover dirty-tracked NX Huge Pages")
-Reported-by: Fabio Coatti <fabio.coatti@gmail.com>
-Closes: https://lore.kernel.org/all/CADpTngX9LESCdHVu_2mQkNGena_Ng2CphWNwsRGSMxzDsTjU2A@mail.gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I thought one could look into a cred struct using a BPF LSM, which
+would allow one to make access control decisions based on group ID,
+but I will be the first to admit I'm not a BPF LSM expert.
+Regardless, one could introduce a group ID check into a LSM if they
+were so inclined.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index c8961f45e3b1..6eaa3d6994ae 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -7091,7 +7091,10 @@ static void kvm_recover_nx_huge_pages(struct kvm *kvm)
- 		 */
- 		slot = NULL;
- 		if (atomic_read(&kvm->nr_memslots_dirty_logging)) {
--			slot = gfn_to_memslot(kvm, sp->gfn);
-+			struct kvm_memslots *slots;
-+
-+			slots = kvm_memslots_for_spte_role(kvm, sp->role);
-+			slot = __gfn_to_memslot(slots, sp->gfn);
- 			WARN_ON_ONCE(!slot);
- 		}
- 
+I also find it slightly amusing that you are arguing against my reply
+that was discussing *not* adding another userns control point; of all
+people I thought you would be supportive of this ... /me shrugs again.
 
-base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
--- 
-2.41.0.rc2.161.g9c6817b8e7-goog
+> > and although only SELinux currently provides an access control
+> > implementation, there is no reason you couldn't add support for your
+> > favorite LSM, or even just a simple BPF LSM to enforce the group
+> > controls as you've described them here.
+>
+> Is there a publicly available SELinux policy that uses that LSM hook?
 
+I have no idea, I don't track all of the publicly available SELinux
+policies because frankly it doesn't matter; the SELinux feature
+exists, and it is my role to support and maintain it.  There are
+LSM/SELinux features which are not widely exercised in general purpose
+SELinux policies for various reasons, but *are* used in specialized
+environments that are not often discussed on public mailing lists.
+
+--=20
+paul-moore.com
