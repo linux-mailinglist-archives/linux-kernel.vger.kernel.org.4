@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE10F71FEF0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AE671FEF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235322AbjFBKVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S235332AbjFBKVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235309AbjFBKVk (ORCPT
+        with ESMTP id S235317AbjFBKVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:21:40 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754A6194
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:21:39 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so2759070a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:21:39 -0700 (PDT)
+        Fri, 2 Jun 2023 06:21:43 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C09196
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:21:41 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5149e65c218so2751071a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:21:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1685701297; x=1688293297;
+        d=amarulasolutions.com; s=google; t=1685701299; x=1688293299;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tlm5X0f1SJIUHEa+Ch7CRBAmlhS5LXsyaOP8GZ1/KKI=;
-        b=dKNDTUc5GWxmNVpO0hSi+LT5wi86h1Qt4xjEcapRn/pCf5bEu4VvXaLEhGOqCbsemD
-         1GxvShFnnr5s80Jb8Ddo65hgCGg55+zcmpE8fjFyl+fHXMqreR9SMD/mHRb1mC6jtvkC
-         addZVekgyLsnZlOZQgZfaIJRXy8Pm2lpJjTCA=
+        bh=+N6ncdPhuJx70XZ6yjaTOtXW/wJdhXZgpqu86CyLnmg=;
+        b=FN+wcbGOSq0oaAGO68O3XS3iH/IcziIzYBzGbvG0X5hp7SCpf4EJJNAg1ZHmseAnew
+         VPCMtcRQpkV5+FX+hVA0hl3xoaUG8TEfI/J/HgK+jzruhXOyLLGtoLcSSQIjLRIjohII
+         VKnbARjYi/zDstgJJ4cvJWtQugRvzYaC5omoE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685701297; x=1688293297;
+        d=1e100.net; s=20221208; t=1685701299; x=1688293299;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tlm5X0f1SJIUHEa+Ch7CRBAmlhS5LXsyaOP8GZ1/KKI=;
-        b=D1MtIWBTzzrAv8Rqed2YPX5B0SEcbOJj1hMh8B0itiwK5wjZgD6U51TizD2BcFoevr
-         Qt4ugMo8yL3nEYfXUDO+d7XpX3kFTCLCi2qL13w3wVTppbiQSRvR8iwoimCgQAcyD5Ae
-         bUJlU8sLAG8FTatT6CnO3lz9JAJ9hVLiYliRQFLK/s07JXbOq4EHq4LK6RL/PuEaFgzO
-         nvIQrBfNH3QvKqMOuuXdj9e9viC72viK51cIJgOdBVcDDE8bwHrbdPqv9fpNkQ5ldAVl
-         kxiRLK5vTAUqlrax+HPHZGPrYNC0PDXjoDCCF2ruy98yYcw9K9D4r6kBOBo7J4QCX2K0
-         xSbw==
-X-Gm-Message-State: AC+VfDxP/X1jMJngvhNbnHrNVbodPXNuxftt8TD0wlH/T8ck80ASXiH5
-        RYJl0+HcT7AojoP6PnrTbgfsv35P5hZbvlvvPc7g6w==
-X-Google-Smtp-Source: ACHHUZ6KUZCEHQmagmTjEK/HnGclXdX1cbLKZklW1ePFhWRcqd7vYKbYY6Cpp/PfHZR+wLKRik0eKA==
-X-Received: by 2002:aa7:c997:0:b0:50b:c630:a956 with SMTP id c23-20020aa7c997000000b0050bc630a956mr1635028edt.17.1685701297624;
-        Fri, 02 Jun 2023 03:21:37 -0700 (PDT)
+        bh=+N6ncdPhuJx70XZ6yjaTOtXW/wJdhXZgpqu86CyLnmg=;
+        b=FngLqwiNesdtaz1Nod8AsoAWy/V+pbEBmJrhXw2ljMkBOmGP/mgb7nYqHiJn1dqcxW
+         WHD16d6da9+re8n2iY/9/g6XJh0CmUDG3ACP8ILQ5mPaVLMQCVTBUyT5RKNlQ64FigKe
+         X3Z5FborUYCWfTZo+hFUbjhyjBH5r8i9Eh5j2xF8FKMSAbur8h6gPTvfmh9pYZb3d/st
+         Ry1FxDlqifAnR7lGr8H3vQ4fxGnTus0VWma4BsveE7W+7fwyuV0nLVVW2WxhSN2oINWu
+         atrlcMh6RClipyQhGDPBiJTkhg3GXuQi490nXKxlSSE2s3YPaG5Au97M88JyeSAGeQHv
+         n+Mw==
+X-Gm-Message-State: AC+VfDwCigrk9IlXdsN6nOmxsiff3PYT27SMU/v8rWWyHdgwicHL8a9P
+        rJ7RlD+nMdWw7mpxuTZojbXjO93+1uSI5KyKPTczOw==
+X-Google-Smtp-Source: ACHHUZ4cxTRC+aOD1sVygvyNLnQtq32ncqv67n9fRQJ5jpcnMNundXDEtA2HWACi2ZfzZnSq8+CJvw==
+X-Received: by 2002:aa7:d817:0:b0:514:9d17:d6e8 with SMTP id v23-20020aa7d817000000b005149d17d6e8mr1521068edq.26.1685701299310;
+        Fri, 02 Jun 2023 03:21:39 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-248-31-20.retail.telecomitalia.it. [95.248.31.20])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa7d398000000b0051499320435sm528887edq.14.2023.06.02.03.21.36
+        by smtp.gmail.com with ESMTPSA id x24-20020aa7d398000000b0051499320435sm528887edq.14.2023.06.02.03.21.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 03:21:37 -0700 (PDT)
+        Fri, 02 Jun 2023 03:21:38 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
         michael@amarulasolutions.com,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
         Conor Dooley <conor+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2 3/6] ARM: dts: stm32: support display on stm32f746-disco board
-Date:   Fri,  2 Jun 2023 12:21:19 +0200
-Message-Id: <20230602102123.3345587-4-dario.binacchi@amarulasolutions.com>
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 4/6] dt-bindings: display: simple: add Rocktech RK043FN48H
+Date:   Fri,  2 Jun 2023 12:21:20 +0200
+Message-Id: <20230602102123.3345587-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230602102123.3345587-1-dario.binacchi@amarulasolutions.com>
 References: <20230602102123.3345587-1-dario.binacchi@amarulasolutions.com>
@@ -77,89 +80,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to Rocktech RK043FN48H display on stm32f746-disco board.
+Add compatible to panel-simple for Rocktech Displays Limited
+RK043FN48H 4.3" 480x272 LCD-TFT panel.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
 ---
 
-(no changes since v1)
+Changes in v2:
+- Add 'Acked-by' tag of Conor Dooley.
 
- arch/arm/boot/dts/stm32f746-disco.dts | 51 +++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32f746-disco.dts b/arch/arm/boot/dts/stm32f746-disco.dts
-index c11616ed5fc6..cda423b6a874 100644
---- a/arch/arm/boot/dts/stm32f746-disco.dts
-+++ b/arch/arm/boot/dts/stm32f746-disco.dts
-@@ -60,10 +60,41 @@ memory@c0000000 {
- 		reg = <0xC0000000 0x800000>;
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		linux,cma {
-+			compatible = "shared-dma-pool";
-+			no-map;
-+			size = <0x80000>;
-+			linux,dma-default;
-+		};
-+	};
-+
- 	aliases {
- 		serial0 = &usart1;
- 	};
- 
-+	backlight: backlight {
-+		compatible = "gpio-backlight";
-+		gpios = <&gpiok 3 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	panel_rgb: panel-rgb {
-+		compatible = "rocktech,rk043fn48h";
-+		backlight = <&backlight>;
-+		enable-gpios = <&gpioi 12 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+		port {
-+			panel_in_rgb: endpoint {
-+				remote-endpoint = <&ltdc_out_rgb>;
-+			};
-+		};
-+	};
-+
- 	usbotg_hs_phy: usb-phy {
- 		#phy-cells = <0>;
- 		compatible = "usb-nop-xceiv";
-@@ -99,6 +130,26 @@ &i2c1 {
- 	status = "okay";
- };
- 
-+&dma1 {
-+	status = "okay";
-+};
-+
-+&dma2 {
-+	status = "okay";
-+};
-+
-+&ltdc {
-+	pinctrl-0 = <&ltdc_pins_a>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	port {
-+		ltdc_out_rgb: endpoint {
-+			remote-endpoint = <&panel_in_rgb>;
-+		};
-+	};
-+};
-+
- &sdio1 {
- 	status = "okay";
- 	vmmc-supply = <&mmc_vcard>;
+diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+index 01560fe226dd..bd6a92d2b41c 100644
+--- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
++++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+@@ -280,6 +280,8 @@ properties:
+       - rocktech,rk101ii01d-ct
+         # Rocktech Display Ltd. RK070ER9427 800(RGB)x480 TFT LCD panel
+       - rocktech,rk070er9427
++        # Rocktech Display Ltd. RK043FN48H 4.3" 480x272 LCD-TFT panel
++      - rocktech,rk043fn48h
+         # Samsung 13.3" FHD (1920x1080 pixels) eDP AMOLED panel
+       - samsung,atna33xc20
+         # Samsung 12.2" (2560x1600 pixels) TFT LCD panel
 -- 
 2.32.0
 
