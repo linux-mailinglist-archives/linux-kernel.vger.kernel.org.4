@@ -2,95 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1939871FE04
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333E671FE05
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbjFBJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S234764AbjFBJhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234361AbjFBJgV (ORCPT
+        with ESMTP id S234563AbjFBJhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:36:21 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA4E7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:36:19 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f50470d77cso2477703e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:36:19 -0700 (PDT)
+        Fri, 2 Jun 2023 05:37:48 -0400
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10313E7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:37:45 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-974566553ccso81065766b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:37:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1685698577; x=1688290577;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3hnBdT+4sofW6weHvtY0aB3YDwyxDO3yd2SZl1VkXg=;
-        b=2wuqAodsy7HoWHGvVe5jW9OMuhCUSqCgb8Q0X68MCniJvVWk9vSjxsqaheCfDOBU8O
-         24yDaRZOpd5J0iwC57SUBC+W7AlUTyQyZVNzxQyXE3BWnDp4h/vzBlhMvJXE/r3gDkLb
-         WjnexhCx5w40GmlXK2o14O8O9cdTLSdVJQPp81Bpu6BE4w9iXFlXke4oS3FsjQ1Stjdy
-         bMmu7yvhb6tfKKVnQPh6EnC/I5TuWLiEGVYu9UJi6uF8tmUevyGqwjpp2kIL7zcY7Fd6
-         1qRcsy6jALhfJkXQkc1AZ5tHpuKziWKUX2JJz2zP1BQ+UUPS/cZFWLyWLg3Oo5Zp2aNO
-         vbDQ==
+        d=google.com; s=20221208; t=1685698663; x=1688290663;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=g6hKGnk7+yrdCqGxFZXtFZSCtr3Hs69nhywa4vN9dQk=;
+        b=k++9SNiv/OO3O33g9/9eTroGH9b5hGlPNSi00zMI+3lKBu4RkFuIC1EcEe7KD/jbaz
+         w7M2YFlWaueUEZ3ZBRhBGEljk4CX6XobHPYEr/cMV88eHC8OdecDaOMfZJuBeqInAwD+
+         AS49oX1gWO0jWTyaCmjdNL7X0Yk+k7i5creGBmVCLkabQjlsHTPe5sA28usbmDCXYCRJ
+         4ZptKGmHboTtMeV00P4JBm95Ws+ym2erT/xlVh4nZgISW78geGc+StYhiNHOeV4sSw4e
+         PAkVnBlceCInTUdm4jIK/4AJvO4dTSuhgWJSM/z4SZ2w33u+uzuwv+yyv44kgQKOdQGn
+         uWYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685698577; x=1688290577;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3hnBdT+4sofW6weHvtY0aB3YDwyxDO3yd2SZl1VkXg=;
-        b=lu88hM/dbN90Jqzij4fxoN+lYuHJo0GEzfC2v50Hx/w2EYR09tVXYoeVB/bhBLVn5e
-         vZ69OIeS9XcAt0iq1Sp5WVlcaFHbs1YQmRGGOeQW+ahJge5eTD6dEqTc+/vikYn6Qj15
-         Z+EElWevUy/BiqZqjNMXEgQghHcWx+1ULEHeeRwTsLtwgWR9EaaEw8iLH7rV44dR5iFG
-         LUugeHhHFTnDZowmi3q7G/Iz1ZODlofsQrdaKQkfzLhJeL8ZGTKz0oXfhQ54TIYICxPp
-         LI20Q1frSykz3yRONL3mpyX7xqGewgyVAwGoO9snjRpBs3tOkLlCnpWJFc9BvNMps5SU
-         +lhw==
-X-Gm-Message-State: AC+VfDzH6rf+b8ra1tUJEwU2iM5QB9DoFegyLaL3DXYE8jgixo+PC9Hh
-        DJWtNhqhcf7/D+SWfXgyJz9gRg==
-X-Google-Smtp-Source: ACHHUZ7qQeDUha9mDyy+gujyAY0nQj03FED/BjoEl5XPG1LJTS8xMalacGSsIUEV5xttDjR8WUG5Zw==
-X-Received: by 2002:ac2:4824:0:b0:4db:1e4a:74a1 with SMTP id 4-20020ac24824000000b004db1e4a74a1mr1516894lft.0.1685698577315;
-        Fri, 02 Jun 2023 02:36:17 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id 18-20020a05600c029200b003f601a31ca2sm1337446wmk.33.2023.06.02.02.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 02:36:16 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Fri, 02 Jun 2023 11:36:07 +0200
-Subject: [PATCH net-next] ipv6: lower "link become ready"'s level message
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-net-next-skip_print_link_becomes_ready-v1-1-7ff2b88dc9b8@tessares.net>
-X-B4-Tracking: v=1; b=H4sIAAa4eWQC/5WOwQqDMBAFf0VybkoSjdCe+h9FQhK3dbGNkg2ii
- P/eKJSee3iHx8AwKyOICMSuxcoiTEg4hHzkqWC+s+EJHNv8mRKqFLWQPEDKmxOnHkczRgzJvDD
- 0xoEf3kAmgm0Xrp1XtdattapiWeYsAXfRBt/tuq9lR2OEB85Hw/0Hmkw6pDTE5Yib5MH/7Zgkl
- 9zLEurKy0pc9C0BkY1A52xgzbZtH2KCdjkEAQAA
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Mat Martineau <martineau@kernel.org>,
-        Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2795;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=U6Zkq3srBMQTPaEUG3HGzM57fXdxB8VpRxHgcFT+el8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkebgQCX/9JMKftJ5U7zjZIG1X6H1AAnSt9raUN
- Q69PhpcIq6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZHm4EAAKCRD2t4JPQmmg
- c2fnD/wIHt1J8gTaEY6Rcdt3ayLx76pBwCzZswplm6GiaI/S8iZLz455CLHoimDPXcXBSpAUyoL
- kWp/OQkiH975/TGlrBDM4BwCxBz0ARMag/uKrruFCcM5f6aNe7ySXfZ31EU3+JM04CnrZG8uSKY
- UPChOnXVtmj6M5JO4kd/oS/YxRSoHs1vwl1/khOvmPWAuPyR/mMqp6+LGq6GA3yrI8jh4fFV3Y/
- 0SgIhKBuZ7fPkNqf3GQcRQovUFymy2xrv6SxnbgKq+PlzgzN2RSo6vioTAIssIDdvBQIdAvYz06
- cu7RaU2TK9aej11QEMO+f54t8WtzJAecJEbUw3gy2mxmp5rlQHqUlpjCd7dloQoE0pjQMk23iY7
- /EVBfwTzCCb6Iv1pYUJewm8WTfkrFssO0+mb3DFXHfossfEfKnba4NE4jVjkBIyWskZBY8hasmw
- MKJUW/rsG+o4JtbV9gzjc6WOkM75IdxPAAnKXqcv3bTsWzEiJ6cctRY0NZawt/jV9662Ez/SUru
- e4wO3PU5iT1UK8jksUMzhmFyQ2v93J0eQbjYwb4q9D0D+WJFqUnS8nkIbArunPiasf/w2aANQk5
- RQPS/folm9oM8hN/6ycoOvaE3kGvmXH/PzQcSuVyt6FxuhVfn4WfTk92+0iJqi5AefH6sh5hxo+
- pUqGEH8nxY9tbMg==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        d=1e100.net; s=20221208; t=1685698663; x=1688290663;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g6hKGnk7+yrdCqGxFZXtFZSCtr3Hs69nhywa4vN9dQk=;
+        b=M8fvrO565HalzqUvP2zgOJdyUZHVf8zHEOoN54sASOyF71N6DQV4T04JoXbVv5dhil
+         SFkJ+Q6uGIT8mT20PMKDXIPcJehh1hA9C8PHusXmycr8N82TPSrmd+VuRc2Z00skgRE9
+         GBZdm6j1MHTkLMl1gSy4QUsXwty7/QYmzVhDaJX+xeSzj+t1LwyTnWWdmgC8z2U9+tXy
+         h6H21a17Iiw+iPllde23dFcHCxHOuaEt6Nqisma6zR5q/mn0ql+OV4yZXtA+zPaxxhxL
+         Goz7JRYaJp3qFwKAXzvnsMK7l7Cp/IHVh6SlkZ5gv1X53+jfsXwdTBGoTT6b773wVmFY
+         ei6A==
+X-Gm-Message-State: AC+VfDyjSAmWNjc+HmOMpYduMebOiaPf2z9hzDvl7+K/P8awVLcwKC9z
+        5jNQzytnOwlimhonzWgoi0soVF8mraijyi4=
+X-Google-Smtp-Source: ACHHUZ6JmHF0O7xB25c4LZS3SBpbPu8gJ1LUrG2oig85p/mrkugigxAcAyjZYDiO5uEzwymT7yTtjwNZQO8JTzA=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a17:906:5a69:b0:974:5e62:2afc with SMTP
+ id my41-20020a1709065a6900b009745e622afcmr502336ejc.13.1685698663640; Fri, 02
+ Jun 2023 02:37:43 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 09:37:41 +0000
+In-Reply-To: <ZHkI8LXrqUOJ7G5E@boqun-archlinux>
+Mime-Version: 1.0
+References: <ZHkI8LXrqUOJ7G5E@boqun-archlinux>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230602093741.1040283-1-aliceryhl@google.com>
+Subject: Re: [PATCH v2 5/8] rust: workqueue: add helper for defining
+ work_struct fields
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     boqun.feng@gmail.com
+Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
+        benno.lossin@proton.me, bjorn3_gh@protonmail.com, gary@garyguo.net,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, tj@kernel.org, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,68 +72,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This following message is printed in the console each time a network
-device configured with an IPv6 addresses is ready to be used:
+Boqun Feng <boqun.feng@gmail.com> writes:
+> On Thu, Jun 01, 2023 at 01:49:43PM +0000, Alice Ryhl wrote:
+>> +/// Defines the method that should be called directly when a work item is executed.
+>> +///
+>> +/// Typically you would implement [`WorkItem`] instead. The `run` method on this trait will
+>> +/// usually just perform the appropriate `container_of` translation and then call into the `run`
+>> +/// method from the [`WorkItem`] trait.
+>> +///
+>> +/// This trait is used when the `work_struct` field is defined using the [`Work`] helper.
+>> +///
+>> +/// # Safety
+>> +///
+>> +/// Implementers must ensure that [`__enqueue`] uses a `work_struct` initialized with the [`run`]
+>> +/// method of this trait as the function pointer.
+>> +///
+>> +/// [`__enqueue`]: RawWorkItem::__enqueue
+>> +/// [`run`]: WorkItemPointer::run
+>> +pub unsafe trait WorkItemPointer<const ID: u64>: RawWorkItem<ID> {
+>> +    /// Run this work item.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// The provided `work_struct` pointer must originate from a previous call to `__enqueue` where
+>> +    /// the `queue_work_on` closure returned true, and the pointer must still be valid.
+>> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct);
+>> +}
+>> +
+>> +/// Defines the method that should be called when this work item is executed.
+>> +///
+>> +/// This trait is used when the `work_struct` field is defined using the [`Work`] helper.
+>> +pub trait WorkItem<const ID: u64 = 0> {
+>> +    /// The pointer type that this struct is wrapped in. This will typically be `Arc<Self>` or
+>> +    /// `Pin<Box<Self>>`.
+>> +    type Pointer: WorkItemPointer<ID>;
+> 
+> This being an associate type makes me wonder how do we want to support
+> the following (totally made-up by me, but I think it makes sense)?:
+> 
+> Say we have a struct
+> 
+> 	pub struct Foo {
+> 		work: Work<Foo>,
+> 		data: Data,
+> 	}
+> 
+> 	impl Foo {
+> 		pub fn do_sth(&self) {
+> 			...
+> 		}
+> 	}
+> 
+> and we want to queue both Pin<Box<Foo>> and Arc<Foo> as work items, but
+> the following doesn't work:
+> 
+> 	// Pin<Box<Foo>> can be queued.
+> 	impl WorkItem for Foo {
+> 		type Pointer = Pin<Box<Foo>>;
+> 		fn run(ptr: Self::Pointer) {
+> 			ptr.do_sth();
+> 		}
+> 	}
+> 
+> 	// Arc<Foo> can also be queued.
+> 	impl WorkItem for Foo {
+> 		type Pointer = Arc<Foo>;
+> 		fn run(ptr: Self::Pointer) {
+> 			ptr.do_sth();
+> 		}
+> 	}
+> 
+> Of course, we can use new type idiom, but that's not really great, and
+> we may have more smart pointer types in the future.
+> 
+> Am I missing something here?
 
-  ADDRCONF(NETDEV_CHANGE): <iface>: link becomes ready
+Basically, you're asking "is it possible to use the same `work_struct`
+field for several different pointer types"?
 
-When netns are being extensively used -- e.g. by re-creating netns' with
-veth to discuss with each others for testing purposes like mptcp_join.sh
-selftest does -- it generates a lot of messages like that: more than 700
-when executing mptcp_join.sh with the latest version.
+When creating the function pointer to store in the `work_struct`, the
+function pointer _must_ know what the pointer type is. Otherwise it
+cannot call the right `WorkItem::run` method or perform the correct
+`container_of` operation. (E.g. an `Arc` embeds a `refcount_t` before
+the struct, but a `Box` does not.)
 
-It looks like this message is not that helpful after all: maybe it can
-be used as a sign to know if there is something wrong, e.g. if a device
-is being regularly reconfigured by accident? But even then, there are
-better ways to monitor and diagnose such issues.
+With an associated type there is no problem with that. Associated types
+force you to make a choice, which means that the `work_struct` knows
+what the pointer type is when you create it. Supporting what you suggest
+means that we must be able to change the function pointer stored in the
+`work_struct` after initializing it.
 
-When looking at commit 3c21edbd1137 ("[IPV6]: Defer IPv6 device
-initialization until the link becomes ready.") which introduces this new
-message, it seems it had been added to verify that the new feature was
-working as expected. It could have then used a lower level than "info"
-from the beginning but it was fine like that back then: 17 years ago.
+This is rather tricky because you can call `enqueue` from several
+threads in parallel; just setting the function pointer before you call
+`queue_work_on` would be a data race. I suppose you could do it by
+implementing our own `queue_work_on` that sets the function pointer
+_after_ successfully setting the `WORK_STRUCT_PENDING_BIT`, but I don't
+think this patchset should do that.
 
-It seems then OK today to simply lower its level, similar to commit
-7c62b8dd5ca8 ("net/ipv6: lower the level of "link is not ready" messages")
-and as suggested by Mat [1], Stephen and David [2].
-
-Link: https://lore.kernel.org/mptcp/614e76ac-184e-c553-af72-084f792e60b0@kernel.org/T/ [1]
-Link: https://lore.kernel.org/netdev/68035bad-b53e-91cb-0e4a-007f27d62b05@tessares.net/T/ [2]
-Suggested-by: Mat Martineau <martineau@kernel.org>
-Suggested-by: Stephen Hemminger <stephen@networkplumber.org>
-Suggested-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
-RFC to v1:
-- Thanks to Stephen and David's feedback, this new version is smaller
-  and simpler: only the level of the problematic message is changed, no
-  more sysctl.
-- Link to RFC: https://lore.kernel.org/r/20230601-net-next-skip_print_link_becomes_ready-v1-1-c13e64c14095@tessares.net
----
- net/ipv6/addrconf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 3797917237d0..5479da08ef40 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3633,8 +3633,8 @@ static int addrconf_notify(struct notifier_block *this, unsigned long event,
- 				idev->if_flags |= IF_READY;
- 			}
- 
--			pr_info("ADDRCONF(NETDEV_CHANGE): %s: link becomes ready\n",
--				dev->name);
-+			pr_debug("ADDRCONF(NETDEV_CHANGE): %s: link becomes ready\n",
-+				 dev->name);
- 
- 			run_pending = 1;
- 		}
-
----
-base-commit: a395b8d1c7c3a074bfa83b9759a4a11901a295c5
-change-id: 20230601-net-next-skip_print_link_becomes_ready-5bc2655daa24
-
-Best regards,
--- 
-Matthieu Baerts <matthieu.baerts@tessares.net>
-
+Alice
