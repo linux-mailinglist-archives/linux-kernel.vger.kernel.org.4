@@ -2,314 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4572D71F958
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E4271F961
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 06:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbjFBEbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 00:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S233601AbjFBEiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 00:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFBEbd (ORCPT
+        with ESMTP id S229524AbjFBEh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 00:31:33 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA903F2;
-        Thu,  1 Jun 2023 21:31:30 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7997F4DA;
-        Fri,  2 Jun 2023 06:31:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685680266;
-        bh=9S9JYKY7cRm3zZqCOCmZP+h3+ydCaV86kXG8+VbfXGg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q9UW+dDUVh5DA31FnP9O9ymemJUrgNqq1rNwOOSkQo8Y3AojRf962ZfhpiQE3/dBU
-         dEITlaz3EaRv/JH107nz5/kOHcmkWznHQJKSRJESGnNQTuKFXZNQBugatoQ5pN8tzb
-         4RF7T8+TILNdM35jimEqxWLhG/h/1BpvoXXnClDk=
-Date:   Fri, 2 Jun 2023 07:31:26 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v2 2/2] media: i2c: Add support for alvium camera
-Message-ID: <20230602043126.GM22609@pendragon.ideasonboard.com>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-3-tomm.merciai@gmail.com>
- <20230529074018.GD25984@pendragon.ideasonboard.com>
- <ZHcd09f5wOKjQdHX@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230531113331.GC27043@pendragon.ideasonboard.com>
- <ZHjPyxColttdARQm@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+        Fri, 2 Jun 2023 00:37:57 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C793F2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:37:54 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bad1ae90c2eso1731081276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 21:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685680673; x=1688272673;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJxGCGn41BvabvDFNoHM5AnkkTjflqlE1qMNlE8NrT0=;
+        b=hLiVWg2vLRCGga9dPaoBmb31J4RQXoKrnLyjofX4nrluqzG+krMZEBkG963VV3+V4S
+         s+8cFe/GC9jT+mttHRcUgLqdAWaNK+4XJfOsKmkfRyxraldoFeK3u0aDrpHHDFy8+geA
+         I+BVR4akDprVaJTfkU3zr7Uc//8VHDpcHsKp892pLRDmIDEe7dHVOra7Xn0lK7TCCWon
+         b3GYtV2/SVVlBXw+4utgS9GHQrb+vEIMWNAyb6VxBnHIWrXHPzYDBTAmo8nwbHBXjTfw
+         wghXDbSao4T2gtOYNqjy91CEhqjmEc3+JG5hRAUqAvMS4wRt8RVjEj6zljJFtyHOjo50
+         ZEfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685680673; x=1688272673;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJxGCGn41BvabvDFNoHM5AnkkTjflqlE1qMNlE8NrT0=;
+        b=bWgSLRuollopjZ+dAm6hEJmcuSqi/YDB0O40/XU1iRZVjqcGPVXur4x8mn6UYmlLUL
+         I8rFcKno1Ei6jM4F7mffSIAfA7TzDYRkTLdsMiLa73vimkMPrN6xlJ6yCDuREjVlRN3i
+         57IQrPNLstoWaXKrQvzORNYKf6LRQVJ9fzG9sGHGCfDDgho40lCltIUXOb/YYiJBK7DV
+         AZWpytBVg+pkG/tkp+vUH42zJi7RMU/jXq8+RozByCd40nCxFAYfIv+qnHKRWZxq4+sH
+         MSoddYQu/hrTKSXodWM3BerkZxiKyr5ni1cWtrqA0E4ji8aT/LB/mAau8NjYN+5fo1BQ
+         MIGA==
+X-Gm-Message-State: AC+VfDxMZ5fSEBSA5PLJHBDKGSJj39B4Bj5YL3jHmLCL7G3NBe1oegoJ
+        HPheq4WUdzw9Hw1ENOlNHE6xFA==
+X-Google-Smtp-Source: ACHHUZ62Kcn2qr9AiBqyelJYmBklj7AUuE+DPbUEEozY9Og2nI55kjXOuHw2dqOrnNWIFBw/8cuzPg==
+X-Received: by 2002:a25:2b09:0:b0:b69:8770:9d95 with SMTP id r9-20020a252b09000000b00b6987709d95mr2183916ybr.17.1685680672998;
+        Thu, 01 Jun 2023 21:37:52 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 194-20020a2503cb000000b00ba8c2f3e1a4sm64190ybd.56.2023.06.01.21.37.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 21:37:52 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 21:37:38 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Jann Horn <jannh@google.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 00/12] mm: free retracted page table by RCU
+In-Reply-To: <CAG48ez0pCqfRdVSnJz7EKtNvMR65=zJgVB-72nTdrNuhtJNX2Q@mail.gmail.com>
+Message-ID: <3a33b59f-47c1-9dea-209a-9f77eec3cb1@google.com>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com> <CAG48ez0pCqfRdVSnJz7EKtNvMR65=zJgVB-72nTdrNuhtJNX2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZHjPyxColttdARQm@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463760895-147145368-1685680672=:27841"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-CC'ing Liam, Mark, Rob and Krzysztof. Sakari, there's also a question
-for you below.
+---1463760895-147145368-1685680672=:27841
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On Thu, Jun 01, 2023 at 07:05:15PM +0200, Tommaso Merciai wrote:
-> On Wed, May 31, 2023 at 02:33:31PM +0300, Laurent Pinchart wrote:
-> > On Wed, May 31, 2023 at 12:13:39PM +0200, Tommaso Merciai wrote:
-> > > On Mon, May 29, 2023 at 10:40:18AM +0300, Laurent Pinchart wrote:
-> > > > On Fri, May 26, 2023 at 07:39:44PM +0200, Tommaso Merciai wrote:
-> > > > > The Alvium camera is shipped with sensor + isp in the same housing.
-> > > > 
-> > > > What ISP is that ?
-> > > 
-> > > The isp comes from Allied Vision, is called Alvium and is part of the camera.
-> > > In real is a vision processor, this offers more functionality then an isp can do.
-> > > It is not sold separately but is an integrated part of the camera itself
-> > > which also takes care of the sensor abstraction.
-> > > 
-> > > > > The camera can be equipped with one out of various sensor and abstract
-> > > > > the user from this. Camera is connected via MIPI CSI-2.
-> > > > > 
-> > > > > Most of the sensor's features are supported, with the main exception
-> > > > > being fw update.
-> > > > 
-> > > > I assume you mean "camera module features" here, as firmware update
-> > > > isn't a camera sensor feature.
-> > > 
-> > > Yep.
-> > > 
-> > > > > The driver provides all mandatory, optional and recommended V4L2 controls
-> > > > > for maximum compatibility with libcamera
-> > > > > 
-> > > > > References:
-> > > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > > 
-> > > > I'll do a partial review only as the patch is large, and will try to
-> > > > review the rest in v2.
-> > > 
-> > > No problem.
-> > > 
-> > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > > ---
-> > > > >  drivers/media/i2c/Kconfig  |    9 +
-> > > > >  drivers/media/i2c/Makefile |    1 +
-> > > > >  drivers/media/i2c/alvium.c | 3547 ++++++++++++++++++++++++++++++++++++
-> > > > >  drivers/media/i2c/alvium.h |  500 +++++
-> > > > >  4 files changed, 4057 insertions(+)
-> > > > >  create mode 100644 drivers/media/i2c/alvium.c
-> > > > >  create mode 100644 drivers/media/i2c/alvium.h
+On Wed, 31 May 2023, Jann Horn wrote:
+> On Mon, May 29, 2023 at 8:11=E2=80=AFAM Hugh Dickins <hughd@google.com> w=
+rote:
+> > Here is the third series of patches to mm (and a few architectures), ba=
+sed
+> > on v6.4-rc3 with the preceding two series applied: in which khugepaged
+> > takes advantage of pte_offset_map[_lock]() allowing for pmd transitions=
+=2E
+>=20
+> To clarify: Part of the design here is that when you look up a user
+> page table with pte_offset_map_nolock() or pte_offset_map() without
+> holding mmap_lock in write mode, and you later lock the page table
+> yourself, you don't know whether you actually have the real page table
+> or a detached table that is currently in its RCU grace period, right?
 
-[snip]
+Right.  (And I'd rather not assume anything of mmap_lock, but there are
+one or two or three places that may still do so.)
 
-> > > > > diff --git a/drivers/media/i2c/alvium.c b/drivers/media/i2c/alvium.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..e77fb6bda64b
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/media/i2c/alvium.c
-> > > > > @@ -0,0 +1,3547 @@
+> And detached tables are supposed to consist of only zeroed entries,
+> and we assume that no relevant codepath will do anything bad if one of
+> these functions spuriously returns a pointer to a page table full of
+> zeroed entries?
 
-[snip]
+(Nit that I expect you're well aware of: IIRC "zeroed" isn't 0 on s390.)
 
-> > > > > +static int alvium_probe(struct i2c_client *client)
-> > > > > +{
-> > > > > +	struct device *dev = &client->dev;
-> > > > > +	struct v4l2_subdev *sd;
-> > > > > +	struct alvium_dev *alvium;
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	alvium = devm_kzalloc(dev, sizeof(*alvium), GFP_KERNEL);
-> > > > > +	if (!alvium)
-> > > > > +		return -ENOMEM;
-> > > > > +
-> > > > > +	alvium->i2c_client = client;
-> > > > > +	ret = alvium_get_dt_data(alvium);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > > +
-> > > > > +	mutex_init(&alvium->lock);
-> > > > > +
-> > > > > +	sd = &alvium->sd;
-> > > > > +
-> > > > > +	/* init alvium sd */
-> > > > > +	v4l2_i2c_subdev_init(sd, client, &alvium_subdev_ops);
-> > > > > +
-> > > > > +	sd->flags |= V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > > > > +	alvium->pad.flags = MEDIA_PAD_FL_SOURCE;
-> > > > > +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> > > > > +	sd->entity.ops = &alvium_sd_media_ops;
-> > > > > +
-> > > > > +	ret = media_entity_pads_init(&sd->entity, 1, &alvium->pad);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > > +
-> > > > > +	sd->dev = dev;
-> > > > > +
-> > > > > +	ret = alvium_power_on(alvium);
-> > > > 
-> > > > The driver should use runtime PM (with autosuspend), and power on/off in
-> > > > the .s_stream() handler.
-> > > 
-> > > Can we delay the pm implementation as a future patchset?
-> > > Alvium pm would be tricky (cause is the boot time of the camera)
-> > > and if is possible I want work on pm later.
-> > > Let me know. Thanks! :)
-> > 
-> > With autosuspend the camera can remain powered up between stream stop
-> > and stream start, if they happen quickly enough. An autosuspend delay of
-> > a few seconds is usually a good value. It should be fairly easy to
-> > implement runtime PM support, you just need to
-> > 
-> > - Call alvium_power_on() from the runtime PM resume handler and
-> >   alvium_power_off() from the runtime PM suspend handler.
-> > 
-> > - Call pm_runtime_resume_and_get() and stream on time, and
-> >   pm_runtime_mark_last_busy() and pm_runtime_put_autosuspend() at stream
-> >   stop time.
-> > 
-> > - Initialize runtime PM at probe time (and clean up at remove time).
-> >   There's a bit of boilerplate code needed to get that right, but it's
-> >   not difficult. You can copy it from the imx290 driver.
-> 
-> Back to you to clarify this point.
-> 
-> Plan as you suggest is handling pm of camera using external
-> regulator. Problem is that the boot time of the camera is around 5s.
+If someone is using pte_offset_map() without lock, they must be prepared
+to accept page-table-like changes.  The limits of pte_offset_map_nolock()
+with later spin_lock(ptl): I'm still exploring: there's certainly an
+argument that one ought to do a pmd_same() check before proceeding,
+but I don't think anywhere needs that at present.
 
-5s ? Ouch !!
+Whether the page table has to be full of zeroed entries when detached:
+I believe it is always like that at present (by the end of the series,
+when the collapse_pte_offset_map() oddity is fixed), but whether it needs
+to be so I'm not sure.  Quite likely it will need to be; but I'm open to
+the possibility that all it needs is to be still a page table, with
+perhaps new entries from a new usage in it.
 
-This has two consequences:
+The most obvious vital thing (in the split ptlock case) is that it
+remains a struct page with a usable ptl spinlock embedded in it.
 
-- Just probing the camera would take 5s, which is insanely long.
-- There will be a 5s delay when starting video capture.
+The question becomes more urgent when/if extending to replacing the
+pagetable pmd by huge pmd in one go, without any mmap_lock: powerpc
+wants to deposit the page table for later use even in the shmem/file
+case (and all arches in the anon case): I did work out the details once
+before, but I'm not sure whether I would still agree with myself; and was
+glad to leave replacement out of this series, to revisit some time later.
 
-There's no 5s delay in the current code, so I assume things work fine
-because the power regulator is always on, and turned on 5s or more
-before the driver is loaded. That's pretty fragile.
+>=20
+> So in particular, in handle_pte_fault() we can reach the "if
+> (unlikely(!pte_same(*vmf->pte, entry)))" with vmf->pte pointing to a
+> detached zeroed page table, but we're okay with that because in that
+> case we know that !pte_none(vmf->orig_pte)&&pte_none(*vmf->pte) ,
+> which implies !pte_same(*vmf->pte, entry) , which means we'll bail
+> out?
 
-That camera is clearly not a good fit for an embedded system that cares
-about power consumption and performance, but we still have to support
-it. The probe time issue isn't something we can fix, a 5s delay is
-required.
+There is no current (even at end of series) circumstance in which we
+could be pointing to a detached page table there; but yes, I want to
+allow for that, and yes I agree with your analysis.  But with the
+interesting unanswered question for the future, of what if the same
+value could be found there: would that imply it's safe to proceed,
+or would some further prevention be needed?
 
-The stream start issue can be alleviated by keeping the camera on, or
-offering a way for userspace to turn it on ahead of stream start.
-Runtime PM autosuspend will help with the former, and I would push the
-autosuspend delay up as a result of the huge camera boot time. We don't
-have a good solution of the latter at the moment, it used to be that
-opening video nodes would power up the whole pipeline, but that has been
-dropped some time ago in V4L2. Another API extension for this kind of
-use cases would be useful I think. Sakari, any opinion ?
+>=20
+> If that's the intent, it might be good to add some comments, because
+> at least to me that's not very obvious.
 
-> Can I use:
->  - regulator-boot-on; To handle 5s of boot time during the probe
->  - add delay of 5s on power on?
-> 
-> What do you think?
+That's a very fair request; but I shall have difficulty deciding where
+to place such comments.  I shall have to try, then you redirect me.
 
-I expect people to mark the camera regulator as regulator-always-on in DT to work
-around the problem. regulator-boot-on is different, I don't think you
-need it in this case. Its documentation states
+And I think we approach this in opposite ways: my nature is to put some
+infrastructure in place, and then look at it to see what we can get away
+with; whereas your nature is to define upfront what the possibilities are.
+We can expect some tussles!
 
-  "This property is intended to only be used for regulators where
-  software cannot read the state of the regulator."
-
-This means that we shouldn't add an unconditional delay of 5s in the PM
-runtime resume handler in the driver, as that would cause a huge penalty
-if the regulator was already on. We could set the
-regulator-enable-ramp-delay property to 5s, which would ensure that the
-camera has time to boot whenever to regulator is turned on, but won't
-cause any additional delay at every stream start. Trouble is, that's a
-bit of a hack, as the 5s boot time is a property of the camera, not the
-regulator.
-
-Another option would be to add the delay in the driver, but condition it
-on the state of the regulator. If the regulator is already on, the delay
-would be skipped. This won't work if the supply is not always on and
-shared between different devices though, as another device could turn it
-on shortly before the camera driver runs the runtime PM resume handler,
-and we would skip the delay in that case.
-
-Any opinion from the regulator framework and DT bindings maintainers on
-this topic ?
-
-> > > > > +	if (ret)
-> > > > > +		goto entity_cleanup;
-> > > > > +
-> > > > > +	ret = alvium_get_hw_info(alvium);
-> > > > > +	if (ret) {
-> > > > > +		dev_err(dev, "Device detection failed: %d\n", ret);
-> > > > > +		goto err_poweroff;
-> > > > > +	}
-> > > > > +
-> > > > > +	ret = alvium_hw_init(alvium);
-> > > > > +	if (ret) {
-> > > > > +		dev_err(dev, "hw_init fail %d\n", ret);
-> > > > > +		goto entity_cleanup;
-> > > > > +	}
-> > > > > +
-> > > > > +	ret = alvium_setup_mipi_fmt(alvium);
-> > > > > +	if (ret) {
-> > > > > +		dev_err(dev, "hw_init fail %d\n", ret);
-> > > > > +		goto entity_cleanup;
-> > > > > +	}
-> > > > > +
-> > > > > +	/* Setup initial frame interval*/
-> > > > > +	alvium->frame_interval.numerator = 1;
-> > > > > +	alvium->frame_interval.denominator = ALVIUM_DEFAULT_FR_HZ;
-> > > > > +	alvium->fr = ALVIUM_DEFAULT_FR_HZ;
-> > > > > +
-> > > > > +	/* Setup the initial mode */
-> > > > > +	alvium->mode.fmt = alvium_csi2_default_fmt;
-> > > > > +	alvium->mode.width = alvium_csi2_default_fmt.width;
-> > > > > +	alvium->mode.height = alvium_csi2_default_fmt.height;
-> > > > > +	alvium->mode.crop.left = alvium->min_offx;
-> > > > > +	alvium->mode.crop.top = alvium->min_offy;
-> > > > > +	alvium->mode.crop.width = alvium_csi2_default_fmt.width;
-> > > > > +	alvium->mode.crop.height = alvium_csi2_default_fmt.height;
-> > > > > +
-> > > > > +	ret = alvium_init_controls(alvium);
-> > > > > +	if (ret)
-> > > > > +		goto entity_cleanup;
-> > > > > +
-> > > > > +	ret = v4l2_async_register_subdev_sensor(sd);
-> > > > > +	if (ret) {
-> > > > > +		dev_err(dev,
-> > > > > +			"failed to register async subdev: %d", ret);
-> > > > > +		goto entity_cleanup;
-> > > > > +	}
-> > > > > +
-> > > > > +	v4l2_info(sd, "%s: completed successfully\n", __func__);
-> > > > > +	return 0;
-> > > > > +
-> > > > > +err_poweroff:
-> > > > > +	alvium_power_off(alvium);
-> > > > > +entity_cleanup:
-> > > > > +	media_entity_cleanup(&sd->entity);
-> > > > > +	mutex_destroy(&alvium->lock);
-> > > > > +	return ret;
-> > > > > +}
-
-[snip]
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks,
+Hugh
+---1463760895-147145368-1685680672=:27841--
