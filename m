@@ -2,125 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FD372097E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B197B720970
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbjFBTFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S237054AbjFBTAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237115AbjFBTFD (ORCPT
+        with ESMTP id S235724AbjFBTAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:05:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C211B7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685732659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=lJAFxNimyhgGkmw8GXkGsiBNva5tBIiiepv3OQs0cGk=;
-        b=AgYcQ6l/D00LoQZ/P/17iIEZ64fZTmBETs1LUX4SoUWh0jj//c526JYE+fLO9wOmOYx9/4
-        /KceDumZyikaIc9rJG2Bn7FXcb54rcWl79wREwF5/ykAsrf+PML5g+YJvqr+cu9vikFMRA
-        L58Y3LznhmfcOD/XMuNslvmNUkgN/yM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-504-gCOX5Fs8O-Gvp5nPcrtFrw-1; Fri, 02 Jun 2023 15:04:08 -0400
-X-MC-Unique: gCOX5Fs8O-Gvp5nPcrtFrw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D3998007CE;
-        Fri,  2 Jun 2023 19:04:06 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3891EC0297C;
-        Fri,  2 Jun 2023 19:04:06 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 1D840403BFA58; Fri,  2 Jun 2023 16:03:42 -0300 (-03)
-Message-ID: <20230602190115.545766386@redhat.com>
-User-Agent: quilt/0.67
-Date:   Fri, 02 Jun 2023 15:58:00 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH v2 3/3] mm/vmstat: do not refresh stats for nohz_full CPUs
-References: <20230602185757.110910188@redhat.com>
+        Fri, 2 Jun 2023 15:00:54 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14AC1A5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:00:51 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30af0aa4812so2432226f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 12:00:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685732450; x=1688324450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8VL0M+Hv9mGmc2Kt3/mWXFNmoQyIrOk75ebAr7Lp4t4=;
+        b=wNuEBht98hdHBzwrSX9/VjIRmjQydztOjE5vGDPkxuPe9qAgdxHlKT8L9Czx/B3eJ7
+         6V+1YEOf5awhAgikwlyYS86zeTrGk0f9z9gpmxb4JXphlFjJp+tm3ZXq+llmI69utkrh
+         Jz76LGTEiSDL+E8aEgcv4smX/WbfrpbXaLZMuuXLrp9J5lxKFe7Se7AC0Diq2Wtyhzo+
+         0fke/IRtSWl34ZOsn2lto4fcW4cu23b0iC5LaTJtCt+PrGL9K6lpPWcjF/a8g0hHcge+
+         jtDSzZNcIgu6eJ9YHVzHdblOT7oFIEXuXbfTCfF353iztjidwgYTSewgFU4ibtn36SNC
+         lwJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685732450; x=1688324450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8VL0M+Hv9mGmc2Kt3/mWXFNmoQyIrOk75ebAr7Lp4t4=;
+        b=XgLwWWHHya8Z4LWBeyxUVt7KGICeye2ricC5hZKx7uTmmm9lJsQP64TnDnZ/RFJvjq
+         w+tISoo2eJCs1Otnk8pbTcmoU7VdmWpDzR5s8R7un+Y4xBNMc4XBVAPDU0RSJfDe8SGN
+         P2IAXM+ZoXpciv2pZ2JX4Jtbnzy++ghxbmh7jk7W+Jx1s5P0Z0Uyhw8TM6cVpLAM0iFA
+         PLD7Xr8yd/JotydHGnzYw2A591ttF/aHMoH6MVgs1T3ewwZsSLh4LCg8QBsQI5r0lI4T
+         Uo6gB2ga0ReuQIUfnmy1lcuaMU8nZTB/ZdWGAGockGoMmoYfEmtim9O9LiI2Fu3/9rSF
+         nq3w==
+X-Gm-Message-State: AC+VfDzVp4dDYbxqVWGWEtMkHjZFCRbXMzZEDGOL3xgMfKvxBI4cyOYT
+        hzWExVc4elqiCbNHe1/xSMr9cg==
+X-Google-Smtp-Source: ACHHUZ6Oh8bWLSOT4QRyV5ew1nqbPRtcV9c9JCxEs994pSpo0l2xBf1uRTl1F39Ha+3YnNAnq8fIug==
+X-Received: by 2002:a5d:4211:0:b0:309:509f:a7f0 with SMTP id n17-20020a5d4211000000b00309509fa7f0mr542331wrq.44.1685732450258;
+        Fri, 02 Jun 2023 12:00:50 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d504e000000b00300aee6c9cesm2436674wrt.20.2023.06.02.12.00.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 12:00:48 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 22:00:45 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 03/11] tls/sw: Use zero-length sendmsg()
+ without MSG_MORE to flush
+Message-ID: <ee50e4ec-5df7-4342-885d-9e6c52da7407@kadam.mountain>
+References: <20230602150752.1306532-1-dhowells@redhat.com>
+ <20230602150752.1306532-4-dhowells@redhat.com>
+ <ZHo0rNlhJCRE4msb@corigine.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHo0rNlhJCRE4msb@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interruption caused by queueing work on nohz_full CPUs 
-is undesirable for certain aplications.
+On Fri, Jun 02, 2023 at 08:27:56PM +0200, Simon Horman wrote:
+> + dan Carpenter
+> 
+> On Fri, Jun 02, 2023 at 04:07:44PM +0100, David Howells wrote:
+> > Allow userspace to end a TLS record without supplying any data by calling
+> > send()/sendto()/sendmsg() with no data and no MSG_MORE flag.  This can be
+> > used to flush a previous send/splice that had MSG_MORE or SPLICE_F_MORE set
+> > or a sendfile() that was incomplete.
+> > 
+> > Without this, a zero-length send to tls-sw is just ignored.  I think
+> > tls-device will do the right thing without modification.
+> > 
+> > Signed-off-by: David Howells <dhowells@redhat.com>
+> > cc: Chuck Lever <chuck.lever@oracle.com>
+> > cc: Boris Pismenny <borisp@nvidia.com>
+> > cc: John Fastabend <john.fastabend@gmail.com>
+> > cc: Jakub Kicinski <kuba@kernel.org>
+> > cc: Eric Dumazet <edumazet@google.com>
+> > cc: "David S. Miller" <davem@davemloft.net>
+> > cc: Paolo Abeni <pabeni@redhat.com>
+> > cc: Jens Axboe <axboe@kernel.dk>
+> > cc: Matthew Wilcox <willy@infradead.org>
+> > cc: netdev@vger.kernel.org
+> > ---
+> >  net/tls/tls_sw.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> > index cac1adc968e8..6aa6d17888f5 100644
+> > --- a/net/tls/tls_sw.c
+> > +++ b/net/tls/tls_sw.c
+> > @@ -945,7 +945,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+> >  	struct tls_rec *rec;
+> >  	int required_size;
+> >  	int num_async = 0;
+> > -	bool full_record;
+> > +	bool full_record = false;
+> >  	int record_room;
+> >  	int num_zc = 0;
+> >  	int orig_size;
+> > @@ -971,6 +971,9 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+> >  		}
+> >  	}
+> >  
+> > +	if (!msg_data_left(msg) && eor)
+> > +		goto just_flush;
+> > +
+> 
+> Hi David,
+> 
+> the flow of this function is not entirely simple, so it is not easy for me
+> to manually verify this. But in combination gcc-12 -Wmaybe-uninitialized
+> and Smatch report that the following may be used uninitialised as a result
+> of this change:
+> 
+>  * msg_pl
 
-Fix by not refreshing per-CPU stats of nohz_full CPUs. 
+This warning seems correct to me.
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+>  * orig_size
 
----
-v2: opencode schedule_on_each_cpu (Michal Hocko)
+This warning assumes we hit the first warning and then hit the goto
+wait_for_memory;
 
-Index: linux-vmstat-remote/mm/vmstat.c
-===================================================================
---- linux-vmstat-remote.orig/mm/vmstat.c
-+++ linux-vmstat-remote/mm/vmstat.c
-@@ -1881,8 +1881,13 @@ int vmstat_refresh(struct ctl_table *tab
- 		   void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	long val;
--	int err;
- 	int i;
-+	int cpu;
-+	struct work_struct __percpu *works;
-+
-+	works = alloc_percpu(struct work_struct);
-+	if (!works)
-+		return -ENOMEM;
- 
- 	/*
- 	 * The regular update, every sysctl_stat_interval, may come later
-@@ -1896,9 +1901,24 @@ int vmstat_refresh(struct ctl_table *tab
- 	 * transiently negative values, report an error here if any of
- 	 * the stats is negative, so we know to go looking for imbalance.
- 	 */
--	err = schedule_on_each_cpu(refresh_vm_stats);
--	if (err)
--		return err;
-+	cpus_read_lock();
-+	for_each_online_cpu(cpu) {
-+		struct work_struct *work;
-+
-+		if (cpu_is_isolated(cpu))
-+			continue;
-+		work = per_cpu_ptr(works, cpu);
-+		INIT_WORK(work, refresh_vm_stats);
-+		schedule_work_on(cpu, work);
-+	}
-+
-+	for_each_online_cpu(cpu) {
-+		if (cpu_is_isolated(cpu))
-+			continue;
-+		flush_work(per_cpu_ptr(works, cpu));
-+	}
-+	cpus_read_unlock();
-+	free_percpu(works);
- 	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
- 		/*
- 		 * Skip checking stats known to go negative occasionally.
+>  * msg_en
 
+I don't get this warning on my system but it's the same thing.  Hit the
+first warning then the goto wait_for_memory.
+
+>  * required_size
+
+Same.
+
+>  * try_to_copy
+
+I don't really understand this warning and I can't reproduce it.
+Strange.
+
+regards,
+dan carpenter
 
