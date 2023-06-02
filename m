@@ -2,114 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8B3720266
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155C8720267
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235862AbjFBMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S234921AbjFBMsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbjFBMrS (ORCPT
+        with ESMTP id S232674AbjFBMse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:47:18 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EDCE63;
-        Fri,  2 Jun 2023 05:47:05 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352CjJJe008788;
-        Fri, 2 Jun 2023 12:47:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=r5Vxddmy2HSlIOmeoz4FV7DtWkvwFlQhF6xej4Qy/NQ=;
- b=nm81liY8XzRDYQAMAoWX92O9uNZPjxnc6u1rnpJXwZMlcDY4LgzsIdvNQguG34GqmEDu
- 4D8oV9qgPKoPujGM6yI/5HYgmao3/f20sfx+Lu77il7NcBX9lIi3/k2fBWpD3DeaQHhD
- +khs73lz9UwQeFKVNRNjmaKT1uN6CITFifV9EpU+MDh/JO97aMYNh2zO3EGn33eHxz8V
- V/zbjxnqA/i0H1NU/V/594rFC8mwMCueoaiCPKfnmYFApgeUjRZpgc3aIe4eV0V0pybG
- D2PjXLnVoInUkMORt/xodSWUi7rhZ+owUdO2sFJMHjqsPghQFD5AZDwuFyXr8e+7vbgi AA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qyfdc2954-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 12:47:04 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 352CjPEk008953;
-        Fri, 2 Jun 2023 12:47:03 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qyfdc294s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 12:47:03 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35271oiq024079;
-        Fri, 2 Jun 2023 12:47:01 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qu9g52hn0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 12:47:01 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 352Ckw3q19399172
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 2 Jun 2023 12:46:58 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 394FE2004E;
-        Fri,  2 Jun 2023 12:46:58 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 632D420043;
-        Fri,  2 Jun 2023 12:46:57 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.36.211])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri,  2 Jun 2023 12:46:57 +0000 (GMT)
-Date:   Fri, 2 Jun 2023 14:46:55 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, jjherne@linux.ibm.com,
-        pasic@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, Cedric Le Goater <clegoate@redhat.com>
-Subject: Re: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest
- is removed
-Message-ID: <ZHnkvxEonzxrVQdA@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
- <30741787-441a-034f-f8d4-9f1060841051@linux.ibm.com>
- <20230601144722.6eba9c49.alex.williamson@redhat.com>
+        Fri, 2 Jun 2023 08:48:34 -0400
+Received: from outbound-smtp02.blacknight.com (outbound-smtp02.blacknight.com [81.17.249.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C0F1AD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:48:29 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp02.blacknight.com (Postfix) with ESMTPS id 35BC9BABE0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:48:28 +0100 (IST)
+Received: (qmail 9395 invoked from network); 2 Jun 2023 12:48:28 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Jun 2023 12:48:27 -0000
+Date:   Fri, 2 Jun 2023 13:48:25 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] mm: compaction: Update pageblock skip when first
+ migration candidate is not at the start
+Message-ID: <20230602124825.24a775kwwuf4rs6v@techsingularity.net>
+References: <20230515113344.6869-1-mgorman@techsingularity.net>
+ <20230515113344.6869-4-mgorman@techsingularity.net>
+ <e87a9797-c8ce-1959-884a-7f791adeaafc@suse.cz>
+ <20230529103342.esek6r5fvmft2nky@techsingularity.net>
+ <6695b7e5-9fa5-fae8-8a66-cc5985b0baaf@suse.cz>
+ <20230602111622.swtxhn6lu2qwgrwq@techsingularity.net>
+ <152e0730-0ddc-a1f8-7122-275d51741a1d@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230601144722.6eba9c49.alex.williamson@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5iSu3tiOUKN3nWDUYNafwFtdRy7FKsOl
-X-Proofpoint-ORIG-GUID: cLi3oBdIVKxc8Vr9IsdUvCC2_ayYmm1A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_09,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
- suspectscore=0 adultscore=0 mlxlogscore=779 bulkscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020094
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <152e0730-0ddc-a1f8-7122-275d51741a1d@suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 02:47:22PM -0600, Alex Williamson wrote:
-...
-> > As to how this series eventually reaches master...  It touches both s390 and vfio.  
+On Fri, Jun 02, 2023 at 02:19:00PM +0200, Vlastimil Babka wrote:
+> On 6/2/23 13:16, Mel Gorman wrote:
+> > On Mon, May 29, 2023 at 02:43:48PM +0200, Vlastimil Babka wrote:
+> >> On 5/29/23 12:33, Mel Gorman wrote:
+> >> > On Thu, May 25, 2023 at 03:37:43PM +0200, Vlastimil Babka wrote:
+> >> >> On 5/15/23 13:33, Mel Gorman wrote:
+> >> >> > isolate_migratepages_block should mark a pageblock as skip if scanning
+> >> >> > started on an aligned pageblock boundary but it only updates the skip
+> >> >> > flag if the first migration candidate is also aligned. Tracing during
+> >> >> > a compaction stress load (mmtests: workload-usemem-stress-numa-compact)
+> >> >> > that many pageblocks are not marked skip causing excessive scanning of
+> >> >> > blocks that had been recently checked. Update pageblock skip based on
+> >> >> > "valid_page" which is set if scanning started on a pageblock boundary.
+> >> >> > 
+> >> >> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> >> >> 
+> >> >> I wonder if this has an unintended side-effect that if we resume
+> >> >> isolate_migratepages_block() of a partially compacted pageblock to finish
+> >> >> it, test_and_set_skip() will now tell us to abort, because we already set
+> >> >> the skip bit in the previous call. This would include the
+> >> >> cc->finish_pageblock rescan cases.
+> >> >> 
+> >> >> So unless I miss something that already prevents that, I agree we should not
+> >> >> tie setting the skip bit to pageblock_aligned(pfn), but maybe if we are not
+> >> >> pageblock aligned, we should ignore the already-set skip bit, as it was most
+> >> >> likely being set by us in the previous iteration and should not prevent us
+> >> >> from finishing the pageblock?
+> >> >> 
+> >> > 
+> >> > Hmm, I think you're right. While it should not hit the original bug,
+> >> > migration candidates are missed until the next compaction scan which
+> >> > could be tricky to detect. Something like this as a separate patch?
+> >> > Build tested only but the intent is for an unaligned start to set the skip
+> >> > bet if already unset but otherwise complete the scan. Like earlier fixes,
+> >> > this might overscan some pageblocks in a given context but we are probably
+> >> > hitting the limits on how compaction can run efficiently in the current
+> >> > scheme without causing other side-effects :(
+> >> 
+> >> Yeah that should work! I think it should be even folded to 3/4 but if you
+> >> want separate, fine too.
+> >> 
 > > 
-> > @Alex/@s390 maintainers -- I suggest it go through s390 given the
-> > diffstat, it's almost completely in s390 drivers code.  However there
-> > is a uapi hit to vfio.h (in patch 1) that should get at least an ACK
-> > from Alex beforehand.
+> > I was not happy with the test results so limited the scope of the patch
+> > which performed much better both in terms of absolute performance and
+> > compaction activity.
 > 
-> Ack'd, I'll expect this to go through the s390 tree.  Thanks,
+> That's surprising. Does that mean that if we isolate COMPACT_CLUSTER_MAX
+> pages, migrate them without failing, but it's not enough to succeed (i.e.
+> there are more pages we need to migrate to free up a whole pageblock), it's
+> better to give up on the rest of the pageblock rather than continue?
 
-Applied, thanks!
+I don't have precise enough data to answer that with certainty but probably
+yes, at least in terms of scan activity. The first version had spikes of
+pages scanned for migration that are not always reproducible and not on
+all machines.
 
-> Alex
+> As
+> that's AFAIU the scenario where cc->finish_pageblock is false when we
+> revisit an unfinished pageblock.
+> 
+> > Are you still ok with this version?
+> 
+> It's better than previously in that cc->finish_pageblock == true case is not
+> sabotaged anymore. But the result as described above seems to be a weird
+> non-intuitive and non-obvious heuristic. How did the test differences look like?
+> 
 
+5 machines were tested in all (different Intel and AMD generations),
+2 showed unexpected spikes in scan activity. 1 showed high migration
+scan counts for workloads workload-thpchallenge-kernel-build-xfs
+and workload-usemem-stress-numa-compact. They are both basically
+compaction stressors with the first one using a kernel build
+in the background to generate noise. For the second machine, only
+workload-usemem-stress-numa-compact was affected. In all other test cases
+and machines, the patches were equivalent in terms of behaviour but the
+extreme counter-examples led be to conclude the fix should be as constrained
+as possible unless there is a good reason to do otherwise.
+
+> > Vlastimil Babka pointed out the following problem with
+> > mm-compaction-update-pageblock-skip-when-first-migration-candidate-is-not-at-the-start.patch
+> > 
+> > 	I wonder if this has an unintended side-effect that if we resume
+> > 	isolate_migratepages_block() of a partially compacted pageblock
+> > 	to finish it, test_and_set_skip() will now tell us to abort,
+> > 	because we already set the skip bit in the previous call. This
+> > 	would include the cc->finish_pageblock rescan cases.
+> > 
+> > He is correct and a partial rescan as implemented in "mm, compaction:
+> > finish pageblocks on complete migration failure" would abort
+> > prematurely.
+> > 
+> > Test and set the skip bit when acquiring "exclusive access" to a pageblock
+> > for migration but only abort if the calling context is rescanning to
+> > finish a pageblock.
+> 
+> Should it say NOT rescanning to finish a pageblock?
+> 
+
+Yep, it should. The sentence was a last minute update before pushing
+send :(
+
+-- 
+Mel Gorman
+SUSE Labs
