@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018DE72048A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEBF72048C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbjFBOck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S235926AbjFBOeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbjFBOci (ORCPT
+        with ESMTP id S234948AbjFBOem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:32:38 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC6899
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:32:37 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-39a53c7648fso1831439b6e.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:32:37 -0700 (PDT)
+        Fri, 2 Jun 2023 10:34:42 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A81A99
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:34:41 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30c4c1fd511so1420695f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:34:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1685716357; x=1688308357;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6NwA907vGnrNpaOFyWDRDxSy5v1vFxmBWhlUfMES2kw=;
-        b=EauV+zfSnBg6r0ozgcM9FVLsm5gQCUXgiYyfYePz+nQ/L81vRnwKSIX3WIdM4BmfS2
-         Y6Q0se655hmMB+A2zm5Ipm6ukstFJH/l3WWIKs6vgRvCR18zZL6inolAzhr0+/y2NZGd
-         wLDgV6XS3o9gg12dJMji52ozOCvPoJ1oejgSpyUaETeJQtItQiIplDI7sgX65PF7k5G4
-         6CGEq9XCateFJruI6vXJDAEmQOFsSgegr4aLlAXyQ/0o/BOZtRDufrYSj2nRrD0gd/Ip
-         HkDVzLSDdWPCV3pG3MTk58ed9yYqeyz8j4tvKpboWViVkZaPjy84wwHmnWt93wpu6fLU
-         6WTA==
+        d=6wind.com; s=google; t=1685716480; x=1688308480;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=mh32AefeMMikefo4GnmhNXDOVxpzlJj5DaZUcMsa5o0=;
+        b=LXWoieCAyBJ2+K0+1+5yS9NQxQ8likoHP8OVjdwd0g+UxVGnfaBVwC2JZ7D5QlYnhY
+         LLM+Uhougx1RczKC0pO+B+YLqnsfl43IOkAfsVPfsRPVFvPqeQytk1cyWMmI+M/ms/RZ
+         TVJ2KKeEySCO0nHbrSo9CyRA3BpJkX2EWQEwOFI4lSSx4/eU/UaIWvvDi4O/BHn1Sy8k
+         rbTh+GHyGlplxjpNSG92+rtHQbjPs6mljUpb6wDyKQ/3PszcPwQYdCKvQpTUOE6cnnWA
+         sA/BACfmakFDPdffsMVKYVMyTxjN92RmMS3nGT243N2wyAtIaCTECGYZeU0CpgrcSk6m
+         SnrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685716357; x=1688308357;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6NwA907vGnrNpaOFyWDRDxSy5v1vFxmBWhlUfMES2kw=;
-        b=iWsUaz3A2LpDZ58xMzYEvK8lN39Puy1XRBKeIG3tXZxjmFwwFh/8ZC/fTHRq+TNEg/
-         tjY6auYwb31qgPpPCxsFFptrs+medqb0IfUaxhpqg6mK6aI6mUgtFFFJr0moUdf+PkKf
-         GB9t965spItGmMjl7OmCxhxXtL0xlJz45Ljjee4/FeNWv33lZy2gcNZbwhxXj34HF6Or
-         06H5z5YNZthePzR9xMc2rySauT0EZ9GqKNDAcb8jGPlnfDY9fUFdL77vIJ+nFw7mO2dl
-         lXO/SPXq9jRCkGLaPbyualh8hccUTknUf0AiT7jKIQhkC7rE7QVmv2I4RVjJx8gat9ZT
-         Y0jw==
-X-Gm-Message-State: AC+VfDxzawA2N325lFYO0B9xK3KFQrbyEI/rij7ZkjLCj1Ebt5NerpLv
-        LJJxYpkahrpb94Osftq8/A+NP6HTNc9S/zrJhqk=
-X-Google-Smtp-Source: ACHHUZ4V0UzJXmOaS27pn0qGqFdFCh76Hfz2jr/a0CAePlRB6y4q8OwnVaD7Jbl2aB8HCK25aVZeqQ==
-X-Received: by 2002:a54:408b:0:b0:39a:748f:4bbd with SMTP id i11-20020a54408b000000b0039a748f4bbdmr132133oii.15.1685716356815;
-        Fri, 02 Jun 2023 07:32:36 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id j18-20020a0ceb12000000b0061b5dbf1994sm839858qvp.146.2023.06.02.07.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 07:32:36 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1q55pT-001vhW-EA;
-        Fri, 02 Jun 2023 11:32:35 -0300
-Date:   Fri, 2 Jun 2023 11:32:35 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Yanfei Xu <yanfei.xu@intel.com>, dwmw2@infradead.org,
-        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] iommu/vt-d: Use BUG_ON to check NULL value of 'table'
-Message-ID: <ZHn9g6QoMUo3ZPog@ziepe.ca>
-References: <20230530092503.152926-1-yanfei.xu@intel.com>
- <20230530092503.152926-3-yanfei.xu@intel.com>
- <3e75f9de-4c67-93aa-9fb4-28da9849dd48@linux.intel.com>
+        d=1e100.net; s=20221208; t=1685716480; x=1688308480;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mh32AefeMMikefo4GnmhNXDOVxpzlJj5DaZUcMsa5o0=;
+        b=KxkB55XZQBVtLhhET7tybGytfQcJMPR7ypB5nnysaOfjf8fHeZ9C1aSbEkovPvBmqm
+         htpsUunJhphekUE4nRU8TV3EjTpW29vb4ysEbAg2m6D5/EtjOiQYGKxobxCJQHmvmhBx
+         LqWIC+/VyZpRUS8mHYviHjvD45i8sfDe/rvq1eb8BNDFYYQOvyOZUxQSlDWP6lxU+RbF
+         4qcEj8H0CLQGBtoAZwl5Ba3sLK8JzyOmmuf7LM86bv90ByWttv0vFjjTjGlK8uw29a8l
+         x+u1Lv8MT1lkjVTgtePar01K+Jv4DOF6Pn2Va/aV+Vvqbhnh7FUdh22fRRBdgO3FU0J8
+         ABGw==
+X-Gm-Message-State: AC+VfDwfd4hHc3ftJnoB7nlEpk3dXDns6xwIvydEEpdBV8SHf+Wc/tB6
+        brbgM2Nh47FcS3701U/6mDprwQ==
+X-Google-Smtp-Source: ACHHUZ4Q4CRLY+qqnMRdLxgAmfjgYx/BaUO1YyxkfmId5OxzCb0ED50kKdVr0LqsYnOhJDCPbbDDjQ==
+X-Received: by 2002:a5d:48cc:0:b0:307:7e22:dfc3 with SMTP id p12-20020a5d48cc000000b003077e22dfc3mr103508wrs.63.1685716479790;
+        Fri, 02 Jun 2023 07:34:39 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:c196:937f:1927:fe24? ([2a01:e0a:b41:c160:c196:937f:1927:fe24])
+        by smtp.gmail.com with ESMTPSA id g9-20020adfe409000000b0030ae53550f5sm1847392wrm.51.2023.06.02.07.34.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 07:34:38 -0700 (PDT)
+Message-ID: <e8431649-6389-bea3-58ab-9764dba83b3e@6wind.com>
+Date:   Fri, 2 Jun 2023 16:34:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e75f9de-4c67-93aa-9fb4-28da9849dd48@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH 1/1] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Content-Language: en-US
+To:     Mike Christie <michael.christie@oracle.com>, oleg@redhat.com,
+        linux@leemhuis.info, axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+References: <20230601183232.8384-1-michael.christie@oracle.com>
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Organization: 6WIND
+In-Reply-To: <20230601183232.8384-1-michael.christie@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,41 +82,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:26:55AM +0800, Baolu Lu wrote:
-> On 5/30/23 5:25 PM, Yanfei Xu wrote:
-> > Checking NULL value of 'table' variable deserves a BUG_ON as the
-> > following code will trigger a crash by dereferencing the NULL
-> > 'table' pointer. Crash in advance with BUG_ON to avoid WARN_ON
-> > plus NULL pointer dereferencing can simplify the crash log.
-> > 
-> > Signed-off-by: Yanfei Xu<yanfei.xu@intel.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index e98f1b122b49..8aa3bfdb7f95 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -1944,7 +1944,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
-> >   	if (sm_supported(iommu)) {
-> >   		unsigned long pds;
-> > -		WARN_ON(!table);
-> > +		BUG_ON(!table);
+Le 01/06/2023 à 20:32, Mike Christie a écrit :
+> When switching from kthreads to vhost_tasks two bugs were added:
+> 1. The vhost worker tasks's now show up as processes so scripts doing
+> ps or ps a would not incorrectly detect the vhost task as another
+> process.  2. kthreads disabled freeze by setting PF_NOFREEZE, but
+> vhost tasks's didn't disable or add support for them.
 > 
-> BUG_ON() is not recommended. Perhaps,
+> To fix both bugs, this switches the vhost task to be thread in the
+> process that does the VHOST_SET_OWNER ioctl, and has vhost_worker call
+> get_signal to support SIGKILL/SIGSTOP and freeze signals. Note that
+> SIGKILL/STOP support is required because CLONE_THREAD requires
+> CLONE_SIGHAND which requires those 2 signals to be supported.
 > 
-> 		if (!table)
-> 			-ENODEV;
+> This is a modified version of the patch written by Mike Christie
+> <michael.christie@oracle.com> which was a modified version of patch
+> originally written by Linus.
 > 
-> ?
-
-If it is not something you think needs active debugging then just let
-it crash on the NULL pointer deref. You get a nice backtrace from that
-already.
-
-The additional value of the WARN is it gives you a line number, a
-prettier print and it might recover more cleanly (or not, it might
-just crash somewhere else).
-
-Jason
+> Much of what depended upon PF_IO_WORKER now depends on PF_USER_WORKER.
+> Including ignoring signals, setting up the register state, and having
+> get_signal return instead of calling do_group_exit.
+> 
+> Tidied up the vhost_task abstraction so that the definition of
+> vhost_task only needs to be visible inside of vhost_task.c.  Making
+> it easier to review the code and tell what needs to be done where.
+> As part of this the main loop has been moved from vhost_worker into
+> vhost_task_fn.  vhost_worker now returns true if work was done.
+> 
+> The main loop has been updated to call get_signal which handles
+> SIGSTOP, freezing, and collects the message that tells the thread to
+> exit as part of process exit.  This collection clears
+> __fatal_signal_pending.  This collection is not guaranteed to
+> clear signal_pending() so clear that explicitly so the schedule()
+> sleeps.
+> 
+> For now the vhost thread continues to exist and run work until the
+> last file descriptor is closed and the release function is called as
+> part of freeing struct file.  To avoid hangs in the coredump
+> rendezvous and when killing threads in a multi-threaded exec.  The
+> coredump code and de_thread have been modified to ignore vhost threads.
+> 
+> Remvoing the special case for exec appears to require teaching
+> vhost_dev_flush how to directly complete transactions in case
+> the vhost thread is no longer running.
+> 
+> Removing the special case for coredump rendezvous requires either the
+> above fix needed for exec or moving the coredump rendezvous into
+> get_signal.
+> 
+> Fixes: 6e890c5d5021 ("vhost: use vhost_tasks for worker threads")
+> Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+> Co-developed-by: Mike Christie <michael.christie@oracle.com>
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Tested-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
