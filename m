@@ -2,213 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AD971F88E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC33D71F890
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbjFBClN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 22:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S233508AbjFBCmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbjFBClL (ORCPT
+        with ESMTP id S231628AbjFBCmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:41:11 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38418D;
-        Thu,  1 Jun 2023 19:41:10 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ba1815e12efso1465830276.3;
-        Thu, 01 Jun 2023 19:41:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685673669; x=1688265669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YVZyL/O31PWOCOA/BG7GrWW4VzwpPJxkkhP5MOBTY0I=;
-        b=TV3P8nE7l8W7YyS259p9ZoAOl5Bmh5VEBeK6dFZEUVO9dw3zwXfKx7BDRV1NQyrKld
-         8XdK9RTXrZ9Arqm4N+N44uwm9yVjrklD63/2nBOio6J0YC99wwo0GFmhWT+IumxrCvlG
-         kaIJ5mJXQqec9Eo33xcqzei0RteYFCKgVS+yL/yc8VsgBlRUfXgRR2xGa8/sEMp5Nuw0
-         GdvSrx8taqgR0Dno93womQKlEdJubeeOm95n3kBvf+ZtFNI95V9FNVIavmHLuBYMu7ou
-         PDfAnEWlefvaF+f2oU4KySYnxAzgZ3GlqJuyvcCDhmANMuzR4Zy2+glr85hxzNuLjMgD
-         iiDg==
-X-Gm-Message-State: AC+VfDyIrX+RQYFrmbeB/9hEY/iefChpslyEHtZX7ldrL6Sb3I05A1o9
-        QNwL3nKPo/EEl/Zcm4brsKGqOE0b+xwBGcdvAco=
-X-Google-Smtp-Source: ACHHUZ6Y19sHUXPnAHUMH7OeXfOEz3N2O7lT+04ZG9ZYlsL6EOk62eVasjT19xblc3/8/TgpqXLOxsEIKM73GJVxiiY=
-X-Received: by 2002:a25:a287:0:b0:ba6:a923:4744 with SMTP id
- c7-20020a25a287000000b00ba6a9234744mr1797524ybi.44.1685673669398; Thu, 01 Jun
- 2023 19:41:09 -0700 (PDT)
+        Thu, 1 Jun 2023 22:42:04 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49631192;
+        Thu,  1 Jun 2023 19:42:03 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1685673718t57gxjvm
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 02 Jun 2023 10:41:57 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: rZJGTgY0+YPwgiakv+THh63hc5GL5wrSfdcmfDhOS6QGyKlpj/pA1lPZrNBJn
+        S2PuA7MPx5NA7C1rfVlK3kj2oDOohD86hqt9rTiKaOmnIgqgVP1kADXNm87bE0Qjkw65H4U
+        Nk9O/OhkDoD3LA8P7zp7FuOKWxCdZpUNdmU7cvTZ6vv60Gb06wmNjrL7npQ2VQtR77Ms9bn
+        FhHFtI3iToYyuF/K5irzIZWEtJQ83vw6ixMp0RFD6a39kGH8a3EItulQB9mugw/QJIGni7K
+        YVEhSnLbvNOgOu9eKMAAAc9ZnX4ISwso9Qu6n+Y3Htb7DVp9u9YwaMT+rHmhp9T5wkgsOuv
+        zjad4G8I8vZgaCL4E70g98xApxdF/8qQqRtJWpxFMb+MOMgF8izKZjerhpXPQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6459984539969045256
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     falcon@tinylab.org, thomas@t-8ch.de, w@1wt.eu
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/nolibc: test_fork: fix up duplicated print
+Date:   Fri,  2 Jun 2023 10:41:57 +0800
+Message-Id: <20230602024157.11151-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org>
+References: <61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230531040428.501523-1-anshuman.khandual@arm.com> <20230531040428.501523-9-anshuman.khandual@arm.com>
-In-Reply-To: <20230531040428.501523-9-anshuman.khandual@arm.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 1 Jun 2023 19:40:58 -0700
-Message-ID: <CAM9d7cihqiUULBR7JoizDGySVYdOx3TH_CJV=QDpeck3p8z5wg@mail.gmail.com>
-Subject: Re: [PATCH V11 08/10] arm64/perf: Add struct brbe_regset helper functions
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,RCVD_IN_PBL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 9:15 PM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> The primary abstraction level for fetching branch records from BRBE HW has
-> been changed as 'struct brbe_regset', which contains storage for all three
-> BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
-> happens in the task sched out path, or in the PMU IRQ handling path, these
-> registers need to be extracted from the HW. Afterwards both live and stored
-> sets need to be stitched together to create final branch records set. This
-> adds required helper functions for such operations.
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Tested-by: James Clark <james.clark@arm.com>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Hi, Willy
+
+What about this one for 2023xxxx-nolibc-rv32+stkp6?
+
+@Thomas, welcome your Reviewed-by If it is ok for you ;-)
+
+Best regards,
+Zhangjin
+
+> running nolibc-test with glibc on x86_64 got such print issue:
+> 
+>     29 execve_root = -1 EACCES                                       [OK]
+>     30 fork30 fork = 0                                                      [OK]
+>     31 getdents64_root = 712                                         [OK]
+> 
+> The fork test case has three printf calls:
+> 
+>     (1) llen += printf("%d %s", test, #name);
+>     (2) llen += printf(" = %d %s ", expr, errorname(errno));
+>     (3) llen += pad_spc(llen, 64, "[FAIL]\n"); --> vfprintf()
+> 
+> In the following scene, the above issue happens:
+> 
+>     (a) The parent calls (1)
+>     (b) The parent calls fork()
+>     (c) The child runs and shares the print buffer of (1)
+>     (d) The child exits, flushs the print buffer and closes its own stdout/stderr
+>         * "30 fork" is printed at the first time.
+>     (e) The parent calls (2) and (3), with "\n" in (3), it flushs the whole buffer
+>         * "30 fork = 0 ..." is printed
+> 
+> Therefore, there are two "30 fork" in the stdout.
+> 
+> Between (a) and (b), if flush the stdout (and the sterr), the child in
+> stage (c) will not be able to 'see' the print buffer.
+> 
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 > ---
-
-[SNIP]
+>  tools/testing/selftests/nolibc/nolibc-test.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 7de46305f419..88323a60aa4a 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -486,7 +486,13 @@ static int test_getpagesize(void)
+>  static int test_fork(void)
+>  {
+>  	int status;
+> -	pid_t pid = fork();
+> +	pid_t pid;
 > +
-> +static inline void copy_brbe_regset(struct brbe_regset *src, int src_idx,
-> +                                   struct brbe_regset *dst, int dst_idx)
-> +{
-> +       dst[dst_idx].brbinf = src[src_idx].brbinf;
-> +       dst[dst_idx].brbsrc = src[src_idx].brbsrc;
-> +       dst[dst_idx].brbtgt = src[src_idx].brbtgt;
-> +}
+> +	/* flush the printf buffer to avoid child flush it */
+> +	fflush(stdout);
+> +	fflush(stderr);
 > +
-> +/*
-> + * This function concatenates branch records from stored and live buffer
-> + * up to maximum nr_max records and the stored buffer holds the resultant
-> + * buffer. The concatenated buffer contains all the branch records from
-> + * the live buffer but might contain some from stored buffer considering
-> + * the maximum combined length does not exceed 'nr_max'.
-> + *
-> + *     Stored records  Live records
-> + *     ------------------------------------------------^
-> + *     |       S0      |       L0      |       Newest  |
-> + *     ---------------------------------               |
-> + *     |       S1      |       L1      |               |
-> + *     ---------------------------------               |
-> + *     |       S2      |       L2      |               |
-> + *     ---------------------------------               |
-> + *     |       S3      |       L3      |               |
-> + *     ---------------------------------               |
-> + *     |       S4      |       L4      |               nr_max
-> + *     ---------------------------------               |
-> + *     |               |       L5      |               |
-> + *     ---------------------------------               |
-> + *     |               |       L6      |               |
-> + *     ---------------------------------               |
-> + *     |               |       L7      |               |
-> + *     ---------------------------------               |
-> + *     |               |               |               |
-> + *     ---------------------------------               |
-> + *     |               |               |       Oldest  |
-> + *     ------------------------------------------------V
-> + *
-> + *
-> + * S0 is the newest in the stored records, where as L7 is the oldest in
-> + * the live reocords. Unless the live buffer is detetcted as being full
-> + * thus potentially dropping off some older records, L7 and S0 records
-> + * are contiguous in time for a user task context. The stitched buffer
-> + * here represents maximum possible branch records, contiguous in time.
-> + *
-> + *     Stored records  Live records
-> + *     ------------------------------------------------^
-> + *     |       L0      |       L0      |       Newest  |
-> + *     ---------------------------------               |
-> + *     |       L0      |       L1      |               |
-> + *     ---------------------------------               |
-> + *     |       L2      |       L2      |               |
-> + *     ---------------------------------               |
-> + *     |       L3      |       L3      |               |
-> + *     ---------------------------------               |
-> + *     |       L4      |       L4      |             nr_max
-> + *     ---------------------------------               |
-> + *     |       L5      |       L5      |               |
-> + *     ---------------------------------               |
-> + *     |       L6      |       L6      |               |
-> + *     ---------------------------------               |
-> + *     |       L7      |       L7      |               |
-> + *     ---------------------------------               |
-> + *     |       S0      |               |               |
-> + *     ---------------------------------               |
-> + *     |       S1      |               |    Oldest     |
-> + *     ------------------------------------------------V
-> + *     |       S2      | <----|
-> + *     -----------------      |
-> + *     |       S3      | <----| Dropped off after nr_max
-> + *     -----------------      |
-> + *     |       S4      | <----|
-> + *     -----------------
-> + */
-> +static int stitch_stored_live_entries(struct brbe_regset *stored,
-> +                                     struct brbe_regset *live,
-> +                                     int nr_stored, int nr_live,
-> +                                     int nr_max)
-> +{
-> +       int nr_total, nr_excess, nr_last, i;
-> +
-> +       nr_total = nr_stored + nr_live;
-> +       nr_excess = nr_total - nr_max;
-> +
-> +       /* Stored branch records in stitched buffer */
-> +       if (nr_live == nr_max)
-> +               nr_stored = 0;
-> +       else if (nr_excess > 0)
-> +               nr_stored -= nr_excess;
-> +
-> +       /* Stitched buffer branch records length */
-> +       if (nr_total > nr_max)
-> +               nr_last = nr_max;
-> +       else
-> +               nr_last = nr_total;
-> +
-> +       /* Move stored branch records */
-> +       for (i = 0; i < nr_stored; i++)
-> +               copy_brbe_regset(stored, i, stored, nr_last - nr_stored - 1 + i);
-
-I'm afraid it can overwrite some entries if nr_live is small
-and nr_stored is big.  Why not use memmove()?
-
-Also I think it'd be simpler if you copy store to live.
-It'll save copying live in the IRQ but it will copy the
-whole content to store again for the sched switch.
-
-Thanks,
-Namhyung
-
-
-> +
-> +       /* Copy live branch records */
-> +       for (i = 0; i < nr_live; i++)
-> +               copy_brbe_regset(live, i, stored, i);
-> +
-> +       return nr_last;
-> +}
-> +
->  /*
->   * Generic perf branch filters supported on BRBE
->   *
-> --
+> +	pid = fork();
+>  
+>  	switch (pid) {
+>  	case -1:
+> -- 
 > 2.25.1
->
+> 
+> 
