@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A86571F82F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCEF71F831
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjFBBsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S232809AbjFBBuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFBBsp (ORCPT
+        with ESMTP id S229598AbjFBBus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:48:45 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A323297;
-        Thu,  1 Jun 2023 18:48:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=2FfI2CGt5OAyLnPlwE0+qVBCnJpNryj1RGeDDNRa1ps=; b=wfk+KV8WqWyawOQOczdqtPXpzN
-        0fc/6LgQIhnF59Y/63v2SxhWWIn2Q9I8/7ENu42jKIr3keJdfGAXHPrHLcU3gHphF9dbJr/MLLOGb
-        mXq8xCMyOIEzjQFPZ7n/hcMvFh+L2F3zWvj2U/XmjEWAxUspwbusJCgGn4nF+cYEThk4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q4tto-00EdAD-49; Fri, 02 Jun 2023 03:48:16 +0200
-Date:   Fri, 2 Jun 2023 03:48:16 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     msmulski2@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
-        kabel@kernel.org, Michal Smulski <michal.smulski@ooma.com>
-Subject: Re: [PATCH net-next v5 1/1] net: dsa: mv88e6xxx: implement USXGMII
- mode for mv88e6393x
-Message-ID: <324df285-d042-4cc7-9304-d8ccffc624e2@lunn.ch>
-References: <20230601215251.3529-1-msmulski2@gmail.com>
- <20230601215251.3529-2-msmulski2@gmail.com>
- <ZHke6JqvcWZsOdX5@shell.armlinux.org.uk>
+        Thu, 1 Jun 2023 21:50:48 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E59A3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:50:47 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id e33ad88a-00e7-11ee-a9de-005056bdf889;
+        Fri, 02 Jun 2023 04:50:45 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Fri, 2 Jun 2023 04:50:44 +0300
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v1 01/43] gpio: ep93xx: split device in multiple
+Message-ID: <ZHlK9EkHlLD7DDG7@surfacebook>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601053546.9574-2-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHke6JqvcWZsOdX5@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230601053546.9574-2-nikita.shubin@maquefel.me>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,15 +51,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> It would be nice to wait until we've converted 88e6xxx to phylink PCS
-> before adding this support, which is something that's been blocked for
-> a few years but should be unblocked either at the end of this cycle,
-> or certainly by 6.5-rc1. Andrew, would you agree?
+Thu, Jun 01, 2023 at 08:33:52AM +0300, Nikita Shubin kirjoitti:
+> This prepares ep93xx SOC gpio to convert into device tree driver:
+> - dropped banks and legacy defines
+> - split AB IRQ and make it shared
+> 
+> We are relying on IRQ number information A, B ports have single shared
+> IRQ, while F port have dedicated IRQ for each line.
+> 
+> Also we had to split single ep93xx platform_device into multiple, one
+> for each port, without this we can't do a full working transition from
+> legacy platform code into device tree capable. All GPIO_LOOKUP were
+> change to match new chip namings.
 
-I don't think merging this will make it any harder to convert the code
-to a PCS driver.
+First of all, check if you added In-Reply-to email header to the previous
+thread, at least `b4` downloaded 188 messages in this one so far. Second,
+the previous was kinda v0, while we usually assume that non-versioned series
+is v1. This is a bit ambiguous.
 
-As far as i know, all the DT changes should already be in linux-next,
-so i think 6.5-rc1 is a reasonable target.
+...
 
-   Andrew
+> +		GPIO_LOOKUP_IDX("gpio-ep93xx.4", 1,	NULL, 1, GPIO_ACTIVE_HIGH),
+
+TAB used instead of space.
+
+...
+
+>  struct device __init *ep93xx_init_devices(void)
+>  {
+>  	struct device *parent;
+> +	int i;
+
+It's unsigned, right?
+
+> +	for (i = 0; i < ARRAY_SIZE(ep93xx_gpio_device); i++)
+> +		platform_device_register(ep93xx_gpio_device[i]);
+
+...
+
+>  	writeb(eic->int_debounce,
+> -	       epg->base + eic->irq_offset + EP93XX_INT_DEBOUNCE_OFFSET);
+> +	       eic->base + EP93XX_INT_DEBOUNCE_OFFSET);
+
+Now this can be a single line. Also some other cases may be optimized.
+
+...
+
+> +	void __iomem *intr = devm_platform_ioremap_resource_byname(pdev, "intr");
+
+It's less error prone if the assignment is split from definition and moved
+closer to its (first) user...
+
+> +
+
+...here.
+
+> +	if (IS_ERR(intr))
+> +		return PTR_ERR(intr);
+
+...
+
+> +	egc->eic = devm_kcalloc(dev, 1,
+> +				sizeof(*egc->eic),
+> +				GFP_KERNEL);
+
+Why kcalloc(1), is this a part that will be (slightly) modified in the next
+patches in the series?
+
+> +	if (!egc->eic)
+> +		return -ENOMEM;
+>  
+...
+
+> +		irq = platform_get_irq(pdev, 0);
+
+No return value check?
+
+> +		ret = devm_request_irq(dev, irq,
+> +				ep93xx_ab_irq_handler,
+> +				IRQF_SHARED, gc->label, gc);
+> +		if (ret) {
+> +			dev_err(dev, "error requesting IRQ : %d\n", irq);
+> +			return ret;
+
+If it's soslely part of the ->probe() flow, you may use dev_err_probe().
+
+> +		}
+>  
+> +		girq->parents[0] = irq;
+
+...
+
+>  		for (i = 0; i < girq->num_parents; i++) {
+> +			irq = platform_get_irq(pdev, i);
+> +			if (irq <= 0)
+
+== 0 is never happen case. Why?
+
+> +				continue;
+> +
+> +			girq->parents[i] = irq;
+>  		}
+
+> +	ret = bgpio_init(gc, &pdev->dev, 1, data, NULL, NULL, dir, NULL, 0);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "unable to init generic GPIO\n");
+> +		return ret;
+
+		return dev_err_probe(...);
+
+>  	}
+
+...
+
+> +	if (platform_irq_count(pdev) > 0) {
+
+Do you need this check?
+
+> +		dev_dbg(&pdev->dev, "setting up irqs for %s\n", dev_name(&pdev->dev));
+> +		ret = ep93xx_setup_irqs(pdev, egc);
+> +		if (ret)
+> +			dev_err(&pdev->dev, "setup irqs failed for %s\n", dev_name(&pdev->dev));
+
+If it's an error, why continuing?
+
+> +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
