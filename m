@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B372F71FC3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FE5720F42
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 12:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbjFBIky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S230048AbjFCKaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 06:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjFBIku (ORCPT
+        with ESMTP id S230162AbjFCK34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:40:50 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476E9196
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:40:49 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-777097126abso51683639f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:40:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685695248; x=1688287248;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R21t3yxIGLscTBQIenn82agFv8hkbnPzy8Ffbly2fQc=;
-        b=RU/p4/PSqal3O9NGclB7cVP3SbvRfZHNJ8JEogkvlGxMMNXTzWz0o2TYUcRDq4BLHq
-         Y9vMWH2xOGvcsbOZc2/d3f/6yU2scPizm89fdkZxtD+cxz4EhMfdqPzuVHwo/WGQE2GH
-         BrUW9XyWuetNVMzRA14DtPYC/0f0tkiUXnH68u5r38o5XSsb4pEu49T6RLoIUMeNG6E5
-         DYzylmHbfAySDbQKvGz2vHz6UpMK7oZ5KlMO6Ymxb65quTW+XdoX3jsDYbpvhkOeaO0P
-         u7/pcS/x5tKM/VPG5TeU+Eu9kmPIr8hqCwwnhPMmptA+eH+ewtcZeSuPAg6Fi3/4f+sf
-         V9xg==
-X-Gm-Message-State: AC+VfDx2WGqAh1QFMgn+Pn8ebfp6RrbkPRE70l/Cv1tIsPKOZxAcJv1p
-        zv9Uul3chHA2SLXydvH3EwffUfEBcGKTgi7W22ZN260rQZ1s
-X-Google-Smtp-Source: ACHHUZ7tm68wj2kCbhsNKE7zQLZeoOSQO31xd4HxX+TR4+/zTR6v1hDDvUFr/P0SZaxAsbGsTZpyloM/VJpeCl7MW/lUiHMeDEDG
+        Sat, 3 Jun 2023 06:29:56 -0400
+X-Greylist: delayed 4202 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 03:29:55 PDT
+Received: from mail.webtopbits.pl (mail.webtopbits.pl [195.231.64.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F09136
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 03:29:55 -0700 (PDT)
+Received: by mail.webtopbits.pl (Postfix, from userid 1001)
+        id 1F153A3938; Fri,  2 Jun 2023 09:40:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=webtopbits.pl;
+        s=mail; t=1685695268;
+        bh=Eh8ECMiYd4baGAwPAzhz8mhJACXX7NSRkYjh+plaY18=;
+        h=Date:From:To:Subject:From;
+        b=hyKYOwr9UHsJHwxo45xhS+se9XAJO0mjw79m/h78sEhzMjwkk5WydTHvzDjCn+EoX
+         WlUhCB14NTb3p8EncPteBtZuHS1Q7cRJZn5Ro69HiaIjULdzSFcSugTFgE77mmtrYU
+         u3frhCJmsZQaAd1heMsROamxuGW7I/qcXmD7WyJXg8zHFqLJ7g4H5odg0Simlu/uuf
+         dLsukeW1qRlbB3+DRL3s3B5pfN+ePMk0Q6H2+cCuqt5Y2lYVMN1Jc8oWomICHv+YQd
+         uw3N6cdJDr0CQz6Qzcj7QIe1ASAh6zGfA4ksIGxC9Mv4i6ut5PHJZApFdmdeFlNlkl
+         5r/WddOmchfVw==
+Received: by mail.webtopbits.pl for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 08:40:50 GMT
+Message-ID: <20230602085530-0.1.8w.5kes.0.w6vo92cnhx@webtopbits.pl>
+Date:   Fri,  2 Jun 2023 08:40:50 GMT
+From:   "Kamil Durjasz" <kamil.durjasz@webtopbits.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?Wy=C5=BCsza_konwersja_w_e-sklepie_?=
+X-Mailer: mail.webtopbits.pl
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9ec5:0:b0:777:127e:6dd5 with SMTP id
- a5-20020a5d9ec5000000b00777127e6dd5mr671109ioe.2.1685695248595; Fri, 02 Jun
- 2023 01:40:48 -0700 (PDT)
-Date:   Fri, 02 Jun 2023 01:40:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007e054605fd218210@google.com>
-Subject: [syzbot] Monthly ntfs report (Jun 2023)
-From:   syzbot <syzbot+list96ce3166ad941b6ae46b@syzkaller.appspotmail.com>
-To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,48 +48,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello ntfs maintainers/developers,
+Dzie=C5=84 dobry,
 
-This is a 31-day syzbot report for the ntfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/ntfs
+w jaki spos=C3=B3b docieraj=C4=85 Pa=C5=84stwo do odbiorc=C3=B3w?
 
-During the period, 1 new issues were detected and 0 were fixed.
-In total, 25 issues are still open and 7 have been fixed so far.
+Tworzymy pot=C4=99=C5=BCne narz=C4=99dzia sprzeda=C5=BCy, kt=C3=B3re pozw=
+alaj=C4=85 kompleksowo rozwi=C4=85za=C4=87 problemy potencjalnych klient=C3=
+=B3w i skutecznie wp=C5=82yn=C4=85=C4=87 na ich decyzje zakupowe.=20
 
-Some of the still happening issues:
+Skupiamy si=C4=99 na Pa=C5=84stwa potrzebach zwi=C4=85zanych z obs=C5=82u=
+g=C4=85 sklepu, oczekiwaniach i planach sprzeda=C5=BCowych. Szczeg=C3=B3=C5=
+=82owo dopasowujemy grafik=C4=99, funkcjonalno=C5=9Bci, struktur=C4=99 i =
+mikrointerakcje do Pa=C5=84stwa grupy docelowej, co przek=C5=82ada si=C4=99=
+ na oczekiwane rezultaty.
 
-Ref  Crashes Repro Title
-<1>  2429    Yes   possible deadlock in ntfs_read_folio
-                   https://syzkaller.appspot.com/bug?extid=8ef76b0b1f86c382ad37
-<2>  2284    Yes   kernel BUG at fs/ntfs/aops.c:LINE!
-                   https://syzkaller.appspot.com/bug?extid=6a5a7672f663cce8b156
-<3>  879     Yes   kernel BUG in __ntfs_grab_cache_pages
-                   https://syzkaller.appspot.com/bug?extid=01b3ade7c86f7dd584d7
-<4>  392     Yes   possible deadlock in map_mft_record
-                   https://syzkaller.appspot.com/bug?extid=cb1fdea540b46f0ce394
-<5>  285     No    KASAN: use-after-free Read in ntfs_test_inode
-                   https://syzkaller.appspot.com/bug?extid=2751da923b5eb8307b0b
-<6>  30      Yes   KASAN: slab-out-of-bounds Read in ntfs_readdir
-                   https://syzkaller.appspot.com/bug?extid=d36761079ac1b585a6df
-<7>  9       Yes   KASAN: use-after-free Read in ntfs_attr_find (2)
-                   https://syzkaller.appspot.com/bug?extid=ef50f8eb00b54feb7ba2
-<8>  9       Yes   kernel BUG in ntfs_iget
-                   https://syzkaller.appspot.com/bug?extid=d62e6bd2a2d05103d105
-<9>  6       No    possible deadlock in ntfs_sync_mft_mirror
-                   https://syzkaller.appspot.com/bug?extid=c9340661f4a0bb3e7e65
-<10> 3       Yes   KASAN: use-after-free Read in ntfs_read_folio
-                   https://syzkaller.appspot.com/bug?extid=d3cd38158cd7c8d1432c
+Ch=C4=99tnie przedstawi=C4=99 dotychczasowe realizacje, aby mogli Pa=C5=84=
+stwo przekona=C4=87 si=C4=99 o naszych mo=C5=BCliwo=C5=9Bciach. Mog=C4=99=
+ si=C4=99 skontaktowa=C4=87?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Pozdrawiam
+Kamil Durjasz
