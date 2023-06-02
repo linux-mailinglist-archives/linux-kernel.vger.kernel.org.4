@@ -2,265 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59F971FF74
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A5E71FF77
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbjFBKgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S235711AbjFBKg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236011AbjFBKfP (ORCPT
+        with ESMTP id S234751AbjFBKf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:35:15 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3631FC7;
-        Fri,  2 Jun 2023 03:34:19 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f60e536250so23707025e9.1;
-        Fri, 02 Jun 2023 03:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685701995; x=1688293995;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6WwVzjMT13eHkkQuH4z/XI2TgceopoHSsmejuQOoz9k=;
-        b=Y0r7TXZE33mYlN7FVr58Liz7F66cdOWOUajtii8RswIxqkVGn49vT9AGdXLvlzb5c5
-         Vl2ZGtPbcaZztzALwVqAzNlC9FcYE/DHSsasPw96bWyxt4VEouYAK5YPy1KdQIEKTorX
-         XeDAgiS4I4EYReiOeeXztwgZnfcv0CjkaC9Eray/M+r1iSe7KaBEw/Jm25suES3vY5La
-         0DJT5O42nkBMMbFZrF+bpC10CRpDYy5Z5TKENoFdZh11kPxVjPWl/i+zE3TaQW73FY42
-         YMMdstts1kO9FdItwTClVen72JWvTEjFnz68CUykMRkjNJKS6wBEXMxfUXqhkfCQS8bQ
-         yEHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685701995; x=1688293995;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6WwVzjMT13eHkkQuH4z/XI2TgceopoHSsmejuQOoz9k=;
-        b=Xzzk/hIb6F1aQSSzbcVve+We1eAQ718z3IvVdXrp2ntSKnriurBLh13lSgj6Iu+zVF
-         9ZLb4IbfF5YryGR0fsVC2zEWCQkld0PAB3VKVvmdzlXG+yLMWJSHSW6eUBOOjqMkLZNh
-         STMzhaQgmg/UQeP6h3DmWNZb7PLttb/rROZJFsJ4cJlEFrIgW3Ejtv6OQ/N5hZGP5/DD
-         jqzZZjwACm/bbWenAiUBUObd1YIWkySZChjwezXYE0lgVYgUHv6q8gO8+2lq7rEcpN8K
-         fJYX38LSn6g5LvP4cNLPcEAJcHjpHm20q/p9Z6rxReEvJYoN7dKqxdU3J9bOvxbPwep7
-         xw+w==
-X-Gm-Message-State: AC+VfDyhETCLGQL5ZohJzO8xBhWKsxBDMpfNY0CyeWLLVtjwYeTHssls
-        mAnXqK1gWc8lScuEi9lcGWM=
-X-Google-Smtp-Source: ACHHUZ7H9FfL5WnoVHiPDlmb7Pf9mWxA+40EPLe9rU+qoF2Fadwa2H6cgJaSZJhIl5yaru6osNtUSA==
-X-Received: by 2002:adf:cd8b:0:b0:307:cf71:ed8c with SMTP id q11-20020adfcd8b000000b00307cf71ed8cmr3429402wrj.35.1685701994532;
-        Fri, 02 Jun 2023 03:33:14 -0700 (PDT)
-Received: from localhost.localdomain (host-79-23-99-244.retail.telecomitalia.it. [79.23.99.244])
-        by smtp.gmail.com with ESMTPSA id f4-20020adff8c4000000b00307a83ea722sm1270596wrq.58.2023.06.02.03.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 03:33:13 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jiaqi Yan <jiaqiyan@google.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Peter Collingbourne <pcc@google.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] highmem: Rename put_and_unmap_page() to unmap_and_put_page()
-Date:   Fri,  2 Jun 2023 12:33:07 +0200
-Message-Id: <20230602103307.5637-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 2 Jun 2023 06:35:57 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB84E43;
+        Fri,  2 Jun 2023 03:34:41 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 12:33:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685702025; bh=BFaP0Bc5Ii+o8/5LmJhFs9l0FX4Zgrji4nYoQeGg2r0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sHe2c8Yid9GaHV+KwNK8KEx8ByjVCeqLMVJHyFuOswJWYF7lxAheuxCdbPVZBJ8zQ
+         ZCVi7YO2XrKDvrNnHIna/35ybCrpPHeBHdUXjUcq4OrCz36FadA9lrew7Fyp9QUQp8
+         ta6kDxFR/V+huCFYFPUYSaq0vN5VS2aV8lyx2tJ8=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, w@1wt.eu, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for
+ rv32
+Message-ID: <f7cb4209-a70f-4f59-8b11-2d189908f18c@t-8ch.de>
+References: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
+ <20230602040625.24373-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602040625.24373-1-falcon@tinylab.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit 849ad04cf562a ("new helper: put_and_unmap_page()"), Al Viro
-introduced the put_and_unmap_page() to use in those many places where we
-have a common pattern consisting of calls to kunmap_local() +
-put_page().
+On 2023-06-02 12:06:25+0800, Zhangjin Wu wrote:
+> Willy, Arnd and Thomas
+> 
+> Based on your suggestions, in the comming v3, I plan to split the whole rv32
+> support to something like this:
 
-Obviously, first we unmap and then we put pages. Instead, the original
-name of this helper seems to imply that we first put and then unmap.
+Is each of these parts a new patchset?
+I would suggest to do so.
 
-Therefore, rename the helper and change the only known upstreamed user
-(i.e., fs/sysv) before this helper enters common use and might become
-difficult to find all call sites and instead easy to break the builds.
+> 1. Generic part1
+> 
+>    (The old feedbacks are applied with the new Suggested-by lines, welcome your
+>     additional feedbacks if there are ;-))
+> 
+>     selftests/nolibc: syscall_args: use generic __NR_statx
+>     tools/nolibc: add missing nanoseconds support for __NR_statx
+>     selftests/nolibc: allow specify extra arguments for qemu
+>     selftests/nolibc: fix up compile warning with glibc on x86_64
+>     selftests/nolibc: not include limits.h for nolibc
+>     selftests/nolibc: use INT_MAX instead of __INT_MAX__
+>     tools/nolibc: arm: add missing my_syscall6
+>     tools/nolibc: open: fix up compile warning for arm
+>     selftests/nolibc: support two errnos with EXPECT_SYSER2()
+>     selftests/nolibc: remove gettimeofday_bad1/2 completely
+>     selftests/nolibc: add new gettimeofday test cases
 
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+These all look good and non-controversial.
 
-I had sent an RFC which had a typo in a call of unmap_and_put_page().
-The Kernel Test Robot made me notice that typo (thanks) and now it is fixed.
+> 2. Add Compile support for rv32
+> 
+>    (Convert all of the unsupported syscalls to a return of -ENOSYS, this
+>     allows us to fix up the test failures one by one not that urgently later)
+> 
+>     tools/nolibc: fix up #error compile failures with -ENOSYS
+>     tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
 
-My fault: I thought that an RFC doesn't need compiler's checks but now I
-know I was wrong :-(
+These should be their own series in my opinion.
+It will likely generate some discussion.
 
-The RFC is at:
-https://lore.kernel.org/lkml/20230601132317.13606-1-fmdefrancesco@gmail.com/
+>     selftests/nolibc: riscv: customize makefile for rv32
+> 
+>    (The first two are new but clear enough, based on the idea of suggestion from Arnd [1])
+> 
+> 3. Fix up the left test failures one by one
 
-The reason of the RFC was mainly because I wasn't sure whether or not Al
-was using some obscure name calling convention which is unknown to me.
+I'm not a fan of adding an "official" rv32 support with still failing
+tests.
 
-Anyway, he and nobody else objected. Therefore, I decided to drop the
-RFC prefix and send a real patch. In the meantime I changed the subject
-prefif from "fs" to "mm" and added linux-mm to the list of recipients.
+>    (Plan to add everyone as a standalone patchset, which will easier the review
+>     and merge progress)
+> 
+>    wait4 -> waitid
+>    lseek -> llseek
+>    gettimeofday -> clock_gettime/clock_gettime64
+>    select -> pselect6/pselect6_time64
+>    ppoll -> ppoll_time64
 
- fs/sysv/dir.c           | 22 +++++++++++-----------
- fs/sysv/namei.c         |  8 ++++----
- include/linux/highmem.h |  2 +-
- 3 files changed, 16 insertions(+), 16 deletions(-)
+I guess these new codepaths will also be used on non-rv32 architectures
+and will therefore validated without rv32.
 
-diff --git a/fs/sysv/dir.c b/fs/sysv/dir.c
-index cdb3d632c63d..0140010aa0c3 100644
---- a/fs/sysv/dir.c
-+++ b/fs/sysv/dir.c
-@@ -52,7 +52,7 @@ static int sysv_handle_dirsync(struct inode *dir)
- }
- 
- /*
-- * Calls to dir_get_page()/put_and_unmap_page() must be nested according to the
-+ * Calls to dir_get_page()/unmap_and_put_page() must be nested according to the
-  * rules documented in mm/highmem.rst.
-  *
-  * NOTE: sysv_find_entry() and sysv_dotdot() act as calls to dir_get_page()
-@@ -103,11 +103,11 @@ static int sysv_readdir(struct file *file, struct dir_context *ctx)
- 			if (!dir_emit(ctx, name, strnlen(name,SYSV_NAMELEN),
- 					fs16_to_cpu(SYSV_SB(sb), de->inode),
- 					DT_UNKNOWN)) {
--				put_and_unmap_page(page, kaddr);
-+				unmap_and_put_page(page, kaddr);
- 				return 0;
- 			}
- 		}
--		put_and_unmap_page(page, kaddr);
-+		unmap_and_put_page(page, kaddr);
- 	}
- 	return 0;
- }
-@@ -131,7 +131,7 @@ static inline int namecompare(int len, int maxlen,
-  * itself (as a parameter - res_dir). It does NOT read the inode of the
-  * entry - you'll have to do that yourself if you want to.
-  *
-- * On Success put_and_unmap_page() should be called on *res_page.
-+ * On Success unmap_and_put_page() should be called on *res_page.
-  *
-  * sysv_find_entry() acts as a call to dir_get_page() and must be treated
-  * accordingly for nesting purposes.
-@@ -166,7 +166,7 @@ struct sysv_dir_entry *sysv_find_entry(struct dentry *dentry, struct page **res_
- 							name, de->name))
- 					goto found;
- 			}
--			put_and_unmap_page(page, kaddr);
-+			unmap_and_put_page(page, kaddr);
- 		}
- 
- 		if (++n >= npages)
-@@ -209,7 +209,7 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
- 				goto out_page;
- 			de++;
- 		}
--		put_and_unmap_page(page, kaddr);
-+		unmap_and_put_page(page, kaddr);
- 	}
- 	BUG();
- 	return -EINVAL;
-@@ -228,7 +228,7 @@ int sysv_add_link(struct dentry *dentry, struct inode *inode)
- 	mark_inode_dirty(dir);
- 	err = sysv_handle_dirsync(dir);
- out_page:
--	put_and_unmap_page(page, kaddr);
-+	unmap_and_put_page(page, kaddr);
- 	return err;
- out_unlock:
- 	unlock_page(page);
-@@ -321,12 +321,12 @@ int sysv_empty_dir(struct inode * inode)
- 			if (de->name[1] != '.' || de->name[2])
- 				goto not_empty;
- 		}
--		put_and_unmap_page(page, kaddr);
-+		unmap_and_put_page(page, kaddr);
- 	}
- 	return 1;
- 
- not_empty:
--	put_and_unmap_page(page, kaddr);
-+	unmap_and_put_page(page, kaddr);
- 	return 0;
- }
- 
-@@ -352,7 +352,7 @@ int sysv_set_link(struct sysv_dir_entry *de, struct page *page,
- }
- 
- /*
-- * Calls to dir_get_page()/put_and_unmap_page() must be nested according to the
-+ * Calls to dir_get_page()/unmap_and_put_page() must be nested according to the
-  * rules documented in mm/highmem.rst.
-  *
-  * sysv_dotdot() acts as a call to dir_get_page() and must be treated
-@@ -376,7 +376,7 @@ ino_t sysv_inode_by_name(struct dentry *dentry)
- 	
- 	if (de) {
- 		res = fs16_to_cpu(SYSV_SB(dentry->d_sb), de->inode);
--		put_and_unmap_page(page, de);
-+		unmap_and_put_page(page, de);
- 	}
- 	return res;
- }
-diff --git a/fs/sysv/namei.c b/fs/sysv/namei.c
-index 2b2dba4c4f56..fcf163fea3ad 100644
---- a/fs/sysv/namei.c
-+++ b/fs/sysv/namei.c
-@@ -164,7 +164,7 @@ static int sysv_unlink(struct inode * dir, struct dentry * dentry)
- 		inode->i_ctime = dir->i_ctime;
- 		inode_dec_link_count(inode);
- 	}
--	put_and_unmap_page(page, de);
-+	unmap_and_put_page(page, de);
- 	return err;
- }
- 
-@@ -227,7 +227,7 @@ static int sysv_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 		if (!new_de)
- 			goto out_dir;
- 		err = sysv_set_link(new_de, new_page, old_inode);
--		put_and_unmap_page(new_page, new_de);
-+		unmap_and_put_page(new_page, new_de);
- 		if (err)
- 			goto out_dir;
- 		new_inode->i_ctime = current_time(new_inode);
-@@ -256,9 +256,9 @@ static int sysv_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 
- out_dir:
- 	if (dir_de)
--		put_and_unmap_page(dir_page, dir_de);
-+		unmap_and_put_page(dir_page, dir_de);
- out_old:
--	put_and_unmap_page(old_page, old_de);
-+	unmap_and_put_page(old_page, old_de);
- out:
- 	return err;
- }
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 4de1dbcd3ef6..68da30625a6c 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -507,7 +507,7 @@ static inline void folio_zero_range(struct folio *folio,
- 	zero_user_segments(&folio->page, start, start + length, 0, 0);
- }
- 
--static inline void put_and_unmap_page(struct page *page, void *addr)
-+static inline void unmap_and_put_page(struct page *page, void *addr)
- {
- 	kunmap_local(addr);
- 	put_page(page);
--- 
-2.40.1
+So you could submit these before the final rv32 patch in a series.
 
+> 4. Clean up some old test cases one by one
+> 
+>    Like statx ...
+> 
+> Best regards,
+> Zhangjin
+> 
+> [1]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+> 
+> > Both riscv64 and riscv32 have:
+> > 
+> > * the same ARCH value, it is riscv
+> > * the same arch/riscv source code tree
+> > 
+> > The only differences are:
+> > 
+> > * riscv64 uses defconfig, riscv32 uses rv32_defconfig
+> > * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
+> > * riscv32 has different compiler options (-march= and -mabi=)
+> > 
+> > So, riscv32 can share most of the settings with riscv64, there is no
+> > need to add it as a whole new architecture but just need a flag to
+> > record and reflect the difference.
+> > 
+> > The 32bit mips and loongarch may be able to use the same method, so,
+> > let's use a meaningful flag: CONFIG_32BIT. If required in the future,
+> > this flag can also be automatically loaded from
+> > include/config/auto.conf.
+> > 
+> > With this patch, it is able to run nolibc test for rv32 like this:
+> > 
+> >     $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
+> >  1 file changed, 9 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > index 44088535682e..ea434a0acdc1 100644
+> > --- a/tools/testing/selftests/nolibc/Makefile
+> > +++ b/tools/testing/selftests/nolibc/Makefile
+> > @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
+> >  ARCH = $(SUBARCH)
+> >  endif
+> >  
+> > +# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
+> > +ifneq ($(findstring xriscv,x$(ARCH)),)
+> > +  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
+> > +  override ARCH := riscv
+> > +endif
+> > +
+> >  # kernel image names by architecture
+> >  IMAGE_i386       = arch/x86/boot/bzImage
+> >  IMAGE_x86_64     = arch/x86/boot/bzImage
+> > @@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
+> >  DEFCONFIG_arm64      = defconfig
+> >  DEFCONFIG_arm        = multi_v7_defconfig
+> >  DEFCONFIG_mips       = malta_defconfig
+> > -DEFCONFIG_riscv      = defconfig
+> > +DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
+> >  DEFCONFIG_s390       = defconfig
+> >  DEFCONFIG_loongarch  = defconfig
+> >  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
+> > @@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
+> >  QEMU_ARCH_arm64      = aarch64
+> >  QEMU_ARCH_arm        = arm
+> >  QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
+> > -QEMU_ARCH_riscv      = riscv64
+> > +QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
+> >  QEMU_ARCH_s390       = s390x
+> >  QEMU_ARCH_loongarch  = loongarch64
+> >  QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
+> > @@ -76,6 +82,7 @@ else
+> >  Q=@
+> >  endif
+> >  
+> > +CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
+> >  CFLAGS_s390 = -m64
+> >  CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+> >  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+> > -- 
+> > 2.25.1
+> 
