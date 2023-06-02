@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767CF72098A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E06172098D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237147AbjFBTLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S236583AbjFBTLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236583AbjFBTLN (ORCPT
+        with ESMTP id S237106AbjFBTLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:11:13 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F92133;
-        Fri,  2 Jun 2023 12:11:11 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75b0df81142so275313585a.2;
-        Fri, 02 Jun 2023 12:11:11 -0700 (PDT)
+        Fri, 2 Jun 2023 15:11:35 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBDA1BE;
+        Fri,  2 Jun 2023 12:11:32 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75b01271ad4so231746885a.1;
+        Fri, 02 Jun 2023 12:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685733070; x=1688325070;
+        d=gmail.com; s=20221208; t=1685733091; x=1688325091;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/c+JmdRjZKJt3f/jf4aQQG5jIKIzfXv3IkRk6BRsBRw=;
-        b=shpwf31GrX+DRB/nGXbzkDffrVUebrAcz/grvP0YcKsMQMNsORI878epuMFQsuCgcK
-         0POr1bnjxqILJGLbyObKyDdQkztwP/yJhkZmZDUCu6dSsqgtllG4+JaJmm6sjv9IPNIN
-         JQb/6O3TkdhV5OqcYie4bYnbL5YJNCfW1glZ1mxKbuGfFhZZpT3Iak7u3ydWyvxHSmIU
-         inptzN1UMPKIHph18fueBAdNPuLaJBYgU1enV/hZGmmak+K/JnlyDk8nTh2E4GrKPVRt
-         nTVa0nabxXzqoXKTpNkHIjZoXy/9zw4ALzzkTkFYiSyUaeZXCZRNSGSC1ezBEXlP2LuB
-         qyLA==
+        bh=opFi1JTQYsq9CCCUgt1EEOObmcMhgBVZV9dRUuWuSGw=;
+        b=pIxmdQ9XfmOIJbx8yTczNiD0X4sZxgFu6m69eJeQcAmnOTkyt13Ysou4KnDPwWGX+T
+         Z96wFpf/1GVU9lau6s1oWmMzsU1+EA+ev3oelwbYB6NCTd6oCZ7L6WvEA4THlQNO5oH2
+         6eln1MDKzfP1KUyDqB/Me61IBYPvdTcipm1mIFA1/zcC6eMyOBnfCgwhhsynmOEUjPPB
+         J8ak6QzjrT8n+2qgwkhN2gJAkY2/A3xqRAfDHKREYrS5XYzZWxvdFPGrhG8r/L+7pv9/
+         Fwl+t5BNiO7Jq4vXmaQBRLF7IW1cZIFaS52KHotah1KIgcXTSgtW0OpMm/WXgiwWT0GK
+         062A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685733070; x=1688325070;
+        d=1e100.net; s=20221208; t=1685733091; x=1688325091;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/c+JmdRjZKJt3f/jf4aQQG5jIKIzfXv3IkRk6BRsBRw=;
-        b=WKBGK5kOyTAiht4V5oHgeInSyfoX2MTQxRNV+hBuMpGx55iyFyifUGzBXKMjd/hmx4
-         7yLJrZmCDrMd1nqr0eDKYLBJGIMupUo7CgJyp+w44ajdFBKDTErhNgQoa+kFq4jFYSV3
-         WPwwXethf1F86U2Co/Mfo983rCEyM8iGPmSAvs19V+hG4SRHINNS15+o4SxGahzC0ipU
-         9mKOTPSlKLoYyxlhvkl10k6ZBDhI43aD6sYoPuEa8PllNaB8NOKci459MuGfHT57ShDp
-         +iXuuLJHehqkZX847yL2XJr/e425NXleanL6GtW9tjO+ENp41kheZMOM8cBD3AETbC1S
-         9ruw==
-X-Gm-Message-State: AC+VfDzLNAlIBbhly3qksq7D+Izcl+uKVWJt7p4utrR7YiwcOpO+SF5O
-        MnUQdm2NzqkMANRQah8G+Rg=
-X-Google-Smtp-Source: ACHHUZ5fN2FHtbXoLD5R2oPpDXu3MR+F+o69SkjKLL8dzKzMkVkbBuQ1j9ShMgzswRy3VKEGAnDgUA==
-X-Received: by 2002:a05:620a:6412:b0:75b:23a0:deb3 with SMTP id pz18-20020a05620a641200b0075b23a0deb3mr13899930qkn.49.1685733070619;
-        Fri, 02 Jun 2023 12:11:10 -0700 (PDT)
+        bh=opFi1JTQYsq9CCCUgt1EEOObmcMhgBVZV9dRUuWuSGw=;
+        b=lxyswwKpNflAiICsr2HmG/xsVZoODxNPz7/ZhUs0eKT0bmukNg7V+VcNghar4Goxnu
+         ZuVEHFrYt4JiTfZ1RocIIjOqlHmhj05Kcv9MI8o7N4j0DtvZKLKUA3PJulSfp+AOLhjq
+         7D1DgloV9zwU+ZJBi60G2i22spuLlOBgMgOKQq87lJXzxbXcTpBZZULQ1yFzagWGA8N9
+         Zt/UqCK8tav9eIoV7jP7XpIP8sxA9so9Bw/RGsgauV+3XqsLEte+zHVj28kHzxFS1Bt3
+         uAQusB8sH/S99mPW4gcYRwkbWlypMYvjmr9rzMgjZl3Qoa8TBuGMR17Vj6oh5NLP9m/4
+         m1Qw==
+X-Gm-Message-State: AC+VfDxU8NkDkgeeuR6yejP43WOWdr+JX8pPiRawWrg29QWySUHW9QoP
+        nWG2j1Yzy5UyjHNx8mC9ufQ=
+X-Google-Smtp-Source: ACHHUZ6YnUoaCGLE6lsrpxVhurfAkr9IE0o/Fi5tnPsc12SxFMiaxgHFvtsALAFo4/50VjKKYKOnPg==
+X-Received: by 2002:a05:620a:4003:b0:75b:23a1:8347 with SMTP id h3-20020a05620a400300b0075b23a18347mr17217065qko.66.1685733091668;
+        Fri, 02 Jun 2023 12:11:31 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id o24-20020a05620a15d800b00751517fd46esm971836qkm.26.2023.06.02.12.11.01
+        by smtp.googlemail.com with ESMTPSA id t7-20020a05620a004700b0075b327a2988sm936705qkt.133.2023.06.02.12.11.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 12:11:09 -0700 (PDT)
-Message-ID: <efa17e71-93e8-bd77-433b-bf3f1df5f49d@gmail.com>
-Date:   Fri, 2 Jun 2023 12:10:57 -0700
+        Fri, 02 Jun 2023 12:11:30 -0700 (PDT)
+Message-ID: <3597b0be-2dc9-5dbd-a773-6dd5704ef4a9@gmail.com>
+Date:   Fri, 2 Jun 2023 12:11:17 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/3] net: phy: realtek: Add optional external PHY clock
+Subject: Re: [PATCH v2 3/3] net: phy: realtek: Disable clock on suspend
 Content-Language: en-US
 To:     Detlev Casanova <detlev.casanova@collabora.com>,
         linux-kernel@vger.kernel.org
@@ -71,9 +71,9 @@ Cc:     Andrew Lunn <andrew@lunn.ch>,
         Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230602182659.307876-1-detlev.casanova@collabora.com>
- <20230602182659.307876-2-detlev.casanova@collabora.com>
+ <20230602182659.307876-4-detlev.casanova@collabora.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230602182659.307876-2-detlev.casanova@collabora.com>
+In-Reply-To: <20230602182659.307876-4-detlev.casanova@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,11 +87,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 6/2/23 11:26, Detlev Casanova wrote:
-> In some cases, the PHY can use an external clock source instead of a
-> crystal.
+> For PHYs that call rtl821x_probe() where an external clock can be
+> configured, make sure that the clock is disabled
+> when ->suspend() is called and enabled on resume.
 > 
-> Add an optional clock in the phy node to make sure that the clock source
-> is enabled, if specified, before probing.
+> The PHY_ALWAYS_CALL_SUSPEND is added to ensure that the suspend function
+> is actually always called.
 > 
 > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 
