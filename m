@@ -2,91 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2DA71FF9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AE771FFA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 12:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbjFBKn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 06:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S235210AbjFBKoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 06:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbjFBKn0 (ORCPT
+        with ESMTP id S235721AbjFBKob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:43:26 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34205E5A
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:43:05 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-777683e803bso86380039f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 03:43:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685702556; x=1688294556;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G9TOw2H2TDDn1VQzhH7iezPzkkf4u+p1oMfgUm2gH4s=;
-        b=NcRsd6YYS2t/2CJ8US1O7vqTZaYNsLs+SKpueYE2w5eOdEnaVKn4z7fCU18EeH1mJC
-         MsY2RqgzyOFPMbRawWXJ53624n47jOxcVvT+WlUz5DLN0OcWPltgatjhqe46V80bMI+8
-         3Q0zv++X0EOxrb3j0EOtol9nB9y6dNFaxQrGAKdzPD52CIc69We4mo18MJt5lvUmk/5J
-         qKKYoHeruhYVWtJgrmmbtX7tljkeAGTQcToi7TMJ+yWlTLtmqf5Yw73z0l+PMnMly4J/
-         mRGbwWK6PSP5s7grjjCcTqsBAO5FbexYJmsPpfjmCOTK0bqvttUO3oRGZU1ZUoSJVwtA
-         EB0w==
-X-Gm-Message-State: AC+VfDyBTTEi9sXu6q3UwZ/8GmT7cu2lfk2WTWFr+YDHtVsEhoYsm5LD
-        8Zy9p7UCrQYG3wJSIl7DJW7w5FaHognRCYOZDl33urHgtlzS
-X-Google-Smtp-Source: ACHHUZ5g81UbT0rdYhiZsxkJQRZusYNFheAl9Q2G8/fz5X7oyogzCbJ3gEEO9e7RVn0nSDYkK4N6utNhjlOH6ehZj7UVEKz1AfvE
+        Fri, 2 Jun 2023 06:44:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFDE1AD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 03:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685702597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=phpZd5hK2i2mM+vAnJfGyLfRqwW0axG13fXI7MRFpGs=;
+        b=Mcd3L4aUsnJE+6hkNKR3BVyGL/Zv9r0WtYgIoOmpeexpDAxXIch6wS4otPco/E1v3g0+L/
+        37mOdAoNorYLVpwdYV0FEsd8FnEmDo6SeJ5BGAmMfVIPtndVUTt4g3++SXmp83/6QL8V8A
+        K/SCvFQnlZrO7CZ+QTfY7QZaCpwEQ08=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-I1xxHkoXNl6b6j-Eozu2nw-1; Fri, 02 Jun 2023 06:43:07 -0400
+X-MC-Unique: I1xxHkoXNl6b6j-Eozu2nw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F1F3185A793;
+        Fri,  2 Jun 2023 10:43:06 +0000 (UTC)
+Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6936FC154D9;
+        Fri,  2 Jun 2023 10:43:04 +0000 (UTC)
+Date:   Fri, 2 Jun 2023 18:42:59 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        willy@infradead.org, deller@gmx.de
+Subject: Re: [PATCH v5 RESEND 14/17] mm/ioremap: Consider IOREMAP space in
+ generic ioremap
+Message-ID: <ZHnHs+ro44SBS+lV@MiWiFi-R3L-srv>
+References: <20230515090848.833045-1-bhe@redhat.com>
+ <20230515090848.833045-15-bhe@redhat.com>
+ <ZGR3Ft27kdgXKKfp@infradead.org>
+ <ZGR3yWIdjfJTupgY@infradead.org>
+ <ZHXD082+VntWgbNo@MiWiFi-R3L-srv>
+ <ZHh9TcwFwzeWU9sx@infradead.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a814:0:b0:774:7cc5:6682 with SMTP id
- c20-20020a5ea814000000b007747cc56682mr799847ioa.3.1685702556762; Fri, 02 Jun
- 2023 03:42:36 -0700 (PDT)
-Date:   Fri, 02 Jun 2023 03:42:36 -0700
-In-Reply-To: <00000000000015ac7905e97ebaed@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000017cc6205fd233643@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
-From:   syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, dan.carpenter@oracle.com,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHh9TcwFwzeWU9sx@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-9p: client_create/destroy: only call trans_mod->close after create
+On 06/01/23 at 04:13am, Christoph Hellwig wrote:
+> On Tue, May 30, 2023 at 05:37:23PM +0800, Baoquan He wrote:
+> > If we want to consolidate code, we can move is_ioremap_addr() to
+> > include/linux/mm.h libe below. Not sure if it's fine. With it,
+> > both kernel/iomem.c and mm/ioremap.c can use is_ioremap_addr().
+> 
+> Can we just add a ne header for this given that no one else really
+> needs it?
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Is it OK like below?
 
-#syz fix: exact-commit-title
+From fe5d4d25afa1e989fa82877c8466a97fc8bd8c93 Mon Sep 17 00:00:00 2001
+From: Baoquan He <bhe@redhat.com>
+Date: Fri, 2 Jun 2023 18:36:48 +0800
+Subject: [PATCH] mm: move is_ioremap_addr() into new header file
+Content-type: text/plain
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+Now is_ioremap_addr() is only used in kernel/iomem.c and gonna be used
+in mm/ioremap.c. Move it into its own new header file linux/ioremap.h.
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=67d13108d855f451cafc
-
+Signed-off-by: Baoquan He <bhe@redhat.com>
 ---
-[1] I expect the commit to be present in:
+ include/linux/ioremap.h | 29 +++++++++++++++++++++++++++++
+ include/linux/mm.h      |  5 -----
+ kernel/iomem.c          |  1 +
+ mm/ioremap.c            |  1 +
+ 4 files changed, 31 insertions(+), 5 deletions(-)
+ create mode 100644 include/linux/ioremap.h
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+diff --git a/include/linux/ioremap.h b/include/linux/ioremap.h
+new file mode 100644
+index 000000000000..2fd51a77ebdc
+--- /dev/null
++++ b/include/linux/ioremap.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_IOREMAP_H
++#define _LINUX_IOREMAP_H
++
++#include <linux/kasan.h>
++#include <asm/pgtable.h>
++
++#if defined(CONFIG_HAS_IOMEM) || defined(CONFIG_GENERIC_IOREMAP)
++/*
++ * Ioremap often, but not always uses the generic vmalloc area. E.g on
++ * Power ARCH, it could have different ioremap space. 
++ */
++#ifndef IOREMAP_START
++#define IOREMAP_START   VMALLOC_START
++#define IOREMAP_END     VMALLOC_END
++#endif
++static inline bool is_ioremap_addr(const void *x)
++{
++	unsigned long addr = (unsigned long)kasan_reset_tag(x);
++	return addr >= IOREMAP_START && addr < IOREMAP_END;
++}
++#else
++static inline bool is_ioremap_addr(const void *x)
++{
++	return false;
++}
++#endif
++
++#endif /* _LINUX_IOREMAP_H */
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 27ce77080c79..7379f19768b4 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1041,11 +1041,6 @@ unsigned long vmalloc_to_pfn(const void *addr);
+  * On nommu, vmalloc/vfree wrap through kmalloc/kfree directly, so there
+  * is no special casing required.
+  */
+-
+-#ifndef is_ioremap_addr
+-#define is_ioremap_addr(x) is_vmalloc_addr(x)
+-#endif
+-
+ #ifdef CONFIG_MMU
+ extern bool is_vmalloc_addr(const void *x);
+ extern int is_vmalloc_or_module_addr(const void *x);
+diff --git a/kernel/iomem.c b/kernel/iomem.c
+index 62c92e43aa0d..9682471e6471 100644
+--- a/kernel/iomem.c
++++ b/kernel/iomem.c
+@@ -3,6 +3,7 @@
+ #include <linux/types.h>
+ #include <linux/io.h>
+ #include <linux/mm.h>
++#include <linux/ioremap.h>
+ 
+ #ifndef ioremap_cache
+ /* temporary while we convert existing ioremap_cache users to memremap */
+diff --git a/mm/ioremap.c b/mm/ioremap.c
+index 0248e630561b..3dede3302eba 100644
+--- a/mm/ioremap.c
++++ b/mm/ioremap.c
+@@ -10,6 +10,7 @@
+ #include <linux/mm.h>
+ #include <linux/io.h>
+ #include <linux/export.h>
++#include <linux/ioremap.h>
+ 
+ /*
+  * Ioremap often, but not always uses the generic vmalloc area. E.g on
+-- 
+2.34.1
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+> 
+> 
 
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
