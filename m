@@ -2,181 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA81771FCCD
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC0D71FCCC
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234828AbjFBI4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S234714AbjFBI4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbjFBIzp (ORCPT
+        with ESMTP id S234533AbjFBIzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:55:45 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2120.outbound.protection.outlook.com [40.107.101.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87891725;
-        Fri,  2 Jun 2023 01:54:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lVG8iIaDdOPVkNy43iZjm2rUHVI2skylbrzpv+eFHvLD9adx+BjGzMeiUrmfCRJRnX/eqI5nwkSm+W6rIvDWde1Fyfu++Dq4W68UQkfam1CEb4DiYxC5B1JmBY/Rv3KUl0z1YNfhbdoNp5tIyzYg3qgyjtJ18p5zlIhnguiiH0bQVAyeW37feW29FBWoOiwBws+7MWIMNuphHxiXX4OeOe1TM6Zr+916FdYbchJTcqywFNFNVGzUGB7lF0IMjMTNP4EksW+Hm6frS1k1tygGrIFoer+NGUh3e6jYC1FG/q1lAP8UMKkQP8YVVwPmSbwvOB+vnqlnGOZwEYHbuQRB+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zj6Ei+ljIkxAf0K+7V8QQEKsXXHDWBv01Q5VDqle+Xo=;
- b=ilTuuoK/Rd7HXPAfkMm6YfV+k/0R7noW/5WOEFXWAEcaCbSMRni2dA76+jBjT/X5Gb9SXpXsQDN39CWXq1LQtO7sjdbuRvMhw8btRBXsdR17GE3Sujt3RIn5ro13SIim9WGfd8NiDc7zOZBxMo4eSFtImMWU9XoLiJZD47Vgi1upnpv0+JC1xfi7z8qej4iG4BcmvIXisykQ/wEi8vTpPRuFajvKTbrCQv2p9cD6R7pnt9PoP+uzeDZT4vOnT2DEsHRX2PPjV3ob0bTsxrIG+C+viXqZO8nhhetWQ67+1yNkTylhTskiC6u4bX+L3qVduWQ7Ir3vfUGq+8A4pPXQsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 2 Jun 2023 04:55:39 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B051722
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:54:33 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f4f89f71b8so2402688e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zj6Ei+ljIkxAf0K+7V8QQEKsXXHDWBv01Q5VDqle+Xo=;
- b=hnW2MidDOKtKdJmFRnxhAzO5mzA5mDF0T7qCSK+SYmYUyTYPX4LXG9JzGIdNLROBPHsxL2sqTYPDNTKOgP7nSnSMuI0j5p8AX1XNeVIbX+y+dpGJm1a3JlWUIrDlLlT2ChgFIwy4/Kp9OEPYsE7MmwdfzKpPamrnrz2J1d9h/LQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM8PR13MB5174.namprd13.prod.outlook.com (2603:10b6:8:1::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.26; Fri, 2 Jun 2023 08:54:31 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
- 08:54:31 +0000
-Date:   Fri, 2 Jun 2023 10:54:24 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com,
-        Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH net-next] ethtool: ioctl: improve error checking for
- set_wol
-Message-ID: <ZHmuQAeP82TuBssK@corigine.com>
-References: <1685566429-2869-1-git-send-email-justin.chen@broadcom.com>
- <ZHi/aT6vxpdOryD8@corigine.com>
- <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7e49753-3ad6-9e03-44ff-945e66fca9a3@broadcom.com>
-X-ClientProxiedBy: AS4P195CA0014.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:5e2::10) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1685696071; x=1688288071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h/K5d07Ai5xBTSHj+4m9+Mu0PCCcMTAitKgXkZjqnoo=;
+        b=v3Y9MWXvJoO2KFDBFAr9XfYehYzj+8qojfNEHgk7w4BJ2Ve0lPt7IcPZBstjJNmRGl
+         oFSaSjRlnK1M3XkvgMrGRFJY5AqvSTOtPUQoJOjtq47vK7zBkxsGUEDklEU1DIvt8rTN
+         99Y7DykZMADbznsAoOwdwZni6005w6Ej3dBigtfP9utbU4OqVm7BnRfSscGT7jEqPMmj
+         jfvD5Ai6efUas/1aFSfHoagUT+BxUXOvbX/aHH9d3ZKWfPu4xwFxi8p0+gxtl+QWrn77
+         nmuPO2ToL/CnCas5nna/L9VpcZBoR1TWjU2bpu9CBt8bsE1J53l4EO4ZrmNy7VbG05zo
+         vf3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685696071; x=1688288071;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h/K5d07Ai5xBTSHj+4m9+Mu0PCCcMTAitKgXkZjqnoo=;
+        b=CuSzm/mjhZ7iqwLZLEGk3RfhsEGAgyh6g/AapPxNPft+/tpnB+1gsalPeynZeJCYuV
+         jWr5st7UPQd1vXMHU+B1iVX/SW58LC3qbKEBCd7pTO/qVFuXOkRHVJ2eqbVToIGJaGiJ
+         FvIQ1tIlbVBg29jAZhKayb52o6j9Tk0cHl0ENSjfj0+8L1XziLtEHvOUxkBOe5Y6T53Y
+         l5sJ49mYYkI313g1WxRru+vSDpJajdKVel0RdhnCB1YLM2R610w5Cw0b2IvqNGqT4YIn
+         2l08NSLUPzMSOtyrLN+8lZm21c9fBhyvoJoCNmXC5P+yHd4sprLKA8/RINLRjd1i+lm5
+         kllw==
+X-Gm-Message-State: AC+VfDxUPxf2m0d0shmP8RtxjjIAG/KdBOuPU3DAiZAHkh6MOTsYP2YN
+        pU/n1Su0PQ8o/LbPuRi0Jkia3w==
+X-Google-Smtp-Source: ACHHUZ5FsE78Qq21/c3s1WU+/VE5y4o6fVrH9MjwLufB6XedwCo/HmrIrTOSLq7FTIVr5E3cg23C9Q==
+X-Received: by 2002:ac2:518f:0:b0:4f3:aa73:562 with SMTP id u15-20020ac2518f000000b004f3aa730562mr1505757lfi.2.1685696071078;
+        Fri, 02 Jun 2023 01:54:31 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id c24-20020ac25318000000b004eefdd8b37fsm94626lfh.194.2023.06.02.01.54.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 01:54:30 -0700 (PDT)
+Message-ID: <ab8d7a2d-e2db-39cd-dbac-bb5535cb8c19@linaro.org>
+Date:   Fri, 2 Jun 2023 10:54:29 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM8PR13MB5174:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93558371-107c-42e8-8460-08db6346fadb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0FKOOcMfpSAGBdMI039v3QSnBFgN5ug23z14BXe870WNxacWQnB3cF2IlrulHI+Bo0B8NJt4MpAxyLqUpzTg6ul/uFzmyBfsdCkooI6fu/IZooLAtWKZZb2B13s7yf3m9x4OXUmmEAetp7TUk6hRGlrw0cB18uqqrW/wBIeQ855UUO2tjfWwa7aM00qVSNeNeAiLia/SoD79bP6fykf4Bu2NCMnBgazfqESHKUHNXbLOt1voOOIoWB98HCgO9gcrEWyB2/ciWoVzC4dI4by6rsmoJTPELmTDDDYLKOQaUjOKUlhA1npyYPYkQpx0E5uRyTtiyBDU6rgUOItRPa7i8KXjZCfd5YsZKP9QG/2zHZb2PiXw0sJraEQ+L5GVasLdw159Sfpm9FLmtVELax+RqJ5IdaGHlBys6GEh15Lqzym7FvRpDIcmULbtetrFK0BmebyXmmWz4Zjd3wtpFcSAWz7WcFKuGC2cAUHaIEkg02orz7IRkxFokMPfmw5shSyRtteBEpsy/PLWjWqWUgbcZQ/I/4W39JWWwEXmvWyy4FR7QX8WmyZTkKzszQ6d8624/PyUsO5mt4gzJvFwvjTPb3vS1QNj2hiimT5C9beZ9MQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(136003)(396003)(376002)(366004)(346002)(451199021)(54906003)(5660300002)(8676002)(8936002)(478600001)(41300700001)(6486002)(86362001)(6666004)(316002)(4326008)(6916009)(53546011)(186003)(7416002)(66476007)(66556008)(66946007)(44832011)(6506007)(26005)(6512007)(2616005)(2906002)(83380400001)(36756003)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DihTHN5m2/L8ibW/mxcyIuhugm44QEJVlczvc4wXpMcYG/iYhZe9VnxVH5uB?=
- =?us-ascii?Q?F2P20QDPc0XdTTLZ+mQ1qpsBH8lsLou3nRVF65nFh3GFifrUivQLiCkLK/ow?=
- =?us-ascii?Q?7ckoBwHKYf3ff26bZukp3Sv1OBZEYRGvKkxPXQTuLiSotCgVKwrGZj+nNwQv?=
- =?us-ascii?Q?zz46mftwNi06yHTV7epAqttXmaCoG1q0TgIATV83Jn6AZH+k9Z9uoWVCScEw?=
- =?us-ascii?Q?VS9Wp5Xmyp7XxVwDM9fQGOBlBznlJX0Cok1RaPhWgSSXLlbgnJ+kd2jKbDyk?=
- =?us-ascii?Q?ZeB/8bMFw9yHrQBkk08oAlxbtF92oYVQn7NUmChcn0zMyx/h89wG78y0uaW3?=
- =?us-ascii?Q?O4UbEhqOozrXkrdi92W1SJNWUQF248VJCho57XY2wgn46xJOJkyG6vMasr2h?=
- =?us-ascii?Q?H1kp/SVZVoBR91SUT3KisUurLRATGVt3TpLto6GkTyXZZ7Xxsft3lnjeWrJb?=
- =?us-ascii?Q?0SIRWD2OjJvg/QlwB/5/wPVWeXNceebYNVHXPirCavNVMzQVKX3GWrl1KjZq?=
- =?us-ascii?Q?7Ggz8ODnn4IVf03LD7NRLKKV4dYVxe1mUlWZgaBi6wYEOpPrt8b7/kDqhmkf?=
- =?us-ascii?Q?ml/p7186yvSUrS8x3mhaoGB8ndQxZOgc4Rja5y6qTKu9Sg3/JX5qFew+gGYK?=
- =?us-ascii?Q?GhFn8ifiq64VKMiRQ/s9plclkvS9UU2xQk9fqL5edMbeHD+/i/kpN2Gpv97N?=
- =?us-ascii?Q?N3WG/VTpBAiGWfOGgAYR9tH057H3ZZ5k7wzuZJud7RiDkdosyaB6rxbcJMsn?=
- =?us-ascii?Q?gtkMHeNVQ4he3y7rFTsWAxX7EkR3mLIc8UW8raSFaqmN08Xk/nLBFp9NVbTv?=
- =?us-ascii?Q?+dflnKTtrhFC2LBJ/G8vtVbEoIUr7XUHCwq/La5810zd5DZvUnBNf1XawyVz?=
- =?us-ascii?Q?qX8fiazPCMSx76rxzSaTTVrRNTK3nMn+dn1AoHyu+89vFp5dlbkj45OP46O6?=
- =?us-ascii?Q?09ntznz851VPhSjcCYrIyaVDUMRmFvlmmhuarYLA2QXGeiK7Io26184fUpCW?=
- =?us-ascii?Q?1qe1iXqDx/TkzDCnqIz4vbgSOhIYuWfWGzBqzzIOUoBfeoc04ab+ycdn9iM6?=
- =?us-ascii?Q?DztzNcGLX2z5EtShBGMb7DXqhQuB8WSFLnuyG6yWy1HVS+Upz54qE+JLXGe9?=
- =?us-ascii?Q?MBu4i3LzPf76bSpIzGriuOjZWR+T5NTSZYqC5MgRyIUdNYwR84HNuRamcBKj?=
- =?us-ascii?Q?/dzR5xU9kzalLyQpCauNx0Opkmnwhv05+wrDPJeDiScVSNu5FY5d9puuY2Ge?=
- =?us-ascii?Q?6hpjUFxwUHzCVuvi2UmARklwZSxUg+Ejisi3VTjEk4eaaU/TpfymgavyRhO9?=
- =?us-ascii?Q?8H2diX01/DB4oNjomICnNxmH/Sb/golSZc6+jTt70Bo94HIbYzak/mUVWxbW?=
- =?us-ascii?Q?utvCri0AHGi2h1DcQcxTR6LbmjaN5Gp4DO6komJqbTMIBAB0ajWGj4eSn3F9?=
- =?us-ascii?Q?f/duZT0TdR5CIWLKQsNxN1uwToF76+R1L9o2d3Dt+VqGeJkjYXiEG+ODQ9Hw?=
- =?us-ascii?Q?8VHKJhcu4Ww/FaQfBJuE7gUvGxAz3rFXX/CLiNtlbmLpc8gK2aCpJnIp+K2K?=
- =?us-ascii?Q?jlDQGC2YFjaR1bTI1dzsxXT9zS0N/orvmm2SkC5mGWOBN5Bzx7Ri4G+aCFsX?=
- =?us-ascii?Q?yQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93558371-107c-42e8-8460-08db6346fadb
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 08:54:31.2609
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 57j6r1h5qPoC45YyVv+TPB7Wf8Kv7oH4ASbNY3++WEE0d+zKl8AR5jXzzXZ1YNnbU7KJ4y4iNCVjzqFTWZBA3F+UfE+zSwljdZciwrFXv4Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR13MB5174
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] cpufreq: qcom-nvmem: add support for IPQ8074
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Marko <robimarko@gmail.com>
+Cc:     rafael@kernel.org, ilia.lin@kernel.org, agross@kernel.org,
+        andersson@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ansuelsmth@gmail.com
+References: <20230530165409.641661-1-robimarko@gmail.com>
+ <20230602041327.klyjs4cevmzn6vs7@vireshk-i7>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230602041327.klyjs4cevmzn6vs7@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 09:22:50AM -0700, Justin Chen wrote:
+
+
+On 2.06.2023 06:13, Viresh Kumar wrote:
+> On 30-05-23, 18:54, Robert Marko wrote:
+>> IPQ8074 comes in 2 families:
+>> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+>> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
+>>
+>> So, in order to be able to share one OPP table lets add support for IPQ8074
+>> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
+>>
+>> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+>> will get created by NVMEM CPUFreq driver.
+>>
+>> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > 
+> I am waiting for someone from Qcom to review this stuff.
+We're on v2 and it looks like there will be a v3
+
+https://lore.kernel.org/linux-arm-msm/20230530165807.642084-1-robimarko@gmail.com/
+
+Konrad
 > 
-> On 6/1/2023 8:55 AM, Simon Horman wrote:
-> > + Daniil Tatianin <d-tatianin@yandex-team.ru>, Andrew Lunn <andrew@lunn.ch>
-> >    as per ./scripts/get_maintainer.pl --git-min-percent 25 net/ethtool/ioctl.c
-> > 
-> > On Wed, May 31, 2023 at 01:53:49PM -0700, Justin Chen wrote:
-> > > The netlink version of set_wol checks for not supported wolopts and avoids
-> > > setting wol when the correct wolopt is already set. If we do the same with
-> > > the ioctl version then we can remove these checks from the driver layer.
-> > 
-> > Hi Justin,
-> > 
-> > Are you planning follow-up patches for the driver layer?
-> > 
-> 
-> I was planning to for the Broadcom drivers since those I can test. But I
-> could do it across the board if that is preferred.
-
-I think that would be my suggestion.
-But I'm unsure of the magnitude of change involved.
-Or how risky it is in terms of introducing regressions.
-In any case, perhaps it's best to start small.
-
-> > > Signed-off-by: Justin Chen <justin.chen@broadcom.com>
-> > > ---
-> > >   net/ethtool/ioctl.c | 14 ++++++++++++--
-> > >   1 file changed, 12 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-> > > index 6bb778e10461..80f456f83db0 100644
-> > > --- a/net/ethtool/ioctl.c
-> > > +++ b/net/ethtool/ioctl.c
-> > > @@ -1436,15 +1436,25 @@ static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
-> > >   static int ethtool_set_wol(struct net_device *dev, char __user *useraddr)
-> > >   {
-> > > -	struct ethtool_wolinfo wol;
-> > > +	struct ethtool_wolinfo wol, cur_wol;
-> > >   	int ret;
-> > > -	if (!dev->ethtool_ops->set_wol)
-> > > +	if (!dev->ethtool_ops->get_wol || !dev->ethtool_ops->set_wol)
-> > >   		return -EOPNOTSUPP;
-> > 
-> > Are there cases where (in-tree) drivers provide set_wol byt not get_wol?
-> > If so, does this break their set_wol support?
-> > 
-> 
-> My original thought was to match netlink set wol behavior. So drivers that
-> do that won't work with netlink set_wol right now. I'll skim around to see
-> if any drivers do this. But I would reckon this should be a driver fix.
-
-It seems, from other discussion in a different sub-thread, that we are
-likely clear there :)
-
-As that was my only real reservation wrt this patch:
-
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
-
-
