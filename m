@@ -2,169 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF3471F9D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E7271F9D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbjFBGDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S233652AbjFBGDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjFBGDT (ORCPT
+        with ESMTP id S233418AbjFBGDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 02:03:19 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6638C1A2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:03:17 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-bb167972cffso1826007276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 23:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685685796; x=1688277796;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zsFlKAGcv+fQqN1VVT9TBfhOrr8gOpZnbD5J9Rbft4=;
-        b=Y1BisDvMhSzU6oLolCbfFVEgLMBmkQqmlhDVPpW2AJeK8jBOlWFdFzL1tmuKOpvK63
-         GHp/SMU2i1PecHncq+b0lH3okXqlru+09I8QXCT9NALz59R7lsKaFrIT52Hiqg0zxTrC
-         jqOVLA4YrHbMJ8glWqmmX18tl8OerbjfR8d4jWr1vj09V6zTyWVo1xxkRbkx8FKG4Z9E
-         o7UIT7SMKh+6qHbb35DHGZE2LGVQgAMuvaanUZKjDX1mZVWuXTA1af7RiiJxIJKDI/Fw
-         yZw6JHtIxsA5qBBvdFUR4HhBdS3PC2/xGlBXKlhRRsZvH9HBG7Q8HWGC15eDYbLtpv+i
-         H45Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685685796; x=1688277796;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zsFlKAGcv+fQqN1VVT9TBfhOrr8gOpZnbD5J9Rbft4=;
-        b=b1XhDCJ9PR5MbrswQwRH83F6lkFv8vNEJf8+nkLQGGmDFsdZKPVvdERZkTFo1DoHVT
-         I6RGKlVu1fg/LEjSYQvwVAgekRHsOcPY+ZoiPIIKEZo2wDVcn/3weuWfJCBJZZiyrL2Q
-         +08Ibzv41FIXWeyqoqDXNd5FR+VDDwZ2PG0RyNuDV+E2weZdG/T0KpXzZXrplEtc5d2n
-         MQgcyMcqCHtoncbT8cjtUoObqb05hUzuSFJdFGYqf/3QRbY7b2nB/KGNPwXG52ft5uGo
-         kYHKVFunQmiriwDGzqiO1jrks/DNRAHS/25z2cx1eJ2QfxLLuIlSWclkV+5Xf0HrZaVv
-         8YKQ==
-X-Gm-Message-State: AC+VfDwgH6NIMh6TqJyHf3G1m042Lg1oxzkwl4aJPMwks41B8FbiI9GA
-        SbTEkPbi4x0HuO5dCggLmnxgoA==
-X-Google-Smtp-Source: ACHHUZ6eYdbQngpbs2i38U7FBW9tfhwKdbT7ZR71DCB3qxUId8cHs0QRFbdpfBZ1Bt76wUVanJBNhQ==
-X-Received: by 2002:a0d:d447:0:b0:568:bec5:ebaf with SMTP id w68-20020a0dd447000000b00568bec5ebafmr12482758ywd.12.1685685796445;
-        Thu, 01 Jun 2023 23:03:16 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id u17-20020a818411000000b0055d7fc2b704sm184207ywf.16.2023.06.01.23.03.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 23:03:15 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 23:03:11 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Fri, 2 Jun 2023 02:03:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB271A5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:03:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF3B464C59
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A76C433EF;
+        Fri,  2 Jun 2023 06:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685685820;
+        bh=72VyoFkGUn0mm7PyaN7SmnXVYG5EwT4wxe7Vv6CO8YE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q0VyiuReFvyJrntTISNbCEtkBYHQi7ugluiWFSaxg3p7MhaG78u1vM0YZXe4bdnHw
+         QJVOvuKA4d0/C/hPYgKGg/fk2umqPs1f6T5Cc0Sa18ShESOkq0UqUGgP+bCdP6zoDU
+         iGAyRmn0u+/b1TI0EJSAFIZffj6ZCQp+p0/oLCIsZHJTML1qTT/INWGhYQ5SI9sW1u
+         2HR6ojuQZdmTgyOaOcyqPycp7mhPzCqrQas305V1SkWbayf0Bb/bVNg36//hxjgvsL
+         Smh/vEfzHtJDknxD3lIUy+6LVy5yFyd4UDqcq8dXxXJjLvuw03VLfJma9OEjMR1+bA
+         B3timrON3gtTA==
+Date:   Thu, 1 Jun 2023 23:03:37 -0700
+From:   Chris Li <chrisl@kernel.org>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
+        Michal Hocko <mhocko@suse.com>,
         Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 08/12] mm/pgtable: add pte_free_defer() for pgtable as
- page
-In-Reply-To: <ZHekpAKJ05cr/GLl@ziepe.ca>
-Message-ID: <a7f4722-8af2-f7be-eada-ff1e6e918da1@google.com>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com> <739964d-c535-4db4-90ec-2166285b4d47@google.com> <ZHekpAKJ05cr/GLl@ziepe.ca>
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH -V3 2/5] swap, __read_swap_cache_async(): enlarge
+ get/put_swap_device protection range
+Message-ID: <ZHmGOa2FdGwJpjgf@google.com>
+References: <20230529061355.125791-1-ying.huang@intel.com>
+ <20230529061355.125791-3-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529061355.125791-3-ying.huang@intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023, Jason Gunthorpe wrote:
-> On Sun, May 28, 2023 at 11:23:47PM -0700, Hugh Dickins wrote:
-> > Add the generic pte_free_defer(), to call pte_free() via call_rcu().
-> > pte_free_defer() will be called inside khugepaged's retract_page_tables()
-> > loop, where allocating extra memory cannot be relied upon.  This version
-> > suits all those architectures which use an unfragmented page for one page
-> > table (none of whose pte_free()s use the mm arg which was passed to it).
-> > 
-> > Signed-off-by: Hugh Dickins <hughd@google.com>
-> > ---
-> > +	page = pgtable;
-> > +	call_rcu(&page->rcu_head, pte_free_now);
+On Mon, May 29, 2023 at 02:13:52PM +0800, Huang Ying wrote:
+> This makes the function a little easier to be understood because we
+> don't need to consider swapoff.  And this makes it possible to remove
+> get/put_swap_device() calling in some functions called by
+> __read_swap_cache_async().
 > 
-> People have told me that we can't use the rcu_head on the struct page
-> backing page table blocks. I understood it was because PPC was using
-> that memory for something else.
-
-In the 05/12 thread, Matthew pointed out that powerpc (and a few others)
-use the one struct page for multiple page tables, and the lack of
-multiple rcu_heads means I've got that patch and 06/12 sparc and
-07/12 s390 embarrassingly wrong (whereas this generic 08/12 is okay).
-
-I believe I know the extra grossness needed for powerpc and sparc: I had
-it already for powerpc, but fooled myself into thinking not yet needed.
-
-But (I haven't quite got there yet) it looks like Gerald is pointing
-out that s390 is using lru which coincides with rcu_head: I already knew
-s390 the most difficult, but that will be another layer of difficulty.
-
-I expect it was s390 which people warned you of.
-
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Chris Li <chrisl@kernel.org>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  mm/swap_state.c | 31 +++++++++++++++++++++----------
+>  1 file changed, 21 insertions(+), 10 deletions(-)
 > 
-> I was hoping Mathew's folio conversion would help clarify this..
+> diff --git a/mm/swap_state.c b/mm/swap_state.c
+> index b76a65ac28b3..a8450b4a110c 100644
+> --- a/mm/swap_state.c
+> +++ b/mm/swap_state.c
+> @@ -417,9 +417,13 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  {
+>  	struct swap_info_struct *si;
+>  	struct folio *folio;
+> +	struct page *page;
+>  	void *shadow = NULL;
+>  
+>  	*new_page_allocated = false;
+> +	si = get_swap_device(entry);
+> +	if (!si)
+> +		return NULL;
+>  
+>  	for (;;) {
+>  		int err;
+> @@ -428,14 +432,12 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  		 * called after swap_cache_get_folio() failed, re-calling
+>  		 * that would confuse statistics.
+>  		 */
+> -		si = get_swap_device(entry);
+> -		if (!si)
+> -			return NULL;
+>  		folio = filemap_get_folio(swap_address_space(entry),
+>  						swp_offset(entry));
+> -		put_swap_device(si);
+> -		if (!IS_ERR(folio))
+> -			return folio_file_page(folio, swp_offset(entry));
+> +		if (!IS_ERR(folio)) {
+> +			page = folio_file_page(folio, swp_offset(entry));
+> +			goto got_page;
+> +		}
+>  
+>  		/*
+>  		 * Just skip read ahead for unused swap slot.
+> @@ -446,7 +448,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  		 * else swap_off will be aborted if we return NULL.
+>  		 */
+>  		if (!__swp_swapcount(entry) && swap_slot_cache_enabled)
+> -			return NULL;
+> +			goto fail_put_swap;
+>  
+>  		/*
+>  		 * Get a new page to read into from swap.  Allocate it now,
+> @@ -455,7 +457,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  		 */
+>  		folio = vma_alloc_folio(gfp_mask, 0, vma, addr, false);
+>  		if (!folio)
+> -			return NULL;
+> +                        goto fail_put_swap;
+>  
+>  		/*
+>  		 * Swap entry may have been freed since our caller observed it.
+> @@ -466,7 +468,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  
+>  		folio_put(folio);
+>  		if (err != -EEXIST)
+> -			return NULL;
+> +			goto fail_put_swap;
+>  
+>  		/*
+>  		 * We might race against __delete_from_swap_cache(), and
+> @@ -500,12 +502,17 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  	/* Caller will initiate read into locked folio */
+>  	folio_add_lru(folio);
+>  	*new_page_allocated = true;
+> -	return &folio->page;
+> +	page = &folio->page;
+> +got_page:
+> +	put_swap_device(si);
+> +	return page;
+>  
+>  fail_unlock:
+>  	put_swap_folio(folio, entry);
+>  	folio_unlock(folio);
+>  	folio_put(folio);
+> +fail_put_swap:
+> +	put_swap_device(si);
+>  	return NULL;
+>  }
+>  
+> @@ -514,6 +521,10 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>   * and reading the disk if it is not already cached.
+>   * A failure return means that either the page allocation failed or that
+>   * the swap entry is no longer in use.
+> + *
+> + * get/put_swap_device() aren't needed to call this function, because
+> + * __read_swap_cache_async() call them and swap_readpage() holds the
+> + * swap cache folio lock.
+>   */
+>  struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  				   struct vm_area_struct *vma,
+> -- 
+> 2.39.2
+>
 
-I doubt that: what we have for use today is pages, however they are
-dressed up.
+Reviewed-by: Chris Li (Google) <chrisl@kernel.org>
 
-> 
-> On the flip side, if we are able to use rcu_head here then we should
-> use it everywhere and also use it mmu_gather.c instead of allocating
-> memory and having the smp_call_function() fallback. This would fix it
-> to be actual RCU.
-> 
-> There have been a few talks that it sure would be nice if the page
-> tables were always freed via RCU and every arch just turns on
-> CONFIG_MMU_GATHER_RCU_TABLE_FREE. It seems to me that patch 10 is kind
-> of half doing that by making this one path always use RCU on all
-> arches.
-> 
-> AFAIK the main reason it hasn't been done was the lack of a rcu_head..
+Chris
 
-I haven't paid attention to that part of the history, and won't be
-competent to propagate this further, into MMU-Gather-World; but agree
-that would be a satisfying conclusion.
-
-Hugh
