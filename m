@@ -2,123 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF3772005F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52044720069
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbjFBL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S235242AbjFBLaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbjFBL23 (ORCPT
+        with ESMTP id S233860AbjFBLaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:28:29 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCAA197
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:28:25 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9707313e32eso295405466b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 04:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685705304; x=1688297304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z1GnyRn3CUTJ1J4Rj60TNnTJgegattVBSNHX3CbgG/Y=;
-        b=PrD07nOhqMMOui7dr1hFvNithn14j5tFeEpuSMeqd6/fCCGE5ktA6wR+nqtwU/13gh
-         ioCdbkJwsluQur5y4OnIq/exx17v7aKVO8EQHg5d+vvF0aXn11CLnBvXvcUKPEbhsidP
-         WRyEn0YL53R+mZjkDOMsAs31CzvOFXGuLumfg=
+        Fri, 2 Jun 2023 07:30:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B521A2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685705356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m5O5N0TyyMY0AmUwL9aXlrKkbB93l6CptL3vOxA2D70=;
+        b=M9CGJRPTslASNmFjROMQKVWjz1sUK90wiNyuoBsKcmnZ5cHirs6+uBpKXXwJKfwaoWuOzR
+        3Rina7yT4AorXNY48sVPHrFYgs+KlV+ai/aY1YW6knXWlJ9mvXI3EvJfqf9zi9KUi6crwd
+        XeIXRyr1fFVG6hS4lGjRwH58Ica0Hsw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-367-t3dhm65cOOiIY6zoWa695A-1; Fri, 02 Jun 2023 07:29:15 -0400
+X-MC-Unique: t3dhm65cOOiIY6zoWa695A-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f604260ef3so32440545e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 04:29:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685705304; x=1688297304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z1GnyRn3CUTJ1J4Rj60TNnTJgegattVBSNHX3CbgG/Y=;
-        b=gw1f/s8jXEIxyevo+N5BE5DZL26KU224AAN+4F4La3R4e+syF9RgUqhwfRGHDa00yp
-         8/ql+xJSjNKuAQxNmFrtk2pDlvYXMv32PcBdH9FQQjttPJSROCNeJZ14sun/9nsUMSNV
-         rZ+GpGf6IIrlvAsLNidSWdJSuoVbfRGDgiVoodGBfGCIStQBjQFr9h2HLJf+R/N7Lgu+
-         yALmPqyqUKsvUvirD2hH9W7n4Gq0v7esFgBBOzfUg4nJi7cez82mJ4ILIexQTE/Y/kZa
-         ZdrqG23KFKdUNe0f5qQzzkfsc3kztBxqCklK59Qf+a3RNuVCVcDbJ2iVLkmOi/AlufWX
-         kfYw==
-X-Gm-Message-State: AC+VfDzBfc9VksReQNtIWxx9CTyJ1IA8qiGfCmBvbTlrAZhm0ggWZyMM
-        svBUm0sFWyAJsLndgnGzQYqqu/SVrk+weidRYhSDdQco
-X-Google-Smtp-Source: ACHHUZ7lKIyyBBlfwBsKD4WTXhCefwUjUhBvmyAfS8R0TJP9R50iCDbS30OSA8+NUsl/BelA6N+AaA==
-X-Received: by 2002:a17:907:9413:b0:973:bcf6:1d4 with SMTP id dk19-20020a170907941300b00973bcf601d4mr10695534ejc.76.1685705304087;
-        Fri, 02 Jun 2023 04:28:24 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id f14-20020a170906494e00b0097461fecc91sm651007ejt.81.2023.06.02.04.28.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 04:28:22 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-514924b4f8cso2814456a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 04:28:22 -0700 (PDT)
-X-Received: by 2002:aa7:c403:0:b0:50b:c89f:f381 with SMTP id
- j3-20020aa7c403000000b0050bc89ff381mr1838560edq.29.1685705302070; Fri, 02 Jun
- 2023 04:28:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685705354; x=1688297354;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m5O5N0TyyMY0AmUwL9aXlrKkbB93l6CptL3vOxA2D70=;
+        b=YJ4bfYNKBmV1AcNNdFCt+LwIKX86dTICnMolh95t50x+1UuDOMiYwq/qV/YyXceGcL
+         GTM3Le9INebvbYT0KJ+/3H5EL5njdV77/PhvqCmKUDKcxYDHvZvWgXVok3PzY1jZMb/I
+         VZEIPZhd+NHqftIykHxlNTSxF3BhSNFYYybyhiutG0WfQDwt2AEBPlB30zdmU5EcfVv4
+         yDbIkfenhDJn716Z2LTeyYQOBcXkC+329XhE/T4nr8NIx+N2ORgrRy0OevgQs2eNJfyp
+         vOCUcITDwryL0bH5Sh65oC7Xm78UI/fNDKtIVje9ZrqBTMGz7xtHSGM7J2QPC0WS6u3n
+         c2dA==
+X-Gm-Message-State: AC+VfDyS/3qd13SsDIOLIucbc9kBiLjkf0r+uGb/9Rknt/fddizFRSIJ
+        oHnjlLkqzAGmK4FKFHHsO1kP+ATh9H6sxi/iu4wa3trQ/KialjEqJ4NuMbvQ1c7mLLkqx/RbK7L
+        uX33GVFywA4xPl7VZGGeEWv86
+X-Received: by 2002:a7b:c40e:0:b0:3f6:692:5607 with SMTP id k14-20020a7bc40e000000b003f606925607mr1556940wmi.40.1685705354399;
+        Fri, 02 Jun 2023 04:29:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4dcPqFDvHV3ct60ARjBBFoyUN3UqVLOgErABUb/MJcY8uYWEWljv/fngcidmqyYie7j4vLsQ==
+X-Received: by 2002:a7b:c40e:0:b0:3f6:692:5607 with SMTP id k14-20020a7bc40e000000b003f606925607mr1556931wmi.40.1685705354099;
+        Fri, 02 Jun 2023 04:29:14 -0700 (PDT)
+Received: from redhat.com ([2.55.4.169])
+        by smtp.gmail.com with ESMTPSA id b14-20020a5d40ce000000b002e5ff05765esm1441961wrq.73.2023.06.02.04.29.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 04:29:13 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 07:29:10 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>
+Subject: Re: [RFC PATCH net 0/3] virtio-net: allow usage of small vrings
+Message-ID: <20230602072138-mutt-send-email-mst@kernel.org>
+References: <20230430131518.2708471-1-alvaro.karsz@solid-run.com>
+ <20230430100535-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723C479C388266434DE415ED4699@AM0PR04MB4723.eurprd04.prod.outlook.com>
+ <20230501062107-mutt-send-email-mst@kernel.org>
+ <AM0PR04MB4723E9A0AED11B60360D27C2D46E9@AM0PR04MB4723.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
- <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com>
- <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk>
- <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
- <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com>
- <832277.1685630048@warthog.procyon.org.uk> <909595.1685639680@warthog.procyon.org.uk>
- <20230601212043.720f85c2@kernel.org> <952877.1685694220@warthog.procyon.org.uk>
-In-Reply-To: <952877.1685694220@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Jun 2023 07:28:05 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wjvgL5nyZmpYRWBfab4NKvfQ7NjUvUhE3a3wYTyTEHdfQ@mail.gmail.com>
-Message-ID: <CAHk-=wjvgL5nyZmpYRWBfab4NKvfQ7NjUvUhE3a3wYTyTEHdfQ@mail.gmail.com>
-Subject: Re: Bug in short splice to socket?
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM0PR04MB4723E9A0AED11B60360D27C2D46E9@AM0PR04MB4723.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 4:23=E2=80=AFAM David Howells <dhowells@redhat.com> =
-wrote:
->
-> +/*
-> + * Pass a zero-length record to the splice-write actor with SPLICE_F_MOR=
-E
-> + * turned off to allow the network to see MSG_MORE deasserted.
-> + */
-> +static ssize_t splice_from_pipe_zero(struct pipe_inode_info *pipe,
+On Mon, May 01, 2023 at 11:41:44AM +0000, Alvaro Karsz wrote:
+> > > > Why the difference?
+> > > >
+> > >
+> > > Because the RING_SIZE < 4 case requires much more adjustments.
+> > >
+> > > * We may need to squeeze the virtio header into the headroom.
+> > > * We may need to squeeze the GSO header into the headroom, or block the features.
+> > 
+> > We alread do this though no?
+> > I think we'll need to tweak hard_header_len to guarantee it's there
+> > as opposed to needed_headroom ...
+> > 
+> > > * At the moment, without NETIF_F_SG, we can receive a skb with 2 segments, we may need to reduce it to 1.
+> > 
+> > You are saying clearing NETIF_F_SG does not guarantee a linear skb?
+> > 
+> 
+> I don't know..
+> I'm not sure what is the cause, but using this patchset, without any host GSO feature, I can get a chain of 3 descriptors.
+> Posing an example of a 4 entries ring during iperf3, acting as a client:
+> (TX descriptors)
+> 
+> len=86       flags 0x1         addr 0xf738d000
+> len=1448   flags 0x0         addr 0xf738d800
+> len=86       flags 0x8081   addr 0xf738e000
+> len=1184,   flags 0x8081  addr 0xf738e800
+> len=264     flags 0x8080   addr 0xf738f000
+> len=86       flags 0x8081   addr 0xf738f800
+> len=1448   flags 0x0         addr 0xf7390000
+> len=86       flags 0x1         addr 0xf7390800
+> len=1448   flags 0x0         addr 0xf7391000
+> len=86       flags 0x1         addr 0xf716a800
+> len=1448   flags 0x8080   addr 0xf716b000
+> len=86       flags 0x8081   addr 0xf7391800
+> len=1448   flags 0x8080   addr 0xf7392000
+> 
+> We got a chain of 3 in here.
+> This happens often.
+> 
+> Now, when negotiating host GSO features, I can get up to 4:
+> 
+> len=86       flags 0x1         addr 0xf71fc800
+> len=21328 flags 0x1         addr 0xf6e00800
+> len=32768 flags 0x8081   addr 0xf6e06000
+> len=11064 flags 0x8080   addr 0xf6e0e000
+> len=86       flags 0x8081   addr 0xf738b000
+> len=1         flags 0x8080   addr 0xf738b800
+> len=86       flags 0x1         addr 0xf738c000
+> len=21704 flags 0x1         addr 0xf738c800
+> len=32768 flags 0x1         addr 0xf7392000
+> len=10688 flags 0x0         addr 0xf739a000
+> len=86       flags 0x8081   addr 0xf739d000
+> len=22080 flags 0x8081   addr 0xf739d800
+> len=32768 flags 0x8081   addr 0xf73a3000
+> len=10312 flags 0x8080   addr 0xf73ab000
+> 
+> TBH, I thought that this behaviour was expected until you mentioned it,
+> This is why virtnet_calc_max_descs returns 3 if no host_gso feature is negotiated, and 4 otherwise.
+> I was thinking that we may need to use another skb to hold the TSO template (for headers generation)...
+> 
+> Any ideas?
 
-David, STOP.
+Something's wrong with the code apparently. Want to try sticking
+printk's in the driver to see what is going on?
 
-Stop doing these crazy hacks to generic splice code. None of this makes sen=
-se.
+Documentation/networking/netdev-features.rst says:
+	Those features say that ndo_start_xmit can handle fragmented skbs:
+	NETIF_F_SG --- paged skbs (skb_shinfo()->frags), NETIF_F_FRAGLIST ---
+	chained skbs (skb->next/prev list).
 
-Those zero-sized splices have never worked, don't try to make them work.
 
-The splice() system call has always had that
+of course we can always linearize if we want to ...
 
-        if (!len)
-                return 0;
 
-since being introduced. We're not adding any crazy stuff now.
+> > > * We may need to change all the control commands, so class,  command and command specific data will fit in a single segment.
+> > > * We may need to disable the control command and all the features depending on it.
+> > 
+> > well if we don't commands just fail as we can't add them right?
+> > no corruption or stalls ...
+> > 
+> > > * We may need to disable NAPI?
+> > 
+> > hmm why napi?
+> > 
+> 
+> I'm not sure if it's required to disable it, but I'm not sure what's the point having napi if the ring size is 1..
+> Will it work?
 
-Do what I already suggested: making SPLICE_F_MORE reflect reality.
+Not much point in it but it's simpler to just keep things consistent.
 
-Or don't do anything at all. Because this kind of hacky garbage is not
-even amusing.
+> > > There may be more changes..
+> > >
+> > > I was thinking that it may be easier to start with the easier case RING_SIZE >= 4, make sure everything is working fine, then send a follow up patchset with the required adjustments for RING_SIZE < 4.
+> > 
+> > 
+> > it's ok but I'm just trying to figure out where does 4 come from.
+> > 
+> 
+> I guess this part was not clear, sorry..
+> In case of split vqs, we have ring size 2 before 4.
+> And as you saw, we still get chains of 3 when NETIF_F_SG is off (Which I thought was expected).
+> 
 
-               Linus
+Worth figuring out where do these come from.
+
+-- 
+MST
+
