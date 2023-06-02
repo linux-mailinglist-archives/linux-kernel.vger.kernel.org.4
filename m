@@ -2,151 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732BF720958
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F00720963
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbjFBSoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S237067AbjFBSu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234942AbjFBSom (ORCPT
+        with ESMTP id S235496AbjFBSuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:44:42 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9BF1B6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 11:44:39 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9745ba45cd1so216999966b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 11:44:39 -0700 (PDT)
+        Fri, 2 Jun 2023 14:50:24 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2128.outbound.protection.outlook.com [40.107.220.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BED61A5;
+        Fri,  2 Jun 2023 11:50:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RUMcpw4qtTPt8cffT/hELuBVwmiFMhBvp44riQiEz/YK6cV3CuTnsvwDCHGfxtP+NP+eh4b2Et5Iv5D4ZOvATB6aez3R3g53aQ0aaOqHwTmDPKoFPnwbF7r2ffAcMDxIQtfyXDBhwqoz9hWhA13xKHdD6nn/LnRqy3d2n+M/2clbGBzr3odOv3oLiwnZgQndLrDnsHaxemXVSbiNM9J8U0NO57nyS5P7dR0aKYZGIX9/zocaDzSdp/GVKGBm4NYuqS/A9dxmvtJKFCIhgtubYWym7ZC21cPR/jwzIACtG/BB30LYuO15YyKtwHtZo70XfbJ9lNUjqQOM8FP5omOClA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iGp/RelLSKQh9skSR/gRuj4R3y6z9zeQxcjTv7v46OE=;
+ b=LVKLOxOHbUriwUsTecAAvZZS45JjJg7zzNvp05GnOI1opPpAjSWJbuTpLs2sPCWet8XprnkjyZyNuI3QZ47PnoaBIavt4et8028eqa8jpUWNa+1YGCGnFT+9wv32jrl53UWcfyze2jcnFee2ALLPqqzZuh1SxokSX1/xBnLliP2w3npW/Z3PbhDyf/KCRI8vchsrCrm+8RIAptk52+Op0EsgioxE1ljQ1lw4AMubAcglpOZ5KWddXNp32up0nO6kyFBVCdeO8UtjWc+YzC5xnSEyQj/a9I0lZ9o3xWB8EgXMdyLA+1kSmPCw2DCmEkUex7sTI8cU+wCZnFaQJXD+4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685731478; x=1688323478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VS2PPB5+6vCBsSxepSbGKCuyaQT9nPsi9usTi72Jayc=;
-        b=Dh5hdhHUskk0dJUgRg/dHNjcoQaoFcCqqW49L8C4cxOuUHd7A5klJumDFALbc77kfN
-         TOe0SZh9Dxxkx8+yCDim6XmVdsfaY+BAN/Pm0iZaRA5iIdCJ7AcEHtdbfhfKBnMbqXKg
-         IrjS0jeZ4gkJK0nbaCc7bGKUFbSb6IaEGqIDM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685731478; x=1688323478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VS2PPB5+6vCBsSxepSbGKCuyaQT9nPsi9usTi72Jayc=;
-        b=Jtj3FcsH2cz766ZC8RI7nOvK/7ebEaHHPY5Ho5UdrxE5lz2QALaOOeIZxrTUZ1rAsx
-         v6H+rWTdacQbj0xOXwGUiNDKYKhp9uJm4gcoK/NA320Mh5inxG6iHGwTC+tquBf1Is3E
-         2eAbZkRXTHUoEqfNMEbIgToD2BBCTm1Jn0941T5hCz0Hu/cwM9JiIX1Ss/ui8uvtt936
-         lLYY5ClsCpwUuGmVSkAXbyvKnXRK2pL3NnNdUTW5y64s0ONfNA9PPjHl3PVgCHEoSdrQ
-         yV6nUROLOjmjOVhfAt/qM1LyWb5dj5QDPUPAfhw1sNKd6YjaTt9bJhBOE50nxRch1T88
-         77hQ==
-X-Gm-Message-State: AC+VfDww/U1sKA010vy7JEkq7XKsIzZYV5TN+4Js8sIcsItBEL+bAe9r
-        f4HPIKk/932JAJutIvRY6Yp2+Hean9m34h8XJuNKOQ==
-X-Google-Smtp-Source: ACHHUZ7H8ymmvsuV8pIQreDZRzT1x8Q5ySH7cuWVFpH38pUlAJ9sGk9vksaBVqGaNtyGZXGewzGH8jOcPNcYXgPHGa4=
-X-Received: by 2002:a17:906:eec8:b0:970:c9f:2db6 with SMTP id
- wu8-20020a170906eec800b009700c9f2db6mr11444588ejb.63.1685731478182; Fri, 02
- Jun 2023 11:44:38 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iGp/RelLSKQh9skSR/gRuj4R3y6z9zeQxcjTv7v46OE=;
+ b=wBWxaT6XMT2B2VjtZQP+w6wrsujJX5lpKjCNskzX3EQHFi+ceOzb/4jy0bDQBfLNyHDWy4oRiPwxkNmjSYlHlOrN63Ml/dbb3uo/yx+k5jkVDIaABIFFv8AwSHkxAx6cb5MZ2h+Irf3+lp+u7mJ30/j2rYBYxatne73vm7fDq54=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by LV3PR13MB6430.namprd13.prod.outlook.com (2603:10b6:408:197::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.12; Fri, 2 Jun
+ 2023 18:50:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
+ 18:50:18 +0000
+Date:   Fri, 2 Jun 2023 20:50:11 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        netdev@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Subject: Re: [PATCH v9 2/4] lib/ref_tracker: improve printing stats
+Message-ID: <ZHo54/ycgGUxjiiw@corigine.com>
+References: <20230224-track_gt-v9-0-5b47a33f55d1@intel.com>
+ <20230224-track_gt-v9-2-5b47a33f55d1@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224-track_gt-v9-2-5b47a33f55d1@intel.com>
+X-ClientProxiedBy: AM9P195CA0018.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21f::23) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <ZGzIJlCE2pcqQRFJ@bfoster> <ZGzbGg35SqMrWfpr@redhat.com>
- <ZG1dAtHmbQ53aOhA@dread.disaster.area> <ZG+KoxDMeyogq4J0@bfoster>
- <ZHB954zGG1ag0E/t@dread.disaster.area> <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
- <ZHFEfngPyUOqlthr@dread.disaster.area> <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
- <ZHYB/6l5Wi+xwkbQ@redhat.com> <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
- <ZHYWAGmKhwwmTjW/@redhat.com>
-In-Reply-To: <ZHYWAGmKhwwmTjW/@redhat.com>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Fri, 2 Jun 2023 11:44:27 -0700
-Message-ID: <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     Joe Thornber <thornber@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, dm-devel@redhat.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Joe Thornber <ejt@redhat.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV3PR13MB6430:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd155795-984c-49ef-2162-08db639a35ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SCTzp5v+71yIT9+vcXBLh5abtNK8JoVqQ2UzDtgNd0EncFCHMA99F/wzoJ3SH0F73zvg5/a7Rxsi1LmcBwzUn02BxhOYC5FYLYMiCfEX779hHyO+twnAS1+i5+t6duMMo+4k+fpqHgyJ/5jz0/JyDgjpALLmcESO9wixjUTgnKuph4w3FJtdAyTvilGEwCP0RhxehetzaDCexIssrPJIexkdlhYpT2fspKYVdQzIvWrb8trF42CEsWu7bt088gR2JdLimTmjIsEOvk46+OvRnJtUf8gn+skkzz1VMB3BfsBu2mj5mXeumlDXRhhYzHdDbM64AVoHEbDmaeo9K3GUGzeJorH9iajq7QFdIvv+eKm7S/K+Jb5JVzWZmMQNBHAHikQsVUiK2z5v2E7irkWEjr5bynMxoi6fNyrqm8HroiZ+IhLOASVl5r/5tdKZi4gIMueMb2Tiw6FAvZ+0IV6oM/v1fVLqVwQPHt3yZ8f+viate0Ec3yzNbMmDFBDlQI6l7B/u1bs1fdit8wFutY2X/m1ka72gYEF+fjIfcN5joZEMHiw9+s8eNLqZeZlBCX5O
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(366004)(39840400004)(451199021)(36756003)(2616005)(83380400001)(4744005)(2906002)(86362001)(38100700002)(6486002)(41300700001)(316002)(6666004)(5660300002)(8676002)(8936002)(478600001)(54906003)(66556008)(4326008)(66946007)(6506007)(6512007)(26005)(66476007)(6916009)(186003)(7416002)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OVA2HZl7oxRLWsgiBrBKa6x7qzAAa2GKtQKsectGzHjgefpsH9zZP4OdHSvd?=
+ =?us-ascii?Q?rrjElZ7/bRzlzizoexqxfrre5lskD8jLj6PUecR+j0UXkPw0qCJTaiFj+Bxk?=
+ =?us-ascii?Q?YpTOQsFVvv0dnyRRktCl1DgUlPVS5pCqBDR6eG1WGRxbn6jLAmGJzlRqmPZQ?=
+ =?us-ascii?Q?BhYyovyx/mphu4OBrj13E2z55DxMHBAH/ppiB/v4MN4kbUoTXCaYU7xt2phu?=
+ =?us-ascii?Q?KUe3uS3F69v0bwNVeN1OCbL+xi494rZRHNmWSN11Eg0Gh8meBuwKvtNfvrnW?=
+ =?us-ascii?Q?kd/w+st5wIyG2fsmnJPWHpjOIFqm+LB5b+Jd9LtR0WWL9uwNcizzKnxUxRE1?=
+ =?us-ascii?Q?c+vcGhcOkegTnpc4WZdEE/Vr/zBDnJdwvI77qWRJ1XvlzrUN7yNgr6QmT58B?=
+ =?us-ascii?Q?teQW4nEfyuwy+Ldn3lcUz7t3Ib7cYuWV8t5Jxv5ax340bm4ztLDbhtVWOEO4?=
+ =?us-ascii?Q?FMD0dSLxA92+NjLHD4EDH0O5h1WHYgdLGnbjUwhtQS5mtFr2AYHLM8R5ybmz?=
+ =?us-ascii?Q?0zKiZVy7WxjI8S3YWvBjS48EPcwj1eDDQtURuvPMOuaR5fgMZ9jQemld+B+Y?=
+ =?us-ascii?Q?otxq+m5SymEjJyhWSrDVjFDcyvaFsyCMOAdSvVzDj3YfmYpd9+WsMdtk2j4Y?=
+ =?us-ascii?Q?75Ihrw0nFNp0fgeU1mbFIL1i3V6w2D20wV3RrCxemFEIEt/VrTPK0kLbaV6S?=
+ =?us-ascii?Q?BUydqxUsN72RRTM+4VmSP4/XJM9xlFT6RjYPuJsPJkRtaMEG+uzJsou4ZR0P?=
+ =?us-ascii?Q?2lUUGTvQ2MC3vj2a8eoFfeYKNE6XADOENYYLQ6Nar0JoHA2cOito8lmt+qHW?=
+ =?us-ascii?Q?rOUNftcv0W4ddsBalU1E8Tr429NgAJQGNU13s3FGAlxRoUmVWpEEKje7sR4e?=
+ =?us-ascii?Q?S1E0rP0UXUeXo2HcuAoFfebYZJrddrrwlQIE1gDDN52THQTSCmGsCvaL/ypB?=
+ =?us-ascii?Q?gp16fxJgWWxBYybeveM3I+GSo4HtfhDnRqAFT41HGCmwO2MbDp/3xTGWjAEA?=
+ =?us-ascii?Q?Qobn2X/yxem3DYDbYCri08fSGwsB1ojcVCK9in/z6uSAwbcwngbWYaug2VfT?=
+ =?us-ascii?Q?nkUcqsmk1yhgeXpz/dnSbahPuNGXowFHebMi5s1nJlZb6UNBO2l84ow/KrcK?=
+ =?us-ascii?Q?xIMH0KNZEv3VAiW5ELATwo156Des3JAH1pD+vIi7117j6nzRdo3Jh8fAeoOy?=
+ =?us-ascii?Q?8cfq1kykERnjmG9U2MaEZiaxFM5WRmvJZOgeyCQNiq7qaxT4eEcpNPvQsyJp?=
+ =?us-ascii?Q?UimDE2x0GSh3FTRvOyE+1WELbdoetU0dqfbXf8yEVxTRxP5psSQ0ldoyYqdJ?=
+ =?us-ascii?Q?uPNTWC9mO8FShdq8cHOKBCp8wGeS0fkS1+kjtrv7vn6ILIbO5mkMlW5P9KKd?=
+ =?us-ascii?Q?7dqNZyP1ZpckOp8ffAP7BD6XQReaVId8IuSSiFUYQk38d6xqL/2YluhuYwRK?=
+ =?us-ascii?Q?sHZOJRuiwqI/u2vHGbwN59xvStokC1kjACNA0aSThhyCZ9cAANJLX0AM5gXZ?=
+ =?us-ascii?Q?Y0ZMh3OFd3EYFIi0ctKnb1FLsh3KgzWN2lmHWT8Q6xAERdQD5/wA07ClW72h?=
+ =?us-ascii?Q?WvfCRkae2usHBzs0IxAPRDXJr8EkUS758TiBgmNRXi4EMc7uGsPdvpwQGQ/T?=
+ =?us-ascii?Q?fQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd155795-984c-49ef-2162-08db639a35ff
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 18:50:18.7686
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SxxXJKcLXxwIPii58dT4LyqQUtQMBMdVZlp1w7obwVA8XdIYdbl1Rn4C3sCsMoQR1NmktJvKJjD2mzU7xfkqgsDaLjQrqNlfNzrxaRZZb8k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR13MB6430
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 8:28=E2=80=AFAM Mike Snitzer <snitzer@kernel.org> w=
-rote:
->
-> On Tue, May 30 2023 at 10:55P -0400,
-> Joe Thornber <thornber@redhat.com> wrote:
->
-> > On Tue, May 30, 2023 at 3:02=E2=80=AFPM Mike Snitzer <snitzer@kernel.or=
-g> wrote:
-> >
-> > >
-> > > Also Joe, for you proposed dm-thinp design where you distinquish
-> > > between "provision" and "reserve": Would it make sense for REQ_META
-> > > (e.g. all XFS metadata) with REQ_PROVISION to be treated as an
-> > > LBA-specific hard request?  Whereas REQ_PROVISION on its own provides
-> > > more freedom to just reserve the length of blocks? (e.g. for XFS
-> > > delalloc where LBA range is unknown, but dm-thinp can be asked to
-> > > reserve space to accomodate it).
-> > >
-> >
-> > My proposal only involves 'reserve'.  Provisioning will be done as part=
- of
-> > the usual io path.
->
-> OK, I think we'd do well to pin down the top-level block interfaces in
-> question. Because this patchset's block interface patch (2/5) header
-> says:
->
-> "This patch also adds the capability to call fallocate() in mode 0
-> on block devices, which will send REQ_OP_PROVISION to the block
-> device for the specified range,"
->
-> So it wires up blkdev_fallocate() to call blkdev_issue_provision(). A
-> user of XFS could then use fallocate() for user data -- which would
-> cause thinp's reserve to _not_ be used for critical metadata.
->
-> The only way to distinquish the caller (between on-behalf of user data
-> vs XFS metadata) would be REQ_META?
->
-> So should dm-thinp have a REQ_META-based distinction? Or just treat
-> all REQ_OP_PROVISION the same?
->
-I'm in favor of a REQ_META-based distinction. Does that imply that
-REQ_META also needs to be passed through the block/filesystem stack
-(eg. REQ_OP_PROVION + REQ_META on a loop device translates to a
-fallocate(<insert meta flag name>) to the underlying file)?
+On Fri, Jun 02, 2023 at 12:21:34PM +0200, Andrzej Hajda wrote:
+> In case the library is tracking busy subsystem, simply
+> printing stack for every active reference will spam log
+> with long, hard to read, redundant stack traces. To improve
+> readabilty following changes have been made:
 
-<bikeshed>
-I think that might have applications beyond just provisioning:
-currently, for stacked filesystems (eg filesystems residing in a file
-on top of another filesystem), even if the upper filesystem issues
-read/write requests with REQ_META | REQ_PRIO, these flags are lost in
-translation at the loop device layer.  A flag like the above would
-allow the prioritization of stacked filesystem metadata requests.
-</bikeshed>
+Hi Andrzej,
 
-Bringing the discussion back to this series for a bit, I'm still
-waiting on feedback from the Block maintainers before sending out v8
-(which at the moment, only have a
-s/EXPORT_SYMBOL/EXPORT_SYMBOL_GPL/g). I believe from the conversation
-most of the above is follow up work, but please let me know if you'd
-prefer I add some of this to the current series!
+in case you have to respin for some other reason, you may want to consider:
 
-Best
-Sarthak
+  readabilty -> readability
 
-> Mike
+...
