@@ -2,296 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F77F7206C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACC97206CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbjFBQE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S236315AbjFBQF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbjFBQE5 (ORCPT
+        with ESMTP id S234982AbjFBQFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:04:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAB0BC;
-        Fri,  2 Jun 2023 09:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=6T2J0Gv8y0l2pIuTyjrwgwYHikyeOTi38B9VMQ4I2Nc=; b=OYNGnBNp61YqfJLfV5Ye3PydBa
-        kN84wCqGJkfutr/+9vDIVHx15Cn5uDj44t1lVwTADYMZPDjQtfigwAi8oUgR+Cen091xMqahKLvWO
-        Da0EScO1fPYoN9Y1ByMoaGfGOU/L/0CeF6G/oDa+o3iMkoEZi1nOxzCWxbK14S50FVa25rb2i9byI
-        IsRcW3pIsrdeMesgkaySHtVa3v8kxOq79eySVx9OLKw4EE2M4TDNU924onhUqCOuH+AdlrYzgK6fO
-        J4mcOBwJCeAwXv0ORl+vZlQuebADI6jLhlTXqmmF30oegfsIe7Z/VvoYbH92fOVHzbNpbqnesgh41
-        /y5J5cbA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q57GW-007KjW-1U;
-        Fri, 02 Jun 2023 16:04:36 +0000
-Date:   Fri, 2 Jun 2023 09:04:36 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZHoTFDkPIgglW0sU@bombadil.infradead.org>
-References: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
- <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
- <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+        Fri, 2 Jun 2023 12:05:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3D671B8;
+        Fri,  2 Jun 2023 09:05:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B4A81063;
+        Fri,  2 Jun 2023 09:06:06 -0700 (PDT)
+Received: from [10.57.22.125] (unknown [10.57.22.125])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 007AE3F7BD;
+        Fri,  2 Jun 2023 09:05:17 -0700 (PDT)
+Message-ID: <9d724c1d-ef76-8a9f-a55b-814ba8ceb83a@arm.com>
+Date:   Fri, 2 Jun 2023 17:05:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH v4 07/11] coresight-tpdm: Add nodes for dsb edge control
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+ <1682586037-25973-8-git-send-email-quic_taozha@quicinc.com>
+ <606b8a25-0468-c310-ccff-1477e2b238b2@arm.com>
+ <c5c28ab8-7d6a-f8e7-ad34-8716ac77d2dc@quicinc.com>
+ <a2bd3bbf-5512-971a-95a1-3220f31814a2@arm.com>
+ <19bd262c-9063-5c7c-02b2-aa507c8c2a31@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <19bd262c-9063-5c7c-02b2-aa507c8c2a31@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 05:19:58PM +0200, David Hildenbrand wrote:
-> On 31.05.23 18:57, Luis Chamberlain wrote:
-> > On Wed, May 31, 2023 at 09:51:41AM +0200, David Hildenbrand wrote:
-> > > On 30.05.23 18:22, Luis Chamberlain wrote:
-> > > > On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
-> > > > > On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
-> > > > > > 
-> > > > > > I took a closer look at some of the modules that failed to load and
-> > > > > > noticed a pattern in that they have dependencies that are needed by more
-> > > > > > than one device.
-> > > > > 
-> > > > > Ok, this is a "maybe something like this" RFC series of two patches -
-> > > > > one trivial one to re-organize things a bit so that we can then do the
-> > > > > real one which uses a filter based on the inode pointer to return an
-> > > > > "idempotent return value" for module loads that share the same inode.
-> > > > > 
-> > > > > It's entirely untested, and since I'm on the road I'm going to not
-> > > > > really be able to test it. It compiles for me, and the code looks
-> > > > > fairly straightforward, but it's probably buggy.
-> > > > > 
-> > > > > It's very loosely based on Luis' attempt,  but it
-> > > > >    (a) is internal to module loading
-> > > > >    (b) uses a reliable cookie
-> > > > >    (c) doesn't leave the cookie around randomly for later
-> > > > >    (d) has seen absolutely no testing
-> > > > > 
-> > > > > Put another way: if somebody wants to play with this, please treat it
-> > > > > as a starting point, not the final thing. You might need to debug
-> > > > > things, and fix silly mistakes.
-> > > > > 
-> > > > > The idea is to just have a simple hash list of currently executing
-> > > > > module loads, protected by a trivial spinlock. Every module loader
-> > > > > adds itself to the right hash list, and if they were the *first* one
-> > > > > (ie no other pending module loads for that inode), will actually do
-> > > > > the module load.
-> > > > > 
-> > > > > Everybody who *isn't* the first one will just wait for completion and
-> > > > > return the same error code that the first one returned.
-> > > > 
-> > > > That's also a hell much more snazzier MODULE_DEBUG_AUTOLOAD_DUPS if we
-> > > > ever wanted to do something similar there if we wanted to also
-> > > > join request_module() calls, instead of it hiding under debug.
-> > > > 
-> > > > > This is technically bogus. The first one might fail due to arguments.
-> > > > 
-> > > > For boot it's fine, as I can't think of boot wanting to support trying
-> > > > to load a module with different arguments but who knows. But I can't
-> > > > see it sensible to issue concurrent multiple requests for modules
-> > > > with different arguments without waiting in userspace for the first
-> > > > to fail.
-> > > > 
-> > > > Even post-boot, doing that sounds rather insane, but it would certainly
-> > > > be a compromise and should probably be clearly documented. I think just
-> > > > a comment acknolwedging that corner case seems sensible.
-> > > > 
-> > > > Because we won't be able to get the arguments until we process the
-> > > > module, so it would be too late for this optimization on kread. So it is
-> > > > why I had also stuck to the original feature being in kread, as then it
-> > > > provides a uniq kread call and the caller is aware of it. But indeed I
-> > > > had not considered the effects of arguments.
-> > > > 
-> > > > Lucas, any thoughts from modules kmod userspace perspective into
-> > > > supporting anyone likely issuing concurrent modules requests with
-> > > > differing arguments?
-> > > > 
-> > > > > So the cookie shouldn't be just the inode, it should be the inode and
-> > > > > a hash of the arguments or something like that.
-> > > > 
-> > > > Personally I think it's a fine optimization without the arguments.
-> > > > 
-> > > > > But it is what it is,
-> > > > > and apart from possible show-stopper bugs this is no worse than the
-> > > > > failed "exclusive write deny" attempt. IOW - maybe worth trying?
-> > > > 
-> > > > The only thing I can think of is allowing threads other than the
-> > > > first one to complete before the one that actually loaded the
-> > > > module. I thought about this race for module auto-loading, see
-> > > > the comment in kmod_dup_request_announce(), so that just
-> > > > further delays the completion to other thread with a stupid
-> > > > queue_work(). That seems more important for module auto-loading
-> > > > duplicates than for boot finit_module() duplicates. But not sure
-> > > > if odering matters in the end due to a preemtible kernel and maybe
-> > > > that concern is hysteria.
-> > > > 
-> > > > > And if *that* didn't sell people on this patch series, I don't know
-> > > > > what will. I should be in marketing! Two drink minimums, here I come!
-> > > > 
-> > > > Sold:
-> > > > 
-> > > > on 255 vcpus 0 duplicates found with this setup:
-> > > > 
-> > > > root@kmod ~ # cat /sys/kernel/debug/modules/stats
-> > > >            Mods ever loaded       66
-> > > >        Mods failed on kread       0
-> > > > Mods failed on decompress       0
-> > > >     Mods failed on becoming       0
-> > > >         Mods failed on load       0
-> > > >           Total module size       11268096
-> > > >         Total mod text size       4149248
-> > > >          Failed kread bytes       0
-> > > >     Failed decompress bytes       0
-> > > >       Failed becoming bytes       0
-> > > >           Failed kmod bytes       0
-> > > >    Virtual mem wasted bytes       0
-> > > >            Average mod size       170729
-> > > >       Average mod text size       62868
-> > > > 
-> > > > So:
-> > > > 
-> > > > Tested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > 
-> > > > In terms of bootup timing:
-> > > > 
-> > > > Before:
-> > > > Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s
-> > > > graphical.target reached after 44.178s in userspace.
-> > > > After:
-> > > > Startup finished in 23.995s (kernel) + 40.350s (userspace) = 1min 4.345s
-> > > > graphical.target reached after 40.226s in userspace.
-> > > 
-> > > I'll try grabbing the system where we saw the KASAN-related issues [1] and
-> > > give it a churn with and without the two patches. Might take a bit (~1 day),
-> > > unfortunately.
-> > > 
-> > > [1] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
-> > 
-> > Great, don't forget:
-> > 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index 82b0dcc1fe77..222015093eeb 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3066,7 +3066,7 @@ struct idempotent {
-> >   #define IDEM_HASH_BITS 8
-> >   static struct hlist_head idem_hash[1 << IDEM_HASH_BITS];
-> > -static struct spinlock idem_lock;
-> > +static DEFINE_SPINLOCK(idem_lock);
-> >   static bool idempotent(struct idempotent *u, const void *cookie)
-> >   {
-> > 
+On 02/06/2023 15:38, Tao Zhang wrote:
 > 
-> Finally was able to run it on that ThinkSystem SR950 with 8 populated
-> sockets -> 224 cores and 448 logical CPUs.
-> 
-> The KASAN vmap issues on that system were already no longer reproducible with your
-> (Luis) previous work that's already in master.
-> 
-> I tested a !debug and debug config (both based on corresponding RHEL9 configs), comparing
-> 929ed21dfdb6 ("master") with 929ed21dfdb6 + Linus' patches ("patched").
-> 
-> 
-> Unfortunately, boot times vary a lot, and I did not figure out how to reduce
-> the noise. I captured the "systemd-analyze blame" output as well.
-> 
-> 
-> 1) !debug config (not enabling KASAN)
-> 
-> a) master
-> 
-> Startup finished in 32.225s (kernel) + 7.399s (initrd) + 20.378s (userspace) = 1min 3ms
-> multi-user.target reached after 20.352s in userspace.
-> Startup finished in 43.734s (kernel) + 7.288s (initrd) + 19.827s (userspace) = 1min 10.851s
-> multi-user.target reached after 19.800s in userspace.
-> Startup finished in 50.514s (kernel) + 7.171s (initrd) + 24.757s (userspace) = 1min 22.443s
-> multi-user.target reached after 24.734s in userspace.
-> Startup finished in 26.722s (kernel) + 7.249s (initrd) + 23.923s (userspace) = 57.895s
-> multi-user.target reached after 23.892s in userspace.
-> 
-> b) patched
-> 
-> Startup finished in 36.318s (kernel) + 7.177s (initrd) + 21.383s (userspace) = 1min 4.879s
-> multi-user.target reached after 21.355s in userspace.
-> Startup finished in 36.318s (kernel) + 7.177s (initrd) + 21.383s (userspace) = 1min 4.879s
-> multi-user.target reached after 21.355s in userspace.
-> Startup finished in 1min 34.678s (kernel) + 7.239s (initrd) + 24.066s (userspace) = 2min 5.985s
-> multi-user.target reached after 24.040s in userspace.
-> Startup finished in 25.879s (kernel) + 7.144s (initrd) + 29.665s (userspace) = 1min 2.689s
-> multi-user.target reached after 29.637s in userspace.
-> 
-> 
-> 
-> 2) debug config (enabling KASAN)
-> 
-> a) master
-> 
-> Startup finished in 2min 12.695s (kernel) + 25.058s (initrd) + 1min 13.012s (userspace) = 3min 50.765s
-> multi-user.target reached after 1min 12.903s in userspace.
-> Startup finished in 1min 45.400s (kernel) + 24.294s (initrd) + 1min 8.910s (userspace) = 3min 18.606s
-> multi-user.target reached after 1min 8.786s in userspace.
-> Startup finished in 2min 4.857s (kernel) + 24.715s (initrd) + 1min 5.088s (userspace) = 3min 34.660s
-> multi-user.target reached after 1min 4.967s in userspace.
-> Startup finished in 3min 20.400s (kernel) + 24.703s (initrd) + 1min 5.469s (userspace) = 4min 50.573s
-> multi-user.target reached after 1min 5.344s in userspace.
-> 
-> b) patched
-> 
-> Startup finished in 2min 5.250s (kernel) + 25.049s (initrd) + 1min 1.961s (userspace) = 3min 32.262s
-> multi-user.target reached after 1min 1.844s in userspace.
-> Startup finished in 1min 52.524s (kernel) + 24.897s (initrd) + 1min 5.062s (userspace) = 3min 22.484s
-> multi-user.target reached after 1min 4.916s in userspace.
-> Startup finished in 9min 36.817s (kernel) + 24.859s (initrd) + 1min 18.657s (userspace) = 11min 20.335s
-> multi-user.target reached after 1min 18.455s in userspace.
-> Startup finished in 30min 20.715s (kernel) + 24.722s (initrd) + 1min 7.039s (userspace) = 31min 52.476s
-> multi-user.target reached after 1min 6.907s in userspace.
-> 
-> 
-> What concerns me a bit, is that on the patched kernel we seem to hit more cases where
-> boot takes much longer (in both kernel configs).
-> 
-> I'll do some more runs/investigation to see if this is reproducible or just some system oddity.
-> 
-> Staring just at the udev settle time (systemd-analyze blame), it's very similar between both kernel
-> versions.
+> On 6/2/2023 4:45 PM, Suzuki K Poulose wrote:
+>> On 02/06/2023 09:21, Tao Zhang wrote:
+>>>
+>>> On 6/1/2023 8:14 PM, Suzuki K Poulose wrote:
+>>>> On 27/04/2023 10:00, Tao Zhang wrote:
+>>>>> Add the nodes to set value for DSB edge control and DSB edge
+>>>>> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
+>>>>> resgisters to configure edge control. DSB edge detection control
+>>>>> 00: Rising edge detection
+>>>>> 01: Falling edge detection
+>>>>> 10: Rising and falling edge detection (toggle detection)
+>>>>> And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
+>>>>> configure mask. Eight 32 bit registers providing DSB interface
+>>>>> edge detection mask control.
+>>>>>
+>>>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>>>>> ---
+>>>>>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  32 +++++
+>>>>>   drivers/hwtracing/coresight/coresight-tpdm.c       | 135 
+>>>>> ++++++++++++++++++++-
+>>>>>   drivers/hwtracing/coresight/coresight-tpdm.h       |  21 ++++
+>>>>>   3 files changed, 187 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git 
+>>>>> a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm 
+>>>>> b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>>> index 348e167..a57f000 100644
+>>>>> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>>>> @@ -60,3 +60,35 @@ Description:
+>>>>>           Bit[3] : Set to 0 for low performance mode.
+>>>>>                    Set to 1 for high performance mode.
+>>>>>           Bit[4:8] : Select byte lane for high performance mode.
+>>>>> +
+>>>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
+>>>>> +Date:        March 2023
+>>>>> +KernelVersion    6.3
+>>>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
+>>>>> Zhang (QUIC) <quic_taozha@quicinc.com>
+>>>>> +Description:
+>>>>> +        Read/Write a set of the edge control registers of the DSB
+>>>>> +        in TPDM.
+>>>>> +
+>>>>> +        Expected format is the following:
+>>>>> +        <integer1> <integer2> <integer3>
+>>>>> +
+>>>>> +        Where:
+>>>>> +        <integer1> : Start EDCR register number
+>>>>> +        <integer2> : End EDCR register number
+>>>>> +        <integer3> : The value need to be written
+>>>>> +
+>>>>> +What: /sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
+>>>>> +Date:        March 2023
+>>>>> +KernelVersion    6.3
+>>>>> +Contact:    Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao 
+>>>>> Zhang (QUIC) <quic_taozha@quicinc.com>
+>>>>> +Description:
+>>>>> +        Read/Write a set of the edge control mask registers of the
+>>>>> +        DSB in TPDM.
+>>>>> +
+>>>>> +        Expected format is the following:
+>>>>> +        <integer1> <integer2> <integer3>
+>>>>> +
+>>>>> +        Where:
+>>>>> +        <integer1> : Start EDCMR register number
+>>>>> +        <integer2> : End EDCMR register number
+>>>>> +        <integer3> : The value need to be written
+>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
+>>>>> b/drivers/hwtracing/coresight/coresight-tpdm.c
+>>>>> index 1bacaa5..a40e458 100644
+>>>>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+>>>>> @@ -80,7 +80,14 @@ static void set_trigger_type(struct tpdm_drvdata 
+>>>>> *drvdata, u32 *val)
+>>>>>     static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>>>>>   {
+>>>>> -    u32 val;
+>>>>> +    u32 val, i;
+>>>>> +
+>>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
+>>>>> +        writel_relaxed(drvdata->dsb->edge_ctrl[i],
+>>>>> +               drvdata->base + TPDM_DSB_EDCR(i));
+>>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
+>>>>> + writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
+>>>>> +               drvdata->base + TPDM_DSB_EDCMR(i));
+>>>>
+>>>> Do all TPDM DSBs have MAX_EDCR registers ? Or some have less than 
+>>>> that ?
+>>>> If it is latter, do we need special care to avoid writing to inexistent
+>>>> registers ?
+>>>>
+>>> You are right, not all DSB TPDMs have MAX_EDCR registers. In our 
+>>> design, the inexistent register addresses
+>>>
+>>> are not occupied and safe for accessing.
+>>>
+>>> Currently we don't have a good way to know the quantity of EDCR/EDCMR 
+>>> registers for DSB TPDMs.
+>>>
+>>> The only way we can think of is to set it in device tree manually.
+>>>
+>>> Do you have other suggestion for this?
+>>>
+>>>>>         val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
+>>>>>       /* Set trigger timestamp */
+>>>>> @@ -313,6 +320,130 @@ static ssize_t dsb_mode_store(struct device 
+>>>>> *dev,
+>>>>>   }
+>>>>>   static DEVICE_ATTR_RW(dsb_mode);
+>>>>>   +static ssize_t dsb_edge_ctrl_show(struct device *dev,
+>>>>> +                       struct device_attribute *attr,
+>>>>> +                       char *buf)
+>>>>> +{
+>>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>>>>> +    ssize_t size = 0;
+>>>>> +    int i;
+>>>>> +
+>>>>> +    spin_lock(&drvdata->spinlock);
+>>>>> +    for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
+>>>>> +        size += sysfs_emit_at(buf, size,
+>>>>> +                  "Index:0x%x Val:0x%x\n", i,
+>>>>> +                  drvdata->dsb->edge_ctrl[i]);
+>>>>
+>>>> It may be safe, but please add a check to make sure that we don't
+>>>> overflow. At least bail out when we hit a return of 0, indicating
+>>>> reached the end of buffer.
+>>>>
+>>> Can I add the following check to replace the current code??
+>>>
+>>> int ret = 0;
+>>>
+>>>
+>>> for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
+>>>
+>>>      ret = sysfs_emit_at(buf, size, "Index:0x%x Val:0x%x\n", i, 
+>>> drvdata->dsb->edge_ctrl[i]);
+>>>
+>>>      if (!ret) {
+>>>
+>>>          dev_warn(drvdata->dev, "The buffer has been overflowed\n");
+>>
+>> You don't need this, it already triggers a WARN() in sysfs_emit_at().
+>> So you could do:
+>>
+>>     for (....) {
+>>         unsigned long bytes = sysfs_emit_at(buf, size, ....);
+>>
+>>         if (bytes <= 0)
+>>             break;
+>>         size += bytes;
+>>     }
+>>
+> Sure, I will update in the next patch series.
+>>
+>>>
+>>>          spin_unlock(&drvdata->spinlock);
+>>>
+>>>          return size;
+>>>
+>>>      } else
+>>>
+>>>          size += ret;
+>>>
+>>> }
+>>>
+>>>>> +    }
+>>>>> +    spin_unlock(&drvdata->spinlock);
+>>>>> +    return size;
+>>>>> +}
+>>>>> +
+>>>>> +/*
+>>>>> + * value 1: Start EDCR register number
+>>>>> + * value 2: End EDCR register number
+>>>>> + * value 3: The value need to be written
+>>>>> + * The EDCR registers can include up to 16 32-bit registers, and each
+>>>>> + * one can be configured to control up to 16 edge detections(2 bits
+>>>>> + * control one edge detection). So a total 256 edge detections can be
+>>>>> + * configured. So the starting number(value 1) and ending 
+>>>>> number(value 2)
+>>>>> + * cannot be greater than 256, and value 1 should be less than 
+>>>>> value 2.
+>>>>> + * The following values are the rage of value 3.
+>>>>> + * 0 - Rising edge detection
+>>>>> + * 1 - Falling edge detection
+>>>>> + * 2 - Rising and falling edge detection (toggle detection)
+>>>>> + */
+>>>>> +static ssize_t dsb_edge_ctrl_store(struct device *dev,
+>>>>> +                    struct device_attribute *attr,
+>>>>> +                    const char *buf,
+>>>>> +                    size_t size)
+>>>>> +{
+>>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+>>>>> +    unsigned long val, mask, start, end, edge_ctrl, edge_ctrl_shift;
+>>>>> +    int i, reg;
+>>>>> +
+>>>>> +    if (sscanf(buf, "%lx %lx %lx", &start, &end, &edge_ctrl) != 3)
+>>>>> +        return -EINVAL;
+>>>>> +    if ((start >= TPDM_DSB_MAX_LINES) || (end >= 
+>>>>> TPDM_DSB_MAX_LINES) ||
+>>>>> +        (start > end) || (edge_ctrl > 0x2))
+>>>>> +        return -EPERM;
+>>>>> +
+>>>>> +    spin_lock(&drvdata->spinlock);
+>>>>> +    for (i = start; i <= end; i++) {
+>>>>> +        /*
+>>>>> +         * There are 2 bit per DSB Edge Control line.
+>>>>> +         * Thus we have 16 lines in a 32bit word.
+>>>>> +         */
+>>>>> +        reg = EDCR_TO_WORD_IDX(i);
+>>>>> +        mask = EDCR_TO_WORD_MASK(i);
+>>>>> +        val = drvdata->dsb->edge_ctrl[reg];
+>>>>
+>>>>> +        edge_ctrl_shift = EDCR_TO_WORD_VAL(edge_ctrl, i);
+>>>>> +        bitmap_replace(&val, &val, &edge_ctrl_shift, &mask, 32);
+>>>>
+>>>> Could we simply do :
+>>>>
+>>>>         reg &= ~mask;
+>>>>         reg |= FIELD_PREP(mask, edge_ctrl);
+>>>>
+>>> Perhaps "FIELD_PREP" cannot be used here since "mask" must be 
+>>> constant in this macro.
+>>
+>> Ah, you are right. Sorry about that.
+>>
+>>>
+>>> But in our code, the variable "mask" is not constant.
+>>
+>> Still I think using the bitmap_replace is an overkill. We could simply
+>> do:
+>>         val &= ~mask;
+>>         val |= EDCR_TO_WORD_VAL(edge_ctrl, i);
 
-Thanks for these tests, having MODULE_STATS enabled +
+Since we don't need mask any longer we could even do :
 
-cat /sys/kernel/debug/modules/stats
+	   val &= ~EDCR_TO_WORD_MASK(i);
+	   val |= EDCR_TO_WORD_VAL(edge_ctrl, i);
 
-would be of huge value, both on master and + patched.
 
-  Luis
+Suzuki
+
+
