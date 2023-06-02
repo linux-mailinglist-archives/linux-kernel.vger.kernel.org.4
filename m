@@ -2,173 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CB571F8FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B5771F908
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjFBDiy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 23:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S232042AbjFBDyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 23:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjFBDiv (ORCPT
+        with ESMTP id S229542AbjFBDyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 23:38:51 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3286B137
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:38:49 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-33bf805e901so12654255ab.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:38:49 -0700 (PDT)
+        Thu, 1 Jun 2023 23:54:09 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86302180
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:54:08 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8337a5861so3982212276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685678047; x=1688270047;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4rpaRYhp9pezQBgGgl7jQUhQdvTwr6KJlRlk+rOPp+4=;
+        b=oy7uyJW5kSVKl5JSZ/Uud8NxX96LuyPz1MBYWsWFDACRtnYfZ1CykuEc2PuIU66iaC
+         nPGpUMcz+eLB6jycjZt1gVbGp4FGxaTUDJbaAWFE9qLsiXIPMFlFNTs7ymDceTA3fszR
+         T52SUG0LFVyp50KWfFp4BrB78tpk+y11glHpxWmJ0IOh6CcMCPlkb957vcAWhEs/KT3K
+         cXrSV9Y4YNMOWee17PUB5H+ggHFhVEqXycwu25L/+KLR/bWyA1nqzOeG2rbG7Kvudu4s
+         R5vrkEk5r6zFr9seW2+eyeZp/02I+rUHk8MMYmq11yLTl/47oyZCUKm68jpRxRlnCyis
+         GFXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685677128; x=1688269128;
-        h=content-transfer-encoding:to:from:subject:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=npKlXBUECB6tHlzVMPCKFkNyoTojj33sXOKw6OCzR0c=;
-        b=SOGJA+tqNciOkORUkt/sqlK34iBwYsZI1wVgci+xjAtApc8FxI8gSVoMtvktiI/q8Q
-         zpOqj6vrHuLqSXzvswArAHjw5GSYFKrlOR2y9ybnjPK8jWwS/45RCB/Md4sICxrKBW8G
-         yEN0gBIbnC8Wp8fl0ZhCwDel/MLJDHFsFtmnkER7WEVAHoDWlCG67NnLXmjYIXp9zI7f
-         OIKNTO1fUa0KS6S06WhreCI8jFOwx6PKRU6iKzUwyOq9tea2iiEc3BrTb3B528x886j3
-         jyQ6SzcYcJu06mne1bEHYLhLaWc3pIPKH9wISwA1Zn+vY4+JmEdbFkBlMGqsCbVeZFuR
-         Om1w==
-X-Gm-Message-State: AC+VfDy9Hmzb9R+Bv2NZhBcSl7dv82Fh9PQl1GfnE0wvVf+kgLI4pxmZ
-        gyu43LulyPWKTZbfsr20anC3eoikUYmvoSzRinVAbzJ0iKR/
-X-Google-Smtp-Source: ACHHUZ4dm2WIPXh9DeJ2wH4xjdBN79QBGO96FM4c/+Sl5flDXZ8F6fXGjelq2tU6Rb5EXUYmjCzFywXxlXh8C+OImAkCZKAM329n
-MIME-Version: 1.0
-X-Received: by 2002:a92:cc42:0:b0:335:fef6:6b84 with SMTP id
- t2-20020a92cc42000000b00335fef66b84mr3727931ilq.1.1685677128534; Thu, 01 Jun
- 2023 20:38:48 -0700 (PDT)
-Date:   Thu, 01 Jun 2023 20:38:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000073d32c05fd1d4a6b@google.com>
-Subject: [syzbot] [reiserfs?] general protection fault in account_system_index_time
- (3)
-From:   syzbot <syzbot+5444b0cc48f4e1939d72@syzkaller.appspotmail.com>
-To:     frederic@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+        d=1e100.net; s=20221208; t=1685678047; x=1688270047;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4rpaRYhp9pezQBgGgl7jQUhQdvTwr6KJlRlk+rOPp+4=;
+        b=RMBxJOuXkXZcT/3U1MrlP41X5YQC+xby2K4pc8sJbvyAE3SLe4YGzqFThk92YhLZ9T
+         MHEXHZNSpoUUier1JvT4L5AmRFVRuEcykfiv9f38mkPgktuxntS88jJotrVl1P1K+xAF
+         P2jHt22YO8FeliSIuXSloC7dqQ2jT7UFwRelLi8qPbvW8+udu6WaDMP74hsfJF5QjEfC
+         4vCdxDQtSaoSEJtUfrN33Ncc2wt6E5OXspZXejLupA1U537ITU7UV/0oc26WQQUM6Uog
+         PVXsqS+gB3Y0X6oA6CPn1v0V+sKsaggCPUESAHBAcv/A3s9wWFSZdy6IYcMIpUvyAkfy
+         0Utg==
+X-Gm-Message-State: AC+VfDwF43umcuV2pCQLxPU2mfMEf7FauSZO5Gp+dW15TPeykByKceQb
+        ABCrXngchbTwtFMRfiNuJC21ZGJ5L2TPAQ==
+X-Google-Smtp-Source: ACHHUZ4kDJe2xZPeYgvJPMDUZ6UocdXCqm7Vq9ZTHKGva9YUiMBK+nsyd/mpj/y1ZSiphFIx6Cj3S9zv926dBQ==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:d404:0:b0:bad:2828:479 with SMTP id
+ m4-20020a25d404000000b00bad28280479mr1058303ybf.6.1685678047749; Thu, 01 Jun
+ 2023 20:54:07 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 11:53:59 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
+Message-ID: <20230602035400.2333527-1-davidgow@google.com>
+Subject: [PATCH] Documentation: kunit: Rename references to kunit_abort()
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Rae Moar <rmoar@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The kunit_abort() function has been renamed __kunit_abort(), update the
+references to it in the documentation.
 
-syzbot found the following issue on:
-
-HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12ec7b85280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6a2745d066dda0ec
-dashboard link: https://syzkaller.appspot.com/bug?extid=5444b0cc48f4e1939d72
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17956736280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175da599280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d4d1d06b34b8/disk-715abede.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3ef33a86fdc8/vmlinux-715abede.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e0006b413ed1/bzImage-715abede.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/525b69f4318a/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5444b0cc48f4e1939d72@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0040000033: 0000 [#1] PREEMPT SMP KASAN
-KASAN: probably user-memory-access in range [0x0000000200000198-0x000000020000019f]
-CPU: 1 PID: 262216 Comm:  Not tainted 6.4.0-rc2-next-20230515-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:get_running_cputimer include/linux/sched/cputime.h:79 [inline]
-RIP: 0010:account_group_system_time include/linux/sched/cputime.h:143 [inline]
-RIP: 0010:account_system_index_time+0x86/0x2f0 kernel/sched/cputime.c:173
-Code: 63 02 00 00 48 8b 9d f8 08 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 98 01 00 00 4c 8d b3 38 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e7 01 00 00 8b 83 98 01 00 00
-RSP: 0018:ffffc900001e0da0 EFLAGS: 00010006
-RAX: dffffc0000000000 RBX: 0000000200000001 RCX: 1ffffffff1827d41
-RDX: 0000000040000033 RSI: 000000000097fff6 RDI: 0000000200000199
-RBP: ffff88807638bb80 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: ffffffffffffffff R12: 000000000097fff6
-R13: 0000000000000002 R14: 0000000200000139 R15: ffffffff817770e0
-FS:  00005555556c1300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffca0efd000 CR3: 0000000019395000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- update_process_times+0x26/0x1a0 kernel/time/timer.c:2069
- tick_sched_handle+0x8e/0x170 kernel/time/tick-sched.c:243
- tick_sched_timer+0xee/0x110 kernel/time/tick-sched.c:1481
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x1c0/0xa30 kernel/time/hrtimer.c:1749
- hrtimer_interrupt+0x320/0x7b0 kernel/time/hrtimer.c:1811
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1095 [inline]
- __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1112
- sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:get_running_cputimer include/linux/sched/cputime.h:79 [inline]
-RIP: 0010:account_group_system_time include/linux/sched/cputime.h:143 [inline]
-RIP: 0010:account_system_index_time+0x86/0x2f0 kernel/sched/cputime.c:173
-Code: 63 02 00 00 48 8b 9d f8 08 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 98 01 00 00 4c 8d b3 38 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e7 01 00 00 8b 83 98 01 00 00
-RSP: 0018:ffffc900001e0da0 EFLAGS: 00010006
-RAX: dffffc0000000000 RBX: 0000000200000001 RCX: 1ffffffff1827d41
-RDX: 0000000040000033 RSI: 000000000097fff6 RDI: 0000000200000199
-RBP: ffff88807638bb80 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: ffffffffffffffff R12: 000000000097fff6
-R13: 0000000000000002 R14: 0000000200000139 R15: ffffffff817770e0
-FS:  00005555556c1300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffca0efd000 CR3: 0000000019395000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	63 02                	movsxd (%rdx),%eax
-   2:	00 00                	add    %al,(%rax)
-   4:	48 8b 9d f8 08 00 00 	mov    0x8f8(%rbp),%rbx
-   b:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  12:	fc ff df
-  15:	48 8d bb 98 01 00 00 	lea    0x198(%rbx),%rdi
-  1c:	4c 8d b3 38 01 00 00 	lea    0x138(%rbx),%r14
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	74 08                	je     0x3a
-  32:	3c 03                	cmp    $0x3,%al
-  34:	0f 8e e7 01 00 00    	jle    0x221
-  3a:	8b 83 98 01 00 00    	mov    0x198(%rbx),%eax
-
-
+Suggested-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ Documentation/dev-tools/kunit/architecture.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation/dev-tools/kunit/architecture.rst
+index e95ab05342bb..f335f883f8f6 100644
+--- a/Documentation/dev-tools/kunit/architecture.rst
++++ b/Documentation/dev-tools/kunit/architecture.rst
+@@ -119,9 +119,9 @@ All expectations/assertions are formatted as:
+ 	  terminated immediately.
+ 
+ 		- Assertions call the function:
+-		  ``void __noreturn kunit_abort(struct kunit *)``.
++		  ``void __noreturn __kunit_abort(struct kunit *)``.
+ 
+-		- ``kunit_abort`` calls the function:
++		- ``__kunit_abort`` calls the function:
+ 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)``.
+ 
+ 		- ``kunit_try_catch_throw`` calls the function:
+-- 
+2.41.0.rc2.161.g9c6817b8e7-goog
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
