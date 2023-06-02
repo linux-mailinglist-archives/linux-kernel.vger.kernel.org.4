@@ -2,214 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC22E71FD26
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B32B71FD24
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbjFBJJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S235015AbjFBJJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbjFBJIk (ORCPT
+        with ESMTP id S234473AbjFBJIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:08:40 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2066.outbound.protection.outlook.com [40.107.96.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB28E68;
-        Fri,  2 Jun 2023 02:07:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SoO2fy8DYxqr676BuA2p6KaZWbx+hQVJZAV28hlXI7G6zH7qP19ZT+ClhNoiUIF42wsFRmI9hQCcXWlUyH/rpprNOyD8s2dnbLYWUyB6FNOi5cFytIQfWE5pmlev6KvoJVUlwehwTUmGdhglJkEarlL/NNVBE4jGqvy6ojPdOay9Vl08pdSGEVaqHNlsVBkFWLdg3D7qj1gYvJ9+TWKjkiyVsBPsVi2hxR103Je4hpgstIucbWhjqX2tNil8iCClwNouYGBqli0DL/ySQMxl0lrUVSL7fIyGFBxwwGqa6FL42uez6BSLWGL2IlJ4Q2oG7H1FlfoJhGo6FvMX8TUV/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2FeiWQgMoksWBE3u/hZhAgV7nSI4Jyldab7SYVsIB+0=;
- b=gtFqPdI/cKL1PkWX5REZWD8jtVUe52CEhe/vgqgzG8HBtHkLbxBkxaNEyWUbIXgpQB5lhOmOtHGFM3WJGIUetxXIKJFFLWb9WKcpSETGeT1EOi/EKHsnjHDSg2FClJVrspY+vZTf9g1d0JlJDyctevkP3Hjb07+rjL3UwC4upk7SkVWJXzkV9ylQ0Sdi4nuxb79Txwd8Nkz2QKt09nwVhzhkk8wJSObi655wRSQh2ZuRa9TSXrl9xSazhceYWZgPN1uTSbTAxCFISS+FWVsui6s0DxehEfcoynfAeNSxea4rQyOZL+wqrs1+CQdu5E/ryT+38zhQiw+q55+SUfb1Rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2FeiWQgMoksWBE3u/hZhAgV7nSI4Jyldab7SYVsIB+0=;
- b=WkxLIASEZWUPhHXtgqHbKX7094OsyzfnQr63PY1L0WquKKTZAJYi5NkLXUVbMTMvEvQiQW8Y3tRMJ21y+CzXw6HcrcsrSeqbRe7y/d+Z5XE3aXqvd99YylTaSfOsiVR9BdUK4sdhpV1UhFAwtwQdIIVSh802oS8RNxtqZde4BGg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
- by SA1PR12MB6848.namprd12.prod.outlook.com (2603:10b6:806:25f::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Fri, 2 Jun
- 2023 09:06:51 +0000
-Received: from BYAPR12MB3286.namprd12.prod.outlook.com
- ([fe80::8801:420d:4748:33b1]) by BYAPR12MB3286.namprd12.prod.outlook.com
- ([fe80::8801:420d:4748:33b1%4]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
- 09:06:51 +0000
-Date:   Fri, 2 Jun 2023 14:36:37 +0530
-From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, x86@kernel.org
-Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
-Message-ID: <ZHmxHWbkQWvcq+bZ@BLR-5CG11610CF.amd.com>
-References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
- <3de5c24f-6437-f21b-ed61-76b86a199e8c@amd.com>
- <20230601111326.GV4253@hirez.programming.kicks-ass.net>
- <20230601115643.GX4253@hirez.programming.kicks-ass.net>
- <20230601120001.GJ38236@hirez.programming.kicks-ass.net>
- <20230601145113.GA559993@hirez.programming.kicks-ass.net>
- <a78b5df0-2374-29bf-f948-3054f1e7e46c@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a78b5df0-2374-29bf-f948-3054f1e7e46c@amd.com>
-X-ClientProxiedBy: PN3PR01CA0150.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:c8::8) To BYAPR12MB3286.namprd12.prod.outlook.com
- (2603:10b6:a03:139::15)
+        Fri, 2 Jun 2023 05:08:31 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE91701
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:07:12 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f4c264f6c6so2477246e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685696830; x=1688288830;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IX+kmeXrNhJi6cZKuaL9gCIGolWcF8s8IuKBE9FFXgg=;
+        b=XVCqYO1xKDfiJ/Uyd+9gQiXgnYTb2D2ywIq9BhxWN/ZJasQS+rGEVbBE+/59Jsp0Cl
+         NdoKhsyMjmwFl8J5zx2fcwsdARnQ6CSEfnzU+j1vyRzj7b6MoMhSfj3LE54HvdVwiE9+
+         t+LmcfFFwYu6tQPqO9a41rZcIZOuiJKBG+A5BLgjp1FFDi0FLUpVRi3gAoB/4gP96kUl
+         KvCNzvFKdAUj+/wTUJDvJDYTWXGFJDEsnjbDldT/s0Y7pdZcUYiiRxU5QzX0V79FP0+/
+         +oWV/vfED/x4Mmr/zRprc/2Y+9xFo9jYcSY7JxkeOEhOteMU96eV1E/L8WSUH4Ev+Fih
+         jDPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685696830; x=1688288830;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IX+kmeXrNhJi6cZKuaL9gCIGolWcF8s8IuKBE9FFXgg=;
+        b=Rll5SCQdUXFm+2JDFJgqGDlnNOzlfBHPk6SOIn+nt6QMdbOZWlL8TpQ7BpXaz1IThY
+         6dIcsQZXEc4GxaNyUc0eWdDjJQaUHT04Akdv1DSDNEUZOGImEoA5dmzl9XH1307MdxIF
+         t61GEQL/RQGfE3tHJZ9tCEWIjI/qCe2akveA20rtZwQFZ8jbYobxYY9rkWHtoi1VfIFJ
+         +TfVJ2o0f+i1qArw6RZnUX/Kp+/wUcwJO+P+OYoGfJ4kh2LGKHE7mfqKe3ST+JVB1KSG
+         FyM/RkjMtJ120XqRWHZDyjmsJ23qsx+GmR9xM/iT0Gz9ceEnuO2I9HUvj2LDehFtqWR/
+         NdWw==
+X-Gm-Message-State: AC+VfDwmCqj6eyo6a1+BDocRDpUJh0DmDmTq+ZHHQJDRfC9sXVdTydra
+        bBTr5s3rWehFth7eahlWXe3SeA==
+X-Google-Smtp-Source: ACHHUZ7MZ4rRkXmnNBzCy3kx/gti2EDC8Boap/W0DrnMizM0PgrD1hdd2oi7TdqStGrkzJQKEmLHVQ==
+X-Received: by 2002:a2e:a176:0:b0:2aa:cb6c:d0dc with SMTP id u22-20020a2ea176000000b002aacb6cd0dcmr1070528ljl.29.1685696830031;
+        Fri, 02 Jun 2023 02:07:10 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id s13-20020a2e81cd000000b002adf8d948dasm151963ljg.35.2023.06.02.02.07.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 02:07:09 -0700 (PDT)
+Message-ID: <2d768b8c-9cd0-84dd-9e04-10c11c5b9809@linaro.org>
+Date:   Fri, 2 Jun 2023 11:07:08 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3286:EE_|SA1PR12MB6848:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9399f9e6-3d1f-4b00-49a7-08db6348b388
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WrQzDZOqcEuY1BO0BopD5SBHASZYAbRog5UFVZn8ByjgSCygvOj52SUutzlOKNktWDxv/SQ4i/CtkGt9n69e2XMvductwvdGP0mn2DbgRgaaL0tRJvb8T0qYHqC0nsmMIf/vcGfy6qwkUgYfodZq9A3s4O15sFaRm8+37Bmq9bXl0lmJwW71rRtlA215It4Bji04LwN3plaxUupFanAFBrEtrqskvgoGk8uW9f9yQoXF7gCPnPCAK1NOcid1kY1ffDm6BpHAkeRP3NY1rOVWkRSbexQDezXoFciqe8dkZoYnkNCczNxw8scCFS5v/dFOQ6og5AwRZHYKQwUAOHLyt2ADRG4QNSEEy/CSFDiO7Ws9Mpw5KcXGuZ9zNxr4CUVd2DoE+xNiFuMVcIn3sYIYSCtHjMLntkvwdh6f4DSCj/5Q8mZ+xfTXqnLWc1A03w/XyFhXDRTls0f3d31HZxhA9vv/l3zta8rt8elCLuOdFLag5G393yfj23NvwaVWZOIXx7KQ6pfOkX8wMR3M81VynlFLyEdTJVm2Yd8T+e2zJXO3cScp99Jpz+DBmjHP1WFwqRO11m6aBbCoM80AFT0MDg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(366004)(376002)(396003)(136003)(451199021)(53546011)(6506007)(6512007)(8676002)(66946007)(966005)(66556008)(66476007)(26005)(38100700002)(6636002)(5660300002)(4326008)(8936002)(6862004)(83380400001)(86362001)(41300700001)(54906003)(316002)(6666004)(6486002)(186003)(2906002)(478600001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L05m/iCiBzhsDcLyHoUyA+3/5ojqnRt8WgP+8mdb3WSDNuP2un35mq/eSmH6?=
- =?us-ascii?Q?48vVrDDrE+t/nArdiWxqLJITOP9LNaRYvsi5Hp3CcGLYaUGbRJiJucB8s7ZD?=
- =?us-ascii?Q?Gz6K/goITKdXt4to0bysXB+5m+KEQfkUup+POHv6/Rp3K5GZPAlIUBMkMqaU?=
- =?us-ascii?Q?ZsMsg+Nys7P7zSZDD0sNMrT4Gp7JQmmRpGmlj/rpOX0OYt5ellUsTt7ZUnVq?=
- =?us-ascii?Q?xlal3SmkdX70CeI4AfOTrGHDgefo9CK/gxkBxolOOaf7eAjm97x0YbRsIXbw?=
- =?us-ascii?Q?MVJgWZmoCc1CYI9k2NmDR4pT8Ty7Ljx2a2oLM71/NZibUxU2J8tCXdelVb5s?=
- =?us-ascii?Q?e+IjRc4XppeNG5QeTigg9nk+4cisC5NostiTT4+32oZyrMd0v+x5Hycbpqqg?=
- =?us-ascii?Q?p5K1oS7JvZf7PbURotVErgSZPhTyvXkTrxRtQta/e9NWv8oOFGSZtY20jEAg?=
- =?us-ascii?Q?h8VptA47OwMNSTdhOhFqObOgkRUuWUWVcAj4XS53KMzBkfuEaNujd/Xc1YcQ?=
- =?us-ascii?Q?nu3U8ubc6/sVZtdRWkyfH/ROb27ufCEZDNRvsZRZdz+lrAewEE9Nx6nmYKmz?=
- =?us-ascii?Q?PGuxDXTwL2wDwzhiIkSt2W974ZG6iQbbzCarQYO/NVl/WAIKZGWLn+V2xKUt?=
- =?us-ascii?Q?a06FrJfkUQeh4h6lUKRQVw69uwzgG1TltcEDinCPOPk+DIaPxfhyzxvQ5AME?=
- =?us-ascii?Q?fsqKyEqNjxtpVsKSOE1QRHweBfSD4Fidlyh++ZsCY4yAqQMj4VcB1kK9AhM/?=
- =?us-ascii?Q?VhVERQoEbMgj/TkpJRD1FMmZHzF1r7/9oN015H/mdDNdhh1u+TuyAzh/EFG8?=
- =?us-ascii?Q?DRRXYULrXEy/tYZm3ZaGpF1YPvuHjkR79nwX72iuunGbCZUmDPUgEFx2W+02?=
- =?us-ascii?Q?1jzsgzBgv3IgmVvGo+TpngWhKrG1NPtIxv36ddDsZQyZM/5sLGQO8aSxZVIZ?=
- =?us-ascii?Q?xWR9b1IC/oVWmuCN6UsKML/cX0NqWltV2SH1VG6SyCYwhUSqBVu5QZcOxSpV?=
- =?us-ascii?Q?XZ1HnkyW2ZltFD0wp0Zkgy1wCJnn5CTiCssuyMQl63c8GA462ShlqcH/1FnA?=
- =?us-ascii?Q?Mp+JaeD+Ppxs8H4HXRCx0GzYpuHf8EceCBjwfW4CYZI5fqFUhg45P4K+Dri/?=
- =?us-ascii?Q?8xHILmgF7ELeN0ZCltlBnCRO+B3im85yr/bTytSxRxE742cRuTBqWanDs+LZ?=
- =?us-ascii?Q?XjFP+TONgaHuqy/BKyhaZD/OexEB5ddEWE8zHiKxkKmxPVYZkHKZw8d2RwjI?=
- =?us-ascii?Q?u4UdknWECbPgZsyYaIPBnxb205WNX9Jri89ktn/XL6Nn+XDrp8NzntwRh1d3?=
- =?us-ascii?Q?ItKWCBYvvhKyyrs+jZu2qLAhCDboorNguUwaMjGKV4WW8Ee+/magX9q+HsV6?=
- =?us-ascii?Q?07nRrew0bejcil03E3IOX3Gzw8VR24dgnFjxrUnOxIyDcypoOOVq7POoCNI8?=
- =?us-ascii?Q?o5b4j0qF85LWu7JRhNMP0JlrY6Yt1MKlTUT5cPkN32EIqnyZRhq94iwIs04D?=
- =?us-ascii?Q?LqwZB8orO+lFEn1861tfLm0RjJtG2XrxDEZrncDgY//6UT//3VwTQyIwEsFU?=
- =?us-ascii?Q?doULhOHFU9rBI0+sW8qZRivkDghEuvKXPEQyrX+e?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9399f9e6-3d1f-4b00-49a7-08db6348b388
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 09:06:50.8155
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H9XMuNknEcr7KB9+vO5MZQTbQLxJe66Ceh5bOELHx4MFwZZg2poWE9l32X7Mca1Syqa7K/xnoOfxtbUwQ6htpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6848
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 5/8] pinctrl: qcom: mark true OF dependency - common MSM
+ pinctrl code
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230601152026.1182648-1-krzysztof.kozlowski@linaro.org>
+ <20230601152026.1182648-5-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230601152026.1182648-5-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peter,
 
-On Fri, Jun 02, 2023 at 10:47:07AM +0530, K Prateek Nayak wrote:
-> Hello Peter,
+
+On 1.06.2023 17:20, Krzysztof Kozlowski wrote:
+> The common MSM pinctrl driver code (PINCTRL_MSM) uses
+> pinconf_generic_dt_node_to_map_group() from GENERIC_PINCONF, which is
+> not available for compile testing for !OF cases.  Drivers actually do
+> not depend on OF.  Move the OF dependency to the entry actually
+> depending on it and drop any "|| COMPILE_TEST", because OF is required
+> also for compile testing (lack of OF was never visible in compile
+> testing because none of the drivers could be compile tested due to
+> Makefile).
 > 
-> On 6/1/2023 8:21 PM, Peter Zijlstra wrote:
-> > On Thu, Jun 01, 2023 at 02:00:01PM +0200, Peter Zijlstra wrote:
-> >> On Thu, Jun 01, 2023 at 01:56:43PM +0200, Peter Zijlstra wrote:
-> >>> On Thu, Jun 01, 2023 at 01:13:26PM +0200, Peter Zijlstra wrote:
-> >>>>
-> >>>> This DeathStarBench thing seems to suggest that scanning up to 4 CCDs
-> >>>> isn't too much of a bother; so perhaps something like so?
-> >>>>
-> >>>> (on top of tip/sched/core from just a few hours ago, as I had to 'fix'
-> >>>> this patch and force pushed the thing)
-> >>>>
-> >>>> And yeah, random hacks and heuristics here :/ Does there happen to be
-> >>>> additional topology that could aid us here? Does the CCD fabric itself
-> >>>> have a distance metric we can use?
-> >>>
-> >>>   https://www.anandtech.com/show/16529/amd-epyc-milan-review/4
-> >>>
-> >>> Specifically:
-> >>>
-> >>>   https://images.anandtech.com/doci/16529/Bounce-7763.png
-> >>>
-> >>> That seems to suggest there are some very minor distance effects in the
-> >>> CCD fabric. I didn't read the article too closely, but you'll note that
-> >>> the first 4 CCDs have inter-CCD latency < 100 while the rest has > 100.
-> >>>
-> >>> Could you also test on a Zen2 Epyc, does that require nr=8 instead of 4?
-> >>> Should we perhaps write it like: 32 / llc_size ?
-> >>>
-> >>> The Zen2 picture:
-> >>>
-> >>>   https://images.anandtech.com/doci/16315/Bounce-7742.png
-> >>>
-> >>> Shows a more pronounced CCD fabric topology, you can really see the 2
-> >>> CCX inside the CCD but also there's two ligher green squares around the
-> >>> CCDs themselves.
-> >>
-> >> I can't seem to find pretty pictures for Zen4 Epyc; what does that want?
-> >> That's even bigger at 96/8=12 LLCs afaict.
-> > 
-> > Going by random pictures on the interweb again, it looks like this Zen4
-> > thing wants either 2 groups of 6 each, or 4 groups of 3.
->
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Yes, this is what the topology looks like
-
-|---------------------------------------------------------------------------------| 
-|                                                                                 |
-|   ----------- ----------- -----------     ----------- ----------- -----------   |
-|   |(0-7)    | |(8-15)   | |(16-23)  |     |(48-55)  | |(56-63)  | |(64-71)  |   |
-|   | LLC0    | | LLC1    | | LLC2    |     | LLC6    | | LLC7    | | LLC8    |   |
-|   |(96-103) | |(104-111)| |(112-119)|     |(144-151)| |(152-159)| |(160-167)|   |
-|   ----------- ----------- -----------     ----------- ----------- -----------   |
-|                                                                                 |
-|                                                                                 |
-|   ----------- ----------- -----------     ----------- ----------- -----------   |
-|   |(24-31)  | |(32-39)  | |(40-47)  |     |(72-79)  | |(80-87)  | |(88-95)  |   |
-|   | LLC3    | | LLC4    | | LLC5    |     | LLC9    | | LLC10   | | LLC11   |   |
-|   |(120-127)| |(128-135)| |(136-143)|     |(168-175)| |(176-183)| |(184-191)|   |
-|   ----------- ----------- -----------     ----------- ----------- -----------   |
-|                                                                                 |
-|---------------------------------------------------------------------------------|
-
-
-> I would think it is the latter since NPS4 does that but let me go verify.
-
-2 groups of 6 each is the vertical split which is NPS2.
-
-4 groups of 3 each is the vertical and horizontal split, which is
-NPS4.
-
-In both these cases, currently the domain hierarchy
-
-SMT --> MC --> NODE --> NUMA
-
-where the NODE will be the parent of MC and be the 2nd level wakeup domain.
-
-If we define CLS to be the group with 3 LLCs, which becomes the parent
-of the MC domain, then, the hierarchy would be
-
-NPS1 : SMT --> MC --> CLS --> DIE
-NPS2 : SMT --> MC --> CLS --> NODE --> NUMA
-NPS4 : SMT --> MC --> CLS --> NUMA
-
-NPS2 will have 5 domains within a single socket. Oh well!
-
---
-Thanks and Regards
-gautham.
+Konrad
+>  drivers/pinctrl/qcom/Kconfig | 43 ++----------------------------------
+>  1 file changed, 2 insertions(+), 41 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+> index 2236bdff7e60..18ac19f41873 100644
+> --- a/drivers/pinctrl/qcom/Kconfig
+> +++ b/drivers/pinctrl/qcom/Kconfig
+> @@ -4,6 +4,8 @@ if (ARCH_QCOM || COMPILE_TEST)
+>  config PINCTRL_MSM
+>  	tristate "Qualcomm core pin controller driver"
+>  	depends on GPIOLIB
+> +	# OF for pinconf_generic_dt_node_to_map_group() from GENERIC_PINCONF
+> +	depends on OF
+>  	select QCOM_SCM
+>  	select PINMUX
+>  	select PINCONF
+> @@ -14,7 +16,6 @@ config PINCTRL_MSM
+>  
+>  config PINCTRL_APQ8064
+>  	tristate "Qualcomm APQ8064 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -23,7 +24,6 @@ config PINCTRL_APQ8064
+>  
+>  config PINCTRL_APQ8084
+>  	tristate "Qualcomm APQ8084 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -32,7 +32,6 @@ config PINCTRL_APQ8084
+>  
+>  config PINCTRL_IPQ4019
+>  	tristate "Qualcomm IPQ4019 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -41,7 +40,6 @@ config PINCTRL_IPQ4019
+>  
+>  config PINCTRL_IPQ8064
+>  	tristate "Qualcomm IPQ8064 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -50,7 +48,6 @@ config PINCTRL_IPQ8064
+>  
+>  config PINCTRL_IPQ5332
+>  	tristate "Qualcomm Technologies Inc IPQ5332 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -60,7 +57,6 @@ config PINCTRL_IPQ5332
+>  
+>  config PINCTRL_IPQ8074
+>  	tristate "Qualcomm Technologies, Inc. IPQ8074 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -71,7 +67,6 @@ config PINCTRL_IPQ8074
+>  
+>  config PINCTRL_IPQ6018
+>  	tristate "Qualcomm Technologies, Inc. IPQ6018 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -82,7 +77,6 @@ config PINCTRL_IPQ6018
+>  
+>  config PINCTRL_IPQ9574
+>  	tristate "Qualcomm Technologies, Inc. IPQ9574 pin controller driver"
+> -	depends on OF || COMPILE_TEST
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -93,7 +87,6 @@ config PINCTRL_IPQ9574
+>  
+>  config PINCTRL_MSM8226
+>  	tristate "Qualcomm 8226 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -103,7 +96,6 @@ config PINCTRL_MSM8226
+>  
+>  config PINCTRL_MSM8660
+>  	tristate "Qualcomm 8660 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -112,7 +104,6 @@ config PINCTRL_MSM8660
+>  
+>  config PINCTRL_MSM8960
+>  	tristate "Qualcomm 8960 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -121,7 +112,6 @@ config PINCTRL_MSM8960
+>  
+>  config PINCTRL_MDM9607
+>  	tristate "Qualcomm 9607 pin controller driver"
+> -	depends on OF
+>  	depends on PINCTRL_MSM
+>  	help
+>  	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> @@ -129,7 +119,6 @@ config PINCTRL_MDM9607
+>  
+>  config PINCTRL_MDM9615
+>  	tristate "Qualcomm 9615 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -138,7 +127,6 @@ config PINCTRL_MDM9615
+>  
+>  config PINCTRL_MSM8X74
+>  	tristate "Qualcomm 8x74 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -147,7 +135,6 @@ config PINCTRL_MSM8X74
+>  
+>  config PINCTRL_MSM8909
+>  	tristate "Qualcomm 8909 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -156,7 +143,6 @@ config PINCTRL_MSM8909
+>  
+>  config PINCTRL_MSM8916
+>  	tristate "Qualcomm 8916 pin controller driver"
+> -	depends on OF
+>  	depends on PINCTRL_MSM
+>  	help
+>  	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> @@ -164,7 +150,6 @@ config PINCTRL_MSM8916
+>  
+>  config PINCTRL_MSM8953
+>  	tristate "Qualcomm 8953 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -175,7 +160,6 @@ config PINCTRL_MSM8953
+>  
+>  config PINCTRL_MSM8976
+>  	tristate "Qualcomm 8976 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -186,7 +170,6 @@ config PINCTRL_MSM8976
+>  
+>  config PINCTRL_MSM8994
+>  	tristate "Qualcomm 8994 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -196,7 +179,6 @@ config PINCTRL_MSM8994
+>  
+>  config PINCTRL_MSM8996
+>  	tristate "Qualcomm MSM8996 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -205,7 +187,6 @@ config PINCTRL_MSM8996
+>  
+>  config PINCTRL_MSM8998
+>  	tristate "Qualcomm MSM8998 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -214,7 +195,6 @@ config PINCTRL_MSM8998
+>  
+>  config PINCTRL_QCM2290
+>  	tristate "Qualcomm QCM2290 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -223,7 +203,6 @@ config PINCTRL_QCM2290
+>  
+>  config PINCTRL_QCS404
+>  	tristate "Qualcomm QCS404 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -271,7 +250,6 @@ config PINCTRL_QCOM_SSBI_PMIC
+>  
+>  config PINCTRL_QDU1000
+>  	tristate "Qualcomm Technologies Inc QDU1000/QRU1000 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -281,7 +259,6 @@ config PINCTRL_QDU1000
+>  
+>  config PINCTRL_SA8775P
+>  	tristate "Qualcomm Technologies Inc SA8775P pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -290,7 +267,6 @@ config PINCTRL_SA8775P
+>  
+>  config PINCTRL_SC7180
+>  	tristate "Qualcomm Technologies Inc SC7180 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -300,7 +276,6 @@ config PINCTRL_SC7180
+>  
+>  config PINCTRL_SC7280
+>  	tristate "Qualcomm Technologies Inc SC7280 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -329,7 +304,6 @@ config PINCTRL_SC8180X
+>  
+>  config PINCTRL_SC8280XP
+>  	tristate "Qualcomm Technologies Inc SC8280xp pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -339,7 +313,6 @@ config PINCTRL_SC8280XP
+>  
+>  config PINCTRL_SDM660
+>  	tristate "Qualcomm Technologies Inc SDM660 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -349,7 +322,6 @@ config PINCTRL_SDM660
+>  
+>  config PINCTRL_SDM670
+>  	tristate "Qualcomm Technologies Inc SDM670 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -369,7 +341,6 @@ config PINCTRL_SDM845
+>  
+>  config PINCTRL_SDX55
+>  	tristate "Qualcomm Technologies Inc SDX55 pin controller driver"
+> -	depends on OF
+>  	depends on ARM || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -379,7 +350,6 @@ config PINCTRL_SDX55
+>  
+>  config PINCTRL_SDX65
+>          tristate "Qualcomm Technologies Inc SDX65 pin controller driver"
+> -        depends on OF
+>          depends on ARM || COMPILE_TEST
+>          depends on PINCTRL_MSM
+>          help
+> @@ -389,7 +359,6 @@ config PINCTRL_SDX65
+>  
+>  config PINCTRL_SDX75
+>          tristate "Qualcomm Technologies Inc SDX75 pin controller driver"
+> -        depends on OF
+>          depends on ARM64 || COMPILE_TEST
+>          depends on PINCTRL_MSM
+>          help
+> @@ -399,7 +368,6 @@ config PINCTRL_SDX75
+>  
+>  config PINCTRL_SM6115
+>  	tristate "Qualcomm Technologies Inc SM6115,SM4250 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -409,7 +377,6 @@ config PINCTRL_SM6115
+>  
+>  config PINCTRL_SM6125
+>  	tristate "Qualcomm Technologies Inc SM6125 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -419,7 +386,6 @@ config PINCTRL_SM6125
+>  
+>  config PINCTRL_SM6350
+>  	tristate "Qualcomm Technologies Inc SM6350 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -429,7 +395,6 @@ config PINCTRL_SM6350
+>  
+>  config PINCTRL_SM6375
+>  	tristate "Qualcomm Technologies Inc SM6375 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -439,7 +404,6 @@ config PINCTRL_SM6375
+>  
+>  config PINCTRL_SM7150
+>  	tristate "Qualcomm Technologies Inc SM7150 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -449,7 +413,6 @@ config PINCTRL_SM7150
+>  
+>  config PINCTRL_SM8150
+>  	tristate "Qualcomm Technologies Inc SM8150 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -459,7 +422,6 @@ config PINCTRL_SM8150
+>  
+>  config PINCTRL_SM8250
+>  	tristate "Qualcomm Technologies Inc SM8250 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
+> @@ -487,7 +449,6 @@ config PINCTRL_SM8350
+>  
+>  config PINCTRL_SM8450
+>  	tristate "Qualcomm Technologies Inc SM8450 pin controller driver"
+> -	depends on OF
+>  	depends on ARM64 || COMPILE_TEST
+>  	depends on PINCTRL_MSM
+>  	help
