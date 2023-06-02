@@ -2,89 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120187209B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF747209BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237180AbjFBTV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S236997AbjFBTWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbjFBTVW (ORCPT
+        with ESMTP id S237200AbjFBTWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:21:22 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1D51B8;
-        Fri,  2 Jun 2023 12:21:20 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 850051C0E51; Fri,  2 Jun 2023 21:21:17 +0200 (CEST)
-Date:   Fri, 2 Jun 2023 21:21:14 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     jarkko@kernel.org, gregkh@linuxfoundation.org, pavel@denx.de,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        linux-integrity@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com, stable@vger.kernel.org
-Subject: Re: [PATCH] tpm, tpm_tis: correct tpm_tis_flags enumeration values
-Message-ID: <ZHpBKi4Mk2+hvSom@duo.ucw.cz>
-References: <20230530164116.20770-1-LinoSanfilippo@gmx.de>
+        Fri, 2 Jun 2023 15:22:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B093D1BC;
+        Fri,  2 Jun 2023 12:22:08 -0700 (PDT)
+Date:   Fri, 02 Jun 2023 19:22:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685733726;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ThsPPSvvi0NQuDbE3V2XkRsox2z+4m2CiOPtkRH1F7w=;
+        b=PyxJvpgrfSc+7RQ+v9un/vJOraVQL5Wj49KBWiagvT+LfqxbJCKpbd4QEKI6pBa0S3RgGI
+        1B1WRV3TkdlDkBaMhKczjBQbHBI1WXrXUF6bDc2sU/oAUsKKXjJWUK49gXCP1ChFyzwbMd
+        bWse7C3qA6jzIdgb35OAzsredZqRA81IVHH1t815UloN4JIdIKSVc4Bgtq+3xnvBaoZlOn
+        PkqYULmLDAAQ23lYlMXzazRTYx8PawTBXiot6huh6XnHFm6ox8RyFHAJAMa0bEyOB2tuB/
+        oM6Ut59fdaiLQNuYkEjU+d7HQtLll8mk3zjzGzxnbGIrwkGqxh/6dTOljAXg6Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685733726;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ThsPPSvvi0NQuDbE3V2XkRsox2z+4m2CiOPtkRH1F7w=;
+        b=qAqjZDruE0UXn2lqVEHDwTiOWV1JwVjiiFfhCY4jUA5FACpr/k7F0snb+GuWf7Cy/8obty
+        2guLfndcUNMSg8DQ==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/core] objtool: Add __kunit_abort() to noreturns
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230602175453.swsn3ehyochtwkhy@treble>
+References: <20230602175453.swsn3ehyochtwkhy@treble>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="w9Khytz2WmtvP9wq"
-Content-Disposition: inline
-In-Reply-To: <20230530164116.20770-1-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Message-ID: <168573372607.404.6955816775416345418.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the objtool/core branch of tip:
 
---w9Khytz2WmtvP9wq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Commit-ID:     ff9a6459bbec06df7da2545020d7383aba13b3fb
+Gitweb:        https://git.kernel.org/tip/ff9a6459bbec06df7da2545020d7383aba13b3fb
+Author:        Josh Poimboeuf <jpoimboe@kernel.org>
+AuthorDate:    Fri, 02 Jun 2023 10:54:53 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 02 Jun 2023 21:12:24 +02:00
 
-Hi!
+objtool: Add __kunit_abort() to noreturns
 
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->=20
-> With commit 858e8b792d06 ("tpm, tpm_tis: Avoid cache incoherency in test
-> for interrupts") bit accessor functions are used to access flags in
-> tpm_tis_data->flags.
->=20
-> However these functions expect bit numbers, while the flags are defined as
-> bit masks in enum tpm_tis_flag.
->=20
-> Fix this inconsistency by using numbers instead of masks also for the fla=
-gs
-> in the enum.
->=20
+Fixes a bunch of warnings like:
 
-Reviewed-by: Pavel Machek <pavel@denx.de>
+  drivers/input/tests/input_test.o: warning: objtool: input_test_init+0x1cb: stack state mismatch: cfa1=4+64 cfa2=4+56
+  lib/kunit/kunit-test.o: warning: objtool: kunit_log_newline_test+0xfb: return with modified stack frame
+  ...
 
-Thank you!
+Fixes: 260755184cbd ("kunit: Move kunit_abort() call out of kunit_do_failed_assertion()")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230602175453.swsn3ehyochtwkhy@treble
+---
+ tools/objtool/noreturns.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-									Pavel
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---w9Khytz2WmtvP9wq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZHpBKgAKCRAw5/Bqldv6
-8iFbAJ4tQr2ZZkoJAQQwMB1LxZcY64Tp8gCgtTqX7sTiTc12sDu7z5xhTjevRQ8=
-=q5/Y
------END PGP SIGNATURE-----
-
---w9Khytz2WmtvP9wq--
+diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
+index cede606..1514e84 100644
+--- a/tools/objtool/noreturns.h
++++ b/tools/objtool/noreturns.h
+@@ -7,6 +7,7 @@
+  * Yes, this is unfortunate.  A better solution is in the works.
+  */
+ NORETURN(__invalid_creds)
++NORETURN(__kunit_abort)
+ NORETURN(__module_put_and_kthread_exit)
+ NORETURN(__reiserfs_panic)
+ NORETURN(__stack_chk_fail)
