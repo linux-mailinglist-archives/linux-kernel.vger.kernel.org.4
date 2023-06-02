@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F02A72027A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401C972027E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbjFBM7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S235426AbjFBNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbjFBM7j (ORCPT
+        with ESMTP id S234366AbjFBNAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:59:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2AA1A5;
-        Fri,  2 Jun 2023 05:59:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E43164F2F;
-        Fri,  2 Jun 2023 12:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AC9C4339B;
-        Fri,  2 Jun 2023 12:59:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685710775;
-        bh=hgQ+jcnBRg7Kz5BV/YLx0DsJ02rSu8vuSyPtdfEMiRI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kvu0pWSsado4ksDKBBw9DqrCuvKkxBZQ64tWb9c5McH56AqRdnsX1Ax7JvIodHsvL
-         2qwkQSkSPiqunr/lwIUwWm28u1m9lR/hArDc/aVgVu7VTF2JxHt+2AU7ypaGi8QuLP
-         CnvQ50M2Rl9e7kPVZl5mtL0zlVaM+kaMgixLO3xLpovW2FdHk5t+o3Xg8jwEFl7Vsh
-         j5+wLRFXI3lSalEGWjSf6e6Gr97KiRuGchqBaRKhEieHWRsoO/5jLAcX2JYgGQIVPv
-         meTWbbGd4qHMabnJ4hTeD7Bw4iC4khZvWYB5XW61IfbEIG8idNLQ+TVQIRa5O2uL70
-         KBLYNgsXB672g==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso2652513e87.1;
-        Fri, 02 Jun 2023 05:59:35 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwdFnY9O+dlwHFoOEUQp1Q5pLimRysDj/HbajwWn3QF+1FiU8tN
-        ioEJf+ulxciVI5bvqHAYf+NiEQwXLLHzJ1lvd3A=
-X-Google-Smtp-Source: ACHHUZ60ZaYZ6HTdyybNTMhnhXuFiOk76bJEGNaKp6z6pG3Kz0xJwO0AFSRHiI2iT4sCoq1Hh6ohnJvwrT37cPMUDRI=
-X-Received: by 2002:ac2:53ab:0:b0:4f6:13f1:38a4 with SMTP id
- j11-20020ac253ab000000b004f613f138a4mr759648lfh.41.1685710773672; Fri, 02 Jun
- 2023 05:59:33 -0700 (PDT)
+        Fri, 2 Jun 2023 09:00:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA391AD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685710792;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SYQbDxF8HJ9yczCBr5+GXXpcpnhVFKGmC8UmRB4rHvs=;
+        b=GCJJ8rIE20Z+Yr7P6/3Ezht3iouMduFDsyGLFSDHOj7CihTUbLGuxOtfkcpD9ZDIIShz0A
+        WsOhjLc9J3blMhIj95/k3Om9iNXuOkFeHswlH0OhPWNWUTkwk6MuBefomwNxGpYw95gS3m
+        285ZRZCrMJf7m8NzkeTkrGPcqk7wCCE=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-219-mht-Sc-tPXyqHbt3B36diw-1; Fri, 02 Jun 2023 08:59:51 -0400
+X-MC-Unique: mht-Sc-tPXyqHbt3B36diw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-94a355cf318so157684666b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 05:59:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685710790; x=1688302790;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SYQbDxF8HJ9yczCBr5+GXXpcpnhVFKGmC8UmRB4rHvs=;
+        b=ir6UWFwcsD0/pd7VPTKdwmeA+1ePbnmBHoHFY17AKQTYUthjMzxKu8hmEqEVTdd+v9
+         f2XRlnVPca9p4IBeQ14sdBshSre5B2Fqd9/O+aTFpy6AORqbEZEl9KZ9NVES1gQDmp51
+         LpdihveHS9WT3JwVfjVFT8tcQ+57btMjbHixliym5XziEj1g62OaYN0EOHV1Z4bHW4vd
+         dp8HJA/DJPHrFrD8CRv0v5ZRs1W61f8xFmXXpKPaViUPvQOhBSM7tE0q/3cG+7DAx0Wq
+         LApclDr6Oa55nCtaXPJmo7Qaz0VGWRuXQ/eCdBxxVmH9fUiyiCAwaS2usdQIPz4AGKwZ
+         b00Q==
+X-Gm-Message-State: AC+VfDze1kluddu61uqGEHt/0bPPlsPOv7it95qLjYm3gWdBE3YxZfQY
+        1MFeqoUBd9btvepSc4X5z2cZ7GubHqq5muxctS+yckO22mCBYWGtJMQl+VynnnYm8sbYn+Cuhfw
+        bFCQ19WqU/tYVIlj40Qsd+DN0
+X-Received: by 2002:a17:907:ea4:b0:953:37eb:7727 with SMTP id ho36-20020a1709070ea400b0095337eb7727mr11854251ejc.43.1685710790319;
+        Fri, 02 Jun 2023 05:59:50 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ekYZVdjYbzMccPVTK+2ktNkRpoStqU6upFUXJFP95B+/Om1SsDRzy0Z55fgVlHy1+zr/fVA==
+X-Received: by 2002:a17:907:ea4:b0:953:37eb:7727 with SMTP id ho36-20020a1709070ea400b0095337eb7727mr11854230ejc.43.1685710790074;
+        Fri, 02 Jun 2023 05:59:50 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id t15-20020a1709063e4f00b00965c529f103sm737493eji.86.2023.06.02.05.59.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 05:59:49 -0700 (PDT)
+Message-ID: <880b5b02-3c4c-c104-2eab-22664f13a252@redhat.com>
+Date:   Fri, 2 Jun 2023 14:59:48 +0200
 MIME-Version: 1.0
-References: <20230512194302.1662230-1-nicholasbishop@google.com> <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
-In-Reply-To: <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 2 Jun 2023 14:59:22 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFkJGUzksNRwMv1nBb-b3=ZOXb0xD=ZfA1RQvWZBHMBXQ@mail.gmail.com>
-Message-ID: <CAMj1kXFkJGUzksNRwMv1nBb-b3=ZOXb0xD=ZfA1RQvWZBHMBXQ@mail.gmail.com>
-Subject: Re: [PATCH] efi/esrt: Allow ESRT access without CAP_SYS_ADMIN
-To:     Nicholas Bishop <nicholasbishop@google.com>,
-        Peter Jones <pjones@redhat.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] leds: cht-wcove: mark cht_wc_leds_brightness_get static
+To:     Arnd Bergmann <arnd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>, Yauhen Kharuzhy <jekhor@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230601213439.3398794-1-arnd@kernel.org>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230601213439.3398794-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 10:11, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Fri, 12 May 2023 at 21:43, Nicholas Bishop <nicholasbishop@google.com> wrote:
-> >
-> > Access to the files in /sys/firmware/efi/esrt has been restricted to
-> > CAP_SYS_ADMIN since support for ESRT was added, but this seems overly
-> > restrictive given that the files are read-only and just provide
-> > information about UEFI firmware updates.
-> >
-> > Remove the CAP_SYS_ADMIN restriction so that a non-root process can read
-> > the files, provided a suitably-privileged process changes the file
-> > ownership first. The files are still read-only and still owned by root by
-> > default.
-> >
-> > Signed-off-by: Nicholas Bishop <nicholasbishop@google.com>
->
-> Seems reasonable to me. Peter?
->
+Hi Arnd,
 
-I've queued this up now.
+On 6/1/23 23:34, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This was apparently made global but is not called from anywhere else:
+> 
+> drivers/leds/leds-cht-wcove.c:144:21: error: no previous prototype for 'cht_wc_leds_brightness_get' [-Werror=missing-prototypes]
+> 
+> Fixes: 047da762b9a93 ("leds: Add Intel Cherry Trail Whiskey Cove PMIC LED driver")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Thank you for the patch. This is a duplicate fix with these
+2 earlier submissions of the same fix:
+
+https://lore.kernel.org/linux-leds/20230525183317.129232-1-hdegoede@redhat.com/
+https://lore.kernel.org/linux-leds/20230530234748.3641630-1-trix@redhat.com/
+
+Regards,
+
+Hans
 
 
-> > ---
-> >  drivers/firmware/efi/esrt.c | 4 ----
-> >  1 file changed, 4 deletions(-)
-> >
-> > diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
-> > index d5915272141f..aab96ab64a1a 100644
-> > --- a/drivers/firmware/efi/esrt.c
-> > +++ b/drivers/firmware/efi/esrt.c
-> > @@ -95,10 +95,6 @@ static ssize_t esre_attr_show(struct kobject *kobj,
-> >         struct esre_entry *entry = to_entry(kobj);
-> >         struct esre_attribute *attr = to_attr(_attr);
-> >
-> > -       /* Don't tell normal users what firmware versions we've got... */
-> > -       if (!capable(CAP_SYS_ADMIN))
-> > -               return -EACCES;
-> > -
-> >         return attr->show(entry, buf);
-> >  }
-> >
-> > --
-> > 2.40.1.606.ga4b1b128d6-goog
-> >
+
+
+
+> ---
+>  drivers/leds/leds-cht-wcove.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/leds/leds-cht-wcove.c b/drivers/leds/leds-cht-wcove.c
+> index 0cfebee989107..0a5c30e5ed5d4 100644
+> --- a/drivers/leds/leds-cht-wcove.c
+> +++ b/drivers/leds/leds-cht-wcove.c
+> @@ -141,7 +141,7 @@ static int cht_wc_leds_brightness_set(struct led_classdev *cdev,
+>  	return ret;
+>  }
+>  
+> -enum led_brightness cht_wc_leds_brightness_get(struct led_classdev *cdev)
+> +static enum led_brightness cht_wc_leds_brightness_get(struct led_classdev *cdev)
+>  {
+>  	struct cht_wc_led *led = container_of(cdev, struct cht_wc_led, cdev);
+>  	unsigned int val;
+
