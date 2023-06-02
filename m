@@ -2,88 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA35720A1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB79720A1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235924AbjFBUCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S236031AbjFBUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 16:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235676AbjFBUCk (ORCPT
+        with ESMTP id S235459AbjFBUDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:02:40 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CE31A2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:02:38 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-565cd2fc9acso25161807b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 13:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685736158; x=1688328158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uKpM70iut4VL/i/tNwIJ6FRXcVMH8A9pJiWYgjw70Z4=;
-        b=LBXEr0Gz9/jSE2IzPO1IS6zEcw7CKaf7ShCxPcbfHiIRcMVyHJE6jlqruEdXiPRhsN
-         t7QPfE21VrMd0e5MA4poZyXSWlKz99pmyuZ6nbFlYITw+zQkkxJGt3TyoBe3wj5pp0G+
-         7cgf49PL2G5mDCbvxlJU07M9gTI6xB+pea5jYuRjypx2zECLDS0EG1/tCMgyrB7uZL9L
-         UdCaMZyGf4wccXYxJT6yNVSM2SPeNbRVfjFCNVB9r/EOaeU9nlYCW0FOc653YJu3+x3X
-         i9g99X8wWPuNiGo4+NndFkSh9qXz23oUBbP+QALXauKfyDT5PPViUFxTGt+AV6EIDvxK
-         05sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685736158; x=1688328158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uKpM70iut4VL/i/tNwIJ6FRXcVMH8A9pJiWYgjw70Z4=;
-        b=EKlaqVMGAT6RGJHbmlOd3528M5jzthuN7kDRfGGQkfR+vEj1uwRjFuD+VXZcqJKmi7
-         xugtlHRgXIbRa2Np1EOu7jAaOWd4TCZZfSQSa/cUFDOA8k6DQ4MXW2Fzlp2MG41UEM6+
-         Gk8ewkzsTlLF4QxgkJfwDc4zw3vYgsHP1xiRsD5G3vh85gFiTeFJUvYyld9oXKAtBNC7
-         pMEcYqTAxk/D6YcPcWwy966M7fCttq/3vtAuZn1CaN29OvKiUnJkn8A/nUEKw2W3Lf8i
-         YCzdZ1GzE6u5QKaaqlJtOP7dIsJDF5sgxxxAmW7ANz7aYxqiMSPGTcPsKBf9zyB2+i45
-         P9tw==
-X-Gm-Message-State: AC+VfDyZ30XYUQzfJhVoGw9nNDhIPnqL6X+MFU6RToKnIFrriSpzx2XQ
-        UmBAjaVS0v2ds07LWYv07XIf+qp5uWhiW+gGeHq6hw==
-X-Google-Smtp-Source: ACHHUZ4jOpJdukkSCa5e3qroZIItg8oz58sxAOAyc2Z3apFXdNJNcmOUzPtJWFFQmuHO/M0hskfAOw+6OPoF+v3C4Kk=
-X-Received: by 2002:a0d:e0c1:0:b0:566:584e:5ce with SMTP id
- j184-20020a0de0c1000000b00566584e05cemr1045478ywe.34.1685736157943; Fri, 02
- Jun 2023 13:02:37 -0700 (PDT)
+        Fri, 2 Jun 2023 16:03:50 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520939D;
+        Fri,  2 Jun 2023 13:03:48 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.82.21) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 2 Jun 2023
+ 23:03:39 +0300
+Subject: Re: [PATCH v1 26/43] pata: cirrus: add DT support for Cirrus EP93xx
+To:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Damien Le Moal <dlemoal@kernel.org>
+CC:     Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>,
+        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601054549.10843-8-nikita.shubin@maquefel.me>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <32a041b0-d02d-4353-4794-094b96271e3a@omp.ru>
+Date:   Fri, 2 Jun 2023 23:03:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
-In-Reply-To: <20230602-pl022-defer-fix-v2-1-383f6bc2293a@axis.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 2 Jun 2023 22:02:26 +0200
-Message-ID: <CACRpkda53synLQCyRPVHA20CFMOUVo6c11-m_ckdvru5iOf0Og@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: spl022: Probe defer is no error
-To:     =?UTF-8?Q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230601054549.10843-8-nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.82.21]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 06/02/2023 19:42:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 177822 [Jun 02 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 515 515 1b17fc6ab778ab3730d780f30d802773a7d822ac
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_no_received}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.82.21 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.82.21 in (user) dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;31.173.82.21:7.1.2;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.82.21
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/02/2023 19:47:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/2/2023 6:52:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 8:13=E2=80=AFPM M=C3=A5rten Lindahl <marten.lindahl@=
-axis.com> wrote:
+Hello!
 
-> When the spi controller is registered and the cs_gpiods cannot be
-> assigned, causing a defer of the probe, there is an error print saying:
-> "probe - problem registering spi master"
->
-> This should not be announced as an error. Print this message for all
-> errors except for the probe defer.
->
-> Signed-off-by: M=C3=A5rten Lindahl <marten.lindahl@axis.com>
+On 6/1/23 8:45 AM, Nikita Shubin wrote:
 
-Excellent, thanks!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> - find register range from the device tree
+> - get interrupts from device tree
 
-Yours,
-Linus Walleij
+   Hm... I'm not seeing such changes in your patch?
+
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+> 
+> Notes:
+>     v0 -> v1:
+>     
+>     - fixed headers
+>     - dropped coma in id table
+> 
+>  drivers/ata/pata_ep93xx.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/ata/pata_ep93xx.c b/drivers/ata/pata_ep93xx.c
+> index c6e043e05d43..8d363bc71342 100644
+> --- a/drivers/ata/pata_ep93xx.c
+> +++ b/drivers/ata/pata_ep93xx.c
+> @@ -40,6 +40,7 @@
+>  #include <linux/ata.h>
+>  #include <linux/libata.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/delay.h>
+>  #include <linux/dmaengine.h>
+>  #include <linux/ktime.h>
+> @@ -1016,9 +1017,16 @@ static int ep93xx_pata_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct of_device_id ep93xx_pata_of_ids[] = {
+> +	{ .compatible = "cirrus,ep9312-pata" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ep93xx_pata_of_ids);
+> +
+>  static struct platform_driver ep93xx_pata_platform_driver = {
+>  	.driver = {
+>  		.name = DRV_NAME,
+> +		.of_match_table = ep93xx_pata_of_ids,
+>  	},
+>  	.probe = ep93xx_pata_probe,
+>  	.remove = ep93xx_pata_remove,
+
+MBR, Sergey
