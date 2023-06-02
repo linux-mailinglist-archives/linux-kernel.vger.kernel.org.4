@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290BD720AD5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F350E720ADA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbjFBVIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S236320AbjFBVJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbjFBVIF (ORCPT
+        with ESMTP id S235803AbjFBVJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:08:05 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F05D19B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 14:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685740084; x=1717276084;
-  h=date:from:to:cc:subject:message-id;
-  bh=bDZU8pYJGMr4pYw96VbKRx1iwvTkZhrOQf9GPTi7jlc=;
-  b=mvwA+bPwmzLjQzNCyWzB4iKwTWkSf7Ml7u3TlbCQ/frovYd/o/G4m/sW
-   QEgLHlNxj4959I3vijniNAjAXgvqwD8RiFcebB6KzOAivx9nBMtj0WcQ3
-   wKmXZe+MUE9SWLP88YkbhVa2UvXcBb2JLmULDcUEsLIhy3cOmipDVTO7p
-   6vdet3z/dla7GBN9ug3cQmPGyNNkx839LI7QmVck4KO0+mMG3es3biTws
-   lQASSDo2UkInxnm9e1nyuXdfiLSV76Z9EWV2u5JA71rxJZJVR/afz0kbJ
-   JrZg7P8u+p8i08z5GgicAi9Gb6EppaJ4/pbitA4g76OkuS7J3/Mhq4ib5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="340599470"
-X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="340599470"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 14:08:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="773027094"
-X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="773027094"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Jun 2023 14:08:02 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q5C0A-0000yK-0B;
-        Fri, 02 Jun 2023 21:08:02 +0000
-Date:   Sat, 03 Jun 2023 05:07:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 054377e4774eee812b7930933d7a354ed5a7ddd6
-Message-ID: <20230602210716.DSU5T%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 17:09:44 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0CFE44
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 14:09:43 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f81ffc9065so17121cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 14:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685740182; x=1688332182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LUMera+KvK+Gz/9RKZAMPcQOid3tjahfrpp/rUltHc0=;
+        b=pk4cGu0/3pmf5wMb2zrvLiM7LFiMXqZDIcSLOO4crtzLkI2WKv46nPUQ8L8b3C24Gk
+         53NL23ygGSJUxh8nYlnk7neJwUFenkudGwzfonrIyt3IjEtMVZ3iug/wJrjtQx9HF483
+         hyXjU2rgpZmRpeyWOJaieI/xdI+FClXktuP77dRBSlqZAGFJ5YmqmHt3/wqGbcg0TB+3
+         X0mhN7KCTNjf2J4PuWohJHo1l1Ywd2n/4gNUM24iSO74X1Bk50YhwZnJz9AX+u+ucFwL
+         mYRdHIZl/830C53zUPzzf8ci1oabmsa/p/JNwxHZd1/GKF9udL66b7x+CjR4YmyBDD1o
+         JAoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685740182; x=1688332182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LUMera+KvK+Gz/9RKZAMPcQOid3tjahfrpp/rUltHc0=;
+        b=Fbzjn7RddgBmO4Cc4aZQd2GqcYRJeYfhdHg3qQBa92I16Z/D7RwXRBQEOgOhP5r4hP
+         tGqnCHaeoSd/ABk0KZQ+ZLbGmobQh6i9ej4fsVmt2neBlBr8aPNVPsrJeQSx+UvI1L44
+         fjndxC8Yl9VGzvNLPrg30svkF/KvQissEDEHpucyMCI+JFTvmyjxTP6Mp8HlABnLgcze
+         aIcR6IPK341F8W0PUfZp1Ttqeo8GEKITTnHqOBH5dzWJnoa0R7hHbjk3vcVwsQRRhXp8
+         BE15hM8fl5CLikZy/X5VhFGrAxY2QWY7LliS3XY19QC+HmnObF+YZPr4PgstFFBm78gC
+         TXbw==
+X-Gm-Message-State: AC+VfDyxzt+eO28M9J2d59wEOhwW99niP0opA4S0g4v5Yc2X6W+LAv8c
+        OqTxo0AsFstGseUkSHuzrW8qa+ZY0jWMGZkTLWG5bQ==
+X-Google-Smtp-Source: ACHHUZ6nvddC1In5fKd+Up/9hfnwFowLjuDC2AxLmQfO6dLUJGNRMVXOb/t0xO3QKtw8lrdxO6ZfOtmclxaM/dR0naM=
+X-Received: by 2002:a05:622a:295:b0:3f0:af20:1a37 with SMTP id
+ z21-20020a05622a029500b003f0af201a37mr271519qtw.15.1685740182308; Fri, 02 Jun
+ 2023 14:09:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230329-kunit-devm-inconsistencies-test-v1-0-015b1574d673@kernel.org>
+ <20230329-kunit-devm-inconsistencies-test-v1-1-015b1574d673@kernel.org>
+In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v1-1-015b1574d673@kernel.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 2 Jun 2023 14:09:31 -0700
+Message-ID: <CAGS_qxoXJ1BgvRLY9F=DxHfUntRvkVBHqgJMc=0E+qCGVj6bdw@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] drivers: base: Add basic devm tests for root devices
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 054377e4774eee812b7930933d7a354ed5a7ddd6  Merge x86/misc into tip/master
+On Fri, Jun 2, 2023 at 8:20=E2=80=AFAM Maxime Ripard <mripard@kernel.org> w=
+rote:
 
-elapsed time: 726m
+One small suggestion below
+<snip>
 
-configs tested: 47
-configs skipped: 91
+> +static void root_device_devm_register_unregister_test(struct kunit *test=
+)
+> +{
+> +       struct test_priv *priv;
+> +       int ret;
+> +
+> +       priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
+> +       init_waitqueue_head(&priv->release_wq);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230531   gcc  
-i386                 randconfig-i002-20230531   gcc  
-i386                 randconfig-i003-20230531   gcc  
-i386                 randconfig-i004-20230531   gcc  
-i386                 randconfig-i005-20230531   gcc  
-i386                 randconfig-i006-20230531   gcc  
-i386                 randconfig-i051-20230531   gcc  
-i386                 randconfig-i052-20230531   gcc  
-i386                 randconfig-i053-20230531   gcc  
-i386                 randconfig-i054-20230531   gcc  
-i386                 randconfig-i055-20230531   gcc  
-i386                 randconfig-i056-20230531   gcc  
-i386                 randconfig-i061-20230531   gcc  
-i386                 randconfig-i062-20230531   gcc  
-i386                 randconfig-i063-20230531   gcc  
-i386                 randconfig-i064-20230531   gcc  
-i386                 randconfig-i065-20230531   gcc  
-i386                 randconfig-i066-20230531   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sparc                               defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230531   gcc  
-x86_64               randconfig-a002-20230531   gcc  
-x86_64               randconfig-a003-20230531   gcc  
-x86_64               randconfig-a004-20230531   gcc  
-x86_64               randconfig-a005-20230531   gcc  
-x86_64               randconfig-a006-20230531   gcc  
-x86_64               randconfig-r031-20230531   gcc  
-x86_64                               rhel-8.3   gcc  
+Note: should we use an init function to handle this setup?
+We can store it in test->priv instead.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+static int my_init(struct kunit *test)
+{
+  struct test_priv *priv;
+
+  priv =3D kunit_kzalloc(test, sizeof(test_priv), GFP_KERNEL);
+  if (!priv) return -ENOMEM;
+  // N.B. I think you could probably still use assert instead
+
+  init_waitqueue_head(&priv->release_wq);
+
+  priv->dev =3D root_device_register(DEVICE_NAME);
+  if (!priv->dev) return -ENOMEM;
+
+  test->priv =3D priv;
+}
+
+...
+static struct kunit_suite root_device_devm_test_suite =3D {
+       .name =3D "root-device-devm",
+       .init =3D my_init,
+       .test_cases =3D root_device_devm_tests,
+};
+
+Daniel
