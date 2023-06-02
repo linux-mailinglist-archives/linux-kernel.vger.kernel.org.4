@@ -2,205 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A0A720543
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9F272054D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236317AbjFBPDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S235284AbjFBPFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbjFBPCx (ORCPT
+        with ESMTP id S234248AbjFBPFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:02:53 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657CFE78;
-        Fri,  2 Jun 2023 08:02:37 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352AvioG002212;
-        Fri, 2 Jun 2023 15:02:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=pps0720;
- bh=I4jT3z3eoGyIX7qiGm4VyK5ShLGUDmzAVB8sztxAyGY=;
- b=aubGfdMkKw6YskgC5cyoB4UwfoPEkVWhTp/m2wO1Z3Wy2zmxu2zzYCjo5I4EwMQ/cTyE
- iaE4K/6SZHtJQRJ/cQeZm7n55TnriFAHWUBUOo6TmyT+azJKXdhmKH1SfIf222sytBfY
- oCHLQguPWT0nZzLXqxWcmMqUFcruMvJICNiJcbkHnMfSdC4UZLlYFLle84GiErV0Nyp1
- JNHIyhLB5FveKLmTOMS3SlXjFFpIlTtk73AUCT0s/dwJya0eFrkvExi8eems8Kuj9klG
- Nd2y4pTQpaXYaSodDh+lRM7R/C8UOFrLLYhCT7V5sENs8lnkTZPwHED9FzR1YUU1BUnM 5Q== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3qye17txfe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 15:02:16 +0000
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 8B374800192;
-        Fri,  2 Jun 2023 15:02:15 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 2 Jun 2023 03:02:12 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
- via Frontend Transport; Fri, 2 Jun 2023 03:02:12 -1200
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 2 Jun 2023 03:02:10 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=br5Xqf+9ZX98gpWoRKi2nVI2R7Vz0zGUGyaCq0f/Y00Dny1D0Or+NDHibRTdsIBuy/brjpH5hrY94TWYza/0Clq3C55EA8xEXeCZYbFR7FRtq2RKD2Tbz2Qjr47Kwo9sjMYQNGY4IDJcaSv5z0Tlu4kccrFyABOpeqKhvI5FqYsK5eWxLmoN5nuzVDaVg37ST7+iTe6Ejomdywdvk2wzMMVx8XzGenaogHEkUgIjRINumckYL95gFSnyYBzc02JllES2JaWl3qr1Lg7YlOxeEQIMy++CbnCQpBbi8ApYArYNou083+rSbFhAKwQP68vl3GJINJKDoQCIyy5LKwrDIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I4jT3z3eoGyIX7qiGm4VyK5ShLGUDmzAVB8sztxAyGY=;
- b=A8jrsa7jMHyxk411WEBnCrkmB14J02+YzsvwGz71OgzanGgUFYtkD/miEq4NduTDCPfSHrctdY9ppiu7ikX48MG+9KXzGJXspbHPhkD/SSByhafPSmSJWU99MLhTDQPJ5FS3yiTaYJWtXCyr2h8qXw2Cs5cWbVhCFcVw9crNZTLCmGP0w68CNGWCcY5DldloDNtvyMPLFjop4JwLQOAO/3TKc2e3yt5BIZ5oORuGaw6HXOBI+Woo4aAl+btLFO6QJNA1Fzve7HQvDjJb0sY+EV5e9Go5nEm4sZkFXnxUkT8+nHLcO0hRGuqI2m4Jyzw3sx+d0QSHKUMLDQJ2k5sLhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- PH0PR84MB1669.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:171::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Fri, 2 Jun
- 2023 15:02:07 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2a07:1ac6:6523:8682]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2a07:1ac6:6523:8682%5]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
- 15:02:05 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-Thread-Topic: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-Thread-Index: AQHZk9PWKQUBcQjeO0mLSJz9z8PkXK90ljUAgAAVFxCAABXlgIABVANQgAAbQwCAAAmAAIABEPEA
-Date:   Fri, 2 Jun 2023 15:02:05 +0000
-Message-ID: <306CAF4C-214B-4BAD-B859-BAF6F43B2775@hpe.com>
-References: <20230531151918.105223-1-nick.hawkins@hpe.com>
- <20230531151918.105223-5-nick.hawkins@hpe.com>
- <07b2a2f7-5ddc-0f10-6b1f-184dc21fa580@roeck-us.net>
- <DM4PR84MB19274F575858CBCB2FA5C23E88489@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <b1d8f851-4e87-333c-229c-b9dc37ea3c40@roeck-us.net>
- <DM4PR84MB19273A008BB11589CEEF697188499@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <CACRpkdarJCSCif+r1e_jXbbAgv03OgGAO6pkW9x-yiYZJxdGeQ@mail.gmail.com>
- <8bd7d122-18b5-b9b4-0090-6344caf903fd@roeck-us.net>
-In-Reply-To: <8bd7d122-18b5-b9b4-0090-6344caf903fd@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.73.23052000
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|PH0PR84MB1669:EE_
-x-ms-office365-filtering-correlation-id: abefc885-2e51-4e88-cc6a-08db637a545a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lPBAAeaVqBEKKjAI5jFQn1cz5rK2THc1kcycVZOyCE93qnEDLqWdZMqOWLozNlhPFu2cLWOP9k2tyeEDPOzsgTUd4X364JM2crFqrkggmv3OuvYhCAi46e9xdO6yzZRImZN6Ok1FrznSGSeLlr91JeOR5lPdduL0G3PbYSa03zjN/X5i1gP4sgXAnMZuGUoq9kaLNCrWgNvsXQZuxYL8GmerEGJtQp/21RhJnTBbxXBZxlBL22HL2qM1jFeuoAHeNQYXpwF9LgXt9/MspT07KY73HJgk8bHtN7Kh9tmPBltlaXWGfYBStb8OaB1SFP9Y2fFEvOYutTvt9L1xAedcPOzl9fW0NSZ9nZverV9eZeSu3xVu7wbUJ3m5aGJDUiZAp4tEw6a0EVYAuklfMzW3u7DO4+wlahSBygIbL0g/UyZ4aacA4CeYxduUKoFtTPp2o0BXDsRv8awoDBZ2DCobmJGDt6SH05soJI2VBtIlbthIULHU8a9xhbLMRN540eSMekj6KVbk/ktc+GTrAtMyCeRlztWRI1vCLQHDHh8aqcG1fHImlQwA8Z6hFuzX3BNgNDPMyBWWvkAT06sYq39+1x4TGrq+SuFP7DicKHeynJ1Z/CuVjA5iOCo+y3jrBxP4rZL8LuhJ6nVzOUSczIYEbA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(346002)(136003)(396003)(376002)(451199021)(41300700001)(316002)(122000001)(6512007)(38070700005)(82960400001)(4326008)(71200400001)(33656002)(8676002)(2906002)(8936002)(6486002)(86362001)(2616005)(91956017)(76116006)(66946007)(64756008)(66556008)(66476007)(66446008)(36756003)(110136005)(54906003)(7416002)(6506007)(26005)(38100700002)(478600001)(5660300002)(186003)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzd5UG1TYldSK3ViU0xTS0h0aytVbFJ2SjJ5Zy9RQVVvKy9DaWowTlNCVGV2?=
- =?utf-8?B?N1hPV1BJcWpxaks4b0liSDc5K0N6TXdCNEtvYXRZQzFvVjV4RWpBeHY5VTNX?=
- =?utf-8?B?TUFBS25yWUpXK1pXZzhJTVM2c3lVd1NnY2tVMXYxM3VZZnBNZ3h0cWczZ2RF?=
- =?utf-8?B?amhWVFkwYXVNQnhGSWRRdlQ2ZE9ienMyeHE2UzdabGhWeHBGVVNuWjFCMHpT?=
- =?utf-8?B?enNuM2FVWEdLWjYzRStmM2JqNXJRMjlBamZDaGw2cTV5eHVhMmlWenViNHg0?=
- =?utf-8?B?a1N5SEpVV0NsVGtwa1RleTNpWExBa0QxN1QyT3Y1czJmU2xIcXc0WVppeHJW?=
- =?utf-8?B?RmVNcHZBVHlMOElRUEtvRlphYzF2bEZZdU1LYTR0b0MzR010U2VvLy9IUUJs?=
- =?utf-8?B?ZVlYcWpiYlV6b2hCdDZNS3VUdWExTytKbEdhZDN0NXRBTmpFWURPTS9pelNP?=
- =?utf-8?B?ZFhlbkhzajVhN1BsdVV6b3lEOVlJL0tOQTMrRkVKOTdJenM1eTFnbDJSTExY?=
- =?utf-8?B?RkY1R0t1amhVeHlUK1QvSkREcTQzQkNHZkJTcndQRnVCTDh5Y3dkakFtbkp5?=
- =?utf-8?B?ZWpuRFBMYjg0Q2ZoM1FKRVdKS0NOSzJwLzZEaGR4Umh1REVCeXVCNSt5M2pU?=
- =?utf-8?B?YTZNN2FIUTFTa1haZjFqdGlsWWN5MTYwVjBwMWc2SEd6U0pwOUlVVjVTN0tL?=
- =?utf-8?B?VERsTkxTTy9BRHJGbDh2RTVwd3FSTDA0SExFdnI4LzNVRWM2NkNmR0pKVVBt?=
- =?utf-8?B?amdWRVJlRXlOSitoamtNSlBtUDdkZzVFRU5FYytKY0RkMFRNNyt2bFNBNi9S?=
- =?utf-8?B?R1RCSjRCSkRqc21PYmFIV3MzV3dWK0ZnL2F6YllITmIySEVkU0VhVmsrVURm?=
- =?utf-8?B?TThNTWxibkdYbGhzNk5QM200aWVBc2k4NEV5d1JSUTFYSFM4QXZ1ay9tY2Jx?=
- =?utf-8?B?enZlUkV5YzhsSVcwL2lxNDdjVDBiVUUyUTFKNmFtak0rUDdaUU9wUzN3UFov?=
- =?utf-8?B?SVVCYkI2NjhMK2FHczZ2WStJUGZFQktCb1R3c3FrM0V0K3lRQ2xpbFlHdTFt?=
- =?utf-8?B?a2F0Nlc5cEJoMGVveWExcURwQ2hnV3AwZTRtM0xmcjRNSytQUHFMYUViRmlF?=
- =?utf-8?B?cm9BMFlzZklTVWczQ0wxL3pZcVR1Y012MlRIQjExUUdSSTNDV1V6WldoTElO?=
- =?utf-8?B?Z2IwWC9LQXdWem45cmpjamNDWFVIQ3dDck9UbFpMRjU3eFhvM20xcDNYY1U2?=
- =?utf-8?B?c08wYlhMcExNN2FNdlpiVGdPWTF3NHBCSjM4U3ZQVjg1bUdnRUNKc2MxUURh?=
- =?utf-8?B?azY1SlFvMTZSeGV3dis0aHRmRHdhdnlWb3RndmVpWVhoRUJSckZJK3d4cWh3?=
- =?utf-8?B?a2EvSU5BVTUzaDlaR1VnQit5a1hSb2RaaGlFMGxwd1BxVU1CbVYyaXdtbE1n?=
- =?utf-8?B?eUdLRTVsWXRyYXRZVG8xbktmNzlJemRxZGxuZjROQVRMS1BBbm9zL3JLb0VK?=
- =?utf-8?B?SXU2RHNRZkRycTEvd3hWRWVzN3BmYk5pNzU1bzRJSXB3b01HbS9uSUdlbVZt?=
- =?utf-8?B?cDkzcWovTENxSmhnY295UVhCMGRQdlJLWlhFbU5OL25ZR2t6YTcyNnQ4cVhi?=
- =?utf-8?B?dFhuN1ZZWkVJeUErMExpaENZdGRHTUxVWnVObXRINWZia0FCVFhyTG9tUE1J?=
- =?utf-8?B?bCtPZDZEQ2hKMld1NGF0RFZYM3Q2OWpROFBOZ0RHd2tNbzdoa0JsVXNMN3B2?=
- =?utf-8?B?KzNwVXoxT3hPMmFBYWJicTJxZzg3TmNRNTJwOXF2UkdlUmtncWNyTCtVdDNK?=
- =?utf-8?B?b000TTVqNWlwcjVxclVXRWdBTlJTTlhPaDVwWXhoTVovNzluYlJMei9nbnlJ?=
- =?utf-8?B?STJLVEd2TnYvWUZpTGxjVlFxOWlsa3pBdThHOWVaNU5QbzlhVjk2MmNyWVZx?=
- =?utf-8?B?N3ovR0xmLzRhNkVJcER0RUF4MHY1K3F5VjI5dHBUbVVUVHlYVUtnMXJod3Ns?=
- =?utf-8?B?RTRkRFRzWG1vdWM1SC81c1ZmUm1lbXJIWW81cVpoL2txTVJ2Z0lFWFJmTDJR?=
- =?utf-8?B?Zi8rZ2dmSkdBWjRpdGp5S0JzRGZaM3I4Q1JYOXpzbFRUTjcwaGRhRzB2THhj?=
- =?utf-8?Q?mCdqdG9nhOBOPOdNH7gADMnQ1?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1CC064DCE748954FB77418EFB2F5A632@NAMPRD84.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 2 Jun 2023 11:05:34 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F331B7;
+        Fri,  2 Jun 2023 08:05:30 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b02d0942caso10957255ad.1;
+        Fri, 02 Jun 2023 08:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685718330; x=1688310330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AVYp+0xRrABpA+nW/UL0wQT78NsGeWK/bJt+odq48Kw=;
+        b=SWtj/RivdDdkfH7W4UOFjyATb5ZvO+gXvdjEMUq2seQQ2xynVC2zodDPFqHrZnMmyA
+         kd4F2kJfKxmEhe05gfyFz71s/AftNNFk2jVlC9xVvnDG4+m1qirwtdgmnl9dZtVf/O/x
+         f4MErBuHDem0CQZo/3wUp1vgqyUOdDQxSFcJWhvshUhmO8dRa115KmSkMxt1xhTXy5Ou
+         3xKRl2Mw0qBgwFVipSfHgqLj/m9KZpUBNa6ARZz5gPf6sPapuNq1i31L8RJsqwdqj6fQ
+         PBE/aRyl16QS/yORG6eQWFez7HOaeASp0VWZ6tpp/lFBzV0NO5/JM1Go6eItan0VX01D
+         jVoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685718330; x=1688310330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AVYp+0xRrABpA+nW/UL0wQT78NsGeWK/bJt+odq48Kw=;
+        b=D2W3vLmAQ/YS2zdSvcYAlQYoxQOriFmJ9VnQFhlw2U/KKWFBsf42BSU17+wR3BK9cE
+         tbJxCQ6xD5mNd071eTG+MtNxfxiMyBjDKWfAR/QT+4gAiy6NeCWEMG+1GmL8WPHz5I+9
+         droao9m95pduQ8HXUIuin64vEsrRfVmbsBCDIFTrXX0zt1z2bOUYSdKBhydC1WAxFIqv
+         koIXjOyPoHLxgEqflWGF3hfOv32MpK81gfpQJWIzBcsaik4OPL6l1TzsfB3Dh+ZYq3OW
+         kUulUqVwHUABYCKfKG2CfTDdIpBIlFRm4G1fC59LZ8AmPxzoHh9Mn+3YfJvUR+CEA8VG
+         OTWw==
+X-Gm-Message-State: AC+VfDzWHSjCNFCVncSYUmNs/Hd2E9BrnYr+qogteWblxuEAROk192Ee
+        bJT0dCATP18D3N/zPFDVBUzzPTDC9LD8VrkJcdU=
+X-Google-Smtp-Source: ACHHUZ6hu3WaEIY/KGqCiqpllvClinnYMo4yqXbSBKsWFgY7OWcRmf8HOHpvyi1bSZIESaNssHBa4XOvHA8dj15DqWY=
+X-Received: by 2002:a17:903:2284:b0:1ae:dadc:ca2a with SMTP id
+ b4-20020a170903228400b001aedadcca2amr198815plh.57.1685718329571; Fri, 02 Jun
+ 2023 08:05:29 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: abefc885-2e51-4e88-cc6a-08db637a545a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jun 2023 15:02:05.5050
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 12xRCN8QUEH757OfbTyb0qIKwEWaywhJnygDt5DvJGNMFnBie/Sb2lif9xvn2z2HK0GihnFk716eNt4+zc3UjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR84MB1669
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: sg4EY7KK_84AJ2QaQwtob_6oNyfPvdt9
-X-Proofpoint-ORIG-GUID: sg4EY7KK_84AJ2QaQwtob_6oNyfPvdt9
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_11,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxlogscore=464 phishscore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020113
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230525125746.553874-1-aleksander.lobakin@intel.com>
+ <20230525125746.553874-4-aleksander.lobakin@intel.com> <8828262f1c238ab28be9ec87a7701acd791af926.camel@gmail.com>
+ <cb7d3479-63a5-31b4-355d-b12a7e1b2878@intel.com> <CAKgT0Ud204CiJeB-5zcTKdrv7ODrfP09t73CqRhps7g3qhWU5w@mail.gmail.com>
+ <d375fef9-43c4-9f2a-41c9-5247fcb3aa1e@intel.com>
+In-Reply-To: <d375fef9-43c4-9f2a-41c9-5247fcb3aa1e@intel.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Fri, 2 Jun 2023 08:04:53 -0700
+Message-ID: <CAKgT0Uc4UQ=PpVtjUAP=hjTDrWWkc79PeSwp39T6MSpo1ZyOag@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next v2 03/12] iavf: optimize Rx
+ buffer allocation a bunch
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        netdev@vger.kernel.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+IA0KPiA+IFRoaXMgY2FuIGJlIGRvbmUgc2V2ZXJhbCB3YXlzLCB0aGUgbW9zdCBzdHJhaWdo
-dC1mb3J3YXJkIGlzIG5vdGlmaWVycy4NCj4gPiBpbmNsdWRlL2xpbnV4L25vdGlmaWVyLmgNCj4g
-PiANCg0KDQo+IFRoaXMgaXMgYWxsIHVubmVjZXNzYXJ5LiBUaGUgaHdtb24gZHJpdmVyIGNvdWxk
-IHJlZ2lzdGVyIGEgZ3BpbyBwaW4sDQo+IGluY2x1ZGluZyBpbnRlcnJ1cHQsIGFuZCB0aGVuIHJl
-cG9ydCBzdGF0ZSBjaGFuZ2VzIHRvIHVzZXJzcGFjZSB3aXRoDQo+IHN5c2ZzIG9yIHVkZXYgZXZl
-bnRzIG9uIHRoZSByZWdpc3RlcmVkIGh3bW9uIHN5c2ZzIGF0dHJpYnV0ZXMuDQoNCg0KPiBJZiB0
-aGV5IHJlYWxseSB3YW50IHRvIHVzZSB1c2Vyc3BhY2UgZm9yIGV2ZXJ5dGhpbmcsIHRoZXkgc2hv
-dWxkDQo+IGp1c3QgdXNlIHVzZXJzcGFjZSBmb3IgZXZlcnl0aGluZyBhbmQgbm90IGJvdGhlciB3
-aXRoIGEga2VybmVsIGRyaXZlci4NCg0KR3JlZXRpbmdzIEd1ZW50ZXIgYW5kIExpbnVzLA0KDQpU
-aGFuayB5b3UgZm9yIHlvdXIgZmVlZGJhY2sgYW5kIGFzc2lzdGFuY2UuIEkgZGlzY3Vzc2VkIHRo
-aXMgd2l0aCBteQ0KdGVhbSBhbmQgdGhlIGRpcmVjdGlvbiB0aGV5IGFyZSBsZWFuaW5nIGlzIHRo
-YXQgdGhleSB3YW50IHRvIG93biB0aGUNCkdQSU9zIGluIHVzZXIgc3BhY2UuIFRoZSBmYW4gZHJp
-dmVyIGl0IHdvdWxkIHN0aWxsIG5lZWQgdG8gYmUgdXNlZA0KdG8gc2V0IGFuZCByZWFkIFBXTXMg
-YXMgdGhleSBhcmUga2VybmVsIHByb3RlY3RlZCByZWdpc3RlcnMuIEl0IHdpbGwNCmFsc28gbmVl
-ZCB0byBiZSB0aGVyZSB0byBjb29yZGluYXRlIHRoZSBwcm9wZXIgb2Zmc2V0IGluIHRoZSBHWFAN
-CnJlZ2lzdGVycyB0byBjb250cm9sIGEgcGFydGljdWxhciBmYW5zIFBXTS4NCg0KRm9yIGhvdCBw
-bHVnZ2FibGUgZGV2aWNlcyBzdWNoIGFzIGZhbnMgYW5kIHBzdSB0aGV5IHdpbGwgbmVlZCB0bw0K
-YmluZC91bmJpbmQgdGhlIGh3bW9uIGRyaXZlciBvZiB0aGUgZGV2aWNlIGFzIGl0IGlzIGluc2Vy
-dGVkL3JlbW92ZWQuDQoNCklzIHRoaXMgYW4gYWNjZXB0YWJsZSBwYXRoIGZvcndhcmQ/DQoNCklm
-IGl0IGlzIEkgd2lsbCByZXZpc2UgdGhpcyBwYXRjaHNldCBvbmNlIG1vcmUgdG8gbWFrZSB0aGUg
-ZmFuIGluZGVwZW5kZW50DQpvZiB0aGUgR1BJTyBkcml2ZXIuDQoNClRoYW5rcyBhZ2FpbiBmb3Ig
-YWxsIHRoZSBndWlkYW5jZSwNCg0KLU5pY2sgSGF3a2lucw0KDQo=
+On Fri, Jun 2, 2023 at 7:00=E2=80=AFAM Alexander Lobakin
+<aleksander.lobakin@intel.com> wrote:
+>
+> From: Alexander Duyck <alexander.duyck@gmail.com>
+> Date: Wed, 31 May 2023 10:22:18 -0700
+>
+> > On Wed, May 31, 2023 at 8:14=E2=80=AFAM Alexander Lobakin
+> > <aleksander.lobakin@intel.com> wrote:
+>
+> [...]
+>
+> >> But not all of these variables are read-only. E.g. NTC is often
+> >> modified. Page size was calculated per descriptor, but could be once a
+> >> poll cycle starts, and so on.
+> >
+> > Yeah, the ntc should be carried in the stack. The only reason for
+> > using the ring variable was because in the case of ixgbe we had to do
+> > some tricks with it to deal with RSC as we were either accessing ntc
+> > or the buffer pointed to by the descriptor. I think most of that code
+> > has been removed for i40e though.
+>
+> IAVF was forked off ixgbe as per Jesse's statement :D
+
+Yes, but point is they are forked off the same driver and this code
+has fallen a bit behind i40e. Really both should probably have been
+updated at the same time.
+
+The fact is everything since igb is more or less based on the same
+design. I just kept tweaking it as I moved from one driver to the
+next. So in terms of refactoring to use a common library you could
+probably go back that far without too much trouble. The only
+exceptions to all that are fm10k and igbvf which while being similar
+also have some significant design differences that might make it a bit
+more difficult.
+
+> [...]
+>
+> >>> Any specific reason for this? Just wondering if this is meant to
+> >>> address some sort of memory pressure issue since it basically just
+> >>> means the allocation can go out and try to free other memory.
+> >>
+> >> Yes, I'm no MM expert, but I've seen plenty of times messages from the
+> >> MM folks that ATOMIC shouldn't be used in non-atomic contexts. Atomic
+> >> allocation is able to grab memory from some sort of critical reservs a=
+nd
+> >> all that, and the less we touch them, the better. Outside of atomic
+> >> contexts they should not be touched.
+> >
+> > For our purposes though the Rx path is more-or-less always in
+> > interrupt context. That is why it had defaulted to just always using
+> > GFP_ATOMIC. For your purposes you could probably leave it that way
+> > since you are going to be pulling out most of this code anyway.
+>
+> That's for Rx path, but don't forget that the initial allocation on ifup
+> is done in the process context. That's what the maintainers and
+> reviewers usually warn about: to not allocate with %GFP_ATOMIC on ifups.
+
+I can see that for the static values like the queue vectors and rings,
+however for the buffers themselves, but I don't see the point in doing
+that for the regular buffer allocations. Basically it is adding
+overhead for something that should have minimal impact as it usually
+happens early on during boot when the memory should be free anyway so
+GFP_ATOMIC vs GFP_KERNEL wouldn't have much impact in either case
+
+> [...]
+>
+> >> The point of budget is to limit the amount of time drivers can spend o=
+n
+> >> cleaning their rings. Making skb the unit makes the unit very logical
+> >> and flexible, but I'd say it should always be solid. Imagine you get a
+> >> frame which got spanned across 5 buffers. You spend x5 time (roughly) =
+to
+> >> build an skb and pass it up the stack vs when you get a linear frame i=
+n
+> >> one buffer, but according to your logics both of these cases count as =
+1
+> >> unit, while the amount of time spent differs significantly. I can't sa=
+y
+> >> that's fair enough.
+> >
+> > I would say it is. Like I said most of the overhead is the stack, not
+> > the driver. So if we are cleaning 5 descriptors but only processing
+> > one skb then I would say it is only one unit in terms of budget. This
+> > is one of the reasons why we don't charge Tx to the NAPI budget. Tx
+> > clean up is extremely lightweight as it is only freeing memory, and in
+> > cases of Tx and Rx being mixed can essentially be folded in as Tx
+> > buffers could be reused for Rx.
+> >
+> > If we are wanting to increase the work being done per poll it would
+> > make more sense to stick to interrupts and force it to backlog more
+> > packets per interrupt so that it is processing 64 skbs per call.
+>
+> Oh, I feel like I'm starting to agree :D OK, then the following doesn't
+> really get out of my head: why do we store skb pointer on the ring then,
+> if we count 1 skb as 1 unit, so that we won't leave the loop until the
+> EOP? Only to handle allocation failures? But skb is already allocated at
+> this point... <confused>
+
+The skb is there to essentially hold the frags. Keep in mind that when
+ixgbe was coded up XDP didn't exist yet.
+
+I think there are drivers that are already getting away from this,
+such as mvneta, by storing an xdp_buff instead of an skb. In theory we
+could do away with most of this and just use a shared_info structure,
+but since that exists in the first frag we still need a pointer to the
+first frag as well.
+
+Also multi-frag frames are typically not that likely on a normal
+network as most of the frames are less than 1514B in length. In
+addition as I mentioned before a jumbo frame workload will be less
+demanding since the frame rates are so much lower. So when I coded
+this up I had optimized for the non-fragged case with the fragmented
+case being more of an afterthought needed mostly as exception
+handling.
+
+> [...]
+>
+> >>> What is the test you saw the 2% performance improvement in? Is it
+> >>> something XDP related or a full stack test?
+> >>
+> >> Not XDP, it's not present in this driver at this point :D
+> >> Stack test, but without usercopy overhead. Trafgen bombs the NIC, the
+> >> driver builds skbs and passes it up the stack, the stack does GRO etc,
+> >> and then the frames get dropped on IP input because there's no socket.
+> >
+> > So one thing you might want to look at would be a full stack test w/
+> > something such as netperf versus optimizing for a drop only test.
+> > Otherwise that can lead to optimizations that will actually hurt
+> > driver performance in the long run.
+>
+> I was doing some netperf (or that Microsoft's tool, don't remember the
+> name) tests, but the problem is that usercopy is such a bottleneck, so
+> that you don't notice any optimizations or regressions most of time.
+> Also, userspace tools usually just pass huge payload chunks and then the
+> drivers GSO them into MTU-sized frames, so you always get line rate and
+> that's it. Short frames or interleave/imix (randomly-mix-sized) are the
+> most stressful from my experience and are able to show actual outcome.
+
+That is kind of what I figured. So one thing to watch out for is
+stating performance improvements without providing context on what
+exactly it is you are doing to see that gain. So essentially what we
+have is a microbenchmark that is seeing the gain.
+
+Admittedly my goto used to be IPv4 routing since that exercised both
+the Tx and Rx path for much the same reason. However one thing you
+need to keep in mind is that if you cannot see a gain in the
+full-stack test odds are most users may not notice much of an impact.
+
+> >
+> >>>
+> >>>> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> >>>
+> >>> Also one thing I am not a huge fan of is a patch that is really a
+> >>> patchset onto itself. With all 6 items called out here I would have
+> >>> preferred to see this as 6 patches as it would have been easier to
+> >>> review.
+> >>
+> >> Agree BTW, I'm not a fan of this patch either. I wasn't sure what to d=
+o
+> >> with it, as splitting it into 6 explodes the series into a monster, bu=
+t
+> >> proceeding without it increases diffstat and complicates things later
+> >> on. I'll try the latter, but will see. 17 patches is not the End of Da=
+ys
+> >> after all.
+> >
+> > One thing you may want to consider to condense some of these patches
+> > would be to look at possibly combining patches 4 and 5 which disable
+> > recycling and use a full 4K page. It seems like of those patches one
+> > ends up redoing the other since so many of the dma_sync calls are
+> > updated in both.
+>
+> Or maybe I'll move this one into the subsequent series, since it's only
+> pt. 1 of Rx optimizations. There's also the second commit, but it's
+> probably as messy as this one and these two could be just converted into
+> a series.
+>
+> [...]
+>
+> >>> Just a nit. You might want to break this up into two statements like =
+I
+> >>> had before. I know some people within Intel weren't a huge fan of whe=
+n
+> >>> I used to do that kind of thing all the time in loops where I would d=
+o
+> >>> the decrement and test in one line.. :)
+> >>
+> >> Should I please them or do it as I want to? :D I realize from the
+> >> compiler's PoV it's most likely the same, but dunno, why not.
+> >
+> > If nobody internally is bugging you about it then I am fine with it. I
+> > just know back during my era people would complain about that from a
+> > maintainability perspective. I guess I got trained to catch those kind
+> > of things as a result.
+>
+> Haha understand. I usually say: "please some good arguments or I didn't
+> hear this", maybe that's why nobody complained on `--var` yet :D
+
+Either that or they were already worn down by the time you started
+adding this type of stuff.. :)
+
+The one I used to do that would really drive people nuts was:
+    for (i =3D loop_count; i--;)
+
+It is more efficient since I don't have to do the comparison to the
+loop counter, but it is definitely counterintuitive to run loops
+backwards like that. I tried to break myself of the habit of using
+those sort of loops anywhere that wasn't performance critical such as
+driver init.
+
+> [...]
+>
+> >> Yes, I'm optimizing all this out later in the series. I was surprised
+> >> just as much as you when I saw skb getting passed to do nothing ._.
+> >
+> > The funny part for me is that it is like reviewing code written via a
+> > game of telephone. I recognize the code but have to think about it
+> > since there are all the bits of changes and such from the original
+> > ixgbe.
+>
+> Lots of things are still recognizable even in IDPF. That's how this
+> series was born... :D
+
+Yep, now the question is how many drivers can be pulled into using
+this library. The issue is going to be all the extra features and
+workarounds outside of your basic Tx/Rx will complicate the code since
+all the drivers implement them a bit differently. One of the reasons
+for not consolidating them was to allow for performance optimizing for
+each driver. By combining them you are going to likely need to add a
+number of new conditional paths to the fast path.
+
+
+> >
+> >> [...]
+> >>
+> >> Thanks for the detailed reviews, stuff that Intel often lacks :s :D
+> >
+> > No problem, it was the least I could do since I am responsible for so
+> > much of this code in the earlier drivers anyway. If nothing else I
+> > figured I could provide a bit of history on why some of this was the
+> > way it was.
+> These history bits are nice and interesting to read actually! And also
+> useful since they give some context and understanding of what is
+> obsolete and can be removed/changed.
+
+Yeah, it is easiest to do these sort of refactors when you have
+somebody to answer the "why" of most of this. I recall going through
+this when I was refactoring the igb/ixgbe drivers back in the day and
+having to purge the dead e1000 code throughout. Of course, after this
+refactor it will be all yours right?.. :D
