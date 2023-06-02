@@ -2,154 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F347072059A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42D7720507
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236505AbjFBPLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S236312AbjFBO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236447AbjFBPLm (ORCPT
+        with ESMTP id S235281AbjFBO6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:11:42 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EF410E4
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 08:11:15 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-650c89c7e4fso1952895b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 08:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1685718662; x=1688310662;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YrYBSW8qeXE8L8yfvdl8QinykFnJTuk07/XjwMoUeVE=;
-        b=qu93yN+BiKoQR/bKXLpg56UTzaPfupYXZkwPAS/SM4sV/8V5hm62649tjUEpGP7YLW
-         CTcl/91RCAuHjZlaVLKPhSq1JgbIhQ88RkyebHa/Ru9bQcq3orZF1/Phc0RHYqyK/txS
-         4ygVpr4xdpOMgj96fS+DTrwY+vc2+sSk+p2eCCsYHGJhDaUmbzM5QUrHanNekHFnbv64
-         kVnW8lRrLFGxezD/kIDCpKMfjO4phXPEtYQqJ0Qk1ZhLZ2WB0wNNOfrbrlUgTZGsFWPc
-         AMGr7p26DJUfKXi09NOnK2bbdSdhTPsoLDw+CouGXT0eMAERoW7PF+x7a4qOBxCsePKu
-         IJmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685718662; x=1688310662;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YrYBSW8qeXE8L8yfvdl8QinykFnJTuk07/XjwMoUeVE=;
-        b=kTiOZi3H7tvfxMLVNGiyNenDkcru6hQxb7wubNVRbnWGgQsBjt/CBYpre93PiWJWbd
-         gvXL7aztvHQ6Qj4hTP7zdGfB6ouAxmlYAPWw1p8UPKHPbEmoDLM0FKrwqsWAyB36cXLq
-         8zMlMM0TRl+AG25BfPJbPnyESyi/vIsSMo9NezZziWM10mi6y1GHnzow7x8clDaS7TQB
-         ympGNPB4gO2xglHv/Sr6CdeDVYqmhtmUF23lGLp54MCunuiA2A64h25xYHBOA+/Aadjg
-         sgZpnMA6oVSsW5y+kW9yFVISfgMJeSqHIhFmOF8r1X7Y/Hyc+E6JWrereZUlnm4RSAsc
-         K+oA==
-X-Gm-Message-State: AC+VfDxF7HsoohOfaByoC2cFAxfJJeDAebXAudqhJ3Am0IWBhHC/DOt5
-        s68yBYmR0l1UD/amnoS5bdM6LQ==
-X-Google-Smtp-Source: ACHHUZ5lq868GyrBxPLkEgZi3NcLZ0qAOyZwshzbl/Lk7FSKdcWKA6GQThH1Jum2CNXd5wP4XzABMA==
-X-Received: by 2002:a05:6a00:88d:b0:64f:5406:d59e with SMTP id q13-20020a056a00088d00b0064f5406d59emr17852377pfj.17.1685718662535;
-        Fri, 02 Jun 2023 08:11:02 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id n12-20020a62e50c000000b00634a96493f7sm1114822pff.128.2023.06.02.08.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 08:11:02 -0700 (PDT)
-In-Reply-To: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
-References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
-Subject: Re: (subset) [PATCH V6 00/21] Add basic ACPI support for RISC-V
-Message-Id: <168571787727.17224.6663458864222960682.b4-ty@rivosinc.com>
-Date:   Fri, 02 Jun 2023 07:57:57 -0700
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Sunil V L <sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 2 Jun 2023 10:58:46 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C398123;
+        Fri,  2 Jun 2023 07:58:45 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 070103200988;
+        Fri,  2 Jun 2023 10:58:42 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Fri, 02 Jun 2023 10:58:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1685717922; x=1685804322; bh=7Y8TYqKsacvY7VA7C8WB1Ns1VO8mVvWK0oP
+        LQKlkwpY=; b=U2O4apWWA78FWG18DmouAFIXOcjKL1zzAONdy5E19Ecz5AJWQVo
+        ZfEmysg8/mpFe9/XZKuYQDl4J0+qe+ecyipDLcJr49zaQYOGvh8LC3/843mutNqs
+        babtnAWMtzbh6VjCsCkyp5KhteW5Y3kpgWQ2tOmycki/hMW+Taw3T8VoZNQDDaWJ
+        PFqDUtjLiw48ap0zFONMpe1Lb2wdCwTcNfd6Mx7pP0UNWeI7TRwL9bdLGxOlqpGP
+        JcxIdQ6KB1fQQrF/smcIWWkO6PLVQvSe0DWXfGRRW01qR///LKXdCRNW3x19lFHp
+        cPgTdTxy4i38sUrVX7QQeW983s8JfsSemgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685717922; x=1685804322; bh=7Y8TYqKsacvY7VA7C8WB1Ns1VO8mVvWK0oP
+        LQKlkwpY=; b=IkfmjnJN7+ffhqNEzf82XaUnTtXhgiYgbGn27+u1No8BrLxXfKL
+        YcoNLAZv9BNAiMhCK+Amsb7x+RZhjJoJWXq+IuVPC7V8Ix/KvTSzi5CBASieRlUw
+        YjViTSA1qyCk5AZQCRf8DXq237LBVcNt92UahVZP8amOgw8bZfmqwnehF7OiK7aJ
+        1tvFRBHx75NJBQyBwncCCm0BzPYI/OO0VblnLjzMv6kKrTMKEH3suz26g5qOKMcK
+        BYmA+yBce0W/ZAx6D9Fp6kFVcA9nn5JuXzL4X/xIMMgVV4CPDKAbvs2EcEfwvx7R
+        NqUz+i+psGMTS8CvJUjAfv5laQZdtzVqEXg==
+X-ME-Sender: <xms:ogN6ZH2r_h08YjMo8lrAVGc9e3T0AF9t0FKogfvEZVKtscWx2Rm6qg>
+    <xme:ogN6ZGFus1iBNtYfFyH7eydTZkiGwX2X8q1Rsnl1-9Has84NCpZ9nOJ60MQ1JIKt3
+    ZWGK_QGY5Tfr8YLs4g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelfedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfo
+    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
+    gsrdgtrgeqnecuggftrfgrthhtvghrnhephfefgedufeetgfetlefgkefgvdejleelvefg
+    hfejfffhtdeitdejfeekvdeugfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgt
+    rg
+X-ME-Proxy: <xmx:ogN6ZH59XdDijpxPzMXizdaeZT0q5WXKJlFkxwJBB9DRtCGjQ_NAUQ>
+    <xmx:ogN6ZM0Ome8_BxF6WRmgp4Xun-s-GyChH9CHfTt11RHLdTmYCpWdZA>
+    <xmx:ogN6ZKE_ty6pZYJaKh7tqCplCeX2OPQcaIE68KsmGtDDAQxaKhkKCg>
+    <xmx:ogN6ZPQ_NMSPs-gtj1PCJocu1LnLww-TSQMzJeok0J_m97CYmRNO8Q>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 59814C60091; Fri,  2 Jun 2023 10:58:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <3dda4d38-ef79-403c-a233-a8cf774edfd2@app.fastmail.com>
+In-Reply-To: <bec3684e-d9d1-d88b-846a-46a1fc481ffb@linux.intel.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
+ <20230601200552.4396-8-mpearson-lenovo@squebb.ca>
+ <bec3684e-d9d1-d88b-846a-46a1fc481ffb@linux.intel.com>
+Date:   Fri, 02 Jun 2023 10:58:21 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     "Hans de Goede" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 8/8] platform/x86: think-lmi: Don't display unnecessary
+ authentication settings
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 2, 2023, at 7:12 AM, Ilpo J=C3=A4rvinen wrote:
+> On Thu, 1 Jun 2023, Mark Pearson wrote:
+>
+>> If Opcode support is available (which is the standard for all platfor=
+ms
+>> going forward) then there is no need to have the encoding and kbdlang
+>> attributes visible.
+>>=20
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>
+> Thanks a lot, the patches look good now. One small thing for future: n=
+ext=20
+> time, try to arrange a series such that the patches with Fixes tags ar=
+e=20
+> the first patches, in here I think it's not a big deal since 2/8 doesn=
+'t=20
+> seem to conflict with 3/8.
+>
+Ah - OK, thanks for the note, I didn't know that.
 
-On Mon, 15 May 2023 11:19:07 +0530, Sunil V L wrote:
-> This patch series enables the basic ACPI infrastructure for RISC-V.
-> Supporting external interrupt controllers is in progress and hence it is
-> tested using poll based HVC SBI console and RAM disk.
-> 
-> The first patch in this series is one of the patch from Jisheng's
-> series [1] which is not merged yet. This patch is required to support
-> ACPI since efi_init() which gets called before sbi_init() can enable
-> static branches and hits a panic.
-> 
-> [...]
+> For all patches 1-8:
+>
+> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+>
 
-Applied, thanks!
-
-[01/21] riscv: move sbi_init() earlier before jump_label_init()
-        https://git.kernel.org/palmer/c/24fc18087f42
-[02/21] platform/surface: Disable for RISC-V
-        https://git.kernel.org/palmer/c/7f2e20459b28
-[03/21] crypto: hisilicon/qm: Fix to enable build with RISC-V clang
-        https://git.kernel.org/palmer/c/fbb995a7b27c
-[04/21] ACPI: tables: Print RINTC information when MADT is parsed
-        https://git.kernel.org/palmer/c/4d02d88d2b92
-[05/21] ACPI: OSL: Make should_use_kmap() 0 for RISC-V
-        https://git.kernel.org/palmer/c/214c236223b8
-[06/21] RISC-V: Add support to build the ACPI core
-        https://git.kernel.org/palmer/c/a91a9ffbd3a5
-[07/21] ACPI: processor_core: RISC-V: Enable mapping processor to the hartid
-        https://git.kernel.org/palmer/c/8b7809e28952
-[08/21] RISC-V: Add ACPI initialization in setup_arch()
-        https://git.kernel.org/palmer/c/724f4c0df766
-[09/21] RISC-V: ACPI: Cache and retrieve the RINTC structure
-        https://git.kernel.org/palmer/c/f99561199470
-[10/21] drivers/acpi: RISC-V: Add RHCT related code
-        https://git.kernel.org/palmer/c/e6b9d8eddb17
-[11/21] RISC-V: smpboot: Create wrapper setup_smp()
-        https://git.kernel.org/palmer/c/61946127ab49
-[12/21] RISC-V: smpboot: Add ACPI support in setup_smp()
-        https://git.kernel.org/palmer/c/ce92546cd637
-[13/21] RISC-V: only iterate over possible CPUs in ISA string parser
-        https://git.kernel.org/palmer/c/914d6f44fc50
-[14/21] RISC-V: cpufeature: Add ACPI support in riscv_fill_hwcap()
-        https://git.kernel.org/palmer/c/396c018332a1
-[15/21] RISC-V: cpu: Enable cpuinfo for ACPI systems
-        https://git.kernel.org/palmer/c/0b144c818989
-[16/21] irqchip/riscv-intc: Add ACPI support
-        https://git.kernel.org/palmer/c/7023b9d83f03
-[17/21] clocksource/timer-riscv: Refactor riscv_timer_init_dt()
-        https://git.kernel.org/palmer/c/cd12d206685a
-[18/21] clocksource/timer-riscv: Add ACPI support
-        https://git.kernel.org/palmer/c/21f4f92410dc
-[19/21] RISC-V: time.c: Add ACPI support for time_init()
-        https://git.kernel.org/palmer/c/714aa1d1c8ca
-[20/21] RISC-V: Enable ACPI in defconfig
-        https://git.kernel.org/palmer/c/0b8e15ca0082
-
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
-
+Many thanks
+Mark
