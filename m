@@ -2,158 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC786720628
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68448720632
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236793AbjFBP1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S236601AbjFBPaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236722AbjFBP1j (ORCPT
+        with ESMTP id S235457AbjFBPaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:27:39 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E95A170A;
-        Fri,  2 Jun 2023 08:27:10 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 861935C0107;
-        Fri,  2 Jun 2023 11:27:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 02 Jun 2023 11:27:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685719628; x=1685806028; bh=EA
-        n509B42z4RvrXjkGuSHFSke8zfjodcTwhfhG1xSoQ=; b=MLGBdaGhzZiVYaNICr
-        q9ianAiGmqejNg9pm7QFamLBy5qiYeqW/vJXKV1wf67fKYEl2WF34QojYxL5XTwp
-        mXKgdnj3MwroNZuBRgWCmcw332bI5FHG96JmFXV5+nWQ8kKDnLdHpFPgtUmTTnOm
-        FJVY14ATK+f1YKMb4KEY8GO5QL+mwwzqOSFPtbTzTfdGVL7x2aK4Q1rxzDGsYOXh
-        zegp5M7H49Tpon6SBm2P04tncdD8tLNNvlmyGCErH0tAZpQLBPtUFOMAAo/L3bOa
-        7Lu7QLCwXkNXlu0VjVq8POE02RYQEmb5QoS8jUfCMRv28hBTpl9ceHaqnjdetwYK
-        LJWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685719628; x=1685806028; bh=EAn509B42z4Rv
-        rXjkGuSHFSke8zfjodcTwhfhG1xSoQ=; b=GgG+/rYDns3+9qvAfUByIbOhe5Ljn
-        wYtsPmlwcT4TdOyfoHmiGywqQhI8uBAKOAjHbd8cKzvUmbe4QD3ZH9Q8QqMmp8AG
-        2QxnrK5363OQZP3vL+cb7bPZHXVqsMr2SuRb6zMWHq6x9z7JAuE58GDGI9j0CqA/
-        /RGlEztBp30bUPVwGf+Y7yOZOMhGTEn05NOsLdJKPW9Q5FKlZ7j7JSjnMTofVG0E
-        PBUUT/wDH6kjtYHv4BJc21Qvs0k0CngXgYRhKnAlNbTACEwbj+AVsrHyzzZkdQ60
-        ksdWsn6k1zRLTxqtZh38oEky/o6mfHvTrejRR8yU1QgU5Qbtoa0ZKIw+Q==
-X-ME-Sender: <xms:Swp6ZCcsAcapujBwFFSXjO5yJJm6I7O3Tzwf-eK4n3dSsvLG7i0E-g>
-    <xme:Swp6ZMPyFCqg4jhArYoWmvZrcPHDbt7w5_8lGUfhTVo75aaRQYoFrvHcOG4OTBAtn
-    HofupmBKPNHaBqbG4U>
-X-ME-Received: <xmr:Swp6ZDjnKpoQgG28oUaXDmuSs8UNAkTUh_oE_7a6pxVg9g17iCIgaeGOvcNd--D54toZRE559gfd40PmXcX4NA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelfedgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
-    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:Swp6ZP8uhCzybm2gKzMxQJ89yCGIc9kiAGgvVx0rPJ37BYLSuQIBtA>
-    <xmx:Swp6ZOvg2GdcjEd8IaaY-d4T8dvwsRJC7lp-zAfsjYGh-yjwsqfz0w>
-    <xmx:Swp6ZGGC9bSxhERi_Kr3ppNjltPwDUppPYp0O8gtIQ9u09dZgKJWcg>
-    <xmx:TAp6ZAWg2_SO1jtQp4YCiVZ1wcwcCOH4uMFif_MDhzdNTAj_I5slug>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Jun 2023 11:27:07 -0400 (EDT)
-Date:   Fri, 2 Jun 2023 17:27:05 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] drivers: base: Add tests showing devm handling
- inconsistencies
-Message-ID: <aix7tdvpegbkfe3okbrxu6phk7gnzfttrkmomocwofi5kkoaqz@25oaumodlg7j>
-References: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
- <wiej2vps6uhozcpxeye3xfgpnlvxcbaek73px36f4jsef3e77p@ewcsmzrxzhsi>
- <2023053137-leggings-grumbly-a33a@gregkh>
+        Fri, 2 Jun 2023 11:30:23 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C33118C;
+        Fri,  2 Jun 2023 08:30:22 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-64d57cd373fso2601142b3a.1;
+        Fri, 02 Jun 2023 08:30:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685719822; x=1688311822;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPKdSeegJ1AjrJW7LMNG9qtOmBvErTcO60Kp9uoBAUo=;
+        b=B9ra3mj7DImeWz7UQ+7vlYszdhQQs67FppTsNnLFkwnf6zcN+f/+YYvcQEBbavjksc
+         6C4V7ZL67thxgkK1CLQWaft5aLBIMLqkx1WEUDtfxZM5bK4dDr7Y6zT+TGq5j3EuicRK
+         I84BVKgeCstctHErojGZ3hz3EGQ9YNVrgc34FK3Vo853KRAKiD2SnNr1MvXG9w8iKA14
+         9wedDXR8YdEJgCfj1ciQZbZs9eihPJUeQmsQEGenrNl/fODUtePpaeMJebMwuI9P8Gab
+         dABxyhqq1RWjgyZoiPYHp1LDGFvupZPW/BTMNPip2y7S8BrP5JuBtnOEc3Zdn985GuZH
+         Ffnw==
+X-Gm-Message-State: AC+VfDyrwkXynhhzH2a59n+gWyesSJblk2LgcY9igrFjbDIq2meFQF6I
+        jv9zSfhg2hp2/JZ83suS8VY=
+X-Google-Smtp-Source: ACHHUZ6t+PZGDb1tlOYRkSVMTfB+/8WJ1iwPlQA6V89bTxaoWefn2zm47DGjvtayj0rFawrAfWDGbA==
+X-Received: by 2002:a17:902:e9d5:b0:1b0:56cf:b89d with SMTP id 21-20020a170902e9d500b001b056cfb89dmr152512plk.12.1685719821515;
+        Fri, 02 Jun 2023 08:30:21 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902904500b001ae365072cfsm1508558plz.219.2023.06.02.08.30.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 08:30:21 -0700 (PDT)
+Message-ID: <7b553268-69d3-913a-f9de-28f8d45bdb1e@acm.org>
+Date:   Fri, 2 Jun 2023 08:30:19 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4a5e5qpdgsdrrqyo"
-Content-Disposition: inline
-In-Reply-To: <2023053137-leggings-grumbly-a33a@gregkh>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6] scsi: core: Wait until device is fully resumed before
+ doing rescan
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     dlemoal@kernel.org, bblock@linux.ibm.com, acelan.kao@canonical.com,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230602084956.1299001-1-kai.heng.feng@canonical.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230602084956.1299001-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/2/23 01:49, Kai-Heng Feng wrote:
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index d217be323cc6..092f37464101 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1621,6 +1621,11 @@ void scsi_rescan_device(struct device *dev)
+>   {
+>   	struct scsi_device *sdev = to_scsi_device(dev);
+>   
+> +#ifdef CONFIG_PM_SLEEP
+> +	if (dev->power.is_suspended)
+> +		wait_for_completion(&dev->power.completion);
+> +#endif
+> +
+>   	device_lock(dev);
+>   
+>   	scsi_attach_vpd(sdev);
 
---4a5e5qpdgsdrrqyo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Directly accessing dev->power.completion from the SCSI core seems like a 
+layering violation to me. Isn't this an object that should only be 
+accessed directly by the device driver power management core? 
+Additionally, what guarantees that the desired power state has been 
+reached after wait_for_completion(&dev->power.completion) has finished?
 
-On Wed, May 31, 2023 at 08:20:13PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Apr 17, 2023 at 06:12:26PM +0200, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > On Wed, Mar 29, 2023 at 08:38:30PM +0100, Maxime Ripard wrote:
-> > > Hi,
-> > >=20
-> > > This follows the discussion here:
-> > > https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnf=
-wb@houat/
-> > >=20
-> > > This shows a couple of inconsistencies with regard to how device-mana=
-ged
-> > > resources are cleaned up. Basically, devm resources will only be clea=
-ned up
-> > > if the device is attached to a bus and bound to a driver. Failing any=
- of
-> > > these cases, a call to device_unregister will not end up in the devm
-> > > resources being released.
-> > >=20
-> > > We had to work around it in DRM to provide helpers to create a device=
- for
-> > > kunit tests, but the current discussion around creating similar, gene=
-ric,
-> > > helpers for kunit resumed interest in fixing this.
-> > >=20
-> > > This can be tested using the command:
-> > > ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/base/test/
-> > >=20
-> > > Let me know what you think,
-> > > Maxime
-> > >=20
-> > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >=20
-> > Is there any news on this?
->=20
-> Can you resend, last I saw the kernel test robot had a problem, which
-> causes any patch series like that to be ignored by me.
+I think we need another solution. The device_lock() and device_unlock() 
+calls have been introduced by commit e27829dc92e5 ("scsi: serialize 
+->rescan against ->remove"). I think there are other ways to serialize
+scsi_rescan_device() against scsi_remove_device(), e.g. via 
+host->scan_mutex. Is this something that has been considered?
 
-Yeah, this was due to .kunitconfig being ignored by .gitignore, which
-triggers a warning for the bot.
+Thanks,
 
-It's now fixed (at least in next), and I just resent the patches
-
-Thanks!
-Maxime
-
---4a5e5qpdgsdrrqyo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZHoKSQAKCRDj7w1vZxhR
-xXI0AP92qZlvkY6tZTf/o96Lk7z7mgalTkrKk3lDwB+Y2+jYnAEA/uqb5/rYKIDu
-y4MSGyib4QSms9nvdN7YIC53SV364wQ=
-=m7wS
------END PGP SIGNATURE-----
-
---4a5e5qpdgsdrrqyo--
+Bart.
