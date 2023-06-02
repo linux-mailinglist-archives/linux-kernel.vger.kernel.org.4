@@ -2,117 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963447206D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE997206E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236386AbjFBQHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S236375AbjFBQJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236543AbjFBQHi (ORCPT
+        with ESMTP id S236481AbjFBQJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:07:38 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFAA1B7
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:07:33 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-974638ed5c5so138267066b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:07:33 -0700 (PDT)
+        Fri, 2 Jun 2023 12:09:22 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0611B3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:09:20 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-256563a2097so945758a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:09:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685722051; x=1688314051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pSyIWuON41xIpPsAfkdJjA0fkmYqrGMTTzJNJtvl1ho=;
-        b=Vfh0HBQP9WOsPk/09//1NgyAMTU3HloZI1+GuAjqp7Fz2sCHJT3TJDGpnjaenHHbm0
-         UUZ8MzC5kEuRRtA9XkhfAaN3TrUXjYS6ZQtW2KsYAjAW4haZVnfVVP74giz+deURrLFv
-         3AoYjMY0jdGEkHl0URpi1IWo8dzeCJVXNWmhE=
+        d=google.com; s=20221208; t=1685722160; x=1688314160;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CrBznNpfIektl+0F56DGUskRV9SVRyyJJNGSAgJCWsU=;
+        b=b0EK5EkQAvUbJd/5CI9JmaBA2AcS63I/nUtDpTen2VS8L6qUHg6hJhg/pSoRsKwY4v
+         4zc/VohGEqRAQaxYJ8s5Q2wlDDmC09ip4PGnO085kJMhMWxl9YRHBs93r34YaRgw4pZ1
+         huwuhwxN1DFxBu/3v8+NwObO937gaBYARAS9sxQSrfflMOhQ8yJa+YtpjeBho/o4y8iI
+         9xCfS18WMita6JT6dnI49ZMdliDI9SVor79yYAeB5DCtqlu7a26jmHwHKghM4bNAYrAD
+         e0AM/+ZNxKbH+7lx5Q1/kxruJPXl4BFhClRg34UJpUKntukQdSbuPskeuSipMWVufF4z
+         6C+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685722051; x=1688314051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pSyIWuON41xIpPsAfkdJjA0fkmYqrGMTTzJNJtvl1ho=;
-        b=Vp/Kjscg/ej+LVcKyBU5JpgHwHDzQVqKinHXeiCr0oaJbbMCZWN2+/BxYkrEGQ7E+M
-         Oa6oGaIMrzlJQy4tar1lXZc/yoQTVCddXWFyTMcIqOCcGvNTsj1wwefFEGmN4EGqoCtW
-         jZl3VFPFp9GJpJMcFvjgaN3FkNpaLrNrR3bz9yhDppn5IesZug6ldd2WRvDO0w31SDXA
-         A8LK1aEY8ocuRHAOV9Tx06udQQHsx4QZjvaHaqFrJSKmu3FdadTExCAyZG4AV0m+KaE+
-         E3AQvS/6B1/eq2f5MdYoM0VbwmIHAD666KqkBh1jHRiB3mfSk+Iyf7aIwNRxi7LyOmgk
-         QRvQ==
-X-Gm-Message-State: AC+VfDw+9q2S8m356QMX1tEKGnCGiXcw3HzQ0MUcA6fiFE/yysNym6B9
-        5C5XbmbiOHv9wG6Dyzpd+jWb/RPcJCwVdioiV+jVdVuv
-X-Google-Smtp-Source: ACHHUZ5XcQnLEFvz8kZuRsmUm4pSQ3y2t86BG/Hxm3YL/vJ5OjWJyicucLZYnI7p0gCHsy5Xoa70NA==
-X-Received: by 2002:a17:907:168d:b0:976:a0b2:bf0a with SMTP id hc13-20020a170907168d00b00976a0b2bf0amr207100ejc.7.1685722051743;
-        Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id dk23-20020a170906f0d700b009746394662asm782626ejb.53.2023.06.02.09.07.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96fab30d1e1so482562166b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:07:31 -0700 (PDT)
-X-Received: by 2002:aa7:c0ce:0:b0:516:2dcf:d027 with SMTP id
- j14-20020aa7c0ce000000b005162dcfd027mr2836164edp.10.1685722030936; Fri, 02
- Jun 2023 09:07:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org> <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com> <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com> <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org> <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
- <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org> <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
-In-Reply-To: <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 2 Jun 2023 12:06:54 -0400
-X-Gmail-Original-Message-ID: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
-Message-ID: <CAHk-=whwFoC30zoTfsQAvkDRvgMCovwKGW_R1PPnqiF+YemcOA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
+        d=1e100.net; s=20221208; t=1685722160; x=1688314160;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CrBznNpfIektl+0F56DGUskRV9SVRyyJJNGSAgJCWsU=;
+        b=VIQr3gBdEUeZtivNniLJuZIvXkDL0vUI1/1njgNbMmNCnDcOAbLJB9qnD53LT8oysS
+         CBQo1Gtf9qY0TU8TGRavXYGPYAQs/Qxpt8KClOQZJWbf8tA4N/GuUbc6q+a9k2lsfnDT
+         1Z3E5kreBu5nw6/i0sPNI94hlhfPPiwhXlsFssGNkkF5+Ck0ezb3XaxSGj81BLdxOJV/
+         njdCLFld6Mp3KAvfiju+MmAAjfV+GOK5ciqkVAqaBpTHpEpQamGoaUxfi9dWnBdefdCG
+         q7nxhO6KdJuY+azadyHRRftaYfEOpockgJzs30fMAoCQvmG0iAnel51sVg7eSlyhST8O
+         3rJQ==
+X-Gm-Message-State: AC+VfDzDsWrMKbrRLA1sESE6hQ/yullpukPTbnpFJFltBLdgjohx0Qo+
+        GiOGxwBtFIwmqyplxUyCjsVTxLJSeqp0
+X-Google-Smtp-Source: ACHHUZ5ZGxbo+gkDx4JqKh+NeWoLt4VdzZkYMyMMkIG5LjQfWBJtHb0cBRHXtDUdDevPcUhc5Nq9rRO9T/h3
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a17:902:eac5:b0:1b1:7e1e:5ddd with SMTP id
+ p5-20020a170902eac500b001b17e1e5dddmr91433pld.9.1685722159787; Fri, 02 Jun
+ 2023 09:09:19 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 09:08:58 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230602160914.4011728-1-vipinsh@google.com>
+Subject: [PATCH v2 00/16] Use MMU read lock for clear-dirty-log
+From:   Vipin Sharma <vipinsh@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 11:20=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> What concerns me a bit, is that on the patched kernel we seem to hit more=
- cases where
-> boot takes much longer (in both kernel configs).
+Hi,
 
-So it potentially serializes the loads to the same file more, but in
-the process uses much less memory (since the ones waiting will not
-have done any of the "load file contents and uncompress them"). So
-it's a bit of a trade-off.
+This series is on top of kvmarm/next as I needed to also modify Eager
+page splitting logic in clear-dirty-log API. Eager page splitting is not
+present in Linux 6.4-rc4.
 
-We could complicate things a bit, and let other callers return -EEXIST
-a bit earlier, but I'm not convinced it really matters.
+Also, I had to change selftests patches (1 to 5) as some commits were
+removed from kvm/queue remote. This caused issue due to different APIs
+being present in dirty_log_perf_test when I was rebasing v2. Those
+removed commits are now back in kvm-x86 branch of Sean [1] but not in
+kvmarm/next or kvm/queue. I didn't want to wait for review of v2, so I
+changed dirty_log_perf_test to work with kvmarm/next branch. When Sean's
+kvm-x86 branch is merged, sleftests in this patch series need to be
+modified to use new APIs or whoever merges last need to take care of
+that.
 
-Honestly, taking too long because user space does something stupid and
-wrong is not a kernel bug. Not booting because we use too much memory
-- that's problematic. But booting slowly because udev does several
-thousand unnecessary module loads is entirely on udev.
+This patch series modifies clear-dirty-log operation to run under MMU
+read lock. It write protects SPTEs and split huge pages using MMU read
+lock instead of MMU write lock.
 
-                 Linus
+Use of MMU read lock is made possible by using shared page table
+walkers. Currently only page fault handlers use shared page table
+walkers, with this series, clear-dirty-log operation will also use
+shared page table walkers.
+
+Patches 1 to 5:
+These patches are modifying dirty_log_perf_test. Intent is to mimic
+production scenarios where guest keeps on executing while userspace
+thread collects and clears dirty logs independently.
+
+Three new command line options are added:
+1. j: Allows to run guest vCPUs and main thread collecting dirty logs
+      independently of each other after initialization is complete.
+2. k: Allows to clear dirty logs in smaller chunks compared to existing
+      whole memslot clear in one call.
+3. l: Allows to add customizable wait time between consecutive clear
+      dirty log calls to mimic sending dirty memory to destination.
+
+Patch 7-16:
+These patches refactor code to move MMU lock operations to arch specific
+code, refactor Arm's page table walker APIs, and change MMU write lock
+for clearing dirty logs to read lock. Patch 16 has results showing
+improvements based on dirty_log_perf_test.
+
+
+1. https://lore.kernel.org/lkml/168565341087.666819.6731422637224460050.b4-ty@google.com/
+
+v2:
+- Fix compile warning for mips and riscv.
+- Added logic to continue or retry shared page walk which are not fault
+  handler.
+- Huge page split also changed to run under MMU read lock.
+- Added more explanations in commit logs.
+- Selftests is modified because a commit series was reverted back in
+  dirty_log_perf_test on kvm/queue.
+
+v1: https://lore.kernel.org/lkml/20230421165305.804301-1-vipinsh@google.com/
+
+Vipin Sharma (16):
+  KVM: selftests: Clear dirty logs in user defined chunks sizes in
+    dirty_log_perf_test
+  KVM: selftests: Add optional delay between consecutive clear-dirty-log
+    calls
+  KVM: selftests: Pass the count of read and write accesses from guest
+    to host
+  KVM: selftests: Print read-write progress by vCPUs in
+    dirty_log_perf_test
+  KVM: selftests: Allow independent execution of vCPUs in
+    dirty_log_perf_test
+  KVM: arm64: Correct the kvm_pgtable_stage2_flush() documentation
+  KVM: mmu: Move mmu lock/unlock to arch code for clear dirty log
+  KMV: arm64: Pass page table walker flags to stage2_apply_range_*()
+  KVM: arm64: Document the page table walker actions based on the
+    callback's return value
+  KVM: arm64: Return -ENOENT if PTE is not valid in stage2_attr_walker
+  KVM: arm64: Use KVM_PGTABLE_WALK_SHARED flag instead of
+    KVM_PGTABLE_WALK_HANDLE_FAULT
+  KVM: arm64: Retry shared page table walks outside of fault handler
+  KVM: arm64: Run clear-dirty-log under MMU read lock
+  KVM: arm64: Pass page walker flags from callers of stage 2 split
+    walker
+  KVM: arm64: Provide option to pass page walker flag for huge page
+    splits
+  KVM: arm64: Split huge pages during clear-dirty-log under MMU read
+    lock
+
+ arch/arm64/include/asm/kvm_pgtable.h          |  42 +++--
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c         |   4 +-
+ arch/arm64/kvm/hyp/pgtable.c                  |  68 ++++++--
+ arch/arm64/kvm/mmu.c                          |  65 +++++---
+ arch/mips/kvm/mmu.c                           |   2 +
+ arch/riscv/kvm/mmu.c                          |   2 +
+ arch/x86/kvm/mmu/mmu.c                        |   3 +
+ .../selftests/kvm/dirty_log_perf_test.c       | 147 ++++++++++++++----
+ tools/testing/selftests/kvm/lib/memstress.c   |  13 +-
+ virt/kvm/dirty_ring.c                         |   2 -
+ virt/kvm/kvm_main.c                           |   4 -
+ 11 files changed, 265 insertions(+), 87 deletions(-)
+
+
+base-commit: 532b2ecfa547f02b1825108711565eff026bce5a
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
