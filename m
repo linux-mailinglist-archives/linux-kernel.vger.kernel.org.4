@@ -2,243 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2146C7208B2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4C77208B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbjFBR7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S236952AbjFBSAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 14:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236877AbjFBR7w (ORCPT
+        with ESMTP id S236323AbjFBSAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:59:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF85B9F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685728743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cSARUz2O3TmQ5YM6iQ0ZZCNg+rFHS4+v0lFyDbqBuwM=;
-        b=G6QD/WhPiQkN4mv+BomHgICN35/Vv4iynsi9xaK6rE4ezcpDStJh2898wv20hzQli1Tk1a
-        1mugQvLmc59iMaRZq7ztSX5ZUOCks9bZx+Qa/cVJc1bw+n6PC2TXxe8a3WFIdQYFlUzdDH
-        LQG/Q2i3DsgKzEiBuYVpe6/TDU/hy3g=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-627-RubznLp0P8ayhW0usP6GbQ-1; Fri, 02 Jun 2023 13:59:02 -0400
-X-MC-Unique: RubznLp0P8ayhW0usP6GbQ-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b175cf0d1so29647985a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:59:02 -0700 (PDT)
+        Fri, 2 Jun 2023 14:00:45 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9A123;
+        Fri,  2 Jun 2023 11:00:44 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-256e1d87a46so1154304a91.0;
+        Fri, 02 Jun 2023 11:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685728844; x=1688320844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=przK18vRT0zCHgc2Ms43sB7BY+Y+MRlKaT+sSKUYQsQ=;
+        b=Mj/Y1Tfg9CZxODZpoMOuAnXyJ4VhAtOZZGFtAX+LvE9mbVPXA0PkHvSbrijeuMeQ9Q
+         7GiI5Zkl8D49H97hX3Z5lZfxX83kQA1DTpcEGSbgDWVbi6AN0ySdJZSko9kIGUId4BpU
+         kLSXu46ldxN5SCTqzbVqcacDKSmcvx2mr6d6YDtj0CyiENntTYlBLAOxJeJheWqjx2on
+         eXpFxLltZN+wGmfs1KMWH9ESZejYhtMzy4GRbg5IAbTe1rlznN6yuqfRd9fd7jmJPW3z
+         ZEbbwYTbU1zHVkVbx8G/vw2WZ0pbNYhKQ3NkuAytOb583DvFHnJskFWSMl5yO67MQMvr
+         MFhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685728742; x=1688320742;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSARUz2O3TmQ5YM6iQ0ZZCNg+rFHS4+v0lFyDbqBuwM=;
-        b=bfW3Z/jlU4/FuoEt5vB3ZbKJC5a0ISriLvda1TSRw397aL1y50Ea5vccJ1ZLldW1TO
-         zNAtTUmtGP4/ik6cKtVsRDL3NUX8wFV2ermioFdXXVheUY8V9CJ2KAS3dJ312U9djn+Q
-         TPCifVd+5h2VUCxv0BUFgrpirBYIVfh3J60L4wx8KiiBOFg4MQFAo7nw4cOUH4sWzPSB
-         CpDZgoDSpvQnBSHnVqzkJXvvrv3nby1q1dUUhU5cNZlWrX20IrUcB2vD/Wk1E063z8cy
-         tWmHvRgm1ythMzaU/L+SrdX40PTkg9aUK0Q0MjDWvgYRFq5c1PMF9/cOoVDbveIIv0sr
-         xFAw==
-X-Gm-Message-State: AC+VfDyzzoiuBceoWHAwBSn0Pdxm5zL7IoviAuor0Z9N0ZGuwKjE8Boq
-        7deUqAMaEsMj3dHIrHYMwt1CaCx9QgJqcBADZYuLnaQE/RJ7tPoi1snP0BrKfH/eqgq+ztrpqbB
-        u/QA2eL1d/nRa6RrW80cloJ0I
-X-Received: by 2002:a05:620a:43a4:b0:75b:23a1:69f0 with SMTP id a36-20020a05620a43a400b0075b23a169f0mr11249970qkp.7.1685728742220;
-        Fri, 02 Jun 2023 10:59:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4m8Bhw4wjEoJhLfsA5Ru0yUPJznYbpOxt4yZuMQxYyzBraywPvQDy3Ozu06ddbe9B1KF2HHw==
-X-Received: by 2002:a05:620a:43a4:b0:75b:23a1:69f0 with SMTP id a36-20020a05620a43a400b0075b23a169f0mr11249931qkp.7.1685728741857;
-        Fri, 02 Jun 2023 10:59:01 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id b10-20020a05620a118a00b0074ca7c33b79sm910734qkk.23.2023.06.02.10.58.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 10:59:01 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 13:58:58 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZHot4rwXGOzeqJ86@x1n>
-References: <20230525085517.281529-1-usama.anjum@collabora.com>
- <20230525085517.281529-3-usama.anjum@collabora.com>
- <ZHfAOAKj1ZQJ+zSy@x1n>
- <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
- <ZHj7jmJ5fKla1Rax@x1n>
- <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
- <ZHodIFQesrCA53To@x1n>
- <be70e76a-3875-6e1b-a5aa-b89d2368b904@collabora.com>
+        d=1e100.net; s=20221208; t=1685728844; x=1688320844;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=przK18vRT0zCHgc2Ms43sB7BY+Y+MRlKaT+sSKUYQsQ=;
+        b=Gz93kt45Gs6plPRPZC2EvuOm6RZwetJGpIV1ATXS19Phmx75k4VlVw7hAjNE4rbGBp
+         8IrxQOrNEduDatieGJA9VxM5vN1ZCsNB1YlUSMk+yAbulTvXWyZA1B/ZmV2oqwfMnLco
+         y/PUcpo7yf9YC0p4OXQUbgiijxPr0u6poyPrhbhQ2l3PAxHgZnm/fQTrDDAJDcSuZjqa
+         au9vtvmku1y78lQ9cWJRh3xk07WE3Kqx2eeMuzK+zqrPuXvD6rkZOHZPpP4wOhZCwzAf
+         9An7sJZZVkmObV6Hyy//z8hsYEmIE4335jl/TXGFUyUqtXaZErHvBxP97hDS9t3xIzmE
+         gCIg==
+X-Gm-Message-State: AC+VfDwcQFlWVSOGaFdPZ4OhS5BnfowZ+uHe+CqqOIeOPdfvOUjrcbKL
+        11hWc/WumQz8pngh6mf16URo/CvJN6/gnzfnc14=
+X-Google-Smtp-Source: ACHHUZ72UIMKwVCWqtcz2aAXhMbLxbQwkCTiu6JUWlIeuEo95vb2MDtYIVmCLhICRk8Uvv7sApPWNeKNJdWyFNc2p9Q=
+X-Received: by 2002:a17:90a:2f04:b0:258:fe26:9721 with SMTP id
+ s4-20020a17090a2f0400b00258fe269721mr396310pjd.17.1685728843506; Fri, 02 Jun
+ 2023 11:00:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <be70e76a-3875-6e1b-a5aa-b89d2368b904@collabora.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230530150035.1943669-1-aleksander.lobakin@intel.com>
+ <20230530150035.1943669-10-aleksander.lobakin@intel.com> <0962a8a8493f0c892775cda8affb93c20f8b78f7.camel@gmail.com>
+ <51f558e3-7ccd-45cd-d944-73997765fd12@intel.com>
+In-Reply-To: <51f558e3-7ccd-45cd-d944-73997765fd12@intel.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Fri, 2 Jun 2023 11:00:07 -0700
+Message-ID: <CAKgT0Ue7US2wwZXXU6HcGPBZWg+pSZ=PE_HWxJHgF8bmLymkfg@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 09/12] iavf: switch to Page Pool
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 10:42:45PM +0500, Muhammad Usama Anjum wrote:
-> Thank you for reviewing and helping out.
-> 
-> On 6/2/23 9:47 PM, Peter Xu wrote:
+On Fri, Jun 2, 2023 at 9:31=E2=80=AFAM Alexander Lobakin
+<aleksander.lobakin@intel.com> wrote:
+>
+> From: Alexander H Duyck <alexander.duyck@gmail.com>
+> Date: Wed, 31 May 2023 09:19:06 -0700
+>
+> > On Tue, 2023-05-30 at 17:00 +0200, Alexander Lobakin wrote:
+> >> Now that the IAVF driver simply uses dev_alloc_page() + free_page() wi=
+th
+> >> no custom recycling logics and one whole page per frame, it can easily
+> >> be switched to using Page Pool API instead.
+>
 > [...]
-> >>>> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
-> >>>> 					 unsigned long addr, pte_t *ptep,
-> >>>> 					 pte_t ptent)
-> >>>> {
-> >>>> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
-> >>>> 		return;
-> >>>>
-> >>>> 	if (is_hugetlb_entry_migration(ptent))
-> >>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
-> >>>> 				pte_swp_mkuffd_wp(ptent));
-> >>>> 	else if (!huge_pte_none(ptent))
-> >>>> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
-> >>>> 					huge_pte_mkuffd_wp(ptent));
-> >>>> 	else
-> >>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
-> >>>> 				make_pte_marker(PTE_MARKER_UFFD_WP));
-> >>>> }
-> >>>
-> >>> the is_pte_marker() check can be extended to double check
-> >>> pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
-> >>> uffd-wp bit currently we only support swapin error which should sigbus when
-> >>> accessed, so no point in tracking anyway.
-> >> Yeah, we are good with what we have as even if more bits are supported in
-> >> pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
-> >> enabled. So no other bit would be set on the marker.
-> > 
-> > I think we don't know?  swapin error bit can be set there afaiu, if someone
-> > swapoff -a and found a swap device broken for some swapped out ptes.
-> Oops, so I remove returning on pte marker detection. Instead the last else
-> is already setting marker wp-ed.
-
-What I meant is your current code is fine, please don't remove the check.
-
-Removing is_pte_marker() means you could potentially overwrite one swap
-error entry with a marker only having uffd-wp bit set.  It can corrupt the
-guest because swapin error is not recoverable and higher priority than wp.
-
-> 
-> > 
-> > But again I think that's fine for now.
-> > 
+>
+> >> @@ -691,8 +690,6 @@ int iavf_setup_tx_descriptors(struct iavf_ring *tx=
+_ring)
+> >>   **/
+> >>  void iavf_clean_rx_ring(struct iavf_ring *rx_ring)
+> >>  {
+> >> -    u16 i;
+> >> -
+> >>      /* ring already cleared, nothing to do */
+> >>      if (!rx_ring->rx_pages)
+> >>              return;
+> >> @@ -703,28 +700,17 @@ void iavf_clean_rx_ring(struct iavf_ring *rx_rin=
+g)
+> >>      }
 > >>
-> >>>
-> >>>>
-> >>>> As we always set UNPOPULATED, so markers are always set on none ptes
-> >>>> initially. Is it possible that a none pte becomes present, then swapped and
-> >>>> finally none again? So I'll do the following addition for make_uffd_wp_pte():
-> >>>>
-> >>>> --- a/fs/proc/task_mmu.c
-> >>>> +++ b/fs/proc/task_mmu.c
-> >>>> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
-> >>>> vm_area_struct *vma,
-> >>>>  	} else if (is_swap_pte(ptent)) {
-> >>>>  		ptent = pte_swp_mkuffd_wp(ptent);
-> >>>>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
-> >>>> +	} else {
-> >>>> +		set_pte_at(vma->vm_mm, addr, pte,
-> >>>> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
-> >>>>  	}
-> >>>>  }
-> >>>
-> >>> Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
-> >>> should probably keep the protocol (only set the marker when WP_UNPOPULATED
-> >>> for anon).
-> >> This function is only reachable when UNPOPULATED + Async WP are set. So we
-> >> don't need to use userfaultfd_wp_use_markers().
-> > 
-> > I don't remember where you explicitly checked that to make sure it'll
-> > always be the case, but if you do it'll still be nice if you can add a
-> > comment right above here explaining.
-> I was only testing for WP and WP Async in pagemap_scan_test_walk() as WP
-> async can only be enabled if unpopulated is enabled which in turn enables
-> the markers. I'll add userfaultfd_wp_use_markers() to pagemap_scan_test_walk().
+> >>      /* Free all the Rx ring sk_buffs */
+> >> -    for (i =3D 0; i < rx_ring->count; i++) {
+> >> +    for (u32 i =3D 0; i < rx_ring->count; i++) {
+> >
+> > Did we make a change to our coding style to allow declaration of
+> > variables inside of for statements? Just wondering if this is a change
+> > since the recent updates to the ISO C standard, or if this doesn't
+> > match up with what we would expect per the coding standard.
+>
+> It's optional right now, nobody would object declaring it either way.
+> Doing it inside is allowed since we switched to C11, right.
+> Here I did that because my heart was breaking to see this little u16
+> alone (and yeah, u16 on the stack).
 
-OK.
+Yeah, that was back when I was declaring stack variables the exact
+same size as the ring parameters. So u16 should match the size of
+rx_ring->count not that it matters. It was just a quirk I had at the
+time.
 
-> 
-> > 
-> > Or, maybe you can still use userfaultfd_wp_use_markers() here, then you can
-> > just WARN_ON_ONCE() on it, which looks even better?
-> > 
-> > [...]
-> > 
-> >>> Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
-> >>> address range to be scanned to me.  If it skips some unstable pmd without
-> >>> filling in anything it seems everything later will be shifted with
-> >>> PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
-> >>> before return.
-> >> I don't think this is a bug if this is how it was implemented in the first
-> >> place. In this task_mmu.c file, we can find several examples of the same
-> >> pattern that error isn't returned if pmd_trans_unstable() succeeds.
-> > 
-> > I don't see why multiple same usages mean it's correct.. maybe they're all
-> > buggy?
-> > 
-> > I can post a patch for this to collect opinions to see if I missed
-> > something. I'd suggest you figure out what's the right thing to do for the
-> > new interface and make it right from the start, no matter how it was
-> > implemented elsewhere.
-> Alright. At first sight, it seems I should return -EAGAIN here. But there
-> maybe a case where there are 3 THPs. I've cleared WP over the first THP and
-> put data in the user buffer. If I return -EAGAIN, the data in the user
-> buffer would be not used by the user correctly as negative value has been
-> returned. So the best way here would be to skip this second VMA and don't
-> abort the operation. Thus we'll not be giving any information about the
-> second THP as it was in transition.
-> 
-> I'll think about it again before sending next version.
+> >
+> >>              struct page *page =3D rx_ring->rx_pages[i];
+> >> -            dma_addr_t dma;
+> >>
+> >>              if (!page)
+> >>                      continue;
+> >>
+> >> -            dma =3D page_pool_get_dma_addr(page);
+> >> -
+> >>              /* Invalidate cache lines that may have been written to b=
+y
+> >>               * device so that we avoid corrupting memory.
+> >>               */
+> >> -            dma_sync_single_range_for_cpu(rx_ring->dev, dma,
+> >> -                                          LIBIE_SKB_HEADROOM,
+> >> -                                          LIBIE_RX_BUF_LEN,
+> >> -                                          DMA_FROM_DEVICE);
+> >> -
+> >> -            /* free resources associated with mapping */
+> >> -            dma_unmap_page_attrs(rx_ring->dev, dma, LIBIE_RX_TRUESIZE=
+,
+> >> -                                 DMA_FROM_DEVICE, IAVF_RX_DMA_ATTR);
+> >> -
+> >> -            __free_page(page);
+> >> +            page_pool_dma_sync_full_for_cpu(rx_ring->pool, page);
+> >> +            page_pool_put_full_page(rx_ring->pool, page, false);
+> >>      }
+> >>
+> >>      rx_ring->next_to_clean =3D 0;
+> >> @@ -739,10 +725,15 @@ void iavf_clean_rx_ring(struct iavf_ring *rx_rin=
+g)
+> >>   **/
+> >>  void iavf_free_rx_resources(struct iavf_ring *rx_ring)
+> >>  {
+> >> +    struct device *dev =3D rx_ring->pool->p.dev;
+> >> +
+> >>      iavf_clean_rx_ring(rx_ring);
+> >>      kfree(rx_ring->rx_pages);
+> >>      rx_ring->rx_pages =3D NULL;
+> >>
+> >> +    page_pool_destroy(rx_ring->pool);
+> >> +    rx_ring->dev =3D dev;
+> >> +
+> >>      if (rx_ring->desc) {
+> >>              dma_free_coherent(rx_ring->dev, rx_ring->size,
+> >>                                rx_ring->desc, rx_ring->dma);
+> >
+> > Not a fan of this switching back and forth between being a page pool
+> > pointer and a dev pointer. Seems problematic as it is easily
+> > misinterpreted. I would say that at a minimum stick to either it is
+> > page_pool(Rx) or dev(Tx) on a ring type basis.
+>
+> The problem is that page_pool has lifetime from ifup to ifdown, while
+> its ring lives longer. So I had to do something with this, but also I
+> didn't want to have 2 pointers at the same time since it's redundant and
+> +8 bytes to the ring for nothing.
 
-Here when reaching unstable==true I think it means a rare race happened,
-that a thp was _just_ installed.  You can try to read the comment over
-pmd_trans_unstable() and pmd_none_or_trans_huge_or_clear_bad() to
-understand what it wants to avoid.
+It might be better to just go with NULL rather than populating it w/
+two different possible values. Then at least you know if it is an
+rx_ring it is a page_pool and if it is a tx_ring it is dev. You can
+reset to the page pool when you repopulate the rest of the ring.
 
-Basically afaiu that's the ultimate guard if one wants to walk the pte
-pgtable (that fact can change again if Hugh's series will land, but that's
-another story).
+> > This setup works for iavf, however for i40e/ice you may run into issues
+> > since the setup_rx_descriptors call is also used to setup the ethtool
+> > loopback test w/o a napi struct as I recall so there may not be a
+> > q_vector.
+>
+> I'll handle that. Somehow :D Thanks for noticing, I'll take a look
+> whether I should do something right now or it can be done later when
+> switching the actual mentioned drivers.
+>
+> [...]
+>
+> >> @@ -240,7 +237,10 @@ struct iavf_rx_queue_stats {
+> >>  struct iavf_ring {
+> >>      struct iavf_ring *next;         /* pointer to next ring in q_vect=
+or */
+> >>      void *desc;                     /* Descriptor ring memory */
+> >> -    struct device *dev;             /* Used for DMA mapping */
+> >> +    union {
+> >> +            struct page_pool *pool; /* Used for Rx page management */
+> >> +            struct device *dev;     /* Used for DMA mapping on Tx */
+> >> +    };
+> >>      struct net_device *netdev;      /* netdev ring maps to */
+> >>      union {
+> >>              struct iavf_tx_buffer *tx_bi;
+> >
+> > Would it make more sense to have the page pool in the q_vector rather
+> > than the ring? Essentially the page pool is associated per napi
+> > instance so it seems like it would make more sense to store it with the
+> > napi struct rather than potentially have multiple instances per napi.
+>
+> As per Page Pool design, you should have it per ring. Plus you have
+> rxq_info (XDP-related structure), which is also per-ring and
+> participates in recycling in some cases. So I wouldn't complicate.
+> I went down the chain and haven't found any place where having more than
+> 1 PP per NAPI would break anything. If I got it correctly, Jakub's
+> optimization discourages having 1 PP per several NAPIs (or scheduling
+> one NAPI on different CPUs), but not the other way around. The goal was
+> to exclude concurrent access to one PP from different threads, and here
+> it's impossible.
 
-As said, a patch will be posted (will have you copied) soon just for that,
-so people can also comment and may help you / us know which is the right
-way, probably not in a few hours (need to go very soon..), but shouldn't be
-too long.  I just need to double check more users out of task_mmu.c when
-we're at it.
+The xdp_rxq can be mapped many:1 to the page pool if I am not mistaken.
 
--- 
-Peter Xu
+The only reason why I am a fan of trying to keep the page_pool tightly
+associated with the napi instance is because the napi instance is what
+essentially is guaranteeing the page_pool is consistent as it is only
+accessed by that one napi instance.
 
+> Lemme know. I can always disable NAPI optimization for cases when one
+> vector is shared by several queues -- and it's not a usual case for
+> these NICs anyway -- but I haven't found a reason for that.
+
+I suppose we should be fine if we have a many to one mapping though I
+suppose. As you said the issue would be if multiple NAPI were
+accessing the same page pool.
