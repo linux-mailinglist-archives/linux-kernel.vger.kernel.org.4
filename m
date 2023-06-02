@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D03F71FACA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A22071FAC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbjFBHOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 03:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S234109AbjFBHMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 03:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjFBHOI (ORCPT
+        with ESMTP id S234143AbjFBHMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:14:08 -0400
-X-Greylist: delayed 104 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Jun 2023 00:14:06 PDT
-Received: from smtpq4.tb.ukmail.iss.as9143.net (smtpq4.tb.ukmail.iss.as9143.net [212.54.57.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E77132
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:14:05 -0700 (PDT)
-Received: from [212.54.57.97] (helo=smtpq2.tb.ukmail.iss.as9143.net)
-        by smtpq4.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <smf-linux@virginmedia.com>)
-        id 1q4yxR-0007ts-Pk
-        for linux-kernel@vger.kernel.org; Fri, 02 Jun 2023 09:12:21 +0200
-Received: from [212.54.57.105] (helo=csmtp1.tb.ukmail.iss.as9143.net)
-        by smtpq2.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <smf-linux@virginmedia.com>)
-        id 1q4yxP-0005a0-Ud
-        for linux-kernel@vger.kernel.org; Fri, 02 Jun 2023 09:12:19 +0200
-Received: from Moira ([82.0.204.144])
-        by cmsmtp with SMTPA
-        id 4yxOqXMO0zx3m4yxOq2pao; Fri, 02 Jun 2023 09:12:19 +0200
-X-SourceIP: 82.0.204.144
-X-Authenticated-Sender: smf-linux@virginmedia.com
-X-Spam: 0
-X-Authority: v=2.4 cv=AJMelZwL c=1 sm=1 tr=0 ts=64799653 cx=a_exe
- a=7KlAsy3RGnwpW11VTsQBiw==:117 a=7KlAsy3RGnwpW11VTsQBiw==:17
- a=IkcTkHD0fZMA:10 a=of4jigFt-DYA:10 a=e5mUnYsNAAAA:8 a=Frlf4u0NsMQjUqWB7K0A:9
- a=QEXdDO2ut3YA:10 a=Vxmtnl_E_bksehYqCbjh:22
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virginmedia.com;
-        s=meg.feb2017; t=1685689939;
-        bh=9EoG3Ymv1xxJO4OrF3iWrxZxfJMXhMsXIBDRxtNTzfs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=pU3jG/GkCBBXUUzXFjRPOHWGmHngdqxylMBKx6aCnl+Bsx79J0VjPfdYfs8YHhBnV
-         yVZfQWzw9tsVA9OTd5yfPkdPTV+M+HLaB4pKWLTGO4yQ6G3SGJnLeKO9rdRkzFTL7W
-         ulGfdHuVWmCA0NUX1tjQlPHYedU44+WEZPc7tHEv5D3x3o6djqOOSldIzPVvQ/PIH4
-         /5ZcsTzmuI/5cGFVVBJf/D4+mN6Gm+ayhfwJYwwWqVRisAqOEUkfnishlWvu/JfSa3
-         E1QpLRjqLk51nXe9O05cf9MBtHnDPfB0ImSxLunOtuEox0LSg8n1fi7GgvPkHnsezQ
-         ryNOfhWnrTF6Q==
-Message-ID: <33a192fc-9279-6681-32ed-2046ed2e3ce1@virginmedia.com>
-Date:   Fri, 2 Jun 2023 08:12:04 +0100
+        Fri, 2 Jun 2023 03:12:14 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489B10C2
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 00:12:09 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-970056276acso245218166b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 00:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685689928; x=1688281928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ID97egBGuXMI7J4GkeNsqWERFtG/jgBWuZXR0IgIwWE=;
+        b=pJ6WxSKGbQ1lTXGYSx5AV6TgLnndwDX+mYc4xaGh0RzfzalUrq3xVEWx54oWvDi02I
+         z1fvVun1fQXFZBEdCACH3A6qBZmGWyjxGbOKud+dLG9w+/9DEIU1owODdv9vBALtlBrf
+         OXsvJ2jO/bxffy3BDljQJDG/GORMavqDuUvF6qtPv+yxO/+R3BQdJ3p6BTSbPay0Hxv7
+         dY53Bs3Z8PYwSd5WBPOuwBbVrXj+sbZYw7QtiuISgIKdt4FCeuBAoBXK6n1Pq6mUXacl
+         ZLN8o4wds8nM3S3H16LEMFHrkqTKHIWPKMnJARqQVdgy0rbl3V2ZrqlFi6a0s3q/rsLW
+         KusA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685689928; x=1688281928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ID97egBGuXMI7J4GkeNsqWERFtG/jgBWuZXR0IgIwWE=;
+        b=f3TqCiqlZ6dVLiBJSdOz2ySSTXiSVHTKlPppCfXjTJPgZRu4NNc/LxDtpOm7bQD8Cg
+         hqjfIpfcy674XHZBOHtf932DXfM+BRM++LE6vo50fvjtoTgLbgJIbXR1rEfKu88liNIp
+         1b81oXfvOvtIXp7uwlMq3hINugi1wtFRj3c/HBw1y3zwNf00h9BkEIBQnPp/iEWe2ark
+         4CKq7fbpuV/EV6Nio6fPsOx/BngowrQhqD+Yj6yvQKZ6rRmhJ5C4IvS5F13CypaIXJ/p
+         fEroWc7PNTSyIZ5mN9GFiOFWPrNiyAIDotJ9mK9MuuQx7js1XjhVM+EzOiIDKBLG0ete
+         a0wg==
+X-Gm-Message-State: AC+VfDwVrgA0dluXGWW1XdwxEAxGdX2lab8I1IhMcTWeraj23YRM4F/R
+        f9kreH10lTvblGucoWINxk62qw==
+X-Google-Smtp-Source: ACHHUZ4hbQaYX7U80wxKjvKgnV9pZX+PaiNP2lawdYjP7mjQi3B2eIAZoovKcl7m0wcRKYSz3aVP3Q==
+X-Received: by 2002:a17:906:6a16:b0:947:ebd5:c798 with SMTP id qw22-20020a1709066a1600b00947ebd5c798mr10173625ejc.54.1685689927791;
+        Fri, 02 Jun 2023 00:12:07 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id g4-20020a170906c18400b00969f13d886fsm397252ejz.71.2023.06.02.00.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 00:12:07 -0700 (PDT)
+Message-ID: <7dfc6241-ed72-d655-7400-fd8f9c413e69@linaro.org>
+Date:   Fri, 2 Jun 2023 09:12:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Fwd: Started to get "memfd_create() without MFD_EXEC nor
- MFD_NOEXEC_SEAL"
-Content-Language: en-GB
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Jeff Xu <jeffxu@google.com>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        David Herrmann <dh.herrmann@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hugh Dickins <hughd@google.com>, Jann Horn <jannh@google.com>,
-        Jorge Lucangeli Obes <jorgelo@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <69dad53e-9363-c551-111a-d0051bb0265f@gmail.com>
- <38f847ed-69dc-d5da-5822-bd9da753fc30@suse.cz>
- <202306010710.7F5C39B7A@keescook>
- <74b8e4c0-a557-b047-4507-c243c9aad216@gmail.com>
-From:   Stuart Foster <smf-linux@virginmedia.com>
-Organization: Linux Development
-In-Reply-To: <74b8e4c0-a557-b047-4507-c243c9aad216@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: i2c-mt65xx: add additional clocks
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        =?UTF-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
+References: <5f15212060f82fb94239174c4e4b46c151645fe8.1685549360.git.daniel@makrotopia.org>
+ <12fea13e-e2c3-487f-8d2b-cfd320c98ba7@linaro.org>
+ <ZHjtExYIdVFo3HnB@makrotopia.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZHjtExYIdVFo3HnB@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfCSb7Kr7YK7fDk5I8YK/NfMO+h6QittNrtGhdPZVOvh/sIsLJN6kIS+gP2UXJIMTQj/7hnRpIfc3DVmGUJZJAArBJdTzkp8/sv3FqMrE5FN6HOEfi7wF
- AdpBSq2DHmD3isDkrcFlSt/6qEeul0faS6wra1JNWFwfUt+uleBAzIwzOP4MBXmFHQgTEdOsmT42YHGec/UKyCCIAaYMotU4bFi/PIizsghUihLY+NtABs2s
- OuQSycOIDIplliUeupZww0IM8N0zG7wSZ/3vEQM+QQD1rMYR2n7ORxq+/yQNX7EjJOQsk/+59uvfMyl69Ur2Njz6tBpw/a4HTgBEe/NhVxyky0U3ZJUp/kxw
- sygTLKIURaHmPdd5SuvWLPgnwVAGT6Hr/jmHbBE3gxDjIRRA+3p1y7MCdV7THa2QZ3I1952s0r2seyNgqWYiegkVHd5WSx6Heq4PbWl9ePWNPBvUV2QfOOFc
- kGmbNhATyGfw9EX0C/lzF5P7OPtqivmlYge56gPUeTYQCiqPEu5gEy/r0KQOmkBTjGhms6phRSnoVmv+Hza0RZrG17BQzHml5f+87Z6EivtfaE4XBnt6tDcr
- SbGJc5YrTylX7detjf8m+uJkSK1sad28YNKLKLoCKFSNSsydEqPaX4R8UsgX8dJyUZE=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 03:15, Bagas Sanjaya wrote:
-> On 6/1/23 21:12, Kees Cook wrote:
->>> Hm indeed it seems to have introduced 2 new flags and immediately warn if
->>> any process doesn't use them. Maybe it would make sense for some of the
->>> non-default values of vm.memfd_noexec, but it's too early to warn
->>> unconditionally everywhere, no?
+On 01/06/2023 21:10, Daniel Golle wrote:
+> On Thu, Jun 01, 2023 at 06:54:01PM +0200, Krzysztof Kozlowski wrote:
+>> On 31/05/2023 18:10, Daniel Golle wrote:
+>>> Add pck and mck clocks which are needed to access I2C registers on MT7981.
+>>>
+>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+>>> ---
+>>>  Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+>>> index fda0467cdd954..550795f6573c5 100644
+>>> --- a/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+>>> +++ b/Documentation/devicetree/bindings/i2c/i2c-mt65xx.yaml
+>>> @@ -78,6 +78,8 @@ properties:
+>>>        - const: dma
+>>>        - const: arb
+>>>        - const: pmic
+>>> +      - const: mck
+>>> +      - const: pck
+>>>  
 >>
->> This is pretty standard for getting new options like this noticed by
->> userspace -- there is no regression in _behavior_. It's just a reminder
->> to fix userspace code.
->>
+>> Adding names does not magically add the clocks. This wasn't tested.
 > 
-> Telling regzbot:
-> 
-> #regzbot invalid: not a kernel regression, but userspace fix is needed
-> 
-> Thanks.
-> 
+> Adding the clocks is done in patch 2/2 which just wasn't sent to
+> devicetree@ and dt maintainers, but to the relevant mailing lists
+> instead. Was that wrong and should I always send the complete series
+> also to devicetree@ as well as dt maintainers?
 
-Issue raised with XOrg:
+I didn't mean implementation. I meant that you still do not allow more
+clocks! You can put into names whatever you wish but clocks are taken
+from "clocks" property, not from clock-names.
 
-https://gitlab.freedesktop.org/xorg/xserver/-/issues/1553
+
+Best regards,
+Krzysztof
 
