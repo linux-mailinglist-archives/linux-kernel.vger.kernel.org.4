@@ -2,88 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A37720A77
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBE2720A7C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 22:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236242AbjFBUkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 16:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S235830AbjFBUmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 16:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbjFBUkm (ORCPT
+        with ESMTP id S232935AbjFBUmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 16:40:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1B0E48;
-        Fri,  2 Jun 2023 13:40:37 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352DuFJf005995;
-        Fri, 2 Jun 2023 20:40:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9+03auotNTz1TIZFlXasLKcdBNaehKED/ltJTzRkCCM=;
- b=ck4BSOKDv958p3nZdyRLrQd0zBhueNGhzVUGik6DM9u57cZ3dDYjLjyksWPJOue3epL0
- eXOvBYppxYTifduXuDmwcwGdf1LuxY/dW6DAGQLNRi2f+m339MIiaP5YoPK4vzX6lzGz
- Y/uzHr7SpUXx1xqQYuVhRKpL5mxbMzOJj1VXKg/gysE0BhFFfaX0t+DwrgXNi5CkRAAV
- 1GfVupqDWINzG6Zh5DPb1G2tYxiGFgdOQbaY3B2g2bBOZT7YuLtd0nMP6cEb4eNP4dXH
- uDBwB4ypiillYTIMzuQPCDkWWuuSPPaEkSkgqgKOA9/l7jj9h3/oqqGy0ZPwm/yCsceo RQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qydr5heyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 02 Jun 2023 20:40:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 352Keahr005559
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 2 Jun 2023 20:40:36 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 2 Jun 2023
- 13:40:35 -0700
-Message-ID: <e5044160-ebc8-b1e7-a944-33cd1b080eb3@quicinc.com>
-Date:   Fri, 2 Jun 2023 14:40:35 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] MAINTAINERS: Add Carl/Pranjal as QAIC reviewers
-Content-Language: en-US
-To:     <quic_carlv@quicinc.com>, <quic_pkanojiy@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230523161421.11017-1-quic_jhugo@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230523161421.11017-1-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NnAsRHPj8jLvNMlxwd8fmTl8hEIf8nKF
-X-Proofpoint-GUID: NnAsRHPj8jLvNMlxwd8fmTl8hEIf8nKF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-02_16,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- clxscore=1015 mlxscore=0 spamscore=0 mlxlogscore=891 priorityscore=1501
- suspectscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020160
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 2 Jun 2023 16:42:03 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4AA1A6
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:42:02 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b1bd4fcc22so5124595ad.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 13:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685738521; x=1688330521;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A3JKXYSTKUDDfkWw2z2gFFNkpbBKNRDNZFCjBvxP6b8=;
+        b=4ap8xeEQ+RrljIBH8n4l6V33lwJ2Ruabow/MOb1HhRfUfARoCeT4iYuXw+5l0SCo1w
+         BsWI8/x9bXZBOvdJo1nG7sA5se5dE+HdTPScOynYnBPtujmO+2mbGH4y5vJQKw9v4rOw
+         gnCthwhPd2SORL80DDL7SINMo9fZkjj3SDmP7dBoTn46ljI83h1VbWJv1ptjzK9lEU7z
+         RVshQ+BK50eYyTbWnyILBZv6qnaHQde490IuSaMFd+guECLHZM6vbGCTl5FKCAnymjwt
+         izJA+opMgbMAg1shFiX9Oa0hTgWiLoDPb09pts6sfLXPjsl4VWV7Z79pkFnOGtx0Vak5
+         7wJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685738521; x=1688330521;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A3JKXYSTKUDDfkWw2z2gFFNkpbBKNRDNZFCjBvxP6b8=;
+        b=XHzYBgBUIo0eV4ILEyK2gLqBv9XJ//CSp2bzH1mqiE7HdvUJRmT+v/YKapm1HccE+I
+         RaEIrtq5b7QX/5g90ZSJgv0N6v+OIjkErAerhd3JdzfhlkHBxueSMI5gP8uUO7EOmDZN
+         vD7FbIAAJ6FZ+DCvrwRiDG+gA4T3b4/M2RXqrIiZGVoYV/oPEiuxl4/bzUNPGGPP8FXL
+         voJRAjPBi/ul1qN0WkYbdFjVuYIuuxJi9enDy4+q4JiKHwfXeAtk9xA5kqFekRrWEw6i
+         5vIZGORVrcPDm/FNdAFjHK9Iyn6VlvOtH0yaWUOoH6WWGFJM9FlcRMkn/R/gObsgrsx2
+         Sntg==
+X-Gm-Message-State: AC+VfDy7bGpnJEYh14g50D6u0jTBUDZkFrWPo1/r7bdBfI/Hc+I8yCs6
+        fjK/GDX5yMoEMVLF+jaBC7qVzPWQTuiWaw==
+X-Google-Smtp-Source: ACHHUZ7ba/Xh7elxe6ChoVnSNP5RVMN2e2mldGZEh0c1L4GkyqYouIgLvWoGBnJnoNCHtKgu17h/DRA0j3+evg==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:903:3291:b0:1ad:e1a3:919 with SMTP id
+ jh17-20020a170903329100b001ade1a30919mr237956plb.8.1685738521194; Fri, 02 Jun
+ 2023 13:42:01 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 20:41:59 +0000
+In-Reply-To: <20230602081135.75424-3-wuyun.abel@bytedance.com>
+Mime-Version: 1.0
+References: <20230602081135.75424-1-wuyun.abel@bytedance.com> <20230602081135.75424-3-wuyun.abel@bytedance.com>
+Message-ID: <20230602204159.vo7fmuvh3y2pdfi5@google.com>
+Subject: Re: [PATCH net-next v5 2/3] sock: Always take memcg pressure into consideration
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/2023 10:14 AM, Jeffrey Hugo wrote:
-> Carl and Pranjal have been reviewing the QAIC patches.  List them as
-> reviewers so that they are copied on all developments which will make
-> it easier for them to continue reviewing QAIC patches.
-> 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
++Willem
 
-Applied to drm-misc-next
+On Fri, Jun 02, 2023 at 04:11:34PM +0800, Abel Wu wrote:
+> The sk_under_memory_pressure() is called to check whether there is
+> memory pressure related to this socket. But now it ignores the net-
+> memcg's pressure if the proto of the socket doesn't care about the
+> global pressure, which may put burden on its memcg compaction or
+> reclaim path (also remember that socket memory is un-reclaimable).
+> 
+> So always check the memcg's vm status to alleviate memstalls when
+> it's in pressure.
+> 
+
+This is interesting. UDP is the only protocol which supports memory
+accounting (i.e. udp_memory_allocated) but it does not define
+memory_pressure. In addition, it does have sysctl_udp_mem. So
+effectively UDP supports a hard limit and ignores memcg pressure at the
+moment. This patch will change its behavior to consider memcg pressure
+as well. I don't have any objection but let's get opinion of UDP
+maintainer.
+
+> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> ---
+>  include/net/sock.h | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index 3f63253ee092..ad1895ffbc4a 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -1411,13 +1411,11 @@ static inline bool sk_has_memory_pressure(const struct sock *sk)
+>  
+>  static inline bool sk_under_memory_pressure(const struct sock *sk)
+>  {
+> -	if (!sk->sk_prot->memory_pressure)
+> -		return false;
+> -
+>  	if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
+>  		return true;
+>  
+> -	return !!*sk->sk_prot->memory_pressure;
+> +	return sk->sk_prot->memory_pressure &&
+> +		*sk->sk_prot->memory_pressure;
+>  }
+>  
+>  static inline long
+> -- 
+> 2.37.3
+> 
