@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853907207FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243977207FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbjFBQ4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
+        id S236888AbjFBQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbjFBQ4x (ORCPT
+        with ESMTP id S236838AbjFBQ46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:56:53 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8A418D
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:56:50 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6af6db17a27so1313013a34.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:56:50 -0700 (PDT)
+        Fri, 2 Jun 2023 12:56:58 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008391A5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:56:54 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bb24045f986so489941276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1685725009; x=1688317009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UpFkoBOgIhm6mVYnAm3/uE52vs/uGNgQbLUnzZ8e50A=;
-        b=OYTGcuM33CecRMp0bGXgKRvNrSjIqKgpvkYDOSRdh6fe8CHOCEdAr1Frby7/3YtOWq
-         seQc9WxsFfEXsBsVEPABs2F5x4iUvW4Fju58l4vzqWHstTxWJun+rg22pagiK7Z6HpEA
-         W/72rYdED9jIxY/+FA+YrIo2TEfPcD2bQNRT4=
+        d=google.com; s=20221208; t=1685725014; x=1688317014;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOg4+l/DOJChc+nkZOWK9ss0MzzfNN2Nkg/r8MQpUK8=;
+        b=laAI+NzOjPEt7adLhRNeGC5PTwPYDma4sqTfDHH2LuJZ8GYBZqqk0i5/AmrydXq6T7
+         roWfE8qMGHFaFea9WTdR44rqoO7JEe6JBzhri7iO4G7BfeAAe3v1PAjj6j7WTL5/aeH/
+         fTxuKmzOwxGfElUeL30wxSdyPJ5+BjBfbLdSr8jyE2T1rRfH76XWxINuVeCC2WEaJknU
+         nGAmrWeCJMK3/LGD2xdF58gaDcsupHibI1JtxQE1piL+zYbjwc/gBtpUNWNSR69i0Wo+
+         rbK83WGCNK3lPHtRX6m0hP4mFggfLywRf/sLb4IVj7xACylSg20nxJgOtRVPkFNa9RSG
+         ch/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685725009; x=1688317009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UpFkoBOgIhm6mVYnAm3/uE52vs/uGNgQbLUnzZ8e50A=;
-        b=C8uO11PqLtIV2maEmJNfAlCvSDhM6Z5cM7gzO07fCpI0mSqJItqrXS6ax3RlkYEyXY
-         MSjwFHwJQRh6NfnOR5E+4Dnds971sicKUOPuNSSt4zHaMPPuT+RG0661Rh1As5uBZIm/
-         9WuU4E9pqmfoEGH7QEHUVtHPLTHGdAZviaEPIBxIjG49nGv7W0TN2tXYcNOAtfgaeIy+
-         2CQGk5eZSAZ+XwwlpZ0uZD9QWLuaCPXT/O6hfXIE8Rl6wk3pcsCkdC062LQXmbJ5HVWg
-         /0JuhpYUGTtiuDqATcrdm9NPO/6G2KaoVUwx/EXWbrnO9n9VGJydmDem7PQMgb6KsNPL
-         0EVQ==
-X-Gm-Message-State: AC+VfDxd5vNMtpfaxjTZ8BWC3FcpOklWeu6zUZqlVvjj2ySmMqoeK0vg
-        1oJ7ORbESdqHXV6aDgqvwbUIiQ==
-X-Google-Smtp-Source: ACHHUZ7/PTjo9k0bGsi3dIeEZREUXDAf8wSbxwJM45eAIKUPenOyP0DS66nNoBJMRzqoRnm6VX+zDg==
-X-Received: by 2002:a05:6830:1042:b0:6af:7493:79be with SMTP id b2-20020a056830104200b006af749379bemr1930925otp.10.1685725009629;
-        Fri, 02 Jun 2023 09:56:49 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id l2-20020a0568301d6200b006ab305429e7sm807579oti.0.2023.06.02.09.56.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 09:56:49 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Fri, 2 Jun 2023 11:56:47 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 00/45] 6.3.6-rc1 review
-Message-ID: <ZHofTwvKfnZmRhww@fedora64.linuxtx.org>
-References: <20230601131938.702671708@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601131938.702671708@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685725014; x=1688317014;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOg4+l/DOJChc+nkZOWK9ss0MzzfNN2Nkg/r8MQpUK8=;
+        b=h9hMtU71tMjjxuWA6p0exX3QgGm09JC2sfnQXAlhsJeYBa+Ea5P/3SJu0tL/dDD/wu
+         4gk5lQTrRq4khremh9ZCj9s+CCI3aqawG0FcpRrwSaoIRPBs/w8bhaX+dw+eyYhKlCVA
+         qufrtOKt8FLa12H3TNsyqBZSSIub7W7DvUcWhtwLtk3lygbtd5ASod4a5e93vuJpsf9/
+         dwZ9Zjubw83psDy7CnvhMbglKoctE03iSM6Y3C0hKq+Zy6vzq6ouRGmKrj55SFr9cdXS
+         HewuDOljLZCcSDzHSKZaXCkEGM58PztHTfj9UOJRmqRdEPhlRPF3o3M3c9THgEPiruN4
+         mLfQ==
+X-Gm-Message-State: AC+VfDyt0XIwNrN2OJorIq/SlzRXXYaHynmP6sgMUKpDgGZTFULauetm
+        3dXBnaKWr/zi9JZppcxoRZ0jit1tcls=
+X-Google-Smtp-Source: ACHHUZ4ZXOip91E1lWsVMpNUj0KdBUUS7+scQ+ifNKdscSmerWX8Q/oVXM6rOmyp6dy9xV33ekhZ8wHADwM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:723:b0:bab:9391:470d with SMTP id
+ l3-20020a056902072300b00bab9391470dmr1307718ybt.0.1685725014297; Fri, 02 Jun
+ 2023 09:56:54 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 09:56:52 -0700
+In-Reply-To: <8f319a1e-a869-b666-b606-c0b4764ef7b1@rbox.co>
+Mime-Version: 1.0
+References: <20230307135233.54684-1-wei.w.wang@intel.com> <168565180722.660019.15543226381784798973.b4-ty@google.com>
+ <8f319a1e-a869-b666-b606-c0b4764ef7b1@rbox.co>
+Message-ID: <ZHofVKJxjaUxIDUN@google.com>
+Subject: Re: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michal Luczaj <mhal@rbox.co>
+Cc:     dmatlack@google.com, mizhang@google.com, isaku.yamahata@gmail.com,
+        pbonzini@redhat.com, Wei Wang <wei.w.wang@intel.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 02:20:56PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.6 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Jun 02, 2023, Michal Luczaj wrote:
+> On 6/2/23 03:20, Sean Christopherson wrote:
+> > On Tue, 07 Mar 2023 21:52:33 +0800, Wei Wang wrote:
+> >> Current KVM_BUG and KVM_BUG_ON assume that 'cond' passed from callers is
+> >> 32-bit as it casts 'cond' to the type of int. This will be wrong if 'cond'
+> >> provided by a caller is 64-bit, e.g. an error code of 0xc0000d0300000000
+> >> will be converted to 0, which is not expected.
+> >>
+> >> Improves the implementation by using bool in KVM_BUG and KVM_BUG_ON.
+> >> 'bool' is preferred to 'int' as __ret is essentially used as a boolean
+> >> and coding-stytle.rst documents that use of bool is encouraged to improve
+> >> readability and is often a better option than 'int' for storing boolean
+> >> values.
+> >>
+> >> [...]
+> > 
+> > Applied to kvm-x86 generic, thanks!
+> > 
+> > [1/1] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+> >       https://github.com/kvm-x86/linux/commit/c9d601548603
 > 
-> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
-> Anything received after that time might be too late.
+> I guess this makes the !! in kvm_vm_ioctl_create_vcpu() unnecessary:
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> KVM_BUG_ON(!!xa_store(&kvm->vcpu_array, vcpu->vcpu_idx, vcpu, 0)...
 
-Tested rc1 against the Fedora build system (aarch64, ppc64le, s390x,
-x86_64), and boot tested x86_64. No regressions noted.
+Ya, I saw that, which in addition to Wei's ping, is what reminded me that the
+KVM_BUG_ON() fix hadn't been merged.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> Is it worth a patch (perhaps along with chopping off !! in
+> kvm_msr_allowed() and few other places)?
+
+Yes, I think so.
