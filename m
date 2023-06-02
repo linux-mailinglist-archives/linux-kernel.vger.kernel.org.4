@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E0272086F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42813720873
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 19:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236464AbjFBRe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 13:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S236732AbjFBRgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236807AbjFBRex (ORCPT
+        with ESMTP id S236683AbjFBRgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 13:34:53 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C621BB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:34:52 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-53f04fdd77dso1104567a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:34:52 -0700 (PDT)
+        Fri, 2 Jun 2023 13:36:18 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B481B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:36:16 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-33baee0235cso6205ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685727291; x=1688319291;
+        d=google.com; s=20221208; t=1685727376; x=1688319376;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gWIa/hYf2V21JsH65jMMneaHDH++6Qy4w6MXkMzKbeA=;
-        b=CF5VYZUNTPPKcmz/AL0FUm8zCeVsv4UWgQoT2GTpOMwIegL4cKT5KMgJflTMFC66+V
-         xeoJJhQw9zCxlpRsFzKpcpk3IpHpJUgokoZxTf+vySbVKwjMVbv0w+9YzyxJbq2eLLkQ
-         QoaTjNiq3cQBnG8j61My0iFJIOzzkd9fBERi81X/woRS8hpe71y3/8Ndud2zBENlqgzm
-         ASjZOEX674wCxJVFg10odu9fkYILiCqbqc0McsqS/c2yCEMGdb+Cl48xS8RCvg7irJfg
-         2gtIjL7KtA3r3hj70bKu5SV0dM5u1c1mZHqxkwMrBdD2AVbBTLlF9+sXVHfNZ5r17QzG
-         pfWg==
+        bh=VYGuxy8Ej8tRmw8Uag/5H01fuHpZsdaCh2dA+H02kPM=;
+        b=AiObH6k1yxEvPCx51OIA8EV79fxDTSyeBg01wdrmxpGcD6UdUsMYOJwf/c1hToEGp5
+         A9G+k6Wo8HljKcNncggTq9A+iEMYRTwo5i7E6l6f632glXN9vPAFmTI79exvZuaynYDK
+         bHyfpIBzFsV+rTeMQqtycEU01a6xAzUg4SZ8IHuVkBV650P7H190xDpMbgqcZbUeQFa4
+         qHkWSrLYV1CaZ4ehzMflooIUi8EQKCfcJn1kIxUEYhIhDGtnSiG6+s9uqnFTjJ8GFe7t
+         /lDwet166VDDHCfma+oh0a26VEDHNnYP8zmPTljMn8h+37iC2EP9ZsMcOFpem893YACv
+         p5CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685727291; x=1688319291;
+        d=1e100.net; s=20221208; t=1685727376; x=1688319376;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gWIa/hYf2V21JsH65jMMneaHDH++6Qy4w6MXkMzKbeA=;
-        b=Vmu7rdPuXMMZeODB8VTJoULojNQF7n8FynI7QwVd0lgeP5PVPiwvnNC942/CBYxdBL
-         Gc3milboMU1BAFlI2WcbJ4769XSXxv9hQLvx8UxDgnneuUyQhAtI9m8MgypXknwBxJjW
-         6JBnc5cgRXN2Al91VA/yGRVsE4d3Ga1ZjxNt9toSxGibymML5pPYAo3fuFIgHeUI3N5W
-         FCa2lfRdUtEF+bOjy1J22TEQPYmZmkf9UvicmJboOm1TK0WhS3oXCtKXi9RkHPhePJ9M
-         ZUGgZ4/o5ksEi2qiciEXP+YfF67n31nDQBoAFSbRDqKW5O8cT+uHiBtE7sy3dtYbG6c+
-         Kgow==
-X-Gm-Message-State: AC+VfDyU4J7JWmonvDwvgkGfRn+OCbOktrId5wG39nL5vJCi7mQz4Su6
-        Mk4yiJWTerwUrgA3j9ZipC8Tr2s4QoO9tGZ9QNmBWQ==
-X-Google-Smtp-Source: ACHHUZ7TXiL2cGXn5F7xjRx6tmKXIWHTmLk4eDufEfMDEnkoYiBpO3aTnkMsCO6fu5T/GC6Oh8VkS7YwWqGpMRW8+9I=
-X-Received: by 2002:a17:90a:6b09:b0:253:3d00:a55a with SMTP id
- v9-20020a17090a6b0900b002533d00a55amr546994pjj.34.1685727291547; Fri, 02 Jun
- 2023 10:34:51 -0700 (PDT)
+        bh=VYGuxy8Ej8tRmw8Uag/5H01fuHpZsdaCh2dA+H02kPM=;
+        b=I/sGYcGmqf2jlXtFiQzp81ukQZBlrOd00W9+V61gcqmns2uQBCgubduCAGN/Al/dPz
+         337ItmoJ406kMfneS3TRIYtpTfZYwoHTwUuCgzseaZ3T6ABNsbRPUmGkAPEDQE5HI5Xi
+         YBmsfnGgZ4ZW9+A9YorI0ApLRDVQQBdp2J9pJW9/vBCcDwhw0wZdk4ZXZVBoMIgNJG5+
+         eBZcWfKNIFitK2p3dDOWRvPqc3EJkUnLPFODpNSqbA6+I/FvYX2u4bLVqk4tDn3csAkQ
+         P0J/zSnLqzldjEiV5zqjI8937caXwWm0sf5Yip+0AirFaKaspJhbdTLZ3CPn3jIF8tC8
+         EiMw==
+X-Gm-Message-State: AC+VfDybSEPw+boJhWrzuwpC1OeCIrZ2VEaftqSV8WDe7JD9fRcRtLjI
+        0VcYBrQ2skl8Qvmpl1+X+7AxGHSBt59TZ2vQO3Oy7Q==
+X-Google-Smtp-Source: ACHHUZ6wj7whRMGkFLe9wDNGh8O3OzAA6um6O9lWia/t8YK+4adlmlDW6jCDZkxTijAzhN1cAzOrQ9c3l6HGhUEm6Fw=
+X-Received: by 2002:a05:6e02:164a:b0:33c:c3ed:889c with SMTP id
+ v10-20020a056e02164a00b0033cc3ed889cmr270037ilu.12.1685727375853; Fri, 02 Jun
+ 2023 10:36:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230531040203.19295-1-badhri@google.com> <20230531040203.19295-2-badhri@google.com>
- <618e4f17-2799-4838-a21c-184c9303bef6@rowland.harvard.edu>
- <CAPTae5KrTBa-=JuBDD8iVCx1+Hqd14yWOiCRkAg0+a75Q9QcXA@mail.gmail.com> <0125d274-bac3-41e1-bd29-156a3bfcc995@rowland.harvard.edu>
-In-Reply-To: <0125d274-bac3-41e1-bd29-156a3bfcc995@rowland.harvard.edu>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Fri, 2 Jun 2023 10:34:14 -0700
-Message-ID: <CAPTae5KEBNyVJOwa3Ft2BVUU_SOGArxfcujdc7L+eHi8kbcKjw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, francesco@dolcini.it,
-        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
-        luca@z3ntu.xyz, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230602092949.545577-1-ryan.roberts@arm.com> <20230602092949.545577-3-ryan.roberts@arm.com>
+ <CAOUHufb5R_+eMxM28WWxXubPzUO4+c_1UHoXVAcWsKEyG1ndAQ@mail.gmail.com> <640f81aa-035e-9f42-c848-096e4c9e014c@arm.com>
+In-Reply-To: <640f81aa-035e-9f42-c848-096e4c9e014c@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 2 Jun 2023 11:35:39 -0600
+Message-ID: <CAOUHufakZjOK445jkMorPsqkdZuwKGxmym4+0p=s2NtB1GtbBQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] mm/damon/ops-common: atomically test and clear
+ young on ptes and pmds
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, damon@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 3:55=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
+On Fri, Jun 2, 2023 at 11:14=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com>=
+ wrote:
 >
-> On Wed, May 31, 2023 at 03:40:26PM -0700, Badhri Jagan Sridharan wrote:
-> > On Wed, May 31, 2023 at 10:55=E2=80=AFAM Alan Stern <stern@rowland.harv=
-ard.edu> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 04:02:02AM +0000, Badhri Jagan Sridharan wrot=
-e:
-> > > > usb_udc_connect_control() does not check to see if the udc has alre=
-ady
-> > > > been started. This causes gadget->ops->pullup to be called through
-> > > > usb_gadget_connect() when invoked from usb_udc_vbus_handler() even
-> > > > before usb_gadget_udc_start() is called. Guard this by checking for
-> > > > udc->started in usb_udc_connect_control() before invoking
-> > > > usb_gadget_connect().
-> > >
-> > > After a merged version of patches 1/3 and 3/3 have been applied, it
-> > > seems like most of this will not be needed any more.  Maybe not any o=
-f
-> > > it.
+> On 02/06/2023 17:35, Yu Zhao wrote:
+> > On Fri, Jun 2, 2023 at 3:30=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.c=
+om> wrote:
+> >>
+> >> It is racy to non-atomically read a pte, then clear the young bit, the=
+n
+> >> write it back as this could discard dirty information. Further, it is
+> >> bad practice to directly set a pte entry within a table. Instead
+> >> clearing young must go through the arch-provided helper,
+> >> ptep_test_and_clear_young() to ensure it is modified atomically and to
+> >> give the arch code visibility and allow it to check (and potentially
+> >> modify) the operation.
+> >>
+> >> Fixes: 3f49584b262c ("mm/damon: implement primitives for the virtual m=
+emory address spaces").
 > >
-> > Without the connect_lock introduced in this patch, wouldn't the
-> > usb_gadget_connect()/
-> > usb_gadget_disconnect() through soft_connect_store() race against
-> > usb_gadget_connect()/ usb_gadget_disconnect() through
-> > usb_udc_connect_control() ?
+> > Just to double check: was "Cc: stable@vger.kernel.org" overlooked or
+> > deemed unnecessary?
 >
-> Okay, yes, that's a good point.  It needs to be mentioned in the patch
-> description so that people will understand it is the real reason for
-> this change.
+> It was overlooked - incompetance strikes again! I was intending to cc the=
+ whole
+> series. What's the best way to fix this? Can I just add stable in cc on r=
+eply to
+> the cover letter or will I have to resend the lot?
 
-Thanks Alan !
-I had posted the v6 version of the series with 1/3 and 3/3 of v5
-squashed together. I have made changes to address your concerns in v5.
-Instead of adding a new lock, I used the connect_lock in this patch to
-protect the allow_connect flag.
-Eager to know your thoughts !
-
-Regards,
-Badhri
-
->
-> Alan Stern
+Resending the whole series would be more reliable for the process (and
+easier for Andrew). You might want to include a few new
+reviewed/acked-bys anyway (I just acked the next patch).
