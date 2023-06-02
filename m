@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEDA720289
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A22720288
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbjFBND7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S235661AbjFBND5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbjFBNDz (ORCPT
+        with ESMTP id S229538AbjFBNDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Jun 2023 09:03:55 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB30819A;
-        Fri,  2 Jun 2023 06:03:52 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6261cb1208eso19480756d6.0;
-        Fri, 02 Jun 2023 06:03:52 -0700 (PDT)
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4131B3;
+        Fri,  2 Jun 2023 06:03:53 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-565ee3d14c2so21184797b3.2;
+        Fri, 02 Jun 2023 06:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685711032; x=1688303032;
+        d=gmail.com; s=20221208; t=1685711033; x=1688303033;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bwu3a5TiDNk8aQX2qZ7oGL61sBeYU4YgJcuj8qXhAP4=;
-        b=AUtqBJyZ0q5NPj4CuiDNzoMzkp06YVY+KXCw5P/LEFgqo3bvtjU6wcdT7Kq/bJ00fj
-         ekdccBJyWK2YzgUG7gaIPL+N4PS/WXGy2QeKn5PHijfRsko0ofEI8CMTURVlVWKxmkye
-         kdW8vINpOKSOJanVCdeVHNNfwMQqwEj4w5/4lntGFRbYJNIve1fLkT6rpmIDOv23VQxL
-         lQTb/wkp8kOH/XIhV0Eb5vkyxLtyiyAnBd+zh3ASH3S3Xmi7JRKG4FPZZhLnBFLI89XV
-         OOlQcvBm+Ri3hEfok4py9SD/ch5NIKxHTLItTJhZRlcFSNgdUaQj3q4ZdW0K2tAqeTZr
-         OY4g==
+        bh=l3ZRPUz8ZBR77uMNjAdn8AKPr3I5bpHtCQUGRxd1Y5I=;
+        b=PCx/ghPp/7LQ4JBemhHQpWMBLCbwb2E5ZIWLu96BLs/tF4uAbK7VxQe+JUmTMOgJWP
+         wbNwWcmos7mxPxeH/2AT1yC5OcOlNBMIbhEBbM26iGPiC5gWkxvprCtV2ZV88I8Cpipr
+         wUvbi36DBW3X073X0BwGO80111vEpT8tQa+qUJ9XYkT6slRisaLDmpCg5Ouqb2O8/LUD
+         NGotGc38gBVA3sFmLCclfGJvAvzUDB2dy896gVRBJvycnCHSodWBzs65ZF1owDSnx+aY
+         4khZU0k+xoAyx4Kv6wUDIgrCFzEWkhGB5YqNbRyMyO7v4dqO/yqKjweZsT/1L2AnbWd6
+         onTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711032; x=1688303032;
+        d=1e100.net; s=20221208; t=1685711033; x=1688303033;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bwu3a5TiDNk8aQX2qZ7oGL61sBeYU4YgJcuj8qXhAP4=;
-        b=JlF+uC8DEa1B6QYdTK4K8/sTrkUUCOKievCj18siXvJ7KcSUoPtvm6HvpT1zWqnqDK
-         3U5/nmyWq3FtBny+uhUGHj9Ur0WU/cGdetSRk86OXy5W1FT68UykV/RwHdPIKVWnOfOk
-         AjeP/x2CCceO7UV5LbvhZihF9knU7tPVrAzlAcf/tpesne5jXJAvpLCLLBJO7UPmmzrt
-         tfXSD1UZrXlYVWQDVkEFYRbJKFK5F8FARvyNMMETvXbqvFv2+ah5wRgPH0DRDYIZES9N
-         0SQmBwpqAjW+ByiPRvT9ENeWunqXEvFJkS+lUJTckDZUDHc003YPDECh2l5gxA7LMBbc
-         iuKQ==
-X-Gm-Message-State: AC+VfDwLmJDNtxf2IwTGec7puPpvEHPn8iye2ST8sK5jrPHLC2H4++Nf
-        aQb1bJ/668gi/Cw9lYIlfjL0IouaZvKMGKirT8o=
-X-Google-Smtp-Source: ACHHUZ5oNkE2+uMJq9lvZUWNrIS3tlbtY4VxLBOJs7jzLpJ3o43croYk9Ip3WhUy+unyiGCQgAx5CbQb186fLGTd1yc=
-X-Received: by 2002:a05:6214:240b:b0:623:9a08:4edd with SMTP id
- fv11-20020a056214240b00b006239a084eddmr6420585qvb.25.1685711031776; Fri, 02
- Jun 2023 06:03:51 -0700 (PDT)
+        bh=l3ZRPUz8ZBR77uMNjAdn8AKPr3I5bpHtCQUGRxd1Y5I=;
+        b=Gx77B0uujJXLVt0/PjxnaKBshkauN8JfCF6LLG8ozMr7BIiH12VGAvZ/T9WSQqvRPl
+         ehoXNvQERz2tbkmKPQ0iBZlgzepGes086g1VpwO7BXNcLJuNQx9ZPe+PHbGFP6pFw+1H
+         oqmHWTeuKE5kaAudQ09X7g0jIuaSuOli/sD1eIdJRt77Go+xiXZkTJpkpUklPeY1J+Of
+         ZFVSEDZeHPKk+VfokuQmrvyajxSMQomNICVBgI8Uwdsj0gFq+sDtRLBB2XiXRO+6kT3y
+         Idu+GPbB0C+bgl57jMl/mC791j1MNE1Xh3J2eV63DyS1V2hjJs+8byMDPdZGmfM5K0g3
+         OD3A==
+X-Gm-Message-State: AC+VfDw1k9eR2JygTQCoe0xUQrCaHa3HBeMUqwaGkecE49lS3TydIZxW
+        0gJcmgej6H4NnvdOV+LYjD1Fz5aMjaf7CNzUsow=
+X-Google-Smtp-Source: ACHHUZ7fFI2FiBfit/D2txdSbalGxdI6U723yrg8Qc5/16GhvGFJQS5doIqTz5hFt1EXkICJDhjoINq+kd6P1zfwPPk=
+X-Received: by 2002:a0d:cbc5:0:b0:564:a549:babc with SMTP id
+ n188-20020a0dcbc5000000b00564a549babcmr12513619ywd.32.1685711032746; Fri, 02
+ Jun 2023 06:03:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230602072755.7314-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230602072755.7314-1-jiasheng@iscas.ac.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 2 Jun 2023 16:03:15 +0300
-Message-ID: <CAHp75VfSU-xXWPmwjCKsxc_WcFdZmJuYBO1nd230SeLe7D+b-g@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: sifive: Add missing check for platform_get_irq
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-gpio@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <CANn89iK13jkbKXv-rKiUbTqMrk3KjVPGYH_Vv7FtJJ5pTdUAYQ@mail.gmail.com>
+ <20230531225947.38239-1-kuniyu@amazon.com> <b613cbaf569945e3811609a9f10fe0aa@AcuMS.aculab.com>
+In-Reply-To: <b613cbaf569945e3811609a9f10fe0aa@AcuMS.aculab.com>
+From:   Akihiro Suda <suda.kyoto@gmail.com>
+Date:   Fri, 2 Jun 2023 22:03:41 +0900
+Message-ID: <CAG8fp8R+2TztxYKcLwU354mQ47mD7RPQKarxnzA+j2ydtqamBg@mail.gmail.com>
+Subject: Re: [PATCH linux] net/ipv4: ping_group_range: allow GID from
+ 2147483648 to 4294967294
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "akihiro.suda.cz@hco.ntt.co.jp" <akihiro.suda.cz@hco.ntt.co.jp>,
+        "akihirosuda@git.sr.ht" <akihirosuda@git.sr.ht>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "segoon@openwall.com" <segoon@openwall.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,50 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:28=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.c=
-n> wrote:
+2023=E5=B9=B46=E6=9C=882=E6=97=A5(=E9=87=91) 19:51 David Laight <David.Laig=
+ht@aculab.com>:
 >
-> Add the missing check for platform_get_irq and return error code
-> if it fails.
+> From: Kuniyuki Iwashima
+> > Sent: 01 June 2023 00:00
+> ....
+> > > > --- a/include/net/ping.h
+> > > > +++ b/include/net/ping.h
+> > > > @@ -20,7 +20,7 @@
+> > > >   * gid_t is either uint or ushort.  We want to pass it to
+> > > >   * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+> > > >   */
+> > > > -#define GID_T_MAX (((gid_t)~0U) >> 1)
+> > > > +#define GID_T_MAX ((gid_t)~0U)
+>
+> Doesn't that comment need updating?
+>
+> I do wonder how much code breaks for gid > MAXINT.
+> How much testing does it actually get??
 
-The template for function references is func().
-Otherwise looks fine to me
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+It is fixed in v3:
+https://patchwork.kernel.org/project/netdevbpf/patch/20230601031305.55901-1=
+-akihiro.suda.cz@hco.ntt.co.jp/
 
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
->
-> v1 -> v2:
->
-> 1. Return "chip->irq_number[i]" instead of "-ENODEV".
-> ---
->  drivers/gpio/gpio-sifive.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-sifive.c b/drivers/gpio/gpio-sifive.c
-> index 98939cd4a71e..7245000fb049 100644
-> --- a/drivers/gpio/gpio-sifive.c
-> +++ b/drivers/gpio/gpio-sifive.c
-> @@ -221,8 +221,11 @@ static int sifive_gpio_probe(struct platform_device =
-*pdev)
->                 return -ENODEV;
->         }
->
-> -       for (i =3D 0; i < ngpio; i++)
-> +       for (i =3D 0; i < ngpio; i++) {
->                 chip->irq_number[i] =3D platform_get_irq(pdev, i);
-> +               if (chip->irq_number[i] < 0)
-> +                       return chip->irq_number[i];
-> +       }
->
->         ret =3D bgpio_init(&chip->gc, dev, 4,
->                          chip->base + SIFIVE_GPIO_INPUT_VAL,
-> --
-> 2.25.1
->
+```
+-/*
+- * gid_t is either uint or ushort.  We want to pass it to
+- * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+- */
+-#define GID_T_MAX (((gid_t)~0U) >> 1)
++#define GID_T_MAX (((gid_t)~0U) - 1)
+```
+
+Tested with 4294967294, 4294967295 (EINVAL), and 4294967296 (EINVAL), on x8=
+6_64.
 
 
---
-With Best Regards,
-Andy Shevchenko
+
+
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
