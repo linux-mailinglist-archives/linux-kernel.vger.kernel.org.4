@@ -2,83 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9534720042
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A775272003D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbjFBLS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S235549AbjFBLSe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 07:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235552AbjFBLSo (ORCPT
+        with ESMTP id S235358AbjFBLSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:18:44 -0400
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4736318C;
-        Fri,  2 Jun 2023 04:18:31 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9a:3200:0:0:0:1])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 352BHn9O1185756
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 2 Jun 2023 12:17:51 +0100
-Received: from miraculix.mork.no ([IPv6:2a01:799:964:4b0a:9af7:269:d286:bcf0])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 352BHhKM3898766
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Fri, 2 Jun 2023 13:17:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1685704664; bh=D25jkR/WUH8PZduU3b5o10N3jWWeZOgQA2nLbFQTGnA=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=G4jFD+3B1qqEeWsYZVROqK3W7y9sWFjgHXl792FH3ygWbvhib4HhcUOehbsFOlCwf
-         SAhOUYFpgfmNmjli1/X9VwqJ3e1nbRxOC402OQ378spDK113DnswOSg3UY54wkOrl6
-         NrH8TylEUzIt795lkdcfmgK35SarfxXHrmRIUsKM=
-Received: (nullmailer pid 1385861 invoked by uid 1000);
-        Fri, 02 Jun 2023 11:17:38 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Wes Huang <wes155076@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wes Huang <wes.huang@moxa.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add support for Compal RXM-G1
-Organization: m
-References: <20230602054112.2299565-1-wes.huang@moxa.com>
-Date:   Fri, 02 Jun 2023 13:17:38 +0200
-In-Reply-To: <20230602054112.2299565-1-wes.huang@moxa.com> (Wes Huang's
-        message of "Fri, 2 Jun 2023 13:41:12 +0800")
-Message-ID: <87y1l2m7u5.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Fri, 2 Jun 2023 07:18:30 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0121A1B9;
+        Fri,  2 Jun 2023 04:18:15 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso4799658276.1;
+        Fri, 02 Jun 2023 04:18:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685704695; x=1688296695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=55TCnNM7kMHRew3G4Jl4TYRy0f4Haiew0/tikDTeZNg=;
+        b=QUfrLdFvAGwzYmoCbap1nhDGCSYytke1ndKiXgRySPehbNi0hgnyQQR2CPr7AKeurm
+         fuelDWEh6jNgdD1SbWJUT+VbxS1Q2/XEhsadC7sp3aujSvxtHDW5lcm/s/3vkygnpWhl
+         43A5rQVCMfuXBYNHPPqoXys5KGN7YsHehRXutO+sI/FJiK6I/VJ9kCND4laKowv7pXko
+         cASjaGLcd9sV4kP6mHx/N+Z0UTEFIis+FtI9asH5NR1d3ndSQP+RJ4CFtxl427mKjYgA
+         6miDMlkGwRgN7TNJejn0/lmDgJNSgoyZ/qZ69OLmBl3jRlA+5yWRMJPEJwPtLdQFZKiX
+         iCDA==
+X-Gm-Message-State: AC+VfDwtaeWC9oIyG4myUjM5VlQpN9f9FzhN1No89Zm8MJDIUATj85Bi
+        VeUntkpOjtk9CB0+gb8rFLByLNPjfzboqDzv
+X-Google-Smtp-Source: ACHHUZ5WDEDLyze0p2DKzK94QluEN0m78XsgT8PdUjwD4yVHgBuwa/3hvekURaEK3p0XCi4S2blrlg==
+X-Received: by 2002:a81:4f15:0:b0:561:94a9:f9f7 with SMTP id d21-20020a814f15000000b0056194a9f9f7mr5542787ywb.20.1685704694917;
+        Fri, 02 Jun 2023 04:18:14 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id h187-20020a0dc5c4000000b0055aafcef659sm387316ywd.5.2023.06.02.04.18.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 04:18:13 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-568928af8f5so30320507b3.1;
+        Fri, 02 Jun 2023 04:18:12 -0700 (PDT)
+X-Received: by 2002:a81:4f15:0:b0:561:94a9:f9f7 with SMTP id
+ d21-20020a814f15000000b0056194a9f9f7mr5542636ywb.20.1685704692143; Fri, 02
+ Jun 2023 04:18:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.8 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1685696114.git.geert+renesas@glider.be> <14e091fc522aa63a3e33bda1016e5fa946d47d18.1685696114.git.geert+renesas@glider.be>
+ <20230602110459.GC26944@pendragon.ideasonboard.com>
+In-Reply-To: <20230602110459.GC26944@pendragon.ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 2 Jun 2023 13:17:58 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXR79TTSAcKb=DA2mRVDgaxBERts5PQLMf+mXpZDQJu=Q@mail.gmail.com>
+Message-ID: <CAMuHMdXR79TTSAcKb=DA2mRVDgaxBERts5PQLMf+mXpZDQJu=Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] drm: Remove references to removed transitional helpers
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wes Huang <wes155076@gmail.com> writes:
+Hi Laurent,
 
-> Add support for Compal RXM-G1 which is based on Qualcomm SDX55 chip.
+On Fri, Jun 2, 2023 at 1:05 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> On Fri, Jun 02, 2023 at 11:11:35AM +0200, Geert Uytterhoeven wrote:
+> > The transitional helpers were removed a long time ago, but some
+> > references stuck.  Remove them.
+> >
+> > Fixes: 21ebe615c16994f3 ("drm: Remove transitional helpers")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Patch looks good to me, but checkpatch warns about mismatch between From
-(which ends up as Author) and your SoB:
+> > --- a/drivers/gpu/drm/drm_plane_helper.c
+> > +++ b/drivers/gpu/drm/drm_plane_helper.c
+> > @@ -51,14 +51,6 @@
+> >   * planes, and newly merged drivers must not rely upon these transitional
+> >   * helpers.
+> >   *
+>
+> The first paragraph starts with "This helper library has two parts.". As
+> you're dropping the mention of the second part, I think you should
+> rework the first paragraph too.
 
- WARNING: From:/Signed-off-by: email address mismatch: 'From: Wes Huang <we=
-s155076@gmail.com>' !=3D 'Signed-off-by: Wes Huang <wes.huang@moxa.com>'
+That was my initial thought, too.
+However, the code still has a second part, not related to the topic of
+the first part (primary plane support).
 
-If you have to send this from a different account, then you can work
-around that issue by adding "From: Wes Huang <wes.huang@moxa.com>" as
-the first line of the email body, followed by a single blank line.
+>
+> > - * The second part also implements transitional helpers which allow drivers to
+> > - * gradually switch to the atomic helper infrastructure for plane updates. Once
+> > - * that switch is complete drivers shouldn't use these any longer, instead using
+> > - * the proper legacy implementations for update and disable plane hooks provided
+> > - * by the atomic helpers.
+> > - *
+> > - * Again drivers are strongly urged to switch to the new interfaces.
+> > - *
+> >   * The plane helpers share the function table structures with other helpers,
+> >   * specifically also the atomic helpers. See &struct drm_plane_helper_funcs for
+> >   * the details.
 
-git will then use the second From as Author, and it will match the SoB.
+Gr{oetje,eeting}s,
 
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Bj=C3=B8rn
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
