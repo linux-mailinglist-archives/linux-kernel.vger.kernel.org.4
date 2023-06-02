@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C507204D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17F57204D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236212AbjFBOsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S235465AbjFBOtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236215AbjFBOsp (ORCPT
+        with ESMTP id S236228AbjFBOtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:48:45 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB95E4E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:48:42 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so3134156a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685717321; x=1688309321;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=hJ9vneQJ4b683G/HZn1+z6+HzvNcmHcX4U7xxt8CZQM=;
-        b=fod6LE95FV3APy5Pg6yBDbE1/Y+vFXNmAWLeCfz4L5JBk30TL+NMVnUCdzzyz1FmGA
-         tnAwb/pDxY6oxocRE7I92RpB1oMc4Ejd0AGm4RBYZmXgPLLbMDpQUSUJzxch0HcivYmH
-         eeKQiKDauWuzCFuGJoK41t9I8GBIIvnUtBY3PmVgVsQ0Gxq5tBLjiVkfrdXuV433zoPH
-         dsQNE3O+Rnb2IYR1p7VvhIGMcWM3DGsVhdqFVTwZqf2QmZZ1LKPrxOimSrdLO+ZMPKe0
-         LAZ+wOUz/ib1HVFZLCL609EZyw89w5tYV+UvpDTsdWHXTt1lKL2oaLhVA3CxTm5YuRBo
-         CtZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717321; x=1688309321;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hJ9vneQJ4b683G/HZn1+z6+HzvNcmHcX4U7xxt8CZQM=;
-        b=FfzLpQuBQ2aZKfVC0A3CkNqFtlhlhIA0vzBBbEQfxsBG6jFNubEBSkvmn9Jh5BH1k6
-         zP+wey0YGYN05wh3HlOT6JYDWY7iuIaOHhBamBj4VyW1McHc+jE+VquK1NlwF+vkd+Rd
-         FIj2vUaOwzrzVmpnKawyR5qHNnFeSlJOqTeFKmHix1aCM3LBckzhXbbFabGMslkJVos1
-         f2rEyHuUFqJyoFANkN7WveLqj2wFA+q50Ys01VGKIt6f7+Ncc9I6ktFEAsJHRmdA12QZ
-         dt5sQ1LLxzkupif/D+nfX6UX1qOVNkI3lGLCKAYUVk2l/2gVB8OlMsovZ+Ib1YW77A5w
-         q1VA==
-X-Gm-Message-State: AC+VfDxPIyATs7M0gsZLruP73HTWuQtgpk/MMZz9ScCwVirjfvOiuxUK
-        v0OaMqma1S28zNr8MKjMp46zQw==
-X-Google-Smtp-Source: ACHHUZ7UZYmvfQCc3kWCaTEJZ/XKHlA07x9dA5pULrpWr6CJ5UxHiyb7LwJqRCvti/IzE2pGri8UQg==
-X-Received: by 2002:a17:907:160d:b0:974:1c91:a751 with SMTP id hb13-20020a170907160d00b009741c91a751mr12009627ejc.29.1685717321001;
-        Fri, 02 Jun 2023 07:48:41 -0700 (PDT)
-Received: from localhost ([194.62.217.2])
-        by smtp.gmail.com with ESMTPSA id cb2-20020a170906a44200b0097457363fc0sm851382ejb.33.2023.06.02.07.48.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 07:48:40 -0700 (PDT)
-References: <20230601134946.3887870-1-aliceryhl@google.com>
- <20230601134946.3887870-9-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2 8/8] rust: workqueue: add examples
-Date:   Fri, 02 Jun 2023 16:48:14 +0200
-In-reply-to: <20230601134946.3887870-9-aliceryhl@google.com>
-Message-ID: <87y1l1zzqw.fsf@metaspace.dk>
+        Fri, 2 Jun 2023 10:49:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8CEE49;
+        Fri,  2 Jun 2023 07:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685717355; x=1717253355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YPUlxeS32cApP+ZDIUHR9khrq40A8i+TVQo/LyymAAg=;
+  b=iSIFuCLsrzjIhWQBq0iHm1gHLZ5Fe81EIAgx/XJKBBeb5h4s9L/vuxNi
+   sxbmnLW1Vnpkz3AhKgcybk4fgrK2BzmQ+6gqei9fF0FkGprGa9olHloGP
+   xbX4agugBUo/X5HDCdot1VlKxug48zEhqKIluLCyE89uT7YoWFAMR3dwT
+   YiFJ9I1SCjzWW4pXvbbWu+vcrodW4esE9qEgmGm+AmQvW+g9TyP3NlnQ/
+   4FFQHCk5TwMl0rQbmioL314poFzQMNdXl10QfJc4pI33sR3WqYza4DiSN
+   rNi+V4AieD9jdYVpu8Wv6UVZyzPUrz4tEzMO9KgE1ijDl4a/VnxI/bOWP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="353378802"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="353378802"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 07:49:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="772905903"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="772905903"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Jun 2023 07:49:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q565Q-000fQj-0X;
+        Fri, 02 Jun 2023 17:49:04 +0300
+Date:   Fri, 2 Jun 2023 17:49:03 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Maksim Kiselev <bigunclemax@gmail.com>
+Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 1/3] iio: adc: Add Allwinner D1/T113s/R329/T507 SoCs
+ GPADC
+Message-ID: <ZHoBXxM80aqvLZNt@smile.fi.intel.com>
+References: <20230601223104.1243871-1-bigunclemax@gmail.com>
+ <20230601223104.1243871-2-bigunclemax@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601223104.1243871-2-bigunclemax@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,135 +95,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 02, 2023 at 01:30:39AM +0300, Maksim Kiselev wrote:
+> From: Maxim Kiselev <bigunclemax@gmail.com>
+> 
+> The General Purpose ADC (GPADC) can convert the external signal into
+> a certain proportion of digital value, to realize the measurement of
+> analog signal, which can be applied to power detection and key detection.
+> 
+> Theoretically, this ADC can support up to 16 channels. All SoCs below
+> contain this GPADC IP. The only difference between them is the number
+> of available channels:
+> 
+>  T113 - 1 channel
+>  D1   - 2 channels
+>  R329 - 4 channels
+>  T507 - 4 channels
 
-Alice Ryhl <aliceryhl@google.com> writes:
+...
 
-> This adds two examples of how to use the workqueue. The first example
-> shows how to use it when you only have one `work_struct` field, and the
-> second example shows how to use it when you have multiple `work_struct`
-> fields.
->
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> +struct sun20i_gpadc_iio {
+> +	struct regmap		*regmap;
+> +	struct completion	completion;
+> +	struct mutex		lock;
 
-Reviewed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
+The locks should be explained (what are they for? what do they protect?).
 
-> ---
->  rust/kernel/workqueue.rs | 104 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 104 insertions(+)
->
-> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index c302e8b8624b..cefcf43ff40e 100644
-> --- a/rust/kernel/workqueue.rs
-> +++ b/rust/kernel/workqueue.rs
-> @@ -26,6 +26,110 @@
->  //!  * The `WorkItemPointer` trait is implemented for the pointer type that points at a something
->  //!    that implements `WorkItem`.
->  //!
-> +//! ## Example
-> +//!
-> +//! This example defines a struct that holds an integer and can be scheduled on the workqueue. When
-> +//! the struct is executed, it will print the integer. Since there is only one `work_struct` field,
-> +//! we do not need to specify ids for the fields.
-> +//!
-> +//! ```
-> +//! use kernel::prelude::*;
-> +//! use kernel::sync::Arc;
-> +//! use kernel::workqueue::{self, Work, WorkItem};
-> +//!
-> +//! #[pin_data]
-> +//! struct MyStruct {
-> +//!     value: i32,
-> +//!     #[pin]
-> +//!     work: Work<MyStruct>,
-> +//! }
-> +//!
-> +//! impl_has_work! {
-> +//!     impl HasWork<Self> for MyStruct { self.work }
-> +//! }
-> +//!
-> +//! impl MyStruct {
-> +//!     fn new(value: i32) -> Result<Arc<Self>> {
-> +//!         Arc::pin_init(pin_init!(MyStruct {
-> +//!             value,
-> +//!             work <- Work::new(),
-> +//!         }))
-> +//!     }
-> +//! }
-> +//!
-> +//! impl WorkItem for MyStruct {
-> +//!     type Pointer = Arc<MyStruct>;
-> +//!
-> +//!     fn run(this: Arc<MyStruct>) {
-> +//!         pr_info!("The value is: {}", this.value);
-> +//!     }
-> +//! }
-> +//!
-> +//! /// This method will enqueue the struct for execution on the system workqueue, where its value
-> +//! /// will be printed.
-> +//! fn print_later(val: Arc<MyStruct>) {
-> +//!     let _ = workqueue::system().enqueue(val);
-> +//! }
-> +//! ```
-> +//!
-> +//! The following example shows how multiple `work_struct` fields can be used:
-> +//!
-> +//! ```
-> +//! use kernel::prelude::*;
-> +//! use kernel::sync::Arc;
-> +//! use kernel::workqueue::{self, Work, WorkItem};
-> +//!
-> +//! #[pin_data]
-> +//! struct MyStruct {
-> +//!     value_1: i32,
-> +//!     value_2: i32,
-> +//!     #[pin]
-> +//!     work_1: Work<MyStruct, 1>,
-> +//!     #[pin]
-> +//!     work_2: Work<MyStruct, 2>,
-> +//! }
-> +//!
-> +//! impl_has_work! {
-> +//!     impl HasWork<Self, 1> for MyStruct { self.work_1 }
-> +//!     impl HasWork<Self, 2> for MyStruct { self.work_2 }
-> +//! }
-> +//!
-> +//! impl MyStruct {
-> +//!     fn new(value_1: i32, value_2: i32) -> Result<Arc<Self>> {
-> +//!         Arc::pin_init(pin_init!(MyStruct {
-> +//!             value_1,
-> +//!             value_2,
-> +//!             work_1 <- Work::new(),
-> +//!             work_2 <- Work::new(),
-> +//!         }))
-> +//!     }
-> +//! }
-> +//!
-> +//! impl WorkItem<1> for MyStruct {
-> +//!     type Pointer = Arc<MyStruct>;
-> +//!
-> +//!     fn run(this: Arc<MyStruct>) {
-> +//!         pr_info!("The value is: {}", this.value_1);
-> +//!     }
-> +//! }
-> +//!
-> +//! impl WorkItem<2> for MyStruct {
-> +//!     type Pointer = Arc<MyStruct>;
-> +//!
-> +//!     fn run(this: Arc<MyStruct>) {
-> +//!         pr_info!("The second value is: {}", this.value_2);
-> +//!     }
-> +//! }
-> +//!
-> +//! fn print_1_later(val: Arc<MyStruct>) {
-> +//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 1>(val);
-> +//! }
-> +//!
-> +//! fn print_2_later(val: Arc<MyStruct>) {
-> +//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 2>(val);
-> +//! }
-> +//! ```
-> +//!
->  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
->  
->  use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
+> +	int			lastch;
+> +};
+
+...
+
+> +static const struct regmap_config sun20i_gpadc_regmap_config = {
+> +	.reg_bits = 32,
+> +	.val_bits = 32,
+> +	.reg_stride = 4,
+> +	.fast_io = true,
+
+I forgot if I asked about regmap lock do you need it?
+
+> +};
+
+...
+
+> +	if (!wait_for_completion_timeout(&info->completion,
+> +					 msecs_to_jiffies(100))) {
+
+Dunno if it's better to have this parameter to be defined with self-explanatory
+name.
+
+> +		ret = -ETIMEDOUT;
+> +		goto err;
+> +	}
+
+...
+
+> +err:
+
+err_unlock:
+
+> +	mutex_unlock(&info->lock);
+> +
+> +	return ret;
+
+...
+
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_RAW:
+> +		ret = sun20i_gpadc_adc_read(info, chan, val);
+> +		return ret;
+
+		return sun...;
+
+> +	case IIO_CHAN_INFO_SCALE:
+> +		/* value in mv = 1800mV / 4096 raw */
+> +		*val = 1800;
+> +		*val2 = 12;
+> +		return IIO_VAL_FRACTIONAL_LOG2;
+> +	default:
+> +		return -EINVAL;
+> +	}
+
+...
+
+> +	if (num_channels > SUN20I_GPADC_MAX_CHANNELS) {
+> +		dev_err(dev, "num of channel children out of range");
+> +		return -EINVAL;
+> +	}
+
+Is it really critical error?
+
+...
+
+> +	channels = devm_kcalloc(dev, num_channels,
+> +				sizeof(*channels), GFP_KERNEL);
+
+At least one more parameter can be located on the previous line.
+
+> +	if (!channels)
+> +		return -ENOMEM;
+
+...
+
+> +err_child_out:
+
+err_put_child:
+
+The goto labels should be self-explanatory of what to expect when goto.
+
+> +	fwnode_handle_put(node);
+> +
+> +	return ret;
+
+...
+
+> +	ret = devm_request_irq(dev, irq, sun20i_gpadc_irq_handler,
+> +			       0, dev_name(dev), info);
+> +	if (ret < 0)
+
+Here...
+
+> +		return dev_err_probe(dev, ret,
+> +				     "failed requesting irq %d\n", irq);
+
+...
+
+> +	ret = devm_iio_device_register(dev, indio_dev);
+> +	if (ret < 0)
+
+...and here, do the positive returned values even possible?
+
+> +		return dev_err_probe(dev, ret,
+> +				     "could not register the device\n");
+
+...
+
+> +	{ .compatible = "allwinner,sun20i-d1-gpadc", },
+
+Inner comma is not needed.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
