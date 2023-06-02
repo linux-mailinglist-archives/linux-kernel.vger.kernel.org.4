@@ -2,119 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003E671F70C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7882371F70F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 02:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbjFBAPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 20:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S232303AbjFBARM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 20:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjFBAPG (ORCPT
+        with ESMTP id S229545AbjFBARK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 20:15:06 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2970C12C;
-        Thu,  1 Jun 2023 17:15:06 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-541f4ee6f89so1055784eaf.2;
-        Thu, 01 Jun 2023 17:15:06 -0700 (PDT)
+        Thu, 1 Jun 2023 20:17:10 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352DD12C;
+        Thu,  1 Jun 2023 17:17:10 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53f832298acso927774a12.0;
+        Thu, 01 Jun 2023 17:17:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685664905; x=1688256905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZoO4kRichS2zxccTSqMieJokAHBxiDEurxplxjeSpo=;
-        b=DCAbpoRMxIVbOpnsaG9vlDWF6vxI0ZuKoJvsPqsclYD4OOtVN64fSHST9sJymuEaGr
-         vrZ6/S0THbeCrqHP/AuwysQzbPRcl4ov7MT/Gp7wOfZy5bVGuJ+zYzksbCfAQ+IB3N9Z
-         ZXmghJNvTAjMzcZQ2N4hETTBtEq490Ubrb84M9827mCI8mgkRt6+vmzFUQWsOFlcV9XV
-         /a0PtKP2qxj97/cqTGJWGZ5qHiuO/n4WXvNEZ2TnB6yr0BftWh0NClXGiTLbced6sB41
-         2b4fu/sYH9yFfHyZABcVAT5qbtj0P3sfW8gy14RBh5xNdFmlyaU2449Pj/ob3FdQ0KeN
-         Pq6Q==
+        d=gmail.com; s=20221208; t=1685665029; x=1688257029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrN0t9UfclF5cy9ZloYwTGr7DNKDxki6WiEgWkwACt0=;
+        b=lhdPVIA071TFtqeyHYSqjD+WiSJe5DtZLJeVp0VVCLWYYZd+5WAjeq1hVbT5+7ClFy
+         9u2kk7mjDc48JB9HqsVR2sAZ9rP81WaiX4dzkboZzQcHhpXACuDj2nnKilO0GpRb+w+U
+         GHE3V9Wj+8jyWmXurP1jnV0hdWJW6F6Oc0kgM4cb7hNG2vjVJ9V93WnUUJaAuQFXy75M
+         EX70u2pqVKKtBfi0cdlsZwHCN1KYMuyOQbtGqBzQwSBC8CYln56LMIhCGlMyKuL/Lhns
+         nGOn2mA7NCNpeXL3+28jIJiSx++xrwO63IgXVRfw70YfqUbvm/+rxnFh81O4k0la58j8
+         cWuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685664905; x=1688256905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lZoO4kRichS2zxccTSqMieJokAHBxiDEurxplxjeSpo=;
-        b=ZiQB3JYBFiGshatvqZdYyO/b/yGV+5FTBSs0fg/ty9EXvLIkxtv+vp6nIpeVwuQ68Y
-         V4vfpnvsygvGjR8twhAr7WfeBJzh7SJQ9kO26snjKtDxhMm1LSFybze6filI5/sb0SYm
-         E+q+LuW90yDlOVOufRQv+2ghLfQEKhbUxylyNncu7EiILiuBwrSOyAwPx9w0YKwrVCqn
-         tA0q6m2kx9cqZdHNeHjBRNI6LLFiKJyjTZ/1CFOx9v2eOLd4H/zO4Q/0UYH2Ppzaz/J5
-         ly02was0+ORhHHiRGRQ7l8ujC7SBd0qO29ERAD+g0niMHgtHNid+RkFLRmKK3Elr4g+B
-         5Clg==
-X-Gm-Message-State: AC+VfDyB+6+awfDyqvArumZ+/YndGbsfGoEbIVRa4oCp17OIWAbIQ7jv
-        QL3HjkH2F+RGkZW1V3GxSVs=
-X-Google-Smtp-Source: ACHHUZ6yjBcvEkrtugxUO4HIiOG6YluU7DgTZTKviOwpM19PM7jHGijJn0nZH8PDi8q7R+IMIL32yA==
-X-Received: by 2002:a05:6358:5e01:b0:117:ffb1:dfa8 with SMTP id q1-20020a0563585e0100b00117ffb1dfa8mr5113373rwn.19.1685664905223;
-        Thu, 01 Jun 2023 17:15:05 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id c13-20020aa7880d000000b0063d46ec5777sm5603608pfo.158.2023.06.01.17.15.03
+        d=1e100.net; s=20221208; t=1685665029; x=1688257029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yrN0t9UfclF5cy9ZloYwTGr7DNKDxki6WiEgWkwACt0=;
+        b=lBTh2/8S8nxh4s7rd7w7H6AIBAv4rwqhc8aAOuqmVlGEhO1FKkk7IOhKBxLge3l5sn
+         Qj4VB0DGZddT2L2eC5hmPMY3vxBwg7Ps/LDXCmxwD35trproipO8Bp6NPAjGEJK8jdCs
+         ct9I/jp+w4WTji13M9xjU8PC+If1lpCFip1rzN6raHk3kg+pWFYTxT3mKUvIimnkyvIL
+         fAy/QQ9Sj3DaIAIPw4T6K5c3esS8J19MryKz2yRists0ho4fJBX/5BFIfIC/MZeoRbjY
+         cPEex1QdYSAIXmFyDBhVQr1HZwFFSRScvJ5xipmQRWIAJrt0TI3u7rin36o6pXgwr2MW
+         rUbQ==
+X-Gm-Message-State: AC+VfDz+VrSj8VzYByFTapUbvS8KNw2Bj00za3yiKRjDh/ms7+fCbTF4
+        567iUYNCQgvnv2n/rRGkh7o=
+X-Google-Smtp-Source: ACHHUZ4kgjZ/9aCx3yqrjCBRAZjTN9DN2TIK1WeVwg35b18YgGek5vl5Fbx+Mm9jblZN4JyRmlMgVg==
+X-Received: by 2002:a05:6a20:1583:b0:10b:71c:20c5 with SMTP id h3-20020a056a20158300b0010b071c20c5mr9859169pzj.51.1685665029572;
+        Thu, 01 Jun 2023 17:17:09 -0700 (PDT)
+Received: from babbage.. (162-227-164-7.lightspeed.sntcca.sbcglobal.net. [162.227.164.7])
+        by smtp.gmail.com with ESMTPSA id b38-20020a631b66000000b0051eff0a70d7sm8063pgm.94.2023.06.01.17.17.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 17:15:04 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 17:15:02 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        "Chen, Bo2" <chen.bo@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v14 011/113] KVM: TDX: Add C wrapper functions for
- SEAMCALLs to the TDX module
-Message-ID: <20230602001502.GI1234772@ls.amr.corp.intel.com>
-References: <cover.1685333727.git.isaku.yamahata@intel.com>
- <37b118268ccf73d8e9cc1ef8f9fb7376fb732d60.1685333727.git.isaku.yamahata@intel.com>
- <DS0PR11MB63736AAA616C74E5F8316B1ADC499@DS0PR11MB6373.namprd11.prod.outlook.com>
+        Thu, 01 Jun 2023 17:17:09 -0700 (PDT)
+From:   msmulski2@gmail.com
+To:     andrew@lunn.ch
+Cc:     f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
+        kabel@kernel.org, Michal Smulski <michal.smulski@ooma.com>
+Subject: [PATCH net-next v6 0/1] net: dsa: mv88e6xxx: implement USXGMII mode for mv88e6393x
+Date:   Thu,  1 Jun 2023 17:17:03 -0700
+Message-Id: <20230602001705.2747-1-msmulski2@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB63736AAA616C74E5F8316B1ADC499@DS0PR11MB6373.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 01:24:35PM +0000,
-"Wang, Wei W" <wei.w.wang@intel.com> wrote:
+From: Michal Smulski <michal.smulski@ooma.com>
 
-> > diff --git a/arch/x86/kvm/vmx/tdx_ops.h b/arch/x86/kvm/vmx/tdx_ops.h
-> > new file mode 100644 index 000000000000..893cc6c25f3b
-> > --- /dev/null
-> > +++ b/arch/x86/kvm/vmx/tdx_ops.h
-> > @@ -0,0 +1,202 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* constants/data definitions for TDX SEAMCALLs */
-> > +
-> > +#ifndef __KVM_X86_TDX_OPS_H
-> > +#define __KVM_X86_TDX_OPS_H
-> > +
-> > +#include <linux/compiler.h>
-> > +
-> > +#include <asm/cacheflush.h>
-> > +#include <asm/asm.h>
-> > +#include <asm/kvm_host.h>
-> > +
-> > +#include "tdx_errno.h"
-> > +#include "tdx_arch.h"
-> > +#include "x86.h"
-> > +
-> > +static inline u64 kvm_seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
-> > +			       struct tdx_module_output *out) {
-> 
-> As discussed somewhere before, kvm_* is more common to be labelled for the
-> generic code. Would it be better to be named tdx_seamcall here?
+Changes from previous version:
+* use phylink_decode_usxgmii_word() to decode USXGMII link state
+* use existing include/uapi/linux/mdio.h defines when parsing status bits
 
-Ok, let's rename it to tdx_seamcall(), that's more consistent in this file.
+Michal Smulski (1):
+  net: dsa: mv88e6xxx: implement USXGMII mode for mv88e6393x
+
+ drivers/net/dsa/mv88e6xxx/chip.c   |  3 +-
+ drivers/net/dsa/mv88e6xxx/port.c   |  3 ++
+ drivers/net/dsa/mv88e6xxx/serdes.c | 46 ++++++++++++++++++++++++++++--
+ drivers/net/dsa/mv88e6xxx/serdes.h |  4 +++
+ 4 files changed, 52 insertions(+), 4 deletions(-)
+
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.34.1
+
