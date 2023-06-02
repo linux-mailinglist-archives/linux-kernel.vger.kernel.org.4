@@ -2,219 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2F0720132
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B80720138
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235717AbjFBMLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S235735AbjFBMM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbjFBMK3 (ORCPT
+        with ESMTP id S235501AbjFBMMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:10:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A05D3;
-        Fri,  2 Jun 2023 05:10:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95D3E64F8E;
-        Fri,  2 Jun 2023 12:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAF4C433D2;
-        Fri,  2 Jun 2023 12:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685707827;
-        bh=4j8IEfNND6Ip35V7OtZoAneDtYiN13jPWMiXFEGXX8Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KZ7TPpTQeD+Vq5oJC3k6NUFUDf/mSj9/Xg//feYUZoO47Kygl0xx68NMlze9SXgTE
-         vObudw8yQG/29PxYUzmM34qJUp/u0N4sFY/3KmkQ6mVHVfsCAnt1titgWsZwzhmGJU
-         v/8BG/J5MGIpKzWJOB5SOd9g0N7T8UeWzwb6bDnYNuNTyOJh35RKHpVERVxQq+dRim
-         F1pShYvk3Wz5Wb/IjC72U3GqValbIvX/cT1b+AXlbnGLXr6sPTDJZQjVsQVBUwxCPk
-         2SAhfOD7rQRVmmpDZfQPsXBFF0GWJkUf+I3xJ2NcywVy2QVkRxKgAfczGSkbUYDILJ
-         r5ow31qPdQWOg==
-Message-ID: <38d41f97-14d5-e24b-3d19-6c4f96305c58@kernel.org>
-Date:   Fri, 2 Jun 2023 21:10:22 +0900
+        Fri, 2 Jun 2023 08:12:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFAEE7
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685707903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jBqXisssxSy08laXqA4j2X5BRqq3rkPi2c6BRIFiiB0=;
+        b=KFqcnBdkwa6+ko4XDv7sAQtk/OJN4blu07FMGbvPN/wyvqtdVib8Fxzrg7WbSl9UsY+1pW
+        4W/50jYS9RwDzGX+jUZcUcyQyDmXcYbNZpz9UGoZaziMBuYylv5r8h5H5inxExz2eKLLnS
+        7FclH0fyuvBvLvH3PG9tnLXlwNi+4wQ=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-zzyjqPU2PbSyqV8Pkow48A-1; Fri, 02 Jun 2023 08:11:42 -0400
+X-MC-Unique: zzyjqPU2PbSyqV8Pkow48A-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4f3bb9c5b2bso1489998e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 05:11:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685707901; x=1688299901;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jBqXisssxSy08laXqA4j2X5BRqq3rkPi2c6BRIFiiB0=;
+        b=MsjD5/Y6sDOo3kTn5kmllvUbEM16IXCcNV+3WtS0TL3qJf40eupOuFtYcAkhxnh3xo
+         nQ0S9aAhi4Y5T/pLWemZg5qZKVEdAs2BfQkzeAta8NGU6CHridgn/EflIIXeQmuqu8/P
+         of7HY5hTMBpCKXBr6nLz7tkhGCmJf54Wr/3caG1vKKoaXh9IB+w+Pl4bTTEmktjrhdf+
+         CU1h3aeZnweHoIRlG53MvBWxaOaforlMyAKqBVFwcIpIBrzveKOmF/kvvWM33+lN7QLJ
+         Q4svC+d+b3RWj+x872xaKYpSdbK8NbHITPwo5ysxf+ZWm5bc6v17sT/hzmFPmCJcfkeJ
+         cM5g==
+X-Gm-Message-State: AC+VfDzx08kbX/984i6DBiI+f9Fd2MRHgV6o+8bart+OYAj26jYoUu9V
+        bEoFDi9Rrz+cQVtsahGvZaoora1qP3qJtD8cG/TlGw7QM2MxDfg0bXJSOKXAUgRLKInbSeeEumF
+        ByKyg+J3X67jEtVo9/TZtpHNT
+X-Received: by 2002:ac2:5d49:0:b0:4f3:b242:aa90 with SMTP id w9-20020ac25d49000000b004f3b242aa90mr1515708lfd.35.1685707901330;
+        Fri, 02 Jun 2023 05:11:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6IVeiUNG0peGHBMQ2vc4eUrkOSQnaTk3Irclc1ESd8zyAftY8Hs9kbez88ioB4Hh+4W4z+RQ==
+X-Received: by 2002:ac2:5d49:0:b0:4f3:b242:aa90 with SMTP id w9-20020ac25d49000000b004f3b242aa90mr1515704lfd.35.1685707900929;
+        Fri, 02 Jun 2023 05:11:40 -0700 (PDT)
+Received: from redhat.com ([2.55.4.169])
+        by smtp.gmail.com with ESMTPSA id n2-20020a5d4c42000000b00306415ac69asm1519978wrt.15.2023.06.02.05.11.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 05:11:40 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 08:11:36 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Nanyong Sun <sunnanyong@huawei.com>
+Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        jasowang@redhat.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        wangrong68@huawei.com
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+Message-ID: <20230602081114-mutt-send-email-mst@kernel.org>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 1/3] PCI: endpoint: support an alignment aware
- map/unmaping
-Content-Language: en-US
-To:     Kishon Vijay Abraham I <kvijayab@amd.com>,
-        Shunsuke Mie <mie@igel.co.jp>,
-        Jingoo Han <jingoohan1@gmail.com>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Frank Li <Frank.Li@nxp.com>, Li Chen <lchen@ambarella.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230113090350.1103494-1-mie@igel.co.jp>
- <20230113090350.1103494-2-mie@igel.co.jp>
- <e417f2c9-1fcb-cf57-3524-1408c9aae5fa@amd.com>
- <978b63ac-90b5-b909-d259-0668b77f1cc8@kernel.org>
- <52b8f850-af8c-1971-9729-c5de37875bf9@amd.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <52b8f850-af8c-1971-9729-c5de37875bf9@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207120843.1580403-1-sunnanyong@huawei.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/23 20:39, Kishon Vijay Abraham I wrote:
+On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
+> From: Rong Wang <wangrong68@huawei.com>
 > 
-> 
-> On 6/2/2023 5:13 AM, Damien Le Moal wrote:
->> On 6/2/23 00:06, Kishon Vijay Abraham I wrote:
->>> Hi Shunsuke,
->>>
->>> On 1/13/2023 2:33 PM, Shunsuke Mie wrote:
->>>> Add an align_mem operation to the EPC ops, which function is used to
->>>> pci_epc_map/unmap_addr(). These change to enable mapping for any alignment
->>>> restriction of EPC. The map function maps an aligned memory to include a
->>>> requested memory region.
->>>
->>> I'd prefer all the PCIe address alignment restriction be handled in the
->>> endpoint function drivers and not inside the core layer (esp in map and
->>> unmap calls).
->>
->> That is a really *bad* idea ! Most function drivers should be able to work with
->> any EP controller hardware. Asking these drivers to support all the alignment
->> peculiarities of every possible EP controller is impossible.
-> 
-> Function drivers already work with various restrictions of EP controller 
-> hardware. pci_epc_features was added to provide such restrictions to 
-> function drivers. Not sure why it has to be different here.
->>
->>> IMO, get the pci address alignment restriction using pci_epc_features.
->>> And use a bigger size (based on alignment restriction) in
->>> pci_epc_mem_alloc_addr() and access the allocated window using an offset
->>> (based on alignment value). You can add separate helpers if required.
->>
->> That is too simplistic and not enough. Example: Rick and I working on an nvme
->> function driver are facing a lot of issues with the EPC API for mem & mapping
->> management because we have 0 control over the PCI address that the host will
->> use. Alignment is all over the place, and the current EPC memory API
->> restrictions (window size limitations) make it impossible to transparently
->> handle all cases. We endup with NVMe command failures simply because of the API
->> limitations.
-> 
-> You mean restrictions w.r.t OB window address and not PCIe address?
->>
->> And sure, we can modify that driver to better support the EP controller we are
->> using (rockchip). But we need to support other EP controllers as well. So API
-> 
-> Every EP controller can provide it's restrictions in pci_epc_features. 
-> Unless the alignment is going to change dynamically, don't see a need 
-> for adding new epc ops.
-> 
-> Not sure why the following cannot be handled from function driver?
-> 
-> From
-> 
->         A                    A + S
->          ┌────────────────────────┐
->          │                        │
->          │        OB WIN          │
->          ├────────────────────────┤
-> mapping │                        │
->          ▼                  B + S ▼
->        B ┌────────────────────────┐
->          │                        │
->          │       PCI Address      │
->          └────────────────────────┘
-> 
-> To
-> 
-> 
->       A   A'│              A + S      A+S+alignment
->        ┌────┼───────────────────┬──────┐
->        │    │                   │      │
->        │    │       OB WIN      │      │
->        ├────┴───────────────────┴──────┤
->        │                               |
->        │                               |
->     B' ▼   B                     B + S ▼
->        ┌────┬──────────────────────────┐
->        │    │                          │
->        │    │     PCI Address          │
->        └────┴──────────────────────────┘
-> 
-> So the changes in function driver will be
-> 1) Get alignment value in epc_features
-> 2) pci_epc_mem_alloc_addr()/pci_epc_map_addr() will take into account 
-> the alignment value (change in size parameter)
-> 3) Access host memory from an offset in the provided 
-> pci_epc_mem_alloc_addr().
+> Once enable iommu domain for one device, the MSI
+> translation tables have to be there for software-managed MSI.
+> Otherwise, platform with software-managed MSI without an
+> irq bypass function, can not get a correct memory write event
+> from pcie, will not get irqs.
+> The solution is to obtain the MSI phy base address from
+> iommu reserved region, and set it to iommu MSI cookie,
+> then translation tables will be created while request irq.
 
-The problem with all this is that some EP controllers (at least the rockchip for
-sure, likely the Cadence one as well) have alignment constraints that depend on
-the *host* PCI address (yes, the rockchip driver is still buggy in that respect,
-fixes coming, see at the end for the details about the rockchip). The current
-API does not allow for that to be gracefully handled and using the epc_features
-for that would not work at all.
 
-With this dynamic constraint based on the host PCI address (which the EPF cannot
-control), we need EPC core functions that:
-1) allocate memory from windows based on the PCI address they will be mapped to
-2) Depending on the size of the transfer + the alignment need for a PCI address,
-a single memory window may not be enough, so we need the ability to allocate
-memory over multiple windows
-3) Some nice helpers that avoid that pattern of mem alloc + map pci addr and
-simplify them with "map this PCI address for me and tell me the local CPU
-address for it, completely hiding any alignment concerns.
+OK this one seems to be going nowhere I untagged it.
 
->> changes are definitely needed. Working on that. That is not easy as the mapping
->> API and its semantic impacts data transfers (memcpy_from|toio and DMA).
->>
->> I do have a patch that does something similar as this one, but at a much higher
->> level with a helper function that gives the function driver the offset into the
->> allocated memory region to use for mapping a particular PCI address. And then
->> this helper is then in turn used into a new pci_epc_map() function which does
->> mem alloc + mapping in one go based on the EPC constraints. That hides all
+> Change log
+> ----------
 > 
-> pci_epc_map() was added only to perform mapping functionality. I'd 
-> prefer it stays that way instead of adding bunch of other things into it.
-
-I am not proposing to add to it or to modify it. That function can remain the
-basic one for simple cases. But we need better functions for more complex EPF
-functions that need to map potentially large memory areas to random PCI addresses.
-
-What I am proposing is to have more intelligent helpers using the current simple
-functions: essentially wrapping pci_epc_mem_alloc_addr()+pci_epc_map_addr() with
-pci_epc_map(), and similar for unmap. That would greatly simplify the code of
-EPF drivers that constantly need to map/unmap PCI address to serve IOs/transfers
-as requested by the host/RP side. Developers would still be free to use the
-verbose path if they wish to do so, modulo the mandatory fixes for gracefully
-handling alignment and allocation size, for which we need either to modify
-pci_epc_mem_alloc_addr() or new functions.
-
-Note about the rk3399 EP controller: it has 1MB memory windows that can be used
-to map up to 1MB of PCI address space. This limits comes from the fact that the
-mapping controller uses at most the lower 22 bits from the local CPU address as
-the lower bits for the PCI address. But this also implies that the offset (the
-alignment) into the memory window must be equal to the mask of the PCI address
-to map over the number of bits of PCI address that will change over the range of
-addresses mapped (the number of bits of address changing over the address range
-[PCI_addr .. PCI_addr + mapping_size - 1]).
-
-Notifying this alignment need to an EPF driver can only be done using an API.
-Cannot do that with epc_features fields.
-
--- 
-Damien Le Moal
-Western Digital Research
+> v1->v2:
+> - add resv iotlb to avoid overlap mapping.
+> 
+> Signed-off-by: Rong Wang <wangrong68@huawei.com>
+> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
+> ---
+>  drivers/iommu/iommu.c |  1 +
+>  drivers/vhost/vdpa.c  | 59 ++++++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 57 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 5f6a85aea501..af9c064ad8b2 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
+>  	if (ops->get_resv_regions)
+>  		ops->get_resv_regions(dev, list);
+>  }
+> +EXPORT_SYMBOL(iommu_get_resv_regions);
+>  
+>  /**
+>   * iommu_put_resv_regions - release resered regions
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index ec32f785dfde..a58979da8acd 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -49,6 +49,7 @@ struct vhost_vdpa {
+>  	struct completion completion;
+>  	struct vdpa_device *vdpa;
+>  	struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
+> +	struct vhost_iotlb resv_iotlb;
+>  	struct device dev;
+>  	struct cdev cdev;
+>  	atomic_t opened;
+> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+>  
+>  	v->in_batch = 0;
+>  
+> +	vhost_iotlb_reset(&v->resv_iotlb);
+> +
+>  	return vdpa_reset(vdpa);
+>  }
+>  
+> @@ -1013,6 +1016,10 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
+>  	    msg->iova + msg->size - 1 > v->range.last)
+>  		return -EINVAL;
+>  
+> +	if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
+> +					msg->iova + msg->size - 1))
+> +		return -EINVAL;
+> +
+>  	if (vhost_iotlb_itree_first(iotlb, msg->iova,
+>  				    msg->iova + msg->size - 1))
+>  		return -EEXIST;
+> @@ -1103,6 +1110,45 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
+>  	return vhost_chr_write_iter(dev, from);
+>  }
+>  
+> +static int vhost_vdpa_resv_iommu_region(struct iommu_domain *domain, struct device *dma_dev,
+> +	struct vhost_iotlb *resv_iotlb)
+> +{
+> +	struct list_head dev_resv_regions;
+> +	phys_addr_t resv_msi_base = 0;
+> +	struct iommu_resv_region *region;
+> +	int ret = 0;
+> +	bool with_sw_msi = false;
+> +	bool with_hw_msi = false;
+> +
+> +	INIT_LIST_HEAD(&dev_resv_regions);
+> +	iommu_get_resv_regions(dma_dev, &dev_resv_regions);
+> +
+> +	list_for_each_entry(region, &dev_resv_regions, list) {
+> +		ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
+> +				region->start + region->length - 1,
+> +				0, 0, NULL);
+> +		if (ret) {
+> +			vhost_iotlb_reset(resv_iotlb);
+> +			break;
+> +		}
+> +
+> +		if (region->type == IOMMU_RESV_MSI)
+> +			with_hw_msi = true;
+> +
+> +		if (region->type == IOMMU_RESV_SW_MSI) {
+> +			resv_msi_base = region->start;
+> +			with_sw_msi = true;
+> +		}
+> +	}
+> +
+> +	if (!ret && !with_hw_msi && with_sw_msi)
+> +		ret = iommu_get_msi_cookie(domain, resv_msi_base);
+> +
+> +	iommu_put_resv_regions(dma_dev, &dev_resv_regions);
+> +
+> +	return ret;
+> +}
+> +
+>  static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>  {
+>  	struct vdpa_device *vdpa = v->vdpa;
+> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>  
+>  	ret = iommu_attach_device(v->domain, dma_dev);
+>  	if (ret)
+> -		goto err_attach;
+> +		goto err_alloc_domain;
+>  
+> -	return 0;
+> +	ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, &v->resv_iotlb);
+> +	if (ret)
+> +		goto err_attach_device;
+>  
+> -err_attach:
+> +	return 0;
+> +err_attach_device:
+> +	iommu_detach_device(v->domain, dma_dev);
+> +err_alloc_domain:
+>  	iommu_domain_free(v->domain);
+>  	return ret;
+>  }
+> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
+>  		goto err;
+>  	}
+>  
+> +	vhost_iotlb_init(&v->resv_iotlb, 0, 0);
+> +
+>  	r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
+>  	if (r)
+>  		goto err;
+> -- 
+> 2.25.1
 
