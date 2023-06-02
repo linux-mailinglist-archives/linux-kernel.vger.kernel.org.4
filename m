@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5CB71FE0E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA0F71FE12
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbjFBJkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
+        id S235062AbjFBJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjFBJkC (ORCPT
+        with ESMTP id S229458AbjFBJlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:40:02 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D157194
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:39:58 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8BxFvHtuHlk_JUDAA--.7898S3;
-        Fri, 02 Jun 2023 17:39:57 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxMMjsuHlkALeFAA--.19015S3;
-        Fri, 02 Jun 2023 17:39:56 +0800 (CST)
-Message-ID: <0fcdb10d-d69f-1f9e-d989-b36193c3fba0@loongson.cn>
-Date:   Fri, 2 Jun 2023 17:39:56 +0800
+        Fri, 2 Jun 2023 05:41:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77416C0
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:41:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9B964C7D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA543C433EF;
+        Fri,  2 Jun 2023 09:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685698876;
+        bh=/KSfwY3Ual0+wljvgcQlMt2JAgEfVGw+2YZ7Lc+KauY=;
+        h=From:To:Subject:In-Reply-To:References:Date:From;
+        b=UDLKmlUAbmsOJHDUcz5fnpZTTJXa+Dkfr8EZpIQJkiP0PFwaHjIHlsfPjtVSahPyO
+         ybmlER5Np6+I53qyaUKKbu7ZpRfSepvfS2mu6y54NWnJzRhe+5DZNie8mk2D02xrPE
+         25gt8d46UomGELcEcrEEYQVHHrkhNY0IyblBiLp57higroyXJ5FWyXjgyRfA0rzLfN
+         7XMTuEWZV5Helndap57dn4EjfxkvKIrwhK36B+Z2BMRtz5igg0RlfIdiBVfF9W0u4d
+         XnMPDODBOYzTsGxznoFfQ9BgWNZgH5+0HI2jSONP6szg5K5GaW7rL3F3KqE6ku/uEx
+         vMntFNYBCgNFg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Ruan Jinjie <ruanjinjie@huawei.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        palmer@rivosinc.com
+Subject: Re: [PATCH v3] riscv: fix kprobe __user string arg print fault issue
+In-Reply-To: <c9b6939c-f072-c4aa-b721-3cd0b2fd5635@huawei.com>
+References: <20230504072910.3742842-1-ruanjinjie@huawei.com>
+ <c9b6939c-f072-c4aa-b721-3cd0b2fd5635@huawei.com>
+Date:   Fri, 02 Jun 2023 11:41:13 +0200
+Message-ID: <87cz2ei4li.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] LoongArch: Align pci memory base address with page size
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongson-kernel@lists.loongnix.cn,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230602030732.1047696-1-maobibo@loongson.cn>
- <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
- <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
- <CAAhV-H4VHoNQdpDdpcPfDXJxnpoWUtDqmJMhb_r4DS4JtnxvhQ@mail.gmail.com>
- <e483b7bb-4184-758d-2840-11d75659975e@loongson.cn>
- <CAAhV-H4VH2yZ3sMqQYK_KWrv6FT7fqHykuMMFo_B55WJeRQOwA@mail.gmail.com>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <CAAhV-H4VH2yZ3sMqQYK_KWrv6FT7fqHykuMMFo_B55WJeRQOwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxMMjsuHlkALeFAA--.19015S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxtFWfuw13tFW8ZryftFWUurg_yoW7ZrykpF
-        W7Aan8CrWUGry7Cw4aqwn8WFsIv3srKr17Xr13Jry7Gryqvry7Xr1UJF15CFy8Jrs8GF1j
-        vr4jkrW7WF15JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2ID7UUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,150 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ruan Jinjie <ruanjinjie@huawei.com> writes:
+
+> Ping.
+
+Maybe it's not clear *why* we need
+ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE on RISC-V?
+
+ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE is used in the kernel to
+determine what "memory access" function to use, e.g.
+
+  | #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+  |         if ((unsigned long)str_val < TASK_SIZE)
+  |             ret =3D strncpy_from_user_nofault(str_field, str_val, STR_V=
+AR_LEN_MAX);
+  |         else
+  | #endif
+  |             ret =3D strncpy_from_kernel_nofault(str_field, str_val, STR=
+_VAR_LEN_MAX);
+
+RISC-V makes use of the SUM bit [1], which requires the kernel flips a
+bit explicitly to touch user memory, so it's important to use the
+correct access function.
+
+What this means, is that if
+CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE is *not* defined for RV
+kernels, the copy_from_kernel will fault (as Jinjie points out in the
+commit message).
+
+The fixes tag should be when Daniel Borkmann introduced the config -- or
+that makes sense from a backport perspective.
+
+Maybe Palmer can add a lore link to this post, and the following
+fixes-tag
+
+  Fixes: 0ebeea8ca8a4 ("bpf: Restrict bpf_probe_read{, str}() only to archs=
+ where they work")
+
+when applying?
 
 
-在 2023/6/2 16:00, Huacai Chen 写道:
-> On Fri, Jun 2, 2023 at 3:35 PM bibo, mao <maobibo@loongson.cn> wrote:
->>
->>
->>
->> 在 2023/6/2 14:55, Huacai Chen 写道:
->>> On Fri, Jun 2, 2023 at 2:48 PM bibo, mao <maobibo@loongson.cn> wrote:
->>>>
->>>>
->>>>
->>>> 在 2023/6/2 12:11, Huacai Chen 写道:
->>>>> +cc Bjorn
->>>>>
->>>>> Hi, Bibo,
->>>>>
->>>>> On Fri, Jun 2, 2023 at 11:07 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>>>>>
->>>>>> LoongArch linux kernel uses 16K page size by default, some pci devices have
->>>>>> only 4K memory size, it is normal in general architectures. However memory
->>>>>> space of different pci devices will share one physical page address space.
->>>>>> This is not safe for mmu protection, also UIO and VFIO requires base
->>>>>> address of pci memory space page aligned.
->>>>>>
->>>>>> This patch adds check with function pcibios_align_resource, and set base
->>>>>> address of resource page aligned.
->>>>>>
->>>>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->>>>>> ---
->>>>>>  arch/loongarch/pci/pci.c | 23 +++++++++++++++++++++++
->>>>>>  1 file changed, 23 insertions(+)
->>>>>>
->>>>>> diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
->>>>>> index 2726639150bc..1380f3672ba2 100644
->>>>>> --- a/arch/loongarch/pci/pci.c
->>>>>> +++ b/arch/loongarch/pci/pci.c
->>>>>> @@ -83,6 +83,29 @@ int pcibios_alloc_irq(struct pci_dev *dev)
->>>>>>         return acpi_pci_irq_enable(dev);
->>>>>>  }
->>>>>>
->>>>>> +/*
->>>>>> + * memory space size of some pci cards is 4K, it is separated with
->>>>>> + * different pages for generic architectures, so that mmu protection can
->>>>>> + * work with different pci cards. However page size for LoongArch system
->>>>>> + * is 16K, memory space of different pci cards may share the same page
->>>>>> + * on LoongArch, it is not safe here.
->>>>>> + * Also uio drivers and vfio drivers sugguests that base address of memory
->>>>>> + * space should page aligned. This function aligns base address with page size
->>>>>> + */
->>>>>> +resource_size_t pcibios_align_resource(void *data, const struct resource *res,
->>>>>> +               resource_size_t size, resource_size_t align)
->>>>>> +{
->>>>>> +       resource_size_t start = res->start;
->>>>>> +
->>>>>> +       if (res->flags & IORESOURCE_MEM) {
->>>>>> +               if (align & (PAGE_SIZE - 1)) {
->>>>>> +                       align = PAGE_SIZE;
->>>>>> +                       start = ALIGN(start, align);
->>>>> I don't know whether this patch is really needed, but the logic here
->>>>> has some problems.
->>>>>
->>>>> For example, if PAGE_SIZE=16KB, align=18KB, what should we do? Align
->>>>> to 16KB or align to 32KB? IMO it should align to 32KB, but in your
->>>>> patch it will align to 16KB.
->>>> In general pci device is aligned by size, and its value is a power of 2 in value.
->>>> I do not see such devices with 18K alignment requirements.
->>> If so, you can simply ignore "align" and use  start = ALIGN(start, PAGE_SIZE);
->>>
->>>>
->>>> By pci local bus spec, there are such lines:
->>>>
->>>> "Devices are free to consume more address space than required, but decoding down
->>>> to a 4 KB space for memory is suggested for devices that need less than that amount. For
->>>> instance, a device that has 64 bytes of registers to be mapped into Memory Space may
->>>> consume up to 4 KB of address space in order to minimize the number of bits in the address
->>>> decoder."
->>>>
->>>> I cannot  think whether it is necessary simply from judging whether other
->>>> architectures have similar code. If so, LoongArch system just  always follows others.
->>>> It is actually one problem since LoongArch uses 16K page size.
->>> As I know, both MIPS and ARM64 can use non-4K pages, but when I grep
->>> pcibios_align_resource in the arch directory, none of them do
->>> PAGE_SIZE alignment.
->> Here is piece of  code in drivers/vfio/pci/vfio_pci_core.c
->>                 /*
->>                  * Here we don't handle the case when the BAR is not page
->>                  * aligned because we can't expect the BAR will be
->>                  * assigned into the same location in a page in guest
->>                  * when we passthrough the BAR. And it's hard to access
->>                  * this BAR in userspace because we have no way to get
->>                  * the BAR's location in a page.
->>                  */
->> no_mmap:
->>                 vdev->bar_mmap_supported[bar] = false;
->>
->> Do you think it is a issue or not?
-> May be or may not be, if it should be aligned to PAGE_SIZE, then MIPS
-> and ARM64 also need this.
-> 
->>
->> You can search function pnv_pci_default_alignment or pcibios_align_resource about
->> alpha architecture.
-> Alpha's pcibios_align_resource() have nothing to do with PAGE_SIZE,
-> pnv_pci_default_alignment() seems to be the case. But if alignment is
-> really needed, I think it is better to provide a
-> pcibios_default_alignment() as powerpc.
-I will double check which is better. Just be curious, how do you think it is a problem
-or not, just checking whether other arches have similar code??
+Bj=C3=B6rn
 
-
-> 
-> Huacai
->>
->> Regards
->> Bibo, mao
->>
->>>
->>> Huacai
->>>
->>>>
->>>> Regards
->>>> Bibo, Mao
->>>>>
->>>>> Huacai
->>>>>> +               }
->>>>>> +       }
->>>>>> +       return start;
->>>>>> +}
->>>>>> +
->>>>>>  static void pci_fixup_vgadev(struct pci_dev *pdev)
->>>>>>  {
->>>>>>         struct pci_dev *devp = NULL;
->>>>>> --
->>>>>> 2.27.0
->>>>>>
->>>>> _______________________________________________
->>>>> Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
->>>>> To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
->>>>
->>>>
->>> _______________________________________________
->>> Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
->>> To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
->>
->>
-
+[1] https://github.com/riscv/riscv-isa-manual/blob/main/src/supervisor.adoc=
+?plain=3D1#L118
