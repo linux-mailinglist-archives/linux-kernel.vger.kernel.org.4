@@ -2,154 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD67E71F7E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BC471F7EC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjFBBbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S233201AbjFBBbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjFBBb2 (ORCPT
+        with ESMTP id S233139AbjFBBbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:31:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763F6198
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685669446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/cMHIbrTWtgBUsYlhuC2ZhD157W4Z46c619IAlhaVOY=;
-        b=b1iDfAMJiI7544cv6P8+/ob0/fVsS7mNbJ19KyvUH4PQZdohoeEL0uee4oj64UDBihwrio
-        /tfcGbi9KwRNJaeG9LbCxkxuCZ7bCsI/q1oocmS5Zbg8U0rBupiv4WPrq9hjGRd7eFi97P
-        IwPwS5v12WsQnqU4/VFEjm5unRQ/L3g=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-558-zRBlaODHPZm4kq_rKHyRUA-1; Thu, 01 Jun 2023 21:30:45 -0400
-X-MC-Unique: zRBlaODHPZm4kq_rKHyRUA-1
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1b024ab0c28so14192055ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 18:30:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685669444; x=1688261444;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/cMHIbrTWtgBUsYlhuC2ZhD157W4Z46c619IAlhaVOY=;
-        b=QxdxPpL+PYzaT+TfllQJW1nmbnjVFKg+TF+m3hXjwTvmf1fJi5EQPUHEvBSajBIiHX
-         oNvYJvZ7khUlzzQtqhXz860FIaUoaGta/igDwfUG7z9u4sFcwZatBqddOyB8/XSlkE4a
-         XGMIg3WhgZlSGNeiTgFFRvzYLNma2cQk3jyib0er42ayKMBb0Y0pTSmN+fWikshHuUM3
-         fpN7QTXZALlzhRU+okdcBgsbPCg5HgZmU3WzeFP4g/hEGCOmVRICiJnv7SgTNvoBhW92
-         tD4L60BvQrX1KkXgh/iCHZ8TdSq5PMJcva6C4QE85iaXT3ysSWl8rMix0OERXOVgYkND
-         ZVaw==
-X-Gm-Message-State: AC+VfDxaK2D1f1xJicD+gI4VxK7ZidVIUMJLYjNo8lVANbnpWGkgQHPF
-        rSLI4h8Cyqdk3Jv8NDotfNf2LgRQhTaG4zVsZSwCmhVqjzfVtlbQMOKj3e63Ngz8KFO3S9OKlHV
-        +85FVEW25TuZB1s8XxbCTH6Rk
-X-Received: by 2002:a17:902:e851:b0:1ae:6a3:d058 with SMTP id t17-20020a170902e85100b001ae06a3d058mr1297444plg.36.1685669444423;
-        Thu, 01 Jun 2023 18:30:44 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6lg4pocoaH90MQ7MXLHYzdEIFqSltD2WuDyfdDq9fVk8AnZlltHqWPspRnTIxhIO54fNxuYA==
-X-Received: by 2002:a17:902:e851:b0:1ae:6a3:d058 with SMTP id t17-20020a170902e85100b001ae06a3d058mr1297430plg.36.1685669444141;
-        Thu, 01 Jun 2023 18:30:44 -0700 (PDT)
-Received: from [10.72.12.188] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170902860700b001acad86ebc5sm47952plo.33.2023.06.01.18.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 18:30:43 -0700 (PDT)
-Message-ID: <b3b1b8dc-9903-c4ff-0a63-9a31a311ff0b@redhat.com>
-Date:   Fri, 2 Jun 2023 09:30:37 +0800
+        Thu, 1 Jun 2023 21:31:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE187198;
+        Thu,  1 Jun 2023 18:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685669494; x=1717205494;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=8D8V7igw+9f4qtTzHIy+5OAo3ktpzRZhtQbr9zeJEFQ=;
+  b=QGm4cZbrEcIwaWOviLUao1fa4aEoC0gu4O2x1uLOa9/F5JTKvzt3JClo
+   uMGiLQjly3FvZ9q26+RH/X5G7mNu06K9jQhnHCEXCbEh6l9wF7RjTHvLC
+   +zlLGvaJFjKS8sOleDt979dkTBQtrHcHAoTMqEWb/UWX70/EgUX1aGX6n
+   VzF194nr0qw8LClAdztN4mwJ7dLwVCXbr5+6aG7A26YkOJzQF0yO1U4fF
+   A2+lvtKH1V7bpk+tp4MQIHZyQSZitGFgl2tVhul3dvd4mk5+M4d3s2vqw
+   AIl8g9u936xWnFkwG+2/9oGfKhIPOMTRvYyA3lTPGRPxkdUZAFwzZ9xfv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="336101112"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="336101112"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 18:31:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="685087723"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="685087723"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jun 2023 18:31:33 -0700
+Received: from dkhamitk-mobl1.amr.corp.intel.com (dkhamitk-mobl1.amr.corp.intel.com [10.251.3.100])
+        by linux.intel.com (Postfix) with ESMTP id 6054B580CD0;
+        Thu,  1 Jun 2023 18:31:33 -0700 (PDT)
+Message-ID: <d1e0d5fc837753c292f78a5357fd9ba4531f06d2.camel@linux.intel.com>
+Subject: Re: [PATCH] ACPI: x86: Adjust Microsoft LPS0 _DSM handling sequence
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Date:   Thu, 01 Jun 2023 18:31:33 -0700
+In-Reply-To: <20230601233953.1332-1-mario.limonciello@amd.com>
+References: <20230601233953.1332-1-mario.limonciello@amd.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 10/13] ceph: allow idmapped setattr inode op
-Content-Language: en-US
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
- <20230524153316.476973-11-aleksandr.mikhalitsyn@canonical.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230524153316.476973-11-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/24/23 23:33, Alexander Mikhalitsyn wrote:
-> From: Christian Brauner <christian.brauner@ubuntu.com>
->
-> Enable __ceph_setattr() to handle idmapped mounts. This is just a matter
-> of passing down the mount's idmapping.
->
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Ilya Dryomov <idryomov@gmail.com>
-> Cc: ceph-devel@vger.kernel.org
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
->   fs/ceph/inode.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-> index 37e1cbfc7c89..f1f934439be0 100644
-> --- a/fs/ceph/inode.c
-> +++ b/fs/ceph/inode.c
-> @@ -2050,6 +2050,13 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
->   
->   	dout("setattr %p issued %s\n", inode, ceph_cap_string(issued));
->   
-> +	/*
-> +	 * The attr->ia_{g,u}id members contain the target {g,u}id we're
-> +	 * sending over the wire. The mount idmapping only matters when we
-> +	 * create new filesystem objects based on the caller's mapped
-> +	 * fs{g,u}id.
-> +	 */
-> +	req->r_mnt_idmap = &nop_mnt_idmap;
-
-For example with an idmapping 1000:0 and in the /mnt/idmapped_ceph/.
-
-This means the "__ceph_setattr()" will always use UID 0 to set the 
-caller_uid, right ? If it is then the client auth checking for the 
-setattr requests in cephfs MDS will succeed, since the UID 0 is root. 
-But if you use a different idmapping, such as 1000:2000, it will fail.
-
-So here IMO we should set it to 'idmap' too ?
-
-Thanks
-
-- Xiubo
-
->   	if (ia_valid & ATTR_UID) {
->   		dout("setattr %p uid %d -> %d\n", inode,
->   		     from_kuid(&init_user_ns, inode->i_uid),
-> @@ -2240,7 +2247,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->   	if (ceph_inode_is_shutdown(inode))
->   		return -ESTALE;
->   
-> -	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
-> +	err = setattr_prepare(idmap, dentry, attr);
->   	if (err != 0)
->   		return err;
->   
-> @@ -2255,7 +2262,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->   	err = __ceph_setattr(inode, attr);
->   
->   	if (err >= 0 && (attr->ia_valid & ATTR_MODE))
-> -		err = posix_acl_chmod(&nop_mnt_idmap, dentry, attr->ia_mode);
-> +		err = posix_acl_chmod(idmap, dentry, attr->ia_mode);
->   
->   	return err;
->   }
+T24gVGh1LCAyMDIzLTA2LTAxIGF0IDE4OjM5IC0wNTAwLCBNYXJpbyBMaW1vbmNpZWxsbyB3cm90
+ZToKPiBJbiBXaW5kb3dzIHRoZSBNaWNyb3NvZnQgX0RTTSBkb2Vzbid0IGNhbGwgZnVuY3Rpb25z
+IDMtPjUtPjcgZm9yIHN1c3BlbmQKPiBhbmQgOC0+Ni0+NCBmb3IgcmVzdW1lIGxpa2UgTGludXgg
+Y3VycmVudGx5IGRvZXMuCj4gCj4gUmF0aGVyIGl0IGNhbGxzIDMtPjctPjUgZm9yIHN1c3BlbmQg
+YW5kIDYtPjgtPjQgZm9yIHJlc3VtZS4KPiBBbGlnbiB0aGlzIGNhbGxpbmcgb3JkZXIgZm9yIExp
+bnV4IGFzIHdlbGwuCj4gCj4gTGluazoKPiBodHRwczovL2xlYXJuLm1pY3Jvc29mdC5jb20vZW4t
+dXMvd2luZG93cy1oYXJkd2FyZS9kZXNpZ24vZGV2aWNlLWV4cGVyaWVuY2VzL21vZGVybi1zdGFu
+ZGJ5LXN0YXRlcwoKSSBkaWRuJ3QgY2F0Y2ggdGhlIG9yZGVyaW5nIGluIHRoZSBsaW5rLiBXYXMg
+dGhlcmUgYW55IGlzc3VlIHRoYXQgcHJvbXB0ZWQgdGhpcwpjaGFuZ2U/CgpEYXZpZAoKPiBTaWdu
+ZWQtb2ZmLWJ5OiBNYXJpbyBMaW1vbmNpZWxsbyA8bWFyaW8ubGltb25jaWVsbG9AYW1kLmNvbT4K
+PiAtLS0KPiDCoGRyaXZlcnMvYWNwaS94ODYvczJpZGxlLmMgfCAxNCArKysrKysrLS0tLS0tLQo+
+IMKgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPiAKPiBk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL3g4Ni9zMmlkbGUuYyBiL2RyaXZlcnMvYWNwaS94ODYv
+czJpZGxlLmMKPiBpbmRleCBlNDk5YzYwYzQ1NzkuLjcyMTQxOTdjMTVhMCAxMDA2NDQKPiAtLS0g
+YS9kcml2ZXJzL2FjcGkveDg2L3MyaWRsZS5jCj4gKysrIGIvZHJpdmVycy9hY3BpL3g4Ni9zMmlk
+bGUuYwo+IEBAIC00ODUsMTEgKzQ4NSwxMSBAQCBpbnQgYWNwaV9zMmlkbGVfcHJlcGFyZV9sYXRl
+KHZvaWQpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBBQ1BJX0xQUzBfRU5UUlksCj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBscHMwX2RzbV9mdW5jX21hc2ssIGxwczBfZHNtX2d1aWQpOwo+IMKg
+wqDCoMKgwqDCoMKgwqBpZiAobHBzMF9kc21fZnVuY19tYXNrX21pY3Jvc29mdCA+IDApIHsKPiAt
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYWNwaV9zbGVlcF9ydW5fbHBzMF9kc20oQUNQ
+SV9MUFMwX0VOVFJZLAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxwczBfZHNtX2Z1bmNfbWFza19taWNyb3NvZnQsCj4gbHBz
+MF9kc21fZ3VpZF9taWNyb3NvZnQpOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+LyogbW9kZXJuIHN0YW5kYnkgZW50cnkgKi8KPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGFjcGlfc2xlZXBfcnVuX2xwczBfZHNtKEFDUElfTFBTMF9NU19FTlRSWSwKPiDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+bHBzMF9kc21fZnVuY19tYXNrX21pY3Jvc29mdCwKPiBscHMwX2RzbV9ndWlkX21pY3Jvc29mdCk7
+Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFjcGlfc2xlZXBfcnVuX2xwczBfZHNt
+KEFDUElfTFBTMF9FTlRSWSwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBscHMwX2RzbV9mdW5jX21hc2tfbWljcm9zb2Z0LAo+
+IGxwczBfZHNtX2d1aWRfbWljcm9zb2Z0KTsKPiDCoMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gwqDC
+oMKgwqDCoMKgwqDCoGxpc3RfZm9yX2VhY2hfZW50cnkoaGFuZGxlciwgJmxwczBfczJpZGxlX2Rl
+dm9wc19oZWFkLCBsaXN0X25vZGUpIHsKPiBAQCAtNTI0LDExICs1MjQsNiBAQCB2b2lkIGFjcGlf
+czJpZGxlX3Jlc3RvcmVfZWFybHkodm9pZCkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGlmIChoYW5kbGVyLT5yZXN0b3JlKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGhhbmRsZXItPnJlc3RvcmUoKTsKPiDCoAo+IC3CoMKgwqDCoMKg
+wqDCoC8qIE1vZGVybiBzdGFuZGJ5IGV4aXQgKi8KPiAtwqDCoMKgwqDCoMKgwqBpZiAobHBzMF9k
+c21fZnVuY19tYXNrX21pY3Jvc29mdCA+IDApCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGFjcGlfc2xlZXBfcnVuX2xwczBfZHNtKEFDUElfTFBTMF9NU19FWElULAo+IC3CoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxw
+czBfZHNtX2Z1bmNfbWFza19taWNyb3NvZnQsCj4gbHBzMF9kc21fZ3VpZF9taWNyb3NvZnQpOwo+
+IC0KPiDCoMKgwqDCoMKgwqDCoMKgLyogTFBTMCBleGl0ICovCj4gwqDCoMKgwqDCoMKgwqDCoGlm
+IChscHMwX2RzbV9mdW5jX21hc2sgPiAwKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgYWNwaV9zbGVlcF9ydW5fbHBzMF9kc20oYWNwaV9zMmlkbGVfdmVuZG9yX2FtZCgpID8KPiBA
+QCAtNTM5LDYgKzUzNCwxMSBAQCB2b2lkIGFjcGlfczJpZGxlX3Jlc3RvcmVfZWFybHkodm9pZCkK
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFjcGlfc2xlZXBfcnVuX2xwczBfZHNt
+KEFDUElfTFBTMF9FWElULAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBscHMwX2RzbV9mdW5jX21hc2tfbWljcm9zb2Z0LAo+
+IGxwczBfZHNtX2d1aWRfbWljcm9zb2Z0KTsKPiDCoAo+ICvCoMKgwqDCoMKgwqDCoC8qIE1vZGVy
+biBzdGFuZGJ5IGV4aXQgKi8KPiArwqDCoMKgwqDCoMKgwqBpZiAobHBzMF9kc21fZnVuY19tYXNr
+X21pY3Jvc29mdCA+IDApCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFjcGlfc2xl
+ZXBfcnVuX2xwczBfZHNtKEFDUElfTFBTMF9NU19FWElULAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxwczBfZHNtX2Z1bmNf
+bWFza19taWNyb3NvZnQsCj4gbHBzMF9kc21fZ3VpZF9taWNyb3NvZnQpOwo+ICsKPiDCoMKgwqDC
+oMKgwqDCoMKgLyogU2NyZWVuIG9uICovCj4gwqDCoMKgwqDCoMKgwqDCoGlmIChscHMwX2RzbV9m
+dW5jX21hc2tfbWljcm9zb2Z0ID4gMCkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGFjcGlfc2xlZXBfcnVuX2xwczBfZHNtKEFDUElfTFBTMF9TQ1JFRU5fT04sCgo=
 
