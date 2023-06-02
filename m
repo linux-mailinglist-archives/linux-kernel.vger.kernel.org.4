@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2DF71FE25
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0235171FE2B
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbjFBJon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        id S234329AbjFBJpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbjFBJoi (ORCPT
+        with ESMTP id S232404AbjFBJpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:44:38 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F415B3
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:44:37 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-461b6c85a28so17915e0c.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:44:37 -0700 (PDT)
+        Fri, 2 Jun 2023 05:45:09 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DE4134;
+        Fri,  2 Jun 2023 02:45:08 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-bacf5b89da7so1993280276.2;
+        Fri, 02 Jun 2023 02:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685699076; x=1688291076;
+        d=gmail.com; s=20221208; t=1685699108; x=1688291108;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L9MDdiGNQyozYNYhlffEGTRvT7DDnoxyaHD04TGAKeA=;
-        b=BNFTeQxC9ouzk5HKhoORQEopHY7htboovi6YDzN4fTgG3ohX+yD+ThjzPssQhDrEjm
-         /NtN1+S7HgLzlRD4aXTZ1q0407LxhLu3pqBt7rYeA1hsKXFkns3aJEcZDlYvehWASW/V
-         V9EiVsgbu/gkZnpijmhbbjuYAAhoC5uhA+PX/F4LQ5UsbZ9JGB7j7cn9s5NTOrJU7EWe
-         qh3NDN4pp/30HhfVoQ2DarxpuGLTClbs8OsT3Ry+BhZEUkKhafmAxddhMIjCC1FB9t9L
-         4XIedNlechVs943fsE/MJYXQ6hBMu0g8QkF9bnBbbph6pDl6k0bt/l58Y5jJn6ThrxIa
-         Nm6w==
+        bh=sO9CYKq3zsyFP6OrznRGehjIWLTIrAXykOQSpEJEjfc=;
+        b=c6IdsA3jP2haZ6HorJDy1WTeD7Ii7Z2qg/GiS0h1mQjOI3zcuhZvcZ78Gjmvgeir3o
+         FvpdyAt1cx8GTHk3QFDFIRe3jq0AaJnFDVUtfmoH0LbI8uKuSrKo+MKiDBotn1trb2tR
+         tgGYnNihC3nr/sgM6EyaKSdD6pzJkt7Ttx4nIYf0o5pavjZzRrYwLgeAtysz62QHhVLm
+         6H94i+p4AE0eSwHnY/abShLK6E3JeGf+rOQHOBG7g/WFtro49tzCtsKmZ1ocmIcAGm3d
+         K5U12MsezDSY5rVrdbv5ppdhccK6Yyj5PKUByZpeM/6LtfP3ssFvTRKgGU638nI3Xytb
+         +Tog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685699076; x=1688291076;
+        d=1e100.net; s=20221208; t=1685699108; x=1688291108;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L9MDdiGNQyozYNYhlffEGTRvT7DDnoxyaHD04TGAKeA=;
-        b=A9IgjgitT6rdEf6SdAZBrG0+jKh7oFqCjhDVYt9f+9bc0995ulFDueGK5OpOGaK72a
-         cNBe846e/1aDuf2bQj1CN/adjMv/lBkrBsPRBOCkZ1TvLbKQ/TCCAJsHxra8Vnd4AoQ3
-         QZAi3Pcssf5fNaxeQ0Xt9fCpsJxCaun+Y8Flja8PPdzmRBJk2Ziyk/7ECOu4BWEQSK/r
-         714A/Yfo8xSjdUVaUek3edO0+ZfSVE+o6bMe8sCRrRLlOiOdOJJa5g9aeMub0RSUs7zZ
-         DEpaO9D7cqsN/IPVW0KBQZz9RbARGeCXz2fH3gAEnoYxCoGrGmx5KrV4G4RINy4AG8RS
-         Lpqg==
-X-Gm-Message-State: AC+VfDzc2yrpb1onhsijHkJ16JbDGj5JDI9ln/dD1CSP8mEmDXibKeO7
-        FpGbPSDN+VEK1RqQmfL/tjpauJvOwZNWpKinEswyQg==
-X-Google-Smtp-Source: ACHHUZ5z1bRWqTnqmPW0skglwi03nMjfC1xBqDoqxDowi3tz5CH3snBRatxHpAdHnT+pmiyQuSRgFCia+ItXzERoLpw=
-X-Received: by 2002:a1f:c1d2:0:b0:45c:e4a5:5f4f with SMTP id
- r201-20020a1fc1d2000000b0045ce4a55f4fmr2051337vkf.7.1685699076414; Fri, 02
- Jun 2023 02:44:36 -0700 (PDT)
+        bh=sO9CYKq3zsyFP6OrznRGehjIWLTIrAXykOQSpEJEjfc=;
+        b=Vyj/ahWEkr22k+ptLgKQi/8pmC3y8PVZvQZLKYl42NG1GKz3hEpnKfEQkKmdw3fpEx
+         x3JaRWhQ4uIqmN2rKYRPhOuQV6VG9hFh8cLJrgKJZbP7rkN2WKIaDIesJoRti5yQs3M0
+         +c15+jdQN4GBUhHR6LerTjX5W/Lie01Ko+qI8k0sLHl26p+lKA+l2AOPbtpp/S3zvspK
+         d1rBw6LCQHPqXAf31dQ9jOnnY4+6zHUFtNwkaOYSAy8h/jNHCLsmbqzFunedNDr28vpX
+         MySZCjsdw3oAmGfcDRa9Keb4DCWxkhz3T5ZtgsomSC9M0XP/zYPixHS3/LiS7iCUCUl2
+         emPA==
+X-Gm-Message-State: AC+VfDzF/1VtAV5VElnDgDwmjWRMLl1PjkXzeAhVW4jvBPQABP32FP1V
+        cPHPZ1zCZTylu8Eq0jWNJroIU5qBG+V9fWXVO/E=
+X-Google-Smtp-Source: ACHHUZ7K2EOgjVq4WoCi44uJ9i/tvSnqHqw52MlY2vtO1cg3EMJxhBOLXPIBd6eWR9XrxZj65pTK1oOmh5KREk2hdV4=
+X-Received: by 2002:a25:9d89:0:b0:ba8:620b:38a7 with SMTP id
+ v9-20020a259d89000000b00ba8620b38a7mr2334349ybp.53.1685699107625; Fri, 02 Jun
+ 2023 02:45:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601131938.702671708@linuxfoundation.org>
-In-Reply-To: <20230601131938.702671708@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 2 Jun 2023 15:14:25 +0530
-Message-ID: <CA+G9fYscs4WKYTp=fYbUemdtjPbSJifzcfUjrE=FM2mrf5hc8w@mail.gmail.com>
-Subject: Re: [PATCH 6.3 00/45] 6.3.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230602065958.2869555-1-imagedong@tencent.com> <20230602065958.2869555-5-imagedong@tencent.com>
+In-Reply-To: <20230602065958.2869555-5-imagedong@tencent.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 2 Jun 2023 17:44:56 +0800
+Message-ID: <CADxym3ZTEvh2nrdY2PXhuApuU8=6MjNF71R_VSd4VDxp3URe8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/5] selftests/bpf: rename bpf_fentry_test{7,8,9}
+ to bpf_fentry_test_ptr*
+To:     olsajiri@gmail.com
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
+        benbjiang@tencent.com, iii@linux.ibm.com, imagedong@tencent.com,
+        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
+        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,174 +80,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 at 18:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, Jun 2, 2023 at 3:03=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
 >
-> This is the start of the stable review cycle for the 6.3.6 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> From: Menglong Dong <imagedong@tencent.com>
 >
-> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
-> Anything received after that time might be too late.
+> To make it more clear, let's make the N in bpf_fentry_testN as the count
+> of target function arguments. Therefore, let's rename
+> bpf_fentry_test{7,8,9} to bpf_fentry_test_ptr{1,2,3}.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.3.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.3.y
-> and the diffstat can be found below.
+> Meanwhile, to stop the checkpatch complaining, move the "noinline" ahead
+> of "int".
 >
-> thanks,
+> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  net/bpf/test_run.c                            | 12 +++++-----
+>  .../selftests/bpf/prog_tests/bpf_cookie.c     | 24 +++++++++----------
+>  .../bpf/prog_tests/kprobe_multi_test.c        | 16 ++++++-------
+>  .../testing/selftests/bpf/progs/fentry_test.c | 16 ++++++-------
+>  .../testing/selftests/bpf/progs/fexit_test.c  | 16 ++++++-------
+>  .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+>  .../selftests/bpf/progs/kprobe_multi.c        | 12 +++++-----
+>  .../bpf/progs/verifier_btf_ctx_access.c       |  2 +-
+>  .../selftests/bpf/verifier/atomic_fetch_add.c |  4 ++--
+>  9 files changed, 52 insertions(+), 52 deletions(-)
 >
-> greg k-h
 
+Sadly, this patch breaks the "bpf_fentry_test?" pattern in
+kprobe_multi.c and kprobe_multi_test.c.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I'm considering changing the "bpf_fentry_test?" to
+"bpf_fentry_test*" to solve this problem.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Another option, we can remove kretprobe_test7_result
+and kretprobe_test8_result and only check
+bpf_fentry_test1~6 in kprobe_multi_check.
 
-## Build
-* kernel: 6.3.6-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-6.3.y
-* git commit: b8c049753f7cf6804abcd8bbd0abf46baf4bff5e
-* git describe: v6.3.5-46-gb8c049753f7c
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.5=
--46-gb8c049753f7c
-
-## Test Regressions (compared to v6.3.5)
-
-## Metric Regressions (compared to v6.3.5)
-
-## Test Fixes (compared to v6.3.5)
-
-## Metric Fixes (compared to v6.3.5)
-
-## Test result summary
-total: 185110, pass: 161571, fail: 3311, skip: 19957, xfail: 271
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 144 passed, 1 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 40 passed, 1 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-mincore
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Or......maybe I shouldn't rename them?
