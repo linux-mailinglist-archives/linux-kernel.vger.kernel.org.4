@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF84C71FBC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AE571FBC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbjFBIVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S234434AbjFBIWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbjFBIVt (ORCPT
+        with ESMTP id S234421AbjFBIW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:21:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49486198;
-        Fri,  2 Jun 2023 01:21:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D23E9644C3;
-        Fri,  2 Jun 2023 08:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D73C433EF;
-        Fri,  2 Jun 2023 08:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685694106;
-        bh=d06PJuVSxob5MNWnuvAfNiLm/H/DP8lybGq+f6bIRIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r6ipDXp/Am8PzDws5Oc+S4hirU0asEA6JiGOVRF8Q7+nIVhDtKeN6ww56KQlaqYvu
-         uA7LZZfw9IIaSfKvkginodpkqw3ZyZwfOXIgnT2nFYdAbcuKD8VlPdSO4gUnbtFmpu
-         VWgX3FJBETrhUVbmh/iyhqdpYr/nqxOeDQ02LP2Lo8xHgZWH2kwn5q+/gMffmyF6en
-         Bn4WtClrn2nBOrM5R1wDErDyE+An0wpIIFaZ/HqGJkuKNsjmrZ+n/bnPnlGxy3EDuS
-         DGDUhAWgE9JWbl/7HSRuJ3eAWHuoQRGK7SkGd1wKsDv5Fj85YujhbCt19wJN3we2bx
-         IEDzGNHifsQww==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q502l-0001Fx-AV; Fri, 02 Jun 2023 10:21:55 +0200
-Date:   Fri, 2 Jun 2023 10:21:55 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] Bluetooth: fix use-bdaddr-property quirk
-Message-ID: <ZHmmowyw_ulrQXJd@hovoldconsulting.com>
-References: <20230531090424.3187-1-johan+linaro@kernel.org>
- <20230531090424.3187-3-johan+linaro@kernel.org>
- <CGME20230601220156eucas1p21caabcf02509fce7eb26f973704980f9@eucas1p2.samsung.com>
- <ecef83c8-497f-4011-607b-a63c24764867@samsung.com>
+        Fri, 2 Jun 2023 04:22:29 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0F91B3;
+        Fri,  2 Jun 2023 01:22:27 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3527LWm8028714;
+        Fri, 2 Jun 2023 08:22:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WsEZSYZx/nSTwIUknz9I81oypvix1MflwupAP35b7gk=;
+ b=dORL9pqBYh5bdaY9KMYJ4DuNVWpKdrUn7A5WQ4YAA5Mz4eusXeioKQYUwQjq8enXL4PS
+ HGyNl4pOvR7TWXmJs2SM0o3N3PofP1qddnnu5IFO8Wd8ZiA/hGTOljbsY7kkFo3xwR6x
+ rvvRap7jZnTRZ4cINufkFh+VcsQ2f8T03/GkG3zWZXWjHO1MQe186Z2ZLQvVw8NBWHNc
+ b5JjlNKLnISnxrEm9SJoh9iWhU3PfGUDnz6PO3JfCpLMP6LnnUiDZzOHojC7JWdJgQaz
+ Lrju+iRCk8WaVhI3c50VPVqlDPFX1U1BUSmiEOdx2Q6TRu7J4kLVWHwEh8gifOuQumQ7 sQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxs9gthds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 08:22:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3528MHSh024930
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Jun 2023 08:22:17 GMT
+Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 2 Jun 2023
+ 01:22:14 -0700
+Message-ID: <196c085f-8772-0259-4a26-511f4ab05bcb@quicinc.com>
+Date:   Fri, 2 Jun 2023 13:52:11 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ecef83c8-497f-4011-607b-a63c24764867@samsung.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH RESEND 4/4] arm64: dts: qcom: ipq5332: add support for the
+ RDP474 variant
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230601042054.29075-1-quic_kathirav@quicinc.com>
+ <20230601042054.29075-5-quic_kathirav@quicinc.com>
+ <91c63634-eb39-fdca-2c76-6f8182c2d47c@linaro.org>
+ <2dd8e5be-c5b5-02e7-32d0-587a40cb70cc@quicinc.com>
+ <201cb02b-b7b0-eecc-a9d5-3a7535c91d8d@linaro.org>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <201cb02b-b7b0-eecc-a9d5-3a7535c91d8d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: FwQB8B2GVCF1b3l5wbPLu8msfQoE7ypc
+X-Proofpoint-GUID: FwQB8B2GVCF1b3l5wbPLu8msfQoE7ypc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_05,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0
+ phishscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306020063
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,63 +90,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 12:01:55AM +0200, Marek Szyprowski wrote:
-> On 31.05.2023 11:04, Johan Hovold wrote:
-> > Devices that lack persistent storage for the device address can indicate
-> > this by setting the HCI_QUIRK_INVALID_BDADDR which causes the controller
-> > to be marked as unconfigured until user space has set a valid address.
-> >
-> > The related HCI_QUIRK_USE_BDADDR_PROPERTY was later added to similarly
-> > indicate that the device lacks a valid address but that one may be
-> > specified in the devicetree.
-> >
-> > As is clear from commit 7a0e5b15ca45 ("Bluetooth: Add quirk for reading
-> > BD_ADDR from fwnode property") that added and documented this quirk and
-> > commits like de79a9df1692 ("Bluetooth: btqcomsmd: use
-> > HCI_QUIRK_USE_BDADDR_PROPERTY"), the device address of controllers with
-> > this flag should be treated as invalid until user space has had a chance
-> > to configure the controller in case the devicetree property is missing.
-> >
-> > As it does not make sense to allow controllers with invalid addresses,
-> > restore the original semantics, which also makes sure that the
-> > implementation is consistent (e.g. get_missing_options() indicates that
-> > the address must be set) and matches the documentation (including
-> > comments in the code, such as, "In case any of them is set, the
-> > controller has to start up as unconfigured.").
-> >
-> > Fixes: e668eb1e1578 ("Bluetooth: hci_core: Don't stop BT if the BD address missing in dts")
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> 
-> This patch has been recently merged to linux-next as commit 6ac517d8cf8b 
-> ("Bluetooth: fix use-bdaddr-property quirk"). Unfortunately it breaks 
-> bluetooth operation on my Raspberry Pi 3b+, 4b+ and Khadas VIM3 based 
-> test systems.
-> 
-> Before this patch on Raspberry Pi 4b+:
-> 
-> root@target:~# dmesg | grep hci0
-> [   14.459292] Bluetooth: hci0: BCM: chip id 107
-> [   14.464283] Bluetooth: hci0: BCM: features 0x2f
-> [   14.470632] Bluetooth: hci0: BCM4345C0
-> [   14.474483] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
-> [   14.487275] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
-> [   15.347542] Bluetooth: hci0: BCM: features 0x2f
-> [   15.354588] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+-0159
-> [   15.361076] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0290
-> root@target:~# hcitool dev
-> Devices:
->          hci0    DC:A6:32:12:38:D1
 
-Thanks for the report and sorry about the breakage.
+On 6/2/2023 12:34 PM, Krzysztof Kozlowski wrote:
+> On 02/06/2023 06:05, Kathiravan T wrote:
+>> On 6/1/2023 10:59 PM, Krzysztof Kozlowski wrote:
+>>> On 01/06/2023 06:20, Kathiravan T wrote:
+>>>> Add the initial device tree support for the Reference Design
+>>>> Platform(RDP) 474 based on IPQ5332 family of SoC. This patch carries
+>>>> the support for Console UART, eMMC, I2C and GPIO based buttons.
+>>>>
+>>>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/Makefile           |   1 +
+>>>>    arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts | 112 ++++++++++++++++++++
+>>>>    2 files changed, 113 insertions(+)
+>>>>    create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>>> index 4f9e81253e18..0f8c763a9bd9 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>>> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-mi01.2.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp442.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp468.dtb
+>>>> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp474.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
+>>>> new file mode 100644
+>>>> index 000000000000..085729a0fdf1
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
+>>>> @@ -0,0 +1,112 @@
+>>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>>> +/*
+>>>> + * IPQ5332 RDP474 board device tree source
+>>>> + *
+>>>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>>> + */
+>>>> +
+>>>> +/dts-v1/;
+>>>> +
+>>>> +#include <dt-bindings/gpio/gpio.h>
+>>>> +#include <dt-bindings/input/input.h>
+>>>> +#include "ipq5332.dtsi"
+>>>> +
+>>>> +/ {
+>>>> +	model = "Qualcomm Technologies, Inc. IPQ5332 MI01.9";
+>>>> +	compatible = "qcom,ipq5332-ap-mi01.9", "qcom,ipq5332";
+>>>> +
+>>>> +	aliases {
+>>>> +		serial0 = &blsp1_uart0;
+>>>> +	};
+>>>> +
+>>>> +	chosen {
+>>>> +		stdout-path = "serial0";
+>>>> +	};
+>>>> +
+>>>> +	gpio_keys {
+>>> No, srsly, so not only ignored the tags but also feedback?
+>>
+>> Please correct me if I am wrong here..
+>>
+>> This is RESEND of V1 patches (only minor correction in the subject line
+> I sent you three emails and I assumed you got my feedback, thus it
+> should not have been resend...
+>
+>
+>> in cover letter). Also I don't see review comments as such in original
+>> V1 as well
+>> https://lore.kernel.org/linux-arm-msm/20230531135048.19164-1-quic_kathirav@quicinc.com/
+>>
+>> Can you help to point out your review comments, I couldn't able to find out.
+> ... but I don't see them on lore. So apparently you also did not get them.
+>
+> I apologize in such case. Mails are nicely sent in my outbox but
+> apparently went to /dev/null.
+>
+> Original feedback:
+>
+> Same problems as with most of recent patches. No underscores in node names.
 
-Turns out that the Broadcom driver has so far been setting the
-HCI_QUIRK_USE_BDADDR_PROPERTY also for devices such as yours which
-already have a valid address.
 
-I've sent a fix for the Broadcom driver here:
+Ack. Will fix it in next spin.
 
-	https://lore.kernel.org/lkml/20230602081912.4708-1-johan+linaro@kernel.org
 
-which should address this. Could you give it a try?
-
-Johan
+> Best regards,
+> Krzysztof
+>
