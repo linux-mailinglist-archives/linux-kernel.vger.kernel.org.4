@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38E371FB2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541FE71FB2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 09:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbjFBHlC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S234403AbjFBHlA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 03:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234359AbjFBHky (ORCPT
+        with ESMTP id S234278AbjFBHkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 03:40:54 -0400
+        Fri, 2 Jun 2023 03:40:53 -0400
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED5C123;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4C4198;
         Fri,  2 Jun 2023 00:40:50 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id AFC1D8102;
-        Fri,  2 Jun 2023 15:40:48 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
- 2023 15:40:48 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 13F9B8109;
+        Fri,  2 Jun 2023 15:40:49 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
+ 2023 15:40:49 +0800
 Received: from xiaofei.localdomain (180.164.60.184) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Jun
- 2023 15:40:47 +0800
+ 2023 15:40:48 +0800
 From:   Keith Zhao <keith.zhao@starfivetech.com>
 To:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
@@ -51,9 +51,9 @@ CC:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Jack Zhu <jack.zhu@starfivetech.com>,
         Shengyang Chen <shengyang.chen@starfivetech.com>,
         Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: [PATCH 4/9] drm/verisilicon: Add gem driver for JH7110 SoC
-Date:   Fri, 2 Jun 2023 15:40:38 +0800
-Message-ID: <20230602074043.33872-5-keith.zhao@starfivetech.com>
+Subject: [PATCH 5/9] drm/verisilicon: Add mode config funcs
+Date:   Fri, 2 Jun 2023 15:40:39 +0800
+Message-ID: <20230602074043.33872-6-keith.zhao@starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230602074043.33872-1-keith.zhao@starfivetech.com>
 References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
@@ -73,518 +73,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch implements gem related APIs for JH7100 SoC.
+Add mode setting functions for JH7110 SoC.
 
 Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
 ---
- drivers/gpu/drm/verisilicon/Makefile |   3 +-
- drivers/gpu/drm/verisilicon/vs_drv.c |   6 +
- drivers/gpu/drm/verisilicon/vs_gem.c | 372 +++++++++++++++++++++++++++
- drivers/gpu/drm/verisilicon/vs_gem.h |  72 ++++++
- 4 files changed, 452 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpu/drm/verisilicon/vs_gem.c
- create mode 100644 drivers/gpu/drm/verisilicon/vs_gem.h
+ drivers/gpu/drm/verisilicon/Makefile |   1 +
+ drivers/gpu/drm/verisilicon/vs_drv.c |   3 +
+ drivers/gpu/drm/verisilicon/vs_fb.c  | 181 +++++++++++++++++++++++++++
+ drivers/gpu/drm/verisilicon/vs_fb.h  |  15 +++
+ 4 files changed, 200 insertions(+)
+ create mode 100644 drivers/gpu/drm/verisilicon/vs_fb.c
+ create mode 100644 drivers/gpu/drm/verisilicon/vs_fb.h
 
 diff --git a/drivers/gpu/drm/verisilicon/Makefile b/drivers/gpu/drm/verisilicon/Makefile
-index 64ce1b26546c..30360e370e47 100644
+index 30360e370e47..38254dc5d98d 100644
 --- a/drivers/gpu/drm/verisilicon/Makefile
 +++ b/drivers/gpu/drm/verisilicon/Makefile
 @@ -1,6 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0
  
--vs_drm-objs := vs_drv.o
-+vs_drm-objs := vs_drv.o \
-+		vs_gem.o
+ vs_drm-objs := vs_drv.o \
++		vs_fb.o \
+ 		vs_gem.o
  
  obj-$(CONFIG_DRM_VERISILICON) += vs_drm.o
- 
 diff --git a/drivers/gpu/drm/verisilicon/vs_drv.c b/drivers/gpu/drm/verisilicon/vs_drv.c
-index 24d333598477..e0a2fc43b55f 100644
+index e0a2fc43b55f..d84aacd751bc 100644
 --- a/drivers/gpu/drm/verisilicon/vs_drv.c
 +++ b/drivers/gpu/drm/verisilicon/vs_drv.c
 @@ -30,6 +30,7 @@
  #include <drm/drm_vblank.h>
  
  #include "vs_drv.h"
-+#include "vs_gem.h"
++#include "vs_fb.h"
+ #include "vs_gem.h"
  
  #define DRV_NAME	"starfive"
- #define DRV_DESC	"Starfive DRM driver"
-@@ -47,6 +48,7 @@ static const struct file_operations fops = {
- 	.compat_ioctl	= drm_compat_ioctl,
- 	.poll			= drm_poll,
- 	.read			= drm_read,
-+	.mmap			= vs_gem_mmap,
- };
+@@ -118,6 +119,8 @@ static int vs_drm_bind(struct device *dev)
+ 	if (ret)
+ 		goto err_mode;
  
- static struct drm_driver vs_drm_driver = {
-@@ -54,6 +56,10 @@ static struct drm_driver vs_drm_driver = {
- 	.lastclose		= drm_fb_helper_lastclose,
- 	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
- 	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import	= vs_gem_prime_import,
-+	.gem_prime_import_sg_table = vs_gem_prime_import_sg_table,
-+	.gem_prime_mmap		= vs_gem_prime_mmap,
-+	.dumb_create		= vs_gem_dumb_create,
- 	.fops			= &fops,
- 	.name			= DRV_NAME,
- 	.desc			= DRV_DESC,
-diff --git a/drivers/gpu/drm/verisilicon/vs_gem.c b/drivers/gpu/drm/verisilicon/vs_gem.c
++	vs_mode_config_init(drm_dev);
++
+ 	ret = drm_vblank_init(drm_dev, drm_dev->mode_config.num_crtc);
+ 	if (ret)
+ 		goto err_bind;
+diff --git a/drivers/gpu/drm/verisilicon/vs_fb.c b/drivers/gpu/drm/verisilicon/vs_fb.c
 new file mode 100644
-index 000000000000..3f963471c1ab
+index 000000000000..3e85f7365084
 --- /dev/null
-+++ b/drivers/gpu/drm/verisilicon/vs_gem.c
-@@ -0,0 +1,372 @@
++++ b/drivers/gpu/drm/verisilicon/vs_fb.c
+@@ -0,0 +1,181 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2023 VeriSilicon Holdings Co., Ltd.
 + */
 +
-+#include <linux/dma-buf.h>
-+#include <linux/of_reserved_mem.h>
-+#include <drm/drm_gem_dma_helper.h>
++#include <linux/module.h>
++#include <linux/version.h>
 +
-+#include "vs_drv.h"
++#include <drm/drm_damage_helper.h>
++#include <drm/drm_fb_helper.h>
++#include <drm/drm_crtc.h>
++#include <drm/drm_crtc_helper.h>
++#include <drm/drm_fourcc.h>
++#include <drm/drm_framebuffer.h>
++#include <drm/drm_gem.h>
++#include <drm/drm_gem_framebuffer_helper.h>
++
++#include "vs_fb.h"
 +#include "vs_gem.h"
 +
-+static const struct drm_gem_object_funcs vs_gem_default_funcs;
++#define fourcc_mod_vs_get_type(val) \
++	(((val) & DRM_FORMAT_MOD_VS_TYPE_MASK) >> 54)
 +
-+static int vs_gem_alloc_buf(struct vs_gem_object *vs_obj)
++static struct drm_framebuffer_funcs vs_fb_funcs = {
++	.create_handle	= drm_gem_fb_create_handle,
++	.destroy	= drm_gem_fb_destroy,
++	.dirty		= drm_atomic_helper_dirtyfb,
++};
++
++static struct drm_framebuffer *
++vs_fb_alloc(struct drm_device *dev, const struct drm_mode_fb_cmd2 *mode_cmd,
++	    struct vs_gem_object **obj, unsigned int num_planes)
 +{
-+	struct drm_device *dev = vs_obj->base.dev;
-+	unsigned int nr_pages;
-+	struct sg_table sgt;
-+	int ret = -ENOMEM;
++	struct drm_framebuffer *fb;
++	int ret, i;
 +
-+	if (vs_obj->dma_addr) {
-+		DRM_DEV_DEBUG_KMS(dev->dev, "already allocated.\n");
-+		return 0;
-+	}
-+
-+	vs_obj->dma_attrs = DMA_ATTR_WRITE_COMBINE | DMA_ATTR_FORCE_CONTIGUOUS
-+			   | DMA_ATTR_NO_KERNEL_MAPPING;
-+
-+	nr_pages = vs_obj->size >> PAGE_SHIFT;
-+
-+	vs_obj->pages = kvmalloc_array(nr_pages, sizeof(struct page *),
-+				       GFP_KERNEL | __GFP_ZERO);
-+	if (!vs_obj->pages) {
-+		DRM_DEV_ERROR(dev->dev, "failed to allocate pages.\n");
-+		return -ENOMEM;
-+	}
-+
-+	vs_obj->cookie = dma_alloc_attrs(to_dma_dev(dev), vs_obj->size,
-+					 &vs_obj->dma_addr, GFP_KERNEL,
-+					 vs_obj->dma_attrs);
-+
-+	if (!vs_obj->cookie) {
-+		DRM_DEV_ERROR(dev->dev, "failed to allocate buffer.\n");
-+		goto err_free;
-+	}
-+
-+	vs_obj->iova = vs_obj->dma_addr;
-+
-+	ret = dma_get_sgtable_attrs(to_dma_dev(dev), &sgt,
-+				    vs_obj->cookie, vs_obj->dma_addr,
-+				    vs_obj->size, vs_obj->dma_attrs);
-+	if (ret < 0) {
-+		DRM_DEV_ERROR(dev->dev, "failed to get sgtable.\n");
-+		goto err_mem_free;
-+	}
-+
-+	if (drm_prime_sg_to_page_array(&sgt, vs_obj->pages, nr_pages)) {
-+		DRM_DEV_ERROR(dev->dev, "invalid sgtable.\n");
-+		ret = -EINVAL;
-+		goto err_sgt_free;
-+	}
-+
-+	sg_free_table(&sgt);
-+
-+	return 0;
-+
-+err_sgt_free:
-+	sg_free_table(&sgt);
-+err_mem_free:
-+		dma_free_attrs(to_dma_dev(dev), vs_obj->size, vs_obj->cookie,
-+			       vs_obj->dma_addr, vs_obj->dma_attrs);
-+err_free:
-+	kvfree(vs_obj->pages);
-+
-+	return ret;
-+}
-+
-+static void vs_gem_free_buf(struct vs_gem_object *vs_obj)
-+{
-+	struct drm_device *dev = vs_obj->base.dev;
-+
-+	if (!vs_obj->dma_addr) {
-+		DRM_DEV_DEBUG_KMS(dev->dev, "dma_addr is invalid.\n");
-+		return;
-+	}
-+
-+	dma_free_attrs(to_dma_dev(dev), vs_obj->size, vs_obj->cookie,
-+		       (dma_addr_t)vs_obj->dma_addr,
-+		       vs_obj->dma_attrs);
-+
-+	kvfree(vs_obj->pages);
-+}
-+
-+static void vs_gem_free_object(struct drm_gem_object *obj)
-+{
-+	struct vs_gem_object *vs_obj = to_vs_gem_object(obj);
-+
-+	if (obj->import_attach)
-+		drm_prime_gem_destroy(obj, vs_obj->sgt);
-+	else
-+		vs_gem_free_buf(vs_obj);
-+
-+	drm_gem_object_release(obj);
-+
-+	kfree(vs_obj);
-+}
-+
-+static struct vs_gem_object *vs_gem_alloc_object(struct drm_device *dev,
-+						 size_t size)
-+{
-+	struct vs_gem_object *vs_obj;
-+	struct drm_gem_object *obj;
-+	int ret;
-+
-+	vs_obj = kzalloc(sizeof(*vs_obj), GFP_KERNEL);
-+	if (!vs_obj)
++	fb = kzalloc(sizeof(*fb), GFP_KERNEL);
++	if (!fb)
 +		return ERR_PTR(-ENOMEM);
 +
-+	vs_obj->size = size;
-+	obj = &vs_obj->base;
++	drm_helper_mode_fill_fb_struct(dev, fb, mode_cmd);
 +
-+	ret = drm_gem_object_init(dev, obj, size);
-+	if (ret)
-+		goto err_free;
++	for (i = 0; i < num_planes; i++)
++		fb->obj[i] = &obj[i]->base;
 +
-+	vs_obj->base.funcs = &vs_gem_default_funcs;
-+
-+	ret = drm_gem_create_mmap_offset(obj);
++	ret = drm_framebuffer_init(dev, fb, &vs_fb_funcs);
 +	if (ret) {
-+		drm_gem_object_release(obj);
-+		goto err_free;
-+	}
-+
-+	return vs_obj;
-+
-+err_free:
-+	kfree(vs_obj);
-+	return ERR_PTR(ret);
-+}
-+
-+struct vs_gem_object *vs_gem_create_object(struct drm_device *dev,
-+					   size_t size)
-+{
-+	struct vs_gem_object *vs_obj;
-+	int ret;
-+
-+	size = PAGE_ALIGN(size);
-+
-+	vs_obj = vs_gem_alloc_object(dev, size);
-+	if (IS_ERR(vs_obj))
-+		return vs_obj;
-+
-+	ret = vs_gem_alloc_buf(vs_obj);
-+	if (ret) {
-+		drm_gem_object_release(&vs_obj->base);
-+		kfree(vs_obj);
++		dev_err(dev->dev, "Failed to initialize framebuffer: %d\n",
++			ret);
++		kfree(fb);
 +		return ERR_PTR(ret);
 +	}
 +
-+	return vs_obj;
++	return fb;
 +}
 +
-+static struct vs_gem_object *vs_gem_create_with_handle(struct drm_device *dev,
-+						       struct drm_file *file,
-+						       size_t size,
-+						       unsigned int *handle)
++static struct drm_framebuffer *vs_fb_create(struct drm_device *dev,
++					    struct drm_file *file_priv,
++					    const struct drm_mode_fb_cmd2 *mode_cmd)
 +{
-+	struct vs_gem_object *vs_obj;
++	struct drm_framebuffer *fb;
++	const struct drm_format_info *info;
++	struct vs_gem_object *objs[MAX_NUM_PLANES];
 +	struct drm_gem_object *obj;
-+	int ret;
-+
-+	vs_obj = vs_gem_create_object(dev, size);
-+	if (IS_ERR(vs_obj))
-+		return vs_obj;
-+
-+	obj = &vs_obj->base;
-+
-+	ret = drm_gem_handle_create(file, obj, handle);
-+
-+	drm_gem_object_put(obj);
-+
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return vs_obj;
-+}
-+
-+static int vs_gem_mmap_obj(struct drm_gem_object *obj,
-+			   struct vm_area_struct *vma)
-+{
-+	struct vs_gem_object *vs_obj = to_vs_gem_object(obj);
-+	struct drm_device *drm_dev = vs_obj->base.dev;
-+	unsigned long vm_size;
++	unsigned int height, size;
++	unsigned char i, num_planes;
 +	int ret = 0;
 +
-+	vm_size = vma->vm_end - vma->vm_start;
-+	if (vm_size > vs_obj->size)
-+		return -EINVAL;
++	info = drm_get_format_info(dev, mode_cmd);
++	if (!info)
++		return ERR_PTR(-EINVAL);
 +
-+	vma->vm_pgoff = 0;
++	num_planes = info->num_planes;
++	if (num_planes > MAX_NUM_PLANES)
++		return ERR_PTR(-EINVAL);
 +
-+	/*
-+	 * We allocated a struct page table for starfive_obj, so clear
-+	 * VM_PFNMAP flag that was set by drm_gem_mmap_obj()/drm_gem_mmap().
-+	 */
-+	vm_flags_mod(vma, VM_IO | VM_DONTEXPAND | VM_DONTDUMP, VM_PFNMAP);
++	for (i = 0; i < num_planes; i++) {
++		obj = drm_gem_object_lookup(file_priv, mode_cmd->handles[i]);
++		if (!obj) {
++			dev_err(dev->dev, "Failed to lookup GEM object.\n");
++			ret = -ENXIO;
++			goto err;
++		}
 +
-+	vma->vm_page_prot = pgprot_writecombine(vm_get_page_prot(vma->vm_flags));
-+	vma->vm_page_prot = pgprot_decrypted(vma->vm_page_prot);
++		height = drm_format_info_plane_height(info,
++						      mode_cmd->height, i);
 +
-+	ret = dma_mmap_attrs(to_dma_dev(drm_dev), vma, vs_obj->cookie,
-+			     vs_obj->dma_addr, vs_obj->size,
-+			     vs_obj->dma_attrs);
++		size = height * mode_cmd->pitches[i] + mode_cmd->offsets[i];
 +
-+	if (ret)
-+		drm_gem_vm_close(vma);
++		if (obj->size < size) {
++			drm_gem_object_put(obj);
 +
-+	return ret;
-+}
-+
-+struct sg_table *vs_gem_prime_get_sg_table(struct drm_gem_object *obj)
-+{
-+	struct vs_gem_object *vs_obj = to_vs_gem_object(obj);
-+
-+	return drm_prime_pages_to_sg(obj->dev, vs_obj->pages,
-+					 vs_obj->size >> PAGE_SHIFT);
-+}
-+
-+int vs_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map)
-+{
-+	struct vs_gem_object *vs_obj = to_vs_gem_object(obj);
-+
-+	void *vaddr = vs_obj->dma_attrs & DMA_ATTR_NO_KERNEL_MAPPING ?
-+		       page_address(vs_obj->cookie) : vs_obj->cookie;
-+
-+	iosys_map_set_vaddr(map, vaddr);
-+
-+	return 0;
-+}
-+
-+void vs_gem_prime_vunmap(struct drm_gem_object *obj, struct iosys_map *map)
-+{
-+	/* Nothing to do */
-+}
-+
-+static const struct vm_operations_struct vs_vm_ops = {
-+	.open  = drm_gem_vm_open,
-+	.close = drm_gem_vm_close,
-+};
-+
-+static const struct drm_gem_object_funcs vs_gem_default_funcs = {
-+	.free = vs_gem_free_object,
-+	.get_sg_table = vs_gem_prime_get_sg_table,
-+	.vmap = vs_gem_prime_vmap,
-+	.vunmap = vs_gem_prime_vunmap,
-+	.vm_ops = &vs_vm_ops,
-+};
-+
-+int vs_gem_dumb_create(struct drm_file *file,
-+		       struct drm_device *dev,
-+		       struct drm_mode_create_dumb *args)
-+{
-+	struct vs_drm_private *priv = dev->dev_private;
-+	struct vs_gem_object *vs_obj;
-+	unsigned int pitch = DIV_ROUND_UP(args->width * args->bpp, 8);
-+
-+	if (args->bpp % 10)
-+		args->pitch = ALIGN(pitch, priv->pitch_alignment);
-+	else
-+		/* for costum 10bit format with no bit gaps */
-+		args->pitch = pitch;
-+	args->size = PAGE_ALIGN(args->pitch * args->height);
-+	vs_obj = vs_gem_create_with_handle(dev, file, args->size,
-+					   &args->handle);
-+	return PTR_ERR_OR_ZERO(vs_obj);
-+}
-+
-+struct drm_gem_object *vs_gem_prime_import(struct drm_device *dev,
-+					   struct dma_buf *dma_buf)
-+{
-+	return drm_gem_prime_import_dev(dev, dma_buf, to_dma_dev(dev));
-+}
-+
-+struct drm_gem_object *
-+vs_gem_prime_import_sg_table(struct drm_device *dev,
-+			     struct dma_buf_attachment *attach,
-+			     struct sg_table *sgt)
-+{
-+	struct vs_gem_object *vs_obj;
-+	int npages;
-+	int ret;
-+	struct scatterlist *s;
-+	u32 i;
-+	dma_addr_t expected;
-+	size_t size = attach->dmabuf->size;
-+
-+	size = PAGE_ALIGN(size);
-+
-+	vs_obj = vs_gem_alloc_object(dev, size);
-+	if (IS_ERR(vs_obj))
-+		return ERR_CAST(vs_obj);
-+
-+	expected = sg_dma_address(sgt->sgl);
-+	for_each_sg(sgt->sgl, s, sgt->nents, i) {
-+		if (sg_dma_address(s) != expected) {
-+			DRM_ERROR("sg_table is not contiguous");
 +			ret = -EINVAL;
 +			goto err;
 +		}
-+		if (sg_dma_len(s) & (PAGE_SIZE - 1)) {
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+		if (i == 0)
-+			vs_obj->iova = sg_dma_address(s);
-+		expected = sg_dma_address(s) + sg_dma_len(s);
++
++		objs[i] = to_vs_gem_object(obj);
 +	}
 +
-+	vs_obj->dma_addr = sg_dma_address(sgt->sgl);
-+
-+	npages = vs_obj->size >> PAGE_SHIFT;
-+	vs_obj->pages = kvmalloc_array(npages, sizeof(struct page *),
-+				       GFP_KERNEL);
-+	if (!vs_obj->pages) {
-+		ret = -ENOMEM;
++	fb = vs_fb_alloc(dev, mode_cmd, objs, i);
++	if (IS_ERR(fb)) {
++		ret = PTR_ERR(fb);
 +		goto err;
 +	}
 +
-+	ret = drm_prime_sg_to_page_array(sgt, vs_obj->pages, npages);
-+	if (ret)
-+		goto err_free_page;
++	return fb;
 +
-+	vs_obj->sgt = sgt;
-+
-+	return &vs_obj->base;
-+
-+err_free_page:
-+	kvfree(vs_obj->pages);
 +err:
-+	vs_gem_free_object(&vs_obj->base);
++	for (; i > 0; i--)
++		drm_gem_object_put(&objs[i - 1]->base);
 +
 +	return ERR_PTR(ret);
 +}
 +
-+int vs_gem_prime_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
++struct vs_gem_object *vs_fb_get_gem_obj(struct drm_framebuffer *fb,
++					unsigned char plane)
 +{
-+	int ret = 0;
++	if (plane > MAX_NUM_PLANES)
++		return NULL;
 +
-+	ret = drm_gem_mmap_obj(obj, obj->size, vma);
-+	if (ret < 0)
-+		return ret;
-+
-+	return vs_gem_mmap_obj(obj, vma);
++	return to_vs_gem_object(fb->obj[plane]);
 +}
 +
-+int vs_gem_mmap(struct file *filp, struct vm_area_struct *vma)
++static const struct drm_format_info vs_formats[] = {
++	{.format = DRM_FORMAT_NV12, .depth = 0, .num_planes = 2, .char_per_block = { 20, 40, 0 },
++	 .block_w = { 4, 4, 0 }, .block_h = { 4, 4, 0 }, .hsub = 2, .vsub = 2, .is_yuv = true},
++	{.format = DRM_FORMAT_YUV444, .depth = 0, .num_planes = 3, .char_per_block = { 20, 20, 20 },
++	 .block_w = { 4, 4, 4 }, .block_h = { 4, 4, 4 }, .hsub = 1, .vsub = 1, .is_yuv = true},
++};
++
++static const struct drm_format_info *
++vs_lookup_format_info(const struct drm_format_info formats[],
++		      int num_formats, u32 format)
 +{
-+	struct drm_gem_object *obj;
-+	int ret;
++	int i;
 +
-+	ret = drm_gem_mmap(filp, vma);
-+	if (ret)
-+		return ret;
++	for (i = 0; i < num_formats; i++) {
++		if (formats[i].format == format)
++			return &formats[i];
++	}
 +
-+	obj = vma->vm_private_data;
-+
-+	if (obj->import_attach)
-+		return dma_buf_mmap(obj->dma_buf, vma, 0);
-+
-+	return vs_gem_mmap_obj(obj, vma);
++	return NULL;
 +}
-diff --git a/drivers/gpu/drm/verisilicon/vs_gem.h b/drivers/gpu/drm/verisilicon/vs_gem.h
++
++static const struct drm_format_info *
++vs_get_format_info(const struct drm_mode_fb_cmd2 *cmd)
++{
++	if (fourcc_mod_vs_get_type(cmd->modifier[0]) ==
++		DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT)
++		return vs_lookup_format_info(vs_formats, ARRAY_SIZE(vs_formats),
++									 cmd->pixel_format);
++	else
++		return NULL;
++}
++
++static const struct drm_mode_config_funcs vs_mode_config_funcs = {
++	.fb_create			 = vs_fb_create,
++	.get_format_info	 = vs_get_format_info,
++	.output_poll_changed = drm_fb_helper_output_poll_changed,
++	.atomic_check		 = drm_atomic_helper_check,
++	.atomic_commit		 = drm_atomic_helper_commit,
++};
++
++static struct drm_mode_config_helper_funcs vs_mode_config_helpers = {
++	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
++};
++
++void vs_mode_config_init(struct drm_device *dev)
++{
++	dev->mode_config.fb_modifiers_not_supported = false;
++
++	if (dev->mode_config.max_width == 0 ||
++	    dev->mode_config.max_height == 0) {
++		dev->mode_config.min_width  = 0;
++		dev->mode_config.min_height = 0;
++		dev->mode_config.max_width  = 4096;
++		dev->mode_config.max_height = 4096;
++	}
++	dev->mode_config.funcs = &vs_mode_config_funcs;
++	dev->mode_config.helper_private = &vs_mode_config_helpers;
++}
+diff --git a/drivers/gpu/drm/verisilicon/vs_fb.h b/drivers/gpu/drm/verisilicon/vs_fb.h
 new file mode 100644
-index 000000000000..3a6d7452cb06
+index 000000000000..78dda8e42894
 --- /dev/null
-+++ b/drivers/gpu/drm/verisilicon/vs_gem.h
-@@ -0,0 +1,72 @@
++++ b/drivers/gpu/drm/verisilicon/vs_fb.h
+@@ -0,0 +1,15 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2023 VeriSilicon Holdings Co., Ltd.
 + */
 +
-+#ifndef __VS_GEM_H__
-+#define __VS_GEM_H__
++#ifndef __VS_FB_H__
++#define __VS_FB_H__
 +
-+#include <linux/dma-buf.h>
++#define MAX_NUM_PLANES		3 /* colour format plane */
 +
-+#include <drm/drm_gem.h>
-+#include <drm/drm_prime.h>
++struct vs_gem_object *vs_fb_get_gem_obj(struct drm_framebuffer *fb,
++					unsigned char plane);
 +
-+#include "vs_drv.h"
-+/*
-+ *
-+ * @base: drm gem object.
-+ * @size: size requested from user
-+ * @cookie: cookie returned by dma_alloc_attrs
-+ *	- not kernel virtual address with DMA_ATTR_NO_KERNEL_MAPPING
-+ * @dma_addr: bus address(accessed by dma) to allocated memory region.
-+ *	- this address could be physical address without IOMMU and
-+ *	device address with IOMMU.
-+ * @dma_attrs: attribute for DMA API
-+ * @get_pages: flag for manually applying for non-contiguous memory.
-+ * @pages: Array of backing pages.
-+ * @sgt: Imported sg_table.
-+ *
-+ */
-+struct vs_gem_object {
-+	struct drm_gem_object	base;
-+	size_t			size;
-+	void			*cookie;
-+	dma_addr_t		dma_addr;
-+	u32				iova;
-+	unsigned long	dma_attrs;
-+	bool			get_pages;
-+	struct page		**pages;
-+	struct sg_table *sgt;
-+};
-+
-+static inline
-+struct vs_gem_object *to_vs_gem_object(struct drm_gem_object *obj)
-+{
-+	return container_of(obj, struct vs_gem_object, base);
-+}
-+
-+struct vs_gem_object *vs_gem_create_object(struct drm_device *dev,
-+					   size_t size);
-+
-+int vs_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map);
-+void vs_gem_prime_vunmap(struct drm_gem_object *obj, struct iosys_map *map);
-+
-+int vs_gem_prime_mmap(struct drm_gem_object *obj,
-+		      struct vm_area_struct *vma);
-+
-+int vs_gem_dumb_create(struct drm_file *file_priv,
-+		       struct drm_device *drm,
-+		       struct drm_mode_create_dumb *args);
-+
-+int vs_gem_mmap(struct file *filp, struct vm_area_struct *vma);
-+
-+struct sg_table *vs_gem_prime_get_sg_table(struct drm_gem_object *obj);
-+
-+struct drm_gem_object *vs_gem_prime_import(struct drm_device *dev,
-+					   struct dma_buf *dma_buf);
-+struct drm_gem_object *
-+vs_gem_prime_import_sg_table(struct drm_device *dev,
-+			     struct dma_buf_attachment *attach,
-+			     struct sg_table *sgt);
-+
-+#endif /* __VS_GEM_H__ */
++void vs_mode_config_init(struct drm_device *dev);
++#endif /* __VS_FB_H__ */
 -- 
 2.34.1
 
