@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B98471F81A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7E371F7B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjFBBjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S230397AbjFBBVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbjFBBjS (ORCPT
+        with ESMTP id S231854AbjFBBVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:39:18 -0400
-X-Greylist: delayed 1108 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 18:39:04 PDT
-Received: from mx0c-0054df01.pphosted.com (mx0c-0054df01.pphosted.com [67.231.159.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCA2A3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:39:03 -0700 (PDT)
-Received: from pps.filterd (m0208999.ppops.net [127.0.0.1])
-        by mx0c-0054df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3520iw4T019954;
-        Thu, 1 Jun 2023 21:20:09 -0400
-Received: from can01-yt3-obe.outbound.protection.outlook.com (mail-yt3can01lp2174.outbound.protection.outlook.com [104.47.75.174])
-        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3qucyv7e89-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 21:20:09 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y2sNeIB97QDpVAy3jK8XXHQbG99TnkCQGkoq8Zfd9i70SyGNSR6jZTdPBFeTuU019E3C8l5gH6lLbsajCN0Sxe8r3fZJN8Y8WgD7uRjYVNhl1q5hQJDdfYOeR0XiyVkANRH+8LpDfqPOsq9nf2O+y56x7JhuqTDloXidg9qNyXwWI6m8jGO0uw1qCvFf2L3p+zc72OhtGLfojzo2dwID3nTu2WSJPg8tbIiZDSTL4FVXRkuaSGltPzIjz/0t6EKulglxw2Zs+IGoxu15yMbVTpbEYt9fiS5scO9D7cSyyTnkiJsdVa9Y6XjFl71k6fnzgLIVrp8prLnVG7+FHuAeiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jUK1cxlr5hycbv+5K6U1RQvfhCp2WXQeQ6U0UR97oq0=;
- b=hA1iMg9IIYvJOTbAv9F57mQtCfIplqR3V/a21yTBmaj3/Ej2vV1sKnFYq4OIvaDhprEHSqVKf3HDJht0Z1PVY6RPVt+V7jJPj1QjhjCzz5akB229V3Uqx6GH6VZrUYPjJ/yjZ0o8Dj3DAhYHu6vQscWiioqLk6vnNS/ZGwvwsyRPQ37HLrNecPigjaIVyfQWQSBNPq9/4LD601C8xtopDBMMcsZ/fNOqA2+bQq0IWnYsIwI8cjps7ejWyHrwr9NqtEGtf++ZehAbOCHxNdpN9cApwNVQkeiucPnPECxL3E96V/EroYakRT3sZWqaWFhi4tuw3/eQwmkoNk6KIdhHjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
- dkim=pass header.d=calian.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jUK1cxlr5hycbv+5K6U1RQvfhCp2WXQeQ6U0UR97oq0=;
- b=wHucbtLjHQGj86HUpI9uaYHbB0fCy+t9JyopLphEa0KeP8j81BO5SAzyW/8Tdm+NnkHObTMZhJLM62An4NhCudJXtHobyCrc4MnoqkqzxkJK5EUCBEJ2pGaBokbf3PkNGgSAjLklnOo7gl4k/BoBvY4cfdZvkVBud4UggokvEGM=
-Received: from YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b9::6)
- by YT3PR01MB9041.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:7e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Fri, 2 Jun
- 2023 01:20:07 +0000
-Received: from YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::c059:dcd5:ca20:4a0]) by YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::c059:dcd5:ca20:4a0%6]) with mapi id 15.20.6455.020; Fri, 2 Jun 2023
- 01:20:07 +0000
-From:   Robert Hancock <robert.hancock@calian.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Robert Hancock <robert.hancock@calian.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: simple-card-utils: fix PCM constraint error check
-Date:   Thu,  1 Jun 2023 19:19:35 -0600
-Message-Id: <20230602011936.231931-1-robert.hancock@calian.com>
-X-Mailer: git-send-email 2.40.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CY5PR15CA0105.namprd15.prod.outlook.com
- (2603:10b6:930:7::13) To YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:b9::6)
+        Thu, 1 Jun 2023 21:21:01 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E371A2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:20:34 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230602012031epoutp04f1dd9675d3c3d02ad56a10f58a62a56c~kst7_ETZf1306813068epoutp04O
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:20:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230602012031epoutp04f1dd9675d3c3d02ad56a10f58a62a56c~kst7_ETZf1306813068epoutp04O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685668831;
+        bh=oi/HXprnvpWdq4YONcP4X19Y2L2mjcH2LWUovvdZo+w=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=WuuQoYYhFtiX6AjKfOhKAqsWDsqa8oaX9Vw+Eg71GaAVFy59M64vGcO8zN8hvmM5l
+         ilyTxbG368SqpYHoTGx0YxQflklcYiQ2E71Aa7VbxsIev9iLT12W85daoTGrdAbYiB
+         VBt8pHFMvHx5EJ8SbigLqNNFRTFf/jnjrSTwONd4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230602012030epcas1p1f48cc8bd1248ac12dcc2daa83c46e219~kst7bbT_o1782017820epcas1p1E;
+        Fri,  2 Jun 2023 01:20:30 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.36.136]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QXQDF5Pjhz4x9QH; Fri,  2 Jun
+        2023 01:20:29 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.A7.48553.DD349746; Fri,  2 Jun 2023 10:20:29 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230602012029epcas1p2fc2451aa4869c66b7b548bd5661815a9~kst6E3AWe2147821478epcas1p2s;
+        Fri,  2 Jun 2023 01:20:29 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230602012029epsmtrp28da01313b6f7539b25ff4d2298dfd4d7~kst6DiL8E1303413034epsmtrp2b;
+        Fri,  2 Jun 2023 01:20:29 +0000 (GMT)
+X-AuditID: b6c32a39-d8d1ea800001bda9-ac-647943ddd2c1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7A.61.27706.DD349746; Fri,  2 Jun 2023 10:20:29 +0900 (KST)
+Received: from inkidae001 (unknown [10.113.221.213]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230602012029epsmtip23c4872b301c969d0519c27c918bdb34a~kst5zdaLq1260012600epsmtip2b;
+        Fri,  2 Jun 2023 01:20:29 +0000 (GMT)
+From:   =?ks_c_5601-1987?B?tOvAzrHiL1RpemVuIFBsYXRmb3JtIExhYihTUikvu++8usD8wNo=?= 
+        <inki.dae@samsung.com>
+To:     "'Andi Shyti'" <andi.shyti@kernel.org>
+Cc:     "'lm0963'" <lm0963hack@gmail.com>, <sw0312.kim@samsung.com>,
+        <kyungmin.park@samsung.com>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <krzysztof.kozlowski@linaro.org>,
+        <alim.akhtar@samsung.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230601082928.4mk7hfi5hunaxm4y@intel.intel>
+Subject: RE: [PATCH] drm/exynos: fix race condition UAF in
+ exynos_g2d_exec_ioctl
+Date:   Fri, 2 Jun 2023 10:20:28 +0900
+Message-ID: <004e01d994f0$6af0fb20$40d2f160$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB8838:EE_|YT3PR01MB9041:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fde73be-5993-4e04-287e-08db6307806d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RvnWJLPIPRdCAlU61pI+bRz7oWuYAA7i/+xn+FdlkZ1TBNcn15XjZTYCNm21Y/mhMEI56NWT7QM1wsnqq7SlGYNpKu7PO5BjuJPEw7hIMVNhdImhmPxglrioz7wNOMipDvYqT1mefhqXXB9CGefzQDN8A4MvPCvAWenAas4aQdNEvwESvwegID9at9uJXMj73e3+4p1Lod4L77i+3qeIwwAjJqr9rT0ckpZOGHhlbdVkggDHqZazFD5D87iHSH4ZmeqI72LR0FgPAS3VG1HIXkwCRz4Elg1dsdpvv1XWD58RyfifoKPVAZFeZJyrkjyQGUskpBrxFWIVYIJyq5wbhVUSI68utoeYzRMsAXf5w/k7t0XZXbsVirWHQctdbHtE9p2wD1/37jq5TYzprR/E8M1uz1Q3qioINXLNGBQaVGvqjsyAht2YcDmuK3Gl2IBhsiTIULwSdEiWCO8ohht8NB7HFV2jZKIp3m4Yjw/jxLkGCArcXJcchUictygkJHGXEvPC48w1f5eE/jEuvW2JweLCo2BEgIQwgxmb3fDWboXcGenKuRgQ74snFQkqkY7mx+MFMh7IvYyDIE50TAuNpHUm/ABWu8Ci5HqzwYPS9t7wvWv4Z/bUjF/Dqt7v7cBy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(396003)(346002)(136003)(451199021)(38100700002)(41300700001)(316002)(38350700002)(4326008)(6512007)(6666004)(6486002)(8936002)(86362001)(2906002)(8676002)(52116002)(66556008)(66946007)(2616005)(36756003)(66476007)(110136005)(44832011)(26005)(6506007)(1076003)(7049001)(478600001)(5660300002)(83380400001)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vSBIBA5wmG0NUkIeOGah9yTJ5hlby9og9iRObQ1e3uPxR+i7fO+I+FNWXlht?=
- =?us-ascii?Q?7RH6TNWNcCpXxyUvsDwDbd1SUY7G1HIMDg3KAUz9dsLRY87xIRgEwmi5TYm/?=
- =?us-ascii?Q?fe350TJyqQRLn/Zvry58c6nMJd6LblBzoiuzd+2nZI6qBBFFcLAYCbDwE8PH?=
- =?us-ascii?Q?tTWqj3wGxYYUEdBvIyiXb20xqWSN81wIpgT7+AG2ahEVFTzCl2fLIONLz47R?=
- =?us-ascii?Q?h5T0wH6aQfnsplirJDSiKLH8gtjYSL0C0YpBQFUv791SA6+F98553F3CYDCA?=
- =?us-ascii?Q?B5/LF3HPwRk6wsQ4J4azZsE+mZbxIayJtnMKZxzmv6I/1znmq60eXId8YRvu?=
- =?us-ascii?Q?KEs97BIYTjdpeFPrSjl4gOx9kSr0ez9gKPiNUdoQy2x1N5hXI/sNH6jykBWl?=
- =?us-ascii?Q?OZxwATnUo2Cp8UKK3mtKAQ4q+m7ukAFt98OsLmSx/2efUcORqHVToAGIxsPl?=
- =?us-ascii?Q?BRSwdFIjnrb/L5JDHqyGlMWnal3y3ZFv9qBhkc4p4q3YY25BpeXoNUZeO9I8?=
- =?us-ascii?Q?/KabDpK5VbKbV1H1S3BvYCY1FyJfVrNZH1MZlp0P8IwsUpC6XMzItRtR3RcE?=
- =?us-ascii?Q?+mSmNa99NIsSxBQVGq45ovM7Z1xgTo90n5x4sfxFdxcb1t+FHzY/OKA/Lq1m?=
- =?us-ascii?Q?R25RT/lvFSoBfibTzpJDuSJ8DjlEPUbq2LhzzzKr6O3M17UiLZOdAbeMHWQ+?=
- =?us-ascii?Q?0Tel3ZLOBHUFiJoMVntGrRehOZ4PLXCPheLatuvn91sYEpSLAfTrgHfdTclV?=
- =?us-ascii?Q?/fQ6iBC+j8g3kRYQwTIUPriIvQDgUYfXAsn09ytP6KWxTzc2ZXN5Sw6iXSpD?=
- =?us-ascii?Q?YDNESAmjgvb6gCb5KaJt2+q72mW6udiJtLT1ZOnR7aTPC7EAxQLN1irPAfIf?=
- =?us-ascii?Q?AdGmZ5wEoDD7pWHvaI7jv+1V8OyRE3p0JvrRBM/nVEPSQzgWBBkQteaStLy4?=
- =?us-ascii?Q?HV9FzvR99UfuPzGgwf3ZdDpUHH6NGBRSY9b6spB6FbdpNDA0euFqWBFNTQp0?=
- =?us-ascii?Q?1NXpyYdAzdmSyimllLxm6JW8O+tesVHJLszKG9qGabJPTcDn2Q+qfSoEr0Pj?=
- =?us-ascii?Q?2iL8wmFHNXKNCS55jF1SAKIwlUg0wamVT7lBaWhTJzMgmvc9Gi8hIP3Yr/Jh?=
- =?us-ascii?Q?xg78WmiQ6N79Eaa6wmVZZKawEszXiWoArpVn0dvQC7iFKc8k5StGsJ393Fsu?=
- =?us-ascii?Q?GUEcGeRJQWSueUgr6ErEeBS7SHhNJQAfH7CPMoUP82KTW7zV8ve76kKGHT5r?=
- =?us-ascii?Q?EZnAxPOwujKQZaBYS46AdrKbADwFodvbYZmTJFxHQYVIZhywuO1gsPPr7rPl?=
- =?us-ascii?Q?JHK1tTTSAPCLFnMtW3WK4fT9JD2XqhHzqZLDwt1infvUHib3B4k0AI2vaMUI?=
- =?us-ascii?Q?fuM3BRV9K0sDcKeHuaOai8/DYPS2e6gN0B4TXNhpif7HQ7UL5OyffiIic5tf?=
- =?us-ascii?Q?Ed4EHsR7tKYuIUcojpKFczu8zehgffR0p6Fk3Fkcq26fvUkoelSh6VHolOMR?=
- =?us-ascii?Q?3Mauem+GLBVQ2csy17qAAAJZYer83XeBLk13tF0t2i+BKoRNypQ0neIrIejC?=
- =?us-ascii?Q?bx1izRsyaSh4Y6ZGp5+vFI3YGGaGRBj8J3B11pQYSH40kVEA3DEY6xOTBQHJ?=
- =?us-ascii?Q?gA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: +ad82ihB3Ss9S/I68BMeIvUzR6CSJi7LsKMx/maQApeCgDDvuEkwE2yZtSO9kwMQg8ZvUaIdbDoKYikmuNn2R4N1f3cfDbqqTmJlZ1jtRt3ymmPTFvtN9WMSe4KJmlZJqHoQce0DRhankIDukBoKEBnWuHzLNmo1Axs9jHxFG17QB79vNWl14dehTeC5udDG2rTODyoPjdGZ3BAJ6duMdi0B3AY0Cl4705Mw6cE/GcFD3ZUDfIHmcdDmvgwR2Lu1pWYcYHSUbibxsYZvO9FK3sjqgDzszz9jexq0r64QO9vOwB6EhQ1xgSv9GJdgd7ZaQMuFrlXyp5S6Niot4QhY/HSBbHIm/jHFmtHEjeYqRS/LrMmSi1Xf4rm4TpmSOSDEFcuiwJMQql5LAfRzBfNX4KrjA3HcNZAdlVsLjQpFIp/8P9ZuNil3EFpZAaTheRPbUaRjJr8963mix1XP5afo3mUvruz2nU7tp4cAOJ1bvabKcTyD0sAwHC7XVXHaiQIxK/xktUjLsdUp1YiimaMV/rTE+kAUe6PTK70ZZT0QNNS/CWxcWNmrht4lOIFDwTpLdIglHO1l0/Nz4RoUlDjJc92rk5dzyV3mf/W6E7YRXFahclldzRg82qBdk9hMYM2BRo93zRylb6rfE8eBAPvq72OhbqsyoxjBgYcdMv7dW4CiKnQF1Ekq6ifwT+lRGAFyQHHDntO+as0itiQq1pTb5OQWxXv1GcJmcMQmoI92LtRXCZ97sNUxXlx9vc6OU11n6fOxNYSXb+JMog/KVC1f3oT3FFp6mgf4FC5ED8Ux4rD8ZM5Ns48jSTn1mhD7VXF6qsOrWSVNCqsDvfxnXQNIuKelSQtr2jUsx1EJ0srshvj0VoSHVeJiUAXwmokjgnAAtdfqhtI52KAElAVVhq0oDyZjt9J8cTQmHC9seLtWiGM=
-X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fde73be-5993-4e04-287e-08db6307806d
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 01:20:07.6058
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uTofDsJSU2rScqda0h7fQD/yV7CPWAY5OUJAYYrJYklF9MtHmtWBJmrtcnOowOnFhFn9mOf/zhvIxf5PLdB6pxf4dU31JJjqG0+rokiETWE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB9041
-X-Proofpoint-ORIG-GUID: uzE6DDM11TCfSfKBX6rRaG6xwfWjzS1U
-X-Proofpoint-GUID: uzE6DDM11TCfSfKBX6rRaG6xwfWjzS1U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- bulkscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 adultscore=0 suspectscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306020009
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset="ks_c_5601-1987"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGTj1Ryyv7UvGCwDbo/bVuHx7F6MwGboBvXA23aa5ECFYZTkQHsjiyBAkvDF18C1e4e+AKZUix2AY4xbwKvcBbQwA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPJsWRmVeSWpSXmKPExsWy7bCmnu5d58oUg/bVmhYnri9isngwbxub
+        xf2vHYwW/7dNZLa48vU9m8Xe11vZLc42vWG32PT4GqvF5V1z2CxmnN/HZHF8egOTxYzJL9kc
+        eDz2flvA4rFz1l12j02rOtk87lzbw+Zxv/s4k8fmJfUefVtWMXp83iQXwBGVbZORmpiSWqSQ
+        mpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdK2SQlliTilQKCCxuFhJ
+        386mKL+0JFUhI7+4xFYptSAlp8C0QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj0rqfTAVt/hUN
+        vbuZGxhf+HQxcnJICJhIfD9xi62LkYtDSGAHo8TWheeZQRJCAp8YJdbdU4OwvzFKLP/M1cXI
+        AdbwYooYRP1eRonuzqusEM5LRomNC5YxgjSwCWRI3G1fzApiiwhoSVy8chysiFngJpPElw8z
+        GUEmcQpYSfz6UQBiCgsESXR+cAQpZxFQkdja8xBsDK+ApcT56xehbEGJkzOfsIDYzAJGEktW
+        z2eCsLUlli18zQzxjILEz6fLoNZmSdx+/J8ZokZEYnZnGzPICRICZzgk5s/7yAjR4CLRvaGX
+        CcIWlnh1fAs7hC0l8fndXjaIhsmMEneur2CBcGYwShz+eR2q21hi/9LJUN2KEjt/z2WEWMcn
+        8e5rDyskuHglOtqEIEqUJI5dvAHVKiFxYclEtgmMSrOQPDcLyXOzkDw3C8kTCxhZVjGKpRYU
+        56anFhsWmMJjOzk/dxMjOCVrWe5gnP72g94hRiYOxkOMEhzMSiK8QmHlKUK8KYmVValF+fFF
+        pTmpxYcYTYHhPZFZSjQ5H5gV8kriDU0sDUzMjIxNLAzNDJXEeb881U4REkhPLEnNTk0tSC2C
+        6WPi4JRqYMr2Ud39S7Cv/vxWK9GYTQ1/v/1NebnxTNTM6Gsqf75riUSe4ajS/fP068Lziurf
+        217fm3CLi+NjZ/CWKZO+RIdNXJqmMltWqqxW8blFaMQEK8Xv7A/Se8ITWJY7dDbvkpqyKoR5
+        Z0XzHZHPe7a9WfG88OWaS7M6v+2awur669Ek7r5PjCyhwZH3nb6aPKzetlQube+fwAvreLfd
+        XXOx1XAqW+qrNiOl/773n3MpxoSkq8kVnuJ0+jSdg+Vh1M2t+8+dPGukpHAs7fz8lug9ZY+E
+        9orvTv1stq3WYo2ExdQbhvalkqf/O2uZHs9keLvVIF9ZXWdy4d9JK4QMd+SF7vSb5La6vd/f
+        ov+512nnL7lKLMUZiYZazEXFiQBkuy34UgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsWy7bCSvO5d58oUg39H+CxOXF/EZPFg3jY2
+        i/tfOxgt/m+byGxx5et7Nou9r7eyW5xtesNusenxNVaLy7vmsFnMOL+PyeL49AYmixmTX7I5
+        8Hjs/baAxWPnrLvsHptWdbJ53Lm2h83jfvdxJo/NS+o9+rasYvT4vEkugCOKyyYlNSezLLVI
+        3y6BK2Pn2X6mgtvGFa1XJ7I1MHaqdzFycEgImEi8mCLWxcjFISSwm1Hizb3JzBBxCYktWzkg
+        TGGJw4eLIUqeM0pcPr6drYuRk4NNIE1i0tz9rCC2iICWxMUrx8FsZoGnTBIzLmeA2EICv5kl
+        PuwxB5nDKWAl8etHAUhYWCBA4uqtx2BjWARUJLb2PGQEsXkFLCXOX78IZQtKnJz5hAVipIlE
+        4+FuKFtbYtnC18wgtoSAgsTPp8ugTsiSuP34PzNEjYjE7M425gmMwrOQjJqFZNQsJKNmIWlZ
+        wMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/dxMjOCq1NHcwbl/1Qe8QIxMH4yFGCQ5m
+        JRFeobDyFCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY
+        uGUWsWRZXuxVLxC4O72u6nv6De8Zex/Krpm9aVKw5JtHJz9X310h3OVyNGHTw1eK8orKF+uL
+        A3KMPzsFvdW9x7pPYoZF+pT/yjLHXgXc/W/2WKYxZ0JG7EOnt1s/Pjix0lF4f2B+xkUlqzcr
+        mn4XyTIpn63fI73uS+GV7U5q5zy9hQpn6+5t2tKxR5/V/Otdx0XaGvYegTXbrxX2BfKf99Bl
+        MTGXOKnSHONp3P5b+O+N26+P+Xj0sS6rjCls2PPrh32z/vrObbpzMzv+c1zal9tcG/FqHsOm
+        x5rnA7rnHDbnaHJsORRvs8qZlXn55UTr/73L+bJOB90q7/yxWZXZcKnxxz0bL8p5hhzdVblP
+        iaU4I9FQi7moOBEAigJH6jkDAAA=
+X-CMS-MailID: 20230602012029epcas1p2fc2451aa4869c66b7b548bd5661815a9
+X-Msg-Generator: CA
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230531120656epcas1p1df61dae784f4b6833b39c43da697be08
+References: <20230526130131.16521-1-lm0963hack@gmail.com>
+        <20230530222150.24oogloda6wtvpvm@intel.intel>
+        <CAAgLYK7FNrAYFRp7C3LDtqevFENQLw8YYAFR2Pk9wdfQ5RKVeg@mail.gmail.com>
+        <20230531081917.grx3qqqm7usaqoa5@intel.intel>
+        <CAAgLYK4KzuKMTkBwzCJj4wa+W+=9fR+A1J=XR-n1E-W7EjexuA@mail.gmail.com>
+        <CGME20230531120656epcas1p1df61dae784f4b6833b39c43da697be08@epcas1p1.samsung.com>
+        <20230531120531.dynd3iyggauucly7@intel.intel>
+        <007001d99413$0f08ba60$2d1a2f20$@samsung.com>
+        <20230601082928.4mk7hfi5hunaxm4y@intel.intel>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -134,38 +133,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code in asoc_simple_startup was treating any non-zero return from
-snd_pcm_hw_constraint_minmax as an error, when this can return 1 in some
-normal cases and only negative values indicate an error.
+Andi=7E :)
 
-When this happened, it caused asoc_simple_startup to disable the clocks
-it just enabled and return 1, which was not treated as an error by the
-calling code which only checks for negative return values. Then when the
-PCM is eventually shut down, it causes the clock framework to complain
-about disabling clocks that were not enabled.
-
-Fix the check for snd_pcm_hw_constraint_minmax return value to only
-treat negative values as an error.
-
-Fixes: 5ca2ab459817 ("ASoC: simple-card-utils: Add new system-clock-fixed flag")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
----
- sound/soc/generic/simple-card-utils.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/generic/simple-card-utils.c b/sound/soc/generic/simple-card-utils.c
-index 467edd96eae5..e5ff61c1e9d1 100644
---- a/sound/soc/generic/simple-card-utils.c
-+++ b/sound/soc/generic/simple-card-utils.c
-@@ -314,7 +314,7 @@ int asoc_simple_startup(struct snd_pcm_substream *substream)
- 		}
- 		ret = snd_pcm_hw_constraint_minmax(substream->runtime, SNDRV_PCM_HW_PARAM_RATE,
- 			fixed_rate, fixed_rate);
--		if (ret)
-+		if (ret < 0)
- 			goto codec_err;
- 	}
- 
--- 
-2.40.1
-
+> -----Original Message-----
+> From: Andi Shyti <andi.shyti=40kernel.org>
+> Sent: Thursday, June 1, 2023 5:29 PM
+> To: =B4=EB=C0=CE=B1=E2/Tizen=20Platform=20Lab(SR)/=BB=EF=BC=BA=C0=FC=C0=
+=DA=20<inki.dae=40samsung.com>=0D=0A>=20Cc:=20'lm0963'=20<lm0963hack=40gmai=
+l.com>;=20sw0312.kim=40samsung.com;=0D=0A>=20kyungmin.park=40samsung.com;=
+=20airlied=40gmail.com;=20daniel=40ffwll.ch;=0D=0A>=20krzysztof.kozlowski=
+=40linaro.org;=20alim.akhtar=40samsung.com;=20dri-=0D=0A>=20devel=40lists.f=
+reedesktop.org;=20linux-arm-kernel=40lists.infradead.org;=20linux-=0D=0A>=
+=20samsung-soc=40vger.kernel.org;=20linux-kernel=40vger.kernel.org=0D=0A>=
+=20Subject:=20Re:=20=5BPATCH=5D=20drm/exynos:=20fix=20race=20condition=20UA=
+F=20in=0D=0A>=20exynos_g2d_exec_ioctl=0D=0A>=20=0D=0A>=20Hi=20Inki,=0D=0A>=
+=20=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20If=20it=20is=20async,=20runqueue_n=
+ode=20is=20freed=20in=0D=0A>=20g2d_runqueue_worker=20on=0D=0A>=20>=20>=20an=
+other=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20worker=20thread.=20So=20in=20ext=
+reme=20cases,=20if=20g2d_runqueue_worker=0D=0A>=20runs=0D=0A>=20>=20>=20fir=
+st,=20and=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20then=20executes=20the=20foll=
+owing=20if=20statement,=20there=20will=20be=20use-=0D=0A>=20>=20>=20after-f=
+ree.=0D=0A>=20>=20>=20>=20>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=20>=20>=20>=
+=20Signed-off-by:=20Min=20Li=20<lm0963hack=40gmail.com>=0D=0A>=20>=20>=20>=
+=20>=20>=20>=20>=20---=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20=20drivers/gpu/=
+drm/exynos/exynos_drm_g2d.c=20=7C=202=20+-=0D=0A>=20>=20>=20>=20>=20>=20>=
+=20>=20=201=20file=20changed,=201=20insertion(+),=201=20deletion(-)=0D=0A>=
+=20>=20>=20>=20>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20diff=20--=
+git=20a/drivers/gpu/drm/exynos/exynos_drm_g2d.c=0D=0A>=20>=20>=20b/drivers/=
+gpu/drm/exynos/exynos_drm_g2d.c=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20index=
+=20ec784e58da5c..414e585ec7dd=20100644=0D=0A>=20>=20>=20>=20>=20>=20>=20>=
+=20---=20a/drivers/gpu/drm/exynos/exynos_drm_g2d.c=0D=0A>=20>=20>=20>=20>=
+=20>=20>=20>=20+++=20b/drivers/gpu/drm/exynos/exynos_drm_g2d.c=0D=0A>=20>=
+=20>=20>=20>=20>=20>=20>=20=40=40=20-1335,7=20+1335,7=20=40=40=20int=20exyn=
+os_g2d_exec_ioctl(struct=0D=0A>=20>=20>=20drm_device=20*drm_dev,=20void=20*=
+data,=0D=0A>=20>=20>=20>=20>=20>=20>=20>=20=20=20=20=20=20=20/*=20Let=20the=
+=20runqueue=20know=20that=20there=20is=20work=20to=20do.=20*/=0D=0A>=20>=20=
+>=20>=20>=20>=20>=20>=20=20=20=20=20=20=20queue_work(g2d->g2d_workq,=20&g2d=
+->runqueue_work);=0D=0A>=20>=20>=20>=20>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=
+=20>=20>=20>=20-=20=20=20=20=20if=20(runqueue_node->async)=0D=0A>=20>=20>=
+=20>=20>=20>=20>=20>=20+=20=20=20=20=20if=20(req->async)=0D=0A>=20>=20>=20>=
+=20>=20>=20>=0D=0A>=20>=20>=20>=20>=20>=20>=20did=20you=20actually=20hit=20=
+this?=20If=20you=20did,=20then=20the=20fix=20is=20not=20OK.=0D=0A>=20>=20>=
+=20>=20>=20>=0D=0A>=20>=20>=20>=20>=20>=20No,=20I=20didn't=20actually=20hit=
+=20this.=20I=20found=20it=20through=20code=20review.=0D=0A>=20This=0D=0A>=
+=20>=20>=20>=20>=20>=20is=20only=20a=20theoretical=20issue=20that=20can=20o=
+nly=20be=20triggered=20in=0D=0A>=20extreme=0D=0A>=20>=20>=20>=20>=20>=20cas=
+es.=0D=0A>=20>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=20first=20of=20all=20runq=
+ueue=20is=20used=20again=20two=20lines=20below=20this,=20which=0D=0A>=20>=
+=20>=20>=20>=20means=20that=20if=20you=20don't=20hit=20the=20uaf=20here=20y=
+ou=20will=20hit=20it=0D=0A>=20>=20>=20>=20>=20immediately=20after.=0D=0A>=
+=20>=20>=20>=0D=0A>=20>=20>=20>=20No,=20if=20async=20is=20true,=20then=20it=
+=20will=20goto=20out,=20which=20will=20directly=0D=0A>=20return.=0D=0A>=20>=
+=20>=20>=0D=0A>=20>=20>=20>=20if=20(runqueue_node->async)=0D=0A>=20>=20>=20=
+>=20=20=20=20=20goto=20out;=20=20=20//=20here,=20go=20to=20out,=20will=20di=
+rectly=20return=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=20wait_for_completion=
+(&runqueue_node->complete);=20=20=20=20=20=20//=20not=20hit=0D=0A>=20>=20>=
+=20>=20g2d_free_runqueue_node(g2d,=20runqueue_node);=0D=0A>=20>=20>=20>=0D=
+=0A>=20>=20>=20>=20out:=0D=0A>=20>=20>=20>=20return=200;=0D=0A>=20>=20>=0D=
+=0A>=20>=20>=20that's=20right,=20sorry,=20I=20misread=20it.=0D=0A>=20>=20>=
+=0D=0A>=20>=20>=20>=20>=20Second,=20if=20runqueue=20is=20freed,=20than=20we=
+=20need=20to=20remove=20the=20part=0D=0A>=20>=20>=20>=20>=20where=20it's=20=
+freed=20because=20it=20doesn't=20make=20sense=20to=20free=20runqueue=0D=0A>=
+=20>=20>=20>=20>=20at=20this=20stage.=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=
+=20It=20is=20freed=20by=20g2d_free_runqueue_node=20in=20g2d_runqueue_worker=
+=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=20static=20void=20g2d_runqueue_worke=
+r(struct=20work_struct=20*work)=0D=0A>=20>=20>=20>=20=7B=0D=0A>=20>=20>=20>=
+=20=20=20=20=20......=0D=0A>=20>=20>=20>=20=20=20=20=20if=20(runqueue_node)=
+=20=7B=0D=0A>=20>=20>=20>=20=20=20=20=20=20=20=20=20pm_runtime_mark_last_bu=
+sy(g2d->dev);=0D=0A>=20>=20>=20>=20=20=20=20=20=20=20=20=20pm_runtime_put_a=
+utosuspend(g2d->dev);=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=20=20=20=20=20=
+=20=20=20=20complete(&runqueue_node->complete);=0D=0A>=20>=20>=20>=20=20=20=
+=20=20=20=20=20=20if=20(runqueue_node->async)=0D=0A>=20>=20>=20>=20=20=20=
+=20=20=20=20=20=20=20=20=20=20g2d_free_runqueue_node(g2d,=20runqueue_node);=
+=20=20=20=20=20=20=20=20//=0D=0Afreed=0D=0A>=20here=0D=0A>=20>=20>=0D=0A>=
+=20>=20>=20this=20is=20what=20I'm=20wondering:=20is=20it=20correct=20to=20f=
+ree=20a=20resource=0D=0A>=20>=20>=20here?=20The=20design=20looks=20to=20me=
+=20a=20bit=20fragile=20and=20prone=20to=20mistakes.=0D=0A>=20>=0D=0A>=20>=
+=20This=20question=20seems=20to=20deviate=20from=20the=20purpose=20of=20thi=
+s=20patch.=20If=20you=0D=0A>=20are=20providing=20additional=20opinions=20fo=
+r=20code=20quality=20improvement=20unrelated=0D=0A>=20to=20this=20patch,=20=
+it=20would=20be=20more=20appropriate=20for=20me=20to=20answer=20instead=20o=
+f=0D=0A>=20him.=0D=0A>=20=0D=0A>=20It's=20not=20deviating=20as=20the=20ques=
+tion=20was=20already=20made=20in=20my=20first=0D=0A>=20review.=20It=20just=
+=20looks=20strange=20to=20me=20that=20a=20piece=20of=20data=20shared=0D=0A>=
+=20amongst=20processes=20can=20be=20freed=20up=20without=20sinchronizing.=
+=20A=20bunch=0D=0A=0D=0AI=20believe=20that=20if=20we=20overlook=20any=20dou=
+bts=20or=20concerns=20about=20worrisome=0D=0Aaspects=20without=20completely=
+=20resolving=20them,=20it=20wouldn't=20be=20helpful=20to=20the=0D=0Acommuni=
+ty.=0D=0ATherefore,=20I=20would=20like=20to=20clarify=20more=20explicitly=
+=20in=20order=20to=20ensure=20a=0D=0Abetter=20understanding.=0D=0A=0D=0AAFA=
+IK,=20the=20data=20you=20mentioned=20isn't=20shared=20between=20processes.=
+=20This=20data=20is=0D=0Agenerated=20driver-internally=20when=20the=20user=
+=20makes=20a=20rendering=20request=20and=0D=0Awill=20be=20removed=20once=20=
+the=202D=20GPU=20finishes=20rendering.=0D=0A=0D=0A=0D=0AHowever,=20there=20=
+may=20be=20another=20issue=20that=20I'm=20not=20aware=20of,=20so=20if=20the=
+re=20is=0D=0Aany,=20give=20me=20it=20more=20specifically=20as=20it=20would=
+=20help=20improve=20driver=20stability.=0D=0A=0D=0AThanks=20again,=0D=0AInk=
+i=20Dae=0D=0A=0D=0A>=20of=20if's=20do=20not=20make=20it=20robust=20enough.=
+=0D=0A>=20=0D=0A>=20The=20patch=20itself,=20in=20my=20point=20of=20view,=20=
+is=20not=20really=20fixing=20much=0D=0A>=20and=20won't=20make=20any=20diffe=
+rence,=20it's=20just=20exposing=20the=20weakness=20I=0D=0A>=20mentioned.=0D=
+=0A>=20=0D=0A>=20However,=20honestly=20speaking,=20I=20don't=20know=20the=
+=20driver=20well=20enough=0D=0A>=20to=20suggest=20architectural=20changes=
+=20and=20that's=20why=20I=20r-b'ed=20this=0D=0A>=20one.=20But=20the=20first=
+=20thing=20that=20comes=20to=20my=20mind,=20without=20looking=0D=0A>=20much=
+=20at=20the=20code,=20is=20using=20kref's=20as=20a=20way=20to=20make=20sure=
+=20that=20a=0D=0A>=20resource=20doesn't=20magically=20disappear=20under=20y=
+our=20nose.=0D=0A>=20=0D=0A>=20But,=20of=20course,=20this=20is=20up=20to=20=
+you=20and=20if=20in=20your=20opinion=20this=20is=0D=0A>=20OK=20and=20it=20f=
+ixes=20it...=20then=20you=20definitely=20know=20better=20:)=0D=0A>=20=0D=0A=
+>=20Thanks=20for=20this=20discussion,=0D=0A>=20Andi=0D=0A>=20=0D=0A>=20>=20=
+The=20runqueue=20node=20-=20which=20contains=20command=20list=20for=20g2d=
+=20rendering=20-=20is=0D=0A>=20generated=20when=20the=20user=20calls=20the=
+=20ioctl=20system=20call.=20Therefore,=20if=20the=0D=0A>=20user-requested=
+=20command=20list=20is=20rendered=20by=20g2d=20device=20then=20there=20is=
+=20no=0D=0A>=20longer=20a=20reason=20to=20keep=20it.=20:)=0D=0A>=20>=0D=0A>=
+=20>=20>=0D=0A>=20>=20>=20The=20patch=20per=20se=20is=20OK.=20It=20doesn't=
+=20make=20much=20difference=20to=20me=0D=0A>=20>=20>=20where=20you=20actual=
+ly=20read=20async,=20although=20this=20patch=20looks=20a=20bit=0D=0A>=20>=
+=20>=20safer:=0D=0A>=20>=20>=0D=0A>=20>=20>=20Reviewed-by:=20Andi=20Shyti=
+=20<andi.shyti=40kernel.org>=0D=0A>=20>=0D=0A>=20>=20Thanks,=0D=0A>=20>=20I=
+nki=20Dae=0D=0A>=20>=0D=0A>=20>=20>=0D=0A>=20>=20>=20However=20some=20refac=
+toring=20might=20be=20needed=20to=20make=20it=20a=20bit=20more=0D=0A>=20>=
+=20>=20robust.=0D=0A>=20>=20>=0D=0A>=20>=20>=20Thanks,=0D=0A>=20>=20>=20And=
+i=0D=0A>=20>=20>=0D=0A>=20>=20>=20>=20=20=20=20=20=7D=0D=0A>=20>=20>=20>=0D=
+=0A>=20>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=20Finally,=20can=20you=20elabor=
+ate=20on=20the=20code=20review=20that=20you=20did=20so=0D=0A>=20>=20>=20>=
+=20>=20that=20we=20all=20understand=20it?=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=
+=20>=20queue_work(g2d->g2d_workq,=20&g2d->runqueue_work);=0D=0A>=20>=20>=20=
+>=20msleep(100);=20=20=20=20=20=20=20=20//=20add=20sleep=20here=20to=20let=
+=20g2d_runqueue_worker=20run=0D=0A>=20first=0D=0A>=20>=20>=20>=20if=20(runq=
+ueue_node->async)=0D=0A>=20>=20>=20>=20=20=20=20=20goto=20out;=0D=0A>=20>=
+=20>=20>=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=0D=0A>=20>=20>=20>=20>=
+=20Andi=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=0D=0A>=20>=20>=20>=0D=0A>=20>=
+=20>=20>=20--=0D=0A>=20>=20>=20>=20Min=20Li=0D=0A>=20>=0D=0A>=20>=0D=0A=0D=
+=0A
