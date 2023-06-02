@@ -2,118 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2C271F788
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A74371F78A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 03:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbjFBBKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 21:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S233230AbjFBBKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 21:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjFBBKM (ORCPT
+        with ESMTP id S232941AbjFBBKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 21:10:12 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1CDBE2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 18:10:10 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Dx_+txQXlkQ3gDAA--.7525S3;
-        Fri, 02 Jun 2023 09:10:09 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_7NwQXlkNhmFAA--.19292S3;
-        Fri, 02 Jun 2023 09:10:08 +0800 (CST)
-Message-ID: <9405d7b7-081c-cbe9-8aa7-701b4b1d8b96@loongson.cn>
-Date:   Fri, 2 Jun 2023 09:10:08 +0800
+        Thu, 1 Jun 2023 21:10:49 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FE8E4;
+        Thu,  1 Jun 2023 18:10:48 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6b10a3d91dfso77611a34.0;
+        Thu, 01 Jun 2023 18:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685668248; x=1688260248;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JH98QIvRTr6UanreAyKHqgM4BGZBSV4Xr4LOowmlmGk=;
+        b=Ttry9yv4yGffZ8+5YY7QOR5UGwV3VAzvywcudKmI3R1O8C2JeTzwqd4rh81lKYhgxt
+         1mOw9aZ9R2D5e2BcpBux2/DN8bdZhcimrgZm/WO7Xdvmy1BjCAtBmmVIm5lk9rEnl6GB
+         C4UZS90gRXrBx7dq7mTILSRxNBI/Jv3L856YbU5gHV90dfpP3Qvz0QZ8VcdNFDQtmwXa
+         2aZ1J/l3viG5lbVx88WF0a9WSagGnltXene62GwcSO38LwuZD2REoBED1TnIjbtrdB3m
+         U2QhcNsG2zEy4Q61JrMY6RQOPbC1vS8pXpmobb4zltkUlvRHlCGd8gt24Pv/W9yFz9EZ
+         pZRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685668248; x=1688260248;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JH98QIvRTr6UanreAyKHqgM4BGZBSV4Xr4LOowmlmGk=;
+        b=lPGgqJfIh1UaeLIoz735pj2ffcT4hrquZcFRJ82Jyjuh5thN0tDLWje8uODSTKqa7l
+         qINzLt94cpY+1FEZ/I7x+5IjlQl6j7zrR2AskYez1Uf/C2JGF704dzAfsBw8ZJvzDCde
+         ut5XqA4ehIoAV5LEc7jLrw/Pi5prZ2vgASQelgGoVjOr6V6NlZ1745YVcpmRK6pz+v71
+         6LDIzX1ZLoAmbnXFCJvI7pVsbsvUlSrgb3tvgR8AJw7y1tLubO+hE5VdswlJuE/lk3s9
+         nkknRh0+HzES9jxxG29++wm2sBc7Qm/FYOsqJP4t0DoyELNfquVmmVx442wNuY04tuqb
+         Og8Q==
+X-Gm-Message-State: AC+VfDyLWG4X+u9AhFwZ8GQQSvwHXqlNRzfXAs3+2EvtT16tV6hwImS+
+        GCZyzpFJ2QiBpRg2/tJgLwxuJ20t5YGuSkQeATQ=
+X-Google-Smtp-Source: ACHHUZ4XPuz4c9rrooO5lzthn7ewEGiToh11VcZSPY2ZDm7z6XPwg9tBLrptzSglD5xyAvjUJgt1RfQTN0DOsuX7HE8=
+X-Received: by 2002:aca:a8c1:0:b0:385:d91:ee30 with SMTP id
+ r184-20020acaa8c1000000b003850d91ee30mr4236678oie.3.1685668247712; Thu, 01
+ Jun 2023 18:10:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of
- msi_domain_prepare_irqs()
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <87zg5lj1yb.ffs@tglx>
-Content-Language: en-US
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <87zg5lj1yb.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_7NwQXlkNhmFAA--.19292S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KFW5Gw4fZr48CF1DCrW8Xrb_yoW8WrWrpa
-        yUJ3WS9FsxKrW2krn3tw4rWry0yFZ5Gr45Xr95Kr1qk3s7Jr9avrsrtr4Y9a43Cwn8Ca4j
-        vFyFgFyUJryUAFJanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
-        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <ZHkseX6TiFahvxJA@work>
+In-Reply-To: <ZHkseX6TiFahvxJA@work>
+From:   Justin Tee <justintee8345@gmail.com>
+Date:   Thu, 1 Jun 2023 18:10:36 -0700
+Message-ID: <CABPRKS_FD=oeJGAEk2kpiwxSP-eDRXmm0iMhDfOW0CLV4qcS3Q@mail.gmail.com>
+Subject: Re: [PATCH v2][next] scsi: lpfc: Avoid -Wstringop-overflow warning
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Justin Tee <justin.tee@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Gustavo and Kees.
 
+Reviewed-by: Justin Tee <justin.tee@broadcom.com>
 
-在 2023/5/30 23:03, Thomas Gleixner 写道:
-> On Tue, May 30 2023 at 16:34, Huacai Chen wrote:
->> On Tue, May 30, 2023 at 4:19 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->>> Let's take a step back and look at the larger picture:
->>>
->>>  1) A PCI/MSI irqdomain is attached to a PCI bus
->>>
->>>  2) The number of PCI devices on that PCI bus is usually known at boot
->>>     time _before_ the first device driver is probed.
->>>
->>>     That's not entirely true for PCI hotplug devices, but that's hardly
->>>     relevant for an architecture which got designed less than 10 years
->>>     ago and the architects decided that 256 MSI vectors are good enough
->>>     for up to 256 CPUs. The concept of per CPU queues was already known
->>>     at that time, no?
->> Does this solution depend on the per-device msi domain? Can we do that
->> if we use the global msi domain?
-> 
-> In principle it should not depend on per-device MSI domains, but I
-> really don't want to add new functionality to the old operating models
-> as that does not create an incentive for people to convert their stuff
-> over.
-> 
->>> So the irqdomain can tell the PCI/MSI core the maximum number of vectors
->>> available for a particular bus, right?
->>>
->>> The default, i.e if the irqdomain does not expose that information,
->>> would be "unlimited", i.e. ULONG_MAX.
->> OK, thanks, but how to expose? By msi_domain_info::hwsize?
-> 
-> Probably. Needs a proper helper around it.
-
-It is not common issue, command line and documentation explanation
-is not suitable here.
-
-Can we add weak function like this?
-int __weak arch_set_max_msix_vectors(void)
-
-Regards
-Bibo, mao
-> 
-> Thanks,
-> 
->         tglx
-
+On Thu, Jun 1, 2023 at 4:43=E2=80=AFPM Gustavo A. R. Silva
+<gustavoars@kernel.org> wrote:
+>
+> Prevent any potential integer wrapping issue, and avoid a
+> -Wstringop-overflow warning by using the check_mul_overflow() helper.
+>
+> drivers/scsi/lpfc/lpfc.h:
+> 837:#define LPFC_RAS_MIN_BUFF_POST_SIZE (256 * 1024)
+>
+> drivers/scsi/lpfc/lpfc_debugfs.c:
+> 2266 size =3D LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
+>
+> this can wrap to negative if cfg_ras_fwlog_buffsize is large
+> enough. And even when in practice this is not possible (due to
+> phba->cfg_ras_fwlog_buffsize never being larger than 4[1]), the
+> compiler is legitimately warning us about potentially buggy code.
+>
+> Fix the following warning seen under GCC-13:
+> In function =E2=80=98lpfc_debugfs_ras_log_data=E2=80=99,
+>     inlined from =E2=80=98lpfc_debugfs_ras_log_open=E2=80=99 at drivers/s=
+csi/lpfc/lpfc_debugfs.c:2271:15:
+> drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: =E2=80=98memcpy=E2=80=
+=99 specified bound between 18446744071562067968 and 18446744073709551615 e=
+xceeds maximum object size 9223372036854775807 [-Wstringop-overflow=3D]
+>  2210 |                         memcpy(buffer + copied, dmabuf->virt,
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  2211 |                                size - copied - 1);
+>       |                                ~~~~~~~~~~~~~~~~~~
+>
+> Link: https://github.com/KSPP/linux/issues/305
+> Link: https://lore.kernel.org/linux-hardening/CABPRKS8zyzrbsWt4B5fp7kMowA=
+ZFiMLKg5kW26uELpg1cDKY3A@mail.gmail.com/ [1]
+> Co-developed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> Changes in v2:
+>  - Use check_mul_overflow() helper (Kees).
+>
+> v1:
+>  - Link: https://lore.kernel.org/linux-hardening/ZHZq7AV9Q2WG1xRB@work/
+>
+>  drivers/scsi/lpfc/lpfc_debugfs.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_de=
+bugfs.c
+> index bdf34af4ef36..7f9b221e7c34 100644
+> --- a/drivers/scsi/lpfc/lpfc_debugfs.c
+> +++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+> @@ -2259,11 +2259,15 @@ lpfc_debugfs_ras_log_open(struct inode *inode, st=
+ruct file *file)
+>                 goto out;
+>         }
+>         spin_unlock_irq(&phba->hbalock);
+> -       debug =3D kmalloc(sizeof(*debug), GFP_KERNEL);
+> +
+> +       if (check_mul_overflow(LPFC_RAS_MIN_BUFF_POST_SIZE,
+> +                              phba->cfg_ras_fwlog_buffsize, &size))
+> +               goto out;
+> +
+> +       debug =3D kzalloc(sizeof(*debug), GFP_KERNEL);
+>         if (!debug)
+>                 goto out;
+>
+> -       size =3D LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsi=
+ze;
+>         debug->buffer =3D vmalloc(size);
+>         if (!debug->buffer)
+>                 goto free_debug;
+> --
+> 2.34.1
+>
