@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8FA720B16
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24667720B1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236667AbjFBVjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S236293AbjFBVlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236657AbjFBVjw (ORCPT
+        with ESMTP id S235360AbjFBVlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:39:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA9A3;
-        Fri,  2 Jun 2023 14:39:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B63618A0;
-        Fri,  2 Jun 2023 21:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2C7C433D2;
-        Fri,  2 Jun 2023 21:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685741990;
-        bh=jJcEafNEBlo7FHkto+qtCLWl4ZJ3NoLaWu0A7agnlOQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CvYwJpEkEv2IeDbVrM7f1xbTHhw59xgQ7iXNAUXEIQxjqSfDUJTu5/JCuyzEYHaTm
-         l/Ix0E97QmvKv8DY6oTWypTkPrpEQlUOPuBl2dPmiLwWlSuqFIOU5E3CQpE6dH7fYN
-         Lv/zaA4zvS3Trh1LCau6D8jnRaWx1xesrW7wfI+SsKbeHOhgXsGOWdSMKakxeTDbPW
-         1fTRZ7gFV+cXZcnGe8HBYJ8wePxWpfV5VfV1rOuMXrjpkAxMEhxuUEmOceHJlzMzjX
-         jmpg72WzjBC9+n4u+4SWIqwtMIPdnxmon/PcFOIMb9Wp0v/lgOptHM5gfCchjMj2QP
-         YS10NsTYZGRXQ==
-Date:   Fri, 2 Jun 2023 14:39:46 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Dongsoo Lee <letrhee@nsr.re.kr>
-Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, letrhee@gmail.com
-Subject: Re: [PATCH v2 0/2] crypto: LEA block cipher implementation
-Message-ID: <20230602213946.GD628@quark.localdomain>
-References: <20230525121301.722682-1-letrhee@nsr.re.kr>
- <ZHh1H3yKPU68J7Uv@gondor.apana.org.au>
- <008d01d99518$33db63f0$9b922bd0$@nsr.re.kr>
+        Fri, 2 Jun 2023 17:41:23 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1DC19B;
+        Fri,  2 Jun 2023 14:41:21 -0700 (PDT)
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+X-GND-Sasl: didi.debian@cknow.org
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4650A40004;
+        Fri,  2 Jun 2023 21:41:17 +0000 (UTC)
+From:   Diederik de Haas <didi.debian@cknow.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Andrew Powers-Holmes <aholmes@omnom.net>,
+        Ondrej Jirman <megi@xff.cz>, stable@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register and range
+ mappings
+Date:   Fri, 02 Jun 2023 23:41:16 +0200
+Message-ID: <4805396.GXAFRqVoOG@bagend>
+Organization: Connecting Knowledge
+In-Reply-To: <20230601132516.153934-1-frattaroli.nicolas@gmail.com>
+References: <20230601132516.153934-1-frattaroli.nicolas@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <008d01d99518$33db63f0$9b922bd0$@nsr.re.kr>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; boundary="nextPart1853143.tdWV9SEqCh";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,29 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 03:05:16PM +0900, Dongsoo Lee wrote:
-> Additionally, we are exploring the possibility of using `blk-crypto` for
-> encryption. Currently, the ciphers available for `blk-crypto` are
-> AES-256-XTS, AES-128-CBC-ESSIV, Adiantum, and SM4-XTS. We would like to add
-> LEA-256-XTS to these.
-> 
-> ( https://github.com/torvalds/linux/blob/master/block/blk-crypto.c#L21 )
-> 
-> Instead of disk encryption, it is also possible to use `fscrypt` to encrypt
-> the file system for data-at-rest environments. `fscrypt` currently supports
-> AES-256-XTS, AES-256-CTS-CBC, AES-128-CBC-ESSIV, AES-128-CTS-CBC, SM4-XTS,
-> SM4-CTS-CBC, Adiantum, and AES-256-HCTR2.
-> 
-> ( https://github.com/torvalds/linux/blob/master/fs/crypto/keysetup.c#L16 )
-> 
+--nextPart1853143.tdWV9SEqCh
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Diederik de Haas <didi.debian@cknow.org>
+Date: Fri, 02 Jun 2023 23:41:16 +0200
+Message-ID: <4805396.GXAFRqVoOG@bagend>
+Organization: Connecting Knowledge
+In-Reply-To: <20230601132516.153934-1-frattaroli.nicolas@gmail.com>
+References: <20230601132516.153934-1-frattaroli.nicolas@gmail.com>
+MIME-Version: 1.0
 
-Currently the only user of blk-crypto is fscrypt.  So the above two paragraphs
-are really talking about the same thing.
+On Thursday, 1 June 2023 15:25:16 CEST Nicolas Frattaroli wrote:
+> The register and range mappings for the PCIe controller in Rockchip's
+> RK356x SoCs are incorrect. Replace them with corrected values from the
+> vendor BSP sources, updated to match current DT schema.
 
-I haven't seen any patch that proposes adding LEA support to fscrypt.  Also, I'm
-not sure that the information you've provided so far is sufficient motivation
-for adding it to fscrypt.  I did recently allow another national pride cipher,
-SM4, to be added to fscrypt, but that was only because a user said they were
-being *required* to use SM4.  It's not clear that's the case for LEA.
+I have been using the exact same patch for a while now and without it my 
+Quartz64 Model A with a USB3 adapter card either caused a boot failure, a 
+fatal kernel crash or a non-fatal kernel crash (system seemed to work apart 
+from the USB3 adapter card).
+With the patch, everything worked. So
 
-- Eric
+Tested-by: Diederik de Haas <didi.debian@cknow.org>
+--nextPart1853143.tdWV9SEqCh
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZHph/AAKCRDXblvOeH7b
+bgsIAP49BoTE7Nu6A2Nw3wl1PJZ1DddFJ+6e2+chHwt8qgze8gD9Hvl3lz5bGkis
+dP+y9LqkkMhJ7ftBWL9UsWH/QMtnvgg=
+=eoxl
+-----END PGP SIGNATURE-----
+
+--nextPart1853143.tdWV9SEqCh--
+
+
+
