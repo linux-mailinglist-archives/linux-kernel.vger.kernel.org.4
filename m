@@ -2,305 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63ED72040B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF60720422
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbjFBOL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S235362AbjFBOQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236056AbjFBOLU (ORCPT
+        with ESMTP id S234594AbjFBOQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:11:20 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D04E41;
-        Fri,  2 Jun 2023 07:11:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685715077; x=1717251077;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WEuoE/22upTwizbkHAb7wUpNSG3W8irAh4ohOv/LZqg=;
-  b=R0tS5/Ye557sJoOJsD4+dga5MjVDBaGqwEvksS9UVke29PvkpsnVKjRW
-   3U133g0QsRc9m0bjkryuBZdPSNHsJJqWZW+vsHNN6lN5dUfqawe6+w5CJ
-   7P0kTA35dQPLVLvacxaReBUDbpm9UdvVcK0V2K8iFeoVN/yyQG4st4bBI
-   PK7c1l9UPFTBQDnBW3WYLXsLsqlkDIIlKI3HWeu/cP1VQYqTwagGVpL2u
-   5AAiVu1HJlHvjoYbmg+bTzNpLSD9dmg52UoWpa6wNhyPJY4E5vzGmUwbT
-   LBD0khKmPUlUIhbtQMhlx7LeiBmazKHAD7OB+h7JeMalDWvSFlLo7wqvJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="358304507"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="358304507"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 07:11:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="954519429"
-X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
-   d="scan'208";a="954519429"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Jun 2023 07:11:15 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 2 Jun 2023 07:11:14 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 2 Jun 2023 07:11:14 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.49) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 2 Jun 2023 07:11:14 -0700
+        Fri, 2 Jun 2023 10:16:41 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8871A4;
+        Fri,  2 Jun 2023 07:16:39 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CItDVID7pHz2ZdZPtxmYT+BSpdxIunITc5L15EUpPhPcnzDvlL7VaszQocp+vLOdmAHxMbmnze4WNauh1gyRLT/myB6HKEA5U3z2vyu5y4GS6/D06XIJLc4tWI87Z68xWes75kMZIz8gYlXuPMaEHVwMFf5rzxiJKq/d0hFfbowC31hDoFdWwJgtw2pe/KKHNd2fEn3dR5eK8dBH84ZnB006MLbt7WuW+BttkeVqmqsk5StKf54muG6uuikpRw7tXOUb1PUBLqao+yKZJTvldtYXkzrctC7UTd61N6Z7piPWrCI8hvKLK2JiMtSaoxBHQguIHApxByzWH6POEmyhgA==
+ b=ZLoYNL5Bc3E1DC76CfRCas17JWy++bp/VMH84z1k8oEiq57JNZ4Luuw2HNIHZ5pn/YawXiGSP5zCluyq2nCL0MXAbFrMek96uizTEuWM6DiWzy9ImtaY8v4wD3HduP7oxmjhtMZgqU46XXysWK3cFW+ps6TFl7UcNOLTxm47STaRUInlk6aymNfwAQz8x98wtBZ0xi2RAb+dQOs1jXXmPTaUDDng1/4ERabysyH9nFYRQY+8l/Udu3N+xcSHk9nAahf/3rBImW1izho9GPHk2vIzMrZmmzKlGxyv6/N4lDt/39dAlyLQ5Qr2CoV7YLaf0YZfQdLho9o8kepbaX0xKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3eMyqX2JRqTFXhLrpKxauvgAy2xb9DiseyaPy3Gntx0=;
- b=Ot6c0KnS+72ecJOl760Ayea+e9nRA66+J2lOeOU5eoZ6IjArfLdIuKhQ7h2wK5mo0Awias1Y/Mm6pvdGf9lQg94Juj7pAUQrjKMu5vhuH9WWmM5QnGNNl35fvjn7JcX7cci4u81e57tAPiR6IWFChtXgaDXCc81K1HrUbJ6zwmkJ505fuBI416+uk0coOjI13aGJTV2xfCyoSvkx5mkkyKLmwH5bw5v3AFDLNaYm41m29YLmBR0all30w84GeSiluCinOSUEOqYvIa6X8zFmFvaAH/agUEz/TeoSqp5FGJiVMf2yk4R5MWCtqqyKZ1mwu1ad6+sdFUG0bfUhdxhUig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by DM6PR11MB4563.namprd11.prod.outlook.com (2603:10b6:5:28e::23) with
+ bh=PxJdJH7KJuWU3tJ2igpIZ0922BMVESU82njhQzdKBbI=;
+ b=mbq5v1fNyipBBwm1v1ztOK+wBBUdHEdInynIk33UH+dduyAjBlCoTiR7OimIMv+PNthcSXsmOiU8kQH5Ux7RoBnwRrhSA+Q4QYQE0jr5lKEXoR17vLS7RsOdrxX62t0BUawso/ELze1WWv8QbG5+XxqAbRdvLRBMzmj3TsKfkzv3KmKZlcuXrC+QcMUwNa7Le8O1q47BqZKJw41T08t+Qh2RM2DJlbnDdAPpTn8I4DewfHtlryQuuxuUmu/fY56l9toCCoAZrlramS7XWrZXG6TqZwfnbiMu6DE/PO3aUt6hF6an2RL5zjet/Q9aPJ1yI24JmEH7WHwNCGE9Yic1Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PxJdJH7KJuWU3tJ2igpIZ0922BMVESU82njhQzdKBbI=;
+ b=Y+JMiDX6MQh1Lji10Ow0TiKiTuvQKK8lngfA0dogRGzeuIslWHc128Io+MncYgVgNgaBwAKVM3HAAQeFmLp5s6VTHL2nDnTvu+FthapRcQtx31Qqw8zLimZdWCm1Avz00nlRnuhnRAGlGumY4x5XQ2AxPB5ITFYimzicd5i/olE=
+Received: from DS7PR05CA0040.namprd05.prod.outlook.com (2603:10b6:8:2f::33) by
+ SN7PR12MB8604.namprd12.prod.outlook.com (2603:10b6:806:273::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26; Fri, 2 Jun
- 2023 14:11:12 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::82b6:7b9d:96ce:9325]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::82b6:7b9d:96ce:9325%6]) with mapi id 15.20.6455.024; Fri, 2 Jun 2023
- 14:11:12 +0000
-Message-ID: <97d2efe0-599b-70d3-16ca-1dbab13eb2b1@intel.com>
-Date:   Fri, 2 Jun 2023 16:09:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v3 03/12] iavf: optimize Rx buffer allocation a
- bunch
-Content-Language: en-US
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        "Michal Kubiak" <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-References: <20230530150035.1943669-1-aleksander.lobakin@intel.com>
- <20230530150035.1943669-4-aleksander.lobakin@intel.com>
- <ZHd4UPXgNaJlmyv1@boxer>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <ZHd4UPXgNaJlmyv1@boxer>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0068.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::12) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Fri, 2 Jun
+ 2023 14:16:37 +0000
+Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2f:cafe::a5) by DS7PR05CA0040.outlook.office365.com
+ (2603:10b6:8:2f::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.9 via Frontend
+ Transport; Fri, 2 Jun 2023 14:16:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.24 via Frontend Transport; Fri, 2 Jun 2023 14:16:36 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Jun
+ 2023 09:16:13 -0500
+Date:   Fri, 2 Jun 2023 16:16:01 +0200
+From:   Robert Richter <rrichter@amd.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v4 01/23] cxl/acpi: Probe RCRB later during RCH
+ downstream port creation
+Message-ID: <ZHn5RwXFuQOSWXaF@rric.localdomain>
+References: <20230523232214.55282-1-terry.bowman@amd.com>
+ <20230523232214.55282-2-terry.bowman@amd.com>
+ <20230601111328.00005620@Huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230601111328.00005620@Huawei.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|DM6PR11MB4563:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c8d5f3f-ff20-4e40-11a6-08db63733888
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT032:EE_|SN7PR12MB8604:EE_
+X-MS-Office365-Filtering-Correlation-Id: b50031e9-533d-4299-dbcb-08db6373fa04
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KOFwKI8m8XEfndI7cL1iUaFXraEoYMr9M4q2Woc3V2/9OhQe7XmP1LU/B5MRaqSlFaSBh05iY2Qs87z01JZmvGrTFHnJjCSMad31BjVATMpXiBMd+2X7KNHLel4akf5FN6DP2CDDctQiqzVMcrnhbzBr/C79X/wkMhkaKS/G9lVxO7gf+ruQqeI+x7lXP+jJ23ePvssRowyTAc6oggIEJk/A7k0f+aZy4lQcYF/ZTp4UpRTOB6YBVdBtYLrnw48OAnwTt8ym3qUAx6pZWXPGmyCcCwlHdiZwdxZ9mTVBtyjcOETuPOl+UcNrdFj6z4H/KzPHR4QS6RcS3auxm6MIwjyBZOdN7MW6zAct23n3/dU469gLG4XSTrAPiY0QnX8N7klmtsElTI57cP9mS6x6rtRE11ToRpfhOIgm9RjFzYr+VT1VF1EpUPunTDOkc1UXSdFo2vUZl/pyxEF+Hmm4ifJjTMXjjvY2jd1VLKpwaywV6eTn17VeDWdj/+LTE9iSjsn6UJXYxjvWJCV61XzoyZ9n/N/PtTnXV6reWCoHgWhQN2DykZj8BCyFOq5qRi8iUI0ksJ7nIba4WaRfsXfGYQ0PqB+Wypvzt7GOxiJCe8q5/gRjVvSTEa5w86C4YVxkRkUKjFl69bJ2y/lK2kJU3g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199021)(8936002)(8676002)(6862004)(66946007)(31686004)(5660300002)(7416002)(4326008)(6636002)(66556008)(316002)(66476007)(41300700001)(2906002)(54906003)(37006003)(6666004)(478600001)(6486002)(6512007)(6506007)(26005)(186003)(2616005)(36756003)(82960400001)(83380400001)(38100700002)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VTBoUWNCeGRiZkVqcmVtUE1FS3Z0WGJOMTA1cFhWSlp2VW9UdVkwSlp6L0pZ?=
- =?utf-8?B?NGYzNG80bHl3QmRudVF6RXhsRE1HMFpmUEhQaHBQQkJKN000N2lYM3lqMmtI?=
- =?utf-8?B?ZmlGYThBRlhVMUNtZ0FLS2JmNjJJZ0Z1U1UvVUE2MU5kTVVlaVNWN0x3UnNs?=
- =?utf-8?B?ZHpuM3hWNXBiTzN5YUxwRElsRE9QL3AzdnNaWnZ5Qlc5d25uK1AwZEFtYnRI?=
- =?utf-8?B?R3l3ZklML3ppRkhwcjA0SHlJTStTODZXNWNJWmhZK3dnekhERnVKV3l2TzRP?=
- =?utf-8?B?aDVZY01kSDNHa1NIVDk4N0tuSTJDRkJBS1RhOFkzcC8xTHh5a0tldkJxZGRq?=
- =?utf-8?B?Y2VYNjZqMFJ6SmszMytuazVKcW02WXZYOTBqT1k4b3RqSUFpRDd2dFJsVURD?=
- =?utf-8?B?MEdua29jUk5JdHlCQzVoN00zdVFLSEFTd2lIdm5lVnhERkZaeEEwTVBrWnF5?=
- =?utf-8?B?aXlKdTN2MFJoVjQ0T251VDNuL3dQS0x6QkdzUllLVHlVUkV5Skduc2pjdmho?=
- =?utf-8?B?TWw2RFEyVWJHbnhoOEx4Nm5SOVExRGZRZldxcSttaThML2VqdXkxQW5jRU1R?=
- =?utf-8?B?WkVsWGwzdEVyb1hRZ0FHNFBzZjdvUVNSTS8wSDUrbXB3TXRxYVJRa3B5ejYz?=
- =?utf-8?B?SE5pMjhmWmlzZGNmUTdHV0pXY0Y1M1FabytpcHpjNU8vNzd2SS92bzJBQnM4?=
- =?utf-8?B?MG9VVHhaTkRBcmtFalBvcUFTbkEydnZtRHZzVEVMd2dEL251elFMenc2V3RQ?=
- =?utf-8?B?V3lRMUVWK202VUN4aDQyZVJpN2RWMGpLWmUvSVFlREN1ZjUzYW1IZ0M3Qit1?=
- =?utf-8?B?TjJ2RVZjRjBzVEcrREtGa2ErcWEwL1QxenZpdnNpaS84cGxESTFaSWFsTExN?=
- =?utf-8?B?QXJEcGU3WkNPZFo1YlZiVXNnc1R4d2RnTG1xRGJYWnZ0ZUpIRXJZeGJpNXQ1?=
- =?utf-8?B?R1pYeCsvZXZMMXZ3M2FybmFNRDNsVmpkV1dwemNRSFN5WjgzTkcyTXAwdjdJ?=
- =?utf-8?B?bkNrRmpLR0ZVazljbzloNitQQlZ4MkdiU2ZOdldiQUdVYzU4cWF5TGs2bjlN?=
- =?utf-8?B?bE12TWd3ZjRoVlpEMDJua0hGTVZ6aXoybVZwWDVFb1dOdzFxR1Boa2VkR0Fx?=
- =?utf-8?B?RVRxSVlZTHF2Nk12Z0daSFg1ai80RndtZk44SDNRWUFiUW9ySTE2WU5MK2NK?=
- =?utf-8?B?UTlBbXZjbFBadVJHY1h6V0JJdFdGZVBhY3I1dFdPVzdUREZwS090UVZTWjF4?=
- =?utf-8?B?Rnl5cjgyb3Jwai9JVFV3cDhBdmxMV29WMlBRMEowVjY1dWluTVdRUjMvcERr?=
- =?utf-8?B?Y3Y3RGN6U201SmpaYlR1K2RIdGxqbERMRjE2L09ZanJsbFVSWHFNT2JJU1hE?=
- =?utf-8?B?ZXQ0MmlOVHNOZmNQTkVzV3F4a2pvcTBjTWtuZldKU1U1dEhXangzdXRQSzJU?=
- =?utf-8?B?MmhlVGhkeXdIc0MxUzJuZGQ2cmRiMUZ0cnROUGNLZTVZNkI5czJxQ1JCbXVJ?=
- =?utf-8?B?NENTdzFJVC9VbzN0cHZYUXhsVzdLbkozTzcrQVJ3NDhYcmZKSEpVNDRpSGtW?=
- =?utf-8?B?SGFrZUFxMDNsUFJicitxNjF2Rkg5MG1HaVYwQWFaakszNXdPMGo5UWVkZFIz?=
- =?utf-8?B?ekhsNFpaSmdoc3pyVDZBT1JVNDFnb3FDVXBQZWJVRDd1WUovTXNSemJkVUt2?=
- =?utf-8?B?MFlpZWI4dkhYdWdZRDBiUm9FU2RMRU9vOWdtUElENmptRENWYUJMT0l6U0tI?=
- =?utf-8?B?TkMwUC8rNms1MGFodEVGOFB3bnczTExDUEVFVUpiYWltdWkrNndqSnJDamVa?=
- =?utf-8?B?YlAwbHZScm5haDJid015clArVXU4Y05JcFIvZk9nT3dYRHh5Zm9hSXpBcWZy?=
- =?utf-8?B?SlNnVE91YlVVbXVFaS83eUhaMVRpdHhsV1E5RWFHbzV6QWhTc3lzN3g5SG1P?=
- =?utf-8?B?bnFKcjlxdUlaRHVsQVJKNHdxbVppT3J0a2hBWkU4ZGJiUnBpdHJmNld0OFdn?=
- =?utf-8?B?TGgrZkVxdndXTzgzUXhYZmNpTE51dkxEOTA2SlVML01ReDhyMVNNRDczUDNm?=
- =?utf-8?B?UW1GTHBabWpLZnJwaTBqakpMVm9Kb3ptL052cVhiU3BvbVJadlYzdWI2ZUFN?=
- =?utf-8?B?Qmk0RW43eEtlSjlFV01VWm9KN3QrV2VqQUVhVmtBeGc5WlptbmRhbWVjMXBq?=
- =?utf-8?B?Tnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c8d5f3f-ff20-4e40-11a6-08db63733888
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 14:11:12.5849
+X-Microsoft-Antispam-Message-Info: DhXMxxLHk5GOZLJZdL4n95BMgYHqzCTFcLdXqJWKuEskZoOp2RfWDDLQ0/QF8yT23bqJ2/la3Nw9EawXtyK0oFRyin/HfZwu9svpYs9y4Npr0duoS2txqn7cwFTAwQrlLy+CDRnxYJbNnr1rSAiQgIvaF0nX0Effv2bSXU7sG4AGcxKThwA2ur0ERowcvCEDXE/EYMpZccKat5xwCCIiHgnwh/a15fDYaBzoy/HCumgzb+3g/urRVcIVfX10L/qw4jUh3DNjvrtNsNoicgel39Q5oEJVdDN5D9Sp1Rl81+/Ex9u4ryx2DRnkEPUQ6SGYlXsmprUGtq2FMUrWeMyDWWdYQF9jPsZbbmzW7TBniHiPYPD8/8APNMfYwbrArQJkErHF/h5KmdPMPu7TPO564YAmn78gXmSSioxFk6HIDx8WiRxyyJZw18LWSSQmCQSL7gb/qC/tS8tpoaDoAJe/hvJer6f0hSiOA+/HaxDsxLla+EyCHFGEMi4jhgfVhM3uey+pMg9ug42dQS+XXsfaS9gmwGkkAm8oBuYoI2LaNx2UaJvx3atYhiMrn4sBUfFPWliA9wuq50vHuT3Ij3TxootJrjQCpa98fh49rFQi/zUany3Xqx60YKd775PJ1u1+Kp2EsyZGdzX5UPhfXVhxKpw08AKjA+h9GLAZyx0P4Yr6T4OY/Poeq+TXm69WsF20LqGEWpf6lAZUWdWeM7MmCxbzXbwpSP5AWl03KN2psge79CpPCrplAGveA4MsOdaQU/YWbE8UXNscSKH2p+OA1Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199021)(46966006)(36840700001)(40470700004)(36860700001)(40460700003)(47076005)(83380400001)(316002)(8936002)(81166007)(6666004)(70206006)(5660300002)(4326008)(7416002)(6916009)(70586007)(82310400005)(41300700001)(8676002)(356005)(7696005)(40480700001)(55016003)(82740400003)(54906003)(2906002)(9686003)(186003)(53546011)(16526019)(478600001)(26005)(336012)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 14:16:36.9130
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VWHZDEnLHIzTdqBxg+hLa1YTzqiwb9OAcI3tGnxcu07Kf2bXv4LxDfyjC1MFdhhMgiDSHdjdg0xCEFDSge9ssIsTObA5t8QA7cOfLRi+Ad8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4563
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: b50031e9-533d-4299-dbcb-08db6373fa04
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8604
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Date: Wed, 31 May 2023 18:39:44 +0200
+Hi Jonathan,
 
-> On Tue, May 30, 2023 at 05:00:26PM +0200, Alexander Lobakin wrote:
->> The Rx hotpath code of IAVF is not well-optimized TBH. Before doing any
->> further buffer model changes, shake it up a bit. Notably:
->>
->> 1. Cache more variables on the stack.
->>    DMA device, Rx page size, NTC -- these are the most common things
->>    used all throughout the hotpath, often in loops on each iteration.
->>    Instead of fetching (or even calculating, as with the page size) them
->>    from the ring all the time, cache them on the stack at the beginning
->>    of the NAPI polling callback. NTC will be written back at the end,
->>    the rest are used read-only, so no sync needed.
+On 01.06.23 11:13:28, Jonathan Cameron wrote:
+> On Tue, 23 May 2023 18:21:52 -0500
+> Terry Bowman <terry.bowman@amd.com> wrote:
 > 
-> I like calculating page size once per napi istance. Reduces a bunch of
-> branches ;)
+> > From: Robert Richter <rrichter@amd.com>
+> > 
+> > The RCRB is extracted already during ACPI CEDT table parsing while the
+> > data of this is needed not earlier than dport creation. This
+> > implementation comes with drawbacks: During ACPI table scan there is
+> > already MMIO access including mapping and unmapping, but only ACPI
+> > data should be collected here. The collected data must be transferred
+> > through a couple of interfaces until it is finally consumed when
+> > creating the dport. This causes complex data structures and function
+> > interfaces. Additionally, RCRB parsing will be extended to also
+> > extract AER data, it would be much easier do this at a later point
+> > during port and dport creation when the data structures are available
+> > to hold that data.
+> > 
+> > To simplify all that, probe the RCRB at a later point during RCH
+> > downstream port creation. Change ACPI table parser to only extract the
+> > base address of either the component registers or the RCRB. Parse and
+> > extract the RCRB in devm_cxl_add_rch_dport().
+> > 
+> > This is in preparation to centralize all RCRB scanning.
+> > 
+> > Signed-off-by: Robert Richter <rrichter@amd.com>
+> > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 > 
-> Yet another optimization I did on other drivers was to store rx_offset
-> within ring struct. I skipped iavf for some reason. I can follow-up with
-> that, but I'm bringing this up so we keep an eye on it.
-
-rx_offset is stored as Page Pool param in its struct. So no follow-ups
-here needed :)
-
-[...]
-
->> 3. Don't allocate with %GPF_ATOMIC on ifup.
+> Hi,
 > 
-> s/GPF/GFP
-
-Breh :s
-
+> Some comments inline, though one of them (about extensibility of CDAT
+> structures) applies just as much to the existing code so doesn't affect
 > 
->>    This involved introducing the @gfp parameter to a couple functions.
->>    Doesn't change anything for Rx -> softirq.
->> 4. 1 budget unit == 1 descriptor, not skb.
->>    There could be underflow when receiving a lot of fragmented frames.
->>    If each of them would consist of 2 frags, it means that we'd process
->>    64 descriptors at the point where we pass the 32th skb to the stack.
->>    But the driver would count that only as a half, which could make NAPI
->>    re-enable interrupts prematurely and create unnecessary CPU load.
-> 
-> How would this affect 9k MTU workloads?
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> for this patch.
 
-Not measured =\ But I feel like I'll drop this bullet, so will see.
+thanks for review. See inline.
 
 > 
->> 5. Shortcut !size case.
->>    It's super rare, but possible -- for example, if the last buffer of
->>    the fragmented frame contained only FCS, which was then stripped by
->>    the HW. Instead of checking for size several times when processing,
->>    quickly reuse the buffer and jump to the skb fields part.
 > 
-> would be good to say about pagecnt_bias handling.
-
-?? Bias is changed only when the buffer contains data, in this case it's
-not changed, so the buffer is ready to be reused.
-
-[...]
-
->> Function: add/remove: 4/2 grow/shrink: 0/5 up/down: 473/-647 (-174)
->>
->> + up to 2% performance.
+> > ---
+> >  drivers/cxl/acpi.c      | 52 ++++++++++++++++-------------------------
+> >  drivers/cxl/core/port.c | 21 +++++++++++++----
+> >  drivers/cxl/cxl.h       |  1 -
+> >  3 files changed, 36 insertions(+), 38 deletions(-)
+> > 
+> > diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> > index 7e1765b09e04..39227070da9b 100644
+> > --- a/drivers/cxl/acpi.c
+> > +++ b/drivers/cxl/acpi.c
+> > @@ -373,20 +373,18 @@ static int add_host_bridge_uport(struct device *match, void *arg)
+> >  }
+> >  
+> >  struct cxl_chbs_context {
+> > -	struct device *dev;
+> >  	unsigned long long uid;
+> > -	resource_size_t rcrb;
+> > -	resource_size_t chbcr;
+> > +	resource_size_t base;
+> >  	u32 cxl_version;
+> >  };
+> >  
+> > -static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+> > +static int cxl_get_chbs(union acpi_subtable_headers *header, void *arg,
+> >  			 const unsigned long end)
+> >  {
+> >  	struct cxl_chbs_context *ctx = arg;
+> >  	struct acpi_cedt_chbs *chbs;
+> >  
+> > -	if (ctx->chbcr)
+> > +	if (ctx->base)
+> >  		return 0;
+> >  
+> >  	chbs = (struct acpi_cedt_chbs *) header;
+> > @@ -395,23 +393,16 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+> >  		return 0;
+> >  
+> >  	ctx->cxl_version = chbs->cxl_version;
+> > -	ctx->rcrb = CXL_RESOURCE_NONE;
+> > -	ctx->chbcr = CXL_RESOURCE_NONE;
+> > +	ctx->base = CXL_RESOURCE_NONE;
+> >  
+> >  	if (!chbs->base)
+> >  		return 0;
+> >  
+> > -	if (chbs->cxl_version != ACPI_CEDT_CHBS_VERSION_CXL11) {
+> > -		ctx->chbcr = chbs->base;
 > 
-> I am sort of not buying that. You are removing iavf_reuse_rx_page() here
-> which is responsible for reusing the page, but on next patch that is
-> supposed to avoid page split perf drops by 30%. A bit confusing?
+> Trivial: This is a functional change and should be called out -
+> previously the base address was stashed even if the length test
+> fails, now it isn't. May make no difference because it was never used
+> if that's the case, but would be nice to still mention it in patch description.
 
-Nope. reuse_rx_page() only adds overhead since it moves reusable buffers
-around the ring, while without it they get reused in-place. That's why
-it doesn't cause any regressions. The next patch removes page reuse
-completely, hence the perf changes.
-
-[...]
-
->> -static void iavf_reuse_rx_page(struct iavf_ring *rx_ring,
->> -			       struct iavf_rx_buffer *old_buff)
-> 
-> this is recycling logic so i feel this removal belongs to patch 04, right?
-
-(above)
-
-> 
->> -{
->> -	struct iavf_rx_buffer *new_buff;
->> -	u16 nta = rx_ring->next_to_alloc;
-
-
-[...]
-
->> -static struct iavf_rx_buffer *iavf_get_rx_buffer(struct iavf_ring *rx_ring,
->> -						 const unsigned int size)
->> +static void iavf_sync_rx_buffer(struct device *dev, struct iavf_rx_buffer *buf,
->> +				u32 size)
-> 
-> you have peeled out all of the contents of this function, why not calling
-> dma_sync_single_range_for_cpu() directly?
-
-Pretty long line, so I decided to leave it here. It gets removed anyway
-when Page Pool is here.
-
-[...]
-
->>  	if (iavf_can_reuse_rx_page(rx_buffer)) {
->> -		/* hand second half of page back to the ring */
->> -		iavf_reuse_rx_page(rx_ring, rx_buffer);
->>  		rx_ring->rx_stats.page_reuse_count++;
-> 
-> what is the purpose of not reusing the page but bumping the meaningless
-> stat? ;)
-
-Also above. It's reused, just not moved around the ring :D
-
-[...]
-
->> +		/* Very rare, but possible case. The most common reason:
->> +		 * the last fragment contained FCS only, which was then
-
-                            ^^^^^^^^
-
->> +		 * stripped by the HW.
-> 
-> you could also mention this is happening for fragmented frames
-
-Mmm?
+The logic changed but the intention is to have the same checks as
+before. The length check is in only for the CXL11 case and no check
+for VH mode. This is implemented as before and no functional change,
+note the check later below in the old code which was the CXL11-only
+path.
 
 > 
->> +		 */
->> +		if (unlikely(!size))
->> +			goto skip_data;
-Thanks,
-Olek
+> Also, ACPI tables are designed to be extensible and I think that
+> applies to CDAT tables as well - so this code should not be
+> checking for a precise match, but rather that it is greater than
+> or equal to the size we will read from.
+
+I don't think the spec will change here as this is limited to RCD mode
+only. Other than e.g. capability register ranges this is a block size,
+there is no intention to extend it.
+
+> 
+> 
+> > +	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL11 &&
+> > +	    chbs->length != CXL_RCRB_SIZE)
+> >  		return 0;
+> > -	}
+> 
+> >  
+> > -	if (chbs->length != CXL_RCRB_SIZE)
+> > -		return 0;
+
+Note this check here.
+
+-Robert
+
+> > -
+> > -	ctx->rcrb = chbs->base;
+> > -	ctx->chbcr = cxl_rcrb_to_component(ctx->dev, chbs->base,
+> > -					   CXL_RCRB_DOWNSTREAM);
+> > +	ctx->base = chbs->base;
+> >  
+> >  	return 0;
+> >  }
+> 
