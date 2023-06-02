@@ -2,164 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 375AA720BA6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A95720BB7
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 00:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236676AbjFBWCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 18:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        id S236782AbjFBWFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 18:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236441AbjFBWCg (ORCPT
+        with ESMTP id S236753AbjFBWFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 18:02:36 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA121B5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 15:02:35 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2569298a074so2299476a91.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 15:02:35 -0700 (PDT)
+        Fri, 2 Jun 2023 18:05:18 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15A21BC
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 15:05:16 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b1bc451355so5354705ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 15:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685743355; x=1688335355;
+        d=google.com; s=20221208; t=1685743516; x=1688335516;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YwW/YRChR0hQq0w4cIg6VkzOmhI9SHkIawXb2E1L18U=;
-        b=0oucoBOJ1hR4/HHB6rax89bQU17jgwXdfFUxvlCc7uziaB4LioNeMF+wyWs6yh5ixU
-         7F5JYtJ8X7Xgxjhiqg9Al81UV0OJ3ME4JmbVnCtlwzHxrMgkuUppucCf/CbzlQ3f+TNd
-         pU/4AlnrzGvymIjBvoNdQ9ODrhUmHsgYqn5U7vwpNYx6MTyQm92VdWqM/MfLPj3ZCDka
-         ncoiA7B6bz3OCWUWemqRsS6zRD3nzJqOmIn0An99az0igtJWnfd0QMV6QKjKWUtKfS70
-         BbmjFAEFIwQAfxH7SaeDFIEWqH8NiJGC1s94Zso0E8DMiH5mQIEiEw+8JQJ50kbR6CcS
-         1Bdw==
+        bh=ZYT9g7A1uxTfGjyFEugvL3AXvNQ8WAq4xs51FmroEpE=;
+        b=nK5w7yjJ2ZDaNLlhATxkXjSYyCzCpBlP7Li/vw+GEdE+1O8kttnNhGvAitz1dsxL2e
+         865HJ4Ofuj3avvkyWxHFU9N/3ukIPwdalbB6t9DtYbOJScO4boFzGOXCyP7z2N56xH2c
+         HzazY77/WnP7pB5qq8ZsrocG/jLpsWLuTRIGkMBfQzF8q/RjrsGXhCi9ug+NaxUcdKN3
+         EfDIz98qYmocoB2F+ulyBHSoa2eX9MYl4XmxH0HdzTvp+VbAWVu3A37GKUeuyOiUNc+B
+         rVL3asJXfPs6yE/VArZ/1K1jazWTHXlBK2jtshKyQEUKnedvcwVvypDkQ3MTFFjXhxqd
+         wTcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685743355; x=1688335355;
+        d=1e100.net; s=20221208; t=1685743516; x=1688335516;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YwW/YRChR0hQq0w4cIg6VkzOmhI9SHkIawXb2E1L18U=;
-        b=Q/0NAVwCmxVGxt6f6osikV2yqu0267a6YGkzbP5ZCzYVrur1LdS84eZo0KnecSGsxU
-         2lYbiGbB2J/40HVvw+ryP61xfBGiHLnqIZXAppUUg+JoD38o/qTfEfWMV3G3iESPBhfP
-         Judhud5cH+ovLI6uldirIAdyQXgF9IdRaCLWR9R5hPztO546F88mrp+2XOsthGPIIuyn
-         4QhXq5rHbhXngkoWJHDhhfkIwJ3y+1a333SUq6dPoZM0pIqks2U7xCzD9aicoIxVXsj5
-         x1iES0eIzQGXt2Y5PKvlR1dHuR8aPQKq2F5o2ksv+FqPLjMofhVWJvVFsY2Wmszk9U4J
-         JNuA==
-X-Gm-Message-State: AC+VfDxnwLCKFoGe0ureP2u/wZL5jhLGArT/w7WhEm2JKjdJzFQJBb5T
-        8hSWR+WU0p/JRnp6rC5jKMyxPjyoAFvy6byS+xacNNeAvvzVhfFntatrjwl1NzdPpH25LxiPLPw
-        HTgHEausxX1Npf/PNO+zyUUwn/Qjbl+gwg5i1BUUrZjJGuiu2Nc+XxJZqhpICT7iC+QPB550=
-X-Google-Smtp-Source: ACHHUZ7B0lBnDsteBcNteqyDnWFfPMnmMeHfPLHZKlCOyV1iEOmz5QUsXV+LnUzG6xSjZPLKUd6iFRRIk3IK
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:90a:d38e:b0:256:b9d1:4e34 with SMTP id
- q14-20020a17090ad38e00b00256b9d14e34mr255120pju.5.1685743354752; Fri, 02 Jun
- 2023 15:02:34 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 22:02:10 +0000
-In-Reply-To: <20230602220221.600774-1-jstultz@google.com>
+        bh=ZYT9g7A1uxTfGjyFEugvL3AXvNQ8WAq4xs51FmroEpE=;
+        b=VCjbOujCLPsz10yzL8+XeTG6q5AiZ079OyJPFO7t/zu+uwBrF5oV7o1n4g7vgaWXts
+         bPpw19sXowtt5fCIYezlITXdXeQy8uVcxYypqVMr7U2O+3Mrp8cuJ7Z0zBw7pUbIwrpi
+         zaNlEqrOzmo6/403cUeFcBHlisPtLkH2NxoJCMTKoo6B9GTlmLOQRJADpKn62reQxMMX
+         mCqi0QKbpU/DCoL1XArmHl+sZoDmBbuYZ/h1AvZjWkSb4t7sUOVJvkxrXcQgqlA6CwGs
+         yy6qPGH7/dKYlrGHcUqeynZOzxq0rVmOYFnMNCBgoKCrgym8A33OsD7XUAGw9mlhGXaY
+         xe4Q==
+X-Gm-Message-State: AC+VfDxjUyLRxKsgfqqQGuN5nFzE9ME0svzLtWWWuJbS57v8hdOsfhdv
+        bsBKqHPkpk0qn2910z8JcawaFLICIhKs
+X-Google-Smtp-Source: ACHHUZ7pEdWJ7NvgBXRWYlvDIkhcQsS0dYnnyQn3NYEOuxUBBGxCliENNbka3sB447MQvu4T/MSHiByJMH86
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a17:902:da8d:b0:1b1:a4e2:a2e3 with SMTP id
+ j13-20020a170902da8d00b001b1a4e2a2e3mr315044plx.5.1685743516273; Fri, 02 Jun
+ 2023 15:05:16 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 15:04:55 -0700
+In-Reply-To: <20230602211602.3b7rfa252wliiszp@synopsys.com>
 Mime-Version: 1.0
-References: <20230602220221.600774-1-jstultz@google.com>
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230602220221.600774-2-jstultz@google.com>
-Subject: [PATCH 2/2] torture: Add lock_torture_writer_fifo module param
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, John Stultz <jstultz@google.com>
+References: <20230602211602.3b7rfa252wliiszp@synopsys.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230602220455.313801-1-arakesh@google.com>
+Subject: [PATCH v3] usb: gadget: uvc: clean up comments and styling in video_pump
+From:   Avichal Rakesh <arakesh@google.com>
+To:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
+Cc:     thinh.nguyen@synopsys.com, arakesh@google.com, etalvala@google.com,
+        gregkh@linuxfoundation.org, jchowdhary@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+This patch elaborates on some of the edge cases handled by
+video_pump around setting no_interrupt flag, and brings the
+code style in line with rest of the file.
 
-Modifies locktorture writer to run as RT task.
-
-To use it:
-insmod /lib/modules/torture.ko random_shuffle=1 lock_torture_writer_fifo=1
-                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
-insmod /lib/modules/locktorture.ko torture_type=mutex_lock rt_boost=1 rt_boost_factor=50 nested_locks=3
-
-This patch has been helpful to uncover issues with the proxy-execution
-seires.
-
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: kernel-team@android.com
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-[jstultz: Include header change to build, reword commit message]
-Signed-off-by: John Stultz <jstultz@google.com>
+Link: https://lore.kernel.org/20230602151916.GH26944@pendragon.ideasonboard.com/
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
 ---
- kernel/locking/locktorture.c |  3 ++-
- kernel/torture.c             | 11 ++++++++++-
- 2 files changed, 12 insertions(+), 2 deletions(-)
+Changelog:
+v2:
+  - Updated commit message to make it clear that userspace application is not
+    required to match the ISOC rate.
+  - Styling and comment revision based on review
+v3:
+  - Rebased on to Greg's usb-next where v1 had already merged
+  - Updated commit message to match the actual changes after rebase.
 
-diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index 153ddc4c47ef..7cb044fc99b2 100644
---- a/kernel/locking/locktorture.c
-+++ b/kernel/locking/locktorture.c
-@@ -816,7 +816,8 @@ static int lock_torture_writer(void *arg)
- 	bool skip_main_lock;
- 
- 	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
--	set_user_nice(current, MAX_NICE);
-+	if (!rt_task(current))
-+		set_user_nice(current, MAX_NICE);
- 
- 	do {
- 		if ((torture_random(&rand) & 0xfffff) == 0)
-diff --git a/kernel/torture.c b/kernel/torture.c
-index 8be83fdc6be1..db79197e257a 100644
---- a/kernel/torture.c
-+++ b/kernel/torture.c
-@@ -37,6 +37,7 @@
- #include <linux/ktime.h>
- #include <asm/byteorder.h>
- #include <linux/torture.h>
-+#include <linux/sched/rt.h>
- #include "rcu/rcu.h"
- 
- MODULE_LICENSE("GPL");
-@@ -57,6 +58,9 @@ module_param(verbose_sleep_duration, int, 0444);
- static int random_shuffle;
- module_param(random_shuffle, int, 0444);
- 
-+static int lock_torture_writer_fifo;
-+module_param(lock_torture_writer_fifo, int, 0444);
-+
- static char *torture_type;
- static int verbose;
- 
-@@ -734,7 +738,7 @@ bool stutter_wait(const char *title)
- 	cond_resched_tasks_rcu_qs();
- 	spt = READ_ONCE(stutter_pause_test);
- 	for (; spt; spt = READ_ONCE(stutter_pause_test)) {
--		if (!ret) {
-+		if (!ret && !rt_task(current)) {
- 			sched_set_normal(current, MAX_NICE);
- 			ret = true;
+
+ drivers/usb/gadget/function/uvc_video.c | 38 ++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index e81865978299..91af3b1ef0d4 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -382,13 +382,13 @@ static void uvcg_video_pump(struct work_struct *work)
+ {
+ 	struct uvc_video *video = container_of(work, struct uvc_video, pump);
+ 	struct uvc_video_queue *queue = &video->queue;
++	/* video->max_payload_size is only set when using bulk transfer */
++	bool is_bulk = video->max_payload_size;
+ 	struct usb_request *req = NULL;
+ 	struct uvc_buffer *buf;
+ 	unsigned long flags;
++	bool buf_done;
+ 	int ret;
+-	bool buf_int;
+-	/* video->max_payload_size is only set when using bulk transfer */
+-	bool is_bulk = video->max_payload_size;
+
+ 	while (video->ep->enabled) {
+ 		/*
+@@ -414,20 +414,19 @@ static void uvcg_video_pump(struct work_struct *work)
+
+ 		if (buf != NULL) {
+ 			video->encode(req, video, buf);
+-			/* Always interrupt for the last request of a video buffer */
+-			buf_int = buf->state == UVC_BUF_STATE_DONE;
++			buf_done = buf->state == UVC_BUF_STATE_DONE;
+ 		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
+ 			/*
+ 			 * No video buffer available; the queue is still connected and
+-			 * we're traferring over ISOC. Queue a 0 length request to
++			 * we're transferring over ISOC. Queue a 0 length request to
+ 			 * prevent missed ISOC transfers.
+ 			 */
+ 			req->length = 0;
+-			buf_int = false;
++			buf_done = false;
+ 		} else {
+ 			/*
+-			 * Either queue has been disconnected or no video buffer
+-			 * available to bulk transfer. Either way, stop processing
++			 * Either the queue has been disconnected or no video buffer
++			 * available for bulk transfer. Either way, stop processing
+ 			 * further.
+ 			 */
+ 			spin_unlock_irqrestore(&queue->irqlock, flags);
+@@ -435,11 +434,24 @@ static void uvcg_video_pump(struct work_struct *work)
  		}
-@@ -944,6 +948,11 @@ int _torture_create_kthread(int (*fn)(void *arg), void *arg, char *s, char *m,
- 		*tp = NULL;
- 		return ret;
- 	}
-+
-+	if (lock_torture_writer_fifo &&
-+	    !strncmp(s, "lock_torture_writer", strlen(s)))
-+		sched_set_fifo(*tp);
-+
- 	wake_up_process(*tp);  // Process is sleeping, so ordering provided.
- 	torture_shuffle_task_register(*tp);
- 	return ret;
--- 
-2.41.0.rc2.161.g9c6817b8e7-goog
+
+ 		/*
+-		 * With usb3 we have more requests. This will decrease the
+-		 * interrupt load to a quarter but also catches the corner
+-		 * cases, which needs to be handled.
++		 * With USB3 handling more requests at a higher speed, we can't
++		 * afford to generate an interrupt for every request. Decide to
++		 * interrupt:
++		 *
++		 * - When no more requests are available in the free queue, as
++		 *   this may be our last chance to refill the endpoint's
++		 *   request queue.
++		 *
++		 * - When this is request is the last request for the video
++		 *   buffer, as we want to start sending the next video buffer
++		 *   ASAP in case it doesn't get started already in the next
++		 *   iteration of this loop.
++		 *
++		 * - Four times over the length of the requests queue (as
++		 *   indicated by video->uvc_num_requests), as a trade-off
++		 *   between latency and interrupt load.
+ 		 */
+-		if (list_empty(&video->req_free) || buf_int ||
++		if (list_empty(&video->req_free) || buf_done ||
+ 		    !(video->req_int_count %
+ 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+ 			video->req_int_count = 0;
+--
+2.41.0.rc0.172.g3f132b7071-goog
 
