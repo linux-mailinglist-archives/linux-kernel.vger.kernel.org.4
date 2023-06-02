@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC7D71FA09
+	by mail.lfdr.de (Postfix) with ESMTP id EB6EB71FA0A
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 08:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbjFBGZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 02:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S233468AbjFBGZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 02:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjFBGZI (ORCPT
+        with ESMTP id S233016AbjFBGZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 2 Jun 2023 02:25:08 -0400
 Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5794FE7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E88EB
         for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 23:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References;
-        bh=/Wt3FAz+QMdyWFgCq6hzT7xcxzyac+Un/+XRumxejUc=; b=sfkVhOfzP62qGMqGIMeruVTmIv
-        poJapgW4vvSwGjLaobeJ6o3LPC9nf9BWZmEyLLGcendfpGIQ1gmjVklwUPEAQeOkvAdU2f6ruVPfe
-        5FpEhwA+qJmkzSlLDE5HakUAtME5RG6QIXttWo39EEFund7GMBldSDbuisaQm71nhgZSZkpaBAWXe
-        YNisiTPwjlzOq0uSpAESP4D3it/I8N9l+Hwudpgb8ZMV3O5mpYEclv2ofLVmeYTOca1qmcvnL2S9L
-        18RzwU/w+7QmcgmP6sS0tOQFkbcglHbOqjf7KtaCk0FiZslU//RbK8zCE1r93tRyT6fz57CDoe59j
-        xNR0b5lw==;
+        s=default2211; h=Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=6nGHV3Tzd+ueExjxQGldi1rcP9sIpx+z7TiCsn2/rGU=; b=d4QLPBiQIVud1K/5SgqaiQUF2Q
+        18Re8MstSV22J2FAaZrY+k+k2ArGgVz+BQS65FEHVpTCmS0WCHrYbGC+EgtYAkJQqe2zisp8QzkxR
+        s205XdbCugs+LNgayuocbd75VlgFnW7gpLMAEdZzUuV8k6yGG89qTDJRdputSO7Oaz+WARiSlkdp0
+        4ny91JSwtuE0+vpZbHq1txJZfELwo8uP4II+LgMPJHBJy4lYG/IafhJxxC/jvF6yYF6TvgPHAU1jL
+        ZCFAJ4MHbRAWTlb641zpCU5EY5vdhlfvbKNx1/8VKuWz2b/VEEWa6IaajoK2zpS2BjQpe3Yaxtsc3
+        rUEEScyQ==;
 Received: from sslproxy02.your-server.de ([78.47.166.47])
         by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <sean@geanix.com>)
-        id 1q4yDg-000Ett-EG; Fri, 02 Jun 2023 08:25:04 +0200
+        id 1q4yDg-000Etu-JH; Fri, 02 Jun 2023 08:25:04 +0200
 Received: from [185.17.218.86] (helo=zen..)
         by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sean@geanix.com>)
-        id 1q4yDg-000Nkl-6b; Fri, 02 Jun 2023 08:25:04 +0200
+        id 1q4yDg-000Nkl-BR; Fri, 02 Jun 2023 08:25:04 +0200
 From:   Sean Nyekjaer <sean@geanix.com>
 To:     krzysztof.kozlowski@linaro.org, conor@kernel.org, lee@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Sean Nyekjaer <sean@geanix.com>
-Subject: [PATCH v3 1/2] mfd: stpmic1: fixup main control register and bits naming
-Date:   Fri,  2 Jun 2023 08:24:25 +0200
-Message-Id: <20230602062426.3947116-1-sean@geanix.com>
+Subject: [PATCH v3 2/2] mfd: stpmic1: add pmic poweroff via sys-off handler
+Date:   Fri,  2 Jun 2023 08:24:26 +0200
+Message-Id: <20230602062426.3947116-2-sean@geanix.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230602062426.3947116-1-sean@geanix.com>
+References: <20230602062426.3947116-1-sean@geanix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: sean@geanix.com
@@ -58,79 +60,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixup main control register and bits naming so the match the naming from
-the datasheet.
-
-https://www.st.com/resource/en/datasheet/stpmic1.pdf
+Use devm_register_sys_off_handler() that allows to register multiple
+power-off handlers.
+This will allow boards using the stpmic1 to power-off.
 
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Reviewed-by: Lee Jones <lee@kernel.org>
 ---
 Changes since v1:
- - None
+ - Removed superfluous function
 
 Changes since v2:
- - None
+ - Removed the devicetree option to turn the power-off functionality on and off.
 
- drivers/mfd/stpmic1.c       |  4 ++--
- include/linux/mfd/stpmic1.h | 12 ++++++------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/mfd/stpmic1.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
-index 8db1530d9bac..4c9b18d9dec8 100644
+index 4c9b18d9dec8..9c7d1c3b8dfd 100644
 --- a/drivers/mfd/stpmic1.c
 +++ b/drivers/mfd/stpmic1.c
-@@ -19,7 +19,7 @@
- 
- static const struct regmap_range stpmic1_readable_ranges[] = {
- 	regmap_reg_range(TURN_ON_SR, VERSION_SR),
--	regmap_reg_range(SWOFF_PWRCTRL_CR, LDO6_STDBY_CR),
-+	regmap_reg_range(MAIN_CR, LDO6_STDBY_CR),
- 	regmap_reg_range(BST_SW_CR, BST_SW_CR),
- 	regmap_reg_range(INT_PENDING_R1, INT_PENDING_R4),
- 	regmap_reg_range(INT_CLEAR_R1, INT_CLEAR_R4),
-@@ -30,7 +30,7 @@ static const struct regmap_range stpmic1_readable_ranges[] = {
+@@ -7,6 +7,7 @@
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/stpmic1.h>
+ #include <linux/module.h>
++#include <linux/reboot.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
+ #include <linux/of_platform.h>
+@@ -117,6 +118,16 @@ static const struct regmap_irq_chip stpmic1_regmap_irq_chip = {
+ 	.num_irqs = ARRAY_SIZE(stpmic1_irqs),
  };
  
- static const struct regmap_range stpmic1_writeable_ranges[] = {
--	regmap_reg_range(SWOFF_PWRCTRL_CR, LDO6_STDBY_CR),
-+	regmap_reg_range(MAIN_CR, LDO6_STDBY_CR),
- 	regmap_reg_range(BST_SW_CR, BST_SW_CR),
- 	regmap_reg_range(INT_CLEAR_R1, INT_CLEAR_R4),
- 	regmap_reg_range(INT_SET_MASK_R1, INT_SET_MASK_R4),
-diff --git a/include/linux/mfd/stpmic1.h b/include/linux/mfd/stpmic1.h
-index fa3f99f7e9a1..dc00bac24f5a 100644
---- a/include/linux/mfd/stpmic1.h
-+++ b/include/linux/mfd/stpmic1.h
-@@ -15,7 +15,7 @@
- #define RREQ_STATE_SR		0x5
- #define VERSION_SR		0x6
++static int stpmic1_power_off(struct sys_off_data *data)
++{
++	struct stpmic1 *ddata = data->cb_data;
++
++	regmap_update_bits(ddata->regmap, MAIN_CR,
++			   SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
++
++	return NOTIFY_DONE;
++}
++
+ static int stpmic1_probe(struct i2c_client *i2c)
+ {
+ 	struct stpmic1 *ddata;
+@@ -159,6 +170,16 @@ static int stpmic1_probe(struct i2c_client *i2c)
+ 		return ret;
+ 	}
  
--#define SWOFF_PWRCTRL_CR	0x10
-+#define MAIN_CR			0x10
- #define PADS_PULL_CR		0x11
- #define BUCKS_PD_CR		0x12
- #define LDO14_PD_CR		0x13
-@@ -148,14 +148,14 @@
- #define LDO_BYPASS_MASK			BIT(7)
++	ret = devm_register_sys_off_handler(ddata->dev,
++					    SYS_OFF_MODE_POWER_OFF,
++					    SYS_OFF_PRIO_DEFAULT,
++					    stpmic1_power_off,
++					    ddata);
++	if (ret) {
++		dev_err(ddata->dev, "failed to register sys-off handler: %d\n", ret);
++		return ret;
++	}
++
+ 	return devm_of_platform_populate(dev);
+ }
  
- /* Main PMIC Control Register
-- * SWOFF_PWRCTRL_CR
-+ * MAIN_CR
-  * Address : 0x10
-  */
--#define ICC_EVENT_ENABLED		BIT(4)
-+#define OCP_OFF_DBG			BIT(4)
- #define PWRCTRL_POLARITY_HIGH		BIT(3)
--#define PWRCTRL_PIN_VALID		BIT(2)
--#define RESTART_REQUEST_ENABLED		BIT(1)
--#define SOFTWARE_SWITCH_OFF_ENABLED	BIT(0)
-+#define PWRCTRL_ENABLE			BIT(2)
-+#define RESTART_REQUEST_ENABLE		BIT(1)
-+#define SOFTWARE_SWITCH_OFF		BIT(0)
- 
- /* Main PMIC PADS Control Register
-  * PADS_PULL_CR
 -- 
 2.40.0
 
