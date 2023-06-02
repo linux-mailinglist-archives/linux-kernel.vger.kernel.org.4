@@ -2,295 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32597207E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4DE7207E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbjFBQrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S236821AbjFBQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbjFBQrN (ORCPT
+        with ESMTP id S236840AbjFBQrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:47:13 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF961B1;
-        Fri,  2 Jun 2023 09:47:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QXpYY18RSz9y11c;
-        Sat,  3 Jun 2023 00:36:49 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnoEfnHHpkz+H8Ag--.3469S2;
-        Fri, 02 Jun 2023 17:46:44 +0100 (CET)
-Message-ID: <d1148a9e210dda23592d63ad64e7c1f9af23adea.camel@huaweicloud.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Jeff Mahoney <jeffm@suse.com>, Paul Moore <paul@paul-moore.com>,
-        syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        Jan Kara <jack@suse.cz>
-Date:   Fri, 02 Jun 2023 18:46:27 +0200
-In-Reply-To: <07c825a21fb4c57f4290158e529d32f4e0e0fbf0.camel@huaweicloud.com>
-References: <0000000000007bedb605f119ed9f@google.com>
-         <00000000000000964605faf87416@google.com>
-         <CAHC9VhTZ=Esk+JxgAjch2J44WuLixe-SZMXW2iGHpLdrdMKQ=g@mail.gmail.com>
-         <1020d006-c698-aacc-bcc3-92e5b237ef91@huaweicloud.com>
-         <29fcea18-d720-d5df-0e00-eb448e6bbfcf@suse.com>
-         <07c825a21fb4c57f4290158e529d32f4e0e0fbf0.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 2 Jun 2023 12:47:01 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18D91B3;
+        Fri,  2 Jun 2023 09:47:00 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f8008cb772so20788301cf.3;
+        Fri, 02 Jun 2023 09:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685724420; x=1688316420;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
+        b=qjGHtXZxoBBdS2HT2JkrKSST/yA4++3X0V+xwfmvFh9WP4br4vOwfY/p02/dOh/Hti
+         /d1coxNhXhmoHYQzGJIHccxZqRwqCIPpKsul96SdosuIgxQxByyWX8RWqLk1fVYlKLkw
+         uZlLU0Q1KKvaa0Gy0W5plYTHm9Upu2tHq5ovT8rmmRUfcw4mOiMZp9QicqJZIVNo7hhA
+         0KBsx/tOCH9SwmmSQMSOPaKlrLXBDoYRAzV3jw8crDS8C9KgKPaAs+AQ4GcQqX97+m0B
+         Q+UaZ76XrVuuVQLkp0VYh5OIQxYEtEupMTxHK2atoSEFgywcvAMTB47ukoaYqEApW+MG
+         3VnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685724420; x=1688316420;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2eoN2DyKs5X+s+DyCZK8A4ivF3BEc52nu/fFwt4W6Js=;
+        b=lGsFds7RLC3O5bjTuafItI0k/JvXmDTwYfaDXwIRJqF4QRbgkZRcD/XrxkLjx3KxUt
+         vmcg+2BMnhCiR/wYSj0sS9DJKGwiTcfknIteTKzrpBLvOCWi/j5usksj+ty3WyYNgVmT
+         8mVYNBR3RRkjVvd5YDEoXjUDRChvTymGFPpeKETkYfAsnCan+Opx9GwWfCipfRcBX65x
+         L2w2NDWYmqh0JmY+bHeESMkJmLHkB12OpFTDrI5HVrkRyEglCXvUBhixCQCaxbUfDxyF
+         s1C/vjNuaqVbltG/nvtmVhZOP+o5aM65KtvInhscibmuVLugxxv4r1y0xPMTwfI/DraL
+         lp6A==
+X-Gm-Message-State: AC+VfDyTm/v1e15LMjSWEFu4f8CXlOj0rsLGUwhEn4Ieq9FzFqfyhxNO
+        vLrXEZ5ISprrlYVd8pH4qQ==
+X-Google-Smtp-Source: ACHHUZ7EOoJZ6L7R1UJCRQzjWBBZWjNY4vgxY0heC6yYd/8OioyvT8szOiU6EybWHfv5vJbwiyYBEg==
+X-Received: by 2002:a05:622a:181b:b0:3e4:e430:94e with SMTP id t27-20020a05622a181b00b003e4e430094emr16704854qtc.64.1685724419595;
+        Fri, 02 Jun 2023 09:46:59 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id y28-20020ac87c9c000000b003e89e2b3c23sm963638qtv.58.2023.06.02.09.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 09:46:58 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:27c2:60bf:3f0f:e3a1])
+        by serve.minyard.net (Postfix) with ESMTPSA id B29E41800C3;
+        Fri,  2 Jun 2023 16:46:57 +0000 (UTC)
+Date:   Fri, 2 Jun 2023 11:46:56 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Craig Shelley <craig@microtron.org.uk>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Break doesn't work on a CP2105
+Message-ID: <ZHodALMLTWk72Vvm@mail.minyard.net>
+Reply-To: minyard@acm.org
+References: <ZEmDs0ASdnEAnpsL@minyard.net>
+ <ZGtZKCvo71woGf9T@hovoldconsulting.com>
+ <ZGtlnWGSc31Wdhxa@mail.minyard.net>
+ <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDnoEfnHHpkz+H8Ag--.3469S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3XrWkXF1xuF47JFy7Xw4kCrg_yoWfCr17pr
-        WrKa9rKr1vyrn5JF40g3WUWw1vq39xGryUXrn3GrWUZa1vqr97JFW0vrySkr47urZ7CF9r
-        Jw4Dtw13Zrn8JwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj44KrgADsN
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-02 at 09:20 +0200, Roberto Sassu wrote:
-> On Thu, 2023-06-01 at 17:22 -0400, Jeff Mahoney wrote:
-> > On 5/31/23 05:49, Roberto Sassu wrote:
-> > > On 5/5/2023 11:36 PM, Paul Moore wrote:
-> > > > On Fri, May 5, 2023 at 4:51 PM syzbot
-> > > > <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com> wrote:
-> > > > > syzbot has bisected this issue to:
-> > > > > 
-> > > > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-> > > > > Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > Date:   Fri Mar 31 12:32:18 2023 +0000
-> > > > > 
-> > > > >      reiserfs: Add security prefix to xattr name in 
-> > > > > reiserfs_security_write()
-> > > > > 
-> > > > > bisection log:  
-> > > > > https://syzkaller.appspot.com/x/bisect.txt?x=14403182280000
-> > > > > start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of 
-> > > > > https://githu..
-> > > > > git tree:       upstream
-> > > > > final oops:     
-> > > > > https://syzkaller.appspot.com/x/report.txt?x=16403182280000
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=12403182280000
-> > > > > kernel config:  
-> > > > > https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
-> > > > > dashboard link: 
-> > > > > https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-> > > > > syz repro:      
-> > > > > https://syzkaller.appspot.com/x/repro.syz?x=12442414280000
-> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176a7318280000
-> > > > > 
-> > > > > Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
-> > > > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in 
-> > > > > reiserfs_security_write()")
-> > > > > 
-> > > > > For information about bisection process see: 
-> > > > > https://goo.gl/tpsmEJ#bisection
-> > > > 
-> > > > I don't think Roberto's patch identified above is the actual root
-> > > > cause of this problem as reiserfs_xattr_set_handle() is called in
-> > > > reiserfs_security_write() both before and after the patch.  However,
-> > > > due to some bad logic in reiserfs_security_write() which Roberto
-> > > > corrected, I'm thinking that it is possible this code is being
-> > > > exercised for the first time and syzbot is starting to trigger a
-> > > > locking issue in the reiserfs code ... ?
-> > > 
-> > > + Jan, Jeff (which basically restructured the lock)
-> > > 
-> > > + Petr, Ingo, Will
+On Fri, Jun 02, 2023 at 02:53:31PM +0200, Johan Hovold wrote:
+> On Mon, May 22, 2023 at 07:52:45AM -0500, Corey Minyard wrote:
+> > On Mon, May 22, 2023 at 01:59:36PM +0200, Johan Hovold wrote:
 > 
-> Peter, clearly (sorry!)
-> 
-> > I involve the lockdep experts, to get a bit of help on this.
+> > > I just verified that break works on the first port of my cp2105 but not
+> > > on the second one (I seem to receive the last characters sent instead).
+> > > 
+> > > Apparently this is expected as the datasheet (AN571) says the following
+> > > about the SET_BREAK command:
+> > > 
+> > > 	This command is not supported on the second CP2105 interface.
+> > > 
+> > > Which port are you seeing this behaviour with?
 > > 
-> > Yep, looks like that's been broken since it was added in 2009.  Since 
-> > there can't be any users of it, it'd make sense to drop the security 
-> > xattr support from reiserfs entirely.
+> > I'm guessing this is it.  From the schematic I think this is the
+> > TXD_ECI pin, though I'm not 100% sure.  I'd have to dig through the
+> > device tree and SOC manual to be sure which port is which.
 > 
-> Thanks, Jeff. Will make a patch to implement your suggestion.
-
-Ok, I tried first to disable security xattr initialization and keep the
-xattr handler.
-
-Setting the security xattr manually triggers a lockdep warning. Even
-worse, setting a trusted xattr manually triggers that too. So, not sure
-how we should proceed.
-
-Have you looked at:
-
-https://lore.kernel.org/linux-kernel/8a48ede1-3a45-7c3c-39e9-36001ac09283@huaweicloud.com/
-
-That silences the lockdep warning, but I'm far from saying that it
-won't have any side effect...
-
-Thanks
-
-Roberto
-
-> Meanwhile, I learned how to read lockdep a bit better. The following
-> format could have helped me to understand it more quickly. The proposal
-> is simply to change #n to CPU#n at the top of the trace, define labels
-> L#n for the locks, and add them where effectively are held.
+> It should be the second SCI interface which do not support break.
 > 
-> [   77.746561][ T5418] -> CPU1 (&sbi->lock){+.+.}-{3:3}:
-> [   77.753772][ T5418]        lock_acquire+0x23e/0x630
-> [   77.758792][ T5418]        __mutex_lock_common+0x1d8/0x2530
-> [   77.764504][ T5418]   (L3) mutex_lock_nested+0x1b/0x20
-> [   77.769868][ T5418]        reiserfs_write_lock+0x70/0xc0
-> [   77.775321][ T5418]        reiserfs_mkdir+0x321/0x870
-> [   77.780509][ T5418]   (L2) open_xa_dir+0x259/0x540
-> [   77.785440][ T5418]        xattr_lookup+0x17/0x210
-> [   77.790378][ T5418]        reiserfs_xattr_set_handle+0xda/0xc80
-> [   77.796448][ T5418]        reiserfs_security_write+0x134/0x190
-> [   77.802416][ T5418]        reiserfs_new_inode+0x13bf/0x1a90
-> [   77.808124][ T5418]        reiserfs_create+0x3b1/0x680
-> [   77.813399][ T5418]        path_openat+0xf1e/0x2c10
-> [   77.818415][ T5418]        do_filp_open+0x22a/0x440
-> [   77.823433][ T5418]        do_sys_openat2+0x10f/0x430
-> [   77.828624][ T5418]        __x64_sys_creat+0x11e/0x160
-> [   77.833905][ T5418]        do_syscall_64+0x41/0xc0
-> [   77.838926][ T5418]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [   77.845514][ T5418] 
-> [   77.845514][ T5418] -> CPU0 (&type->i_mutex_dir_key#8/3){+.+.}-{3:3}:
-> [   77.854118][ T5418]        validate_chain+0x166b/0x58e0
-> [   77.859488][ T5418]        __lock_acquire+0x125b/0x1f80
-> [   77.864853][ T5418]        lock_acquire+0x23e/0x630
-> [   77.869909][ T5418]   (L4) down_write_nested+0x3d/0x50
-> [   77.875186][ T5418]        open_xa_dir+0x134/0x540
-> [   77.880117][ T5418]        xattr_lookup+0x17/0x210
-> [   77.885050][ T5418]        reiserfs_xattr_get+0xe1/0x4a0
-> [   77.890501][ T5418]        __vfs_getxattr+0x2fe/0x350
-> [   77.895802][ T5418]        smk_fetch+0x98/0xf0
-> [   77.900382][ T5418]        smack_d_instantiate+0x5d5/0xa20
-> [   77.906018][ T5418]        security_d_instantiate+0x6b/0xb0
-> [   77.911736][ T5418]        d_instantiate_new+0x5e/0xe0
-> [   77.917013][ T5418]   (L1) reiserfs_create+0x5ee/0x680
-> [   77.922293][ T5418]        path_openat+0xf1e/0x2c10
-> [   77.927308][ T5418]        do_filp_open+0x22a/0x440
-> [   77.932330][ T5418]        do_sys_openat2+0x10f/0x430
-> [   77.937515][ T5418]        __x64_sys_creat+0x11e/0x160
-> [   77.942874][ T5418]        do_syscall_64+0x41/0xc0
-> [   77.947796][ T5418]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [   77.954200][ T5418] 
-> [   77.954200][ T5418] other info that might help us debug this:
-> [   77.954200][ T5418] 
-> [   77.964508][ T5418]  Possible unsafe locking scenario:
-> [   77.964508][ T5418] 
-> [   77.972034][ T5418]   CPU0                         CPU1
-> [   77.977394][ T5418]   ----                         ----
-> [   77.982748][ T5418]   L1: lock(&sbi->lock);
-> [   77.986726][ T5418]                                L2: lock(&type->i_mutex_dir_key#8/3);
-> [   77.994618][ T5418]                                L3: lock(&sbi->lock);
-> [   78.001118][ T5418]   L4: lock(&type->i_mutex_dir_key#8/3);
+> > Would it be possible to return an error in this situation instead of it
+> > silently not working?  Just to avoid others having the same issue.
 > 
-> Thanks
+> I just posted a patch series which does that. The USB serial drivers do
+> not currently return any errors related to break signalling even though
+> this has been possible since 2008.
 > 
-> Roberto
+> The same mechanism can be used to report that break signalling is not
+> supported by a device or driver, but the USB serial drivers would be the
+> first tty drivers that actually do this. If it turns out to cause any
+> trouble we can still use this series to avoid the unnecessary wait.
 > 
-> > > First of all, the lockdep warning is trivial to reproduce:
-> > > 
-> > > # dd if=/dev/zero of=reiserfs.img bs=1M count=100
-> > > # losetup -f --show reiserfs.img
-> > > /dev/loop0
-> > > # mkfs.reiserfs /dev/loop0
-> > > # mount /dev/loop0 /mnt/
-> > > # touch file0
-> > > 
-> > > In the testing system, Smack is the major LSM.
-> > > 
-> > > Ok, so the warning here is clear:
-> > > 
-> > > https://syzkaller.appspot.com/x/log.txt?x=12403182280000
-> > > 
-> > > However, I was looking if that can really happen. From this:
-> > > 
-> > > [   77.746561][ T5418] -> #1 (&sbi->lock){+.+.}-{3:3}:
-> > > [   77.753772][ T5418]        lock_acquire+0x23e/0x630
-> > > [   77.758792][ T5418]        __mutex_lock_common+0x1d8/0x2530
-> > > [   77.764504][ T5418]        mutex_lock_nested+0x1b/0x20
-> > > [   77.769868][ T5418]        reiserfs_write_lock+0x70/0xc0
-> > > [   77.775321][ T5418]        reiserfs_mkdir+0x321/0x870
-> > > 
-> > > I see that the lock is taken in reiserfs_write_lock(), while lockdep says:
-> > > 
-> > > [   77.710227][ T5418] but task is already holding lock:
-> > > [   77.717587][ T5418] ffff88807568d090 (&sbi->lock){+.+.}-{3:3}, at: 
-> > > reiserfs_write_lock_nested+0x4a/0xb0
-> > > 
-> > > which is in a different place, I believe here:
-> > > 
-> > > int reiserfs_paste_into_item(struct reiserfs_transaction_handle *th,
-> > >                               /* Path to the pasted item. */
-> > > [...]
-> > > 
-> > >          depth = reiserfs_write_unlock_nested(sb);
-> > >          dquot_free_space_nodirty(inode, pasted_size);
-> > >          reiserfs_write_lock_nested(sb, depth);
-> > >          return retval;
-> > > }
-> > > 
-> > > This is called by reiserfs_add_entry(), which is called by 
-> > > reiserfs_create() (it is in the lockdep trace). After returning to 
-> > > reiserfs_create(), d_instantiate_new() is called.
-> > > 
-> > > I don't know exactly, I take the part that the lock is held. But if it 
-> > > is held, how d_instantiate_new() can be executed in another task?
-> > > 
-> > > static int reiserfs_create(struct mnt_idmap *idmap, struct inode *dir,
-> > >                          struct dentry *dentry, umode_t mode, bool excl)
-> > > {
-> > > 
-> > > [...]
-> > > 
-> > >          reiserfs_write_lock(dir->i_sb);
-> > > 
-> > >          retval = journal_begin(&th, dir->i_sb, jbegin_count);
-> > > 
-> > > [...]
-> > > 
-> > >          d_instantiate_new(dentry, inode);
-> > >          retval = journal_end(&th);
-> > > 
-> > > out_failed:
-> > >          reiserfs_write_unlock(dir->i_sb);
-> > > 
-> > > If the lock is held, the scenario lockdep describes cannot happen. Any 
-> > > thoughts?
-> > 
-> > It's important to understand that the reiserfs write lock was added as a 
-> > subsystem-specific replacement for the BKL.  Given that reiserfs was 
-> > dying already back then, it made more sense from a time management 
-> > perspective to emulate that behavior internally rather than use new 
-> > locking when practically nobody cared anymore.
-> > 
-> > See reiserfs_write_unlock_nested and reiserfs_write_lock_nested paired 
-> > throughout the code.  It drops the lock when it passes a point where 
-> > it's likely to schedule, just like the BKL would have.
-> > 
-> > Yes, it's a mess.  Just let it die quietly.
-> > 
-> > -Jeff
-> > 
+> Care to give the series a try?
+> 
+> 	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
 
+I have tested this series.  I can verify that one of the CP2105 ports
+(ttyUSB0) does not return an error on sending the break, and the other
+(ttyUSB1) does.  This is the only USB serial device on the system.
+
+However, the device hooked to the remote console (ttyUSB0), the one not
+returning an error on sending a break, still doesn't send a break.  So
+my problem isn't fixed :-(.
+
+# ls -l /dev/serial/by-path
+total 0
+lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
+lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.1-port0 -> ../../ttyUSB1
+
+-corey
+
+> 
+> Johan
