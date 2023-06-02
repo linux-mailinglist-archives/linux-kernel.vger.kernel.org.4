@@ -2,97 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD837207CB
+	by mail.lfdr.de (Postfix) with ESMTP id 5040F7207CA
 	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbjFBQjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S235916AbjFBQjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236178AbjFBQje (ORCPT
+        with ESMTP id S235888AbjFBQjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:39:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7381B1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:39:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02CF96177F
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 16:39:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95E1C433D2;
-        Fri,  2 Jun 2023 16:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685723971;
-        bh=8bHNswoYHnSXiwlo70dxM9TzF2xyp76+5Txn9KrkcSE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EP2oraAs3QhbPgvUBRn9rQxBwby+mZyogAhpZlMjbPgtVQgzUfSn85GgQNt9QQ7cE
-         J6rqiysXHUN+V/NdAGZLcUM9jYpgRlGe4lKDRKMgd6qAkKpNRApYIIKXCiPzVvbbl9
-         ecnWbqlQV/DkEX6WUbgxsXxZ1Ogdj4DveBysM9xfVOOczmSaX+OCBvIbxwRC+ZQMKC
-         WH5FQuQdl7JaE+UeMiK0hwRK/mqoXS1ebNE+jECkk7XLJcQdpZ6YSr4FMjNbjplfAu
-         xxaiju23JPAXST7BkvUu2LfePX9M4nQk70yeNO9XLnGqjWJpvKl6rjXZZRT+q9OVNq
-         HWjsvMb/W23tg==
-Date:   Fri, 2 Jun 2023 09:39:29 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: Bug in short splice to socket?
-Message-ID: <20230602093929.29fd447d@kernel.org>
-In-Reply-To: <CAHk-=wgyAGUMHmQM-5Eb556z5xiHZB7cF05qjrtUH4F7P-1rSA@mail.gmail.com>
-References: <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
-        <20230524153311.3625329-1-dhowells@redhat.com>
-        <20230524153311.3625329-10-dhowells@redhat.com>
-        <20230526180844.73745d78@kernel.org>
-        <499791.1685485603@warthog.procyon.org.uk>
-        <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
-        <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com>
-        <832277.1685630048@warthog.procyon.org.uk>
-        <909595.1685639680@warthog.procyon.org.uk>
-        <20230601212043.720f85c2@kernel.org>
-        <952877.1685694220@warthog.procyon.org.uk>
-        <CAHk-=wjvgL5nyZmpYRWBfab4NKvfQ7NjUvUhE3a3wYTyTEHdfQ@mail.gmail.com>
-        <1227123.1685706296@warthog.procyon.org.uk>
-        <CAHk-=wgyAGUMHmQM-5Eb556z5xiHZB7cF05qjrtUH4F7P-1rSA@mail.gmail.com>
+        Fri, 2 Jun 2023 12:39:35 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354281B3
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:39:33 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-772d796bbe5so114663839f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 09:39:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685723972; x=1688315972;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jQGoC7vlZtXDhLEgYv1SxcnvHwW74JFQkSojIS2V8g0=;
+        b=H1Ov/2GR44o8XkFF61kvfxjyTUCMPVvyT9Z3dk9DzhAjAm+oYnPALQneyZ8JIz/zC8
+         c4HZX1fZB9uk0hqiDXz1tXSt5NQc0cOZzxkrGYCYBLL6EKXdR3YSZCKN/1c5FmyD0aqC
+         6+EKlSeqtLk7HB+Q5AqU0ca6svK0yDokOoXwa6fNXWadly/yjKJjzVtK2lM4SdSCqeqm
+         Z914V1jp0jmKOQE3t3TTO5+s48ohxuYevHmpm0spckGnFCfcw9dQGkeLRMzXcP3QJ8fj
+         Zq2LGP6tZHGL7EQxaYrJL27OXpR2fiAg+17NEZ0xRUHNXqRA7dF42e7tRQsiscp694tU
+         7nRA==
+X-Gm-Message-State: AC+VfDypAnkYqVrA/F7PymccuJbBwM1d/vXEqQLmTwCGwrAOb8fKNdBS
+        RToGwkDPMruxCozz1gBc7yEDItNn6gakfpDOwp1Jxp49Vsd+
+X-Google-Smtp-Source: ACHHUZ6HfjrvFZwBLUA1rgPFDPGlIB6ktQF0HD8+Jk0f0mP7NTLlW+yzUOsQpQQ1SxCI/wQRIIkKKwq6mZsV05N5tdLLaJF2T/rJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:10ea:b0:41d:77ab:bc2 with SMTP id
+ g10-20020a05663810ea00b0041d77ab0bc2mr924254jae.4.1685723972618; Fri, 02 Jun
+ 2023 09:39:32 -0700 (PDT)
+Date:   Fri, 02 Jun 2023 09:39:32 -0700
+In-Reply-To: <4aa799a0b87d4e2ecf3fa74079402074dc42b3c5.camel@huaweicloud.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000093d48c05fd2832a7@google.com>
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
+From:   syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, jack@suse.cz, jeffm@suse.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, paul@paul-moore.com, peterz@infradead.org,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        roberto.sassu@huaweicloud.com, syzkaller-bugs@googlegroups.com,
+        will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Jun 2023 08:11:47 -0400 Linus Torvalds wrote:
-> If then some *real* load ends up showing a regression, we may just be
-> screwed. Our current behavior may be buggy, but we have the rule that
-> once user space depends on kernel bugs, they become features pretty
-> much by definition, however much we might dislike it.
-> 
-> At that point, we'll have to see what we can do - if anything.
+Hello,
 
-Can we have a provisional plan of how we'll fix it if someone does
-complain? We can't just revert David's work, and if none of the
-solutions are appealing - socket implementations may be left holding
-the bag.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-I dislike the magic zero sends, and I think you do, too. In case of TLS
-its unclear whether we should generate an empty record (like UDP would).
+Reported-and-tested-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
 
-Can we add an optional splice_end / short_splice / splice_underflow /
-splice_I_did_not_mean_to_set_more_on_the_previous_call_sorry callback
-to struct file_operations?
+Tested on:
+
+commit:         4432b507 lsm: fix a number of misspellings
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b47dd1280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=178a8c28652084e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=102f6ab6280000
+
+Note: testing is done by a robot and is best-effort only.
