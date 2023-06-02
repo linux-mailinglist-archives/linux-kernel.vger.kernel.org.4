@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD2C71FC1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93A571FC22
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233920AbjFBIcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S234428AbjFBIc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbjFBIca (ORCPT
+        with ESMTP id S234107AbjFBIc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:32:30 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F63BA
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:32:29 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-96f4d917e06so363337466b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:32:29 -0700 (PDT)
+        Fri, 2 Jun 2023 04:32:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710B018C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:32:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f53c06babso245208366b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685694748; x=1688286748;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UCvZzCkceHQLAgJOLe2xH1CLoNBzC2CyR2ZyQ8lcY28=;
-        b=vMeWSqL3Od3di5QPH5Kan+qcApYKF+tB2LUmi5cBJpdaXtIajcgcY82pUCGxV9/E9O
-         l83Mia6kVBsNnWW0gUN41tYRkgJuhByMib9C3r3rLzUkhd5czH8LspvHQEIJt8BGG/El
-         3wIjVe+m7HziZNlCGORm1zCQoSBxp846WS1T0sSDEyiwufOhu5+H0aPT4m+bnN48QcOP
-         mf6gQgXakNuZxlD66VCC7zYACTumfAIRWf42SNIIh9Em5JxCoFThclfGUAlgRoNsC9Mu
-         CDA2S83mEM1Jn6zR7QM6ej0NxRGuMJlhffn7/3+qnABZges3Sxykx7RFJ1JJ3QyNbvdF
-         PxuA==
+        d=linaro.org; s=google; t=1685694774; x=1688286774;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S6o32+EXqkQOwwvwWTyyFIWUzWvHCRd3bW8dtLzYc0M=;
+        b=SF+7px9QcZH1m1Vj1b2GfXALro+NdRTuZIllFGdKVav7TEBvES/2uDpWKVI9xCZWZj
+         Iv4bT38X4VR2ZAahaID8tl7YnfQCN+dfYwrgfbmTjOg1U7rD7NSOfjpjrWHShz7TJyZY
+         YcTLPTBP6SIuO7QCpCu72aRFZO6EQUipoA2O/r+AmyTKNT45OebGXlQrEew7g4fHcWMF
+         OVrAocSDqDleCKKAaH70gdYegshPK3bxyqFB5qSxqTmvtlaZcG4jmIc5e0rMFKGEzSJA
+         Tysc9o6h3haQDhWXsvkxQhM8zCT2RaiSSLJOfFY3rkol/FC7XZY12Jh9hC8Fk6fX5yEm
+         ajHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685694748; x=1688286748;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UCvZzCkceHQLAgJOLe2xH1CLoNBzC2CyR2ZyQ8lcY28=;
-        b=BrT1TOU4xWn+Ohq91gqeSrOAD+rfMt2rli5x3/Yx9kukHPeutgJTYBBmBux1zdI+Oc
-         1TZhtS83QphNkt8nOgN9q0rMDHWollqI/z+c72R07PXPt3sZ0L+N5Q0q1NYaW77MTm/i
-         UIx2Coe/gA9GjvoLcICv0mIjvLi4atLo53G5I5hPnUBsNaftsdJDahQ1n2VyqKn6uO0t
-         g+7cE/K3qBtqyCUGyjP9LD05SpMHR5D1Y5aQpgtY8VB1KkSyx67Y6gfZ4mZQ6gYcGThG
-         oUVB/Ki7Z0jtkxh8dMF26A0HwQW+bHUsBaqcz/Xq7rC0ADExSItfRXuM+XDVXiR5VrpB
-         4Xvw==
-X-Gm-Message-State: AC+VfDyEOPOYfOsMRPXaClsHMCxJwAdVfcaKz1ciiGpG9NW9UlLWuwVj
-        bV87h/JRh2dA0PWk31Kvl3V8KyoYZXCB9zI=
-X-Google-Smtp-Source: ACHHUZ6zF59pjH4cZ+4lTs/BOFGMVHIV1FDOPjf1rZP8tce1rNk0I9uT+7UxQeB08cq3R/FFSW8QgcsRPG1tS/Q=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a17:907:2cd5:b0:96f:5028:76e3 with SMTP
- id hg21-20020a1709072cd500b0096f502876e3mr1631473ejc.1.1685694748236; Fri, 02
- Jun 2023 01:32:28 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 08:32:25 +0000
-In-Reply-To: <20230601183002.237a31fa.gary@garyguo.net>
-Mime-Version: 1.0
-References: <20230601183002.237a31fa.gary@garyguo.net>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602083226.1034597-1-aliceryhl@google.com>
-Subject: Re: [PATCH v2 4/8] rust: workqueue: define built-in queues
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     gary@garyguo.net
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        tj@kernel.org, walmeida@microsoft.com, wedsonaf@gmail.com,
-        yakoyoku@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685694774; x=1688286774;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6o32+EXqkQOwwvwWTyyFIWUzWvHCRd3bW8dtLzYc0M=;
+        b=YBvOk6JonjBi46KQ/CM5dW8tWaDarQ6mbArQKoeWZwDbcfhIFqIiKUBztsURccmZ4O
+         XOBUeSsW6NA+4Zhc5AC1ZQNEYRCHaWLWvoT8ePz65AWkxN8HR9N7+JKlfcIqwszwh75Q
+         6G1ubkQOIVsw8Tx8IErXtFE9pc0fgLviwEoz3sYKz6FTlLSkV1WSt4FROOjvseo99kOd
+         FvLUoTmk+Rm6qsHo/myKU9lZG3TQg5UJAV0cLzWn7hcijZXWc7/WNDCR1adEfX/fJwkc
+         y8d1kU+0YDYlJ28F+afzLoLH5rXCamBX/Aa6HPCLfXD5qHlFpwjXRiB8tbi0bvZNl5Gs
+         S00g==
+X-Gm-Message-State: AC+VfDzC7qgetTp1H7+lgBskCVM12QLcxDUY+EkC3RpWTx3P7ypzqb7B
+        BDadIRspXHfol2w++NvlGJeA0A==
+X-Google-Smtp-Source: ACHHUZ5bbkg1zhdbdLCCj6ww+0OpxboaT0r5ApjCE5h604Y3MUUFQIlVUcvBkPvczEmb5mkg4VqJdw==
+X-Received: by 2002:a17:907:a42a:b0:96f:912d:7922 with SMTP id sg42-20020a170907a42a00b0096f912d7922mr9551134ejc.53.1685694773958;
+        Fri, 02 Jun 2023 01:32:53 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id y26-20020a17090668da00b00947ed087a2csm461979ejr.154.2023.06.02.01.32.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 01:32:53 -0700 (PDT)
+Message-ID: <75d78713-fc8f-24a9-a422-2b4d57c5d488@linaro.org>
+Date:   Fri, 2 Jun 2023 10:32:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 3/8] dt-bindings: leds: leds-mt6323: Support WLED
+ output
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, pavel@ucw.cz
+Cc:     lee@kernel.org, sean.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
+ <20230601110813.2373764-4-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601110813.2373764-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gary Guo <gary@garyguo.net> writes:
-> On Thu,  1 Jun 2023 13:49:42 +0000
-> Alice Ryhl <aliceryhl@google.com> wrote:
->> From: Wedson Almeida Filho <walmeida@microsoft.com>
->> 
->> We provide these methods because it lets us access these queues from
->> Rust without using unsafe code.
->> 
->> These methods return `&'static Queue`. References annotated with the
->> 'static lifetime are used when the referent will stay alive forever.
->> That is ok for these queues because they are global variables and cannot
->> be destroyed.
->> 
->> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
->> Co-developed-by: Alice Ryhl <aliceryhl@google.com>
->> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
->> Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+On 01/06/2023 13:08, AngeloGioacchino Del Regno wrote:
+> Some PMICs have a separated WLED string output: add a property
+> `mediatek,is-wled` to indicate which LED string is a WLED.
 > 
-> This looks fine to me, so:
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/leds/leds-mt6323.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> 
-> Just one question about style: would people prefer:
-> 
-> 	kernel::workqueue::system().enqueue(...)
-> 
-> or
-> 
-> 	use kernel::workqueue::Queue;
-> 	Queue::system().enqueue(...)
-> 
-> ?
+> diff --git a/Documentation/devicetree/bindings/leds/leds-mt6323.txt b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
+> index 052dccb8f2ce..904b2222a5fe 100644
+> --- a/Documentation/devicetree/bindings/leds/leds-mt6323.txt
+> +++ b/Documentation/devicetree/bindings/leds/leds-mt6323.txt
+> @@ -30,6 +30,7 @@ Optional properties for the LED child node:
+>  - label : See Documentation/devicetree/bindings/leds/common.txt
+>  - linux,default-trigger : See Documentation/devicetree/bindings/leds/common.txt
+>  - default-state: See Documentation/devicetree/bindings/leds/common.txt
+> +- mediatek,is-wled: LED string is connected to WLED output
 
-I prefer the first version.
+Why would it matter to what the output is connected to?
 
-Alice
+Best regards,
+Krzysztof
+
