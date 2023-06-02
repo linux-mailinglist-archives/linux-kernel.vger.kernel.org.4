@@ -2,131 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A44720537
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CF9720775
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236362AbjFBPCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S236826AbjFBQXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236369AbjFBPBt (ORCPT
+        with ESMTP id S236384AbjFBQXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:01:49 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8382E5A;
-        Fri,  2 Jun 2023 08:01:47 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-5ed99ebe076so21300266d6.2;
-        Fri, 02 Jun 2023 08:01:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685718107; x=1688310107;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zRAU68UeuXK18E4EeqM4miubTOqC0hPyuU/RpS6y6BQ=;
-        b=cG4Eopy6qPKwheYmxCPCLf4fetz017uQKj/QORKW30EZuVJU8G002LyDMjE1SKm94q
-         fu7/RIAzybqdhNqstRab5nB+H/fuFgWZBU8wSoIRdk+3w+nckoi1YaVK8uZ7vzJ4fJCd
-         n2R75tuo6izqDBf/+kp62hqw3oW82gU29SPloOqpAihJ4YrXq5SfuBwY5n/Vk0yu4LlN
-         t7bMujMh9BFwvnPZ2Zd2oOTmncTycTzhNR94pvoxheN0o+XsHJQRximLwZ2urIDkeCSC
-         bRMBHCwocQmoh3nKkDhU3DV9nCdbVnfOvnoK1lRLS/8q2TbSILu0kUnjwsuEwBb9gKBt
-         Zs9A==
-X-Gm-Message-State: AC+VfDwkGKC1ZpkPw1iVQJ22mDlhaZuAMeFZKPcOD/Cs8WW0WZ2xZmWM
-        jDHW6JZ2fmYTepV8m1JNtc32G9Enrldpo61x
-X-Google-Smtp-Source: ACHHUZ6tzHm/VV4i6hYVt0H6zPcEtE79GJL+QoC9i9K41llRWjGeaKOzZgoggzZS3ZBIiU6V57I4GQ==
-X-Received: by 2002:a05:6214:2487:b0:625:775e:8802 with SMTP id gi7-20020a056214248700b00625775e8802mr18589429qvb.18.1685718106532;
-        Fri, 02 Jun 2023 08:01:46 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:1317])
-        by smtp.gmail.com with ESMTPSA id d5-20020a0cea85000000b006286334f999sm897345qvp.78.2023.06.02.08.01.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 08:01:32 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for non-NULLable PTR_TO_BTF_IDs
-Date:   Fri,  2 Jun 2023 10:01:12 -0500
-Message-Id: <20230602150112.1494194-2-void@manifault.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230602150112.1494194-1-void@manifault.com>
-References: <20230602150112.1494194-1-void@manifault.com>
+        Fri, 2 Jun 2023 12:23:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995FB197
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685722995; x=1717258995;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2vScx9xL+4WATF6N210Q9YVlE3QByB+nFbRWxvKBxXE=;
+  b=QqcmMyqkXPCoRexgXZY7R/n/rkpI2zsxelTBs6pvBxvEVnge9P6XWITz
+   /7O9umXxMau7jixmA3vFLpbionrOoz7nfnyh1BFwCYueREewb+r/IxWmF
+   1Zo6U71rm6aXxiGthF3mAjF2XjzbNBWnf3C0PeSdgSanPwdbXc61P/aEw
+   Frkz6WwtHn8udXhY/GhR5kWd906NCHH8AxOU065oG7cY2W9mf6ymvTTw7
+   xhwVFUsVBKuZFkslAF23f6/1WSUnkU3Fb8UOXYX3Km+5lqW1j6MOHy9e3
+   d+dDkXke64E5rWb5c3dfaZ/gHyBJLhv/5I6J4kmey9uSj6ao2uvIFe617
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="442285455"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="442285455"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 09:23:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="685367783"
+X-IronPort-AV: E=Sophos;i="6.00,213,1681196400"; 
+   d="scan'208";a="685367783"
+Received: from joshkuo-mobl.amr.corp.intel.com (HELO [10.209.39.242]) ([10.209.39.242])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 09:23:14 -0700
+Message-ID: <8ad62f37-8cf7-6bd0-3d4d-d04d5def893c@linux.intel.com>
+Date:   Fri, 2 Jun 2023 10:01:20 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v2 4/5] soundwire: stream: Invert logic on runtime alloc
+ flags
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230602101140.2040141-1-ckeepax@opensource.cirrus.com>
+ <20230602101140.2040141-4-ckeepax@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230602101140.2040141-4-ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a recent patch, we taught the verifier that trusted PTR_TO_BTF_ID can
-never be NULL. This prevents the verifier from incorrectly failing to
-load certain programs where it gets confused and thinks a reference
-isn't dropped because it incorrectly assumes that a branch exists in
-which a NULL PTR_TO_BTF_ID pointer is never released.
 
-This patch adds a testcase that verifies this cannot happen.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- .../selftests/bpf/prog_tests/cpumask.c        |  1 +
- .../selftests/bpf/progs/cpumask_success.c     | 24 +++++++++++++++++++
- 2 files changed, 25 insertions(+)
+On 6/2/23 05:11, Charles Keepax wrote:
+> sdw_stream_add_slave/master have flags to indicate if the master or
+> slave runtime where allocated in that call to the function. Currently
+> these flags are cleared on all the paths where the runtime is not
+> allocated, it is more logic and simpler to set the flag on the one path
+> where the runtime is allocated.
+> 
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cpumask.c b/tools/testing/selftests/bpf/prog_tests/cpumask.c
-index cdf4acc18e4c..d89191440fb1 100644
---- a/tools/testing/selftests/bpf/prog_tests/cpumask.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cpumask.c
-@@ -70,5 +70,6 @@ void test_cpumask(void)
- 		verify_success(cpumask_success_testcases[i]);
- 	}
- 
-+	RUN_TESTS(cpumask_success);
- 	RUN_TESTS(cpumask_failure);
- }
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/testing/selftests/bpf/progs/cpumask_success.c
-index 2fcdd7f68ac7..602a88b03dbc 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_success.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- 
-+#include "bpf_misc.h"
- #include "cpumask_common.h"
- 
- char _license[] SEC("license") = "GPL";
-@@ -426,3 +427,26 @@ int BPF_PROG(test_global_mask_rcu, struct task_struct *task, u64 clone_flags)
- 
- 	return 0;
- }
-+
-+SEC("tp_btf/task_newtask")
-+__success
-+int BPF_PROG(test_refcount_null_tracking, struct task_struct *task, u64 clone_flags)
-+{
-+	struct bpf_cpumask *mask1, *mask2;
-+
-+	mask1 = bpf_cpumask_create();
-+	mask2 = bpf_cpumask_create();
-+
-+	if (!mask1 || !mask2)
-+		goto free_masks_return;
-+
-+	bpf_cpumask_test_cpu(0, (const struct cpumask *)mask1);
-+	bpf_cpumask_test_cpu(0, (const struct cpumask *)mask2);
-+
-+free_masks_return:
-+	if (mask1)
-+		bpf_cpumask_release(mask1);
-+	if (mask2)
-+		bpf_cpumask_release(mask2);
-+	return 0;
-+}
--- 
-2.40.1
+Much easier to review indeed, thanks!
 
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+> ---
+> 
+> Changes since v1:
+>  - Split out of the goto patch to ease review
+> 
+> Also worth noting I guess this patch could be squashed with patch 1 in
+> the series really, but I opted to leave them separate as patch 1 is a
+> much simpler fix to be cherry-picked back to older kernels if someone
+> needs the fixup, rather than mixing the fixup and tidy up.
+> 
+> Thanks,
+> Charles
+> 
+>  drivers/soundwire/stream.c | 25 ++++++++++++-------------
+>  1 file changed, 12 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
+> index 6595f47b403b5..df5600a80c174 100644
+> --- a/drivers/soundwire/stream.c
+> +++ b/drivers/soundwire/stream.c
+> @@ -1854,7 +1854,7 @@ int sdw_stream_add_master(struct sdw_bus *bus,
+>  			  struct sdw_stream_runtime *stream)
+>  {
+>  	struct sdw_master_runtime *m_rt;
+> -	bool alloc_master_rt = true;
+> +	bool alloc_master_rt = false;
+>  	int ret;
+>  
+>  	mutex_lock(&bus->bus_lock);
+> @@ -1876,10 +1876,8 @@ int sdw_stream_add_master(struct sdw_bus *bus,
+>  	 * it first), if so skip allocation and go to configuration
+>  	 */
+>  	m_rt = sdw_master_rt_find(bus, stream);
+> -	if (m_rt) {
+> -		alloc_master_rt = false;
+> +	if (m_rt)
+>  		goto skip_alloc_master_rt;
+> -	}
+>  
+>  	m_rt = sdw_master_rt_alloc(bus, stream);
+>  	if (!m_rt) {
+> @@ -1888,6 +1886,8 @@ int sdw_stream_add_master(struct sdw_bus *bus,
+>  		ret = -ENOMEM;
+>  		goto unlock;
+>  	}
+> +
+> +	alloc_master_rt = true;
+>  skip_alloc_master_rt:
+>  
+>  	if (sdw_master_port_allocated(m_rt))
+> @@ -1980,8 +1980,8 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
+>  {
+>  	struct sdw_slave_runtime *s_rt;
+>  	struct sdw_master_runtime *m_rt;
+> -	bool alloc_master_rt = true;
+> -	bool alloc_slave_rt = true;
+> +	bool alloc_master_rt = false;
+> +	bool alloc_slave_rt = false;
+>  
+>  	int ret;
+>  
+> @@ -1992,10 +1992,8 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
+>  	 * and go to configuration
+>  	 */
+>  	m_rt = sdw_master_rt_find(slave->bus, stream);
+> -	if (m_rt) {
+> -		alloc_master_rt = false;
+> +	if (m_rt)
+>  		goto skip_alloc_master_rt;
+> -	}
+>  
+>  	/*
+>  	 * If this API is invoked by Slave first then m_rt is not valid.
+> @@ -2009,21 +2007,22 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
+>  		goto unlock;
+>  	}
+>  
+> +	alloc_master_rt = true;
+> +
+>  skip_alloc_master_rt:
+>  	s_rt = sdw_slave_rt_find(slave, stream);
+> -	if (s_rt) {
+> -		alloc_slave_rt = false;
+> +	if (s_rt)
+>  		goto skip_alloc_slave_rt;
+> -	}
+>  
+>  	s_rt = sdw_slave_rt_alloc(slave, m_rt);
+>  	if (!s_rt) {
+>  		dev_err(&slave->dev, "Slave runtime alloc failed for stream:%s\n", stream->name);
+> -		alloc_slave_rt = false;
+>  		ret = -ENOMEM;
+>  		goto alloc_error;
+>  	}
+>  
+> +	alloc_slave_rt = true;
+> +
+>  skip_alloc_slave_rt:
+>  	if (sdw_slave_port_allocated(s_rt))
+>  		goto skip_port_alloc;
