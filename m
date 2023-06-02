@@ -2,223 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CB271F84E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D6571F851
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233557AbjFBCJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 22:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S232718AbjFBCN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjFBCJs (ORCPT
+        with ESMTP id S229454AbjFBCN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:09:48 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1E313E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 19:09:45 -0700 (PDT)
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E74593F12E
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1685671782;
-        bh=HGFWY1748xWHBeuQ3h2WYaCQqPEsRJy9T6c8zRERFxM=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=HZOWl/p8dEH+aXZ8g5Fi6R9VlSY5H0TqnCIBVeCadsIlbKMkX07q9CLEZawjrq6iS
-         Q5YBKPJYgKz5pZDVE4CNkoO/LTXZ0ZDH2CiLgP6ugwoYwYXMQ2L7HT5Hn/+5epTClc
-         GqgaGHEk1HLlel9c7J70Fx4VOOrFV7SZSr9qfLmOyW92A5DnLuPA0Pop3B5wu7U5DV
-         PD+FyKJ+FFIsXdWGH0YXxQeD9epWkoLggUbA/oHXasmkJ00nTLcZCZTowkA+B6BuJD
-         WF/Yfc9gqnUsj1rOrMp97OSSJtOrs3ake3xiIQ114MMKgZUckPiJfSBYBHZPalNU/9
-         5OnBK8CuY+iNQ==
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b04bc1f3cbso7190925ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 19:09:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685671781; x=1688263781;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HGFWY1748xWHBeuQ3h2WYaCQqPEsRJy9T6c8zRERFxM=;
-        b=d9YB+O3WZ/3yCLgWNX6YYXkfwpemjo5+WCRGWihAB09fOM+YFl7tDzzmg4dXVXfJ0t
-         76eOPzDXiLNcT0t8tUZFCnSM8X35a/BYftDQKR/PTAJGS9pp11poCi8DGlUEnmaINpfd
-         sFgHboxplRg8GqgDgXni9qLWXtC5O5azB1SthHnvgrsueaOGPF2Cg19seL8jwcr8HcRp
-         xAwOxiR2K3lAZ3P4TmHIKhfQaWP49ZnCgg1rFqFEedp4IylW3JtxvZSfUVbHL+wekAQY
-         eSXlhhL+LGlc7DNYd33/a/s9ass9VmRHFS8YKmMJRlRVum1LI3vwSKM/cgX+Nq+ye7tD
-         w2eg==
-X-Gm-Message-State: AC+VfDzCDlt22xSMisz52nUYiXW68r8FBTrZc5dsNzEnhYJNdNJ/RBqE
-        x6y3jdc0XVo8FHqrmc+OW/zsSMyZM+Tu4zMWI5yRuv0dC3BtFUhSSXL6AKUXNfi2y5xOau9S/P/
-        +kWbh1HTuQw0RnIVJpaEvcPGQ7/9gJ2Q2xLTokdBTb/XFktWPKQ==
-X-Received: by 2002:a17:902:d503:b0:1b1:a2c3:29c0 with SMTP id b3-20020a170902d50300b001b1a2c329c0mr882203plg.24.1685671781282;
-        Thu, 01 Jun 2023 19:09:41 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ714BmOv9fruEm5Qgzxep6fJULya1ekyW4/JETSKvADOJrqtiqDHlU+NnOPyVOY75zkhlAelA==
-X-Received: by 2002:a17:902:d503:b0:1b1:a2c3:29c0 with SMTP id b3-20020a170902d50300b001b1a2c329c0mr882194plg.24.1685671780984;
-        Thu, 01 Jun 2023 19:09:40 -0700 (PDT)
-Received: from chengendu.. (111-248-148-133.dynamic-ip.hinet.net. [111.248.148.133])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b001acacff3a70sm64391plg.125.2023.06.01.19.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 19:09:40 -0700 (PDT)
-From:   Chengen Du <chengen.du@canonical.com>
-To:     trond.myklebust@hammerspace.com
-Cc:     anna@kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chengen Du <chengen.du@canonical.com>
-Subject: [PATCH v2 RESEND] NFS: Add mount option 'fasc'
-Date:   Fri,  2 Jun 2023 10:09:35 +0800
-Message-Id: <20230602020935.43367-1-chengen.du@canonical.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 1 Jun 2023 22:13:26 -0400
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A824F138;
+        Thu,  1 Jun 2023 19:13:24 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-01 (Coremail) with SMTP id qwCowACHj_szUHlkEgfGCQ--.60181S2;
+        Fri, 02 Jun 2023 10:13:08 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        davthompson@nvidia.com, asmaa@nvidia.com, mkl@pengutronix.de,
+        limings@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH] mlxbf_gige: Add missing check for platform_get_irq
+Date:   Fri,  2 Jun 2023 10:13:05 +0800
+Message-Id: <20230602021305.29926-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: qwCowACHj_szUHlkEgfGCQ--.60181S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF4DJw1DXrykur18Cr18AFb_yoW8Cr1Up3
+        ykKwn5ArWkJa4rKw4xu3W3ua4rJ3WUCry3Wrn09a18Z347Jrn5GryS9rWavF1UCr1kZrZ8
+        JFnFqryUtw47Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUO_MaUUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In certain instances, users or applications switch to other privileged
-users by executing commands like 'su' to carry out operations on NFS-
-mounted folders. However, when this happens, the login time for the
-privileged user is reset, and any NFS ACCESS operations must be resent,
-which can result in a decrease in performance. In specific production
-environments where the access cache can be trusted due to stable group
-membership, there's no need to verify the cache stall situation.
-To maintain the initial behavior and performance, a new mount option
-called 'fasc' has been introduced. This option triggers the mechanism
-of clearing the file access cache upon login.
+On Thu, 1 Jun 2023 23:54:02 +0800 Jakub Kicinski wrote:
+> On Thu,  1 Jun 2023 14:58:08 +0800 Jiasheng Jiang wrote:
+>> According to the documentation of submitting patches
+>> (Link: https://docs.kernel.org/process/submitting-patches.html),
+>> I used "scripts/get_maintainer.pl" to gain the appropriate recipients
+>> for my patch.
+>> However, the "limings@nvidia.com" is not contained in the following list.
+> 
+> And I told you already to run the script on the _patch_ not on the file
+> path.
+> 
+> $ ./scripts/get_maintainer.pl 0001-mlxbf_gige-Add-missing-check-for-platform_get_irq.patch
+> "David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS,blamed_fixes:1/1=100%)
+> Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+> Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS,commit_signer:5/6=83%,authored:1/6=17%,removed_lines:1/20=5%)
+> Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+> Asmaa Mnebhi <asmaa@nvidia.com> (commit_signer:4/6=67%,blamed_fixes:1/1=100%)
+> David Thompson <davthompson@nvidia.com> (commit_signer:4/6=67%,authored:4/6=67%,added_lines:94/99=95%,removed_lines:19/20=95%,blamed_fixes:1/1=100%)
+> Marc Kleine-Budde <mkl@pengutronix.de> (commit_signer:1/6=17%)
+> Jiasheng Jiang <jiasheng@iscas.ac.cn> (commit_signer:1/6=17%,authored:1/6=17%)
+> vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+> Liming Sun <limings@nvidia.com> (blamed_fixes:1/1=100%)
+> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+> linux-kernel@vger.kernel.org (open list)
 
-Signed-off-by: Chengen Du <chengen.du@canonical.com>
----
- fs/nfs/dir.c              | 21 ++++++++++++---------
- fs/nfs/fs_context.c       |  5 +++++
- fs/nfs/super.c            |  1 +
- include/linux/nfs_fs_sb.h |  1 +
- 4 files changed, 19 insertions(+), 9 deletions(-)
+I have got it. I will run the script on the patch.
 
-diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-index 8f3112e71a6a..cefdb23d4cd7 100644
---- a/fs/nfs/dir.c
-+++ b/fs/nfs/dir.c
-@@ -2951,12 +2951,14 @@ static struct nfs_access_entry *nfs_access_search_rbtree(struct inode *inode, co
- 	return NULL;
- }
- 
--static u64 nfs_access_login_time(const struct task_struct *task,
--				 const struct cred *cred)
-+static inline
-+bool nfs_check_access_stale(const struct task_struct *task,
-+			    const struct cred *cred,
-+			    const struct nfs_access_entry *cache)
- {
- 	const struct task_struct *parent;
- 	const struct cred *pcred;
--	u64 ret;
-+	u64 login_time;
- 
- 	rcu_read_lock();
- 	for (;;) {
-@@ -2966,15 +2968,15 @@ static u64 nfs_access_login_time(const struct task_struct *task,
- 			break;
- 		task = parent;
- 	}
--	ret = task->start_time;
-+	login_time = task->start_time;
- 	rcu_read_unlock();
--	return ret;
-+
-+	return ((s64)(login_time - cache->timestamp) > 0);
- }
- 
- static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, u32 *mask, bool may_block)
- {
- 	struct nfs_inode *nfsi = NFS_I(inode);
--	u64 login_time = nfs_access_login_time(current, cred);
- 	struct nfs_access_entry *cache;
- 	bool retry = true;
- 	int err;
-@@ -3003,7 +3005,8 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
- 		retry = false;
- 	}
- 	err = -ENOENT;
--	if ((s64)(login_time - cache->timestamp) > 0)
-+	if ((NFS_SERVER(inode)->flags & NFS_MOUNT_FASC) &&
-+	    nfs_check_access_stale(current, cred, cache))
- 		goto out;
- 	*mask = cache->mask;
- 	list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
-@@ -3023,7 +3026,6 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
- 	 * but do it without locking.
- 	 */
- 	struct nfs_inode *nfsi = NFS_I(inode);
--	u64 login_time = nfs_access_login_time(current, cred);
- 	struct nfs_access_entry *cache;
- 	int err = -ECHILD;
- 	struct list_head *lh;
-@@ -3038,7 +3040,8 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
- 		cache = NULL;
- 	if (cache == NULL)
- 		goto out;
--	if ((s64)(login_time - cache->timestamp) > 0)
-+	if ((NFS_SERVER(inode)->flags & NFS_MOUNT_FASC) &&
-+	    nfs_check_access_stale(current, cred, cache))
- 		goto out;
- 	if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
- 		goto out;
-diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
-index 9bcd53d5c7d4..0a14bd67efc1 100644
---- a/fs/nfs/fs_context.c
-+++ b/fs/nfs/fs_context.c
-@@ -88,6 +88,7 @@ enum nfs_param {
- 	Opt_vers,
- 	Opt_wsize,
- 	Opt_write,
-+	Opt_fasc,
- };
- 
- enum {
-@@ -194,6 +195,7 @@ static const struct fs_parameter_spec nfs_fs_parameters[] = {
- 	fsparam_string("vers",		Opt_vers),
- 	fsparam_enum  ("write",		Opt_write, nfs_param_enums_write),
- 	fsparam_u32   ("wsize",		Opt_wsize),
-+	fsparam_flag  ("fasc",		Opt_fasc),
- 	{}
- };
- 
-@@ -861,6 +863,9 @@ static int nfs_fs_context_parse_param(struct fs_context *fc,
- 	case Opt_sloppy:
- 		ctx->sloppy = true;
- 		break;
-+	case Opt_fasc:
-+		ctx->flags |= NFS_MOUNT_FASC;
-+		break;
- 	}
- 
- 	return 0;
-diff --git a/fs/nfs/super.c b/fs/nfs/super.c
-index 30e53e93049e..e8d0ffd04b16 100644
---- a/fs/nfs/super.c
-+++ b/fs/nfs/super.c
-@@ -444,6 +444,7 @@ static void nfs_show_mount_options(struct seq_file *m, struct nfs_server *nfss,
- 		{ NFS_MOUNT_NORDIRPLUS, ",nordirplus", "" },
- 		{ NFS_MOUNT_UNSHARED, ",nosharecache", "" },
- 		{ NFS_MOUNT_NORESVPORT, ",noresvport", "" },
-+		{ NFS_MOUNT_FASC, ",fasc", "" },
- 		{ 0, NULL, NULL }
- 	};
- 	const struct proc_nfs_info *nfs_infop;
-diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
-index ea2f7e6b1b0b..332ceb11be6c 100644
---- a/include/linux/nfs_fs_sb.h
-+++ b/include/linux/nfs_fs_sb.h
-@@ -153,6 +153,7 @@ struct nfs_server {
- #define NFS_MOUNT_WRITE_EAGER		0x01000000
- #define NFS_MOUNT_WRITE_WAIT		0x02000000
- #define NFS_MOUNT_TRUNK_DISCOVERY	0x04000000
-+#define NFS_MOUNT_FASC			0x08000000
- 
- 	unsigned int		fattr_valid;	/* Valid attributes */
- 	unsigned int		caps;		/* server capabilities */
--- 
-2.39.2
+Thanks,
+Jiang
 
