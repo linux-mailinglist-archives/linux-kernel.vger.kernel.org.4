@@ -2,105 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1FD72038D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2E0720399
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjFBNjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S235865AbjFBNl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234739AbjFBNjk (ORCPT
+        with ESMTP id S234946AbjFBNlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:39:40 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA861B5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:39:38 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1a4250b07so24800461fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685713176; x=1688305176;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=55brW+iiqQZU3U4ATbpWs6UQaJT/M5kVk9naukILYbg=;
-        b=KZ011BeeVmf8SiU/LbVv1IOLCdwdga3jA+5YffDWrbswzPvg/bl/r/qBuklednytfa
-         n7q31NPgUQstES8DmSvSoZ/qQa5/yD/z5uvDn7Cd26XuFvfJC7WEDIHtWKTIhSfb1Iab
-         dz1Scg2JVfNXE2O80F8TOQDuVzJMD/dKAN0bR66YJfOsZAuPLUuhebp5IuS2pYRgIH+O
-         QdAGVETof9nQpmPjsrYdvzPg1CSzXOC49+qQs18ouTrrG5AZexQYmKSAAddXVr9BwEpi
-         QYEu6hY58L0c5N7lKIdiaJTB/zHL5A0e6/vXVRBW7KhDI++1+1qRShHdWK2WX9bYWLsr
-         MV8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685713176; x=1688305176;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=55brW+iiqQZU3U4ATbpWs6UQaJT/M5kVk9naukILYbg=;
-        b=IP6OVzbVB2AGRKgcbgzWxZuO5CYvEWZVqQNwlrnqKrgXgjjW+44Vzp/z2ZsMXfSJb2
-         WXX/VilsehCG8+UCZbWXzTb659D6MMtwXkbnI4rdFCC1OlW31hFumBo9tE5GGsaI4A5I
-         lLY80M8Y0ELF3iEsbjbMiqn8ckeGWQsk1JLJcBMsx2w0RJDdKs3unMRzPmL/Xk/iAvfX
-         KFh6YL+XO7GmIib0zsHl4nqyasyphrIq8cEuNSq5wl+MMMaYlh5k4Nzau7Q8ryT51CNz
-         lmX0ki6wtqtZEiKWYPzhhjchijMRzRGEKovxLflAUji0unF5aull5Onylxg7r08hgMZ5
-         Besg==
-X-Gm-Message-State: AC+VfDwr/QpC3wqXKCRPP3LFYObGxHbPIHhkidTol1jS6LJhe/u68twR
-        GH+eW3ELQ7/HRXwnjcq+t6MFPA==
-X-Google-Smtp-Source: ACHHUZ5VXEiuCcdFzknOLseqdS50yg/IecTf0s0owUi+fueqMfql6O2PelFFz39byNr2wsoteWCRlw==
-X-Received: by 2002:a2e:9b93:0:b0:2a9:ee54:9fad with SMTP id z19-20020a2e9b93000000b002a9ee549fadmr35054lji.7.1685713176404;
-        Fri, 02 Jun 2023 06:39:36 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id u11-20020a2e91cb000000b002b1ac2bcf99sm226486ljg.120.2023.06.02.06.39.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 06:39:35 -0700 (PDT)
-Message-ID: <9f770d30-29c6-7390-0d14-ec9c5b4b1bc7@linaro.org>
-Date:   Fri, 2 Jun 2023 15:39:34 +0200
+        Fri, 2 Jun 2023 09:41:20 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047BF137;
+        Fri,  2 Jun 2023 06:41:19 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q551o-0006Ct-LG; Fri, 02 Jun 2023 15:41:16 +0200
+Message-ID: <0625e839-65a5-2c79-681a-c43b502cb89f@leemhuis.info>
+Date:   Fri, 2 Jun 2023 15:41:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 6/6] arm64: defconfig: Enable sc828x0xp lpasscc clock
- controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     johan+linaro@kernel.org, agross@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230525122930.17141-1-srinivas.kandagatla@linaro.org>
- <20230525122930.17141-7-srinivas.kandagatla@linaro.org>
- <b06070d3-a272-9a0b-2d02-df8fbca4e951@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <b06070d3-a272-9a0b-2d02-df8fbca4e951@linaro.org>
+ Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH 01/13] Revert "ext4: remove ac->ac_found >
+ sbi->s_mb_min_to_scan dead check in ext4_mb_check_limits"
+Content-Language: en-US, de-DE
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>, linux-ext4@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <cover.1685009579.git.ojaswin@linux.ibm.com>
+ <cd639a08cc9824c927591d9de14049f2461e1923.1685009579.git.ojaswin@linux.ibm.com>
+From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <cd639a08cc9824c927591d9de14049f2461e1923.1685009579.git.ojaswin@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685713279;ef956bba;
+X-HE-SMSGID: 1q551o-0006Ct-LG
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-On 2.06.2023 15:18, Krzysztof Kozlowski wrote:
-> Resending as my previous email probably got lost. If you got it twice,
-> apologies.
+On 25.05.23 13:32, Ojaswin Mujoo wrote:
+> This reverts commit 32c0869370194ae5ac9f9f501953ef693040f6a1.
 > 
-> On 25/05/2023 14:29, Srinivas Kandagatla wrote:
->> Enabled sc828x0xp lpasscc clock controller driver required for X13s laptop.
-sc8280xp
+> The reverted commit was intended to remove a dead check however it was observed
+> that this check was actually being used to exit early instead of looping
+> sbi->s_mb_max_to_scan times when we are able to find a free extent bigger than
+> the goal extent. Due to this, a my performance tests (fsmark, parallel file
+> writes in a highly fragmented FS) were seeing a 2x-3x regression.
+> 
+> Example, the default value of the following variables is:
+> 
+> sbi->s_mb_max_to_scan = 200
+> sbi->s_mb_min_to_scan = 10
+> 
+> In ext4_mb_check_limits() if we find an extent smaller than goal, then we return
+> early and try again. This loop will go on until we have processed
+> sbi->s_mb_max_to_scan(=200) number of free extents at which point we exit and
+> just use whatever we have even if it is smaller than goal extent.
+> 
+> Now, the regression comes when we find an extent bigger than goal. Earlier, in
+> this case we would loop only sbi->s_mb_min_to_scan(=10) times and then just use
+> the bigger extent. However with commit 32c08693 that check was removed and hence
+> we would loop sbi->s_mb_max_to_scan(=200) times even though we have a big enough
+> free extent to satisfy the request. The only time we would exit early would be
+> when the free extent is *exactly* the size of our goal, which is pretty uncommon
+> occurrence and so we would almost always end up looping 200 times.
+> 
+> Hence, revert the commit by adding the check back to fix the regression. Also
+> add a comment to outline this policy.
+> 
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> [...]
 
-Konrad
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> ---
-> 
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 32c0869370194ae5ac
+#regzbot title ext4: 2x-3x regression in performance tests
+#regzbot monitor:
+https://lore.kernel.org/all/ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com/
+#regzbot fix: Revert "ext4: remove ac->ac_found > sbi->s_mb_min_to_scan
+dead check in ext4_mb_check_limits"
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
