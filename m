@@ -2,72 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893117208B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2146C7208B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 20:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236742AbjFBSAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 14:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S236316AbjFBR7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 13:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbjFBSAR (ORCPT
+        with ESMTP id S236877AbjFBR7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 14:00:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4728F1A2
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:59:28 -0700 (PDT)
+        Fri, 2 Jun 2023 13:59:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF85B9F
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 10:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685728767;
+        s=mimecast20190719; t=1685728743;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2vEfy4ABvbNm71f6wJfPO0YUTrGmZR9PK0H6cIJhbRw=;
-        b=abSWuJysw7fwpk4xV/ySYfNpwdSuqRYLYAUcUa0q4pAfshcQROlA/mfbY43F11nYKg7EOP
-        UciJLWjz4kIVRNgoOlVGGXcjJwIRSmAM/UAnAo6p9MCPmImlSUdbgY50DC0qoFpTVgol4o
-        2FNlNdisUno9tox0oerPLeWNh2bgsks=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-412-nTsWchWkPnyhyWDJbcXr9A-1; Fri, 02 Jun 2023 13:59:24 -0400
-X-MC-Unique: nTsWchWkPnyhyWDJbcXr9A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB2033C14116;
-        Fri,  2 Jun 2023 17:59:23 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.50])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 0193FC154D7;
-        Fri,  2 Jun 2023 17:59:08 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri,  2 Jun 2023 19:59:02 +0200 (CEST)
-Date:   Fri, 2 Jun 2023 19:58:47 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk, ebiederm@xmission.com,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, stefanha@redhat.com, brauner@kernel.org
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230602175846.GC555@redhat.com>
-References: <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
- <20230522174757.GC22159@redhat.com>
- <20230523121506.GA6562@redhat.com>
- <26c87be0-8e19-d677-a51b-e6821e6f7ae4@redhat.com>
- <20230531072449.GA25046@redhat.com>
- <CACGkMEv2kB9J1qGYkGkywk1YHV2gU2fMr7qx4vEv9L5f6qL5mg@mail.gmail.com>
- <20230531091432.GB25046@redhat.com>
- <CACGkMEvNrC5gc4ppp0QG-SNSbs_snrqwPkNBotffRRDJA1VJjQ@mail.gmail.com>
- <20230601074315.GA13133@redhat.com>
- <CACGkMEss2LkUiUKaEkhBWwFDBBz31T3N94a0=zSD1d+Fhb1zyQ@mail.gmail.com>
+        bh=cSARUz2O3TmQ5YM6iQ0ZZCNg+rFHS4+v0lFyDbqBuwM=;
+        b=G6QD/WhPiQkN4mv+BomHgICN35/Vv4iynsi9xaK6rE4ezcpDStJh2898wv20hzQli1Tk1a
+        1mugQvLmc59iMaRZq7ztSX5ZUOCks9bZx+Qa/cVJc1bw+n6PC2TXxe8a3WFIdQYFlUzdDH
+        LQG/Q2i3DsgKzEiBuYVpe6/TDU/hy3g=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-627-RubznLp0P8ayhW0usP6GbQ-1; Fri, 02 Jun 2023 13:59:02 -0400
+X-MC-Unique: RubznLp0P8ayhW0usP6GbQ-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b175cf0d1so29647985a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 10:59:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685728742; x=1688320742;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSARUz2O3TmQ5YM6iQ0ZZCNg+rFHS4+v0lFyDbqBuwM=;
+        b=bfW3Z/jlU4/FuoEt5vB3ZbKJC5a0ISriLvda1TSRw397aL1y50Ea5vccJ1ZLldW1TO
+         zNAtTUmtGP4/ik6cKtVsRDL3NUX8wFV2ermioFdXXVheUY8V9CJ2KAS3dJ312U9djn+Q
+         TPCifVd+5h2VUCxv0BUFgrpirBYIVfh3J60L4wx8KiiBOFg4MQFAo7nw4cOUH4sWzPSB
+         CpDZgoDSpvQnBSHnVqzkJXvvrv3nby1q1dUUhU5cNZlWrX20IrUcB2vD/Wk1E063z8cy
+         tWmHvRgm1ythMzaU/L+SrdX40PTkg9aUK0Q0MjDWvgYRFq5c1PMF9/cOoVDbveIIv0sr
+         xFAw==
+X-Gm-Message-State: AC+VfDyzzoiuBceoWHAwBSn0Pdxm5zL7IoviAuor0Z9N0ZGuwKjE8Boq
+        7deUqAMaEsMj3dHIrHYMwt1CaCx9QgJqcBADZYuLnaQE/RJ7tPoi1snP0BrKfH/eqgq+ztrpqbB
+        u/QA2eL1d/nRa6RrW80cloJ0I
+X-Received: by 2002:a05:620a:43a4:b0:75b:23a1:69f0 with SMTP id a36-20020a05620a43a400b0075b23a169f0mr11249970qkp.7.1685728742220;
+        Fri, 02 Jun 2023 10:59:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4m8Bhw4wjEoJhLfsA5Ru0yUPJznYbpOxt4yZuMQxYyzBraywPvQDy3Ozu06ddbe9B1KF2HHw==
+X-Received: by 2002:a05:620a:43a4:b0:75b:23a1:69f0 with SMTP id a36-20020a05620a43a400b0075b23a169f0mr11249931qkp.7.1685728741857;
+        Fri, 02 Jun 2023 10:59:01 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id b10-20020a05620a118a00b0074ca7c33b79sm910734qkk.23.2023.06.02.10.58.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 10:59:01 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 13:58:58 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZHot4rwXGOzeqJ86@x1n>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com>
+ <ZHfAOAKj1ZQJ+zSy@x1n>
+ <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
+ <ZHj7jmJ5fKla1Rax@x1n>
+ <3589803d-5594-71de-d078-ad4499f233b6@collabora.com>
+ <ZHodIFQesrCA53To@x1n>
+ <be70e76a-3875-6e1b-a5aa-b89d2368b904@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEss2LkUiUKaEkhBWwFDBBz31T3N94a0=zSD1d+Fhb1zyQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+In-Reply-To: <be70e76a-3875-6e1b-a5aa-b89d2368b904@collabora.com>
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,58 +110,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02, Jason Wang wrote:
->
-> On Thu, Jun 1, 2023 at 3:43 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> >
-> > and the final rewrite:
-> >
-> >         if (work->node) {
-> >                 work_next = work->node->next;
-> >                 if (true)
-> >                         clear_bit(&work->flags);
-> >         }
-> >
-> > so again, I do not see the load-store control dependency.
->
-> This kind of optimization is suspicious. Especially considering it's
-> the control expression of the loop but not a condition.
+On Fri, Jun 02, 2023 at 10:42:45PM +0500, Muhammad Usama Anjum wrote:
+> Thank you for reviewing and helping out.
+> 
+> On 6/2/23 9:47 PM, Peter Xu wrote:
+> [...]
+> >>>> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+> >>>> 					 unsigned long addr, pte_t *ptep,
+> >>>> 					 pte_t ptent)
+> >>>> {
+> >>>> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+> >>>> 		return;
+> >>>>
+> >>>> 	if (is_hugetlb_entry_migration(ptent))
+> >>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >>>> 				pte_swp_mkuffd_wp(ptent));
+> >>>> 	else if (!huge_pte_none(ptent))
+> >>>> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+> >>>> 					huge_pte_mkuffd_wp(ptent));
+> >>>> 	else
+> >>>> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >>>> 				make_pte_marker(PTE_MARKER_UFFD_WP));
+> >>>> }
+> >>>
+> >>> the is_pte_marker() check can be extended to double check
+> >>> pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
+> >>> uffd-wp bit currently we only support swapin error which should sigbus when
+> >>> accessed, so no point in tracking anyway.
+> >> Yeah, we are good with what we have as even if more bits are supported in
+> >> pte markers, this function is only reached when UNPOPULATED + ASYNC WP are
+> >> enabled. So no other bit would be set on the marker.
+> > 
+> > I think we don't know?  swapin error bit can be set there afaiu, if someone
+> > swapoff -a and found a swap device broken for some swapped out ptes.
+> Oops, so I remove returning on pte marker detection. Instead the last else
+> is already setting marker wp-ed.
 
-It is not about optimization,
+What I meant is your current code is fine, please don't remove the check.
 
-> Looking at the assembly (x86):
->
->    0xffffffff81d46c5b <+75>:    callq  0xffffffff81689ac0 <llist_reverse_order>
->    0xffffffff81d46c60 <+80>:    mov    %rax,%r15
->    0xffffffff81d46c63 <+83>:    test   %rax,%rax
->    0xffffffff81d46c66 <+86>:    je     0xffffffff81d46c3a <vhost_worker+42>
->    0xffffffff81d46c68 <+88>:    mov    %r15,%rdi
->    0xffffffff81d46c6b <+91>:    mov    (%r15),%r15
->    0xffffffff81d46c6e <+94>:    lock andb $0xfd,0x10(%rdi)
->    0xffffffff81d46c73 <+99>:    movl   $0x0,0x18(%rbx)
->    0xffffffff81d46c7a <+106>:   mov    0x8(%rdi),%rax
->    0xffffffff81d46c7e <+110>:   callq  0xffffffff821b39a0
-> <__x86_indirect_thunk_array>
->    0xffffffff81d46c83 <+115>:   callq  0xffffffff821b4d10 <__SCT__cond_resched>
-> ...
->
-> I can see:
->
-> 1) The code read node->next (+91) before clear_bit (+94)
+Removing is_pte_marker() means you could potentially overwrite one swap
+error entry with a marker only having uffd-wp bit set.  It can corrupt the
+guest because swapin error is not recoverable and higher priority than wp.
 
-The code does. but what about CPU ?
+> 
+> > 
+> > But again I think that's fine for now.
+> > 
+> >>
+> >>>
+> >>>>
+> >>>> As we always set UNPOPULATED, so markers are always set on none ptes
+> >>>> initially. Is it possible that a none pte becomes present, then swapped and
+> >>>> finally none again? So I'll do the following addition for make_uffd_wp_pte():
+> >>>>
+> >>>> --- a/fs/proc/task_mmu.c
+> >>>> +++ b/fs/proc/task_mmu.c
+> >>>> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+> >>>> vm_area_struct *vma,
+> >>>>  	} else if (is_swap_pte(ptent)) {
+> >>>>  		ptent = pte_swp_mkuffd_wp(ptent);
+> >>>>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
+> >>>> +	} else {
+> >>>> +		set_pte_at(vma->vm_mm, addr, pte,
+> >>>> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
+> >>>>  	}
+> >>>>  }
+> >>>
+> >>> Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
+> >>> should probably keep the protocol (only set the marker when WP_UNPOPULATED
+> >>> for anon).
+> >> This function is only reachable when UNPOPULATED + Async WP are set. So we
+> >> don't need to use userfaultfd_wp_use_markers().
+> > 
+> > I don't remember where you explicitly checked that to make sure it'll
+> > always be the case, but if you do it'll still be nice if you can add a
+> > comment right above here explaining.
+> I was only testing for WP and WP Async in pagemap_scan_test_walk() as WP
+> async can only be enabled if unpopulated is enabled which in turn enables
+> the markers. I'll add userfaultfd_wp_use_markers() to pagemap_scan_test_walk().
 
-> 2) And the it uses a lock prefix to guarantee the execution order
+OK.
 
-As I said from the very beginning, this code is fine on x86 because
-atomic ops are fully serialised on x86.
+> 
+> > 
+> > Or, maybe you can still use userfaultfd_wp_use_markers() here, then you can
+> > just WARN_ON_ONCE() on it, which looks even better?
+> > 
+> > [...]
+> > 
+> >>> Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
+> >>> address range to be scanned to me.  If it skips some unstable pmd without
+> >>> filling in anything it seems everything later will be shifted with
+> >>> PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
+> >>> before return.
+> >> I don't think this is a bug if this is how it was implemented in the first
+> >> place. In this task_mmu.c file, we can find several examples of the same
+> >> pattern that error isn't returned if pmd_trans_unstable() succeeds.
+> > 
+> > I don't see why multiple same usages mean it's correct.. maybe they're all
+> > buggy?
+> > 
+> > I can post a patch for this to collect opinions to see if I missed
+> > something. I'd suggest you figure out what's the right thing to do for the
+> > new interface and make it right from the start, no matter how it was
+> > implemented elsewhere.
+> Alright. At first sight, it seems I should return -EAGAIN here. But there
+> maybe a case where there are 3 THPs. I've cleared WP over the first THP and
+> put data in the user buffer. If I return -EAGAIN, the data in the user
+> buffer would be not used by the user correctly as negative value has been
+> returned. So the best way here would be to skip this second VMA and don't
+> abort the operation. Thus we'll not be giving any information about the
+> second THP as it was in transition.
+> 
+> I'll think about it again before sending next version.
 
-OK. we can't convince each other. I'll try to write another email when
-I have time,
+Here when reaching unstable==true I think it means a rare race happened,
+that a thp was _just_ installed.  You can try to read the comment over
+pmd_trans_unstable() and pmd_none_or_trans_huge_or_clear_bad() to
+understand what it wants to avoid.
 
-If this code is correct, then my understanding of memory barriers is even
-worse than I think. I wouldn't be surprised, but I'd like to understand
-what I have missed.
+Basically afaiu that's the ultimate guard if one wants to walk the pte
+pgtable (that fact can change again if Hugh's series will land, but that's
+another story).
 
-Oleg.
+As said, a patch will be posted (will have you copied) soon just for that,
+so people can also comment and may help you / us know which is the right
+way, probably not in a few hours (need to go very soon..), but shouldn't be
+too long.  I just need to double check more users out of task_mmu.c when
+we're at it.
+
+-- 
+Peter Xu
 
