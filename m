@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C31720B4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3382720B4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbjFBV5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S236342AbjFBV7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbjFBV5f (ORCPT
+        with ESMTP id S232032AbjFBV7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:57:35 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20604.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::604])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75201A5;
-        Fri,  2 Jun 2023 14:57:32 -0700 (PDT)
+        Fri, 2 Jun 2023 17:59:03 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625A51A5;
+        Fri,  2 Jun 2023 14:59:02 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k4dC45oQkmuOhYUj6MKKECgScXbanHWwYuwd/E0QwvGFtg4gwe1PiK5sRqF/nUEMGY7L+1VMmugnPw75WvR64/VfTYfz4eZgv8BRTX+M5DSgtQW3He6Zbp0UjWrhNOHmVg0A90Gb+YqaccIcRjUojMdAaZNswRYFHlbgmo4Wx8FHeTZjUCIE57biF0hF8SUMMefkzg+fQ8prf9+iXmmvpG4aE9oMlepBh4uXfNWq0+vPteNavoZcufStEkmlFCyBfEwDY+2zWRLBJS3PI2gkffBHwsbbiSu8RiMy7V01Ymou2sOFvY8ohYWs5I2jMEILbYodn9k1014hwl71nTJVJQ==
+ b=D2c1GIhYHxp9rCvNNxjQaOk6Z12jhXkC74elbzeNx4s2e/geM28uhaQTrqbmjSjpfCQpmHSOKxu9BTHdtlt5QDAgeobLOZEZXThHHrTMeUskHw3daLSHJfX8jivjTOdu0w7MalqRorPmCsUbTJgt0K0dlU84Wwl5b6Fd26H1HNKIG3PM/Xnhjv74rXW8X3wKqtkNt7pMQvd/YVppE+UqQpyUZRIJPhiSyer/oeTgqeR0oOs0Pfk6bwLQXXOxfeS1Z2dzaWpENdrj/pISLsrYB4mHPTH/PYC8/J0hyJ4Psvu4fecUUPfxXglEfdEcM2Z+gYhYVLh8qDlmmdj3TwW2HA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zvn7Z5wiC2g/vY2+ej4namyaIY6J8phwPfyEsrP+MVs=;
- b=IxmoSaxM3LBwhqkn+2Kjx2vM8ON/tB1Khv9Opb/0BB6ZLzX8wOgyhnHFV1ypsvSMPCDKrHIxv6VUgOwyVLXMZ2T3Fq4gh6TeVDveiw9VArsvsWN/jVYFfHcC+u7QPz2Mhb7TZqCTA9jFtfAUwSUshNwkV6pkYP4JhWLwDsHKVpMTe7KwaFof7ZWCiIyp1JrBfGDcEMTb2dLQE/cBRmzKi52Ja0lOlkZVrxlw3y7zro4redFHPEpAxC13SGBBWUKONBDOhoQq+hj+3EZ1/dQ8NGlBZ5tFXagSYV5yDbntPR5dZzJKovsKopQYY6SL73IMawnjXezN4084r/gFX9sSXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=11c7+tKWhd8/Fv/phZfjhUy6nyDLC+Q7uB90UecJnFs=;
+ b=OnfGeJuqwcOkCfykdGxyHV129DG13vRJb3r92vOP7HaBV5rGV16Kjy/6IfQ1yS4O2A0YTqx3/EtwZgzxn79Iu8Fa13JTp84V4NsUKywBg7QHI9jLbZU7YXVjnDO3xDMTNN2FZf7lBdSEBHIjZks350rDGIl8mcz/G73tH7PNMC4pVwdShWgp6em/pZIMzQuYY2LclQWOeC+uj5b63VObukAN48nRk/SCgmXsXBvNj7A+smurjEV5i0R5sngtlB2OPgwugwbt6vBRu+oN87Rf4cfh2oM3Yc1ZCBPx2HNDDa64Zi2KyJadISZz67p5XpLVIQ+2NljpyeHxvD5WxTejtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zvn7Z5wiC2g/vY2+ej4namyaIY6J8phwPfyEsrP+MVs=;
- b=FFamkhlCKHK93h8uLPNbzgu75zLZX25xQ8192nOjQbkZ8pis41BzMUZcH6M09+PEdZrTd79RfTL0NjPUXMdAqYrptwkACXDy7WdmkFglEitkk0JPjJsyFWaX/eS6Ugmvmdm+3zpHvy/BbUyo+aI6UWpI114CDRmeMlKr2IqXESY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH0PR12MB5105.namprd12.prod.outlook.com (2603:10b6:610:bc::22) with
+ bh=11c7+tKWhd8/Fv/phZfjhUy6nyDLC+Q7uB90UecJnFs=;
+ b=T2OjdZdSLLlFOKW6z2ZYZNlz9FEZIm2mYwsBcGUF9JpZwjeoSRSy/+Lx/xfA0INyc9J3GiTAM6CxRMg6rnVOjOaWeTbPvc+Y7i9ubLBycEAoCpwguRjIwQsqQhyitjj+pKphRKpX4ZzH9FXFNifGm1FMQ2veYtkgIAQC6KGSlIhlKCe9o1XjOj1FybtEXFbEDxrXwoK9I+xnkDRfMQWUvmfR1v9UwsM4GmBlTuuj60q95GoBOtv5N42tj2C7kr4wZzmwRIUSkFZU4oJkivmluOvRc4yb8dbhaG8f4U5vZTeYcCLZzvPYgOyGEVdiGvFvSljmURRpn9bIKgTDUzG69A==
+Received: from BN9PR03CA0636.namprd03.prod.outlook.com (2603:10b6:408:13b::11)
+ by MN2PR12MB4077.namprd12.prod.outlook.com (2603:10b6:208:1da::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Fri, 2 Jun
- 2023 21:57:28 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a65c:3aa0:b759:8527]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a65c:3aa0:b759:8527%5]) with mapi id 15.20.6433.022; Fri, 2 Jun 2023
- 21:57:28 +0000
-Message-ID: <fda371a2-da84-c764-c809-2a361418b4ef@amd.com>
-Date:   Fri, 2 Jun 2023 16:57:26 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] PCI: Call _REG when saving/restoring PCI state
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-References: <ZHpPOzT0nm+vddPq@bhelgaas>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <ZHpPOzT0nm+vddPq@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DM6PR06CA0076.namprd06.prod.outlook.com
- (2603:10b6:5:336::9) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Fri, 2 Jun
+ 2023 21:59:00 +0000
+Received: from BN8NAM11FT080.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13b:cafe::b3) by BN9PR03CA0636.outlook.office365.com
+ (2603:10b6:408:13b::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
+ Transport; Fri, 2 Jun 2023 21:59:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT080.mail.protection.outlook.com (10.13.176.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.28 via Frontend Transport; Fri, 2 Jun 2023 21:59:00 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
+ 14:58:51 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
+ 14:58:51 -0700
+Message-ID: <bd676097-e4d6-10bc-4ef7-47c939c8cb50@nvidia.com>
+Date:   Fri, 2 Jun 2023 14:58:50 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 09/12] selftests/mm: move psize(), pshift() into
+ vm_utils.c
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-10-jhubbard@nvidia.com>
+ <0a838454-90d0-9d85-fc2c-8c2571240fb5@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <0a838454-90d0-9d85-fc2c-8c2571240fb5@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH0PR12MB5105:EE_
-X-MS-Office365-Filtering-Correlation-Id: f7cd83b5-2945-4ca3-eb98-08db63b45b8e
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT080:EE_|MN2PR12MB4077:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4d730d5-82d8-4f6b-5640-08db63b49266
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0MJ+bW8IQl3Pk2LVc1Lt7syBm3Lnj9a+v0DUAklCHtep/fJTWauLD9n2YhdYpgFT+/GBwtiy1Pf2p5SGRr+kIIAXgbGEdV0zGfrmqJFkEV3BaBLtMphzXx0p31kDirsCjKp7be06ykihX3oqBthw3U39ZpIpkldIMT/GiEOAC6sAcB71H1JnQVr620ZPSXaaKomm1Ow1KYvoyyFVgmuBRa0RlMsm+CL8bWTtYiH9HKj7SyTvP9iJBWVSWPHZP0VZNh9EjGhpy8Gj6g5jyugLYJwgjsm81nMpUIIqmvX5dZtjUuF+z/Lr+y0g32NCfx2JRGtVQWHVPI7eq/oFiiyd5SkEV8BQP/EZiKVu3ssl46321KeayfrH72j2+lDKzOKBSpc8wrz8TjOBuqEeURu/EA76C1w1Sv0hVC/2tYHW62xfyVc857ckpvPr3udDk8sei2TfFUK11QVWmAuq4zjfWhJSjye45xY1sc1qDtZSl6gMkmmlDAx5/Vac2/frwnPI/xt0ox6ws4WweFK1pFSafpagld5m/aha+fU2mYvKC5PZd5WPLQEJVK1kQt1jZGh7CfBriXv4iPrdT8PtWdYvQw5fRYX2VjSOAmbRS6WuCJKLMPuxfliSu8G69IHGNOMlcjnXAfRlJas2dGApDYtzqq4yj2ZOdKW0BdQepSwhC+3xiLjlpazslTybggANACm8BpyJTVnIJSGulhv+by0CJw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199021)(186003)(5660300002)(2616005)(2906002)(478600001)(316002)(4326008)(31696002)(6916009)(6486002)(31686004)(86362001)(41300700001)(966005)(38100700002)(54906003)(8936002)(8676002)(53546011)(6506007)(6512007)(36756003)(66946007)(66476007)(66556008)(83380400001)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXpBOERqWlZYVzdma3dOK1RJSDE0Z3FlbUh5R0dVVEQzRkxMd1VjVDZyM0lv?=
- =?utf-8?B?WEZBNExhY2tPU2Q3UHFaMkw1L1FpNzBETVdjV29jbDZlVkVSMWUxRjZqcVZy?=
- =?utf-8?B?eEJ1REZaVmV2QzV5blh5QWZYd3pGRi9SVm8raVdSS0hTMThHUDk4TGZyQ2Zz?=
- =?utf-8?B?WVVFM1Z2RkQ4bXB5NHdtd2hoN0hWOStjb1NEZWMwQXVrbng3enlWK1JzUFlj?=
- =?utf-8?B?UVlxakx4NExSWTlqWFJLaE1iUVpMVG5oWFBUa0xib1diclNXbFdjUFV6VEE4?=
- =?utf-8?B?QnFaMDhiMFYwd3EwdnBFNDhyNnZ4RDhGOVVUZC9LdFdkVFYyRmpIbnNiTWdq?=
- =?utf-8?B?ZzNRTkxQWFhRSlJNcXJ6dy8vNGdoSmI5N3VwTG1rcjVEQ3hTZDlXc01lZzlo?=
- =?utf-8?B?a1IyaUgxT0Jod0NLVTY0YjV5blI0bytRRXg1d1BWajk4STZENlFsTWRiS3VB?=
- =?utf-8?B?Nk0yd1dtd2ZSejhzWmtqd1JWODdMTWoyVEFFZTBiRjFQZndQMENRbTltQmd0?=
- =?utf-8?B?anBGc1ovN3Rwb1V5aXZoeklGc0l3UWU5T3hsREQ1dHFKakgzY3JzelhaK3R0?=
- =?utf-8?B?cHM5cWhCbEhkY1JBaUNid1F1N3Z0bEdYbGV3aWIySldzLzVSZnI2cS9sSEpK?=
- =?utf-8?B?b1dWczBqVjN3UVNhYkgvZHpYL3ZuNWU0azhqTzl1empZZ3g1OXAxdjhKOFcw?=
- =?utf-8?B?UHJXZjlwdm1mUThuQXhHQ3Bic2RmMENrTmtqRC9LbUZNKzZOL2dqMGhjMTFj?=
- =?utf-8?B?OUliTE9QamJMS0M3b3B3REdNdXBER2lHTEwyS3FPS21VNmJ0Z1BDek9mYUl1?=
- =?utf-8?B?RkRrZjlBWW9rK2NxcVZTQ252MTlBZXBkaGtHZU1lUHFiWVdxK0E4emhEbU0x?=
- =?utf-8?B?Uno2WVl6c043NHlPVVJ4Tmg4M2FWVlNyZ2ltdlArenRVeGM3MHZYQkZzZDdr?=
- =?utf-8?B?a3JLOEtXU3lPQ3E5aXpZTGo0eDRHS2pGeWpZK0lSb0pESTV5dEpvbTJiR2kw?=
- =?utf-8?B?cXcvaVRhWE9uYzlQVGlzRlliR3FVd01mVU1Zb3RIVUNWeG9NWFlua3VTZks3?=
- =?utf-8?B?aGJ2SWZJbG9DczB1MHJBYnVBNVhrRHl0S2ZoMW80QlR2bGF3WCs3Y0FvSnoz?=
- =?utf-8?B?TzRHSWpXcUJKcFdJc09lZkFGVVJyOVlVVXczWEZ6WCtxZGgzVkFCbFQzNVRv?=
- =?utf-8?B?NDAwbXNkKytYSW5yY3Fab1lleEduZVpoN1hjM3lieU05RktFRWdQVURoMmll?=
- =?utf-8?B?dk1aMGU4dW43YzJ2OXA0Q28wVmNoU2lmaVpEbVEzNi9PdnJnODJmYmRSWVI2?=
- =?utf-8?B?aVpFOVZCWjMzQmQxTURNa3R3T0JqYXZocGZmUDZCSkR0Umtsb1FFUXpmRW1s?=
- =?utf-8?B?ZFptaWtaM0paTXJ6SVFCMjRoaExrSERqWXRUYmlhSzlWcXlyU2t1d3k2K2No?=
- =?utf-8?B?U25jQUdHb0pCVnRHSFhGWUppelZYUGYyUVIvSExnRlpiYkNyVUcwOGVLcGMr?=
- =?utf-8?B?Sk01SkRDN0VFVXZpZVcvTXhZNWdjSG1VTFM3dXF1d3ZoU25iU3Jiei81TElu?=
- =?utf-8?B?UlNObWhJSTc0Yk5SeUNYZjl2UWdBekpHaVpGelFCZ1NCWEhNd3cxbStSNWlt?=
- =?utf-8?B?M2p4Q1AzalU5eXFpTllpS2l5SEwvcXRMMWkzaEJSZ2N0cjhEdGhOZlE4YWRy?=
- =?utf-8?B?c0RzQ25GQ0IrNmQ2ZWJ6cW45ZGF0Q3BVVXVzSzdMQjV2VXY3S1pJd2w4YnFY?=
- =?utf-8?B?Q0hCbDM2UVdQWFJmazVoRW1iTE9JWiswc1V4aXhxUS92VTdzOWxuQ2phMkh4?=
- =?utf-8?B?REY2UmhxcGFqUGloaWNhY3FqV0N5Tm5PMU5FN1p3QXZEeUJqcGJHVTBQRVJI?=
- =?utf-8?B?L3E4ckFmWWprK0Q2aVd3Zy8yNGlIanFKM0xWK001djZ6SUNzSnVySENqRHBR?=
- =?utf-8?B?Q2xSQkJsWVVVRDdNaWFTYmhwOUFIQktNYXhVczZwNzRZYmMrWXNpK0RJajAx?=
- =?utf-8?B?SXZ1UDh6enQyN2czdTJYYUtXTVNCZ25PeldDak1PeVU2dzBBNS9BZXhPbXAx?=
- =?utf-8?B?OG9rY096YTEyNEpDdDJCNXlLajBLMkIreUZyZU8xNkp2MzN1ZC9wbktrT2RC?=
- =?utf-8?B?a0JaR1FEZmw4T2RtUUNjYXI4YTFxTU8yL3R6RnFLWnBWQ2Y2Z3dyMHlvRWZI?=
- =?utf-8?Q?7FA/vtfLl39rPKG1DaaPsZsZX58sSlwhpkjhTrdMbLe8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7cd83b5-2945-4ca3-eb98-08db63b45b8e
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 21:57:28.6418
+X-Microsoft-Antispam-Message-Info: oHZPnUWHtrdtQJ6dZS3spGLXnhTY8bShW4wR1S9o1rk5U4Mdy7wqMo5cM00KC6ILH7FRtGzX2BrVtcX4N/IlEr64Kn1HpaaAWob59ebKxsRuJleD0+IFlFDtRF0qMA1wi3A54I1UKUlAhfnH1dlpXrGerZmQUQPRvV2IdpwSeSRdk1dff/JZSjzkS/zAawLIZrHnBWrZwBJ4oDVtZFdfnzT8WZTnWDwZxAS7G3JM8/ysbebqhkvpm1+9mKT0xpU6e5+avor8VCnPkTrP170y9dtUQ5xU/uuQrknbOj4FD8sRzbUlCGGPUCKLN/2NUwROx7snMvFRZnnxJefXyj9ApC+5sNQJQq9HSzoXpUP1bIxnUZR5J0QnpXZfy1+IMTBimrJ5PgyqIuwJkQuccUdAVbt1XV1tKVYAypVHp20n7Mkh/Onf0rHEnUs46MePlZGmlMMJmDfoPjwtpIVT2PcSqEPYRL1YR9zbwlz5Zp/g7js5WUr2DfCed0EwmNvt4yF5vIZfaIia+qivtl65Gip25H1sOSvgzFr3iOvq2EhPNcHIeCQ5XGYdhlTe1PHgNdGE+HxNgVQAeV7W0LemqoHcd85/KWlbp6R/42j1eDDIG6Q3eWhXHqrAXzvgQhfAiBa5BTyI+vqwYYmjJoHG4A/avTp7zeoVSHjgryO4JevozuC31P+2KOzOEk6AJ+EZjlU8PwZzfI3JF82nZpPP4GYzbHopEXdpsHxMrSQ1wMYrpsg5Fsc6yNqrkxuGaQeXwaeN1VKG9l574UWIxLiejJn01w==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(376002)(346002)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(53546011)(26005)(186003)(16526019)(316002)(36860700001)(47076005)(83380400001)(2616005)(41300700001)(426003)(336012)(2906002)(8676002)(5660300002)(8936002)(70586007)(16576012)(70206006)(110136005)(40480700001)(86362001)(36756003)(478600001)(54906003)(31696002)(4326008)(82740400003)(356005)(7636003)(82310400005)(31686004)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 21:59:00.2469
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BssF+9f6b7RPidOfFUswQcpnp899XRRVBoVXrIqpMyJA7luY/tjn4KkUt/EWornqZ5zkBqoalMNQgN0pH4EONQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5105
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4d730d5-82d8-4f6b-5640-08db63b49266
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT080.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4077
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,147 +113,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/2/23 03:19, David Hildenbrand wrote:
+> On 02.06.23 03:33, John Hubbard wrote:
+>> This is in preparation for linking test programs with both vm_utils.c
+>> and uffd-common.c. The static inline routines would prevent that, and
+>> there is no particular need for inlining here, so turn these into normal
+>> functions that are more flexible to build and link.
+> 
+> I'm probably missing something important, but isn't it the most common thing to use "static inline" across multiple objects that we then link?
 
-On 6/2/2023 3:21 PM, Bjorn Helgaas wrote:
-> [+cc Rafael, Len, linux-acpi]
->
-> Hi Mario,
->
-> On Thu, Jun 01, 2023 at 10:11:22PM -0500, Mario Limonciello wrote:
->> ASMedia PCIe GPIO controllers connected to AMD SOC fail functional tests
->> after returning from s2idle. This is because the BIOS checks whether the
->> OSPM has called the _REG method to determine whether it can interact with
->> the OperationRegion assigned to the device.
-> "s2idle" is a Linux term; I'd prefer something that we can relate to
-> the ACPI spec.
-It's important for the symptoms of this issue though, this
-problem doesn't trigger "just" by moving D-states.
+Yes, absolutely. I've just had my confidence in things shaken by some
+of the quirks in the selftests framework, but you're right.
 
-It happens as a result of system suspend.
+> 
+> Hope you can enlighten me what the real issue here is.
+> 
 
->
-> Maybe a pointer to the specific function in the driver that has a
-> problem?  Based on the patch, I assume the driver uses some control
-> method that looks at PCI config space?
+At this point it looks like a header file inclusion mess. As usual,
+including header files from other header files leads to problems,
+and in this case I'm now seeing vm_utils.h included from uffd-common.h,
+causing multiple definitions of these static inline functions.
 
-The issue isn't in anything Linux code "does"; it's in the "lack"
-of Linux code doing what it needs to IE using _REG.
+If I try to undo that it generates a boatload of new errors, so I'm
+thinking to just change the commit message to explain that I'm moving
+this to a normal function in order to avoid the above situation.
 
-At least for this issue _REG is treated like a lock mechanism.
-In the spec it says specifically:
-
-"When an operation region handler is unavailable, AML cannot access
-data fields in that region".
-
-That is it's to ensure that OSPM and AML don't both simultaneously
-access the same region.
-
-What happens is that AML normally wants to access this region during
-suspend, but without the sequence of calling _REG it can't.
-
->
->> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
->> state of PCI devices.
-> Please include the spec citation: ACPI r6.5, sec 6.5.4.  The URL has
-> changed in the past and may change in the future, but the name/section
-> number will not.
-Sure.
->
->> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/pci/pci.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
->> index e38c2f6eebd4..071ecba548b0 100644
->> --- a/drivers/pci/pci.c
->> +++ b/drivers/pci/pci.c
->> @@ -1068,6 +1068,12 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
->>   	return acpi_pci_bridge_d3(dev);
->>   }
->>   
->> +static inline int platform_toggle_reg(struct pci_dev *dev, int c)
->> +{
->> +	return acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
->> +				 ACPI_ADR_SPACE_PCI_CONFIG, c);
->> +}
-> You never check the return value, so why return it?
-
-_REG isn't mandatory for any of these uses, and I wanted to make
-sure that if it does end up being mandatory in a future use that
-the return code wasn't thrown away.  If you think it's better to
-just throw it away now, I have no qualms making it a void instead.
-
->
-> The function actually doesn't *toggle*; it connects or disconnects
-> based on "c".
-Can you suggest a better function name?
->
-> This looks like it only builds when CONFIG_ACPI=y?
-
-The prototype for acpi_evaluate_reg isn't guarded by CONFIG_ACPI
-so I figured it worked both ways.
-
-But looking again I don't see a dummy implementation version for
-the lack of CONFIG_ACPI, so I'll double check it.
-
->
->>   /**
->>    * pci_update_current_state - Read power state of given device and cache it
->>    * @dev: PCI device to handle.
->> @@ -1645,6 +1651,9 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
->>   int pci_save_state(struct pci_dev *dev)
->>   {
->>   	int i;
->> +
->> +	platform_toggle_reg(dev, ACPI_REG_DISCONNECT);
-> I would expect these to be in the PM code near the power state
-> transitions, not in the state save/restore code.  These functions
-> *are* used during suspend/resume, but are used in other places as
-> well, where we probably don't want _REG executed.
->
-> Cc'd Rafael and PM folks, who can give much better feedback.
-My knee jerk reaction when we found the root cause for this issue
-was to put the code right around the D-state transitions, but I
-decided against this.
-
-I put it in save/restore intentionally because
-like I mentioned above it's treated like a locking mechanism between
-OSPM and AML and it's not functionally tied to a D-state transition.
-
-When the state is saved it's like Linux says
-"I'm done using this region, go ahead and touch it firmware".
-When it's restored it's like Linux says
-"Don't use that region, I'm claiming it for now".
-
-Think about that other patch I wrote recently that controls D3
-availability [1].  If it was only run in the D-state transitions and
-the root port stays in D0 but has a _REG method it would never get
-called.
-
->>   	/* XXX: 100% dword access ok here? */
->>   	for (i = 0; i < 16; i++) {
->>   		pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
->> @@ -1790,6 +1799,8 @@ void pci_restore_state(struct pci_dev *dev)
->>   	pci_enable_acs(dev);
->>   	pci_restore_iov_state(dev);
->>   
->> +	platform_toggle_reg(dev, ACPI_REG_CONNECT);
->> +
->>   	dev->state_saved = false;
->>   }
->>   EXPORT_SYMBOL(pci_restore_state);
->> @@ -3203,6 +3214,7 @@ void pci_pm_init(struct pci_dev *dev)
->>   	pci_read_config_word(dev, PCI_STATUS, &status);
->>   	if (status & PCI_STATUS_IMM_READY)
->>   		dev->imm_ready = 1;
->> +	platform_toggle_reg(dev, ACPI_REG_CONNECT);
->>   }
->>   
->>   static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
->> -- 
->> 2.34.1
-[1] 
-https://lore.kernel.org/linux-pci/20230530163947.230418-2-mario.limonciello@amd.com/ 
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
