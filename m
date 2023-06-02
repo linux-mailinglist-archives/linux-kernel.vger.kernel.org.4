@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155C8720267
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A2672026C
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 14:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbjFBMsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 08:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S235079AbjFBMxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 08:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbjFBMse (ORCPT
+        with ESMTP id S233790AbjFBMxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 08:48:34 -0400
-Received: from outbound-smtp02.blacknight.com (outbound-smtp02.blacknight.com [81.17.249.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C0F1AD
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 05:48:29 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp02.blacknight.com (Postfix) with ESMTPS id 35BC9BABE0
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 13:48:28 +0100 (IST)
-Received: (qmail 9395 invoked from network); 2 Jun 2023 12:48:28 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Jun 2023 12:48:27 -0000
-Date:   Fri, 2 Jun 2023 13:48:25 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] mm: compaction: Update pageblock skip when first
- migration candidate is not at the start
-Message-ID: <20230602124825.24a775kwwuf4rs6v@techsingularity.net>
-References: <20230515113344.6869-1-mgorman@techsingularity.net>
- <20230515113344.6869-4-mgorman@techsingularity.net>
- <e87a9797-c8ce-1959-884a-7f791adeaafc@suse.cz>
- <20230529103342.esek6r5fvmft2nky@techsingularity.net>
- <6695b7e5-9fa5-fae8-8a66-cc5985b0baaf@suse.cz>
- <20230602111622.swtxhn6lu2qwgrwq@techsingularity.net>
- <152e0730-0ddc-a1f8-7122-275d51741a1d@suse.cz>
+        Fri, 2 Jun 2023 08:53:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680F1180;
+        Fri,  2 Jun 2023 05:53:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0370C64EC2;
+        Fri,  2 Jun 2023 12:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F407C433D2;
+        Fri,  2 Jun 2023 12:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685710401;
+        bh=ZV3TXb4k3/oksLoC4wMufxc1DqE6EYIOcySR9DR8FeE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oR8aJMD0ZbgcO8098hioibDz0XaQQvUdvPPf0+iatNwkwlmlnMHQyKNi82bTde7NZ
+         VkFAE4/2M90yaw8yKbtbXI7NbEuJsFWMRFQmHvnWUFkgc3TUh34YaJt7rUqyr67p+1
+         8oYUaEoDY7lLG8N2ToKrQrv+yyENjindJF16fazmqsHxuo44FfMiziKzRpXdH9bQ1u
+         nwGV2Vo6YlvJPxhNKonKbAr5GPJdmWm152t1O7A9vaB2oF42xsrxmCUDG+RLsZLJii
+         8SRw5yUXnvwc0+NhTti8FyJ5BRUCQeHrYF60o/983LmO9v8oZasnXRUGyykqplZS1C
+         TvmAnl5aSRipw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q54Hb-00050s-36; Fri, 02 Jun 2023 14:53:31 +0200
+Date:   Fri, 2 Jun 2023 14:53:31 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Corey Minyard <minyard@acm.org>
+Cc:     Craig Shelley <craig@microtron.org.uk>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Break doesn't work on a CP2105
+Message-ID: <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+References: <ZEmDs0ASdnEAnpsL@minyard.net>
+ <ZGtZKCvo71woGf9T@hovoldconsulting.com>
+ <ZGtlnWGSc31Wdhxa@mail.minyard.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <152e0730-0ddc-a1f8-7122-275d51741a1d@suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZGtlnWGSc31Wdhxa@mail.minyard.net>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:19:00PM +0200, Vlastimil Babka wrote:
-> On 6/2/23 13:16, Mel Gorman wrote:
-> > On Mon, May 29, 2023 at 02:43:48PM +0200, Vlastimil Babka wrote:
-> >> On 5/29/23 12:33, Mel Gorman wrote:
-> >> > On Thu, May 25, 2023 at 03:37:43PM +0200, Vlastimil Babka wrote:
-> >> >> On 5/15/23 13:33, Mel Gorman wrote:
-> >> >> > isolate_migratepages_block should mark a pageblock as skip if scanning
-> >> >> > started on an aligned pageblock boundary but it only updates the skip
-> >> >> > flag if the first migration candidate is also aligned. Tracing during
-> >> >> > a compaction stress load (mmtests: workload-usemem-stress-numa-compact)
-> >> >> > that many pageblocks are not marked skip causing excessive scanning of
-> >> >> > blocks that had been recently checked. Update pageblock skip based on
-> >> >> > "valid_page" which is set if scanning started on a pageblock boundary.
-> >> >> > 
-> >> >> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> >> >> 
-> >> >> I wonder if this has an unintended side-effect that if we resume
-> >> >> isolate_migratepages_block() of a partially compacted pageblock to finish
-> >> >> it, test_and_set_skip() will now tell us to abort, because we already set
-> >> >> the skip bit in the previous call. This would include the
-> >> >> cc->finish_pageblock rescan cases.
-> >> >> 
-> >> >> So unless I miss something that already prevents that, I agree we should not
-> >> >> tie setting the skip bit to pageblock_aligned(pfn), but maybe if we are not
-> >> >> pageblock aligned, we should ignore the already-set skip bit, as it was most
-> >> >> likely being set by us in the previous iteration and should not prevent us
-> >> >> from finishing the pageblock?
-> >> >> 
-> >> > 
-> >> > Hmm, I think you're right. While it should not hit the original bug,
-> >> > migration candidates are missed until the next compaction scan which
-> >> > could be tricky to detect. Something like this as a separate patch?
-> >> > Build tested only but the intent is for an unaligned start to set the skip
-> >> > bet if already unset but otherwise complete the scan. Like earlier fixes,
-> >> > this might overscan some pageblocks in a given context but we are probably
-> >> > hitting the limits on how compaction can run efficiently in the current
-> >> > scheme without causing other side-effects :(
-> >> 
-> >> Yeah that should work! I think it should be even folded to 3/4 but if you
-> >> want separate, fine too.
-> >> 
+On Mon, May 22, 2023 at 07:52:45AM -0500, Corey Minyard wrote:
+> On Mon, May 22, 2023 at 01:59:36PM +0200, Johan Hovold wrote:
+
+> > I just verified that break works on the first port of my cp2105 but not
+> > on the second one (I seem to receive the last characters sent instead).
 > > 
-> > I was not happy with the test results so limited the scope of the patch
-> > which performed much better both in terms of absolute performance and
-> > compaction activity.
-> 
-> That's surprising. Does that mean that if we isolate COMPACT_CLUSTER_MAX
-> pages, migrate them without failing, but it's not enough to succeed (i.e.
-> there are more pages we need to migrate to free up a whole pageblock), it's
-> better to give up on the rest of the pageblock rather than continue?
-
-I don't have precise enough data to answer that with certainty but probably
-yes, at least in terms of scan activity. The first version had spikes of
-pages scanned for migration that are not always reproducible and not on
-all machines.
-
-> As
-> that's AFAIU the scenario where cc->finish_pageblock is false when we
-> revisit an unfinished pageblock.
-> 
-> > Are you still ok with this version?
-> 
-> It's better than previously in that cc->finish_pageblock == true case is not
-> sabotaged anymore. But the result as described above seems to be a weird
-> non-intuitive and non-obvious heuristic. How did the test differences look like?
-> 
-
-5 machines were tested in all (different Intel and AMD generations),
-2 showed unexpected spikes in scan activity. 1 showed high migration
-scan counts for workloads workload-thpchallenge-kernel-build-xfs
-and workload-usemem-stress-numa-compact. They are both basically
-compaction stressors with the first one using a kernel build
-in the background to generate noise. For the second machine, only
-workload-usemem-stress-numa-compact was affected. In all other test cases
-and machines, the patches were equivalent in terms of behaviour but the
-extreme counter-examples led be to conclude the fix should be as constrained
-as possible unless there is a good reason to do otherwise.
-
-> > Vlastimil Babka pointed out the following problem with
-> > mm-compaction-update-pageblock-skip-when-first-migration-candidate-is-not-at-the-start.patch
+> > Apparently this is expected as the datasheet (AN571) says the following
+> > about the SET_BREAK command:
 > > 
-> > 	I wonder if this has an unintended side-effect that if we resume
-> > 	isolate_migratepages_block() of a partially compacted pageblock
-> > 	to finish it, test_and_set_skip() will now tell us to abort,
-> > 	because we already set the skip bit in the previous call. This
-> > 	would include the cc->finish_pageblock rescan cases.
+> > 	This command is not supported on the second CP2105 interface.
 > > 
-> > He is correct and a partial rescan as implemented in "mm, compaction:
-> > finish pageblocks on complete migration failure" would abort
-> > prematurely.
-> > 
-> > Test and set the skip bit when acquiring "exclusive access" to a pageblock
-> > for migration but only abort if the calling context is rescanning to
-> > finish a pageblock.
+> > Which port are you seeing this behaviour with?
 > 
-> Should it say NOT rescanning to finish a pageblock?
-> 
+> I'm guessing this is it.  From the schematic I think this is the
+> TXD_ECI pin, though I'm not 100% sure.  I'd have to dig through the
+> device tree and SOC manual to be sure which port is which.
 
-Yep, it should. The sentence was a last minute update before pushing
-send :(
+It should be the second SCI interface which do not support break.
 
--- 
-Mel Gorman
-SUSE Labs
+> Would it be possible to return an error in this situation instead of it
+> silently not working?  Just to avoid others having the same issue.
+
+I just posted a patch series which does that. The USB serial drivers do
+not currently return any errors related to break signalling even though
+this has been possible since 2008.
+
+The same mechanism can be used to report that break signalling is not
+supported by a device or driver, but the USB serial drivers would be the
+first tty drivers that actually do this. If it turns out to cause any
+trouble we can still use this series to avoid the unnecessary wait.
+
+Care to give the series a try?
+
+	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
+
+Johan
