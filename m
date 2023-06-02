@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF9571FC07
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A44D71FC0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234719AbjFBI1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S234725AbjFBI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234635AbjFBI1F (ORCPT
+        with ESMTP id S234303AbjFBI23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:27:05 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A56C10DB
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:26:24 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af2d092d7aso25604491fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:26:24 -0700 (PDT)
+        Fri, 2 Jun 2023 04:28:29 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0697910FE
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:27:42 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso2619704a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 01:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685694382; x=1688286382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SH+XgwSwmVykCt6k705IeR4vpGlDvItlRo4YBIrE2zM=;
-        b=aqiWVm4c8Hn8cSRfsEJ/hmI3VoIAlmpI9kl1DqSIqgEaURRaI7eKgth0koicQfVIfe
-         bCG9Lwed6N8mrzvAYua8KP2qCKJjzh164f0siWfvkIYThmwyY0BCLWiqqoq39w88sgua
-         VgPuHyr6sRb5mH03MbTPb4NFu2bPSfIPF4KLIkqCnNBfZRpNcbJUxkoRCuDIWl69UukN
-         QCk29QYHTBnJDtsxX/4Fp1eFcrLQJz5FYcSWvyO3VHWzErfyb9dro5NyUHyJyYj8u/ly
-         CYXn2i6mVLKymc8LiCFVhNufS4gmv927LZgCF0HxxJETkeEi31GEJGQXCAKOiZAQf1ab
-         /dcw==
+        d=linaro.org; s=google; t=1685694436; x=1688286436;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rqiBV30sd6pVAOr/JC2i8NEvFQRhidh6InexBKyx7mo=;
+        b=rIl0eivXD4yxDCT/YgMEsx+zB95XosuikN/Qy10i57lfY0bUaZOBftlmQqO+cFMD0D
+         HZAAhd0VW/ieFo5zYGo6vv2v0zUDlZ52siklLw4uV81kybENAfWJX5R3rwrvf1buexm1
+         yEMYUIUSzh/qNzwQBiwrUVRoKsvabnkfIAmeTWvOidfzk0NWYH9cT8KdwNTwXDRoHenP
+         EInC+vD5ibY9evurg3TMnF2a3tcxmfxxjvXFWOSqpjcgLZIxu/CI4Luehlm1nqH4vHwD
+         X0FqymZc2B+ehA1Y5i2CI/W5+vwNvIxBm+FpLQN812zDX0RThsO/Sk+wpIPeOHKFX7Xs
+         uPSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685694382; x=1688286382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SH+XgwSwmVykCt6k705IeR4vpGlDvItlRo4YBIrE2zM=;
-        b=M7UX9/AIsrxkbYIsOuwUEwVYaQIlx+rdnX0is2jTmx5u+nh0d9OuOSSSbLKoGGC21B
-         Q93eWpveMCVtny9Sg6BpXk1SySwFu21fDvrdFJoPAZQnLUmDmocH0TosJQoRRHd4PCZy
-         MSsTnbelvle9qZO2hwQq+Kf1WUwICjdCz+W1A8gZUtGgpMys5XMI5zK3KOA323a6WJPv
-         nGu7ABojcQ2LPx1ewxRZbQzQg68gyCeRReER5d8yGx2oY2BlzoQjE76htwt649TTxRej
-         MV4Ye2jXD/T/8DCX2/ZM4F7M0Lm1dqKGgYlZuWj2CV0YprIzhmPFW7VzaMvk1RwWdEFt
-         85IA==
-X-Gm-Message-State: AC+VfDxiOYLNEQN9WpGbk2LhNLmVyDkH7K9JvcY8nhF0NJfrQ3+vmpX6
-        DgUArdjExm3qEgxGqXt8l1khEWenCRNKqTL6NakADw==
-X-Google-Smtp-Source: ACHHUZ4iDMKF9FrTWDJm5SWHKTXyozoTseWA3wZDneLvRJLbLpNAwsdhUZz9tXQvVuNWeiqCEhZWofU8BPErRbMrnZM=
-X-Received: by 2002:a2e:9a8e:0:b0:2b1:b040:b5ff with SMTP id
- p14-20020a2e9a8e000000b002b1b040b5ffmr465605lji.4.1685694382379; Fri, 02 Jun
- 2023 01:26:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685694436; x=1688286436;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rqiBV30sd6pVAOr/JC2i8NEvFQRhidh6InexBKyx7mo=;
+        b=aShwtVzf8ekDii+DLNXBX3ckW89vmJTmP6uEPXjtHnYGaEzYnujb482DkDysvOUTA7
+         Pz+l3OUCVrz+zEURGeK/6ttucK68QjQBIp26LHsE0TDOL+a5iVU4RU15O81RkyHxKcNF
+         LSlKFkfRa7rSQoyYAh662au9AMLLQgyyVZpb8n6wxbJtkVsfINkan7uJW4aN77ZpmL8t
+         S+4Hx5/Foek6YFNOv8Osa/glrThPNNJuMilJaBhcA8/vRULb33zboOqnXi5rz/Glrj3h
+         p9oiezeyMaDjm4/q7h7xtnAAcn3n1F/TTELIscnPMhISDbRIQbDtH+JjYUhObEyRIVVo
+         LGag==
+X-Gm-Message-State: AC+VfDzwDds3DIvCYFM6FU4eXjCCPB8tY2Xarc8mA2v4/apghSrAwgmh
+        vUsxYrIxz6o1PXRcVTzsBaR4/A==
+X-Google-Smtp-Source: ACHHUZ7QkKl0T36/hmXWtoKKBK/0HSPptyUZfw8AKnhu87xXvJCANWT/QJH7XR+fLH3RF42PD2as2Q==
+X-Received: by 2002:a05:6402:2cd:b0:506:976e:5242 with SMTP id b13-20020a05640202cd00b00506976e5242mr1511546edx.25.1685694436433;
+        Fri, 02 Jun 2023 01:27:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id x26-20020aa7cd9a000000b005149461b1e0sm414404edv.25.2023.06.02.01.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 01:27:15 -0700 (PDT)
+Message-ID: <1d6f70ab-e971-4a83-a9b3-e049b38c29a0@linaro.org>
+Date:   Fri, 2 Jun 2023 10:27:12 +0200
 MIME-Version: 1.0
-References: <20220405093759.1126835-1-alex.bennee@linaro.org>
- <20230531191007.13460-1-shyamsaini@linux.microsoft.com> <SN7PR11MB6850DA4A185E3429B62531CD84499@SN7PR11MB6850.namprd11.prod.outlook.com>
- <CAC_iWjKAdimEH0SsC_z9QuFS4sGLp2BVzx03s+RKvcLXY25kuQ@mail.gmail.com> <CAFA6WYPKeJYTzvnZkoL_dw6uXSkhAh6uxoEOWHYU7oLNRDRWaA@mail.gmail.com>
-In-Reply-To: <CAFA6WYPKeJYTzvnZkoL_dw6uXSkhAh6uxoEOWHYU7oLNRDRWaA@mail.gmail.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Fri, 2 Jun 2023 11:25:46 +0300
-Message-ID: <CAC_iWjLOhUvp5ggCCkHN5MRNfB_h6FZ2Z14yrtR3aqGn0Ovxig@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     "Zhu, Bing" <bing.zhu@intel.com>,
-        Shyam Saini <shyamsaini@linux.microsoft.com>,
-        "alex.bennee@linaro.org" <alex.bennee@linaro.org>,
-        "code@tyhicks.com" <code@tyhicks.com>,
-        "Matti.Moell@opensynergy.com" <Matti.Moell@opensynergy.com>,
-        "arnd@linaro.org" <arnd@linaro.org>,
-        "hmo@opensynergy.com" <hmo@opensynergy.com>,
-        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "maxim.uvarov@linaro.org" <maxim.uvarov@linaro.org>,
-        "ruchika.gupta@linaro.org" <ruchika.gupta@linaro.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "Huang, Yang" <yang.huang@intel.com>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v1 1/7] dt-bindings: mmc: fsl-imx-esdhc: Add imx6ul
+ support
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     kernel@pengutronix.de, Peng Fan <peng.fan@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Anson Huang <Anson.Huang@nxp.com>, Marek Vasut <marex@denx.de>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+References: <20230601101451.357662-1-o.rempel@pengutronix.de>
+ <20230601101451.357662-2-o.rempel@pengutronix.de>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601101451.357662-2-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,93 +100,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 at 08:49, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Thu, 1 Jun 2023 at 11:02, Ilias Apalodimas
-> <ilias.apalodimas@linaro.org> wrote:
-> >
-> > Hi Bing
-> >
-> > On Thu, 1 Jun 2023 at 04:03, Zhu, Bing <bing.zhu@intel.com> wrote:
-> > >
-> > > As an alternative, Is it possible to change ftpm design not to depend=
- on RPMB access at the earlier/boot stage? Because to my understanding, typ=
-ically PCRs don't require persistent/NV storage (for example, before RPMB o=
-r tee-supplicant is ready, use TEE memory instead as temporary storage)
-> >
-> > I am not entirely sure this will solve our problem here.  You are
-> > right that we shouldn't depend on the supplicant to extend PCRs. But
-> > what happens if an object is sealed against certain PCR values?  We
-> > are back to the same problem
->
-> +1
->
-> Temporary storage may be a stop gap solution for some use-cases but
-> having a fast path access to RPMB via kernel should be our final goal.
-> I would suggest we start small with the MMC subsystem to expose RPMB
-> access APIs for OP-TEE driver rather than a complete RPMB subsystem.
+On 01/06/2023 12:14, Oleksij Rempel wrote:
+> Add the 'fsl,imx6ul-usdhc' value to the compatible properties list in
+> the fsl-imx-esdhc.yaml file. This is required to match the compatible
+> strings present in the 'mmc@2190000' node of 'imx6ul-prti6g.dtb'. This
+> commit addresses the following dtbs_check warning:
+>   imx6ul-prti6g.dtb: mmc@2190000: compatible: 'oneOf' conditional failed,
+>     one must be fixed: ['fsl,imx6ul-usdhc', 'fsl,imx6sx-usdhc'] is too long
+>     'fsl,imx6ul-usdhc' is not one of ['fsl,imx25-esdhc', 'fsl,imx35-esdhc',
+>     'fsl,imx51-esdhc', 'fsl,imx53-esdhc', 'fsl,imx6q-usdhc',
+>     'fsl,imx6sl-usdhc', 'fsl,imx6sx-usdhc', 'fsl,imx7d-usdhc',
+>     'fsl,imx7ulp-usdhc', 'fsl,imx8mm-usdhc', 'fsl,imxrt1050-usdhc',
+>     'nxp,s32g2-usdhc']
+>   From schema: Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
 
-I discussed with the OP-TEE maintainers about adding parts of the
-supplicant in the kernel.  The supplicant 'just' sends an ioctl to
-store/read stuff anyway.  So it would make sense to have a closer and
-see if that looks reasonable.
-Thanks
+Except what Conor wrote, please don't wrap that much the error log - it
+is unreadable. Trim it, remove unneeded parts and keep some decent
+one/two lines even if it exceeds the commit msg. This applies to other
+patches as well.
 
-/Ilias
+Best regards,
+Krzysztof
 
->
-> -Sumit
->
-> >
-> > Thanks
-> > /Ilias
-> > >
-> > > Bing
-> > >
-> > > IPAS Security Brown Belt (https://www.credly.com/badges/69ea809f-3a96=
--4bc7-bb2f-442c1b17af26)
-> > > System Software Engineering
-> > > Software and Advanced Technology Group
-> > > Zizhu Science Park, Shanghai, China
-> > >
-> > > -----Original Message-----
-> > > From: Shyam Saini <shyamsaini@linux.microsoft.com>
-> > > Sent: Thursday, June 1, 2023 3:10 AM
-> > > To: alex.bennee@linaro.org
-> > > Cc: code@tyhicks.com; Matti.Moell@opensynergy.com; arnd@linaro.org; Z=
-hu, Bing <bing.zhu@intel.com>; hmo@opensynergy.com; ilias.apalodimas@linaro=
-.org; joakim.bech@linaro.org; linux-kernel@vger.kernel.org; linux-mmc@vger.=
-kernel.org; linux-scsi@vger.kernel.org; maxim.uvarov@linaro.org; ruchika.gu=
-pta@linaro.org; Winkler, Tomas <tomas.winkler@intel.com>; ulf.hansson@linar=
-o.org; Huang, Yang <yang.huang@intel.com>; sumit.garg@linaro.org; jens.wikl=
-ander@linaro.org; op-tee@lists.trustedfirmware.org
-> > > Subject: [PATCH v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-> > >
-> > > Hi Alex,
-> > >
-> > > [ Resending, Sorry for the noise ]
-> > >
-> > > Are you still working on it or planning to resubmit it ?
-> > >
-> > > [1] The current optee tee kernel driver implementation doesn't work w=
-hen IMA is used with optee implemented ftpm.
-> > >
-> > > The ftpm has dependency on tee-supplicant which comes once the user s=
-pace is up and running and IMA attestation happens at boot time and it requ=
-ires to extend ftpm PCRs.
-> > >
-> > > But IMA can't use PCRs if ftpm use secure emmc RPMB partition. As opt=
-ee can only access RPMB via tee-supplicant(user space). So, there should be=
- a fast path to allow optee os to access the RPMB parititon without waiting=
- for user-space tee supplicant.
-> > >
-> > > To achieve this fast path linux optee driver and mmc driver needs som=
-e work and finally it will need RPMB driver which you posted.
-> > >
-> > > Please let me know what's your plan on this.
-> > >
-> > > [1] https://optee.readthedocs.io/en/latest/architecture/secure_storag=
-e.html
-> > >
-> > > Best Regards,
-> > > Shyam
