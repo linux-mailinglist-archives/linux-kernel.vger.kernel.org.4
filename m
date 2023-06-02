@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9E9720990
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767CF72098A
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbjFBTLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S237147AbjFBTLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237157AbjFBTLu (ORCPT
+        with ESMTP id S236583AbjFBTLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:11:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CBC1B8;
-        Fri,  2 Jun 2023 12:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AJABSmQfgLq8Q+2ppxsM6XF5q+Vq5qZe9N94edfIwwY=; b=PU4T7ADc0jcAq3KFGfGex3diK8
-        vuW6kxlnkjA4+MmRJvz0D0+wTteEYEdN0jEKVsMD/rWd4UKxTB9R75WweAYuX8LhbgcrsPvFit3yI
-        lh7intlQyz7vxEAlTtCqyyD8JU13qOTD16vLtKcHmFSXi2Pyo9MrCSkaYoixNrt5uhFV6lzG4WxI4
-        2nLcE6+JFpQ/MhqrGMsVU/cbMmJGBLPLrkolWc5jANycOonOz9+oT0qGgaU6JjJZWKYWvYHTgqSEx
-        acJK6R/uKBhblUAn+hhA5XEIMwsd+asra2KUYSEbBY8+7a7B+ca3G+EnF+XF7HS+DZKZBrmkC0kGI
-        jbJBbSdQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q5AAJ-009SqQ-JN; Fri, 02 Jun 2023 19:10:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EB5333002F0;
-        Fri,  2 Jun 2023 21:10:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B12CE20581278; Fri,  2 Jun 2023 21:10:14 +0200 (CEST)
-Date:   Fri, 2 Jun 2023 21:10:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, suravee.suthikulpanit@amd.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org,
-        John David Anglin <dave.anglin@bell.net>,
-        Sam James <sam@gentoo.org>
-Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of
- __SIZEOF_INT128__
-Message-ID: <20230602191014.GA695361@hirez.programming.kicks-ass.net>
-References: <20230531130833.635651916@infradead.org>
- <20230531132323.722039569@infradead.org>
- <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
- <20230601101409.GS4253@hirez.programming.kicks-ass.net>
- <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
- <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
- <20230602143912.GI620383@hirez.programming.kicks-ass.net>
- <E333E35E-5F9C-441C-B75A-082F19D37978@zytor.com>
+        Fri, 2 Jun 2023 15:11:13 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F92133;
+        Fri,  2 Jun 2023 12:11:11 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75b0df81142so275313585a.2;
+        Fri, 02 Jun 2023 12:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685733070; x=1688325070;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/c+JmdRjZKJt3f/jf4aQQG5jIKIzfXv3IkRk6BRsBRw=;
+        b=shpwf31GrX+DRB/nGXbzkDffrVUebrAcz/grvP0YcKsMQMNsORI878epuMFQsuCgcK
+         0POr1bnjxqILJGLbyObKyDdQkztwP/yJhkZmZDUCu6dSsqgtllG4+JaJmm6sjv9IPNIN
+         JQb/6O3TkdhV5OqcYie4bYnbL5YJNCfW1glZ1mxKbuGfFhZZpT3Iak7u3ydWyvxHSmIU
+         inptzN1UMPKIHph18fueBAdNPuLaJBYgU1enV/hZGmmak+K/JnlyDk8nTh2E4GrKPVRt
+         nTVa0nabxXzqoXKTpNkHIjZoXy/9zw4ALzzkTkFYiSyUaeZXCZRNSGSC1ezBEXlP2LuB
+         qyLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685733070; x=1688325070;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/c+JmdRjZKJt3f/jf4aQQG5jIKIzfXv3IkRk6BRsBRw=;
+        b=WKBGK5kOyTAiht4V5oHgeInSyfoX2MTQxRNV+hBuMpGx55iyFyifUGzBXKMjd/hmx4
+         7yLJrZmCDrMd1nqr0eDKYLBJGIMupUo7CgJyp+w44ajdFBKDTErhNgQoa+kFq4jFYSV3
+         WPwwXethf1F86U2Co/Mfo983rCEyM8iGPmSAvs19V+hG4SRHINNS15+o4SxGahzC0ipU
+         9mKOTPSlKLoYyxlhvkl10k6ZBDhI43aD6sYoPuEa8PllNaB8NOKci459MuGfHT57ShDp
+         +iXuuLJHehqkZX847yL2XJr/e425NXleanL6GtW9tjO+ENp41kheZMOM8cBD3AETbC1S
+         9ruw==
+X-Gm-Message-State: AC+VfDzLNAlIBbhly3qksq7D+Izcl+uKVWJt7p4utrR7YiwcOpO+SF5O
+        MnUQdm2NzqkMANRQah8G+Rg=
+X-Google-Smtp-Source: ACHHUZ5fN2FHtbXoLD5R2oPpDXu3MR+F+o69SkjKLL8dzKzMkVkbBuQ1j9ShMgzswRy3VKEGAnDgUA==
+X-Received: by 2002:a05:620a:6412:b0:75b:23a0:deb3 with SMTP id pz18-20020a05620a641200b0075b23a0deb3mr13899930qkn.49.1685733070619;
+        Fri, 02 Jun 2023 12:11:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o24-20020a05620a15d800b00751517fd46esm971836qkm.26.2023.06.02.12.11.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 12:11:09 -0700 (PDT)
+Message-ID: <efa17e71-93e8-bd77-433b-bf3f1df5f49d@gmail.com>
+Date:   Fri, 2 Jun 2023 12:10:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E333E35E-5F9C-441C-B75A-082F19D37978@zytor.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] net: phy: realtek: Add optional external PHY clock
+Content-Language: en-US
+To:     Detlev Casanova <detlev.casanova@collabora.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230602182659.307876-1-detlev.casanova@collabora.com>
+ <20230602182659.307876-2-detlev.casanova@collabora.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230602182659.307876-2-detlev.casanova@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 10:00:17AM -0700, H. Peter Anvin wrote:
+On 6/2/23 11:26, Detlev Casanova wrote:
+> In some cases, the PHY can use an external clock source instead of a
+> crystal.
+> 
+> Add an optional clock in the phy node to make sure that the clock source
+> is enabled, if specified, before probing.
+> 
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 
-> Dumb question: is this only about the cpp macro or is it about __int128 existing at all?
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
-It's mostly about __int128 being there, __SIZEOF_INT128__ is just the
-way we go about detecting if it's there or not.
