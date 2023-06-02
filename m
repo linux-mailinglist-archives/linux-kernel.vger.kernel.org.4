@@ -2,126 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260EC71F8F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D64171F8FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 05:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbjFBD13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 23:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S233573AbjFBDc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 23:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjFBD1Z (ORCPT
+        with ESMTP id S231259AbjFBDcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 23:27:25 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196A71A2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 20:27:19 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f7f864525fso15916731cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 20:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685676438; x=1688268438;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4fzVJ1Qh6n3X3yZDJNAOPlld3Ovzv7tP/YDPTpU3UdA=;
-        b=Q1unEDD5B8N2OMFUKodzQfNolloTMgh+wChrYJzcIXlBbNVn0ldgIUk7WtMJqH/tQf
-         Ra5VN0HBmkXb4e9+vS9Nu00wlSO+YK544nB58c4MGaghrlcPSgfpHzX3oCymvWMDUlzH
-         hE7bG1lZ6KZPAoAWv1G8ewhhYScwgDncNBjo1q96QXR4ieyWDikKnm0p0TEJexzyhfZG
-         f7nwsncgXV4nydaOpNTGvsZxNLCnuqTQh/0w9yRgNR6QWNhak06QWQ/NVRg+qc5MJlBJ
-         Y/uujXOmJwaUeW1dHBZRP0oa+OhX+gIRwXF5ZOvNg7RcaO4xoY3pgUsyshKXZ58E2hGx
-         MOJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685676438; x=1688268438;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4fzVJ1Qh6n3X3yZDJNAOPlld3Ovzv7tP/YDPTpU3UdA=;
-        b=NHJ0sldaLZOsiZiT9ja647g5wBoGr0YhuCVPgwUuDSMqBDjEGwLPmmKNTW03eens9M
-         TgLjVe6J2UX3jI2pGIYV3rV3L4x8TZoK5DsF4d7KaxQLP7kM2fEMJAbbr4mkmgf3VUeM
-         pv+FWMis78R97NMACyPSWPtTHffK2DeK9E+2EpjhhV+ykU5IYDTEN4KnyMhhFeXS5VdS
-         zhWBsmqf5o+69PK5l2pXdxCeTvnRSwCk3feRAsRKbfuqqqz2SrzlUU+KfVcA2LM7CkSa
-         Ji34Pr8S2A82bW4KH6bf8FBAmLkeInZ2StgO1Omob2BS+KUmoa6mkljtPYnSTsDft4d8
-         eShA==
-X-Gm-Message-State: AC+VfDy5zMgsYUNAn53JkuRKp/9aUa2j93wDY6EMWrwCYzm6cAgnCpZt
-        BwUOl+7ZTZ9xKZ5eKiiLkfnU
-X-Google-Smtp-Source: ACHHUZ5qq/CUeWNWrIdQjdJCptiuULwNuUnpW4lEK1sxxbELp3XsV5M3T7hVKplXbzSdHnxjxOPNgw==
-X-Received: by 2002:a05:622a:1004:b0:3f6:833b:2368 with SMTP id d4-20020a05622a100400b003f6833b2368mr16010417qte.46.1685676438253;
-        Thu, 01 Jun 2023 20:27:18 -0700 (PDT)
-Received: from thinkpad ([117.217.186.123])
-        by smtp.gmail.com with ESMTPSA id r9-20020a632b09000000b0052c9d1533b6sm187387pgr.56.2023.06.01.20.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 20:27:17 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 08:57:10 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] PCI: endpoint: Warn and return if EPC is
- started/stopped multiple times
-Message-ID: <20230602032710.GB5341@thinkpad>
-References: <20230601145718.12204-1-manivannan.sadhasivam@linaro.org>
- <20230601145718.12204-5-manivannan.sadhasivam@linaro.org>
- <c691d9bd-9596-373e-0abe-2e776eb0d54b@kernel.org>
+        Thu, 1 Jun 2023 23:32:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCB8107;
+        Thu,  1 Jun 2023 20:32:21 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3523RLGS010375;
+        Fri, 2 Jun 2023 03:32:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=8Fr9E41LV4XYbsh2GbgkeOokUoanLTDOkI7MomT0vNU=;
+ b=NegNc5DpxMr0QtCrm2mTlzyyiRYC3Dwqi2AbXCXhZ1WqP0+Lmfts+KMskup3sYQUZaQM
+ XAcnmtINS/MLBhS8c6VIjLmctCkZIsPa5YrIwIsP25xYcS4AGkibNWKbPz496G+argoJ
+ xIRDQ2P4GAApksvGTW1Lguu45zF8fDmFMUFK4U8yiWc1UURPR5z9+gmSxCsS3eI66+I0
+ o9sB1JtgaBxkKKYBYP/GwtKaWduEWhTJSAF8fTFYOzbZghvWhE+WWfOaAaz6hKPDdbnb
+ 9GFadXtGLOdlNb6OYHp6C2diZeBQGKimkBlX0S2GcQApsbLPA5KKgDWzfdhTkTzzXBQd ow== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxugr9p3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Jun 2023 03:32:15 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3523WE2d016825
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Jun 2023 03:32:14 GMT
+Received: from ipa-build-02.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 1 Jun 2023 20:32:11 -0700
+From:   Minghao Zhang <quic_minghao@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <linus.walleij@linaro.org>
+CC:     Minghao Zhang <quic_minghao@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_satyap@quicinc.com>,
+        <quic_tsoni@quicinc.com>
+Subject: [PATCH v2] pinctrl: qcom: Add support to log pin status before suspend for TLMM
+Date:   Fri, 2 Jun 2023 11:31:46 +0800
+Message-ID: <20230602033146.46387-1-quic_minghao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c691d9bd-9596-373e-0abe-2e776eb0d54b@kernel.org>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: UYInF-gqJwn7E7KD2dGbkb_DP5JC-chx
+X-Proofpoint-ORIG-GUID: UYInF-gqJwn7E7KD2dGbkb_DP5JC-chx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_01,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=979 phishscore=0
+ bulkscore=0 clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306020024
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 08:18:58AM +0900, Damien Le Moal wrote:
-> On 6/1/23 23:57, Manivannan Sadhasivam wrote:
-> > When the EPC is started or stopped multiple times from configfs, just emit
-> > a once time warning and return. There is no need to call the EPC start/stop
-> > functions in those cases.
-> > 
-> > Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/pci/endpoint/pci-ep-cfs.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/pci/endpoint/pci-ep-cfs.c b/drivers/pci/endpoint/pci-ep-cfs.c
-> > index 4b8ac0ac84d5..62c8e09c59f4 100644
-> > --- a/drivers/pci/endpoint/pci-ep-cfs.c
-> > +++ b/drivers/pci/endpoint/pci-ep-cfs.c
-> > @@ -178,6 +178,9 @@ static ssize_t pci_epc_start_store(struct config_item *item, const char *page,
-> >  	if (kstrtobool(page, &start) < 0)
-> >  		return -EINVAL;
-> >  
-> > +	if (WARN_ON_ONCE(start == epc_group->start))
-> > +		return 0;
-> 
-> WARN will dump a backtrace which is fairly scary for the user. This case is
-> simply a bad user manipulation of the device, so why not simply add a pr_err()
-> (optional) and return -EALREADY ?
-> 
+This change supports to print pin status before device suspend
+to debug for TLMM. And expose 2 APIs to enable/disable this
+functionality.
 
-There EPF core uses WARN_ON_ONCE in other similar places, so thought of sticking
-to that pattern. But I agree, WARN_ON_ONCE is not strictly required here. Will
-add a error log and return the appropriate error no.
+Signed-off-by: Minghao Zhang <quic_minghao@quicinc.com>
+---
+ drivers/pinctrl/qcom/pinctrl-msm.c | 133 ++++++++++++++++++++++-------
+ drivers/pinctrl/qcom/pinctrl-msm.h |   4 +
+ 2 files changed, 108 insertions(+), 29 deletions(-)
 
-Moreover, will push a patch later to change other instances as well.
-
-- Mani
-
-> > +
-> >  	if (!start) {
-> >  		pci_epc_stop(epc);
-> >  		epc_group->start = 0;
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
-> 
-
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+index c5f52d4f7781..fbc379c82e4f 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -83,6 +83,21 @@ struct msm_pinctrl {
+ 	u32 phys_base[MAX_NR_TILES];
+ };
+ 
++static bool pinctrl_msm_log_mask;
++
++static const char * const pulls_keeper[] = {
++	"no pull",
++	"pull down",
++	"keeper",
++	"pull up"
++};
++
++static const char * const pulls_no_keeper[] = {
++	"no pull",
++	"pull down",
++	"pull up",
++};
++
+ #define MSM_ACCESSOR(name) \
+ static u32 msm_readl_##name(struct msm_pinctrl *pctrl, \
+ 			    const struct msm_pingroup *g) \
+@@ -654,6 +669,29 @@ static void msm_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
+ 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
+ }
+ 
++static void msm_gpio_pin_status_get(struct msm_pinctrl *pctrl, const struct msm_pingroup *g,
++				    unsigned int offset, int *is_out, unsigned int *func,
++				    int *drive, int *pull, int *egpio_enable, int *val)
++{
++	u32 ctl_reg, io_reg;
++
++	ctl_reg = msm_readl_ctl(pctrl, g);
++	io_reg = msm_readl_io(pctrl, g);
++
++	*is_out = !!(ctl_reg & BIT(g->oe_bit));
++	*func = (ctl_reg >> g->mux_bit) & 7;
++	*drive = (ctl_reg >> g->drv_bit) & 7;
++	*pull = (ctl_reg >> g->pull_bit) & 3;
++	*egpio_enable = 0;
++	if (pctrl->soc->egpio_func && ctl_reg & BIT(g->egpio_present))
++		*egpio_enable = !(ctl_reg & BIT(g->egpio_enable));
++
++	if (*is_out)
++		*val = !!(io_reg & BIT(g->out_bit));
++	else
++		*val = !!(io_reg & BIT(g->in_bit));
++}
++
+ #ifdef CONFIG_DEBUG_FS
+ 
+ static void msm_gpio_dbg_show_one(struct seq_file *s,
+@@ -670,40 +708,13 @@ static void msm_gpio_dbg_show_one(struct seq_file *s,
+ 	int pull;
+ 	int val;
+ 	int egpio_enable;
+-	u32 ctl_reg, io_reg;
+-
+-	static const char * const pulls_keeper[] = {
+-		"no pull",
+-		"pull down",
+-		"keeper",
+-		"pull up"
+-	};
+-
+-	static const char * const pulls_no_keeper[] = {
+-		"no pull",
+-		"pull down",
+-		"pull up",
+-	};
+ 
+ 	if (!gpiochip_line_is_valid(chip, offset))
+ 		return;
+ 
+ 	g = &pctrl->soc->groups[offset];
+-	ctl_reg = msm_readl_ctl(pctrl, g);
+-	io_reg = msm_readl_io(pctrl, g);
+-
+-	is_out = !!(ctl_reg & BIT(g->oe_bit));
+-	func = (ctl_reg >> g->mux_bit) & 7;
+-	drive = (ctl_reg >> g->drv_bit) & 7;
+-	pull = (ctl_reg >> g->pull_bit) & 3;
+-	egpio_enable = 0;
+-	if (pctrl->soc->egpio_func && ctl_reg & BIT(g->egpio_present))
+-		egpio_enable = !(ctl_reg & BIT(g->egpio_enable));
+-
+-	if (is_out)
+-		val = !!(io_reg & BIT(g->out_bit));
+-	else
+-		val = !!(io_reg & BIT(g->in_bit));
++	msm_gpio_pin_status_get(pctrl, g, offset, &is_out, &func,
++					&drive, &pull, &egpio_enable, &val);
+ 
+ 	if (egpio_enable) {
+ 		seq_printf(s, " %-8s: egpio\n", g->name);
+@@ -733,6 +744,39 @@ static void msm_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
+ #define msm_gpio_dbg_show NULL
+ #endif
+ 
++static void msm_gpio_log_pin_status(struct gpio_chip *chip, unsigned int offset)
++{
++	const struct msm_pingroup *g;
++	struct msm_pinctrl *pctrl = gpiochip_get_data(chip);
++	unsigned int func;
++	int is_out;
++	int drive;
++	int pull;
++	int val;
++	int egpio_enable;
++
++	if (!gpiochip_line_is_valid(chip, offset))
++		return;
++
++	g = &pctrl->soc->groups[offset];
++	msm_gpio_pin_status_get(pctrl, g, offset, &is_out, &func,
++					&drive, &pull, &egpio_enable, &val);
++
++	pr_debug("%s: %s, %s, func%d, %dmA, %s\n",
++		g->name, is_out ? "out" : "in",
++		val ? "high" : "low", func,
++		msm_regval_to_drive(drive),
++		pctrl->soc->pull_no_keeper ? pulls_no_keeper[pull] : pulls_keeper[pull]);
++}
++
++static void msm_gpios_status(struct gpio_chip *chip)
++{
++	unsigned int i;
++
++	for (i = 0; i < chip->ngpio; i++)
++		msm_gpio_log_pin_status(chip, i);
++}
++
+ static int msm_gpio_init_valid_mask(struct gpio_chip *gc,
+ 				    unsigned long *valid_mask,
+ 				    unsigned int ngpios)
+@@ -1476,6 +1520,35 @@ SIMPLE_DEV_PM_OPS(msm_pinctrl_dev_pm_ops, msm_pinctrl_suspend,
+ 
+ EXPORT_SYMBOL(msm_pinctrl_dev_pm_ops);
+ 
++void debug_pintctrl_msm_enable(void)
++{
++	pinctrl_msm_log_mask = true;
++}
++EXPORT_SYMBOL(debug_pintctrl_msm_enable);
++
++void debug_pintctrl_msm_disable(void)
++{
++	pinctrl_msm_log_mask = false;
++}
++EXPORT_SYMBOL(debug_pintctrl_msm_disable);
++
++static __maybe_unused int noirq_msm_pinctrl_suspend(struct device *dev)
++{
++	struct msm_pinctrl *pctrl = dev_get_drvdata(dev);
++
++	if (pinctrl_msm_log_mask) {
++		pr_debug("%s\n", pctrl->chip.label);
++		msm_gpios_status(&pctrl->chip);
++	}
++
++	return 0;
++}
++
++const struct dev_pm_ops noirq_msm_pinctrl_dev_pm_ops = {
++	.suspend_noirq = noirq_msm_pinctrl_suspend,
++};
++EXPORT_SYMBOL(noirq_msm_pinctrl_dev_pm_ops);
++
+ int msm_pinctrl_probe(struct platform_device *pdev,
+ 		      const struct msm_pinctrl_soc_data *soc_data)
+ {
+@@ -1537,6 +1610,8 @@ int msm_pinctrl_probe(struct platform_device *pdev,
+ 	if (ret)
+ 		return ret;
+ 
++	pinctrl_msm_log_mask = false;
++
+ 	platform_set_drvdata(pdev, pctrl);
+ 
+ 	dev_dbg(&pdev->dev, "Probed Qualcomm pinctrl driver\n");
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
+index 985eceda2517..faae8a28c8c6 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.h
++++ b/drivers/pinctrl/qcom/pinctrl-msm.h
+@@ -155,6 +155,10 @@ struct msm_pinctrl_soc_data {
+ };
+ 
+ extern const struct dev_pm_ops msm_pinctrl_dev_pm_ops;
++extern const struct dev_pm_ops noirq_msm_pinctrl_dev_pm_ops;
++
++void debug_pintctrl_msm_enable(void);
++void debug_pintctrl_msm_disable(void);
+ 
+ int msm_pinctrl_probe(struct platform_device *pdev,
+ 		      const struct msm_pinctrl_soc_data *soc_data);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.17.1
+
