@@ -2,150 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1477205B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E00A7205B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbjFBPPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S236522AbjFBPPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235446AbjFBPPQ (ORCPT
+        with ESMTP id S236394AbjFBPPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:15:16 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A16A136
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 08:15:15 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b038064d97so26855675ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 08:15:15 -0700 (PDT)
+        Fri, 2 Jun 2023 11:15:23 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0599CE43;
+        Fri,  2 Jun 2023 08:15:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E2fKISemOoUpStM4T3ibnKvZzkH6I2Ol/3BN+9cur8ccaFaJ2rQy6pKLbjuaXWULetjXO77kkdC9/x+QtWrrYO5GiyIIW93YNT45WHwRSjk17KBBCJyaeEt2kvuEvsxPYbFCnsb0Dh1TFCSaB2zLvGQw8exg3PtSaBHD5tptl6STWc/uejUtQQiUbkvEkeEAZybghg7tjGfZpTxGKCv/7l0ugbwSnQgQQOryM8zheYvEfEWvcFx4firA/CSRdz0Oh+1zeIlAS8JWS0KdPyfuXnHCw1/k+uzNfQ8IeLRBmBf1Q/URNZES3UkjrbMxA6LkFkKWr+fD5Tn/gojNLkACsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tAERUP7tWwE4MNECYCM5/ajFW/6s/EdqUivVr3TQOU8=;
+ b=PPAa6jX7TLdQXeVSykTMTQUopqiLOzWW4/xgsdbbvTHXUkx65eqqImge3+rj1Rca+KBhmAvkOgrukvSazMN3ahGkZLtaM7d6N8Mx/WoJr5U8KaDuRgofRAmoQfxb/Qf9tigcLfbebRNfCMRZ0+SRAYizRxUu1N4hR1onN3BkOdkqbyzBUd3H7+E7MFsmBHAxwHCNIPamc6war9b/L9dy/2adr6zaZkJ/OQANf63mGm95h8/R62fEZ11aFAOHL3r6ZLHrXmRdrLtwiqauQbFoU8FQ39NYEiFsVVCGapq66EhTeT5VJFDdfxo9cHNRdDgIEO/tFFEkfF7lYjYNVPaIYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google; t=1685718915; x=1688310915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GLlNdqI6axFbvYJKMCYGXuL8XXPH0s44RaNvUf/xb6U=;
-        b=A62jmKOB1yFlTiUosWU7VYThESPApQWicsGL82YBY5HyRrCmBHSGxhtTsUd7cmxvFP
-         FHVeE2Eg5YibxFL0i+3hqOEr0zDDsphcTMgN8Rn6pvDhWsUGMl5plNzEr9zsL6SpjRjJ
-         RcyWzBtM0z8ZSV2dTIZYNnKCJ4EzHcTC29MBA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685718915; x=1688310915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GLlNdqI6axFbvYJKMCYGXuL8XXPH0s44RaNvUf/xb6U=;
-        b=HibOCW/Uo2enJnDN9M+710M9GZuOIL/l2OVnUdge9M/3stOe7Zl5H36dhsJey8VzgU
-         U/w/rSs6t83m4ONtaWIeMsoE8IKCDSRpFuXFc39VTK9WDkcwPaozKEW794W9uHLN/SFK
-         T4GI6JKnnkcsMJE9GVZ3qE9zK86jViNWEm5pVnGOmdnhu/zeGLFHe6JWcYZYgrOHn8MJ
-         9990GadeumsqkU3CJlvPTDkPXZvL0KZta8KQeaRpMncBg3vzDXxLZU+fqoHA1q5QsqnH
-         IyOzF5wFQ/iCwtNU/cZ34lWkO8CdHRVyGBG5rEh64REkD3M3enj/K6DmZqT7YGT1EhG0
-         53yQ==
-X-Gm-Message-State: AC+VfDzIi7MpnuBEzXwCKoj0SIcitBQ04Ec7tQy9D2PXX71xLcYWEcIt
-        cSOVEbeeTjy0YB9+KRRg7fr3QzaIFyiZRCljifjCcg==
-X-Google-Smtp-Source: ACHHUZ6qwVeiaUsGgqIiu+lEAgHS5+tjGdgegjL/iZBujmGeXFWFIdEf/ajIH1GWOoFyADttfsNBiOOHfP+VvXz7XZY=
-X-Received: by 2002:a17:903:2449:b0:1ad:ea13:1914 with SMTP id
- l9-20020a170903244900b001adea131914mr61219pls.30.1685718914621; Fri, 02 Jun
- 2023 08:15:14 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tAERUP7tWwE4MNECYCM5/ajFW/6s/EdqUivVr3TQOU8=;
+ b=Gy9LvfJiuNS2cAtxM+YzL/AwZ+KKxES/EQOReLY/tj7Vl0gLa8vGl+kc60jLZFJyGfkEv3tDHpCDXOji4qywIezXSrTC/oeD0vJD56b7iaJaao6waMNBt+51vL8zIL24l20CWuqKd9+/N0qFmuhdLxU0EOruuq6qr7XxBRJJ4ug=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6220.namprd13.prod.outlook.com (2603:10b6:510:24b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Fri, 2 Jun
+ 2023 15:15:17 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.026; Fri, 2 Jun 2023
+ 15:15:17 +0000
+Date:   Fri, 2 Jun 2023 17:15:09 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amakhalov@vmware.com, vsirnapalli@vmware.com, akaher@vmware.com,
+        tkundu@vmware.com, keerthanak@vmware.com,
+        Xin Long <lucien.xin@gmail.com>
+Subject: Re: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
+ enabled
+Message-ID: <ZHoHfcMgYqO3l7Np@corigine.com>
+References: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
+X-ClientProxiedBy: AS4P192CA0036.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:658::29) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230523181624.19932-1-ivan@cloudflare.com> <CAHC9VhTtbbiwyOqiFfveWF6hV-Wb5cuhk0r8EdUi0kVb0v4P_Q@mail.gmail.com>
- <CABWYdi2A8ZfVJjmDpwiNhvYD8m-+PC5MsNRzofX7SXn2TTyY9Q@mail.gmail.com>
- <CAHC9VhQm9JEFozFMvNuBc_dx+XAqvJCY_Z8Dyf7q_RyDcNu=QA@mail.gmail.com>
- <CABWYdi3_zAVpeTRBou_Br-n6VXeM1xWTCSvu==QWdG4sd+nnnw@mail.gmail.com>
- <CAHC9VhReahw8G4Vc0eMdhQMLhGYE53=X48akC13rN4EPkiF3tQ@mail.gmail.com>
- <CALrw=nFdnSOyfd9X9qzpbTT8R_-m3uBM==FFkNSQ2XZsxUz0Fg@mail.gmail.com> <CAHC9VhR4mnoj=uEEO8ceFvtHAy=ziUROnVHgoNAnH1Gr2+tH5g@mail.gmail.com>
-In-Reply-To: <CAHC9VhR4mnoj=uEEO8ceFvtHAy=ziUROnVHgoNAnH1Gr2+tH5g@mail.gmail.com>
-From:   Ignat Korchagin <ignat@cloudflare.com>
-Date:   Fri, 2 Jun 2023 16:15:03 +0100
-Message-ID: <CALrw=nHJWv+igGK3R23DQXB3UE_b14ES=sFAQqL0GG9Tw=hrMw@mail.gmail.com>
-Subject: Re: [PATCH] audit: check syscall bitmap on entry to avoid extra work
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Ivan Babrou <ivan@cloudflare.com>, audit@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Eric Paris <eparis@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6220:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae704a03-8b8c-48e2-d673-08db637c2c1e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: llNwST21VM1nWJmYHFDD4E6Y5JUUGeAcBZqsUDTxV2FHJP2xYWVrao7B2Vxj82eTG4d6dCDDHXLYrk27tHOgWqXGpEYNASt5NFrC0KWRtdknx8NiUBnK+n7MLVbmm9Ru49EawveQ6fmwotCWJ0s2YxkvOC1339/GZ0kyBiZv7++wd3sfucWRC0p76ynzY2hjoA+2CtOHT2+fKjn2BRLLouQ3xEleyI2Mh5gCIjeiswfAsyMnMNW/nq/Y/q+BpZqtKbUJyhg9MCWi+mSxd3thusQlT1UM20l/49U2lc9QC9TDf3J6KM4GcBCefwxo3WNKBAWs/apmAOmxn4EQx2zadJSeQA9VMbh/owaSqvVXV1LMAr6m4WUlvvYW6OOiwaSd18zMx82kNE6ltgYMcCTGaI0zEb0OEF1QOWiYY/8aP3fUotoX4P85968xmus94EexfMHE9Mqgj2QynTemw+Ag/kg6GAhdhirF7eS79/0AgbcoQqYP1e58q86+tgwogfsASes2vFSYOo/Dlsxu31jCmx+qnc+LWpgaxk7VODLBHT/0d+zLZZDH8lVS3DKaxV6aUC89TIoV431kCcJ+SfWoOrZLaAU5sqskJpzEhykTKhQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(376002)(136003)(366004)(346002)(451199021)(316002)(186003)(54906003)(6666004)(6486002)(86362001)(41300700001)(83380400001)(478600001)(2616005)(2906002)(26005)(44832011)(66476007)(66556008)(6916009)(66946007)(6512007)(5660300002)(7416002)(6506007)(36756003)(8676002)(38100700002)(4326008)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R/NxoXN21GTc1zH5YEfN7JhEYk9wdq/dfYC8iIAJD08Wj19SEG6Duus1MmtQ?=
+ =?us-ascii?Q?1m8SQJCxV043oa95+xsaDTcoAws4/t4n5jDpwJr+8mnOv8qQCkKuDpe/j46H?=
+ =?us-ascii?Q?MeripAI/anaf5BBLFoEGLdhSD77v2b9akfk2DETXAIVeHcDXADra07WKDBHG?=
+ =?us-ascii?Q?CgofPXFiMr7U/4wmsBxFE/13DI1To7frUkx23A8HLk3AYp2NjqlsprX8xfKK?=
+ =?us-ascii?Q?TAT8IMabp3zerXclJq2KOoxnvBtOYtn60WjpPreSemvdDrrYPBfaJ65LrWNA?=
+ =?us-ascii?Q?3TByAIk//fwvEosSeTSSPiF9Szq52XB9jEjE05ft3g6LS8L28CKbTW1Xp8HH?=
+ =?us-ascii?Q?nxx1NbUU+THBN+Vzdl5m1l2ylqUsB6wzm0bk1iVTEdA6kir+7jf19gG70DyB?=
+ =?us-ascii?Q?sq2r3725vmNK8QQSVLwdvqL3R9ibqPFXKFA/7Z0ZMs9GPxUSRU3w+yPAByfS?=
+ =?us-ascii?Q?BZgXFG2JytJUVzH5gfv7CPGasglhN/tx/YI7XkmmXqHHilhN1/eiTe05jAgZ?=
+ =?us-ascii?Q?F1H1ue4cWHCwq8xahmXPAgtOKTmISmGSUdCmh4RuHOnpvaL+hQMfj+oodySv?=
+ =?us-ascii?Q?FuQ72ry/XXMjsIw74WsoGAJTsMjPhWsXiGhNmq/mEBzBiZXdvZLviP4L7e/6?=
+ =?us-ascii?Q?x2c9LoAgyqPfidhjw0etMklWL6m+bnSvXPZvNIAFY4FOj+tQ96DcQjHtYYRh?=
+ =?us-ascii?Q?FRj5YlqM930T8XP8NNic8rDMca06woKenEol8CQlxLBrGRFj1YtcewetsGVi?=
+ =?us-ascii?Q?RfRpfyOCEPAidhQ+k260rM9MJw0JkqaGP58WjsgJSTM2h+2jydfU//Sgx24E?=
+ =?us-ascii?Q?K5dVu7gZqTGeszCIq1Qg2fcyZG3oZTeXbupqg+6rXNNYugYYR3XSoonc3MZ5?=
+ =?us-ascii?Q?cKA1Gw9uuCaK+q3jzxyPFBweUdPGIxzgfKPOyFh8+7NzoXubzCUrpmT9XMk2?=
+ =?us-ascii?Q?HlWTUmI0WWd7iMfFqytWrMAHF4u7E9pHLDy3o1ywF4g2yv4qAWfEbrqLC6v+?=
+ =?us-ascii?Q?jlhqYROysIq+WKicMePPEbhRWoCbxwschQPoulKa00oSt/sPlJM1pw2QvfvM?=
+ =?us-ascii?Q?nXDVLWOb58oJ9ce1AKypiKgi1Qd7ppUxci2hKR9io0JpxW7/M6LvEXgroeRz?=
+ =?us-ascii?Q?fLQy7SLCPDNpjlcdj9t/oI2P/GUdxhFdoRFz57jog5hYV7EiICbPDX/zxSex?=
+ =?us-ascii?Q?yMd//LC7s53G8f7woXMb9i00lDAc/s0RukWFkUQKgP3yqMjZpvhV+xCKqj8L?=
+ =?us-ascii?Q?kQNuMkzCudpyVUpH3yQHq6j3kRETDik8piAkpLeo0GQgLes2wHXvrPxmI/ND?=
+ =?us-ascii?Q?YzAV0i7mulvTw1p1MROTf6MwCNsxCqsrsJyLxHdJLNcIvG5tHDeYkpU2/VxK?=
+ =?us-ascii?Q?xh58BShXNALiwIZzjGlSiKFd/laSOMm+vj3AJEfx5xjXkkO0Z/XQwXviFgAj?=
+ =?us-ascii?Q?bAx0yo366alItbY2kEUviRugTrSPCPdun+TBNKC7bXG0Bx/q6WTQjnFrQcCS?=
+ =?us-ascii?Q?eHLbyHuGuWwS9/mRwlqqlQsGUlTa1+XMJPMLk/d2nqKu7+Ym68aqraeZgwFc?=
+ =?us-ascii?Q?lx4269LSZJutSJmA2uy43VyrqaAbJu06qOOoKukhj4+q3OGxWbGu84n4HwH9?=
+ =?us-ascii?Q?YQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae704a03-8b8c-48e2-d673-08db637c2c1e
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 15:15:17.2277
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eXvoIGFWYI6yz2X5ZMpJKuRYPm4m/B8nbq7M5WHAMgrvQB4+R8+nYwXyvp+tNMsJBkEC4Oh+vw1KAFXd6mE9JWzr5wODoThoZtyEkBXeBLg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6220
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 3:56=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
-te:
->
-> On Fri, Jun 2, 2023 at 7:08=E2=80=AFAM Ignat Korchagin <ignat@cloudflare.=
-com> wrote:
-> > On Thu, May 25, 2023 at 3:15=E2=80=AFAM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On Wed, May 24, 2023 at 2:05=E2=80=AFPM Ivan Babrou <ivan@cloudflare.=
-com> wrote:
-> > > > On Tue, May 23, 2023 at 7:03=E2=80=AFPM Paul Moore <paul@paul-moore=
-.com> wrote:
-> > > > > > Could you elaborate on what exactly you would like to see added=
-? It's
-> > > > > > not clear to me what is missing.
-> > > > >
-> > > > > I should have been more clear, let me try again ...
-> > > > >
-> > > > > From my perspective, this patch adds code and complexity to deal =
-with
-> > > > > the performance impact of auditing.  In some cases that is the ri=
-ght
-> > > > > thing to do, but I would much rather see a more in-depth analysis=
- of
-> > > > > where the audit hot spots are in this benchmark, and some thought=
-s on
-> > > > > how we might improve that.  In other words, don't just add additi=
-onal
-> > > > > processing to bypass (slower, more involved) processing; look at =
-the
-> > > > > processing that is currently being done and see if you can find a=
- way
-> > > > > to make it faster.  It will likely take longer, but the results w=
-ill
-> > > > > be much more useful.
-> > > >
-> > > > The fastest way to do something is to not do it to begin with.
-> > >
-> > > While you are not wrong, I believe you and I are focusing on differen=
-t
-> > > things.  From my perspective, you appear primarily concerned with
-> > > improving performance by reducing the overhead of auditing.  I too am
-> > > interested in reducing the audit overhead, but I also place a very
-> > > high value on maintainable code, perhaps more than performance simply
-> > > because the current audit code quality is so very poor.
-> > > Unfortunately, the patch you posted appears to me as yet another
-> > > bolt-on performance tweak that doesn't make an attempt at analyzing
-> > > the current hot spots of syscall auditing, and ideally offering
-> > > solutions.  Perhaps ultimately this approach is the only sane thing
-> > > that can be done, but I'd like to see some analysis first of the
-> > > syscall auditing path.
-> >
-> > Ivan is out of office, but I would like to keep the discussion going.
-> > We do understand your position and we're actually doing a project
-> > right now to investigate audit performance better ...
->
-> That's great, thank you!
->
-> > But the way I see it - the audit subsystem performance and the way how
-> > that subsystem plugs into the rest of the kernel code are two somewhat
-> > independent things with the patch proposed here addressing the latter
-> > (with full understanding that the former might be improved as well) ...
->
-> You've done a good job explaining the reasoning and motivations behind
-> the patch submitted, that is good, but I'm not seeing any recognition
-> or understanding about the perspective I shared with you earlier.  The
-> performance of audit in general does need to be improved, I don't
-> think anyone disagrees with that, but my argument is that we need to
-> focus on changes which not only reduce the processing overhead, but
-> *also* reduce the complexity of the code as well.
++ Xin Long
 
-Ah, sorry. You're right - I paid too much attention to performance and
-didn't quite read your concern about code complexity. But still, I
-think that code complexity improvements fall onto the implementation
-of the audit subsystem itself vs what we try to accomplish here is to
-improve the way how that subsystem plugs into the rest of the kernel.
+On Thu, Jun 01, 2023 at 11:47:54PM +0530, Ashwin Dayanand Kamat wrote:
+> MD5 is not FIPS compliant. But still md5 was used as the
+> default algorithm for sctp if fips was enabled.
+> Due to this, listen() system call in ltp tests was
+> failing for sctp in fips environment, with below error message.
+> 
+> [ 6397.892677] sctp: failed to load transform for md5: -2
+> 
+> Fix is to not assign md5 as default algorithm for sctp
+> if fips_enabled is true. Instead make sha1 as default algorithm.
+> The issue fixes ltp testcase failure "cve-2018-5803 sctp_big_chunk"
+> 
+> Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
+> ---
+> v3:
+> * Resolved hunk failures.
+> * Changed the ratelimited notice to be more meaningful.
+> * Used ternary condition for if/else condtion.
+> v2:
+> * The listener can still fail if fips mode is enabled after
+>   that the netns is initialized.
+> * Fixed this in sctp_listen_start() as suggested by
+>   Paolo Abeni <pabeni@redhat.com>
 
-Ignat
+FWIIW, this seems reasonable to me.
+
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
