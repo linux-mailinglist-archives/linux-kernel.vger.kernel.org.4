@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8DB7200DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F007200DE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbjFBLul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S235418AbjFBLuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235452AbjFBLu0 (ORCPT
+        with ESMTP id S235498AbjFBLu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:50:26 -0400
+        Fri, 2 Jun 2023 07:50:27 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5946D1B1;
-        Fri,  2 Jun 2023 04:49:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A46AE5E;
+        Fri,  2 Jun 2023 04:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685706594; x=1717242594;
+  t=1685706597; x=1717242597;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aQjPDwWRzWzs+gV1YQG6XJoskPW79jaEO1/n4+Mecro=;
-  b=YCcF9ckGCFmme+E/oo6pqRPjpNNHOJiZISecjFrgI3kFtY7Yypjxn0Dq
-   6FhGKxfceWnJNxisWjY8wD8rZ0q5p23Kl1xpBeZK4yGhoRnUaWIxZMwuv
-   xl3pKxlOKI3tkXYf36C8EAp6Q0D/Lt925BHM9uKAynlxOwqfOtlgG1J7G
-   g9YoMhSVgwpt96hXpmdly/0bLEjeQ4qAYvjPIqN4GVkllc3Js7lrvrlR9
-   2Wat1bewPaLp12jMSMEo7SUzytMCO0UXssltWbg7KCyNUF/N5KobHuHvw
-   Cc1XfjXWt0+F35on64HNnpnPZRRW6Il4OKwDBVseUbdCWsuJNeN1QihCw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="358279775"
+  bh=dtcnuM+2TdnbsCijUckC327W0mtKyRtASd4omSZHYjg=;
+  b=dhOY6WwD9tFuCuNpuke6q6ieXvkiWB1ka421N2iGJyH3t11c/dO3Ave3
+   uyUjL8e54Ujg+zQDU3jo1J4Q+IfkMn0axTp/MwrpP4+M8IZL24fARlFCm
+   xNY0pBSFachRkmOSfzExXpZdwCroT+BmNhYuymJziAOrtOLLVj+72wJG5
+   HWVL5IALGh1McnNLAPzt7W27CmP2lyTl2xSdTc/en9YIAFh08RJdKEi6z
+   /JCRZV7LK92B/atT0xoeTI6QCjcWb4pFsRl6xub+Tkfwel/h8lOq7vW6H
+   ye6Es4NDwLnKTFqBxSP1Bo3V0sYYtYNWL2sWcwP0m6I2QiNMj40e/jRI5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="358279796"
 X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
-   d="scan'208";a="358279775"
+   d="scan'208";a="358279796"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:49:09 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:49:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="707819546"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="707819552"
 X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
-   d="scan'208";a="707819546"
+   d="scan'208";a="707819552"
 Received: from rspatil-mobl3.gar.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.208.112])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:49:03 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 04:49:11 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
@@ -48,17 +48,14 @@ To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath12k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [RFC PATCH v1 11/13] wifi: ath12k: Use pci_disable/enable_link_state()
-Date:   Fri,  2 Jun 2023 14:47:48 +0300
-Message-Id: <20230602114751.19671-12-ilpo.jarvinen@linux.intel.com>
+Subject: [RFC PATCH v1 12/13] IB/hfi1: Use pci_disable/enable_link_state()
+Date:   Fri,  2 Jun 2023 14:47:49 +0300
+Message-Id: <20230602114751.19671-13-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230602114751.19671-1-ilpo.jarvinen@linux.intel.com>
 References: <20230602114751.19671-1-ilpo.jarvinen@linux.intel.com>
@@ -76,46 +73,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ath12k driver adjusts ASPM state itself which leaves ASPM service
+IB/hfi1 driver adjusts ASPM state itself which leaves ASPM service
 driver in PCI core unaware of the link state changes the driver
 implemented.
 
 Call pci_disable_link_state() and pci_enable_link_state() instead of
 adjusting ASPMC field in LNKCTL directly in the driver and let PCI core
-handle the ASPM state management.
+handle the ASPM state management. Remove the functions that handled the
+ASPM changes that are now unnecessary.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/net/wireless/ath/ath12k/pci.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/infiniband/hw/hfi1/aspm.c | 38 +++----------------------------
+ drivers/infiniband/hw/hfi1/pcie.c |  2 +-
+ 2 files changed, 4 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath12k/pci.c b/drivers/net/wireless/ath/ath12k/pci.c
-index e1e45eb50f3e..c072026d6699 100644
---- a/drivers/net/wireless/ath/ath12k/pci.c
-+++ b/drivers/net/wireless/ath/ath12k/pci.c
-@@ -794,19 +794,15 @@ static void ath12k_pci_aspm_disable(struct ath12k_pci *ab_pci)
- 		   u16_get_bits(ab_pci->link_ctl, PCI_EXP_LNKCTL_ASPM_L1));
+diff --git a/drivers/infiniband/hw/hfi1/aspm.c b/drivers/infiniband/hw/hfi1/aspm.c
+index a3c53be4072c..8e3fc1d4c9c6 100644
+--- a/drivers/infiniband/hw/hfi1/aspm.c
++++ b/drivers/infiniband/hw/hfi1/aspm.c
+@@ -54,45 +54,13 @@ static void aspm_hw_set_l1_ent_latency(struct hfi1_devdata *dd)
+ 	pci_write_config_dword(dd->pcidev, PCIE_CFG_REG_PL3, reg32);
+ }
  
- 	/* disable L0s and L1 */
--	pcie_capability_clear_word(ab_pci->pdev, PCI_EXP_LNKCTL,
--				   PCI_EXP_LNKCTL_ASPMC);
+-static void aspm_hw_enable_l1(struct hfi1_devdata *dd)
+-{
+-	struct pci_dev *parent = dd->pcidev->bus->self;
 -
-+	pci_disable_link_state(ab_pci->pdev, PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
- 	set_bit(ATH12K_PCI_ASPM_RESTORE, &ab_pci->flags);
- }
- 
- static void ath12k_pci_aspm_restore(struct ath12k_pci *ab_pci)
+-	/*
+-	 * If the driver does not have access to the upstream component,
+-	 * it cannot support ASPM L1 at all.
+-	 */
+-	if (!parent)
+-		return;
+-
+-	/* Enable ASPM L1 first in upstream component and then downstream */
+-	pcie_capability_clear_and_set_word(parent, PCI_EXP_LNKCTL,
+-					   PCI_EXP_LNKCTL_ASPMC,
+-					   PCI_EXP_LNKCTL_ASPM_L1);
+-	pcie_capability_clear_and_set_word(dd->pcidev, PCI_EXP_LNKCTL,
+-					   PCI_EXP_LNKCTL_ASPMC,
+-					   PCI_EXP_LNKCTL_ASPM_L1);
+-}
+-
+-void aspm_hw_disable_l1(struct hfi1_devdata *dd)
+-{
+-	struct pci_dev *parent = dd->pcidev->bus->self;
+-
+-	/* Disable ASPM L1 first in downstream component and then upstream */
+-	pcie_capability_clear_and_set_word(dd->pcidev, PCI_EXP_LNKCTL,
+-					   PCI_EXP_LNKCTL_ASPMC, 0x0);
+-	if (parent)
+-		pcie_capability_clear_and_set_word(parent, PCI_EXP_LNKCTL,
+-						   PCI_EXP_LNKCTL_ASPMC, 0x0);
+-}
+-
+ static  void aspm_enable(struct hfi1_devdata *dd)
  {
- 	if (test_and_clear_bit(ATH12K_PCI_ASPM_RESTORE, &ab_pci->flags))
--		pcie_capability_clear_and_set_word(ab_pci->pdev, PCI_EXP_LNKCTL,
--						   PCI_EXP_LNKCTL_ASPMC,
--						   ab_pci->link_ctl &
--						   PCI_EXP_LNKCTL_ASPMC);
-+		pci_enable_link_state(ab_pci->pdev, ab_pci->link_ctl &
-+				      (PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1));
+ 	if (dd->aspm_enabled || aspm_mode == ASPM_MODE_DISABLED ||
+ 	    !dd->aspm_supported)
+ 		return;
+ 
+-	aspm_hw_enable_l1(dd);
++	pci_enable_link_state(dd->pcidev, PCI_EXP_LNKCTL_ASPM_L1);
+ 	dd->aspm_enabled = true;
  }
  
- static void ath12k_pci_kill_tasklets(struct ath12k_base *ab)
+@@ -101,7 +69,7 @@ static  void aspm_disable(struct hfi1_devdata *dd)
+ 	if (!dd->aspm_enabled || aspm_mode == ASPM_MODE_ENABLED)
+ 		return;
+ 
+-	aspm_hw_disable_l1(dd);
++	pci_disable_link_state(dd->pcidev, PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
+ 	dd->aspm_enabled = false;
+ }
+ 
+@@ -254,7 +222,7 @@ void aspm_init(struct hfi1_devdata *dd)
+ 	/* Start with ASPM disabled */
+ 	aspm_hw_set_l1_ent_latency(dd);
+ 	dd->aspm_enabled = false;
+-	aspm_hw_disable_l1(dd);
++	pci_disable_link_state(dd->pcidev, PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
+ 
+ 	/* Now turn on ASPM if configured */
+ 	aspm_enable_all(dd);
+diff --git a/drivers/infiniband/hw/hfi1/pcie.c b/drivers/infiniband/hw/hfi1/pcie.c
+index 08732e1ac966..767f6cb770b6 100644
+--- a/drivers/infiniband/hw/hfi1/pcie.c
++++ b/drivers/infiniband/hw/hfi1/pcie.c
+@@ -1182,7 +1182,7 @@ int do_pcie_gen3_transition(struct hfi1_devdata *dd)
+ 	 * will be enabled if required later
+ 	 */
+ 	dd_dev_info(dd, "%s: clearing ASPM\n", __func__);
+-	aspm_hw_disable_l1(dd);
++	pci_disable_link_state(dd->pcidev, PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
+ 
+ 	/*
+ 	 * step 5f: clear DirectSpeedChange
 -- 
 2.30.2
 
