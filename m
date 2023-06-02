@@ -2,120 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C518720B40
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9804720B47
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 23:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbjFBVvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 17:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S236115AbjFBVy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 17:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbjFBVvu (ORCPT
+        with ESMTP id S236256AbjFBVyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 17:51:50 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6015B10C6;
-        Fri,  2 Jun 2023 14:51:22 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6af7fef214cso1905237a34.0;
-        Fri, 02 Jun 2023 14:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685742664; x=1688334664;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9LyhjoS28aUESLXn6ZKM0bdRXh4cqYI4n9WNxwVEOj8=;
-        b=LpYGwwBLSVmgNXEL85B7LFpRJ5Y36vn1pkemJFqJLcLVh6qzjgRGl8pDvSords0S8X
-         ca+Cs8/qnSGrj2M09z6uyAxXQCVez41QjB+TEWD0wK0SxZEmtl6D+DjvmNSpv4N8l6Ak
-         BWyvn+bFQuTZWbujitI6gScpUl1otUY8zfFeh0T0OQOCrrT7Ws8mzHqiZFHSER78H++i
-         op9l7g3aCRngWqFx9nrYlu1Upwv/SCTc+vRh0w6PXWSp6TjT3bmRT5fRz/ejaxPkPUQH
-         xtq+FOcFRXsBriECDXcy+1HOutZuqJko3PrzKROMcHhviCDbncu+PXZRHW6tkItSZoxZ
-         8Egw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685742664; x=1688334664;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9LyhjoS28aUESLXn6ZKM0bdRXh4cqYI4n9WNxwVEOj8=;
-        b=GFN4PJX8U4mK4TKMORqkPatd2TEkE/kTQXau5QG9016xroK/AeaP2nH5T3/dc4D+jI
-         MMHp2sJmtBPxQIRWO0/HlhQF1Br9G6/AtLrbEVDeb5aOIEWF6pRfRdtlbKydgcWj5nzt
-         qY9PySN5n3S9qtfniQMVHpJ/HsisJ3YlT3DhgTRQU1kUU9Qe3KQHe2kfDkvZOZIhFnO2
-         K8wGXgC6+4oGAxBwld9N53dIHB8rdRhXT8OrP3pwBupi9ePMpbEDeyAzgxy173IDzZwY
-         c2mcipO2/mxDk8TIQJ/cJFHDuWVOhi94HY9zky0EulRBO62CxkHhJ0gGeXkTQEPog5Y8
-         YIfA==
-X-Gm-Message-State: AC+VfDxKwAKMXT8OQuaBQKHnUHE5QyGQFuclgl1iJAfhHA9H+b7Ur7dv
-        KEGDFMx0P/tevB6X4l1rVD5CXPm/WBeWIw==
-X-Google-Smtp-Source: ACHHUZ46Vxon1WXTeWKbHhazSe/lclkMMiBqLCynxDoI400iszcQFoOb5Ezi3x5065rtpWkEdQ31Lg==
-X-Received: by 2002:a9d:6255:0:b0:6af:6f7c:843f with SMTP id i21-20020a9d6255000000b006af6f7c843fmr1906673otk.7.1685742664559;
-        Fri, 02 Jun 2023 14:51:04 -0700 (PDT)
-Received: from madhu-kernel (99-145-207-128.lightspeed.austtx.sbcglobal.net. [99.145.207.128])
-        by smtp.gmail.com with ESMTPSA id e17-20020a9d63d1000000b006af9405773dsm1042679otl.35.2023.06.02.14.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 14:51:04 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 16:51:02 -0500
-From:   Madhumitha Prabakaran <madhumithabiw@gmail.com>
-To:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Cc:     ivan.orlov0322@gmail.com
-Subject: [PATCH] docs: Fix warning:Error in "code-block" directive
-Message-ID: <20230602215102.GA220958@madhu-kernel>
+        Fri, 2 Jun 2023 17:54:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7E1A5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 14:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 539F961EF8
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 21:54:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68E5C4339B;
+        Fri,  2 Jun 2023 21:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685742891;
+        bh=gCs8lv7QzbHnoWxQdwszcYV+QYvUCCO1/czQtJohcFU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ts7sAD57zMu7vNGEpDIixZvsiCJOZ80qVMELZ4CaImTurenx2HP26g13kCMI3Bffm
+         3UiQfr0XQOhK3uV65sXsNKniBv0Vq7wHx/6q3alx5oUnt97bTptVmunhDmaIp5AT10
+         JayT2NdmOxOq2na3VbRxvvCYCAsW+cPy+p+Ks1iIFHud46AI2g5vvwwcwrvAlj0CNi
+         YYkAzjXX67DfIU7VbUAP7EXfYc4vKM7qx6EzIsqM5uMM33aytyfGTP5WsK1/xlOX/d
+         P/oaziCvx8iFLG+gxDhd2tm4HrV/dbkLrcGUhoYm4IVNrvgLB288ByElyoY/Ch9SJT
+         hyCq98DJScunQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Yu Zhao <yuzhao@google.com>, Mike Rapoport <rppt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        damon@lists.linux.dev
+Subject: Re: [PATCH v3 3/4] mm/damon/ops-common: Refactor to use {pte|pmd}p_clear_young_notify()
+Date:   Fri,  2 Jun 2023 21:54:49 +0000
+Message-Id: <20230602215449.107659-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230602092949.545577-4-ryan.roberts@arm.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the error in "code-block" directive by providing the
-argument as "text".
+Hi Ryan,
 
-Signed-off-by: Madhumitha Prabakaran <madhumithabiw@gmail.com>
----
- .../firmware-guide/acpi/chromeos-acpi-device.rst          | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Fri, 2 Jun 2023 10:29:48 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
 
-diff --git a/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst b/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
-index f37fc90ce340..27292299ad17 100644
---- a/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
-+++ b/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
-@@ -131,7 +131,7 @@ None
- Result code:
- ------------
- 
--.. code-block::
-+.. code-block:: text
- 
-    Package {
-            Reserved1
-@@ -192,7 +192,7 @@ None
- 
- Result code:
- ------------
--.. code-block::
-+.. code-block:: text
- 
-         Package {
-                 Package {
-@@ -265,7 +265,7 @@ None
- 
- Result code:
- ------------
--.. code-block::
-+.. code-block:: text
- 
-         Package {
-                 NV Storage Block Offset  //DWORD
-@@ -347,7 +347,7 @@ A package containing a list of null-terminated ASCII strings, one for each contr
- supported by the Chrome OS hardware device, not including the MLST method itself.
- For this version of the specification, the result is:
- 
--.. code-block::
-+.. code-block:: text
- 
-         Package {
-                 "CHSW",
--- 
-2.25.1
+> With the fix in place to atomically test and clear young on ptes and
+> pmds, simplify the code to handle the clearing for both the primary mmu
+> and the mmu notifier with a single API call.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> ---
+>  mm/damon/ops-common.c | 22 ++--------------------
+>  1 file changed, 2 insertions(+), 20 deletions(-)
+> 
+> diff --git a/mm/damon/ops-common.c b/mm/damon/ops-common.c
+> index acc264b97903..d4ab81229136 100644
+> --- a/mm/damon/ops-common.c
+> +++ b/mm/damon/ops-common.c
+> @@ -39,21 +39,12 @@ struct folio *damon_get_folio(unsigned long pfn)
+>  
+>  void damon_ptep_mkold(pte_t *pte, struct vm_area_struct *vma, unsigned long addr)
+>  {
+> -	bool referenced = false;
+>  	struct folio *folio = damon_get_folio(pte_pfn(*pte));
+>  
+>  	if (!folio)
+>  		return;
+>  
+> -	if (ptep_test_and_clear_young(vma, addr, pte))
+> -		referenced = true;
+> -
+> -#ifdef CONFIG_MMU_NOTIFIER
+> -	if (mmu_notifier_clear_young(vma->vm_mm, addr, addr + PAGE_SIZE))
+> -		referenced = true;
+> -#endif /* CONFIG_MMU_NOTIFIER */
+> -
+> -	if (referenced)
+> +	if (ptep_clear_young_notify(vma, addr, pte))
+>  		folio_set_young(folio);
+>  
+>  	folio_set_idle(folio);
+> @@ -63,21 +54,12 @@ void damon_ptep_mkold(pte_t *pte, struct vm_area_struct *vma, unsigned long addr
+>  void damon_pmdp_mkold(pmd_t *pmd, struct vm_area_struct *vma, unsigned long addr)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> -	bool referenced = false;
+>  	struct folio *folio = damon_get_folio(pmd_pfn(*pmd));
+>  
+>  	if (!folio)
+>  		return;
+>  
+> -	if (pmdp_test_and_clear_young(vma, addr, pmd))
+> -		referenced = true;
+> -
+> -#ifdef CONFIG_MMU_NOTIFIER
+> -	if (mmu_notifier_clear_young(vma->vm_mm, addr, addr + HPAGE_PMD_SIZE))
+> -		referenced = true;
+> -#endif /* CONFIG_MMU_NOTIFIER */
+> -
+> -	if (referenced)
+> +	if (pmdp_clear_young_notify(vma, addr, pmd))
+>  		folio_set_young(folio);
+>  
+>  	folio_set_idle(folio);
+> -- 
+> 2.25.1
+> 
+> 
