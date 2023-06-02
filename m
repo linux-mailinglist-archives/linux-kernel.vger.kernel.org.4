@@ -2,203 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974197204D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C507204D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 16:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236217AbjFBOsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 10:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S236212AbjFBOsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 10:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbjFBOsQ (ORCPT
+        with ESMTP id S236215AbjFBOsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 10:48:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF7C1BF
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:48:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E35A621A2C;
-        Fri,  2 Jun 2023 14:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685717292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qgCcBdiuMHEcUROu//ERii1RUEDyG9SRk3k8Wf+Yozc=;
-        b=kHP2tR4LakBIm3RgvPtArMr3AOseyJZSk/TxM/oAaF8iDXEkF5f6imlfwJuR68jwwxeMJ0
-        XgrmFeDP4dgsyoyuSrGccehwvZIyEWLc562GX3SL6+fs7qVgiIW5unDxk/Rjz1KegEmgxb
-        sXQOKO2kDnWoISB0VfflqDn5EObX5wQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DC5D13A2E;
-        Fri,  2 Jun 2023 14:48:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YwrqGCwBemR6XQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 02 Jun 2023 14:48:12 +0000
-Message-ID: <bd70e7b8-1971-6982-979a-ce1eb4c93465@suse.com>
-Date:   Fri, 2 Jun 2023 16:48:11 +0200
+        Fri, 2 Jun 2023 10:48:45 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB95E4E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 07:48:42 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so3134156a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 07:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685717321; x=1688309321;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=hJ9vneQJ4b683G/HZn1+z6+HzvNcmHcX4U7xxt8CZQM=;
+        b=fod6LE95FV3APy5Pg6yBDbE1/Y+vFXNmAWLeCfz4L5JBk30TL+NMVnUCdzzyz1FmGA
+         tnAwb/pDxY6oxocRE7I92RpB1oMc4Ejd0AGm4RBYZmXgPLLbMDpQUSUJzxch0HcivYmH
+         eeKQiKDauWuzCFuGJoK41t9I8GBIIvnUtBY3PmVgVsQ0Gxq5tBLjiVkfrdXuV433zoPH
+         dsQNE3O+Rnb2IYR1p7VvhIGMcWM3DGsVhdqFVTwZqf2QmZZ1LKPrxOimSrdLO+ZMPKe0
+         LAZ+wOUz/ib1HVFZLCL609EZyw89w5tYV+UvpDTsdWHXTt1lKL2oaLhVA3CxTm5YuRBo
+         CtZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685717321; x=1688309321;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hJ9vneQJ4b683G/HZn1+z6+HzvNcmHcX4U7xxt8CZQM=;
+        b=FfzLpQuBQ2aZKfVC0A3CkNqFtlhlhIA0vzBBbEQfxsBG6jFNubEBSkvmn9Jh5BH1k6
+         zP+wey0YGYN05wh3HlOT6JYDWY7iuIaOHhBamBj4VyW1McHc+jE+VquK1NlwF+vkd+Rd
+         FIj2vUaOwzrzVmpnKawyR5qHNnFeSlJOqTeFKmHix1aCM3LBckzhXbbFabGMslkJVos1
+         f2rEyHuUFqJyoFANkN7WveLqj2wFA+q50Ys01VGKIt6f7+Ncc9I6ktFEAsJHRmdA12QZ
+         dt5sQ1LLxzkupif/D+nfX6UX1qOVNkI3lGLCKAYUVk2l/2gVB8OlMsovZ+Ib1YW77A5w
+         q1VA==
+X-Gm-Message-State: AC+VfDxPIyATs7M0gsZLruP73HTWuQtgpk/MMZz9ScCwVirjfvOiuxUK
+        v0OaMqma1S28zNr8MKjMp46zQw==
+X-Google-Smtp-Source: ACHHUZ7UZYmvfQCc3kWCaTEJZ/XKHlA07x9dA5pULrpWr6CJ5UxHiyb7LwJqRCvti/IzE2pGri8UQg==
+X-Received: by 2002:a17:907:160d:b0:974:1c91:a751 with SMTP id hb13-20020a170907160d00b009741c91a751mr12009627ejc.29.1685717321001;
+        Fri, 02 Jun 2023 07:48:41 -0700 (PDT)
+Received: from localhost ([194.62.217.2])
+        by smtp.gmail.com with ESMTPSA id cb2-20020a170906a44200b0097457363fc0sm851382ejb.33.2023.06.02.07.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 07:48:40 -0700 (PDT)
+References: <20230601134946.3887870-1-aliceryhl@google.com>
+ <20230601134946.3887870-9-aliceryhl@google.com>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v2 8/8] rust: workqueue: add examples
+Date:   Fri, 02 Jun 2023 16:48:14 +0200
+In-reply-to: <20230601134946.3887870-9-aliceryhl@google.com>
+Message-ID: <87y1l1zzqw.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
- protection modify mask
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
- <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
- <cfd19da7-4148-f277-0cf8-507b94d214a3@suse.com>
- <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------xSod5AXDcN7eeAnElmpFWrrJ"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------xSod5AXDcN7eeAnElmpFWrrJ
-Content-Type: multipart/mixed; boundary="------------pvIpQ559mjmcgHKBMLSOMf6K";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@redhat.com>, Yu Zhao <yuzhao@google.com>,
- linux-kernel@vger.kernel.org,
- =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?=
- <marmarek@invisiblethingslab.com>, Andi Shyti <andi.shyti@linux.intel.com>,
- drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Message-ID: <bd70e7b8-1971-6982-979a-ce1eb4c93465@suse.com>
-Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
- protection modify mask
-References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
- <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
- <cfd19da7-4148-f277-0cf8-507b94d214a3@suse.com>
- <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
-In-Reply-To: <20230602144357.GCZHoALQjO+xx3YxAz@fat_crate.local>
 
---------------pvIpQ559mjmcgHKBMLSOMf6K
-Content-Type: multipart/mixed; boundary="------------Dk7NVigM3sGgJDBkoB6lZ7gd"
+Alice Ryhl <aliceryhl@google.com> writes:
 
---------------Dk7NVigM3sGgJDBkoB6lZ7gd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> This adds two examples of how to use the workqueue. The first example
+> shows how to use it when you only have one `work_struct` field, and the
+> second example shows how to use it when you have multiple `work_struct`
+> fields.
+>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-T24gMDIuMDYuMjMgMTY6NDMsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBK
-dW4gMDEsIDIwMjMgYXQgMTA6NDc6MzlBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IEFzIGRlc2NyaWJlZCBpbiB0aGUgY29tbWl0IG1lc3NhZ2UsIHRoaXMgb25seSB3b3Jr
-cyBvbiBiYXJlIG1ldGFsIGR1ZSB0byB0aGUNCj4+IFBBVCBiaXQgbm90IGJlaW5nIG5lZWRl
-ZCBmb3IgV0MgbWFwcGluZ3MuDQo+Pg0KPj4gTWFraW5nIHRoaXMgcGF0Y2ggWGVuIHNwZWNp
-ZmljIHdvdWxkIHRyeSB0byBjdXJlIHRoZSBzeW1wdG9tcyB3aXRob3V0IGZpeGluZw0KPj4g
-dGhlIHVuZGVybHlpbmcgcHJvYmxlbTogX1BBR0VfUEFUIHNob3VsZCBiZSByZWdhcmRlZCB0
-aGUgc2FtZSB3YXkgYXMgdGhlIGJpdHMNCj4+IGZvciBjYWNoaW5nIG1vZGUgKF9QQUdFX0NI
-R19NQVNLKS4NCj4gDQo+IFNvIHdoeSBpc24ndCBfUEFHRV9QQVQgcGFydCBvZiBfUEFHRV9D
-SEdfTUFTSz8NCg0KVGhpcyB3b3VsZCByZXN1bHQgaW4gcHJvYmxlbXMgZm9yIGxhcmdlIHBh
-Z2VzOiBfUEFHRV9QU0UgaXMgYXQgdGhlIHNhbWUNCnBvc2l0aW9uIGFzIF9QQUdFX1BBVCAo
-bGFyZ2UgcGFnZXMgYXJlIHVzaW5nIF9QQUdFX1BBVF9MQVJHRSBpbnN0ZWFkKS4NCg0KWWVz
-LCB4ODYgQUJJIGlzIGEgbWVzcy4NCg0KDQpKdWVyZ2VuDQoNCg==
---------------Dk7NVigM3sGgJDBkoB6lZ7gd
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Andreas Hindborg (Samsung) <nmi@metaspace.dk>
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> ---
+>  rust/kernel/workqueue.rs | 104 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 104 insertions(+)
+>
+> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+> index c302e8b8624b..cefcf43ff40e 100644
+> --- a/rust/kernel/workqueue.rs
+> +++ b/rust/kernel/workqueue.rs
+> @@ -26,6 +26,110 @@
+>  //!  * The `WorkItemPointer` trait is implemented for the pointer type that points at a something
+>  //!    that implements `WorkItem`.
+>  //!
+> +//! ## Example
+> +//!
+> +//! This example defines a struct that holds an integer and can be scheduled on the workqueue. When
+> +//! the struct is executed, it will print the integer. Since there is only one `work_struct` field,
+> +//! we do not need to specify ids for the fields.
+> +//!
+> +//! ```
+> +//! use kernel::prelude::*;
+> +//! use kernel::sync::Arc;
+> +//! use kernel::workqueue::{self, Work, WorkItem};
+> +//!
+> +//! #[pin_data]
+> +//! struct MyStruct {
+> +//!     value: i32,
+> +//!     #[pin]
+> +//!     work: Work<MyStruct>,
+> +//! }
+> +//!
+> +//! impl_has_work! {
+> +//!     impl HasWork<Self> for MyStruct { self.work }
+> +//! }
+> +//!
+> +//! impl MyStruct {
+> +//!     fn new(value: i32) -> Result<Arc<Self>> {
+> +//!         Arc::pin_init(pin_init!(MyStruct {
+> +//!             value,
+> +//!             work <- Work::new(),
+> +//!         }))
+> +//!     }
+> +//! }
+> +//!
+> +//! impl WorkItem for MyStruct {
+> +//!     type Pointer = Arc<MyStruct>;
+> +//!
+> +//!     fn run(this: Arc<MyStruct>) {
+> +//!         pr_info!("The value is: {}", this.value);
+> +//!     }
+> +//! }
+> +//!
+> +//! /// This method will enqueue the struct for execution on the system workqueue, where its value
+> +//! /// will be printed.
+> +//! fn print_later(val: Arc<MyStruct>) {
+> +//!     let _ = workqueue::system().enqueue(val);
+> +//! }
+> +//! ```
+> +//!
+> +//! The following example shows how multiple `work_struct` fields can be used:
+> +//!
+> +//! ```
+> +//! use kernel::prelude::*;
+> +//! use kernel::sync::Arc;
+> +//! use kernel::workqueue::{self, Work, WorkItem};
+> +//!
+> +//! #[pin_data]
+> +//! struct MyStruct {
+> +//!     value_1: i32,
+> +//!     value_2: i32,
+> +//!     #[pin]
+> +//!     work_1: Work<MyStruct, 1>,
+> +//!     #[pin]
+> +//!     work_2: Work<MyStruct, 2>,
+> +//! }
+> +//!
+> +//! impl_has_work! {
+> +//!     impl HasWork<Self, 1> for MyStruct { self.work_1 }
+> +//!     impl HasWork<Self, 2> for MyStruct { self.work_2 }
+> +//! }
+> +//!
+> +//! impl MyStruct {
+> +//!     fn new(value_1: i32, value_2: i32) -> Result<Arc<Self>> {
+> +//!         Arc::pin_init(pin_init!(MyStruct {
+> +//!             value_1,
+> +//!             value_2,
+> +//!             work_1 <- Work::new(),
+> +//!             work_2 <- Work::new(),
+> +//!         }))
+> +//!     }
+> +//! }
+> +//!
+> +//! impl WorkItem<1> for MyStruct {
+> +//!     type Pointer = Arc<MyStruct>;
+> +//!
+> +//!     fn run(this: Arc<MyStruct>) {
+> +//!         pr_info!("The value is: {}", this.value_1);
+> +//!     }
+> +//! }
+> +//!
+> +//! impl WorkItem<2> for MyStruct {
+> +//!     type Pointer = Arc<MyStruct>;
+> +//!
+> +//!     fn run(this: Arc<MyStruct>) {
+> +//!         pr_info!("The second value is: {}", this.value_2);
+> +//!     }
+> +//! }
+> +//!
+> +//! fn print_1_later(val: Arc<MyStruct>) {
+> +//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 1>(val);
+> +//! }
+> +//!
+> +//! fn print_2_later(val: Arc<MyStruct>) {
+> +//!     let _ = workqueue::system().enqueue::<Arc<MyStruct>, 2>(val);
+> +//! }
+> +//! ```
+> +//!
+>  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
+>  
+>  use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------Dk7NVigM3sGgJDBkoB6lZ7gd--
-
---------------pvIpQ559mjmcgHKBMLSOMf6K--
-
---------------xSod5AXDcN7eeAnElmpFWrrJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmR6ASwFAwAAAAAACgkQsN6d1ii/Ey+t
-Kwf+J581HB+9alPQG+Y6YV6SaYs+cqCaGLsEL/4a0Vem+j67nYpFFIgyv2tMhCgtJbnALHhJx0lZ
-NJM1XKZOJD0PW9s74DqmzYKkE0SfBppGsF9lobv0yod0kKku/tV6AOXRoKcd1tMCvOiVDREcpSF5
-Wh3NyX0iOTNHwNWH3hFJDzJ0dKIL9AtkG0R54eGaKXtcAtQEJ5r7Nhs4jK8maJHTKA4joZuWl6yh
-p3+huplv4ewT5TQvLSGSEMuZ28wr7FyN/Mj3wi4r3Qwtzn/jEayh3b72m5ajS3xg/TFx7hew2qeF
-//8fEk09ZDA9ebGJzJDSkm2VbVJ6ZzZzCEG8jQvvqw==
-=lbX1
------END PGP SIGNATURE-----
-
---------------xSod5AXDcN7eeAnElmpFWrrJ--
