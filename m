@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC1C7206BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E057206BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 18:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbjFBQAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 12:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S234468AbjFBQCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 12:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbjFBQAp (ORCPT
+        with ESMTP id S234027AbjFBQCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 12:00:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA4A132
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685721599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WluSeIuvtKhl0MvwyGqfFEArtzh7ptnhCjSpLHHHp9s=;
-        b=H1kjvdNkyEtyHyC0b5Ov7prZjNrzoZIkU5/S0XK8287Jml3A8EHX6ZdNMbiP3SOyXbCLpv
-        JjnvncrL8ihwkw1tGFLo2dPCfCqgFRhdgVUY7EiAyJotnnWPRUss88Nh5aVOnZpnTCSVoE
-        hZu3g1mZPL4MhOfGF5kE4DwbZ84+3hI=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-bkyaVGo1NCCTFev7UGI9zg-1; Fri, 02 Jun 2023 11:59:58 -0400
-X-MC-Unique: bkyaVGo1NCCTFev7UGI9zg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f6b20bc467so2564361cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 08:59:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685721598; x=1688313598;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Fri, 2 Jun 2023 12:02:12 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BB1BB;
+        Fri,  2 Jun 2023 09:02:11 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-256766a1c43so1048763a91.1;
+        Fri, 02 Jun 2023 09:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685721731; x=1688313731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WluSeIuvtKhl0MvwyGqfFEArtzh7ptnhCjSpLHHHp9s=;
-        b=QPizEtuhLOthad1nlTVoUSxhqZJaCWnbsbrIS7s16QNnrC45JvodOOc3rQP1EzdiFN
-         QZVWMTMEbUVFiVwQb0b8/WGGyGeCxRzNFIASKxh+0tvR8EONW6NBfRyVFdA9ViBdIw62
-         a9aPf523upx5FBVCfxhhAYaEq49mOO8qw6IqsXt27Yy41yN9oyL6xwlvBOWvCVC7VgeB
-         l5MzzqUc3qdqtXkGOmF0RiHqE5UfWGfd/O4NmTiuj2xExUTm3sMA9k4Gpq9TQcDYjvhp
-         q5IdME/ELPLkTKrGgMWTAlU8doCkMuHSdpYefbyq5oTpkvKOZ57aKV3WsbiKoPyz/PnY
-         OdLg==
-X-Gm-Message-State: AC+VfDyUgbhtsVlSs4rr6yrSWYxzYDvo/6uGHJv0WkpX8N/3iHXLxrKY
-        JVqfOklH1JKSp5GVrsbPYvJawnCTmqHJ6lluCAdtGpJnK812P/kIIMJVVjTTG0dIBnLMVA/tRxN
-        wvzZLf8Kb0Wi2Xi7CQkmMu+fs
-X-Received: by 2002:a05:622a:148e:b0:3f6:a9e9:1e96 with SMTP id t14-20020a05622a148e00b003f6a9e91e96mr16819348qtx.2.1685721597813;
-        Fri, 02 Jun 2023 08:59:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4P+qvQuw+e4EBMOLjOETYwQ3U0i400pZccCzfCIIyuO0UO5Oda35BzCXNcPgaf0G00J0XIqA==
-X-Received: by 2002:a05:622a:148e:b0:3f6:a9e9:1e96 with SMTP id t14-20020a05622a148e00b003f6a9e91e96mr16819317qtx.2.1685721597584;
-        Fri, 02 Jun 2023 08:59:57 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id p15-20020ac8460f000000b003f7369c7302sm897702qtn.89.2023.06.02.08.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 08:59:56 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 11:59:55 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/12] selftests/mm: move uffd* routines from vm_util.c
- to uffd-common.c
-Message-ID: <ZHoR+3v+zUENBhi4@x1n>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-11-jhubbard@nvidia.com>
+        bh=xuDfprJrboRzf5u1uDrS/dCv7LltA39eqMpcIyjhXRQ=;
+        b=dqnjDk+PySEns2fwhB8Ipf8F9D/wNK95+O1S6L5P+K2jN8qo1z5RZj4DqIMTiidEtj
+         HZj1RorvCbyvVgoN5bP0F2rg13OoBLm+OQDDcDYH8L2x1DLCvonHORbUXSeg3sKtA27k
+         1zuSbrqnZ/gbBLgAVOTlhlHDihas2E1fyhqVXQ75/fWo6EQ6VcE23xETUrD/8prYj/QT
+         1OQNNba2SD5lBAjTe77HW7K09EdXlnUEJe39ctBGCEk4Pl/NPL/VvwqkMF62CNnPy3cY
+         hP46xM2IHW+2ekr0q7Spe6/v4VH0t3WY12KZw20kTkN+3H5OBPh59msu6YSfn8lhY6Fq
+         I9mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685721731; x=1688313731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xuDfprJrboRzf5u1uDrS/dCv7LltA39eqMpcIyjhXRQ=;
+        b=drncCoQ5CXaQGk5RG8du6vrkGrUXcmmXkhkHaXY1EDEvOeBqifm1SeG0lDiRrHhylp
+         tN2eJKbow3IiCRB1N8MoQ/6mzWVeY3t7ys/hPV1t/lWL//GjJY8Mw9ls4JLdDFr52hZr
+         4aWHuFjyGwFs+Y0ljzmNwnwinjKhgCBY2q0qTAOxO1ZHxYikdpF6yLkz/lu2lO8bSyQj
+         uS/yXhrCD71LfsWZ+2rXoyKkTWfti4cgqPGVW2bPRiI+1pf9/3ltiqnRB5s6tPGpM9vX
+         F0EtkL5t8uShAmnA600itwmGForuxDWVLF/Ze53AS9YkPwgPbJbUXGOwtohvBk7LAbPp
+         mm0A==
+X-Gm-Message-State: AC+VfDy5x8jQ+9Xmvgfwl/2omL08/u+CDARVYWivdrNO8MtR5anJRe18
+        /JAa1hdr2cWacqnZLjbOgyecLZxSCluaHUjmCkXqwCur
+X-Google-Smtp-Source: ACHHUZ5Gv34h4x6xVP8yrgytk9HvpKsnxASXFx2v6OgtBqglkEKB3C47eX1HIurLUsCBMlbshpA7WkhAnMstCKuighc=
+X-Received: by 2002:a17:90b:1003:b0:253:360a:f6b with SMTP id
+ gm3-20020a17090b100300b00253360a0f6bmr342713pjb.13.1685721730887; Fri, 02 Jun
+ 2023 09:02:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230602013358.900637-11-jhubbard@nvidia.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+ <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+ <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn> <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
+ <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn> <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
+In-Reply-To: <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Fri, 2 Jun 2023 09:01:34 -0700
+Message-ID: <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Ding Hui <dinghui@sangfor.com.cn>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 06:33:56PM -0700, John Hubbard wrote:
-> This is where they belong, and this makes it cleaner to apply a
-> follow-up fix to the uffd builds.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On Fri, Jun 2, 2023 at 8:42=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > > Also, RTNL should be held during the time both calls are made into th=
+e
+> > > driver. So nothing from userspace should be able to get in the middle
+> > > of these calls to change the number of queues.
+> > >
+> >
+> > The RTNL lock is already be held during every each ioctl in dev_ethtool=
+().
+> >
+> >     rtnl_lock();
+> >     rc =3D __dev_ethtool(net, ifr, useraddr, ethcmd, state);
+> >     rtnl_unlock();
+>
+> Yes, exactly. So the kernel should be safe from buffer overruns.
+>
+> Userspace will not get more than it asked for. It might get less, and
+> it could be different to the previous calls. But i'm not aware of
+> anything which says anything about the consistency between different
+> invocations of ethtool -S.
 
-Thanks for further looking into this.
+The problem is the userspace allocation ends up requiring we make two
+calls into the stack. So it takes the lock once to get the count,
+performs the allocation, and then calls into ethtool again taking the
+lock and by then the value may have changed.
 
-I'm fine to move it over if you think proper, but just to mention I had
-those in vm_utils.h just because I left all uffd specific tests shared code
-in uffd-common.h, so my plan was uffd-common.h shouldn't be included in
-most test cases except uffd tests.
+Within each call it is held the entire time, but the userspace has to
+make two calls. So in between the two the number of rings could
+potentially change.
 
-I'm not sure whether we can just make your next patch of "ifndef.." into
-vm_utils.h to avoid the movement, or is it a must?
-
-Thanks,
-
--- 
-Peter Xu
-
+What this change is essentially doing is clamping the copied data to
+the lesser of the current value versus the value when the userspace
+was allocated. However I am wondering now if we shouldn't just update
+the size value and return that as some sort of error for the userspace
+to potentially reallocate and repeat until it has the right size.
