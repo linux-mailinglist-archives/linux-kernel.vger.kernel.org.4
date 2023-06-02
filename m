@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A15071FCF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE15A71FCF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234813AbjFBJCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S234740AbjFBJCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234672AbjFBJBp (ORCPT
+        with ESMTP id S234723AbjFBJBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:01:45 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D661AE;
-        Fri,  2 Jun 2023 02:01:45 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-39a50fcc719so1306525b6e.2;
-        Fri, 02 Jun 2023 02:01:45 -0700 (PDT)
+        Fri, 2 Jun 2023 05:01:49 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0E91BB
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:01:47 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4f89f71b8so2410307e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685696504; x=1688288504;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kws7y4VkDTZYQ3nyC0nxFkZqfRS9Xqe8rcms/oZZOcU=;
-        b=oWywxfMHX+105fVuwQITBZfdOAXhyC4cy5+yf73os1h/j9mjUddf9NBdUddAAuOBvZ
-         AfnyWDHRHEKj7zMtgupGsf4ZoDRADlhi78QT2T9LBvNe5AITcEED1SvPBJiWDAFcKXhm
-         9Dcn6f8vqUfhZATVnHBYohL/3N9Z8z/vFDkIEtdXoVVyjGkEbboK0h11y1YHvN4vvUT2
-         LvoVHw2EWLknp3zzbdGye6WIqg3wKaFLvz0ldaKIjxGGdqiBDKfACYCgH1mvXNMj1eiy
-         gn2u2uBmjIWJldlHfWM7tuDebf0Bp0ib6+CbpCzA5EUJ8P8huT85b/D/0EEo4fNgmnho
-         4MOA==
+        d=linaro.org; s=google; t=1685696506; x=1688288506;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GwgsgMAg7oqkWKtA9ARjdycdp0sFv9de/hyXYAPV7fQ=;
+        b=agFUrV6Ulcvygm1bLPR9dFf9IjnUJKRO8lR6DufrM09WFb2cmQQss9gOhx/5zHmU7M
+         64iKFYoRW3p999QIImwOz7jMkPsH2TjlPVRE3twWsFwxSkQ+Lp6ALYC6taunvPIPEG1j
+         S/loCqtWOm8rw310sU4Hb0houZP2Ko9sLG6yBkduhHQrhw9wlU5ePtHQ/oHB6Su30PR/
+         fLXJFVomsmxj8KUkJPpRAM4w2ATm1EWXPCwUdmGvr6tcUy1FjnkInzjoMFsH4IM3vtct
+         Am9YI6qeS15zK1wtsS0Ic/SPyfl13VgnyL1+Gr/JDWzr4suHq90s5MKIi8YgbfjEmeDu
+         Ot8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685696504; x=1688288504;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kws7y4VkDTZYQ3nyC0nxFkZqfRS9Xqe8rcms/oZZOcU=;
-        b=GPQFkRXOHTgzM5zlcc/sZNikIz7o4Pbeto5k61SZohUnrshcUuwqrQRDeSj+cAoFy/
-         EWisQJ77f6saHEclu2tXWxrZ9JndcRiOesUa6ykF6DaxvTnMgb+q+iVtcF25Bxb/QaPu
-         dlfNrvcSlNvKXoEhWqrPvnXPKFliu8T6ZWhdctA1581i0mTsbaQcUHHnbPD4nuAUzzYZ
-         igsOwupae/SS5MEI65PmI7j2d0mDE6Dv5qg49hzVRv/EOojDXJ9A7au0HYMOLm9C1m0i
-         2YpBn6PU/eR8TXSE6sM7RYkXJndUnpunxaiMT8HbhighEqVO/N6spPLZ1CE7gpHj94ij
-         RziQ==
-X-Gm-Message-State: AC+VfDwNkzDZeQJ/qbNDnrTp5xPdaTNmSKz2WrO3CPPGtucscYdPGVJw
-        vLr6kz732cOCqvtFFrt/fF8=
-X-Google-Smtp-Source: ACHHUZ71ASbbleh0vAkdGrczHAvNay7xsB8T1bsoYWAd7d5kyoqr4Pra+5RsRSdr/Ecn0nHyxbCeTQ==
-X-Received: by 2002:a05:6808:1d5:b0:398:4d61:aad9 with SMTP id x21-20020a05680801d500b003984d61aad9mr2051172oic.24.1685696504349;
-        Fri, 02 Jun 2023 02:01:44 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-3.three.co.id. [180.214.232.3])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170902c28300b001a245b49731sm822266pld.128.2023.06.02.02.01.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 02:01:43 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id D15D0106A05; Fri,  2 Jun 2023 16:01:40 +0700 (WIB)
-Date:   Fri, 2 Jun 2023 16:01:40 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/39] 6.1.32-rc2 review
-Message-ID: <ZHmv9J2-oGhI7pQq@debian.me>
-References: <20230601143327.479886832@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1685696506; x=1688288506;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GwgsgMAg7oqkWKtA9ARjdycdp0sFv9de/hyXYAPV7fQ=;
+        b=Pt9VV9Le/zbq9dUxDaHtGsjgkeSWOVt0Mzejke1R6wDX+SDdxFHd64Cn3MyaAxhUW6
+         t7kArrDfG9KR4FZfzBzzO781I7fMlguhYUgjVOy93bsIPybwaa4iKFjr8UkfqaL7U4c+
+         kmGmV40M/Wd1rIJu8w2KYgBW2+3rSvwGOHmm38hiW9FGNtZDpyOPa7FGk29Z5OlpyBtM
+         MQb0LSHCj/6CMQzGzRQsqrVtFYUZrYi2+m7+Em1OLexEpvpNW8ZqNzmLcCVeX8jtuscX
+         PxkNAY1RvdcbeVDVtWI4WAzd6XlQ44QDJJjTv5I4oVvUeu4B0Fnx/7jz8q+l7xJOu873
+         tnDw==
+X-Gm-Message-State: AC+VfDwqFOZZy61WCtp7X78CKNH0kJ8RsTn1mVaztpfxRhvVN0N6iSQZ
+        d/0Vz9STAkTOMQywiXtMrFpXyw==
+X-Google-Smtp-Source: ACHHUZ6XMRORxk0H28KhaJr9QQvl9wz69kF0QV/iwPeAeAWOe8C8Jxn0/4LKz1MSZPwmFxye+3uxIg==
+X-Received: by 2002:a2e:8057:0:b0:2a7:6f82:4a87 with SMTP id p23-20020a2e8057000000b002a76f824a87mr1146115ljg.35.1685696505796;
+        Fri, 02 Jun 2023 02:01:45 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id t17-20020a2e9c51000000b002ac7a25c001sm146056ljj.24.2023.06.02.02.01.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 02:01:45 -0700 (PDT)
+Message-ID: <a503ac0a-9123-0e47-f76f-e3674f1ca136@linaro.org>
+Date:   Fri, 2 Jun 2023 11:01:44 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mJ8XI4Gw8QAc66Dd"
-Content-Disposition: inline
-In-Reply-To: <20230601143327.479886832@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/8] pinctrl: qcom: qdf2xxx: drop ACPI_PTR
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230601152026.1182648-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230601152026.1182648-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,35 +78,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---mJ8XI4Gw8QAc66Dd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 01, 2023 at 03:35:57PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.32 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+On 1.06.2023 17:20, Krzysztof Kozlowski wrote:
+> Driver can bind only via ACPI matching and acpi_device_id is there
+> unconditionally, so drop useless ACPI_PTR() macro.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Oh I forgot this SoC existed... I wish I could play with it!
 
-Successfully compiled and installed bindeb-pkgs on my computer (Acer
-Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---mJ8XI4Gw8QAc66Dd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHmv9AAKCRD2uYlJVVFO
-o3NoAQDWtj/c35QsvmIKvWiUvDsh7nXEpnwgM0JLjSlWPohmoQEAnNUZJLfcQDeE
-cPHHi8XeTuKRvoLU5oNEshjmsvUZnQ8=
-=0WUK
------END PGP SIGNATURE-----
-
---mJ8XI4Gw8QAc66Dd--
+Konrad
+>  drivers/pinctrl/qcom/pinctrl-qdf2xxx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pinctrl/qcom/pinctrl-qdf2xxx.c b/drivers/pinctrl/qcom/pinctrl-qdf2xxx.c
+> index b0f1b3dc6831..b5808fcfb13c 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-qdf2xxx.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-qdf2xxx.c
+> @@ -142,7 +142,7 @@ MODULE_DEVICE_TABLE(acpi, qdf2xxx_acpi_ids);
+>  static struct platform_driver qdf2xxx_pinctrl_driver = {
+>  	.driver = {
+>  		.name = "qdf2xxx-pinctrl",
+> -		.acpi_match_table = ACPI_PTR(qdf2xxx_acpi_ids),
+> +		.acpi_match_table = qdf2xxx_acpi_ids,
+>  	},
+>  	.probe = qdf2xxx_pinctrl_probe,
+>  	.remove = msm_pinctrl_remove,
