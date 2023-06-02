@@ -2,190 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459C97209E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330BE7209E7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbjFBTeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S235960AbjFBTfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236141AbjFBTeY (ORCPT
+        with ESMTP id S236305AbjFBTez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:34:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A77E19B
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685734406;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=7Z1/Pgz58TbhaQAzpuoEur5XNSR4LavXZhKLTHjF5Cw=;
-        b=FlZeDhvsdoVuIeC5RUv0HGDQMjfAbROZdUmW6xV21lgMmSSVDqdsPm/178bwkDAu/RgoC7
-        azlDlrKeaXaR9AR4CtHOBxygo2Ixd3qBYpe8S7bv7KvfcijdO02ywssSxvoTqiqnag90LD
-        cLtmWlirHa+1SI/7EDv0h8atnxkqPRs=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-215-4mpDBvSYNBqVaCzvH69W8Q-1; Fri, 02 Jun 2023 15:33:25 -0400
-X-MC-Unique: 4mpDBvSYNBqVaCzvH69W8Q-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6237c937691so28208436d6.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 12:33:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685734403; x=1688326403;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7Z1/Pgz58TbhaQAzpuoEur5XNSR4LavXZhKLTHjF5Cw=;
-        b=BKqiQGCPrVjw8cjf4vRPtEQhOVcy65IyvjBlzgnHhynY/xTrhlm9iJzConwc6xwV0K
-         taous/1LeFp38DF+gmoJHaEbX1jaXrlGKDZ9TrHV0q+DxyOY4OGqav2s4d6gtJ3cS7nc
-         UXboY8yVvmSXMB5m6UIypW0vRuayQoBRsVDqIEV2wDlh1VzoZOnL3nQPfP8iajqQ6XQo
-         Y1Zm+qaaVsKtmf7AAzTlEaxEcmcbttMd+EzBOOK1HtfHKuKVdMEl4bUP3eTl/dStK08U
-         Bv2Qe00lgFWnda8vqIhxn3KsY2OQWNlDtICmohw70qKqc7I8ISYtKo/ekzRpxkRY9hPm
-         EBrg==
-X-Gm-Message-State: AC+VfDxyOcVXrYsTl5CWKpeL32imJOJRF7NaN2jKFjDZiRxM9uVzhWMT
-        DK6fJD7OTbV7x3r9eRuyoE4GgzHIPVGUJ9QzMLQwpFT44ToZcJyaidvLCOsWhOcY+cwPtf/7KYm
-        JugqAo8Y+9OT0T9SRjV9mxakOpMzRwxl5xsSP2naTwplkPcT1OD9zPhQVSvnyqmaTYV4qoG4LkV
-        TeYLkVFt8bggufmg==
-X-Received: by 2002:a05:6214:240b:b0:623:9a08:4edd with SMTP id fv11-20020a056214240b00b006239a084eddmr7805026qvb.25.1685734403696;
-        Fri, 02 Jun 2023 12:33:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7NZR2ZeuZ9ArjkHu3p5/1mDjjAHhYDJMspDvekkAGQhPg38icwokA4+1iokJfw7YqLFuJqFA==
-X-Received: by 2002:a05:6214:240b:b0:623:9a08:4edd with SMTP id fv11-20020a056214240b00b006239a084eddmr7804993qvb.25.1685734403378;
-        Fri, 02 Jun 2023 12:33:23 -0700 (PDT)
-Received: from fedora (bras-base-wndson1334w-grc-09-142-113-164-22.dsl.bell.ca. [142.113.164.22])
-        by smtp.gmail.com with ESMTPSA id f30-20020ad4559e000000b0061c7431810esm1145512qvx.141.2023.06.02.12.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 12:33:22 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 15:33:21 -0400
-From:   Lucas Karpinski <lkarpins@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com, bmasney@redhat.com,
-        quic_shazhuss@quicinc.com
-Subject: [PATCH] Revert "arm64: dts: qcom: sa8540p-ride: enable pcie2a node"
-Message-ID: <pmodcoakbs25z2a7mlo5gpuz63zluh35vbgb5itn6k5aqhjnny@jvphbpvahtse>
+        Fri, 2 Jun 2023 15:34:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F6319B;
+        Fri,  2 Jun 2023 12:34:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D3826171E;
+        Fri,  2 Jun 2023 19:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93820C433D2;
+        Fri,  2 Jun 2023 19:34:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685734489;
+        bh=pVlZKSK7V60KmCp33dUk7C5+KElh0XQCV1KKRWbcQK0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fHmUyu5c/sVACqPy0gfGn2fBV9FLEDuhZPl3nFcTKs9nXSLp41oJ9HM4l69qFmbiY
+         XPlw6rznp83fjpwBCPoMgtMojFuMDLlD4V9+OiG9lHK9uoRILBDGkADD+k5IMiWMaF
+         IFHN7mtSt1WBWN+zeO+w5QqT6hPog9LsPpx4XQtQ40cvu3Aq25BbadPvEJtm+Lb5+k
+         nyGEIOrXIaHT16sRWebf2QbtKBEPS8P0WxoDiZuTvOIHTX+oZVj+lBdGQ+g6QI/3k+
+         tpJv14XAihBmEiu+x4YE4AFzUxbQTZzR5S5fnKe1ZnTvZyQ33lDUDyNYExeAQZRyfk
+         9chjeT1n3iAvA==
+Date:   Fri, 2 Jun 2023 13:35:41 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Haim Dreyfuss <haim.dreyfuss@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] wifi: iwlwifi: mvm: Fix -Warray-bounds bug in
+ iwl_mvm_wait_d3_notif()
+Message-ID: <ZHpEjTmBys5cCOGZ@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 2eb4cdcd5aba2db83f2111de1242721eeb659f71.
+kmemdup() at line 2735 is not duplicating enough memory for
+notif->tid_tear_down and notif->station_id. As it only duplicates
+612 bytes: up to offsetofend(struct iwl_wowlan_info_notif,
+received_beacons), this is the range of [0, 612) bytes.
 
-The patch introduced a sporadic error where the Qdrive3 will fail to
-boot occasionally due to an rcu preempt stall.
-Qualcomm has disabled pcie2a downstream:
-https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/rh-patch/-/commit/447f2135909683d1385af36f95fae5e1d63a7e2f
+2735	notif = kmemdup(notif_v1,
+2736			offsetofend(struct iwl_wowlan_info_notif,
+2737				    received_beacons),
+2738			GFP_ATOMIC);
 
-rcu: INFO: rcu_preempt self-detected stall on CPU
-rcu:     0-....: (1 GPs behind) idle=77fc/1/0x4000000000000004 softirq=841/841 fqs=2476
-rcu:     (t=5253 jiffies g=-175 q=2552 ncpus=8)
-Call trace:
- __do_softirq
- ____do_softirq
- call_on_irq_stack
- do_softirq_own_stack
- __irq_exit_rcu
- irq_exit_rcu
+which evidently does not cover bytes 612 and 613 for members
+tid_tear_down and station_id in struct iwl_wowlan_info_notif.
+See below:
 
-The issue occurs normally once every 3-4 boot cycles.
-There is likely a race condition caused when setting up the two pcie
-domains concurrently (pcie2a and pcie3a).
+$ pahole -C iwl_wowlan_info_notif drivers/net/wireless/intel/iwlwifi/mvm/d3.o
+struct iwl_wowlan_info_notif {
+	struct iwl_wowlan_gtk_status_v3 gtk[2];          /*     0   488 */
+	/* --- cacheline 7 boundary (448 bytes) was 40 bytes ago --- */
+	struct iwl_wowlan_igtk_status igtk[2];           /*   488    80 */
+	/* --- cacheline 8 boundary (512 bytes) was 56 bytes ago --- */
+	__le64                     replay_ctr;           /*   568     8 */
+	/* --- cacheline 9 boundary (576 bytes) --- */
+	__le16                     pattern_number;       /*   576     2 */
+	__le16                     reserved1;            /*   578     2 */
+	__le16                     qos_seq_ctr[8];       /*   580    16 */
+	__le32                     wakeup_reasons;       /*   596     4 */
+	__le32                     num_of_gtk_rekeys;    /*   600     4 */
+	__le32                     transmitted_ndps;     /*   604     4 */
+	__le32                     received_beacons;     /*   608     4 */
+	u8                         tid_tear_down;        /*   612     1 */
+	u8                         station_id;           /*   613     1 */
+	u8                         reserved2[2];         /*   614     2 */
 
-The issue is not present when only pcie2a is enabled or when only pcie3a
-is enabled.
-A workaround was found that allowed the Qdrive3 to boot with both pcie2a
-and pcie3a enabled.
-Set the .probe_type to PROBE_FORCE_SYNCHRONOUS and add an msleep() to
-the probing function.
-This is not a solution, so this patch is disabling pcie2a as it seems
-Red Hat are the only ones working on the board,
-we're find with disabling the node until a root cause is found. If
-anyone has further suggestions for debugging, let me know.
+	/* size: 616, cachelines: 10, members: 13 */
+	/* last cacheline: 40 bytes */
+};
 
-Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
+Therefore, when the following assignments take place, actually no memory
+has been allocated for those objects:
+
+2743	notif->tid_tear_down = notif_v1->tid_tear_down;
+2744	notif->station_id = notif_v1->station_id;
+
+Fix this by allocating space for the whole notif object and zero out the
+remaining space in memory after member station_id.
+
+This also fixes the following -Warray-bouds issues:
+ CC      drivers/net/wireless/intel/iwlwifi/mvm/d3.o
+drivers/net/wireless/intel/iwlwifi/mvm/d3.c: In function ‘iwl_mvm_wait_d3_notif’:
+drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2743:30: warning: array subscript ‘struct iwl_wowlan_info_notif[0]’ is partly outside array bounds of ‘unsigned char[612]’ [-Warray-bounds=]
+ 2743 |                         notif->tid_tear_down = notif_v1->tid_tear_down;
+      |
+                 from drivers/net/wireless/intel/iwlwifi/mvm/d3.c:7:
+In function ‘kmemdup’,
+    inlined from ‘iwl_mvm_wait_d3_notif’ at drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2735:12:
+include/linux/fortify-string.h:765:16: note: object of size 612 allocated by ‘__real_kmemdup’
+  765 |         return __real_kmemdup(p, size, gfp);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/wireless/intel/iwlwifi/mvm/d3.c: In function ‘iwl_mvm_wait_d3_notif’:
+drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2744:30: warning: array subscript ‘struct iwl_wowlan_info_notif[0]’ is partly outside array bounds of ‘unsigned char[612]’ [-Warray-bounds=]
+ 2744 |                         notif->station_id = notif_v1->station_id;
+      |                              ^~
+In function ‘kmemdup’,
+    inlined from ‘iwl_mvm_wait_d3_notif’ at drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2735:12:
+include/linux/fortify-string.h:765:16: note: object of size 612 allocated by ‘__real_kmemdup’
+  765 |         return __real_kmemdup(p, size, gfp);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Link: https://github.com/KSPP/linux/issues/306
+Fixes: 905d50ddbc83 ("wifi: iwlwifi: mvm: support wowlan info notification version 2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- During debugging:
-        - Added additional time for clock/regulator stabilization.
-        - Reduced the bandwidth across pcie2a and pcie3a.
-        - Replaced the interconnect setup from another driver.
-        - The 32-bit/64-bit/config-io space for both pcie2a and pcie3a look to be mapped correctly.
-        - Verified interconnects were started successfully.
+ drivers/net/wireless/intel/iwlwifi/mvm/d3.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 44 -----------------------
- 1 file changed, 44 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 24fa449d48a6..d492723ccf7c 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -186,27 +186,6 @@ &i2c18 {
- 	status = "okay";
- };
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+index 37aa4676dc94..1f8658a5ef28 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+@@ -2733,8 +2733,7 @@ static bool iwl_mvm_wait_d3_notif(struct iwl_notif_wait_data *notif_wait,
+ 			struct iwl_wowlan_info_notif_v1 *notif_v1 = (void *)pkt->data;
  
--&pcie2a {
--	ranges = <0x01000000 0x0 0x3c200000 0x0 0x3c200000 0x0 0x100000>,
--		 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>,
--		 <0x03000000 0x5 0x00000000 0x5 0x00000000 0x1 0x00000000>;
--
--	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
--	wake-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
--
--	pinctrl-names = "default";
--	pinctrl-0 = <&pcie2a_default>;
--
--	status = "okay";
--};
--
--&pcie2a_phy {
--	vdda-phy-supply = <&vreg_l11a>;
--	vdda-pll-supply = <&vreg_l3a>;
--
--	status = "okay";
--};
--
- &pcie3a {
- 	ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
- 		 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x20000000>,
-@@ -356,29 +335,6 @@ i2c18_default: i2c18-default-state {
- 		bias-pull-up;
- 	};
+ 			notif = kmemdup(notif_v1,
+-					offsetofend(struct iwl_wowlan_info_notif,
+-						    received_beacons),
++					sizeof(struct iwl_wowlan_info_notif),
+ 					GFP_ATOMIC);
  
--	pcie2a_default: pcie2a-default-state {
--		perst-pins {
--			pins = "gpio143";
--			function = "gpio";
--			drive-strength = <2>;
--			bias-pull-down;
--		};
+ 			if (!notif)
+@@ -2742,7 +2741,7 @@ static bool iwl_mvm_wait_d3_notif(struct iwl_notif_wait_data *notif_wait,
+ 
+ 			notif->tid_tear_down = notif_v1->tid_tear_down;
+ 			notif->station_id = notif_v1->station_id;
 -
--		clkreq-pins {
--			pins = "gpio142";
--			function = "pcie2a_clkreq";
--			drive-strength = <2>;
--			bias-pull-up;
--		};
--
--		wake-pins {
--			pins = "gpio145";
--			function = "gpio";
--			drive-strength = <2>;
--			bias-pull-up;
--		};
--	};
--
- 	pcie3a_default: pcie3a-default-state {
- 		perst-pins {
- 			pins = "gpio151";
++			memset_after(notif, 0, station_id);
+ 		} else {
+ 			notif = (void *)pkt->data;
+ 		}
 -- 
-2.40.1
+2.34.1
 
