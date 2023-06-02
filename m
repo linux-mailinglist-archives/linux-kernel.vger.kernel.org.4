@@ -2,168 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B197B720970
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9113720972
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237054AbjFBTAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S237092AbjFBTCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235724AbjFBTAy (ORCPT
+        with ESMTP id S235724AbjFBTCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:00:54 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14AC1A5
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:00:51 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30af0aa4812so2432226f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 12:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685732450; x=1688324450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8VL0M+Hv9mGmc2Kt3/mWXFNmoQyIrOk75ebAr7Lp4t4=;
-        b=wNuEBht98hdHBzwrSX9/VjIRmjQydztOjE5vGDPkxuPe9qAgdxHlKT8L9Czx/B3eJ7
-         6V+1YEOf5awhAgikwlyYS86zeTrGk0f9z9gpmxb4JXphlFjJp+tm3ZXq+llmI69utkrh
-         Jz76LGTEiSDL+E8aEgcv4smX/WbfrpbXaLZMuuXLrp9J5lxKFe7Se7AC0Diq2Wtyhzo+
-         0fke/IRtSWl34ZOsn2lto4fcW4cu23b0iC5LaTJtCt+PrGL9K6lpPWcjF/a8g0hHcge+
-         jtDSzZNcIgu6eJ9YHVzHdblOT7oFIEXuXbfTCfF353iztjidwgYTSewgFU4ibtn36SNC
-         lwJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685732450; x=1688324450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8VL0M+Hv9mGmc2Kt3/mWXFNmoQyIrOk75ebAr7Lp4t4=;
-        b=XgLwWWHHya8Z4LWBeyxUVt7KGICeye2ricC5hZKx7uTmmm9lJsQP64TnDnZ/RFJvjq
-         w+tISoo2eJCs1Otnk8pbTcmoU7VdmWpDzR5s8R7un+Y4xBNMc4XBVAPDU0RSJfDe8SGN
-         P2IAXM+ZoXpciv2pZ2JX4Jtbnzy++ghxbmh7jk7W+Jx1s5P0Z0Uyhw8TM6cVpLAM0iFA
-         PLD7Xr8yd/JotydHGnzYw2A591ttF/aHMoH6MVgs1T3ewwZsSLh4LCg8QBsQI5r0lI4T
-         Uo6gB2ga0ReuQIUfnmy1lcuaMU8nZTB/ZdWGAGockGoMmoYfEmtim9O9LiI2Fu3/9rSF
-         nq3w==
-X-Gm-Message-State: AC+VfDzVp4dDYbxqVWGWEtMkHjZFCRbXMzZEDGOL3xgMfKvxBI4cyOYT
-        hzWExVc4elqiCbNHe1/xSMr9cg==
-X-Google-Smtp-Source: ACHHUZ6Oh8bWLSOT4QRyV5ew1nqbPRtcV9c9JCxEs994pSpo0l2xBf1uRTl1F39Ha+3YnNAnq8fIug==
-X-Received: by 2002:a5d:4211:0:b0:309:509f:a7f0 with SMTP id n17-20020a5d4211000000b00309509fa7f0mr542331wrq.44.1685732450258;
-        Fri, 02 Jun 2023 12:00:50 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h14-20020a5d504e000000b00300aee6c9cesm2436674wrt.20.2023.06.02.12.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 12:00:48 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 22:00:45 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
+        Fri, 2 Jun 2023 15:02:07 -0400
+Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAD11A5;
+        Fri,  2 Jun 2023 12:02:02 -0700 (PDT)
+Date:   Fri, 02 Jun 2023 19:01:44 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rhysre.net;
+        s=protonmail2; t=1685732519; x=1685991719;
+        bh=C2QS5bMur8OIlVMgvGAIQpVXbcN3hut2o7OYj0Ps85k=;
+        h=Date:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=hb1jDB12okjd1GZPt82WIops7vdBFZLmoGanTrvn0AQXNw8UwPZZsqoadYEZA1D+1
+         04dPtrzURPVLfxxuKC+dPw+9n1OdWyYhxyv5+tmU4BNExSY7ydzBN0Crd/AaVJC+nc
+         y4cewhTe2f/3qQSFIM8azsahfLh127MGHk0LKbf5IFbBxjPPb53S287UzpTph+wOmj
+         emHg9gU5Jk/oM9EOlhTjat17Ny4sIS/3aC4HrSs7lDAXEJKridxySVcWOYoLpIW5bd
+         JJjc4HRYyKmxa8hmC3E4kshtfn5QnU0EFXmgNy+7dULUerUsmgdVo+RNsFEKvqb3sW
+         1dk8ZGwzxVzMA==
+From:   Rhys Rustad-Elliott <me@rhysre.net>
+Cc:     Rhys Rustad-Elliott <me@rhysre.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 03/11] tls/sw: Use zero-length sendmsg()
- without MSG_MORE to flush
-Message-ID: <ee50e4ec-5df7-4342-885d-9e6c52da7407@kadam.mountain>
-References: <20230602150752.1306532-1-dhowells@redhat.com>
- <20230602150752.1306532-4-dhowells@redhat.com>
- <ZHo0rNlhJCRE4msb@corigine.com>
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2 0/2] Fix elem_size not being set for inner maps
+Message-ID: <20230602190110.47068-1-me@rhysre.net>
+Feedback-ID: 51368404:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHo0rNlhJCRE4msb@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MISSING_HEADERS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 08:27:56PM +0200, Simon Horman wrote:
-> + dan Carpenter
-> 
-> On Fri, Jun 02, 2023 at 04:07:44PM +0100, David Howells wrote:
-> > Allow userspace to end a TLS record without supplying any data by calling
-> > send()/sendto()/sendmsg() with no data and no MSG_MORE flag.  This can be
-> > used to flush a previous send/splice that had MSG_MORE or SPLICE_F_MORE set
-> > or a sendfile() that was incomplete.
-> > 
-> > Without this, a zero-length send to tls-sw is just ignored.  I think
-> > tls-device will do the right thing without modification.
-> > 
-> > Signed-off-by: David Howells <dhowells@redhat.com>
-> > cc: Chuck Lever <chuck.lever@oracle.com>
-> > cc: Boris Pismenny <borisp@nvidia.com>
-> > cc: John Fastabend <john.fastabend@gmail.com>
-> > cc: Jakub Kicinski <kuba@kernel.org>
-> > cc: Eric Dumazet <edumazet@google.com>
-> > cc: "David S. Miller" <davem@davemloft.net>
-> > cc: Paolo Abeni <pabeni@redhat.com>
-> > cc: Jens Axboe <axboe@kernel.dk>
-> > cc: Matthew Wilcox <willy@infradead.org>
-> > cc: netdev@vger.kernel.org
-> > ---
-> >  net/tls/tls_sw.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> > index cac1adc968e8..6aa6d17888f5 100644
-> > --- a/net/tls/tls_sw.c
-> > +++ b/net/tls/tls_sw.c
-> > @@ -945,7 +945,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
-> >  	struct tls_rec *rec;
-> >  	int required_size;
-> >  	int num_async = 0;
-> > -	bool full_record;
-> > +	bool full_record = false;
-> >  	int record_room;
-> >  	int num_zc = 0;
-> >  	int orig_size;
-> > @@ -971,6 +971,9 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
-> >  		}
-> >  	}
-> >  
-> > +	if (!msg_data_left(msg) && eor)
-> > +		goto just_flush;
-> > +
-> 
-> Hi David,
-> 
-> the flow of this function is not entirely simple, so it is not easy for me
-> to manually verify this. But in combination gcc-12 -Wmaybe-uninitialized
-> and Smatch report that the following may be used uninitialised as a result
-> of this change:
-> 
->  * msg_pl
+Commit d937bc3449fa ("bpf: make uniform use of array->elem_size
+everywhere in arraymap.c") changed array_map_gen_lookup to use
+array->elem_size instead of round_up(map->value_size, 8) as the element
+size when generating code to access a value in an array map.
 
-This warning seems correct to me.
+array->elem_size, however, is not set by bpf_map_meta_alloc when
+initializing an BPF_MAP_TYPE_ARRAY_OF_MAPS or BPF_MAP_TYPE_HASH_OF_MAPS.
+This results in array_map_gen_lookup incorrectly outputting code that
+always accesses index 0 in the array (as the index will be calculated
+via a multiplication with the element size, which is incorrectly set to
+0).
 
->  * orig_size
+This patchset sets elem_size on the bpf_array object when allocating an
+array or hash of maps to fix this and adds a selftest that accesses an
+array map nested within a hash of maps at a nonzero index to prevent
+regressions.
 
-This warning assumes we hit the first warning and then hit the goto
-wait_for_memory;
+v1: https://lore.kernel.org/bpf/95b5da7c-ee52-3ecb-0a4e-f6a7a114f269@linux.=
+dev/
 
->  * msg_en
+Changelog:
 
-I don't get this warning on my system but it's the same thing.  Hit the
-first warning then the goto wait_for_memory.
+v1 -> v2:
 
->  * required_size
+Address comments by Martin KaFai Lau:
+- Directly use inner_array->elem_size instead of using round_up
+- Move selftests to a new patch
+- Use ASSERT_* macros instead of CHECK and remove duration
+- Remove unnecessary usleep
+- Shorten selftest name
 
-Same.
+Rhys Rustad-Elliott (2):
+  bpf: Fix elem_size not being set for inner maps
+  selftests/bpf: Add access_inner_map selftest
 
->  * try_to_copy
+ kernel/bpf/map_in_map.c                       |  8 +++-
+ .../bpf/prog_tests/inner_array_lookup.c       | 31 +++++++++++++
+ .../bpf/progs/test_inner_array_lookup.c       | 45 +++++++++++++++++++
+ 3 files changed, 82 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/inner_array_look=
+up.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_inner_array_look=
+up.c
 
-I don't really understand this warning and I can't reproduce it.
-Strange.
+--=20
+2.40.1
 
-regards,
-dan carpenter
 
