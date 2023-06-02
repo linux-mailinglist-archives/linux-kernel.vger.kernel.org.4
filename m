@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20316720099
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7E1720096
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbjFBLp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 07:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
+        id S234473AbjFBLpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFBLpy (ORCPT
+        with ESMTP id S229470AbjFBLpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:45:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0D6194
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685706307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0/yzPRRzgr0a2u6l5HBVBgW8iyZpj+2he0Zb6/uXfoE=;
-        b=CbLtjryOZw1QeR+KIknKExGKbAFL5zoWcDwqe9QdHp/8epSC9UPXINCRbmlL81bvEf463i
-        r85JvZpxVY6NPoL8zEgzMeNhLd0sdK+nXzRCId5HJj9l/eofIfRLY8069hoix+9LFDVIbr
-        r61tMnHOzJDGPPL+/tyllexk9byPtIs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-18pN8u9yNt6Rjg29hrPxFQ-1; Fri, 02 Jun 2023 07:45:00 -0400
-X-MC-Unique: 18pN8u9yNt6Rjg29hrPxFQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 2 Jun 2023 07:45:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2928D194;
+        Fri,  2 Jun 2023 04:45:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55AD9381D4ED;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 746D460921;
+        Fri,  2 Jun 2023 11:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7793CC433EF;
         Fri,  2 Jun 2023 11:44:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 19CB1C154D7;
-        Fri,  2 Jun 2023 11:44:56 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wjvgL5nyZmpYRWBfab4NKvfQ7NjUvUhE3a3wYTyTEHdfQ@mail.gmail.com>
-References: <CAHk-=wjvgL5nyZmpYRWBfab4NKvfQ7NjUvUhE3a3wYTyTEHdfQ@mail.gmail.com> <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com> <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com> <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk> <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com> <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com> <832277.1685630048@warthog.procyon.org.uk> <909595.1685639680@warthog.procyon.org.uk> <20230601212043.720f85c2@kernel.org> <952877.1685694220@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: Bug in short splice to socket?
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685706300;
+        bh=ar8irlPxQ03WqRUZe/aeTAqrjnl1t+FeNYGJb4UItCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YwS6zF6m2mj48pWPiiuWC3HXF/81djLjU2P2+80DIepL+C7in4y2EnwdlrGMeTJzb
+         YNcxOCNdAljelhDsv/cuMH8Gxl+QPpcCVGQiqn8jukLdvK1VV8KqnpxEkVDtgd0JW9
+         +8k0xKXv/EBd+Ym51avSa1I7UKq7BIXAaR2ZpH4yTPk9SXzvzcsrA6uqUeWYrp69gq
+         GkV2utr1uD+aDeWCgcp1r8xqI6urNQh9mgYlyEeMaoAl6O71FUQ66GBBr1oCY1m7Q5
+         7L9q38dPX2i/3R7BRu293HzjKZ/Xy3I56Xz5VQYWPg/EGLQ7RUz5hF2wcXm+1tcvbF
+         tWx5HKFutStmg==
+Date:   Fri, 2 Jun 2023 12:44:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?M=E5rten?= Lindahl <marten.lindahl@axis.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@axis.com
+Subject: Re: [PATCH] spi: spl022: Probe defer is no error
+Message-ID: <b1c53730-6675-4c91-b891-cdbe57576759@sirena.org.uk>
+References: <20230602-pl022-defer-fix-v1-1-b80bfca3e1b4@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1227121.1685706296.1@warthog.procyon.org.uk>
-Date:   Fri, 02 Jun 2023 12:44:56 +0100
-Message-ID: <1227123.1685706296@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1UUdbCFR0TYiZly+"
+Content-Disposition: inline
+In-Reply-To: <20230602-pl022-defer-fix-v1-1-b80bfca3e1b4@axis.com>
+X-Cookie: War is an equal opportunity destroyer.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> Do what I already suggested: making SPLICE_F_MORE reflect reality.
+--1UUdbCFR0TYiZly+
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm trying to.  I need MSG_MORE to behave sensibly for what I want.
+On Fri, Jun 02, 2023 at 01:11:51PM +0200, M=E5rten Lindahl wrote:
 
-What I have signals SPLICE_F_MORE (and thus MSG_MORE) as long as we haven't
-yet read enough data to fulfill the request - and will break out of the loop
-if we get a zero-length read.
+>  	if (status !=3D 0) {
+> -		dev_err(&adev->dev,
+> -			"probe - problem registering spi master\n");
+> +		if (status !=3D -EPROBE_DEFER)
+> +			dev_err(&adev->dev,
+> +				"probe - problem registering spi master\n");
 
-But this causes a change in behaviour because we then leave the protocol
-having seen MSG_MORE set where it didn't previously see that.
+dev_err_probe().
 
-This causes "tls -r tls.12_aes_gcm.multi_chunk_sendfile" on the TLS kselftest
-to fail.
+--1UUdbCFR0TYiZly+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Now, if we're fine with the change in behaviour, I can make the selftest
-observe the short sendfile() and cancel MSG_MORE itself - but that's just a
-test program.
+-----BEGIN PGP SIGNATURE-----
 
-So that's the question: Do I have to maintain the current behaviour for the
-short-splice case?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR51jcACgkQJNaLcl1U
+h9BE6gf/VHIu+QukYghZvEPG5FRLJdZkVDycGIVFhdCzOI38jChe9Dudz8uj16A3
+Uu+YNmG1Pf9wuqYn78SLvFSiqWscf4gkAuv7HpT00QQPhlTvMeuo56ghSFxvCODE
+wzrtdhoNpqeXeKZ9s9hmyi3YGbhVC6SlZPk+K1UGB2oZ85FWr0vFROQmDmSrxnUS
+UHEtKEtl3yEbK47EswYhNdZMeP3k7j+/aI+wbu28/mlGlpeBbOwiQmxSvEInCe2O
+F7QAdlRtOBTwPE8f1um0etzF50KvzRhm90zCfcN0DYw7yt/paM2IQwZTmcR3WeZ2
+ZG5I/E2PMOsUQqHJWUkpw18yVddcfg==
+=es7q
+-----END PGP SIGNATURE-----
 
-David
-
+--1UUdbCFR0TYiZly+--
