@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6EC71F866
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A822271F863
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 04:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbjFBC2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 22:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S233386AbjFBC2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 22:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbjFBC2P (ORCPT
+        with ESMTP id S229781AbjFBC17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 22:28:15 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB99119B;
-        Thu,  1 Jun 2023 19:28:12 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b038064d97so22502925ad.0;
-        Thu, 01 Jun 2023 19:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685672892; x=1688264892;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iH1ysj30mF85sJI8Hu+UweQ/IViEKpx4ySqfGsRzxAs=;
-        b=n9hmECaPd+ti6J6O3CLn/hnZa9po4lvtqeG9t7fTWbd6d+18sta9hEaL45qSB+zkh5
-         8ZA/GPZH2HTvbxXe0YEj8500pOBEml8Zp3HSPng4Oj7Pl59f6GLyb55gLV4ao6wzfqT3
-         tnMcUM2jZiArcSWQGP1seAeIOhtbmO7k1SHOl4kZm2AcTmBnjQMqWv4MqBFcBeEp/NkL
-         01ymX7ULoR8wtEItTDxzxIV1jrplntVc/AKf87k4fN2AOOMY+9tUWRzvyNWwIzejLCVy
-         jXpBwL287rwNs0q7Uog2OFXH9ZB8Ksd3mgLBjHPGE+p/d6oaRRnGQILxkKYZtg9/vJ9l
-         Rwwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685672892; x=1688264892;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iH1ysj30mF85sJI8Hu+UweQ/IViEKpx4ySqfGsRzxAs=;
-        b=S8irZSA61SUHiyYV7LHQBxznHmkG5fbcjdmbobQD5bNO0/GhYgyo0QtSdr4qBAHVyc
-         jS7czVdaUCd1IBkT8l5sGQxhIR2tSCBapamEjUvka8T19F94EhxjmewZBdVECjxMrqZO
-         ldF5p5Dsn4uZKnFQhSAc1ct40A97Dl51/TbQ4gNga7OFlvNWQdV3oBFUsN+LaqPoXa1V
-         fGCgL1ebNccnsV7gG8eUgMYUxBeFl1m2PSamFxvJ23IB++X5mnRANJeXavOkGi5vYrp4
-         6eaCYI9/xfGdT82plX4LqKUUBDaMT3o/sJ09agKHN4msUXkBuAiHpa49VphgEkBgsDfH
-         pZhg==
-X-Gm-Message-State: AC+VfDym6yzNdSors8W7ZDLK+2CBfYW48ZIIezQLGvSl5EuFrXEmeSIG
-        oezdcrGEF9TTLnRNEpBK2wNbP+zGYP0=
-X-Google-Smtp-Source: ACHHUZ4e6+vRjrIpsaHlh4EAancrsEHwVNsQVko2QUD7knU+Nwo4iXkRehTnlgoYJZYQRmAB6kY9Vw==
-X-Received: by 2002:a17:902:d2c5:b0:1b1:76c2:2966 with SMTP id n5-20020a170902d2c500b001b176c22966mr850675plc.20.1685672891925;
-        Thu, 01 Jun 2023 19:28:11 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-49.three.co.id. [116.206.12.49])
-        by smtp.gmail.com with ESMTPSA id t21-20020a170902b21500b001ac45598b59sm76827plr.163.2023.06.01.19.28.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 19:28:11 -0700 (PDT)
-Message-ID: <9f12c322-fb62-26f0-46d1-61936a419468@gmail.com>
-Date:   Fri, 2 Jun 2023 09:27:48 +0700
+        Thu, 1 Jun 2023 22:27:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9915E184;
+        Thu,  1 Jun 2023 19:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685672878; x=1717208878;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IQBY6CSkF8HVOgom8PLO7+N9vZQlh9ITh/b+24j0gaw=;
+  b=OBaO2K0sT5WUJ6xpLrIEUoWljkhh7rf2/BCOeFG/PkOs8AlDrl8kkOs/
+   xbFEmf0lYiL4yYdH0RciLcS7E/flSOMAjjidZnrD9r8J4mgK4x+ceve1k
+   B2EJeMWYeDbmWAEyC2AMKXB/R4nOP++pGO2G+/7LGNsgQhBbScHmkvL3j
+   xQm6kAe7seTY91nyEj2h0NjceWDaPbGPr8+R33TAgUv2JsUyjFqHYEBU3
+   IAn72TM0r4XbovbzZfTkmlMGpUPhBaRzRNkzJfQcMA3FSHNg9WbgcPLym
+   HNDDs/51k7s24oXHOH/NCFK7e5E+OzNQVfVLPc0d0HjmH2QymknHKdHdX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="335360372"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="335360372"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 19:27:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="881872738"
+X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
+   d="scan'208";a="881872738"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Jun 2023 19:27:55 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4uWB-0002vu-0K;
+        Fri, 02 Jun 2023 02:27:55 +0000
+Date:   Fri, 2 Jun 2023 10:27:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Franziska Naepelt <franziska.naepelt@googlemail.com>,
+        keyrings@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        dhowells@redhat.com, dwmw2@infradead.org,
+        linux-kernel@vger.kernel.org,
+        Franziska Naepelt <franziska.naepelt@gmail.com>
+Subject: Re: [PATCH] certs/extract-cert: Fix checkpatch issues
+Message-ID: <202306021040.UTvXfH5J-lkp@intel.com>
+References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux Real Time <linux-rt-users@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Paolo Abeni <pabeni@redhat.com>, SamW <proaudiomanuk@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: commit 6e98b09da931a00bf4e0477d0fa52748bf28fcce suspect causing
- full system lockup
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601190508.56610-1-franziska.naepelt@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,36 +68,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Franziska,
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+kernel test robot noticed the following build errors:
 
-> 6e98b09da931a00bf4e0477d0fa52748bf28fcce
-> OS slackware64-current fully upto date, on an AMD 990fx motherboard with a 
-> Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 09).
-> Linux-rt-devel-rc2-rt1 and linux-rt-devel-6.4-rc3-rt2 had same issue, previous linux-rt-devel-6.3.3-rt15 worked with no issue.
-> 
-> Hello I suspect this series of commits is causing the full system lock im having when using the r8169 driver with linux-rt-devel-6.4-rc3-rt2. With the driver enabled my system locks up with a few mins of booting and logging into desktop. I have to use power off button and reboot to older kernel. With the r8169 driver blacklisted the kernel works perfectly.
-> My syslog attachment shows the driver errors and after looking at commits I saw the above numbered as being the most likly cause.
-> A member of oftc linux-rt irc channel looked and gave the comment posted below.
-> "tell the driver maintainers they must not enable the irq in the napi poll function"
-> He said it looked like that could be causing the errors and then full system lockup.
-> please contact me if any further information is required.
-> 
-> My fix has been blacklist r8169 and use the r8168 driver from relatek with a patch to enable builfing with the 6.4 kernel.
-> Thank you for your time
-> SamW
+[auto build test ERROR on 7877cb91f1081754a1487c144d85dc0d2e2e7fc4]
 
-See Bugzilla for the full thread and attached syslog.
+url:    https://github.com/intel-lab-lkp/linux/commits/Franziska-Naepelt/certs-extract-cert-Fix-checkpatch-issues/20230602-030657
+base:   7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+patch link:    https://lore.kernel.org/r/20230601190508.56610-1-franziska.naepelt%40gmail.com
+patch subject: [PATCH] certs/extract-cert: Fix checkpatch issues
+config: mips-buildonly-randconfig-r002-20230602 (https://download.01.org/0day-ci/archive/20230602/202306021040.UTvXfH5J-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/7fdfaec7a3c9f58676a5892e679d8bca319abd8a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Franziska-Naepelt/certs-extract-cert-Fix-checkpatch-issues/20230602-030657
+        git checkout 7fdfaec7a3c9f58676a5892e679d8bca319abd8a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Anyway, I'm adding it to regzbot:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306021040.UTvXfH5J-lkp@intel.com/
 
-#regzbot introduced: 6e98b09da931a0 https://bugzilla.kernel.org/show_bug.cgi?id=217519
-#regzbot title: Networking pull for v6.4 causes full system lockup on RTL8111/8168/8411
+All errors (new ones prefixed by >>):
 
-Thanks.
+>> certs/extract-cert.c:36:8: error: unknown type name '__noreturn'
+   static __noreturn
+          ^
+   1 error generated.
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217519
+
+vim +/__noreturn +36 certs/extract-cert.c
+
+    35	
+  > 36	static __noreturn
+    37	void format(void)
+    38	{
+    39		fprintf(stderr,
+    40			"Usage: extract-cert <source> <dest>\n");
+    41		exit(2);
+    42	}
+    43	
 
 -- 
-An old man doll... just what I always wanted! - Clara
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
