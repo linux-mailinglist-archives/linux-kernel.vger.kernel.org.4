@@ -2,246 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584B17205F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0F3720617
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236516AbjFBPZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S236679AbjFBP04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbjFBPZx (ORCPT
+        with ESMTP id S236626AbjFBP0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:25:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C8FE4E;
-        Fri,  2 Jun 2023 08:25:46 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 884CD844;
-        Fri,  2 Jun 2023 17:25:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685719522;
-        bh=qxxf/d08ZqtGMHoK4SpD04QNfH/WTFybI3QFyM9eykE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A2utsvl2PPql1S26cGr98mxyumTzYpnMf8fkfVhmQC1PL+7oJw3DjO0NKIVxMuTPE
-         e0OwTdriIiArAmQZiIsZo0zBs2RQeg6kXpu6VDrXeBLHnzu4pq3d/4ZlkEwu7qNACz
-         pSSxCP15nsCEwyX0cyLHJwc+g/DQCKpa7GvVlFf0=
-Date:   Fri, 2 Jun 2023 18:25:43 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dmitry Perchanov <dmitry.perchanov@intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, sakari.ailus@intel.com,
-        Evgeni Raikhel <evgeni.raikhel@intel.com>, demisrael@gmail.com,
-        Nir Azkiel <nir.azkiel@intel.com>
-Subject: Re: [PATCH v4] media: uapi: v4l: Intel metadata format update
-Message-ID: <20230602152543.GJ26944@pendragon.ideasonboard.com>
-References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
- <944dd3c67fc7e9c1b8d6bd0491d61fdbb9489e70.camel@intel.com>
- <20230602144624.GA3343@pendragon.ideasonboard.com>
- <2eef3b075da7e91b938222a345e3f18f3765619f.camel@intel.com>
+        Fri, 2 Jun 2023 11:26:45 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4171BD;
+        Fri,  2 Jun 2023 08:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=I2vUbBBSf4xk84sE4lIaqX0DuZHJ0D83reAR+ls3KHs=; b=Yxx6KD6Co9lKZSMp2M8sLsxfO4
+        cLZ7y6N/2bgjFdi8GbxbWv6zodQxPdj7Mtd5mzvsHZUbN0uF4wPPT27neorrvV7vCm5njoYZ2HwcR
+        IXJvxk32vBEX76kfG3gQ2zXJg15aC7w5N8WeKtdFsLMufgzxIVIZCo4uOsHupJiECw3I=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:50948 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q56fd-0008Hq-VV; Fri, 02 Jun 2023 11:26:30 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hugo@hugovil.com,
+        linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Date:   Fri,  2 Jun 2023 11:26:16 -0400
+Message-Id: <20230602152626.284324-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2eef3b075da7e91b938222a345e3f18f3765619f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
+X-Spam-Level: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Subject: [PATCH v7 0/9] serial: sc16is7xx: fix GPIO regression and rs485 improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-On Fri, Jun 02, 2023 at 06:00:04PM +0300, Dmitry Perchanov wrote:
-> Hi Laurent,
-> 
-> Thanks for review!
-> I will gladly accept your proposed changes.
-> 
-> Comments inline.
-> 
-> On Fri, 2023-06-02 at 17:46 +0300, Laurent Pinchart wrote:
-> > On Thu, Jun 01, 2023 at 07:08:46PM +0300, Dmitry Perchanov wrote:
-> > > Update metadata structure for Intel RealSense UVC/MIPI cameras.
-> > > Compliant to Intel Configuration version 3.
-> > > 
-> > > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
-> > > ---
-> > >  .../media/v4l/pixfmt-meta-d4xx.rst            | 52 ++++++++++++++++---
-> > >  1 file changed, 46 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> > > index 4e437ba97a0e..7482f298d0cc 100644
-> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-meta-d4xx.rst
-> > > @@ -12,7 +12,7 @@ Intel D4xx UVC Cameras Metadata
-> > >  Description
-> > >  ===========
-> > >  
-> > > -Intel D4xx (D435 and other) cameras include per-frame metadata in their UVC
-> > > +Intel D4xx (D435, D455 and others) cameras include per-frame metadata in their UVC
-> > >  payload headers, following the Microsoft(R) UVC extension proposal [1_]. That
-> > >  means, that the private D4XX metadata, following the standard UVC header, is
-> > >  organised in blocks. D4XX cameras implement several standard block types,
-> > > @@ -26,6 +26,8 @@ V4L2_META_FMT_UVC with the only difference, that it also includes proprietary
-> > >  payload header data. D4xx cameras use bulk transfers and only send one payload
-> > >  per frame, therefore their headers cannot be larger than 255 bytes.
-> > >  
-> > > +This document implements Intel Configuration version 3 [9_].
-> > > +
-> > >  Below are proprietary Microsoft style metadata types, used by D4xx cameras,
-> > >  where all fields are in little endian order:
-> > >  
-> > > @@ -43,7 +45,7 @@ where all fields are in little endian order:
-> > >      * - __u32 ID
-> > >        - 0x80000000
-> > >      * - __u32 Size
-> > > -      - Size in bytes (currently 56)
-> > > +      - Size in bytes, include ID (all protocol versions: 60)
-> > >      * - __u32 Version
-> > >        - Version of this structure. The documentation herein corresponds to
-> > >          version xxx. The version number will be incremented when new fields are
-> > 
-> > Should this read "version 3" instead of "version xxx" ?
-> 
-> This can read 1, 2 or 3, depends on firmware version.
-> All cameras have same firmware. The latest will report 3.
+Hello,
+this patch series mainly fixes a GPIO regression and improve RS485 flags and
+properties detection from DT.
 
-The sentence reads
+It now also includes various small fixes and improvements that were previously
+sent as separate patches, but that made testing everything difficult.
 
-"The documentation herein corresponds to version xxx."
+Patch 1 fixes an issue with init of first port during probing.
 
-As you're updating the documentation to correspond to version 3, I
-thought it would be best to make that explicit. Another option would be
+Patch 2 fixes an issue when debugging IOcontrol register, but it is also
+necessary for patch "fix regression with GPIO configuration" to work.
 
-"The documentation herein covers versions 1, 2 and 3."
+Patch 3 is a refactor of GPIO registration code in preparation for patch 5.
 
-I think I like that better. What do you think ?
+Patches 4 and 5 fix a GPIO regression by (re)allowing to choose GPIO function
+for GPIO pins shared with modem status lines.
 
-> > > @@ -72,13 +74,17 @@ where all fields are in little endian order:
-> > >        - Bottom border of the AE Region of Interest
-> > >      * - __u32 Preset
-> > >        - Preset selector value, default: 0, unless changed by the user
-> > > -    * - __u32 Laser mode
-> > > -      - 0: off, 1: on
-> > > +    * - __u8 Emitter mode (v3 only) (__u32 Laser mode for v1) [8_]
-> > > +      - 0: off, 1: on, same as __u32 Laser mode for v1
-> > > +    * - __u8 RFU byte (v3 only)
-> > > +      - Spare byte for future use
-> > > +    * - __u16 LED Power (v3 only)
-> > > +      - Led power value 0-360 (F416 SKU)
-> > >      * - :cspan:`1` *Capture Timing*
-> > >      * - __u32 ID
-> > >        - 0x80000001
-> > >      * - __u32 Size
-> > > -      - Size in bytes (currently 40)
-> > > +      - Size in bytes, include ID (all protocol versions: 40)
-> > >      * - __u32 Version
-> > >        - Version of this structure. The documentation herein corresponds to
-> > >          version xxx. The version number will be incremented when new fields are
-> > > @@ -101,7 +107,7 @@ where all fields are in little endian order:
-> > >      * - __u32 ID
-> > >        - 0x80000002
-> > >      * - __u32 Size
-> > > -      - Size in bytes (currently 40)
-> > > +      - Size in bytes, include ID (v1:36, v3:40)
-> > >      * - __u32 Version
-> > >        - Version of this structure. The documentation herein corresponds to
-> > >          version xxx. The version number will be incremented when new fields are
-> > > @@ -124,6 +130,14 @@ where all fields are in little endian order:
-> > >        - Requested frame rate per second
-> > >      * - __u16 Trigger
-> > >        - Byte 0: bit 0: depth and RGB are synchronised, bit 1: external trigger
-> > > +    * - __u16 Calibration count (v3 only)
-> > > +      - Calibration counter, see [4_] below
-> > > +    * - __u8 GPIO input data (v3 only)
-> > > +      - GPIO readout, see [4_] below (Supported from FW 5.12.7.0)
-> > > +    * - __u32 Sub-preset info (v3 only)
-> > > +      - Sub-preset choice information, see [4_] below
-> > > +    * - __u8 reserved (v3 only)
-> > > +      - RFU byte.
-> > >  
-> > >  .. _1:
-> > >  
-> > > @@ -140,6 +154,8 @@ where all fields are in little endian order:
-> > >    0x00000010 Exposure priority
-> > >    0x00000020 AE ROI
-> > >    0x00000040 Preset
-> > > +  0x00000080 Emitter mode
-> > > +  0x00000100 LED Power
-> > >  
-> > >  .. _3:
-> > >  
-> > > @@ -165,6 +181,8 @@ where all fields are in little endian order:
-> > >    0x00000040 Framerate
-> > >    0x00000080 Trigger
-> > >    0x00000100 Cal count
-> > > +  0x00000200 GPIO Input Data
-> > > +  0x00000400 Sub-preset Info
-> > >  
-> > >  .. _5:
-> > >  
-> > > @@ -211,3 +229,25 @@ Left sensor: ::
-> > >  Fish Eye sensor: ::
-> > >  
-> > >    1 RAW8
-> > > +
-> > > +.. _8:
-> > > +
-> > > +[8] The "Laser mode" is replaced by three different fields.
-> > 
-> > "... has been replaced in version 3 by ..."
-> > 
-> > > +"Laser" renamed to "Emitter" as there multiple technologies
-> > 
-> > s/there/there are/
-> 
-> Accepted. Thanks!
->
-> > > +for camera projectors. As we have another field for "Laser Power"
-> > > +we introduced "LED Power" for extra emitter.
-> > > +
-> > > +The __u32 "Laser mode" integer is divided by two bytes and short: ::
-> > 
-> > The "Laser mode" __u32 field has been split into: ::
->
-> Accepted. Thanks!
-> 
-> > > +   1 __u8 Emitter mode
-> > > +   2 __u8 RFU byte
-> > > +   3 __u16 LED Power
-> > > +
-> > > +This is a change between versions 1 and 3. All versions 1,2 and 3
-> > 
-> > s/1,2/1, 2/
->
-> Accepted. Thanks!
-> 
-> > > +are backward compatible with same data format and they are supported.
-> > > +See [2_] for which attributes are valid.
-> > > +
-> > > +.. _9:
-> > > +
-> > > +[9]
-> > > +LibRealSense SDK metadata source:
-> > 
-> > I'll remove the blank line after '[9]', that is
-> > 
-> > > +[9] LibRealSense SDK metadata source:
->
-> Accepted. Thanks!
-> 
-> > I can fix all this when applying if you're fine with the changes.
->
-> Yes, I agree. Thank You for your effort!
->
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > 
-> > > +https://github.com/IntelRealSense/librealsense/blob/master/src/metadata.h
+Patch 6 fixes a bug with the output value when first setting the GPIO direction.
 
+Patch 7 allows to read common rs485 device-tree flags and properties.
+
+Patch 8 introduces a delay after a reset operation to respect datasheet
+timing recommandations.
+
+Patch 9 improves comments about chip variants.
+
+I have tested the changes on a custom board with two SC16IS752 DUART using a
+Variscite IMX8MN NANO SOM.
+
+Thank you.
+
+Link: [v1] https://lkml.org/lkml/2023/5/17/967
+      [v1] https://lkml.org/lkml/2023/5/17/777
+      [v1] https://lkml.org/lkml/2023/5/17/780
+      [v1] https://lkml.org/lkml/2023/5/17/785
+      [v1] https://lkml.org/lkml/2023/5/17/1311
+      [v2] https://lkml.org/lkml/2023/5/18/516
+      [v3] https://lkml.org/lkml/2023/5/25/7
+      [v4] https://lkml.org/lkml/2023/5/29/656
+      [v5] https://lkml.org/lkml/2023/6/1/1046
+      [v6] https://lkml.org/lkml/2023/6/1/1328
+
+Changes for V3:
+- Integrated all patches into single serie to facilitate debugging and tests.
+- Reduce number of exported GPIOs depending on new property
+  nxp,modem-control-line-ports
+- Added additional example in DT bindings
+
+Changes for V4:
+- Increase reset post delay to relax scheduler.
+- Put comments patches at the end.
+- Remove Fixes tag for patch "mark IOCONTROL register as volatile".
+- Improve commit messages after reviews.
+- Fix coding style issues after reviews.
+- Change GPIO registration to always register the maximum number of GPIOs
+  supported by the chip, but maks-out GPIOs declared as modem control lines.
+- Add patch to refactor GPIO registration.
+- Remove patch "serial: sc16is7xx: fix syntax error in comments".
+- Remove patch "add dump registers function"
+
+Changes for V5:
+- Change patch order to facilitate stable backport(s).
+- Change duplicate device addresses in DT binding examples.
+- Use GENMASK for bit masks.
+- Replace of_property_for_each_u32() with device_property_read_u32_array
+- Add "Cc: stable..." tags
+
+Changes for V6:
+- Fix compilation bug introduced by patch 3
+
+Changes for V7:
+- Minor changes and coding style fixes after review for
+  patch 5 "fix regression with GPIO configuration".
+
+Hugo Villeneuve (9):
+  serial: sc16is7xx: fix broken port 0 uart init
+  serial: sc16is7xx: mark IOCONTROL register as volatile
+  serial: sc16is7xx: refactor GPIO controller registration
+  dt-bindings: sc16is7xx: Add property to change GPIO function
+  serial: sc16is7xx: fix regression with GPIO configuration
+  serial: sc16is7xx: fix bug when first setting GPIO direction
+  serial: sc16is7xx: add call to get rs485 DT flags and properties
+  serial: sc16is7xx: add post reset delay
+  serial: sc16is7xx: improve comments about variants
+
+ .../bindings/serial/nxp,sc16is7xx.txt         |  46 +++++
+ drivers/tty/serial/sc16is7xx.c                | 169 +++++++++++++-----
+ 2 files changed, 175 insertions(+), 40 deletions(-)
+
+
+base-commit: 9e87b63ed37e202c77aa17d4112da6ae0c7c097c
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart
