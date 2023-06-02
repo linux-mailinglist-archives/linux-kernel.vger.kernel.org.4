@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B537209AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FC37209B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237176AbjFBTTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S237193AbjFBTVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbjFBTTh (ORCPT
+        with ESMTP id S237185AbjFBTVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:19:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96EE1BF;
-        Fri,  2 Jun 2023 12:19:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 351ED6123C;
-        Fri,  2 Jun 2023 19:19:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657E9C433EF;
-        Fri,  2 Jun 2023 19:19:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685733574;
-        bh=2DysCi0izWWkAAQmUSsVWD5RYIHiULBjqxwGXFltK9o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=iUqz86/VndTNM37qAyzcaE9ACYVoZ0nOT0mmMltHr0RnOYzg7qc+uA/tAqlpqbazK
-         Z7GkQb9StW9vbjFNPSqQCBN/uZQ9Z/q7pdRdITFaahlyxwfkwcCB9ThkZriZ8togNk
-         Riw5sbqDeNoDaXtiFlZXGahLfcMunuvcfISxIhP9TOyC9OoBZaJYN5eqfEqJ/VFS/F
-         e3OhYl4H6X+FMnUeBfrZZZDvVzDJeU1NPZSNuJnMBbqHqTeETEzR/YJxqbQdwSJ/3b
-         9OpVFFBcZ8hKjzCDJTTv9JMaBkSaPM0Bs2pNrDIEJdB12sQH/SMoxZ0XUaamcw80TN
-         5xyxZoebe1ZDA==
-Date:   Fri, 2 Jun 2023 14:19:32 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Bibo Mao <maobibo@loongson.cn>, WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Align pci memory base address with page size
-Message-ID: <ZHpAxC1aedBsR3K2@bhelgaas>
+        Fri, 2 Jun 2023 15:21:32 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2331CE41;
+        Fri,  2 Jun 2023 12:21:31 -0700 (PDT)
+Received: from [127.0.0.1] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 352JK7fE2750506
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 2 Jun 2023 12:20:07 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 352JK7fE2750506
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023051001; t=1685733612;
+        bh=SMZguLjkAGwW1nnxkS45sNuwWaVSmMrNfx0ztcGGwoA=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=M12klTJ5FYJ+X8CUS9C3VIpLDDMPTsKRZ0ndgBKVMmE7aVMV0MN0/y9Jvzn81tOqa
+         8VYX8/bm9osGsG2ClUgVOyJj8lbUxvR+FH3nCAq2d658yulezFd25UFLxwFRhjtOS5
+         IjlBfRN2e8q9yDkAuYcRFZPnJBPmhZVzw4981sWNvjYtM4oL0bb3Na6skyPzoQgIdo
+         iCn1fDCEMrqULzSB9GRm5RmqDinfT0ZlP//XuPLwDhfhWBfc2pGRjLhHy9T2u4pvwH
+         vQYmPBqCCoxSpJWpRZkrllXh+v8F6mpkhaRL54uoSHt6pPLFXvZrX+niKiXYDc8cPp
+         mA9OLCSWYPRCg==
+Date:   Fri, 02 Jun 2023 12:20:05 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, suravee.suthikulpanit@amd.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        John David Anglin <dave.anglin@bell.net>,
+        Sam James <sam@gentoo.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_07/12=5D_parisc/percpu=3A_Wo?= =?US-ASCII?Q?rk_around_the_lack_of_=5F=5FSIZEOF=5FINT128=5F=5F?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230602191014.GA695361@hirez.programming.kicks-ass.net>
+References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org> <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net> <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de> <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com> <20230602143912.GI620383@hirez.programming.kicks-ass.net> <E333E35E-5F9C-441C-B75A-082F19D37978@zytor.com> <20230602191014.GA695361@hirez.programming.kicks-ass.net>
+Message-ID: <B432FCD8-2ED7-42B1-BC3B-34F277A1CD9F@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc linux-pci, beginning of thread:
-https://lore.kernel.org/all/20230602030732.1047696-1-maobibo@loongson.cn/]
-
-On Fri, Jun 02, 2023 at 12:11:02PM +0800, Huacai Chen wrote:
-> On Fri, Jun 2, 2023 at 11:07 AM Bibo Mao <maobibo@loongson.cn> wrote:
-> >
-> > LoongArch linux kernel uses 16K page size by default, some pci devices have
-> > only 4K memory size, it is normal in general architectures. However memory
-> > space of different pci devices will share one physical page address space.
-> > This is not safe for mmu protection, also UIO and VFIO requires base
-> > address of pci memory space page aligned.
-> >
-> > This patch adds check with function pcibios_align_resource, and set base
-> > address of resource page aligned.
-> >
-> > Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> > ---
-> >  arch/loongarch/pci/pci.c | 23 +++++++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> >
-> > diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
-> > index 2726639150bc..1380f3672ba2 100644
-> > --- a/arch/loongarch/pci/pci.c
-> > +++ b/arch/loongarch/pci/pci.c
-> > @@ -83,6 +83,29 @@ int pcibios_alloc_irq(struct pci_dev *dev)
-> >         return acpi_pci_irq_enable(dev);
-> >  }
-> >
-> > +/*
-> > + * memory space size of some pci cards is 4K, it is separated with
-> > + * different pages for generic architectures, so that mmu protection can
-> > + * work with different pci cards. However page size for LoongArch system
-> > + * is 16K, memory space of different pci cards may share the same page
-> > + * on LoongArch, it is not safe here.
-> > + * Also uio drivers and vfio drivers sugguests that base address of memory
-> > + * space should page aligned. This function aligns base address with page size
-> > + */
-> > +resource_size_t pcibios_align_resource(void *data, const struct resource *res,
-> > +               resource_size_t size, resource_size_t align)
-> > +{
-> > +       resource_size_t start = res->start;
-> > +
-> > +       if (res->flags & IORESOURCE_MEM) {
-> > +               if (align & (PAGE_SIZE - 1)) {
-> > +                       align = PAGE_SIZE;
-> > +                       start = ALIGN(start, align);
-> I don't know whether this patch is really needed, but the logic here
-> has some problems.
-> 
-> For example, if PAGE_SIZE=16KB, align=18KB, what should we do? Align
-> to 16KB or align to 32KB? IMO it should align to 32KB, but in your
-> patch it will align to 16KB.
-> 
-> Huacai
-> > +               }
-> > +       }
-> > +       return start;
-> > +}
-> > +
-> >  static void pci_fixup_vgadev(struct pci_dev *pdev)
-> >  {
-> >         struct pci_dev *devp = NULL;
-> > --
-> > 2.27.0
-> >
+Ok=2E So the patch description needs to be fixed=2E Otherwise the solution =
+would be far simpler :)
