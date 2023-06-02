@@ -2,107 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB397205B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5557205C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 17:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236508AbjFBPQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 11:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S236541AbjFBPTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 11:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbjFBPQz (ORCPT
+        with ESMTP id S235527AbjFBPTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 11:16:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6DB18D;
-        Fri,  2 Jun 2023 08:16:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5DA865149;
-        Fri,  2 Jun 2023 15:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FEB4C433D2;
-        Fri,  2 Jun 2023 15:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685719013;
-        bh=xSEpxg33Y2SgSD3RfJr1UzQa06gTFJ4eEBC5hlV5FIo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rQWM1s6QdtDSb/Cvzj5SlSryf7uA71A/77AvkoquEf6JZeHLBsP841yjuTadE2SOc
-         XMUDCj8XmvvXc5so8lGPM9vy+i6U2CghVBq3WM9792RWw4rf8hfjFy6MmKRJlwLvhV
-         /mcxlk2iNQ0KYob4ZPfiUqTbm63k7Wienb1PrwDebDkFPjrDnK71GbCOSMFqrz7hvp
-         /06WK78/HKa909fnL8z2HfUMizFoaTUYJHe+tWwvN3QCAEnE6URsJVbaYnta20z5jg
-         g1so0uRRWE42cXHpdNDm5nqBXM9SIjuMv20G4LtWliHtCnsFw0GDpbwjzNusWYPSma
-         6L5wnM9JVw2Wg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Boerge Struempfel <boerge.struempfel@gmail.com>,
-        "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230602115731.708883-1-linux@rasmusvillemoes.dk>
-References: <20230602115731.708883-1-linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v2] spi: spi-imx: fix mixing of native and gpio
- chipselects for imx51/imx53/imx6 variants
-Message-Id: <168571901091.65587.1980168076721765173.b4-ty@kernel.org>
-Date:   Fri, 02 Jun 2023 16:16:50 +0100
+        Fri, 2 Jun 2023 11:19:20 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4C2123;
+        Fri,  2 Jun 2023 08:19:19 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126156168104.26.openmobile.ne.jp [126.156.168.104])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 922C8844;
+        Fri,  2 Jun 2023 17:18:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685719135;
+        bh=gU0yaWBrgT7+tqOEJsiMT+dgAGI/2MMNm6uujQuRWaM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dyTV53YCp7cwa+xVr2/JFr+AuaIhX4a8FLalc6In6FACC+qbglEXNdaVEyCMfBczd
+         dc1AMUepnNHxC2mcCXdzY092MdbtV56uKxaf25smciq4Finb4fPXCrG6KL2euoMKDD
+         QUzx4fKgif4ZO1OFlzoM3IGDrAvprUq/KdmZA8II=
+Date:   Fri, 2 Jun 2023 18:19:16 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Avichal Rakesh <arakesh@google.com>
+Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: queue empty isoc requests if no video
+ buffer is available
+Message-ID: <20230602151916.GH26944@pendragon.ideasonboard.com>
+References: <20230508231103.1621375-1-arakesh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230508231103.1621375-1-arakesh@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 02 Jun 2023 13:57:30 +0200, Rasmus Villemoes wrote:
-> Commit 87c614175bbf (spi: spi-imx: fix MX51_ECSPI_* macros when cs >
-> 3) ensured that the argument passed to the macros was masked with &3,
-> so that we no longer write outside the intended fields in the various
-> control registers. When all chip selects are gpios, this works just
-> fine.
+Hi Avichal,
+
+Thank you for the patch.
+
+On Mon, May 08, 2023 at 04:11:03PM -0700, Avichal Rakesh wrote:
+> ISOC transfers expect a certain cadence of requests being queued. Not
+> keeping up with the expected rate of requests results in missed ISOC
+> transfers (EXDEV). The application layer may or may not produce video
+> frames to match this expectation, so uvc gadget driver must handle cases
+> where the application is not queuing up buffers fast enough to fulfill
+> ISOC requirements.
+
+I think the application *must* not produce video frames to match the
+expectations. If it did, it would mean that it would either have to use
+more than the available ISOC bandwidth (which is obviously bad), or use
+*exactly* the ISOC bandwidth. Unless the application performs rate
+matching (which would require information about the USB timings that
+isn't available to userspace as far as I can tell), that's not possible.
+
+> Currently, uvc gadget driver waits for new video buffer to become available
+> before queuing up usb requests. With this patch the gadget driver queues up
+> 0 length usb requests whenever there are no video buffers available. The
+> USB controller's complete callback is used as the limiter for how quickly
+> the 0 length packets will be queued. Video buffers are still queued as
+> soon as they become available.
 > 
-> However, when a mix of native and gpio chip selects are in use, that
-> masking is too naive. Say, for example, that SS0 is muxed as native
-> chip select, and there is also a chip at 4 (obviously with a gpio
-> cs). In that case, when accessing the latter chip, both the SS0 pin
-> and the gpio pin will be asserted low.
+> Link: https://lore.kernel.org/CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com/
+> Signed-off-by: Avichal Rakesh <arakesh@google.com>
+> ---
+>  drivers/usb/gadget/function/uvc_video.c | 32 ++++++++++++++++++-------
+>  1 file changed, 24 insertions(+), 8 deletions(-)
 > 
-> [...]
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index dd1c6b2ca7c6..e81865978299 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -386,6 +386,9 @@ static void uvcg_video_pump(struct work_struct *work)
+>  	struct uvc_buffer *buf;
+>  	unsigned long flags;
+>  	int ret;
+> +	bool buf_int;
+> +	/* video->max_payload_size is only set when using bulk transfer */
+> +	bool is_bulk = video->max_payload_size;
 
-Applied to
+Let's rename buf_int to buf_done, that matches the intent of the code
+better.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Could you reorder the fields by line length ?
 
-Thanks!
+	struct uvc_video *video = container_of(work, struct uvc_video, pump);
+	struct uvc_video_queue *queue = &video->queue;
+	/* video->max_payload_size is only set when using bulk transfer */
+	bool is_bulk = video->max_payload_size;
+	struct usb_request *req = NULL;
+	struct uvc_buffer *buf;
+	unsigned long flags;
+	bool buf_done;
+	int ret;
 
-[1/1] spi: spi-imx: fix mixing of native and gpio chipselects for imx51/imx53/imx6 variants
-      commit: a34e0353a681bbdd0402825e25410c3236109f31
+>  
+>  	while (video->ep->enabled) {
+>  		/*
+> @@ -408,20 +411,35 @@ static void uvcg_video_pump(struct work_struct *work)
+>  		 */
+>  		spin_lock_irqsave(&queue->irqlock, flags);
+>  		buf = uvcg_queue_head(queue);
+> -		if (buf == NULL) {
+> +
+> +		if (buf != NULL) {
+> +			video->encode(req, video, buf);
+> +			/* Always interrupt for the last request of a video buffer */
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+I would drop this comment, and ... (see below)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> +			buf_int = buf->state == UVC_BUF_STATE_DONE;
+> +		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
+> +			/*
+> +			 * No video buffer available; the queue is still connected and
+> +			 * we're traferring over ISOC. Queue a 0 length request to
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+s/traferring/transferring/
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> +			 * prevent missed ISOC transfers.
+> +			 */
+> +			req->length = 0;
+> +			buf_int = false;
+> +		} else {
+> +			/*
+> +			 * Either queue has been disconnected or no video buffer
 
-Thanks,
-Mark
+s/Either queue/Either the queue/
 
+> +			 * available to bulk transfer. Either way, stop processing
+
+s/to bulk/for bulk/
+
+> +			 * further.
+> +			 */
+>  			spin_unlock_irqrestore(&queue->irqlock, flags);
+>  			break;
+>  		}
+>  
+> -		video->encode(req, video, buf);
+> -
+>  		/*
+>  		 * With usb3 we have more requests. This will decrease the
+>  		 * interrupt load to a quarter but also catches the corner
+>  		 * cases, which needs to be handled.
+>  		 */
+
+... and expand this:
+
+  		/*
+		 * With USB3 handling more requests at a higher speed, we can't
+		 * afford to generate an interrupt for every request. Decide to
+		 * interrupt:
+		 *
+		 * - When no more requests are available in the free queue, as
+		 *   this may be our last chance to refill the endpoint's
+		 *   request queue.
+		 *
+		 * - When this is request is the last request for the video
+		 *   buffer, as we want to start sending the next video buffer
+		 *   ASAP in case it doesn't get started already in the next
+		 *   iteration of this loop.
+		 *
+		 * - Four times over the length of the requests queue (as
+		 *   indicated by video->uvc_num_requests), as a trade-off
+		 *   between latency and interrupt load.
+		 */
+
+And now that I've written this, I wonder if we could drop the second
+case. Now that we have a guarantee we will queue 0-length requests after
+the current buffer if no other buffer is available, I don't think we
+need to make the last request of a buffer a special case. It even seems
+to me that we could drop the first case too, and just interrupt 4 times
+over the length of the requests queue. What do you think ?
+
+> -		if (list_empty(&video->req_free) ||
+> -		    buf->state == UVC_BUF_STATE_DONE ||
+> +		if (list_empty(&video->req_free) || buf_int ||
+>  		    !(video->req_int_count %
+>  		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+>  			video->req_int_count = 0;
+> @@ -441,8 +459,7 @@ static void uvcg_video_pump(struct work_struct *work)
+>  
+>  		/* Endpoint now owns the request */
+>  		req = NULL;
+> -		if (buf->state != UVC_BUF_STATE_DONE)
+> -			video->req_int_count++;
+> +		video->req_int_count++;
+>  	}
+>  
+>  	if (!req)
+> @@ -527,4 +544,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+>  			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
+>  	return 0;
+>  }
+> -
+
+-- 
+Regards,
+
+Laurent Pinchart
