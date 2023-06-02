@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7D072029A
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9C572029F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 15:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235875AbjFBNGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 09:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S235917AbjFBNHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 09:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbjFBNGn (ORCPT
+        with ESMTP id S235464AbjFBNHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 09:06:43 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B721AB;
-        Fri,  2 Jun 2023 06:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Y84qRq7gqEl7quzGwy5z/2wXIR5WfX6BYU6q3+lFVsw=; b=ekr1xkFlnN0XWid3TIelC3SBQJ
-        lAtTjZp4XsGIxiSvI4FTOCgobli6ncdzPLWXuzuWdpw0ySppH56lLwSrLFod1KU9F1RbZ8t6r3gAf
-        i1X+IfJgK/cYjG7eRhE88hJljwoAjMddvhJl5RMuIVErG6JtQ7nHKua3XdaGS2lEZpYM=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:35388 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q54U9-0006m5-MG; Fri, 02 Jun 2023 09:06:30 -0400
-Date:   Fri, 2 Jun 2023 09:06:29 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org
-Message-Id: <20230602090629.aa1bee802aafae76ce4e1e60@hugovil.com>
-In-Reply-To: <CAHp75VcLNRQyeo4H-auDvk+CxZ0hz+2pysqP3bBgW-uZB_2vPw@mail.gmail.com>
-References: <20230601201844.3739926-1-hugo@hugovil.com>
-        <20230601201844.3739926-6-hugo@hugovil.com>
-        <ZHkN5kEa6yqHdDeL@surfacebook>
-        <20230601204140.3b45c9b97efb36431d058ba7@hugovil.com>
-        <20230601212514.28914aee77ae9a513904ee6b@hugovil.com>
-        <CAHp75VcLNRQyeo4H-auDvk+CxZ0hz+2pysqP3bBgW-uZB_2vPw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Fri, 2 Jun 2023 09:07:20 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859BB1B5
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 06:07:19 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-628f267aa5aso3597806d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 06:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685711238; x=1688303238;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RAI4vy7gsUhap988dUNs7BKw8upS15dtgSM+VQvSEy8=;
+        b=lSdiN6qXb01JDFh7xVCXNtJWGHjWni9tPWdGWAgSyFBRjuoPvUMBqa7C8INDifwZ+H
+         7/28dqNVGUgZ0yMqB7Iqc+rry+/bLYL3Kh9tHKIkpD+X6HW2jOZk2QTY6TWY9LJH1ghw
+         2OHafWQe0kLj0AgQw+GaImQsH8GvQMx1GjVeJnIbMK8nmbXqmwYbmKNzF4puhnvCuPwD
+         1eqUDexjmX04YO5lNWI0pPOec+ULtmrcWvY/KqCZJ4w80EN0bSbrY/8jsuVhbHx9SpNY
+         8oQUq+6CcHpfzTzhlk/vOwXqE7olwW5j+pEswRQDSJr4nqfx7V2YoOiNBvgdJsWMsdyf
+         v6Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685711238; x=1688303238;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RAI4vy7gsUhap988dUNs7BKw8upS15dtgSM+VQvSEy8=;
+        b=RMmEnosmpLNQMISgxrS71xE+kMXSkKw+1dFZDleuP9KZT/MS7e/PZb5fMyxbVfa9FV
+         HL+KeLt5ES5U/gKPOwb6pXesPLM7evOKzA/zIjA/xBYip7rD4t+kEEo9l2ksXMIh16vi
+         qmxdvcd6k7R3WjfTsvek+qXCD/2SU0woVcHQZmwr+5JPbAChKRdBcVQzEHtzJaA16aba
+         YU/XxEqD1kHNRUIVolUvSPB907sHjJXJOm+otiQ2RWzEB1p+A9eVCsqJkC9yGAeNQI9Z
+         Vn0XkI1AxHBhp2Zr2ti5lcLm3aXYYiPsPNzRneKTHce3gpVbXQ7ACgy/Bm9CSFyLVFdw
+         7qIA==
+X-Gm-Message-State: AC+VfDy1mbzRLq+z5X7kYsLFcvhG7Q/mI9zZqK3+xD10oL9NNYs0+R3m
+        VV/sh/E9dbG4urXi3sNGINNH3y0Eno/a8FoZpKs7Iw==
+X-Google-Smtp-Source: ACHHUZ4h6QFgC70g3Tm8W5gJdO09duxPAozEZ1wU7UWxUx+ToaQIyE3xchZLn1sLYCdRxrhXyN74lcExyjydetLiOyU=
+X-Received: by 2002:a05:6214:27ec:b0:626:cf8:633c with SMTP id
+ jt12-20020a05621427ec00b006260cf8633cmr13482756qvb.38.1685711238577; Fri, 02
+ Jun 2023 06:07:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
+ <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com> <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+In-Reply-To: <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Fri, 2 Jun 2023 18:36:42 +0530
+Message-ID: <CAMi1Hd1WF77UF0khEs0XFFvS05issVNo1=sxY9e+VcNFFOCcuQ@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v6 5/9] serial: sc16is7xx: fix regression with GPIO
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Jun 2023 15:58:43 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Fri, 2 Jun 2023 at 13:00, Amit Pundir <amit.pundir@linaro.org> wrote:
+>
+> On Thu, 1 Jun 2023 at 19:35, Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > If you reorder the nodes in the device tree, I think it'll change the
+> > probe order. Does that affect anything? I'm wondering if there's some
+> > sort of delayed reaction from a previous regulator.
+>
+> Hi, Bumping lvs1 and lvs2 regulators up to the top of the list in the
+> DTS https://bugs.linaro.org/show_bug.cgi?id=5975#c4 does seem to work.
+> I can't reproduce the crash in 125 reboots so far, while I'm still
+> testing with only qcom-rpmh-regulator kernel module. I'll do some more
+> testing with full system running and send this re-ordering fix I can't
+> reproduce the crash further.
 
-> On Fri, Jun 2, 2023 at 4:25 AM Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > On Thu, 1 Jun 2023 20:41:40 -0400
-> > Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > > On Fri, 2 Jun 2023 00:30:14 +0300
-> > > andy.shevchenko@gmail.com wrote:
-> > > > Thu, Jun 01, 2023 at 04:18:40PM -0400, Hugo Villeneuve kirjoitti:
-> 
-> ...
-> 
-> > > > Maybe positive one?
-> > > >     if (mctrl_mask)
-> > > >             regmap_update_bits(...);
-> > >
-> > > I used negative to save on indentation, but it also fits by converting it to positive, so done.
-> 
-> I understand, but in this case it is slightly more weird to have
-> negative conditional and in either case return the value of the local
-> variable.
+Hi, successfully rebooted AOSP with v6.4-rc4 on DB845c about 100+
+times with this above mentioned lvs nodes reordering in the device
+tree. I don't see any obvious functionality breakage in my limited
+smoke testing so far either. I'll post this workaround/fix for review
+on the lkml.
 
-Yes.
-
-> > Greg did not yet respond to my email about the proposed tags, but if the new order of the patches and the stable tags I added seems ok to you, I will resend V7. It will then probably easier for Greg to comment directly on V7 for the stable tags (Cc:).
-> 
-> They look fine to me, but Greg is the maintainer, he decides if it's
-> really okay or not.
-
-Then I will submit V7 now.
-
-Thank you,
-Hugo.
+Regards,
+Amit Pundir
