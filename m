@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA83A71FE54
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D9971FE57
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 11:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234944AbjFBJve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 05:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S235053AbjFBJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 05:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbjFBJvc (ORCPT
+        with ESMTP id S235005AbjFBJwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 05:51:32 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE59CE
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:51:31 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30ad8f33f1aso1874473f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685699490; x=1688291490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGtSPD/KSvWTuHa/AA+uczmQU/ENOiQMfRsZQeajJ5I=;
-        b=P+KNl/NxHb1htEUlM/JYGx6KvK0eHnRM1/FNkMDOULUzpQN5tQYzbSeWXp3UJz/mpr
-         EQm1ZN77g2419QZCiDqctQYEzlaus5armw/606j9Rrxu4M3n3btbrexCK7Rp6QGfj6gS
-         mOHrDofQiL181qUvzVK7sItn/sbDLHtqL/QX/EVic5HLWHr1NCYlK0G131KduHfxRcjH
-         SMqnAgmXBnVv3L6y+jnIOWVk1CPIHPa6gre93EgFakek5vS8YyOlLQSjA2+1z39qZU+X
-         SYVslyW20kz2S1z75HvMLjKPMk64OoPwK+hJPy2UchNMx70/lB+0qvlOVmraGe3QZIGF
-         DM3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685699490; x=1688291490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zGtSPD/KSvWTuHa/AA+uczmQU/ENOiQMfRsZQeajJ5I=;
-        b=Xfu8xn+N084k87Y9FNju+a2zyvEKXYuMTT4baXu74bMnCTj6s44u/HZrGaxEQenEqy
-         waAHvhhf5rvhzO+Js/vwE2vaLYxjEb2M7TgI/aL0jkLX48X919P8SShCPcvu8rz1iYHJ
-         CZBSesF/LRAjNyh5bA8IVr7DdxyTzllqGEMz0t3s7QDb3nWP7+biZQI66N+mpgeqweDj
-         Kc74Bk4BRmku1Jyr5XkBkx8AIDzd5+S0NJ7LQQRh5r1MJyinXaWquFpExtjg8wfkPfBj
-         0PveSIBn8h9Xzjmt+7bNMyaXAVFZASEQ+DrclH52vDrCirYuL0FQgJr4dkyjAios4fx5
-         RgkA==
-X-Gm-Message-State: AC+VfDxlNwhYPsL9H3h9b5nfguQdGFhY+Mdg/Sn5Ex8wXkZAmbdLJGBR
-        yI941ZaXslzMYRUv82KwUuZfhA==
-X-Google-Smtp-Source: ACHHUZ6A1brfLCWWqQzljL7Mxmx2fPEHJx0/q/zn0bbgPiI4NqAwmYm0kU04EGZGKPiNYZHBwKX3cw==
-X-Received: by 2002:adf:e988:0:b0:307:95d1:d7d0 with SMTP id h8-20020adfe988000000b0030795d1d7d0mr4253499wrm.39.1685699489831;
-        Fri, 02 Jun 2023 02:51:29 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id p5-20020a5d4585000000b003078354f774sm1185082wrq.36.2023.06.02.02.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 02:51:28 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 12:51:24 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH] ASoC: SOF: ipc4-topology: Use size_t for variable passed
- to kzalloc()
-Message-ID: <311dd225-9d30-4100-a779-bd0a9499535f@kadam.mountain>
-References: <a311e4ae83406f714c9d1f7f2f857284265e581c.1685640591.git.christophe.jaillet@wanadoo.fr>
+        Fri, 2 Jun 2023 05:52:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8F7132
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 02:52:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74CDF64E25
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D62D4C4339C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 09:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685699519;
+        bh=LwTZxULyEKfOlJX2hcZvEWgQuLprY+dwV1T2krSleFg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ExpJrV+2My5cWFwWwkOzlOGqB2bNqZb66f6XVUYZ9BGsA9SWBgGqpBN4JXrgLPkMM
+         l2XRfkfg9m8y4LlbSSxvOH9FlcIUsiNfPEkQ7ByLTunxx199TufBo2G5wwgV2SBZrb
+         T3fLrUcdV9ldH3MZImXUaLIEQZLYoqj8Jn0cp/xelMmuLdbmljdOyKdQS0WEO0dGHQ
+         ZaeGfOjahYDQT0sonjdwiETEGTiqWuMExAov6zrmOXRp/3e7TEn6QobnZQv/npWQQt
+         4h12ggNulsg9EemRdGgBaUeHdhwQxzChKJME1rhxYD8FIlkFPGiZkzASpISivZ4CM8
+         D+VMGCzgfUN7A==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2b1a6777dd8so19267851fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 02:51:59 -0700 (PDT)
+X-Gm-Message-State: AC+VfDy3Z+YIWlGWgrX6cblrKtYhB6PBEA7+8Y3gRKj6eID/cJjrnhF8
+        f3lIQLTnhhgfwYgjxzlhd4ZybPNTg0MCD0kIpwI=
+X-Google-Smtp-Source: ACHHUZ4jjKVW81hW61XG8nqmpMu7vzkziJeORytqbbmvNM1osXeXdoDYLLwbjx6CrXdMy0NN7ToOxhkRdcCXYZzfA8Q=
+X-Received: by 2002:a2e:860c:0:b0:2af:1d17:7f98 with SMTP id
+ a12-20020a2e860c000000b002af1d177f98mr1425264lji.41.1685699517892; Fri, 02
+ Jun 2023 02:51:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a311e4ae83406f714c9d1f7f2f857284265e581c.1685640591.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20210529034138.83384-1-wangkefeng.wang@huawei.com>
+ <20210529034138.83384-2-wangkefeng.wang@huawei.com> <20210601143125.GB30436@shell.armlinux.org.uk>
+ <CAMj1kXF9crOKFaGfzcj9T4n58XAr7n85YZO0x7J1DcRG2JrfcQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXF9crOKFaGfzcj9T4n58XAr7n85YZO0x7J1DcRG2JrfcQ@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 2 Jun 2023 11:51:46 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHXB4a6ug0kUSJpNrtpgQ_p1w52P=5JZthZGiuPCCqM0w@mail.gmail.com>
+Message-ID: <CAMj1kXHXB4a6ug0kUSJpNrtpgQ_p1w52P=5JZthZGiuPCCqM0w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ARM: mm: Refactor __do_page_fault()
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jungseung Lee <js07.lee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 07:30:12PM +0200, Christophe JAILLET wrote:
-> struct_size() checks for overflow, but assigning its result to just a u32
-> may still overflow after a successful check.
-> 
-> Use a size_t instead in order to be cleaner.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Based on analysis from Dan Carpenter on another patch (see [1]).
-> 
-> [1]: https://lore.kernel.org/all/00e84595-e2c9-48ea-8737-18da34eaafbf@kili.mountain/
-> ---
->  sound/soc/sof/ipc4-topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-> index db64e0cb8663..50faa4c88b97 100644
-> --- a/sound/soc/sof/ipc4-topology.c
-> +++ b/sound/soc/sof/ipc4-topology.c
-> @@ -881,7 +881,7 @@ static int sof_ipc4_widget_setup_comp_process(struct snd_sof_widget *swidget)
->  	/* allocate memory for base config extension if needed */
->  	if (process->init_config == SOF_IPC4_MODULE_INIT_CONFIG_TYPE_BASE_CFG_WITH_EXT) {
->  		struct sof_ipc4_base_module_cfg_ext *base_cfg_ext;
-> -		u32 ext_size = struct_size(base_cfg_ext, pin_formats,
-> +		size_t ext_size = struct_size(base_cfg_ext, pin_formats,
->  						swidget->num_input_pins + swidget->num_output_pins);
+On Fri, 2 Jun 2023 at 11:49, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 1 Jun 2021 at 16:32, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Sat, May 29, 2021 at 11:41:37AM +0800, Kefeng Wang wrote:
+> > > 1. cleanup access_error(), make vma flags set and check into
+> > >    __do_page_fault() and do_page_fault() directly.
+> > >
+> > > 2. drop fsr and task argument, instead, using vm_flags in
+> > >    __do_page_fault().
+> > >
+> > > 3. cleans up the multiple goto statements in __do_page_fault().
+> > >
+> > > 4. use current->mm directly in do_page_fault().
+> > >
+> > > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> >
+> > This patch is a really good example of something that is very difficult
+> > to review and see that there are no unintended changes.
+> >
+> > Many people have complained about my patches, where I create a series of
+> > many patches where each patch does exactly _one_ simple transformation to
+> > the code. This is a good example _why_ I do that - a step by step single
+> > transformation approach is way easier to review.
+> >
+> > Sorry, but I'm not able to sensibly review this patch, and therefore
+> > I won't apply it. Please split it into smaller changes.
+> >
+>
+> Agreed. If your commit message contains an enumeration of things the
+> patch does, it is a very strong hint that each of those things needs
+> to be a separate patch if at all possible.
 
-The temptation would be to change the addition as well:
+Also, apologies for digging up this 2 year old thread :-) I did so
+unintentionally.
 
-	size_t ext_size = struct_size(base_cfg_ext, pin_formats,
-				      size_add(swidget->num_input_pins, swidget->num_output_pins);
-
-These values can only be in the 0-8 range so it's not a real bug.
-
-Smatch cannot parse this data correctly to verify that it is safe.
-Maybe in two years Smatch will be able to.  Probably a human who is
-unfamiliar with this code can figure out that it is safe within 15
-minutes?
-
-I think the change to size_t doesn't hurt anyone and there isn't any
-downside to it.  The size_add() change is slightly less readable than
-just adding the numbers but I think eventually people will just get used
-to it.
-
-regards,
-dan carpenter
+(Somehow, it turned up as new/unread in my LAKML folder)
