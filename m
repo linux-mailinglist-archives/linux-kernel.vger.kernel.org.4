@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD5A71F9BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 07:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A225F71F9BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 07:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbjFBFnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 01:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S233419AbjFBFqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 01:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbjFBFnJ (ORCPT
+        with ESMTP id S232144AbjFBFq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 01:43:09 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEC81A8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 22:43:08 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30c4c1fd511so991874f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 22:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685684587; x=1688276587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sNTg+KuLBbcTe5HDJe8O03xlL6tR45AjRJnyQRIY63E=;
-        b=t+5e6M32D48uebn5lqVZohvfd6CQuRjE8hp4CEoy/uc9tWUsuAUoZ2qX2po9RVG/5h
-         GkJJUQKo7LEzljbhWFao2eUdJrxbEvAlrxXO+1MhwdMNfjFEWhB7y19PI4r1EQKFDQeW
-         SW4lMo3jDW3OCWEHj8QvNPspIJYjDH5U1EzvJnxtx3/swyzGt7rrIrVcsjkcGRntsTdI
-         O5PrjcXu/gfSkv1Cbf/4GoMVBvctFMTMgSk0dH3Wn4YuIj2y4COmdXHAnr6AedBM2VI/
-         zjRZEcLTvtNLweP4t6Nz5IWghaCLBuMDMKz8C33BsQC0TS0ijQp0+fPWE2n0ngzIyu+j
-         9MkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685684587; x=1688276587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sNTg+KuLBbcTe5HDJe8O03xlL6tR45AjRJnyQRIY63E=;
-        b=IwYvmTtyqlcz3lawLR50YMoKAlreFKTSD49v/6W7s4sHKMxGpOjTXs38r1R4iZwiMT
-         YT/SK4ZgLXrStyXGd9gzEtzzDwY3vt1SYuzF7tzIJP5NDvLDhY62oEd0FXASY1KmaItT
-         AaP28TZG/PQyct1tqo44Xh2Lo8/6/J/EjJujDYfrDa5EBs2Kie11nSI8DtE0r6RyEoZl
-         /pUa1fH2DgR0jyp/eqe9A41KtoWh5svgGXn1kKP4UykbxSJOGn8njp7vP3AakwNq1BYt
-         fliALOSwS/wtmSdiqT+SC1i+YR6uqKxqu3yfK4UvKdnNh9CXG9Co6oS+nZyJS0MWuUBT
-         vdEg==
-X-Gm-Message-State: AC+VfDxX+C/jymplJBv1doRAk5LiMLoEiSv/xU9GJhsHyQwDYOS6zJZG
-        3fejWeAiC5dDrzEcejsHZePGI0jIGFsRZR8CM5E=
-X-Google-Smtp-Source: ACHHUZ5m3+HGO2Q09xGpHY7AnCCpDNZfAg5pNondET17bqvD/cQcPcbYOXnBlS2NfNQ79ctkLbpC/g==
-X-Received: by 2002:adf:d84a:0:b0:309:4a0f:facc with SMTP id k10-20020adfd84a000000b003094a0ffaccmr3238420wrl.40.1685684586965;
-        Thu, 01 Jun 2023 22:43:06 -0700 (PDT)
-Received: from linaro.org ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id d6-20020a5d5386000000b00307c46f4f08sm551869wrv.79.2023.06.01.22.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 22:43:06 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 08:43:05 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: sm8250: Add missing interconnect
- paths to USB HCs
-Message-ID: <ZHmBaVFF7Vys9dev@linaro.org>
-References: <20230601120029.38859-1-abel.vesa@linaro.org>
- <20230601120029.38859-2-abel.vesa@linaro.org>
- <eb7b8485-6c6c-da4d-cf90-334139b21ce6@linaro.org>
+        Fri, 2 Jun 2023 01:46:26 -0400
+X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 22:46:20 PDT
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8C4A4197
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 22:46:19 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id C8862110020826;
+        Fri,  2 Jun 2023 13:44:14 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 2 Jun 2023 13:44:14 +0800
+Date:   Fri, 2 Jun 2023 13:44:04 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   Tio Zhang <tiozhang@didiglobal.com>
+To:     <pmladek@suse.com>, <yu.c.chen@intel.com>,
+        <akpm@linux-foundation.org>
+CC:     <juri.lelli@redhat.com>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <vincent.guittot@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <tiozhang@didiglobal.com>,
+        <zyhtheonly@gmail.com>, <zwp10758@gmail.com>, <zyhtheonly@yeah.net>
+Subject: [PATCH v3 2/2] sched: print parent comm in sched_show_task()
+Message-ID: <20230602054404.GA30014@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: pmladek@suse.com, yu.c.chen@intel.com,
+        akpm@linux-foundation.org, juri.lelli@redhat.com, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, zyhtheonly@gmail.com,
+        zwp10758@gmail.com, zyhtheonly@yeah.net
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <eb7b8485-6c6c-da4d-cf90-334139b21ce6@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCK2HuorPgSwWZpw@alley>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-01 14:22:35, Konrad Dybcio wrote:
-> 
-> 
-> On 1.06.2023 14:00, Abel Vesa wrote:
-> > The USB HCs nodes are missing the interconnect paths, so add them.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8250.dtsi | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > index e5c60a6e4074..eefd3dcbb2e1 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > @@ -3750,6 +3750,10 @@ usb_1: usb@a6f8800 {
-> >  
-> >  			resets = <&gcc GCC_USB30_PRIM_BCR>;
-> >  
-> > +			interconnects = <&aggre1_noc MASTER_USB3 0 &mc_virt SLAVE_EBI_CH0 0>,
-> > +					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3 0>;
-> You need to update #interconnect-cells to 2.
+Knowing who the parent is might be useful for debugging.
+For example, we can sometimes resolve kernel hung tasks by stopping
+the person who begins those hung tasks.
+With the parent's name printed in sched_show_task(),
+it might be helpful to let people know which "service" should be operated.
+Also, we move the parent info to a following new line.
+It would be better to solve the situation when the task
+is not alive and we could not get information about the parent.
 
-Ugh, missed that. Will send a new version.
+Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
+---
+ kernel/sched/core.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-Thanks,
-Abel
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index cb2aa2b54c7a..d8fd35684d6c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8853,7 +8853,6 @@ SYSCALL_DEFINE2(sched_rr_get_interval_time32, pid_t, pid,
+ void sched_show_task(struct task_struct *p)
+ {
+ 	unsigned long free = 0;
+-	int ppid;
+ 
+ 	if (!try_get_task_stack(p))
+ 		return;
+@@ -8865,14 +8864,19 @@ void sched_show_task(struct task_struct *p)
+ #ifdef CONFIG_DEBUG_STACK_USAGE
+ 	free = stack_not_used(p);
+ #endif
+-	ppid = 0;
++
++	pr_cont(" stack:%-5lu pid:%-5d flags:0x%08lx\n",
++		free, task_pid_nr(p), read_task_thread_flags(p));
++
+ 	rcu_read_lock();
+-	if (pid_alive(p))
+-		ppid = task_pid_nr(rcu_dereference(p->real_parent));
++	if (pid_alive(p)) {
++		struct task_struct *parent = rcu_dereference(p->real_parent);
++
++		pr_info("parent:%-15.15s ppid:%-6d\n", parent->comm, task_pid_nr(parent));
++	} else {
++		pr_info("parent:unknown         ppid:<NULL>\n");
++	}
+ 	rcu_read_unlock();
+-	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
+-		free, task_pid_nr(p), ppid,
+-		read_task_thread_flags(p));
+ 
+ 	print_worker_info(KERN_INFO, p);
+ 	print_stop_info(KERN_INFO, p);
+-- 
+2.17.1
 
-> 
-> Konrad
-> > +			interconnect-names = "usb-ddr", "apps-usb";
-> > +
-> >  			usb_1_dwc3: usb@a600000 {
-> >  				compatible = "snps,dwc3";
-> >  				reg = <0 0x0a600000 0 0xcd00>;
-> > @@ -3810,6 +3814,10 @@ usb_2: usb@a8f8800 {
-> >  
-> >  			resets = <&gcc GCC_USB30_SEC_BCR>;
-> >  
-> > +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI_CH0 0>,
-> > +					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3_1 0>;
-> > +			interconnect-names = "usb-ddr", "apps-usb";
-> > +
-> >  			usb_2_dwc3: usb@a800000 {
-> >  				compatible = "snps,dwc3";
-> >  				reg = <0 0x0a800000 0 0xcd00>;
