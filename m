@@ -2,125 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A775272003D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8067B720045
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 13:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbjFBLSe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 2 Jun 2023 07:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S235884AbjFBLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 07:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235358AbjFBLSa (ORCPT
+        with ESMTP id S235880AbjFBLTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:18:30 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0121A1B9;
-        Fri,  2 Jun 2023 04:18:15 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso4799658276.1;
-        Fri, 02 Jun 2023 04:18:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685704695; x=1688296695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=55TCnNM7kMHRew3G4Jl4TYRy0f4Haiew0/tikDTeZNg=;
-        b=QUfrLdFvAGwzYmoCbap1nhDGCSYytke1ndKiXgRySPehbNi0hgnyQQR2CPr7AKeurm
-         fuelDWEh6jNgdD1SbWJUT+VbxS1Q2/XEhsadC7sp3aujSvxtHDW5lcm/s/3vkygnpWhl
-         43A5rQVCMfuXBYNHPPqoXys5KGN7YsHehRXutO+sI/FJiK6I/VJ9kCND4laKowv7pXko
-         cASjaGLcd9sV4kP6mHx/N+Z0UTEFIis+FtI9asH5NR1d3ndSQP+RJ4CFtxl427mKjYgA
-         6miDMlkGwRgN7TNJejn0/lmDgJNSgoyZ/qZ69OLmBl3jRlA+5yWRMJPEJwPtLdQFZKiX
-         iCDA==
-X-Gm-Message-State: AC+VfDwtaeWC9oIyG4myUjM5VlQpN9f9FzhN1No89Zm8MJDIUATj85Bi
-        VeUntkpOjtk9CB0+gb8rFLByLNPjfzboqDzv
-X-Google-Smtp-Source: ACHHUZ5WDEDLyze0p2DKzK94QluEN0m78XsgT8PdUjwD4yVHgBuwa/3hvekURaEK3p0XCi4S2blrlg==
-X-Received: by 2002:a81:4f15:0:b0:561:94a9:f9f7 with SMTP id d21-20020a814f15000000b0056194a9f9f7mr5542787ywb.20.1685704694917;
-        Fri, 02 Jun 2023 04:18:14 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id h187-20020a0dc5c4000000b0055aafcef659sm387316ywd.5.2023.06.02.04.18.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 04:18:13 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-568928af8f5so30320507b3.1;
-        Fri, 02 Jun 2023 04:18:12 -0700 (PDT)
-X-Received: by 2002:a81:4f15:0:b0:561:94a9:f9f7 with SMTP id
- d21-20020a814f15000000b0056194a9f9f7mr5542636ywb.20.1685704692143; Fri, 02
- Jun 2023 04:18:12 -0700 (PDT)
+        Fri, 2 Jun 2023 07:19:09 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC90E51
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 04:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mX/3s5jn0kye18Dtq9IV01UdoBlPE+i0WCzziDNI6ok=; b=qrMPgDfQgl7NfBgtOl4Glxq5y3
+        R3xIRrOJzDdGMaZdrLY2OSL4S3I34sO8VjkMVYlpHBXvvEUZBT1dFIdf7qCUTibgxeFSMhVCUpUNe
+        CcClr8wbXYn/U3oFRBNXHB0WwFtXNh/W5eFqdTh7aSSWcDjhpE3wcgNVTJmXPiql8IIgEkhaZTyzh
+        XMy2On1IlTByANsgswyKkTvzk9IC2J8dh36qm0gUGqQI+DVhYe5oVwZImuer16MWOWMdoYXgp9nxJ
+        E0FfJqX5Nc95FO+M+betXLc578qSQ2xn4g6xqus9FuUhRZZRil078HY+COV8dWnTr1BDlFpay8pUt
+        eNyJ+r9w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q52nn-001JPN-1M;
+        Fri, 02 Jun 2023 11:18:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DF9EF300220;
+        Fri,  2 Jun 2023 13:18:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9FE5A243B0938; Fri,  2 Jun 2023 13:18:37 +0200 (CEST)
+Date:   Fri, 2 Jun 2023 13:18:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
+ wait_task_inactive().
+Message-ID: <20230602111837.GE620383@hirez.programming.kicks-ass.net>
+References: <Y++UzubyNavLKFDP@linutronix.de>
+ <20230525165244.GV83892@hirez.programming.kicks-ass.net>
+ <20230526080543.GF38236@hirez.programming.kicks-ass.net>
+ <20230526151335.oPeFiIdq@linutronix.de>
+ <20230601091234.GW83892@hirez.programming.kicks-ass.net>
+ <20230602082503.GA624418@hirez.programming.kicks-ass.net>
+ <20230602103731.GA630648@hirez.programming.kicks-ass.net>
+ <20230602104958._mDE_6c6@linutronix.de>
 MIME-Version: 1.0
-References: <cover.1685696114.git.geert+renesas@glider.be> <14e091fc522aa63a3e33bda1016e5fa946d47d18.1685696114.git.geert+renesas@glider.be>
- <20230602110459.GC26944@pendragon.ideasonboard.com>
-In-Reply-To: <20230602110459.GC26944@pendragon.ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Jun 2023 13:17:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXR79TTSAcKb=DA2mRVDgaxBERts5PQLMf+mXpZDQJu=Q@mail.gmail.com>
-Message-ID: <CAMuHMdXR79TTSAcKb=DA2mRVDgaxBERts5PQLMf+mXpZDQJu=Q@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drm: Remove references to removed transitional helpers
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602104958._mDE_6c6@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Fri, Jun 02, 2023 at 12:49:58PM +0200, Sebastian Andrzej Siewior wrote:
+> On 2023-06-02 12:37:31 [+0200], Peter Zijlstra wrote:
+> > ---
+> > Subject: sched: Unconditionally use full-fat wait_task_inactive()
+> > From: Peter Zijlstra <peterz@infradead.org>
+> > Date: Fri Jun  2 10:42:53 CEST 2023
+> > 
+> > While modifying wait_task_inactive() for PREEMPT_RT; the build robot
+> > noted that UP got broken. This led to audit and consideration of the
+> > UP implementation of wait_task_inactive().
+> > 
+> > It looks like the UP implementation is also broken for PREEMPT;
+> 
+> If UP is broken for PREEMPT, shouldn't it get a fixes or stable tag?
 
-On Fri, Jun 2, 2023 at 1:05 PM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Fri, Jun 02, 2023 at 11:11:35AM +0200, Geert Uytterhoeven wrote:
-> > The transitional helpers were removed a long time ago, but some
-> > references stuck.  Remove them.
-> >
-> > Fixes: 21ebe615c16994f3 ("drm: Remove transitional helpers")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> > --- a/drivers/gpu/drm/drm_plane_helper.c
-> > +++ b/drivers/gpu/drm/drm_plane_helper.c
-> > @@ -51,14 +51,6 @@
-> >   * planes, and newly merged drivers must not rely upon these transitional
-> >   * helpers.
-> >   *
->
-> The first paragraph starts with "This helper library has two parts.". As
-> you're dropping the mention of the second part, I think you should
-> rework the first paragraph too.
-
-That was my initial thought, too.
-However, the code still has a second part, not related to the topic of
-the first part (primary plane support).
-
->
-> > - * The second part also implements transitional helpers which allow drivers to
-> > - * gradually switch to the atomic helper infrastructure for plane updates. Once
-> > - * that switch is complete drivers shouldn't use these any longer, instead using
-> > - * the proper legacy implementations for update and disable plane hooks provided
-> > - * by the atomic helpers.
-> > - *
-> > - * Again drivers are strongly urged to switch to the new interfaces.
-> > - *
-> >   * The plane helpers share the function table structures with other helpers,
-> >   * specifically also the atomic helpers. See &struct drm_plane_helper_funcs for
-> >   * the details.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+It has been broken *forever*, I don't think we need to 'rush' a fix.
+Also, I don't think anybody actually uses a UP+PREEMPT kernel much, but
+what do I know.
