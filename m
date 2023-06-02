@@ -2,167 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0D271FBAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7318971FBB9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 10:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbjFBIPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 04:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S234333AbjFBITL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 04:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbjFBIPp (ORCPT
+        with ESMTP id S234245AbjFBITJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:15:45 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEE699;
-        Fri,  2 Jun 2023 01:15:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXbRH3N09z4f3nTP;
-        Fri,  2 Jun 2023 16:15:39 +0800 (CST)
-Received: from [10.67.110.112] (unknown [10.67.110.112])
-        by APP1 (Coremail) with SMTP id cCh0CgD3UBsrpXlkZ5KVKA--.44759S2;
-        Fri, 02 Jun 2023 16:15:40 +0800 (CST)
-Message-ID: <92671ed7-ca4f-48e4-f29d-a42860f93d89@huaweicloud.com>
-Date:   Fri, 2 Jun 2023 16:15:39 +0800
+        Fri, 2 Jun 2023 04:19:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E021718C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 01:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685693901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e6dgcfRzwtu2q6ZQ7H261Q/6f1VW8EOruX+6XBOQKHE=;
+        b=D3eTQHfh3uD764qMtiQ3itjR5OkNa+ytU/G2S94oPnSPEbDxrvCXMR6DgJvxz7P+z4HnH2
+        GDJh3aGAGY3lNSBloNo/e+ZB8O4mMdc4wOW3b2Ep/UYTbP48zUWVbmCvHLZn0sYEOmQkZH
+        zohF0Zu/xzSg5SUrasyJ1kFjlBOiNso=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-hfm_teGCOESRR0UGvP-mcg-1; Fri, 02 Jun 2023 04:18:15 -0400
+X-MC-Unique: hfm_teGCOESRR0UGvP-mcg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF2C4811E7F;
+        Fri,  2 Jun 2023 08:18:14 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3FBAF1121314;
+        Fri,  2 Jun 2023 08:18:13 +0000 (UTC)
+Date:   Fri, 2 Jun 2023 10:18:11 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] perf tools: allow running annotation browser from
+ c2c-report
+Message-ID: <20230602081811.GA240769@samus.usersys.redhat.com>
+References: <20230531115014.161454-1-asavkov@redhat.com>
+ <20230531115014.161454-3-asavkov@redhat.com>
+ <CAM9d7ci6h_f8WsRu3cyYPQJO8nuAXcsMX_T_+aLy_0t5_33tMA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] cgroup: Stop task iteration when rebinding subsystem
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cuigaosheng1@huawei.com
-References: <20230526114139.70274-1-xiujianfeng@huaweicloud.com>
- <ojymhf4m3p52py6sezwbc2zamxm46wmhxs577uucima6evj2sc@djoi3dhzbdf6>
-From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
-In-Reply-To: <ojymhf4m3p52py6sezwbc2zamxm46wmhxs577uucima6evj2sc@djoi3dhzbdf6>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgD3UBsrpXlkZ5KVKA--.44759S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFyUAF48ZF43ZrWUuF4DArb_yoWrGw48pF
-        y5ZrZxtrs5Zw4jgr4fKa4qqayF9rWvgw4UGrW5J3ySywnrAFyxWr4Ikw13uF4SyFZrGwsx
-        KF4j9ry5uw1qqaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7ci6h_f8WsRu3cyYPQJO8nuAXcsMX_T_+aLy_0t5_33tMA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+Hello,
 
-On 2023/6/2 1:33, Michal Koutný wrote:
-> Hello Jianfeng.
-> 
-> On Fri, May 26, 2023 at 07:41:39PM +0800, Xiu Jianfeng <xiujianfeng@huaweicloud.com> wrote:
->> The race that cause this bug can be shown as below:
->>
->> (hotplug cpu)                | (umount cpuset)
->> mutex_lock(&cpuset_mutex)    | mutex_lock(&cgroup_mutex)
->> cpuset_hotplug_workfn        |
->>  rebuild_root_domains        |  rebind_subsystems
->>   update_tasks_root_domain   |   spin_lock_irq(&css_set_lock)
->>    css_task_iter_start       |    list_move_tail(&cset->e_cset_node[ss->id]
->>    while(css_task_iter_next) |                  &dcgrp->e_csets[ss->id]);
->>    css_task_iter_end         |   spin_unlock_irq(&css_set_lock)
->> mutex_unlock(&cpuset_mutex)  | mutex_unlock(&cgroup_mutex)
-> 
-> Good catch!
-> 
->>
->> Inside css_task_iter_start/next/end, css_set_lock is hold and then
->> released, so when iterating task(left side), the css_set may be moved to
->> another list(right side), then it->cset_head points to the old list head
->> and it->cset_pos->next points to the head node of new list, which can't
->> be used as struct css_set.
-> 
-> I find your analysis sane -- the stale it->cset_head is problematic.
-> 
->> To fix this issue, introduce CSS_TASK_ITER_STOPPED flag for css_task_iter.
->> when moving css_set to dcgrp->e_csets[ss->id] in rebind_subsystems(), stop
->> the task iteration.
-> 
-> Does it mean that iteration would not yield all tasks that are
-> associated with give cs->css? That sounds like broken correctness of the
-> iterator.
-> 
-> I may suggest a slightly different approach that should not affect
-> running iterators.
-> - I had to switch from all css_sets to only scgrp's css_sets since
->   css_set_table order of css_sets may be different than scgrp->e_csets
-> - Not sure how portable is using array element as a `member` argument of
->   offsetof (in expansion of list_for_each_entry_safe).
-> 
-> This is only to illustrate the idea, i.e. merely compile tested.
-> 
-> WDYT?
+Thank you for the review.
 
-Yes, I think this approach is better for it doesn't affect the running
-iterators, and we have tested it, it can solve this issue, thank you.
+On Thu, Jun 01, 2023 at 02:26:48PM -0700, Namhyung Kim wrote:
+> Hello,
+> 
+> On Wed, May 31, 2023 at 4:50 AM Artem Savkov <asavkov@redhat.com> wrote:
+> >
+> > Add a shortcut to run annotation browser for selected symbol from
+> > c2c report TUI.
+> >
+> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> > ---
+> >  tools/perf/builtin-c2c.c | 76 +++++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 71 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+> > index 05dfd98af170b..96e66289c2576 100644
+> > --- a/tools/perf/builtin-c2c.c
+> > +++ b/tools/perf/builtin-c2c.c
+> > @@ -19,11 +19,13 @@
 
-So if maintainers agree, I would send a v2.
+snip
+
+> >  struct c2c_hists {
+> > @@ -79,6 +83,7 @@ struct c2c_hist_entry {
+> >          * because of its callchain dynamic entry
+> >          */
+> >         struct hist_entry       he;
+> > +       struct evsel            *evsel;
+> 
+> I'm not sure if it's needed.  It seems c2c command doesn't collect
+> samples per evsel.  It uses c2c.hists.hists for all evsels.  Then it
+> might not be worth keeping an evsel in a c2c_hist_entry and
+> just use a random evsel in the evlist.
+> 
+
+Right, but annotation browser does use it for line usage percentage
+calculation. So does this mean it won't be showing correct percentages
+whatever evsel is chosen and that's why it is possible to just select a
+random one?
+
+As far as I can tell evlist is not currently available in
+perf_c2c__browse_cacheline(), but it can be added to struct perf_c2c.
+
+> >  };
+
+snip
+
+> > +       " a             Annotate current symbol\n"
+> >         " n             Toggle Node details info \n"
+> >         " s             Toggle full length of symbol and source line columns \n"
+> >         " q             Return back to cacheline list \n";
+> > @@ -2650,6 +2670,44 @@ static int perf_c2c__browse_cacheline(struct hist_entry *he)
+> >                 key = hist_browser__run(browser, "? - help", true, 0);
+> >
+> >                 switch (key) {
+> > +               case 'a':
+> 
+> I think it's better to factor this code out to a function.
+
+Ok, will do.
+
+> > +                       if (!browser->selection ||
+> > +                           !browser->selection->map ||
+> > +                           !browser->selection->map->dso ||
+> > +                           browser->selection->map->dso->annotate_warned) {
+> > +                               continue;
+> > +                       }
+> > +
+> > +                       ms.map = browser->selection->map;
+> > +
+> > +                       if (!browser->selection->sym) {
+> > +                               if (!browser->he_selection)
+> > +                                       continue;
+> > +
+> > +                               ms.sym = symbol__new_unresolved(browser->he_selection->ip,
+> > +                                                               browser->selection->map);
+> > +
+> > +                               if (!ms.sym)
+> > +                                       continue;
+> > +                       } else {
+> > +                               if (symbol__annotation(browser->selection->sym)->src == NULL) {
+> > +                                       ui_browser__warning(&browser->b, 0,
+> > +                                               "No samples for the \"%s\" symbol.\n\n",
+> > +                                               browser->selection->sym->name);
+> > +                                       continue;
+> > +                               }
+> > +                               ms.sym = browser->selection->sym;
+> > +                       }
+> > +
+> > +                       err = map_symbol__tui_annotate(&ms, c2c_he->evsel, browser->hbt, &c2c.annotation_opts);
+> > +
+> > +                       ui_browser__update_nr_entries(&browser->b, browser->hists->nr_entries);
+> 
+> c2c_browser__update_nr_entries() ?
+
+Will it change from the previous call before the while loop? This part
+was mostly copied over from do_annotate() in ui/browsers/hists.c so I am
+a bit hazy here. My understanding is that update_nr_entries and handle
+resize are called here mostly for refresh/reset of the ui and
+recalculation of number of entries is not needed
 
 > 
-> Regards,
-> Michal
+> > +                       if ((err == 'q' || err == CTRL('c')) && browser->he_selection->branch_info)
 > 
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 625d7483951c..e67d2a0776c1 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -1798,7 +1798,7 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
->  {
->  	struct cgroup *dcgrp = &dst_root->cgrp;
->  	struct cgroup_subsys *ss;
-> -	int ssid, i, ret;
-> +	int ssid, ret;
->  	u16 dfl_disable_ss_mask = 0;
->  
->  	lockdep_assert_held(&cgroup_mutex);
-> @@ -1842,7 +1842,8 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
->  		struct cgroup_root *src_root = ss->root;
->  		struct cgroup *scgrp = &src_root->cgrp;
->  		struct cgroup_subsys_state *css = cgroup_css(scgrp, ss);
-> -		struct css_set *cset;
-> +		struct css_set *cset, *cset_pos;
-> +		struct css_task_iter *it;
->  
->  		WARN_ON(!css || cgroup_css(dcgrp, ss));
->  
-> @@ -1860,9 +1861,18 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
->  		css->cgroup = dcgrp;
->  
->  		spin_lock_irq(&css_set_lock);
-> -		hash_for_each(css_set_table, i, cset, hlist)
-> +		WARN_ON(!list_empty(&dcgrp->e_csets[ss->id]));
-> +		list_for_each_entry_safe(cset, cset_pos, &scgrp->e_csets[ss->id], e_cset_node[ss->id]) {
->  			list_move_tail(&cset->e_cset_node[ss->id],
->  				       &dcgrp->e_csets[ss->id]);
-> +			/* all css_sets of scgrp together in same order to dcgrp,
-> +			 * patch in-flight iterators to preserve correct iteration,
-> +			 * cset_head is under css_set_lock */
-> +			list_for_each_entry(it, &cset->task_iters, iters_node) {
-> +				if (it->cset_head == &scgrp->e_csets[ss->id])
-> +					it->cset_head = &dcgrp->e_csets[ss->id];
-> +			}
-> +		}
->  		spin_unlock_irq(&css_set_lock);
->  
->  		if (ss->css_rstat_flush) {
+> Why check branch_info?
+
+This was copied over as well and the comment in hists.c states "offer
+option to annotate the other branch source or target (if they exists)
+when returning from annotate". So I now think this might not be needed
+here at all?
+
+> > +                                       continue;
+> > +                       if (err)
+> > +                               ui_browser__handle_resize(&browser->b);
+> > +
+> > +                       continue;
+> 
+> It'd be natural to use 'break' instead of 'continue' here.
+
+Yes, will change this.
+
+> >                 case 's':
+> >                         c2c.symbol_full = !c2c.symbol_full;
+
+snip
+
+> >         perf_session__delete(session);
+> >  out:
+> > +       annotation_options__init(&c2c.annotation_opts);
+> 
+> __exit() ?
+
+Ouch, thanks for noticing!
+
+-- 
+ Artem
 
