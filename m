@@ -2,104 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C27B720A0D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC7D720A12
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 21:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235697AbjFBTzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 15:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S235860AbjFBT6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 15:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbjFBTzC (ORCPT
+        with ESMTP id S235726AbjFBT6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 15:55:02 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70B1A1
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:55:00 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bacd408046cso3437178276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 12:55:00 -0700 (PDT)
+        Fri, 2 Jun 2023 15:58:07 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230C9E43
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 12:58:06 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so3627551a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 12:58:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685735700; x=1688327700;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wvC6wmElZRvpiH+E9L3WfoP2SwSbGd7WVHWRFrOxZPI=;
-        b=wsRD0Zar9MaDd0qyE6WTlk+K/eZ5x8B3psJKtTHmSL3pIe5Un8FIOTldhFWGd5MKgC
-         B9A1+v5QpmkQ5KskiJTRuLdwRDHYwaWVOlt94UMhvZLk9atnEs0TIvCRF6fK7ZblC7i0
-         BtSjmwLmyFGjPav2GJkNERHRqMHEc2SreymXCCkvulycHbzHLXfDIKMjTAiMVIfdEDKu
-         BKm1qlM1MjKYLvKKP5WCv2/uzi1CPrVXMsoG+uPyAQ6JKrjDUr3UkV8/58Ov278pClYA
-         2WJebWN5OaWWg99R14kwO6f+IhQhmwf7AooxaZmHu9iXUXkaGPx9o2Xj8XRqlnQ2pHSt
-         TOBg==
+        d=linux-foundation.org; s=google; t=1685735884; x=1688327884;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8pqo3OfJjzReA0YZCNQePZ3Xh5QPxALpix/U4edhgSI=;
+        b=W4f2bvHY/MqtlWgFoJcA+8vxb7C0987DVZj2B5PB2quJ4KQUQHF9e6SIGOPIRiGTIh
+         Wz8b90W6/fBSD0skzOT6YNt6xHi9cR+ErM1v7lJrBVG99YNrQ+i9Jzkwok5SGQnCx5Pw
+         YpwwJLJB55uJxOm0scv6/RripMi+2ltE/pnSw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685735700; x=1688327700;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wvC6wmElZRvpiH+E9L3WfoP2SwSbGd7WVHWRFrOxZPI=;
-        b=EL1lHygWTrLVxWQVl8sK2B4Zm72gEA5eedsVnhEbRkFWOxRAQ3P9ZTA+HjCWZynNNc
-         Gpzo06Yreo3evs7Gu3IZvPveSdHH66JKzzXZTq7PkYeqDUHQVsTOZasHCCClRpASx+Pk
-         1Dap4BW7O/zJCMXqWsdwQ2+YcjbMVTu7psLy1V4n9wGbgktNljWHNMQ2WaEDhh/wIp8J
-         45/IUFH0VbZvglAfBWun0a6oSfivQmRUy1T23g9m0ln5/nNZ0CiUQkKSXmU6dyit8oRT
-         TVwHEFr4kYD/fNZch0ieAnA2KhzTK37iKG58RJi5PZyapFj7C36/exObQAT6UFO3IaAQ
-         b1TA==
-X-Gm-Message-State: AC+VfDxiiGHucTuVsBM7rZCAZPZPzVyO3uKvLVtgf6PT3qi9t2yXWK/I
-        xFji5m5156l+j/7aN+57in9oJJ+3ubsMMGE=
-X-Google-Smtp-Source: ACHHUZ4GaYGWl55WZGgfw+yOAPT8336nv+q0TvP+cvQiTk6jVpc/RyyGtR3bRWQbdkqi+GXIKPVOZzKp9Gsqs3o=
-X-Received: from wg.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3423])
- (user=weihaogao job=sendgmr) by 2002:a25:d4c8:0:b0:ba8:1e72:2c88 with SMTP id
- m191-20020a25d4c8000000b00ba81e722c88mr2279165ybf.13.1685735699800; Fri, 02
- Jun 2023 12:54:59 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 19:54:50 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230602195451.2862128-1-weihaogao@google.com>
-Subject: [PATCH] Fix gitignore for recently added usptream self tests
-From:   Weihao Gao <weihaogao@google.com>
-To:     "David S . Miller " <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        Weihao Gao <weihaogao@google.com>
+        d=1e100.net; s=20221208; t=1685735884; x=1688327884;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8pqo3OfJjzReA0YZCNQePZ3Xh5QPxALpix/U4edhgSI=;
+        b=XJBbC5BmOh0inFq/L4DBwSMeCk/GpoSofHrOEi/RtHzRdQr0uhzmb3hCyGmLywxv3H
+         NpV0wGEj2B9yVdxVKdP7wa2dCZzUF2Z1f1x62mZERYqfJcg5FEMW/K07+CaXzJVIV5Eh
+         3gZt4appRiVY9Wftj7pUZNpHT2wWvgfYtlzY/PO1RBVMH+KpLfmEQSF2EoNcaqwBzroz
+         ulNKB4gk6qTyRIW857s1tPSg5PyJ5W19+7ry3tQAOEMJcW/zMdEStmNh9wmZKv7V/HdJ
+         /SSBt45J5kVWptG2JWWPRUpTB5C5H27uRzjXYSVUgYXaONPIBkiwqbc+M30RCrigQtZV
+         W97A==
+X-Gm-Message-State: AC+VfDxIj9Mvzv67q+isHaG61KKDXAKLlZHb205s1NWwDvCE4G3iuFt2
+        hCNqAmQfzfAznyJEhSfuCPepKIna15zgCbYRZ+J2O01W
+X-Google-Smtp-Source: ACHHUZ6uUlzyCZbq1iyJRvONMnnk0F2oly21q/jrNoZcBvjtjDFavhH1cTTZ0WEbYgiEeYmvJq/0Tg==
+X-Received: by 2002:a17:907:3ea7:b0:974:9b83:7523 with SMTP id hs39-20020a1709073ea700b009749b837523mr1807486ejc.76.1685735884475;
+        Fri, 02 Jun 2023 12:58:04 -0700 (PDT)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id j24-20020a170906095800b009659fa6eeddsm1106193ejd.196.2023.06.02.12.58.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 12:58:04 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so3627504a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 12:58:03 -0700 (PDT)
+X-Received: by 2002:a05:6402:b10:b0:514:9b60:ea65 with SMTP id
+ bm16-20020a0564020b1000b005149b60ea65mr2665357edb.16.1685735862382; Fri, 02
+ Jun 2023 12:57:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230531130833.635651916@infradead.org> <20230531132323.722039569@infradead.org>
+ <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com> <20230601101409.GS4253@hirez.programming.kicks-ass.net>
+ <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de> <CAHk-=whL65CLuy9D9gyO608acM5WLWo_ggAMP1cGu2XvyC0-hA@mail.gmail.com>
+ <20230602143912.GI620383@hirez.programming.kicks-ass.net> <E333E35E-5F9C-441C-B75A-082F19D37978@zytor.com>
+ <20230602191014.GA695361@hirez.programming.kicks-ass.net> <B432FCD8-2ED7-42B1-BC3B-34F277A1CD9F@zytor.com>
+ <20230602194021.GB695361@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230602194021.GB695361@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 2 Jun 2023 15:57:25 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wi4q=_+vQkOM0LRY7SfsH+D1-9DOSBABAzXrZwWxmJR+g@mail.gmail.com>
+Message-ID: <CAHk-=wi4q=_+vQkOM0LRY7SfsH+D1-9DOSBABAzXrZwWxmJR+g@mail.gmail.com>
+Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of __SIZEOF_INT128__
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, suravee.suthikulpanit@amd.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        John David Anglin <dave.anglin@bell.net>,
+        Sam James <sam@gentoo.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This resolves the issue that generated binary is showing up as an untracked git file after every build on the kernel.
+On Fri, Jun 2, 2023 at 3:40=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> "With 64bit builds depending on __SIZEOF_INT128__ to detect the
+> presence of __int128 raise the parisc minimum compiler version to
+> gcc-11.0.0."
+>
+> better?
 
-Signed-off-by: Weihao Gao <weihaogao@google.com>
----
- tools/testing/selftests/net/.gitignore | 3 +++
- 1 file changed, 3 insertions(+)
+I'd just say "64-bit targets need the __int128 type, which for pa-risc
+means raising the minimum gcc version to 11".
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 80f06aa62034..f27a7338b60e 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -8,8 +8,10 @@ diag_uid
- fin_ack_lat
- gro
- hwtstamp_config
-+io_uring_zerocopy_tx
- ioam6_parser
- ip_defrag
-+ip_local_port_range
- ipsec
- ipv6_flowlabel
- ipv6_flowlabel_mgr
-@@ -26,6 +28,7 @@ reuseport_bpf_cpu
- reuseport_bpf_numa
- reuseport_dualstack
- rxtimestamp
-+sctp_hello
- sk_bind_sendto_listen
- sk_connect_zero_addr
- socket
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+The __SIZEOF_INT128__ part isn't the important part. That's just the sympto=
+m.
 
+               Linus
