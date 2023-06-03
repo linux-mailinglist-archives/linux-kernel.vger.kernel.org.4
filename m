@@ -2,109 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78312721154
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 19:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B001720EEB
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjFCRIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 13:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S229989AbjFCJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 05:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjFCRII (ORCPT
+        with ESMTP id S229692AbjFCJ1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 13:08:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD0E135
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 10:08:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 938D960B4B
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 17:08:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF872C433A0;
-        Sat,  3 Jun 2023 17:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685812087;
-        bh=625V0iT5dcehfVt4qp+4KsunqsvUgaOhEkp64prztuE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mh016dTw6+Ptz8S0odzfu5vqrTwHWrX7gPI3LWg8aJGRF3ES+70ahzjpvreYGtu3L
-         3eAM6sA0I2sRRt/jT7wICaR7Fh5/kxX/J7yGOdSc1naXM5ekeQc/3FoYFxj74ekWJ7
-         c9N1n1hg2QAuiDvBAyy+6CPGOSMzvZcXNhn848ET64ugNQydaSXi3hofcqIpYCPbH4
-         LwAPFg/owy8d6bNbe86ro5BbF4NAeCbsifc55jpi5hhjTwCCNpJ8vKTF/4vQTS+mw+
-         W2ICtXxbhYQw9WalBmCDrYXbpLyWzB82vjRrAD08V+sna0hUGiFDYoiL0ZKKsO6YXV
-         NOgsweVlQ1kwg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] drm/bridge: imx: turn imx8{qm,qxp}-ldb into single-object modules
-Date:   Sun,  4 Jun 2023 02:07:47 +0900
-Message-Id: <20230603170747.1753842-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230603170747.1753842-1-masahiroy@kernel.org>
-References: <20230603170747.1753842-1-masahiroy@kernel.org>
+        Sat, 3 Jun 2023 05:27:55 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F9E48;
+        Sat,  3 Jun 2023 02:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685784473; x=1717320473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pdvmuC2wyW2a7AD5zT1/NjQSBP98ch0K0/460XXGMZU=;
+  b=nlUSMCNMMY0ehLsukjtWCFfY6oPBtq533ee84WI6/bp5JYwF0kxJBVpZ
+   8SVvqwTLkA/DtaZ2KpdxOcXBbvLKQbZXqQ1khnkrYYJ+Wo+xY/LR1Dhxq
+   vJYC69zkx8/YBMaceq1zigpulxl76sgBkuYi6gcNV+RHDkPA4xD1KTict
+   zf4ZyBLtTqRY4r0nAXSIro7AATMsT64RI1iRo2o5GnJ61FDLPARB3BHMM
+   F/vAvNyt3Cq/liOrraBvpaj0GI/RmzIqr45S11zTYCElr07Qqc4y8Kbjb
+   jOcD6Pp5xGvUOEMlUjfHB7LA4SWoN5/aHp5N4Tt2TvQyD6TpGp1+1HxW+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="419591916"
+X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
+   d="scan'208";a="419591916"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 02:27:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="658529048"
+X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
+   d="scan'208";a="658529048"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga003.jf.intel.com with ESMTP; 03 Jun 2023 02:27:51 -0700
+Date:   Sun, 4 Jun 2023 01:27:21 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@amd.com, linux-fpga@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Subject: Re: [PATCH v2] fpga: zynq-fpga: Ensure proper xCAP interface switch
+Message-ID: <ZHt3+XSvmTnk1Xno@yilunxu-OptiPlex-7050>
+References: <20230531095624.1802757-1-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531095624.1802757-1-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the previous fix, these modules are built from a single C file.
+On 2023-05-31 at 15:26:24 +0530, Nava kishore Manne wrote:
+> From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+> 
+> The Zynq platform has PCAP, ICAP and JTAG interfaces for configuring
+> programmable logic (PL). The existing driver implementation uses the
+> PCAP interface to configure the PL. Before switching the PL configuration
+> interface from PCAP to ICAP make sure that all outstanding Transactions
+> relevant to the PL configuration should be completed by the PCAP interface
+> otherwise it may lead to PL configuration issues.
+> 
+> This patch provides a required fix to ensure that all existing PL
+> transactions are completed before switching from PCAP to ICAP.
+> 
+> For detailed information relevant to PL configuration interfaces refer
+> Zynq 7000 TRM (section 6.5.1).
+> Link: https://docs.xilinx.com/v/u/en-US/ug585-Zynq-7000-TRM
+> 
+> Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> Changes for v2:
+>               - Updated commit message and added Doc link as suggested by Yilun.
+> 
+>  drivers/fpga/zynq-fpga.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+> index ae0da361e6c6..88db9ac36887 100644
+> --- a/drivers/fpga/zynq-fpga.c
+> +++ b/drivers/fpga/zynq-fpga.c
+> @@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
+>  	if (err)
+>  		return err;
+>  
+> -	/* Release 'PR' control back to the ICAP */
+> -	zynq_fpga_write(priv, CTRL_OFFSET,
+> -		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
+> -
+>  	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
+>  				     intr_status & IXR_PCFG_DONE_MASK,
+>  				     INIT_POLL_DELAY,
+>  				     INIT_POLL_TIMEOUT);
+>  
+> +	/* Release 'PR' control back to the ICAP */
+> +	zynq_fpga_write(priv, CTRL_OFFSET,
+> +			zynq_fpga_read(priv, CTRL_OFFSET)
+> +			& ~CTRL_PCAP_PR_MASK);
 
-Rename the source files so they match the module names.
+Don't put the & at the beginning of the line:
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+	zynq_fpga_read(priv, CTRL_OFFSET) &
+	~CTRL_PCAP_PR_MASK);
 
- drivers/gpu/drm/bridge/imx/Makefile                           | 4 ----
- drivers/gpu/drm/bridge/imx/{imx8qm-ldb-drv.c => imx8qm-ldb.c} | 0
- .../gpu/drm/bridge/imx/{imx8qxp-ldb-drv.c => imx8qxp-ldb.c}   | 0
- 3 files changed, 4 deletions(-)
- rename drivers/gpu/drm/bridge/imx/{imx8qm-ldb-drv.c => imx8qm-ldb.c} (100%)
- rename drivers/gpu/drm/bridge/imx/{imx8qxp-ldb-drv.c => imx8qxp-ldb.c} (100%)
+or just:
+	zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
 
-diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
-index 64b93009376a..c102443f7286 100644
---- a/drivers/gpu/drm/bridge/imx/Makefile
-+++ b/drivers/gpu/drm/bridge/imx/Makefile
-@@ -1,9 +1,5 @@
--imx8qm-ldb-objs := imx8qm-ldb-drv.o
- obj-$(CONFIG_DRM_IMX8QM_LDB) += imx8qm-ldb.o
--
--imx8qxp-ldb-objs := imx8qxp-ldb-drv.o
- obj-$(CONFIG_DRM_IMX8QXP_LDB) += imx8qxp-ldb.o
--
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK) += imx8qxp-pixel-link.o
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK_TO_DPI) += imx8qxp-pxl2dpi.o
-diff --git a/drivers/gpu/drm/bridge/imx/imx8qm-ldb-drv.c b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
-similarity index 100%
-rename from drivers/gpu/drm/bridge/imx/imx8qm-ldb-drv.c
-rename to drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
-diff --git a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb-drv.c b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
-similarity index 100%
-rename from drivers/gpu/drm/bridge/imx/imx8qxp-ldb-drv.c
-rename to drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
--- 
-2.39.2
+80 lines is not a must now.
 
+Others look good to me.
+
+Thanks,
+Yilun
+
+> +
+>  	clk_disable(priv->clk);
+>  
+>  	if (err)
+> -- 
+> 2.25.1
+> 
