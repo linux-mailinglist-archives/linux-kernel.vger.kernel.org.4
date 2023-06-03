@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1AB720E72
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD10720E74
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjFCHLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 03:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S232338AbjFCHNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFCHLp (ORCPT
+        with ESMTP id S229513AbjFCHNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:11:45 -0400
-Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0EC0;
-        Sat,  3 Jun 2023 00:11:41 -0700 (PDT)
-Received: from [0.0.0.0] (unknown [172.96.223.238])
-        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id AD5ED2802D9;
-        Sat,  3 Jun 2023 15:11:32 +0800 (CST)
-Message-ID: <5f0f2bab-ae36-8b13-2c6d-c69c6ff4a43f@sangfor.com.cn>
-Date:   Sat, 3 Jun 2023 15:11:29 +0800
+        Sat, 3 Jun 2023 03:13:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9C4D3;
+        Sat,  3 Jun 2023 00:13:16 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QY9y50hcDztQWp;
+        Sat,  3 Jun 2023 15:10:53 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 3 Jun
+ 2023 15:13:10 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <lizefan.x@bytedance.com>, <tj@kernel.org>, <hannes@cmpxchg.org>
+CC:     <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] cgroup: make cgroup_is_threaded() and cgroup_is_thread_root() static
+Date:   Sat, 3 Jun 2023 15:13:04 +0800
+Message-ID: <20230603071304.1077085-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
-        huangcun@sangfor.com.cn
-References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
- <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
- <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn>
- <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
- <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
- <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
- <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
- <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch>
- <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
- <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
- <20230602225519.66c2c987@kernel.org>
-From:   Ding Hui <dinghui@sangfor.com.cn>
-In-Reply-To: <20230602225519.66c2c987@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaHRpCVh5NQkwdS0hLSR1CGFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpMSVVCTVVJSUhVSUhDWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
-X-HM-Tid: 0a888018ecd22eb1kusnad5ed2802d9
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PU06Nio5KD1MMjMzNRA*Vk8*
-        UQgwCxNVSlVKTUNOTExNSUJDS0hIVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlKTElVQk1VSUlIVUlIQ1lXWQgBWUFPSklONwY+
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/3 13:55, Jakub Kicinski wrote:
-> On Sat, 3 Jun 2023 09:51:34 +0800 Ding Hui wrote:
->>> If that is the case maybe it would just make more sense to just return
->>> an error if we are at risk of overrunning the userspace allocated
->>> buffer.
->>
->> In that case, I can modify to return an error, however, I think the
->> ENOSPC or EFBIG mentioned in a previous email may not be suitable,
->> maybe like others length/size checking return EINVAL.
->>
->> Another thing I wondered is that should I update the current length
->> back to user if user buffer is not enough, assuming we update the new
->> length with error returned, the userspace can use it to reallocate
->> buffer if he wants to, which can avoid re-call previous ioctl to get
->> the new length.
-> 
-> This entire thread presupposes that user provides the length of
-> the buffer. I don't see that in the code. Take ethtool_get_stats()
-> as an example, you assume that stats.n_stats is set correctly,
-> but it's not enforced today. Some app somewhere may pass in zeroed
-> out stats and work just fine.
-> 
+They're only called inside cgroup.c. Make them static.
 
-Yes.
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ kernel/cgroup/cgroup-internal.h | 2 --
+ kernel/cgroup/cgroup.c          | 4 ++--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-I checked the others ioctl (e.g. ethtool_get_eeprom(), ethtool_get_features()),
-and searched the git log of ethtool utility, so I think that is an implicit
-rule and the check is missed in kernel where the patch involves.
-
-Without this rule, we cannot guarantee the safety of copy to user.
-
-Should we keep to be compatible with that incorrect userspace usage?
-
+diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
+index 367b0a42ada9..c56071f150f2 100644
+--- a/kernel/cgroup/cgroup-internal.h
++++ b/kernel/cgroup/cgroup-internal.h
+@@ -220,8 +220,6 @@ static inline void get_css_set(struct css_set *cset)
+ 
+ bool cgroup_ssid_enabled(int ssid);
+ bool cgroup_on_dfl(const struct cgroup *cgrp);
+-bool cgroup_is_thread_root(struct cgroup *cgrp);
+-bool cgroup_is_threaded(struct cgroup *cgrp);
+ 
+ struct cgroup_root *cgroup_root_from_kf(struct kernfs_root *kf_root);
+ struct cgroup *task_cgroup_from_root(struct task_struct *task,
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 8b8ca2e01019..824e3b465f6f 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -357,7 +357,7 @@ static bool cgroup_has_tasks(struct cgroup *cgrp)
+ 	return cgrp->nr_populated_csets;
+ }
+ 
+-bool cgroup_is_threaded(struct cgroup *cgrp)
++static bool cgroup_is_threaded(struct cgroup *cgrp)
+ {
+ 	return cgrp->dom_cgrp != cgrp;
+ }
+@@ -396,7 +396,7 @@ static bool cgroup_can_be_thread_root(struct cgroup *cgrp)
+ }
+ 
+ /* is @cgrp root of a threaded subtree? */
+-bool cgroup_is_thread_root(struct cgroup *cgrp)
++static bool cgroup_is_thread_root(struct cgroup *cgrp)
+ {
+ 	/* thread root should be a domain */
+ 	if (cgroup_is_threaded(cgrp))
 -- 
-Thanks,
-- Ding Hui
+2.27.0
 
