@@ -2,121 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D87720CF6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7FA720CFA
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237096AbjFCBUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S236938AbjFCBXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236639AbjFCBUu (ORCPT
+        with ESMTP id S236800AbjFCBXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:20:50 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4D7D3;
-        Fri,  2 Jun 2023 18:20:49 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53482b44007so1582152a12.2;
-        Fri, 02 Jun 2023 18:20:49 -0700 (PDT)
+        Fri, 2 Jun 2023 21:23:42 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367561AD
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:23:40 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-6259c242c96so24106126d6.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685755249; x=1688347249;
+        d=joelfernandes.org; s=google; t=1685755419; x=1688347419;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Y8G14r0YKKL8+n+kxnv7WBaleE87AmdN5aEH7tTSD0=;
-        b=GE4o4UgrHnVuBjbHYjL70FiW0mNsGq7LMqCYTiXoyni/vx2kywW1gnRzT4PSyG98in
-         G6fQ7rhf4vu5kMFeka/ZnQoRZeWpKEFIXDEwxuPpb6ixK15sH2NIDEngx+qhdf7FTROy
-         uS0Egk7/Odr4K9WyRbpEXvjbgTwe/T5dQ9rzwq1SeslQTjQxoSDFxMrSiDa7m3Y/9Ub1
-         9c8Y8y/g/1rnNvWtCZhmosgezdT2iArDpxvpi8BqcmIgzz9gGcVu5giQUgkYVDSJDbUq
-         p72/eazhxsfZvLmb5/EIkvHw0nbNZrJFFac6vjis3D5d5m4zTaeeFNgzv9GjFHEm0CgD
-         zKMg==
+        bh=j1BLmFCKytW9ZYVm+ndzJiXX+MhplDDGBVFny/CzIpE=;
+        b=JV3AUE7PyR3YjCdaAxSZDCOjQYUynkpk49ctuBKzEdwUn1nj0WgVLEwevCaL86pe1d
+         2u+Amlra+y+EJ0XNvJbHGPXZukJH7aDS4eApEwEh5or0W+nZmZJKb2agXsI8RP3wRiCT
+         gtuIfd4hlpASfCKlg6gEaEjVdofApXe3cLG2A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685755249; x=1688347249;
+        d=1e100.net; s=20221208; t=1685755419; x=1688347419;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3Y8G14r0YKKL8+n+kxnv7WBaleE87AmdN5aEH7tTSD0=;
-        b=kbtDvkZoaPDYSo4r/somBUYLt0eejETUX0sfeBTRcqCibD6zQHSspb9B+Csd5ToGvj
-         m64pQSacni5QAnO+WO8u9/vCSyyYKz4qI+Zbc3qxgc4Fid/wVGVEpsKm4QMfmxqfCCxI
-         s6XXtdA6mZAf6jrWOmVdLxKWfrvO8GQHGTvjDHUwBYimSAUvL4B4Vply+0yLFQxILQk4
-         3YzzGrf6/LWIWIMik46fD6P2hG0fF7+u2987DSR4bCwoapMEPN6NiUwGrPF2445wTCiD
-         gPwOX+PILkCI8biShVQUGYWZD/f1AlYVQYFKxzFSYcCbap+9iiggwJputpDXC2RJjY4+
-         j8VA==
-X-Gm-Message-State: AC+VfDz+5nJbrcERpB2bctLNpiu3aO5aQoBrb/1N3My7PJ3segTLqTz1
-        iB8dUmnq0Jh+NKbrBh6SJC5hDe9D22U=
-X-Google-Smtp-Source: ACHHUZ7LmVwCwsURitbtWYQSwB8mFwNeU2UJxFwVrfjzu6MUO9S7a1WjVJoOeSUzyHLEBBLxgtL0hw==
-X-Received: by 2002:a17:90b:374a:b0:256:23f:abc5 with SMTP id ne10-20020a17090b374a00b00256023fabc5mr904687pjb.10.1685755248530;
-        Fri, 02 Jun 2023 18:20:48 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-37.three.co.id. [116.206.12.37])
-        by smtp.gmail.com with ESMTPSA id t8-20020a17090a3b4800b00246cc751c6bsm3880815pjf.46.2023.06.02.18.20.47
+        bh=j1BLmFCKytW9ZYVm+ndzJiXX+MhplDDGBVFny/CzIpE=;
+        b=jNOSbJjgUObW+OZdbbR0FV3m1mhtEG00DEXl0InsLHRerJUzjXmOedbwmwN9j8QOYh
+         OCIqYZzfdU+8WO0W4lyjFXnljQoqFDKNoibK3DDYM8nENYiD5TpsFCY+3+taWJG0J4hU
+         HtbwuCPVYtyvB9D1JcIx3JV+gGaqCCXJiyVfhBZg0BRBG8w8+4fmVDIEcpx/cHMO4Jqg
+         HDo5/2NhStQeAxh0hWcv5TSt0aCKnJMQU+rg1x5ykEIayjMW8UDqbC7+lB50wLqk65hn
+         RgutRmX9R503gS7TIGAhzOB+YabEu9bfVd+1nWY0d5xfSQghhur3R5COGfP0/XOq6QBD
+         kIyA==
+X-Gm-Message-State: AC+VfDweGuIQGT84qZwVpRY5DhAKGNJvMlguY9sI+ItMNXue51v476Wl
+        5C8HggAPtS9uQdD/92IbWX2XDA==
+X-Google-Smtp-Source: ACHHUZ6UnhYU5u1nrUcucEeqhz6VZj3zOUwepg05ZdXmSS8lXFTQ5rbCB8l6SQKzaSNo+JgB64fBAw==
+X-Received: by 2002:a05:6214:124b:b0:628:49c5:d755 with SMTP id r11-20020a056214124b00b0062849c5d755mr198419qvv.50.1685755419286;
+        Fri, 02 Jun 2023 18:23:39 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id he31-20020a05622a601f00b003e394714c07sm1487081qtb.10.2023.06.02.18.23.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 18:20:48 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id B97121069ED; Sat,  3 Jun 2023 08:20:44 +0700 (WIB)
-Date:   Sat, 3 Jun 2023 08:20:44 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Madhumitha Prabakaran <madhumithabiw@gmail.com>, rafael@kernel.org,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-        Linux Documentation <linux-doc@vger.kernel.org>
-Cc:     ivan.orlov0322@gmail.com
-Subject: Re: [PATCH] docs: Fix warning:Error in "code-block" directive
-Message-ID: <ZHqVbIouMkvM4OAs@debian.me>
-References: <20230602215102.GA220958@madhu-kernel>
+        Fri, 02 Jun 2023 18:23:38 -0700 (PDT)
+Date:   Sat, 3 Jun 2023 01:23:38 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: Re: [PATCH 4/9] rcu: Introduce lazy queue's own qhimark
+Message-ID: <20230603012338.GA2795276@google.com>
+References: <20230531101736.12981-1-frederic@kernel.org>
+ <20230531101736.12981-5-frederic@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TMDPLLkdIOvqcUM1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230602215102.GA220958@madhu-kernel>
+In-Reply-To: <20230531101736.12981-5-frederic@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 31, 2023 at 12:17:31PM +0200, Frederic Weisbecker wrote:
+> The lazy and the regular bypass queues share the same thresholds in
+> terms of number of callbacks after which a flush to the main list is
+> performed: 10 000 callbacks.
+> 
+> However lazy and regular bypass don't have the same purposes and neither
+> should their respective thresholds:
+> 
+> * The bypass queue stands for relieving the main queue in case of a
+>   callback storm. It makes sense to allow a high number of callbacks to
+>   pile up before flushing to the main queue, especially as the life
+>   cycle for this queue is very short (1 jiffy).
 
---TMDPLLkdIOvqcUM1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure.
 
-On Fri, Jun 02, 2023 at 04:51:02PM -0500, Madhumitha Prabakaran wrote:
-> Fix the error in "code-block" directive by providing the
-> argument as "text".
->=20
-> <snipped> ...
->  Result code:
->  ------------
-> =20
-> -.. code-block::
-> +.. code-block:: text
+> 
+> * The lazy queue aims to spare wake ups and reduce the number of grace
+>   periods. There it doesn't make sense to allow a huge number of
+>   callbacks before flushing so as not to introduce memory pressure,
+>   especially as the life cycle for this queue is very long (10
+>   seconds).
 
-Nope.
+It does make sense as we have a shrinker, and it is better to avoid RCU
+disturbing the system unwantedly when there's lots of memory lying around.
 
-I don't see error you mention in this patch when making htmldocs on my
-computer (my setup is pretty standard: see
-Documentation/doc-guide/sphinx.rst). This patch is unneccessary, though,
-unless you have code snippets in some language (e.g. C, where passing
-language name to code-block:: syntax-highlight it). Result code outputs,
-on the other hand, are generic text with no definitive syntax, hence
-you can omit language name.
+> 
+> For those reasons, set the default threshold for the lazy queue to
+> 100.
 
-Thanks.
+I am OK with splitting the qhimark, but this lazy default is too low. In
+typical workloads on ChromeOS, we see 1000s of callback even when CPU
+utilization is low. So considering that, we would be flushing all the time.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Eventually I want the mm subsystem to tell us when flushing is needed so we
+could flush sooner at that time if really needed, but for now we have a
+shrinker so it should be OK. Is there a reason the shrinker does not work for
+you?
 
---TMDPLLkdIOvqcUM1
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
+ - Joel
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHqVZgAKCRD2uYlJVVFO
-o+pPAQC1MK/h/J4QW3qWmnbpauQ0Cr0k33lf8QV+hDnWKCkEpQD/QTYX820N+B3c
-/0rBRMzVYbE7FluBIIK+7tJ0f+ahswg=
-=JKVF
------END PGP SIGNATURE-----
 
---TMDPLLkdIOvqcUM1--
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> ---
+>  kernel/rcu/tree.c      | 2 ++
+>  kernel/rcu/tree_nocb.h | 9 ++++-----
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index bc4e7c9b51cb..9b98d87fa22e 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -379,6 +379,8 @@ static int rcu_is_cpu_rrupt_from_idle(void)
+>  static long blimit = DEFAULT_RCU_BLIMIT;
+>  #define DEFAULT_RCU_QHIMARK 10000 // If this many pending, ignore blimit.
+>  static long qhimark = DEFAULT_RCU_QHIMARK;
+> +#define DEFAULT_RCU_QHIMARK_LAZY 100 // If this many pending, flush.
+> +static long qhimark_lazy = DEFAULT_RCU_QHIMARK_LAZY;
+>  #define DEFAULT_RCU_QLOMARK 100   // Once only this many pending, use blimit.
+>  static long qlowmark = DEFAULT_RCU_QLOMARK;
+>  #define DEFAULT_RCU_QOVLD_MULT 2
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index 8320eb77b58b..c08447db5a2e 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -480,10 +480,9 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+>  
+>  	// If ->nocb_bypass has been used too long or is too full,
+>  	// flush ->nocb_bypass to ->cblist.
+> -	if ((ncbs && !bypass_is_lazy && j != READ_ONCE(rdp->nocb_bypass_first)) ||
+> -	    (ncbs &&  bypass_is_lazy &&
+> -	     (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_lazy_flush))) ||
+> -	    ncbs >= qhimark) {
+> +	if (ncbs &&
+> +	    ((!bypass_is_lazy && ((j != READ_ONCE(rdp->nocb_bypass_first)) || ncbs >= qhimark)) ||
+> +	     (bypass_is_lazy && (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_lazy_flush) || ncbs >= qhimark_lazy)))) {
+>  		rcu_nocb_lock(rdp);
+>  		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+>  
+> @@ -724,7 +723,7 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>  
+>  		if (bypass_ncbs && (lazy_ncbs == bypass_ncbs) &&
+>  		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_lazy_flush) ||
+> -		     bypass_ncbs > 2 * qhimark)) {
+> +		     bypass_ncbs > 2 * qhimark_lazy)) {
+>  			flush_bypass = true;
+>  		} else if (bypass_ncbs && (lazy_ncbs != bypass_ncbs) &&
+>  		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + 1) ||
+> -- 
+> 2.40.1
+> 
