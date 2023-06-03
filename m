@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BB07210D3
+	by mail.lfdr.de (Postfix) with ESMTP id C3ADB7210D5
 	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 17:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjFCPfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 11:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
+        id S229921AbjFCPfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 11:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFCPfF (ORCPT
+        with ESMTP id S229566AbjFCPfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 3 Jun 2023 11:35:05 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E410C132;
-        Sat,  3 Jun 2023 08:35:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780DC18D;
+        Sat,  3 Jun 2023 08:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685806503; x=1717342503;
+  t=1685806504; x=1717342504;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Rw+wxmjMySuTIW59NrPQ4xVEjyG0POQ4g40kzOQSZSk=;
-  b=mZ6mAmTcn7JuhUEhOH5OSQ4u6BUmo0JLghhsZqb60KH6xkhMVTlcI9jk
-   bn/A7c/mZG/rQLjnN8DX0s9acDkSBIb4JvdXoz59euMI5JwOkrhW4Wr+Y
-   UHBcEWhiXMhzxZsEQ8bHdzKusJ9y3JZl0S53IYc2yPAp2NEUWk/BbfbSs
-   kMo9AFtoI7TuTJO/51mZRdTuNJU39kOVmpUWsgQW5fhgnQ+w+Gnt5nyHP
-   RNIp+xPLiQ/yiuNF6f/FZ1fABOOhOUaFhuGBQeqrjGecV2yHauQ+9G57s
-   wmWa4VzxjkyyVR+pp57M608B9gSXUvirl1sg1Jrex4VqAIEWKte0w10aM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="356097300"
+  bh=EqZrJYyo/GziPMZxaJs9+u1mtCZh0+buRAvMpDKc0L8=;
+  b=MX2MNQMxAQvbQVuG06g64PApg7IX//k4L0aCN9x0mHV/iytEMqDc0ltj
+   RthJD0wVcAgGl7/9u1pzp6HxX2fbCInaSk7DLB+HbsFq1OIavdEVFtKS5
+   qIjJoEpIr2/Ie4JVsbIRaBmcZSLKlrSw8o+oZz4xdo6ZIdJqs6bqzp9Ty
+   YvHLNTNY3/DdsdrqWFxJTS4y+C470ST7CzWf+lbNn9PvYnTcCs1BNXDkZ
+   0NJIK6SIOeJBUy9KRSNmyXha2NLPirFQz1IJbwcO2k2aI71VPmgYkb9Cw
+   btcVoOHR2RutmeJEURV3yiLbFOKTZHqY3IrpYtFifnuTn4hsVGiCqorif
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="356097313"
 X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="356097300"
+   d="scan'208";a="356097313"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 08:35:02 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 08:35:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="702274230"
+X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="702274235"
 X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="702274230"
+   d="scan'208";a="702274235"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga007.jf.intel.com with ESMTP; 03 Jun 2023 08:35:01 -0700
+  by orsmga007.jf.intel.com with ESMTP; 03 Jun 2023 08:35:02 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         dm-devel@redhat.com
@@ -50,11 +50,11 @@ Cc:     ebiggers@kernel.org, elliott@hpe.com, gmazyland@gmail.com,
         charishma1.gairuboyina@intel.com,
         lalithambika.krishnakumar@intel.com, nhuck@google.com,
         chang.seok.bae@intel.com, Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v8 01/12] Documentation/x86: Document Key Locker
-Date:   Sat,  3 Jun 2023 08:22:16 -0700
-Message-Id: <20230603152227.12335-2-chang.seok.bae@intel.com>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v8 02/12] x86/cpufeature: Enumerate Key Locker feature
+Date:   Sat,  3 Jun 2023 08:22:17 -0700
+Message-Id: <20230603152227.12335-3-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230603152227.12335-1-chang.seok.bae@intel.com>
 References: <20230524165717.14062-1-chang.seok.bae@intel.com>
@@ -69,8 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the overview of the feature along with relevant consideration
-when provisioning dm-crypt volumes with AES-KL instead of AES-NI.
+Key Locker is a CPU feature to minimize exposure of clear-text key
+material. An encoded form, called 'key handle', is referenced for data
+encryption or decryption instead of accessing the clear text key.
+
+A wrapping key loaded in the CPU's software-inaccessible state is used
+to transform a user key into a key handle. On rarely unexpected
+hardware failure, the key could be lost.
+
+Here enumerate this hardware capability. It will not be shown up in
+/proc/cpuinfo as userspace usage is not supported. This is because
+there is no ABI to coordinate the wrapping-key failure.
+
+The feature supports Advanced Encryption Standard (AES) cipher
+algorithm with new SIMD instruction set like its predecessor (AES-NI).
+Mark the feature depending on XMM2. The new AES implementation will be
+in the crypto library.
+
+Add X86_FEATURE_KEYLOCKER to the disabled features mask at the moment.
+It will be enabled under a new config option.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
@@ -79,146 +96,89 @@ Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: x86@kernel.org
-Cc: linux-doc@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
 Changes from v6:
-* Rebase on the upstream -- commit ff61f0791ce9 ("docs: move x86
-  documentation into Documentation/arch/"). (Nathan Huckleberry)
-* Remove a duplicated sentence -- 'But there is no AES-KL instruction
-  to process a 192-bit key.'
-* Update the text for clarity and readability:
-  - Clarify the error code and exemplify the backup failure
-  - Use 'wrapping key' instead of less readable 'IWKey'
-
-Changes from v5:
-* Fix a typo: 'feature feature' -> 'feature'
+* Massage the changelog -- re-organize the change descriptions
 
 Changes from RFC v2:
-* Add as a new patch.
+* Do not publish the feature flag to userspace.
+* Update the changelog.
 
-The preview is available here:
-  https://htmlpreview.github.io/?https://github.com/intel-staging/keylocker/kdoc/arch/x86/keylocker.html
+Changes from RFC v1:
+* Updated the changelog.
 ---
- Documentation/arch/x86/index.rst     |  1 +
- Documentation/arch/x86/keylocker.rst | 97 ++++++++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 Documentation/arch/x86/keylocker.rst
+ arch/x86/include/asm/cpufeatures.h          | 1 +
+ arch/x86/include/asm/disabled-features.h    | 8 +++++++-
+ arch/x86/include/uapi/asm/processor-flags.h | 2 ++
+ arch/x86/kernel/cpu/cpuid-deps.c            | 1 +
+ 4 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/arch/x86/index.rst b/Documentation/arch/x86/index.rst
-index c73d133fd37c..256359c24669 100644
---- a/Documentation/arch/x86/index.rst
-+++ b/Documentation/arch/x86/index.rst
-@@ -42,3 +42,4 @@ x86-specific Documentation
-    features
-    elf_auxvec
-    xstate
-+   keylocker
-diff --git a/Documentation/arch/x86/keylocker.rst b/Documentation/arch/x86/keylocker.rst
-new file mode 100644
-index 000000000000..5557b8d0659a
---- /dev/null
-+++ b/Documentation/arch/x86/keylocker.rst
-@@ -0,0 +1,97 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index cb8ca46213be..4a12673df7e9 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -389,6 +389,7 @@
+ #define X86_FEATURE_AVX512_VPOPCNTDQ	(16*32+14) /* POPCNT for vectors of DW/QW */
+ #define X86_FEATURE_LA57		(16*32+16) /* 5-level page tables */
+ #define X86_FEATURE_RDPID		(16*32+22) /* RDPID instruction */
++#define X86_FEATURE_KEYLOCKER		(16*32+23) /* "" Key Locker */
+ #define X86_FEATURE_BUS_LOCK_DETECT	(16*32+24) /* Bus Lock detect */
+ #define X86_FEATURE_CLDEMOTE		(16*32+25) /* CLDEMOTE instruction */
+ #define X86_FEATURE_MOVDIRI		(16*32+27) /* MOVDIRI instruction */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index fafe9be7a6f4..eb841d694ed9 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -38,6 +38,12 @@
+ # define DISABLE_OSPKE		(1<<(X86_FEATURE_OSPKE & 31))
+ #endif /* CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS */
+ 
++#ifdef CONFIG_X86_KEYLOCKER
++# define DISABLE_KEYLOCKER	0
++#else
++# define DISABLE_KEYLOCKER	(1<<(X86_FEATURE_KEYLOCKER & 31))
++#endif /* CONFIG_X86_KEYLOCKER */
 +
-+==============
-+x86 Key Locker
-+==============
-+
-+Introduction
-+============
-+
-+Key Locker is a CPU feature to reduce key exfiltration opportunities
-+while maintaining a programming interface similar to AES-NI. It
-+converts the AES key into an encoded form, called the 'key handle'.
-+The key handle is a wrapped version of the clear-text key where the
-+wrapping key has limited exposure. Once converted, all subsequent data
-+encryption using new AES instructions (AES-KL) uses this key handle,
-+reducing the exposure of private key material in memory.
-+
-+CPU-internal Wrapping Key
-+=========================
-+
-+The CPU-internal wrapping key is an entity in a software-invisible CPU
-+state. On every system boot, a new key is loaded. So the key handle that
-+was encoded by the old wrapping key is no longer usable on system shutdown
-+or reboot.
-+
-+And the key may be lost on the following exceptional situation upon wakeup:
-+
-+Wrapping Key Restore Failure
-+----------------------------
-+
-+The CPU state is volatile with the ACPI S3/4 sleep states. When the system
-+supports those states, the key has to be backed up so that it is restored
-+on wake up. The kernel saves the key in non-volatile media.
-+
-+The event of a wrapping key restore failure upon resume from suspend, all
-+established key handles become invalid. In flight dm-crypt operations
-+receive error results from pending operations. In the likely scenario that
-+dm-crypt is hosting the root filesystem the recovery is identical to if a
-+storage controller failed to resume from suspend, reboot. If the volume
-+impacted by a wrapping key restore failure is a data-volume then it is
-+possible that I/O errors on that volume do not bring down the rest of the
-+system. However, a reboot is still required because the kernel will have
-+soft-disabled Key Locker. Upon the failure, the crypto library code will
-+return -ENODEV on every AES-KL function call. The Key Locker implementation
-+only loads a new wrapping key at initial boot, not any time after like
-+resume from suspend.
-+
-+Use Case and Non-use Cases
-+==========================
-+
-+Bare metal disk encryption is the only intended use case.
-+
-+Userspace usage is not supported because there is no ABI provided to
-+communicate and coordinate wrapping-key restore failure to userspace. For
-+now, key restore failures are only coordinated with kernel users. But the
-+kernel can not prevent userspace from using the feature's AES instructions
-+('AES-KL') when the feature has been enabled. So, the lack of userspace
-+support is only documented, not actively enforced.
-+
-+Key Locker is not expected to be advertised to guest VMs and the kernel
-+implementation ignores it even if the VMM enumerates the capability. The
-+expectation is that a guest VM wants private wrapping key state, but the
-+architecture does not provide that. An emulation of that capability, by
-+caching per-VM wrapping keys in memory, defeats the purpose of Key Locker.
-+The backup / restore facility is also not performant enough to be suitable
-+for guest VM context switches.
-+
-+AES Instruction Set
-+===================
-+
-+The feature accompanies a new AES instruction set. This instruction set is
-+analogous to AES-NI. A set of AES-NI instructions can be mapped to an
-+AES-KL instruction. For example, AESENC128KL is responsible for ten rounds
-+of transformation, which is equivalent to nine times AESENC and one
-+AESENCLAST in AES-NI.
-+
-+But they have some notable differences:
-+
-+* AES-KL provides a secure data transformation using an encrypted key.
-+
-+* If an invalid key handle is provided, e.g. a corrupted one or a handle
-+  restriction failure, the instruction fails with setting RFLAGS.ZF. The
-+  crypto library implementation includes the flag check to return -EINVAL.
-+  Note that this flag is also set if the wrapping key is changed, e.g.,
-+  because of the backup error.
-+
-+* AES-KL implements support for 128-bit and 256-bit keys, but there is no
-+  AES-KL instruction to process an 192-bit key. The AES-KL cipher
-+  implementation logs a warning message with a 192-bit key and then falls
-+  back to AES-NI. So, this 192-bit key-size limitation is only documented,
-+  not enforced. It means the key will remain in clear-text in memory. This
-+  is to meet Linux crypto-cipher expectation that each implementation must
-+  support all the AES-compliant key sizes.
-+
-+* Some AES-KL hardware implementation may have noticeable performance
-+  overhead when compared with AES-NI instructions.
-+
+ #ifdef CONFIG_X86_5LEVEL
+ # define DISABLE_LA57	0
+ #else
+@@ -126,7 +132,7 @@
+ #define DISABLED_MASK14	0
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+-			 DISABLE_ENQCMD)
++			 DISABLE_ENQCMD|DISABLE_KEYLOCKER)
+ #define DISABLED_MASK17	0
+ #define DISABLED_MASK18	0
+ #define DISABLED_MASK19	0
+diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
+index d898432947ff..262348aeaad1 100644
+--- a/arch/x86/include/uapi/asm/processor-flags.h
++++ b/arch/x86/include/uapi/asm/processor-flags.h
+@@ -128,6 +128,8 @@
+ #define X86_CR4_PCIDE		_BITUL(X86_CR4_PCIDE_BIT)
+ #define X86_CR4_OSXSAVE_BIT	18 /* enable xsave and xrestore */
+ #define X86_CR4_OSXSAVE		_BITUL(X86_CR4_OSXSAVE_BIT)
++#define X86_CR4_KEYLOCKER_BIT	19 /* enable Key Locker */
++#define X86_CR4_KEYLOCKER	_BITUL(X86_CR4_KEYLOCKER_BIT)
+ #define X86_CR4_SMEP_BIT	20 /* enable SMEP support */
+ #define X86_CR4_SMEP		_BITUL(X86_CR4_SMEP_BIT)
+ #define X86_CR4_SMAP_BIT	21 /* enable SMAP support */
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index f6748c8bd647..200c5e69f78c 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -81,6 +81,7 @@ static const struct cpuid_dep cpuid_deps[] = {
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
+ 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
++	{ X86_FEATURE_KEYLOCKER,		X86_FEATURE_XMM2      },
+ 	{}
+ };
+ 
 -- 
 2.17.1
 
