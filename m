@@ -2,159 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446BA721126
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 18:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38252721137
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 18:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjFCQPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 12:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S229558AbjFCQXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 12:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFCQO7 (ORCPT
+        with ESMTP id S229437AbjFCQXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 12:14:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291C2BD
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 09:14:58 -0700 (PDT)
+        Sat, 3 Jun 2023 12:23:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB39BB;
+        Sat,  3 Jun 2023 09:23:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9A7160B61
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 16:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B1FC433EF;
-        Sat,  3 Jun 2023 16:14:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F40E60A5C;
+        Sat,  3 Jun 2023 16:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D07C433D2;
+        Sat,  3 Jun 2023 16:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685808897;
-        bh=bzSAZ1YsCUZ2UczkOzfOUE1xUDtm1RQJDMA4raWpkH0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=XEbZ6yaYoSK3wdz7c5XwxZh0oIEJUNaV26CrDHoFW4D2W/SbdFqA9fX4NjLmtXx1K
-         TrBSkvzBzRzQIj5nY/rcbVigboHlc+1Pqs5gLLTJtfnjsKBvOiDqiMEM3TqW5t28TO
-         p9LGN/9jU+LEZUFa92zwufQNu6aQ3LZLS1+bWpynjj23zQutMjVq+mDnuzIUiuV6hz
-         McbU51nXWLl92g885FY584UUzh27xwOzJbxPYOBzZ5vHzuYOiDSB2bfzLSx7eiSOe8
-         6dH2Inw7O2Bbi3EshA8bIooOwxPeszeblRhTcu2PnfPPhLvOe6hujv3ldzdHwrcHC+
-         ZNFbW+Lr2AkVw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B5677CE1B88; Sat,  3 Jun 2023 09:14:56 -0700 (PDT)
-Date:   Sat, 3 Jun 2023 09:14:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com
-Subject: Re: [PATCH 2/2] torture: Add lock_torture_writer_fifo module param
-Message-ID: <c2415658-de0e-4497-889a-d5401cbc134a@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230602220221.600774-1-jstultz@google.com>
- <20230602220221.600774-2-jstultz@google.com>
+        s=k20201202; t=1685809426;
+        bh=DObsz3X+0kn7tZFIPV9cliWFhjZ6iUIjxIfHma3XYL0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UCFgp98SdKOVsIR1BxEP/Dzd22rz0GDezMPMQsX/SvJER7775F19V7zXsYQvrRmNf
+         OLOtbGWex39BrLMhqXW4HzdGvxb/hMEyQ/cx8JlF+V0HODERyWEWfBKxyfrzGn+CCe
+         xw8vq+8G7RRoKbIXD40gNGtuHD9LonU98pJi76Bir+osx8MOCR4tZJUPZspU/jHoMA
+         F7rfb+cMgiRUgXbOStsKn203sg4dZ1fgfEXeGCFMW/LbhOCR1qn+zaGLxKAc5E45po
+         TsAoGgamclTE0lQZEEMYgs0et2nWQPc03a9C4vq8U0dbRcAxQ93k3zwqMA1LYt5yel
+         nF7OU7HwCdgkg==
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-39810ce3e13so2817413b6e.2;
+        Sat, 03 Jun 2023 09:23:45 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzdu1zIsxqevxDDbxRaU/9oEEx2J2aArxTEs2YL99TR/bLEpCXA
+        572AO9BBOcVqJB1RscIc1L0Jor8QhLabR3Lyblo=
+X-Google-Smtp-Source: ACHHUZ6hpsnGhpLz5li3DNJ1xqZ+qYnxy/iQ6EoGUJb9CJqHof4FygP0R3CUvd7v2nFld3aY5CKwjJEL8ZPOXyU4kpI=
+X-Received: by 2002:aca:120d:0:b0:39a:a65c:42a2 with SMTP id
+ 13-20020aca120d000000b0039aa65c42a2mr397218ois.49.1685809425224; Sat, 03 Jun
+ 2023 09:23:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602220221.600774-2-jstultz@google.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230409145358.2538266-1-masahiroy@kernel.org> <20230531213319.GA2201875@dev-arch.thelio-3990X>
+In-Reply-To: <20230531213319.GA2201875@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 4 Jun 2023 01:23:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASeNAx5a1P9fkf+8+Fj4HFujPN=57fWtAoc7XL97LdkxA@mail.gmail.com>
+Message-ID: <CAK7LNASeNAx5a1P9fkf+8+Fj4HFujPN=57fWtAoc7XL97LdkxA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add $(CLANG_CFLAGS) to KBUILD_CPPFLAGS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rini <trini@konsulko.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 10:02:10PM +0000, John Stultz wrote:
-> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> 
-> Modifies locktorture writer to run as RT task.
-> 
-> To use it:
-> insmod /lib/modules/torture.ko random_shuffle=1 lock_torture_writer_fifo=1
->                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-> insmod /lib/modules/locktorture.ko torture_type=mutex_lock rt_boost=1 rt_boost_factor=50 nested_locks=3
-> 
-> This patch has been helpful to uncover issues with the proxy-execution
-> seires.
-> 
-> Cc: Davidlohr Bueso <dave@stgolabs.net>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: kernel-team@android.com
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> [jstultz: Include header change to build, reword commit message]
-> Signed-off-by: John Stultz <jstultz@google.com>
+On Thu, Jun 1, 2023 at 6:33=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> Hi Masahiro,
+>
+> On Sun, Apr 09, 2023 at 11:53:57PM +0900, Masahiro Yamada wrote:
+> > When preprocessing arch/*/kernel/vmlinux.lds.S, the target triple is
+> > not passed to $(CPP) because we add it only to KBUILD_{C,A}FLAGS.
+> >
+> > As a result, the linker script is preprocessed with predefined macros
+> > for the build host instead of the target.
+> >
+> > Assuming you use an x86 build machine, compare the following:
+> >
+> >  $ clang -dM -E -x c /dev/null
+> >  $ clang -dM -E -x c /dev/null -target aarch64-linux-gnu
+> >
+> > There is no actual problem presumably because our linker scripts do not
+> > rely on such predefined macros, but it is better to define correct ones=
+.
+> >
+> > Move $(CFLAGS_CFLAGS) to KBUILD_CPPFLAGS, so that all *.c, *.S, *.lds.S
+> > will be processed with the proper target triple.
+> >
+> > Reported-by: Tom Rini <trini@konsulko.com>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/Makefile.clang | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 70b354fa1cb4..93ca059cc3b8 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -38,6 +38,5 @@ CLANG_FLAGS +=3D -Werror=3Dunknown-warning-option
+> >  CLANG_FLAGS  +=3D -Werror=3Dignored-optimization-argument
+> >  CLANG_FLAGS  +=3D -Werror=3Doption-ignored
+> >  CLANG_FLAGS  +=3D -Werror=3Dunused-command-line-argument
+> > -KBUILD_CFLAGS        +=3D $(CLANG_FLAGS)
+> > -KBUILD_AFLAGS        +=3D $(CLANG_FLAGS)
+> > +KBUILD_CPPFLAGS      +=3D $(CLANG_FLAGS)
+> >  export CLANG_FLAGS
+> > --
+> > 2.37.2
+> >
+>
+> I am doubling back to this change, as the lack of '--target' in
+> KBUILD_CPPFLAGS is now an active bug with clang-17 due to a new change
+> that rejects '-mbig-endian' and '-mlittle-endian' when not supported by
+> the target, which breaks the arm64 vDSO build when preprocessing its
+> linker script:
+>
+>   # Turn on CONFIG_CPU_BIG_ENDIAN in menuconfig
+>   $ make -skj"$(nproc)" ARCH=3Darm64 LLVM=3D1 O=3Dbuild mrproper virtconf=
+ig menuconfig arch/arm64/kernel/vdso/
+>   ...
+>   clang: error: unsupported option '-mbig-endian' for target 'x86_64-pc-l=
+inux-gnu'
+>   make[3]: *** [.../scripts/Makefile.build:387: arch/arm64/kernel/vdso/vd=
+so.lds] Error 1
+>   ...
+>
+>   https://github.com/llvm/llvm-project/commit/d81ce04587c006b6731198956c5=
+22c93d0df1050
+>   https://github.com/ClangBuiltLinux/linux/issues/1859
+>
+> This change resolves that issue.
 
-Queued and pushed, thank you all!
+Ah. Now we have a good reason to apply this patch.
 
-							Thanx, Paul
 
-> ---
->  kernel/locking/locktorture.c |  3 ++-
->  kernel/torture.c             | 11 ++++++++++-
->  2 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-> index 153ddc4c47ef..7cb044fc99b2 100644
-> --- a/kernel/locking/locktorture.c
-> +++ b/kernel/locking/locktorture.c
-> @@ -816,7 +816,8 @@ static int lock_torture_writer(void *arg)
->  	bool skip_main_lock;
->  
->  	VERBOSE_TOROUT_STRING("lock_torture_writer task started");
-> -	set_user_nice(current, MAX_NICE);
-> +	if (!rt_task(current))
-> +		set_user_nice(current, MAX_NICE);
->  
->  	do {
->  		if ((torture_random(&rand) & 0xfffff) == 0)
-> diff --git a/kernel/torture.c b/kernel/torture.c
-> index 8be83fdc6be1..db79197e257a 100644
-> --- a/kernel/torture.c
-> +++ b/kernel/torture.c
-> @@ -37,6 +37,7 @@
->  #include <linux/ktime.h>
->  #include <asm/byteorder.h>
->  #include <linux/torture.h>
-> +#include <linux/sched/rt.h>
->  #include "rcu/rcu.h"
->  
->  MODULE_LICENSE("GPL");
-> @@ -57,6 +58,9 @@ module_param(verbose_sleep_duration, int, 0444);
->  static int random_shuffle;
->  module_param(random_shuffle, int, 0444);
->  
-> +static int lock_torture_writer_fifo;
-> +module_param(lock_torture_writer_fifo, int, 0444);
-> +
->  static char *torture_type;
->  static int verbose;
->  
-> @@ -734,7 +738,7 @@ bool stutter_wait(const char *title)
->  	cond_resched_tasks_rcu_qs();
->  	spt = READ_ONCE(stutter_pause_test);
->  	for (; spt; spt = READ_ONCE(stutter_pause_test)) {
-> -		if (!ret) {
-> +		if (!ret && !rt_task(current)) {
->  			sched_set_normal(current, MAX_NICE);
->  			ret = true;
->  		}
-> @@ -944,6 +948,11 @@ int _torture_create_kthread(int (*fn)(void *arg), void *arg, char *s, char *m,
->  		*tp = NULL;
->  		return ret;
->  	}
-> +
-> +	if (lock_torture_writer_fifo &&
-> +	    !strncmp(s, "lock_torture_writer", strlen(s)))
-> +		sched_set_fifo(*tp);
-> +
->  	wake_up_process(*tp);  // Process is sleeping, so ordering provided.
->  	torture_shuffle_task_register(*tp);
->  	return ret;
-> -- 
-> 2.41.0.rc2.161.g9c6817b8e7-goog
-> 
+
+> I was able to figure out why those new
+> warnings appeared for ARCH=3Dmips, it is the shell invocation for
+> CHECKFLAGS. The following diff resolves it for me:
+>
+> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> index a7a4ee66a9d3..ef7b05ae92ce 100644
+> --- a/arch/mips/Makefile
+> +++ b/arch/mips/Makefile
+> @@ -346,7 +346,7 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tables
+>  KBUILD_LDFLAGS         +=3D -m $(ld-emul)
+>
+>  ifdef CONFIG_MIPS
+> -CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
+> +CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM -E=
+ -x c /dev/null | \
+>         grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+>         sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\$$=
+/&&/g')
+>  endif
+
+
+Agree. This is the right fix because this $(shell ...) retrieves
+the predefined macros of the compiler.
+So, KBUILD_CPPFLAGS is correct.
+
+
+
+> I will run this change plus that diff through my build matrix to see if
+> any other issues pop up. If not, I will respond with some tags and
+> perhaps this could be taken as a fix for 6.4 so that it could
+> potentially be backported?
+>
+> Cheers,
+> Nathan
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
