@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA055720E22
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03F8720E25
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjFCGbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 02:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S231846AbjFCGfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 02:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFCGbI (ORCPT
+        with ESMTP id S229523AbjFCGff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 02:31:08 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A25E5A;
-        Fri,  2 Jun 2023 23:31:03 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3536UZFb041869;
-        Sat, 3 Jun 2023 01:30:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685773835;
-        bh=ISHvgcwYKUrLcIU7PQXGJdRhfqIZfS1CSg2P3P+bGN4=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=fQ82EM8ePo5cOzLzMPXzXxWPxRzb6TxB//IF0o14hkChrkJ9Helt4K4M9DI/7mxQj
-         nBrkjrRM+mMcUOrGT/RRZKuPa0V1HGPny64R3ePa9nDgQGyHBUomgOGU8h1ryzk9tC
-         USHDWsH9F16jHDr3G4ZTMvLHAuFhzqarifVbRkIg=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3536UZ9U017373
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 3 Jun 2023 01:30:35 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 3
- Jun 2023 01:30:34 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 3 Jun 2023 01:30:35 -0500
-Received: from [10.249.131.186] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3536UJu4023813;
-        Sat, 3 Jun 2023 01:30:19 -0500
-Message-ID: <5fef1d49-19f7-884d-68dd-668bd23251e6@ti.com>
-Date:   Sat, 3 Jun 2023 12:00:17 +0530
+        Sat, 3 Jun 2023 02:35:35 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27276E58;
+        Fri,  2 Jun 2023 23:35:35 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 668D4804D;
+        Sat,  3 Jun 2023 06:35:34 +0000 (UTC)
+Date:   Sat, 3 Jun 2023 09:35:33 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <20230603063533.GS14287@atomide.com>
+References: <20230525113034.46880-1-tony@atomide.com>
+ <20230602083335.GA181647@google.com>
+ <87a5xii33r.fsf@jogness.linutronix.de>
+ <20230603054139.GR14287@atomide.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-CC:     <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH net] net: stmmac: dwmac-qcom-ethqos: fix a regression on
- EMAC < 3
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-References: <20230602190455.3123018-1-brgl@bgdev.pl>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <20230602190455.3123018-1-brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603054139.GR14287@atomide.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Tony Lindgren <tony@atomide.com> [230603 05:41]:
+> I don't think 8250_mtk needs to do register access before and after the
+> serial port registration, but if it does, then adding custom read/write
+> functions can be done that do not rely on initialized port like
+> serial_out().
 
+Oh but mtk8250_runtime_suspend() calls serial_in(up, MTK_UART_DEBUG0), so
+yeah if that gets called before registration is complete it causes a NULL
+pointer exception. If the serial_ctrl and serial_port devices do runtime
+suspend before port registration completes, things will fail.
 
-On 03-06-2023 00:34, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> We must not assign plat_dat->dwmac4_addrs unconditionally as for
-> structures which don't set them, this will result in the core driver
-> using zeroes everywhere and breaking the driver for older HW. On EMAC < 2
-> the address should remain NULL.
-> 
-> Fixes: b68376191c69 ("net: stmmac: dwmac-qcom-ethqos: Add EMAC3 support")
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Sounds like doing pm_runtime_resume_and_get() in mtk8250_probe() might
+fix the issue. Still seems that adding a custom read function for
+mtk8250_runtime_suspend() to use instead of calling serial_in() should
+not be needed.
 
-Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+An experimental untested patch below, maye it helps?
 
-> ---
->  drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> index 16a8c361283b..f07905f00f98 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> @@ -644,7 +644,8 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  	plat_dat->fix_mac_speed = ethqos_fix_mac_speed;
->  	plat_dat->dump_debug_regs = rgmii_dump;
->  	plat_dat->has_gmac4 = 1;
-> -	plat_dat->dwmac4_addrs = &data->dwmac4_addrs;
-> +	if (ethqos->has_emac3)
-> +		plat_dat->dwmac4_addrs = &data->dwmac4_addrs;
->  	plat_dat->pmt = 1;
->  	plat_dat->tso_en = of_property_read_bool(np, "snps,tso");
->  	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
-
--- 
 Regards,
-Siddharth.
+
+Tony
+
+8< ------
+diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
+--- a/drivers/tty/serial/8250/8250_mtk.c
++++ b/drivers/tty/serial/8250/8250_mtk.c
+@@ -588,20 +588,24 @@ static int mtk8250_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, data);
+ 
+ 	pm_runtime_enable(&pdev->dev);
+-	err = mtk8250_runtime_resume(&pdev->dev);
++	err = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (err)
+ 		goto err_pm_disable;
+ 
+ 	data->line = serial8250_register_8250_port(&uart);
+ 	if (data->line < 0) {
+ 		err = data->line;
+-		goto err_pm_disable;
++		goto err_pm_put;
+ 	}
+ 
+ 	data->rx_wakeup_irq = platform_get_irq_optional(pdev, 1);
+ 
++	pm_runtime_put_sync(&pdev->dev);
++
+ 	return 0;
+ 
++err_pm_put:
++	pm_runtime_put_sync(&pdev->dev);
+ err_pm_disable:
+ 	pm_runtime_disable(&pdev->dev);
+ 
+-- 
+2.41.0
