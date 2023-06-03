@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B4B720E2C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AD9720E35
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjFCGiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 02:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S232076AbjFCGxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 02:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjFCGiu (ORCPT
+        with ESMTP id S229617AbjFCGw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 02:38:50 -0400
+        Sat, 3 Jun 2023 02:52:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FF1C6
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 23:38:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7180197;
+        Fri,  2 Jun 2023 23:52:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3553160A4C
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 06:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C172C433EF;
-        Sat,  3 Jun 2023 06:38:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39149601D9;
+        Sat,  3 Jun 2023 06:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7248C433D2;
+        Sat,  3 Jun 2023 06:52:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685774328;
-        bh=Ww3/vKUJQBHff7cB+X/RbuQRVkrsQ3I889K7iIKiGtc=;
+        s=k20201202; t=1685775176;
+        bh=Dtp7yfw3yIgpqLiDkFokEpEEdCuCwpELzyb1JLQqmrw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L15nmu+93564FFy5+uxruKubBk9dQaOHm/98Rgy8ruUPaZ+0OOOuxL+uXmbevFJGS
-         Lipb6mlFr+Zs4L0bgLsfYv8iBYDf9HK8ugxT1doVDzdaJHWJQt2g3Ub2oBwWuCIzpn
-         yEUw9JcaIbXRuwVPtFYlY2G/lXEI5GYgfleyY+ypQYKJoGrrn9sGm+0VgkeuCXiJfg
-         u8Ew+w4azeFMPb9OCU0Kbgj4rOSHya050OJt133/6+/tn3ZFKRZdsyohc/yHYMsE9W
-         8OjNnkGBnMFRxa9V3Tx+knQXAZ5v6mTPjKqIlaE8Tk50AGCh5OKvbDlDLffb+itTfP
-         o3+3vS6BlL5Kw==
-Date:   Fri, 2 Jun 2023 23:38:47 -0700
+        b=TE06WsU3DCFbMrsqZlqF429AXurYRJfP/0Zv2ohSLs8375orVlB58ve3KTVMOKmbS
+         PiSGZynui9JnJg3B0/YZWpIZNRBhfGEOFp5rVJeK0fJRGDREg6nyecUN+4NutKmEQn
+         tWlwAcdAaynyHoVkcXLssxpGSI5ieYElOSfvkBonjBHaFxvZbisr8nwO2ZFMk+7oMs
+         IfxML+cV2NVqDTx8M9FPI+0b+YW1dc3EemFN7SKx7Npi+s7qViK6ohzl9PT3FJneS4
+         JB5fK5J42HHHgWuz4xmEC9Rh2kZXRiWuUndyPJqFmZ9i9kDnfl54QUS0S+KfKmOB+d
+         eVh/BEjikHwZA==
+Date:   Fri, 2 Jun 2023 23:52:54 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH net-next v3 11/11] net: Add samples for network I/O and
- splicing
-Message-ID: <20230602233847.06c01102@kernel.org>
-In-Reply-To: <20230602150752.1306532-12-dhowells@redhat.com>
-References: <20230602150752.1306532-1-dhowells@redhat.com>
-        <20230602150752.1306532-12-dhowells@redhat.com>
+To:     Justin Chen <justin.chen@broadcom.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, richardcochran@gmail.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        simon.horman@corigine.com
+Subject: Re: [PATCH net-next v6 3/6] net: bcmasp: Add support for ASP2.0
+ Ethernet controller
+Message-ID: <20230602235254.61798d80@kernel.org>
+In-Reply-To: <1685657551-38291-4-git-send-email-justin.chen@broadcom.com>
+References: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
+        <1685657551-38291-4-git-send-email-justin.chen@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -68,14 +64,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  2 Jun 2023 16:07:52 +0100 David Howells wrote:
-> Examples include:
-> 
-> 	./splice-out -w0x400 /foo/16K 4K | ./alg-encrypt -s -
-> 	./splice-out -w0x400 /foo/1M | ./unix-send -s - /tmp/foo
-> 	./splice-out -w0x400 /foo/16K 16K -w1 | ./tls-send -s6 -n16K - servbox
-> 	./tcp-send /bin/ls 192.168.6.1
-> 	./udp-send -4 -p5555 /foo/4K localhost
+On Thu,  1 Jun 2023 15:12:28 -0700 Justin Chen wrote:
+> +	ports_node = of_find_node_by_name(dev->of_node, "ethernet-ports");
+> +	if (!ports_node) {
+> +		dev_warn(dev, "No ports found\n");
+> +		return 0;
+> +	}
+> +
+> +	for_each_available_child_of_node(ports_node, intf_node) {
+> +		of_property_read_u32(intf_node, "reg", &port);
+> +		if (!bcmasp_is_port_valid(priv, port)) {
+> +			dev_warn(dev, "%pOF: %d is an invalid port\n",
+> +				 intf_node, port);
+> +			continue;
+> +		}
+> +
+> +		priv->intf_count++;
+> +	}
 
-Can it be made into a selftests? Move the code and wrap the above in a
-bash script?
+I think that you're leaking ports_node,
+
+/**
+ * of_find_node_by_name - Find a node by its "name" property
+ * @from:	The node to start searching from or NULL; the node
+ *		you pass will not be searched, only the next one
+ *		will. Typically, you pass what the previous call
+ *		returned. of_node_put() will be called on @from.
+ * @name:	The name string to match against
+ *
+ * Return: A node pointer with refcount incremented, use
+ * of_node_put() on it when done.
+ */
+
+-- 
+pw-bot: cr
