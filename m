@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C492F720DF6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 07:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E49F720E01
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 07:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjFCFlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 01:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S231519AbjFCFz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 01:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFCFlm (ORCPT
+        with ESMTP id S229523AbjFCFzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 01:41:42 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D4C2E52;
-        Fri,  2 Jun 2023 22:41:41 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 9E7208111;
-        Sat,  3 Jun 2023 05:41:40 +0000 (UTC)
-Date:   Sat, 3 Jun 2023 08:41:39 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <20230603054139.GR14287@atomide.com>
-References: <20230525113034.46880-1-tony@atomide.com>
- <20230602083335.GA181647@google.com>
- <87a5xii33r.fsf@jogness.linutronix.de>
+        Sat, 3 Jun 2023 01:55:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5615CE55
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 22:55:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB30D60B3B
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 05:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD340C433D2;
+        Sat,  3 Jun 2023 05:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685771720;
+        bh=BY2PwvlTytRqfRCUBmDd8GS5hKDMoCaWTKd22a+Jz7g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eXbV5kUQyk/ndeeFuEAYQ2mjH9VqVcghvb6SRK5JEmWREgCJDta+zkb5TacF0BMFE
+         7NTX2djcBKIWj+mqddnlnqz+tU9/yhD6KfmISw/hOc4QQgPsOj1K2et9boIjWcjPNg
+         50dsOkWKHz2rhXKzfbAZZqD2KJGHrYuRw0bt+rU/ii09eBKHNz6IZXPj7GNJtqAv38
+         KQAboIaP2DUgxIwu6h4bqIrt9wF8grcXzWqZppwe5tj9PcKaejywkknT2SGwNaJY3b
+         6pHloOodNZu98yQm3BAcklIyzGOTYWjBeGDVoFRH8Lq1sB9jB7rXSMs1awpFSGEXBi
+         FpOEFSrV1beKw==
+Date:   Fri, 2 Jun 2023 22:55:19 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ding Hui <dinghui@sangfor.com.cn>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+Message-ID: <20230602225519.66c2c987@kernel.org>
+In-Reply-To: <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+        <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+        <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn>
+        <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
+        <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
+        <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
+        <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
+        <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch>
+        <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
+        <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a5xii33r.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,41 +66,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 3 Jun 2023 09:51:34 +0800 Ding Hui wrote:
+> > If that is the case maybe it would just make more sense to just return
+> > an error if we are at risk of overrunning the userspace allocated
+> > buffer.
+> 
+> In that case, I can modify to return an error, however, I think the
+> ENOSPC or EFBIG mentioned in a previous email may not be suitable,
+> maybe like others length/size checking return EINVAL.
+> 
+> Another thing I wondered is that should I update the current length
+> back to user if user buffer is not enough, assuming we update the new
+> length with error returned, the userspace can use it to reallocate
+> buffer if he wants to, which can avoid re-call previous ioctl to get
+> the new length.
 
-* John Ogness <john.ogness@linutronix.de> [230602 10:13]:
-> Unfortunately next-20230601 also brought in a series that added
-> spinlocking to the 8250 driver. That may be the issue here instead.
-
-I think you're off the hook here with the spinlocking changes :)
-
-My guess right now is that 8250_mtk does not want runtime PM resume called
-on probe for some reason, and assumes it won't happen until until in
-mtk8250_do_pm()?
-
-Looking at the probe, the driver does pm_runtime_enable(), but then calls
-mtk8250_runtime_resume() directly. Not sure what the intention here is.
-Maybe adding pm_runtime_set_active() in probe might provide more clues.
-
-When we add the new serial_ctrl and serial_port devices, their runtime PM
-functions propagate to the parent 8250_mtk device. And then something goes
-wrong, well this is my guess on what's going on..
-
-To me it seems the 8250_mtk should just do pm_runtime_resume_and_get()
-instead of mtk8250_runtime_resume(), then do pm_runtime_put() at the end
-of the probe?
-
-I don't think 8250_mtk needs to do register access before and after the
-serial port registration, but if it does, then adding custom read/write
-functions can be done that do not rely on initialized port like
-serial_out().
-
-Looking at the kernelci.org test boot results for Linux next [0], seems
-this issue is somehow 8250_mtk specific. I don't think the rk3399 boot
-issue is serial port related.
-
-Regards,
-
-Tony
-
-[0] https://linux.kernelci.org/test/job/next/branch/master/kernel/next-20230602/plan/baseline/
+This entire thread presupposes that user provides the length of 
+the buffer. I don't see that in the code. Take ethtool_get_stats()
+as an example, you assume that stats.n_stats is set correctly,
+but it's not enforced today. Some app somewhere may pass in zeroed
+out stats and work just fine.
