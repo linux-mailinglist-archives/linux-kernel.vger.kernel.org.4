@@ -2,77 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF03E72103C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 15:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68EF72103E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 15:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbjFCNq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 09:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S229804AbjFCNvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 09:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjFCNqy (ORCPT
+        with ESMTP id S229666AbjFCNvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 09:46:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15151A6
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 06:46:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C39160F5D
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 13:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03879C433D2;
-        Sat,  3 Jun 2023 13:46:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685800009;
-        bh=uwLFmzHnfP2Te/6647K+L+Cww5d+wOP9X5PmfsYjmgA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MhEmew2hX0ggkE4xczQ0yay5qGYISjQBbfSKOwjVuw8aqttaP1kGaMxhrzzQXXnDs
-         TeDULvAuocTaAu/Y3GFKNNBin6DqOeeTBnmSqTIbGWUNCdnoBd4emQTZ7A1UYuvVnm
-         q9LGncs/IoHiZjJ9NOza0DxuK0qwdrhym/WSqcVGd90B6Jpd+dv15EGP0mAf4itxHv
-         sudIjE6RFy2CAaMFZb+DxvR8cNbORc6cp8POkhgZ/mQw0w55gvTH0e99iS/to9GSQ7
-         ImIiG59143uHgqYp7O0XN5AdML+4gf7lwophU57gdNer85sVmTyG+REds5sNhgHHp4
-         iXIpAb5001LMw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0CFFC395E0;
-        Sat,  3 Jun 2023 13:46:48 +0000 (UTC)
-Subject: Re: [GIT PULL] probes: Fixes for 6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230603155554.9ab2f3edf0c503c312595258@kernel.org>
-References: <20230603155554.9ab2f3edf0c503c312595258@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230603155554.9ab2f3edf0c503c312595258@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git probes-fixes-6.4-rc4
-X-PR-Tracked-Commit-Id: eb50d0f250e96ede9192d936d220cd97adc93b89
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 51f269a6ecc701f9932eff5b253a1f89746be6bd
-Message-Id: <168580000889.22793.14198894210014036728.pr-tracker-bot@kernel.org>
-Date:   Sat, 03 Jun 2023 13:46:48 +0000
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 3 Jun 2023 09:51:08 -0400
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B81D123
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 06:51:05 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+        id adf7629f-0215-11ee-b972-005056bdfda7;
+        Sat, 03 Jun 2023 16:51:03 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sat, 3 Jun 2023 16:51:03 +0300
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mathieu Othacehe <m.othacehe@gmail.com>
+Subject: Re: [PATCH v5 5/7] iio: light: vcnl4000: Add period for vcnl4040/4200
+Message-ID: <ZHtFR6_jdi10bFdH@surfacebook>
+References: <20230530142405.1679146-1-astrid.rost@axis.com>
+ <20230530142405.1679146-6-astrid.rost@axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530142405.1679146-6-astrid.rost@axis.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 3 Jun 2023 15:55:54 +0900:
+Tue, May 30, 2023 at 04:24:03PM +0200, Astrid Rost kirjoitti:
+> Add read/write attribute for proximity and illuminance period. The
+> period is set in the interrupt persistence flags(PS_PERS and ALS_PERS).
+> An interrupt will not be asserted if the raw value is not over (or lower)
+> than the threshold for the set continued amount of measurements.
+> The time in seconds is calculated by the number of continued refreshes
+> multiplied with the integration time.
+> It will always pick the next lower possible value. The period changes,
+> if the integration time is changed.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git probes-fixes-6.4-rc4
+...
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/51f269a6ecc701f9932eff5b253a1f89746be6bd
+> +static ssize_t vcnl4040_read_als_period(struct vcnl4000_data *data, int *val, int *val2)
+> +{
+> +	int ret, ret_pers, ret_it;
+> +	int64_t val_c;
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
+> +	if (ret < 0)
+> +		return ret;
 
-Thank you!
+> +	ret_pers = FIELD_GET(VCNL4040_ALS_CONF_PERS, ret);
+
+> +
+
+Redundant blank line.
+
+> +	if (ret_pers >= ARRAY_SIZE(vcnl4040_als_persistence))
+> +		return -EINVAL;
+> +
+> +	ret_it = FIELD_GET(VCNL4040_ALS_CONF_IT, ret);
+
+> +
+
+Ditto.
+
+> +	if (ret_it >= data->chip_spec->num_als_it_times)
+> +		return -EINVAL;
+
+Also name them better, at least by dropping ret prefix.
+
+> +	val_c = mul_u32_u32((*data->chip_spec->als_it_times)[ret_it][1],
+> +			    vcnl4040_als_persistence[ret_pers]);
+> +	*val = div_u64_rem(val_c, MICRO, val2);
+> +
+> +	return IIO_VAL_INT_PLUS_MICRO;
+> +}
+
+...
+
+> +static ssize_t vcnl4040_write_als_period(struct vcnl4000_data *data, int val, int val2)
+> +{
+> +	unsigned int index;
+> +	int ret, ret_it;
+
+Name variable better.
+
+> +	u16 regval;
+> +	int64_t val_n = mul_u32_u32(val, MICRO) + val2;
+
+It is inconsistent to use uXX and intXX_t in the same module. Can you explain
+the intention?
+
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret_it = FIELD_GET(VCNL4040_ALS_CONF_IT, ret);
+
+> +
+
+Redundant blank line.
+
+> +	if (ret_it >= data->chip_spec->num_als_it_times)
+> +		return -EINVAL;
+> +
+> +	for (index = 0; index < ARRAY_SIZE(vcnl4040_als_persistence) - 1; index++)
+
+In one case you use i, here index. Please, be consistent with your code.
+
+> +		if (val_n < mul_u32_u32(vcnl4040_als_persistence[index],
+> +					(*data->chip_spec->als_it_times)[ret_it][1]))
+> +			break;
+
+It would be better to have
+
+	for (...) {
+		...
+	}
+
+
+> +	mutex_lock(&data->vcnl4000_lock);
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
+> +	if (ret < 0)
+> +		goto out_unlock;
+> +
+> +	regval = (ret & ~VCNL4040_ALS_CONF_PERS) |
+> +		 FIELD_PREP(VCNL4040_ALS_CONF_PERS, index);
+> +	ret = i2c_smbus_write_word_data(data->client, VCNL4200_AL_CONF,
+> +					regval);
+> +
+> +out_unlock:
+> +	mutex_unlock(&data->vcnl4000_lock);
+> +	return ret;
+> +}
+
+...
+
+All the same to the other functions applies.
+I stopped here.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+With Best Regards,
+Andy Shevchenko
+
+
