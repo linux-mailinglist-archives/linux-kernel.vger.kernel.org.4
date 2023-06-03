@@ -2,80 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AF7720D4C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB438720D4D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236897AbjFCC1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 22:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S236957AbjFCCba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 22:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235954AbjFCC1l (ORCPT
+        with ESMTP id S229617AbjFCCb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:27:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE84DE41;
-        Fri,  2 Jun 2023 19:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=It052pGmMOChbkHC/frt/IYIkwgCKd1d9bqeq2VQcNA=; b=mlAK7UprlDcOWP/2iYNJyHnj1q
-        4gzstn/vBBIAUUEEeCNwsH5nad0id8R6cN34ZtIpXYLiwW8y9w+C6Bj7xBmlbOJ0xLGMbSaMiwLoQ
-        WWNqoCPXpjhMrmJSxhkiT1gIjiZxVBTET7hqNlnxd86ThNmb6SETSeksoqETe15VBSx4Bt+640zbJ
-        eScMEDs1rHBBvn/SjGVX3bQ76MMLJYFMBGkWdI74L67dLrmHsrRYqGD29G+NL7+ZSJeJmSU3NlC/2
-        NROwGCggaLwKraV4DaagUF+keJahhkJ8jD9/fRWaGepgmZQtsoSpPcxj/0GT910IwVo5mob6y10li
-        CLBUGIzg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q5GzT-008Y1d-01;
-        Sat, 03 Jun 2023 02:27:39 +0000
-Message-ID: <1f315a3d-1ded-1116-641c-c00ddbd825de@infradead.org>
-Date:   Fri, 2 Jun 2023 19:27:38 -0700
+        Fri, 2 Jun 2023 22:31:28 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204C9E41
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 19:31:28 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75b04e897a5so309791485a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 19:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685759487; x=1688351487;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pW1rdqqbkEtPfg32gPMaFYxqvJDDH52eSLMUxtdjdeA=;
+        b=H4HacM23qksu9BnchKnhSbcxJI8fYuoGcOOrjtWGl0q6/72VzVLfqRjpaVOGjnPQPJ
+         QSbWFwVbR++PqWMvbDwWq0CLAm9VUpYiZPb3ltJsJtngZCGhwefGP82AFOrmacQdCWVN
+         bvbw8w3+udaH5c+tE5m/06sSPlVBLwaVlQgLnJquvve9jGs9GYkGtE4JjiNBE5v7a4W4
+         6T7gVTd8YHJoCNC9rM+1GzBTa67xSgvNNZAm3KzMAzPK1ZhzvFmLiw9vGCgtfTyGFGR7
+         5/GJ/nYaGKhwOoVQXdz0c2/KwfMsFMCbZeSenspA8l5rnPQkyxzTWQLQ478IrswHH1N5
+         IiKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685759487; x=1688351487;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pW1rdqqbkEtPfg32gPMaFYxqvJDDH52eSLMUxtdjdeA=;
+        b=FtCynI3+2H977pEOijWRkWLHC0CLeh9ojtM5CPdvJuR6xD3tXywhcpJ4gGaFlB9y7u
+         xUjNzBWvDCNei5B7ZLWxFNAoCbMW6rGqb4qO4a6FdONjOWsnczeiDrRyvtt3ZdwexdMf
+         UKpVBC4uLWGHOKCaHu/8oQp1f7agzooQUNt+hKHa8rsAf/sERtMBwnsOnsT8duXEtULz
+         oMxa1IAm0f5jjydenrxBHKxK8oz+myUeQdmjs3SZ6+GX59VPWmST+UJYjpxzz9b0E0L/
+         Ll8+ZL1BRXne8+633AXJwkXPAikczjjlcbR3jExmqC1j3gBhmFg4waaovOa5cKTLIoWm
+         o5eg==
+X-Gm-Message-State: AC+VfDywWR5F8lu/Xf1myWiWuim+W6gkm0yJnWQvDED4z3krgj4aMvrX
+        /xnwXkMyGrhROH6v0ZTcRIT1Jn8OLNZEOtiSU7S3xDr7SgE=
+X-Google-Smtp-Source: ACHHUZ4CFazECbW1+uvM4ZkwvzK4e+C7zW/jZxxm1NMGAOGWazDOIC9LapzKqLGSfBc/j017YHi1X7KXLeX+XI1ik88=
+X-Received: by 2002:a05:620a:1a24:b0:75b:23a1:3625 with SMTP id
+ bk36-20020a05620a1a2400b0075b23a13625mr17612753qkb.54.1685759487100; Fri, 02
+ Jun 2023 19:31:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] KVM: MAINTAINERS: note that linux-kvm.org isn't
- current
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        kvm@vger.kernel.org
-References: <20230525153204.27960-1-rdunlap@infradead.org>
- <ZHqSYbYscprsU2qT@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ZHqSYbYscprsU2qT@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Liam Ni <zhiguangni01@gmail.com>
+Date:   Sat, 3 Jun 2023 10:31:16 +0800
+Message-ID: <CACZJ9cU6t5sLoDwE6_XOg+UJLpZt4+qHfjYN2bA0s+3y9y6pQQ@mail.gmail.com>
+Subject: [PATCH] mm:Improve the execution efficiency of early_ioremap_setup()
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reduce the number of invalid loops of the function early_ioremap_setup()
+to improve the efficiency of function execution
 
+Signed-off-by: LiamNi <zhiguangni01@gmail.com>
+---
+ mm/early_ioremap.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-On 6/2/23 18:07, Sean Christopherson wrote:
-> On Thu, May 25, 2023, Randy Dunlap wrote:
->> www.linux-kvm.org is not kept current. It contains antiquated
->> and historical information. Don't send people to it for current
->> information on KVM.
-> 
-> It's definitely stale, though unless Red Hat (presumed hoster) plans on decomissioning
-> the site, I'd prefer to keep the reference and instead improve the site.  We (Google)
-> are planning on committing resources to update KVM documentation that doesn't belong
-> in the kernel itself, and updating www.linux-kvm.org instead of creating something new
-> seems like a no-brainer.  I can't promise an updates will happen super quickly, but I
-> will do what I can to make 'em happen sooner than later.
+diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
+index 9bc12e526ed0..ce06b2884789 100644
+--- a/mm/early_ioremap.c
++++ b/mm/early_ioremap.c
+@@ -72,12 +72,10 @@ void __init early_ioremap_setup(void)
+ {
+    int i;
 
-Thanks for the reply, Sean.
-I agree with your preferred plans and look forward to seeing them begin. :)
+-   for (i = 0; i < FIX_BTMAPS_SLOTS; i++)
+-       if (WARN_ON(prev_map[i]))
+-           break;
+-
+-   for (i = 0; i < FIX_BTMAPS_SLOTS; i++)
++   for (i = 0; i < FIX_BTMAPS_SLOTS; i++) {
++       WARN_ON_ONCE(prev_map[i]);
+        slot_virt[i] = __fix_to_virt(FIX_BTMAP_BEGIN - NR_FIX_BTMAPS*i);
++   }
+ }
 
-> Paolo?
-
-cheers.
+ static int __init check_early_ioremap_leak(void)
 -- 
-~Randy
+2.25.1
