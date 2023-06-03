@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047D5720C6A
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 01:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED69720C8B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236211AbjFBXwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 19:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S236862AbjFCALE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 20:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234452AbjFBXwR (ORCPT
+        with ESMTP id S236526AbjFCALC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 19:52:17 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53AA180;
-        Fri,  2 Jun 2023 16:52:16 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-39a53c7648fso2314683b6e.1;
-        Fri, 02 Jun 2023 16:52:16 -0700 (PDT)
+        Fri, 2 Jun 2023 20:11:02 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4285E1BF
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 17:11:01 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso369502466b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 17:11:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685749936; x=1688341936;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OvpQLmsg+2AwEtsmXbyoNbXHbk3YOPzOD4ZGOKEAPR8=;
-        b=VWX6Ld/NtkwxxHt07O8v022y7ONasYfNbUqsWEuVaXGnTDkXILxd3Rep7iZ4GsyGdD
-         h2BbpT+hV0nx5Mbm5tU+V7Aed7w1Pf4DLVRIEP5QINwnXPxvut1PYkNuN70kglpFV6H1
-         /du5eJZ6woPmdCRLKyREDygUSl2WWURblDEx27xW6ugysypyJD4Bp0QEJ4JamrHmz8vu
-         1oWQxWKldD8cfEI0Z2TXsszACvLXtyoBxfXRkO6FfFzFIFia/Xc0s3mx/Pu7hoeEh0sG
-         MExs7Me53/Br/IF3HlLcswwXHspZNTin5NshbzCXmFrvwD2u3nOJeitQz+5lmtfFK8wS
-         iZyQ==
+        d=linux-foundation.org; s=google; t=1685751059; x=1688343059;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UIfddwJGgEUnwUCFA5IlnKSK6V7h4JvROQevxAQzNhk=;
+        b=OBdlPJDuwjSpuZdlD4x/b25JAvw5BWyMAwKwT/nWuWhQf9vP4WDTSfqzu8x561haJZ
+         l7FpCRhW8SP8FI/F0l1Qn/F3sNvYhQR1VoYznI7GZN4WUOIXOvpGnv1QRxvZ7IBa6Ld4
+         AyxzePI9NTDJSdlSYRECAEyNkH7vdRBYeqYM0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685749936; x=1688341936;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OvpQLmsg+2AwEtsmXbyoNbXHbk3YOPzOD4ZGOKEAPR8=;
-        b=hAAWpK3HqnRr8i/gCTr5iuoThV57hz3Mn7z+Zt0+uejocVmp8O/Y8p3+bpEqbCpq3/
-         9XLRxtnwUDdduA76Fgl4pcw55oOWwy24rD9vUCYzhpItn5L/9q1JEmljg+qC8HeyhOrf
-         ilFFjCOuF02If/poLIL4ugyvWpTOf1OZDtH4HRfL6iMMtY3hH2qAQ/NvK3E99XibPQHe
-         7odzEQZS+6TzUGDt2H5KQKAr8zgW3dQOlRGGWSCwtSeHCrXYzu4gw3bHN0aArMeQhE9G
-         x9TuqSLGabIroHlVOD1GjWbdDtUiXyn7c2oLb7HFyXh3L+XhlwfTfLO07YR00TNOOBQ2
-         d4xA==
-X-Gm-Message-State: AC+VfDxXjsGQqk9MxJ8IdQ+8jngaEauuaujP3fRmt4JSX1ZXQnJDP+IQ
-        u6ypkIQqpi04nFQMQi25wfI=
-X-Google-Smtp-Source: ACHHUZ6BXtEG1GLm0QEJqvB6bBiYJJpF2v2p4CqaVyfV6lUXq2Jq9XjqMXOfMqJ9Gh/Lp755az2tOQ==
-X-Received: by 2002:a54:4604:0:b0:398:af5:a18a with SMTP id p4-20020a544604000000b003980af5a18amr1320889oip.59.1685749936034;
-        Fri, 02 Jun 2023 16:52:16 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-82-61.dynamic-ip.hinet.net. [36.228.82.61])
-        by smtp.gmail.com with ESMTPSA id 11-20020a170902c20b00b001b061dcdb6bsm1916070pll.28.2023.06.02.16.52.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 16:52:15 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: sched: wrap tc_skip_wrapper with CONFIG_RETPOLINE
-Date:   Sat,  3 Jun 2023 07:52:09 +0800
-Message-Id: <20230602235210.91262-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1685751059; x=1688343059;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UIfddwJGgEUnwUCFA5IlnKSK6V7h4JvROQevxAQzNhk=;
+        b=RK3WkWou0JfWYs1De+UNbzoxnUp4I5TaR8Kh5095WxZHCIkn2daLC7Dkg83pE7H/Oo
+         y/UQMuRPAIIin6R4l2kze75cy8UQ0aptNQveJVUBDxqLwFMIcFLa72qSvcF6tXqAV2/s
+         DZt93ID/+/Q0Jhf7rbrmJFXwqfgA1NJ9t2lEUyBBm2uNffwpFTLelQEfnImOSJUONt4+
+         n5sZcVQeVrnUQ+WqI9jMOAloAfSTm34s8tEllR0h4VvRYuhV/l9IMT/dmsuL0EnLc4gd
+         wa1DlSAPfwd7BCC/lB70Q93NEq6vfZ/09qMXdTMUATIdhM6rsbTdrvhkLgPKsjlOPjgL
+         nWfg==
+X-Gm-Message-State: AC+VfDwnSp9+7KIKCt3R5TYxD/RBZUwUZdAkBun79tJ3B075O50KvQ5h
+        cNixfDMF1caStYfEn2jiypMHPd4wy3Lmv7ygpiBwP4b8
+X-Google-Smtp-Source: ACHHUZ6QyrkNW2naBQFHjrzAIAoUNU6uHIu6YpXLm5HuDii4Zq7EkVC0fG2xiVtgXEXugUbJyGoOMw==
+X-Received: by 2002:a17:907:703:b0:96f:9963:81ee with SMTP id xb3-20020a170907070300b0096f996381eemr93554ejb.50.1685751059521;
+        Fri, 02 Jun 2023 17:10:59 -0700 (PDT)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id u12-20020a1709060b0c00b009749b769c95sm1119673ejg.158.2023.06.02.17.10.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 17:10:59 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-3f6d7abe9a4so25490265e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 17:10:59 -0700 (PDT)
+X-Received: by 2002:ac2:52ba:0:b0:4f2:7b65:baeb with SMTP id
+ r26-20020ac252ba000000b004f27b65baebmr2458573lfm.53.1685750560415; Fri, 02
+ Jun 2023 17:02:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com> <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
+In-Reply-To: <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 2 Jun 2023 20:02:23 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com>
+Message-ID: <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com>
+Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the following sparse warning:
+On Fri, Jun 2, 2023 at 1:38=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> The patch re-uses the allocation it already does for the key data, and
+> it seems sane.
 
-net/sched/sch_api.c:2305:1: sparse: warning: symbol 'tc_skip_wrapper' was not declared. Should it be static?
+Ugh. I had to check that it was ok to re-use the key buffer, but it
+does seem to be the case that you can just re-use the buffer after
+you've done that crypto_akcipher_set_priv/pub_key() call, and the
+crypto layer has to copy it into its own data structures.
 
-No functional change intended.
+I absolutely abhor the crypto interfaces. They all seem designed for
+that "external DMA engine" case that seems so horrendously pointless
+and slow.  In practice so few of them are that, and we have all those
+optimized routines for doing it all on the CPU - but have in the
+meantime wasted all that time and effort into copying everything,
+turning simple buffers into sg-bufs etc etc. The amount of indirection
+and "set this state in the state machine" is just nasty, and this
+seems to all be a prime example of it all. With some of it then
+randomly going through some kthread too.
 
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- net/sched/sch_api.c | 2 ++
- 1 file changed, 2 insertions(+)
+I still think that patch is probably fine, but was also going "maybe
+the real problem is in that library helper function
+(asymmetric_verify(), in this case), which takes those (sig, siglen,
+digest, digestlen) arguments and turns it into a 'struct
+public_key_signature' without marshalling them.
 
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index 014209b1dd58..9ea51812b9cf 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -2302,7 +2302,9 @@ static struct pernet_operations psched_net_ops = {
- 	.exit = psched_net_exit,
- };
- 
-+#if IS_ENABLED(CONFIG_RETPOLINE)
- DEFINE_STATIC_KEY_FALSE(tc_skip_wrapper);
-+#endif
- 
- static int __init pktsched_init(void)
- {
--- 
-2.34.1
+Just looking at this mess of indirection and different "helper"
+functions makes me second-guess myself about where the actual
+conversion should be - while also feeling like it should never have
+been done as a scatter-gather entry in the first place.
 
+Anyway, I don't feel competent to decide if that pull request is the
+right fix or not.
+
+But it clearly is *a* fix.
+
+            Linus
