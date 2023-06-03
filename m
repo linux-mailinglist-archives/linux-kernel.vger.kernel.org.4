@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A27721011
+	by mail.lfdr.de (Postfix) with ESMTP id BDB56721013
 	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbjFCM1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 08:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S235454AbjFCM3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 08:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbjFCM1h (ORCPT
+        with ESMTP id S235083AbjFCM3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 08:27:37 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A721A4;
-        Sat,  3 Jun 2023 05:27:36 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-969f90d71d4so445734066b.3;
-        Sat, 03 Jun 2023 05:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685795255; x=1688387255;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZcxFciO+FgadEz/OB9cY/SNSRDrKptPDDCbhwYKKivw=;
-        b=WFctNZ81xWIx29VG0DK7rYmLHHpVtkUKtme5W4sXiOd+y5tiNx8DVwPlILjCR9MqGD
-         1ZQXt+KjLQZjCdKWfIOC8SG18OvMxTMp4waGGA57Pk1Aq6aW0rL6usKrkKlpRQfg6hE/
-         YAC3MpkGe83ek2+JtCNqJoTCcFaiUOtfDDn99vsG9ObgB41Gilfyqz0xlp0ol+c3UC9P
-         ETn3m8nFzi61310h93OYSg9LmaisnjuaCT6S1NUK9hEVt58WyHtTD+9NjuWVAbw10NU9
-         hw2TjpMFqPMhxBsHjcjxbD/CF64+Q2wNjnCNcd+GqzNOG3L0ruCTlK5+fHjP/k8MHoCm
-         4Vsg==
+        Sat, 3 Jun 2023 08:29:11 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314A1A6;
+        Sat,  3 Jun 2023 05:29:10 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-561b7729a12so65728487b3.1;
+        Sat, 03 Jun 2023 05:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685795255; x=1688387255;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcxFciO+FgadEz/OB9cY/SNSRDrKptPDDCbhwYKKivw=;
-        b=GXHebttBvqIfodInCodjXa9dafY3HpnSPXi5Pjj3Pu4esHRifjQA9R1fl7LE4gT88X
-         NFZGw85gLUUe7+1h+ELLraiUKR/9MEAHFSRuXyOK+s3nUhjKAmd6DvxlDhNuEv2QvUeh
-         roJeBnvQR0f6Gjc2ckR7K0AcSXFi/I/beaYWnLnO5/1MbF7QaEjiDR8uVOHybq7r6MTh
-         h9dXC/4qRN+XMxMHAWplK2HyZdIb0uwMm2/730Knz80IIsFrZruTui9GuVkI+t1nWVNZ
-         UwNVrM73TY4PdUpz/f+A6rfVQMTY6aSlk5U2eBUiT0Cwz5+v1MB73nqt/PE6OaLejYwT
-         jpGQ==
-X-Gm-Message-State: AC+VfDxh7VyaRqFfaJRDL8we8QsCcs6TnuVOur+iD/9jua9raYsPPr5g
-        WMZt6eUki/7Nvt4Cn0/eFS4=
-X-Google-Smtp-Source: ACHHUZ6WkA2BZcESwcxlAeOsw3PJj/CPtyUZi607dceyCN4ixJQWx8ZldbdWd1nJQZzDpfz6MQ+R9w==
-X-Received: by 2002:a17:907:94d4:b0:975:bb0:5628 with SMTP id dn20-20020a17090794d400b009750bb05628mr1224998ejc.15.1685795254500;
-        Sat, 03 Jun 2023 05:27:34 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id lh20-20020a170906f8d400b0094f698073e0sm1872588ejb.123.2023.06.03.05.27.32
+        d=1e100.net; s=20221208; t=1685795349; x=1688387349;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lj3c5i4LVsfDq+IR9UtiM8SjPOJlmSS1MT39h6r6yz8=;
+        b=LyT2wZ9o8RMwnLf0EZBQ5Ft2BKnD5wom4JrXEequD0EgIg+P+XC6m1hSiWAXzAK1x4
+         7OyVA/c2SmovawmuiX3C/laPARWcc1RZ3Xp9RI2c+lwyU/9xoVjJil3aGc6bFnCT/sgn
+         69yVo/10tfxmI3FwOjjQv6DG0Uyrqy8/gwUrzuakyQDXSH40OTJQd+fKjUM+3LuPg6mB
+         sjnJxCGYcEqD8fkw6GUEDlhABT7suHS1a0EGA8gIK1HQLVj6W+xDL6QIOLrOYCYnmUBz
+         /qLZMgKPxzopPpnc3PIjT5/EXg4RT553InR0XIfgssUzVmtGkMrUoJQj4rXnsLH7xYMI
+         NCNQ==
+X-Gm-Message-State: AC+VfDy7WmCHkAQ3MycBnrj78MbTRBQ5TiYYzOsKIKFYtmWW8qt9Fu4L
+        OKpC+2RPxaEcvdjdA3wENqQ=
+X-Google-Smtp-Source: ACHHUZ5BNuwyzunn2X0qgK3iGCf6DWX/cVutWu5eXPQl3bI+jokGNHknhIgNiMrHcgfCRCoZTniTmA==
+X-Received: by 2002:a81:480c:0:b0:568:cd43:b4ef with SMTP id v12-20020a81480c000000b00568cd43b4efmr3440268ywa.1.1685795348897;
+        Sat, 03 Jun 2023 05:29:08 -0700 (PDT)
+Received: from tofu.cs.purdue.edu ([128.210.0.165])
+        by smtp.gmail.com with ESMTPSA id q125-20020a817583000000b00545a08184cesm1447411ywc.94.2023.06.03.05.29.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jun 2023 05:27:34 -0700 (PDT)
-Date:   Sat, 3 Jun 2023 15:27:31 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
- to p{5,6}_configured
-Message-ID: <20230603122731.bmo2r4jlwtwpcv3k@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-9-arinc.unal@arinc9.com>
- <20230522121532.86610-9-arinc.unal@arinc9.com>
- <20230524175107.hwzygo7p4l4rvawj@skbuf>
- <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
- <20230526130145.7wg75yoe6ut4na7g@skbuf>
- <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+        Sat, 03 Jun 2023 05:29:08 -0700 (PDT)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+Cc:     daveti@purdue.edu, Sungwoo Kim <iam@sung-woo.kim>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: L2CAP: Add missing checks for invalid DCID
+Date:   Sat,  3 Jun 2023 08:28:09 -0400
+Message-Id: <20230603122808.1633403-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 03:15:52PM +0300, Arınç ÜNAL wrote:
-> On 26.05.2023 16:01, Vladimir Oltean wrote:
-> > Ok, but given the premise of this patch set, that phylink is always available,
-> > does it make sense for mt7531_cpu_port_config() and mt7988_cpu_port_config()
-> > to manually call phylink methods?
-> 
-> All I know is that that's how the implementation of phylink's PCS support in
-> this driver works. It expects the MAC to be set up before calling
-> mt753x_phylink_pcs_link_up() and mt753x_phylink_mac_link_up().
+When receiving a connect response we should make sure that the DCID is
+within the valid range and that we don't already have another channel
+allocated for the same DCID.
+Missing checks may violate the specification (BLUETOOTH CORE SPECIFICATION
+Version 5.4 | Vol 3, Part A, Page 1046).
 
-No, but I mean, won't phylink call mt7531_mac_config(), mt753x_phylink_pcs_link_up()
-and mt753x_phylink_mac_link_up() automatically and in the expected order already,
-and if not, what prevents that from happening? I just don't understand why the
-cpu_port_config() methods of MT7531 and MT7988 call phylink methods manually
-from the driver.
+Fixes: 40624183c202 ("L2CAP: Add missing checks for invalid LE DCID")
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+---
+ net/bluetooth/l2cap_core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 376b523c7..104eb0320 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -4306,6 +4306,10 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+ 	result = __le16_to_cpu(rsp->result);
+ 	status = __le16_to_cpu(rsp->status);
+ 
++	if (result == L2CAP_CR_SUCCESS && (dcid < L2CAP_CID_DYN_START ||
++					   dcid > L2CAP_CID_DYN_END))
++		return -EPROTO;
++
+ 	BT_DBG("dcid 0x%4.4x scid 0x%4.4x result 0x%2.2x status 0x%2.2x",
+ 	       dcid, scid, result, status);
+ 
+@@ -4337,6 +4341,11 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+ 
+ 	switch (result) {
+ 	case L2CAP_CR_SUCCESS:
++		if (__l2cap_get_chan_by_dcid(conn, dcid)) {
++			err = -EBADSLT;
++			break;
++		}
++
+ 		l2cap_state_change(chan, BT_CONFIG);
+ 		chan->ident = 0;
+ 		chan->dcid = dcid;
+-- 
+2.34.1
+
