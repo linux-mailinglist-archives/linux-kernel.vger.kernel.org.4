@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6757210AA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 16:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD04C7210A9
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 16:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbjFCOxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 10:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S237118AbjFCOx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 10:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbjFCOxT (ORCPT
+        with ESMTP id S230216AbjFCOxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 10:53:19 -0400
+        Sat, 3 Jun 2023 10:53:20 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19CC196;
-        Sat,  3 Jun 2023 07:53:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 503095C00C8;
-        Sat,  3 Jun 2023 10:53:17 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E5318D;
+        Sat,  3 Jun 2023 07:53:19 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id A327A5C0159;
+        Sat,  3 Jun 2023 10:53:18 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 03 Jun 2023 10:53:17 -0400
+  by compute4.internal (MEProxy); Sat, 03 Jun 2023 10:53:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         invisiblethingslab.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1685803997; x=1685890397; bh=YZHd7YYjlD
-        K6sv+mkKSJgYpLNyemRttpNw5QnchM4bE=; b=TnOxlFpRryRJNsR7dpT46fcwU5
-        WqmiJVKfcJVhI69FXcnQw0XXlGXPg9eAkwuvXv+2oNga3YcKAjpqy3i488+aRrQ1
-        R5lK/T/ytfC9Y2lXcCgBAXPny4UlKg2y68Bt3b/hiAhg5WH1yPTucdXexc89KnxJ
-        j1CGz+TJS3grfw+G1Cgjm9Sv6qjcOTvodT7ihTNrN5QIGI3I/RfTsbBk56hQq/dj
-        N7LCPY8GSBfWjfzC+P7v6OLtBIxGKpPF8y4q8AUbXmHRxPMcNYoKVzQn/38pKOrn
-        cgHs49N9IOZLlTsTUhzfV30H3FLTnOs/+4aE9dCOlJCooyPlIaVG0RbUS6tg==
+        :subject:to:to; s=fm1; t=1685803998; x=1685890398; bh=SGVGhCOi3w
+        bBYhOjjO56k89nCKOx38H3KskyWEyWiGs=; b=Jp89MgG4yUz6UPx66J59ThD/Bv
+        3ZmoZxMs4OXV2lcM3NtGZ1+UwTxPbybEYji7PBUqV0YDPubWeHhoApOzzqgRunbx
+        u/qf3o3FIUR7HBbfc7NkBLmBiEXcUzLwK/320g73bLp5ay2ZIWznc1FYUb3MSFtl
+        59VocK8gNlxmhjSUSAZfrTNpmmx56seI0FFOELKYP+IWK4GOvswszANk66ngrsDG
+        CyejlAATPIaaQkQzp88yGgiT6wFnN1mXxmZPe4XJJJGnH8ZrkvF2NZx2jJKjNeY9
+        RR+AXGW+9HkZ3B8ek24czu+OkLOSH0RQS7TltXzpejPZiiohWxhF7DvT2UFg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685803997; x=
-        1685890397; bh=YZHd7YYjlDK6sv+mkKSJgYpLNyemRttpNw5QnchM4bE=; b=R
-        KSwHSh5CbZGFPlBIs95J+lFNUW+CiVOmBjXlwhhHamgOnD6blPnTsSZctV6KhZa6
-        rc8xKQZcZgcSqnTJqDP5e2MCQGsgvnwfyadaEXHClMLKu3tG5xQA54ukTJZzIqI/
-        8+MC0YPY2gS6iy9ukE0ol1BYlctioyi3n6uC5y5zxKZgigk8d0sFaEj9Xw0UuXA0
-        74ubqf28G7Zee6IfmuHYdlAINdOLRb1ZELv1M+ysGpADDiI1rdxdyjLfQJ4PqBMT
-        U+jozsg5GFP3J/LvN5+U9Et3QjGPM8kIC19TnhmtyaZqCZHvDxVA51pJD/AQn00W
-        t2Gm+rYVbFTgUUbmGkvcA==
-X-ME-Sender: <xms:3VN7ZIjtvr-hGPa2eAqMGPPBk3kg81-uNdIgPs7fp1jqnHyTjgj4Hg>
-    <xme:3VN7ZBBvCV_lM-ebsJpvXTDXbKa3LYrMufYXqA_Qq5FioHXC6N1TG0qwg0IwPkDwN
-    QN-AF1eNhKWPdU>
-X-ME-Received: <xmr:3VN7ZAEC7SpFyijRN8PCmYeHNBTy04K3zEJDn0XHNJ3ic_SG0N35QtYbbGuNgTElKjkTX16rGlM>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685803998; x=
+        1685890398; bh=SGVGhCOi3wbBYhOjjO56k89nCKOx38H3KskyWEyWiGs=; b=U
+        kziZXYYR49LS1/JS1PPJU3ZfdZdjsPIGAHpa1LSgkDMjoiXcnVMZMDTuW0VVTEc7
+        Lf8QpJlAPv5+mQ165EPrrifFO1xdZr1ZeetZex2wKPImB2PPgPNE/k34wH4zIXiY
+        RRJeW0O+OmNb0kamWKXl0CvoraCZuEdkiU35/mOAWXP9fMaC5riJxe0vE9+gzV+I
+        uYfAbfwAgR8OeqlS9S5vhOscLXpBMdP2lI09LLqJtKiYjmxcbzT7sAZ6MZJeRGzt
+        qxCFZbUW0jNtN286djwYT5SzDreLZNhjc4VUfwapiXizqb/ZXMZjNnZuRC44C2pU
+        /1QYevHp01cFM8KqW3LWg==
+X-ME-Sender: <xms:3lN7ZDh0ghprryGPMdaiACNxoWXEEKem6yL6dvmc3n-t-nETHQ_DdA>
+    <xme:3lN7ZADoi3kninUTuKyUXtKvKRcNQP7vtLHwKQY9PtybFM5DKQjQa70QS46r8EmyY
+    jnBp94KXrFfVJk>
+X-ME-Received: <xmr:3lN7ZDEgYkoYkalymaERFrHb-nZJ36wRxW6TUnSiDF3yNkxG26kICKyHuQeGldrxQzXxT5YA-ZM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelhedgkedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
     ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
     hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepjeffjefggfeugeduvedvjeekgfeh
-    gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgeptdenuc
+    gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgepfeenuc
     frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
     lhgrsgdrtghomh
-X-ME-Proxy: <xmx:3VN7ZJQshjK0OPVZRyMOvUkjEAlvzktF87-H0QbB09KdHmXGg6sWtw>
-    <xmx:3VN7ZFy34bsTIjkJyP1YL7_JyTO9CUp-wBx04YlnaD85tT2hAKbiKg>
-    <xmx:3VN7ZH5WjhtCzpfyFr5-AGu7p4R-itSBC6XJQDOH4CO-SmF-BWypGA>
-    <xmx:3VN7ZN_N75wSI2u1kCUoeJH0pfb-_0GlDNZhJ9UYKwPA8R1ujP-npA>
+X-ME-Proxy: <xmx:3lN7ZAQnw0SkrMHFCS0p0iopaEzemtYID1_vMBL78G5aKDJKd2XE4g>
+    <xmx:3lN7ZAz5GEjqcHqmK8AqRBurFZGxdT4Yx3eFTmd4qfNzSMIyAhfgxw>
+    <xmx:3lN7ZG5uWaIEqaxRGNfUBeLmI0boc_uTNYnsrB2PNvWHXv5nzwK1lw>
+    <xmx:3lN7ZM_zq6bg6ishrr7qL4RYTXdtAYevKXPMS3sPIORVoqmAw8I1xw>
 Feedback-ID: iac594737:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 3 Jun 2023 10:53:16 -0400 (EDT)
+ 3 Jun 2023 10:53:17 -0400 (EDT)
 From:   Demi Marie Obenour <demi@invisiblethingslab.com>
 To:     Alasdair Kergon <agk@redhat.com>,
         Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
 Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2 3/6] device-mapper: structs and parameter strings must not overlap
-Date:   Sat,  3 Jun 2023 10:52:41 -0400
-Message-Id: <20230603145244.1538-4-demi@invisiblethingslab.com>
+Subject: [PATCH v2 4/6] device-mapper: Avoid double-fetch of version
+Date:   Sat,  3 Jun 2023 10:52:42 -0400
+Message-Id: <20230603145244.1538-5-demi@invisiblethingslab.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230603145244.1538-1-demi@invisiblethingslab.com>
 References: <20230601212456.1533-1-demi@invisiblethingslab.com>
@@ -89,94 +89,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NUL terminator for each target parameter string must precede the
-following 'struct dm_target_spec'.  Otherwise, dm_split_args() might
-corrupt this struct.  Furthermore, the first 'struct dm_target_spec'
-must come after the 'struct dm_ioctl', as if it overlaps too much
-dm_split_args() could corrupt the 'struct dm_ioctl'.
+The version is fetched once in check_version(), which then does some
+validation and then overwrites the version in userspace with the API
+version supported by the kernel.  copy_params() then fetches the version
+from userspace *again*, and this time no validation is done.  The result
+is that the kernel's version number is completely controllable by
+userspace, provided that userspace can win a race condition.
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Fix this flaw by not copying the version back to the kernel the second
+time.  This is not exploitable as the version is not further used in the
+kernel.  However, it could become a problem if future patches start
+relying on the version field.
+
 Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Cc: stable@vger.kernel.org
+Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
 ---
- drivers/md/dm-ioctl.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ drivers/md/dm-ioctl.c | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
-index 64e8f16d344c47057de5e2d29e3d63202197dca0..da6ca26b51d0953df380582bb3a51c2ec22c27cb 100644
+index da6ca26b51d0953df380582bb3a51c2ec22c27cb..7510afe237d979a5ee71afe87a20d49f631de1aa 100644
 --- a/drivers/md/dm-ioctl.c
 +++ b/drivers/md/dm-ioctl.c
-@@ -1391,7 +1391,7 @@ static inline fmode_t get_mode(struct dm_ioctl *param)
- 	return mode;
- }
- 
--static int next_target(struct dm_target_spec *last, uint32_t next, void *end,
-+static int next_target(struct dm_target_spec *last, uint32_t next, const char *end,
- 		       struct dm_target_spec **spec, char **target_params)
+@@ -1873,30 +1873,33 @@ static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
+  * As well as checking the version compatibility this always
+  * copies the kernel interface version out.
+  */
+-static int check_version(unsigned int cmd, struct dm_ioctl __user *user)
++static int check_version(unsigned int cmd, struct dm_ioctl __user *user,
++			 struct dm_ioctl *kernel_params)
  {
- 	static_assert(_Alignof(struct dm_target_spec) <= 8,
-@@ -1404,7 +1404,7 @@ static int next_target(struct dm_target_spec *last, uint32_t next, void *end,
- 	 * sizeof(struct dm_target_spec) or more, as otherwise *last was
- 	 * out of bounds already.
- 	 */
--	size_t remaining = (char *)end - (char *)last;
-+	size_t remaining = end - (char *)last;
+-	uint32_t version[3];
+ 	int r = 0;
  
- 	/*
- 	 * There must be room for both the next target spec and the
-@@ -1423,10 +1423,7 @@ static int next_target(struct dm_target_spec *last, uint32_t next, void *end,
- 	*spec = (struct dm_target_spec *) ((unsigned char *) last + next);
- 	*target_params = (char *) (*spec + 1);
+-	if (copy_from_user(version, user->version, sizeof(version)))
++	if (copy_from_user(kernel_params->version, user->version, sizeof(kernel_params->version)))
+ 		return -EFAULT;
  
--	if (*spec < (last + 1))
--		return -EINVAL;
--
--	return invalid_str(*target_params, end);
-+	return 0;
- }
- 
- static int populate_table(struct dm_table *table,
-@@ -1436,8 +1433,9 @@ static int populate_table(struct dm_table *table,
- 	unsigned int i = 0;
- 	struct dm_target_spec *spec = (struct dm_target_spec *) param;
- 	uint32_t next = param->data_start;
--	void *end = (void *) param + param_size;
-+	const char *const end = (const char *) param + param_size;
- 	char *target_params;
-+	size_t min_size = sizeof(struct dm_ioctl);
- 
- 	if (!param->target_count) {
- 		DMERR("%s: no targets specified", __func__);
-@@ -1445,6 +1443,13 @@ static int populate_table(struct dm_table *table,
+-	if ((version[0] != DM_VERSION_MAJOR) ||
+-	    (version[1] > DM_VERSION_MINOR)) {
++	if ((kernel_params->version[0] != DM_VERSION_MAJOR) ||
++	    (kernel_params->version[1] > DM_VERSION_MINOR)) {
+ 		DMERR("ioctl interface mismatch: kernel(%u.%u.%u), user(%u.%u.%u), cmd(%d)",
+ 		      DM_VERSION_MAJOR, DM_VERSION_MINOR,
+ 		      DM_VERSION_PATCHLEVEL,
+-		      version[0], version[1], version[2], cmd);
++		      kernel_params->version[0],
++		      kernel_params->version[1],
++		      kernel_params->version[2],
++		      cmd);
+ 		r = -EINVAL;
  	}
  
- 	for (i = 0; i < param->target_count; i++) {
-+		const char *nul_terminator;
-+
-+		if (next < min_size) {
-+			DMERR("%s: next target spec (offset %u) overlaps %s",
-+			      __func__, next, i ? "previous target" : "'struct dm_ioctl'");
-+			return -EINVAL;
-+		}
+ 	/*
+ 	 * Fill in the kernel version.
+ 	 */
+-	version[0] = DM_VERSION_MAJOR;
+-	version[1] = DM_VERSION_MINOR;
+-	version[2] = DM_VERSION_PATCHLEVEL;
+-	if (copy_to_user(user->version, version, sizeof(version)))
++	kernel_params->version[0] = DM_VERSION_MAJOR;
++	kernel_params->version[1] = DM_VERSION_MINOR;
++	kernel_params->version[2] = DM_VERSION_PATCHLEVEL;
++	if (copy_to_user(user->version, kernel_params->version, sizeof(kernel_params->version)))
+ 		return -EFAULT;
  
- 		r = next_target(spec, next, end, &spec, &target_params);
- 		if (r) {
-@@ -1452,6 +1457,15 @@ static int populate_table(struct dm_table *table,
- 			return r;
- 		}
+ 	return r;
+@@ -1922,7 +1925,10 @@ static int copy_params(struct dm_ioctl __user *user, struct dm_ioctl *param_kern
+ 	const size_t minimum_data_size = offsetof(struct dm_ioctl, data);
+ 	unsigned int noio_flag;
  
-+		nul_terminator = memchr(target_params, 0, (size_t)(end - target_params));
-+		if (nul_terminator == NULL) {
-+			DMERR("%s: target parameters not NUL-terminated", __func__);
-+			return -EINVAL;
-+		}
-+
-+		/* Add 1 for NUL terminator */
-+		min_size = (size_t)(nul_terminator - (const char *)spec) + 1;
-+
- 		r = dm_table_add_target(table, spec->target_type,
- 					(sector_t) spec->sector_start,
- 					(sector_t) spec->length,
+-	if (copy_from_user(param_kernel, user, minimum_data_size))
++	/* Version has been copied from userspace already, avoid TOCTOU */
++	if (copy_from_user((char *)param_kernel + sizeof(param_kernel->version),
++			   (char __user *)user + sizeof(param_kernel->version),
++			   minimum_data_size - sizeof(param_kernel->version)))
+ 		return -EFAULT;
+ 
+ 	if (param_kernel->data_size < minimum_data_size) {
+@@ -2034,7 +2040,7 @@ static int ctl_ioctl(struct file *file, uint command, struct dm_ioctl __user *us
+ 	 * Check the interface version passed in.  This also
+ 	 * writes out the kernel's interface version.
+ 	 */
+-	r = check_version(cmd, user);
++	r = check_version(cmd, user, &param_kernel);
+ 	if (r)
+ 		return r;
+ 
 -- 
 Sincerely,
 Demi Marie Obenour (she/her/hers)
