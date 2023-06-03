@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F7E720D97
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 05:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B08A720FE2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 13:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbjFCDUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 23:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S237208AbjFCLOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 07:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbjFCDUK (ORCPT
+        with ESMTP id S229658AbjFCLOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 23:20:10 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C18BD;
-        Fri,  2 Jun 2023 20:20:07 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QY4nt5fzxzLmW7;
-        Sat,  3 Jun 2023 11:18:26 +0800 (CST)
-Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 3 Jun
- 2023 11:20:04 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <dave.hansen@linux.intel.com>
-CC:     <hpa@zytor.com>, <x86@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v2] x86/mce: remove unused mce_vaddr
-Date:   Sat, 3 Jun 2023 19:11:05 +0800
-Message-ID: <20230603111105.174716-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Sat, 3 Jun 2023 07:14:03 -0400
+X-Greylist: delayed 115114 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 04:14:03 PDT
+Received: from out-24.mta1.migadu.com (out-24.mta1.migadu.com [IPv6:2001:41d0:203:375::18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16315180
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 04:14:02 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685790840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i0q/clNCiyPn574KHeniYdEndEa5TXryq3X5pe8ow6w=;
+        b=HYP7ozwc29UHBTiFBxCxuhOm9xSrugaz6Honm6gB1dNkSHn6Ze3Tmz1D15istw+Iy2Rg3h
+        slS/a6Ni7WVuTlJI+8H1Y+c83krBl360mi4qF4E9p6YtGRScKv05LrLem8nvMcGgsABoC1
+        p8nzVqFgLh8+NgqNn2GjR4+0DBwMUGk=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] memcg: use helper macro FLUSH_TIME
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20230603072116.1101690-1-linmiaohe@huawei.com>
+Date:   Sat, 3 Jun 2023 19:13:24 +0800
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <9542DF5E-6B48-48EA-BBD2-3FF801E29C65@linux.dev>
+References: <20230603072116.1101690-1-linmiaohe@huawei.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit a6e3cf70b772 ("x86/mce: Change to not send SIGBUS error during
-copy from user"), mce_vaddr is not used anymore. Remove it.
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- arch/x86/kernel/cpu/mce/severity.c | 2 --
- include/linux/sched.h              | 1 -
- 2 files changed, 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
-index c4477162c07d..1c03221ddcb1 100644
---- a/arch/x86/kernel/cpu/mce/severity.c
-+++ b/arch/x86/kernel/cpu/mce/severity.c
-@@ -255,8 +255,6 @@ static bool is_copy_from_user(struct pt_regs *regs)
- 	if (fault_in_kernel_space(addr))
- 		return false;
- 
--	current->mce_vaddr = (void __user *)addr;
--
- 	return true;
- }
- 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index eed5d65b8d1f..3054a7087230 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1493,7 +1493,6 @@ struct task_struct {
- #endif
- 
- #ifdef CONFIG_X86_MCE
--	void __user			*mce_vaddr;
- 	__u64				mce_kflags;
- 	u64				mce_addr;
- 	__u64				mce_ripv : 1,
--- 
-2.27.0
+> On Jun 3, 2023, at 15:21, Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+> Use helper macro FLUSH_TIME to indicate the flush time to improve the
+> readability a bit. No functional change intended.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks
 
