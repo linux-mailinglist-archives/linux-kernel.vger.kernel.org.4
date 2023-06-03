@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB88720E3B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1AB720E72
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjFCG7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 02:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S231835AbjFCHLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjFCG7D (ORCPT
+        with ESMTP id S229513AbjFCHLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 02:59:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CAF1B7;
-        Fri,  2 Jun 2023 23:59:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 332DA611AE;
-        Sat,  3 Jun 2023 06:59:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AD9C433EF;
-        Sat,  3 Jun 2023 06:59:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685775541;
-        bh=IAGJxJ3JlAB/u0zA2ngAhx3AwvNiI19/nJzIKrbxIwU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JkAQLqD73oxh6KmB2BycBMWXatq8QfSoGA+xO6kS9quNZlFnkVAOTJf9cbEDla5K4
-         c4DExDqam/dmkEipKm3LiZjFv4Y3YV/dx6Ps2fz5D7ecFIEq88Amk+i/sViPsJOXeN
-         qdCyVnnDrjqUbhsZzyxDZWQ+yPeL6/9DkYTHhfqxPVIoCKYDdqQOQ1pxfW1Xp4UwdT
-         Rk5jKYZPqmpyGUKLnliW9dRdpKUKpYVC4AGj2XjFgwls00FdFNAeixy3ZCfwVqxfEp
-         k65VH0q2KQxCZXpdo4CpAUaXENMxXmRoUgxf21f3PS8toenNBUSIbKxc4dfPC3XE5P
-         0wiqX+mSjJ/Og==
-Date:   Fri, 2 Jun 2023 23:58:59 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, richardcochran@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        simon.horman@corigine.com
-Subject: Re: [PATCH net-next v6 3/6] net: bcmasp: Add support for ASP2.0
- Ethernet controller
-Message-ID: <20230602235859.79042ff0@kernel.org>
-In-Reply-To: <1685657551-38291-4-git-send-email-justin.chen@broadcom.com>
-References: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
-        <1685657551-38291-4-git-send-email-justin.chen@broadcom.com>
+        Sat, 3 Jun 2023 03:11:45 -0400
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0EC0;
+        Sat,  3 Jun 2023 00:11:41 -0700 (PDT)
+Received: from [0.0.0.0] (unknown [172.96.223.238])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id AD5ED2802D9;
+        Sat,  3 Jun 2023 15:11:32 +0800 (CST)
+Message-ID: <5f0f2bab-ae36-8b13-2c6d-c69c6ff4a43f@sangfor.com.cn>
+Date:   Sat, 3 Jun 2023 15:11:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+ <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+ <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn>
+ <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
+ <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
+ <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
+ <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
+ <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch>
+ <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
+ <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
+ <20230602225519.66c2c987@kernel.org>
+From:   Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <20230602225519.66c2c987@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaHRpCVh5NQkwdS0hLSR1CGFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpMSVVCTVVJSUhVSUhDWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Tid: 0a888018ecd22eb1kusnad5ed2802d9
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PU06Nio5KD1MMjMzNRA*Vk8*
+        UQgwCxNVSlVKTUNOTExNSUJDS0hIVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKTElVQk1VSUlIVUlIQ1lXWQgBWUFPSklONwY+
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  1 Jun 2023 15:12:28 -0700 Justin Chen wrote:
-> +	/* general stats */
-> +	STAT_NETDEV(rx_packets),
-> +	STAT_NETDEV(tx_packets),
-> +	STAT_NETDEV(rx_bytes),
-> +	STAT_NETDEV(tx_bytes),
-> +	STAT_NETDEV(rx_errors),
-> +	STAT_NETDEV(tx_errors),
-> +	STAT_NETDEV(rx_dropped),
-> +	STAT_NETDEV(tx_dropped),
-> +	STAT_NETDEV(multicast),
+On 2023/6/3 13:55, Jakub Kicinski wrote:
+> On Sat, 3 Jun 2023 09:51:34 +0800 Ding Hui wrote:
+>>> If that is the case maybe it would just make more sense to just return
+>>> an error if we are at risk of overrunning the userspace allocated
+>>> buffer.
+>>
+>> In that case, I can modify to return an error, however, I think the
+>> ENOSPC or EFBIG mentioned in a previous email may not be suitable,
+>> maybe like others length/size checking return EINVAL.
+>>
+>> Another thing I wondered is that should I update the current length
+>> back to user if user buffer is not enough, assuming we update the new
+>> length with error returned, the userspace can use it to reallocate
+>> buffer if he wants to, which can avoid re-call previous ioctl to get
+>> the new length.
+> 
+> This entire thread presupposes that user provides the length of
+> the buffer. I don't see that in the code. Take ethtool_get_stats()
+> as an example, you assume that stats.n_stats is set correctly,
+> but it's not enforced today. Some app somewhere may pass in zeroed
+> out stats and work just fine.
+> 
 
-please don't report standard interface stats in ethtool -S
+Yes.
 
-> +	/* UniMAC RSV counters */
-> +	STAT_BCMASP_MIB_RX("rx_64_octets", mib.rx.pkt_cnt.cnt_64),
-> +	STAT_BCMASP_MIB_RX("rx_65_127_oct", mib.rx.pkt_cnt.cnt_127),
-> +	STAT_BCMASP_MIB_RX("rx_128_255_oct", mib.rx.pkt_cnt.cnt_255),
-> +	STAT_BCMASP_MIB_RX("rx_256_511_oct", mib.rx.pkt_cnt.cnt_511),
-> +	STAT_BCMASP_MIB_RX("rx_512_1023_oct", mib.rx.pkt_cnt.cnt_1023),
-> +	STAT_BCMASP_MIB_RX("rx_1024_1518_oct", mib.rx.pkt_cnt.cnt_1518),
-> +	STAT_BCMASP_MIB_RX("rx_vlan_1519_1522_oct", mib.rx.pkt_cnt.cnt_mgv),
-> +	STAT_BCMASP_MIB_RX("rx_1522_2047_oct", mib.rx.pkt_cnt.cnt_2047),
-> +	STAT_BCMASP_MIB_RX("rx_2048_4095_oct", mib.rx.pkt_cnt.cnt_4095),
-> +	STAT_BCMASP_MIB_RX("rx_4096_9216_oct", mib.rx.pkt_cnt.cnt_9216),
+I checked the others ioctl (e.g. ethtool_get_eeprom(), ethtool_get_features()),
+and searched the git log of ethtool utility, so I think that is an implicit
+rule and the check is missed in kernel where the patch involves.
 
-these should also be removed, and you should implement @get_rmon_stats.
+Without this rule, we cannot guarantee the safety of copy to user.
 
-> +	STAT_BCMASP_MIB_RX("rx_pkts", mib.rx.pkt),
-> +	STAT_BCMASP_MIB_RX("rx_bytes", mib.rx.bytes),
-> +	STAT_BCMASP_MIB_RX("rx_multicast", mib.rx.mca),
-> +	STAT_BCMASP_MIB_RX("rx_broadcast", mib.rx.bca),
-> +	STAT_BCMASP_MIB_RX("rx_fcs", mib.rx.fcs),
+Should we keep to be compatible with that incorrect userspace usage?
 
-there's a FCS error statistic in the standard stats, no need to
-duplicate
+-- 
+Thanks,
+- Ding Hui
 
-> +	STAT_BCMASP_MIB_RX("rx_control", mib.rx.cf),
-> +	STAT_BCMASP_MIB_RX("rx_pause", mib.rx.pf),
-
-@get_pause_stats
-
-> +	STAT_BCMASP_MIB_RX("rx_unknown", mib.rx.uo),
-> +	STAT_BCMASP_MIB_RX("rx_align", mib.rx.aln),
-> +	STAT_BCMASP_MIB_RX("rx_outrange", mib.rx.flr),
-> +	STAT_BCMASP_MIB_RX("rx_code", mib.rx.cde),
-> +	STAT_BCMASP_MIB_RX("rx_carrier", mib.rx.fcr),
-> +	STAT_BCMASP_MIB_RX("rx_oversize", mib.rx.ovr),
-> +	STAT_BCMASP_MIB_RX("rx_jabber", mib.rx.jbr),
-
-these look like candidates from standard stats, too.
-Please read thru:
-
-https://docs.kernel.org/next/networking/statistics.html
-
-> +	STAT_BCMASP_MIB_RX("rx_mtu_err", mib.rx.mtue),
-> +	STAT_BCMASP_MIB_RX("rx_good_pkts", mib.rx.pok),
-> +	STAT_BCMASP_MIB_RX("rx_unicast", mib.rx.uc),
-> +	STAT_BCMASP_MIB_RX("rx_ppp", mib.rx.ppp),
-> +	STAT_BCMASP_MIB_RX("rx_crc", mib.rx.rcrc),
-
-hm, what's the difference between rx_crc and rx_fcs ?
