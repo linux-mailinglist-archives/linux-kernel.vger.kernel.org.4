@@ -2,115 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8C07211BB
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 21:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01341720FDE
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 13:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjFCTKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 15:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S237201AbjFCLMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 07:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFCTKF (ORCPT
+        with ESMTP id S229829AbjFCLMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 15:10:05 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B96E18D
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 12:10:03 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c8423dccso100331266b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 12:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685819401; x=1688411401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c/1fXZdlFrD4ZTMnSyIek5ravNGSg+bm7NeK4UcfZ5I=;
-        b=XGWSGPhc+xt9lfYE3ElzKDuGrJr3WUc1F9NreSgchCvhk9+TGEXaB0X+FKeFhLa4Ul
-         dBWwVA0PU7u3A9Gb/r9/YacGuXlVlqHEu42aPrlpEXXDzJscOc1SF0ShHSQse0Oj/chT
-         QLovyIjmr92pscaSYQIt6uY5CA4K46N++1MwTW+XvEsqSbFTIBJVPKBUnQcFshqSmfQK
-         AlKleHL2WPQjWo13ySdvQFAtO3k6DRkLK4/THrSTOZf+p2O7ixH3ctDfYqgLUS+Hg85I
-         68k9+su4xAFbe2lICX5JB6tswOOT4SmDCXRpHWHpjtOEseiVoM9V54Gs8SlVtQ7YAqlA
-         6tmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685819401; x=1688411401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c/1fXZdlFrD4ZTMnSyIek5ravNGSg+bm7NeK4UcfZ5I=;
-        b=g+8eh7XFBDFDn8gvYrcEuJHwB0b6sH0VJc7Eq7T1TYlIsBdlOvqO6xVvO/s6lH6hC8
-         yOfOG5egtQJY6RlZtMisgm8wlpLeA4PW4zptyVP3RKaFZABh+3vnGbaeS7yi3IE4ev3Z
-         o0ITuS/E9LAfhDcscTctFMIcfo7eSmHwVXR6uGOxbVFR7gadq0H0jh0W3FvZG5ri/QTB
-         kSuKGMv8OlJ41vWfO9AH0LsqacoLRwoDMjWTfKN3jOm+Za56s12ctVddePiMYEUnp/oP
-         YezxR+H8yQu3BX0e57lqhpkVztXIe96XU4gy6ZcGUcJpjvoLMSZUax/yG86X34/ArjbE
-         nWSA==
-X-Gm-Message-State: AC+VfDy3t3Y3hZXaAX6b67l4V3YGt/e6WpA7WD7T7IMg5W9x4sa/NWpU
-        wcF+xO9+WjHDELvL4IAz7pJVCA==
-X-Google-Smtp-Source: ACHHUZ4RopHcJJ7GF3SSU2ePLu5DlX+l9IkWhVj+EuFjvR5yyF0baMdpGCWtH8xOXILm4qx46Z8pUw==
-X-Received: by 2002:a17:906:5d0a:b0:974:5bd2:1807 with SMTP id g10-20020a1709065d0a00b009745bd21807mr2096976ejt.24.1685819401691;
-        Sat, 03 Jun 2023 12:10:01 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id bi1-20020a170906a24100b009664cdb3fc5sm2218126ejb.138.2023.06.03.12.09.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 12:10:01 -0700 (PDT)
-Message-ID: <d354734e-c8d1-2d75-fec4-e91bb322bbe2@linaro.org>
-Date:   Sat, 3 Jun 2023 21:09:58 +0200
+        Sat, 3 Jun 2023 07:12:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AD7133;
+        Sat,  3 Jun 2023 04:12:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685790739; x=1717326739;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tQpbEfI5mySRE7voMPRFgNoLsin+/pbxsffoH1S6pao=;
+  b=jvDRn7opiPNUxiWHh0qCk+Jse+1irFuOcjsn9pS4WIU2yb63VwDLYO2J
+   kGbhGQ65lOfju340A6m07y5fQAJ52yoBeNgAlRX/+2DYjTvruV25klPAW
+   vh6helIQ/Yc2V+YO+woVCNMsvTdA4JD6eBMGbjgjzBp5XspVRDDH3mRAZ
+   54ZUNHRr7TTgyeQnj9tnd8Ab9moeQ/BKwJ4f7RqA8ShtJ7uGUhF9V1LBv
+   saQ5pF3PuDi1qav5m4CUNTxZrPJQxy5Lk/vb3be+TsM3iGqQR/30yGegl
+   w/uoXk/RT+/lWsFO5bRue7nYGxzct50cR3VWkHoa3xg9ZOpnCSYPXCkRR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="356070542"
+X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
+   d="scan'208";a="356070542"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 04:12:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="832254394"
+X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
+   d="scan'208";a="832254394"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga004.jf.intel.com with ESMTP; 03 Jun 2023 04:12:16 -0700
+Date:   Sun, 4 Jun 2023 03:11:47 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [RFC PATCH v6 3/4] fpga: add an initial KUnit suite for the FPGA
+ Region
+Message-ID: <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
+References: <20230531095405.342080-1-marpagan@redhat.com>
+ <20230531095405.342080-4-marpagan@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 1/3] dt-bindings: phy: add PHY_TYPE_CDPHY definition
-Content-Language: en-US
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     mkorpershoek@baylibre.com, khilman@baylibre.com,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
-References: <20230524083033.486490-1-jstephan@baylibre.com>
- <20230524083033.486490-2-jstephan@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230524083033.486490-2-jstephan@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531095405.342080-4-marpagan@redhat.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2023 10:30, Julien Stephan wrote:
-> Add definition for CDPHY phy type that can be configured in either D-PHY
-> mode or C-PHY mode
+On 2023-05-31 at 11:54:04 +0200, Marco Pagani wrote:
+> The suite tests the programming of an FPGA Region with a Bridge
+> and the function for finding a particular Region.
 > 
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 > ---
->  include/dt-bindings/phy/phy.h | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/fpga/tests/fpga-region-test.c | 186 ++++++++++++++++++++++++++
+>  1 file changed, 186 insertions(+)
+>  create mode 100644 drivers/fpga/tests/fpga-region-test.c
 > 
-> diff --git a/include/dt-bindings/phy/phy.h b/include/dt-bindings/phy/phy.h
-> index 6b901b342348..a19d85dbbf16 100644
-> --- a/include/dt-bindings/phy/phy.h
-> +++ b/include/dt-bindings/phy/phy.h
-> @@ -23,5 +23,6 @@
->  #define PHY_TYPE_DPHY		10
->  #define PHY_TYPE_CPHY		11
->  #define PHY_TYPE_USXGMII	12
-> +#define PHY_TYPE_CDPHY		13
+> diff --git a/drivers/fpga/tests/fpga-region-test.c b/drivers/fpga/tests/fpga-region-test.c
+> new file mode 100644
+> index 000000000000..81b271088240
+> --- /dev/null
+> +++ b/drivers/fpga/tests/fpga-region-test.c
+> @@ -0,0 +1,186 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit test for the FPGA Region
+> + *
+> + * Copyright (C) 2023 Red Hat, Inc.
+> + *
+> + * Author: Marco Pagani <marpagan@redhat.com>
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/module.h>
+> +#include <kunit/test.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/fpga/fpga-bridge.h>
+> +#include <linux/fpga/fpga-region.h>
+> +
+> +struct mgr_stats {
+> +	u32 write_count;
+> +};
+> +
+> +struct bridge_stats {
+> +	u32 enable_count;
+> +};
+> +
+> +struct test_ctx {
+> +	struct fpga_manager *mgr;
+> +	struct platform_device *mgr_pdev;
+> +	struct fpga_bridge *bridge;
+> +	struct platform_device *bridge_pdev;
+> +	struct fpga_region *region;
+> +	struct platform_device *region_pdev;
+> +	struct bridge_stats bridge_stats;
+> +	struct mgr_stats mgr_stats;
+> +};
+> +
+> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> +{
+> +	struct mgr_stats *stats = mgr->priv;
+> +
+> +	stats->write_count++;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct fpga_manager_ops fake_mgr_ops = {
+> +	.write = op_write,
+> +};
 
-I don't think there is CD phy. It is D-PHY or C-PHY. This is not for all
-possible combinations but just types of phy.
+Maybe better just put all tests in one module, and have unified
+fake_mgr_ops/mgr_stats/fake_bridge_ops/bridge_stats across all tests.
 
-Best regards,
-Krzysztof
+In previous thread, I said I'm good to the self-contained test module
+but I didn't actually follow the idea. Sorry for that.
 
+The concern is why in this region test, the write_count and only the
+write_count is taken care of.
+
+Although fpga_mgr_load() test covers all mgr_ops, but does that
+means these ops are still good for more complex case like
+fpga_region_program_fpga()? And there is no guarantee
+fpga_region_program_fpga() would always call mgr_ops the same way
+as fpga_mgr_load() in future.
+
+Similar for fpga_bridge. Maybe a complete setup for fpga_region is
+still necessary.
+
+BTW: I like the way that fake drivers are removed. Looks much straight
+forward.
+
+Thanks,
+Yilun
+
+> +
+> +static int op_enable_set(struct fpga_bridge *bridge, bool enable)
+> +{
+> +	struct bridge_stats *stats = bridge->priv;
+> +
+> +	if (enable)
+> +		stats->enable_count++;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct fpga_bridge_ops fake_bridge_ops = {
+> +	.enable_set = op_enable_set
+> +};
+> +
+> +static int fake_region_get_bridges(struct fpga_region *region)
+> +{
+> +	struct fpga_bridge *bridge = region->priv;
+> +
+> +	return fpga_bridge_get_to_list(bridge->dev.parent, region->info, &region->bridge_list);
+> +}
+> +
+> +static int fake_region_match(struct device *dev, const void *data)
+> +{
+> +	return dev->parent == data;
+> +}
+> +
+> +static void fpga_region_test_class_find(struct kunit *test)
+> +{
+> +	struct test_ctx *ctx = test->priv;
+> +	struct fpga_region *region;
+> +
+> +	region = fpga_region_class_find(NULL, &ctx->region_pdev->dev, fake_region_match);
+> +	KUNIT_EXPECT_PTR_EQ(test, region, ctx->region);
+> +}
+> +
+> +static void fpga_region_test_program_fpga(struct kunit *test)
+> +{
+> +	struct test_ctx *ctx = test->priv;
+> +	struct fpga_image_info *img_info;
+> +	char img_buf[4];
+> +	int ret;
+> +
+> +	img_info = fpga_image_info_alloc(&ctx->mgr_pdev->dev);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, img_info);
+> +
+> +	img_info->buf = img_buf;
+> +	img_info->count = sizeof(img_buf);
+> +
+> +	ctx->region->info = img_info;
+> +	ret = fpga_region_program_fpga(ctx->region);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	KUNIT_EXPECT_EQ(test, 1, ctx->mgr_stats.write_count);
+> +	KUNIT_EXPECT_EQ(test, 1, ctx->bridge_stats.enable_count);
+> +
+> +	fpga_bridges_put(&ctx->region->bridge_list);
+> +
+> +	ret = fpga_region_program_fpga(ctx->region);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	KUNIT_EXPECT_EQ(test, 2, ctx->mgr_stats.write_count);
+> +	KUNIT_EXPECT_EQ(test, 2, ctx->bridge_stats.enable_count);
+> +
+> +	fpga_bridges_put(&ctx->region->bridge_list);
+> +
+> +	fpga_image_info_free(img_info);
+> +}
+> +
+> +static int fpga_region_test_init(struct kunit *test)
+> +{
+> +	struct test_ctx *ctx;
+> +	struct fpga_region_info region_info = { 0 };
+> +
+> +	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+> +
+> +	ctx->mgr_pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->mgr_pdev);
+> +
+> +	ctx->mgr = devm_fpga_mgr_register(&ctx->mgr_pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
+> +					  &ctx->mgr_stats);
+> +	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
+> +
+> +	ctx->bridge_pdev = platform_device_register_simple("bridge_pdev", PLATFORM_DEVID_AUTO,
+> +							   NULL, 0);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->bridge_pdev);
+> +
+> +	ctx->bridge = fpga_bridge_register(&ctx->bridge_pdev->dev, "Fake FPGA Bridge",
+> +					   &fake_bridge_ops, &ctx->bridge_stats);
+> +	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->bridge));
+> +
+> +	ctx->region_pdev = platform_device_register_simple("region_pdev", PLATFORM_DEVID_AUTO,
+> +							   NULL, 0);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->region_pdev);
+> +
+> +	region_info.mgr = ctx->mgr;
+> +	region_info.priv = ctx->bridge;
+> +	region_info.get_bridges = fake_region_get_bridges;
+> +
+> +	ctx->region = fpga_region_register_full(&ctx->region_pdev->dev, &region_info);
+> +	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->region));
+> +
+> +	test->priv = ctx;
+> +
+> +	return 0;
+> +}
+> +
+> +static void fpga_region_test_exit(struct kunit *test)
+> +{
+> +	struct test_ctx *ctx = test->priv;
+> +
+> +	fpga_region_unregister(ctx->region);
+> +	platform_device_unregister(ctx->region_pdev);
+> +
+> +	fpga_bridge_unregister(ctx->bridge);
+> +	platform_device_unregister(ctx->bridge_pdev);
+> +
+> +	platform_device_unregister(ctx->mgr_pdev);
+> +}
+> +
+> +static struct kunit_case fpga_region_test_cases[] = {
+> +	KUNIT_CASE(fpga_region_test_class_find),
+> +	KUNIT_CASE(fpga_region_test_program_fpga),
+> +
+> +	{}
+> +};
+> +
+> +static struct kunit_suite fpga_region_suite = {
+> +	.name = "fpga_mgr",
+> +	.init = fpga_region_test_init,
+> +	.exit = fpga_region_test_exit,
+> +	.test_cases = fpga_region_test_cases,
+> +};
+> +
+> +kunit_test_suite(fpga_region_suite);
+> +
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.40.1
+> 
