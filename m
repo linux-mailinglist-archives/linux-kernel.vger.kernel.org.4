@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F50720EDF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA024720EE6
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjFCJMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 05:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S229762AbjFCJVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 05:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFCJMj (ORCPT
+        with ESMTP id S229513AbjFCJVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 05:12:39 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A5F1B7
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 02:12:37 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-bad1ae90c2eso3316225276.2
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 02:12:37 -0700 (PDT)
+        Sat, 3 Jun 2023 05:21:46 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B011BB;
+        Sat,  3 Jun 2023 02:21:44 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso6318899276.1;
+        Sat, 03 Jun 2023 02:21:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685783556; x=1688375556;
+        d=gmail.com; s=20221208; t=1685784104; x=1688376104;
         h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=VvGvevK1DZh3VeG8nQiw1mon0qMeY/YAlPPjsFEFcBA=;
-        b=OhUXBASmjr+1EdRQScFm5mzIBwpEqSzMZhcQ/1HLIHQ6R7MRwAQGV4P2sM/6nI9nRO
-         atHx/kv50XrzSSTZBcMi7Ib7KW94S5At2m+2E4oPhmhxzbjZoO4OMsQgu1/nrpHsacmm
-         AYs9B2lLAla6Or+xfJPjHy6qR3FzVNXZrusfZvxwIfQLhBIkI4yq1E0v7I6wUQxZTeJP
-         3yJBOfOxRw7RGLs9mEFRiVQeXP4ZJa8JJKp+A0U1cwjlpik3HmKMlQjr2P8ur3YvQLQZ
-         K3qpU3EzgIwCgzbbGX4mvk5+vAxHMvIVIa6+2+7eUHo+tZhHH9rm21Gtz1L45Pt5ardd
-         HCNQ==
+        bh=Hfpl/xEXY9XzcbX8+XTKxz2NUoxhZKb5w5NqsqdPcck=;
+        b=PMRgxj0+wOtz4czUmFw5meTwj+yS4Ir0xmOMBodlGKmO0ymGT4gzdEpZz5sAmNefE+
+         Yxs4fuDd4Pc3fEczzxm/iALi5F+hXvjVMl5YMEYSpbO7mKJ5sKOUJc/OgWtjYjFDobHn
+         AqsRI9SzQWdcRMLXv2DipvgRDNTobF1C69X+fCbuaTOqOntMqxpGfJikwMyvm3g2uAbS
+         qGZYutaUmptZFGanV463KtRj7hncvQQO95c7DdcV7hajsLUBnlAKTXz25PVl+u1RTp/Z
+         tyCq096qfCWCmWEiTexeMifBviVXviEvgs9a16x+bcofqk8U2kmoYx1oaxIsPk96hxnj
+         JQng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685783556; x=1688375556;
+        d=1e100.net; s=20221208; t=1685784104; x=1688376104;
         h=to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VvGvevK1DZh3VeG8nQiw1mon0qMeY/YAlPPjsFEFcBA=;
-        b=CzIaU4rGYEj9TKd41T202UKuMUEgfrwS/4HF/jGt/sCUG/tsY6SNUf1iccjtlhDvzg
-         lk7GlZBNDiZPF3LbEph8xq33exr+aiv5G0q7sr1rlc0RTatuoVCpeMOWiZyNLaM65/Zq
-         ie0gtUEii2lyFS9HrCBI4OaQBiMpsNo2DL6f9o1/xbA5SWdqdI88Sk/WsiEH7VnN0a3i
-         Rb0xqDe12WL+M1MaTDoZ/wQyigKN8l02nFvc8LrItue8HYS9LTuTdX5+CdgF+XM/Mqz2
-         lwo2Zm2qTB7HNjj5qBdim7jkhhoyzd2Lh7mUP1Y2+e9ruEUBisaKBCtDSm8gXSiB9a77
-         NPAg==
-X-Gm-Message-State: AC+VfDyClfJDcXQi/DCQWxzi8OylRT+Rd3a8JGfYIEiL/zq7za/uw94A
-        n5ncRdSlrxvncODxb+PQ7ca93ZTg3C7ukGI3B3dALM3Cw7CJDorz
-X-Google-Smtp-Source: ACHHUZ6ZKwVVFm5QBTMpd2I3LPh5rKu94ytSDHwSktz3kwDGeWZsRNKin3Y0dNnJ4sp6t+cbXvmSVkEZaOtMjbQvErY=
-X-Received: by 2002:a81:9251:0:b0:55a:7c7:6ff7 with SMTP id
- j78-20020a819251000000b0055a07c76ff7mr2953760ywg.11.1685783555990; Sat, 03
- Jun 2023 02:12:35 -0700 (PDT)
+        bh=Hfpl/xEXY9XzcbX8+XTKxz2NUoxhZKb5w5NqsqdPcck=;
+        b=QzIx0zx2VwEpjHurquP4w537s4VuqHkn+6/pH9IBifZqacm+YAsxN6eKyB6MnDY044
+         MjVgUcvJi/9lb5UDn47IjSn1gG1eSHrlXtONVt20CXrLTOUZofx3ixpbAdtUQtfR9JYc
+         5NlbsxD1bPCnUKvM/nLrRd4MKcUlc/DlX9RBLQ0HlYlGsxUxNythfDAcgrd1ZMH4N6hh
+         e6by6NH8WTq9rzq0bZiTxr4axiNrDeAUL9hJs0olx4WgoOkdzGe9GkGmPXK03PFQuubR
+         mJADo0gAWL17RdQDLEqlpglCEg0v2T6EUbgotJ5uU74zRd6i5l7LZki5C08JKmU6Wsye
+         Q28w==
+X-Gm-Message-State: AC+VfDzQzxWXud8EtiwE3bUymZDEE5CUxLTWltMkeml6yDWRkKIC0mzz
+        C37aCent0bQIJIyuNpN63dTjAFsqvSWye8KKtSE=
+X-Google-Smtp-Source: ACHHUZ5WZxK9N6zZ4x1i0oum6PijbBoTJPqv/rAdG/l4p2zYnnUaxAJYdr0C1viKyiPJM3EXgAUNbY2/M9WMmK6ze7A=
+X-Received: by 2002:a0d:db4f:0:b0:565:85b0:c128 with SMTP id
+ d76-20020a0ddb4f000000b0056585b0c128mr3074712ywe.6.1685784103915; Sat, 03 Jun
+ 2023 02:21:43 -0700 (PDT)
 MIME-Version: 1.0
 From:   Palash Oswal <oswalpalash@gmail.com>
-Date:   Sat, 3 Jun 2023 02:12:24 -0700
-Message-ID: <CAGyP=7czgoq8V+v09uAJWLXM4sRYsMGQ6YGF2eFARXxmcg8xTw@mail.gmail.com>
-Subject: KASAN: use-after-free Read in dtSearch
-To:     Dave Kleikamp <shaggy@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
+Date:   Sat, 3 Jun 2023 02:21:32 -0700
+Message-ID: <CAGyP=7ff859GTfM+Va5V4ugB7T-cuDxw4ir75MKLGQVAaSxBLw@mail.gmail.com>
+Subject: KASAN: stack-out-of-bounds Read in scm_recv
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +81,10 @@ Link:
 
 Console log :
 ==================================================================
-BUG: KASAN: use-after-free in dtSearch+0x1c87/0x20b0
-Read of size 1 at addr ffff8881272d16f4 by task syz-executor.0/21592
+BUG: KASAN: stack-out-of-bounds in scm_recv.constprop.0+0x5b6/0x5c0
+Read of size 8 at addr ffffc90003fcf948 by task syz-executor.2/18043
 
-CPU: 1 PID: 21592 Comm: syz-executor.0 Not tainted
+CPU: 0 PID: 18043 Comm: syz-executor.2 Not tainted
 6.3.0-rc6-pasta-00035-g0bcc40255504 #1
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
 1.13.0-1ubuntu1.1 04/01/2014
@@ -91,78 +93,98 @@ Call Trace:
  dump_stack_lvl+0xd9/0x150
  print_address_description.constprop.0+0x2c/0x3c0
  kasan_report+0x11c/0x130
- dtSearch+0x1c87/0x20b0
- jfs_lookup+0x180/0x340
- __lookup_slow+0x24c/0x460
- walk_component+0x33f/0x5a0
- path_lookupat+0x185/0x760
- filename_lookup+0x1d2/0x590
- user_path_at_empty+0x46/0x60
- __x64_sys_mount+0x1ee/0x300
+ scm_recv.constprop.0+0x5b6/0x5c0
+ __unix_dgram_recvmsg+0x824/0xb90
+ unix_dgram_recvmsg+0xc4/0xf0
+ ____sys_recvmsg+0x49c/0x5a0
+ ___sys_recvmsg+0xf2/0x180
+ do_recvmmsg+0x25e/0x6e0
+ __x64_sys_recvmmsg+0x20f/0x260
  do_syscall_64+0x39/0xb0
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4547e8eacd
+RIP: 0033:0x7f17a168eacd
 Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4548b8abf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007f4547fbbf80 RCX: 00007f4547e8eacd
-RDX: 0000000000000000 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 00007f4547efcb05 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fffdef4763f R14: 00007fffdef477e0 R15: 00007f4548b8ad80
+RSP: 002b:00007f17a2398bf8 EFLAGS: 00000246
+ ORIG_RAX: 000000000000012b
+RAX: ffffffffffffffda RBX: 00007f17a17bc050 RCX: 00007f17a168eacd
+RDX: 0000000000010106 RSI: 00000000200000c0 RDI: 0000000000000004
+RBP: 00007f17a16fcb05 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000002 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffdf09e0a3f R14: 00007ffdf09e0be0 R15: 00007f17a2398d80
  </TASK>
 
+The buggy address belongs to stack of task syz-executor.2/18043
+KASAN internal error: frame info validation failed; invalid marker: 0
+The buggy address belongs to the virtual mapping at
+ [ffffc90003fc8000, ffffc90003fd1000) created by:
+ kernel_clone+0xeb/0x890
+
 The buggy address belongs to the physical page:
-page:ffffea00049cb440 refcount:0 mapcount:0 mapping:0000000000000000
-index:0x2 pfn:0x1272d1
+page:ffffea00042a9800 refcount:1 mapcount:0 mapping:0000000000000000
+index:0x0 pfn:0x10aa60
 flags: 0x57ff00000000000(node=1|zone=2|lastcpupid=0x7ff)
-raw: 057ff00000000000 ffffea00049c8fc8 ffffea0004cca408 0000000000000000
-raw: 0000000000000002 ffff8881272d1000 00000000ffffffff 0000000000000000
+raw: 057ff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 0, migratetype Reclaimable, gfp_mask
-0x242050(__GFP_IO|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE|__GFP_RECLAIMABLE),
-pid 17911, tgid 17910 (syz-executor.0), ts 959645805638, free_ts
-962549035260
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask
+0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 31, tgid
+31 (kworker/u6:1), ts 269514464150, free_ts 269297799927
  get_page_from_freelist+0x1190/0x2e20
  __alloc_pages+0x1cb/0x4a0
- cache_grow_begin+0x9b/0x3b0
- cache_alloc_refill+0x27f/0x380
- kmem_cache_alloc+0x397/0x3f0
- jbd2__journal_start+0x190/0x850
- __ext4_journal_start_sb+0x411/0x5d0
- ext4_dirty_inode+0xa5/0x130
- __mark_inode_dirty+0x1e0/0xd60
- generic_write_end+0x354/0x440
- ext4_da_write_end+0x172/0x8e0
- generic_perform_write+0x316/0x570
- ext4_buffered_write_iter+0x15b/0x460
- ext4_file_write_iter+0xbd8/0x1720
- __kernel_write_iter+0x262/0x7a0
- dump_user_range+0x234/0x700
+ alloc_pages+0x1aa/0x270
+ __vmalloc_node_range+0xb1c/0x14a0
+ copy_process+0x1320/0x7590
+ kernel_clone+0xeb/0x890
+ user_mode_thread+0xb1/0xf0
+ call_usermodehelper_exec_work+0xd0/0x180
+ process_one_work+0x991/0x15c0
+ worker_thread+0x669/0x1090
+ kthread+0x2e8/0x3a0
+ ret_from_fork+0x1f/0x30
 page last free stack trace:
- free_pcp_prepare+0x5d5/0xa50
- free_unref_page+0x1d/0x490
- slabs_destroy+0x85/0xc0
- ___cache_free+0x2ae/0x3d0
- qlist_free_all+0x4f/0x1a0
- kasan_quarantine_reduce+0x192/0x220
- __kasan_slab_alloc+0x63/0x90
- kmem_cache_alloc+0x1bd/0x3f0
- getname_flags.part.0+0x50/0x4f0
- getname_flags+0x9e/0xe0
- user_path_at_empty+0x2f/0x60
- do_readlinkat+0xcd/0x2f0
- __x64_sys_readlinkat+0x97/0x100
- do_syscall_64+0x39/0xb0
+ 0x10e9caa858
+ 0x435023b
+ 0x10e9caa858
+ 0xffffffff0435023b
+ release_pages+0xcd7/0x1380
+ tlb_batch_pages_flush+0xa8/0x1a0
+ release_pages+0xcd7/0x1380
+ tlb_batch_pages_flush+0xa8/0x1a0
+ __mmput+0x128/0x4c0
+mmput+0x60/0x70
+ __mmput+0x128/0x4c0
+ mmput+0x60/0x70
+ get_signal+0x2315/0x25b0
+ arch_do_signal_or_restart+0x79/0x5c0
+ get_signal+0x2315/0x25b0
+ arch_do_signal_or_restart+0x79/0x5c0
+ do_syscall_64+0x46/0xb0
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff8881272d1580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881272d1600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8881272d1680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                                             ^
- ffff8881272d1700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881272d1780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
+ do_syscall_64+0x46/0xb0
+ 0x8a20008b
+ 0xef5794dbf
+ 0x43f023b
+ 0xef5794dbf
+ 0xffffffff043f023b
+ tlb_finish_mmu+0x1a7/0x7e0
+ exit_mmap+0x2ac/0x7f0
+ tlb_finish_mmu+0x1a7/0x7e0
+ exit_mmap+0x2ac/0x7f0
+ do_exit+0x9d7/0x2960
+ do_group_exit+0xd4/0x2a0
+ do_exit+0x9d7/0x2960
+ do_group_exit+0xd4/0x2a0
+ exit_to_user_mode_prepare+0x11f/0x240
+ syscall_exit_to_user_mode+0x1d/0x50
+ exit_to_user_mode_prepare+0x11f/0x240
+ syscall_exit_to_user_mode+0x1d/0x50
+ 0x0
+ 0xffffffff00000000
+ 0x0
+ 0x0
+ kasan_save_stack+0x22/0x40
+ 0x81d1e785
+ kasan_save_stack+0x22/0x40
