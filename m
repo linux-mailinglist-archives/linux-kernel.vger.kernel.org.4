@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2387720ECA
+	by mail.lfdr.de (Postfix) with ESMTP id 13316720EC8
 	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjFCIjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 04:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S237002AbjFCIkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 04:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjFCIjR (ORCPT
+        with ESMTP id S229453AbjFCIka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 04:39:17 -0400
+        Sat, 3 Jun 2023 04:40:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F31F180
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:39:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2367B180
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:40:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4A6960ACD
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C829C433D2;
-        Sat,  3 Jun 2023 08:39:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BB060919
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:40:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E30AC433EF;
+        Sat,  3 Jun 2023 08:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685781555;
-        bh=5oyiVDfccpGv2hmK2deVVQ8wi3z4MiLKb2Ddfn8bqjo=;
+        s=k20201202; t=1685781628;
+        bh=CfIACcU56/Kirmxg5qc6aUq7hEIljLaNTuavfT7lt4M=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uylY5JgTaGj66a0uUJEklgf8Ch5Vii+rG5gQRprkqtks3BQJaBDV2srGVMHb+sh6F
-         kxqk6onpH0svDDxJ0PyD2fxtFbOdZJBySccFcwM0Dk0Ie0ooU3m3XeHz0WDJlvk8eT
-         ZMSOVSXeBmuHCooHb5DhnHjgpbbWFDLToIknAGTYFKLybItJaaxcowAZmhfGmRKG4s
-         GhWrNlC7sBHoJxx13V4xUeWPNsJtufS4Mwp3VarhI4j4SRqAcx9rfcRF519Hifghba
-         yLKHzGgPsesA/R398L4ElZ0OWHTRV7KR/FSz5t2MTzhMyCdkzpLoCNoRsC5Bgi7rT+
-         /F7idz3u8X7Fg==
+        b=hxcPNskgeoZ56ulkyTmvZ+gNOrIiz6irG+I7g0vIk7XkdxMvUMMkQN/in+IEJR/2i
+         RBsgwt6NYYE+U9lMwU6u//zk7HQpXMrVR0iO9I0OkGX0EG+Gub2Kn5Kqr1+PwvQgfb
+         B/f7VfRhYpB/uqcEr+zfwC/I2PJE0FMqV4vHBoCZ0XyifMJbmFPpEtRoDDwZgzXXk3
+         V3PJOIt4zEgYGLMZX9dSRAvG3jHo7K2kA7w0/ExbA2vJG5ddFLlsTnbhuaT3z3Rn2d
+         qx/phWwd4c824RsejW4+RFK+ndyJE7pelEQCYXuoYzKQYwOhnr96R17GfHEIix2jjn
+         UfLbCEiR1jhDA==
 Received: from [37.166.197.171] (helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1q5Mn3-002WrG-2M;
-        Sat, 03 Jun 2023 09:39:13 +0100
-Date:   Sat, 03 Jun 2023 09:39:11 +0100
-Message-ID: <87wn0lndn4.wl-maz@kernel.org>
+        id 1q5MoE-002Ws2-0C;
+        Sat, 03 Jun 2023 09:40:26 +0100
+Date:   Sat, 03 Jun 2023 09:40:22 +0100
+Message-ID: <87v8g5ndl5.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Kristina Martsenko <kristina.martsenko@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
@@ -54,10 +54,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         Luis Machado <luis.machado@arm.com>,
         Vladimir Murzin <vladimir.murzin@arm.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] KVM: arm64: initialize HCRX_EL2
-In-Reply-To: <20230509142235.3284028-2-kristina.martsenko@arm.com>
+Subject: Re: [PATCH v2 03/11] KVM: arm64: switch HCRX_EL2 between host and guest
+In-Reply-To: <20230509142235.3284028-4-kristina.martsenko@arm.com>
 References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
-        <20230509142235.3284028-2-kristina.martsenko@arm.com>
+        <20230509142235.3284028-4-kristina.martsenko@arm.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -77,20 +77,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 May 2023 15:22:25 +0100,
+On Tue, 09 May 2023 15:22:27 +0100,
 Kristina Martsenko <kristina.martsenko@arm.com> wrote:
 > 
-> ARMv8.7/9.2 adds a new hypervisor configuration register HCRX_EL2.
-> Initialize the register to a safe value (all fields 0), to be robust
-> against firmware that has not initialized it. This is also needed to
-> ensure that the register is reinitialized after a kexec by a future
-> kernel.
+> Switch the HCRX_EL2 register between host and guest configurations, in
+> order to enable different features in the host and guest.
 > 
-> In addition, move SMPME setup over to the new flags, as it would
-> otherwise get overridden. It is safe to set the bit even if SME is not
-> (uniformly) supported, as it will write to a RES0 bit (having no
-> effect), and SME will be disabled by the cpufeature framework.
-> (Similar to how e.g. the API bit is handled in HCR_HOST_NVHE_FLAGS.)
+> Now that there are separate guest flags, we can also remove SMPME from
+> the host flags, as SMPME is used for virtualizing SME priorities and has
+> no use in the host.
 > 
 > Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
 
