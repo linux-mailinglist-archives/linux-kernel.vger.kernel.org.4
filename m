@@ -2,108 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8525A720CEF
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584C9720CF3
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbjFCBRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S237037AbjFCBTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjFCBRO (ORCPT
+        with ESMTP id S236895AbjFCBTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:17:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B8B9;
-        Fri,  2 Jun 2023 18:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685755033; x=1717291033;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZqjGZ5QOK5/9p0dBTmL1jSNej1ZvjR79xQrDuqbSz60=;
-  b=Uie7uu5TIcfBNKXaInDaknHuwZGBaqqOVwcgYOg6H/vyJd6a3kCIQxts
-   /3B0AEAeouHRI1KLneflNIPjluf3Mz35jUWoiGYEpalcBxdUhdhfPCPJZ
-   ylHV/HFiO6foR3G1sMydWbez3SymhymDM0nUmtMmOVP7Hr+vqOZT7ciwo
-   RGNOFu0I1ewg5xVfBmhYtentZZukLwTSy6P1RpHyL5OPtqrtZBYvWSud2
-   Cc33fq/W6ul/GD0zRdEhAZ/Vv5AFUAjZjWsald34iBejOCJnn7dKzAngn
-   fVawbSj8Zn2hDSixU1AZxybZBTZQMnvRRSNR0L3O0DTeevPFRR45ub2OZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="419549579"
-X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="419549579"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 18:17:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="658443953"
-X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="658443953"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2023 18:17:10 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q5FtG-000185-00;
-        Sat, 03 Jun 2023 01:17:10 +0000
-Date:   Sat, 3 Jun 2023 09:16:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Besar Wicaksono <bwicaksono@nvidia.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Subject: Re: [PATCH v2 5/5] perf: arm_cspmu: ampere_cspmu: Add support for
- Ampere SoC PMU
-Message-ID: <202306030958.1IskqGEt-lkp@intel.com>
-References: <20230601030144.3458136-6-ilkka@os.amperecomputing.com>
+        Fri, 2 Jun 2023 21:19:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E8B9
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685755118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=acfZzs+Sz32fwYHtqNNYmLTK9zTzmicEiE02c1Yi1MU=;
+        b=VS7T/N22YSo3Hf5kVmWUWE4OVn5FyZzkX4GenN7/50018VUV0AkoesJfZNRJTDv8y3IaPJ
+        f/5gDNlpr1bZvyB3fYr9W/Luix3EewGRQmY48AbU7XqGyWZoFqtCsfRSJp6FmrionKmxgH
+        DfA6BH9FNPdQ1rZ8NI1iAp9D+vAme0g=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-516-m6IhY2tHPbWo39HoylLagg-1; Fri, 02 Jun 2023 21:18:36 -0400
+X-MC-Unique: m6IhY2tHPbWo39HoylLagg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62849c5e9f0so3076156d6.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:18:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685755116; x=1688347116;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=acfZzs+Sz32fwYHtqNNYmLTK9zTzmicEiE02c1Yi1MU=;
+        b=f1YesHr4qrF2pj/5JwsDxoEnyAeSMuUIu5KPYg3ohRiIC5DhMTOugQ/GxmGhpcmax0
+         Cv1CAo6pjoS7jJehvOaQ7UKoeyxPmILbKfXdErB7Jp3I+W8dy0O3ILvXaVcyBU24KFAB
+         98KclysMQ2koiYXaiEDajutvwo6oD64cDb0Z+OKe1Wkz8MeQRIR9H9DWbHmehrPrcmnM
+         TmdP4Pyq5lyJEX+TeuJLgUV4lyWm3Ooq1XTy5pZ99LJbC4kYTEhPjDvsOBvR5/NLqi2K
+         muHxfY7hWVxYgeI/FicYzpYLZfDgISrVOv7XfJGps7KAP4A4aSdT0B8UuyaRx1TqGKF/
+         JndQ==
+X-Gm-Message-State: AC+VfDxQAaaQ1OQTwak3Igzkg7eDaquG/eGtBstytmAd7F00avOhSJ4i
+        U+ODVlfcF3hEXViCopEG7jCmQhECGq/fySxOFiL4YnTsFsYw1pmJ6Uo604fMBCGSLiphCplHwiK
+        6rnDCrn39Vsg1AMgpE1m2U8Zd
+X-Received: by 2002:a05:6214:529c:b0:625:77a1:2a5f with SMTP id kj28-20020a056214529c00b0062577a12a5fmr13570222qvb.5.1685755116499;
+        Fri, 02 Jun 2023 18:18:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4Xw/XJL0EduiCR89X24e2H4ew9ONg/1wrueVo1QBSQY11bbgWadu8LV1r/8ab1L3EsiP0FlA==
+X-Received: by 2002:a05:6214:529c:b0:625:77a1:2a5f with SMTP id kj28-20020a056214529c00b0062577a12a5fmr13570215qvb.5.1685755116159;
+        Fri, 02 Jun 2023 18:18:36 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id mx8-20020a0562142e0800b006261e141f4bsm1508270qvb.87.2023.06.02.18.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 18:18:35 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 21:18:34 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/12] selftests/mm: move uffd* routines from vm_util.c
+ to uffd-common.c
+Message-ID: <ZHqU6j4PAzy7ene0@x1n>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-11-jhubbard@nvidia.com>
+ <ZHoR+3v+zUENBhi4@x1n>
+ <68549f29-fe41-04d4-f648-245f399c350b@nvidia.com>
+ <ZHpvZcdik7VPsEcL@x1n>
+ <990f222f-643c-3b8e-6e5f-84dc98c3f2e8@nvidia.com>
+ <fed573c9-2045-e13b-15b5-91df2446ef42@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230601030144.3458136-6-ilkka@os.amperecomputing.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fed573c9-2045-e13b-15b5-91df2446ef42@nvidia.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilkka,
+On Fri, Jun 02, 2023 at 05:43:19PM -0700, John Hubbard wrote:
+> On 6/2/23 15:52, John Hubbard wrote:
+> > On 6/2/23 15:38, Peter Xu wrote:
+> > ...
+> > > > I think we're in agreement that we want to only include uffd-common.h
+> > > > where it's actually required. Likewise with the uffd*() routines. So I
+> > > > would like to still move this over, yes, just to have things in their
+> > > > best-named location.
+> > > 
+> > > Sorry I didn't get it - e.g. I'm confused why we need to export
+> > > uffd_test_ops into ksm unit test, it doesn't make much sense to me..
+> > 
+> > Oh, I see what you mean, finally. Yes. ksm should not need that.
+> > 
+> 
+> ...whoops, correction, our very own David Hildenbrand recently made
+> changes that contradict the claim that "ksm and uffd selftests are
+> independent". In fact, ksm now *intentionally* depends upon uffd, as of
+> commit 93fb70aa5904c ("selftests/vm: add KSM unmerge tests"), aha!
+> 
+> That added commit added a call to test_unmerge_uffd_wp(), to
+> ksm_functional_tests.c .
+> 
+> So this needs to stay approximately as-is, it seems.
 
-kernel test robot noticed the following build warnings:
+So I think it depends on what is "as-is" to me in the above sentence. :)
 
-[auto build test WARNING on arm-perf/for-next/perf]
-[also build test WARNING on soc/for-next linus/master v6.4-rc4 next-20230602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+test_unmerge_uffd_wp() impled its own uffd ioctls, and it still doesn't use
+any of uffd-common.h of now (e.g. uffd_test_ops).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ilkka-Koskinen/perf-arm_cspmu-Support-32-bit-accesses-to-64-bit-registers/20230601-110440
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
-patch link:    https://lore.kernel.org/r/20230601030144.3458136-6-ilkka%40os.amperecomputing.com
-patch subject: [PATCH v2 5/5] perf: arm_cspmu: ampere_cspmu: Add support for Ampere SoC PMU
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/6757d231639bb7a9f0b47f52d7d4f101ad3a0e29
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ilkka-Koskinen/perf-arm_cspmu-Support-32-bit-accesses-to-64-bit-registers/20230601-110440
-        git checkout 6757d231639bb7a9f0b47f52d7d4f101ad3a0e29
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+IMHO if we want we can let test_unmerge_uffd_wp() reuse either
+uffd_get_features(), uffd_open(), uffd_register() etc., but still all of
+them are provided by vm_util.h not uffd-common.h for now, and that's
+intended (vm_util.h can contain uffd helpers, or whatever helpers as long
+as generic mm/ unit tests need).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306030958.1IskqGEt-lkp@intel.com/
+We can even move wp_range() from uffd-common.[ch] into vm_utils.[ch], then
+it can also share that (need to replace err(), that's uffd-common
+specific).  Not necessary anything must be done in this series, though.
 
-All warnings (new ones prefixed by >>):
-
->> Documentation/admin-guide/perf/ampere_cspmu.rst: WARNING: document isn't included in any toctree
+Thanks,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Peter Xu
+
