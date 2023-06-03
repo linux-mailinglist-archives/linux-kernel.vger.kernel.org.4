@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584C9720CF3
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D87720CF6
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237037AbjFCBTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S237096AbjFCBUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236895AbjFCBTX (ORCPT
+        with ESMTP id S236639AbjFCBUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:19:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E8B9
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685755118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=acfZzs+Sz32fwYHtqNNYmLTK9zTzmicEiE02c1Yi1MU=;
-        b=VS7T/N22YSo3Hf5kVmWUWE4OVn5FyZzkX4GenN7/50018VUV0AkoesJfZNRJTDv8y3IaPJ
-        f/5gDNlpr1bZvyB3fYr9W/Luix3EewGRQmY48AbU7XqGyWZoFqtCsfRSJp6FmrionKmxgH
-        DfA6BH9FNPdQ1rZ8NI1iAp9D+vAme0g=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-516-m6IhY2tHPbWo39HoylLagg-1; Fri, 02 Jun 2023 21:18:36 -0400
-X-MC-Unique: m6IhY2tHPbWo39HoylLagg-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62849c5e9f0so3076156d6.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:18:36 -0700 (PDT)
+        Fri, 2 Jun 2023 21:20:50 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4D7D3;
+        Fri,  2 Jun 2023 18:20:49 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53482b44007so1582152a12.2;
+        Fri, 02 Jun 2023 18:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685755249; x=1688347249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Y8G14r0YKKL8+n+kxnv7WBaleE87AmdN5aEH7tTSD0=;
+        b=GE4o4UgrHnVuBjbHYjL70FiW0mNsGq7LMqCYTiXoyni/vx2kywW1gnRzT4PSyG98in
+         G6fQ7rhf4vu5kMFeka/ZnQoRZeWpKEFIXDEwxuPpb6ixK15sH2NIDEngx+qhdf7FTROy
+         uS0Egk7/Odr4K9WyRbpEXvjbgTwe/T5dQ9rzwq1SeslQTjQxoSDFxMrSiDa7m3Y/9Ub1
+         9c8Y8y/g/1rnNvWtCZhmosgezdT2iArDpxvpi8BqcmIgzz9gGcVu5giQUgkYVDSJDbUq
+         p72/eazhxsfZvLmb5/EIkvHw0nbNZrJFFac6vjis3D5d5m4zTaeeFNgzv9GjFHEm0CgD
+         zKMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685755116; x=1688347116;
+        d=1e100.net; s=20221208; t=1685755249; x=1688347249;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=acfZzs+Sz32fwYHtqNNYmLTK9zTzmicEiE02c1Yi1MU=;
-        b=f1YesHr4qrF2pj/5JwsDxoEnyAeSMuUIu5KPYg3ohRiIC5DhMTOugQ/GxmGhpcmax0
-         Cv1CAo6pjoS7jJehvOaQ7UKoeyxPmILbKfXdErB7Jp3I+W8dy0O3ILvXaVcyBU24KFAB
-         98KclysMQ2koiYXaiEDajutvwo6oD64cDb0Z+OKe1Wkz8MeQRIR9H9DWbHmehrPrcmnM
-         TmdP4Pyq5lyJEX+TeuJLgUV4lyWm3Ooq1XTy5pZ99LJbC4kYTEhPjDvsOBvR5/NLqi2K
-         muHxfY7hWVxYgeI/FicYzpYLZfDgISrVOv7XfJGps7KAP4A4aSdT0B8UuyaRx1TqGKF/
-         JndQ==
-X-Gm-Message-State: AC+VfDxQAaaQ1OQTwak3Igzkg7eDaquG/eGtBstytmAd7F00avOhSJ4i
-        U+ODVlfcF3hEXViCopEG7jCmQhECGq/fySxOFiL4YnTsFsYw1pmJ6Uo604fMBCGSLiphCplHwiK
-        6rnDCrn39Vsg1AMgpE1m2U8Zd
-X-Received: by 2002:a05:6214:529c:b0:625:77a1:2a5f with SMTP id kj28-20020a056214529c00b0062577a12a5fmr13570222qvb.5.1685755116499;
-        Fri, 02 Jun 2023 18:18:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4Xw/XJL0EduiCR89X24e2H4ew9ONg/1wrueVo1QBSQY11bbgWadu8LV1r/8ab1L3EsiP0FlA==
-X-Received: by 2002:a05:6214:529c:b0:625:77a1:2a5f with SMTP id kj28-20020a056214529c00b0062577a12a5fmr13570215qvb.5.1685755116159;
-        Fri, 02 Jun 2023 18:18:36 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id mx8-20020a0562142e0800b006261e141f4bsm1508270qvb.87.2023.06.02.18.18.34
+        bh=3Y8G14r0YKKL8+n+kxnv7WBaleE87AmdN5aEH7tTSD0=;
+        b=kbtDvkZoaPDYSo4r/somBUYLt0eejETUX0sfeBTRcqCibD6zQHSspb9B+Csd5ToGvj
+         m64pQSacni5QAnO+WO8u9/vCSyyYKz4qI+Zbc3qxgc4Fid/wVGVEpsKm4QMfmxqfCCxI
+         s6XXtdA6mZAf6jrWOmVdLxKWfrvO8GQHGTvjDHUwBYimSAUvL4B4Vply+0yLFQxILQk4
+         3YzzGrf6/LWIWIMik46fD6P2hG0fF7+u2987DSR4bCwoapMEPN6NiUwGrPF2445wTCiD
+         gPwOX+PILkCI8biShVQUGYWZD/f1AlYVQYFKxzFSYcCbap+9iiggwJputpDXC2RJjY4+
+         j8VA==
+X-Gm-Message-State: AC+VfDz+5nJbrcERpB2bctLNpiu3aO5aQoBrb/1N3My7PJ3segTLqTz1
+        iB8dUmnq0Jh+NKbrBh6SJC5hDe9D22U=
+X-Google-Smtp-Source: ACHHUZ7LmVwCwsURitbtWYQSwB8mFwNeU2UJxFwVrfjzu6MUO9S7a1WjVJoOeSUzyHLEBBLxgtL0hw==
+X-Received: by 2002:a17:90b:374a:b0:256:23f:abc5 with SMTP id ne10-20020a17090b374a00b00256023fabc5mr904687pjb.10.1685755248530;
+        Fri, 02 Jun 2023 18:20:48 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-37.three.co.id. [116.206.12.37])
+        by smtp.gmail.com with ESMTPSA id t8-20020a17090a3b4800b00246cc751c6bsm3880815pjf.46.2023.06.02.18.20.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jun 2023 18:18:35 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 21:18:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/12] selftests/mm: move uffd* routines from vm_util.c
- to uffd-common.c
-Message-ID: <ZHqU6j4PAzy7ene0@x1n>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-11-jhubbard@nvidia.com>
- <ZHoR+3v+zUENBhi4@x1n>
- <68549f29-fe41-04d4-f648-245f399c350b@nvidia.com>
- <ZHpvZcdik7VPsEcL@x1n>
- <990f222f-643c-3b8e-6e5f-84dc98c3f2e8@nvidia.com>
- <fed573c9-2045-e13b-15b5-91df2446ef42@nvidia.com>
+        Fri, 02 Jun 2023 18:20:48 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B97121069ED; Sat,  3 Jun 2023 08:20:44 +0700 (WIB)
+Date:   Sat, 3 Jun 2023 08:20:44 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Madhumitha Prabakaran <madhumithabiw@gmail.com>, rafael@kernel.org,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Cc:     ivan.orlov0322@gmail.com
+Subject: Re: [PATCH] docs: Fix warning:Error in "code-block" directive
+Message-ID: <ZHqVbIouMkvM4OAs@debian.me>
+References: <20230602215102.GA220958@madhu-kernel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TMDPLLkdIOvqcUM1"
 Content-Disposition: inline
-In-Reply-To: <fed573c9-2045-e13b-15b5-91df2446ef42@nvidia.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230602215102.GA220958@madhu-kernel>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 05:43:19PM -0700, John Hubbard wrote:
-> On 6/2/23 15:52, John Hubbard wrote:
-> > On 6/2/23 15:38, Peter Xu wrote:
-> > ...
-> > > > I think we're in agreement that we want to only include uffd-common.h
-> > > > where it's actually required. Likewise with the uffd*() routines. So I
-> > > > would like to still move this over, yes, just to have things in their
-> > > > best-named location.
-> > > 
-> > > Sorry I didn't get it - e.g. I'm confused why we need to export
-> > > uffd_test_ops into ksm unit test, it doesn't make much sense to me..
-> > 
-> > Oh, I see what you mean, finally. Yes. ksm should not need that.
-> > 
-> 
-> ...whoops, correction, our very own David Hildenbrand recently made
-> changes that contradict the claim that "ksm and uffd selftests are
-> independent". In fact, ksm now *intentionally* depends upon uffd, as of
-> commit 93fb70aa5904c ("selftests/vm: add KSM unmerge tests"), aha!
-> 
-> That added commit added a call to test_unmerge_uffd_wp(), to
-> ksm_functional_tests.c .
-> 
-> So this needs to stay approximately as-is, it seems.
 
-So I think it depends on what is "as-is" to me in the above sentence. :)
+--TMDPLLkdIOvqcUM1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-test_unmerge_uffd_wp() impled its own uffd ioctls, and it still doesn't use
-any of uffd-common.h of now (e.g. uffd_test_ops).
+On Fri, Jun 02, 2023 at 04:51:02PM -0500, Madhumitha Prabakaran wrote:
+> Fix the error in "code-block" directive by providing the
+> argument as "text".
+>=20
+> <snipped> ...
+>  Result code:
+>  ------------
+> =20
+> -.. code-block::
+> +.. code-block:: text
 
-IMHO if we want we can let test_unmerge_uffd_wp() reuse either
-uffd_get_features(), uffd_open(), uffd_register() etc., but still all of
-them are provided by vm_util.h not uffd-common.h for now, and that's
-intended (vm_util.h can contain uffd helpers, or whatever helpers as long
-as generic mm/ unit tests need).
+Nope.
 
-We can even move wp_range() from uffd-common.[ch] into vm_utils.[ch], then
-it can also share that (need to replace err(), that's uffd-common
-specific).  Not necessary anything must be done in this series, though.
+I don't see error you mention in this patch when making htmldocs on my
+computer (my setup is pretty standard: see
+Documentation/doc-guide/sphinx.rst). This patch is unneccessary, though,
+unless you have code snippets in some language (e.g. C, where passing
+language name to code-block:: syntax-highlight it). Result code outputs,
+on the other hand, are generic text with no definitive syntax, hence
+you can omit language name.
 
-Thanks,
+Thanks.
 
--- 
-Peter Xu
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--TMDPLLkdIOvqcUM1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHqVZgAKCRD2uYlJVVFO
+o+pPAQC1MK/h/J4QW3qWmnbpauQ0Cr0k33lf8QV+hDnWKCkEpQD/QTYX820N+B3c
+/0rBRMzVYbE7FluBIIK+7tJ0f+ahswg=
+=JKVF
+-----END PGP SIGNATURE-----
+
+--TMDPLLkdIOvqcUM1--
