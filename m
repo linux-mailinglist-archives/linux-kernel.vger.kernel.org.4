@@ -2,208 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0AE721017
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B32721019
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbjFCMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 08:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
+        id S236416AbjFCMlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 08:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjFCMfR (ORCPT
+        with ESMTP id S230185AbjFCMlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 08:35:17 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC23A6
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 05:35:16 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-565e8d575cbso28776427b3.3
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 05:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685795716; x=1688387716;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iuVyWmNBcPzZ9px5HApvrbE+4UzVEeYd3n/ao4IebL4=;
-        b=DPE/X+8C36OC5xHFfMvKRPL7NWsT8/ievCoAE3dGGX0hZSLuysF8HLj83SPAI8Dp/C
-         gD9Frniifmn6yMIuosNNoWULw3A0iAucNHhhoRHEXjHymk/vCLsUilgeiOA32KmJvfJr
-         MAz7W9HQTClxzvduMHySapUto3C/OsGxQdoU2IFpV72wg6+6QQ24t4+bNofN+aI09LKx
-         fsJ6LTYoUa6wEJEt1ADnKeBgCUy1++zeDFBf1Ip6b90I2tgD2OzjBxg7z3D3ZcmVGNOY
-         pNrUooHL9um5fagF8E5lBCdSR0nFNYGdEiJC1r3lEhwH08oqTX2H1ili/Mcys6xuxVs0
-         nKMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685795716; x=1688387716;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iuVyWmNBcPzZ9px5HApvrbE+4UzVEeYd3n/ao4IebL4=;
-        b=bMMYApokQx/guhfewHu9MfJj5eX6X54Mp8v3S8WeNq6jGcmDdylmodq3kLkeXV7doX
-         NED+QAT+Ge7+ZU6NsFxkvL2fBFAq94ncKn2KNgLWaiKiN/qTiYmha4jFkyG7lrQ5NSoC
-         +1o4IpYdX+9vEu9yDC/4KYspZAun95Tb7bajuRzt7r8dO9Ie8MC7EDMhMjV0PRajP26V
-         92RMCOOFPV4tFBEKGSC/kh1EpZNlObyzGo29UrYIPMnw+7McuH0DiMYqVbo6WqNfjgg6
-         pr03qTKUHQmfiBTZA/Maw+KjWxv0oqS65/7drGoES99eapoUX5Eg1xoNJokKiPduwDyw
-         x/7Q==
-X-Gm-Message-State: AC+VfDweK+lUOB2noGgwEsPzC9KZSyKAQFwVYnkT+K4PK1MmWkZEc0rJ
-        awRkNUfZ++FlUrnpW9sqfDIIg91W166UaBhCEzKwpg==
-X-Google-Smtp-Source: ACHHUZ6lTNKrMmGDVmxukNct/iygaSE/KOAUNTViKMfFRpdChr9z388Vp/CwnLeUrx78ziV2Sdw0AZ+ld/4WvRkp5UU=
-X-Received: by 2002:a0d:d956:0:b0:565:bf0d:e26d with SMTP id
- b83-20020a0dd956000000b00565bf0de26dmr2223614ywe.51.1685795715767; Sat, 03
- Jun 2023 05:35:15 -0700 (PDT)
+        Sat, 3 Jun 2023 08:41:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BC0F5;
+        Sat,  3 Jun 2023 05:41:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DE1B60AC1;
+        Sat,  3 Jun 2023 12:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE49BC433EF;
+        Sat,  3 Jun 2023 12:41:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685796070;
+        bh=syWTleteIP/DnA6u1wvwOOdt0s9GcQOyPIaILs8YIpE=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=F6FhRhDqej0X8NRtLC1Sl2jTS20q9zp5CAG13iWboBApH2tb294iljcnsS/CAupa2
+         y3fpTnf4bFOvWF4NU2ltR41xqwuwV+QljF5ZI10SKgEsj3kyAwF9DmWNTZ8UKm/MHm
+         CLZozKSLAUxEKiYmcGPw6RiGwBSlzJ9PrsHTtS8uoY2R1awiokZHU1kQEJxmLBIWWm
+         WwPkOmJMoYSLEUcsv2ZZFRcJt/Df9LBdRMkAArZtLU4NJK0fSYbglED+dylV9Vz5Zn
+         VqOtaDnip2lRNzFpFn5sAySa4imamn+aDtMvPQVJrv1ZIowaDVDvH9CW6DvlPFYgKa
+         fYkOf+qnQhmcw==
+Date:   Sat, 3 Jun 2023 14:41:06 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>,
+        Mark Lord <mlord@pobox.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from
+ busy
+In-Reply-To: <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+Message-ID: <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm>
+References: <20230531082428.21763-1-hadess@hadess.net> <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20230531141556.1637341-1-lee@kernel.org> <CANn89iJw2N9EbF+Fm8KCPMvo-25ONwba+3PUr8L2ktZC1Z3uLw@mail.gmail.com>
- <CAM0EoMnUgXsr4UBeZR57vPpc5WRJkbWUFsii90jXJ=stoXCGcg@mail.gmail.com> <20230601140640.GG449117@google.com>
-In-Reply-To: <20230601140640.GG449117@google.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Sat, 3 Jun 2023 08:35:04 -0400
-Message-ID: <CAM0EoMmXFKNMkEFhnLReMO=jwu8ju8udV6-oZO9-yHL_7ocUYw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] net/sched: cls_u32: Fix reference counter leak
- leading to overflow
-To:     Lee Jones <lee@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 10:06=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
->
-> On Wed, 31 May 2023, Jamal Hadi Salim wrote:
->
-> > On Wed, May 31, 2023 at 11:03=E2=80=AFAM Eric Dumazet <edumazet@google.=
-com> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 4:16=E2=80=AFPM Lee Jones <lee@kernel.org> wr=
-ote:
-> > > >
-> > > > In the event of a failure in tcf_change_indev(), u32_set_parms() wi=
-ll
-> > > > immediately return without decrementing the recently incremented
-> > > > reference counter.  If this happens enough times, the counter will
-> > > > rollover and the reference freed, leading to a double free which ca=
-n be
-> > > > used to do 'bad things'.
-> > > >
-> > > > Cc: stable@kernel.org # v4.14+
-> > >
-> > > Please add a Fixes: tag.
->
-> Why?
->
-> From memory, I couldn't identify a specific commit to fix, which is why
-> I used a Cc tag as per the Stable documentation:
->
-> Option 1
-> ********
->
-> To have the patch automatically included in the stable tree, add the tag
->
-> .. code-block:: none
->
->      Cc: stable@vger.kernel.org
->
-> in the sign-off area. Once the patch is merged it will be applied to
-> the stable tree without anything else needing to be done by the author
-> or subsystem maintainer.
->
-> > > > Signed-off-by: Lee Jones <lee@kernel.org>
-> > > > ---
-> > > >  net/sched/cls_u32.c | 5 ++++-
-> > > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-> > > > index 4e2e269f121f8..fad61ca5e90bf 100644
-> > > > --- a/net/sched/cls_u32.c
-> > > > +++ b/net/sched/cls_u32.c
-> > > > @@ -762,8 +762,11 @@ static int u32_set_parms(struct net *net, stru=
-ct tcf_proto *tp,
-> > > >         if (tb[TCA_U32_INDEV]) {
-> > > >                 int ret;
-> > > >                 ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], ex=
-tack);
-> > >
-> > > This call should probably be done earlier in the function, next to
-> > > tcf_exts_validate_ex()
-> > >
-> > > Otherwise we might ask why the tcf_bind_filter() does not need to be =
-undone.
-> > >
-> > > Something like:
-> > >
-> > > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-> > > index 4e2e269f121f8a301368b9783753e055f5af6a4e..ac957ff2216ae18bcabdd=
-3af3b0e127447ef8f91
-> > > 100644
-> > > --- a/net/sched/cls_u32.c
-> > > +++ b/net/sched/cls_u32.c
-> > > @@ -718,13 +718,18 @@ static int u32_set_parms(struct net *net, struc=
-t
-> > > tcf_proto *tp,
-> > >                          struct nlattr *est, u32 flags, u32 fl_flags,
-> > >                          struct netlink_ext_ack *extack)
-> > >  {
-> > > -       int err;
-> > > +       int err, ifindex =3D -1;
-> > >
-> > >         err =3D tcf_exts_validate_ex(net, tp, tb, est, &n->exts, flag=
-s,
-> > >                                    fl_flags, extack);
-> > >         if (err < 0)
-> > >                 return err;
-> > >
-> > > +       if (tb[TCA_U32_INDEV]) {
-> > > +               ifindex =3D tcf_change_indev(net, tb[TCA_U32_INDEV], =
-extack);
-> > > +               if (ifindex < 0)
-> > > +                       return -EINVAL;
-> > > +       }
->
-> Thanks for the advice.  Leave it with me.
->
-> > >         if (tb[TCA_U32_LINK]) {
-> > >                 u32 handle =3D nla_get_u32(tb[TCA_U32_LINK]);
-> > >                 struct tc_u_hnode *ht_down =3D NULL, *ht_old;
-> > > @@ -759,13 +764,9 @@ static int u32_set_parms(struct net *net, struct
-> > > tcf_proto *tp,
-> > >                 tcf_bind_filter(tp, &n->res, base);
-> > >         }
-> > >
-> > > -       if (tb[TCA_U32_INDEV]) {
-> > > -               int ret;
-> > > -               ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], exta=
-ck);
-> > > -               if (ret < 0)
-> > > -                       return -EINVAL;
-> > > -               n->ifindex =3D ret;
-> > > -       }
-> > > +       if (ifindex >=3D 0)
-> > > +               n->ifindex =3D ifindex;
-> > > +
-> >
-> > I guess we crossed paths ;->
->
-> > Please, add a tdc test as well - it doesnt have to be in this patch,
-> > can be a followup.
->
-> I don't know how to do that, or even what a 'tdc' is.  Is it trivial?
->
-> Can you point me towards the documentation please?
+On Wed, 31 May 2023, Jiri Kosina wrote:
 
-There is a README in tools/testing/selftests/tc-testing/README
-If you created the scenario by running some tc command line it should
-not be difficult to create such a test. Or just tell us what command
-line you used to create it and we can help do one for you this time.
-If you found the issue by just eyeballing the code or syzkaller then
-just say that in the commit.
+> > If an attempt at contacting a receiver or a device fails because the
+> > receiver or device never responds, don't restart the communication, only
+> > restart it if the receiver or device answers that it's busy, as originally
+> > intended.
+> > 
+> > This was the behaviour on communication timeout before commit 586e8fede795
+> > ("HID: logitech-hidpp: Retry commands when device is busy").
+> > 
+> > This fixes some overly long waits in a critical path on boot, when
+> > checking whether the device is connected by getting its HID++ version.
+> > 
+> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > Suggested-by: Mark Lord <mlord@pobox.com>
+> > Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217412
+> > ---
+> >  drivers/hid/hid-logitech-hidpp.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+> > index 0fcfd85fea0f..2246044b1639 100644
+> > --- a/drivers/hid/hid-logitech-hidpp.c
+> > +++ b/drivers/hid/hid-logitech-hidpp.c
+> > @@ -314,6 +314,7 @@ static int hidpp_send_message_sync(struct hidpp_device *hidpp,
+> >  			dbg_hid("%s:timeout waiting for response\n", __func__);
+> >  			memset(response, 0, sizeof(struct hidpp_report));
+> >  			ret = -ETIMEDOUT;
+> > +			goto exit;
+> >  		}
+> >  
+> 
+> I have applied this even before getting confirmation from the reporters in 
+> bugzilla, as it's the right thing to do anyway.
 
-cheers,
-jamal
+Unfortunately it doesn't seem to cure the reported issue (while reverting 
+586e8fede79 does): https://bugzilla.kernel.org/show_bug.cgi?id=217523#c2
 
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+-- 
+Jiri Kosina
+SUSE Labs
+
