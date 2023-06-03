@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9741720E89
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C466720E92
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbjFCHn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 03:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S233978AbjFCHov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFCHny (ORCPT
+        with ESMTP id S229647AbjFCHot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:43:54 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50C01B4;
-        Sat,  3 Jun 2023 00:43:53 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d3bc0dce9so354810b3a.0;
-        Sat, 03 Jun 2023 00:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685778233; x=1688370233;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AWur87b6+FWCBKqxfBacalad+HJLdADtjiXHWwWG+kk=;
-        b=HdR32jWEiMDgRFNHZ4AmO+HfNOYRhIeMt1Z5uNTHesSQqHDELs6TlofSvDyhAYT35y
-         JtaJAitoMYef8byzb4Q/v3Q1X37KaWjsPrprQlD57U3+I6XKSx204zCQ1EOG7U21K4fq
-         fXT6MUWv5fX/6d68aknWQA62HaAXaJ7DT2OMuNznhhusSLzEaG5OodKAGVCBaeTD9In5
-         UhGE6Caok7XVhyUI2FU8bRU0U+QCu7mWwwuYcu4PH+H+U4yRVxt3yqk20JfkptJRMas7
-         0UZzD5imjL3NijdOtD+bWCh0OhMtk0o+uTjgUT+aeEfbUcXYkTQbxshWNa3CPUXt94Qk
-         PETw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685778233; x=1688370233;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AWur87b6+FWCBKqxfBacalad+HJLdADtjiXHWwWG+kk=;
-        b=Q5j3DyyBLozk4djJhqFIOJfYkfcUt2wBwQzONJrw1v3c1GHVlhZyGDzo4QC2lej1SG
-         ZgskMl09MlWqLRM1WsoLjb2CS3a3j3we7g8GdISxL+l236eFRiqNsHxBNqKgwpZXCblI
-         4kRSsf2xAit83lmVGh/+rMF6v/V2fpO5BKbyVyfSpCp0psvYxXtBnLU44n2BxPW3nW9b
-         5cjSqKTxyV8Md6CfDtvcw74g6Yl7a7jjc8zd990fTK3NyPuqD125XQXgJkHZXygGSwAn
-         ph1eMggDW/eyYOrcN5ZLNFRDRgQWdQJirA1o9XY3EKQGvizZEIEHaqXUiOFw6poWfTHx
-         2s1w==
-X-Gm-Message-State: AC+VfDybrFjP8Flf11fFWaXBc5wlLAenYR56F4EaDfOh0Cg6oC8kWK/h
-        LI/lUvY9dZe9HcBYUKqrETf2t59o1Rk1MH9+
-X-Google-Smtp-Source: ACHHUZ7Sb3282pwyR3Z2zP7ICZ4Es7PNecGCmDTkrXI02OgZnCeM/hb458Wo12XIa+dX4RK3fGmPTQ==
-X-Received: by 2002:a17:902:ecc5:b0:1ae:1364:6086 with SMTP id a5-20020a170902ecc500b001ae13646086mr12068845plh.2.1685778232982;
-        Sat, 03 Jun 2023 00:43:52 -0700 (PDT)
-Received: from ubuntu.localdomain ([183.208.21.185])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170902c10c00b001afd275e186sm2525846pli.286.2023.06.03.00.43.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jun 2023 00:43:52 -0700 (PDT)
-From:   Min Li <lm0963hack@gmail.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v2] drm/radeon: fix race condition UAF in  radeon_gem_set_domain_ioctl
-Date:   Sat,  3 Jun 2023 15:43:45 +0800
-Message-Id: <20230603074345.17907-1-lm0963hack@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 3 Jun 2023 03:44:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011221B4;
+        Sat,  3 Jun 2023 00:44:47 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3537hDWj013214;
+        Sat, 3 Jun 2023 07:44:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=nTaklHgzvpTd6uAPk3GvsJsBWro+3RpxJdi5w+6YHDo=;
+ b=BSm+ZxTl6Yy5pcjdje940z1B8eUnc6mD/Wm+Sw400xRm+d5zoLG+GFyrDqUaD+GW3PbT
+ al1WFvK0v4PP1UcujH077QCLRjoy7rBESTp+L9azNEyR8ND7KZ0uuj6dJ7uTaJS43ETF
+ RRbq7k5wUzmwmbYBloZeFfI4XFh/LKDRoqNoIyCfya1q9UcbKru4So9dQOdCeEEEkI7H
+ SCOcB8iDqObCb0ov7Em8wl7v5YdLvsikRdwlur6zhPFwSMdiCyo0W6S1B+wElJrWyUej
+ egX+rcIu5dSTN7P99Ka5YMxrXpu1clXMEWvaBpFrs8KdM6s/4vVGcxxmEGT3bnrg9PjS Sg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyvfxga60-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 03 Jun 2023 07:44:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3537iZGV000795
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 3 Jun 2023 07:44:35 GMT
+Received: from [10.216.19.222] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sat, 3 Jun 2023
+ 00:44:28 -0700
+Message-ID: <d47d3077-31e1-329b-5e19-c8d2ec3b5f30@quicinc.com>
+Date:   Sat, 3 Jun 2023 13:14:19 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V4 3/6] dt-bindings: PCI: qcom: Add IPQ9574
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <quic_srichara@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_ipkumar@quicinc.com>
+References: <20230519090219.15925-1-quic_devipriy@quicinc.com>
+ <20230519090219.15925-4-quic_devipriy@quicinc.com>
+ <20230528141713.GB2814@thinkpad>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <20230528141713.GB2814@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: uoBSBZLx_iwDSIdU7scd4k1Hup1vYm3I
+X-Proofpoint-ORIG-GUID: uoBSBZLx_iwDSIdU7scd4k1Hup1vYm3I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-03_04,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306030071
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,45 +90,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Userspace can race to free the gobj(robj converted from), robj should not
-be accessed again after drm_gem_object_put, otherwith it will result in
-use-after-free.
 
-Signed-off-by: Min Li <lm0963hack@gmail.com>
----
-Changes in v2:
-- Remove unused robj, avoid compile complain
 
- drivers/gpu/drm/radeon/radeon_gem.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On 5/28/2023 7:47 PM, Manivannan Sadhasivam wrote:
+> On Fri, May 19, 2023 at 02:32:16PM +0530, Devi Priya wrote:
+>> Add bindings for PCIe hosts on IPQ9574 platform and allow
+>> msi-parent property.
+>>
+> 
+> Why can't you use existing "msi-map" property instead of "msi-parent"?
+> 
+> - Mani
+Sure, will update.
 
-diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-index bdc5af23f005..d3f5ddbc1704 100644
---- a/drivers/gpu/drm/radeon/radeon_gem.c
-+++ b/drivers/gpu/drm/radeon/radeon_gem.c
-@@ -459,7 +459,6 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
- 	struct radeon_device *rdev = dev->dev_private;
- 	struct drm_radeon_gem_set_domain *args = data;
- 	struct drm_gem_object *gobj;
--	struct radeon_bo *robj;
- 	int r;
- 
- 	/* for now if someone requests domain CPU -
-@@ -472,13 +471,12 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
- 		up_read(&rdev->exclusive_lock);
- 		return -ENOENT;
- 	}
--	robj = gem_to_radeon_bo(gobj);
- 
- 	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
- 
- 	drm_gem_object_put(gobj);
- 	up_read(&rdev->exclusive_lock);
--	r = radeon_gem_handle_lockup(robj->rdev, r);
-+	r = radeon_gem_handle_lockup(rdev, r);
- 	return r;
- }
- 
--- 
-2.34.1
-
+Thanks,
+Devi Priya
+> 
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+>>   Changes in V4:
+>> 	- Dropped msi-parent from anyOf: as msi-parent and msi-map
+>> 	  cannot coexist and added it specific to ipq9574
+>>
+>>   .../devicetree/bindings/pci/qcom,pcie.yaml    | 48 +++++++++++++++++++
+>>   1 file changed, 48 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>> index 81971be4e554..af5c7a390df1 100644
+>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>> @@ -26,6 +26,7 @@ properties:
+>>             - qcom,pcie-ipq8064-v2
+>>             - qcom,pcie-ipq8074
+>>             - qcom,pcie-ipq8074-gen3
+>> +          - qcom,pcie-ipq9574
+>>             - qcom,pcie-msm8996
+>>             - qcom,pcie-qcs404
+>>             - qcom,pcie-sa8540p
+>> @@ -113,6 +114,8 @@ properties:
+>>     power-domains:
+>>       maxItems: 1
+>>   
+>> +  msi-parent: true
+>> +
+>>     perst-gpios:
+>>       description: GPIO controlled connection to PERST# signal
+>>       maxItems: 1
+>> @@ -171,6 +174,7 @@ allOf:
+>>               enum:
+>>                 - qcom,pcie-ipq6018
+>>                 - qcom,pcie-ipq8074-gen3
+>> +              - qcom,pcie-ipq9574
+>>       then:
+>>         properties:
+>>           reg:
+>> @@ -382,6 +386,39 @@ allOf:
+>>               - const: ahb # AHB Reset
+>>               - const: axi_m_sticky # AXI Master Sticky reset
+>>   
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,pcie-ipq9574
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          minItems: 6
+>> +          maxItems: 6
+>> +        clock-names:
+>> +          items:
+>> +            - const: ahb  # AHB clock
+>> +            - const: aux  # Auxiliary clock
+>> +            - const: axi_m # AXI Master clock
+>> +            - const: axi_s # AXI Slave clock
+>> +            - const: axi_bridge # AXI bridge clock
+>> +            - const: rchng
+>> +        resets:
+>> +          minItems: 8
+>> +          maxItems: 8
+>> +        reset-names:
+>> +          items:
+>> +            - const: pipe # PIPE reset
+>> +            - const: sticky # Core Sticky reset
+>> +            - const: axi_s_sticky # AXI Slave Sticky reset
+>> +            - const: axi_s # AXI Slave reset
+>> +            - const: axi_m_sticky # AXI Master Sticky reset
+>> +            - const: axi_m # AXI Master reset
+>> +            - const: aux # AUX Reset
+>> +            - const: ahb # AHB Reset
+>> +
+>>     - if:
+>>         properties:
+>>           compatible:
+>> @@ -767,6 +804,7 @@ allOf:
+>>                   - qcom,pcie-ipq8064v2
+>>                   - qcom,pcie-ipq8074
+>>                   - qcom,pcie-ipq8074-gen3
+>> +                - qcom,pcie-ipq9574
+>>                   - qcom,pcie-qcs404
+>>       then:
+>>         required:
+>> @@ -862,6 +900,16 @@ allOf:
+>>             items:
+>>               - const: msi
+>>   
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,pcie-ipq9574
+>> +    then:
+>> +      required:
+>> +        - msi-parent
+>> +
+>>   unevaluatedProperties: false
+>>   
+>>   examples:
+>> -- 
+>> 2.17.1
+>>
+> 
