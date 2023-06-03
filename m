@@ -2,161 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1437210B4
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 17:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9786720E5E
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjFCPBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 11:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
+        id S236946AbjFCHDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFCPBV (ORCPT
+        with ESMTP id S232334AbjFCHCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 11:01:21 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02olkn2059.outbound.protection.outlook.com [40.92.43.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C0AA2
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:01:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=czREagGwMwnpuVF5oOSrPMNxtg48pbB3wvY2BDHM+DsbKZmSo25NfJVrKC3JTcxeit3bTxfecr1AUUiXcFHkzhmXrw10cuYSklUSqt+La1cWyhJ6iEpgfa9MwbGDeSnjDEraUMnFAEVnLC+2PiW+rOEX9QvL9FJdHBG+cQx/rBh4kRKkOgmDQRGNdcDQOIG0H3bTuWYJdkg0Tn4YP2ghZih6NqN+IEOuWZ45rag0UXv8VBNu3BYS2VHfZ0coP/F5VPSJsr/QId8HLAu2njUsgGRxR4gKW0LJrV0WwnQ8hAOI/QMYQubp0lU9clobopz2K1X5YkmN9Ry6/2SrauHbtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YqCsBM8+/NDPtklgA5tO3HD6BVKPrK4A9rNVt3cJSds=;
- b=T+8g8AjETmmLxRthLd9MXJ0URqSkEhChBPKoJIWZWbCFvlDBuJrF22HwfUZC21dVxaIeUo2n9sz6zKjUTaP3Tg7pYWhIIH04TZY9zVOExUxAPQvN/gvICV45CKycC4TeiimOuhPk24ZrrrWDTKyjxhnPDOs5Zj0eWHox3qgqQqe4IJGR3ECNUd6irynXZ4T48f0x7s8z16mISptzTAKMFti3sVv88WlWpcnAvVOqaW3YoE/l25zVub8aaFSsrPn/KJumyWU+sbaO1ogr3mLj5WOW++cSTolj8ZuvpRrXzeKu7JfVN9fXCk6QL5Mme1y003oF1iuIlw/R29hOpKR7RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YqCsBM8+/NDPtklgA5tO3HD6BVKPrK4A9rNVt3cJSds=;
- b=rDFBvqauHkI3v1uce7vLRquks6z/6bCBGvqS7B8SqK2IV934apl7P3CsxrsD8Xmfpmno6ba8Vj5AnwbQUjIUXvKszo4w6UyBvRLBjeIGIMSHaoGSxM7nYyIagvjmPVIEJe4HuMVC1CnYAk6NLDUSvltopZFVgUXKKT4LsM10qKx4QGAl6HMZIgjKaBP2xX3qV7Y6HNIdxdXHMzyjuP7qdVv/VTIJzYE8Rl+vWu55CqHj+TlDUIF1UZE8LKv55I1Ss/TOTyiM2dpnbocfxoKmfJQSz68FILgbqK06scY8eD3KzFGTIVTkPGit3nwm37O0xqgXtVWbp70QP+PUa8g22Q==
-Received: from CY5PR12MB6455.namprd12.prod.outlook.com (2603:10b6:930:35::10)
- by SA0PR12MB4414.namprd12.prod.outlook.com (2603:10b6:806:9a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Sat, 3 Jun
- 2023 15:01:18 +0000
-Received: from CY5PR12MB6455.namprd12.prod.outlook.com
- ([fe80::a39e:3607:29f5:9cdc]) by CY5PR12MB6455.namprd12.prod.outlook.com
- ([fe80::a39e:3607:29f5:9cdc%4]) with mapi id 15.20.6455.028; Sat, 3 Jun 2023
- 15:01:18 +0000
-From:   mirimmad@outlook.com
-Cc:     gregkh@linuxfoundation.org, Immad Mir <mirimmad17@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: use appropriate error codes
-Date:   Sat,  3 Jun 2023 20:30:43 +0530
-Message-ID: <CY5PR12MB6455D90BB75D6CA26C00E873C64FA@CY5PR12MB6455.namprd12.prod.outlook.com>
-X-Mailer: git-send-email 2.40.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [1ua1v+cdNo9QRNu6smC4w6KBhF3tSskufLzEZ/+enMzVrRKCtjUBAZut/UUuwq3h]
-X-ClientProxiedBy: PN2PR01CA0076.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:23::21) To CY5PR12MB6455.namprd12.prod.outlook.com
- (2603:10b6:930:35::10)
-X-Microsoft-Original-Message-ID: <20230603150043.16779-1-mirimmad@outlook.com>
+        Sat, 3 Jun 2023 03:02:11 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D5E134;
+        Sat,  3 Jun 2023 00:02:09 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QY9lq6cGbz4f3w0b;
+        Sat,  3 Jun 2023 15:01:59 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgCHOKxk5Xpk+MxPKw--.30174S2;
+        Sat, 03 Jun 2023 15:01:57 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shikemeng@huaweicloud.com
+Subject: [PATCH v4 00/19] Fixes, cleanups and unit test for mballoc
+Date:   Sat,  3 Jun 2023 23:03:08 +0800
+Message-Id: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6455:EE_|SA0PR12MB4414:EE_
-X-MS-Office365-Filtering-Correlation-Id: 692e1597-66de-4438-bbe7-08db644362a4
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QI54r0ysamcVtO62bkw6r2/V8j25ISPODtxzapcHoGcNW9Yw6TvEeVHz69JPmzy7g7paj2pRXqzJndLzd9Xh9O4zPbj8RIVHF2rLnWLIk5hUtYjvR8a0GDyVtm7oy0TwoXkh70kol0W7eB5ggp5Ow+Is03eY6zluUWWLrcx/7XPnQf9FG+zZdMEL219c4A+Gjb8qHCW7XsoNcNMkuCVv6d+F4B7sn/g2eQCskFAdZxCzO2+iobsgzE3acCU8xXEXQKRYS4IGlIna5jocp7v2B7nz7YUhp6Mqy8eyVrg0lvNWpHnKiA97j5zL5vRU9v3eplqxhfYbPjr3Xnq2ZHJViPkXa9sbb34FGS4pKVhhjFByNv9fwCg9poF3vZ8P9E2SflRrhD8wgEkwcjbygRz7y73AltGwW+X+tF6131DdxXD0FAjEpVuVlwuOvDYES5cK4XJFYjZVgvHXlo4GDRwB0VKI6gntcL3b1S6DD198U4MTP0VNnHhXvEjWJB4XuR7llsHHSNSnSkMUX39bvF9kwgKv+IlTNDkzRrd1bT9asblZYKjoam/Wz5aG6tb4k+2/
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/p3XS6EHY643qOI4/v9+kohIYb0PljfN/2CJNpSNZjAx9r8eNfB8ajbk4O4P?=
- =?us-ascii?Q?XtlIxHHLFtp82aa2VxzRlZ1u7UI2S0mxfkQwDEEEdRSTQt2mRVJtLnBdCxrh?=
- =?us-ascii?Q?AlHplLcB6jV2GxtexPu1lhvgoOr1yO8gc0MHbhScrTtliBt3NkUSgsFmCYXR?=
- =?us-ascii?Q?9XrzUnK5BFwlTVpqNuWTmyuKGferx/V8skTfTfGdVoGRgqMF1gbWO+QH2kb+?=
- =?us-ascii?Q?UWx6hu2O9N8KYNoQeeCH4yprmYtPjWR5Rn4uqA8GWq+4qxTAMuqxLYZFjunf?=
- =?us-ascii?Q?Vks4P+XV+w8a3Y+7ljTu+zgCcypeEO3fBgb25k4L36EzZeh4FbrDZZrpsL7G?=
- =?us-ascii?Q?gzSo2lWpy8s97DkRzEioEACSHm6BwC3TnqHFdCerpvPbm/bBgTvorSNq5wJN?=
- =?us-ascii?Q?4fwEriBX5xgulXVz/tBLYgoucS07SG4lwVZbYSReTQQMgFmvfsaF1NXEDGAB?=
- =?us-ascii?Q?m9aUZzUrLCnXdhGUkibPr74BXXCME/1X3usA9szyg3K3NvyfNirdrUoV/9xF?=
- =?us-ascii?Q?nlqac+hT+cEj4oHZ0MHyjZYCJT/oNUGRlXL5vUSeRARAtJ+rgM3HbFP972HY?=
- =?us-ascii?Q?siMp6nEkMyQ6Z7+ooetB6c3IZUP+pp4+FvmbEpCKK9MncaJ1Pe96fhibGU51?=
- =?us-ascii?Q?64JecPLZe7GtrNU8ycYSIFkCW+rwbtUsLhFXuWjeYiuoYc8W5jJhY8GjaWBZ?=
- =?us-ascii?Q?mkhh3R61tl2r20UuLBa/WJYoSQWcL8ocM8TmaBMOGaoZTTuL+amioLwXmqUQ?=
- =?us-ascii?Q?wUt+PEf++6I7oVi6ZunnOK+mkAOkOwOxGNJxSFIMKuxJYHBeajTAxtvdFBov?=
- =?us-ascii?Q?Au26DLc5hWeNwUu0ZAnEZ8xjR+00VLcHCT/YYUmAmtkLJDQm50L7DIntV+Ot?=
- =?us-ascii?Q?whLN0neD9xlEfulzwLJlGEpbhn/IdQl4nRZRoFIAikBRdvLcZ0S1rFCO/doR?=
- =?us-ascii?Q?lh39q3x4J7e712BUdV+09reIGtOy1zxzzK3xvN6Wy50FxAAq35yEjfqF1Yao?=
- =?us-ascii?Q?tYZDNDwZikUP+VEbp7mYY9nkkdHE1JkVwCWLkGWnWF3b+miVtYPF9AvALO47?=
- =?us-ascii?Q?4a10ADBIm6o9rVdxa669W5u6kLP0aMVGnWdPYMNcGVVvmt3t2x1NsT0r+b3z?=
- =?us-ascii?Q?MjXDciNFC+nF58EHDck8UNOHsyn4hkMUj4RPYODsDr0LiKK3gRhUnkO3bdIf?=
- =?us-ascii?Q?Mxni7hvIdDCZclrajCe64Yqs7d9J1Kd8t3NKzARcHc34KDA9LyI/z1UoFe2V?=
- =?us-ascii?Q?SI78jNIxPVmEghybYkd0lZrqazT2sJchBZy9jCajPw=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 692e1597-66de-4438-bbe7-08db644362a4
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6455.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 15:01:18.7225
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4414
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCHOKxk5Xpk+MxPKw--.30174S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF48Aw18WFy3ZrWxKF17KFg_yoWxtw13pr
+        sIkrn8Kr1xJr1qya93Cw47W3WxKw48C3W7GryfK34xuFy3Jr92y3Z7KFWY9a4DWr4kZFya
+        9F15Cr4rCrn29a7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7sRE
+        SoGDUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Immad Mir <mirimmad17@gmail.com>
+v3->v4:
+1. Collect Reviewed-by from Ojaswin
+2. Do improve as Ojaswin kindly suggested: Fix typo in commit,
+WARN if try to clear bit of uninitialized group and improve
+refactoring of AGGRESSIVE_CHECK code.
+3. Fix conflic on patch 16
+4. Improve git log in patch 16,17
 
-This patch replaces use of returning -1 by appropiate error codes.
+v2->v3:
+1. Make patches on new branch head and fix conflic on "ext4: add
+EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated"
+2. Fix build warnings on "ext4: add some kunit stub for mballoc kunit
+test" and "ext4: add first unit test for ext4_mb_new_blocks_simple in
+mballoc"
 
-Signed-off-by: Immad Mir <mirimmad17@gmail.com>
----
- arch/powerpc/platforms/powernv/opal-elog.c  | 4 ++--
- arch/powerpc/platforms/powernv/opal-xscom.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+There are three parts in this patchset:
+Part1: Patch 1-7 is v2 of sent series
+v1->v2:
+1. collect reviewed-by from Ojaswin. Only "ext4: add
+EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated" needs futher
+review. See [1] for previous comments.
+2. drop "ext4: fix wrong unit use in ext4_mb_new_inode_pa" which is
+already done in [2].
 
-diff --git a/arch/powerpc/platforms/powernv/opal-elog.c b/arch/powerpc/platforms/powernv/opal-elog.c
-index 554fdd7f8..8bb42858e 100644
---- a/arch/powerpc/platforms/powernv/opal-elog.c
-+++ b/arch/powerpc/platforms/powernv/opal-elog.c
-@@ -309,12 +309,12 @@ int __init opal_elog_init(void)
+Part2: Patch 8-17 are more fixes and cleanups to mballoc
+Some patches in this part will be conflict with patches in part1, so
+append new patches in this series instead of creating a new one.
+Patch 8-11 are some random fixes and cleanups, see respective log
+message for detail.
+Patch 12-17 factor out codes to mark bit in group is used or free
+which will update on disk block bitmap and group descriptor. Several
+reasons to do this:
+1. pair behavior of alloc/free bits. For example,
+ext4_mb_new_blocks_simple will update free_clusters in struct flex_groups
+in ext4_mb_mark_bb while ext4_free_blocks_simple forgets this.
+2. remove repeat code to read from disk, update and write back to disk.
+3. reduce future unit test mocks to avoid real IO to update structure
+on disk.
 
- 	/* ELOG not supported by firmware */
- 	if (!opal_check_token(OPAL_ELOG_READ))
--		return -1;
-+		return -EPERM;
+Part3: Patch 18-19 add one unit test for mballoc
+Patch 18 add mocks to functions which will issue IO to disk.
+Patch 19 add unit test for ext4_mb_new_blocks_simple in mballoc.
+Details can be found in respective log message.
 
- 	elog_kset = kset_create_and_add("elog", NULL, opal_kobj);
- 	if (!elog_kset) {
- 		pr_warn("%s: failed to create elog kset\n", __func__);
--		return -1;
-+		return -EPERM;
- 	}
+Before add more unit tests, there are something should be discussed:
+1. How to test static function in mballoc.c
+Currently, include mballoc-test.c in mballoc.c to test static function
+in mballoc.c from mballoc-test.c which is one way suggested in [3].
+Not sure if there is any more elegant way to test static function without
+touch mballoc.c.
+2. How to add mocks to function in mballoc.c which may issue IO to disk
+Currently, KUNIT_STATIC_STUB_REDIRECT is added to functions as suggested
+in kunit document [4].
+3. How to simulate a block bitmap.
+Currently, a fake buffer_head with bitmap data is returned, then no
+futher change is needed.
+If we simulate a block bitmap with an array of data structure like:
+struct test_bitmap {
+       unsigned int	start;
+       unsigned int	len;
+}
+which is suggested by Theodore in [5], then we need to add mocks to
+function which expected bitmap from bitmap_bh->b_data, like
+mb_find_next_bit, mb_find_next_zero_bit and maybe more.
 
- 	irq = opal_event_request(ilog2(OPAL_EVENT_ERROR_LOG_AVAIL));
-diff --git a/arch/powerpc/platforms/powernv/opal-xscom.c b/arch/powerpc/platforms/powernv/opal-xscom.c
-index 6b4eed2ef..6df52404a 100644
---- a/arch/powerpc/platforms/powernv/opal-xscom.c
-+++ b/arch/powerpc/platforms/powernv/opal-xscom.c
-@@ -171,7 +171,7 @@ static int scom_debug_init_one(struct dentry *root, struct device_node *dn,
- 	if (!dir) {
- 		kfree(ent->path.data);
- 		kfree(ent);
--		return -1;
-+		return -EPERM;
- 	}
+Would like to hear any suggestion! Thanks!
 
- 	debugfs_create_blob("devspec", 0400, dir, &ent->path);
-@@ -191,7 +191,7 @@ static int scom_debug_init(void)
+[1]
+https://lore.kernel.org/linux-ext4/ZC3MoWn2UO6p+Swp@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com/
+[2]
+https://lore.kernel.org/linux-ext4/9b35f3955a1d7b66bbd713eca1e63026e01f78c1.1679731817.git.ojaswin@linux.ibm.com
+[3]
+https://docs.kernel.org/dev-tools/kunit/usage.html#testing-static-functions
+[4]
+https://docs.kernel.org/dev-tools/kunit/api/functionredirection.html#c.KUNIT_STATIC_STUB_REDIRECT
+[5]
+https://lore.kernel.org/linux-ext4/20230317155047.GB3270589@mit.edu/
 
- 	root = debugfs_create_dir("scom", arch_debugfs_dir);
- 	if (!root)
--		return -1;
-+		return -EPERM;
+By the way, the "xfstest somke" passes. Please let me know if any more
+test is needed.
+Unit test result is as followings:
+# ./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig --raw_output
+[18:44:39] Configuring KUnit Kernel ...
+[18:44:39] Building KUnit Kernel ...
+Populating config with:
+$ make ARCH=um O=.kunit olddefconfig
+Building with:
+$ make ARCH=um O=.kunit --jobs=88
+[18:44:47] Starting KUnit Kernel (1/1)...
+KTAP version 1
+1..2
+    KTAP version 1
+    # Subtest: ext4_mballoc_test
+    1..1
+    ok 1 test_new_blocks_simple
+ok 1 ext4_mballoc_test
+    KTAP version 1
+    # Subtest: ext4_inode_test
+    1..1
+        KTAP version 1
+        # Subtest: inode_test_xtimestamp_decoding
+        ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+        ok 2 1969-12-31 Upper bound of 32bit < 0 timestamp, no extra bits
+        ok 3 1970-01-01 Lower bound of 32bit >=0 timestamp, no extra bits
+        ok 4 2038-01-19 Upper bound of 32bit >=0 timestamp, no extra bits
+        ok 5 2038-01-19 Lower bound of 32bit <0 timestamp, lo extra sec bit on
+        ok 6 2106-02-07 Upper bound of 32bit <0 timestamp, lo extra sec bit on
+        ok 7 2106-02-07 Lower bound of 32bit >=0 timestamp, lo extra sec bit on
+        ok 8 2174-02-25 Upper bound of 32bit >=0 timestamp, lo extra sec bit on
+        ok 9 2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on
+        ok 10 2242-03-16 Upper bound of 32bit <0 timestamp, hi extra sec bit on
+        ok 11 2242-03-16 Lower bound of 32bit >=0 timestamp, hi extra sec bit on
+        ok 12 2310-04-04 Upper bound of 32bit >=0 timestamp, hi extra sec bit on
+        ok 13 2310-04-04 Upper bound of 32bit>=0 timestamp, hi extra sec bit 1. 1 ns
+        ok 14 2378-04-22 Lower bound of 32bit>= timestamp. Extra sec bits 1. Max ns
+        ok 15 2378-04-22 Lower bound of 32bit >=0 timestamp. All extra sec bits on
+        ok 16 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra sec bits on
+    # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
+    ok 1 inode_test_xtimestamp_decoding
+# Totals: pass:16 fail:0 skip:0 total:16
+ok 2 ext4_inode_test
+[18:44:48] Elapsed time: 8.602s total, 0.001s configuring, 8.483s building, 0.072s running
 
- 	rc = 0;
- 	for_each_node_with_property(dn, "scom-controller") {
---
-2.40.0
+Kemeng Shi (19):
+  ext4: fix wrong unit use in ext4_mb_normalize_request
+  ext4: fix unit mismatch in ext4_mb_new_blocks_simple
+  ext4: fix wrong unit use in ext4_mb_find_by_goal
+  ext4: treat stripe in block unit
+  ext4: add EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated
+  ext4: remove ext4_block_group and ext4_block_group_offset declaration
+  ext4: try all groups in ext4_mb_new_blocks_simple
+  ext4: get block from bh before pass it to ext4_free_blocks_simple in
+    ext4_free_blocks
+  ext4: remove unsed parameter and unnecessary forward declaration of
+    ext4_mb_new_blocks_simple
+  ext4: fix wrong unit use in ext4_mb_clear_bb
+  ext4: fix wrong unit use in ext4_mb_new_blocks
+  ext4: factor out codes to update block bitmap and group descriptor on
+    disk from ext4_mb_mark_bb
+  ext4: call ext4_mb_mark_group_bb in ext4_free_blocks_simple
+  ext4: extent ext4_mb_mark_group_bb to support allocation under journal
+  ext4: call ext4_mb_mark_group_bb in ext4_mb_mark_diskspace_used
+  ext4: call ext4_mb_mark_group_bb in ext4_mb_clear_bb
+  ext4: call ext4_mb_mark_group_bb in ext4_group_add_blocks
+  ext4: add some kunit stub for mballoc kunit test
+  ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
+
+ fs/ext4/balloc.c       |  16 +
+ fs/ext4/ext4.h         |   4 -
+ fs/ext4/mballoc-test.c | 323 +++++++++++++++++++
+ fs/ext4/mballoc.c      | 714 ++++++++++++++++++-----------------------
+ fs/ext4/super.c        |  13 +
+ 5 files changed, 672 insertions(+), 398 deletions(-)
+ create mode 100644 fs/ext4/mballoc-test.c
+
+-- 
+2.30.0
 
