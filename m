@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13316720EC8
+	by mail.lfdr.de (Postfix) with ESMTP id 5D618720EC9
 	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237002AbjFCIkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 04:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S237052AbjFCIm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 04:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFCIka (ORCPT
+        with ESMTP id S229453AbjFCImY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 04:40:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2367B180
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:40:29 -0700 (PDT)
+        Sat, 3 Jun 2023 04:42:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509EC196
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:42:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BB060919
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E30AC433EF;
-        Sat,  3 Jun 2023 08:40:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA1D2617F3
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A53C433EF;
+        Sat,  3 Jun 2023 08:42:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685781628;
-        bh=CfIACcU56/Kirmxg5qc6aUq7hEIljLaNTuavfT7lt4M=;
+        s=k20201202; t=1685781742;
+        bh=XjNjfMoMDbotqrNdLrQzzOxnnbAn0kn7kYrkkhODOtw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hxcPNskgeoZ56ulkyTmvZ+gNOrIiz6irG+I7g0vIk7XkdxMvUMMkQN/in+IEJR/2i
-         RBsgwt6NYYE+U9lMwU6u//zk7HQpXMrVR0iO9I0OkGX0EG+Gub2Kn5Kqr1+PwvQgfb
-         B/f7VfRhYpB/uqcEr+zfwC/I2PJE0FMqV4vHBoCZ0XyifMJbmFPpEtRoDDwZgzXXk3
-         V3PJOIt4zEgYGLMZX9dSRAvG3jHo7K2kA7w0/ExbA2vJG5ddFLlsTnbhuaT3z3Rn2d
-         qx/phWwd4c824RsejW4+RFK+ndyJE7pelEQCYXuoYzKQYwOhnr96R17GfHEIix2jjn
-         UfLbCEiR1jhDA==
+        b=if0swBwI9fuJ59QcXFRA9QNyelnMnPoNuFUdOO6VY4w2Hfr+ORdJH8aRiVGSKjYLz
+         ACC5ZOREGYpLndX/rXLc2G7H1b5Mudy7uYuZjU8Zu4t3qpus+2pctFNQ8VtUlxeuac
+         rbAEWDhzjxXMtTTwAKdHVZ2nuFrLZg60YsRuook3tHbaJ/bh2rpx1sGtUsobPHGS9z
+         +AypHdWeVK85rTFXDtiqI6KQ0B/8H7bxX16RDsnzCI4sLsg+Q1BwBOLu+TrX7gCuIg
+         GzLyZ+cAgnL7fUjcaTsrwoQ9B8oynrPjeRotM5hZPk1MVWFYY9KRhQ/a6ebiJ9ft5O
+         MMthyytlKVHzw==
 Received: from [37.166.197.171] (helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1q5MoE-002Ws2-0C;
-        Sat, 03 Jun 2023 09:40:26 +0100
-Date:   Sat, 03 Jun 2023 09:40:22 +0100
-Message-ID: <87v8g5ndl5.wl-maz@kernel.org>
+        id 1q5Mq4-002Wsz-0o;
+        Sat, 03 Jun 2023 09:42:20 +0100
+Date:   Sat, 03 Jun 2023 09:42:18 +0100
+Message-ID: <87ttvpndhx.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Kristina Martsenko <kristina.martsenko@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
@@ -54,10 +54,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         Luis Machado <luis.machado@arm.com>,
         Vladimir Murzin <vladimir.murzin@arm.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/11] KVM: arm64: switch HCRX_EL2 between host and guest
-In-Reply-To: <20230509142235.3284028-4-kristina.martsenko@arm.com>
+Subject: Re: [PATCH v2 06/11] KVM: arm64: hide MOPS from guests
+In-Reply-To: <20230509142235.3284028-7-kristina.martsenko@arm.com>
 References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
-        <20230509142235.3284028-4-kristina.martsenko@arm.com>
+        <20230509142235.3284028-7-kristina.martsenko@arm.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -67,8 +67,8 @@ X-SA-Exim-Connect-IP: 37.166.197.171
 X-SA-Exim-Rcpt-To: kristina.martsenko@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, broonie@kernel.org, luis.machado@arm.com, vladimir.murzin@arm.com, linux-kernel@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,17 +77,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 May 2023 15:22:27 +0100,
+On Tue, 09 May 2023 15:22:30 +0100,
 Kristina Martsenko <kristina.martsenko@arm.com> wrote:
 > 
-> Switch the HCRX_EL2 register between host and guest configurations, in
-> order to enable different features in the host and guest.
+> As FEAT_MOPS is not supported in guests yet, hide it from the ID
+> registers for guests.
 > 
-> Now that there are separate guest flags, we can also remove SMPME from
-> the host flags, as SMPME is used for virtualizing SME priorities and has
-> no use in the host.
+> The MOPS instructions are UNDEFINED in guests as HCRX_EL2.MSCEn is not
+> set in HCRX_GUEST_FLAGS, and will take an exception to EL1 if executed.
 > 
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 > Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
+
+This is very likely to clash with Jing's series that completely
+reworks the whole idreg series, but as long as this is on its own
+branch, we can deal with that.
 
 Acked-by: Marc Zyngier <maz@kernel.org>
 
