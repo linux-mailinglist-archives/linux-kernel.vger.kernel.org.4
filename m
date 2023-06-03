@@ -2,159 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AEC720DAD
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 05:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B4B720DB4
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 06:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbjFCDpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 23:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S230330AbjFCEER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 00:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjFCDpn (ORCPT
+        with ESMTP id S229523AbjFCEEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 23:45:43 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636E7E4C
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 20:45:41 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:40116)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q5ICv-007FAM-Ob; Fri, 02 Jun 2023 21:45:38 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:45462 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q5ICu-006Cwo-Gt; Fri, 02 Jun 2023 21:45:37 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-In-Reply-To: <20230602192254.GD555@redhat.com> (Oleg Nesterov's message of
-        "Fri, 2 Jun 2023 21:22:55 +0200")
-References: <20230601183232.8384-1-michael.christie@oracle.com>
-        <20230602192254.GD555@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Fri, 02 Jun 2023 22:44:47 -0500
-Message-ID: <87wn0l2or4.fsf@email.froward.int.ebiederm.org>
+        Sat, 3 Jun 2023 00:04:13 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27791E41;
+        Fri,  2 Jun 2023 21:04:11 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1a2c85ef3c2so124732fac.0;
+        Fri, 02 Jun 2023 21:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685765050; x=1688357050;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uDJ4NW+v18hRQd8QqPDqLFxlqAOhHV7cNr8XZuV5p/M=;
+        b=LSX7ARdS59+DyGbvCXkuRwOgqNdiKd9etKckiesB61nejVFFs5qd7juAnJxIbhHaRN
+         gnWjC4xZ/bEAOmnN9DUWXaZc/pVLzF10a/s4mXae33HepSSjnzKYqSAmVtsh2m/FQTEA
+         Am1bupJp1qiwX+EF/j1RYExTuCVjUxxQpwJd74EGo489swZ5ApkGEIfm0w4Ly0Qv01m8
+         ARdb/7uLQ5n8VW70R9piC4lfYxjn86c+s/fLGFSX9N6DGT59IOoIVg/P7d+7QW0XROvC
+         mD9JzoLyvvJeRocyUVZ1k4jqWdso9cJ1iYH84Sxt0QEfu5jGTqkBUI1vyDfyJKMg79ax
+         e+Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685765050; x=1688357050;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uDJ4NW+v18hRQd8QqPDqLFxlqAOhHV7cNr8XZuV5p/M=;
+        b=WipL+BgF2wvxuqtFXi55ml4o03lALAZPlSMYvnuIeVFB7fCdMyEjb6hqkHja3VMKiJ
+         Pz2llQf5bphDkcY/JzyrFXZ6f0ocIXb4RlW/o67l725OIvo+iudL34IOZMAY9YOEXVSm
+         M23fg15wiStEYahJtswAuu9UDMPPil2vFOqtw/j2ZIvZE7yRuOL74sLS516D7h2SxIMK
+         1te1LPsq7irfCsv076qFgw524hFJbaVAD76l5VuDkPCU0MOoKMS43E3tKMCHIMwj+kYY
+         VBPYF6C4rIHhEVVmwS6O1JXZnJ8Ws1V5GVbVklmL5s5N0kjEZ9HAJEJ1eq5HgtpFqpxf
+         yoGg==
+X-Gm-Message-State: AC+VfDxGO9pSEGltUwK86GuX1PUlnOzBxvEaRq3XZJJo3n+JpDWj0LxA
+        bZO+K0ICMQI0C/ZFugBgC2I=
+X-Google-Smtp-Source: ACHHUZ79T/IdMlsUgPFqgx50GCVquh7X2k1tD/RxI5X6jTrEpBwxfRzrW8lGWHsDXQpHaj+wlD+T8Q==
+X-Received: by 2002:a05:6808:186:b0:398:2a35:f328 with SMTP id w6-20020a056808018600b003982a35f328mr2055001oic.8.1685765050391;
+        Fri, 02 Jun 2023 21:04:10 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id ie3-20020a17090b400300b00255e2d5d56csm1944618pjb.1.2023.06.02.21.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 21:04:10 -0700 (PDT)
+Message-ID: <bf0dee59-20ce-27d6-5b6a-683525fc012e@gmail.com>
+Date:   Sat, 3 Jun 2023 13:04:04 +0900
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1q5ICu-006Cwo-Gt;;;mid=<87wn0l2or4.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX18rwwgl3V8rHDOCFR4O8oZK9le+ZTQfAnc=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+To:     rdunlap@infradead.org
+Cc:     bagasdotme@gmail.com, ivan.orlov0322@gmail.com, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, madhumithabiw@gmail.com,
+        rafael@kernel.org, skhan@linuxfoundation.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <e69410c1-8632-354e-e6e0-ac16631f0566@infradead.org>
+Subject: Re: [PATCH] docs: Fix warning:Error in "code-block" directive
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <e69410c1-8632-354e-e6e0-ac16631f0566@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 676 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.6 (0.7%), b_tie_ro: 3.1 (0.5%), parse: 1.16
-        (0.2%), extract_message_metadata: 4.4 (0.7%), get_uri_detail_list: 2.1
-        (0.3%), tests_pri_-2000: 3.2 (0.5%), tests_pri_-1000: 2.1 (0.3%),
-        tests_pri_-950: 1.14 (0.2%), tests_pri_-900: 0.89 (0.1%),
-        tests_pri_-200: 0.69 (0.1%), tests_pri_-100: 2.5 (0.4%),
-        tests_pri_-90: 348 (51.5%), check_bayes: 345 (51.1%), b_tokenize: 6
-        (0.8%), b_tok_get_all: 9 (1.3%), b_comp_prob: 1.88 (0.3%),
-        b_tok_touch_all: 326 (48.2%), b_finish: 0.72 (0.1%), tests_pri_0: 289
-        (42.7%), check_dkim_signature: 0.60 (0.1%), check_dkim_adsp: 3.4
-        (0.5%), poll_dns_idle: 2.0 (0.3%), tests_pri_10: 2.9 (0.4%),
-        tests_pri_500: 9 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/1] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+On Fri, 2 Jun 2023 18:41:46 -0700, Randy Dunlap wrote:
+> On 6/2/23 18:20, Bagas Sanjaya wrote:
+>> On Fri, Jun 02, 2023 at 04:51:02PM -0500, Madhumitha Prabakaran wrote:
+>>> Fix the error in "code-block" directive by providing the
+>>> argument as "text".
+>>>
+>>> <snipped> ...
+>>>  Result code:
+>>>  ------------
+>>>  
+>>> -.. code-block::
+>>> +.. code-block:: text
+>> 
+>> Nope.
+>> 
+>> I don't see error you mention in this patch when making htmldocs on my
+>> computer (my setup is pretty standard: see
+>> Documentation/doc-guide/sphinx.rst). This patch is unneccessary, though,
+>> unless you have code snippets in some language (e.g. C, where passing
+>> language name to code-block:: syntax-highlight it). Result code outputs,
+>> on the other hand, are generic text with no definitive syntax, hence
+>> you can omit language name.
+>> 
+>> Thanks.
+> 
+> 
+> I also don't see any such warnings so I don't see a need for this patch.
+> My wild guess is that some older version of Sphinx was being used.
 
-> Hi Mike,
->
-> sorry, but somehow I can't understand this patch...
->
-> I'll try to read it with a fresh head on Weekend, but for example,
->
-> On 06/01, Mike Christie wrote:
->>
->>  static int vhost_task_fn(void *data)
->>  {
->>  	struct vhost_task *vtsk = data;
->> -	int ret;
->> +	bool dead = false;
->> +
->> +	for (;;) {
->> +		bool did_work;
->> +
->> +		/* mb paired w/ vhost_task_stop */
->> +		if (test_bit(VHOST_TASK_FLAGS_STOP, &vtsk->flags))
->> +			break;
->> +
->> +		if (!dead && signal_pending(current)) {
->> +			struct ksignal ksig;
->> +			/*
->> +			 * Calling get_signal will block in SIGSTOP,
->> +			 * or clear fatal_signal_pending, but remember
->> +			 * what was set.
->> +			 *
->> +			 * This thread won't actually exit until all
->> +			 * of the file descriptors are closed, and
->> +			 * the release function is called.
->> +			 */
->> +			dead = get_signal(&ksig);
->> +			if (dead)
->> +				clear_thread_flag(TIF_SIGPENDING);
->
-> this can't be right or I am totally confused.
->
-> Another signal_wake_up() can come right after clear(SIGPENDING).
+Right.
 
-Technically yes.
+In Sphinx changelog, "Features added" for 2.0.0b1 [1] lists this:
 
-However please not that prepare_signal does:
-	if (signal->flags & SIGNAL_GROUP_EXIT)
-		return false;
+    #1851: Allow to omit an argument for code-block directive. If omitted,
+    it follows highlight or highlight_language
 
-In general it is wrong to receive or attempt to process a signal
-after task death has been decided.
+[1]: https://www.sphinx-doc.org/en/master/changes.html#id1306
 
-Strictly speaking that doesn't cover de_thread, and coredumping
-but still receiving any kind of signal at that point is rare
-and generally wrong behavior.
+Pre-2.0 Sphinx is now deprecated.
+See commit 31abfdda6527 ("docs: Deprecate use of Sphinx < 2.4.x").
 
-Beyond that clearing TIF_SIGPENDING is just an optimization so
-the thread can sleep in schedule and not spin.
+        Thanks, Akira    
 
-> Again, I'll try to re-read this patch, but let me ask anyway...
->
-> Do we have a plan B? I mean... iirc you have mentioned that you can
-> change these code paths to do something like
->
-> 	if (killed)
-> 		tell_the_drivers_that_all_callbacks_will_fail();
->
->
-> so that vhost_worker() can exit after get_signal() returns SIGKILL.
->
-> Probably I misunderstood you, but it would be nice to avoid the changes
-> in coredump/etc code just to add a temporary (iiuc!) fix.
-
-One saving grace with the the vhost code is that you need to open
-device nodes that normally have root-only permissions.
-
-If we are willing to allow races in process shutdown to cause leaks I
-think we can do something better, and put the burden of work on vhost
-layer.
-
-I will follow up with a patch doing that.
-
-Eric
+> 
+> -- 
+> ~Randy
 
