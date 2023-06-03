@@ -2,166 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74717720DDE
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 06:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC80720DE2
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 06:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjFCErn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 00:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S231539AbjFCE4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 00:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjFCErj (ORCPT
+        with ESMTP id S229619AbjFCE4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 00:47:39 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2079.outbound.protection.outlook.com [40.107.101.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5097E59;
-        Fri,  2 Jun 2023 21:47:37 -0700 (PDT)
+        Sat, 3 Jun 2023 00:56:34 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD184E48;
+        Fri,  2 Jun 2023 21:56:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=efXdwnebSmvWPBKvQU87B4Pedb63wnSFGxh72SPadWdwihlUbm7u/DCbJ5UiWkmynfaBYbixAX3R+DR9Ze10rOfdaWKwZKl1x6wBmRJGOOgjd0Kmn9KPb2G5/CbYmD7u8MO9kWzldk1AT2OLA7e1TlX9B7H0OA0tOcii/nzWDKSOaTJDY6+mWi6rO9NclcJVIUv8FGZT+6Bzrtn+Ix/BBby0rYDjrTqjvPrymTrFQ2pz6NHiFE8oot9yBOqYhdEgLzl2D0jdYVoG8DUbdp1kkdQBbCZszcedSzio6YNo7Giux1yNt906uklJxDqpERHiTmAfT28VwCjk3rXxXm1PbA==
+ b=HkDS97pUkZ9VupVEXdSoRpyf1JgpPS5kretAIK75toAk4+1B8aO37goVC58AazXcaKUHyLjqtU1edknYkBW5Q8afv+FYW1Y+h7LerH/n4DIphUAlm5/6rj9EDDQ8fV09Iryofo3SLz5qrLWBmNZqnb86+gngVczEV2JHMvIgJfOxteFxUzzJzF9H3zwQXtg92h4i1XqvogUJ2NjOeOm0QCnU0c3T1pO4h5JN61r34Qcg9Hf2cIyvscavJOE80hs2ZyA5/dcux2555XlCgLD2+9XEmSPIgCOLuLO5ORIDAqJQS9ZZknHuK04BDKMYPXFBfKXgcLx8+MhwP/pX7d0BmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TcfodoBZiXE4glcugY3TSGUlbVkK1tiF7Db6xDO8Cjg=;
- b=X8pmYXikUi30bIy5FTRiAVotsYQXxBjJgEGQHFPstmYoSjjw84aoR0Bpn4aOFB5qINKFdPcWHjkszmQRea3nTFfaYXQsdLg+dMlKTZ1JBYVxBdqfWLu0zPqCRR1YhYyJwEObnoECr9jBgK01N/b3b/r29ErsCIXw4cafXZj4L2240iv+RAewsqHhVgHZTVZtTvZlJv5VYKs7br3C4023J2XMSxvn5lyB7r3ws3LXS2uJV3N3K5heJYuFyi62Pr6xYNUUYmzxxm8Td3/ONaTeYXEzmYr2mZxV1uLuNEn7FOX+mGu+FHnMR3RshLmKHDsKclWs9Vz0YtvnxnDr1ICOAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=ZtEy6rdaGKx16yYT2f9hu6i9x5Q/el1Pu0MgIZ9uIuM=;
+ b=SJGyxjSG0L7N6sWswMHmHK/ua8rguRO859rutKGOUEoKsarK9kTy00HrPcVhI7QIq8Qz5sBFPsE/ifULBSsiiO9Hw+YViFkSW2f6IYrKgjkt8WjATsBzV8tByARbJjyP1q7UanwcNZAG4gSxsDP+nPoH7SsOxhvtUYExszffQnOTQgdQfOBoDZHpN8UzFYTOrL/zA/SSWodhE5Bd/Df95bWU/jBtymr9M05TKmXZL5vnF741srNIxxbgXHCLlYiRxZZWNHHeTT4A8j5JjOMlAt/4mXWMfabH8/DQ67DD4AfjDJQJvWnKyhBdKgFHtB8lDX/UFyv67hhMU9/RauN09A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ooma.com; dmarc=pass action=none header.from=ooma.com;
+ dkim=pass header.d=ooma.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ooma.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TcfodoBZiXE4glcugY3TSGUlbVkK1tiF7Db6xDO8Cjg=;
- b=VE5I9SEJeZ6r8iJz1tMfE15Zid+tGpPffykdP7m9vRynCo581ecFuK4sxJ6zECg1kRBd9kwQM4CWP1xtCsnSOPEYm8Dh5C55xRyg9205c48gHokfam2FV418XC/jDFequUJ6Z509882lOvAiIhlzQ9og9dCdnSvDN45lwEhzZ74=
-Received: from MW3PR05CA0025.namprd05.prod.outlook.com (2603:10b6:303:2b::30)
- by DM6PR12MB4268.namprd12.prod.outlook.com (2603:10b6:5:223::15) with
+ bh=ZtEy6rdaGKx16yYT2f9hu6i9x5Q/el1Pu0MgIZ9uIuM=;
+ b=PvG4Li24PvvMYUgPkzgmcHwzDUqVo2UHzgcgdTqcJKtnWCNv2gpNyN24QNggUiLn8AaIdZQvqYamcIQl/W5YsZME9CmVW9h/yYjayMVJrVTEKgxCByivOXU40SSk6ahW+9S84L1PLbpxUt26bvM7OeTlb3NvDt13oxcD4uMfdcQ=
+Received: from BYAPR14MB2918.namprd14.prod.outlook.com (2603:10b6:a03:153::10)
+ by SJ0PR14MB4394.namprd14.prod.outlook.com (2603:10b6:a03:2c9::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Sat, 3 Jun
- 2023 04:47:33 +0000
-Received: from CO1NAM11FT026.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::ab) by MW3PR05CA0025.outlook.office365.com
- (2603:10b6:303:2b::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.12 via Frontend
- Transport; Sat, 3 Jun 2023 04:47:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT026.mail.protection.outlook.com (10.13.175.67) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.28 via Frontend Transport; Sat, 3 Jun 2023 04:47:32 +0000
-Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 2 Jun
- 2023 23:47:20 -0500
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-To:     <irogers@google.com>, <acme@kernel.org>, <sfr@canb.auug.org.au>
-CC:     <ravi.bangoria@amd.com>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.g.garry@oracle.com>, <will@kernel.org>,
-        <james.clark@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <adrian.hunter@intel.com>, <kjain@linux.ibm.com>,
-        <renyu.zj@linux.alibaba.com>, <kan.liang@linux.intel.com>,
-        <zhengjun.xing@linux.intel.com>, <maddy@linux.ibm.com>,
-        <atrajeev@linux.vnet.ibm.com>, <wangming01@loongson.cn>,
-        <chenhuacai@kernel.org>, <sandipan.das@amd.com>,
-        <9erthalion6@gmail.com>, <seanjc@google.com>, <robh@kernel.org>,
-        <tmricht@linux.ibm.com>, <tegongkang@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-Subject: [PATCH v2] perf test amd: Fix build failure with amd-ibs-via-core-pmu.c
-Date:   Sat, 3 Jun 2023 10:16:50 +0530
-Message-ID: <20230603044650.286-1-ravi.bangoria@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAP-5=fUPZ7+nAcxBp5sFBfxzkOH8kzWkLV0uziHqxYC0cDbbDw@mail.gmail.com>
-References: <CAP-5=fUPZ7+nAcxBp5sFBfxzkOH8kzWkLV0uziHqxYC0cDbbDw@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.24; Sat, 3 Jun
+ 2023 04:56:27 +0000
+Received: from BYAPR14MB2918.namprd14.prod.outlook.com
+ ([fe80::6e6d:b407:35b1:c64]) by BYAPR14MB2918.namprd14.prod.outlook.com
+ ([fe80::6e6d:b407:35b1:c64%3]) with mapi id 15.20.6455.028; Sat, 3 Jun 2023
+ 04:56:26 +0000
+From:   Michal Smulski <michal.smulski@ooma.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "simon.horman@corigine.com" <simon.horman@corigine.com>,
+        "kabel@kernel.org" <kabel@kernel.org>
+Subject: RE: [PATCH net-next v6 1/1] net: dsa: mv88e6xxx: implement USXGMII
+ mode for mv88e6393x
+Thread-Topic: [PATCH net-next v6 1/1] net: dsa: mv88e6xxx: implement USXGMII
+ mode for mv88e6393x
+Thread-Index: AQHZlOeZhHXye15LEk+eN0zupHuzTK93ULkAgAEuRqA=
+Date:   Sat, 3 Jun 2023 04:56:26 +0000
+Message-ID: <BYAPR14MB291837DB503BF967249B1F15E34FA@BYAPR14MB2918.namprd14.prod.outlook.com>
+References: <20230602001705.2747-1-msmulski2@gmail.com>
+ <20230602001705.2747-2-msmulski2@gmail.com>
+ <ZHnEzPadBBbfwj18@shell.armlinux.org.uk>
+In-Reply-To: <ZHnEzPadBBbfwj18@shell.armlinux.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=ooma.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR14MB2918:EE_|SJ0PR14MB4394:EE_
+x-ms-office365-filtering-correlation-id: 90ec6790-30f3-4a8b-1e39-08db63eee31b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GG2VraaJlZxN32+pKuZeiL0tgNZL5SrDVhVPLZy9fvpAE6RgTvRpmgoC6YgXFj0SeM5mvsWrukuxlIf2SuagTucGz9zAakorGwdtsozKcl/XmgjcilsoMH2+qQrsO4QABvmtT7G21w7mAXaORjs0LdNTEMCIwRNlfyqYktphuTzHBXEfKKhRNxfKQoWoCO5wPZ45yncIiKLK2CHJRWjWour/n5KvsNg5FDHfl6BImd1Kc+L4OInaE1v/gpGhZzU+JtJesRi8bQ69OC8aeQblbfo86B5rs6nrdFcKFXX9yHv5PjofkQ7qy2CLmtPxTBuDJBXKIzu81GyHya5zEmh8yx3wiy8Mqs8BX6X6pSjkI63w0g8hJ4jk8+11RmrdjCDewLpqPWegYTkvWyKQf5Q5oSs2OvtrnxLBZz4IFFMHuBxBQkriWLLPIZr/lYhZs3VWsfQtrpqgEOsYXOgJfbfOxGWdC5JGTnVr7UgbVg7musPiRRb4SWwrWrPDdIXsm+HcZHocVVTrfJBSCeE+e6v18om3j4A77gLqMTyGmw4BjfZM5RcJXnTD4qpITu3r8sXOipmNh45151M16VkVgvOuV8YoTiAQbF9O8MIKJAk3Ld3g8j5zZSYOoEBcFdny9+QX6d2MeS9o4o9ubMOndx60Zg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR14MB2918.namprd14.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(39850400004)(346002)(396003)(451199021)(66946007)(55016003)(83380400001)(4326008)(122000001)(41300700001)(38100700002)(316002)(38070700005)(53546011)(7696005)(966005)(6506007)(26005)(9686003)(71200400001)(33656002)(66476007)(66446008)(66556008)(76116006)(64756008)(8936002)(44832011)(8676002)(52536014)(2906002)(7416002)(5660300002)(54906003)(478600001)(110136005)(86362001)(186003)(138113003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eXP6Y7IEpG5D8VzYoEuw6y1ZhPAyVWCRe+k2iuDruc8MLUgAjowBjVznO7Co?=
+ =?us-ascii?Q?msJzl8Cv5qIGj0gQoxL7TqI3+cwVMFti1p6dKlgo+kTzW7moVzjLqLnVtSn8?=
+ =?us-ascii?Q?uu+AE263yN+/9yOZgKMzeJQ/9883qqr+794w2wTtyWNh2NXT0dvhkXbS2h2Z?=
+ =?us-ascii?Q?cIBDVmGLA0PxGRHN4urXbJyMaxkAgafgf0Sn2TCDgjUGzUNo4gRDv/pnlKW2?=
+ =?us-ascii?Q?SibUWl2kC99U+MaK8oQeVTdQq6m5pyCnbcwlRjFn6h6aFawVprZSmzpeOXLJ?=
+ =?us-ascii?Q?kTjSlG2wa1DfMHAC0SXWtVDBmI1IlbXwYZwqPg5Jfg7/HM1fuQD6PahlmgbG?=
+ =?us-ascii?Q?WyGXNhDBG1YiREqzyGRND9bp/y8/PA97Cc3zOw1Y0V8Bz4q4S5TN4kQAdDzV?=
+ =?us-ascii?Q?xFNV14qs28uQIqK9Xs15n3ZvYPxgpHBt6f3xI14D3Zlj78XMd1wFHS/Masam?=
+ =?us-ascii?Q?EufLwPnOXZcr4isaUTWZYDZLvKn6DCb55xOSqllvBB9zkx0DLzne2LNOfajK?=
+ =?us-ascii?Q?t+StlkYoJJ9UTBO+deJk+jACscX5eIWho/aNBJI+lWN+QqJW0OJQNHDjMemp?=
+ =?us-ascii?Q?LE6Ow8hyNVyhkAecUbc3nI8JAwVYOSwCpcNkjdncbggWO0+cEwqWEC6aInZ9?=
+ =?us-ascii?Q?Pf18a9RYgehtwWy/N82w8lldQoAz5nbgNz9ixm/Cv/MsbEKcKza+BKwcPXUN?=
+ =?us-ascii?Q?VNaOBs/AF5CVj2jggQr9roZKBCyXwJQSfN5+aWwkYD6HAGd5Edpl+Anq6Afz?=
+ =?us-ascii?Q?6OxsFQwTPe9vUuQbHy+sCI/nwgTgNFqPdh2x+pn0WdqcW/G0KwJqZYiNrGXt?=
+ =?us-ascii?Q?eWZJhp3QR0vWhCpvK/CI+ZGcfQVUUhDwdz4mEaWkHEbwRxNKYAxJe9lLz2SS?=
+ =?us-ascii?Q?XRJF1yLWKx3xdUghkAo+ncKoJh62RNn9pnK4LN4Sbgv97O42dUPgAoaN8Gzu?=
+ =?us-ascii?Q?3nJMvp3aAvWeEKMYWVFPIAi5l91IqZFKqpskzqI2tJfEbxzuCKTEN1abE+u4?=
+ =?us-ascii?Q?DQcqXag34ZKFzi8zO0tr60I6rskclyJd4phePcH9Ul3mmzvWbdTwBWovim8z?=
+ =?us-ascii?Q?OXHdbdDRMgbq+tYlPxgClmxLQ6K4uPNgICrwlPulKRJ3mnoa5gslvRg2odJo?=
+ =?us-ascii?Q?NfRpwpxfkg6fuUtrjTSJ0qCYHeUT9+FEL434QN6DpyzcI9EiyXDp35OPQ+23?=
+ =?us-ascii?Q?jCHDWKW03Ggbh/WjGCtsIu9DWqJ/Jw5mEx2Ykoyg3J1Zy03xKF7rR2dZyXdV?=
+ =?us-ascii?Q?d1qUrxl+6EZYO2pd/mVVSclbkma03Po5IP8gAlHkESMGte7ine3R0jSEv21G?=
+ =?us-ascii?Q?RYWeyo5LWHB6ItRcBCFvgkasdXuCtpuydUgfrvyXwEIxzhf89GfNHA+zumXG?=
+ =?us-ascii?Q?2YYh+f65X688QLCeLKGGOHsbrot1v6svxcWz3dCNxVGdjVH7vDOWCw3QRD5t?=
+ =?us-ascii?Q?K68qQfBDJg/43EY7rIWdg9Jbbs6qkjthFC4NTG9L2EZ+6PkC/Cg0kfxYk8Un?=
+ =?us-ascii?Q?uCZexG8RlNIwG+Z+iBo5afRwNuaFGr0pUqnPc9LcPyefnE18mqUwwboZc7OD?=
+ =?us-ascii?Q?gXmce/jB0fDJUZtPSyFMHwGY8t49hfJtFMzobcMX?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT026:EE_|DM6PR12MB4268:EE_
-X-MS-Office365-Filtering-Correlation-Id: f82908ee-5e1e-4dd3-8b53-08db63eda4ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SZN5aqxu+PAkkEag3rWRuDbRUmCA0C93Fbktp3wI3+WLZfb+bx6MV8qaGxsQWy8TIfWYnhSA6r6g8cwLdFvGYOpCNvvTxs3JyT6pn2+IQkvzP0FJeHYzSjEQRaHVIBt3NoZotZcioOT+B+TrineV0uXrAe3o+CjgVtDm3dD1wgra8U8dkIbX1A2ojrGepaJPV6v6Z2Uk1VYRisFIuAk3MQxjs4P97RHo67EpcW/D4LclAlbJX6lCAM8NFoEun53Dbmg/JUgRvFIGt3GOVedwP9LYQW0r1scGke7T4C09KhZlZqGxM82FcHA38FA/aB7fDGvd41x/bkxydpo4siUO37UyekvUEX3lYtYUFXY2fDSoAyRHmiQmc6l6xuQCbiL1zOhmAOPCHzJm4gKYX9HJEN5RoV4usl8G7/KEkvbPoMfdma/9D2X7zj5ritbJ0i6pwzTFIpk+IoPwDUDWwe+5dhYiG5ZZSWcnnVJAEPj+sEp0QWbeAHjFA7pi/NHL5TP1D/8+drB3mN3XQoZtgDEkNjWdlYf9TAVRW45xrRzLb4B2jbe4017IwkGONwY7FC5aLW36HssTf/aUQ+m5mjsoIR/68XXsBnozYFgCK+KkaJad6Lp33K4GwkL25l4xxkDeMETgtjlUOEOzC9UNqG1t8kYWnDDAB4ckuNI8iNXUKHyOXCsg0aKqsZyTWdHp5/3zFOuwcUekQmdpv1DCYki4zXCT9ASG+CwjuJI2AphkR4L+aNDdEDXpp23LgvxsF7kfVg2PKSeHKgqAgSrqldSV5g==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199021)(46966006)(40470700004)(36840700001)(40480700001)(81166007)(110136005)(478600001)(8936002)(356005)(40460700003)(54906003)(44832011)(7416002)(7406005)(36756003)(5660300002)(82310400005)(2906002)(8676002)(86362001)(70206006)(4326008)(82740400003)(70586007)(316002)(41300700001)(2616005)(16526019)(186003)(1076003)(26005)(6666004)(7696005)(36860700001)(47076005)(426003)(336012)(83380400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 04:47:32.7055
+X-OriginatorOrg: ooma.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR14MB2918.namprd14.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90ec6790-30f3-4a8b-1e39-08db63eee31b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2023 04:56:26.6380
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f82908ee-5e1e-4dd3-8b53-08db63eda4ef
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT026.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4268
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 2d44ad66-e31e-435e-aaf4-fc407c81e93b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iOOYlyFppKsWgWpBDKXYc7ts2/xCq76m2sZc9iy/FRY5BHFji7hKDd6hYywsU3wnVnrqwCnNZfgRjLa+IFMRdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR14MB4394
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since amd-ibs-via-core-pmu.c was applied via Peter's tree, some of
-the changes came via Arnaldo's tree did not reflect in this file,
-which is causing build failures.
+The two registers are not documented in Marvell spec for this switch and th=
+at is why my original patch did not have link status code.  I have followed=
+ suggestion by Andrew's and used other Marvell hardware that has USXGMII to=
+ see some of the same registers and same address would be accessible this s=
+witch (best effort attempt).=20
+These two registers appear to be read-only and likely are (1) what the swit=
+ch is advertising on USXMII link and (2) what the switch received (link par=
+tner advertisement).
+I am able to distinguish which is which because I can look at the other sid=
+e's of USXGMII interfaces which has well defined USXGMII registers.
 
-  arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: ‘pmus’ undeclared
-  (first use in this function)
-     47 |         if (list_empty(&pmus))
-        |                         ^~~~
-  arch/x86/tests/amd-ibs-via-core-pmu.c:48:17: error: implicit declaration
-  of function ‘perf_pmu__scan’; did you mean
-  perf_pmus__scan’? [-Werror=implicit-function-declaration]
-     48 |                 perf_pmu__scan(NULL);
-        |                 ^~~~~~~~~~~~~~
-        |                 perf_pmus__scan
-  arch/x86/tests/amd-ibs-via-core-pmu.c:50:19: error: implicit declaration
-  of function ‘perf_pmu__find’; did you mean
-  perf_pmus__find’? [-Werror=implicit-function-declaration]
-     50 |         ibs_pmu = perf_pmu__find("ibs_op");
-        |                   ^~~~~~~~~~~~~~
-        |                   perf_pmus__find
+During the boot sequence these registers show the following:
+1. On initial setup of the serdes link (inside the switch):
+Status=3D0x00, lp_status=3D0xff
+2. When irq link status triggers (mv88e6393x_serdes_irq_link_10g() ):
+Status=3D0xd601, lp_status=3D0x9781
+3. the driver then reports link
+mv88e6085 0x0000000008b96000:02: Link is Up - 10Gbps/Full - flow control of=
+f
 
-Fix those.
+Please note that Link Partner' MDIO_USXGMII_LINK bit is always 1 which make=
+s it useless for catching when the link is achieved. That is why I use swit=
+ch's side link bit to note the link is set. However, I can certainly add th=
+is to the patch.
 
-Fixes: 1eaf496ed386 ("perf pmu: Separate pmu and pmus")
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
----
-v1->v2:
-  - Remove unnecessary perf_pmus__scan(NULL) as suggested by Ian.
+My board is based on LX2162a (a version of LX2160a). Specifically, USXMII i=
+nterface is configured as follows:
 
- tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+LX2162a (DPMAC13 configured as USXGMII)  <---USXGMII --> 88E6191X (port10 c=
+onfigured as USXGMII).
 
-diff --git a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
-index 2902798ca5c1..78b1902f6f59 100644
---- a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
-+++ b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
-@@ -44,10 +44,7 @@ int test__amd_ibs_via_core_pmu(struct test_suite *test __maybe_unused,
- 	int ret = TEST_OK;
- 	int fd, i;
- 
--	if (list_empty(&pmus))
--		perf_pmu__scan(NULL);
--
--	ibs_pmu = perf_pmu__find("ibs_op");
-+	ibs_pmu = perf_pmus__find("ibs_op");
- 	if (!ibs_pmu)
- 		return TEST_SKIP;
- 
--- 
-2.40.1
+In fact, I am using pcs-lynx driver for LX2162a side of the interface.
 
+Michal
+
+
+-----Original Message-----
+From: Russell King <linux@armlinux.org.uk>=20
+Sent: Friday, June 2, 2023 3:31 AM
+To: msmulski2@gmail.com; Ioana Ciornei <ioana.ciornei@nxp.com>
+Cc: andrew@lunn.ch; f.fainelli@gmail.com; olteanv@gmail.com; davem@davemlof=
+t.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com; netdev@vger=
+.kernel.org; linux-kernel@vger.kernel.org; simon.horman@corigine.com; kabel=
+@kernel.org; Michal Smulski <michal.smulski@ooma.com>
+Subject: Re: [PATCH net-next v6 1/1] net: dsa: mv88e6xxx: implement USXGMII=
+ mode for mv88e6393x
+
+CAUTION: This email is originated from outside of the organization. Do not =
+click links or open attachments unless you recognize the sender and know th=
+e content is safe.
+
+
+On Thu, Jun 01, 2023 at 05:17:04PM -0700, msmulski2@gmail.com wrote:
+> +/* USXGMII registers for Marvell switch 88e639x are undocumented and=20
+> +this function is based
+> + * on some educated guesses. It appears that there are no status bits=20
+> +related to
+> + * autonegotiation complete or flow control.
+> + */
+> +static int mv88e639x_serdes_pcs_get_state_usxgmii(struct mv88e6xxx_chip =
+*chip,
+> +                                               int port, int lane,
+> +                                               struct=20
+> +phylink_link_state *state) {
+> +     u16 status, lp_status;
+> +     int err;
+> +
+> +     err =3D mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
+> +                                 MV88E6390_USXGMII_PHY_STATUS, &status);
+> +     if (err) {
+> +             dev_err(chip->dev, "can't read Serdes USXGMII PHY status: %=
+d\n", err);
+> +             return err;
+> +     }
+> +     dev_dbg(chip->dev, "USXGMII PHY status: 0x%x\n", status);
+> +
+> +     state->link =3D !!(status & MDIO_USXGMII_LINK);
+> +
+> +     if (state->link) {
+> +             err =3D mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
+> +                                         MV88E6390_USXGMII_LP_STATUS,=20
+> + &lp_status);
+
+What's the difference between these two registers? Specifically, what I'm a=
+sking is why the USXGMII partner status seems to be split between two separ=
+ate registers.
+
+Note that I think phylink_decode_usxgmii_word() is probably missing a check=
+ for MDIO_USXGMII_LINK, based on how Cisco SGMII works (and USXGMII is pret=
+ty similar.)
+
+MDIO_USXGMII_LINK indicates whether the attached PHY has link on the media =
+side or not. It's entirely possible for the USXGMII link to be up (thus all=
+owing us to receive the "LPA" from the PHY) but for the PHY to be reporting=
+ to us that it has no media side link.
+
+So, I think phylink_decode_usxgmii_word() at least needs at the beginning t=
+his added:
+
+        if (!(lpa & MDIO_USXGMII_LINK)) {
+                state->link =3D false;
+                return;
+        }
+
+The only user of this has been the Lynx PCS, so I'll add Ioana to this emai=
+l as well to see whether there's any objection from Lynx PCS users to addin=
+g it.
+
+--
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
