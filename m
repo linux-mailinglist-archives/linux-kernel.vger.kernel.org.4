@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6B2720FA6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 12:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE4B720FB1
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 12:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbjFCKu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 06:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S237135AbjFCK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 06:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbjFCKuw (ORCPT
+        with ESMTP id S229769AbjFCK4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 06:50:52 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFA3E72;
-        Sat,  3 Jun 2023 03:50:27 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-568ba7abc11so34332937b3.3;
-        Sat, 03 Jun 2023 03:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685789426; x=1688381426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qhk+FTHFrBmjng1l4FaLO0XbEr20/z5NnN2R+/a0y9I=;
-        b=WICmglInHtpq/+1zPVqjaftbQw+OxUIfaE4lJknx8UhWFdMk6shN0NrIdXU6wol1rv
-         LdMhT11VDRynM0gW526UFDGKPRH3zdh/pbkWN8sbGQBOcMksFL5jKDtX7pZZKke3yrmd
-         MStDArC2bBafPEXIHm+U2HECM8/+ZSAPiU4YJrvwELU7JCCzYh+J+gW26DdPIZIqA6J0
-         Uq96vdv+939hFTIik/g7vydyar8M1XrJiHXVMSQCTOB2kSJkG3e72mfoPPbxRXuOMRfh
-         uJyTxMZ5TG2Mjo6N3Pu/ZkaAV9UGP0t6MQ/5Lg3RbVFM0kEYlxOB02Y0GHxSuLm0d2v5
-         UsJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685789426; x=1688381426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qhk+FTHFrBmjng1l4FaLO0XbEr20/z5NnN2R+/a0y9I=;
-        b=XsxTxvXJStF/9+v0R56FVw1uKPIeQ5FjLFf9SMBjZYOpywIBdUKeGXa6cstdJCTA3A
-         qpbpkYu+YvSUYbBdbeHKpD5upvFxSB9mLwhZICiaGBDb+PkKOHl9+PqyQCKWJGs3BNJm
-         ARxT8C/Pypf76nLGxMDnFxbu8SEnFX7u7PnWCjztaqehXmyQV1hRCaZg5sWf2oglOIzx
-         +nLNYmP9bVKnemw3RPqIN8tIGiZTsf9uGV28aWRbqeQfJdLlVtV8ipluqbz8EZHpS1Wt
-         O2l3jPaaJ6sI5nsmAB+6hqFVii3A8kA7RABGrysKgY9I823WL7IfXRYZWuqrwO2uomH8
-         XGGQ==
-X-Gm-Message-State: AC+VfDz1oOnXzf4aClG5EkH3vAlUu+Szl7UqDDGc781It6dJrrIwRwcF
-        yDU/W3ecgy+iZWVBq1NOXcK6HQfndrEnRRg0KPM=
-X-Google-Smtp-Source: ACHHUZ6Vd6CnsBPqP7aYagxKWt3Oc7qkiNmhBQY7PH9Ghde129d1hiugljj6y4m1+yZwz56Pmb5G1R9sGTjbFd8a6b8=
-X-Received: by 2002:a81:d34d:0:b0:565:9a3d:a3f9 with SMTP id
- d13-20020a81d34d000000b005659a3da3f9mr4329111ywl.9.1685789426424; Sat, 03 Jun
- 2023 03:50:26 -0700 (PDT)
+        Sat, 3 Jun 2023 06:56:52 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EED59F5
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 03:56:49 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxHetxHHtkYesDAA--.4038S3;
+        Sat, 03 Jun 2023 18:56:49 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_7NwHHtkdTWHAA--.22115S2;
+        Sat, 03 Jun 2023 18:56:48 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v7 0/7] drm/etnaviv: add pci device driver support
+Date:   Sat,  3 Jun 2023 18:56:41 +0800
+Message-Id: <20230603105648.3042645-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAG8fp8Te=oT1JJhTpOZvgWJrgcTq2DXan8UOVZ=KYCYNa8cKog@mail.gmail.com>
- <CAMj1kXG0q-pJEnvqJxxpecVqJcB2jk3rj7S4KNp728THM=de3Q@mail.gmail.com>
- <CAG8fp8Tnfb5tt3Eea4+=zznZLxBfqwha_wkQcPDvU4QhcSckEw@mail.gmail.com>
- <CAG8fp8QbQqDVxEvzeyijbkfU5HoAwbRH0VptMK4-oPnJ7-0Ljg@mail.gmail.com> <CAMj1kXHAt69QqFdZDOTFKNLvAYuY9cwrVFgE+eDNZ8FSQA-45w@mail.gmail.com>
-In-Reply-To: <CAMj1kXHAt69QqFdZDOTFKNLvAYuY9cwrVFgE+eDNZ8FSQA-45w@mail.gmail.com>
-From:   Akihiro Suda <suda.kyoto@gmail.com>
-Date:   Sat, 3 Jun 2023 19:50:15 +0900
-Message-ID: <CAG8fp8TXA2UG+tS8F5KhSW7Xi1o7oHk0kQTs=Z8JpDU5VStjfQ@mail.gmail.com>
-Subject: Re: [PATCH] efi: bump efistub version from 1.1 to 3.0 for
- VZLinuxBootLoader compatibility
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi@vger.kernel.org, Linux x86 <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx_7NwHHtkdTWHAA--.22115S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFyUur4xWryxXrW7ZrW7XFb_yoW8Aw4kpF
+        47JFyYyry0vrW2kw17AFn5JFy3G3WxWF9Yk3srt3sI9w45AFyjvryDKa15Jr9xXr1fJr12
+        qr1akry3WF1UArJanT9S1TB71UUUUeUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bkAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVW8ZVWrXwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVW3AVW8Xw1lYx0E
+        x4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4
+        x0Y40E4IxF1VCIxcxG6Fyj6r4UJwCY1x0262kKe7AKxVWrXVW3AwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVW8ZVWrXwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW7JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_
+        Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUQj
+        YLDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > On x86, it incorporates a BIOS style loader that does not implement o=
-r expose EFI to the loaded kernel.
-> >
-> > AFAICS, it does not seem to use real mode BIOS.
-> >
->
-> I never mentioned real mode, did I?
+There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
+PCI device, and it has 2D and 3D cores in the same core. Thus, this patch
+set is trying to add PCI device driver support to etnaviv.
 
-Sorry, I just misinterpreted "BIOS style loader".
+v6:
+	* Fix build issue on system without CONFIG_PCI enabled
+v7:
+	* Add a separate patch for the platform driver rearrangement (Bjorn)
+	* Switch to runtime check if the GPU is dma coherent or not (Lucas)
+	* Add ETNAVIV_PARAM_GPU_COHERENT to allow userspace to query (Lucas)
+	* Remove etnaviv_gpu.no_clk member (Lucas)
+	* Various Typos and coding style fixed (Bjorn)
 
-2023=E5=B9=B46=E6=9C=883=E6=97=A5(=E5=9C=9F) 7:52 Ard Biesheuvel <ardb@kern=
-el.org>:
->
-> On Fri, 2 Jun 2023 at 22:30, Akihiro Suda <suda.kyoto@gmail.com> wrote:
-> >
-> > > > I'll queue this as a fix, but I'm going to tweak the comment (and t=
-he
-> > > > commit log) a bit, if you don't mind
-> >
-> > Thank you for rewriting my comments, but the new comments seem
-> > slightly incorrect:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3D36e4fc57fc1619f462e669e939209c45763bc8f5
-> >
-> > > efi: Bump stub image version for macOS HVF compatibility
-> >
-> > The commit is about Virtualization.framework, not about
-> > Hypervisor.framework (HVF).
-> >
-> > Virtualization.framework =3D high-level VMM, similar to QEMU
-> > (/usr/bin/qemu-system-*)
-> > Hypervisor.framework     =3D low-level  VMM, similar to kvm.ko
-> >
-> > > The macOS hypervisor framework includes a host-side VMM called VZLinu=
-xBootLoader
-> >
-> > VZLinuxBootLoader is a part of Virtualization.framework, not
-> > Hypervisor.framework.
-> > Also, VZLinuxBootLoader is not a VMM; it is just an API for loading
-> > vmlinuz into Virtualization.framework.
-> > (similar to the `-kernel` and the `-initrd` flags of QEMU)
-> >
->
-> Apologies for these mistakes. Unfortunately, this patch has been
-> merged now so there is nothing we can do about it.
->
-> > > On x86, it incorporates a BIOS style loader that does not implement o=
-r expose EFI to the loaded kernel.
-> >
-> > AFAICS, it does not seem to use real mode BIOS.
-> >
->
-> I never mentioned real mode, did I?
+Sui Jingfeng (7):
+  drm/etnaviv: add a dedicated function to register an irq handler
+  drm/etnaviv: add a dedicated function to get various clocks
+  drm/etnaviv: add dedicated functions to create and destroy platform
+    devices
+  drm/etnaviv: add helpers for private data construction and destruction
+  drm/etnaviv: allow bypass component framework
+  drm/etnaviv: add driver support for the PCI devices
+  drm/etnaviv: add support for the dma coherent device
+
+ drivers/gpu/drm/etnaviv/Kconfig             |   9 +
+ drivers/gpu/drm/etnaviv/Makefile            |   2 +
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c       | 228 +++++++++++++++-----
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h       |  10 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c       |  22 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |   7 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c       | 170 ++++++++++-----
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h       |   9 +
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c   |  75 +++++++
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h   |   9 +
+ include/uapi/drm/etnaviv_drm.h              |   1 +
+ 11 files changed, 422 insertions(+), 120 deletions(-)
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
+
+-- 
+2.25.1
+
