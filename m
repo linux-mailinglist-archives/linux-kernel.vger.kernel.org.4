@@ -2,105 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB56721013
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0AE721017
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235454AbjFCM3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 08:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S235551AbjFCMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 08:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbjFCM3L (ORCPT
+        with ESMTP id S230185AbjFCMfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 08:29:11 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314A1A6;
-        Sat,  3 Jun 2023 05:29:10 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-561b7729a12so65728487b3.1;
-        Sat, 03 Jun 2023 05:29:10 -0700 (PDT)
+        Sat, 3 Jun 2023 08:35:17 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC23A6
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 05:35:16 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-565e8d575cbso28776427b3.3
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 05:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685795716; x=1688387716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iuVyWmNBcPzZ9px5HApvrbE+4UzVEeYd3n/ao4IebL4=;
+        b=DPE/X+8C36OC5xHFfMvKRPL7NWsT8/ievCoAE3dGGX0hZSLuysF8HLj83SPAI8Dp/C
+         gD9Frniifmn6yMIuosNNoWULw3A0iAucNHhhoRHEXjHymk/vCLsUilgeiOA32KmJvfJr
+         MAz7W9HQTClxzvduMHySapUto3C/OsGxQdoU2IFpV72wg6+6QQ24t4+bNofN+aI09LKx
+         fsJ6LTYoUa6wEJEt1ADnKeBgCUy1++zeDFBf1Ip6b90I2tgD2OzjBxg7z3D3ZcmVGNOY
+         pNrUooHL9um5fagF8E5lBCdSR0nFNYGdEiJC1r3lEhwH08oqTX2H1ili/Mcys6xuxVs0
+         nKMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685795349; x=1688387349;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lj3c5i4LVsfDq+IR9UtiM8SjPOJlmSS1MT39h6r6yz8=;
-        b=LyT2wZ9o8RMwnLf0EZBQ5Ft2BKnD5wom4JrXEequD0EgIg+P+XC6m1hSiWAXzAK1x4
-         7OyVA/c2SmovawmuiX3C/laPARWcc1RZ3Xp9RI2c+lwyU/9xoVjJil3aGc6bFnCT/sgn
-         69yVo/10tfxmI3FwOjjQv6DG0Uyrqy8/gwUrzuakyQDXSH40OTJQd+fKjUM+3LuPg6mB
-         sjnJxCGYcEqD8fkw6GUEDlhABT7suHS1a0EGA8gIK1HQLVj6W+xDL6QIOLrOYCYnmUBz
-         /qLZMgKPxzopPpnc3PIjT5/EXg4RT553InR0XIfgssUzVmtGkMrUoJQj4rXnsLH7xYMI
-         NCNQ==
-X-Gm-Message-State: AC+VfDy7WmCHkAQ3MycBnrj78MbTRBQ5TiYYzOsKIKFYtmWW8qt9Fu4L
-        OKpC+2RPxaEcvdjdA3wENqQ=
-X-Google-Smtp-Source: ACHHUZ5BNuwyzunn2X0qgK3iGCf6DWX/cVutWu5eXPQl3bI+jokGNHknhIgNiMrHcgfCRCoZTniTmA==
-X-Received: by 2002:a81:480c:0:b0:568:cd43:b4ef with SMTP id v12-20020a81480c000000b00568cd43b4efmr3440268ywa.1.1685795348897;
-        Sat, 03 Jun 2023 05:29:08 -0700 (PDT)
-Received: from tofu.cs.purdue.edu ([128.210.0.165])
-        by smtp.gmail.com with ESMTPSA id q125-20020a817583000000b00545a08184cesm1447411ywc.94.2023.06.03.05.29.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jun 2023 05:29:08 -0700 (PDT)
-From:   Sungwoo Kim <iam@sung-woo.kim>
-Cc:     daveti@purdue.edu, Sungwoo Kim <iam@sung-woo.kim>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: L2CAP: Add missing checks for invalid DCID
-Date:   Sat,  3 Jun 2023 08:28:09 -0400
-Message-Id: <20230603122808.1633403-1-iam@sung-woo.kim>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1685795716; x=1688387716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iuVyWmNBcPzZ9px5HApvrbE+4UzVEeYd3n/ao4IebL4=;
+        b=bMMYApokQx/guhfewHu9MfJj5eX6X54Mp8v3S8WeNq6jGcmDdylmodq3kLkeXV7doX
+         NED+QAT+Ge7+ZU6NsFxkvL2fBFAq94ncKn2KNgLWaiKiN/qTiYmha4jFkyG7lrQ5NSoC
+         +1o4IpYdX+9vEu9yDC/4KYspZAun95Tb7bajuRzt7r8dO9Ie8MC7EDMhMjV0PRajP26V
+         92RMCOOFPV4tFBEKGSC/kh1EpZNlObyzGo29UrYIPMnw+7McuH0DiMYqVbo6WqNfjgg6
+         pr03qTKUHQmfiBTZA/Maw+KjWxv0oqS65/7drGoES99eapoUX5Eg1xoNJokKiPduwDyw
+         x/7Q==
+X-Gm-Message-State: AC+VfDweK+lUOB2noGgwEsPzC9KZSyKAQFwVYnkT+K4PK1MmWkZEc0rJ
+        awRkNUfZ++FlUrnpW9sqfDIIg91W166UaBhCEzKwpg==
+X-Google-Smtp-Source: ACHHUZ6lTNKrMmGDVmxukNct/iygaSE/KOAUNTViKMfFRpdChr9z388Vp/CwnLeUrx78ziV2Sdw0AZ+ld/4WvRkp5UU=
+X-Received: by 2002:a0d:d956:0:b0:565:bf0d:e26d with SMTP id
+ b83-20020a0dd956000000b00565bf0de26dmr2223614ywe.51.1685795715767; Sat, 03
+ Jun 2023 05:35:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230531141556.1637341-1-lee@kernel.org> <CANn89iJw2N9EbF+Fm8KCPMvo-25ONwba+3PUr8L2ktZC1Z3uLw@mail.gmail.com>
+ <CAM0EoMnUgXsr4UBeZR57vPpc5WRJkbWUFsii90jXJ=stoXCGcg@mail.gmail.com> <20230601140640.GG449117@google.com>
+In-Reply-To: <20230601140640.GG449117@google.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Sat, 3 Jun 2023 08:35:04 -0400
+Message-ID: <CAM0EoMmXFKNMkEFhnLReMO=jwu8ju8udV6-oZO9-yHL_7ocUYw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] net/sched: cls_u32: Fix reference counter leak
+ leading to overflow
+To:     Lee Jones <lee@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When receiving a connect response we should make sure that the DCID is
-within the valid range and that we don't already have another channel
-allocated for the same DCID.
-Missing checks may violate the specification (BLUETOOTH CORE SPECIFICATION
-Version 5.4 | Vol 3, Part A, Page 1046).
+On Thu, Jun 1, 2023 at 10:06=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
+>
+> On Wed, 31 May 2023, Jamal Hadi Salim wrote:
+>
+> > On Wed, May 31, 2023 at 11:03=E2=80=AFAM Eric Dumazet <edumazet@google.=
+com> wrote:
+> > >
+> > > On Wed, May 31, 2023 at 4:16=E2=80=AFPM Lee Jones <lee@kernel.org> wr=
+ote:
+> > > >
+> > > > In the event of a failure in tcf_change_indev(), u32_set_parms() wi=
+ll
+> > > > immediately return without decrementing the recently incremented
+> > > > reference counter.  If this happens enough times, the counter will
+> > > > rollover and the reference freed, leading to a double free which ca=
+n be
+> > > > used to do 'bad things'.
+> > > >
+> > > > Cc: stable@kernel.org # v4.14+
+> > >
+> > > Please add a Fixes: tag.
+>
+> Why?
+>
+> From memory, I couldn't identify a specific commit to fix, which is why
+> I used a Cc tag as per the Stable documentation:
+>
+> Option 1
+> ********
+>
+> To have the patch automatically included in the stable tree, add the tag
+>
+> .. code-block:: none
+>
+>      Cc: stable@vger.kernel.org
+>
+> in the sign-off area. Once the patch is merged it will be applied to
+> the stable tree without anything else needing to be done by the author
+> or subsystem maintainer.
+>
+> > > > Signed-off-by: Lee Jones <lee@kernel.org>
+> > > > ---
+> > > >  net/sched/cls_u32.c | 5 ++++-
+> > > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+> > > > index 4e2e269f121f8..fad61ca5e90bf 100644
+> > > > --- a/net/sched/cls_u32.c
+> > > > +++ b/net/sched/cls_u32.c
+> > > > @@ -762,8 +762,11 @@ static int u32_set_parms(struct net *net, stru=
+ct tcf_proto *tp,
+> > > >         if (tb[TCA_U32_INDEV]) {
+> > > >                 int ret;
+> > > >                 ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], ex=
+tack);
+> > >
+> > > This call should probably be done earlier in the function, next to
+> > > tcf_exts_validate_ex()
+> > >
+> > > Otherwise we might ask why the tcf_bind_filter() does not need to be =
+undone.
+> > >
+> > > Something like:
+> > >
+> > > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+> > > index 4e2e269f121f8a301368b9783753e055f5af6a4e..ac957ff2216ae18bcabdd=
+3af3b0e127447ef8f91
+> > > 100644
+> > > --- a/net/sched/cls_u32.c
+> > > +++ b/net/sched/cls_u32.c
+> > > @@ -718,13 +718,18 @@ static int u32_set_parms(struct net *net, struc=
+t
+> > > tcf_proto *tp,
+> > >                          struct nlattr *est, u32 flags, u32 fl_flags,
+> > >                          struct netlink_ext_ack *extack)
+> > >  {
+> > > -       int err;
+> > > +       int err, ifindex =3D -1;
+> > >
+> > >         err =3D tcf_exts_validate_ex(net, tp, tb, est, &n->exts, flag=
+s,
+> > >                                    fl_flags, extack);
+> > >         if (err < 0)
+> > >                 return err;
+> > >
+> > > +       if (tb[TCA_U32_INDEV]) {
+> > > +               ifindex =3D tcf_change_indev(net, tb[TCA_U32_INDEV], =
+extack);
+> > > +               if (ifindex < 0)
+> > > +                       return -EINVAL;
+> > > +       }
+>
+> Thanks for the advice.  Leave it with me.
+>
+> > >         if (tb[TCA_U32_LINK]) {
+> > >                 u32 handle =3D nla_get_u32(tb[TCA_U32_LINK]);
+> > >                 struct tc_u_hnode *ht_down =3D NULL, *ht_old;
+> > > @@ -759,13 +764,9 @@ static int u32_set_parms(struct net *net, struct
+> > > tcf_proto *tp,
+> > >                 tcf_bind_filter(tp, &n->res, base);
+> > >         }
+> > >
+> > > -       if (tb[TCA_U32_INDEV]) {
+> > > -               int ret;
+> > > -               ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], exta=
+ck);
+> > > -               if (ret < 0)
+> > > -                       return -EINVAL;
+> > > -               n->ifindex =3D ret;
+> > > -       }
+> > > +       if (ifindex >=3D 0)
+> > > +               n->ifindex =3D ifindex;
+> > > +
+> >
+> > I guess we crossed paths ;->
+>
+> > Please, add a tdc test as well - it doesnt have to be in this patch,
+> > can be a followup.
+>
+> I don't know how to do that, or even what a 'tdc' is.  Is it trivial?
+>
+> Can you point me towards the documentation please?
 
-Fixes: 40624183c202 ("L2CAP: Add missing checks for invalid LE DCID")
-Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
----
- net/bluetooth/l2cap_core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+There is a README in tools/testing/selftests/tc-testing/README
+If you created the scenario by running some tc command line it should
+not be difficult to create such a test. Or just tell us what command
+line you used to create it and we can help do one for you this time.
+If you found the issue by just eyeballing the code or syzkaller then
+just say that in the commit.
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 376b523c7..104eb0320 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -4306,6 +4306,10 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
- 	result = __le16_to_cpu(rsp->result);
- 	status = __le16_to_cpu(rsp->status);
- 
-+	if (result == L2CAP_CR_SUCCESS && (dcid < L2CAP_CID_DYN_START ||
-+					   dcid > L2CAP_CID_DYN_END))
-+		return -EPROTO;
-+
- 	BT_DBG("dcid 0x%4.4x scid 0x%4.4x result 0x%2.2x status 0x%2.2x",
- 	       dcid, scid, result, status);
- 
-@@ -4337,6 +4341,11 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
- 
- 	switch (result) {
- 	case L2CAP_CR_SUCCESS:
-+		if (__l2cap_get_chan_by_dcid(conn, dcid)) {
-+			err = -EBADSLT;
-+			break;
-+		}
-+
- 		l2cap_state_change(chan, BT_CONFIG);
- 		chan->ident = 0;
- 		chan->dcid = dcid;
--- 
-2.34.1
+cheers,
+jamal
 
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
