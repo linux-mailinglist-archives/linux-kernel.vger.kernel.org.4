@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C4D721182
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F3A721185
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjFCSNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 14:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S229513AbjFCSUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 14:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjFCSNK (ORCPT
+        with ESMTP id S229441AbjFCSUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 14:13:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1368C91;
-        Sat,  3 Jun 2023 11:13:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A42AD61715;
-        Sat,  3 Jun 2023 18:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12D42C433EF;
-        Sat,  3 Jun 2023 18:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685815989;
-        bh=BaLdbUDwszNFoR+RoJcfTMCqQGxzkVQRDhyLXhSmqdQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=qJC1EV5Qaw9GYPBkTCjWYyzPfqmn2u50FDyKfTzi9flzfJwc6wcQgrJ8NV/f7kB8R
-         hR+tB06ZfcLadbfJSuxhm1tX9ifeM9zfL5Csuk5gBfVPvXecYBCfFhQMq1rJx6tBjU
-         0c8ZoOPAwBW4pQHRgGwep6rJm4UvMsHqho4uT2mNYpWspS7brsA2S3AoutZd4i/Epu
-         RkA5zuO47MGWIJHKpOEhgHhRlUy/ExSytBnjfyUDr6auEPRhz94BLHk/kOh/NyNCTs
-         aXDgHexyCBz+k+t8l4mxFtt4ce4pUR1kkjwV8xjvVEQUlDwnqIXibbLpNbN7K5J5SD
-         bRfUeuZ8KIZEw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2C39C395E0;
-        Sat,  3 Jun 2023 18:13:08 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <b4e84e8564b86822ec4dab6ba85995888df20991.camel@HansenPartnership.com>
-References: <b4e84e8564b86822ec4dab6ba85995888df20991.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <b4e84e8564b86822ec4dab6ba85995888df20991.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 6d074ce231772c66e648a61f6bd2245e7129d1f5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e5282a7d8f6b604f2bb6a06457734b8cf1e2f8f2
-Message-Id: <168581598898.28460.4174809796768994968.pr-tracker-bot@kernel.org>
-Date:   Sat, 03 Jun 2023 18:13:08 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 3 Jun 2023 14:20:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45ED9B9
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 11:20:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4633EFEC;
+        Sat,  3 Jun 2023 11:21:23 -0700 (PDT)
+Received: from [10.57.72.226] (unknown [10.57.72.226])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1260F3F793;
+        Sat,  3 Jun 2023 11:20:35 -0700 (PDT)
+Message-ID: <c87d4b69-0971-2faf-9d10-615e3264b131@arm.com>
+Date:   Sat, 3 Jun 2023 19:20:34 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/4] mm/damon/ops-common: atomically test and clear
+ young on ptes and pmds
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, damon@lists.linux.dev
+References: <20230602214347.85694-1-sj@kernel.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230602214347.85694-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 03 Jun 2023 13:43:28 -0400:
+On 02/06/2023 22:43, SeongJae Park wrote:
+> On Fri, 2 Jun 2023 19:15:01 +0000 SeongJae Park <sj@kernel.org> wrote:
+> 
+>> Hi Ryan,
+>>
+>> On Fri, 2 Jun 2023 18:14:25 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>
+>>> On 02/06/2023 17:35, Yu Zhao wrote:
+>>>> On Fri, Jun 2, 2023 at 3:30 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>>>>
+>>>>> It is racy to non-atomically read a pte, then clear the young bit, then
+>>>>> write it back as this could discard dirty information. Further, it is
+>>>>> bad practice to directly set a pte entry within a table. Instead
+>>>>> clearing young must go through the arch-provided helper,
+>>>>> ptep_test_and_clear_young() to ensure it is modified atomically and to
+>>>>> give the arch code visibility and allow it to check (and potentially
+>>>>> modify) the operation.
+>>>>>
+>>>>> Fixes: 3f49584b262c ("mm/damon: implement primitives for the virtual memory address spaces").
+>>>>
+>>>> Just to double check: was "Cc: stable@vger.kernel.org" overlooked or
+>>>> deemed unnecessary?
+>>>
+>>> It was overlooked - incompetance strikes again! I was intending to cc the
+>>> whole series.
+>>
+>> Not the whole patches in this series but only this patch is intended to be
+>> merged in stable series, right?  If I'm not wrong, you could add
+>> 'Cc: <stable@vger.kernel.org>' tag here[1] when resending, to let stable kernel
+>> maintainers easily understand exactly what patches should be merged in the
+>> stable kernels.  So, you wouldn't need to touch coverletter or cc whole series
+>> but only this one.
+>>
+>> [1] https://www.kernel.org/doc/html/v4.10/process/stable-kernel-rules.html
+> 
+> And I just found Andrew added the tag while adding this to the -mm queue.
+> Thank you, Andrew!
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Yes indeed - thanks for fixing that up for me, Andrew!
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e5282a7d8f6b604f2bb6a06457734b8cf1e2f8f2
+> 
+> [1] https://lore.kernel.org/mm-commits/20230602205509.9DFBDC433D2@smtp.kernel.org/
+> 
+> 
+> Thanks,
+> SJ
+> 
+>>
+>>
+>> Thanks,
+>> SJ
+>>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
