@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB438720D4D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C50720D57
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236957AbjFCCba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 22:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S232018AbjFCCf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 22:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjFCCb2 (ORCPT
+        with ESMTP id S229617AbjFCCfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:31:28 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204C9E41
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 19:31:28 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75b04e897a5so309791485a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 19:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685759487; x=1688351487;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pW1rdqqbkEtPfg32gPMaFYxqvJDDH52eSLMUxtdjdeA=;
-        b=H4HacM23qksu9BnchKnhSbcxJI8fYuoGcOOrjtWGl0q6/72VzVLfqRjpaVOGjnPQPJ
-         QSbWFwVbR++PqWMvbDwWq0CLAm9VUpYiZPb3ltJsJtngZCGhwefGP82AFOrmacQdCWVN
-         bvbw8w3+udaH5c+tE5m/06sSPlVBLwaVlQgLnJquvve9jGs9GYkGtE4JjiNBE5v7a4W4
-         6T7gVTd8YHJoCNC9rM+1GzBTa67xSgvNNZAm3KzMAzPK1ZhzvFmLiw9vGCgtfTyGFGR7
-         5/GJ/nYaGKhwOoVQXdz0c2/KwfMsFMCbZeSenspA8l5rnPQkyxzTWQLQ478IrswHH1N5
-         IiKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685759487; x=1688351487;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pW1rdqqbkEtPfg32gPMaFYxqvJDDH52eSLMUxtdjdeA=;
-        b=FtCynI3+2H977pEOijWRkWLHC0CLeh9ojtM5CPdvJuR6xD3tXywhcpJ4gGaFlB9y7u
-         xUjNzBWvDCNei5B7ZLWxFNAoCbMW6rGqb4qO4a6FdONjOWsnczeiDrRyvtt3ZdwexdMf
-         UKpVBC4uLWGHOKCaHu/8oQp1f7agzooQUNt+hKHa8rsAf/sERtMBwnsOnsT8duXEtULz
-         oMxa1IAm0f5jjydenrxBHKxK8oz+myUeQdmjs3SZ6+GX59VPWmST+UJYjpxzz9b0E0L/
-         Ll8+ZL1BRXne8+633AXJwkXPAikczjjlcbR3jExmqC1j3gBhmFg4waaovOa5cKTLIoWm
-         o5eg==
-X-Gm-Message-State: AC+VfDywWR5F8lu/Xf1myWiWuim+W6gkm0yJnWQvDED4z3krgj4aMvrX
-        /xnwXkMyGrhROH6v0ZTcRIT1Jn8OLNZEOtiSU7S3xDr7SgE=
-X-Google-Smtp-Source: ACHHUZ4CFazECbW1+uvM4ZkwvzK4e+C7zW/jZxxm1NMGAOGWazDOIC9LapzKqLGSfBc/j017YHi1X7KXLeX+XI1ik88=
-X-Received: by 2002:a05:620a:1a24:b0:75b:23a1:3625 with SMTP id
- bk36-20020a05620a1a2400b0075b23a13625mr17612753qkb.54.1685759487100; Fri, 02
- Jun 2023 19:31:27 -0700 (PDT)
+        Fri, 2 Jun 2023 22:35:55 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 269E0E41;
+        Fri,  2 Jun 2023 19:35:52 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.116])
+        by gateway (Coremail) with SMTP id _____8Bx3+sHp3pkddQDAA--.8080S3;
+        Sat, 03 Jun 2023 10:35:51 +0800 (CST)
+Received: from [10.20.42.116] (unknown [10.20.42.116])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuUGp3pkSMKGAA--.19982S3;
+        Sat, 03 Jun 2023 10:35:50 +0800 (CST)
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Liu Peibao <liupeibao@loongson.cn>,
+        Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <20230601163335.6zw4ojbqxz2ws6vx@skbuf>
+ <ZHjaq+TDW/RFcoxW@bhelgaas> <20230601221532.2rfcda4sg5nl7pzp@skbuf>
+ <dc430271-8511-e6e4-041b-ede197e7665d@loongson.cn>
+ <7a7f78ae-7fd8-b68d-691c-609a38ab3161@loongson.cn>
+ <20230602101628.jkgq3cmwccgsfb4c@skbuf>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <87f2b231-2e16-e7b8-963b-fc86c407bc96@loongson.cn>
+Date:   Sat, 3 Jun 2023 10:35:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-From:   Liam Ni <zhiguangni01@gmail.com>
-Date:   Sat, 3 Jun 2023 10:31:16 +0800
-Message-ID: <CACZJ9cU6t5sLoDwE6_XOg+UJLpZt4+qHfjYN2bA0s+3y9y6pQQ@mail.gmail.com>
-Subject: [PATCH] mm:Improve the execution efficiency of early_ioremap_setup()
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230602101628.jkgq3cmwccgsfb4c@skbuf>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxMuUGp3pkSMKGAA--.19982S3
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ur18Zr4rJF13Ww1UWw1ftFb_yoW8ArW3p3
+        y3AFyFkFs8KFsFkw1qqw4rWa4Yyr48t3s5Wr4DWrn7u398X348tw4Ikw4Yga9rCw4xK3W2
+        vayYqF4xCFWqyFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04
+        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce the number of invalid loops of the function early_ioremap_setup()
-to improve the efficiency of function execution
 
-Signed-off-by: LiamNi <zhiguangni01@gmail.com>
----
- mm/early_ioremap.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
-index 9bc12e526ed0..ce06b2884789 100644
---- a/mm/early_ioremap.c
-+++ b/mm/early_ioremap.c
-@@ -72,12 +72,10 @@ void __init early_ioremap_setup(void)
- {
-    int i;
+On 2023/6/2 下午6:16, Vladimir Oltean wrote:
+> Hi Jianmin,
+> 
+> On Fri, Jun 02, 2023 at 03:36:18PM +0800, Jianmin Lv wrote:
+>> On 2023/6/2 下午3:21, Liu Peibao wrote:
+>>> Hi all,
+>>>
+>>> It seems that modification for current PCI enumeration framework is
+>>> needed to solve the problem. If the effect of this modification is not
+>>> easy to evaluate, for the requirement of Loongson, it should be OK that
+>>> do the things in Loongson PCI controller driver like discussed
+>>> before[1].
+>>>
+>>> Br,
+>>> Peibao
+>>>
+>>> [1] https://lore.kernel.org/all/20221114074346.23008-1-liupeibao@loongson.cn/
+>>>
+>>
+>> Agree. For current pci core code, all functions of the device will be
+>> skipped if function 0 is not found, even without the patch 6fffbc7ae137
+>> (e.g. the func 0 is disabled in bios by setting pci header to 0xffffffff).
+>> So it seems that there are two ways for the issue:
+>>
+>> 1. Adjust the pci scan core code to allow separate function to be
+>> enumerated, which will affect widely the pci core code.
+>> 2. Only Adjust loongson pci controller driver as Peibao said, and any
+>> function of the device should use platform device in DT if function 0 is
+>> disabled, which is acceptable for loongson.
+>>
+>> Thanks,
+>> Jianmin
+> 
+> How about 3. handle of_device_is_available() in the probe function of
+> the "loongson, pci-gmac" driver? Would that not work?
+> 
+This way does work only for the specified device. There are other 
+devices, such as HDA, I2S, etc, which have shared pins. Then we have to 
+add of_device_is_available() checking to those drivers one by one. And 
+we are not sure if there are other devices in new generation chips in 
+future. So I'm afraid that the way you mentioned is not suitable for us.
 
--   for (i = 0; i < FIX_BTMAPS_SLOTS; i++)
--       if (WARN_ON(prev_map[i]))
--           break;
--
--   for (i = 0; i < FIX_BTMAPS_SLOTS; i++)
-+   for (i = 0; i < FIX_BTMAPS_SLOTS; i++) {
-+       WARN_ON_ONCE(prev_map[i]);
-        slot_virt[i] = __fix_to_virt(FIX_BTMAP_BEGIN - NR_FIX_BTMAPS*i);
-+   }
- }
+Thanks,
+Jianmin
 
- static int __init check_early_ioremap_leak(void)
--- 
-2.25.1
