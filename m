@@ -2,146 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B833B720CAB
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BE0720CB1
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbjFCAnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 20:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S236920AbjFCAwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 20:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjFCAnf (ORCPT
+        with ESMTP id S236924AbjFCAwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 20:43:35 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D242E41;
-        Fri,  2 Jun 2023 17:43:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BvduP2omH6QW8gUAzkR2315cBQPgQvFlSuKdNnCRX0LvXCaNshuyoo8VWEnz8+qRKqEqSREAQFOm9tyK/uk4GkONnPMiN/1OFla/fZPW2jL0ImeOreguSuYq5eg0uORm0xmMkuHBxaoNkCX75DmqM3yRo3PC2XBVj+8mXiJUZX2CnxV0nx/qA3pXuSrw6IqO6qR0654wH986E5MeDUTksiEDpcfmYEF34sEUzC3EOEauKE/tRJNeletPEwacbuX0fckZ+9yHKZ8VVzi6FjlZ0HoXW7gp4UV0kOzBiddQweohvtI3jMTmTJmgeFLIA6ONEoI4i5QHuefteJRD/CyPiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ozwz4Jq3BHkK6lIsFgJYhHvHuDOmiA840KQwRollF2o=;
- b=fCf70WbLX7zolizxnGdXTiUbbi02cEA0dJv3xNK77TNQhKbVAwO5KbIJbYzz6RoFGXp5BYz1dOCUlV+wKv3wiNLh3czw+ar/2nmuS3BPuDjmRzyP7NhF/kx2iJg2W+Vcs8/wl4cG5beI3ZKleahJGMCnP551LGudTTvRIserYFeTxYY6rXuOOYVH7nXCS7w4+yUvMFL2+HdTwqj0c1et2+FP78lF2kIzQ7fsI6dFzH+QKzyd6ZBjiM90rnJYMzUCMnlpg+K3c8mmwpluAPDA9EmoXSzL2UpfFWEFXw5dzrLi8wiIlQtjPaXJXjmk9iwNJkmnYDhxuPZhTlQ4GXv3sQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ozwz4Jq3BHkK6lIsFgJYhHvHuDOmiA840KQwRollF2o=;
- b=jURGhyn1c0jdzd8M8yoIqkfMCp7j5dCZINBAAhBbF84v9GklEeUEUIg7uGlVgGFLuPHjHgSiLWBLN7Rf1kL1QzF9r/+orEL6iYnYeM+1lX1BOBP2HOAh0oNALcK3QiZqg3dQ89tFx27ubEFnSsonXZMfoyatxedUNPKsxnqKbJdPyrt6aFw2K0kyiXkOn6tlfYKfXrUFz9N+1b0k5WpUaSmb6z2k7wqa3AhUBNnx7ex7Cg4WrH+ScQnmQW+RGE8+q1NzwwS/whMuRBgMOEJuB1XSHRlbiX/e1BcK8VoHSJI5hlufDr/3QxdB6jmUrZjnjx1XeeMycb6kVXRppuluBA==
-Received: from BN8PR15CA0055.namprd15.prod.outlook.com (2603:10b6:408:80::32)
- by DM4PR12MB5120.namprd12.prod.outlook.com (2603:10b6:5:393::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Sat, 3 Jun
- 2023 00:43:32 +0000
-Received: from BN8NAM11FT092.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:80:cafe::e2) by BN8PR15CA0055.outlook.office365.com
- (2603:10b6:408:80::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
- Transport; Sat, 3 Jun 2023 00:43:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT092.mail.protection.outlook.com (10.13.176.180) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.26 via Frontend Transport; Sat, 3 Jun 2023 00:43:32 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 17:43:20 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 17:43:20 -0700
-Message-ID: <fed573c9-2045-e13b-15b5-91df2446ef42@nvidia.com>
-Date:   Fri, 2 Jun 2023 17:43:19 -0700
+        Fri, 2 Jun 2023 20:52:23 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B624CE4E
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 17:52:20 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-33b0cae115bso11813695ab.3
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 17:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685753540; x=1688345540;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=47yKag1HPVe1tlg/ueV2EmabxwqalA0eGEjj+7JE1uc=;
+        b=UWIvN/qvXfrWqOcG4gb6e/SydmD4XyYL0b/3cLXe1b9WDm329KgaO9cKycjRwD473K
+         5TCOPQ/yMBhVqGwhNuU7qPsLBldyyFhIutUweZTyGlDXuPLfeV4ghxFgVoVMaznaJQqL
+         lso2N/YgqQcS9WlXHd0+ykyR+ZNQ4k4Tnd4MLYPidVNLRQPJoOkakl0onc1j45sA3wL4
+         OtVhA8x2Mh5PRgihy8gl+v/XxfHMWX0aOgW/R1aK1HFXbY4CqVcJFxRSMQxSzI0rGq+P
+         xomIjZ7uHiOrIMIyetSUiwCh+tuhcZGtJwu5tFtMYT0gq/oKTpAfK3FSlbqpzuV0E7P7
+         oLkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685753540; x=1688345540;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=47yKag1HPVe1tlg/ueV2EmabxwqalA0eGEjj+7JE1uc=;
+        b=Jm+BQz2ReiVlHq7LnkT9u4V9nj4gFfnTzY4otNvAkRRMYhgSw+dzhfQA1ssIVxeFWI
+         aNVWKX1G1VL+2/Cy/ouYBGBhyrDARvIiXKTBRhPZ+fEOWxP0DliL6OxKUgEO4P60laoN
+         DycayGUzXKeZAkxwz7eQARWJ0kfqCUMMytAXIbHgJbpWAgszEiRJYJHuc5Nbkml8TDDJ
+         0UBFGxME1R4fgEAfnJ5EFOUKcTiOeY6GQ9Z1lUIrHzgbJmkN0Gr5mkdhQLMM+ujH6su8
+         zuNhEm/Ofb49z3k5+LQl84NB2XNoB1KwiyiRwp9cmvaJ6WxY/LgjznB4bIDWe4A7zJT4
+         W4eQ==
+X-Gm-Message-State: AC+VfDzrAM8nE6JgpuASL8YbVoCKTbiZrjwTQIkWeLWQQwdlVOecbI2/
+        GGbC8uBf7plK8bk5qQOMIRBasg==
+X-Google-Smtp-Source: ACHHUZ7rYnVeBADFLLMphNs56bdK1ktmP0TPdfjl/WkThM+AmFAZAPwTara48yQiFHumZBSIA05t5w==
+X-Received: by 2002:a05:6e02:810:b0:338:c685:83d1 with SMTP id u16-20020a056e02081000b00338c68583d1mr10978918ilm.10.1685753539952;
+        Fri, 02 Jun 2023 17:52:19 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id u6-20020a634706000000b0053b8a4f9465sm1788619pga.45.2023.06.02.17.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 17:52:18 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q5FV8-0076kT-2D;
+        Sat, 03 Jun 2023 10:52:14 +1000
+Date:   Sat, 3 Jun 2023 10:52:14 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     Mike Snitzer <snitzer@kernel.org>,
+        Joe Thornber <thornber@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>, dm-devel@redhat.com,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Joe Thornber <ejt@redhat.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZHqOvq3ORETQB31m@dread.disaster.area>
+References: <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+ <ZG+KoxDMeyogq4J0@bfoster>
+ <ZHB954zGG1ag0E/t@dread.disaster.area>
+ <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
+ <ZHFEfngPyUOqlthr@dread.disaster.area>
+ <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+ <ZHYB/6l5Wi+xwkbQ@redhat.com>
+ <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+ <ZHYWAGmKhwwmTjW/@redhat.com>
+ <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 10/12] selftests/mm: move uffd* routines from vm_util.c to
- uffd-common.c
-Content-Language: en-US
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Peter Xu <peterx@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-11-jhubbard@nvidia.com> <ZHoR+3v+zUENBhi4@x1n>
- <68549f29-fe41-04d4-f648-245f399c350b@nvidia.com> <ZHpvZcdik7VPsEcL@x1n>
- <990f222f-643c-3b8e-6e5f-84dc98c3f2e8@nvidia.com>
-In-Reply-To: <990f222f-643c-3b8e-6e5f-84dc98c3f2e8@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT092:EE_|DM4PR12MB5120:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53d91769-49b7-40b2-7526-08db63cb8e8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VhZnzMTyhIMPgXuHujL1oFg/EVNGG3rIIz+Xf5LDPHsO4Yon6F2oHAoDvrqTzQbyRNoOZ+kfuhlCtcKn/bRoE0vHXbOmMeRL0SX/kPvn6zihJAQpJTzkglguK+EDWCs11WZzoLrPvxWo3GAtxvYWfR+O4Dlo9Ba+/Zdt1EOZM2ra+0ctVyMMMuapJgWiQ33lECdMOpc9q1y1eupHiqLlelBVDKDCsqnBsy+1GEWjaKZe4bYdTmhm1Eb1JlWnDKI+J3IkvXvGOm/yRtUGETZrM7n5UwwSTI8CRp6pKhF/aIylM4NVOgZ1eh5epHRk0/qWYx2Sn/Ybv1DkVA4yoNWPDr1/8mUjRfS4sGj8ZKkedDgszDNyb5NnG/NAuBfIjn9qlEcA2N1rEVACFidgeqGpDtKg0oP1uo9NljcsiYEr7L1mWcBWNdjzecKw/GnyYfImT92lwDtbXj/1KFFj13QZDslup2vh+2ZkeSprmYJ6pbqdl0wwkc62apaBJhjMcypXyokoOQPIXCQBI+GRB4OF33tk3DHTSPQqMstRj/LLlQ3eFo0BnbTGUQ8rZHNKpjjht+uXUv5lLMh8xoNOMSauTlw6uNqn2yBNDItm9R1smIqiXvX3aOCV2F+M3FblPXrZB8kzjB1iJHABed3dkR7pcitZMo2cGPjTrTi3c6NwXJmIGgXOoPKbQhcGv+KEqVvA9bYnwegKgEtIzfY12DJFoZ5mDc6E5RznDuXh1Q7bT/zMwzQhQm/hIKRUq/wHOUGRcEqIksyMi/AK0RTrzSLnQA==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(54906003)(16576012)(40460700003)(478600001)(5660300002)(8936002)(8676002)(36756003)(2906002)(4744005)(86362001)(31696002)(82310400005)(4326008)(6916009)(70586007)(316002)(82740400003)(40480700001)(356005)(7636003)(70206006)(41300700001)(31686004)(83380400001)(47076005)(2616005)(53546011)(26005)(186003)(16526019)(336012)(36860700001)(426003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 00:43:32.2041
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53d91769-49b7-40b2-7526-08db63cb8e8b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT092.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5120
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/23 15:52, John Hubbard wrote:
-> On 6/2/23 15:38, Peter Xu wrote:
-> ...
->>> I think we're in agreement that we want to only include uffd-common.h
->>> where it's actually required. Likewise with the uffd*() routines. So I
->>> would like to still move this over, yes, just to have things in their
->>> best-named location.
->>
->> Sorry I didn't get it - e.g. I'm confused why we need to export
->> uffd_test_ops into ksm unit test, it doesn't make much sense to me..
-> 
-> Oh, I see what you mean, finally. Yes. ksm should not need that.
-> 
+On Fri, Jun 02, 2023 at 11:44:27AM -0700, Sarthak Kukreti wrote:
+> On Tue, May 30, 2023 at 8:28 AM Mike Snitzer <snitzer@kernel.org> wrote:
+> >
+> > On Tue, May 30 2023 at 10:55P -0400,
+> > Joe Thornber <thornber@redhat.com> wrote:
+> >
+> > > On Tue, May 30, 2023 at 3:02 PM Mike Snitzer <snitzer@kernel.org> wrote:
+> > >
+> > > >
+> > > > Also Joe, for you proposed dm-thinp design where you distinquish
+> > > > between "provision" and "reserve": Would it make sense for REQ_META
+> > > > (e.g. all XFS metadata) with REQ_PROVISION to be treated as an
+> > > > LBA-specific hard request?  Whereas REQ_PROVISION on its own provides
+> > > > more freedom to just reserve the length of blocks? (e.g. for XFS
+> > > > delalloc where LBA range is unknown, but dm-thinp can be asked to
+> > > > reserve space to accomodate it).
+> > > >
+> > >
+> > > My proposal only involves 'reserve'.  Provisioning will be done as part of
+> > > the usual io path.
+> >
+> > OK, I think we'd do well to pin down the top-level block interfaces in
+> > question. Because this patchset's block interface patch (2/5) header
+> > says:
+> >
+> > "This patch also adds the capability to call fallocate() in mode 0
+> > on block devices, which will send REQ_OP_PROVISION to the block
+> > device for the specified range,"
+> >
+> > So it wires up blkdev_fallocate() to call blkdev_issue_provision(). A
+> > user of XFS could then use fallocate() for user data -- which would
+> > cause thinp's reserve to _not_ be used for critical metadata.
 
-...whoops, correction, our very own David Hildenbrand recently made
-changes that contradict the claim that "ksm and uffd selftests are
-independent". In fact, ksm now *intentionally* depends upon uffd, as of
-commit 93fb70aa5904c ("selftests/vm: add KSM unmerge tests"), aha!
+Mike, I think you might have misunderstood what I have been proposing.
+Possibly unintentionally, I didn't call it REQ_OP_PROVISION but
+that's what I intended - the operation does not contain data at all.
+It's an operation like REQ_OP_DISCARD or REQ_OP_WRITE_ZEROS - it
+contains a range of sectors that need to be provisioned (or
+discarded), and nothing else. The write IOs themselves are not
+tagged with anything special at all.
 
-That added commit added a call to test_unmerge_uffd_wp(), to
-ksm_functional_tests.c .
+i.e. The proposal I made does not use REQ_PROVISION anywhere in the
+metadata/data IO path; provisioned regions are created by separate
+operations and must be tracked by the underlying block device, then
+treat any write IO to those regions as "must not fail w/ ENOSPC"
+IOs.
 
-So this needs to stay approximately as-is, it seems.
+There seems to be a lot of fear about user data requiring
+provisioning. This is unfounded - provisioning is only needed for
+explicitly provisioned space via fallocate(), not every byte of
+user data written to the filesystem (the model Brian is proposing).
 
+Excessive use of fallocate() is self correcting - if users and/or
+their applications provision too much, they are going to get ENOSPC
+or have to pay more to expand the backing pool reserves they need.
+But that's not a problem the block device should be trying to solve;
+that's a problem for the sysadmin and/or bean counters to address.
 
-thanks,
+> >
+> > The only way to distinquish the caller (between on-behalf of user data
+> > vs XFS metadata) would be REQ_META?
+> >
+> > So should dm-thinp have a REQ_META-based distinction? Or just treat
+> > all REQ_OP_PROVISION the same?
+> >
+> I'm in favor of a REQ_META-based distinction.
+
+Why? What *requirement* is driving the need for this distinction?
+
+As the person who proposed this new REQ_OP_PROVISION architecture,
+I'm dead set against it.  Allowing the block device provide a set of
+poorly defined "conditional guarantees" policies instead of a
+mechanism with a single ironclad guarantee defeats the entire
+purpose of the proposal. 
+
+We have a requirement from the *kernel ABI* that *user data writes*
+must not fail with ENOSPC after an fallocate() operation.  That's
+one of the high level policies we need to implement. The filesystem
+is already capable of guaranteeing it won't give the user ENOSPC
+after fallocate, we now need a guarantee from the filesystem's
+backing store that it won't give ENOSPC, too.
+
+The _other thing_ we need to implement is a method of guaranteeing
+the filesystem won't shut down when the backing device goes ENOSPC
+unexpected during metadata writeback.  So we also need the backing
+device to guarantee the regions we write metadata to won't give
+ENOSPC.
+
+That's the whole point of REQ_OP_PROVISION: from the layers above
+the block device, there is -zero- difference between the guarantee
+we need for user data writes to avoid ENOSPC and for metadata writes
+to avoid ENOSPC. They are one and the same.
+
+Hence if the block device is going to say "I support provisioning"
+but then give different conditional guarantees according to the
+*type of data* in the IO request, then it does not provide the
+functionality the higher layers actually require from it.
+
+Indeed, what type of data the IO contains is *context dependent*.
+For example, sometimes we write metadata with user data IO and but
+we still need provisioning guarantees as if it was issued as
+metadata IO. This is the case for mkfs initialising the file system
+by writing directly to the block device.
+
+IOWs, filesystem metadata IO issued from kernel context would be
+considered metadata IO, but from userspace it would be considered
+normal user data IO and hence treated differently. But the reality
+is that they both need the same provisioning guarantees to be
+provided by the block device.
+
+So how do userspace tools deal with this if the block device
+requires REQ_META on user data IOs to do the right thing here? And
+if we provide a mechanism to allow this, how do we prevent userspace
+for always using it on writes to fallocate() provisioned space?
+
+It's just not practical for the block device to add arbitrary
+constraints based on the type of IO because we then have to add
+mechanisms to userspace APIs to allow them to control the IO context
+so the block device will do the right thing. Especially considering
+we really only need one type of guarantee regardless of where the IO
+originates from or what type of data the IO contains....
+
+> Does that imply that
+> REQ_META also needs to be passed through the block/filesystem stack
+> (eg. REQ_OP_PROVION + REQ_META on a loop device translates to a
+> fallocate(<insert meta flag name>) to the underlying file)?
+
+This is exactly the same case as above: the loopback device does
+user data IO to the backing file. Hence we have another situation
+where metadata IO is issued to fallocate()d user data ranges as user
+data ranges and so would be given a lesser guarantee that would lead
+to upper filesystem failure. BOth upper and lower filesystem data
+and metadata need to be provided the same ENOSPC guarantees by their
+backing stores....
+
+The whole point of the REQ_OP_PROVISION proposal I made is that it
+doesn't require any special handling in corner cases like this.
+There are no cross-layer interactions needed to make everything work
+correctly because the provisioning guarantee is not -data type
+dependent*. The entire user IO path code remains untouched and
+blissfully unaware of provisioned regions.
+
+And, realistically, if we have to start handling complex corner
+cases in the filesystem and IO path layers to make REQ_OP_PROVISION
+work correctly because of arbitary constraints imposed by the block
+layer implementations, then we've failed miserably at the design and
+architecture stage.
+
+Keep in mind that every attempt made so far to address the problems
+with block device ENOSPC errors has failed because of the complexity
+of the corner cases that have arisen during design and/or
+implementation. It's pretty ironic that now we have a proposal that
+is remarkably simple, free of corner cases and has virtually no
+cross-layer coupling at all, the first thing that people want to do
+is add arbitrary implementation constraints that result in complex
+cross-layer corner cases that now need to be handled....
+
+Put simply: if we restrict REQ_OP_PROVISION guarantees to just
+REQ_META writes (or any other specific type of write operation) then
+it's simply not worth persuing at the filesystem level because the
+guarantees we actually need just aren't there and the complexity of
+discovering and handling those corner cases just isn't worth the
+effort.
+
+Cheers,
+
+Dave.
 -- 
-John Hubbard
-NVIDIA
-
+Dave Chinner
+david@fromorbit.com
