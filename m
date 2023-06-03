@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6781720CB9
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D11720CBB
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbjFCAxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 20:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S236961AbjFCAxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 20:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236959AbjFCAxX (ORCPT
+        with ESMTP id S236950AbjFCAx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 20:53:23 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93690E68
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 17:53:13 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bad040af6baso3536670276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 17:53:13 -0700 (PDT)
+        Fri, 2 Jun 2023 20:53:26 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DE9E51
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 17:53:24 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-568a8704f6dso36366207b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 17:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685753593; x=1688345593;
+        d=google.com; s=20221208; t=1685753603; x=1688345603;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HkWc440dWqKfJAoTPSU5D4E5Pe2P3uy3rMsCIhe40hk=;
-        b=7uEl/J9TvzVsprsjMLqrwf5nORDQHNyPWeCl+qscfM1YZ0S7pYASeEfoV+RCPS64XU
-         Hd1M9bKzQJrOhyi74jNjZok4LSsXA02fvinmTcuXngeVs/bpn5kLdcWTM0R0fTOr4oxl
-         W5GNj6kSv5gxo4idFpsuBIjKDIZYPwcEmODHQ4U/Lm/9n60j4WX3TdxcaNaay6OO0Y72
-         /mRX8q12wm4QUASjAixVQD2zEj0L3TrIyn2Pb2tVeLsB/uydjyT6QB9G6dcg6EfLpVHV
-         bEt/Dq6Se/BQMUXIy+KbDLvcSGbDWBXwpCpU2VmZx3t3U7l29xUWv57pV88ycMaG+lXI
-         PmJA==
+        bh=n041xAZDVwxiVPMIxRlYBoUvARBDDSPz3idlvcyMyR0=;
+        b=vNlzgZX/Q1pYX8oIlG6T3QWVQpDTWxmVtc5SRsF8Bw7uI1yxaXzJabH5fngu8istNQ
+         WsDf0m3H61WIneh+nfMgAHDRBOwmlkZjDJA8+eFdeHiaphjR8rxZJYF6atg5QiZ9WuPR
+         MRYtcpKpdb54omdSW+iFPYjN1LV36vPTOUKF47cxC0hYYYZHDcf91iF4ESMdf4It6xA+
+         3ZIUrnAmQeZM6j2GnioxaSiKuSl6iuogTp+/tOYQvRKAdKZi244l2LqrROU3bhjK2JA2
+         LWjapl23jD382839ZmCypu1GARzbiEJBXlUvYQVoVVwRPKFkE2nAgGvPSZLmsP4WTQZM
+         G/Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685753593; x=1688345593;
+        d=1e100.net; s=20221208; t=1685753603; x=1688345603;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HkWc440dWqKfJAoTPSU5D4E5Pe2P3uy3rMsCIhe40hk=;
-        b=X+ZJDbvEOgwThmDGQn28Zr5EvrhUPUdp35vYLjsqsqz5ev8uI544mKThvJ7V0hzohs
-         ypG8kfQk1OHPoOYSvMsexijqOqZlzHdETqohGQFdZvtkGK3jhlbWJfxupzydy8J6ZCzm
-         o7MRtb9wJuRwLmh/gxJG370KHjGnMvE5IPrJlIIM+0EcixNAXdm2wLb6bb0jAaQ+MbgR
-         CGiUCxqB2GwSRTruEtQAwcjzD7HnhMtXLkyqZFW/5KL5oT6FAdVcBeYR9hSE4M2c49ZC
-         nNeUfjmiqXIfQ3cceQJ1H281F19GFyLCbAj0ewRuBb+flCu18V6QOtewQureONjsplPi
-         cNAw==
-X-Gm-Message-State: AC+VfDwOmuUlMmE5rhtJgM+qymzxLIHrAAXzkuhwyCsLRAu4MMjGbCsa
-        FMHHfMf4eQA8UYNtI4rz8WfeFWvEdkk=
-X-Google-Smtp-Source: ACHHUZ5atE6hgPN+PIS7ryPhOEtiyjPljJzAD5UoyGoDuS1n9PY8qNGaaSv/DufvjeaNEn1FCcT4fsgpC4I=
+        bh=n041xAZDVwxiVPMIxRlYBoUvARBDDSPz3idlvcyMyR0=;
+        b=e49uTudUB977LN298OaOMJ/xio415/zGAlVYD/73vfvbYQUjXzjamGobq9fprhtQ0T
+         /xXO333I4iq94nmCpqho4TSRheXJga/RfePI8SQYHOJ1IaywrqyB66Jc7v4kaZLwPZi/
+         bElEjUA8X+lZX04xZ3KhoeCZgdReEBFD1cUENX4xEAoKoWrSSHf6VGUmaOupc1cZasoh
+         zf+lvgHHQqqIJMkRS/LBGX0CiS9HL20OKDbmcxHDC5dNxNq/UBeMFA8oSt+8m5uK5Twz
+         R3urHKFiLkEPRCHQQcHgoPlSiV2gYW32u6P0vyXnOHnv6Q9Gk5RaskjTpkKkJpV+YH5z
+         rkfg==
+X-Gm-Message-State: AC+VfDzVhS6OuqhF1rWN0LZ4XFc5cxH2AmPIVTvc5iD5xX6dRd5wIuRn
+        STnE7o+dFHo4z0tyRj570JysowcoCK0=
+X-Google-Smtp-Source: ACHHUZ585eGvc+sAPbTEYw2bb6ViWhvFGyNlXQ/c8TVCCzvxYGotGuLp7iqAtgGmF3Mlc5fqrZJo1EISfDE=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:e04d:0:b0:bac:2448:2aa3 with SMTP id
- x74-20020a25e04d000000b00bac24482aa3mr1555079ybg.9.1685753592911; Fri, 02 Jun
- 2023 17:53:12 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 17:52:28 -0700
-In-Reply-To: <20230602010137.784664-1-seanjc@google.com>
+ (user=seanjc job=sendgmr) by 2002:a81:b705:0:b0:565:9bee:22e0 with SMTP id
+ v5-20020a81b705000000b005659bee22e0mr767492ywh.0.1685753603297; Fri, 02 Jun
+ 2023 17:53:23 -0700 (PDT)
+Date:   Fri,  2 Jun 2023 17:52:30 -0700
+In-Reply-To: <20230602233250.1014316-1-seanjc@google.com>
 Mime-Version: 1.0
-References: <20230602010137.784664-1-seanjc@google.com>
+References: <20230602233250.1014316-1-seanjc@google.com>
 X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <168574912392.1016815.8543067517884131468.b4-ty@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Grab memslot for correct address space in
- NX recovery worker
+Message-ID: <168575177769.1031331.12817523609044474926.b4-ty@google.com>
+Subject: Re: [PATCH v3 0/3] KVM: x86: Out-of-bounds access in kvm_recalculate_phys_map()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fabio Coatti <fabio.coatti@gmail.com>
+        Michal Luczaj <mhal@rbox.co>
 Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,21 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Jun 2023 18:01:37 -0700, Sean Christopherson wrote:
-> Factor in the address space (non-SMM vs. SMM) of the target shadow page
-> when recovering potential NX huge pages, otherwise KVM will retrieve the
-> wrong memslot when zapping shadow pages that were created for SMM.  The
-> bug most visibly manifests as a WARN on the memslot being non-NULL, but
-> the worst case scenario is that KVM could unaccount the shadow page
-> without ensuring KVM won't install a huge page, i.e. if the non-SMM slot
-> is being dirty logged, but the SMM slot is not.
+On Fri, 02 Jun 2023 16:32:47 -0700, Sean Christopherson wrote:
+> In Michal's words...
+> 
+> kvm_recalculate_apic_map() creates the APIC map iterating over the list of
+> vCPUs twice. First to find the max APIC ID and allocate a max-sized buffer,
+> then again, calling kvm_recalculate_phys_map() for each vCPU. This opens a
+> race window: value of max APIC ID can increase _after_ the buffer was
+> allocated.
 > 
 > [...]
 
-Applied to kvm-x86 fixes, thanks!
+Applied 1 and 3 to kvm-x86 fixes (for 6.4), figuring out how to deal with the
+dependencies get #2 into 6.5 is a future problem.
 
-[1/1] KVM: x86/mmu: Grab memslot for correct address space in NX recovery worker
-      https://github.com/kvm-x86/linux/commit/817fa998362d
+[1/3] KVM: x86: Bail from kvm_recalculate_phys_map() if x2APIC ID is out-of-bounds
+      https://github.com/kvm-x86/linux/commit/4364b287982b
+[2/3] ...
+[3/3] KVM: selftests: Add test for race in kvm_recalculate_apic_map()
+      https://github.com/kvm-x86/linux/commit/47d2804bc99c
 
 --
 https://github.com/kvm-x86/linux/tree/next
