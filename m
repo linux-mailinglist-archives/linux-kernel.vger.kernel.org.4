@@ -2,41 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834D7720D12
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A38720D17
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbjFCBxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
+        id S237121AbjFCCFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 22:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbjFCBxq (ORCPT
+        with ESMTP id S231654AbjFCCFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:53:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1AFE48
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:53:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2A761956
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:53:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3D5C433EF;
-        Sat,  3 Jun 2023 01:53:40 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>, chenhuacai@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V1] kthread: Unify kernel_thread() and user_mode_thread()
-Date:   Sat,  3 Jun 2023 09:53:02 +0800
-Message-Id: <20230603015302.1768127-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Fri, 2 Jun 2023 22:05:01 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA511E50
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 19:05:00 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-53f832298acso1717472a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 19:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685757900; x=1688349900;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WqtuoGsQN2xcTwos1nBNdGXenJUhs8GJBYKEpiy7fGg=;
+        b=GrJgSzANBX7ZN4uVrXf2m+6y3ykffx1FuqToZeQ27pTJ90PYaATkL1D/nVGvMLpagN
+         8/gpZDmf90GEAnlFEJmruZlNuQeegFwY9tWsGrqB3IK+DR6v8O5ro8zdcslPAfMHhmmY
+         u2uS0v4mqZ1vUsH+grJb3fZ5QhwGu5qvUk7Wf+f61yE2GoENp/xhbTED7jqmpn22RRt9
+         RLK8hqsX83F675XVJ37GpP8xroB5T6uExIWrlt1450LnRqJzgBRlBkdAvLXilyrGRQdZ
+         aBglSsDhs5l5dD41SK4uBMNzICnAqIHTRd0UNBMzcV8vOboDGL8nvWCsqV1+qWsRDo+3
+         1bmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685757900; x=1688349900;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WqtuoGsQN2xcTwos1nBNdGXenJUhs8GJBYKEpiy7fGg=;
+        b=cKS6oUrC07FqWMJxjJqHg0z5eAXPz9cV8fzUXxiRF2IBwnWnxpm50ph5T9jn4YcoxY
+         rXvZhNfs+cFKUBsSrp9TASi++2s+LQCOyiW83ZJnz8VI0VLd1Azs2C0SEPW+IEe9a/sU
+         OyHDo0PvLipA3KuIPGjHFgxC4O63weOVRWbenB8qO5cxTEhuieCYV43i75rhmNPG3X6t
+         D66dXJwGkFyMeSBr3R3l757SJQd2HehH/IBh6jMerXdnoQAQ3c/4rZy1PCZCgAbqHe92
+         HVfxn5L62GcSYeNU5E6Soz4nCX8Zp3QW8oNPYTiZtSVKIHKiS7St9fT9maTqL8q/rRAG
+         8uwg==
+X-Gm-Message-State: AC+VfDxkZc9FrOs7YuhILCBI5rpduy/qJwDWFdIdhz3UbyxBHSS/hIN7
+        KRzaR5M4iz8vdsOCPuKxD2e+XnMc2sg0GGvZMds=
+X-Google-Smtp-Source: ACHHUZ7grQPCAYkj7+ooHPeYxbrKmpjTrNpNphD8L2S0OEtgUw9sRDBJJ/L0v9s4S9hhx6Kave4RYkiw9fIu79KwL2Y=
+X-Received: by 2002:a17:90b:1e0c:b0:259:ea:2747 with SMTP id
+ pg12-20020a17090b1e0c00b0025900ea2747mr678971pjb.5.1685757899780; Fri, 02 Jun
+ 2023 19:04:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+References: <20230602230552.350731-1-peterx@redhat.com> <20230602230552.350731-2-peterx@redhat.com>
+In-Reply-To: <20230602230552.350731-2-peterx@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 2 Jun 2023 19:04:48 -0700
+Message-ID: <CAHbLzkq+Mf3N1FvjMRD8+SiEsry_39ycgCN92GHp5VsshyKE8w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] mm/mprotect: Retry on pmd_trans_unstable()
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,145 +79,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
-and umh") introduces a new function user_mode_thread() for init and umh.
+On Fri, Jun 2, 2023 at 4:06=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> When hit unstable pmd, we should retry the pmd once more because it means
+> we probably raced with a thp insertion.
+>
+> Skipping it might be a problem as no error will be reported to the caller=
+.
+> I assume it means the user will expect prot changed (e.g. mprotect or
+> userfaultfd wr-protections) applied but it's actually not.
 
-init and umh are different from typical kernel threads since the don't
-need a "kthread" struct and they will finally become user processes by
-calling kernel_execve(), but on the other hand, they are also different
-from typical user mode threads (they have no "mm" structs at creation
-time, which is traditionally used to distinguish a user thread and a
-kernel thread).
+IIRC, mprotect() holds write mmap_lock, so it should not matter. PROT
+NUMA holds read mmap_lock, but returning 0 also doesn't matter (of
+course retry is fine too). just skip that 2M area. The userfaultfd-wp
+is your call :-)
 
-So I think it is reasonable to treat init and umh as "special kernel
-threads". Then let's unify the kernel_thread() and user_mode_thread()
-to kernel_thread() again, and add a new 'user' parameter for init and
-umh.
-
-This also makes code simpler. 
-
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-RFC -> V1: Update commit message and change "user" from int to bool.
-
- include/linux/sched/task.h |  3 +--
- init/main.c                |  4 ++--
- kernel/fork.c              | 20 ++------------------
- kernel/kthread.c           |  2 +-
- kernel/umh.c               |  6 +++---
- 5 files changed, 9 insertions(+), 26 deletions(-)
-
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index 537cbf9a2ade..02eb953bc809 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -98,8 +98,7 @@ struct task_struct *copy_process(struct pid *pid, int trace, int node,
- struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
- struct task_struct *fork_idle(int);
- extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
--			    unsigned long flags);
--extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
-+			    unsigned long flags, bool user);
- extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
- int kernel_wait(pid_t pid, int *stat);
- 
-diff --git a/init/main.c b/init/main.c
-index af50044deed5..469cebbd35e0 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
- 	 * the init task will end up wanting to create kthreads, which, if
- 	 * we schedule it before we create kthreadd, will OOPS.
- 	 */
--	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
-+	pid = kernel_thread(kernel_init, NULL, NULL, CLONE_FS, true);
- 	/*
- 	 * Pin init on the boot CPU. Task migration is not properly working
- 	 * until sched_init_smp() has been run. It will set the allowed
-@@ -710,7 +710,7 @@ noinline void __ref __noreturn rest_init(void)
- 	rcu_read_unlock();
- 
- 	numa_default_policy();
--	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES);
-+	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES, false);
- 	rcu_read_lock();
- 	kthreadd_task = find_task_by_pid_ns(pid, &init_pid_ns);
- 	rcu_read_unlock();
-diff --git a/kernel/fork.c b/kernel/fork.c
-index ed4e01daccaa..f91696904252 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2965,7 +2965,7 @@ pid_t kernel_clone(struct kernel_clone_args *args)
-  * Create a kernel thread.
-  */
- pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
--		    unsigned long flags)
-+		    unsigned long flags, bool user)
- {
- 	struct kernel_clone_args args = {
- 		.flags		= ((lower_32_bits(flags) | CLONE_VM |
-@@ -2974,23 +2974,7 @@ pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
- 		.fn		= fn,
- 		.fn_arg		= arg,
- 		.name		= name,
--		.kthread	= 1,
--	};
--
--	return kernel_clone(&args);
--}
--
--/*
-- * Create a user mode thread.
-- */
--pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags)
--{
--	struct kernel_clone_args args = {
--		.flags		= ((lower_32_bits(flags) | CLONE_VM |
--				    CLONE_UNTRACED) & ~CSIGNAL),
--		.exit_signal	= (lower_32_bits(flags) & CSIGNAL),
--		.fn		= fn,
--		.fn_arg		= arg,
-+		.kthread	= !user,
- 	};
- 
- 	return kernel_clone(&args);
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 490792b1066e..5f025569eb38 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -400,7 +400,7 @@ static void create_kthread(struct kthread_create_info *create)
- #endif
- 	/* We want our own signal handler (we take no signals by default). */
- 	pid = kernel_thread(kthread, create, create->full_name,
--			    CLONE_FS | CLONE_FILES | SIGCHLD);
-+			    CLONE_FS | CLONE_FILES | SIGCHLD, false);
- 	if (pid < 0) {
- 		/* Release the structure when caller killed by a fatal signal. */
- 		struct completion *done = xchg(&create->done, NULL);
-diff --git a/kernel/umh.c b/kernel/umh.c
-index 60aa9e764a38..b0ead7cce761 100644
---- a/kernel/umh.c
-+++ b/kernel/umh.c
-@@ -130,7 +130,7 @@ static void call_usermodehelper_exec_sync(struct subprocess_info *sub_info)
- 
- 	/* If SIGCLD is ignored do_wait won't populate the status. */
- 	kernel_sigaction(SIGCHLD, SIG_DFL);
--	pid = user_mode_thread(call_usermodehelper_exec_async, sub_info, SIGCHLD);
-+	pid = kernel_thread(call_usermodehelper_exec_async, sub_info, NULL, SIGCHLD, true);
- 	if (pid < 0)
- 		sub_info->retval = pid;
- 	else
-@@ -169,8 +169,8 @@ static void call_usermodehelper_exec_work(struct work_struct *work)
- 		 * want to pollute current->children, and we need a parent
- 		 * that always ignores SIGCHLD to ensure auto-reaping.
- 		 */
--		pid = user_mode_thread(call_usermodehelper_exec_async, sub_info,
--				       CLONE_PARENT | SIGCHLD);
-+		pid = kernel_thread(call_usermodehelper_exec_async, sub_info,
-+				       NULL, CLONE_PARENT | SIGCHLD, true);
- 		if (pid < 0) {
- 			sub_info->retval = pid;
- 			umh_complete(sub_info);
--- 
-2.39.1
-
+>
+> To achieve it, move the pmd_trans_unstable() call out of change_pte_range=
+()
+> which will make the retry easier, as we can keep the retval of
+> change_pte_range() untouched.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  mm/mprotect.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+>
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index 92d3d3ca390a..e4756899d40c 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -94,15 +94,6 @@ static long change_pte_range(struct mmu_gather *tlb,
+>
+>         tlb_change_page_size(tlb, PAGE_SIZE);
+>
+> -       /*
+> -        * Can be called with only the mmap_lock for reading by
+> -        * prot_numa so we must check the pmd isn't constantly
+> -        * changing from under us from pmd_none to pmd_trans_huge
+> -        * and/or the other way around.
+> -        */
+> -       if (pmd_trans_unstable(pmd))
+> -               return 0;
+> -
+>         /*
+>          * The pmd points to a regular pte so the pmd can't change
+>          * from under us even if the mmap_lock is only hold for
+> @@ -411,6 +402,7 @@ static inline long change_pmd_range(struct mmu_gather=
+ *tlb,
+>                         pages =3D ret;
+>                         break;
+>                 }
+> +again:
+>                 /*
+>                  * Automatic NUMA balancing walks the tables with mmap_lo=
+ck
+>                  * held for read. It's possible a parallel update to occu=
+r
+> @@ -465,6 +457,16 @@ static inline long change_pmd_range(struct mmu_gathe=
+r *tlb,
+>                         }
+>                         /* fall through, the trans huge pmd just split */
+>                 }
+> +
+> +               /*
+> +                * Can be called with only the mmap_lock for reading by
+> +                * prot_numa or userfaultfd-wp, so we must check the pmd
+> +                * isn't constantly changing from under us from pmd_none =
+to
+> +                * pmd_trans_huge and/or the other way around.
+> +                */
+> +               if (pmd_trans_unstable(pmd))
+> +                       goto again;
+> +
+>                 pages +=3D change_pte_range(tlb, vma, pmd, addr, next,
+>                                           newprot, cp_flags);
+>  next:
+> --
+> 2.40.1
+>
+>
