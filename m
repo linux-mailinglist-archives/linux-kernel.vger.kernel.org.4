@@ -2,152 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D76720E7F
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6F2720E81
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbjFCHfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 03:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S231722AbjFCHg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFCHfR (ORCPT
+        with ESMTP id S229605AbjFCHgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:35:17 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B281A5
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 00:35:15 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30ae69ef78aso3150181f8f.1
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 00:35:15 -0700 (PDT)
+        Sat, 3 Jun 2023 03:36:55 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7511A6
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 00:36:53 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f804665702so106281cf.0
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 00:36:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1685777714; x=1688369714;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685777813; x=1688369813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vS/oCChXdrXNuDjzTXaluarU5mcGap3sB8dhYCuURjc=;
-        b=44DSy4GqZpuTQIEqmv1rl0FyYY8rfxsFPIZSauzX8vhKLg3IfpCpA5S34Dex0+Hw/c
-         UdkHEc9mOwm/qPDGAOjf018P15ccFBzclRId24hPjhAcK2kiuehUrih8C5pp64tW+dBP
-         K4jdc7UrLanW+lmybqoSK1JjSwL1W2hvTN1ALHrbAhsJam1w99vv5pj1gPSk62Iyqa9y
-         WW3Zcvu1aUPbWMRwAFLM1QMBLMqgXdDr35OtYSq+t+eQq9b7bLPPEcPXZg2udxdOh1sT
-         JxJCh07S9aV1KGaTJwZ1VW81UqsxsgbZW6JmUfohWet8HpLZ+M9utuEVcadW+RR6L6ZY
-         yX0A==
+        bh=qUND+da6jPiEZt0cfKognqgQRJ86LBwupcOXaX1hrLc=;
+        b=VE46kVI2oIPTsZQ3yann7Au1KxFUj1nnFC+18MB5AqtniFnmSHWd1y1BXsjKsUwm+u
+         Ozkr1Fu04aLS6kfxawtnRVfdkElUMVB6/BauC46cNNtSjC7P/UA9xEl74ZJP4URW0RND
+         rk0Iiykc0ZL5UbkzaajOyqatihTO1jw8jKbx+cJ5xiDrbBA8EYif5JnBmJObGk7icRw4
+         NfAwuBlR5lBxPgg4cEw1o4jI9HyazTql6te3QaGXS3SMhj52QcJYxrzji3wa1diaDMML
+         iEYaLuhJHi39hiGGgXb1swQjwl7o78WAwN0plU6i6piYAymxjyiR3XTRPKncDXW7ai+2
+         x6zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685777714; x=1688369714;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vS/oCChXdrXNuDjzTXaluarU5mcGap3sB8dhYCuURjc=;
-        b=T+ODISWiNGwAXGz+/8H3dktvqTqrVdoXjB9CbVA+ZXuM+kNFQaEp1lKw6RR5inH5K4
-         9DHDTA0MqOSBVg4jjP1A+aQc2w7qDDVHd8wLcvuOnGF166KEbAVY9qFdRZfUHOAFsx72
-         IplD4KVwBGlpZM56UfCRoCxY2bXwkoZ6cEEhLL2GaslnFJyY307xxTSFLmFezi2FAUsH
-         aOKKtkIT0NSqV9tggIBs1sfPAMcMlpCGCx2m5v5tTEG1fMN/94bm990J2+VJWhQNhkph
-         eEuVcv/08W1Ts+h0DYX0TbOnDo+wtTS5xk3rTqkSfnL8o/yOb+egd2GCgpjTuBsJ/sxv
-         Xkxw==
-X-Gm-Message-State: AC+VfDzsKLmMfU/fJYBSEgK5QefuxdLLbMOKwuOk/Pv+77/Bns4QXAPk
-        as42AGUOhnVdeF7rIicX9iLVpQ==
-X-Google-Smtp-Source: ACHHUZ6u4bDI0ImNWdiKQNqrgXsOM6hawopfb0aVI0jMQKjei4E1qzszBSjaRsTtfxI3pikMwmAZoA==
-X-Received: by 2002:a5d:6790:0:b0:30a:d9e6:7acd with SMTP id v16-20020a5d6790000000b0030ad9e67acdmr1561265wru.6.1685777714121;
-        Sat, 03 Jun 2023 00:35:14 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:f035:39ca:d5b0:1b0? ([2a02:578:8593:1200:f035:39ca:d5b0:1b0])
-        by smtp.gmail.com with ESMTPSA id i8-20020adfdec8000000b0030796e103a1sm3724234wrn.5.2023.06.03.00.35.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 00:35:13 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------ghqasT1MlglPr5sFfYBBlhBs"
-Message-ID: <6f8d3039-e8cf-2e9d-50e3-a48770f624b5@tessares.net>
-Date:   Sat, 3 Jun 2023 09:35:12 +0200
+        d=1e100.net; s=20221208; t=1685777813; x=1688369813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qUND+da6jPiEZt0cfKognqgQRJ86LBwupcOXaX1hrLc=;
+        b=LAxKS32ymuMVy+/gKRsiuLp/VqunCLzheS63RKF9upYnz9VVWQQJnvGHKCeKA2Ru+y
+         fdppDrazrIzOhytU9lWW5gQX6QLwTVhKQcHVReAmZYE7gH/RziKZ9L0kIR2am2bzJnUV
+         yMesYwvujXLJ/1e6z3UDjqpvX5IM+y71YEZs3u8Bwsw1L3l11+aggTLaUDz8Dt0QT4gg
+         LRqhdX6AmBlCGBtG06E/i37VZZACRSvU1YySh4rDTr6S3x5YZsbx1oVSsuIAxslitcu0
+         fm2aBXUmJFT510l6zSzLNViGiv2uyv0q8UqjT070lxlg/PYSW/ZviBnplGU/SMTFlh3X
+         ublw==
+X-Gm-Message-State: AC+VfDzcC9dX/pAwCvikcdw6zS9agwiLro6Frrw+fE/z1pFRplg5JfFo
+        ssUGJUiGNbTIi91/Dx9BWU+E6gq+2YrtqxwJ/HvZVw==
+X-Google-Smtp-Source: ACHHUZ6I6H13jR3j7FRGhw5gTeO9K2llUEgho3hmspahu6mqRnuRNV6MU65MQKj3kBr+jV7kdmRqkEjpjCg2jWvhW3E=
+X-Received: by 2002:a05:622a:295:b0:3f0:af20:1a37 with SMTP id
+ z21-20020a05622a029500b003f0af201a37mr338498qtw.15.1685777812715; Sat, 03 Jun
+ 2023 00:36:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net v3] net/ipv4: ping_group_range: allow GID from
- 2147483648 to 4294967294 - manual merge
-Content-Language: en-GB
-To:     Akihiro Suda <suda.gitsendemail@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, segoon@openwall.com, kuniyu@amazon.com
-Cc:     Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>, suda.kyoto@gmail.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230601031305.55901-1-akihiro.suda.cz@hco.ntt.co.jp>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230601031305.55901-1-akihiro.suda.cz@hco.ntt.co.jp>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230603072116.1101690-1-linmiaohe@huawei.com>
+In-Reply-To: <20230603072116.1101690-1-linmiaohe@huawei.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Sat, 3 Jun 2023 00:36:41 -0700
+Message-ID: <CALvZod6Qa5doN7QJAbr+vtPByyqoPoPiOJAdecT7gnO5+AZnNA@mail.gmail.com>
+Subject: Re: [PATCH] memcg: use helper macro FLUSH_TIME
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        akpm@linux-foundation.org, muchun.song@linux.dev,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------ghqasT1MlglPr5sFfYBBlhBs
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Sat, Jun 3, 2023 at 12:21=E2=80=AFAM Miaohe Lin <linmiaohe@huawei.com> w=
+rote:
+>
+> Use helper macro FLUSH_TIME to indicate the flush time to improve the
+> readability a bit. No functional change intended.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Hello,
-
-On 01/06/2023 05:13, Akihiro Suda wrote:
-> With this commit, all the GIDs ("0 4294967294") can be written to the
-> "net.ipv4.ping_group_range" sysctl.
-> 
-> Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
-> include/linux/uidgid.h), and an attempt to register this number will cause
-> -EINVAL.
-> 
-> Prior to this commit, only up to GID 2147483647 could be covered.
-> Documentation/networking/ip-sysctl.rst had "0 4294967295" as an example
-> value, but this example was wrong and causing -EINVAL.
-
-FYI, we got a small conflict when merging 'net' in 'net-next' in the
-MPTCP tree due to this patch applied in 'net':
-
-  e209fee4118f ("net/ipv4: ping_group_range: allow GID from 2147483648
-to 4294967294")
-
-and this one from 'net-next':
-
-  ccce324dabfe ("tcp: make the first N SYN RTO backoffs linear")
-
------ Generic Message -----
-The best is to avoid conflicts between 'net' and 'net-next' trees but if
-they cannot be avoided when preparing patches, a note about how to fix
-them is much appreciated.
-
-The conflict has been resolved on our side[1] and the resolution we
-suggest is attached to this email. Please report any issues linked to
-this conflict resolution as it might be used by others. If you worked on
-the mentioned patches, don't hesitate to ACK this conflict resolution.
----------------------------
-
-Regarding this conflict, I simply took the modifications from both sides.
-
-Cheers,
-Matt
-
-[1] https://github.com/multipath-tcp/mptcp_net-next/commit/f170c423f567
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
---------------ghqasT1MlglPr5sFfYBBlhBs
-Content-Type: text/x-patch; charset=UTF-8;
- name="f170c423f56781e5957cd5b3c4de781515ed2c2c.patch"
-Content-Disposition: attachment;
- filename="f170c423f56781e5957cd5b3c4de781515ed2c2c.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWNjIG5ldC9pcHY0L3N5c2N0bF9uZXRfaXB2NC5jCmluZGV4IDZhZTMzNDVhM2Jk
-Ziw4OGRmZTUxZTY4ZjMuLjBiYjViMDMwODhlNwotLS0gYS9uZXQvaXB2NC9zeXNjdGxfbmV0
-X2lwdjQuYworKysgYi9uZXQvaXB2NC9zeXNjdGxfbmV0X2lwdjQuYwpAQEAgLTM0LDkgLTM0
-LDggKzM0LDkgQEBAIHN0YXRpYyBpbnQgaXBfdHRsX21pbiA9IDEKICBzdGF0aWMgaW50IGlw
-X3R0bF9tYXggPSAyNTU7CiAgc3RhdGljIGludCB0Y3Bfc3luX3JldHJpZXNfbWluID0gMTsK
-ICBzdGF0aWMgaW50IHRjcF9zeW5fcmV0cmllc19tYXggPSBNQVhfVENQX1NZTkNOVDsKICtz
-dGF0aWMgaW50IHRjcF9zeW5fbGluZWFyX3RpbWVvdXRzX21heCA9IE1BWF9UQ1BfU1lOQ05U
-OwotIHN0YXRpYyBpbnQgaXBfcGluZ19ncm91cF9yYW5nZV9taW5bXSA9IHsgMCwgMCB9Owot
-IHN0YXRpYyBpbnQgaXBfcGluZ19ncm91cF9yYW5nZV9tYXhbXSA9IHsgR0lEX1RfTUFYLCBH
-SURfVF9NQVggfTsKKyBzdGF0aWMgdW5zaWduZWQgbG9uZyBpcF9waW5nX2dyb3VwX3Jhbmdl
-X21pbltdID0geyAwLCAwIH07Cisgc3RhdGljIHVuc2lnbmVkIGxvbmcgaXBfcGluZ19ncm91
-cF9yYW5nZV9tYXhbXSA9IHsgR0lEX1RfTUFYLCBHSURfVF9NQVggfTsKICBzdGF0aWMgdTMy
-IHUzMl9tYXhfZGl2X0haID0gVUlOVF9NQVggLyBIWjsKICBzdGF0aWMgaW50IG9uZV9kYXlf
-c2VjcyA9IDI0ICogMzYwMDsKICBzdGF0aWMgdTMyIGZpYl9tdWx0aXBhdGhfaGFzaF9maWVs
-ZHNfYWxsX21hc2sgX19tYXliZV91bnVzZWQgPQo=
-
---------------ghqasT1MlglPr5sFfYBBlhBs--
+Acked-by: Shakeel Butt <shakeelb@google.com>
