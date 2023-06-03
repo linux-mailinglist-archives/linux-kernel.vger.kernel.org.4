@@ -2,204 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192B6720ED6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4285720ED7
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234343AbjFCJDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 05:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S234892AbjFCJEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 05:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjFCJDV (ORCPT
+        with ESMTP id S229550AbjFCJEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 05:03:21 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FAC1BB;
-        Sat,  3 Jun 2023 02:03:18 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1685782989t9lb8av7
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 03 Jun 2023 17:03:08 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: /+iK7ZpVlLT+meya2RLyMQl070OIddaVNI9G1y5G8+TvTKWsfOc8JNv+7BK7y
-        RKv9TegIR10DaoHy8oH6VC39YXFThvF3r2eoaezrq1kS22HCWwdup1DPRVl2DdMaR9WkMs9
-        keMUjAfFGvoRvkbbQIl20PebzYruePczV9S6XOcJisPXAQqKpU7CDe9vtuMoYadkIj29Lnw
-        o4jvKADJagdCzLM7K3+hZTQ5oJQ+1CvJ/S11x/01xmu4P1fjgtZjRRuyTeAznKwRJ5CEEQy
-        9Gfn81VmVLrEaEUgroPsUmnxKXU5smYo/nS4NWASsoXvmjEVfsIwUbUBgT57YWhAsaEKiGv
-        cNf2x0/4PmmKOFdFJDBjI3ULrKU3qoYkSo8Z55ACWrfMxA5JsNgMIVn85rB35dwWo6CUW1J
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3791833262952156128
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
-Date:   Sat,  3 Jun 2023 17:01:58 +0800
-Message-Id: <f2776eb566b8cf2409d2c21f83ebf85ab92d2f09.1685780412.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685780412.git.falcon@tinylab.org>
-References: <cover.1685780412.git.falcon@tinylab.org>
+        Sat, 3 Jun 2023 05:04:32 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4650C1B5
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 02:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685783070; x=1717319070;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WIApp3OlGSkGOblYByLOHClRSb3CkPt3DE7Ui2gCThE=;
+  b=IkuUOsVkj5AtQAbJUgWVKP+5fkDLORAXU7xoNQfdLQmBSgjOEOz8tMBM
+   2MHp55phA7BYflPHZVYImInzX7Q6jn7DMS5anlmbROARt1I6+gP/NU+7R
+   Vedsb8YK0ApUIV64iJDhn07De+E1MzwCr26a3MGBZ9f95x4fV6RHdhrFf
+   1ZsPxypa7nkuNHigFyZ2Y0nwfDXuSQO6KNiP/TMFLpG7OmpauqJcdH3i5
+   bXGUcWwQQtKB5hu87vC9HWAzg5LN8rih5lRSnD827WMFq80mLy9QHsvui
+   7tqW6m2ugL7RHyGaa/In2I1rcch5nXGvV2Y+GA5LWWjGZWoBun8bOqKIt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="356063979"
+X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
+   d="scan'208";a="356063979"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 02:04:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="954771717"
+X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
+   d="scan'208";a="954771717"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jun 2023 02:04:28 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q5NBT-0001TN-2O;
+        Sat, 03 Jun 2023 09:04:27 +0000
+Date:   Sat, 3 Jun 2023 17:04:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230602 7/7]
+ arch/sparc/kernel/irq_32.c:258:14: error: array subscript [16, 79] is
+ outside array bounds of 'struct tt_entry[1]'
+Message-ID: <202306031638.zmtz006C-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling nolibc for rv32 got such errors:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230602
+head:   20aaaa40b39f5178aee00e3982b68ab8fd0c59a8
+commit: 20aaaa40b39f5178aee00e3982b68ab8fd0c59a8 [7/7] Makefile: Enable -Warray-bounds
+config: sparc-randconfig-c043-20230531 (https://download.01.org/0day-ci/archive/20230603/202306031638.zmtz006C-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=20aaaa40b39f5178aee00e3982b68ab8fd0c59a8
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/fam01-next20230602
+        git checkout 20aaaa40b39f5178aee00e3982b68ab8fd0c59a8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash arch/sparc/kernel/
 
-    In file included from nolibc/sysroot/riscv/include/nolibc.h:99,
-                     from nolibc/sysroot/riscv/include/errno.h:26,
-                     from nolibc/sysroot/riscv/include/stdio.h:14,
-                     from tools/testing/selftests/nolibc/nolibc-test.c:12:
-    nolibc/sysroot/riscv/include/sys.h:946:2: error: #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-      946 | #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-          |  ^~~~~
-    nolibc/sysroot/riscv/include/sys.h:1062:2: error: #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
-     1062 | #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306031638.zmtz006C-lkp@intel.com/
 
-If a syscall is not supported by a target platform, 'return -ENOSYS' is
-better than '#error', which lets the other syscalls work as-is and
-allows developers to fix up the test failures reported by nolibc-test
-one by one later.
+All errors (new ones prefixed by >>):
 
-This converts all of the '#error' to 'return -ENOSYS', so, all of the
-'#error' failures are fixed.
+   arch/sparc/kernel/irq_32.c: In function 'sparc_floppy_request_irq':
+>> arch/sparc/kernel/irq_32.c:258:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     258 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_one = SPARC_RD_PSR_L0; \
+         |              ^
+   arch/sparc/kernel/irq_32.c:272:17: note: in expansion of macro 'INSTANTIATE'
+     272 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   In file included from arch/sparc/kernel/irq_32.c:25:
+   arch/sparc/kernel/kernel.h:142:24: note: at offset [256, 1264] into object 'trapbase_cpu1' of size 16
+     142 | extern struct tt_entry trapbase_cpu1;
+         |                        ^~~~~~~~~~~~~
+   In file included from arch/sparc/include/asm/traps.h:10,
+                    from arch/sparc/kernel/kernel.h:8:
+   arch/sparc/kernel/irq_32.c:261:46: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     261 |                              (unsigned long) &table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two);\
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/traps.h:27:38: note: in definition of macro 'SPARC_BRANCH'
+      27 |           (0x10800000 | (((dest_addr-inst_addr)>>2)&0x3fffff))
+         |                                      ^~~~~~~~~
+   arch/sparc/kernel/irq_32.c:272:17: note: in expansion of macro 'INSTANTIATE'
+     272 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:142:24: note: at offset [256, 1264] into object 'trapbase_cpu1' of size 16
+     142 | extern struct tt_entry trapbase_cpu1;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:259:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     259 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two = \
+         |              ^
+   arch/sparc/kernel/irq_32.c:272:17: note: in expansion of macro 'INSTANTIATE'
+     272 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:142:24: note: at offset [256, 1264] into object 'trapbase_cpu1' of size 16
+     142 | extern struct tt_entry trapbase_cpu1;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:262:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     262 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_three = SPARC_RD_WIM_L3; \
+         |              ^
+   arch/sparc/kernel/irq_32.c:272:17: note: in expansion of macro 'INSTANTIATE'
+     272 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:142:24: note: at offset [256, 1264] into object 'trapbase_cpu1' of size 16
+     142 | extern struct tt_entry trapbase_cpu1;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:263:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     263 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_four = SPARC_NOP;
+         |              ^
+   arch/sparc/kernel/irq_32.c:272:17: note: in expansion of macro 'INSTANTIATE'
+     272 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:142:24: note: at offset [256, 1264] into object 'trapbase_cpu1' of size 16
+     142 | extern struct tt_entry trapbase_cpu1;
+         |                        ^~~~~~~~~~~~~
+>> arch/sparc/kernel/irq_32.c:258:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     258 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_one = SPARC_RD_PSR_L0; \
+         |              ^
+   arch/sparc/kernel/irq_32.c:274:17: note: in expansion of macro 'INSTANTIATE'
+     274 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:143:24: note: at offset [256, 1264] into object 'trapbase_cpu2' of size 16
+     143 | extern struct tt_entry trapbase_cpu2;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:261:46: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     261 |                              (unsigned long) &table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two);\
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/traps.h:27:38: note: in definition of macro 'SPARC_BRANCH'
+      27 |           (0x10800000 | (((dest_addr-inst_addr)>>2)&0x3fffff))
+         |                                      ^~~~~~~~~
+   arch/sparc/kernel/irq_32.c:274:17: note: in expansion of macro 'INSTANTIATE'
+     274 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:143:24: note: at offset [256, 1264] into object 'trapbase_cpu2' of size 16
+     143 | extern struct tt_entry trapbase_cpu2;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:259:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     259 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two = \
+         |              ^
+   arch/sparc/kernel/irq_32.c:274:17: note: in expansion of macro 'INSTANTIATE'
+     274 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:143:24: note: at offset [256, 1264] into object 'trapbase_cpu2' of size 16
+     143 | extern struct tt_entry trapbase_cpu2;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:262:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     262 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_three = SPARC_RD_WIM_L3; \
+         |              ^
+   arch/sparc/kernel/irq_32.c:274:17: note: in expansion of macro 'INSTANTIATE'
+     274 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:143:24: note: at offset [256, 1264] into object 'trapbase_cpu2' of size 16
+     143 | extern struct tt_entry trapbase_cpu2;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:263:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     263 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_four = SPARC_NOP;
+         |              ^
+   arch/sparc/kernel/irq_32.c:274:17: note: in expansion of macro 'INSTANTIATE'
+     274 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:143:24: note: at offset [256, 1264] into object 'trapbase_cpu2' of size 16
+     143 | extern struct tt_entry trapbase_cpu2;
+         |                        ^~~~~~~~~~~~~
+>> arch/sparc/kernel/irq_32.c:258:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     258 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_one = SPARC_RD_PSR_L0; \
+         |              ^
+   arch/sparc/kernel/irq_32.c:276:17: note: in expansion of macro 'INSTANTIATE'
+     276 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:144:24: note: at offset [256, 1264] into object 'trapbase_cpu3' of size 16
+     144 | extern struct tt_entry trapbase_cpu3;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:261:46: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     261 |                              (unsigned long) &table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two);\
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/traps.h:27:38: note: in definition of macro 'SPARC_BRANCH'
+      27 |           (0x10800000 | (((dest_addr-inst_addr)>>2)&0x3fffff))
+         |                                      ^~~~~~~~~
+   arch/sparc/kernel/irq_32.c:276:17: note: in expansion of macro 'INSTANTIATE'
+     276 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:144:24: note: at offset [256, 1264] into object 'trapbase_cpu3' of size 16
+     144 | extern struct tt_entry trapbase_cpu3;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:259:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     259 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two = \
+         |              ^
+   arch/sparc/kernel/irq_32.c:276:17: note: in expansion of macro 'INSTANTIATE'
+     276 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:144:24: note: at offset [256, 1264] into object 'trapbase_cpu3' of size 16
+     144 | extern struct tt_entry trapbase_cpu3;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:262:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     262 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_three = SPARC_RD_WIM_L3; \
+         |              ^
+   arch/sparc/kernel/irq_32.c:276:17: note: in expansion of macro 'INSTANTIATE'
+     276 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:144:24: note: at offset [256, 1264] into object 'trapbase_cpu3' of size 16
+     144 | extern struct tt_entry trapbase_cpu3;
+         |                        ^~~~~~~~~~~~~
+   arch/sparc/kernel/irq_32.c:263:14: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]
+     263 |         table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_four = SPARC_NOP;
+         |              ^
+   arch/sparc/kernel/irq_32.c:276:17: note: in expansion of macro 'INSTANTIATE'
+     276 |                 INSTANTIATE(trap_table)
+         |                 ^~~~~~~~~~~
+   arch/sparc/kernel/kernel.h:144:24: note: at offset [256, 1264] into object 'trapbase_cpu3' of size 16
+     144 | extern struct tt_entry trapbase_cpu3;
+         |                        ^~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 856249a11890..78c86f124335 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
- #elif defined(__NR_chmod)
- 	return my_syscall2(__NR_chmod, path, mode);
- #else
--#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement sys_chmod()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -153,7 +153,7 @@ int sys_chown(const char *path, uid_t owner, gid_t group)
- #elif defined(__NR_chown)
- 	return my_syscall3(__NR_chown, path, owner, group);
- #else
--#error Neither __NR_fchownat nor __NR_chown defined, cannot implement sys_chown()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -251,7 +251,7 @@ int sys_dup2(int old, int new)
- #elif defined(__NR_dup2)
- 	return my_syscall2(__NR_dup2, old, new);
- #else
--#error Neither __NR_dup3 nor __NR_dup2 defined, cannot implement sys_dup2()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -351,7 +351,7 @@ pid_t sys_fork(void)
- #elif defined(__NR_fork)
- 	return my_syscall0(__NR_fork);
- #else
--#error Neither __NR_clone nor __NR_fork defined, cannot implement sys_fork()
-+	return -ENOSYS;
- #endif
- }
- #endif
-@@ -648,7 +648,7 @@ int sys_link(const char *old, const char *new)
- #elif defined(__NR_link)
- 	return my_syscall2(__NR_link, old, new);
- #else
--#error Neither __NR_linkat nor __NR_link defined, cannot implement sys_link()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -700,7 +700,7 @@ int sys_mkdir(const char *path, mode_t mode)
- #elif defined(__NR_mkdir)
- 	return my_syscall2(__NR_mkdir, path, mode);
- #else
--#error Neither __NR_mkdirat nor __NR_mkdir defined, cannot implement sys_mkdir()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -729,7 +729,7 @@ long sys_mknod(const char *path, mode_t mode, dev_t dev)
- #elif defined(__NR_mknod)
- 	return my_syscall3(__NR_mknod, path, mode, dev);
- #else
--#error Neither __NR_mknodat nor __NR_mknod defined, cannot implement sys_mknod()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -848,7 +848,7 @@ int sys_open(const char *path, int flags, mode_t mode)
- #elif defined(__NR_open)
- 	return my_syscall3(__NR_open, path, flags, mode);
- #else
--#error Neither __NR_openat nor __NR_open defined, cannot implement sys_open()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -943,7 +943,7 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
- #elif defined(__NR_poll)
- 	return my_syscall3(__NR_poll, fds, nfds, timeout);
- #else
--#error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1059,7 +1059,7 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
- #endif
- 	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
- #else
--#error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1196,7 +1196,7 @@ int sys_stat(const char *path, struct stat *buf)
- #elif defined(__NR_stat)
- 	ret = my_syscall2(__NR_stat, path, &stat);
- #else
--#error Neither __NR_newfstatat nor __NR_stat defined, cannot implement sys_stat()
-+	return -ENOSYS;
- #endif
- 	buf->st_dev          = stat.st_dev;
- 	buf->st_ino          = stat.st_ino;
-@@ -1243,7 +1243,7 @@ int sys_symlink(const char *old, const char *new)
- #elif defined(__NR_symlink)
- 	return my_syscall2(__NR_symlink, old, new);
- #else
--#error Neither __NR_symlinkat nor __NR_symlink defined, cannot implement sys_symlink()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1312,7 +1312,7 @@ int sys_unlink(const char *path)
- #elif defined(__NR_unlink)
- 	return my_syscall1(__NR_unlink, path);
- #else
--#error Neither __NR_unlinkat nor __NR_unlink defined, cannot implement sys_unlink()
-+	return -ENOSYS;
- #endif
- }
- 
+vim +258 arch/sparc/kernel/irq_32.c
+
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  240  
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  241  int sparc_floppy_request_irq(unsigned int irq, irq_handler_t irq_handler)
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  242  {
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  243  	unsigned int cpu_irq;
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  244  	int err;
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  245  
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  246  
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  247  	err = request_irq(irq, irq_handler, 0, "floppy", NULL);
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  248  	if (err)
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  249  		return -1;
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  250  
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  251  	/* Save for later use in floppy interrupt handler */
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  252  	floppy_irq = irq;
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  253  
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  254  	cpu_irq = (irq & (NR_IRQS - 1));
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  255  
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  256  	/* Dork with trap table if we get this far. */
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  257  #define INSTANTIATE(table) \
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16 @258  	table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_one = SPARC_RD_PSR_L0; \
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  259  	table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two = \
+6baa9b20a68a88 arch/sparc/kernel/irq_32.c Sam Ravnborg   2011-04-18  260  		SPARC_BRANCH((unsigned long) floppy_hardint, \
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  261  			     (unsigned long) &table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_two);\
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  262  	table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_three = SPARC_RD_WIM_L3; \
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  263  	table[SP_TRAP_IRQ1+(cpu_irq-1)].inst_four = SPARC_NOP;
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  264  
+^1da177e4c3f41 arch/sparc/kernel/irq.c    Linus Torvalds 2005-04-16  265  	INSTANTIATE(sparc_ttable)
+b08b5c9c9b35c9 arch/sparc/kernel/irq_32.c Sam Ravnborg   2012-05-25  266  
+
+:::::: The code at line 258 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
