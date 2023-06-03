@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE6D720ED1
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FADA720ED4
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjFCIxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 04:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S229864AbjFCJBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 05:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjFCIw5 (ORCPT
+        with ESMTP id S229550AbjFCJBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 04:52:57 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8453B1A6
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:52:56 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso46084766b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 01:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685782375; x=1688374375;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i4hgS0z3Yb2ht0d9NIqGTFCpoZ1x1i+4zbGIDoMkc6Y=;
-        b=NGlf2px41l0Jptg/BEuTtXeFKZSOTbzOb7uIMg0+F9zRMkAeS5c8harZLvyPrigwLj
-         cBWyQLYM9oW80MW+ylYl7Re6NI7A0zOWqGKEc9HLrl+tdsAttpDgnCZc27CqhbA9OKGX
-         MGjcSoyespZgg17K0ioFU74P6qz4wbD30R2HL0t/kP+I0YOmtWgmmkSt6qzXvrN+uUSZ
-         QAOCWdvCWkS0eFsym7jWY4ceszKZQyDgOc+wlJc7bdwMcNqikdAxu31fHQ984XYSkl75
-         xmpfKbYqG975vJV6Mr0N8FXOCt1Iuhz+IQ8mz025VB/pRQThTG9l7ym7D4LE1HZwcOzL
-         NY5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685782375; x=1688374375;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i4hgS0z3Yb2ht0d9NIqGTFCpoZ1x1i+4zbGIDoMkc6Y=;
-        b=k2ayQopAqB+3Je6M6fsps4Mz+yoBPOhq/pOkMH6UN4ukleTbKK8+HD8U0nBGYSWhnT
-         mRSFICNrFXiNSg+YUlwZ0n2Yor0sbxpbkiRMx+ehBInGAuxSK8DxKDx9/zGZ/ozrFCYh
-         dvLLF+nLKal1LWrI5n8YD665zlAvhPoFYzhY9ZbZ4X3ihDz4gZ1pCcSatL9nPGogteEU
-         YngXZu6TIweuhEDxbI+fSIrImmbdcPbEjP+gkFKYkVyHcXluuKe2QOxVtuJKt4Hjf2OL
-         uCDe1iYacvHAsD767dLlds08RF6TSVik0Sf90x2LOawFJBRqihkrf6cdUMJ5QqdhoVqv
-         tzKg==
-X-Gm-Message-State: AC+VfDzvPYeWe6qpxx/X87deC055w1Sy6J82nCrKaMcESzu4nyuf44gf
-        qT/cAgsOyOlzgic8kjFom6M=
-X-Google-Smtp-Source: ACHHUZ7Qpe56vScU/lUgvpUydKDfzUVjExfLo3Q+4U2pASUlgYYwZUzBWSkCgyxRI51V+NpwsirmjQ==
-X-Received: by 2002:a05:6402:5203:b0:502:1f7b:f069 with SMTP id s3-20020a056402520300b005021f7bf069mr9789976edd.2.1685782374597;
-        Sat, 03 Jun 2023 01:52:54 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id bm11-20020a0564020b0b00b00514b2717ec6sm1562599edb.28.2023.06.03.01.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jun 2023 01:52:53 -0700 (PDT)
-Date:   Sat, 3 Jun 2023 10:52:51 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192e: Add cfg80211.h and remove defined
- variables
-Message-ID: <20230603085251.GA20230@matrix-ESPRIMO-P710>
+        Sat, 3 Jun 2023 05:01:06 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65D41B5;
+        Sat,  3 Jun 2023 02:01:02 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1685782850txqcbj5y
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 03 Jun 2023 17:00:49 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: dS+JUNSIibdBnc+tIJt+WeMytSH2tNEkxCjMCD4VPtHgoFNxQaIPNyyj3VrsU
+        L4aLi7UZjLKSyXCsxEAGLpykcZ6lpcX6vh29qsvV3MwdwXcysQei3DXLoqvZ+mmyI684xYV
+        O+/wRohKUsF5llCCmjFXzT9kBRTpbSwE1lTy+dEL+VK+pelCK942/a+1IQRs3HuKn1WVhrM
+        iLVKUx7SJjng4ljrg2pEE5nnEX/ep0Rf1Uj55k3Vbd8T6hlaTlXLxnCX3nWZMu3gLWqn1gI
+        4I7kD4JLMmWN7SNnGdqjup9qSn1ctiNC0mlpSYUp4EthY61wFhAwe+/rH8Jsx3uQ3yf4pUb
+        fl6OniGg++MT3GHMVagj8FpoPyXXK+Z+l1yKfSlg0y0+KtwVTOPP8PCdFNQrFhUS/qOt+EM
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15397238080264048337
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v3 0/3] nolibc: add part2 of support for rv32
+Date:   Sat,  3 Jun 2023 17:00:36 +0800
+Message-Id: <cover.1685780412.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +51,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add cfg80211 and remove defined variables rfc1042_header and
-bridge_tunnel_header as they are then already defined. Usage of cfg80211
-is required to merge driver into wireless subsystem.
+Hi, Willy
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
-Tested with rtl8192e (WLL6130-D99)
-Transferred this patch over wlan connection of rtl8192e
----
- drivers/staging/rtl8192e/rtllib.h    |  1 +
- drivers/staging/rtl8192e/rtllib_rx.c | 12 ------------
- 2 files changed, 1 insertion(+), 12 deletions(-)
+This is the v3 part2 of support for rv32, differs from the v2 part2 [1],
+we only fix up compile issues in this patchset.
 
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index f2903b14b793..cdd7fdc5befe 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -38,6 +38,7 @@
- 
- #include <linux/netdevice.h>
- #include <linux/if_arp.h> /* ARPHRD_ETHER */
-+#include <net/cfg80211.h>
- #include <net/lib80211.h>
- 
- #define MAX_PRECMD_CNT 16
-diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
-index d44bf261de54..46c77ed335ab 100644
---- a/drivers/staging/rtl8192e/rtllib_rx.c
-+++ b/drivers/staging/rtl8192e/rtllib_rx.c
-@@ -225,18 +225,6 @@ rtllib_rx_frame_mgmt(struct rtllib_device *ieee, struct sk_buff *skb,
- 	return 0;
- }
- 
--/* See IEEE 802.1H for LLC/SNAP encapsulation/decapsulation
-- * Ethernet-II snap header (RFC1042 for most EtherTypes)
-- */
--static unsigned char rfc1042_header[] = {
--	0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00
--};
--
--/* Bridge-Tunnel header (for EtherTypes ETH_P_AARP and ETH_P_IPX) */
--static unsigned char bridge_tunnel_header[] = {
--	0xaa, 0xaa, 0x03, 0x00, 0x00, 0xf8
--};
--
- /* No encapsulation header if EtherType < 0x600 (=length) */
- 
- /* Called by rtllib_rx_frame_decrypt */
+With the v3 generic part1 [2] and this patchset, we can compile nolibc
+for rv32 now.
+
+This is based on the idea of suggestions from Arnd [3], instead of
+'#error' on the unsupported syscall on a target platform, a 'return
+-ENOSYS' allow us to compile it at first and then allow we fix up the
+test failures reported by nolibc-test one by one.
+
+The first two patches fix up all of the compile failures with '-ENOSYS'
+(and '#ifdef' if required):
+
+  tools/nolibc: fix up #error compile failures with -ENOSYS
+  tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
+
+The last one enables rv32 compile support:
+  
+  selftests/nolibc: riscv: customize makefile for rv32
+
+The above compile support patch here is only for test currently, as
+Thomas suggested, for a full rv32 support, it should wait for the left
+parts.
+
+Welcome your feedbacks, will wait for enough discussion on this patchset
+and then send the left parts one by one to fix up the test failures
+about waitid, llseek and time64 syscalls: ppoll_time64, clock_gettime64,
+pselect6_time64.
+
+So, I do recommend to apply this patchset, it allows us to send the left
+parts independently, otherwise, all of them should be sent out for
+review together. with this patchset, the rv32 users may be able to use
+nolibc although some syscalls still missing :-)
+
+Or at least we apply the first two, so, I can manually cherry-pick the
+compile support patch to do my local test, and the other platform
+developer may also benefit from them.
+
+I'm cleaning up the left parts, but still require some time, I plan to
+split them to such parts:
+
+  * part3: waitid, prepared, will send out later
+  * part4: llseek, prepared, will send out later
+  * part5: time64 syscalls, ppoll_time64 ok, will finish them next week
+           (It is a little hard to split them)
+
+Best regards,
+Zhangjin
+---
+
+[1]: https://lore.kernel.org/linux-riscv/cover.1685387484.git.falcon@tinylab.org/T/#t
+[2]: https://lore.kernel.org/linux-riscv/cover.1685777982.git.falcon@tinylab.org/T/#t
+[3]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+
+Zhangjin Wu (3):
+  tools/nolibc: fix up #error compile failures with -ENOSYS
+  tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
+  selftests/nolibc: riscv: customize makefile for rv32
+
+ tools/include/nolibc/sys.h              | 38 ++++++++++++++++---------
+ tools/testing/selftests/nolibc/Makefile | 11 +++++--
+ 2 files changed, 34 insertions(+), 15 deletions(-)
+
 -- 
-2.40.1
+2.25.1
 
