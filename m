@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF794720D0A
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D6E720D10
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237124AbjFCBlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S237023AbjFCBvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235954AbjFCBlv (ORCPT
+        with ESMTP id S231202AbjFCBvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:41:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9981B6;
-        Fri,  2 Jun 2023 18:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=IGvHg8ueaPSLkb+HRbdq0Dyuayg75nPra3YsPtVkCzg=; b=1mFtfwrNSoCATUnXEClh2raq2A
-        a+OJhHBskgEx566hrqUDJyFNaBAWrMYNt9Gq8lJ/dN4xIqG9HW53zJN47Escx2TCxEQeGhvx7PHwY
-        K8FZAyxM/BK9k4n28fNUDbE7f8Jk0sDphxyIiwCjGQJmZFNYcwx8KMWkTWJT/9YaZWxx5hwRL3AYD
-        +i+NIs7LfCRHPkYDNpncNsQwX9XUF/pRE2glfMZ8wmTrbCpigkVPZyhpC3hvwY1cp+2Vx6TfNV9De
-        OllCRQlPZlnkItQJw+cddq8qMbS9l5MmCH26qXZdYSDV50V/kR5syVySuuIiQsoQhh5rgDLD+v/ZC
-        64+E5nlA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q5GH5-008T8b-2K;
-        Sat, 03 Jun 2023 01:41:47 +0000
-Message-ID: <e69410c1-8632-354e-e6e0-ac16631f0566@infradead.org>
-Date:   Fri, 2 Jun 2023 18:41:46 -0700
+        Fri, 2 Jun 2023 21:51:50 -0400
+Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428B8E45;
+        Fri,  2 Jun 2023 18:51:48 -0700 (PDT)
+Received: from [0.0.0.0] (unknown [172.96.223.238])
+        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id D42C928025B;
+        Sat,  3 Jun 2023 09:51:37 +0800 (CST)
+Message-ID: <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
+Date:   Sat, 3 Jun 2023 09:51:34 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] docs: Fix warning:Error in "code-block" directive
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+To:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+ <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+ <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn>
+ <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
+ <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
+ <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
+ <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
+ <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch>
+ <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
 Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Madhumitha Prabakaran <madhumithabiw@gmail.com>,
-        rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-        Linux Documentation <linux-doc@vger.kernel.org>
-Cc:     ivan.orlov0322@gmail.com
-References: <20230602215102.GA220958@madhu-kernel>
- <ZHqVbIouMkvM4OAs@debian.me>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ZHqVbIouMkvM4OAs@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+From:   Ding Hui <dinghui@sangfor.com.cn>
+In-Reply-To: <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTR8ZVkJKTBlKSE9KGEJCHVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpMSVVCTVVJSUhVSUhDWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Tid: 0a887ef4098b2eb1kusnd42c928025b
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pwg6Mjo5Pz1DPjMOFC0TC0Mp
+        QxMwFAFVSlVKTUNOTE5MSktISEhKVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKTElVQk1VSUlIVUlIQ1lXWQgBWUFIQkpPNwY+
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,35 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/2/23 18:20, Bagas Sanjaya wrote:
-> On Fri, Jun 02, 2023 at 04:51:02PM -0500, Madhumitha Prabakaran wrote:
->> Fix the error in "code-block" directive by providing the
->> argument as "text".
+On 2023/6/3 2:02, Alexander Duyck wrote:
+> On Fri, Jun 2, 2023 at 9:37 AM Andrew Lunn <andrew@lunn.ch> wrote:
 >>
->> <snipped> ...
->>  Result code:
->>  ------------
->>  
->> -.. code-block::
->> +.. code-block:: text
+>>> What this change is essentially doing is clamping the copied data to
+>>> the lesser of the current value versus the value when the userspace
+>>> was allocated. However I am wondering now if we shouldn't just update
+>>> the size value and return that as some sort of error for the userspace
+>>> to potentially reallocate and repeat until it has the right size.
+>>
+>> I'm not sure we should be putting any effort into the IOCTL
+>> interface. It is deprecated. We should fix overrun problems, but i
+>> would not change the API. Netlink handles this atomically, and that is
+>> the interface tools should be using, not this IOCTL.
 > 
-> Nope.
+> If that is the case maybe it would just make more sense to just return
+> an error if we are at risk of overrunning the userspace allocated
+> buffer.
 > 
-> I don't see error you mention in this patch when making htmldocs on my
-> computer (my setup is pretty standard: see
-> Documentation/doc-guide/sphinx.rst). This patch is unneccessary, though,
-> unless you have code snippets in some language (e.g. C, where passing
-> language name to code-block:: syntax-highlight it). Result code outputs,
-> on the other hand, are generic text with no definitive syntax, hence
-> you can omit language name.
-> 
-> Thanks.
 
+In that case, I can modify to return an error, however, I think the
+ENOSPC or EFBIG mentioned in a previous email may not be suitable,
+maybe like others length/size checking return EINVAL.
 
-I also don't see any such warnings so I don't see a need for this patch.
-My wild guess is that some older version of Sphinx was being used.
+Another thing I wondered is that should I update the current length
+back to user if user buffer is not enough, assuming we update the new
+length with error returned, the userspace can use it to reallocate
+buffer if he wants to, which can avoid re-call previous ioctl to get
+the new length.
 
 -- 
-~Randy
+Thanks,
+- Ding Hui
+
