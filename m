@@ -2,106 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F3A721185
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAA972118A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjFCSUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 14:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        id S229616AbjFCS0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 14:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFCSUj (ORCPT
+        with ESMTP id S229546AbjFCS0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 14:20:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45ED9B9
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 11:20:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4633EFEC;
-        Sat,  3 Jun 2023 11:21:23 -0700 (PDT)
-Received: from [10.57.72.226] (unknown [10.57.72.226])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1260F3F793;
-        Sat,  3 Jun 2023 11:20:35 -0700 (PDT)
-Message-ID: <c87d4b69-0971-2faf-9d10-615e3264b131@arm.com>
-Date:   Sat, 3 Jun 2023 19:20:34 +0100
+        Sat, 3 Jun 2023 14:26:35 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1A8C2
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 11:26:33 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 228430b1-023c-11ee-abf4-005056bdd08f;
+        Sat, 03 Jun 2023 21:26:20 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sat, 3 Jun 2023 21:26:19 +0300
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 7/9] ASoC: codecs: Add support for the generic IIO
+ auxiliary devices
+Message-ID: <ZHuFywIrTnEFpX6e@surfacebook>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+ <20230523151223.109551-8-herve.codina@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/4] mm/damon/ops-common: atomically test and clear
- young on ptes and pmds
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, damon@lists.linux.dev
-References: <20230602214347.85694-1-sj@kernel.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230602214347.85694-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523151223.109551-8-herve.codina@bootlin.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 22:43, SeongJae Park wrote:
-> On Fri, 2 Jun 2023 19:15:01 +0000 SeongJae Park <sj@kernel.org> wrote:
+Tue, May 23, 2023 at 05:12:21PM +0200, Herve Codina kirjoitti:
+> Industrial I/O devices can be present in the audio path.
+> These devices needs to be used as audio components in order to be fully
+> integrated in the audio path.
 > 
->> Hi Ryan,
->>
->> On Fri, 2 Jun 2023 18:14:25 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->>> On 02/06/2023 17:35, Yu Zhao wrote:
->>>> On Fri, Jun 2, 2023 at 3:30 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>>>>
->>>>> It is racy to non-atomically read a pte, then clear the young bit, then
->>>>> write it back as this could discard dirty information. Further, it is
->>>>> bad practice to directly set a pte entry within a table. Instead
->>>>> clearing young must go through the arch-provided helper,
->>>>> ptep_test_and_clear_young() to ensure it is modified atomically and to
->>>>> give the arch code visibility and allow it to check (and potentially
->>>>> modify) the operation.
->>>>>
->>>>> Fixes: 3f49584b262c ("mm/damon: implement primitives for the virtual memory address spaces").
->>>>
->>>> Just to double check: was "Cc: stable@vger.kernel.org" overlooked or
->>>> deemed unnecessary?
->>>
->>> It was overlooked - incompetance strikes again! I was intending to cc the
->>> whole series.
->>
->> Not the whole patches in this series but only this patch is intended to be
->> merged in stable series, right?  If I'm not wrong, you could add
->> 'Cc: <stable@vger.kernel.org>' tag here[1] when resending, to let stable kernel
->> maintainers easily understand exactly what patches should be merged in the
->> stable kernels.  So, you wouldn't need to touch coverletter or cc whole series
->> but only this one.
->>
->> [1] https://www.kernel.org/doc/html/v4.10/process/stable-kernel-rules.html
-> 
-> And I just found Andrew added the tag while adding this to the -mm queue.
-> Thank you, Andrew!
+> This support allows to consider these Industrial I/O devices as auxliary
+> audio devices and allows to control them using mixer controls.
 
-Yes indeed - thanks for fixing that up for me, Andrew!
+...
 
-> 
-> [1] https://lore.kernel.org/mm-commits/20230602205509.9DFBDC433D2@smtp.kernel.org/
-> 
-> 
-> Thanks,
-> SJ
-> 
->>
->>
->> Thanks,
->> SJ
->>
+> +// audio-iio-aux.c  --  ALSA SoC glue to use IIO devices as audio components
+
+Putting file name into file is not a good idea in case the file will be renamed
+in the future.
+
+...
+
+> +struct audio_iio_aux_chan {
+> +	struct iio_channel *iio_chan;
+> +	const char *name;
+> +	bool is_invert_range;
+
+If you put bool after int:s it may save a few bytes in some cases.
+
+> +	int max;
+> +	int min;
+
+Wondering if there is already a data type for the ranges (like linear_range.h,
+but not sure it's applicable here).
+
+> +};
+
+...
+
+> +	if (val < 0)
+> +		return -EINVAL;
+> +	if (val > max - min)
+
+Btw, who will validate that max > min?
+
+> +		return -EINVAL;
+
+...
+
+> +	return 1; /* The value changed */
+
+Perhaps this 1 needs a definition?
+
+...
+
+> +static struct snd_soc_dapm_widget widgets[3] = {0};
+> +static struct snd_soc_dapm_route routes[2] = {0};
+
+0:s are not needed. Moreover, the entire assingments are redundant
+as this is guaranteed by the C standard.
+
+...
+
+> +	char *input_name = NULL;
+> +	char *output_name = NULL;
+> +	char *pga_name = NULL;
+
+Redundant assignments if you properly label the freeing.
+
+...
+
+> +	BUILD_BUG_ON(ARRAY_SIZE(widgets) < 3);
+
+Use static_assert() at the place where the array is defined.
+
+...
+
+> +	BUILD_BUG_ON(ARRAY_SIZE(routes) < 2);
+
+Ditto.
+
+...
+
+> +end:
+
+out_free:
+
+> +	/* Allocated names are no more needed (duplicated in ASoC internals) */
+> +	kfree(pga_name);
+> +	kfree(output_name);
+> +	kfree(input_name);
+> +
+> +	return ret;
+
+...
+
+> +	for (i = 0; i < iio_aux->num_chans; i++) {
+> +		chan = iio_aux->chans + i;
+> +
+> +		ret = iio_read_max_channel_raw(chan->iio_chan, &chan->max);
+> +		if (ret) {
+> +			dev_err(component->dev, "chan[%d] %s: Cannot get max raw value (%d)\n",
+> +				i, chan->name, ret);
+> +			return ret;
+
+It sounds like a part of ->probe() flow, correct?
+Can dev_err_probe() be used here?
+
+> +		}
+> +
+> +		ret = iio_read_min_channel_raw(chan->iio_chan, &chan->min);
+> +		if (ret) {
+> +			dev_err(component->dev, "chan[%d] %s: Cannot get min raw value (%d)\n",
+> +				i, chan->name, ret);
+> +			return ret;
+
+Ditto.
+
+> +		}
+> +
+> +		/* Set initial value */
+> +		ret = iio_write_channel_raw(chan->iio_chan,
+> +					    chan->is_invert_range ? chan->max : chan->min);
+> +		if (ret) {
+> +			dev_err(component->dev, "chan[%d] %s: Cannot set initial value (%d)\n",
+> +				i, chan->name, ret);
+> +			return ret;
+
+Ditto.
+
+> +		}
+
+...
+
+> +		dev_dbg(component->dev, "chan[%d]: Added %s (min=%d, max=%d, invert=%s)\n",
+> +			i, chan->name, chan->min, chan->max,
+> +			chan->is_invert_range ? "on" : "off");
+
+str_on_off()
+
+> +	}
+
+...
+
+> +	count = of_property_count_strings(np, "io-channel-names");
+> +	if (count < 0) {
+
+> +		dev_err(iio_aux->dev, "%pOF: failed to read io-channel-names\n", np);
+> +		return count;
+
+		return dev_err_probe();
+
+> +	}
+
+...
+
+> +	for (i = 0; i < iio_aux->num_chans; i++) {
+> +		iio_aux_chan = iio_aux->chans + i;
+> +
+> +		ret = of_property_read_string_index(np, "io-channel-names", i,
+> +						    &iio_aux_chan->name);
+> +		if (ret < 0) {
+> +			dev_err(iio_aux->dev, "%pOF: failed to read io-channel-names[%d]\n", np, i);
+> +			return ret;
+
+Ditto.
+
+> +		}
+
+> +		tmp = 0;
+> +		of_property_read_u32_index(np, "snd-control-invert-range", i, &tmp);
+
+> +		iio_aux_chan->is_invert_range = tmp;
+
+You can use this variable directly.
+
+> +	}
+
+Btw, can you avoid using OF APIs? It's better to have device property/fwnode
+API to be used from day 1.
+
+...
+
+> +	platform_set_drvdata(pdev, iio_aux);
+
+Which callback is using this driver data?
+
+...
+
+> +static const struct of_device_id audio_iio_aux_ids[] = {
+> +	{ .compatible = "audio-iio-aux", },
+
+Inner comma is not needed.
+
+> +	{ }
+> +};
+
+...
+
+> +static struct platform_driver audio_iio_aux_driver = {
+> +	.driver = {
+> +		.name = "audio-iio-aux",
+> +		.of_match_table = audio_iio_aux_ids,
+> +	},
+> +	.probe = audio_iio_aux_probe,
+> +};
+
+> +
+
+Redundant blank line
+
+> +module_platform_driver(audio_iio_aux_driver);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
