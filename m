@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BC5720CCA
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25185720CCD
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbjFCA73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 20:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
+        id S236954AbjFCBH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236854AbjFCA71 (ORCPT
+        with ESMTP id S236200AbjFCBHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 20:59:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949341A8;
-        Fri,  2 Jun 2023 17:59:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E7B461FD9;
-        Sat,  3 Jun 2023 00:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458BAC433EF;
-        Sat,  3 Jun 2023 00:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1685753961;
-        bh=eh5DVYfbuqzMcZ0I3u+igVhAEofzAdLoif80bx8rdXA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dvaor2btUSVJCn43NTJn7k/xOz6V6rhBlT8B9vOL+YqUga2PPqqPOs90Kq7lKaqTx
-         pGNf1bFuUGvMpEtESxs41nFqqBkXMblNA0nFjani75NWb7YYi0Z5yBDjnpoIr4D8pM
-         2tzmebkYbhmrqYhTl7C/ISZJrV7AT1RReLYE+BCw=
-Date:   Fri, 2 Jun 2023 17:59:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>, vannapurve@google.com,
-        erdemaktas@google.com
-Subject: Re: [PATCH 1/1] page cache: fix page_cache_next/prev_miss off by
- one
-Message-Id: <20230602175920.4891c718afd2b20b7cd620cb@linux-foundation.org>
-In-Reply-To: <20230602225747.103865-2-mike.kravetz@oracle.com>
-References: <20230602225747.103865-1-mike.kravetz@oracle.com>
-        <20230602225747.103865-2-mike.kravetz@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 2 Jun 2023 21:07:24 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A583E43
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:07:23 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-19f268b1d83so2369344fac.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685754443; x=1688346443;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rk7MwmJT/RKA/8bT+bq8NZnYWiepDXUZ2WOSbM/67Kc=;
+        b=ADa1mYnLZvLryRogdbm5xyDYJs2pS+VRy56cK1FxOIKK+fBdvPkKqg8vexxL+PScO9
+         QgYXX86s8PyQoOt0tPg2a9JvNESv/Gm0NnrbngpRSpWS3Ggn/Se4k6+WYvOGtppz9q8T
+         CBw0Y1m2Kf/2NbCtO93ERx0/U2t9k20iN7LjT/fcQhiFRotb0wWznGHqPlPiy2yyiBsd
+         CpgNepcR5OGfydVYh+pketrWFwCO3Xp4AHArCad7FyhNoRu2QW2h4mw3YSpAKZe79a2b
+         8vuwiMYH7pkAqUzywPz8qFY+H8ArljV91J9MuL09DCpP6GxsIuKpYsVH172Dc39rY2T8
+         iLlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685754443; x=1688346443;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rk7MwmJT/RKA/8bT+bq8NZnYWiepDXUZ2WOSbM/67Kc=;
+        b=QFdxM2ytpqMWM8ynnNhSds0Y3MCQ/9mE89hvAPU0c22ozlGi3uh+SdWyDrOGvXqmka
+         YvLDhK1aOueW2FInkOrg/A7r/qvHJclVDzUXHWENlVZXjeuoHUxWSQxdoXNOSgTMe+7B
+         Z0MoWicLkkIawMrxYZSxnryGCN21N5wUpbkCawlL1iZXM3MJNysXn5EVgSxehYsbFLOm
+         xtOaZh+xE3UcGQIv3stt9s767nZI8EYhznpq66DBb78tuyV+g4LrAFnS0IA0Wbdc6odI
+         0NmBQRlxxM8n/EB+Ah2Z4xAXo/BSM05N4POEQLXTf9NJtmxs8bF5szVJNnr4BJ80z9CJ
+         kdtw==
+X-Gm-Message-State: AC+VfDxw+WOWzrQozZswElmB66zPaJEFVjNOKa5E5IVBxIFydJtYo7Je
+        El7S2UEYfSeDY6UGiubdtPRNkQ==
+X-Google-Smtp-Source: ACHHUZ6Yvio28iRnqPnF69blx9B4/zfV/5T1FwL2B2HB6lmmwNJlkz1rTQ2cVgloksdkBkeYyNzpEg==
+X-Received: by 2002:a05:6808:298:b0:398:41b4:5b2 with SMTP id z24-20020a056808029800b0039841b405b2mr1316618oic.23.1685754442897;
+        Fri, 02 Jun 2023 18:07:22 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:643c:5e1a:4c7c:c5cd? ([2804:14d:5c5e:44fb:643c:5e1a:4c7c:c5cd])
+        by smtp.gmail.com with ESMTPSA id s4-20020acadb04000000b003982a8a1e3fsm1151483oig.51.2023.06.02.18.07.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 18:07:22 -0700 (PDT)
+Message-ID: <28802979-d237-1c9c-ad05-10aaa8f46b48@mojatatu.com>
+Date:   Fri, 2 Jun 2023 22:07:17 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net: sched: wrap tc_skip_wrapper with CONFIG_RETPOLINE
+Content-Language: en-US
+To:     Min-Hua Chen <minhuadotchen@gmail.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230602235210.91262-1-minhuadotchen@gmail.com>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20230602235210.91262-1-minhuadotchen@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  2 Jun 2023 15:57:47 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On 02/06/2023 20:52, Min-Hua Chen wrote:
+> This patch fixes the following sparse warning:
+> 
+> net/sched/sch_api.c:2305:1: sparse: warning: symbol 'tc_skip_wrapper' was not declared. Should it be static?
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
 
-> Ackerley Tng reported an issue with hugetlbfs fallocate here[1].  The
-> issue showed up after the conversion of hugetlb page cache lookup code
-> to use page_cache_next_miss.
+LGTM,
 
-So I'm assuming
+Acked-by: Pedro Tammela <pctammela@mojatatu.com>
 
-Fixes: d0ce0e47b323 ("mm/hugetlb: convert hugetlb fault paths to use alloc_hugetlb_folio()")
-
-?
-
-> Code in hugetlb fallocate, userfaultfd
-> and GUP is now using page_cache_next_miss to determine if a page is
-> present the page cache.  The following statement is used.
+> ---
+>   net/sched/sch_api.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> 	present = page_cache_next_miss(mapping, index, 1) != index;
-> 
-> There are two issues with page_cache_next_miss when used in this way.
-> 1) If the passed value for index is equal to the 'wrap-around' value,
->    the same index will always be returned.  This wrap-around value is 0,
->    so 0 will be returned even if page is present at index 0.
-> 2) If there is no gap in the range passed, the last index in the range
->    will be returned.  When passed a range of 1 as above, the passed
->    index value will be returned even if the page is present.
-> The end result is the statement above will NEVER indicate a page is
-> present in the cache, even if it is.
-> 
-> As noted by Ackerley in [1], users can see this by hugetlb fallocate
-> incorrectly returning EEXIST if pages are already present in the file.
-> In addition, hugetlb pages will not be included in core dumps if they
-> need to be brought in via GUP.  userfaultfd UFFDIO_COPY also uses this
-> code and will not notice pages already present in the cache.  It may try
-> to allocate a new page and potentially return ENOMEM as opposed to
-> EEXIST.
-> 
-> Both page_cache_next_miss and page_cache_prev_miss have similar issues.
-> Fix by:
-> - Check for index equal to 'wrap-around' value and do not exit early.
-> - If no gap is found in range, return index outside range.
-> - Update function description to say 'wrap-around' value could be
->   returned if passed as index.
-> 
-> [1] https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com/
-> 
+> diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+> index 014209b1dd58..9ea51812b9cf 100644
+> --- a/net/sched/sch_api.c
+> +++ b/net/sched/sch_api.c
+> @@ -2302,7 +2302,9 @@ static struct pernet_operations psched_net_ops = {
+>   	.exit = psched_net_exit,
+>   };
+>   
+> +#if IS_ENABLED(CONFIG_RETPOLINE)
+>   DEFINE_STATIC_KEY_FALSE(tc_skip_wrapper);
+> +#endif
+>   
+>   static int __init pktsched_init(void)
+>   {
 
