@@ -2,110 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692CF720EB5
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009AB720EBB
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbjFCIR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 04:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
+        id S234895AbjFCIWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 04:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjFCIRx (ORCPT
+        with ESMTP id S229831AbjFCIWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 04:17:53 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE5AE56;
-        Sat,  3 Jun 2023 01:17:50 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1685780261tx6oj29b
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 03 Jun 2023 16:17:40 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: E5K4RXiq5f16O7Lg/ibaIwDGJ/dBM+SgASgVWJNrZJ0DycLMa61F85p3zn/s0
-        pmVP+uUxVO+uRq/qEVaGBrw6dy5nIj47egVC3sA8D6LyXOmfE2qgnjJAplThr2LHojLED11
-        dN48gvX6BDj+6ZskNGLKC05GNgBi/1WsGLb1E+3d17NhlPgK0/LzJRM0pb94DuYlP0Nmb59
-        w/YBaNODEaG8SfvzKEIj3lR1qDDwBvXpe5afs1A1FBfiTrIN0OgVeJJbKuaREYCdlovpmwR
-        TbYhxWH70C7N9rrtU2bVFSPPjUczDufHPnteLBOjhwo549unG3iUV5HoN68eGMNqiD9QnOE
-        Mbf4IaVts3z35QJQ2XUbnjfxanJ+JTJpIGiU/3+zwyVM15wQhyWDL98jOVCeDUWXeWyrFpD
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11015261677064545706
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 12/12] selftests/nolibc: test_fork: fix up duplicated print
-Date:   Sat,  3 Jun 2023 16:17:25 +0800
-Message-Id: <4e090aff64abeca598d1bb6ee54b40ee4ce52858.1685777982.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685777982.git.falcon@tinylab.org>
-References: <cover.1685777982.git.falcon@tinylab.org>
+        Sat, 3 Jun 2023 04:22:30 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF81299;
+        Sat,  3 Jun 2023 01:22:28 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-7841f18f9f7so750588241.0;
+        Sat, 03 Jun 2023 01:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685780548; x=1688372548;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j8g2hnOGOg2sxpTnLUbSGzAiSvvgwyqIgGFTiGWjGU0=;
+        b=rk5jL5mSq6M2gxVyXs4AUO7B65MmZArJzj3wGRXaSqEsGRuwpHAWF2E9/hMFbKk3c8
+         e4J5pa9SUHMps06XsQ+RxYXPuzuni8NHeYDSYI2xO/UQ49l2A5gS6/4jG3OFwBMYmE81
+         y79noa98hW4pqR2rjBCeCl8nPDi012PX9gVFQNQGk1UXVr4m4XmDvNUqYULKwOFf6Xar
+         2DBh/N6PETCeNBD9+r0VjTjxasPJFUVqVKsrvMFAPkd/Fs7Sx8Pn6rEs/ZTuD7nZ0HIY
+         mfIQvZWI3I+JzOEx6t22cO64rgX3pncWQqcG2P/ECJzu0HB3GMWlTtGYLcMlUX/oO4Mc
+         Bpnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685780548; x=1688372548;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j8g2hnOGOg2sxpTnLUbSGzAiSvvgwyqIgGFTiGWjGU0=;
+        b=RRKZ4/6zYB4JdsufrgTPGIPqUlUFPeNDjmjItfl49H8xQA1i+mH98Mduh/ZBj8t/57
+         ef2sAfzd/23oZpPZps+FTR9F3RlhbMAT5IfAcxc6KDJTu8GmlrWtVFOyZwvNzBqzejZ7
+         xer1a5jEdEvK0hW8+RDRNagCYmLSP+bgL/rWMkfwBbWLkUvi7aHRqgCnGm5l6o6EoIcV
+         nAhdWCQQPiH1Ph1I6SRKrSekVPJ/BCVggfnmOPDDjvkjfRMmP4DXtZ0UR8Uie17Uueag
+         BXIrHR0kwWGZAvpsZHuvEXgqOqjT2XZeLV+28av0/4bNmc5tp5fRDyNN8f0Gx8Ep+qfP
+         OiQQ==
+X-Gm-Message-State: AC+VfDwwaAQ8NRkA7U1br8JHDNtz3ovjgFSmQWrBbbyH7LQUxK+6G7CK
+        1m3wwduG2mWBj7y5FRxCYe2Ny4A1Qm0EmcjklE8=
+X-Google-Smtp-Source: ACHHUZ5ZX5Rv93vS+T0aa4l7PxWVuS+bIALakx92H3qwe7964NQXeeZKVsd/UNfQ8dr18rTvPckahEu218QkzqjD+rk=
+X-Received: by 2002:a1f:6017:0:b0:461:479d:745d with SMTP id
+ u23-20020a1f6017000000b00461479d745dmr985295vkb.8.1685780547644; Sat, 03 Jun
+ 2023 01:22:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230602163044.1820619-1-leitao@debian.org>
+In-Reply-To: <20230602163044.1820619-1-leitao@debian.org>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sat, 3 Jun 2023 10:21:50 +0200
+Message-ID: <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, axboe@kernel.dk,
+        asml.silence@gmail.com, leit@fb.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-running nolibc-test with glibc on x86_64 got such print issue:
+On Fri, Jun 2, 2023 at 6:31=E2=80=AFPM Breno Leitao <leitao@debian.org> wro=
+te:
+>
+> Most of the ioctls to net protocols operates directly on userspace
+> argument (arg). Usually doing get_user()/put_user() directly in the
+> ioctl callback.  This is not flexible, because it is hard to reuse these
+> functions without passing userspace buffers.
+>
+> Change the "struct proto" ioctls to avoid touching userspace memory and
+> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> adapted to operate on a kernel memory other than on userspace (so, no
+> more {put,get}_user() and friends being called in the ioctl callback).
+>
+> This changes the "struct proto" ioctl format in the following way:
+>
+>     int                     (*ioctl)(struct sock *sk, int cmd,
+> -                                        unsigned long arg);
+> +                                        int *karg);
+>
+> So, the "karg" argument, which is passed to the ioctl callback, is a
+> pointer allocated to kernel space memory (inside a function wrapper).
+> This buffer (karg) may contain input argument (copied from userspace in
+> a prep function) and it might return a value/buffer, which is copied
+> back to userspace if necessary. There is not one-size-fits-all format
+> (that is I am using 'may' above), but basically, there are three type of
+> ioctls:
+>
+> 1) Do not read from userspace, returns a result to userspace
+> 2) Read an input parameter from userspace, and does not return anything
+>   to userspace
+> 3) Read an input from userspace, and return a buffer to userspace.
+>
+> The default case (1) (where no input parameter is given, and an "int" is
+> returned to userspace) encompasses more than 90% of the cases, but there
+> are two other exceptions. Here is a list of exceptions:
+>
+> * Protocol RAW:
+>    * cmd =3D SIOCGETVIFCNT:
+>      * input and output =3D struct sioc_vif_req
+>    * cmd =3D SIOCGETSGCNT
+>      * input and output =3D struct sioc_sg_req
+>    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
+>      argument, which is struct sioc_vif_req. Then the callback populates
+>      the struct, which is copied back to userspace.
+>
+> * Protocol RAW6:
+>    * cmd =3D SIOCGETMIFCNT_IN6
+>      * input and output =3D struct sioc_mif_req6
+>    * cmd =3D SIOCGETSGCNT_IN6
+>      * input and output =3D struct sioc_sg_req6
+>
+> * Protocol PHONET:
+>   * cmd =3D=3D SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
+>      * input int (4 bytes)
+>   * Nothing is copied back to userspace.
+>
+> For the exception cases, functions sock_sk_ioctl_inout() will
+> copy the userspace input, and copy it back to kernel space.
+>
+> The wrapper that prepare the buffer and put the buffer back to user is
+> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
+> calls sk_ioctl(), which will handle all cases.
+>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-    29 execve_root = -1 EACCES                                       [OK]
-    30 fork30 fork = 0                                                      [OK]
-    31 getdents64_root = 712                                         [OK]
+Please check the checkpatch output
 
-The fork test case has three printf calls:
+https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
 
-    (1) llen += printf("%d %s", test, #name);
-    (2) llen += printf(" = %d %s ", expr, errorname(errno));
-    (3) llen += pad_spc(llen, 64, "[FAIL]\n"); --> vfprintf()
+> +static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, voi=
+d __user *arg)
+> +{
+> +       int karg;
+> +
+> +       switch (cmd) {
+> +       case SIOCPNADDRESOURCE:
+> +       case SIOCPNDELRESOURCE:
+> +               if (get_user(karg, (int __user *)arg))
+> +                       return -EFAULT;
+> +
+> +               return sk->sk_prot->ioctl(sk, cmd, &karg);
+> +       }
+> +       /* A positive return value means that the ioctl was not processed=
+ */
+> +       return 1;
+> +}
+>  #endif
 
-In the following scene, the above issue happens:
+> +/* A wrapper around sock ioctls, which copies the data from userspace
+> + * (depending on the protocol/ioctl), and copies back the result to user=
+space.
+> + * The main motivation for this function is to pass kernel memory to the
+> + * protocol ioctl callbacks, instead of userspace memory.
+> + */
+> +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+> +{
+> +       int rc =3D 1;
+> +
+> +       if (sk_is_ipmr(sk))
+> +               rc =3D ipmr_sk_ioctl(sk, cmd, arg);
+> +       else if (sk_is_icmpv6(sk))
+> +               rc =3D ip6mr_sk_ioctl(sk, cmd, arg);
+> +       else if (sk_is_phonet(sk))
+> +               rc =3D phonet_sk_ioctl(sk, cmd, arg);
 
-    (a) The parent calls (1)
-    (b) The parent calls fork()
-    (c) The child runs and shares the print buffer of (1)
-    (d) The child exits, flushs the print buffer and closes its own stdout/stderr
-        * "30 fork" is printed at the first time.
-    (e) The parent calls (2) and (3), with "\n" in (3), it flushs the whole buffer
-        * "30 fork = 0 ..." is printed
+Does this handle all phonet ioctl cases correctly?
 
-Therefore, there are two "30 fork" in the stdout.
-
-Between (a) and (b), if flush the stdout (and the sterr), the child in
-stage (c) will not be able to 'see' the print buffer.
-
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index e68c5692ec54..7dd950879161 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -490,7 +490,13 @@ static int test_getpagesize(void)
- static int test_fork(void)
- {
- 	int status;
--	pid_t pid = fork();
-+	pid_t pid;
-+
-+	/* flush the printf buffer to avoid child flush it */
-+	fflush(stdout);
-+	fflush(stderr);
-+
-+	pid = fork();
- 
- 	switch (pid) {
- 	case -1:
--- 
-2.25.1
-
+Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u16.
