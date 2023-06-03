@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A678720CC5
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F25720CC3
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 02:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237051AbjFCA4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 20:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S237040AbjFCAz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 20:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbjFCA4E (ORCPT
+        with ESMTP id S237011AbjFCAzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 20:56:04 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50079E52
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 17:56:02 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5693861875fso31113467b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 17:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685753761; x=1688345761;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6VF+jKVtUKuSL3+orDX/BcKSQvxplFjfV2+ACVF3p9k=;
-        b=cLPwDVeiAtS5QwHY8obE07T+sL+yvyk5p8+xaU12Rw7dw3ucLcmet3zm8HcUALWjwg
-         M08BKohRRYkeoXNNtmnfwBVWe33pEGhMYEwX8kR63BPFThkNLfl0SY4biwvlSAZ1yef8
-         BEzD1evaKUb8EBSo41PirhmgWI59dO9WZ/xBKkstDZIkgEigs/L1PtNFnepUNdg2Z3QE
-         Ese+Oc6f5Un41Gvc8N3pQIhN397i5V301KrZngquHEg3SamqGQg5H5Wyq812wBKdiajp
-         WGya5VPjYX6lE1xmdqaIbr3CJlAJavMiS4LluG/rur/+9UabubAVkCgusC1Vc7NtvmmO
-         FNSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685753761; x=1688345761;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6VF+jKVtUKuSL3+orDX/BcKSQvxplFjfV2+ACVF3p9k=;
-        b=R0dJ4WLJNhHyU6/UFShr/g2EjzkYwUS+9X26qRjAM0Wi6IJOnF9WFljM7SO810C7jI
-         gMjQjguidY3STKWaxDtYJiswJR/UQAUCFex4YebJUF0vE5bnJDYIyogHYWNv7+20qpOX
-         bZi5Ov0rUYLfTraCxzg3QxAiV7cuTMFFxqQAs2LYqz4ukbm4d2K5dVvlSFuyonMHe4bl
-         +LvzFqdi0D9FxxBYjEp7H5fNmPvq98GqL52+JtuLCrehQfAlHAwZ5j4nzgMj60wCgUf6
-         ZOSTqXFA7vS7ZXGpDMHbh6jTp+mqfT5Xc58x+w+7Jj9ZDqlbeIOKZed0hPNR1VgGJoG5
-         SXLQ==
-X-Gm-Message-State: AC+VfDzVh/zgi6qjBC3L4cw8qyAol/5UTaLoKUGmf7G4BePidVb00myu
-        MldiapEO24+L1G+wyT9gz5SFTZypPyc=
-X-Google-Smtp-Source: ACHHUZ6orSVIYJauSsopxLKnrPsP3ebTt9rUpkuUXRc6oqb9uRP/8VP4uXCj20GsBVoJYkZNGBljHuoMyhU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:b512:0:b0:568:a244:d8e5 with SMTP id
- t18-20020a81b512000000b00568a244d8e5mr801228ywh.9.1685753761663; Fri, 02 Jun
- 2023 17:56:01 -0700 (PDT)
-Date:   Fri,  2 Jun 2023 17:55:43 -0700
-In-Reply-To: <20230405234556.696927-1-seanjc@google.com>
+        Fri, 2 Jun 2023 20:55:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0852E62;
+        Fri,  2 Jun 2023 17:55:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2030C60FC6;
+        Sat,  3 Jun 2023 00:55:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 246A0C433D2;
+        Sat,  3 Jun 2023 00:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1685753748;
+        bh=Xubkvl6o/dMjh0W2gs6rjN5eA+h0WSm7E9vZ1z6roSE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ckdb5p4PjYQ2h0tguVeop9ZOh+CNCjMk4ZQS8TtIbeq1ACOe7Hp9tfmWK3rgzPfgd
+         u/08F1YFM4P9P9YNGu9hXZBBpraG979oH2iY8h9V0WowMpD5+x8ChFXswpJBhMdHhw
+         eWk+w9/CsGr7KZWGWop98gLyPrQgbPKWXY0FTPxI=
+Date:   Fri, 2 Jun 2023 17:55:47 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>, vannapurve@google.com,
+        erdemaktas@google.com, stable <stable@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 0/1] RESEND fix page_cache_next/prev_miss off by one
+ error
+Message-Id: <20230602175547.dba09bb3ef7eb0bc508b3a5a@linux-foundation.org>
+In-Reply-To: <20230602225747.103865-1-mike.kravetz@oracle.com>
+References: <20230602225747.103865-1-mike.kravetz@oracle.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230405234556.696927-1-seanjc@google.com>
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <168574934456.1017711.18398419709804116165.b4-ty@google.com>
-Subject: Re: [PATCH 0/2] KVM: VMX: Fixes for faults on ENCLS emulation
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Binbin Wu <binbin.wu@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023 16:45:54 -0700, Sean Christopherson wrote:
-> Found-by-inspection (when reviewing Binbin's patch) fixes for incorrect
-> emulation of faults when KVMintercepts and emulates (sort of) ENCLS.
+On Fri,  2 Jun 2023 15:57:46 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+
+> In commits d0ce0e47b323 and 91a2fb956ad99, hugetlb code was changed to
+> use page_cache_next_miss to determine if a page was present in the page
+> cache.  However, the current implementation of page_cache_next_miss will
+> always return the passed index if max_scan is 1 as in the hugetlb code.
+> As a result, hugetlb code will always thing a page is present in the
+> cache, even if that is not the case.
 > 
-> Very much compile tested only.  Ideally, someone with SGX hardware can
-> confirm that these patches are correct, e.g. my assessment that KVM needs
-> to manually check CR0.PG is based purely of SDM pseudocode.
+> The patch which follows addresses the issue by changing the implementation
+> of page_cache_next_miss and for consistency page_cache_prev_miss.  Since
+> such a patch also impacts the readahead code, I would suggest using the
+> patch by Sidhartha Kumar [1] to fix the issue in 6.3 and this patch moving
+> forward.
+
+Well this is tricky.
+
+This patch applies cleanly to 6.3, so if we add cc:stable to this
+patch, it will get backported, against your suggestion.
+
+Sidhartha's patch [1] (which you recommend for -stable) is quite
+different from this patch.  And Sidhartha's patch has no route to being
+tested in linux-next nor to being merged by Linus.
+
+So problems.  The preferable approach is to just backport this patch
+into -stable in the usual fashion.  What are the risks in doing this?
+
+> If we would rather not modify page_cache_next/prev_miss, then a new
+> interface as suggested by Ackerley Tng [2] could also be used.
 > 
-> [...]
+> Comments on the best way to fix moving forward would be appreciated.
+> 
+> [1] https://lore.kernel.org/linux-mm/20230505185301.534259-1-sidhartha.kumar@oracle.com/
+> [2] https://lore.kernel.org/linux-mm/98624c2f481966492b4eb8272aef747790229b73.1683069252.git.ackerleytng@google.com/
+> 
+> Mike Kravetz (1):
+>   page cache: fix page_cache_next/prev_miss off by one
+> 
+>  mm/filemap.c | 26 ++++++++++++++++----------
+>  1 file changed, 16 insertions(+), 10 deletions(-)
+> 
 
-Applied to kvm-x86 vmx, thanks!
-
-[1/2] KVM: VMX: Inject #GP on ENCLS if vCPU has paging disabled (CR0.PG==0)
-      https://github.com/kvm-x86/linux/commit/5e50082c8c21
-[2/2] KVM: VMX: Inject #GP, not #UD, if SGX2 ENCLS leafs are unsupported
-      https://github.com/kvm-x86/linux/commit/c3a1e119a343
-
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
