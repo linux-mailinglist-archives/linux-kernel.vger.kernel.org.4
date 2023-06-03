@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8293720CEC
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8525A720CEF
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237073AbjFCBMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S236916AbjFCBRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237145AbjFCBLp (ORCPT
+        with ESMTP id S229802AbjFCBRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:11:45 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE601702
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:11:24 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b1bd4fcc22so5544585ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685754684; x=1688346684;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=O6aZ99/gTomPSpDx04dBgMUhLAou1VtK/fDnLslrZmU=;
-        b=x7HWDH8/Bs9YtzCXj/mrZ81zxYF5I7CITbLVs3xIKM9SDl8Dj5A8nTCf6r3RXcbCn2
-         blMFBeeTkuC5motXASnEpV1/tXRACqNxLOenferCAhBm54ivgYoqeyd48H878wW44RUh
-         Be2SKu4/9omccwscEsK5eKJS32/tTOLSkQ/MwCfR1wvFCrEtth7QbICvOK5L2RRkCHhw
-         GIKF2gf1ztel2DMowiBL4haf3VfY/E/eR3BvaajX65im7/Y3zWITDuCfOC8qWpfWQ2Av
-         4uZxD2JZrD2g+4zgtsr6pxlRtA51RsTEYC4LdQQ/KJSmyBYowcXw1YoXo021O2sAwHNA
-         XO+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685754684; x=1688346684;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O6aZ99/gTomPSpDx04dBgMUhLAou1VtK/fDnLslrZmU=;
-        b=Ktf/Mi/skb7IRM9+PgetrfkVejV+/Omx8bHNjpSr5GrKAIRgWnbU8r+ldZ0nSdJazw
-         lsKw1jWPu55nbpNaWCRBGXoI5CWVfqzwNAxl3oIQ5NbhCiodIKzS57wZ59e58rSY2gAi
-         QcsjOmOEmDELXYpAdHeIKB3WZt4tBftsKCwHjTVTyH8nK5+Ty44Nwd3ZT1YWLqzt5Hr/
-         hobgI8pB9XzIxgt1Y4aQNtjohAA1CKBIyEPdxNHVXwLwr3oJ0FHTQ0IsPPs5aot/5nai
-         puMVdFjbwzng1V2mtYVeuJek260ilFkO2vdGbRZLKqKdcQ0uPXdihjTNyuRgzkRPtQit
-         CQVQ==
-X-Gm-Message-State: AC+VfDyUfYhL1ES5c1DSRGV8OxKEihd7wG/0hr8kKpZgqFI/j8rdjO8s
-        PZEDDC+OX8aYZy9u/XHXnCqdWx0UypE=
-X-Google-Smtp-Source: ACHHUZ5j4aR8F78dxip8RbVwwtN7tQSfuK9BhguCjo7+vHSO3ZVYBRQZ6EYSIpVmjSUrhNK8nWPG//nOytk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:c204:b0:1a6:b4cf:f6c0 with SMTP id
- 4-20020a170902c20400b001a6b4cff6c0mr375741pll.4.1685754683772; Fri, 02 Jun
- 2023 18:11:23 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  2 Jun 2023 18:10:58 -0700
-In-Reply-To: <20230603011058.1038821-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230603011058.1038821-1-seanjc@google.com>
-X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230603011058.1038821-13-seanjc@google.com>
-Subject: [PATCH v7 12/12] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>,
-        Like Xu <likexu@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sandipan Das <sandipan.das@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Fri, 2 Jun 2023 21:17:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B8B9;
+        Fri,  2 Jun 2023 18:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685755033; x=1717291033;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZqjGZ5QOK5/9p0dBTmL1jSNej1ZvjR79xQrDuqbSz60=;
+  b=Uie7uu5TIcfBNKXaInDaknHuwZGBaqqOVwcgYOg6H/vyJd6a3kCIQxts
+   /3B0AEAeouHRI1KLneflNIPjluf3Mz35jUWoiGYEpalcBxdUhdhfPCPJZ
+   ylHV/HFiO6foR3G1sMydWbez3SymhymDM0nUmtMmOVP7Hr+vqOZT7ciwo
+   RGNOFu0I1ewg5xVfBmhYtentZZukLwTSy6P1RpHyL5OPtqrtZBYvWSud2
+   Cc33fq/W6ul/GD0zRdEhAZ/Vv5AFUAjZjWsald34iBejOCJnn7dKzAngn
+   fVawbSj8Zn2hDSixU1AZxybZBTZQMnvRRSNR0L3O0DTeevPFRR45ub2OZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="419549579"
+X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
+   d="scan'208";a="419549579"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 18:17:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="658443953"
+X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
+   d="scan'208";a="658443953"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2023 18:17:10 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q5FtG-000185-00;
+        Sat, 03 Jun 2023 01:17:10 +0000
+Date:   Sat, 3 Jun 2023 09:16:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Besar Wicaksono <bwicaksono@nvidia.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Subject: Re: [PATCH v2 5/5] perf: arm_cspmu: ampere_cspmu: Add support for
+ Ampere SoC PMU
+Message-ID: <202306030958.1IskqGEt-lkp@intel.com>
+References: <20230601030144.3458136-6-ilkka@os.amperecomputing.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601030144.3458136-6-ilkka@os.amperecomputing.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,96 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Ilkka,
 
-CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some new
-performance monitoring features for AMD processors.
+kernel test robot noticed the following build warnings:
 
-Bit 0 of EAX indicates support for Performance Monitoring Version 2
-(PerfMonV2) features. If found to be set during PMU initialization,
-the EBX bits of the same CPUID function can be used to determine
-the number of available PMCs for different PMU types.
+[auto build test WARNING on arm-perf/for-next/perf]
+[also build test WARNING on soc/for-next linus/master v6.4-rc4 next-20230602]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so that
-guests can make use of the PerfMonV2 features.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ilkka-Koskinen/perf-arm_cspmu-Support-32-bit-accesses-to-64-bit-registers/20230601-110440
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
+patch link:    https://lore.kernel.org/r/20230601030144.3458136-6-ilkka%40os.amperecomputing.com
+patch subject: [PATCH v2 5/5] perf: arm_cspmu: ampere_cspmu: Add support for Ampere SoC PMU
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/6757d231639bb7a9f0b47f52d7d4f101ad3a0e29
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ilkka-Koskinen/perf-arm_cspmu-Support-32-bit-accesses-to-64-bit-registers/20230601-110440
+        git checkout 6757d231639bb7a9f0b47f52d7d4f101ad3a0e29
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
-Co-developed-by: Sandipan Das <sandipan.das@amd.com>
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/cpuid.c   | 28 +++++++++++++++++++++++++++-
- arch/x86/kvm/svm/svm.c |  4 ++++
- 2 files changed, 31 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306030958.1IskqGEt-lkp@intel.com/
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 61bc71882f07..0e5584f4acd7 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -734,6 +734,10 @@ void kvm_set_cpu_caps(void)
- 		F(NULL_SEL_CLR_BASE) | F(AUTOIBRS) | 0 /* PrefetchCtlMsr */
- 	);
- 
-+	kvm_cpu_cap_init_kvm_defined(CPUID_8000_0022_EAX,
-+		F(PERFMON_V2)
-+	);
-+
- 	/*
- 	 * Synthesize "LFENCE is serializing" into the AMD-defined entry in
- 	 * KVM's supported CPUID if the feature is reported as supported by the
-@@ -1128,7 +1132,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		entry->edx = 0;
- 		break;
- 	case 0x80000000:
--		entry->eax = min(entry->eax, 0x80000021);
-+		entry->eax = min(entry->eax, 0x80000022);
- 		/*
- 		 * Serializing LFENCE is reported in a multitude of ways, and
- 		 * NullSegClearsBase is not reported in CPUID on Zen2; help
-@@ -1233,6 +1237,28 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		entry->ebx = entry->ecx = entry->edx = 0;
- 		cpuid_entry_override(entry, CPUID_8000_0021_EAX);
- 		break;
-+	/* AMD Extended Performance Monitoring and Debug */
-+	case 0x80000022: {
-+		union cpuid_0x80000022_ebx ebx;
-+
-+		entry->ecx = entry->edx = 0;
-+		if (!enable_pmu || !kvm_cpu_cap_has(X86_FEATURE_PERFMON_V2)) {
-+			entry->eax = entry->ebx;
-+			break;
-+		}
-+
-+		cpuid_entry_override(entry, CPUID_8000_0022_EAX);
-+
-+		if (kvm_cpu_cap_has(X86_FEATURE_PERFMON_V2))
-+			ebx.split.num_core_pmc = kvm_pmu_cap.num_counters_gp;
-+		else if (kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE))
-+			ebx.split.num_core_pmc = AMD64_NUM_COUNTERS_CORE;
-+		else
-+			ebx.split.num_core_pmc = AMD64_NUM_COUNTERS;
-+
-+		entry->ebx = ebx.full;
-+		break;
-+	}
- 	/*Add support for Centaur's CPUID instruction*/
- 	case 0xC0000000:
- 		/*Just support up to 0xC0000004 now*/
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index d9669e3cc00a..ff48cdea1fbf 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -5036,6 +5036,10 @@ static __init void svm_set_cpu_caps(void)
- 							  kvm_pmu_cap.num_counters_gp);
- 		else
- 			kvm_cpu_cap_check_and_set(X86_FEATURE_PERFCTR_CORE);
-+
-+		if (kvm_pmu_cap.version != 2 ||
-+		    !kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE))
-+			kvm_cpu_cap_clear(X86_FEATURE_PERFMON_V2);
- 	}
- 
- 	/* CPUID 0x8000001F (SME/SEV features) */
+All warnings (new ones prefixed by >>):
+
+>> Documentation/admin-guide/perf/ampere_cspmu.rst: WARNING: document isn't included in any toctree
+
 -- 
-2.41.0.rc2.161.g9c6817b8e7-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
