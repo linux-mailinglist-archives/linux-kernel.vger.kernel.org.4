@@ -2,185 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED831720F08
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582C0720F09
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjFCJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 05:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
+        id S231569AbjFCJw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 05:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFCJwF (ORCPT
+        with ESMTP id S229475AbjFCJw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 05:52:05 -0400
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3D9E49
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 02:52:03 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 5NvTqcwg0lhpt5NvUq1Ymt; Sat, 03 Jun 2023 11:52:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685785921;
-        bh=sEkP4ZBCfBtKE6wbBKT/e+RFD7qcjLBvxrynGg1sMbg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Wnc+8hl0woXXEG7VOf6t6mLnvH6CnaRngUzo2mY6v8KlwbU938X7zOwebYSXMoVcS
-         QQ0c2MfWTLU6IBLI/tdjRQcUOYSanAx6lt8Slgu8R/VzoUT4aSGygbZgmJG0UgmfsD
-         lMaSdd/tzd/qipIDoaol96akAuiNiMK8Nlc1EsG0HSFW52OG5/7vJf/sCwvHHBC9aE
-         r27PJ41kyv30Yzu2PZEgqnNiYVP1I30gRbnSsGejHSa5qRd6FtpqwTNWQEZyWdpGsB
-         JsHIjSK0gqm8mOe41+hb/uBDr8V0BQhraE0sleDdb3dOzKtxsSjnbEXEh6FeRBOI3C
-         04tglSdZ7fvIA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 03 Jun 2023 11:52:01 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <70eaa9d9-4f0f-20b8-fcac-24b7074a084b@wanadoo.fr>
-Date:   Sat, 3 Jun 2023 11:51:59 +0200
+        Sat, 3 Jun 2023 05:52:57 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F298197;
+        Sat,  3 Jun 2023 02:52:56 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5659d85876dso29188477b3.2;
+        Sat, 03 Jun 2023 02:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685785976; x=1688377976;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6OR5QTtvoInCLV23YctcWJUvtwNYCmNRaAouRWx4/q8=;
+        b=r0n8+hOu2+EpPs9OqqTG5/MYpW0gfUupaAOYAJukGDnB50eYiMvm3D76VYhEdQ4d4N
+         bhXumIFEJeJAuqPc/KBtnL+ondtsZ2uW57oux5jmP2JEFZhNLIEHqXeTk0fB5z9lddQy
+         qCVOWKXn+fhIBC3xRaPcsXnbkp5tAc6NBiM99sf/oDAeUtdH1yIinys8rAB6S6zC6ZUf
+         GeE47LfR1dQQ8u6z36e0CllpppBCpy3d3+N/gAvFYlY9zGfOVlfmun6wnzoGZ6LO1mZ7
+         MJCfb2DF1xW9O/RE3gc9rAGOnenj3T5TrndL95uX2i3Ckcg/RiRzAVhNcVbxc19ag0KC
+         a1iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685785976; x=1688377976;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6OR5QTtvoInCLV23YctcWJUvtwNYCmNRaAouRWx4/q8=;
+        b=O4NGrE2xhUGlno9mrL4q146LYR1JIRU5/m+e5W0x+n84eAfMzC4sS1nEpMXkeJehcN
+         49IeepvBAT4xm92j2+JGAO7pmHtxJKAeDKOosaKTla+vhCAESPuuFT6LTIwH1Vxln2GE
+         FRJjlCAoDiz+R8VZe+uON3Md3K8K1zVNWbJzWL4Z5gvnoPzDArCNo105BtCXbVA46utN
+         yi0GXdJgYmRd7gB1ODB2x+8heF4LMrtFNR0Y0WLty5fNYTpwdkzK2Rbqr+oyV+dN0Rcf
+         c+fELHIPWkQz0fUNXA9esszBvAEmQPxWdod4fGG+DHc1m5AEiquvZfxM8+d7AsIsFXtW
+         Z5mw==
+X-Gm-Message-State: AC+VfDxv+lepJfy6OBKQD67ULpg77Ebdf9LPtSm6RUiHx5E8i76vUtu4
+        /PMA3DBjzEtZjW/JbbSdzb836kuma0dugWPvVPM=
+X-Google-Smtp-Source: ACHHUZ6cV1+6T4uqdm3SH6HE+Rin50hxX3WHA1d8jKdtSfzs7NLV3NKyk11GRFr9vSjI6kEa87tokibdqAt97SYoaBg=
+X-Received: by 2002:a0d:cd85:0:b0:565:a3d1:be19 with SMTP id
+ p127-20020a0dcd85000000b00565a3d1be19mr133749ywd.31.1685785975662; Sat, 03
+ Jun 2023 02:52:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] New module to add NCT6692D watchdog funtionality
-To:     dober6023@gmail.com
-Cc:     dober@lenovo.com, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-        mpearson@lenovo.com, wim@linux-watchdog.org
-References: <20230602163045.605774-1-dober6023@gmail.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230602163045.605774-1-dober6023@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Palash Oswal <oswalpalash@gmail.com>
+Date:   Sat, 3 Jun 2023 02:52:44 -0700
+Message-ID: <CAGyP=7cEJdEiHRRYZ1yGu-YFa-fDdufd-fCEwu+Pi8ymuaV8OQ@mail.gmail.com>
+Subject: KASAN: slab-use-after-free Read in skb_dequeue
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 02/06/2023 à 18:30, David Ober a écrit :
-> The new module adds in the basic functionality of the NCT6692D
-> watchdog driver. This functionality is added to support the
-> Lenovo SE30 device
-> 
-> Signed-off-by: David Ober <dober6023-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> ---
->   drivers/watchdog/Kconfig       |  12 +
->   drivers/watchdog/Makefile      |   1 +
->   drivers/watchdog/nct6692_wdt.c | 690 +++++++++++++++++++++++++++++++++
->   3 files changed, 703 insertions(+)
->   create mode 100644 drivers/watchdog/nct6692_wdt.c
-> 
+Hello,
+I found the following issue using syzkaller with enriched corpus[1] on:
+HEAD commit : 0bcc4025550403ae28d2984bddacafbca0a2f112
+git tree: linux
+C Reproducer : I do not have a C reproducer yet. I will update this
+thread when I get one.
+Kernel .config :
+https://gist.github.com/oswalpalash/d9580b0bfce202b37445fa5fd426e41f
 
-[...]
+Link:
+1. https://github.com/cmu-pasta/linux-kernel-enriched-corpus
 
-> +static int nct6692_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct nct6692_data_t *data = NULL;
-> +	struct nct6692_sio_data *sio_data = dev->platform_data;
-> +	struct resource *res;
-> +
-> +	pr_info("Probe NCT6692 called\n");
-> +	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-> +
-> +	data = kzalloc(sizeof(struct nct6692_data_t), GFP_KERNEL);
+Console log :
+==================================================================
+BUG: KASAN: slab-use-after-free in skb_dequeue+0x163/0x180
+Read of size 8 at addr ffff88803460d080 by task ksoftirqd/0/16
 
-Is it released somewhere?
-Should this be devm_kzalloc()?
+CPU: 0 PID: 16 Comm: ksoftirqd/0 Not tainted
+6.3.0-rc6-pasta-00035-g0bcc40255504 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xd9/0x150
+ print_address_description.constprop.0+0x2c/0x3c0
+ kasan_report+0x11c/0x130
+ skb_dequeue+0x163/0x180
+ ieee80211_tasklet_handler+0x38/0x140
+ tasklet_action_common.constprop.0+0x201/0x2e0
+ __do_softirq+0x1d4/0x905
+ run_ksoftirqd+0x31/0x60
+ smpboot_thread_fn+0x659/0x9e0
+ kthread+0x2e8/0x3a0
+ ret_from_fork+0x1f/0x30
+ </TASK>
 
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	// init value
-> +	data->shm.base_addr = 0;
-> +	data->shm.report_addr = 0;
+Allocated by task 16:
+ kasan_save_stack+0x22/0x40
+ kasan_set_track+0x25/0x30
+ __kasan_slab_alloc+0x7f/0x90
+ kmem_cache_alloc_node+0x296/0x510
+ __alloc_skb+0x288/0x330
+ skb_copy+0x13d/0x3e0
+ mac80211_hwsim_tx_frame_no_nl.isra.0+0xb02/0x1290
+ mac80211_hwsim_tx_frame+0x1ee/0x2a0
+ mac80211_hwsim_beacon_tx+0x561/0xb10
+ __iterate_interfaces+0x2c8/0x570
+ ieee80211_iterate_active_interfaces_atomic+0x73/0x1c0
+ mac80211_hwsim_beacon+0x101/0x200
+ __hrtimer_run_queues+0x5fa/0xbe0
+ hrtimer_run_softirq+0x17f/0x360
+ __do_softirq+0x1d4/0x905
 
-Harmless, but useless (kzalloc() above)
-
-> +
-> +	data->shm.base_phys = sio_data->base_phys;
-> +	data->shm.base_addr = (u_char *)ioremap_cache(data->shm.base_phys, 256);
-> +
-> +	data->shm.offset_mod = SHM_WIN_MOD_OFFSET;
-> +	data->shm.offset_cmd = SHM_WIN_CMD_OFFSET;
-> +	data->shm.offset_sel = SHM_WIN_SEL_OFFSET;
-> +	data->shm.offset_ctl = SHM_WIN_CTL_OFFSET;
-> +	data->shm.offset_id = SHM_WIN_ID_OFFSET;
-> +	data->shm.offset_dat = SHM_WIN_DAT_OFFSET;
-> +
-> +	// Base for REPORT Channel
-> +	data->shm.report_phys = sio_data->report_phys;
-> +	data->shm.report_addr = (u_char *)ioremap_cache(data->shm.report_phys, 256);
-> +
-> +	data->cfg.channel = NCT6692_CHANNEL_DEFAULT;
-> +	data->cfg.mod = 0x10;
-> +	data->cfg.cmd = 0;
-> +	data->cfg.sel = 0;
-> +	data->cfg.idx = 0x15;
-> +	data->cnt.channel = NCT6692_CHANNEL_DEFAULT;
-> +	data->cnt.mod = 0x10;
-> +	data->cnt.cmd = 0;
-> +	data->cnt.sel = 0;
-> +	data->cnt.idx = 0x16;
-
-All these "= 0" are harmless, but useless (kzalloc() above). Maybe it 
-makes sense to keep them.
-
-> +
-> +	data->wdt.ops = &nct6692_wdt_ops;
-> +	data->wdt.info = &nct6692_wdt_info;
-> +
-> +	data->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
-> +	data->wdt.min_timeout = MIN_TIMEOUT;
-> +	data->wdt.max_timeout = MAX_TIMEOUT;
-> +	data->wdt.parent = &pdev->dev;
-> +
-> +	watchdog_init_timeout(&data->wdt, timeout, &pdev->dev);
-> +	watchdog_set_nowayout(&data->wdt, nowayout);
-> +	watchdog_set_drvdata(&data->wdt, data);
-> +
-> +	watchdog_stop_on_unregister(&data->wdt);
-> +
-> +	return devm_watchdog_register_device(dev, &data->wdt);
-> +}
-
-[...]
-
-> +static int __init nct6692_init(void)
-> +{
-> +	struct nct6692_sio_data sio_data;
-> +	int sioaddr[2] = { 0x2e, 0x4e };
-> +	struct resource res;
-> +	int err;
-> +	int address;
-> +	bool found = false;
-> +	u_long base_phys = 0;
-> +	u_long report_phys = 0;
-> +
-> +	platform_driver_register(&nct6692_driver);
-> +
-> +	/*
-> +	 * initialize sio_data->kind and sio_data->sioreg.
-> +	 *
-> +	 * when Super-I/O functions move to a separate file, the Super-I/O
-> +	 * driver will probe 0x2e and 0x4e and auto-detect the presence of a
-> +	 * nct6692 hardware monitor, and call probe()
-> +	 */
-> +	err = nct6692_find(sioaddr[0], &base_phys, &report_phys);
-> +	if (err) {
-> +		err = nct6692_find(sioaddr[1], &base_phys, &report_phys);
-> +		if (err)
-> +			return -ENODEV;
-
-goto exit_unregister; ?
-
-> +	}
-> +	found = true;
-> +	sio_data.base_phys = base_phys;
-> +	sio_data.report_phys = report_phys;
-> +
-
-[...]
-
+Freed by task 16:
+ kasan_save_stack+0x22/0x40
+ kasan_set_track+0x25/0x30
+ kasan_save_free_info+0x2b/0x40
+ ____kasan_slab_free+0x13b/0x1a0
+ kmem_cache_free+0x105/0x370
+ kfree_skbmem+0xef/0x1b0
+ consume_skb+0xdd/0x170
+ mac80211_hwsim_tx_frame+0x1f6/0x2a0
+ mac80211_hwsim_beacon_tx+0x561/0xb10
+ __iterate_interfaces+0x2c8/0x570
+ ieee80211_iterate_active_interfaces_atomic+0x73/0x1c0
+ mac80211_hwsim_beacon+0x101/0x200
+ __hrtimer_run_queues+0x5fa/0xbe0
+ hrtimer_run_softirq+0x17f/0x360
+ __do_softirq+0x1d4/0x905
+Last potentially related work creation:
+------------[ cut here ]------------
+pool index 44248 out of bounds (719) for stack id 21b8acd8
+WARNING: CPU: 0 PID: 16 at lib/stackdepot.c:472
+stack_depot_print+0x6b/0x90
+Modules linked in:
+CPU: 0 PID: 16 Comm: ksoftirqd/0 Not tainted
+6.3.0-rc6-pasta-00035-g0bcc40255504 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:stack_depot_print+0x6b/0x90
+Code: f0 3f 00 00 48 01 c1 8b 71 0c 48 8d 79 18 85 f6 74 1a 48 83 c4
+08 31 d2 5b e9 b1 9d 32 fd 48 c7 c7 f0 b8 f4 8b e8 25 03 0d fd <0f> 0b
+48 83 c4 08 5b c3 c3 48 89 de 48 c7 c7 80 a4 12 8d 89 4c 24
+RSP: 0018:ffffc9000055fca0 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: ffff88803460d170 RCX: 0000000000000100
+RDX: ffff8880151d63c0 RSI: ffffffff814a8297 RDI: 0000000000000001
+RBP: ffff88803460d080 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 646e69206c6f6f70 R12: ffffea0000d18340
+R13: ffff88803460d080 R14: 0000000000000008 R15: ffff8880151d63c0
+FS:  0000000000000000(0000) GS:ffff888063a00000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055b2e7e9f39f CR3: 000000010fb6e000 CR4: 00000000000006f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kasan_print_aux_stacks+0x57/0x70
+ print_address_description.constprop.0+0x71/0x3c0
+ kasan_report+0x11c/0x130
+ skb_dequeue+0x163/0x180
+ ieee80211_tasklet_handler+0x38/0x140
+ tasklet_action_common.constprop.0+0x201/0x2e0
+ __do_softirq+0x1d4/0x905
+ run_ksoftirqd+0x31/0x60
+ smpboot_thread_fn+0x659/0x9e0
+ kthread+0x2e8/0x3a0
+ ret_from_fork+0x1f/0x30
+ </TASK>
