@@ -2,422 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81192720E6B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8497210C7
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 17:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237187AbjFCHDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 03:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S229688AbjFCPUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 11:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbjFCHCN (ORCPT
+        with ESMTP id S229445AbjFCPUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:02:13 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1CBE5C;
-        Sat,  3 Jun 2023 00:02:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QY9lw6PD4z4f3nqX;
-        Sat,  3 Jun 2023 15:02:04 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgCHOKxk5Xpk+MxPKw--.30174S21;
-        Sat, 03 Jun 2023 15:02:06 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shikemeng@huaweicloud.com
-Subject: [PATCH v4 19/19] ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
-Date:   Sat,  3 Jun 2023 23:03:27 +0800
-Message-Id: <20230603150327.3596033-20-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
-References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+        Sat, 3 Jun 2023 11:20:46 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 08:20:43 PDT
+Received: from so254-32.mailgun.net (so254-32.mailgun.net [198.61.254.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CA318D
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:20:43 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
+ s=mx; t=1685805643; x=1685812843; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
+ bh=XTa4pTN8mA1qs4eZR7hkgbdD55qmi0189Q+ftbOrPYA=;
+ b=IokmkBk8Yjwp/KH21IMBHwfQ4aBHf8luw0/wzDaoMeJDS3skL/zu5qXnAbi60s6EF9ticUWJo3N2x5tdb11qHFL8kDSqAFGQW6hPszTU7zf01vAbZ1+Yp6jsf/eDnzgyATmsUhKfgBRjDiPNmBpZZSvCemfYsN4aXXAxfveeAeDNaOYdp17SWoyyedkYeTWo/ikZF0I8TwKw2hzUNTUBaZxxOKUAjHdqX26nuYgvynI06dG9AMMvEBHvAX4CZ4kTeV6CtMeU/BefyqjcUi5J1kOvF9DU4U5WaT3q9G2umhUt/Yp8kibFRL/fTwAGXyyssVK0/VKKlD4R+R+pLjSxvQ==
+X-Mailgun-Sending-Ip: 198.61.254.32
+X-Mailgun-Sid: WyI4ZWI3MiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCI5M2Q1YWIiXQ==
+Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 54d8775e8f74 with SMTP id
+ 647b591d2f85f82427c4c48f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 03 Jun 2023 15:15:41 GMT
+Sender: james@equiv.tech
+From:   James Seo <james@equiv.tech>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     James Seo <james@equiv.tech>, Kalle Valo <kvalo@kernel.org>,
+        workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC] docs: process: Send patches 'To' maintainers and 'Cc' lists
+Date:   Sat,  3 Jun 2023 08:14:47 -0700
+Message-Id: <20230603151447.29288-1-james@equiv.tech>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCHOKxk5Xpk+MxPKw--.30174S21
-X-Coremail-Antispam: 1UD129KBjvJXoW3CFWftryfZr18trWUWr4UArb_yoWDZrykpa
-        n3AF1Y9r45WFnrWayxK340q3WSgw18AryUtryfu34rCFyIyryxGFn7tFy0yF4FkFWxJFnr
-        Xa1Y9ry7CrWxGa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2048vs2IY02
-        0E87I2jVAFwI0_JF0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0
-        rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6x
-        IIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xv
-        wVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFc
-        xC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_
-        Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2
-        IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
-        0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRv
-        JPtUUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here are prepared work:
-1. Include mballoc-test.c to mballoc.c to be able test static function
-in mballoc.c.
-2. Implement static stub to avoid read IO to disk.
-3. Construct fake super_block. Only partial members are set, more members
-will be set when more functions are tested.
-Then unit test for ext4_mb_new_blocks_simple is added.
+The existing wording in the 'Select the recipients for your patch'
+section of submitting-patches.rst states that contributors should
+'copy' maintainers and lists, which might be interpreted to mean that
+patch e-mails should be sent 'Cc' such recipients without any 'To'
+recipients at all.
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+Indeed, this does happen on occasion (and to be fair, examples of the
+practice predating the submitting-patches document exist in kernel
+mailing list archives). It isn't a problem on the protocol level, as
+SMTP itself deals only with SMTP commands (cf. 'RCPT TO'), but
+software that works with MIME headers in message text, perhaps in
+order to generate those commands, doesn't always handle the situation
+well.
+
+At present, when such an e-mail is sent to the vger listservs, the
+MIME header 'To: unlisted-recipients:; (no To-header on input)' is
+added to it somewhere along the chain. 'unlisted-recipients:;' is a
+valid RFC 5322 Group Address, but it (or '(no To-header on input)')
+sometimes goes on to cause problems itself further down the line.
+
+For example, in mutt, it can result in the silent removal of all 'Cc'
+recipients (e.g. kernel mailing lists) from a group reply, leaving
+the 'To' recipient that the original e-mail was 'From' as the only
+actual reply recipient [1]. Other issues [2] are possible in other
+software [3]. It also bears mentioning that a lack of 'To' headers is
+a characteristic of some spam, so such an e-mail may trigger some
+spam filters.
+
+To reduce ambiguity and eliminate this class of potential (albeit
+tangential) issues, prescribe sending patches 'To' maintainers and
+'Cc' lists. While we're at it, strengthen the recommendation to use
+scripts/get_maintainer.pl to find patch recipients, and move Andrew
+Morton's callout as the maintainer of last resort to the next
+paragraph for better flow.
+
+Link: https://github.com/neomutt/neomutt/issues/2548 [1]
+Link: https://github.com/python/cpython/issues/83281 [2]
+Link: https://github.com/kvalo/pwcli/issues/15 [3]
+Signed-off-by: James Seo <james@equiv.tech>
 ---
- fs/ext4/mballoc-test.c | 323 +++++++++++++++++++++++++++++++++++++++++
- fs/ext4/mballoc.c      |   4 +
- 2 files changed, 327 insertions(+)
- create mode 100644 fs/ext4/mballoc-test.c
+ Documentation/process/submitting-patches.rst | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/fs/ext4/mballoc-test.c b/fs/ext4/mballoc-test.c
-new file mode 100644
-index 000000000000..4bb131fc501b
---- /dev/null
-+++ b/fs/ext4/mballoc-test.c
-@@ -0,0 +1,323 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test of ext4 multiblocks allocation.
-+ */
-+
-+#include <kunit/test.h>
-+#include <kunit/static_stub.h>
-+
-+#include "ext4.h"
-+
-+struct mb_grp_ctx {
-+	struct buffer_head bitmap_bh;
-+	struct ext4_group_desc desc;
-+	/* one group descriptor for each group descriptor for simplicity */
-+	struct buffer_head gd_bh;
-+};
-+
-+struct mb_ctx {
-+	struct mb_grp_ctx *grp_ctx;
-+};
-+
-+struct fake_super_block {
-+	struct super_block sb;
-+	struct mb_ctx mb_ctx;
-+};
-+
-+#define MB_CTX(_sb) (&(container_of((_sb), struct fake_super_block, sb)->mb_ctx))
-+#define MB_GRP_CTX(_sb, _group) (&MB_CTX(_sb)->grp_ctx[_group])
-+
-+static struct super_block *alloc_fake_super_block(void)
-+{
-+	struct ext4_super_block *es = kzalloc(sizeof(*es), GFP_KERNEL);
-+	struct ext4_sb_info *sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
-+	struct fake_super_block *fsb = kzalloc(sizeof(*fsb), GFP_KERNEL);
-+
-+	if (fsb == NULL || sbi == NULL || es == NULL)
-+		goto out;
-+
-+	sbi->s_es = es;
-+	fsb->sb.s_fs_info = sbi;
-+	return &fsb->sb;
-+
-+out:
-+	kfree(fsb);
-+	kfree(sbi);
-+	kfree(es);
-+	return NULL;
-+}
-+
-+static void free_fake_super_block(struct super_block *sb)
-+{
-+	struct fake_super_block *fsb = container_of(sb, struct fake_super_block, sb);
-+	struct ext4_sb_info *sbi = EXT4_SB(sb);
-+
-+	kfree(sbi->s_es);
-+	kfree(sbi);
-+	kfree(fsb);
-+}
-+
-+struct ext4_block_layout {
-+	unsigned char blocksize_bits;
-+	unsigned int cluster_bits;
-+	unsigned long blocks_per_group;
-+	ext4_group_t group_count;
-+	unsigned long desc_size;
-+};
-+
-+static void init_sb_layout(struct super_block *sb,
-+			  struct ext4_block_layout *layout)
-+{
-+	struct ext4_sb_info *sbi = EXT4_SB(sb);
-+	struct ext4_super_block *es = sbi->s_es;
-+
-+	sb->s_blocksize = 1UL << layout->blocksize_bits;
-+	sb->s_blocksize_bits = layout->blocksize_bits;
-+
-+	sbi->s_groups_count = layout->group_count;
-+	sbi->s_blocks_per_group = layout->blocks_per_group;
-+	sbi->s_cluster_bits = layout->cluster_bits;
-+	sbi->s_cluster_ratio = 1U << layout->cluster_bits;
-+	sbi->s_clusters_per_group = layout->blocks_per_group >>
-+				    layout->cluster_bits;
-+	sbi->s_desc_size = layout->desc_size;
-+
-+	es->s_first_data_block = cpu_to_le32(0);
-+	es->s_blocks_count_lo = cpu_to_le32(layout->blocks_per_group *
-+					    layout->group_count);
-+}
-+
-+static int mb_grp_ctx_init(struct super_block *sb,
-+			   struct mb_grp_ctx *grp_ctx)
-+{
-+	grp_ctx->bitmap_bh.b_data = kzalloc(EXT4_BLOCK_SIZE(sb), GFP_KERNEL);
-+	if (grp_ctx->bitmap_bh.b_data == NULL)
-+		return -ENOMEM;
-+
-+	get_bh(&grp_ctx->bitmap_bh);
-+	get_bh(&grp_ctx->gd_bh);
-+	return 0;
-+}
-+
-+static void mb_grp_ctx_release(struct mb_grp_ctx *grp_ctx)
-+{
-+	kfree(grp_ctx->bitmap_bh.b_data);
-+	grp_ctx->bitmap_bh.b_data = NULL;
-+}
-+
-+static void mb_ctx_mark_used(struct super_block *sb, ext4_group_t group,
-+			     unsigned int start, unsigned int len)
-+{
-+	struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, group);
-+
-+	mb_set_bits(grp_ctx->bitmap_bh.b_data, start, len);
-+}
-+
-+/* called after init_sb_layout */
-+static int mb_ctx_init(struct super_block *sb)
-+{
-+	struct mb_ctx *ctx = MB_CTX(sb);
-+	ext4_group_t i, ngroups = ext4_get_groups_count(sb);
-+
-+	ctx->grp_ctx = kcalloc(ngroups, sizeof(struct mb_grp_ctx),
-+			       GFP_KERNEL);
-+	if (ctx->grp_ctx == NULL)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ngroups; i++)
-+		if (mb_grp_ctx_init(sb, &ctx->grp_ctx[i]))
-+			goto out;
-+
-+	/*
-+	 * first data block(first cluster in first group) is used by
-+	 * metadata, mark it used to avoid to alloc data block at first
-+	 * block which will fail ext4_sb_block_valid check.
-+	 */
-+	mb_set_bits(ctx->grp_ctx[0].bitmap_bh.b_data, 0, 1);
-+
-+	return 0;
-+out:
-+	while (i-- > 0)
-+		mb_grp_ctx_release(&ctx->grp_ctx[i]);
-+	kfree(ctx->grp_ctx);
-+	return -ENOMEM;
-+}
-+
-+static void mb_ctx_release(struct super_block *sb)
-+{
-+	struct mb_ctx *ctx = MB_CTX(sb);
-+	ext4_group_t i, ngroups = ext4_get_groups_count(sb);
-+
-+	for (i = 0; i < ngroups; i++)
-+		mb_grp_ctx_release(&ctx->grp_ctx[i]);
-+	kfree(ctx->grp_ctx);
-+}
-+
-+static struct buffer_head *
-+ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
-+				   bool ignore_locked)
-+{
-+	struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-+
-+	get_bh(&grp_ctx->bitmap_bh);
-+	return &grp_ctx->bitmap_bh;
-+}
-+
-+static int ext4_wait_block_bitmap_stub(struct super_block *sb,
-+				ext4_group_t block_group,
-+				struct buffer_head *bh)
-+{
-+	return 0;
-+}
-+
-+static struct ext4_group_desc *
-+ext4_get_group_desc_stub(struct super_block *sb, ext4_group_t block_group,
-+		         struct buffer_head **bh)
-+{
-+	struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-+
-+	if (bh != NULL)
-+		*bh = &grp_ctx->gd_bh;
-+
-+	return &grp_ctx->desc;
-+}
-+
-+static int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
-+			       ext4_group_t group, ext4_grpblk_t blkoff,
-+			       ext4_grpblk_t len, int flags)
-+{
-+	struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
-+	struct buffer_head *bitmap_bh = &grp_ctx->bitmap_bh;
-+
-+	if (mc->state)
-+		mb_set_bits(bitmap_bh->b_data, blkoff, len);
-+	else
-+		mb_clear_bits(bitmap_bh->b_data, blkoff, len);
-+
-+	return 0;
-+}
-+
-+#define TEST_BLOCKSIZE_BITS 10
-+#define TEST_CLUSTER_BITS 3
-+#define TEST_BLOCKS_PER_GROUP 8192
-+#define TEST_GROUP_COUNT 4
-+#define TEST_DESC_SIZE 64
-+#define TEST_GOAL_GROUP 1
-+static int mballoc_test_init(struct kunit *test)
-+{
-+	struct ext4_block_layout layout = {
-+		.blocksize_bits = TEST_BLOCKSIZE_BITS,
-+		.cluster_bits = TEST_CLUSTER_BITS,
-+		.blocks_per_group = TEST_BLOCKS_PER_GROUP,
-+		.group_count = TEST_GROUP_COUNT,
-+		.desc_size = TEST_DESC_SIZE,
-+	};
-+	struct super_block *sb;
-+	int ret;
-+
-+	sb = alloc_fake_super_block();
-+	if (sb == NULL)
-+		return -ENOMEM;
-+
-+	init_sb_layout(sb, &layout);
-+
-+	ret = mb_ctx_init(sb);
-+	if (ret != 0) {
-+		free_fake_super_block(sb);
-+		return ret;
-+	}
-+
-+	test->priv = sb;
-+	kunit_activate_static_stub(test,
-+				   ext4_read_block_bitmap_nowait,
-+				   ext4_read_block_bitmap_nowait_stub);
-+	kunit_activate_static_stub(test,
-+				   ext4_wait_block_bitmap,
-+				   ext4_wait_block_bitmap_stub);
-+	kunit_activate_static_stub(test,
-+				   ext4_get_group_desc,
-+				   ext4_get_group_desc_stub);
-+	kunit_activate_static_stub(test,
-+				   ext4_mb_mark_group_bb,
-+				   ext4_mb_mark_group_bb_stub);
-+	return 0;
-+}
-+
-+static void mballoc_test_exit(struct kunit *test)
-+{
-+	struct super_block *sb = (struct super_block *)test->priv;
-+
-+	mb_ctx_release(sb);
-+	free_fake_super_block(sb);
-+}
-+
-+static void test_new_blocks_simple(struct kunit *test)
-+{
-+	struct super_block *sb = (struct super_block *)test->priv;
-+	struct inode inode = { .i_sb = sb, };
-+	struct ext4_allocation_request ar;
-+	ext4_group_t i, goal_group = TEST_GOAL_GROUP;
-+	int err = 0;
-+	ext4_fsblk_t found;
-+	struct ext4_sb_info *sbi = EXT4_SB(sb);
-+
-+	ar.inode = &inode;
-+
-+	/* get block at goal */
-+	ar.goal = ext4_group_first_block_no(sb, goal_group);
-+	found = ext4_mb_new_blocks_simple(&ar, &err);
-+	KUNIT_ASSERT_EQ_MSG(test, ar.goal, found,
-+		"failed to alloc block at goal, expected %llu found %llu",
-+		ar.goal, found);
-+
-+	/* get block after goal in goal group */
-+	ar.goal = ext4_group_first_block_no(sb, goal_group);
-+	found = ext4_mb_new_blocks_simple(&ar, &err);
-+	KUNIT_ASSERT_EQ_MSG(test, ar.goal + EXT4_C2B(sbi, 1), found,
-+		"failed to alloc block after goal in goal group, expected %llu found %llu",
-+		ar.goal + 1, found);
-+
-+	/* get block after goal group */
-+	mb_ctx_mark_used(sb, goal_group, 0, EXT4_CLUSTERS_PER_GROUP(sb));
-+	ar.goal = ext4_group_first_block_no(sb, goal_group);
-+	found = ext4_mb_new_blocks_simple(&ar, &err);
-+	KUNIT_ASSERT_EQ_MSG(test,
-+		ext4_group_first_block_no(sb, goal_group + 1), found,
-+		"failed to alloc block after goal group, expected %llu found %llu",
-+		ext4_group_first_block_no(sb, goal_group + 1), found);
-+
-+	/* get block before goal group */
-+	for (i = goal_group; i < ext4_get_groups_count(sb); i++)
-+		mb_ctx_mark_used(sb, i, 0, EXT4_CLUSTERS_PER_GROUP(sb));
-+	ar.goal = ext4_group_first_block_no(sb, goal_group);
-+	found = ext4_mb_new_blocks_simple(&ar, &err);
-+	KUNIT_ASSERT_EQ_MSG(test,
-+		ext4_group_first_block_no(sb, 0) + EXT4_C2B(sbi, 1), found,
-+		"failed to alloc block before goal group, expected %llu found %llu",
-+		ext4_group_first_block_no(sb, 0 + EXT4_C2B(sbi, 1)), found);
-+
-+	/* no block available, fail to allocate block */
-+	for (i = 0; i < ext4_get_groups_count(sb); i++)
-+		mb_ctx_mark_used(sb, i, 0, EXT4_CLUSTERS_PER_GROUP(sb));
-+	ar.goal = ext4_group_first_block_no(sb, goal_group);
-+	found = ext4_mb_new_blocks_simple(&ar, &err);
-+	KUNIT_ASSERT_NE_MSG(test, err, 0,
-+		"unexpectedly get block when no block is available");
-+}
-+
-+
-+static struct kunit_case ext4_mballoc_test_cases[] = {
-+	KUNIT_CASE(test_new_blocks_simple),
-+	{}
-+};
-+
-+static struct kunit_suite ext4_mballoc_test_suite = {
-+	.name = "ext4_mballoc_test",
-+	.init = mballoc_test_init,
-+	.exit = mballoc_test_exit,
-+	.test_cases = ext4_mballoc_test_cases,
-+};
-+
-+kunit_test_suites(&ext4_mballoc_test_suite);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index c9b7fc0de49e..fb766d12cdf9 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -6764,3 +6764,7 @@ ext4_mballoc_query_range(
+diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+index efac910e2659..53460f3cdc1d 100644
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -231,14 +231,15 @@ patch.
+ Select the recipients for your patch
+ ------------------------------------
  
- 	return error;
- }
+-You should always copy the appropriate subsystem maintainer(s) and list(s) on
+-any patch to code that they maintain; look through the MAINTAINERS file and the
+-source code revision history to see who those maintainers are.  The script
+-scripts/get_maintainer.pl can be very useful at this step (pass paths to your
+-patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
+-maintainer for the subsystem you are working on, Andrew Morton
+-(akpm@linux-foundation.org) serves as a maintainer of last resort.
+-
++You should always notify the appropriate subsystem maintainer(s) and list(s)
++about any patch to code that they maintain.  Identify them by looking through
++the MAINTAINERS file and the source code revision history, and by using the
++script scripts/get_maintainer.pl (pass paths to your patches as arguments to
++scripts/get_maintainer.pl).  Send your patch e-mail "To:" those maintainers and
++"Cc:" those lists.
 +
-+#ifdef CONFIG_EXT4_KUNIT_TESTS
-+#include "mballoc-test.c"
-+#endif
++If you cannot find a maintainer for the subsystem you are working on, Andrew
++Morton (akpm@linux-foundation.org) serves as a maintainer of last resort.  Also,
+ linux-kernel@vger.kernel.org should be used by default for all patches, but the
+ volume on that list has caused a number of developers to tune it out.  Please
+ do not spam unrelated lists and unrelated people, though.
 -- 
-2.30.0
+2.39.2
 
