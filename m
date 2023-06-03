@@ -2,120 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A47720E8D
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9741720E89
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233760AbjFCHoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 03:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
+        id S232369AbjFCHn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjFCHoG (ORCPT
+        with ESMTP id S229453AbjFCHny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:44:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF20E41
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 00:44:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69A4E60A64
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 07:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FA4C433EF;
-        Sat,  3 Jun 2023 07:44:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685778243;
-        bh=xYfWPnmqvmhHvjBtXOmu6oNPER75NycwsuL1memEjUU=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=Vyoliw2rtxHkj8drtwr2CbCjbrkVI5kMP2LGsErsIjUcLXk2HSBwEsC6z49M0ur/W
-         aUNWbQwFXlDYvh9Cz8SvJdpoC67dvPwDRmkGeVL/I8QsLp5h3v5Zm0pdIoNZXmn4Zt
-         O5BMuwVO8LXA+kLHNaOOaOzR79BUwkva/WOdAdr5PllF4Mcz+UFfAYUsmB6vgcFXT7
-         su+3gg8QOc1UiTwJfUjUgaEnO7RiqWo/Op2v5e4a8JQ59Vh8KwmBMmf6vRh+36J9rW
-         nJHTclWEuC/q+dAwvpXP2SDFjBAyfJafEGYW0u33sXflfWQ4XfdZGX9o1DtZmo4HQj
-         P8H4ng2AOipgw==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7322E27C0054;
-        Sat,  3 Jun 2023 03:44:02 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 03 Jun 2023 03:44:02 -0400
-X-ME-Sender: <xms:Qu96ZA0pqZtnqGphoFeGRZVPx5ILpm6K3RwoszbvUDnniPX4u3GzUA>
-    <xme:Qu96ZLFE2qf0ClmAR0uDNMJwbSjicLBSfKJBBjXpTrgkMAqaipR2SB4u9j4oB-4Jz
-    NKXC628t75WO8Keeh0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelgedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeeh
-    udegtdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
-    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
-    druggv
-X-ME-Proxy: <xmx:Qu96ZI6dMlrgIKMJ23iaCHCDOU9wgH-Q3XSFP19BPNFznHXf2SVCiA>
-    <xmx:Qu96ZJ0V5ojqSw7QaVE3UFELP8zKS3Dqs9_aQ1SVmodQbDWDLq4A6w>
-    <xmx:Qu96ZDEGYlA0YrufXnbvjWX_LYKIaoxPzHIlM2YyTK4Htn7PhFMYTg>
-    <xmx:Qu96ZJNXHUsr1N6JexV0erV7vexxhRTo6Qrawa9bii-n1zi_S-EOvw>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 105D0B60086; Sat,  3 Jun 2023 03:44:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <e9601db2-ff7d-4490-abd5-8d3c5946e108@app.fastmail.com>
-In-Reply-To: <c7f88295-2e22-4100-b9c8-feb380b64359@app.fastmail.com>
-References: <20230417205447.1800912-1-arnd@kernel.org>
- <87ttwnnrer.fsf@kernel.org>
- <504c5a7d-0bfd-4b1e-a7f0-65d072657e0a@app.fastmail.com>
- <87mt2eoopo.fsf@kernel.org>
- <c7f88295-2e22-4100-b9c8-feb380b64359@app.fastmail.com>
-Date:   Sat, 03 Jun 2023 09:43:35 +0200
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Arnd Bergmann" <arnd@arndb.de>, "Kalle Valo" <kvalo@kernel.org>
-Cc:     Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wireless: ath: work around false-positive stringop-overread
- warning
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 3 Jun 2023 03:43:54 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50C01B4;
+        Sat,  3 Jun 2023 00:43:53 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d3bc0dce9so354810b3a.0;
+        Sat, 03 Jun 2023 00:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685778233; x=1688370233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AWur87b6+FWCBKqxfBacalad+HJLdADtjiXHWwWG+kk=;
+        b=HdR32jWEiMDgRFNHZ4AmO+HfNOYRhIeMt1Z5uNTHesSQqHDELs6TlofSvDyhAYT35y
+         JtaJAitoMYef8byzb4Q/v3Q1X37KaWjsPrprQlD57U3+I6XKSx204zCQ1EOG7U21K4fq
+         fXT6MUWv5fX/6d68aknWQA62HaAXaJ7DT2OMuNznhhusSLzEaG5OodKAGVCBaeTD9In5
+         UhGE6Caok7XVhyUI2FU8bRU0U+QCu7mWwwuYcu4PH+H+U4yRVxt3yqk20JfkptJRMas7
+         0UZzD5imjL3NijdOtD+bWCh0OhMtk0o+uTjgUT+aeEfbUcXYkTQbxshWNa3CPUXt94Qk
+         PETw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685778233; x=1688370233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AWur87b6+FWCBKqxfBacalad+HJLdADtjiXHWwWG+kk=;
+        b=Q5j3DyyBLozk4djJhqFIOJfYkfcUt2wBwQzONJrw1v3c1GHVlhZyGDzo4QC2lej1SG
+         ZgskMl09MlWqLRM1WsoLjb2CS3a3j3we7g8GdISxL+l236eFRiqNsHxBNqKgwpZXCblI
+         4kRSsf2xAit83lmVGh/+rMF6v/V2fpO5BKbyVyfSpCp0psvYxXtBnLU44n2BxPW3nW9b
+         5cjSqKTxyV8Md6CfDtvcw74g6Yl7a7jjc8zd990fTK3NyPuqD125XQXgJkHZXygGSwAn
+         ph1eMggDW/eyYOrcN5ZLNFRDRgQWdQJirA1o9XY3EKQGvizZEIEHaqXUiOFw6poWfTHx
+         2s1w==
+X-Gm-Message-State: AC+VfDybrFjP8Flf11fFWaXBc5wlLAenYR56F4EaDfOh0Cg6oC8kWK/h
+        LI/lUvY9dZe9HcBYUKqrETf2t59o1Rk1MH9+
+X-Google-Smtp-Source: ACHHUZ7Sb3282pwyR3Z2zP7ICZ4Es7PNecGCmDTkrXI02OgZnCeM/hb458Wo12XIa+dX4RK3fGmPTQ==
+X-Received: by 2002:a17:902:ecc5:b0:1ae:1364:6086 with SMTP id a5-20020a170902ecc500b001ae13646086mr12068845plh.2.1685778232982;
+        Sat, 03 Jun 2023 00:43:52 -0700 (PDT)
+Received: from ubuntu.localdomain ([183.208.21.185])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c10c00b001afd275e186sm2525846pli.286.2023.06.03.00.43.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jun 2023 00:43:52 -0700 (PDT)
+From:   Min Li <lm0963hack@gmail.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, sumit.semwal@linaro.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v2] drm/radeon: fix race condition UAF in  radeon_gem_set_domain_ioctl
+Date:   Sat,  3 Jun 2023 15:43:45 +0800
+Message-Id: <20230603074345.17907-1-lm0963hack@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023, at 17:07, Arnd Bergmann wrote:
-> On Mon, May 8, 2023, at 16:57, Kalle Valo wrote:
->> With older GCC versions from your page I don't have this problem. I'm
->> using Debian 10 still so so is my libc too old?
->
-> (dropping most Cc)
->
-> Indeed, thanks for the report, I forgot about that issue. I used
-> to build the cross toolchains in an old Ubuntu 16.04 chroot to avoid
-> that issue, and I linked all other dependencies statically.
->
-> The gcc-13.1.0 builds are the first ones I did on an arm64 machine,
-> so I had to create a new build environment and started out with
-> just my normal Debian testing rootfs, which caused me enough issues
-> to figure out first.
->
-> I had previously experimented with linking statically against
-> musl to avoid all other dependencies, but that ended up with
-> slower binaries because the default memory allocator in musl
-> doesn't work that well for gcc, and I never quite figured out
-> how to pick a different memory allocator, or which one to use.
->
-> I should probably just pick an older Debian release that is new
-> enough to contain cross compilers for arm64 and x86 and then
-> set up the same kind of chroot I had in before.
+Userspace can race to free the gobj(robj converted from), robj should not
+be accessed again after drm_gem_object_put, otherwith it will result in
+use-after-free.
 
-It took me a while, but now I have a working build setup
-in a Debian Buster schroot with gcc-13 as the main compiler,
-and I updated the gcc-13.1 binaries with those, as well as
-uploading gcc-11.4 and gcc-12.3 build the same way.
+Signed-off-by: Min Li <lm0963hack@gmail.com>
+---
+Changes in v2:
+- Remove unused robj, avoid compile complain
 
-I have only tested the binaries on arm64 Debian testing,
-could you see if the new x86 builds work for you?
+ drivers/gpu/drm/radeon/radeon_gem.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-       Arnd
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index bdc5af23f005..d3f5ddbc1704 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -459,7 +459,6 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
+ 	struct radeon_device *rdev = dev->dev_private;
+ 	struct drm_radeon_gem_set_domain *args = data;
+ 	struct drm_gem_object *gobj;
+-	struct radeon_bo *robj;
+ 	int r;
+ 
+ 	/* for now if someone requests domain CPU -
+@@ -472,13 +471,12 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
+ 		up_read(&rdev->exclusive_lock);
+ 		return -ENOENT;
+ 	}
+-	robj = gem_to_radeon_bo(gobj);
+ 
+ 	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
+ 
+ 	drm_gem_object_put(gobj);
+ 	up_read(&rdev->exclusive_lock);
+-	r = radeon_gem_handle_lockup(robj->rdev, r);
++	r = radeon_gem_handle_lockup(rdev, r);
+ 	return r;
+ }
+ 
+-- 
+2.34.1
+
