@@ -2,87 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3DE721048
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 15:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C967A72104A
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 15:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjFCNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 09:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S230011AbjFCNy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 09:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFCNyO (ORCPT
+        with ESMTP id S229460AbjFCNy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 09:54:14 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC8F9F
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 06:54:13 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 1de9284c-0216-11ee-b3cf-005056bd6ce9;
-        Sat, 03 Jun 2023 16:54:11 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Sat, 3 Jun 2023 16:54:10 +0300
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mathieu Othacehe <m.othacehe@gmail.com>
-Subject: Re: [PATCH v5 0/7] iio: light: vcnl4000: Add features for
- vncl4040/4200
-Message-ID: <ZHtGAn8ZF_fhgNQn@surfacebook>
-References: <20230530142405.1679146-1-astrid.rost@axis.com>
+        Sat, 3 Jun 2023 09:54:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07DC123;
+        Sat,  3 Jun 2023 06:54:54 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QYLsW2ryzztQTW;
+        Sat,  3 Jun 2023 21:52:31 +0800 (CST)
+Received: from [10.136.112.224] (10.136.112.224) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sat, 3 Jun 2023 21:54:48 +0800
+Message-ID: <4d2f356a-9a81-7868-2b62-e977672407e3@huawei.com>
+Date:   Sat, 3 Jun 2023 21:54:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+To:     <davem@davemloft.net>, <kuznet@ms2.inr.ac.ru>,
+        <yoshfuji@linux-ipv6.org>, <kuba@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <yanan@huawei.com>, <caowangbao@huawei.com>
+From:   l00450120 <liaichun@huawei.com>
+Subject: [report net/ipv6] neighbor table overflow causing CPU lockup followed
+ by reset
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230530142405.1679146-1-astrid.rost@axis.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.136.112.224]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, May 30, 2023 at 04:23:58PM +0200, Astrid Rost kirjoitti:
-> Add a more complete support for vncl4040 and vcnl4200, which allows to
-> change the distance of proximity detection and interrupt support for the
-> illuminance sensor.
-> 
-> Proximity functionality:
->   - Interrupt support (new on vcnl4200).
-> 
-> Proximity reduce the amount of interrupts:
->   - Adaptable integration time (new on vcnl4200) - the sampling rate
->     changes according to this value.
->   - Period - interrupt is asserted if the value is above or
->     below a certain threshold.
-> 
-> Proximity change the activity distance:
->   - Oversampling ratio - Amount of LED pulses per measured raw value.
->   - Calibration bias - LED current calibration of the sensor.
-> 
-> Illuminance functionality:
->   - Interrupt support.
-> 
-> Illuminance reduce the amount of interrupts:
->   - Adaptable integration time - the sampling rate and scale changes
->     according to this value.
->   - Period – interrupt is asserted if the value is above or
->     below a certain threshold.
+Hello,
 
-It's a good work, thank you for doing it!
+     My server has 96 CPUs. When a large number of packets are sent and 
+received, soft lockup alarms are generated on a large number of CPUs, 
+and the stack is waiting for the spin_lock.
 
-But it has a lot of small style and inconsistent issues. They are not major
-per se, but since there is more than 3, it makes sense to address. Also check
-if you can split your patches to two or three where it makes sense.
+The following logs appear many times in my dmesg：
+[  563.176845] neighbour: ndisc_cache: neighbor table overflow!
+[ 1861.114898] Route cache is full: consider increasing sysctl 
+net.ipv6.route.max_size.
+[ 1892.475051] watchdog: BUG: soft lockup - CPU#48 stuck for 21s! 
+[ksoftirqd/48:255]
+[ 1892.483796] Sample time: 4008751670 ns(HZ: 250)
+[ 1892.483797] Sample stat:
+[ 1892.483800]  curr: user: 7437909680, nice: 0, sys: 49226747760, idle: 
+1792240181470, iowait: 135261640, irq: 1422047840, softirq: 41069616090, 
+st: 0
+[ 1892.483802]  deta: user: 0, nice: 0, sys: 0, idle: 0, iowait: 0, irq: 
+2903860, softirq: 3997094320, st: 0
+[ 1892.483803] Sample softirq:
+[ 1892.483804] Sample irqstat:
+[ 1892.483807]     irq   14: delta       1001, curr:     473989, arch_timer
+[ 1892.483839]     irq  342: delta          1, curr:        929, 
+enp129s0f0-TxRx-0
+[ 1892.483896] CPU: 48 PID: 255 Comm: ksoftirqd/48 Kdump: loaded 
+Tainted: G           O      5.10.0-136.12.0.86
+[ 1892.483898] Hardware name: Huawei S920X00/BC82AMDDA, BIOS 1.75 04/26/2021
+[ 1892.483900] pstate: 80400009 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
+[ 1892.483908] pc : native_queued_spin_lock_slowpath+0x254/0x37c
+[ 1892.483912] lr : fib6_run_gc+0x234/0x25c
+[ 1892.483914] sp : ffff8001046cb990
+[ 1892.483915] x29: ffff8001046cb990 x28: ffff800101cfd810
+[ 1892.483917] x27: ffff800100cee1a8 x26: 000000010006129b
+[ 1892.483919] x25: 000000000000007d x24: ffff800101c94fc0
+[ 1892.483921] x23: ffff800101c95048 x22: ffff8001017cafa8
+[ 1892.483924] x21: ffff800100cc857c x20: 000000000000025b
+[ 1892.483926] x19: ffff800101c94700 x18: 0000000000000001
+[ 1892.483928] x17: 0000000000000040 x16: ffffffffffffffff
+[ 1892.483930] x15: 00003fffffffffff x14: 000000000000ffff
+[ 1892.483932] x13: 00000000000003f0 x12: ffff203f7fad7770
+[ 1892.483934] x11: 5e0e1ffeff348dae x10: 00000000000080fe
+[ 1892.483936] x9 : ffff803e7e682000 x8 : 0000000000000000
+[ 1892.483938] x7 : ffff203f7fae8040 x6 : ffff800101466040
+[ 1892.483940] x5 : ffff203f7fae8040 x4 : 0000000000000000
+[ 1892.483942] x3 : ffff800101c95048 x2 : 0000000000000000
+[ 1892.483944] x1 : 0000000000c40000 x0 : ffff203f7fae8048
+[ 1892.483949] Call trace:
+[ 1892.483951]  native_queued_spin_lock_slowpath+0x254/0x37c
+[ 1892.483955]  ip6_dst_gc+0xb8/0x14c
+[ 1892.483960]  dst_alloc+0xa4/0xe0
+[ 1892.483962]  ip6_dst_alloc+0x30/0xb0
+[ 1892.483964]  icmp6_dst_alloc+0x8c/0x21c
+[ 1892.483966]  mld_sendpack+0x178/0x374
+[ 1892.483968]  mld_send_cr+0x350/0x530
+[ 1892.483970]  mld_ifc_timer_expire+0x28/0x174
+[ 1892.483972]  call_timer_fn+0x3c/0x180
+[ 1892.483973]  expire_timers+0x150/0x1d0
+[ 1892.483974]  run_timer_softirq+0x134/0x380
+[ 1892.483978]  __do_softirq+0x130/0x358
+[ 1892.483980]  run_ksoftirqd+0x68/0x90
+[ 1892.483983]  smpboot_thread_fn+0x15c/0x1a0
+[ 1892.483985]  kthread+0x108/0x134
+[ 1892.483987]  ret_from_fork+0x10/0x18
 
--- 
-With Best Regards,
-Andy Shevchenko
+And i found out that other people had almost the same situation:
+https://forum.proxmox.com/threads/unexplained-neighbor-table-overflow-causing-cpu-lockup-followed-by-reset.121289/
 
+Looks like it's not an isolated case.
 
+Could you give me some help?
+
+Best regards,
+
+LAC
