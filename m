@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C6D720CD8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE05720CDC
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 03:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237048AbjFCBLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 21:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S236989AbjFCBLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 21:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237007AbjFCBLI (ORCPT
+        with ESMTP id S237074AbjFCBLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 21:11:08 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E3DE43
-        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:11:06 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64d2a8896faso1297724b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:11:06 -0700 (PDT)
+        Fri, 2 Jun 2023 21:11:12 -0400
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E53E44
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 18:11:08 -0700 (PDT)
+Received: by mail-oi1-x249.google.com with SMTP id 5614622812f47-397f122786fso2224970b6e.1
+        for <linux-kernel@vger.kernel.org>; Fri, 02 Jun 2023 18:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685754665; x=1688346665;
+        d=google.com; s=20221208; t=1685754667; x=1688346667;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=zNS+2nUop8HSFhXhjGUsYHrKCz8noRLlXBPZS+z46QI=;
-        b=zD9YgFffhnt58QHSD5hvMYuW98to2PwClt4O7Q5PboHoKYWMUYyrdJRIsO9wOabfrO
-         wbIZ5xULWSadmjrlN0rX9UFk2OB96dKBbdLaudCvmoJUFEPojXphaikBq7HlrEo3Kc5B
-         QUHmKGIPRHLHv+D2zzZVmj1V0GVVepFaZoJ1hUx+xFhXca0H1VaovUViPyU9u0WHtLnr
-         TdbtyI2knorbbWKSj9JxzoWVtBh+3XM8xmV76f/l0Q6XIsMGRTSKTKF5r89qp9DiGQ4t
-         q2hhevSK8TfoK8BDjKnq3gso1vshT8TMMUSvzYuPlEjNAJWuzxrT+i+LXQUOhHHhx5cP
-         f8tA==
+        bh=OHgmCWhsFgWWc85nvi+clBbGRI79fcIkNTIgsGqvymM=;
+        b=rlxDfPJjRdF2a+2a8IL9CQM3ryLHp/fQFGIDzVWEwkAjbu3rsh9eN4/R438auoMsLx
+         irdotbBF0L1VqKT7sLdHg3PikykqWcUlNX6wVlhaUAfH5PKTV+UUR+TyBafKzG8MjC4E
+         tp1WnkLmqwfZvQaRXg6jlLso8YEnv2L36GuDh8uar0YoEOeMWHsovwHhs2G9+A+3kHmr
+         V/qpzImsl5mxJI5ns7EKgEttGZ561aBmdHz/ppbAqpuZmX8j8rgPc/m4SgD+T641muzY
+         vWeaDVcIuFit0C86mc8OyyT6Pgkn1zccHXMcLo0+BpC9MFyGHv6tOIf9BOGgQIFhgJGx
+         UvHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685754665; x=1688346665;
+        d=1e100.net; s=20221208; t=1685754667; x=1688346667;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zNS+2nUop8HSFhXhjGUsYHrKCz8noRLlXBPZS+z46QI=;
-        b=UzelzM0ZdLg+9SsRA2icFl1zlk80YGDS3RsUHCRiqTWJhoiKiNtSJc73nbP8tEWpFF
-         Pr14/Pdg/AnXHIbkezGLqFIGnhZM65jY5JrCbhwwrleRmN+ErA6bxoOAghm2ozJ7NwaD
-         NbpcjVEMTb9OwUCAYBoLMkJS59t5JGwJX1jIpFiTHbTG9RzANBsGWsQkJ27vmfOtzYIT
-         wXoupcqVYp8N39wn1coPpy5Qebi/45kpVRAsKQhghYt/H4UTR+cZU9hzTSY9WXZqeOKu
-         JXrml/Uvg/FiJ/gt1zAhyE1g40sSYxsYvCrBkACLiJZ+gLAvrlhkVHe3H0tOx3WXFEjV
-         yzEw==
-X-Gm-Message-State: AC+VfDzZrli/OODzNXLvROZLc58zjO2gmW3MthAnV/F32duQPhPvD0ow
-        o/trCtqUnX8slw/nQ0lyJY4IYYZ/4UQ=
-X-Google-Smtp-Source: ACHHUZ66VR1ERObfdJKcvipVCvg4VTNcwOGsEvlE1HEOn8bBw52eibfHaJuuXnFKXKd+qxws+6C6rP9MTXk=
+        bh=OHgmCWhsFgWWc85nvi+clBbGRI79fcIkNTIgsGqvymM=;
+        b=QR9/yZsaN2oWUP1o9Qm/fS60pkKs5meK/PGi9c6JE0Pgcct/fYaeM+9AhfESOWCTwJ
+         AlHR9P4nTkcGfkLfbMxMseR7ErafuJANpM0N2YowJ5jFQHvIYflekENzmVp5iVYTR9vA
+         LvuwJQ5LQZSTk0ecmumTQdTU8dFB4UCPwbq/elJPa+SSsEWjOvI6RLLUbL8RuJdrJFtG
+         9x6SVGsT/5B3/Vz1kNgAT3eZi9edTTzQ1VA01jY/B8I6kv+4YPIxG4yL3aSrPK49rbY1
+         qoaDKfAUslsY6D6fdDHFCK4k1OzVLG07Z1DDQsGGqqUBnNCyTv3PmmGMeHvJyz+djSu3
+         Fcqw==
+X-Gm-Message-State: AC+VfDzwNcbzgRxYgpf78NCSdUtyohxVCNbX7omzIKmDGYWfZ+VD6CPo
+        ECoXIvIrDjhe0vV2lN6w33n9Pu6p8gI=
+X-Google-Smtp-Source: ACHHUZ7fj12g6vQgJPTgDrxbgsW/k0ZxqGChmghKukBdZMacw+XVprDLohrghb7z31IURsAjBSVpN4gjegg=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2e0e:b0:647:3f80:c607 with SMTP id
- fc14-20020a056a002e0e00b006473f80c607mr5051252pfb.4.1685754665454; Fri, 02
- Jun 2023 18:11:05 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:aca:a888:0:b0:399:ee8f:6cdc with SMTP id
+ r130-20020acaa888000000b00399ee8f6cdcmr341691oie.9.1685754667468; Fri, 02 Jun
+ 2023 18:11:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  2 Jun 2023 18:10:48 -0700
+Date:   Fri,  2 Jun 2023 18:10:49 -0700
 In-Reply-To: <20230603011058.1038821-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230603011058.1038821-1-seanjc@google.com>
 X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
-Message-ID: <20230603011058.1038821-3-seanjc@google.com>
-Subject: [PATCH v7 02/12] KVM: x86/pmu: Move reprogram_counters() to pmu.h
+Message-ID: <20230603011058.1038821-4-seanjc@google.com>
+Subject: [PATCH v7 03/12] KVM: x86/pmu: Reject userspace attempts to set
+ reserved GLOBAL_STATUS bits
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -67,7 +68,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,66 +77,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Like Xu <likexu@tencent.com>
 
-Move reprogram_counters() out of Intel specific PMU code and into pmu.h so
-that it can be used to implement AMD PMU v2 support.
+Reject userspace writes to MSR_CORE_PERF_GLOBAL_STATUS that attempt to set
+reserved bits.  Allowing userspace to stuff reserved bits doesn't harm KVM
+itself, but it's architecturally wrong and the guest can't clear the
+unsupported bits, e.g. makes the guest's PMI handler very confused.
 
-No functional change intended.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Like Xu <likexu@tencent.com>
-[sean: rewrite changelog]
+[sean: rewrite changelog to avoid use of #GP, rebase on name change]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/pmu.h           | 12 ++++++++++++
- arch/x86/kvm/vmx/pmu_intel.c | 12 ------------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ arch/x86/kvm/vmx/pmu_intel.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 5c7bbf03b599..986563aeeef8 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -201,6 +201,18 @@ static inline void kvm_pmu_request_counter_reprogram(struct kvm_pmc *pmc)
- 	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
- }
- 
-+static inline void reprogram_counters(struct kvm_pmu *pmu, u64 diff)
-+{
-+	int bit;
-+
-+	if (!diff)
-+		return;
-+
-+	for_each_set_bit(bit, (unsigned long *)&diff, X86_PMC_IDX_MAX)
-+		set_bit(bit, pmu->reprogram_pmi);
-+	kvm_make_request(KVM_REQ_PMU, pmu_to_vcpu(pmu));
-+}
-+
- void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu);
- void kvm_pmu_handle_event(struct kvm_vcpu *vcpu);
- int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned pmc, u64 *data);
 diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index fb96cbfc9ae8..edcf8670eb4e 100644
+index edcf8670eb4e..efd113f24c1b 100644
 --- a/arch/x86/kvm/vmx/pmu_intel.c
 +++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -73,18 +73,6 @@ static struct kvm_pmc *intel_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
- 	}
- }
+@@ -402,6 +402,9 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		if (!msr_info->host_initiated)
+ 			return 1; /* RO MSR */
  
--static void reprogram_counters(struct kvm_pmu *pmu, u64 diff)
--{
--	int bit;
--
--	if (!diff)
--		return;
--
--	for_each_set_bit(bit, (unsigned long *)&diff, X86_PMC_IDX_MAX)
--		set_bit(bit, pmu->reprogram_pmi);
--	kvm_make_request(KVM_REQ_PMU, pmu_to_vcpu(pmu));
--}
--
- static bool intel_hw_event_available(struct kvm_pmc *pmc)
- {
- 	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
++		if (data & pmu->global_status_mask)
++			return 1;
++
+ 		pmu->global_status = data;
+ 		break;
+ 	case MSR_CORE_PERF_GLOBAL_CTRL:
 -- 
 2.41.0.rc2.161.g9c6817b8e7-goog
 
