@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8689720E87
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A47720E8D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 09:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjFCHmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 03:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S233760AbjFCHoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 03:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFCHmh (ORCPT
+        with ESMTP id S232017AbjFCHoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 03:42:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7175D1A6
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 00:42:33 -0700 (PDT)
-Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QYBY82q45z18KHx;
-        Sat,  3 Jun 2023 15:37:48 +0800 (CST)
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 3 Jun 2023 15:42:30 +0800
-Subject: Re: [PATCH 2/4] ACPI/APMT: Don't register invalid resource
-To:     Robin Murphy <robin.murphy@arm.com>, <will@kernel.org>
-CC:     <mark.rutland@arm.com>, <suzuki.poulose@arm.com>,
-        <bwicaksono@nvidia.com>, <ilkka@os.amperecomputing.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <cover.1685619571.git.robin.murphy@arm.com>
- <91c8787f1e84d79e110a057615c838f6ac244669.1685619571.git.robin.murphy@arm.com>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <fff39213-5824-4bd6-f0cd-699358eb5361@huawei.com>
-Date:   Sat, 3 Jun 2023 15:42:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <91c8787f1e84d79e110a057615c838f6ac244669.1685619571.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.247]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 3 Jun 2023 03:44:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF20E41
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 00:44:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69A4E60A64
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 07:44:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FA4C433EF;
+        Sat,  3 Jun 2023 07:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685778243;
+        bh=xYfWPnmqvmhHvjBtXOmu6oNPER75NycwsuL1memEjUU=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=Vyoliw2rtxHkj8drtwr2CbCjbrkVI5kMP2LGsErsIjUcLXk2HSBwEsC6z49M0ur/W
+         aUNWbQwFXlDYvh9Cz8SvJdpoC67dvPwDRmkGeVL/I8QsLp5h3v5Zm0pdIoNZXmn4Zt
+         O5BMuwVO8LXA+kLHNaOOaOzR79BUwkva/WOdAdr5PllF4Mcz+UFfAYUsmB6vgcFXT7
+         su+3gg8QOc1UiTwJfUjUgaEnO7RiqWo/Op2v5e4a8JQ59Vh8KwmBMmf6vRh+36J9rW
+         nJHTclWEuC/q+dAwvpXP2SDFjBAyfJafEGYW0u33sXflfWQ4XfdZGX9o1DtZmo4HQj
+         P8H4ng2AOipgw==
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 7322E27C0054;
+        Sat,  3 Jun 2023 03:44:02 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 03 Jun 2023 03:44:02 -0400
+X-ME-Sender: <xms:Qu96ZA0pqZtnqGphoFeGRZVPx5ILpm6K3RwoszbvUDnniPX4u3GzUA>
+    <xme:Qu96ZLFE2qf0ClmAR0uDNMJwbSjicLBSfKJBBjXpTrgkMAqaipR2SB4u9j4oB-4Jz
+    NKXC628t75WO8Keeh0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelgedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeeh
+    udegtdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
+    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
+    druggv
+X-ME-Proxy: <xmx:Qu96ZI6dMlrgIKMJ23iaCHCDOU9wgH-Q3XSFP19BPNFznHXf2SVCiA>
+    <xmx:Qu96ZJ0V5ojqSw7QaVE3UFELP8zKS3Dqs9_aQ1SVmodQbDWDLq4A6w>
+    <xmx:Qu96ZDEGYlA0YrufXnbvjWX_LYKIaoxPzHIlM2YyTK4Htn7PhFMYTg>
+    <xmx:Qu96ZJNXHUsr1N6JexV0erV7vexxhRTo6Qrawa9bii-n1zi_S-EOvw>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 105D0B60086; Sat,  3 Jun 2023 03:44:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <e9601db2-ff7d-4490-abd5-8d3c5946e108@app.fastmail.com>
+In-Reply-To: <c7f88295-2e22-4100-b9c8-feb380b64359@app.fastmail.com>
+References: <20230417205447.1800912-1-arnd@kernel.org>
+ <87ttwnnrer.fsf@kernel.org>
+ <504c5a7d-0bfd-4b1e-a7f0-65d072657e0a@app.fastmail.com>
+ <87mt2eoopo.fsf@kernel.org>
+ <c7f88295-2e22-4100-b9c8-feb380b64359@app.fastmail.com>
+Date:   Sat, 03 Jun 2023 09:43:35 +0200
+From:   "Arnd Bergmann" <arnd@kernel.org>
+To:     "Arnd Bergmann" <arnd@arndb.de>, "Kalle Valo" <kvalo@kernel.org>
+Cc:     Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] wireless: ath: work around false-positive stringop-overread
+ warning
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/1 19:59, Robin Murphy wrote:
-> Don't register a resource for the second page unless the dual-page
-> extension flag is actually present to say it's valid.
-> 
-> CC: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> CC: Hanjun Guo <guohanjun@huawei.com>
-> CC: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
-> 
-> Not a critical fix, since the driver currently works around this itself,
-> but patch #4 would like to clean that up.
-> 
->   drivers/acpi/arm64/apmt.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/acpi/arm64/apmt.c b/drivers/acpi/arm64/apmt.c
-> index 8cab69fa5d59..aa7d5c3c0dd8 100644
-> --- a/drivers/acpi/arm64/apmt.c
-> +++ b/drivers/acpi/arm64/apmt.c
-> @@ -35,11 +35,13 @@ static int __init apmt_init_resources(struct resource *res,
->   
->   	num_res++;
->   
-> -	res[num_res].start = node->base_address1;
-> -	res[num_res].end = node->base_address1 + SZ_4K - 1;
-> -	res[num_res].flags = IORESOURCE_MEM;
-> +	if (node->flags & ACPI_APMT_FLAGS_DUAL_PAGE) {
-> +		res[num_res].start = node->base_address1;
-> +		res[num_res].end = node->base_address1 + SZ_4K - 1;
-> +		res[num_res].flags = IORESOURCE_MEM;
->   
-> -	num_res++;
-> +		num_res++;
-> +	}
->   
->   	if (node->ovflw_irq != 0) {
->   		trigger = (node->ovflw_irq_flags & ACPI_APMT_OVFLW_IRQ_FLAGS_MODE);
+On Mon, May 8, 2023, at 17:07, Arnd Bergmann wrote:
+> On Mon, May 8, 2023, at 16:57, Kalle Valo wrote:
+>> With older GCC versions from your page I don't have this problem. I'm
+>> using Debian 10 still so so is my libc too old?
+>
+> (dropping most Cc)
+>
+> Indeed, thanks for the report, I forgot about that issue. I used
+> to build the cross toolchains in an old Ubuntu 16.04 chroot to avoid
+> that issue, and I linked all other dependencies statically.
+>
+> The gcc-13.1.0 builds are the first ones I did on an arm64 machine,
+> so I had to create a new build environment and started out with
+> just my normal Debian testing rootfs, which caused me enough issues
+> to figure out first.
+>
+> I had previously experimented with linking statically against
+> musl to avoid all other dependencies, but that ended up with
+> slower binaries because the default memory allocator in musl
+> doesn't work that well for gcc, and I never quite figured out
+> how to pick a different memory allocator, or which one to use.
+>
+> I should probably just pick an older Debian release that is new
+> enough to contain cross compilers for arm64 and x86 and then
+> set up the same kind of chroot I had in before.
 
-Good catch,
+It took me a while, but now I have a working build setup
+in a Debian Buster schroot with gcc-13 as the main compiler,
+and I updated the gcc-13.1 binaries with those, as well as
+uploading gcc-11.4 and gcc-12.3 build the same way.
 
-Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+I have only tested the binaries on arm64 Debian testing,
+could you see if the new x86 builds work for you?
+
+       Arnd
