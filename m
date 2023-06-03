@@ -2,134 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B001720EEB
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C24A72117B
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjFCJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 05:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S229551AbjFCSIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 14:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjFCJ1z (ORCPT
+        with ESMTP id S229445AbjFCSIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 05:27:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F9E48;
-        Sat,  3 Jun 2023 02:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685784473; x=1717320473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pdvmuC2wyW2a7AD5zT1/NjQSBP98ch0K0/460XXGMZU=;
-  b=nlUSMCNMMY0ehLsukjtWCFfY6oPBtq533ee84WI6/bp5JYwF0kxJBVpZ
-   8SVvqwTLkA/DtaZ2KpdxOcXBbvLKQbZXqQ1khnkrYYJ+Wo+xY/LR1Dhxq
-   vJYC69zkx8/YBMaceq1zigpulxl76sgBkuYi6gcNV+RHDkPA4xD1KTict
-   zf4ZyBLtTqRY4r0nAXSIro7AATMsT64RI1iRo2o5GnJ61FDLPARB3BHMM
-   F/vAvNyt3Cq/liOrraBvpaj0GI/RmzIqr45S11zTYCElr07Qqc4y8Kbjb
-   jOcD6Pp5xGvUOEMlUjfHB7LA4SWoN5/aHp5N4Tt2TvQyD6TpGp1+1HxW+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="419591916"
-X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
-   d="scan'208";a="419591916"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 02:27:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="658529048"
-X-IronPort-AV: E=Sophos;i="6.00,215,1681196400"; 
-   d="scan'208";a="658529048"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 03 Jun 2023 02:27:51 -0700
-Date:   Sun, 4 Jun 2023 01:27:21 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@amd.com, linux-fpga@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-Subject: Re: [PATCH v2] fpga: zynq-fpga: Ensure proper xCAP interface switch
-Message-ID: <ZHt3+XSvmTnk1Xno@yilunxu-OptiPlex-7050>
-References: <20230531095624.1802757-1-nava.kishore.manne@amd.com>
+        Sat, 3 Jun 2023 14:08:31 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D092132
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 11:08:28 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 3EED7820DBD;
+        Sat,  3 Jun 2023 18:08:27 +0000 (UTC)
+Received: from pdx1-sub0-mail-a268.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id A29DB820D2F;
+        Sat,  3 Jun 2023 18:08:26 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1685815706; a=rsa-sha256;
+        cv=none;
+        b=mqiBEqoLdgQSfFAH9HGsvYvoYsGU4qCpqLa7QLF+UneX5Py6UKFYUEuvvSZmXdG7iP/xFW
+        08fmhhXnkp0xsho3R1r+3bzpuE7PhceO4JiJbB1ya6VqbSK+EtYm0bZpw/vUwlYhFni68Z
+        1XaLvChPjsL2bXsSJeUr7rpMSC+V9IS8C9oWpOBlqBOx9o7D+qDN0YSNRQOVFg5fm5LK6Y
+        v5gtg0Y+soZTjc+Mexs1WRF9inff15tAXfsqlclkY470BQVBpxI/Q6rSP2Ovl0MhIxmCfN
+        a/QJfJI+dImuYOrjZdFO6mbhRwV3xyoYs4PbQe5T9W6OO/GJQDZrJ+ik8sGXOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1685815706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=edsV1yfGqFjC4oidIwYZYQtUalRFvmfjBeoSyFbKiFs=;
+        b=B4UyH0OcAj2BLrPG4w6Hkp/1V8+sU1Tkpd2V5RILYST9QI3qri0kDJ2hxOgmq0XTRWWNuJ
+        pOmPXBASlFpCxxT8hn+7v8J/IIFbGvZPOhuQIRPn/PTKYaht4ok3t2+CBHkiQan84J+fPJ
+        oQC8Bfz10tGHIUDyMAOIkJ8dyjznimXR48NUToBbqLtBGn1Fg6eLmHWpL6kE2qdHDDb6EL
+        YUQ/t+MprjRDft1mN5eUOZgEmz9Mzf+R1UNlIYou0RqHsxzR2ftPNff3F9WzomatSUjQbm
+        +uOqdtB8BB0/qCy+h4NxZbi1CDGnA6+htPDb+5iuXbhaH1e2Ke6ItB5bsZAFcQ==
+ARC-Authentication-Results: i=1;
+        rspamd-5f966895c-mxj6h;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Wiry-Juvenile: 67d3880475b78c39_1685815707049_473911325
+X-MC-Loop-Signature: 1685815707049:1656340810
+X-MC-Ingress-Time: 1685815707049
+Received: from pdx1-sub0-mail-a268.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.104.253.229 (trex/6.8.1);
+        Sat, 03 Jun 2023 18:08:27 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a268.dreamhost.com (Postfix) with ESMTPSA id 4QYSXn5zk3z2p;
+        Sat,  3 Jun 2023 11:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1685815706;
+        bh=edsV1yfGqFjC4oidIwYZYQtUalRFvmfjBeoSyFbKiFs=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=Yd8T0hZS6rdOv1n4oPbiyI4EemMWfjrkJ1flOLco/mKWuxNy9BsZ43usrwJZ8quI5
+         ZLkmuLfL/Bj3DYXJ1+FP4fJ4QpJXe8ztSVCCifzY9c17UyMKwlOkmbOoMc+mkqEX2E
+         UtkfzCxMGv47wPgQpyFT9AQ2dVvBJp1nzCGWfNtO7yfH1bZHpDE7r4Ld1x0meo3rgf
+         JsfpKb+StEM8DeqLmcm7yq9QRVvB2ZIVXfjUfJvLCjtXCf7hLNmrXHRdD8Rr+SLfLd
+         OM+Y+DHMyJYFzHGW6RncCEO5p15DfE/zQJYuR4B2d2vvuFidClKEbzQFM6umpKjWz3
+         RyHjMz7xRlR9A==
+Date:   Sat, 3 Jun 2023 10:34:14 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com
+Subject: Re: [PATCH 2/2] torture: Add lock_torture_writer_fifo module param
+Message-ID: <zzteweboj3hmif5akuxxokyvu6truhy3ygh6w5nwb26zxjlqgs@uqzxhzx3eim7>
+References: <20230602220221.600774-1-jstultz@google.com>
+ <20230602220221.600774-2-jstultz@google.com>
+ <c2415658-de0e-4497-889a-d5401cbc134a@paulmck-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230531095624.1802757-1-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c2415658-de0e-4497-889a-d5401cbc134a@paulmck-laptop>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-31 at 15:26:24 +0530, Nava kishore Manne wrote:
-> From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-> 
-> The Zynq platform has PCAP, ICAP and JTAG interfaces for configuring
-> programmable logic (PL). The existing driver implementation uses the
-> PCAP interface to configure the PL. Before switching the PL configuration
-> interface from PCAP to ICAP make sure that all outstanding Transactions
-> relevant to the PL configuration should be completed by the PCAP interface
-> otherwise it may lead to PL configuration issues.
-> 
-> This patch provides a required fix to ensure that all existing PL
-> transactions are completed before switching from PCAP to ICAP.
-> 
-> For detailed information relevant to PL configuration interfaces refer
-> Zynq 7000 TRM (section 6.5.1).
-> Link: https://docs.xilinx.com/v/u/en-US/ug585-Zynq-7000-TRM
-> 
-> Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
-> Changes for v2:
->               - Updated commit message and added Doc link as suggested by Yilun.
-> 
->  drivers/fpga/zynq-fpga.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index ae0da361e6c6..88db9ac36887 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
->  	if (err)
->  		return err;
->  
-> -	/* Release 'PR' control back to the ICAP */
-> -	zynq_fpga_write(priv, CTRL_OFFSET,
-> -		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
-> -
->  	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
->  				     intr_status & IXR_PCFG_DONE_MASK,
->  				     INIT_POLL_DELAY,
->  				     INIT_POLL_TIMEOUT);
->  
-> +	/* Release 'PR' control back to the ICAP */
-> +	zynq_fpga_write(priv, CTRL_OFFSET,
-> +			zynq_fpga_read(priv, CTRL_OFFSET)
-> +			& ~CTRL_PCAP_PR_MASK);
+On Sat, 03 Jun 2023, Paul E. McKenney wrote:
 
-Don't put the & at the beginning of the line:
+>On Fri, Jun 02, 2023 at 10:02:10PM +0000, John Stultz wrote:
+>> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>>
+>> Modifies locktorture writer to run as RT task.
+>>
+>> To use it:
+>> insmod /lib/modules/torture.ko random_shuffle=1 lock_torture_writer_fifo=1
+>>                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>> insmod /lib/modules/locktorture.ko torture_type=mutex_lock rt_boost=1 rt_boost_factor=50 nested_locks=3
+>>
+>> This patch has been helpful to uncover issues with the proxy-execution
+>> seires.
+>>
+>> Cc: Davidlohr Bueso <dave@stgolabs.net>
+>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> Cc: Josh Triplett <josh@joshtriplett.org>
+>> Cc: Joel Fernandes <joel@joelfernandes.org>
+>> Cc: Juri Lelli <juri.lelli@redhat.com>
+>> Cc: Valentin Schneider <vschneid@redhat.com>
+>> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>> Cc: kernel-team@android.com
+>> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>> [jstultz: Include header change to build, reword commit message]
+>> Signed-off-by: John Stultz <jstultz@google.com>
+>
+>Queued and pushed, thank you all!
 
-	zynq_fpga_read(priv, CTRL_OFFSET) &
-	~CTRL_PCAP_PR_MASK);
+Both look good to me. Feel free to add my:
 
-or just:
-	zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
-
-80 lines is not a must now.
-
-Others look good to me.
-
-Thanks,
-Yilun
-
-> +
->  	clk_disable(priv->clk);
->  
->  	if (err)
-> -- 
-> 2.25.1
-> 
+Acked-by: Davidlohr Bueso <dave@stgolabs.net>
