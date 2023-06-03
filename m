@@ -2,173 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C862B721010
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730A8721012
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 14:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbjFCMXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 08:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S234505AbjFCM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 08:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjFCMXf (ORCPT
+        with ESMTP id S229528AbjFCM1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 08:23:35 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160CFA6
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 05:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685795014; x=1717331014;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZD/60ppn9bOONbsVptann1I1X/Ko/Db0uvT+d/ou2lU=;
-  b=EcRQDfd2fewAgGMkBK99sU2fZ4rA4eukJQwLxjb3LpXqammBPi6AyG/x
-   oGPjrZnHQCcyBL07witXPiaSgXuNakOMyLKYR8PkQ/f4Q0BwCAo+V3neG
-   aXzAMaQVEaQUCyVZL0M2LTScraiiFQzAHfPjDuYtT7oZVbySfOqf8Iemr
-   zjfM8g2NuNWQM6onttThEPtC7moCvhFoZP+p/oFV1m9aYDCq3EGMVzC5A
-   XwFPZvzMh1+YbhDqOoHy+gRGt9a22TZ5iPDVL8zT3aXoDQORciiUGTPy0
-   1+0lRaQe+9J6jL2Jum2sXlqTqpcJ5OlV7uOmgOkUvn8PcPBa/A+4Qx+YI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="354915556"
-X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="354915556"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 05:23:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="832267708"
-X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="832267708"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Jun 2023 05:23:32 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q5QI7-0001aV-2g;
-        Sat, 03 Jun 2023 12:23:31 +0000
-Date:   Sat, 03 Jun 2023 20:22:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- a37f2699c36a7f6606ba3300f243227856c5ad6b
-Message-ID: <20230603122231.WTP75%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 3 Jun 2023 08:27:11 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60480A6;
+        Sat,  3 Jun 2023 05:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=NdKc/jMqGPx4GztP2rKQEhUYT+Xz1wkAFWT6ucRh7C8=; b=P2L+9i8tmKVnpGy9CqOUIgxeu0
+        jy2PAiKhDLB9S6If9z/dVeyWCDAJKL82PCEWUOoDZB/xTNfdx7Duowb0pEgh9y7dmmuGgNkHOp9CS
+        QghaBMsB5zwQFk7x0KRw/H11pn0N5bg2h7XeRbc4u4CsCPcGO4ivlNJQ9aODrZmtEGnGMEdkuMrKU
+        TigbbfjiWTXCG330nHW2bFL2GvGo+IZNaacpD3mAIXvF0xkgO3sueYhEGUR4S46vLFxBwE0ZNoIvv
+        SoqJ0kOX70n+Wn79QQzyIF+nUwCeRTo9SO64U4OtRKIuSENSrPpOHmYo+Y6936SdHTrSOG4fA5DK/
+        m+j9+J+w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47258)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q5QL8-0001Fn-DH; Sat, 03 Jun 2023 13:26:38 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q5QKz-00041Y-AO; Sat, 03 Jun 2023 13:26:29 +0100
+Date:   Sat, 3 Jun 2023 13:26:29 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
+ to p{5,6}_configured
+Message-ID: <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-9-arinc.unal@arinc9.com>
+ <20230522121532.86610-9-arinc.unal@arinc9.com>
+ <20230524175107.hwzygo7p4l4rvawj@skbuf>
+ <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
+ <20230526130145.7wg75yoe6ut4na7g@skbuf>
+ <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: a37f2699c36a7f6606ba3300f243227856c5ad6b  x86/head/64: Switch to KERNEL_CS as soon as new GDT is installed
+On Sat, Jun 03, 2023 at 03:15:52PM +0300, Arınç ÜNAL wrote:
+> On 26.05.2023 16:01, Vladimir Oltean wrote:
+> > Ok, but given the premise of this patch set, that phylink is always available,
+> > does it make sense for mt7531_cpu_port_config() and mt7988_cpu_port_config()
+> > to manually call phylink methods?
+> 
+> All I know is that that's how the implementation of phylink's PCS support in
+> this driver works. It expects the MAC to be set up before calling
+> mt753x_phylink_pcs_link_up() and mt753x_phylink_mac_link_up().
 
-elapsed time: 726m
+First, do you see a message printed for the DSA device indicating that
+a link is up, without identifying the interface? For example, with
+mv88e6xxx:
 
-configs tested: 96
-configs skipped: 95
+mv88e6085 f1072004.mdio-mii:04: Link is Up - 1Gbps/Full - flow control off
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+as opposed to a user port which will look like this:
 
-tested configs:
-arc                          axs101_defconfig   gcc  
-arm                          collie_defconfig   clang
-arm                             rpc_defconfig   gcc  
-arm                           sama7_defconfig   clang
-arm                           sunxi_defconfig   gcc  
-hexagon              randconfig-r041-20230531   clang
-hexagon              randconfig-r045-20230531   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230531   gcc  
-i386                 randconfig-i002-20230531   gcc  
-i386                 randconfig-i003-20230531   gcc  
-i386                 randconfig-i004-20230531   gcc  
-i386                 randconfig-i005-20230531   gcc  
-i386                 randconfig-i006-20230531   gcc  
-i386                 randconfig-i051-20230531   gcc  
-i386                 randconfig-i052-20230531   gcc  
-i386                 randconfig-i053-20230531   gcc  
-i386                 randconfig-i054-20230531   gcc  
-i386                 randconfig-i055-20230531   gcc  
-i386                 randconfig-i056-20230531   gcc  
-i386                 randconfig-i061-20230531   gcc  
-i386                 randconfig-i062-20230531   gcc  
-i386                 randconfig-i063-20230531   gcc  
-i386                 randconfig-i064-20230531   gcc  
-i386                 randconfig-i065-20230531   gcc  
-i386                 randconfig-i066-20230531   gcc  
-i386                 randconfig-r032-20230602   gcc  
-loongarch                        allmodconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-m68k                        m5307c3_defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-mips                          ath79_defconfig   clang
-mips                           ci20_defconfig   gcc  
-mips                       lemote2f_defconfig   clang
-mips                          rm200_defconfig   clang
-nios2                            alldefconfig   gcc  
-nios2                               defconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                   bluestone_defconfig   clang
-powerpc                    ge_imp3a_defconfig   clang
-powerpc                        icon_defconfig   clang
-powerpc                      mgcoge_defconfig   gcc  
-powerpc                   motionpro_defconfig   gcc  
-powerpc                 mpc836x_rdk_defconfig   clang
-powerpc                      pcm030_defconfig   gcc  
-powerpc                      ppc44x_defconfig   clang
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc                     tqm8560_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230531   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230531   clang
-sh                        edosk7760_defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                            hp6xx_defconfig   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230531   gcc  
-x86_64               randconfig-a002-20230531   gcc  
-x86_64               randconfig-a003-20230531   gcc  
-x86_64               randconfig-a004-20230531   gcc  
-x86_64               randconfig-a005-20230531   gcc  
-x86_64               randconfig-a006-20230531   gcc  
-x86_64               randconfig-a011-20230603   gcc  
-x86_64               randconfig-a012-20230603   gcc  
-x86_64               randconfig-a013-20230603   gcc  
-x86_64               randconfig-a014-20230603   gcc  
-x86_64               randconfig-a015-20230603   gcc  
-x86_64               randconfig-a016-20230603   gcc  
-x86_64               randconfig-x051-20230603   gcc  
-x86_64               randconfig-x052-20230603   gcc  
-x86_64               randconfig-x053-20230603   gcc  
-x86_64               randconfig-x054-20230603   gcc  
-x86_64               randconfig-x055-20230603   gcc  
-x86_64               randconfig-x056-20230603   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-kvm   gcc  
-x86_64                           rhel-8.3-syz   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa                    xip_kc705_defconfig   gcc  
+mv88e6085 f1072004.mdio-mii:04 lan1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+If you do, that's likely for the CPU port, and indicates that phylink
+is being used for the CPU port. If not, then you need to investigate
+whether you've provided the full description in DT for the CPU port.
+In other words, phy-mode and a fixed-link specification or in-band
+mode.
+
+Given that, you should have no need to make explicit calls to your
+mac_config, pcs_link_up and mac_link_up functions. If you need to
+make these calls, it suggests that phylink is not being used for the
+CPU port.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
