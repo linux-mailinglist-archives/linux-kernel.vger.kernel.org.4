@@ -2,43 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130277212C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 22:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987317212CA
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 22:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjFCUuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 16:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S231312AbjFCUwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 16:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjFCUuM (ORCPT
+        with ESMTP id S229715AbjFCUv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 16:50:12 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA0D196
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 13:50:11 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 3a507e03-0250-11ee-b3cf-005056bd6ce9;
-        Sat, 03 Jun 2023 23:50:09 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Sat, 3 Jun 2023 23:50:09 +0300
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, heiko@sntech.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sebastian.reichel@collabora.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gustavo.padovan@collabora.com, kernel@collabora.com,
-        serge.broslavsky@collabora.com
-Subject: Re: [PATCH v3 0/8] RK3588 ADC support
-Message-ID: <ZHungQT5an39pjEg@surfacebook>
-References: <20230603185340.13838-1-shreeya.patel@collabora.com>
+        Sat, 3 Jun 2023 16:51:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9036DA6;
+        Sat,  3 Jun 2023 13:51:56 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685825514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FYRhO5tm+egQGj0VtLRHygSd1rVDQErSuxLMnzfSdv8=;
+        b=0n4CvGExlFAiQOFUYi0WTfQCqKhHk3/3cfXG1uCEype+muRoJY8ntPSFJObHSIG5lyPK2y
+        05o9vviiz52SP2Lq28KQ3gL5eaKxKll/hYocC8nhF6V4+P5l2OX0VBU9r4H2FodUY/nN1k
+        3jRJ6cCexsq8npqf4Ftza0JePXpisUouT57oUcUMRIi6Jm/oKDFhogNbRagiJV85UtPN5d
+        3mpSpOVRIBGPr/hsaBpkh7nOF+oTL1EAz52M48ChogJpUKHKlK37YDlGRu+MJLE7nnGeCX
+        7HrEcUsin2F496AlKhi5LY9T1LHNESyK44VIZD2mgshCuhcHIRPNgtxdRTA8CA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685825514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FYRhO5tm+egQGj0VtLRHygSd1rVDQErSuxLMnzfSdv8=;
+        b=q1woBCgZZqp3xbfT7uoawg4xNoNsW6mH9m0273HBQZusqSUq0JaAjouD+KoDG/m+NhCfUZ
+        n5cw61h2vqU9NSDw==
+To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 01/33] x86/traps: let common_interrupt() handle
+ IRQ_MOVE_CLEANUP_VECTOR
+In-Reply-To: <20230410081438.1750-2-xin3.li@intel.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-2-xin3.li@intel.com>
+Date:   Sat, 03 Jun 2023 22:51:54 +0200
+Message-ID: <87leh08e1h.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603185340.13838-1-shreeya.patel@collabora.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,57 +60,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sun, Jun 04, 2023 at 12:23:32AM +0530, Shreeya Patel kirjoitti:
-> This patch series adds ADC support for RK3588 and updates
-> the DT bindings for the same.
-> 
-> To test ADC support on Rock 5B board, a voltage divider circuit
-> was created using the gpio pin 22 ( SARADC_IN4 ) and few more
-> tests were ran for testing the buffer and trigger support using
-> the iio_generic_buffer tool.
+On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+> IRQ_MOVE_CLEANUP_VECTOR is the only one of the system IRQ vectors that
+> is *below* FIRST_SYSTEM_VECTOR. It is a slow path, so just push it
+> into common_interrupt() just before the spurious interrupt handling.
 
-Well done!
+This is a complete NOOP on not FRED enabled systems as the IDT entry is
+still separate. So this change makes no sense outside of the FRED
+universe. Can we pretty please make this consistent?
 
-For patches 1-6
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-(with one nit-pick to be addressed)
+Aside of that the change comes with zero justification. I can see why
+this is done, i.e. to spare range checking in the FRED exception entry
+code, but that brings up an interesting question:
 
-> Changes in v3
->   - Add bitfield.h header file in patch 2.
->   - Add a Reviewed-by tag in patch 2.
->   - Do not remove clock enabling and disabling from the suspend and
->     resume functions respectively in patch 3
-> 
-> Changes in v2
->   - Add from address in patches 1 and 2.
->   - Create separate patches for adding new device support and changes to
->     the old device code.
->   - Make use of FIELD_PREP in patch 2.
->   - Move the enablement of clocks at it's original position in patch 3
->   - Add Reviewed-by tag in patches 4 and 5.
->   - Add an Acked-by tag in patch 8.
-> 
-> Shreeya Patel (8):
->   iio: adc: rockchip_saradc: Add callback functions
->   iio: adc: rockchip_saradc: Add support for RK3588
->   iio: adc: rockchip_saradc: Make use of devm_clk_get_enabled
->   iio: adc: rockchip_saradc: Use of_device_get_match_data
->   iio: adc: rockchip_saradc: Match alignment with open parenthesis
->   iio: adc: rockchip_saradc: Use dev_err_probe
->   arm64: dts: rockchip: Add DT node for ADC support in RK3588
->   dt-bindings: iio: adc: Add rockchip,rk3588-saradc string
-> 
->  .../bindings/iio/adc/rockchip-saradc.yaml     |   1 +
->  arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  12 +
->  drivers/iio/adc/rockchip_saradc.c             | 246 +++++++++++-------
->  3 files changed, 168 insertions(+), 91 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+IRQ_MOVE_CLEANUP_VECTOR is at vector 0x20 on purpose. 0x20 is the lowest
+priority vector so that the following (mostly theoretical) situation
+gets resolved:
 
--- 
-With Best Regards,
-Andy Shevchenko
+sysvec_irq_move_cleanup()
+  if (is_pending_in_apic_IRR(vector_to_clean_up))
+     apic->send_IPI_self(IRQ_MOVE_CLEANUP_VECTOR);
 
+I.e. when for whatever reasons the to be cleaned up vector is still
+pending in the local APIC IRR the function retriggers
+IRQ_MOVE_CLEANUP_VECTOR and returns. As the pending to be cleaned up
+vector has higher priority it gets handled _before_ the cleanup
+vector. Otherwise this ends up in a live lock.
 
+So the question is whether FRED is changing that priority scheme or not.
+
+> @@ -248,6 +248,10 @@ DEFINE_IDTENTRY_IRQ(common_interrupt)
+>  	desc = __this_cpu_read(vector_irq[vector]);
+>  	if (likely(!IS_ERR_OR_NULL(desc))) {
+>  		handle_irq(desc, regs);
+> +#ifdef CONFIG_SMP
+> +	} else if (vector == IRQ_MOVE_CLEANUP_VECTOR) {
+> +		sysvec_irq_move_cleanup(regs);
+
+This nests IDTENTRY:
+
+common_interrupt()
+  irqentry_enter();
+  kvm_set_cpu_l1tf_flush_l1d();
+  run_irq_on_irqstack_cond(__common_interrupt, ....)
+    __common_interrupt()
+        sysvec_irq_move_cleanup()
+          irqentry_enter();             <- FAIL
+          kvm_set_cpu_l1tf_flush_l1d(); <- WHY again?
+          run_sysvec_on_irqstack_cond(__sysvec_irq_move_cleanup);
+            __sysvec_irq_move_cleanup();
+          irqentry_exit();
+
+It does not matter whether the cleanup vector is a slow path or
+not. Regular interrupts are not nesting, period. Exceptions nest, but
+IRQ_MOVE_CLEANUP_VECTOR is not an exception and we don't make an
+exception for it.
+
+Stop this mindless hackery and clean it up so it is correct for all
+variants.
+
+Thanks,
+
+        tglx
