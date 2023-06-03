@@ -2,239 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3BE720DA6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 05:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AEC720DAD
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 05:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236911AbjFCDhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 23:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S236629AbjFCDpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 23:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjFCDhT (ORCPT
+        with ESMTP id S230294AbjFCDpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 23:37:19 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 190271B4;
-        Fri,  2 Jun 2023 20:37:16 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Bx3+trtXpk19cDAA--.8110S3;
-        Sat, 03 Jun 2023 11:37:15 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFLVqtXpkFtGGAA--.22394S3;
-        Sat, 03 Jun 2023 11:37:14 +0800 (CST)
-Message-ID: <198815bd-fe55-8ce8-2115-1594f3eaa919@loongson.cn>
-Date:   Sat, 3 Jun 2023 11:37:14 +0800
+        Fri, 2 Jun 2023 23:45:43 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636E7E4C
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 20:45:41 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:40116)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q5ICv-007FAM-Ob; Fri, 02 Jun 2023 21:45:38 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:45462 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q5ICu-006Cwo-Gt; Fri, 02 Jun 2023 21:45:37 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+In-Reply-To: <20230602192254.GD555@redhat.com> (Oleg Nesterov's message of
+        "Fri, 2 Jun 2023 21:22:55 +0200")
+References: <20230601183232.8384-1-michael.christie@oracle.com>
+        <20230602192254.GD555@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Fri, 02 Jun 2023 22:44:47 -0500
+Message-ID: <87wn0l2or4.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] LoongArch: Align pci memory base address with page size
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongson-kernel@lists.loongnix.cn,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        lichao@loongson.cn
-References: <20230602030732.1047696-1-maobibo@loongson.cn>
- <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
- <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
- <CAAhV-H4VHoNQdpDdpcPfDXJxnpoWUtDqmJMhb_r4DS4JtnxvhQ@mail.gmail.com>
- <e483b7bb-4184-758d-2840-11d75659975e@loongson.cn>
- <CAAhV-H4VH2yZ3sMqQYK_KWrv6FT7fqHykuMMFo_B55WJeRQOwA@mail.gmail.com>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <CAAhV-H4VH2yZ3sMqQYK_KWrv6FT7fqHykuMMFo_B55WJeRQOwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxFLVqtXpkFtGGAA--.22394S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxtFWfuw13tFW8ZryftFWUurg_yoWxAr4DpF
-        WxAFs8CFWUJr17CwsIqw1DWF4av34DKr47Xr43try7Gr9FvFy7Xr1UJr15Cry8Jrs8GF1j
-        vr4UKFW7WF15JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URa0PUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1q5ICu-006Cwo-Gt;;;mid=<87wn0l2or4.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX18rwwgl3V8rHDOCFR4O8oZK9le+ZTQfAnc=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 676 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.6 (0.7%), b_tie_ro: 3.1 (0.5%), parse: 1.16
+        (0.2%), extract_message_metadata: 4.4 (0.7%), get_uri_detail_list: 2.1
+        (0.3%), tests_pri_-2000: 3.2 (0.5%), tests_pri_-1000: 2.1 (0.3%),
+        tests_pri_-950: 1.14 (0.2%), tests_pri_-900: 0.89 (0.1%),
+        tests_pri_-200: 0.69 (0.1%), tests_pri_-100: 2.5 (0.4%),
+        tests_pri_-90: 348 (51.5%), check_bayes: 345 (51.1%), b_tokenize: 6
+        (0.8%), b_tok_get_all: 9 (1.3%), b_comp_prob: 1.88 (0.3%),
+        b_tok_touch_all: 326 (48.2%), b_finish: 0.72 (0.1%), tests_pri_0: 289
+        (42.7%), check_dkim_signature: 0.60 (0.1%), check_dkim_adsp: 3.4
+        (0.5%), poll_dns_idle: 2.0 (0.3%), tests_pri_10: 2.9 (0.4%),
+        tests_pri_500: 9 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/1] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Oleg Nesterov <oleg@redhat.com> writes:
 
+> Hi Mike,
+>
+> sorry, but somehow I can't understand this patch...
+>
+> I'll try to read it with a fresh head on Weekend, but for example,
+>
+> On 06/01, Mike Christie wrote:
+>>
+>>  static int vhost_task_fn(void *data)
+>>  {
+>>  	struct vhost_task *vtsk = data;
+>> -	int ret;
+>> +	bool dead = false;
+>> +
+>> +	for (;;) {
+>> +		bool did_work;
+>> +
+>> +		/* mb paired w/ vhost_task_stop */
+>> +		if (test_bit(VHOST_TASK_FLAGS_STOP, &vtsk->flags))
+>> +			break;
+>> +
+>> +		if (!dead && signal_pending(current)) {
+>> +			struct ksignal ksig;
+>> +			/*
+>> +			 * Calling get_signal will block in SIGSTOP,
+>> +			 * or clear fatal_signal_pending, but remember
+>> +			 * what was set.
+>> +			 *
+>> +			 * This thread won't actually exit until all
+>> +			 * of the file descriptors are closed, and
+>> +			 * the release function is called.
+>> +			 */
+>> +			dead = get_signal(&ksig);
+>> +			if (dead)
+>> +				clear_thread_flag(TIF_SIGPENDING);
+>
+> this can't be right or I am totally confused.
+>
+> Another signal_wake_up() can come right after clear(SIGPENDING).
 
-在 2023/6/2 16:00, Huacai Chen 写道:
-> On Fri, Jun 2, 2023 at 3:35 PM bibo, mao <maobibo@loongson.cn> wrote:
->>
->>
->>
->> 在 2023/6/2 14:55, Huacai Chen 写道:
->>> On Fri, Jun 2, 2023 at 2:48 PM bibo, mao <maobibo@loongson.cn> wrote:
->>>>
->>>>
->>>>
->>>> 在 2023/6/2 12:11, Huacai Chen 写道:
->>>>> +cc Bjorn
->>>>>
->>>>> Hi, Bibo,
->>>>>
->>>>> On Fri, Jun 2, 2023 at 11:07 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>>>>>
->>>>>> LoongArch linux kernel uses 16K page size by default, some pci devices have
->>>>>> only 4K memory size, it is normal in general architectures. However memory
->>>>>> space of different pci devices will share one physical page address space.
->>>>>> This is not safe for mmu protection, also UIO and VFIO requires base
->>>>>> address of pci memory space page aligned.
->>>>>>
->>>>>> This patch adds check with function pcibios_align_resource, and set base
->>>>>> address of resource page aligned.
->>>>>>
->>>>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->>>>>> ---
->>>>>>  arch/loongarch/pci/pci.c | 23 +++++++++++++++++++++++
->>>>>>  1 file changed, 23 insertions(+)
->>>>>>
->>>>>> diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
->>>>>> index 2726639150bc..1380f3672ba2 100644
->>>>>> --- a/arch/loongarch/pci/pci.c
->>>>>> +++ b/arch/loongarch/pci/pci.c
->>>>>> @@ -83,6 +83,29 @@ int pcibios_alloc_irq(struct pci_dev *dev)
->>>>>>         return acpi_pci_irq_enable(dev);
->>>>>>  }
->>>>>>
->>>>>> +/*
->>>>>> + * memory space size of some pci cards is 4K, it is separated with
->>>>>> + * different pages for generic architectures, so that mmu protection can
->>>>>> + * work with different pci cards. However page size for LoongArch system
->>>>>> + * is 16K, memory space of different pci cards may share the same page
->>>>>> + * on LoongArch, it is not safe here.
->>>>>> + * Also uio drivers and vfio drivers sugguests that base address of memory
->>>>>> + * space should page aligned. This function aligns base address with page size
->>>>>> + */
->>>>>> +resource_size_t pcibios_align_resource(void *data, const struct resource *res,
->>>>>> +               resource_size_t size, resource_size_t align)
->>>>>> +{
->>>>>> +       resource_size_t start = res->start;
->>>>>> +
->>>>>> +       if (res->flags & IORESOURCE_MEM) {
->>>>>> +               if (align & (PAGE_SIZE - 1)) {
->>>>>> +                       align = PAGE_SIZE;
->>>>>> +                       start = ALIGN(start, align);
->>>>> I don't know whether this patch is really needed, but the logic here
->>>>> has some problems.
->>>>>
->>>>> For example, if PAGE_SIZE=16KB, align=18KB, what should we do? Align
->>>>> to 16KB or align to 32KB? IMO it should align to 32KB, but in your
->>>>> patch it will align to 16KB.
->>>> In general pci device is aligned by size, and its value is a power of 2 in value.
->>>> I do not see such devices with 18K alignment requirements.
->>> If so, you can simply ignore "align" and use  start = ALIGN(start, PAGE_SIZE);
->>>
->>>>
->>>> By pci local bus spec, there are such lines:
->>>>
->>>> "Devices are free to consume more address space than required, but decoding down
->>>> to a 4 KB space for memory is suggested for devices that need less than that amount. For
->>>> instance, a device that has 64 bytes of registers to be mapped into Memory Space may
->>>> consume up to 4 KB of address space in order to minimize the number of bits in the address
->>>> decoder."
->>>>
->>>> I cannot  think whether it is necessary simply from judging whether other
->>>> architectures have similar code. If so, LoongArch system just  always follows others.
->>>> It is actually one problem since LoongArch uses 16K page size.
->>> As I know, both MIPS and ARM64 can use non-4K pages, but when I grep
->>> pcibios_align_resource in the arch directory, none of them do
->>> PAGE_SIZE alignment.
->> Here is piece of  code in drivers/vfio/pci/vfio_pci_core.c
->>                 /*
->>                  * Here we don't handle the case when the BAR is not page
->>                  * aligned because we can't expect the BAR will be
->>                  * assigned into the same location in a page in guest
->>                  * when we passthrough the BAR. And it's hard to access
->>                  * this BAR in userspace because we have no way to get
->>                  * the BAR's location in a page.
->>                  */
->> no_mmap:
->>                 vdev->bar_mmap_supported[bar] = false;
->>
->> Do you think it is a issue or not?
-> May be or may not be, if it should be aligned to PAGE_SIZE, then MIPS
-> and ARM64 also need this.
-> 
->>
->> You can search function pnv_pci_default_alignment or pcibios_align_resource about
->> alpha architecture.
-> Alpha's pcibios_align_resource() have nothing to do with PAGE_SIZE,
-> pnv_pci_default_alignment() seems to be the case. But if alignment is
-> really needed, I think it is better to provide a
-> pcibios_default_alignment() as powerpc.
-pcibios_default_alignment is in effective for all the pci devices and bridges, in function
-pci_reassigndev_resource_alignment if it is set with alignment limit, it will disable memory
-access and force to reassign memory resource for the device even if it is already aligned . It
-will bring some negative effect such as pci VGA device for GOP use.
+Technically yes.
 
-pcibios_align_resource is relative safer and it will reassigned resource for specified bar. I am
-not familiar with pci, pci experts will give the best answer.
+However please not that prepare_signal does:
+	if (signal->flags & SIGNAL_GROUP_EXIT)
+		return false;
 
-Another way, I checkout source code of uefi bios,  it seems that memory resource is aligned
-with fixed 4K size.  There is such code:
-https://github.com/tianocore/edk2/blob/master/MdeModulePkg/Bus/Pci/PciBusDxe/PciEnumeratorSupport.c
-        if (PciIoDevice->PciBar[BarIndex].Length < (SIZE_4KB)) {
-          //
-          // Force minimum 4KByte alignment for Virtualization technology for Directed I/O
-          //
-          PciIoDevice->PciBar[BarIndex].Alignment = (SIZE_4KB - 1);
-        } else {
-          PciIoDevice->PciBar[BarIndex].Alignment = PciIoDevice->PciBar[BarIndex].Length - 1;
-        }
+In general it is wrong to receive or attempt to process a signal
+after task death has been decided.
 
-Regards
-Bibo, Mao
+Strictly speaking that doesn't cover de_thread, and coredumping
+but still receiving any kind of signal at that point is rare
+and generally wrong behavior.
 
-> 
-> Huacai
->>
->> Regards
->> Bibo, mao
->>
->>>
->>> Huacai
->>>
->>>>
->>>> Regards
->>>> Bibo, Mao
->>>>>
->>>>> Huacai
->>>>>> +               }
->>>>>> +       }
->>>>>> +       return start;
->>>>>> +}
->>>>>> +
->>>>>>  static void pci_fixup_vgadev(struct pci_dev *pdev)
->>>>>>  {
->>>>>>         struct pci_dev *devp = NULL;
->>>>>> --
->>>>>> 2.27.0
->>>>>>
->>>>> _______________________________________________
->>>>> Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
->>>>> To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
->>>>
->>>>
->>> _______________________________________________
->>> Loongson-kernel mailing list -- loongson-kernel@lists.loongnix.cn
->>> To unsubscribe send an email to loongson-kernel-leave@lists.loongnix.cn
->>
->>
+Beyond that clearing TIF_SIGPENDING is just an optimization so
+the thread can sleep in schedule and not spin.
+
+> Again, I'll try to re-read this patch, but let me ask anyway...
+>
+> Do we have a plan B? I mean... iirc you have mentioned that you can
+> change these code paths to do something like
+>
+> 	if (killed)
+> 		tell_the_drivers_that_all_callbacks_will_fail();
+>
+>
+> so that vhost_worker() can exit after get_signal() returns SIGKILL.
+>
+> Probably I misunderstood you, but it would be nice to avoid the changes
+> in coredump/etc code just to add a temporary (iiuc!) fix.
+
+One saving grace with the the vhost code is that you need to open
+device nodes that normally have root-only permissions.
+
+If we are willing to allow races in process shutdown to cause leaks I
+think we can do something better, and put the burden of work on vhost
+layer.
+
+I will follow up with a patch doing that.
+
+Eric
 
