@@ -2,46 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEF5721150
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 19:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43BB721155
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 19:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjFCRAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 13:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S229595AbjFCRIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 13:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFCQ76 (ORCPT
+        with ESMTP id S229482AbjFCRIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 12:59:58 -0400
+        Sat, 3 Jun 2023 13:08:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2F713E;
-        Sat,  3 Jun 2023 09:59:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B6F13E
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 10:08:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E591C61553;
-        Sat,  3 Jun 2023 16:59:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79678C433D2;
-        Sat,  3 Jun 2023 16:59:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE73C60B4B
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 17:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA83C433D2;
+        Sat,  3 Jun 2023 17:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685811596;
-        bh=c4czb+/K444DuaOGCa6WiRR7Gt06zDGYJJlQOVMrtj0=;
+        s=k20201202; t=1685812083;
+        bh=YJn97j6iA20HsijrcP7IiRS2WGaA4roV8+a66M4L3KE=;
         h=From:To:Cc:Subject:Date:From;
-        b=tingSPCAip0+AxNhBChxvnymc77MW6Bc2NReshrMqgTphCGOavjHKmwJ/IpJc0eD/
-         RYbad2PpnoZY5u8KnaeUe56kXlwWmXpZ2iHySQBSVRPVXPfE+ziYxpuzOJ8iVb365k
-         cUj062Y8u2QPsBmkcZvwmLXWC33s10Gwxi+96IVWOvDAqEwxanhLQ/avLTZrcWWuZg
-         w3OOXihZtP5JY12uOc1BllIIbhNRaI2ikCEX/nYIyCXDrG3rJ21u8Js9DK0i+y7BXt
-         +FzNX8B128S/uV6ndcSJ+fgxK+PZIOdY42w9lkCjNwMLWebJem5ZXMrzIifzofn+FA
-         aoYkIZGmbS42Q==
+        b=Z4c+VOGJ1KBlYOgY0pp+zzTr+kYCs2KChCz+CJ9RhZnjK42+hMV3Ow4/mYyKEb4ub
+         arcKdCKjD31hYjRHSIrVPPx/otetnP5SPGRBDOpDMfixCStwF+YFKmrzIQK7E197N4
+         dK3YS8XlJQi+V/hx1s0+Utzs/tkTpQx1KeXX8gswMT8qLc720CeRlaJ0HPgmUaQN+0
+         dNv32+8Kz1FanK2uJrCWtkHCCkIod2yE/dnCI87Hk0J1M7T7DeadSRncnQIC5NPetM
+         +8MQr557VV+TVFlWF6eKxbbsxysxy3YWZvn0Bl2YmFEps8mGn9WJImkKJQ+csPm8ab
+         YPgkAVHQgwd3A==
 From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
 Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Nick Terrell <terrelln@fb.com>
-Subject: [PATCH] block/rnbd: fix mixed module-builtin object
-Date:   Sun,  4 Jun 2023 01:59:49 +0900
-Message-Id: <20230603165949.1753326-1-masahiroy@kernel.org>
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/2] drm/bridge: imx: fix mixed module-builtin object
+Date:   Sun,  4 Jun 2023 02:07:46 +0900
+Message-Id: <20230603170747.1753842-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,97 +68,498 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_BLK_DEV_RNBD_CLIENT=m and CONFIG_BLK_DEV_RNBD_SERVER=y
-(or vice versa), rnbd-common.o is linked to a module and also to
-vmlinux even though CFLAGS are different between builtins and modules.
+With CONFIG_DRM_IMX8QM_LDB=m and CONFIG_DRM_IMX8QXP_LDB=y (or vice
+versa), imx-ldb-helper.o is linked to a module and also to vmlinux
+even though the expected CFLAGS are different between builtins and
+modules.
 
 This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
 Fixing mixed module-builtin objects").
 
-Turn rnbd_access_mode_str() into an inline function.
+Turn helpers in imx-ldb-helper.c into inline functions.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- drivers/block/rnbd/Makefile      |  6 ++----
- drivers/block/rnbd/rnbd-common.c | 23 -----------------------
- drivers/block/rnbd/rnbd-proto.h  | 14 +++++++++++++-
- 3 files changed, 15 insertions(+), 28 deletions(-)
- delete mode 100644 drivers/block/rnbd/rnbd-common.c
+ drivers/gpu/drm/bridge/imx/Makefile         |   4 +-
+ drivers/gpu/drm/bridge/imx/imx-ldb-helper.c | 221 --------------------
+ drivers/gpu/drm/bridge/imx/imx-ldb-helper.h | 213 +++++++++++++++++--
+ 3 files changed, 197 insertions(+), 241 deletions(-)
+ delete mode 100644 drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
 
-diff --git a/drivers/block/rnbd/Makefile b/drivers/block/rnbd/Makefile
-index 40b31630822c..208e5f865497 100644
---- a/drivers/block/rnbd/Makefile
-+++ b/drivers/block/rnbd/Makefile
-@@ -3,13 +3,11 @@
- ccflags-y := -I$(srctree)/drivers/infiniband/ulp/rtrs
+diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
+index aa90ec8d5433..64b93009376a 100644
+--- a/drivers/gpu/drm/bridge/imx/Makefile
++++ b/drivers/gpu/drm/bridge/imx/Makefile
+@@ -1,7 +1,7 @@
+-imx8qm-ldb-objs := imx-ldb-helper.o imx8qm-ldb-drv.o
++imx8qm-ldb-objs := imx8qm-ldb-drv.o
+ obj-$(CONFIG_DRM_IMX8QM_LDB) += imx8qm-ldb.o
  
- rnbd-client-y := rnbd-clt.o \
--		  rnbd-clt-sysfs.o \
--		  rnbd-common.o
-+		  rnbd-clt-sysfs.o
+-imx8qxp-ldb-objs := imx-ldb-helper.o imx8qxp-ldb-drv.o
++imx8qxp-ldb-objs := imx8qxp-ldb-drv.o
+ obj-$(CONFIG_DRM_IMX8QXP_LDB) += imx8qxp-ldb.o
  
- CFLAGS_rnbd-srv-trace.o = -I$(src)
- 
--rnbd-server-y := rnbd-common.o \
--		  rnbd-srv.o \
-+rnbd-server-y := rnbd-srv.o \
- 		  rnbd-srv-sysfs.o \
- 		  rnbd-srv-trace.o
- 
-diff --git a/drivers/block/rnbd/rnbd-common.c b/drivers/block/rnbd/rnbd-common.c
+ obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
+diff --git a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
 deleted file mode 100644
-index 596c3f732403..000000000000
---- a/drivers/block/rnbd/rnbd-common.c
+index 7338b84bc83d..000000000000
+--- a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
 +++ /dev/null
-@@ -1,23 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
+@@ -1,221 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
 -/*
-- * RDMA Network Block Driver
-- *
-- * Copyright (c) 2014 - 2018 ProfitBricks GmbH. All rights reserved.
-- * Copyright (c) 2018 - 2019 1&1 IONOS Cloud GmbH. All rights reserved.
-- * Copyright (c) 2019 - 2020 1&1 IONOS SE. All rights reserved.
+- * Copyright (C) 2012 Sascha Hauer, Pengutronix
+- * Copyright 2019,2020,2022 NXP
 - */
--#include "rnbd-proto.h"
 -
--const char *rnbd_access_mode_str(enum rnbd_access_mode mode)
+-#include <linux/media-bus-format.h>
+-#include <linux/mfd/syscon.h>
+-#include <linux/of.h>
+-#include <linux/regmap.h>
+-
+-#include <drm/drm_bridge.h>
+-#include <drm/drm_of.h>
+-#include <drm/drm_print.h>
+-
+-#include "imx-ldb-helper.h"
+-
+-bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch)
 -{
--	switch (mode) {
--	case RNBD_ACCESS_RO:
--		return "ro";
--	case RNBD_ACCESS_RW:
--		return "rw";
--	case RNBD_ACCESS_MIGRATION:
--		return "migration";
--	default:
--		return "unknown";
+-	return ldb_ch->link_type == LDB_CH_SINGLE_LINK;
+-}
+-
+-bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch)
+-{
+-	return ldb_ch->link_type == LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS ||
+-	       ldb_ch->link_type == LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS;
+-}
+-
+-int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
+-				   struct drm_bridge_state *bridge_state,
+-				   struct drm_crtc_state *crtc_state,
+-				   struct drm_connector_state *conn_state)
+-{
+-	struct ldb_channel *ldb_ch = bridge->driver_private;
+-
+-	ldb_ch->in_bus_format = bridge_state->input_bus_cfg.format;
+-	ldb_ch->out_bus_format = bridge_state->output_bus_cfg.format;
+-
+-	return 0;
+-}
+-
+-void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
+-				const struct drm_display_mode *mode,
+-				const struct drm_display_mode *adjusted_mode)
+-{
+-	struct ldb_channel *ldb_ch = bridge->driver_private;
+-	struct ldb *ldb = ldb_ch->ldb;
+-	bool is_split = ldb_channel_is_split_link(ldb_ch);
+-
+-	if (is_split)
+-		ldb->ldb_ctrl |= LDB_SPLIT_MODE_EN;
+-
+-	switch (ldb_ch->out_bus_format) {
+-	case MEDIA_BUS_FMT_RGB666_1X7X3_SPWG:
+-		break;
+-	case MEDIA_BUS_FMT_RGB888_1X7X4_SPWG:
+-		if (ldb_ch->chno == 0 || is_split)
+-			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH0_24;
+-		if (ldb_ch->chno == 1 || is_split)
+-			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH1_24;
+-		break;
+-	case MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA:
+-		if (ldb_ch->chno == 0 || is_split)
+-			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH0_24 |
+-					 LDB_BIT_MAP_CH0_JEIDA;
+-		if (ldb_ch->chno == 1 || is_split)
+-			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH1_24 |
+-					 LDB_BIT_MAP_CH1_JEIDA;
+-		break;
 -	}
 -}
-diff --git a/drivers/block/rnbd/rnbd-proto.h b/drivers/block/rnbd/rnbd-proto.h
-index da1d0542d7e2..57afe9b07fda 100644
---- a/drivers/block/rnbd/rnbd-proto.h
-+++ b/drivers/block/rnbd/rnbd-proto.h
-@@ -300,6 +300,18 @@ static inline u32 rq_to_rnbd_flags(struct request *rq)
- 	return rnbd_opf;
- }
+-
+-void ldb_bridge_enable_helper(struct drm_bridge *bridge)
+-{
+-	struct ldb_channel *ldb_ch = bridge->driver_private;
+-	struct ldb *ldb = ldb_ch->ldb;
+-
+-	/*
+-	 * Platform specific bridge drivers should set ldb_ctrl properly
+-	 * for the enablement, so just write the ctrl_reg here.
+-	 */
+-	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
+-}
+-
+-void ldb_bridge_disable_helper(struct drm_bridge *bridge)
+-{
+-	struct ldb_channel *ldb_ch = bridge->driver_private;
+-	struct ldb *ldb = ldb_ch->ldb;
+-	bool is_split = ldb_channel_is_split_link(ldb_ch);
+-
+-	if (ldb_ch->chno == 0 || is_split)
+-		ldb->ldb_ctrl &= ~LDB_CH0_MODE_EN_MASK;
+-	if (ldb_ch->chno == 1 || is_split)
+-		ldb->ldb_ctrl &= ~LDB_CH1_MODE_EN_MASK;
+-
+-	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
+-}
+-
+-int ldb_bridge_attach_helper(struct drm_bridge *bridge,
+-			     enum drm_bridge_attach_flags flags)
+-{
+-	struct ldb_channel *ldb_ch = bridge->driver_private;
+-	struct ldb *ldb = ldb_ch->ldb;
+-
+-	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
+-		DRM_DEV_ERROR(ldb->dev,
+-			      "do not support creating a drm_connector\n");
+-		return -EINVAL;
+-	}
+-
+-	if (!bridge->encoder) {
+-		DRM_DEV_ERROR(ldb->dev, "missing encoder\n");
+-		return -ENODEV;
+-	}
+-
+-	return drm_bridge_attach(bridge->encoder,
+-				ldb_ch->next_bridge, bridge,
+-				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+-}
+-
+-int ldb_init_helper(struct ldb *ldb)
+-{
+-	struct device *dev = ldb->dev;
+-	struct device_node *np = dev->of_node;
+-	struct device_node *child;
+-	int ret;
+-	u32 i;
+-
+-	ldb->regmap = syscon_node_to_regmap(np->parent);
+-	if (IS_ERR(ldb->regmap)) {
+-		ret = PTR_ERR(ldb->regmap);
+-		if (ret != -EPROBE_DEFER)
+-			DRM_DEV_ERROR(dev, "failed to get regmap: %d\n", ret);
+-		return ret;
+-	}
+-
+-	for_each_available_child_of_node(np, child) {
+-		struct ldb_channel *ldb_ch;
+-
+-		ret = of_property_read_u32(child, "reg", &i);
+-		if (ret || i > MAX_LDB_CHAN_NUM - 1) {
+-			ret = -EINVAL;
+-			DRM_DEV_ERROR(dev,
+-				      "invalid channel node address: %u\n", i);
+-			of_node_put(child);
+-			return ret;
+-		}
+-
+-		ldb_ch = ldb->channel[i];
+-		ldb_ch->ldb = ldb;
+-		ldb_ch->chno = i;
+-		ldb_ch->is_available = true;
+-		ldb_ch->np = child;
+-
+-		ldb->available_ch_cnt++;
+-	}
+-
+-	return 0;
+-}
+-
+-int ldb_find_next_bridge_helper(struct ldb *ldb)
+-{
+-	struct device *dev = ldb->dev;
+-	struct ldb_channel *ldb_ch;
+-	int ret, i;
+-
+-	for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
+-		ldb_ch = ldb->channel[i];
+-
+-		if (!ldb_ch->is_available)
+-			continue;
+-
+-		ldb_ch->next_bridge = devm_drm_of_get_bridge(dev, ldb_ch->np,
+-							     1, 0);
+-		if (IS_ERR(ldb_ch->next_bridge)) {
+-			ret = PTR_ERR(ldb_ch->next_bridge);
+-			if (ret != -EPROBE_DEFER)
+-				DRM_DEV_ERROR(dev,
+-					      "failed to get next bridge: %d\n",
+-					      ret);
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-void ldb_add_bridge_helper(struct ldb *ldb,
+-			   const struct drm_bridge_funcs *bridge_funcs)
+-{
+-	struct ldb_channel *ldb_ch;
+-	int i;
+-
+-	for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
+-		ldb_ch = ldb->channel[i];
+-
+-		if (!ldb_ch->is_available)
+-			continue;
+-
+-		ldb_ch->bridge.driver_private = ldb_ch;
+-		ldb_ch->bridge.funcs = bridge_funcs;
+-		ldb_ch->bridge.of_node = ldb_ch->np;
+-
+-		drm_bridge_add(&ldb_ch->bridge);
+-	}
+-}
+-
+-void ldb_remove_bridge_helper(struct ldb *ldb)
+-{
+-	struct ldb_channel *ldb_ch;
+-	int i;
+-
+-	for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
+-		ldb_ch = ldb->channel[i];
+-
+-		if (!ldb_ch->is_available)
+-			continue;
+-
+-		drm_bridge_remove(&ldb_ch->bridge);
+-	}
+-}
+diff --git a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.h b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.h
+index a0a5cde27fbc..42e9b4aa8399 100644
+--- a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.h
++++ b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.h
+@@ -65,32 +65,209 @@ struct ldb {
  
--const char *rnbd_access_mode_str(enum rnbd_access_mode mode);
-+static inline const char *rnbd_access_mode_str(enum rnbd_access_mode mode)
+ #define bridge_to_ldb_ch(b)	container_of(b, struct ldb_channel, bridge)
+ 
+-bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch);
+-bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch);
++static inline bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch)
 +{
-+	switch (mode) {
-+	case RNBD_ACCESS_RO:
-+		return "ro";
-+	case RNBD_ACCESS_RW:
-+		return "rw";
-+	case RNBD_ACCESS_MIGRATION:
-+		return "migration";
-+	default:
-+		return "unknown";
++	return ldb_ch->link_type == LDB_CH_SINGLE_LINK;
++}
+ 
+-int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
+-				   struct drm_bridge_state *bridge_state,
+-				   struct drm_crtc_state *crtc_state,
+-				   struct drm_connector_state *conn_state);
++static inline bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch)
++{
++	return ldb_ch->link_type == LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS ||
++	       ldb_ch->link_type == LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS;
++}
+ 
+-void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
+-				const struct drm_display_mode *mode,
+-				const struct drm_display_mode *adjusted_mode);
++static inline int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
++						 struct drm_bridge_state *bridge_state,
++						 struct drm_crtc_state *crtc_state,
++						 struct drm_connector_state *conn_state)
++{
++	struct ldb_channel *ldb_ch = bridge->driver_private;
+ 
+-void ldb_bridge_enable_helper(struct drm_bridge *bridge);
++	ldb_ch->in_bus_format = bridge_state->input_bus_cfg.format;
++	ldb_ch->out_bus_format = bridge_state->output_bus_cfg.format;
+ 
+-void ldb_bridge_disable_helper(struct drm_bridge *bridge);
++	return 0;
++}
+ 
+-int ldb_bridge_attach_helper(struct drm_bridge *bridge,
+-			     enum drm_bridge_attach_flags flags);
++static inline void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
++					      const struct drm_display_mode *mode,
++					      const struct drm_display_mode *adjusted_mode)
++{
++	struct ldb_channel *ldb_ch = bridge->driver_private;
++	struct ldb *ldb = ldb_ch->ldb;
++	bool is_split = ldb_channel_is_split_link(ldb_ch);
+ 
+-int ldb_init_helper(struct ldb *ldb);
++	if (is_split)
++		ldb->ldb_ctrl |= LDB_SPLIT_MODE_EN;
+ 
+-int ldb_find_next_bridge_helper(struct ldb *ldb);
++	switch (ldb_ch->out_bus_format) {
++	case MEDIA_BUS_FMT_RGB666_1X7X3_SPWG:
++		break;
++	case MEDIA_BUS_FMT_RGB888_1X7X4_SPWG:
++		if (ldb_ch->chno == 0 || is_split)
++			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH0_24;
++		if (ldb_ch->chno == 1 || is_split)
++			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH1_24;
++		break;
++	case MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA:
++		if (ldb_ch->chno == 0 || is_split)
++			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH0_24 |
++					 LDB_BIT_MAP_CH0_JEIDA;
++		if (ldb_ch->chno == 1 || is_split)
++			ldb->ldb_ctrl |= LDB_DATA_WIDTH_CH1_24 |
++					 LDB_BIT_MAP_CH1_JEIDA;
++		break;
 +	}
 +}
  
- #endif /* RNBD_PROTO_H */
+-void ldb_add_bridge_helper(struct ldb *ldb,
+-			   const struct drm_bridge_funcs *bridge_funcs);
++static inline void ldb_bridge_enable_helper(struct drm_bridge *bridge)
++{
++	struct ldb_channel *ldb_ch = bridge->driver_private;
++	struct ldb *ldb = ldb_ch->ldb;
+ 
+-void ldb_remove_bridge_helper(struct ldb *ldb);
++	/*
++	 * Platform specific bridge drivers should set ldb_ctrl properly
++	 * for the enablement, so just write the ctrl_reg here.
++	 */
++	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
++}
++
++static inline void ldb_bridge_disable_helper(struct drm_bridge *bridge)
++{
++	struct ldb_channel *ldb_ch = bridge->driver_private;
++	struct ldb *ldb = ldb_ch->ldb;
++	bool is_split = ldb_channel_is_split_link(ldb_ch);
++
++	if (ldb_ch->chno == 0 || is_split)
++		ldb->ldb_ctrl &= ~LDB_CH0_MODE_EN_MASK;
++	if (ldb_ch->chno == 1 || is_split)
++		ldb->ldb_ctrl &= ~LDB_CH1_MODE_EN_MASK;
++
++	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
++}
++
++static inline int ldb_bridge_attach_helper(struct drm_bridge *bridge,
++					   enum drm_bridge_attach_flags flags)
++{
++	struct ldb_channel *ldb_ch = bridge->driver_private;
++	struct ldb *ldb = ldb_ch->ldb;
++
++	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
++		DRM_DEV_ERROR(ldb->dev,
++			      "do not support creating a drm_connector\n");
++		return -EINVAL;
++	}
++
++	if (!bridge->encoder) {
++		DRM_DEV_ERROR(ldb->dev, "missing encoder\n");
++		return -ENODEV;
++	}
++
++	return drm_bridge_attach(bridge->encoder,
++				ldb_ch->next_bridge, bridge,
++				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
++}
++
++static inline int ldb_init_helper(struct ldb *ldb)
++{
++	struct device *dev = ldb->dev;
++	struct device_node *np = dev->of_node;
++	struct device_node *child;
++	int ret;
++	u32 i;
++
++	ldb->regmap = syscon_node_to_regmap(np->parent);
++	if (IS_ERR(ldb->regmap)) {
++		ret = PTR_ERR(ldb->regmap);
++		if (ret != -EPROBE_DEFER)
++			DRM_DEV_ERROR(dev, "failed to get regmap: %d\n", ret);
++		return ret;
++	}
++
++	for_each_available_child_of_node(np, child) {
++		struct ldb_channel *ldb_ch;
++
++		ret = of_property_read_u32(child, "reg", &i);
++		if (ret || i > MAX_LDB_CHAN_NUM - 1) {
++			ret = -EINVAL;
++			DRM_DEV_ERROR(dev,
++				      "invalid channel node address: %u\n", i);
++			of_node_put(child);
++			return ret;
++		}
++
++		ldb_ch = ldb->channel[i];
++		ldb_ch->ldb = ldb;
++		ldb_ch->chno = i;
++		ldb_ch->is_available = true;
++		ldb_ch->np = child;
++
++		ldb->available_ch_cnt++;
++	}
++
++	return 0;
++}
++
++static inline int ldb_find_next_bridge_helper(struct ldb *ldb)
++{
++	struct device *dev = ldb->dev;
++	struct ldb_channel *ldb_ch;
++	int ret, i;
++
++	for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
++		ldb_ch = ldb->channel[i];
++
++		if (!ldb_ch->is_available)
++			continue;
++
++		ldb_ch->next_bridge = devm_drm_of_get_bridge(dev, ldb_ch->np,
++							     1, 0);
++		if (IS_ERR(ldb_ch->next_bridge)) {
++			ret = PTR_ERR(ldb_ch->next_bridge);
++			if (ret != -EPROBE_DEFER)
++				DRM_DEV_ERROR(dev,
++					      "failed to get next bridge: %d\n",
++					      ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static inline void ldb_add_bridge_helper(struct ldb *ldb,
++					 const struct drm_bridge_funcs *bridge_funcs)
++{
++	struct ldb_channel *ldb_ch;
++	int i;
++
++	for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
++		ldb_ch = ldb->channel[i];
++
++		if (!ldb_ch->is_available)
++			continue;
++
++		ldb_ch->bridge.driver_private = ldb_ch;
++		ldb_ch->bridge.funcs = bridge_funcs;
++		ldb_ch->bridge.of_node = ldb_ch->np;
++
++		drm_bridge_add(&ldb_ch->bridge);
++	}
++}
++
++static inline void ldb_remove_bridge_helper(struct ldb *ldb)
++{
++	struct ldb_channel *ldb_ch;
++	int i;
++
++	for (i = 0; i < MAX_LDB_CHAN_NUM; i++) {
++		ldb_ch = ldb->channel[i];
++
++		if (!ldb_ch->is_available)
++			continue;
++
++		drm_bridge_remove(&ldb_ch->bridge);
++	}
++}
+ 
+ #endif /* __IMX_LDB_HELPER__ */
 -- 
 2.39.2
 
