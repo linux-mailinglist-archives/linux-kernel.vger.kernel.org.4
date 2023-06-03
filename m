@@ -2,311 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671DE72116B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 19:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CB5721176
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjFCRs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 13:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S229665AbjFCSCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 14:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFCRsZ (ORCPT
+        with ESMTP id S229451AbjFCSCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 13:48:25 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8AF194
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 10:48:20 -0700 (PDT)
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 156991EC0842;
-        Sat,  3 Jun 2023 19:48:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1685814499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=YExremYVsBTKp2qLehG2IpYwL7nkoYMRX4ld2c/IOrQ=;
-        b=n/jvtaGbyfnkz0k/1ok1L39ZHko7Cz8Pon8A0cBY7JqUyANXY0L8JSDmEiGsntBurj6Bwy
-        ZJfAXVjs1pDK1sxo/fB3eQL7LTTmTZC5ULaw44gNGM2wgunRVAys3gJlBT8cCGPYG5xgOM
-        oSPhnEJcZI5gxZKub/d+8IiQ2iwxrSs=
-Date:   Sat, 3 Jun 2023 19:48:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     amd-gfx@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: WARNING: CPU: 5 PID: 1464 at drivers/gpu/drm/ttm/ttm_bo.c:326
- ttm_bo_release+0x27e/0x2d0 [ttm]
-Message-ID: <20230603174814.GCZHt83pN+wNjf63sC@fat_crate.local>
+        Sat, 3 Jun 2023 14:02:40 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2E4132;
+        Sat,  3 Jun 2023 11:02:38 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6af6fe73f11so3121931a34.0;
+        Sat, 03 Jun 2023 11:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685815358; x=1688407358;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wJ5oIK5c4aaP2KUP+GjmtcSjBZl4zYhr31Fidljy5Rc=;
+        b=JkFGVhWUBwe466ud2BX0WtTfpJiJgJ5URvXEK0eaLNpdnMzibQ7NQJ0ZI0OAi897ai
+         RthPhaGNuvTfEi72MDhpcH+PynEgZQq8740yI/SgrD9G6aLsyI91z2EXo1JfLFKiiSR4
+         G62BFDQ6VCCLwaUArGcAXhqdA2WqmLa/M1wvu47JIfEllNK2FCNZuYsz/AI8+VS7YWRM
+         aNoRbW0XsTNhHDmk8LajfxqpdQwtFKmNO9FvkLoQZoXNcgXgLM2mjAE+y+4ffVYjGNis
+         1OCw9SP2C9IMFG3qnbb/p6hfpA7rFZNQZZ7ILn74Id3zEEN94FzXyaSD3i92gDw8UO0i
+         Mupg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685815358; x=1688407358;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wJ5oIK5c4aaP2KUP+GjmtcSjBZl4zYhr31Fidljy5Rc=;
+        b=LKiLDUuxfKoI5Y6L62BI+G2VmhizwGbfTzhYig8ZnqVZqY7QDYTPW9xo1607eQZPPS
+         gzxWrAzIhUGRfKbtqou23NZ6lzq/WomCWNY61hpDiuIYyZ1FsRxmZE0AEJnldQG0lg7r
+         LMS1nSKJzDoWOf+jyNqMvXOE7KNhqc0AvTFkFZ8/tfEQiArVUvozr0Q/PdrT+UnMZIYl
+         s7jKDWzzSqENDPkjZ7pM0f+5LHoZlagMlteCqLrA0WgE0UpFG8PdX6HnrmmbyiuhIooM
+         vyZKtNthfeOnAWq7XB1sfH5ujOVzbTcOjmO4vTsoeYVOn9geNMRZzK+DZApJOgL+kDQc
+         C8CQ==
+X-Gm-Message-State: AC+VfDyUuxSxdlq2feEF2zZpd86B4IMbmLCgP8MnXFbps68C9rlcDGjV
+        0qlVLT4CkrDv0clZJUua91g=
+X-Google-Smtp-Source: ACHHUZ4DM50zmbAnSQ9adX7zFLIZ8c2b8VEJWlwpNSDS2hSiZtMykWUZHm0cB2o5Bu/+Oy+sSNuUDA==
+X-Received: by 2002:a05:6358:2496:b0:127:9133:fb90 with SMTP id m22-20020a056358249600b001279133fb90mr16248765rwc.16.1685815357843;
+        Sat, 03 Jun 2023 11:02:37 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id mv7-20020a17090b198700b0024dfb8271a4sm3135597pjb.21.2023.06.03.11.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jun 2023 11:02:37 -0700 (PDT)
+Date:   Sat, 3 Jun 2023 11:02:35 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>, chen.bo@intel.com
+Subject: Re: [PATCH v14 111/113] RFC: KVM: x86, TDX: Add check for setting
+ CPUID
+Message-ID: <20230603180235.GM1234772@ls.amr.corp.intel.com>
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <00f3770050fb0751273a48eb17804a7a1a697e75.1685333728.git.isaku.yamahata@intel.com>
+ <20230603092933.00004ada.zhi.wang.linux@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230603092933.00004ada.zhi.wang.linux@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Jun 03, 2023 at 09:29:33AM +0800,
+Zhi Wang <zhi.wang.linux@gmail.com> wrote:
 
-this below triggers with the latest Linus tree:
+> On Sun, 28 May 2023 21:20:33 -0700
+> isaku.yamahata@intel.com wrote:
+> 
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > Add a hook to setting CPUID for additional consistency check of
+> > KVM_SET_CPUID2.
+> > 
+> > Because intel TDX or AMD SNP has restriction on the value of cpuid.  Some
+> > value can't be changed after boot.  Some can be only set at the VM
+> > creation time and can't be changed later.  Check if the new values are
+> > consistent with the old values.
+> >
+> 
+> Thanks for addressing this from the discussion. The structure looks good to me.
+> I was thinking if the patch should be separated into two parts. One is the
+> common part so that AMD folks can include it in their patch series. Another one
+> is TDX callback which builds on top of the common-part patch. 
 
-51f269a6ecc7 ("Merge tag 'probes-fixes-6.4-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace")
+OK.
 
-...
-[   16.173593] [drm] radeon kernel modesetting enabled.
-[   16.173743] radeon 0000:29:00.0: vgaarb: deactivate vga console
-[   16.174300] MCE: In-kernel MCE decoding enabled.
-[   16.175695] EDAC DEBUG: umc_read_base_mask:   DCSB0[0]=0x00000001 reg: 0x50000
-[   16.175698] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC0[0]=0x00000000 reg: 0x50010
-[   16.175700] EDAC DEBUG: umc_read_base_mask:   DCSB0[1]=0x00000000 reg: 0x50004
-[   16.175702] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC0[1]=0x00000000 reg: 0x50014
-[   16.175703] EDAC DEBUG: umc_read_base_mask:   DCSB0[2]=0x00000201 reg: 0x50008
-[   16.175705] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC0[2]=0x00000000 reg: 0x50018
-[   16.175706] EDAC DEBUG: umc_read_base_mask:   DCSB0[3]=0x00000000 reg: 0x5000c
-[   16.175707] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC0[3]=0x00000000 reg: 0x5001c
-[   16.175709] EDAC DEBUG: umc_read_base_mask:   DCSM0[0]=0x03fffdfe reg: 0x50020
-[   16.175710] EDAC DEBUG: umc_read_base_mask:     DCSM_SEC0[0]=0x00000000 reg: 0x50028
-[   16.175712] EDAC DEBUG: umc_read_base_mask:   DCSM0[1]=0x03fffdfe reg: 0x50024
-[   16.175713] EDAC DEBUG: umc_read_base_mask:     DCSM_SEC0[1]=0x00000000 reg: 0x5002c
-[   16.175715] EDAC DEBUG: umc_read_base_mask:   DCSB1[0]=0x00000001 reg: 0x150000
-[   16.175716] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC1[0]=0x00000000 reg: 0x150010
-[   16.175718] EDAC DEBUG: umc_read_base_mask:   DCSB1[1]=0x00000000 reg: 0x150004
-[   16.175719] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC1[1]=0x00000000 reg: 0x150014
-[   16.175720] EDAC DEBUG: umc_read_base_mask:   DCSB1[2]=0x00000201 reg: 0x150008
-[   16.175722] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC1[2]=0x00000000 reg: 0x150018
-[   16.175723] EDAC DEBUG: umc_read_base_mask:   DCSB1[3]=0x00000000 reg: 0x15000c
-[   16.175725] EDAC DEBUG: umc_read_base_mask:     DCSB_SEC1[3]=0x00000000 reg: 0x15001c
-[   16.175726] EDAC DEBUG: umc_read_base_mask:   DCSM1[0]=0x03fffdfe reg: 0x150020
-[   16.175728] EDAC DEBUG: umc_read_base_mask:     DCSM_SEC1[0]=0x00000000 reg: 0x150028
-[   16.175729] EDAC DEBUG: umc_read_base_mask:   DCSM1[1]=0x03fffdfe reg: 0x150024
-[   16.175730] EDAC DEBUG: umc_read_base_mask:     DCSM_SEC1[1]=0x00000000 reg: 0x15002c
-[   16.175741] EDAC DEBUG: umc_determine_memory_type:   UMC0 DIMM type: Unbuffered-DDR4
-[   16.175742] EDAC DEBUG: umc_determine_memory_type:   UMC1 DIMM type: Unbuffered-DDR4
-[   16.177514] Console: switching to colour dummy device 80x25
-[   16.177693] [drm] initializing kernel modesetting (CEDAR 0x1002:0x68E1 0x174B:0x3000 0x00).
-[   16.177733] ATOM BIOS: AMD
-[   16.177795] radeon 0000:29:00.0: VRAM: 1024M 0x0000000000000000 - 0x000000003FFFFFFF (1024M used)
-[   16.177798] radeon 0000:29:00.0: GTT: 1024M 0x0000000040000000 - 0x000000007FFFFFFF
-[   16.177800] [drm] Detected VRAM RAM=1024M, BAR=256M
-[   16.177802] [drm] RAM width 64bits DDR
-[   16.177835] [drm] radeon: 1024M of VRAM memory ready
-[   16.177836] [drm] radeon: 1024M of GTT memory ready.
-[   16.177839] [drm] Loading CEDAR Microcode
-[   16.179106] [drm] Internal thermal controller without fan control
-[   16.199812] [drm] radeon: dpm initialized
-[   16.200179] [drm] GART: num cpu pages 262144, num gpu pages 262144
-[   16.200399] [drm] enabling PCIE gen 2 link speeds, disable with radeon.pcie_gen2=0
-[   16.218135] [drm] PCIE GART of 1024M enabled (table at 0x000000000014C000).
-[   16.218239] radeon 0000:29:00.0: WB enabled
-[   16.218240] radeon 0000:29:00.0: fence driver on ring 0 use gpu addr 0x0000000040000c00
-[   16.218242] radeon 0000:29:00.0: fence driver on ring 3 use gpu addr 0x0000000040000c0c
-[   16.218606] radeon 0000:29:00.0: fence driver on ring 5 use gpu addr 0x000000000005c418
-[   16.218657] radeon 0000:29:00.0: radeon: MSI limited to 32-bit
-[   16.218689] radeon 0000:29:00.0: radeon: using MSI.
-[   16.218707] [drm] radeon: irq initialized.
-[   16.234730] [drm] ring test on 0 succeeded in 0 usecs
-[   16.234738] [drm] ring test on 3 succeeded in 2 usecs
-[   16.317725] r8169 0000:25:00.0 eth0: Link is Down
-[   16.410486] [drm] ring test on 5 succeeded in 1 usecs
-[   16.410492] [drm] UVD initialized successfully.
-[   16.410555] [drm] ib test on ring 0 succeeded in 0 usecs
-[   16.410596] [drm] ib test on ring 3 succeeded in 0 usecs
-[   17.077422] [drm] ib test on ring 5 succeeded
-[   17.077581] [drm] Radeon Display Connectors
-[   17.077584] [drm] Connector 0:
-[   17.077585] [drm]   HDMI-A-1
-[   17.077586] [drm]   HPD4
-[   17.077588] [drm]   DDC: 0x6440 0x6440 0x6444 0x6444 0x6448 0x6448 0x644c 0x644c
-[   17.077590] [drm]   Encoders:
-[   17.077591] [drm]     DFP1: INTERNAL_UNIPHY1
-[   17.077593] [drm] Connector 1:
-[   17.077594] [drm]   DVI-I-1
-[   17.077595] [drm]   HPD1
-[   17.077597] [drm]   DDC: 0x6460 0x6460 0x6464 0x6464 0x6468 0x6468 0x646c 0x646c
-[   17.077599] [drm]   Encoders:
-[   17.077600] [drm]     DFP2: INTERNAL_UNIPHY
-[   17.077601] [drm]     CRT1: INTERNAL_KLDSCP_DAC1
-[   17.077602] [drm] Connector 2:
-[   17.077604] [drm]   VGA-1
-[   17.077605] [drm]   DDC: 0x6430 0x6430 0x6434 0x6434 0x6438 0x6438 0x643c 0x643c
-[   17.077607] [drm]   Encoders:
-[   17.077608] [drm]     CRT2: INTERNAL_KLDSCP_DAC2
-[   17.083149] [drm] Initialized radeon 2.50.0 20080528 for 0000:29:00.0 on minor 0
-[   17.127260] [drm] fb mappable at 0xE034D000
-[   17.127269] [drm] vram apper at 0xE0000000
-[   17.127270] [drm] size 7299072
-[   17.127271] [drm] fb depth is 24
-[   17.127272] [drm]    pitch is 6912
-[   17.127298] fbcon: radeondrmfb (fb0) is primary device
-[   17.167352] Console: switching to colour frame buffer device 210x65
-[   17.170226] radeon 0000:29:00.0: [drm] fb0: radeondrmfb frame buffer device
-[   17.193431] Console: switching to colour dummy device 80x25
-[   17.217406] ------------[ cut here ]------------
-[   17.217408] WARNING: CPU: 5 PID: 1464 at drivers/gpu/drm/ttm/ttm_bo.c:326 ttm_bo_release+0x27e/0x2d0 [ttm]
-[   17.217418] Modules linked in: edac_mce_amd radeon(+) drm_ttm_helper ttm video drm_suballoc_helper drm_display_helper kvm irqbypass drm_kms_helper syscopyarea crc32_pclmul sysfillrect sha512_ssse3 sysimgblt sha512_generic cfbfillrect cfbimgblt wmi_bmof aesni_intel cfbcopyarea crypto_simd cryptd k10temp acpi_cpufreq wmi dm_mod
-[   17.217432] CPU: 5 PID: 1464 Comm: systemd-udevd Not tainted 6.4.0-rc4+ #1
-[   17.217436] Hardware name: Micro-Star International Co., Ltd. MS-7A38/B450M PRO-VDH MAX (MS-7A38), BIOS B.G0 07/26/2022
-[   17.217438] RIP: 0010:ttm_bo_release+0x27e/0x2d0 [ttm]
-[   17.217444] Code: 48 89 43 38 48 89 43 40 48 8b 5c 24 30 48 8b b5 40 08 00 00 48 8b 6c 24 38 48 83 c4 58 e9 7a 49 f7 e0 48 89 ef e9 6c fe ff ff <0f> 0b 48 83 7b 20 00 0f 84 b7 fd ff ff 0f 0b 0f 1f 00 e9 ad fd ff
-[   17.217448] RSP: 0018:ffffc9000095fbb0 EFLAGS: 00010202
-[   17.217451] RAX: 0000000000000001 RBX: ffff8881052c8de0 RCX: 0000000000000000
-[   17.217453] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffff8881052c8de0
-[   17.217455] RBP: ffff888104a66e00 R08: ffff8881052c8de0 R09: ffff888104a7cf08
-[   17.217457] R10: ffffc9000095fbe0 R11: ffffc9000095fbe8 R12: ffff8881052c8c78
-[   17.217458] R13: ffff8881052c8c78 R14: dead000000000100 R15: ffff88810528b108
-[   17.217460] FS:  00007f319fcbb8c0(0000) GS:ffff88881a540000(0000) knlGS:0000000000000000
-[   17.217463] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   17.217464] CR2: 000055dc8b0224a0 CR3: 000000010373d000 CR4: 0000000000750ee0
-[   17.217466] PKRU: 55555554
-[   17.217468] Call Trace:
-[   17.217470]  <TASK>
-[   17.217472]  ? __warn+0x97/0x160
-[   17.217476]  ? ttm_bo_release+0x27e/0x2d0 [ttm]
-[   17.217481]  ? report_bug+0x1ec/0x200
-[   17.217487]  ? handle_bug+0x3c/0x70
-[   17.217490]  ? exc_invalid_op+0x1f/0x90
-[   17.217493]  ? preempt_count_sub+0xb5/0x100
-[   17.217496]  ? asm_exc_invalid_op+0x16/0x20
-[   17.217500]  ? ttm_bo_release+0x27e/0x2d0 [ttm]
-[   17.217505]  ? ttm_resource_move_to_lru_tail+0x1ab/0x1d0 [ttm]
-[   17.217511]  radeon_bo_unref+0x1a/0x30 [radeon]
-[   17.217547]  radeon_gem_object_free+0x20/0x30 [radeon]
-[   17.217579]  radeon_fbdev_fb_destroy+0x57/0x90 [radeon]
-[   17.217616]  unregister_framebuffer+0x72/0x110
-[   17.217620]  drm_client_dev_unregister+0x6d/0xe0
-[   17.217623]  drm_dev_unregister+0x2e/0x90
-[   17.217626]  drm_put_dev+0x26/0x90
-[   17.217628]  pci_device_remove+0x44/0xc0
-[   17.217631]  really_probe+0x257/0x340
-[   17.217635]  __driver_probe_device+0x73/0x120
-[   17.217638]  driver_probe_device+0x2c/0xb0
-[   17.217641]  __driver_attach+0xa0/0x150
-[   17.217643]  ? __pfx___driver_attach+0x10/0x10
-[   17.217646]  bus_for_each_dev+0x67/0xa0
-[   17.217649]  bus_add_driver+0x10e/0x210
-[   17.217651]  driver_register+0x5c/0x120
-[   17.217653]  ? __pfx_radeon_module_init+0x10/0x10 [radeon]
-[   17.217681]  do_one_initcall+0x44/0x220
-[   17.217684]  ? kmalloc_trace+0x37/0xc0
-[   17.217688]  do_init_module+0x64/0x240
-[   17.217691]  __do_sys_finit_module+0xb2/0x100
-[   17.217694]  do_syscall_64+0x3b/0x90
-[   17.217697]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   17.217700] RIP: 0033:0x7f319feaa5a9
-[   17.217702] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 08 0d 00 f7 d8 64 89 01 48
-[   17.217706] RSP: 002b:00007ffc6bf3e7f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-[   17.217709] RAX: ffffffffffffffda RBX: 00005607204f3170 RCX: 00007f319feaa5a9
-[   17.217710] RDX: 0000000000000000 RSI: 00007f31a002eefd RDI: 0000000000000018
-[   17.217712] RBP: 00007f31a002eefd R08: 0000000000000000 R09: 00005607204f1860
-[   17.217714] R10: 0000000000000018 R11: 0000000000000246 R12: 0000000000020000
-[   17.217716] R13: 0000000000000000 R14: 0000560720522450 R15: 0000560720255899
-[   17.217718]  </TASK>
-[   17.217719] ---[ end trace 0000000000000000 ]---
-[   17.233548] BUG: kernel NULL pointer dereference, address: 00000000000000f8
-[   17.233550] #PF: supervisor read access in kernel mode
-[   17.233552] #PF: error_code(0x0000) - not-present page
-[   17.233553] PGD 0 P4D 0 
-[   17.233555] Oops: 0000 [#1] PREEMPT SMP
-[   17.233557] CPU: 5 PID: 1464 Comm: systemd-udevd Tainted: G        W          6.4.0-rc4+ #1
-[   17.233559] Hardware name: Micro-Star International Co., Ltd. MS-7A38/B450M PRO-VDH MAX (MS-7A38), BIOS B.G0 07/26/2022
-[   17.233561] RIP: 0010:atombios_crtc_disable+0x3f/0x2f0 [radeon]
-[   17.233584] Code: ec 48 48 8b 07 48 8b 58 38 e8 cd fc ff ff 48 8b 85 80 00 00 00 48 8b 80 a8 00 00 00 48 85 c0 74 71 4c 8b a0 a8 00 00 00 31 f6 <49> 8b bc 24 f8 00 00 00 4d 8d 6c 24 88 e8 6f 7c 4a e1 83 f8 fc 0f
-[   17.233586] RSP: 0018:ffffc9000095fa78 EFLAGS: 00010246
-[   17.233588] RAX: ffff888104228600 RBX: ffff888104a7c000 RCX: 0000000000000005
-[   17.233590] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888104a7de10
-[   17.233591] RBP: ffff88810528d000 R08: 0000000000000c24 R09: 0000000000030002
-[   17.233592] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-[   17.233594] R13: ffff88810528b2a8 R14: 0000000000000000 R15: ffff88810528b000
-[   17.233595] FS:  00007f319fcbb8c0(0000) GS:ffff88881a540000(0000) knlGS:0000000000000000
-[   17.233597] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   17.233598] CR2: 00000000000000f8 CR3: 000000010373d000 CR4: 0000000000750ee0
-[   17.233600] PKRU: 55555554
-[   17.233601] Call Trace:
-[   17.233602]  <TASK>
-[   17.233603]  ? __die+0x2d/0x80
-[   17.233606]  ? page_fault_oops+0x15e/0x450
-[   17.233609]  ? __pfx_cail_reg_read+0x10/0x10 [radeon]
-[   17.233629]  ? __pfx_cail_reg_write+0x10/0x10 [radeon]
-[   17.233647]  ? __pfx_cail_reg_read+0x10/0x10 [radeon]
-[   17.233665]  ? __pfx_cail_reg_write+0x10/0x10 [radeon]
-[   17.233683]  ? atom_put_dst+0x544/0x580 [radeon]
-[   17.233704]  ? exc_page_fault+0x464/0x8a0
-[   17.233706]  ? asm_exc_page_fault+0x22/0x30
-[   17.233709]  ? atombios_crtc_disable+0x3f/0x2f0 [radeon]
-[   17.233728]  ? atombios_crtc_disable+0x23/0x2f0 [radeon]
-[   17.233746]  ? radeon_atom_encoder_dpms_avivo+0x8b/0x270 [radeon]
-[   17.233780]  ? radeon_atom_encoder_dpms+0xd2/0x1d0 [radeon]
-[   17.233806]  __drm_helper_disable_unused_functions+0x81/0xe0 [drm_kms_helper]
-[   17.233817]  drm_crtc_helper_set_config+0x63c/0x980 [drm_kms_helper]
-[   17.233824]  ? _raw_spin_unlock+0x15/0x40
-[   17.233827]  ? d_walk+0x1be/0x2b0
-[   17.233830]  ? preempt_count_sub+0xb5/0x100
-[   17.233832]  radeon_crtc_set_config+0x4c/0x120 [radeon]
-[   17.233857]  __drm_mode_set_config_internal+0x8f/0x140
-[   17.233861]  drm_helper_force_disable_all+0x8e/0xc0 [drm_kms_helper]
-[   17.233869]  radeon_modeset_fini+0x7f/0xb0 [radeon]
-[   17.233890]  radeon_driver_unload_kms+0x36/0xa0 [radeon]
-[   17.233911]  drm_dev_unregister+0x5c/0x90
-[   17.233913]  drm_put_dev+0x26/0x90
-[   17.233914]  pci_device_remove+0x44/0xc0
-[   17.233916]  really_probe+0x257/0x340
-[   17.233918]  __driver_probe_device+0x73/0x120
-[   17.233920]  driver_probe_device+0x2c/0xb0
-[   17.233923]  __driver_attach+0xa0/0x150
-[   17.233925]  ? __pfx___driver_attach+0x10/0x10
-[   17.233927]  bus_for_each_dev+0x67/0xa0
-[   17.233928]  bus_add_driver+0x10e/0x210
-[   17.233930]  driver_register+0x5c/0x120
-[   17.233932]  ? __pfx_radeon_module_init+0x10/0x10 [radeon]
-[   17.233951]  do_one_initcall+0x44/0x220
-[   17.233953]  ? kmalloc_trace+0x37/0xc0
-[   17.233955]  do_init_module+0x64/0x240
-[   17.233957]  __do_sys_finit_module+0xb2/0x100
-[   17.233959]  do_syscall_64+0x3b/0x90
-[   17.233961]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   17.233963] RIP: 0033:0x7f319feaa5a9
-[   17.233965] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 08 0d 00 f7 d8 64 89 01 48
-[   17.233968] RSP: 002b:00007ffc6bf3e7f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-[   17.233970] RAX: ffffffffffffffda RBX: 00005607204f3170 RCX: 00007f319feaa5a9
-[   17.233971] RDX: 0000000000000000 RSI: 00007f31a002eefd RDI: 0000000000000018
-[   17.233972] RBP: 00007f31a002eefd R08: 0000000000000000 R09: 00005607204f1860
-[   17.233974] R10: 0000000000000018 R11: 0000000000000246 R12: 0000000000020000
-[   17.233975] R13: 0000000000000000 R14: 0000560720522450 R15: 0000560720255899
-[   17.233977]  </TASK>
-[   17.233978] Modules linked in: edac_mce_amd radeon(+) drm_ttm_helper ttm video drm_suballoc_helper drm_display_helper kvm irqbypass drm_kms_helper syscopyarea crc32_pclmul sysfillrect sha512_ssse3 sysimgblt sha512_generic cfbfillrect cfbimgblt wmi_bmof aesni_intel cfbcopyarea crypto_simd cryptd k10temp acpi_cpufreq wmi dm_mod
-[   17.233988] Dumping ftrace buffer:
-[   17.233993]    (ftrace buffer empty)
-[   17.233994] CR2: 00000000000000f8
-[   17.233995] ---[ end trace 0000000000000000 ]---
-[   17.233996] RIP: 0010:atombios_crtc_disable+0x3f/0x2f0 [radeon]
-[   17.234017] Code: ec 48 48 8b 07 48 8b 58 38 e8 cd fc ff ff 48 8b 85 80 00 00 00 48 8b 80 a8 00 00 00 48 85 c0 74 71 4c 8b a0 a8 00 00 00 31 f6 <49> 8b bc 24 f8 00 00 00 4d 8d 6c 24 88 e8 6f 7c 4a e1 83 f8 fc 0f
-[   17.234020] RSP: 0018:ffffc9000095fa78 EFLAGS: 00010246
-[   17.234021] RAX: ffff888104228600 RBX: ffff888104a7c000 RCX: 0000000000000005
-[   17.234023] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888104a7de10
-[   17.234024] RBP: ffff88810528d000 R08: 0000000000000c24 R09: 0000000000030002
-[   17.234025] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-[   17.234027] R13: ffff88810528b2a8 R14: 0000000000000000 R15: ffff88810528b000
-[   17.234028] FS:  00007f319fcbb8c0(0000) GS:ffff88881a540000(0000) knlGS:0000000000000000
-[   17.234030] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   17.234031] CR2: 00000000000000f8 CR3: 000000010373d000 CR4: 0000000000750ee0
-[   17.234033] PKRU: 55555554
-[   17.234034] note: systemd-udevd[1464] exited with irqs disabled
-[   17.282192] Adding 15624188k swap on /dev/sda1.  Priority:-2 extents:1 across:15624188k SS
-[   17.287243] EXT4-fs (sda2): re-mounted b522b1ae-f9dc-4183-be36-d06ce4b0fec6 r/w. Quota mode: disabled.
-[   17.377499] EXT4-fs (sdb1): mounted filesystem 5bb158ff-89fa-4860-9c06-772eef540132 r/w with ordered data mode. Quota mode: disabled.
-[   17.377534] /dev/home1: Can't open blockdev
-[   17.523358] NET: Registered PF_INET6 protocol family
-[   17.523513] Segment Routing with IPv6
-[   17.523517] In-situ OAM (IOAM) with IPv6
-[   19.738875] r8169 0000:25:00.0 eth0: Link is Up - 1Gbps/Full - flow control rx/tx
-[   19.738892] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Link: https://lore.kernel.org/lkml/ZDiGpCkXOcCm074O@google.com/
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+> >  arch/x86/include/asm/kvm_host.h    |  1 +
+> >  arch/x86/kvm/cpuid.c               | 10 ++++++
+> >  arch/x86/kvm/cpuid.h               |  2 ++
+> >  arch/x86/kvm/vmx/main.c            | 10 ++++++
+> >  arch/x86/kvm/vmx/tdx.c             | 57 ++++++++++++++++++++++++++++--
+> >  arch/x86/kvm/vmx/tdx.h             |  7 ++++
+> >  arch/x86/kvm/vmx/x86_ops.h         |  4 +++
+> >  8 files changed, 90 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index c1a4d29cf4fa..5faa13a31f59 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -20,6 +20,7 @@ KVM_X86_OP(hardware_disable)
+> >  KVM_X86_OP(hardware_unsetup)
+> >  KVM_X86_OP_OPTIONAL_RET0(offline_cpu)
+> >  KVM_X86_OP(has_emulated_msr)
+> > +KVM_X86_OP_OPTIONAL_RET0(vcpu_check_cpuid)
+> >  KVM_X86_OP(vcpu_after_set_cpuid)
+> >  KVM_X86_OP(is_vm_type_supported)
+> >  KVM_X86_OP_OPTIONAL(max_vcpus);
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 68ddb0da31e0..4efd9770963c 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1588,6 +1588,7 @@ struct kvm_x86_ops {
+> >  	void (*hardware_unsetup)(void);
+> >  	int (*offline_cpu)(void);
+> >  	bool (*has_emulated_msr)(struct kvm *kvm, u32 index);
+> > +	int (*vcpu_check_cpuid)(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2, int nent);
+> >  	void (*vcpu_after_set_cpuid)(struct kvm_vcpu *vcpu);
+> >  
+> >  	bool (*is_vm_type_supported)(unsigned long vm_type);
+> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> > index 0142a73034c4..ef7c361883d7 100644
+> > --- a/arch/x86/kvm/cpuid.c
+> > +++ b/arch/x86/kvm/cpuid.c
+> > @@ -414,6 +414,9 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+> >  	}
+> >  
+> >  	r = kvm_check_cpuid(vcpu, e2, nent);
+> > +	if (r)
+> > +		return r;
+> > +	r = static_call(kvm_x86_vcpu_check_cpuid)(vcpu, e2, nent);
+> >  	if (r)
+> >  		return r;
+> 
+> It would be nice to move the static_call into the kvm_check_cpuid() as it is
+> part of the process of checking cpuid. It is good enough for now as
+> kvm_check_cpuid() only has one caller. Think if more caller of
+> kvm_check_cpuid() shows up in the future, they need to move it into
+> kvm_check_cpuid anyway.
+> 
+> >  
+> > @@ -1364,6 +1367,13 @@ int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
+> >  	return r;
+> >  }
+> >  
+> > +struct kvm_cpuid_entry2 *__kvm_find_cpuid_entry2(
+> > +	struct kvm_cpuid_entry2 *entries, int nent, u32 function, u64 index)
+> > +{
+> > +	return cpuid_entry2_find(entries, nent, function, index);
+> > +}
+> > +EXPORT_SYMBOL_GPL(__kvm_find_cpuid_entry2);
+> > +
+> 
+> If evetually, we have to open kvm_cpuid2 when searching the cpuid entries,
+> I would suggest to open it in kvm_find_cpuid_entry2() instead of introducing
+> a new __kvm_find_cpuid_entry2(). It would be nice to let kvm_find_cpuid_entry2
+> () to take entreis and nent in the previou patch.
 
+Makes sense. Consolidated kvm_find_cpuid_entry2(
+struct kvm_cpuid_entry2 *entries, int nent, u32 function, u64 index).
+
+> >  struct kvm_cpuid_entry2 *kvm_find_cpuid_entry2( struct kvm_cpuid2 *cpuid,
+> >  						u32 function, u32 index)
+> >  {
+
+... snip...
+
+> > +int tdx_vcpu_check_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2, int nent)
+> > +{
+> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
+> > +	const struct tdsysinfo_struct *tdsysinfo;
+> > +	int i;
+> > +
+> > +	tdsysinfo = tdx_get_sysinfo();
+> > +	if (!tdsysinfo)
+> > +		return -ENOTSUPP;
+> > +
+> > +	/*
+> > +	 * Simple check that new cpuid is consistent with created one.
+> > +	 * For simplicity, only trivial check.  Don't try comprehensive checks
+> > +	 * with the cpuid virtualization table in the TDX module spec.
+> > +	 */
+> > +	for (i = 0; i < tdsysinfo->num_cpuid_config; i++) {
+> > +		const struct tdx_cpuid_config *config = &tdsysinfo->cpuid_configs[i];
+> > +		u32 index = config->sub_leaf == TDX_CPUID_NO_SUBLEAF ? 0: config->sub_leaf;
+> > +		const struct kvm_cpuid_entry2 *old =
+> > +			__kvm_find_cpuid_entry2(kvm_tdx->cpuid, kvm_tdx->cpuid_nent,
+> > +						config->leaf, index);
+> > +		const struct kvm_cpuid_entry2 *new =
+> > +			__kvm_find_cpuid_entry2(e2, nent, config->leaf, index);
+> > +
+> > +		if (!!old != !!new)
+> > +			return -EINVAL;
+> > +		if (!old && !new)
+> > +			continue;
+> > +
+> > +		if ((old->eax ^ new->eax) & config->eax ||
+> > +		    (old->ebx ^ new->ebx) & config->ebx ||
+> > +		    (old->ecx ^ new->ecx) & config->ecx ||
+> > +		    (old->edx ^ new->edx) & config->edx)
+> > +			return -EINVAL;
+> > +	}
+> > +	return 0;
+> > +}
+> 
+> Guess checkpatch.pl will complain about the length of lines above.
+
+By default, the line is 100 chars. Not 80.
+
+
+> > +
+> >  void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+> >  {
+> >  	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> > @@ -2003,10 +2044,12 @@ static void setup_tdparams_eptp_controls(struct kvm_cpuid2 *cpuid, struct td_par
+> >  	}
+> >  }
+> >  
+> > -static void setup_tdparams_cpuids(const struct tdsysinfo_struct *tdsysinfo,
+> > +static void setup_tdparams_cpuids(struct kvm *kvm,
+> > +				  const struct tdsysinfo_struct *tdsysinfo,
+> >  				  struct kvm_cpuid2 *cpuid,
+> >  				  struct td_params *td_params)
+> >  {
+> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> >  	int i;
+> >  
+> >  	/*
+> > @@ -2014,6 +2057,7 @@ static void setup_tdparams_cpuids(const struct tdsysinfo_struct *tdsysinfo,
+> >  	 * be same to the one of struct tdsysinfo.{num_cpuid_config, cpuid_configs}
+> >  	 * It's assumed that td_params was zeroed.
+> >  	 */
+> > +	kvm_tdx->cpuid_nent = 0;
+> >  	for (i = 0; i < tdsysinfo->num_cpuid_config; i++) {
+> >  		const struct tdx_cpuid_config *config = &tdsysinfo->cpuid_configs[i];
+> >  		/* TDX_CPUID_NO_SUBLEAF in TDX CPUID_CONFIG means index = 0. */
+> > @@ -2035,6 +2079,10 @@ static void setup_tdparams_cpuids(const struct tdsysinfo_struct *tdsysinfo,
+> >  		value->ebx = entry->ebx & config->ebx;
+> >  		value->ecx = entry->ecx & config->ecx;
+> >  		value->edx = entry->edx & config->edx;
+> > +
+> > +		/* Remember the setting to check for KVM_SET_CPUID2. */
+> > +		kvm_tdx->cpuid[kvm_tdx->cpuid_nent] = *entry;
+> > +		kvm_tdx->cpuid_nent++;
+> >  	}
+> >  }
+> >  
+> > @@ -2130,7 +2178,7 @@ static int setup_tdparams(struct kvm *kvm, struct td_params *td_params,
+> >  	td_params->tsc_frequency = TDX_TSC_KHZ_TO_25MHZ(kvm->arch.default_tsc_khz);
+> >  
+> >  	setup_tdparams_eptp_controls(cpuid, td_params);
+> > -	setup_tdparams_cpuids(tdsysinfo, cpuid, td_params);
+> > +	setup_tdparams_cpuids(kvm, tdsysinfo, cpuid, td_params);
+> >  	ret = setup_tdparams_xfam(cpuid, td_params);
+> >  	if (ret)
+> >  		return ret;
+> > @@ -2332,6 +2380,11 @@ static int tdx_td_init(struct kvm *kvm, struct kvm_tdx_cmd *cmd)
+> >  	if (cmd->flags)
+> >  		return -EINVAL;
+> >  
+> > +	kvm_tdx->cpuid = kzalloc(sizeof(init_vm->cpuid.entries[0]) * KVM_MAX_CPUID_ENTRIES,
+> > +				 GFP_KERNEL);
+> > +	if (!kvm_tdx->cpuid)
+> > +		return -ENOMEM;
+> > +
+> >  	init_vm = kzalloc(sizeof(*init_vm) +
+> >  			  sizeof(init_vm->cpuid.entries[0]) * KVM_MAX_CPUID_ENTRIES,
+> >  			  GFP_KERNEL);
+> 
+> kfree(kvm_tdx->cpuid) is required in the error handling path of tdx_td_init().
+
+
+No need. tdx_vm_free() frees it. Not here.
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Isaku Yamahata <isaku.yamahata@gmail.com>
