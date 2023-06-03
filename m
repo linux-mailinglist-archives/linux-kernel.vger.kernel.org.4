@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00700720D21
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F1F720D24
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbjFCCJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 22:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S237134AbjFCCJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 22:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjFCCJ3 (ORCPT
+        with ESMTP id S236889AbjFCCJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:09:29 -0400
+        Fri, 2 Jun 2023 22:09:31 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D16E4D;
-        Fri,  2 Jun 2023 19:09:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4561E4D;
+        Fri,  2 Jun 2023 19:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685758168; x=1717294168;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=H0AeSXOoLm6d+sBF/QPZvpAaFBwHsrKQzLumiIp5WZ4=;
-  b=nScQHy2GwrIYh2HSzMSpCqZfp+83VBGFmGGqbwlRj6Lix0vh7Riwlxz3
-   NCrmpeWWhOdh+rvo1UfUFoQWXMFYVg3dH1XW52WlVsglr2NaQye28pMEZ
-   ZESPt/tpUlfX7WZsIiQWNkuI/1RbhHqcC0Z2U9F6osB2Hh8jgK++wYeO7
-   yevvWKxc1ED8LMGUamAghhezzL7/pDnrXLbUvbFDmvQzY8IHJUZN2wHtA
-   B01zKd+36/KHYZsfr0hekK8+P4OlPPj+stKPaYi1UuqNhPoUizfpKifUc
-   fjXc/Cm2lpcz1/QbqPgHRc4cp9cZyjEyOg3EKwwgX4PF9sJxZ1IcPn7j6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="340649428"
+  t=1685758170; x=1717294170;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=+pAIGJKvRh7qS+esVik2IqS8poW9McX9jF5Ma8+7Pj8=;
+  b=lqTinRtQ8ULE/4OTkxE070wSlpolX5BGls5WXUaysCuKp5AiKdYMm9gH
+   STxV/jipZA8o8Yv//1k/VdLVkVf0kMUBtRC756VrNc9F08l52gsL9rbb6
+   1Iq4fHeoR2vIHHnbMK1fjD3iF0liRJM7casYUx/MayejAySnpHSYU1e+p
+   h4Gy5ktzcVARJ2WK9+4Dw6s3G8YyI4Txt+pXxEpWbp1nFyvcs3OfvDULk
+   ADl6R/ptNsT9S0C6O6+vuA+H8UmKvq5nq6F4QvvgIhiwGyvoeZJjBWUK3
+   5CYNPyoveJKusDamtY0GApOMlkNoKqHRAnUrTetppWLg8h3DWCZUbpaGm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="340649435"
 X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="340649428"
+   d="scan'208";a="340649435"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:09:28 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:09:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="852354408"
+X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="852354411"
 X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="852354408"
+   d="scan'208";a="852354411"
 Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.212.97.230])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:09:26 -0700
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:09:29 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH RFC 0/4] dax: Clean up dax_region references
-Date:   Fri, 02 Jun 2023 19:09:20 -0700
-Message-Id: <20230602-dax-region-put-v1-0-d8668f335d45@intel.com>
+Date:   Fri, 02 Jun 2023 19:09:21 -0700
+Subject: [PATCH RFC 1/4] dax/bus: Fix leaked reference in
+ alloc_dax_region()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANCgemQC/x2NQQqDQAxFryJZNzATodpuCz2A29JFZkx1Fp1KY
- osg3r2jy8f7j7+CiSYxuFYrqPySpU8u4E8VxJHzIJj6wkCOand2hD0vqDKUGU7fGRuK1F583cT
- goUSBTTAo5zju2ZttFt3FpPJKy/H0gO5+g+e2/QFT0YkefgAAAA==
+Message-Id: <20230602-dax-region-put-v1-1-d8668f335d45@intel.com>
+References: <20230602-dax-region-put-v1-0-d8668f335d45@intel.com>
+In-Reply-To: <20230602-dax-region-put-v1-0-d8668f335d45@intel.com>
 To:     Dan Williams <dan.j.williams@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
         Dave Jiang <dave.jiang@intel.com>,
@@ -60,11 +60,11 @@ Cc:     Yongqiang Liu <liuyongqiang13@huawei.com>,
         nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
         Ira Weiny <ira.weiny@intel.com>
 X-Mailer: b4 0.13-dev-9a8cd
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685758165; l=1350;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685758165; l=1545;
  i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=H0AeSXOoLm6d+sBF/QPZvpAaFBwHsrKQzLumiIp5WZ4=;
- b=PjRZrjIiB58OFu6WAQdcDL3Xejhg8ixrdE5f89yqGxPlQfRinmET22nVsPyNarG24GyR2xccf
- dB0c8u+VKbMANqBhmPQqFxwwEe0qVe05gadf2596QxTAPXXTClSoZD8
+ bh=+pAIGJKvRh7qS+esVik2IqS8poW9McX9jF5Ma8+7Pj8=;
+ b=23++xNTRjcMP4T5vDFqSFZUyo1YkZSoemfUGTjIUMhcqbFSXmYr5cAd6MW2Wr6cszXEqh1tkf
+ NkYUKeFaToRARLPp8vO6Zk8hwWlXeXg+vJ7nCwlHcCYJKPsUiD/qPNW
 X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
  pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -77,40 +77,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In[*] Yongqiang Liu presented a fix to the reference counting associated
-with the dax_region in hmem.  At the time it was thought the patch was
-unnecessary because dax_region_unregister() call would properly handle
-reference counting.
+kref_init() initializes the ref count to 1.  An extra kref is taken on
+the dax_region to be used by the caller.  If devm_add_action_or_reset()
+fails this extra reference is leaked.
 
-Upon closer inspection Paul noted that this was not the case.  In fact
-Yongqiang's patch was correct but there were other issues as well.
+Drop the extra reference on error.
 
-This series includes Yongqiang's patch and breaks up additional fixes
-which can be backported if necessary followed by a final patch which
-simplifies the reference counting.
-
-[*] https://lore.kernel.org/all/20221203095858.612027-1-liuyongqiang13@huawei.com/
-
+Fixes: d7fe1a67f658 ("dax: add region 'id', 'size', and 'align' attributes")
+Cc: Dan Williams <dan.j.williams@intel.com
+Suggested-by: Paul Cassella <cassella@hpe.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
-Ira Weiny (3):
-      dax/bus: Fix leaked reference in alloc_dax_region()
-      dax/cxl: Fix refcount leak in cxl_dax_region_probe()
-      dax/bus: Remove unnecessary reference in alloc_dax_region()
+ drivers/dax/bus.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Yongqiang Liu (1):
-      dax/hmem: Fix refcount leak in dax_hmem_probe()
+diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+index 227800053309..899e29d107b4 100644
+--- a/drivers/dax/bus.c
++++ b/drivers/dax/bus.c
+@@ -583,6 +583,7 @@ static void dax_region_unregister(void *region)
+ 	dax_region_put(dax_region);
+ }
+ 
++/* The dax_region reference returned should be dropped with dax_region_put() */
+ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+ 		struct range *range, int target_node, unsigned int align,
+ 		unsigned long flags)
+@@ -625,9 +626,13 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+ 		return NULL;
+ 	}
+ 
++	/* Hold a reference to return to the caller */
+ 	kref_get(&dax_region->kref);
+-	if (devm_add_action_or_reset(parent, dax_region_unregister, dax_region))
++	if (devm_add_action_or_reset(parent, dax_region_unregister,
++				     dax_region)) {
++		kref_put(&dax_region->kref, dax_region_free);
+ 		return NULL;
++	}
+ 	return dax_region;
+ }
+ EXPORT_SYMBOL_GPL(alloc_dax_region);
 
- drivers/dax/bus.c       | 6 +++++-
- drivers/dax/cxl.c       | 7 +------
- drivers/dax/hmem/hmem.c | 7 +------
- drivers/dax/pmem.c      | 8 +-------
- 4 files changed, 8 insertions(+), 20 deletions(-)
----
-base-commit: 921bdc72a0d68977092d6a64855a1b8967acc1d9
-change-id: 20230602-dax-region-put-72c289137cb1
-
-Best regards,
 -- 
-Ira Weiny <ira.weiny@intel.com>
+2.40.0
 
