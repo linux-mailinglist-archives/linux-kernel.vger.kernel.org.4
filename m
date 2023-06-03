@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F8B720F36
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 12:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876EE720F4D
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 12:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjFCK2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 06:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S230238AbjFCKh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 06:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjFCK2E (ORCPT
+        with ESMTP id S229661AbjFCKhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 06:28:04 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD081F5
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 03:28:02 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so4451749a12.0
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 03:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685788081; x=1688380081;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uTfEVykiA9a5JMQx/MTE8KQh4y/HxIlvoyXh87G4vjw=;
-        b=Z4y1JuOWcHNdxfvqtVWQZHxCoTdO3tNgb/nPan405XHw1I4shPgErmHHeyEMRelp5g
-         p+omMXFPMaDTQJPUzPoi9tjsiXJVX4kolQ7DcvwcxGPBcKm62ZroQJn63A1AAR02lnvk
-         rQXAm3HKrzLLKdXNm1KLw1n5luvjxv1IStkLdXejvWUPkAnT7kxwbl5CEg1V04zg2Ly2
-         6HNRc2MkHh+JGki8bmL7DAmGdXmgfuHOmTZpYaDohlYTLpq5OGWf0tN1bCKMWFJKXuKO
-         Co7L0JQMHcLZfB99T9MztmbfqGDp49Yp7oGV/2E9GLWySVO7eIDnpwaFJzom/R5OCBHd
-         lKEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685788081; x=1688380081;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uTfEVykiA9a5JMQx/MTE8KQh4y/HxIlvoyXh87G4vjw=;
-        b=cH0FnmODSzJkp218CPLOqzYo4/Wer+54YpNBe9LDDi0tSCKpxsj/UOLOof0OhLunSx
-         MBn7aISJeiK40ui3e6ku3ng21zlNAcg3P9ikAQP+CLIOXKyinEhB0IzC20BDwMyTb1UV
-         Q7gdSB14mqe3XSTGKzWXS+LlswuvLlEzZ+Dk5ukxDMhfT41ftthFIqCMxtIFUwZO6+aU
-         odypDcrKn9YptTorWceq9Ld4VOKerJFg7zg3c4UXXyqOz+2Rh9o6q1voWalOWcbIXk3K
-         TfFDeIOUIiC+dHtVPaWP8Hyqkv1XaP3x8TnA34TrHtBeX9e/IQwwp1f+sOXnuSlqqRpb
-         Rvew==
-X-Gm-Message-State: AC+VfDy4m+XvXdwnlnoEVglodkhy8Hb57v5L+jb1j8d1wKuGwVEg2JjT
-        +Bwgh506oHOLoQopQ+SI9TXV0Q==
-X-Google-Smtp-Source: ACHHUZ5nm1DquVUVP7bIFxKfwWMjSOcM1pZkWya1hPAuODm5Dy6DGX133tCXVsEMhIwlRoMBcMvXJg==
-X-Received: by 2002:a17:906:3047:b0:974:9b83:7523 with SMTP id d7-20020a170906304700b009749b837523mr1048655ejd.76.1685788081137;
-        Sat, 03 Jun 2023 03:28:01 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170906070b00b00974c32c9a75sm1556369ejb.216.2023.06.03.03.27.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 03:28:00 -0700 (PDT)
-Message-ID: <d98c54c9-22e0-c2c3-5ad0-0baf7f51c438@linaro.org>
-Date:   Sat, 3 Jun 2023 12:27:58 +0200
+        Sat, 3 Jun 2023 06:37:47 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 103811B3
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 03:37:43 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Cx5fD2F3tk_OkDAA--.8508S3;
+        Sat, 03 Jun 2023 18:37:42 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxJLH2F3tkkzCHAA--.22741S2;
+        Sat, 03 Jun 2023 18:37:42 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>, Li Yi <liyi@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v7 0/7] drm/etnaviv: add pci device driver support
+Date:   Sat,  3 Jun 2023 18:37:35 +0800
+Message-Id: <20230603103742.3041649-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/3] dt-bindings: net: phy: Document support for
- external PHY clk
-Content-Language: en-US
-To:     Detlev Casanova <detlev.casanova@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230602182659.307876-1-detlev.casanova@collabora.com>
- <20230602182659.307876-3-detlev.casanova@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230602182659.307876-3-detlev.casanova@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxJLH2F3tkkzCHAA--.22741S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFyUur4xWryxXrW7ZrW7XFb_yoW8Aw4kpF
+        47JFyYyry0vrW2kw17AFn5JFy3G3WxWF9Yk3srt3sI9w45AFyjvryDKa15Jr9xXr1fJr12
+        qr1akry3WF1UArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxU4eMKDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 20:26, Detlev Casanova wrote:
-> Ethern PHYs can have external an clock that needs to be activated before
-> probing the PHY.
-> 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  Documentation/devicetree/bindings/net/ethernet-phy.yaml | 6 ++++++
+There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
+PCI device, and it has 2D and 3D cores in the same core. Thus, this patch
+set is trying to add PCI device driver support to etnaviv.
 
-With fixes from Andrew:
+v6:
+	* Fix build issue on system without CONFIG_PCI enabled
+v7:
+	* Add a separate patch for the platform driver rearrangement (Bjorn)
+	* Switch to runtime check if the GPU is dma coherent or not (Lucas)
+	* Add ETNAVIV_PARAM_GPU_COHERENT to allow userspace to query (Lucas)
+	* Remove etnaviv_gpu.no_clk member (Lucas)
+	* Various Typos and coding style fixed (Bjorn)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Sui Jingfeng (7):
+  drm/etnaviv: add a dedicated function to register an irq handler
+  drm/etnaviv: add a dedicated function to get various clocks
+  drm/etnaviv: add dedicated functions to create and destroy platform
+    devices
+  drm/etnaviv: add helpers for private data construction and destruction
+  drm/etnaviv: allow bypass component framework
+  drm/etnaviv: add driver support for the PCI devices
+  drm/etnaviv: add support for the dma coherent device
 
-Best regards,
-Krzysztof
+ drivers/gpu/drm/etnaviv/Kconfig             |   9 +
+ drivers/gpu/drm/etnaviv/Makefile            |   2 +
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c       | 228 +++++++++++++++-----
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h       |  10 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c       |  22 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |   7 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c       | 170 ++++++++++-----
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h       |   9 +
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c   |  75 +++++++
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h   |   9 +
+ include/uapi/drm/etnaviv_drm.h              |   1 +
+ 11 files changed, 422 insertions(+), 120 deletions(-)
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
+
+-- 
+2.25.1
 
