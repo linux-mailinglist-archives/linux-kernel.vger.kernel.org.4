@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8C5720F0C
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 11:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D24E720F28
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 12:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjFCJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 05:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S230172AbjFCKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 06:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFCJyN (ORCPT
+        with ESMTP id S229628AbjFCKUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 05:54:13 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9126D197;
-        Sat,  3 Jun 2023 02:54:12 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-76c64da0e46so91065139f.0;
-        Sat, 03 Jun 2023 02:54:12 -0700 (PDT)
+        Sat, 3 Jun 2023 06:20:16 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF616BB;
+        Sat,  3 Jun 2023 03:20:13 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3078cc99232so2728964f8f.3;
+        Sat, 03 Jun 2023 03:20:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685786052; x=1688378052;
+        d=gmail.com; s=20221208; t=1685787612; x=1688379612;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b9xipDnELMe57gSqssIZi9FLmAA8jeVRZYMJPoPrxg4=;
-        b=kkYOW1SzfgoWqKPdEgMSbmivVcpNOeio6G3ZuKksI5gE1blkS4pYhZX/4hmQPUNYCH
-         QN8lITQ2kg/p5zud5rz0le8IOGz0EFh1IgL4iCaS+geQYF0BiEgUEefRvo9TUnbrodOU
-         YxrKzjMx1/j5uC6WJfMo27KkpXH/jASq5UE0SffRauwtZcpJZcye9QuTmSZ9I8wZlIjK
-         xg5v/DIHhuNBlbbuXI/WawHP8cr8yNELHvBM+xhrBjA9aTaWccgQWiKbniMxDHfiUVE4
-         WIB/K733nIiI/lbjejVW06Ym7o+jiBW1i6KcYXlC5AY3QVV4TVSBCy3wN5cLoo2WdRWh
-         EUTg==
+        bh=WiyEzTB76d51V4yyJkufi8HLIk7ZWcK0vs+TVmZ8HT4=;
+        b=AJ7gci2EWVpp70ajhdJ3QJ6xAv3nQL5YuZ4bHDZ//uc+x87g78koUZlCSKKvEiMZRO
+         d5//72GoLPQR/iHBbN/MeAzPWZNXH+PbGlj2YnC0Y7fRXtABbtu3qRulzOq/10YQXhyX
+         +FkEjnFdcvhkKNGyHYTc7i9g6EfJeDXtUR+dZsJoRu6C+2FJt2qc+ZPqCdBTVM9Uw1Re
+         drgBGSd8+r7Dq69/Nt9fnLH66ZMmLI+3PnAoa2IDvTmHkqGTheB4hgK2l96YxBMoYHmQ
+         YFePNc3L0kOkAJWP2YOM4gseEKopHQ5I8lQgV3aoQ7Ys0hGO5yhML0P2UgeRMWMEym75
+         01nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685786052; x=1688378052;
+        d=1e100.net; s=20221208; t=1685787612; x=1688379612;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b9xipDnELMe57gSqssIZi9FLmAA8jeVRZYMJPoPrxg4=;
-        b=WwdxIN2LZprqPDMK4/iz0W7oSO/pV4uSRRuSmhxOiOj2G6PTj0bYR7EvILbMyMjZtX
-         nYf8O1gO9uSByaw4AOz45we2bzBvSY5YdQ/K27ZeA/GUgUCRwLmOHXtOMAh7AnXxlpBZ
-         KgKY8YNRy03d7d6EkL36VUK0S53SdqiAkoM7Ff/Fo8hSNlTyRqneyL7iDZedylPMItxC
-         DSw0uQW+yAS2EyJqiLqNOVRSnoA+i5jn4NsJGWVGsxmElY2TTBwcJgM29oKZtbligTEg
-         Y/QGBhgfDUszUrN0pwBQSYpMon8iDojSPPm6LSsQ8xqbqL7GcJq+qd2ueF+3uyqpq16F
-         Z2kQ==
-X-Gm-Message-State: AC+VfDzQGKnHQD4rkJ1p4gftu10ASjuU5+LWstcV1MLGxh71UdlYIGAN
-        5Tp82EixaDKv28okoKQcCfHAZG0U5EAzYaOnxtMg6C2g7xYlqQ==
-X-Google-Smtp-Source: ACHHUZ5K1M1p621p0RZX4zAG24hSSGTbnRZFwB57yPelWOhodJUFzHVBb66cXKC7xkj2wubkpK2akuthLugiannw56E=
-X-Received: by 2002:a92:280a:0:b0:33d:6536:46e1 with SMTP id
- l10-20020a92280a000000b0033d653646e1mr3261440ilf.23.1685786051898; Sat, 03
- Jun 2023 02:54:11 -0700 (PDT)
+        bh=WiyEzTB76d51V4yyJkufi8HLIk7ZWcK0vs+TVmZ8HT4=;
+        b=EVwSH6AstYqJZkzSAuZBIWASD0abwdeBnHuflYPQ2hmkj1t8j9bpOeyUGbAEYQ4AFe
+         GzEnSK/5u7dae9ABB6NOF4E2b+EuyjPG3sXZPvNUALfXk+vj80oqBgwjxJxPVRoT6mC4
+         PNHamX07BaArgUYxDfX5sgl/8lx4+ic0nIUa8rJJuuNSw2mOi+64DUOjg6lX/0Scjm2D
+         AP+BK4jPaXlRgr5ftZdFJhAazrBfqdYlNpl1JUpDf9lArCviVfI1q9UAPG6AG5Hhgo11
+         XrTYKFY/gFmJsAeU6nxNGj5ajvnAdLr7x8DXnjmvEKvOMEkZtwYGD7LWmW+tJdsDUI4u
+         3+6w==
+X-Gm-Message-State: AC+VfDzAe/N//IZN1+sUSNKDMUpn2KD57MLXcpqtERHmSN0hVge+Jzys
+        Lcn6/iQeA3JDi47Mij8VYiUA13ZRX7G3lsrRcEE=
+X-Google-Smtp-Source: ACHHUZ5Al2tHisbt7qIrU5MUZ5CmcUjy6JTHvp1qO5H49bwETMbflHI6IvsQHd/Fd58ki71ubfosqZn236HSA2PesW8=
+X-Received: by 2002:a05:6000:885:b0:30a:b4e1:a89f with SMTP id
+ cs5-20020a056000088500b0030ab4e1a89fmr2180137wrb.58.1685787612229; Sat, 03
+ Jun 2023 03:20:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230601221151.670-1-mario.limonciello@amd.com>
 In-Reply-To: <20230601221151.670-1-mario.limonciello@amd.com>
-From:   Nathan Schulte <nmschulte@gmail.com>
-Date:   Sat, 3 Jun 2023 04:54:00 -0500
-Message-ID: <CAO78Khpii4RxTdEdy22bzGzAwLYje3XnJWXfdHiLud9c1TuzgQ@mail.gmail.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sat, 3 Jun 2023 18:19:59 +0800
+Message-ID: <CAJsYDVKoB1AEL47Ud+8jbxMrbZedM0i9p44-PLQTFR9PKLfy6A@mail.gmail.com>
 Subject: Re: [PATCH v3] ACPI: resource: Remove "Zen" specific match and quirks
 To:     Mario Limonciello <mario.limonciello@amd.com>
 Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
         linux-kernel@vger.kernel.org, ofenfisch@googlemail.com,
         wse@tuxedocomputers.com, adam.niederer@gmail.com, adrian@freund.io,
         jirislaby@kernel.org, Renjith.Pananchikkal@amd.com,
-        anson.tsao@amd.com, Richard.Gong@amd.com,
-        Chuanhong Guo <gch981213@gmail.com>, evilsnoo@proton.me,
-        ruinairas1992@gmail.com
+        anson.tsao@amd.com, Richard.Gong@amd.com, evilsnoo@proton.me,
+        ruinairas1992@gmail.com, nmschulte@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This seems to work as well for the ASUS TUF Gaming A16 Advantage
-Edition FA617XT; both Linux 6.3 and 6.4.  Disabling the ITE5570 EC
-[I/O] is required for a "truly" functional experience, of course.
+Hi!
 
-On Thu, Jun 1, 2023 at 5:12=E2=80=AFPM Mario Limonciello
+On Fri, Jun 2, 2023 at 6:12=E2=80=AFAM Mario Limonciello
 <mario.limonciello@amd.com> wrote:
 >
 > commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
@@ -137,107 +134,28 @@ On Thu, Jun 1, 2023 at 5:12=E2=80=AFPM Mario Limonciello
 > Everyone else,
 > Please test. If you have problems with this applied, please share
 > an acpidump and dmesg either on a bug or to me privately.
-> ---
->  drivers/acpi/resource.c | 60 -----------------------------------------
->  1 file changed, 60 deletions(-)
->
-> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-> index 0800a9d77558..1dd8d5aebf67 100644
-> --- a/drivers/acpi/resource.c
-> +++ b/drivers/acpi/resource.c
-> @@ -470,52 +470,6 @@ static const struct dmi_system_id asus_laptop[] =3D =
-{
->         { }
->  };
->
-> -static const struct dmi_system_id lenovo_laptop[] =3D {
-> -       {
-> -               .ident =3D "LENOVO IdeaPad Flex 5 14ALC7",
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -                       DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
-> -               },
-> -       },
-> -       {
-> -               .ident =3D "LENOVO IdeaPad Flex 5 16ALC7",
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -                       DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
-> -               },
-> -       },
-> -       { }
-> -};
-> -
-> -static const struct dmi_system_id tongfang_gm_rg[] =3D {
-> -       {
-> -               .ident =3D "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Ste=
-llaris 15 Gen4 AMD",
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
-> -               },
-> -       },
-> -       { }
-> -};
-> -
-> -static const struct dmi_system_id maingear_laptop[] =3D {
-> -       {
-> -               .ident =3D "MAINGEAR Vector Pro 2 15",
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"=
-),
-> -                       DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
-> -               }
-> -       },
-> -       {
-> -               .ident =3D "MAINGEAR Vector Pro 2 17",
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"=
-),
-> -                       DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
-> -               },
-> -       },
-> -       { }
-> -};
-> -
->  static const struct dmi_system_id lg_laptop[] =3D {
->         {
->                 .ident =3D "LG Electronics 17U70P",
-> @@ -539,10 +493,6 @@ struct irq_override_cmp {
->  static const struct irq_override_cmp override_table[] =3D {
->         { medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, fal=
-se },
->         { asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false=
- },
-> -       { lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, tru=
-e },
-> -       { lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, tr=
-ue },
-> -       { tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, tru=
-e },
-> -       { maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, tr=
-ue },
->         { lg_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false }=
-,
->  };
->
-> @@ -562,16 +512,6 @@ static bool acpi_dev_irq_override(u32 gsi, u8 trigge=
-ring, u8 polarity,
->                         return entry->override;
->         }
->
-> -#ifdef CONFIG_X86
-> -       /*
-> -        * IRQ override isn't needed on modern AMD Zen systems and
-> -        * this override breaks active low IRQs on AMD Ryzen 6000 and
-> -        * newer systems. Skip it.
-> -        */
-> -       if (boot_cpu_has(X86_FEATURE_ZEN))
-> -               return false;
-> -#endif
-> -
->         return true;
->  }
->
-> --
-> 2.34.1
->
+
+I was expecting this patch to break my keyboard again but
+that didn't happen. I'm on the latest UEFI from Lenovo.
+By dumping ACPI APIC I found that there's this:
+
+[0C4h 0196   1]                Subtable Type : 02 [Interrupt Source Overrid=
+e]
+[0C5h 0197   1]                       Length : 0A
+[0C6h 0198   1]                          Bus : 00
+[0C7h 0199   1]                       Source : 01
+[0C8h 0200   4]                    Interrupt : 00000001
+[0CCh 0204   2]        Flags (decoded below) : 0007
+                                    Polarity : 3
+                                Trigger Mode : 1
+
+I don't have a dump of the ACPI table from older UEFIs anymore.
+
+Tested on Lenovo Thinkbook 14G4+ ARA with the latest
+UEFI (J6CN45WW).
+
+Tested-by: Chuanhong Guo <gch981213@gmail.com>
+
+--=20
+Regards,
+Chuanhong Guo
