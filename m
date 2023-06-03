@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9D1720EC6
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2387720ECA
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 10:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236990AbjFCI3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 04:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S232328AbjFCIjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 04:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236976AbjFCI24 (ORCPT
+        with ESMTP id S229654AbjFCIjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 04:28:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BCAA6
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685780889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l/3htB5uc/OVmwcp2TUB+HB2hf7Xjfr9dm8bokABVSg=;
-        b=WlE0B5+amHziiyakxBC73ku+hq3NOrJrxDClCxzPni4B5oP2/dCN7OEEx79cg401oXSXFN
-        vJR3MIXrAs88MX/+hI9EuptaCUyGC/1tBPOQh1Jf4pNKOrukfhsbnlBXR+c6HBFKmGlBBg
-        Z5WMtrVkim85YP48uTRJxRzMYqNtzLw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-180-L6RrAAqqM1Ojjb42u7nbPg-1; Sat, 03 Jun 2023 04:28:06 -0400
-X-MC-Unique: L6RrAAqqM1Ojjb42u7nbPg-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30ae42628cfso1431324f8f.3
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 01:28:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685780885; x=1688372885;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l/3htB5uc/OVmwcp2TUB+HB2hf7Xjfr9dm8bokABVSg=;
-        b=VdtLmicKYvbntGMdP2VRfeAfZgkvJ0e+qjGjKop8Zzv23bnOzOpEaBoDyA3M0N8IaU
-         RNc6yosy5eToTIITt4SO1q5NO8J8eiL6AGhce5NJe+R5W/fKSaonzLFV7Xuxn1oUz1Sq
-         f75937CCjI5UPDggFuWtRrX4IXt7Eqb/9OQYlwlzM54PC8vzEG7RxyQoDM5d7povjXOF
-         9pQwXob1GMLiRq6LFGgwVLhtL5WhgphCrhhiiS5sLI34D1UxZ+YCyDtWNkM/FtbEfFJi
-         SnKtANdwuBAhK8E97slVMdxbFLIJQ044swOY7D04fQbA/HTy4i3zCgNasgnGGHilZtla
-         K3Fw==
-X-Gm-Message-State: AC+VfDx+ZyP/140w06JVOjr57t1rBdDjNrntPtu0DwwQL1o909xErkBT
-        8wCshnTG3Iij7yTa9Gf0Bez0vRlWNbYL/hWTsra1Gg65gdYcuWiU/MHFOgZCVK8KOsWlveVrOfl
-        oxt49BG7lZYO6J/1WLoR1DBBA
-X-Received: by 2002:a7b:c3cb:0:b0:3f6:76e:6049 with SMTP id t11-20020a7bc3cb000000b003f6076e6049mr3156162wmj.1.1685780885015;
-        Sat, 03 Jun 2023 01:28:05 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4WNohNnuxjyqTy5UlAW/2/uI+WGbgepGRvlLf8YeXkBXpHZhu3ExWgAP7lG3XWOQUoZ4xnig==
-X-Received: by 2002:a7b:c3cb:0:b0:3f6:76e:6049 with SMTP id t11-20020a7bc3cb000000b003f6076e6049mr3156145wmj.1.1685780884585;
-        Sat, 03 Jun 2023 01:28:04 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
-        by smtp.gmail.com with ESMTPSA id n24-20020a7bc5d8000000b003f17848673fsm4295963wmk.27.2023.06.03.01.27.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 01:27:58 -0700 (PDT)
-Message-ID: <a4fbc191-9acb-5db8-a375-96c0c1ba3fcd@redhat.com>
-Date:   Sat, 3 Jun 2023 10:27:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 11/12] selftests/mm: fix missing UFFDIO_CONTINUE_MODE_WP
- and similar build failures
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-12-jhubbard@nvidia.com>
- <7a999b80-e266-2b7e-f198-869b1ac7cde7@redhat.com>
- <993773ab-7f5b-241f-b532-ee79a03b371f@nvidia.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <993773ab-7f5b-241f-b532-ee79a03b371f@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sat, 3 Jun 2023 04:39:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F31F180
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 01:39:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4A6960ACD
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 08:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C829C433D2;
+        Sat,  3 Jun 2023 08:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685781555;
+        bh=5oyiVDfccpGv2hmK2deVVQ8wi3z4MiLKb2Ddfn8bqjo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uylY5JgTaGj66a0uUJEklgf8Ch5Vii+rG5gQRprkqtks3BQJaBDV2srGVMHb+sh6F
+         kxqk6onpH0svDDxJ0PyD2fxtFbOdZJBySccFcwM0Dk0Ie0ooU3m3XeHz0WDJlvk8eT
+         ZMSOVSXeBmuHCooHb5DhnHjgpbbWFDLToIknAGTYFKLybItJaaxcowAZmhfGmRKG4s
+         GhWrNlC7sBHoJxx13V4xUeWPNsJtufS4Mwp3VarhI4j4SRqAcx9rfcRF519Hifghba
+         yLKHzGgPsesA/R398L4ElZ0OWHTRV7KR/FSz5t2MTzhMyCdkzpLoCNoRsC5Bgi7rT+
+         /F7idz3u8X7Fg==
+Received: from [37.166.197.171] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q5Mn3-002WrG-2M;
+        Sat, 03 Jun 2023 09:39:13 +0100
+Date:   Sat, 03 Jun 2023 09:39:11 +0100
+Message-ID: <87wn0lndn4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kristina Martsenko <kristina.martsenko@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/11] KVM: arm64: initialize HCRX_EL2
+In-Reply-To: <20230509142235.3284028-2-kristina.martsenko@arm.com>
+References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
+        <20230509142235.3284028-2-kristina.martsenko@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 37.166.197.171
+X-SA-Exim-Rcpt-To: kristina.martsenko@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, broonie@kernel.org, luis.machado@arm.com, vladimir.murzin@arm.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.06.23 00:20, John Hubbard wrote:
-> On 6/2/23 03:23, David Hildenbrand wrote:
-> ...
->> Unfortunately, that seems to be the ugly way to handle this because
->> including the in-tree headers seems to not work and I yet haven't
->> figured out why (there were some changes back and forth so I lost track).
+On Tue, 09 May 2023 15:22:25 +0100,
+Kristina Martsenko <kristina.martsenko@arm.com> wrote:
 > 
-> Yes, ugly, and based on Muhammad's response, I plan on dropping this patch
-> entirely, in fact.
+> ARMv8.7/9.2 adds a new hypervisor configuration register HCRX_EL2.
+> Initialize the register to a safe value (all fields 0), to be robust
+> against firmware that has not initialized it. This is also needed to
+> ensure that the register is reinitialized after a kexec by a future
+> kernel.
+> 
+> In addition, move SMPME setup over to the new flags, as it would
+> otherwise get overridden. It is safe to set the bit even if SME is not
+> (uniformly) supported, as it will write to a RES0 bit (having no
+> effect), and SME will be disabled by the cpufeature framework.
+> (Similar to how e.g. the API bit is handled in HCR_HOST_NVHE_FLAGS.)
+> 
+> Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
 
-Ah, finally I know why it sometimes worked and sometimes didn't ... yes, 
-let's document that somehow.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-Maybe we can even warn from the Makefile when the in-tree headers are 
-not installed yet?
+	M.
 
 -- 
-Cheers,
-
-David / dhildenb
-
+Without deviation from the norm, progress is not possible.
