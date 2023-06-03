@@ -2,139 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C24A72117B
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 20:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67BC721162
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 19:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjFCSIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 14:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S229622AbjFCRfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 13:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFCSIb (ORCPT
+        with ESMTP id S229520AbjFCRfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 14:08:31 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D092132
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 11:08:28 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 3EED7820DBD;
-        Sat,  3 Jun 2023 18:08:27 +0000 (UTC)
-Received: from pdx1-sub0-mail-a268.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A29DB820D2F;
-        Sat,  3 Jun 2023 18:08:26 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1685815706; a=rsa-sha256;
-        cv=none;
-        b=mqiBEqoLdgQSfFAH9HGsvYvoYsGU4qCpqLa7QLF+UneX5Py6UKFYUEuvvSZmXdG7iP/xFW
-        08fmhhXnkp0xsho3R1r+3bzpuE7PhceO4JiJbB1ya6VqbSK+EtYm0bZpw/vUwlYhFni68Z
-        1XaLvChPjsL2bXsSJeUr7rpMSC+V9IS8C9oWpOBlqBOx9o7D+qDN0YSNRQOVFg5fm5LK6Y
-        v5gtg0Y+soZTjc+Mexs1WRF9inff15tAXfsqlclkY470BQVBpxI/Q6rSP2Ovl0MhIxmCfN
-        a/QJfJI+dImuYOrjZdFO6mbhRwV3xyoYs4PbQe5T9W6OO/GJQDZrJ+ik8sGXOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1685815706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=edsV1yfGqFjC4oidIwYZYQtUalRFvmfjBeoSyFbKiFs=;
-        b=B4UyH0OcAj2BLrPG4w6Hkp/1V8+sU1Tkpd2V5RILYST9QI3qri0kDJ2hxOgmq0XTRWWNuJ
-        pOmPXBASlFpCxxT8hn+7v8J/IIFbGvZPOhuQIRPn/PTKYaht4ok3t2+CBHkiQan84J+fPJ
-        oQC8Bfz10tGHIUDyMAOIkJ8dyjznimXR48NUToBbqLtBGn1Fg6eLmHWpL6kE2qdHDDb6EL
-        YUQ/t+MprjRDft1mN5eUOZgEmz9Mzf+R1UNlIYou0RqHsxzR2ftPNff3F9WzomatSUjQbm
-        +uOqdtB8BB0/qCy+h4NxZbi1CDGnA6+htPDb+5iuXbhaH1e2Ke6ItB5bsZAFcQ==
-ARC-Authentication-Results: i=1;
-        rspamd-5f966895c-mxj6h;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Wiry-Juvenile: 67d3880475b78c39_1685815707049_473911325
-X-MC-Loop-Signature: 1685815707049:1656340810
-X-MC-Ingress-Time: 1685815707049
-Received: from pdx1-sub0-mail-a268.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.104.253.229 (trex/6.8.1);
-        Sat, 03 Jun 2023 18:08:27 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a268.dreamhost.com (Postfix) with ESMTPSA id 4QYSXn5zk3z2p;
-        Sat,  3 Jun 2023 11:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1685815706;
-        bh=edsV1yfGqFjC4oidIwYZYQtUalRFvmfjBeoSyFbKiFs=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Yd8T0hZS6rdOv1n4oPbiyI4EemMWfjrkJ1flOLco/mKWuxNy9BsZ43usrwJZ8quI5
-         ZLkmuLfL/Bj3DYXJ1+FP4fJ4QpJXe8ztSVCCifzY9c17UyMKwlOkmbOoMc+mkqEX2E
-         UtkfzCxMGv47wPgQpyFT9AQ2dVvBJp1nzCGWfNtO7yfH1bZHpDE7r4Ld1x0meo3rgf
-         JsfpKb+StEM8DeqLmcm7yq9QRVvB2ZIVXfjUfJvLCjtXCf7hLNmrXHRdD8Rr+SLfLd
-         OM+Y+DHMyJYFzHGW6RncCEO5p15DfE/zQJYuR4B2d2vvuFidClKEbzQFM6umpKjWz3
-         RyHjMz7xRlR9A==
-Date:   Sat, 3 Jun 2023 10:34:14 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com
-Subject: Re: [PATCH 2/2] torture: Add lock_torture_writer_fifo module param
-Message-ID: <zzteweboj3hmif5akuxxokyvu6truhy3ygh6w5nwb26zxjlqgs@uqzxhzx3eim7>
-References: <20230602220221.600774-1-jstultz@google.com>
- <20230602220221.600774-2-jstultz@google.com>
- <c2415658-de0e-4497-889a-d5401cbc134a@paulmck-laptop>
+        Sat, 3 Jun 2023 13:35:31 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB5B8
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 10:35:30 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7748b80141aso194615439f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 10:35:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685813729; x=1688405729;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1SeEqkLJd2frZFJDII6RbpgUseFm/YFNnAbddZInMM=;
+        b=LbejzA1EJORo12PgMNn2twZKhJBlXXPUcaV+8NR9boxRZ/FVU0rpIqlSldwa2A8Acb
+         r42n0Jl44o3gw10lSg3bDeSfm4tpSdfAAeLP/t2FRh7jPuEQEushbFgjNChLHUhwtZd+
+         NB36GxbLHPPAR+9KAu00eDeB/hM9WJYnQm++O0UVdCKv7Nna6euTW2CdanRe/KkqmBLU
+         usgXN2HUowrDV0zKada6rl2IgK34l5A2CwFDXExNQYc1Th3vUDsl/GN/M/Ljh+tNMznZ
+         LV2OrYBL/I/jVrvt1FtTir32iepwzPCfiwHxagM57Mw86I32Swrxblpwq2VUHzhdTETb
+         WywQ==
+X-Gm-Message-State: AC+VfDz8R2kZcjQN2ir5FrYAh8WunvS2XSdUvCT4EM82FKOIOp2+nPFV
+        lHVGqHF8Yec5SFSsAoRM3hfpq+T7whNAgt17xOxF3OJ3ETmt
+X-Google-Smtp-Source: ACHHUZ6PNRvZf4egyXcxaFKUR1h4B17KMjEgcTa+XrD1cnuMT+zQb+7Ml3iHK9opb9E2/04Wa5dQuukbfkq8mgbBCabRKXfYrl2T
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <c2415658-de0e-4497-889a-d5401cbc134a@paulmck-laptop>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:9641:0:b0:41d:72e0:ba18 with SMTP id
+ c59-20020a029641000000b0041d72e0ba18mr2202217jai.0.1685813729544; Sat, 03 Jun
+ 2023 10:35:29 -0700 (PDT)
+Date:   Sat, 03 Jun 2023 10:35:29 -0700
+In-Reply-To: <000000000000eccdc505f061d47f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081d40a05fd3d18ed@google.com>
+Subject: Re: [syzbot] [udf] WARNING in invalidate_bh_lru
+From:   syzbot <syzbot+9743a41f74f00e50fc77@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, brauner@kernel.org, hch@infradead.org,
+        hch@lst.de, jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liushixin2@huawei.com,
+        nogikh@google.com, syzkaller-bugs@googlegroups.com, tytso@mit.edu,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 03 Jun 2023, Paul E. McKenney wrote:
+syzbot has bisected this issue to:
 
->On Fri, Jun 02, 2023 at 10:02:10PM +0000, John Stultz wrote:
->> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
->>
->> Modifies locktorture writer to run as RT task.
->>
->> To use it:
->> insmod /lib/modules/torture.ko random_shuffle=1 lock_torture_writer_fifo=1
->>                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
->> insmod /lib/modules/locktorture.ko torture_type=mutex_lock rt_boost=1 rt_boost_factor=50 nested_locks=3
->>
->> This patch has been helpful to uncover issues with the proxy-execution
->> seires.
->>
->> Cc: Davidlohr Bueso <dave@stgolabs.net>
->> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Josh Triplett <josh@joshtriplett.org>
->> Cc: Joel Fernandes <joel@joelfernandes.org>
->> Cc: Juri Lelli <juri.lelli@redhat.com>
->> Cc: Valentin Schneider <vschneid@redhat.com>
->> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> Cc: kernel-team@android.com
->> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> [jstultz: Include header change to build, reword commit message]
->> Signed-off-by: John Stultz <jstultz@google.com>
->
->Queued and pushed, thank you all!
+commit f6e2c20ca7604e6a267c93a511d19dda72573be1
+Author: Liu Shixin <liushixin2@huawei.com>
+Date:   Fri Apr 29 21:38:04 2022 +0000
 
-Both look good to me. Feel free to add my:
+    fs: sysv: check sbi->s_firstdatazone in complete_read_super
 
-Acked-by: Davidlohr Bueso <dave@stgolabs.net>
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13eed371280000
+start commit:   4ecd704a4c51 tpm, tpm_tis: correct tpm_tis_flags enumerati..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=101ed371280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17eed371280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
+dashboard link: https://syzkaller.appspot.com/bug?extid=9743a41f74f00e50fc77
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ebf8c9280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12df6ab6280000
+
+Reported-by: syzbot+9743a41f74f00e50fc77@syzkaller.appspotmail.com
+Fixes: f6e2c20ca760 ("fs: sysv: check sbi->s_firstdatazone in complete_read_super")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
