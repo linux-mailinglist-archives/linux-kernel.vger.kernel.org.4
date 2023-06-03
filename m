@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8AD720E17
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA055720E22
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 08:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjFCGUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 02:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S231535AbjFCGbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 02:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFCGUm (ORCPT
+        with ESMTP id S229523AbjFCGbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 02:20:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9DE58;
-        Fri,  2 Jun 2023 23:20:40 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QY8qn0xkpzTkkG;
-        Sat,  3 Jun 2023 14:20:21 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 3 Jun 2023 14:20:35 +0800
-Message-ID: <eb35999d-dc81-44d1-fbe2-a7aa6d5f01b3@huawei.com>
-Date:   Sat, 3 Jun 2023 14:20:34 +0800
+        Sat, 3 Jun 2023 02:31:08 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A25E5A;
+        Fri,  2 Jun 2023 23:31:03 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3536UZFb041869;
+        Sat, 3 Jun 2023 01:30:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685773835;
+        bh=ISHvgcwYKUrLcIU7PQXGJdRhfqIZfS1CSg2P3P+bGN4=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=fQ82EM8ePo5cOzLzMPXzXxWPxRzb6TxB//IF0o14hkChrkJ9Helt4K4M9DI/7mxQj
+         nBrkjrRM+mMcUOrGT/RRZKuPa0V1HGPny64R3ePa9nDgQGyHBUomgOGU8h1ryzk9tC
+         USHDWsH9F16jHDr3G4ZTMvLHAuFhzqarifVbRkIg=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3536UZ9U017373
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 3 Jun 2023 01:30:35 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 3
+ Jun 2023 01:30:34 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sat, 3 Jun 2023 01:30:35 -0500
+Received: from [10.249.131.186] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3536UJu4023813;
+        Sat, 3 Jun 2023 01:30:19 -0500
+Message-ID: <5fef1d49-19f7-884d-68dd-668bd23251e6@ti.com>
+Date:   Sat, 3 Jun 2023 12:00:17 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [syzbot] Monthly ext4 report (May 2023)
+ Thunderbird/102.11.2
+CC:     <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net] net: stmmac: dwmac-qcom-ethqos: fix a regression on
+ EMAC < 3
 Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>
-CC:     syzbot <syzbot+list5ea887c46d22b2acf805@syzkaller.appspotmail.com>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>,
-        yangerkun <yangerkun@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <000000000000834af205fce87c00@google.com>
- <df5e7e7d-875c-8e5d-1423-82ec58299b1b@huawei.com>
- <20230602210639.GA1154817@mit.edu>
- <d9be3fbf-023c-ac55-5097-ea3f43a946b4@huawei.com>
- <20230603043028.GE1128875@mit.edu>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230603043028.GE1128875@mit.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+References: <20230602190455.3123018-1-brgl@bgdev.pl>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230602190455.3123018-1-brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/3 12:30, Theodore Ts'o wrote:
-> On Sat, Jun 03, 2023 at 10:05:44AM +0800, Baokun Li wrote:
->> There are many sources of syzkaller issues, and the patches I send out
->> to fix syzkaller issues add Reported-by to all but the ones that fix issues
->> reported by our internal syzbot.
->> However, there may be multiple syzbot reports for the same issue.
-> Yes, that happens a lot especially for Lockdep reports; depending on
-> how the reproducer triggers the locks in which order, there can often
-> be multiple different lockdep signatures, and Syzkaller can't tell
-> that they are all the same thing.
->
-> I tend to focus on syzbot reproducers on the upstream Linux instance,
-> rather than the Android-5.15 syzkaller instance.  And that allows me
-> to use the ext4 subsystem dashboard available at:
->
-> 	https://syzkaller.appspot.com/upstream/s/ext4
->
-> It's against this list of reports that the Monthly ext4 report is
-> generated.  So if people who are submitting fixes against syzkaller
-> reports, it would be nice if they were to check the ext4 dashboard
-> above to look for syzbot reports that might be also relevant to your
-> patch.
->
-> Thanks,
->
-> 					- Ted
->
-OK, later to fix any ext4 issue, I will check if the issue is in the ext4
-subsystem dashboard.
 
-Thanks!
+
+On 03-06-2023 00:34, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> We must not assign plat_dat->dwmac4_addrs unconditionally as for
+> structures which don't set them, this will result in the core driver
+> using zeroes everywhere and breaking the driver for older HW. On EMAC < 2
+> the address should remain NULL.
+> 
+> Fixes: b68376191c69 ("net: stmmac: dwmac-qcom-ethqos: Add EMAC3 support")
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+> index 16a8c361283b..f07905f00f98 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+> @@ -644,7 +644,8 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+>  	plat_dat->fix_mac_speed = ethqos_fix_mac_speed;
+>  	plat_dat->dump_debug_regs = rgmii_dump;
+>  	plat_dat->has_gmac4 = 1;
+> -	plat_dat->dwmac4_addrs = &data->dwmac4_addrs;
+> +	if (ethqos->has_emac3)
+> +		plat_dat->dwmac4_addrs = &data->dwmac4_addrs;
+>  	plat_dat->pmt = 1;
+>  	plat_dat->tso_en = of_property_read_bool(np, "snps,tso");
+>  	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
+
 -- 
-With Best Regards,
-Baokun Li
-.
+Regards,
+Siddharth.
