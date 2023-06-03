@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B179720D22
-	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7CE720D29
+	for <lists+linux-kernel@lfdr.de>; Sat,  3 Jun 2023 04:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbjFCCJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 2 Jun 2023 22:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S236527AbjFCCLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 2 Jun 2023 22:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbjFCCJn (ORCPT
+        with ESMTP id S229802AbjFCCLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:09:43 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F734E63;
-        Fri,  2 Jun 2023 19:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685758178; x=1717294178;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=0hJMjkHkP89rfwhPu6kPTDLYbVJWhkUm9t7eLmXGvlc=;
-  b=gTnsQsfrDhHK+u61fuRVfWkt7DSFABgpPsCiZbjOfuyrAT5uWfZXjUBs
-   57xEMK/UoDKjzT1M0pWR65IJwvYJzmwEX+5aSR46CbW64cdiNxZCDXz5u
-   Ea0RZUw+kXC8mso7phyxEPRJ4sfJo89ztaUgM2E8kEodnJXua9+rkT9uG
-   J6YAx/RZDyTRN7AWdjkt4yZlvOTbuQdPiun/XxE+9slL4ZujuV3DCg4UG
-   3ZJaeAEfDpV0NZatN6gZSRxpjdMTCrJxOMAcwdsPT6hMn31EB4Qxm0wUS
-   KyLuD1U5nlB1tmDl1yhJXkOEs/43CZ5DJ723wychtKwWy5WlT7YsZzsmy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="340649457"
-X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="340649457"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:09:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10729"; a="852354422"
-X-IronPort-AV: E=Sophos;i="6.00,214,1681196400"; 
-   d="scan'208";a="852354422"
-Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.212.97.230])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2023 19:09:36 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Fri, 02 Jun 2023 19:09:24 -0700
-Subject: [PATCH RFC 4/4] dax/bus: Remove unnecessary reference in
- alloc_dax_region()
+        Fri, 2 Jun 2023 22:11:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAF0E4D
+        for <linux-kernel@vger.kernel.org>; Fri,  2 Jun 2023 19:11:22 -0700 (PDT)
+Received: from [192.168.2.99] (109-252-150-34.dynamic.spd-mgts.ru [109.252.150.34])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E24B56600010;
+        Sat,  3 Jun 2023 03:11:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685758280;
+        bh=AEiivb5STUIsnv46nBIbrOdDbVAIQqj2qIRUT1z+E1U=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=mFShlImOeL/NAWI56P4wzSdK529nNkSIwJYFpygQ9my2QPRTHaeKwKzSG+S6dhn+L
+         Ah1oTEY6MofA6LWr0LuPm0DsmQMtXuq6zkE2zuqVfzwyRovmuusUECgYC6WB6SNkDn
+         KOBbE+raamIdVg3QHJalIG7Dw6bokc07rH3eAmuU19hdpmA2v/s2CjK7u9K8kyWIPD
+         6VFDiUsWeHhN4eJqehfajX97dqldITPPKdW+Qk1qrfEJGJxq2WgFIFmIOio+nEw12E
+         GiPX3ijhF7QUpFbYnA/WxFV9ZFbtyJ0QPJstpm0P8X4PBC5j9K3pLrRiWlAX+V8ekA
+         k1+nLQAN+RIEw==
+Message-ID: <0a45ae24-61e2-f691-6f72-42257084919f@collabora.com>
+Date:   Sat, 3 Jun 2023 05:11:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 0/3] Add sync object UAPI support to VirtIO-GPU driver
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        Emil Velikov <emil.velikov@collabora.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230602-dax-region-put-v1-4-d8668f335d45@intel.com>
-References: <20230602-dax-region-put-v1-0-d8668f335d45@intel.com>
-In-Reply-To: <20230602-dax-region-put-v1-0-d8668f335d45@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Yongqiang Liu <liuyongqiang13@huawei.com>,
-        Paul Cassella <cassella@hpe.com>, linux-kernel@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-X-Mailer: b4 0.13-dev-9a8cd
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685758165; l=3727;
- i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=0hJMjkHkP89rfwhPu6kPTDLYbVJWhkUm9t7eLmXGvlc=;
- b=h+bWgJ3qSIdj/EAGT1xs+38BAs20p/pFFmvnjS5xGpX1ZfEYrwqiL/b98IYQKtcO0Pyp94reN
- TH2URAb3gZBAYVKG0d2P5cvNhWCAN5Z7GnIaqBSgYazRlbKWajzaBFp
-X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
- pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,112 +64,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the callers to alloc_dax_region() maintain the device associated
-with the dax_region until the dax_region is referenced by the dax_dev
-they are creating.
+> Dmitry Osipenko (3):
+>   drm/virtio: Refactor and optimize job submission code path
+>   drm/virtio: Wait for each dma-fence of in-fence array individually
 
-Remove the extra kref that alloc_dax_region() takes.  Add a comment to
-clarify the reference counting should additional callers be grown later.
-
-Cc: Yongqiang Liu <liuyongqiang13@huawei.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Paul Cassella <cassella@hpe.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- drivers/dax/bus.c       | 13 ++++++-------
- drivers/dax/cxl.c       |  4 ----
- drivers/dax/hmem/hmem.c |  3 ---
- drivers/dax/pmem.c      |  8 +-------
- 4 files changed, 7 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-index 899e29d107b4..ed34d8aa6b26 100644
---- a/drivers/dax/bus.c
-+++ b/drivers/dax/bus.c
-@@ -583,7 +583,11 @@ static void dax_region_unregister(void *region)
- 	dax_region_put(dax_region);
- }
- 
--/* The dax_region reference returned should be dropped with dax_region_put() */
-+/*
-+ * Caller is responsible to ensure the parent device stays live while the
-+ * returned dax_region is in use.  Or as is typically the case, a separate
-+ * reference should be taken.
-+ */
- struct dax_region *alloc_dax_region(struct device *parent, int region_id,
- 		struct range *range, int target_node, unsigned int align,
- 		unsigned long flags)
-@@ -626,13 +630,8 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
- 		return NULL;
- 	}
- 
--	/* Hold a reference to return to the caller */
--	kref_get(&dax_region->kref);
--	if (devm_add_action_or_reset(parent, dax_region_unregister,
--				     dax_region)) {
--		kref_put(&dax_region->kref, dax_region_free);
-+	if (devm_add_action_or_reset(parent, dax_region_unregister, dax_region))
- 		return NULL;
--	}
- 	return dax_region;
- }
- EXPORT_SYMBOL_GPL(alloc_dax_region);
-diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-index bbfe71cf4325..5ad600ee68b3 100644
---- a/drivers/dax/cxl.c
-+++ b/drivers/dax/cxl.c
-@@ -29,10 +29,6 @@ static int cxl_dax_region_probe(struct device *dev)
- 		.size = range_len(&cxlr_dax->hpa_range),
- 	};
- 	dev_dax = devm_create_dev_dax(&data);
--
--	/* child dev_dax instances now own the lifetime of the dax_region */
--	dax_region_put(dax_region);
--
- 	return IS_ERR(dev_dax) ? PTR_ERR(dev_dax) : 0;
- }
- 
-diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
-index b4831a3d3934..46e1b343f26e 100644
---- a/drivers/dax/hmem/hmem.c
-+++ b/drivers/dax/hmem/hmem.c
-@@ -39,9 +39,6 @@ static int dax_hmem_probe(struct platform_device *pdev)
- 		.size = region_idle ? 0 : range_len(&mri->range),
- 	};
- 	dev_dax = devm_create_dev_dax(&data);
--
--	/* child dev_dax instances now own the lifetime of the dax_region */
--	dax_region_put(dax_region);
- 	return IS_ERR(dev_dax) ? PTR_ERR(dev_dax) : 0;
- }
- 
-diff --git a/drivers/dax/pmem.c b/drivers/dax/pmem.c
-index f050ea78bb83..a4f016d7f4f5 100644
---- a/drivers/dax/pmem.c
-+++ b/drivers/dax/pmem.c
-@@ -13,7 +13,6 @@ static struct dev_dax *__dax_pmem_probe(struct device *dev)
- 	int rc, id, region_id;
- 	resource_size_t offset;
- 	struct nd_pfn_sb *pfn_sb;
--	struct dev_dax *dev_dax;
- 	struct dev_dax_data data;
- 	struct nd_namespace_io *nsio;
- 	struct dax_region *dax_region;
-@@ -65,12 +64,7 @@ static struct dev_dax *__dax_pmem_probe(struct device *dev)
- 		.pgmap = &pgmap,
- 		.size = range_len(&range),
- 	};
--	dev_dax = devm_create_dev_dax(&data);
--
--	/* child dev_dax instances now own the lifetime of the dax_region */
--	dax_region_put(dax_region);
--
--	return dev_dax;
-+	return devm_create_dev_dax(&data);
- }
- 
- static int dax_pmem_probe(struct device *dev)
+Applied these two patches to misc-next. The syncobj patch will wait for
+the turnip Mesa MR.
 
 -- 
-2.40.0
+Best regards,
+Dmitry
 
