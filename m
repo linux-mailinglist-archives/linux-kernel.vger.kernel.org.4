@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1887214F7
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 07:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0D57214F2
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 07:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbjFDFpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 01:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S230257AbjFDFp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 01:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjFDFpL (ORCPT
+        with ESMTP id S230097AbjFDFpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 01:45:11 -0400
+        Sun, 4 Jun 2023 01:45:12 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC09FD
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 22:45:07 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 180145C011C;
-        Sun,  4 Jun 2023 01:45:07 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05724E3
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 22:45:09 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 68DCE5C0111;
+        Sun,  4 Jun 2023 01:45:08 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 04 Jun 2023 01:45:07 -0400
+  by compute3.internal (MEProxy); Sun, 04 Jun 2023 01:45:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
          h=cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685857507; x=
-        1685943907; bh=JXJ2NslYvRvgyn5YNav5urVf+K2fXWuI2M0Mevtt7tE=; b=I
-        ScD5GIrWiztYox8MM7twV5QDUCP8m7sHLqt9ppAGB3Iirq9eNw7GtczB5aLwpYiM
-        Ny2xTcx9WU3uFsuK/HpX1xKbxKoNA2RoZjhsw6UqNfJgFQwRYgww3scsz2ci5ZD1
-        1KwlkD8vcDHo6q0dMsR6eiXSeN2EJaWWPQE9KpVGiALasMYokMWlsw/0HhdVvZ+i
-        d9ZCasfLMwM30UwaYaM8jmuxjzZLasISUON6KC/bSO5pcTvmRXWutf60Fer4eZdq
-        gYAi59KstK54vrMg27bfw61PY8WS5LFvy+L2ghvN1Ux6AgGRinkJS6NVC7rNX6JP
-        VZtAzdOlywrPgIWopjbfQ==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685857508; x=
+        1685943908; bh=8Dgw6YabWHeE3yFvx/mYzF63i5Jthx10ANgrdir9jFg=; b=c
+        8VkNef3khD1nmcuYxU0YMDaeIkjKmM6/dQ1C78y+R1DdGXEVzX6duY9f9yy65bA3
+        QOUsLgIYTFRK6BeZHtsaGnbIfMrbuj2MTtnYD581VSqcMqWhbWi987VHOObzcj0X
+        HAFs0yNmqKS+PyjNUrFVRImSH7YijYlkhjQxiVfAJdQAIfak+fgTPOld9HvQRslS
+        DrhMip0HfOkbDDxT0yph/t1khcHD1T54Ig/FgB6bEacwYruzxtwg4p7Sm3r/KdlK
+        qHOJVKNf2/f3UeJGcPIwbPre+PowOUphnziy/uP7DUWSKRZrCPYrrIMUrHn7F48P
+        mD9vL4W1riC3oXA1/+qVA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:content-type
         :date:date:feedback-id:feedback-id:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
         :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1685857507; x=1685943907; bh=J
-        XJ2NslYvRvgyn5YNav5urVf+K2fXWuI2M0Mevtt7tE=; b=hswlGVHWgKOEG9WNF
-        19pfyFY2rDxvHhAf/w2EqJmzdl3EAncc8p0SXXw8mCJu79O24N3EgwTnHjSts1CV
-        VW7E5Uv0BlJR2YOv6wZzbboS941eCdypicIV17KXtxWVj6QuikOhRa+357teFSSy
-        8OjaCU1TNIQGhEo7lfITARLncXDvqF8Y3yvUTkbojZ3gKbr7INu8EbKYgG1HBnzZ
-        JPww3gnssE3ASb2IWwPpqAULqosKvNqSkqgoXZVg1eFrzd6qsl3Z3MKdF9YLlAQ3
-        csYg6s+l6zMRZZejRkmnhmEWf7XOdyTt2DvUSTxrlv4iyyv+dW+gb7VdCWyJAYNQ
-        oi5zw==
-X-ME-Sender: <xms:4iR8ZCR_A39O_PvmrLRnwmvJkIF68WBOlqBgmC2Y3qeXUvfYYS00rw>
-    <xme:4iR8ZHyW3e3MCREa64jojZxQ5-PHyGbLeq1qDDE88-_XKq4LfCHNIvsp2T2opVmmx
-    8czF0tK06kW0MKPfSo>
-X-ME-Received: <xmr:4iR8ZP3SPJZUndLz6zMdsbB9jp_Fykd3Hs5bcaY_RjwTrK8cHUKeypGRMIz-VfXWvo0Ih9drubazi5_7F0CXDPoH7dk1WJ-zXJVQ-QhJHF8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeliedguddtudcutefuodetggdotefrod
+        :x-me-sender:x-sasl-enc; s=fm1; t=1685857508; x=1685943908; bh=8
+        Dgw6YabWHeE3yFvx/mYzF63i5Jthx10ANgrdir9jFg=; b=rUWG8i8nOUhPylllv
+        5T9v78GAfyD+Pt8BFDUwCMaTvVnwD9GghX03WFuysDoa69Ql1KHd7Ogpk18kyWvj
+        az0EUW3TFPzfT9rmS6aFuTmdutWE/nheL9jrAgSkG2ovt9A2X/GGf2bh7Hqr5eVB
+        7rbm2ogery0tw1DAmmJo1YIl7kFLue2+lq3eNVl0kCvUkX+5JEQvBHHw0dZ3batz
+        BpROmzHieiaSq8v+TX3tgu5WX1qNPGEScG3qOlbgeyG6pIV7ccIbg4C98fBK+1A1
+        vmkGtFxR4KbTtS1W6jAwTu7ki7yte6te9w8GE6OuaLAu9qhcuIvxcxLQcPAuhQmp
+        qrOcg==
+X-ME-Sender: <xms:5CR8ZNa76eQXyIUT9e-QFrRKS5dBZkZlJY4Rb-E7fxgktQ3SHd9KpQ>
+    <xme:5CR8ZEZahXvfClBKdkx1dYVgLqw_8AqidF0rT8Pc5ANnH9r1TYC98_WDEzZDMMsGO
+    lHOOeXM5C1No1IJ1KI>
+X-ME-Received: <xmr:5CR8ZP-rykrPuokG6X8OBhujoD4q3ymkmwHk4HySpj8JP8lsyRg8NzPPTJkQNmYObEHGWQLaNO-Wg2cm2ISqOPLrFT9L1bXnlcO87rQFRhg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeliedguddttdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghk
     rghshhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeevfefffe
     ektefgveegfeelheffhfeujedtjeevtefhkeevkedtjeejvddtjefhjeenucevlhhushht
-    vghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhise
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhise
     hsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:4iR8ZOCPlMm9ZBAN5JEy7aAz6OPxuGa9VpmMK8YT4EfXb7ykRfxKlg>
-    <xmx:4iR8ZLhGSGwuOLCu-i9hbkNKLQXRUX7T7fMENm0xJ-TSgfBs_EWspQ>
-    <xmx:4iR8ZKoI1kzpt5GoC8xYAGIFZvuZSY73y9cTrPIMa7KkZUqZpPHDVQ>
-    <xmx:4yR8ZLJywO6vjFUkQXOmrobD506JzFWW6Lcoa9xX4TSQoYqb4HGaVA>
+X-ME-Proxy: <xmx:5CR8ZLrByeTLgT6nlWR8MkBfszt4OjUmgR1fFbIndQ2YIeXmX1N_zg>
+    <xmx:5CR8ZIpcsM1osDqlGuawdNA-jI_9OcMH0t5vinWHFyM4DazF-YxXMw>
+    <xmx:5CR8ZBT_WYMHSKst6EJg3VwpN60UtvDrxXT5KHRKQQ1sVMBzYhuE7w>
+    <xmx:5CR8ZPSpG-p-1GtXBTBumhIiy8g5jnS5WCuZqf7wXMSqa2UgBN0m9w>
 Feedback-ID: ie8e14432:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 4 Jun 2023 01:45:05 -0400 (EDT)
+ 4 Jun 2023 01:45:07 -0400 (EDT)
 From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
 To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/9] firewire: ohci: use devres for content of configuration ROM
-Date:   Sun,  4 Jun 2023 14:44:50 +0900
-Message-Id: <20230604054451.161076-9-o-takashi@sakamocchi.jp>
+Subject: [PATCH 9/9] firewire: ohci: release buffer for AR req/resp contexts when managed resource is released
+Date:   Sun,  4 Jun 2023 14:44:51 +0900
+Message-Id: <20230604054451.161076-10-o-takashi@sakamocchi.jp>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230604054451.161076-1-o-takashi@sakamocchi.jp>
 References: <20230604054451.161076-1-o-takashi@sakamocchi.jp>
@@ -83,83 +83,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 1394 OHCI driver allocates DMA coherent buffer to transfer content
-of configuration ROM.
+The 1394 OHCI driver allocates several non-coherent DMA buffers for AR
+request and response contexts. The buffers are mapped to kernel virtual
+address (VMA) so that the first page locates after the last page. Even
+when large payload of packet is handled crossing the boundary of buffers,
+the driver operates continuously on VMA.
 
-This commit utilizes managed device resource to maintain the lifetime of
-buffer.
+No kernel API is provided for this kind of mapping, while it is possible
+to release the buffer when PCI device is going to be released.
+
+This commit moves the call of release helper function to the callback
+function of release resources.
 
 Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
- drivers/firewire/ohci.c | 27 +++++++++------------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
+ drivers/firewire/ohci.c | 31 ++++++++++++++-----------------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/firewire/ohci.c b/drivers/firewire/ohci.c
-index 21eb13ea4dad..298667963538 100644
+index 298667963538..7e88fd489741 100644
 --- a/drivers/firewire/ohci.c
 +++ b/drivers/firewire/ohci.c
-@@ -2052,8 +2052,7 @@ static void bus_reset_work(struct work_struct *work)
- 	spin_unlock_irq(&ohci->lock);
+@@ -677,6 +677,9 @@ static void ar_context_release(struct ar_context *ctx)
+ 	struct device *dev = ctx->ohci->card.device;
+ 	unsigned int i;
  
- 	if (free_rom)
--		dma_free_coherent(ohci->card.device, CONFIG_ROM_SIZE,
--				  free_rom, free_rom_bus);
-+		dmam_free_coherent(ohci->card.device, CONFIG_ROM_SIZE, free_rom, free_rom_bus);
++	if (!ctx->buffer)
++		return;
++
+ 	vunmap(ctx->buffer);
  
- 	log_selfids(ohci, generation, self_id_count);
+ 	for (i = 0; i < AR_BUFFERS; i++) {
+@@ -3556,9 +3559,13 @@ static inline void pmac_ohci_off(struct pci_dev *dev) {}
+ static void release_ohci(struct device *dev, void *data)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev);
++	struct fw_ohci *ohci = pci_get_drvdata(pdev);
  
-@@ -2385,10 +2384,8 @@ static int ohci_enable(struct fw_card *card,
- 	 */
+ 	pmac_ohci_off(pdev);
  
- 	if (config_rom) {
--		ohci->next_config_rom =
--			dma_alloc_coherent(ohci->card.device, CONFIG_ROM_SIZE,
--					   &ohci->next_config_rom_bus,
--					   GFP_KERNEL);
-+		ohci->next_config_rom = dmam_alloc_coherent(ohci->card.device, CONFIG_ROM_SIZE,
-+							    &ohci->next_config_rom_bus, GFP_KERNEL);
- 		if (ohci->next_config_rom == NULL)
- 			return -ENOMEM;
++	ar_context_release(&ohci->ar_response_ctx);
++	ar_context_release(&ohci->ar_request_ctx);
++
+ 	dev_notice(dev, "removed fw-ohci device\n");
+ }
  
-@@ -2480,9 +2477,8 @@ static int ohci_set_config_rom(struct fw_card *card,
- 	 * ohci->next_config_rom to NULL (see bus_reset_work).
- 	 */
+@@ -3643,17 +3650,17 @@ static int pci_probe(struct pci_dev *dev,
+ 	err = ar_context_init(&ohci->ar_response_ctx, ohci, PAGE_SIZE/4,
+ 			      OHCI1394_AsRspRcvContextControlSet);
+ 	if (err < 0)
+-		goto fail_arreq_ctx;
++		return err;
  
--	next_config_rom =
--		dma_alloc_coherent(ohci->card.device, CONFIG_ROM_SIZE,
--				   &next_config_rom_bus, GFP_KERNEL);
-+	next_config_rom = dmam_alloc_coherent(ohci->card.device, CONFIG_ROM_SIZE,
-+					      &next_config_rom_bus, GFP_KERNEL);
- 	if (next_config_rom == NULL)
- 		return -ENOMEM;
+ 	err = context_init(&ohci->at_request_ctx, ohci,
+ 			   OHCI1394_AsReqTrContextControlSet, handle_at_packet);
+ 	if (err < 0)
+-		goto fail_arrsp_ctx;
++		return err;
  
-@@ -2515,9 +2511,10 @@ static int ohci_set_config_rom(struct fw_card *card,
- 	spin_unlock_irq(&ohci->lock);
+ 	err = context_init(&ohci->at_response_ctx, ohci,
+ 			   OHCI1394_AsRspTrContextControlSet, handle_at_packet);
+ 	if (err < 0)
+-		goto fail_arrsp_ctx;
++		return err;
  
- 	/* If we didn't use the DMA allocation, delete it. */
--	if (next_config_rom != NULL)
--		dma_free_coherent(ohci->card.device, CONFIG_ROM_SIZE,
--				  next_config_rom, next_config_rom_bus);
-+	if (next_config_rom != NULL) {
-+		dmam_free_coherent(ohci->card.device, CONFIG_ROM_SIZE, next_config_rom,
-+				   next_config_rom_bus);
-+	}
+ 	reg_write(ohci, OHCI1394_IsoRecvIntMaskSet, ~0);
+ 	ohci->ir_context_channels = ~0ULL;
+@@ -3663,10 +3670,8 @@ static int pci_probe(struct pci_dev *dev,
+ 	ohci->n_ir = hweight32(ohci->ir_context_mask);
+ 	size = sizeof(struct iso_context) * ohci->n_ir;
+ 	ohci->ir_context_list = devm_kzalloc(&dev->dev, size, GFP_KERNEL);
+-	if (!ohci->ir_context_list) {
+-		err = -ENOMEM;
+-		goto fail_arrsp_ctx;
+-	}
++	if (!ohci->ir_context_list)
++		return -ENOMEM;
  
- 	/*
- 	 * Now initiate a bus reset to have the changes take
-@@ -3753,12 +3750,6 @@ static void pci_remove(struct pci_dev *dev)
+ 	reg_write(ohci, OHCI1394_IsoXmitIntMaskSet, ~0);
+ 	ohci->it_context_support = reg_read(ohci, OHCI1394_IsoXmitIntMaskSet);
+@@ -3680,10 +3685,8 @@ static int pci_probe(struct pci_dev *dev,
+ 	ohci->n_it = hweight32(ohci->it_context_mask);
+ 	size = sizeof(struct iso_context) * ohci->n_it;
+ 	ohci->it_context_list = devm_kzalloc(&dev->dev, size, GFP_KERNEL);
+-	if (!ohci->it_context_list) {
+-		err = -ENOMEM;
+-		goto fail_arrsp_ctx;
+-	}
++	if (!ohci->it_context_list)
++		return -ENOMEM;
+ 
+ 	ohci->self_id     = ohci->misc_buffer     + PAGE_SIZE/2;
+ 	ohci->self_id_bus = ohci->misc_buffer_bus + PAGE_SIZE/2;
+@@ -3720,10 +3723,6 @@ static int pci_probe(struct pci_dev *dev,
+ 
+  fail_msi:
+ 	pci_disable_msi(dev);
+- fail_arrsp_ctx:
+-	ar_context_release(&ohci->ar_response_ctx);
+- fail_arreq_ctx:
+-	ar_context_release(&ohci->ar_request_ctx);
+ 
+ 	return err;
+ }
+@@ -3750,8 +3749,6 @@ static void pci_remove(struct pci_dev *dev)
  
  	software_reset(ohci);
  
--	if (ohci->next_config_rom && ohci->next_config_rom != ohci->config_rom)
--		dma_free_coherent(ohci->card.device, CONFIG_ROM_SIZE,
--				  ohci->next_config_rom, ohci->next_config_rom_bus);
--	if (ohci->config_rom)
--		dma_free_coherent(ohci->card.device, CONFIG_ROM_SIZE,
--				  ohci->config_rom, ohci->config_rom_bus);
- 	ar_context_release(&ohci->ar_request_ctx);
- 	ar_context_release(&ohci->ar_response_ctx);
+-	ar_context_release(&ohci->ar_request_ctx);
+-	ar_context_release(&ohci->ar_response_ctx);
  	pci_disable_msi(dev);
+ 
+ 	dev_notice(&dev->dev, "removing fw-ohci device\n");
 -- 
 2.39.2
 
