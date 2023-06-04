@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FFF7215A0
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9817215A1
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbjFDIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 04:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
+        id S230506AbjFDIi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 04:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjFDIhe (ORCPT
+        with ESMTP id S229879AbjFDIiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 04:37:34 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F9DA;
-        Sun,  4 Jun 2023 01:37:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-307d58b3efbso3219730f8f.0;
-        Sun, 04 Jun 2023 01:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685867851; x=1688459851;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/RW4TbjF3qcw7YmxPDw6GL8ZaIlrSZn8h5/QVYrrPp8=;
-        b=EbrdZUBU0Mji0L16MSXokIObTH9SYRfFZ9gA94biGdVBS0x4jvyCuw88nbgVmLXeA/
-         dBIZXIkJM4USV1s1QzfjXqPlQ/mkCcSFfHkMxq+V4UbBCW0jCU86+n2p7b7lwz/SHUbB
-         6oBwcfFk8E7dJ74MnTPLfF8tL0+RwRLT2hwbIogBWWwm/iQeXR4mqAdOEqG2qEjzJ4gK
-         mp74hHZR1+daJ1JAGQX947XUR6kYqFMaA6Kmp6GKKYgdiTNglrCsD/P3W9m/uQ0kXYBo
-         Bb7sXpIjaqG3xkkf/ZXKvxX7PwFOj+mznLXJ5s44FskVQxyhUz6ViuYAfzoqxKjsZRTZ
-         UK3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685867851; x=1688459851;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/RW4TbjF3qcw7YmxPDw6GL8ZaIlrSZn8h5/QVYrrPp8=;
-        b=B/x1gx2qNUmN+0HqqGPV3cAjwxQ3vBwPpsurJ8ADckyqDoZXSIFSmCDuc1fbtnwGPl
-         yDFsKem7xVpi7+QLZwDHrWAMdaxPk6K8Nc5NTTRHv0NrDjoW8DSzpydZ9FHUSIu9YnzC
-         n/jclClIRJ39d/HSxf3zNTpj3ro74XdCVxqgxuqmOgS455R/d8LYDsK4Y7pjZjHOZW1q
-         4z48qyLni9elup3kMEATakLZVoMIJHpxp6rznCx0Q656NjRok9L/7k9vj0pMGrOW4yxr
-         aNqDtbkrWeHKAqz80b47niHOt3ta1MFhjD63EuDOVeANYFaoZbSXSj56mp76oKUTVs4l
-         XvjQ==
-X-Gm-Message-State: AC+VfDzDya47MGKHkG0y6qszGi0Mz1LJ0nAX+6KycIDhCGCKRdvgIFoj
-        je6Y5C24mMbhXt3k3VVi7L5auwuPYvI=
-X-Google-Smtp-Source: ACHHUZ6L4JF0jW2JC0FX5JeRF+CeIhBoPYgf9/5C1p+83UpPGn6iPCqD+sXs46KxF7D+/zjqgYrtuw==
-X-Received: by 2002:a5d:58e3:0:b0:309:31ac:6663 with SMTP id f3-20020a5d58e3000000b0030931ac6663mr2692479wrd.16.1685867851220;
-        Sun, 04 Jun 2023 01:37:31 -0700 (PDT)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id j6-20020a5d6186000000b002ffbf2213d4sm6466544wru.75.2023.06.04.01.37.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 01:37:30 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 09:37:29 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/35] 5.15.115-rc3 review
-Message-ID: <ZHxNSQkgrZsyV6OT@debian>
-References: <20230603143543.855276091@linuxfoundation.org>
+        Sun, 4 Jun 2023 04:38:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E526DA
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 01:38:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF8D860ADE
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DB9C433AC
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685867902;
+        bh=KnudFN4jNcEutuFxf6DNoM8rGgneiw4Lp3ZjTygxhr8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jk1iDIy0AZGsHq3dxk3q2oDmG16NwRs5ys11ZUg7tkxZNROZOXoUuq0VsTqcMZm6V
+         YCbPG7GkVbBBsB0FHun7uKhoD74dasItwdpbhFfagSlLDv8twFRhkMN5qvSPQ1vnAE
+         bZ/KyWN7MzT51MByrCVeh6PRcjEAwDaOOHc1WPE3oaex9HnQKwsgj3FOoPbaxnoIaT
+         iyMKe461BKSsGM5zYiumtRtrq3fkADzQKw5R6nkBoInt+b9DUBtxJYTMsmFVecI6Zp
+         ppgECVckS+20TxdGsEN4q6tGhHl2jGBjxRVJIoplwBWSYVfTZboVUJTETOU/3/p32y
+         beJ6yIP5wjpxg==
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-bb1f7c5495dso3646380276.3
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 01:38:22 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwLoZwp8VE4ijE8JqtnHt1R+oE0r5p8f2J8xNuAhVMYqsUrDIkA
+        MQM6+lPMRwLXHAHFoUlSSctqsmS4yR3uad+aW+M=
+X-Google-Smtp-Source: ACHHUZ4JPFHwUpGaNVEQxuGlSXgjpG5Bx6zVuVp9ongH9xrFwkFWDOGNXQ+eva+U1KI6qIraorqXGvm/Bu5D7fIk6XM=
+X-Received: by 2002:a25:8108:0:b0:bac:26d2:53dd with SMTP id
+ o8-20020a258108000000b00bac26d253ddmr8410051ybk.43.1685867901040; Sun, 04 Jun
+ 2023 01:38:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603143543.855276091@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230603170747.1753842-1-masahiroy@kernel.org> <20230604045202.GA29881@pendragon.ideasonboard.com>
+In-Reply-To: <20230604045202.GA29881@pendragon.ideasonboard.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 4 Jun 2023 17:37:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQFc_jEOTyKC429Ee5_F+QnhS88TYudebQ7LH82SbJ+Eg@mail.gmail.com>
+Message-ID: <CAK7LNAQFc_jEOTyKC429Ee5_F+QnhS88TYudebQ7LH82SbJ+Eg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/bridge: imx: fix mixed module-builtin object
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Sun, Jun 4, 2023 at 1:52=E2=80=AFPM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Yamada-san,
+>
+> Thank you for the patch.
+>
+> On Sun, Jun 04, 2023 at 02:07:46AM +0900, Masahiro Yamada wrote:
+> > With CONFIG_DRM_IMX8QM_LDB=3Dm and CONFIG_DRM_IMX8QXP_LDB=3Dy (or vice
+> > versa), imx-ldb-helper.o is linked to a module and also to vmlinux
+> > even though the expected CFLAGS are different between builtins and
+> > modules.
+> >
+> > This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
+> > Fixing mixed module-builtin objects").
+> >
+> > Turn helpers in imx-ldb-helper.c into inline functions.
+>
+> Wouldn't it be better to turn it into a module ? It could then be
+> built-in for the above configuration, are compiled as a module when all
+> its users are module as well.
 
-On Sat, Jun 03, 2023 at 04:37:18PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.115 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
 
-Build test (gcc version 12.2.1 20230511):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Yes, two ways to fix it.
+inline line functions vs a separate module
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+I do not have a strong opinion.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/3687
-[2]. https://openqa.qa.codethink.co.uk/tests/3688
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+I sent v2.
+https://lore.kernel.org/lkml/20230604075713.1027261-1-masahiroy@kernel.org/=
+T/#t
 
--- 
-Regards
-Sudip
+Please pick a preferred one.
+
+
+
+
+
+
+
+
+--
+Best Regards
+
+Masahiro Yamada
