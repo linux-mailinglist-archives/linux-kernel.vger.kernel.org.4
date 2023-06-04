@@ -2,285 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6897872162E
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E49721632
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjFDKqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 06:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S231226AbjFDKrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 06:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjFDKqQ (ORCPT
+        with ESMTP id S229799AbjFDKrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 06:46:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0579DAF;
-        Sun,  4 Jun 2023 03:46:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7970260E95;
-        Sun,  4 Jun 2023 10:46:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5269BC433D2;
-        Sun,  4 Jun 2023 10:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685875573;
-        bh=7j+nOXpMEYvkZcpIkT+9RZ5h5yppMuPNbpho/AMQeWM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EQ3wn3VmR30NKNa+TmmHCemQzpkbU9io45pj7VeKbySu6IssUM0HlTPVziMj76n14
-         abE6z/XXYBusPPicEEK6nPtGRL7yBpq8jrb8R2qQB5kHy0GE78X5gLegTjcP8sHSsu
-         eCMdBzkg9RmT6y5XBxEZdSpbpOvXWE1VLcRdEdCRtYtTDhAAMNEVtsuQYPWWg3p+8F
-         /6gQZN1TlEKyMpMoyl8WDxj1XcXIPmmRurjHaPqrnDXPEaTDsKmF3Qf/QPGuRa/Ses
-         UJPZIdmvqtE/tycQFjNWBwh7tnPyr9fyWsdr0RInXiIslyC0Yq4ml7tJgGOPt+xmFn
-         IeINXFyA/aRtQ==
-Date:   Sun, 4 Jun 2023 11:46:05 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Leonard =?UTF-8?B?R8O2aHJz?= <l.goehrs@pengutronix.de>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] iio: adc: Add Allwinner D1/T113s/R329/T507 SoCs
- GPADC
-Message-ID: <20230604114605.6b18490a@jic23-huawei>
-In-Reply-To: <20230601223104.1243871-2-bigunclemax@gmail.com>
-References: <20230601223104.1243871-1-bigunclemax@gmail.com>
-        <20230601223104.1243871-2-bigunclemax@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sun, 4 Jun 2023 06:47:51 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B277AC1;
+        Sun,  4 Jun 2023 03:47:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685875620; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=l74JK4QshxL/UBAapJGNaqWB+hhBu7Q+e0TTtkWRMHyCbPc+P7Y5RYpgqSV/ZkLlSn2Ujbn1t2HHGef9Qa/aRGUYQ9AJr6OjPyWYl0ZQRP2mu+nCFsYwN3LQeDfdkYlaeya3ftClKUm1L83sJK1VjmvCtnXIj2O02Aja9c4bbak=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685875620; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=5CpE3G81EGn4kbCwrb3Lg35kP6vgfybZjy8KICU3Qkk=; 
+        b=fPsZDhzxDyE4La8mlUGpPywqc+aefiGSBe0U6Zq0pFn3bYET9A85pzzjtWCJiSIcMlgOOSantBjkzpoiVHlRZYKNDqI2ejwh5ZpP2OhMz3t58+6YW0JN6qWqdbbC3qm3SbTImg/JqOvlDnJ9iGNJ+a6B+xQuPkYZdBGVKbxmgxU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685875620;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=5CpE3G81EGn4kbCwrb3Lg35kP6vgfybZjy8KICU3Qkk=;
+        b=BP44qi/99Wb4tyuFqD0glUZaYsSL96WIDdMjJGAndTdkAC7LAeh15RhteFHEEWXr
+        4bnjiAd/utzzZag6TwAKJm6HQfB2vyenuTeCg4DS54HA8a1ab9HjlGXoZuYgENfOfdD
+        EV/N+CPxzmSgyEZ/aVWsoioi1RRKGHne7Yp9cV7w=
+Received: from [192.168.99.249] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 168587561947163.66753033579096; Sun, 4 Jun 2023 03:46:59 -0700 (PDT)
+Message-ID: <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
+Date:   Sun, 4 Jun 2023 13:46:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
+ to p{5,6}_configured
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-9-arinc.unal@arinc9.com>
+ <20230522121532.86610-9-arinc.unal@arinc9.com>
+ <20230524175107.hwzygo7p4l4rvawj@skbuf>
+ <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
+ <20230526130145.7wg75yoe6ut4na7g@skbuf>
+ <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+ <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  2 Jun 2023 01:30:39 +0300
-Maksim Kiselev <bigunclemax@gmail.com> wrote:
-
-> From: Maxim Kiselev <bigunclemax@gmail.com>
+On 3.06.2023 15:26, Russell King (Oracle) wrote:
+> On Sat, Jun 03, 2023 at 03:15:52PM +0300, Arınç ÜNAL wrote:
+>> On 26.05.2023 16:01, Vladimir Oltean wrote:
+>>> Ok, but given the premise of this patch set, that phylink is always available,
+>>> does it make sense for mt7531_cpu_port_config() and mt7988_cpu_port_config()
+>>> to manually call phylink methods?
+>>
+>> All I know is that that's how the implementation of phylink's PCS support in
+>> this driver works. It expects the MAC to be set up before calling
+>> mt753x_phylink_pcs_link_up() and mt753x_phylink_mac_link_up().
 > 
-> The General Purpose ADC (GPADC) can convert the external signal into
-> a certain proportion of digital value, to realize the measurement of
-> analog signal, which can be applied to power detection and key detection.
+> First, do you see a message printed for the DSA device indicating that
+> a link is up, without identifying the interface? For example, with
+> mv88e6xxx:
 > 
-> Theoretically, this ADC can support up to 16 channels. All SoCs below
-> contain this GPADC IP. The only difference between them is the number
-> of available channels:
+> mv88e6085 f1072004.mdio-mii:04: Link is Up - 1Gbps/Full - flow control off
 > 
->  T113 - 1 channel
->  D1   - 2 channels
->  R329 - 4 channels
->  T507 - 4 channels
+> as opposed to a user port which will look like this:
 > 
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> mv88e6085 f1072004.mdio-mii:04 lan1: Link is Up - 1Gbps/Full - flow control rx/tx
+> 
+> If you do, that's likely for the CPU port, and indicates that phylink
+> is being used for the CPU port. If not, then you need to investigate
+> whether you've provided the full description in DT for the CPU port.
+> In other words, phy-mode and a fixed-link specification or in-band
+> mode.
 
-Hi Maxim,
+Yes I do see this. The DT is properly defined and the port is properly 
+set up as a CPU port.
 
-A few more minor comments from me.  Looking good in general though.
+> 
+> Given that, you should have no need to make explicit calls to your
+> mac_config, pcs_link_up and mac_link_up functions. If you need to
+> make these calls, it suggests that phylink is not being used for the
+> CPU port.
 
-> diff --git a/drivers/iio/adc/sun20i-gpadc-iio.c b/drivers/iio/adc/sun20i-gpadc-iio.c
-> new file mode 100644
-> index 000000000000..f4f1dcb06ea5
-> --- /dev/null
-> +++ b/drivers/iio/adc/sun20i-gpadc-iio.c
-> @@ -0,0 +1,296 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * GPADC driver for sunxi platforms (D1, T113-S3 and R329)
-> + * Copyright (c) 2023 Maksim Kiselev <bigunclemax@gmail.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/completion.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +
-> +#include <linux/iio/iio.h>
-> +
-> +#define SUN20I_GPADC_DRIVER_NAME	"sun20i-gpadc"
-> +
-> +/* Register map definition */
-> +#define SUN20I_GPADC_SR			0x00
-> +#define SUN20I_GPADC_CTRL		0x04
-> +#define SUN20I_GPADC_CS_EN		0x08
-> +#define SUN20I_GPADC_FIFO_INTC		0x0c
-> +#define SUN20I_GPADC_FIFO_INTS		0x10
-> +#define SUN20I_GPADC_FIFO_DATA		0X14
-> +#define SUN20I_GPADC_CB_DATA		0X18
-> +#define SUN20I_GPADC_DATAL_INTC		0x20
-> +#define SUN20I_GPADC_DATAH_INTC		0x24
-> +#define SUN20I_GPADC_DATA_INTC		0x28
-> +#define SUN20I_GPADC_DATAL_INTS		0x30
-> +#define SUN20I_GPADC_DATAH_INTS		0x34
-> +#define SUN20I_GPADC_DATA_INTS		0x38
-> +#define SUN20I_GPADC_CH_CMP_DATA(x)	(0x40 + (x) * 4)
-> +#define SUN20I_GPADC_CH_DATA(x)		(0x80 + (x) * 4)
-> +
-> +/* ADC bit shift */
+Your own commit does this so I don't know what to tell you.
 
-Not sure what this comment means?  I'd just drop it.
+https://github.com/torvalds/linux/commit/cbd1f243bc41056c76fcfc5f3380cfac1f00d37b
 
-> +#define SUN20I_GPADC_CTRL_ADC_AUTOCALI_EN_MASK		BIT(23)
-> +#define SUN20I_GPADC_CTRL_WORK_MODE_MASK		GENMASK(19, 18)
-> +#define SUN20I_GPADC_CTRL_ADC_EN_MASK			BIT(16)
-> +#define SUN20I_GPADC_CS_EN_ADC_CH(x)			BIT(x)
-> +#define SUN20I_GPADC_DATA_INTC_CH_DATA_IRQ_EN(x)	BIT(x)
-
-
-
-> +static int sun20i_gpadc_read_raw(struct iio_dev *indio_dev,
-> +				 struct iio_chan_spec const *chan, int *val,
-> +				 int *val2, long mask)
-> +{
-> +	struct sun20i_gpadc_iio *info = iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		ret = sun20i_gpadc_adc_read(info, chan, val);
-> +		return ret;
-
-		return sun20i_gpadc_adc_read()
-and drop the local variable ret as no longer used.
-
-
-
-> +	case IIO_CHAN_INFO_SCALE:
-> +		/* value in mv = 1800mV / 4096 raw */
-> +		*val = 1800;
-> +		*val2 = 12;
-> +		return IIO_VAL_FRACTIONAL_LOG2;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-
-> +static int sun20i_gpadc_alloc_channels(struct iio_dev *indio_dev,
-> +				       struct device *dev)
-> +{
-> +	unsigned int channel;
-> +	int num_channels, i, ret;
-> +	struct iio_chan_spec *channels;
-> +	struct fwnode_handle *node;
-> +
-> +	num_channels = device_get_child_node_count(dev);
-> +	if (num_channels == 0) {
-> +		dev_err(dev, "no channel children");
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (num_channels > SUN20I_GPADC_MAX_CHANNELS) {
-> +		dev_err(dev, "num of channel children out of range");
-> +		return -EINVAL;
-> +	}
-> +
-> +	channels = devm_kcalloc(dev, num_channels,
-> +				sizeof(*channels), GFP_KERNEL);
-> +	if (!channels)
-> +		return -ENOMEM;
-> +
-> +	i = 0;
-> +	device_for_each_child_node(dev, node) {
-> +		ret = fwnode_property_read_u32(node, "reg", &channel);
-> +		if (ret)
-> +			goto err_child_out;
-
-You are fairly verbose on error messages elsewhere - which is somewhat of a
-personal choice, but if you are going to do that I'd expect to see on here as well.
-
-> +
-> +		channels[i].type = IIO_VOLTAGE;
-> +		channels[i].indexed = 1;
-> +		channels[i].channel = channel;
-> +		channels[i].info_mask_separate = BIT(IIO_CHAN_INFO_RAW);
-> +		channels[i].info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE);
-> +
-> +		i++;
-> +	}
-> +
-> +	indio_dev->channels = channels;
-> +	indio_dev->num_channels = num_channels;
-> +
-> +	return 0;
-> +
-> +err_child_out:
-> +	fwnode_handle_put(node);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sun20i_gpadc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct iio_dev *indio_dev;
-> +	struct sun20i_gpadc_iio *info;
-> +	struct reset_control *rst;
-> +	void __iomem *base;
-> +	struct clk *clk;
-> +	int irq;
-> +	int ret;
-> +
-> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*info));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	info = iio_priv(indio_dev);
-> +	info->lastch = -1;
-
-That naming briefly had me confused as my brain tried to figure it out as
-a typo :). Perhaps last_ch is clearer?  Or just go with last_channel and
-be really clear.
-
-> +
-> +	mutex_init(&info->lock);
-> +	init_completion(&info->completion);
-> +
-> +	ret = sun20i_gpadc_alloc_channels(indio_dev, dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	indio_dev->info = &sun20i_gpadc_iio_info;
-> +	indio_dev->name = SUN20I_GPADC_DRIVER_NAME;
-
-We try to make this name identify the chip in question.
-If the driver name is sufficient for these platforms then fair enough.
-It should certainly be enough to distinguish this from other ADCs on the
-platform.
-
+Arınç
