@@ -2,142 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C36721765
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE66721769
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjFDNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S232008AbjFDN0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 09:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFDNZ4 (ORCPT
+        with ESMTP id S232000AbjFDN0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:25:56 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02D9CA;
-        Sun,  4 Jun 2023 06:25:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso5204768a12.0;
-        Sun, 04 Jun 2023 06:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685885154; x=1688477154;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bIF2ahGzJpyo+TqeABEPHibTttnCkEMB3Njy7q/BSEo=;
-        b=N4P+EYIEs8NjOqM/Dmregn7Jp/GB1iY+W/H4AyYoNezm+92mg9UetM3yHca1fGjhZG
-         /4854DPF5NfM/9eUZ9OtKL7xYKYqfH6/WMLcpyDJ99JJIWC0FfbhoAkH+XHa8kN3RGGF
-         IinXBa20IFIEGo7ktOSH5SCo/YfLGjirKDKwBFrHvn+ez6wCqftSoQXBZkoAuiR/L6Jz
-         SzbrfVawaQrL22pGLzYX+8d3G+1g1r3A5iPwhBFti7nZed3oE+p5csx0oY5Uc1BZRuoG
-         UNxEZAE3M3+aQnaFi8fI3iEqLCyTOiU8fHXw+l2wkak1IVi1k9gIAWxEKr0ncVZYwTsn
-         3MXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685885154; x=1688477154;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bIF2ahGzJpyo+TqeABEPHibTttnCkEMB3Njy7q/BSEo=;
-        b=ZGB9W7aI5Q844+YSO1rX4C1GtxSR+wig231XLfn3UVcneck4ZzXDxlze0qllvLg4Sv
-         l9OEivejAcseAzirNY9cTZhdpFxsQst14hbs7mExAZ91vwSAJXty7uKbYcoH29SqzmK6
-         kR0Cz1lfVvD6r8DEBxBnMKONJdQ2YzNqE5syitWauZhFVN1OUTCHi21Eejbd9bTRH6dE
-         XHXPJ3fRTdjbUhjxFlc9FZ6htCmVyxLqpm8hWc0vPPiJWQ77wLlw9TYQoZcyYuWdT5e2
-         QS/L7Z6M6YL5s1ZgAclwMIVhEDZ+yTgFgaH4FEnrdC5rcUARm+zbJhTzi1F9GmA7cwhK
-         wsEA==
-X-Gm-Message-State: AC+VfDzVld7ElZ/WogiLae2TjSQJLKHPow9ZBqPw8zymgw9c/18c379p
-        ebp0f0sS/zOrfm6dO+nN/WA=
-X-Google-Smtp-Source: ACHHUZ7Xq1sZH47pNrsamktZ+ZKVyMGi7kuDL7zZxGwL/JJ/n4KR4qPLUyOyVhtiGxlWvPVgPOzNxA==
-X-Received: by 2002:a17:907:608c:b0:933:868:413a with SMTP id ht12-20020a170907608c00b009330868413amr4349728ejc.15.1685885153871;
-        Sun, 04 Jun 2023 06:25:53 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170906710d00b0096f694609f3sm3098369ejj.31.2023.06.04.06.25.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 06:25:53 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 16:25:50 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
- to p{5,6}_configured
-Message-ID: <20230604132550.zi32bvniqg7ztd5o@skbuf>
-References: <20230524175107.hwzygo7p4l4rvawj@skbuf>
- <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
- <20230526130145.7wg75yoe6ut4na7g@skbuf>
- <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
- <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
- <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
- <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
- <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
- <ZHyMezyKizkz2+Wg@shell.armlinux.org.uk>
- <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
+        Sun, 4 Jun 2023 09:26:09 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC1DE
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 06:26:05 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126166129043.28.openmobile.ne.jp [126.166.129.43])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D8B5D2CF;
+        Sun,  4 Jun 2023 15:25:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685885139;
+        bh=k1erwYPQAWTg50eT/0A3oZ75+86lQmB6B0KQcxSHOgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ceWnev0Ap+lX6ohoWyGW9va8wSoHrzdUe/k31wLB5e1uyI+FnvrY/rXvcSMhXFPE+
+         9XeTOoy2xA00i4UmtFStgrFG0hN1y6Cubjkl83XICM8KbM+Q6o8x6nHVkaleOm31Ej
+         Xx0kbiMtl5HtjnKTo4woBshm7TJ96sO7v+ZYUy1Q=
+Date:   Sun, 4 Jun 2023 16:26:02 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Liu Ying <victor.liu@nxp.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] drm/bridge: imx: fix mixed module-builtin object
+Message-ID: <20230604132602.GB7754@pendragon.ideasonboard.com>
+References: <20230604075713.1027261-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
+In-Reply-To: <20230604075713.1027261-1-masahiroy@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 04:14:31PM +0300, Arınç ÜNAL wrote:
-> On 4.06.2023 16:07, Russell King (Oracle) wrote:
-> > On Sun, Jun 04, 2023 at 03:55:17PM +0300, Vladimir Oltean wrote:
-> > > On Sun, Jun 04, 2023 at 01:18:04PM +0100, Russell King (Oracle) wrote:
-> > > > I don't remember whether Vladimir's firmware validator will fail for
-> > > > mt753x if CPU ports are not fully described, but that would be well
-> > > > worth checking. If it does, then we can be confident that phylink
-> > > > will always be used, and those bypassing calls should not be necessary.
-> > > 
-> > > It does, I've just retested this:
-> > > 
-> > > [    8.469152] mscc_felix 0000:00:00.5: OF node /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 of CPU port 4 lacks the required "phy-handle", "fixed-link" or "managed" properties
-> > > [    8.494571] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register DSA switch
-> > > [    8.502151] mscc_felix: probe of 0000:00:00.5 failed with error -22
-> > 
-> > ... which isn't listed in dsa_switches_apply_workarounds[], and
-> > neither is mt753x. Thanks.
-> > 
-> > So, that should be sufficient to know that the CPU port will always
-> > properly described, and thus bypassing phylink in mt753x for the CPU
-> > port should not be necessary.
-> 
-> Perfect! If I understand correctly, there's this code - specific to MT7531
-> and MT7988 ports being used as CPU ports - which runs in addition to what's
-> in mt753x_phylink_mac_config():
-> 
-> 	mt7530_write(priv, MT7530_PMCR_P(port),
-> 		     PMCR_CPU_PORT_SETTING(priv->id));
-> 
-> This should be put on mt753x_phylink_mac_config(), under priv->id ==
-> ID_MT7531, priv->id == ID_MT7988, and dsa_is_cpu_port(ds, port) checks?
-> 
-> Arınç
+Hello Yamada-san,
 
-Given that mt753x_phylink_mac_config() and mt753x_phylink_mac_link_up() also
-both modifies MT7530_PMCR_P(port), have you studied the code to see what
-really is changed compared to what's in the PMCR_CPU_PORT_SETTING() macro,
-after both phylink methods have run?
+Thank you for the patch.
+
+On Sun, Jun 04, 2023 at 04:57:12PM +0900, Masahiro Yamada wrote:
+> With CONFIG_DRM_IMX8QM_LDB=m and CONFIG_DRM_IMX8QXP_LDB=y (or vice
+> versa), imx-ldb-helper.o is linked to a module and also to vmlinux
+> even though the expected CFLAGS are different between builtins and
+> modules.
+> 
+> This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
+> Fixing mixed module-builtin objects").
+> 
+> Split imx-ldb-helper.c into a separate module.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+> Changes in v2:
+>  - Add a separate module instead of making the functions static inline
+> 
+>  drivers/gpu/drm/bridge/imx/Kconfig          |  5 +++++
+>  drivers/gpu/drm/bridge/imx/Makefile         |  5 +++--
+>  drivers/gpu/drm/bridge/imx/imx-ldb-helper.c | 20 ++++++++++++++++++++
+>  3 files changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
+> index 608f47f41bcd..9fae28db6aa7 100644
+> --- a/drivers/gpu/drm/bridge/imx/Kconfig
+> +++ b/drivers/gpu/drm/bridge/imx/Kconfig
+> @@ -1,9 +1,13 @@
+>  if ARCH_MXC || COMPILE_TEST
+>  
+> +config DRM_IMX_LDB_HELPER
+> +	tristate
+> +
+>  config DRM_IMX8QM_LDB
+>  	tristate "Freescale i.MX8QM LVDS display bridge"
+>  	depends on OF
+>  	depends on COMMON_CLK
+> +	select DRM_IMX_LDB_HELPER
+>  	select DRM_KMS_HELPER
+>  	help
+>  	  Choose this to enable the internal LVDS Display Bridge(LDB) found in
+> @@ -13,6 +17,7 @@ config DRM_IMX8QXP_LDB
+>  	tristate "Freescale i.MX8QXP LVDS display bridge"
+>  	depends on OF
+>  	depends on COMMON_CLK
+> +	select DRM_IMX_LDB_HELPER
+>  	select DRM_KMS_HELPER
+>  	help
+>  	  Choose this to enable the internal LVDS Display Bridge(LDB) found in
+> diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
+> index aa90ec8d5433..5fc821278693 100644
+> --- a/drivers/gpu/drm/bridge/imx/Makefile
+> +++ b/drivers/gpu/drm/bridge/imx/Makefile
+> @@ -1,7 +1,8 @@
+> -imx8qm-ldb-objs := imx-ldb-helper.o imx8qm-ldb-drv.o
+> +obj-$(CONFIG_DRM_IMX_LDB_HELPER) += imx-ldb-helper.o
+> +imx8qm-ldb-objs := imx8qm-ldb-drv.o
+>  obj-$(CONFIG_DRM_IMX8QM_LDB) += imx8qm-ldb.o
+>  
+> -imx8qxp-ldb-objs := imx-ldb-helper.o imx8qxp-ldb-drv.o
+> +imx8qxp-ldb-objs := imx8qxp-ldb-drv.o
+>  obj-$(CONFIG_DRM_IMX8QXP_LDB) += imx8qxp-ldb.o
+>  
+>  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
+> diff --git a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
+> index 7338b84bc83d..7382cb1fbfd7 100644
+> --- a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
+> @@ -4,8 +4,10 @@
+>   * Copyright 2019,2020,2022 NXP
+>   */
+>  
+> +#include <linux/export.h>
+>  #include <linux/media-bus-format.h>
+>  #include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/regmap.h>
+>  
+> @@ -15,16 +17,20 @@
+>  
+>  #include "imx-ldb-helper.h"
+>  
+> +#define DRIVER_NAME		"imx-ldb-helper"
+> +
+>  bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch)
+>  {
+>  	return ldb_ch->link_type == LDB_CH_SINGLE_LINK;
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_channel_is_single_link);
+>  
+>  bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch)
+>  {
+>  	return ldb_ch->link_type == LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS ||
+>  	       ldb_ch->link_type == LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS;
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_channel_is_split_link);
+>  
+>  int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
+>  				   struct drm_bridge_state *bridge_state,
+> @@ -38,6 +44,7 @@ int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
+>  
+>  	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_bridge_atomic_check_helper);
+>  
+>  void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
+>  				const struct drm_display_mode *mode,
+> @@ -69,6 +76,7 @@ void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
+>  		break;
+>  	}
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_bridge_mode_set_helper);
+>  
+>  void ldb_bridge_enable_helper(struct drm_bridge *bridge)
+>  {
+> @@ -81,6 +89,7 @@ void ldb_bridge_enable_helper(struct drm_bridge *bridge)
+>  	 */
+>  	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_bridge_enable_helper);
+>  
+>  void ldb_bridge_disable_helper(struct drm_bridge *bridge)
+>  {
+> @@ -95,6 +104,7 @@ void ldb_bridge_disable_helper(struct drm_bridge *bridge)
+>  
+>  	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_bridge_disable_helper);
+>  
+>  int ldb_bridge_attach_helper(struct drm_bridge *bridge,
+>  			     enum drm_bridge_attach_flags flags)
+> @@ -117,6 +127,7 @@ int ldb_bridge_attach_helper(struct drm_bridge *bridge,
+>  				ldb_ch->next_bridge, bridge,
+>  				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_bridge_attach_helper);
+>  
+>  int ldb_init_helper(struct ldb *ldb)
+>  {
+> @@ -157,6 +168,7 @@ int ldb_init_helper(struct ldb *ldb)
+>  
+>  	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_init_helper);
+>  
+>  int ldb_find_next_bridge_helper(struct ldb *ldb)
+>  {
+> @@ -184,6 +196,7 @@ int ldb_find_next_bridge_helper(struct ldb *ldb)
+>  
+>  	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_find_next_bridge_helper);
+>  
+>  void ldb_add_bridge_helper(struct ldb *ldb,
+>  			   const struct drm_bridge_funcs *bridge_funcs)
+> @@ -204,6 +217,7 @@ void ldb_add_bridge_helper(struct ldb *ldb,
+>  		drm_bridge_add(&ldb_ch->bridge);
+>  	}
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_add_bridge_helper);
+>  
+>  void ldb_remove_bridge_helper(struct ldb *ldb)
+>  {
+> @@ -219,3 +233,9 @@ void ldb_remove_bridge_helper(struct ldb *ldb)
+>  		drm_bridge_remove(&ldb_ch->bridge);
+>  	}
+>  }
+> +EXPORT_SYMBOL_GPL(ldb_remove_bridge_helper);
+> +
+> +MODULE_DESCRIPTION("i.MX8 LVDS Display Bridge(LDB)/Pixel Mapper bridge helper");
+> +MODULE_AUTHOR("Liu Ying <victor.liu@nxp.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:" DRIVER_NAME);
+
+Is the alias needed ? With that fixed (if needed),
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+-- 
+Regards,
+
+Laurent Pinchart
