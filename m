@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CE2721751
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B803721757
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbjFDNRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S230464AbjFDNSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 09:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjFDNRl (ORCPT
+        with ESMTP id S231960AbjFDNSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:17:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B63B8;
-        Sun,  4 Jun 2023 06:17:40 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977c88c9021so164109766b.3;
-        Sun, 04 Jun 2023 06:17:40 -0700 (PDT)
+        Sun, 4 Jun 2023 09:18:12 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F80FD;
+        Sun,  4 Jun 2023 06:18:09 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-653f9c7b3e4so928501b3a.2;
+        Sun, 04 Jun 2023 06:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685884659; x=1688476659;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7koqCf4VFYg5A/2SlKvWQmfNZkGvHu+fwrX65NT2BI4=;
-        b=jMZgvtnFApMUryc5DT7S8bjme4Qu0G0eeb8MHj7I7ZZSFcLIIEE66aQJvSX9v/PjSK
-         Qla4Dhh0sY0o4psUyfZVUyJl8vHiKe/wIKZk9rBAtRzpjgjE5gTEWS/BbzRI8g6sd64d
-         52OB/NWm8zms+Xw8EzaCDLo4GxvRLVV+aGWKQyjFGPX9zY8W7cmVcuijwWSqM9iZ5CAe
-         kPVZh48BVRYR8ehICFc1RRXkSnnFRip4jEY9ZAwd21rD+yil3n//VdMNcJFN/nUnf8mv
-         wCy4L/3tCKgikqc2Abaji7GTuVRmjqd3dstJg0uitXWM1WlmUZMINZGlkY3qZwngIDob
-         fUeg==
+        d=gmail.com; s=20221208; t=1685884688; x=1688476688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2antYKxvIwNmqy5CZTA/jD5hacvCwsyZLTjfiBAziik=;
+        b=apiWE5SRBAi8uhX66jCjeKU/pAGIqPIf3sx18YKQoluVhZ1rMYOCMkyA44lGq0wu5M
+         GAYpS89unkdusP6Qoy9ECNqoYMYNkiDLIQ2Omg5ZkGQ/UPGVKV9okfmQJ3ha7X204avg
+         8gx807hiZF+r/V9wth0N3OXFnXr06vJcVfY28/jD98FdPfzCNcyB1O9sMN5CoBQP6Ugp
+         aSuPZNfZyI2crv6+4mhh29PLrPef5a30qZQfT5/FKF5gvT+uBjn4ssurD1xMDjyujrK4
+         VGD9wuLck5YZB7Ef2gFi4nUOKJmxNt2gKaeJHRG36oRCJKnfsfWTBlEwHKSJdRF2Nqlo
+         VRxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685884659; x=1688476659;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7koqCf4VFYg5A/2SlKvWQmfNZkGvHu+fwrX65NT2BI4=;
-        b=Gmesh5OfdRc0WM7dwnpNHKnyQyS7mSaL6dsfcuiD4QDF7rwDKu3sUJNUJJZFdsGvsh
-         jMIbjatPX678eAoHpnc+NvZKYodDrSam8NO15nfP2ROgPdwv6/9hTF1avvd6nodsvNpp
-         n3N7SwZuHdHst/Mfu2hKo+uHXaQ61bpTU6x+rAmE9qnfbei4liCNzi1WQYFMzkBl8kS2
-         aZiC3JBNbR9wE4BKs5LjVzyEPaLugymOepd8pGUhBW7lVbh1mADTYcbaeHC5b0BcxFCK
-         7bg/MY4L1wPnkxTZw5Pv8L5D6Yo9ySApPkW8PqC6XiCJfNnS3dcrYf4/MdYQ/IJ4h/x3
-         6B5Q==
-X-Gm-Message-State: AC+VfDxOBtHu3M/TxwZKKj3Pm6LvdHpBbepp5YtteKxZ57H2S7TEfkrx
-        gqlnyR5TIVi4srQyYFCiMUk=
-X-Google-Smtp-Source: ACHHUZ7saaoTRYRxO+7KKd51tlh3hT91vDB1ym0R5O2wcD/2PGqGdEjATdeMyC7eoypX6390GMp+xw==
-X-Received: by 2002:a17:907:720c:b0:973:ff8d:2a46 with SMTP id dr12-20020a170907720c00b00973ff8d2a46mr4415968ejc.3.1685884658963;
-        Sun, 04 Jun 2023 06:17:38 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id s18-20020a056402165200b00510b5051f95sm2730393edx.90.2023.06.04.06.17.37
+        d=1e100.net; s=20221208; t=1685884688; x=1688476688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2antYKxvIwNmqy5CZTA/jD5hacvCwsyZLTjfiBAziik=;
+        b=XE28hSDpICZEcj45sNHEkhvO5ccTKPDvg8sN2WrfLQFNq0Itbl8dJzmXthp7xzfAQ0
+         o9L+sZUrWJlSGxYR52YIqIm68CDI+wwjSFT3ClrXALlo7VMqHtmJdiTM7ikfyoKo7542
+         oEhvG9XQrg5K1CadknK0ol8P5fBYVgT73K0DtKuX1mf52kaR7Bx2TJTt9zDhWWJ08Rfc
+         mNBkEzi0caDyesmhdUZFwkjsWRmGcWKVY1MEXDoK/urBHW9f28BvJNObliwfzOY6vMyc
+         zSoVgp5tnmdFsc3PS2UUPyep8jTfVrHXitU1O9TjMWQenHLP/XMlgVZwbVq5lKer40FI
+         sw8A==
+X-Gm-Message-State: AC+VfDxytX1ylewDcx2tLtt5Rzt0nsYjpNlOvO989B3oa4xAfsN8gRTw
+        ZDT3tYOp6i9VWYzLBHz8+H8=
+X-Google-Smtp-Source: ACHHUZ5tZkKgVKSpfQF4V5GjOlVhutEKUzrn1geCssyoRpjtBxkGmkQwJVBs4pJUDHofdpjPNuRqUQ==
+X-Received: by 2002:a05:6a00:15cf:b0:653:a56:db9 with SMTP id o15-20020a056a0015cf00b006530a560db9mr5688123pfu.7.1685884688369;
+        Sun, 04 Jun 2023 06:18:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w12-20020a63474c000000b005134fc049d7sm4152597pgk.31.2023.06.04.06.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 06:17:38 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 16:17:35 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 24/30] net: dsa: mt7530: rename MT7530_MFC to
- MT753X_MFC
-Message-ID: <20230604131735.f2clcinq67wspuun@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-25-arinc.unal@arinc9.com>
- <20230526154258.skbkk4p34ro5uivr@skbuf>
- <ZHDVUC1AqncfF2mK@shell.armlinux.org.uk>
- <e4aff9aa-d0c6-1f2e-7f16-35df59d51b90@arinc9.com>
+        Sun, 04 Jun 2023 06:18:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 4 Jun 2023 06:18:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/35] 5.15.115-rc3 review
+Message-ID: <a298cb13-d3a8-4c2c-a17f-6570698d4e02@roeck-us.net>
+References: <20230603143543.855276091@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e4aff9aa-d0c6-1f2e-7f16-35df59d51b90@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20230603143543.855276091@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 11:06:32AM +0300, Arınç ÜNAL wrote:
-> > Even better are:
-> > #define  MT7531_MIRROR_PORT_GET(x)	FIELD_GET(MT7531_MIRROR_MASK, x)
-> > 
-> > > > +#define  MT7531_MIRROR_PORT_SET(x)	(((x) & 0x7) << 16)
-> > > 
-> > > and here: (((x) << 16) & GENMASK(18, 16))
-> > 
-> > #define  MT7531_MIRROR_PORT_SET(x)	FIELD_PREP(MT7531_MIRROR_MASK, x)
-> > 
-> > No need to add parens around "x" in either of these uses as we're not
-> > doing anything with x other than passing it into another macro.
+On Sat, Jun 03, 2023 at 04:37:18PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.115 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Thanks. I suppose the GENMASK, FIELD_PREP, and FIELD_GET macros can be
-> widely used on mt7530.h? Like GENMASK(2, 0) on MT7530_MIRROR_MASK and
-> FIELD_PREP(MT7530_MIRROR_MASK, x) on MT7530_MIRROR_PORT(x)?
+> Responses should be made by Mon, 05 Jun 2023 14:35:25 +0000.
+> Anything received after that time might be too late.
+> 
 
-I suppose the answer would be "yes, they can be used", but then, I'm not
-really sure what answer you're expecting.
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 499 pass: 499 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
