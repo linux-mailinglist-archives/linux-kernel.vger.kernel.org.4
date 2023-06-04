@@ -2,162 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002D1721A21
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 23:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5E9721A27
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 23:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbjFDVIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 17:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S232191AbjFDVJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 17:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjFDVIO (ORCPT
+        with ESMTP id S229635AbjFDVJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 17:08:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513AB8;
-        Sun,  4 Jun 2023 14:08:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A651260ADE;
-        Sun,  4 Jun 2023 21:08:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE49C433D2;
-        Sun,  4 Jun 2023 21:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685912892;
-        bh=tBcMEkXrQsgqR/F6ZhRcf1FCjzt6WCA3VYv57KwwRro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YeJvobG8z6dzqRsit5sIsSHMfcoFQJQT0lsk3RpGpNSTXDUpBvLvbZnPp18xsw1Op
-         EBQhljqx4fl05CY9+Re1+ccLsuY9GKV+ir1TyjHK5DRSWtN6F8OsTwBNDd8FBU+Pih
-         23wuxP4tRvW6pTbWVXhKuUcJiUPfbc2nnuNrgIz2/dapwchbfo1C/5UIGWZ94Sot9I
-         Qj5WEi3i9Bm718xXQy+3Rv6VIXijNzlygT89FFhcc2X+0xWR4CYmI35Wj4jGycgU0u
-         OS+Ay2auw/kJzPl6KAbpX/AwwWAlGQCxRMTLZhtF4kdvL0EMS6vTnEje9yF2mjMd+n
-         eOf7SY6ruMbPQ==
-Date:   Sun, 4 Jun 2023 22:08:02 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>,
-        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com
-Subject: Re: [PATCH 15/21] dt-bindings: irqchip/atmel-aic5: Add support for
- sam9x7 aic
-Message-ID: <20230604-cohesive-unmoving-032da3272620@spud>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-16-varshini.rajendran@microchip.com>
- <20230603-fervor-kilowatt-662c84b94853@spud>
- <20230603-sanded-blunderer-73cdd7c290c1@spud>
- <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
+        Sun, 4 Jun 2023 17:09:21 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EB5CF
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 14:09:20 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-119-27.bstnma.fios.verizon.net [173.48.119.27])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 354L8L8M008189
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 4 Jun 2023 17:08:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1685912905; bh=rBca0syAuOaNVSA4ig8h6e/NHRrUmmr69r+D5gVpD9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=HHmFqZOrRmj/aCBtAwB12otoUxSo7sG4MaGDQNeYCZgzljDZ1hTINLoDASgc4BGEZ
+         ow+AH9baAEF5LO1ETrXQJmRjmdDCewPJ8u8v4iBdqr4tuOu6WkULvYJ+c6HRdRmNKG
+         zgIUuyuZlbTPYVQFJoR6+8d1BGXkI+7Y9yxgBiVUz60GTudN+GqEd17RKasa6jFHfe
+         FiHJVBREmANlQ60rfZxPaBDucHAMrNNnnVwMXvH24H/yMC/AHHyrJT0rGR95Ewc6Qv
+         +Z3oxdHipsBoBqJ6I97m8wrd7eMHj2/cxscr00hKQJyzhIzZP150M4QTFCdGD00sMl
+         QMdqrdB3E0QPA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 7800915C02EE; Sun,  4 Jun 2023 17:08:21 -0400 (EDT)
+Date:   Sun, 4 Jun 2023 17:08:21 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca, jack@suse.cz,
+        ritesh.list@gmail.com, linux-kernel@vger.kernel.org,
+        jun.nie@linaro.org, ebiggers@kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com,
+        syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com,
+        Matthew Wilcox <willy@infradead.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] ext4: fix race condition between buffer write and
+ page_mkwrite
+Message-ID: <20230604210821.GA1257572@mit.edu>
+References: <20230530134405.322194-1-libaokun1@huawei.com>
+ <20230604030445.GF1128744@mit.edu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3Md+FIkjg+Lb1NW6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230604030445.GF1128744@mit.edu>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jun 03, 2023 at 11:04:45PM -0400, Theodore Ts'o wrote:
+> I tried testing to see if this fixed [1], and it appears to be
+> triggering a lockdep warning[2] at this line in the patch:
+> 
+> [1] https://syzkaller.appspot.com/bug?extid=f4582777a19ec422b517
+> [2] https://syzkaller.appspot.com/x/report.txt?x=17260843280000
 
---3Md+FIkjg+Lb1NW6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looking at this more closely, the fundamental problem is by the time
+ext4_file_mmap() is called, the mm layer has already taken
+current->mm->mmap_lock, and when we try to take the inode_lock, this
+causes locking ordering problems with how buffered write path works,
+which take the inode_lock first, and then in some cases, may end up
+taking the mmap_lock if there is a page fault for the buffer used for
+the buffered write.
 
-On Sun, Jun 04, 2023 at 11:49:48AM +0200, Arnd Bergmann wrote:
-> On Sat, Jun 3, 2023, at 23:23, Conor Dooley wrote:
-> > On Sat, Jun 03, 2023 at 10:19:50PM +0100, Conor Dooley wrote:
-> >> Hey Varshini,
-> >>=20
-> >> On Sun, Jun 04, 2023 at 01:32:37AM +0530, Varshini Rajendran wrote:
-> >> > Document the support added for the Advanced interrupt controller(AIC)
-> >> > chip in the sam9x7 soc family
-> >>=20
-> >> Please do not add new family based compatibles, but rather use per-soc
-> >> compatibles instead.
-> >
-> > These things leave me penally confused. Afaiu, sam9x60 is a particular
+If we're going to stick with the approach in this patch, I think what
+we would need is to add a pre_mmap() function to file_operations
+struct, which would get called by the mmap path *before* taking
+current->mm->mmap_lock, so we can do the inline conversion before we
+take the mmap_lock.
 
-s/penally/perennially/
+I'm not sure how the mm folks would react to such a proposal, though.
+I could be seen as a bit hacky, and it's not clear that any file
+system other than ext4 would need something like this.  Willy, as
+someone who does a lot of work in both mm and fs worlds --- I'm
+curious what you think about this idea?
 
-> > SoC. sam9x7 is actually a family, containing sam9x70, sam9x72 and
-> > sam9x75. It would appear to me that each should have its own compatible,
-> > no?
->=20
-> I think the usual way this works is that the sam9x7 refers to the
-> SoC design as in what is actually part of the chip, whereas the 70,
-> 72 and 75 models are variants that have a certain subset of the
-> features enabled.
->=20
-> If that is the case here, then referring to the on-chip parts by
-> the sam9x7 name makes sense, and this is similar to what we do
-> on TI AM-series chips.
+Thanks,
 
-If it is the case that what differentiates them is having bits chopped
-off, and there's no implementation differences that seems fair.
+    	     	     	      	    	  - Ted
 
-> There is a remaining risk that a there would be a future
-> sam9x71/73/74/76/... product based on a new chip that uses
-> incompatible devices, but at that point we can still use the
-> more specific model number to identify those without being
-> ambiguous. The same thing can of course happen when a SoC
-> vendor reuses a specific name of a prior product with an update
-> chip that has software visible changes.
->=20
-> I'd just leave this up to Varshini and the other at91 maintainers
-> here, provided they understand the exact risks.
-
-Ye, seems fair to me. Nicolas/Claudiu etc, is there a convention to use
-the "0" model as the compatible (like the 9x60 did) or have "random"
-things been done so far?
-
-> It's different for the parts that are listed as just sam9x60
-> compatible in the DT, I think those clearly need to have sam9x7
-> in the compatible list, but could have the sam9x60 identifier
-> as a fallback if the hardware is compatible.
-
-Aye.
-
---3Md+FIkjg+Lb1NW6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHz9MgAKCRB4tDGHoIJi
-0ldWAP0RQc1PNr/7S0ZoI1mtSvW5rkogdGae6SPbH5C+bLhcmQEApOd41QvYR3Pq
-xuVQ4aC0kBM/JFWUKg2lYgoQNcmmEQw=
-=Dd5S
------END PGP SIGNATURE-----
-
---3Md+FIkjg+Lb1NW6--
+> > diff --git a/fs/ext4/file.c b/fs/ext4/file.c
+> > index d101b3b0c7da..9df82d72eb90 100644
+> > --- a/fs/ext4/file.c
+> > +++ b/fs/ext4/file.c
+> > @@ -808,6 +809,27 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
+> >  	if (!daxdev_mapping_supported(vma, dax_dev))
+> >  		return -EOPNOTSUPP;
+> >  
+> > +	/*
+> > +	 * Writing via mmap has no logic to handle inline data, so we
+> > +	 * need to call ext4_convert_inline_data() to convert the inode
+> > +	 * to normal format before doing so, otherwise a BUG_ON will be
+> > +	 * triggered in ext4_writepages() due to the
+> > +	 * EXT4_STATE_MAY_INLINE_DATA flag. Moreover, we need to grab
+> > +	 * i_rwsem during conversion, since clearing and setting the
+> > +	 * inline data flag may race with ext4_buffered_write_iter()
+> > +	 * to trigger a BUG_ON.
+> > +	 */
+> > +	if (ext4_has_feature_inline_data(sb) &&
+> > +	    vma->vm_flags & VM_SHARED && vma->vm_flags & VM_MAYWRITE) {
+> > +		int err;
+> > +
+> > +		inode_lock(inode); <=================== LOCKDEP warning
+> > +		err = ext4_convert_inline_data(inode);
+> > +		inode_unlock(inode);
+> > +		if (err)
+> > +			return err;
+> > +	}
+> 
+> 
+> The details of the lockdep warning from [2], which appears to be a
+> mmap(2) racing with a buffered write(2) are below.  Could you take a
+> look?
+> 
+> Thanks!
+> 
+> 					- Ted
+> 
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 6.4.0-rc4-syzkaller-geb1f822c76be-dirty #0 Not tainted
+> ------------------------------------------------------
+> syz-executor.4/5589 is trying to acquire lock:
+> ffff888024228168 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:142 [inline]
+> ffff888024228168 (&mm->mmap_lock){++++}-{3:3}, at: do_user_addr_fault+0xb3d/0x1210 arch/x86/mm/fault.c:1391
+> 
+> but task is already holding lock:
+> ffff88806a066800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+> ffff88806a066800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+> 
+> which lock already depends on the new lock.
+> 
+> 
+> the existing dependency chain (in reverse order) is:
+> 
+> -> #1 (&sb->s_type->i_mutex_key#8){++++}-{3:3}:
+>        down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+>        inode_lock include/linux/fs.h:775 [inline]
+>        ext4_file_mmap+0x62e/0x800 fs/ext4/file.c:826
+>        call_mmap include/linux/fs.h:1873 [inline]
+>        mmap_region+0x694/0x28d0 mm/mmap.c:2652
+>        do_mmap+0x831/0xf60 mm/mmap.c:1394
+>        vm_mmap_pgoff+0x1a2/0x3b0 mm/util.c:543
+>        ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1440
+>        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> -> #0 (&mm->mmap_lock){++++}-{3:3}:
+>        check_prev_add kernel/locking/lockdep.c:3113 [inline]
+>        check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+>        validate_chain kernel/locking/lockdep.c:3847 [inline]
+>        __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
+>        lock_acquire kernel/locking/lockdep.c:5705 [inline]
+>        lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+>        down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
+>        mmap_read_lock include/linux/mmap_lock.h:142 [inline]
+>        do_user_addr_fault+0xb3d/0x1210 arch/x86/mm/fault.c:1391
+>        handle_page_fault arch/x86/mm/fault.c:1534 [inline]
+>        exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1590
+>        asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+>        fault_in_readable+0x1a5/0x210 mm/gup.c:1856
+>        fault_in_iov_iter_readable+0x252/0x2c0 lib/iov_iter.c:362
+>        generic_perform_write+0x1ae/0x570 mm/filemap.c:3913
+>        ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+>        ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+>        call_write_iter include/linux/fs.h:1868 [inline]
+>        new_sync_write fs/read_write.c:491 [inline]
+>        vfs_write+0x945/0xd50 fs/read_write.c:584
+>        ksys_write+0x12b/0x250 fs/read_write.c:637
+>        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>        do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> other info that might help us debug this:
+> 
+>  Possible unsafe locking scenario:
+> 
+>        CPU0                    CPU1
+>        ----                    ----
+>   lock(&sb->s_type->i_mutex_key#8);
+>                                lock(&mm->mmap_lock);
+>                                lock(&sb->s_type->i_mutex_key#8);
+>   rlock(&mm->mmap_lock);
+> 
+>  *** DEADLOCK ***
+> 
+> 3 locks held by syz-executor.4/5589:
+>  #0: ffff88802a7fe0e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe7/0x100 fs/file.c:1047
+>  #1: ffff888021fe0460 (sb_writers#4){.+.+}-{0:0}, at: ksys_write+0x12b/0x250 fs/read_write.c:637
+>  #2: ffff88806a066800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+>  #2: ffff88806a066800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+> 
+> stack backtrace:
+> CPU: 0 PID: 5589 Comm: syz-executor.4 Not tainted 6.4.0-rc4-syzkaller-geb1f822c76be-dirty #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+>  check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
+>  check_prev_add kernel/locking/lockdep.c:3113 [inline]
+>  check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+>  validate_chain kernel/locking/lockdep.c:3847 [inline]
+>  __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
+>  lock_acquire kernel/locking/lockdep.c:5705 [inline]
+>  lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+>  down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
+>  mmap_read_lock include/linux/mmap_lock.h:142 [inline]
+>  do_user_addr_fault+0xb3d/0x1210 arch/x86/mm/fault.c:1391
+>  handle_page_fault arch/x86/mm/fault.c:1534 [inline]
+>  exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1590
+>  asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+> RIP: 0010:fault_in_readable+0x1a5/0x210 mm/gup.c:1856
+> Code: fc ff df 48 c7 04 02 00 00 00 00 48 83 c4 48 4c 89 e0 5b 5d 41 5c 41 5d 41 5e 41 5f c3 45 31 e4 eb ce e8 ae 51 c4 ff 45 31 f6 <41> 8a 45 00 31 ff 44 89 f6 88 44 24 28 e8 b9 4d c4 ff 45 85 f6 75
+> RSP: 0018:ffffc90006187a38 EFLAGS: 00050246
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff888026905940 RSI: ffffffff81bff672 RDI: 0000000000000007
+> RBP: 00000000200002cc R08: 0000000000000007 R09: 0000000000000000
+> R10: 00000000000002c0 R11: 1ffffffff219cbe3 R12: 000000000000000c
+> R13: 00000000200002c0 R14: 0000000000000000 R15: 1ffff92000c30f48
+>  fault_in_iov_iter_readable+0x252/0x2c0 lib/iov_iter.c:362
+>  generic_perform_write+0x1ae/0x570 mm/filemap.c:3913
+>  ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+>  ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+>  call_write_iter include/linux/fs.h:1868 [inline]
+>  new_sync_write fs/read_write.c:491 [inline]
+>  vfs_write+0x945/0xd50 fs/read_write.c:584
+>  ksys_write+0x12b/0x250 fs/read_write.c:637
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f2359a8c169
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f235a721168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: ffffffffffffffda RBX: 00007f2359bac050 RCX: 00007f2359a8c169
+> RDX: 000000000000000c RSI: 00000000200002c0 RDI: 0000000000000004
+> RBP: 00007f2359ae7ca1 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007ffea89659df R14: 00007f235a721300 R15: 0000000000022000
+>  </TASK>
+> ----------------
+> Code disassembly (best guess), 2 bytes skipped:
+>    0:	df 48 c7             	fisttps -0x39(%rax)
+>    3:	04 02                	add    $0x2,%al
+>    5:	00 00                	add    %al,(%rax)
+>    7:	00 00                	add    %al,(%rax)
+>    9:	48 83 c4 48          	add    $0x48,%rsp
+>    d:	4c 89 e0             	mov    %r12,%rax
+>   10:	5b                   	pop    %rbx
+>   11:	5d                   	pop    %rbp
+>   12:	41 5c                	pop    %r12
+>   14:	41 5d                	pop    %r13
+>   16:	41 5e                	pop    %r14
+>   18:	41 5f                	pop    %r15
+>   1a:	c3                   	retq
+>   1b:	45 31 e4             	xor    %r12d,%r12d
+>   1e:	eb ce                	jmp    0xffffffee
+>   20:	e8 ae 51 c4 ff       	callq  0xffc451d3
+>   25:	45 31 f6             	xor    %r14d,%r14d
+> * 28:	41 8a 45 00          	mov    0x0(%r13),%al <-- trapping instruction
+>   2c:	31 ff                	xor    %edi,%edi
+>   2e:	44 89 f6             	mov    %r14d,%esi
+>   31:	88 44 24 28          	mov    %al,0x28(%rsp)
+>   35:	e8 b9 4d c4 ff       	callq  0xffc44df3
+>   3a:	45 85 f6             	test   %r14d,%r14d
+>   3d:	75                   	.byte 0x75
+>   
