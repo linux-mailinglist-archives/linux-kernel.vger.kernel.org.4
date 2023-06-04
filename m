@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10BB721659
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBB972165C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjFDL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 07:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S231300AbjFDLbH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 4 Jun 2023 07:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDL2G (ORCPT
+        with ESMTP id S229462AbjFDLbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 07:28:06 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BE17DA;
-        Sun,  4 Jun 2023 04:28:04 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 354BRs1j001843;
-        Sun, 4 Jun 2023 13:27:54 +0200
-Date:   Sun, 4 Jun 2023 13:27:54 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Zhangjin Wu <falcon@tinylab.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 11/12] selftests/nolibc: add new gettimeofday test
- cases
-Message-ID: <ZHx1OliMqHx9U1Lw@1wt.eu>
-References: <cover.1685777982.git.falcon@tinylab.org>
- <68dace9e2532316ff454894697ecfd99e419a523.1685777982.git.falcon@tinylab.org>
- <2fccaff5-2354-4ac0-8389-1004d47d8dc9@t-8ch.de>
- <tencent_4668A50A08C3D31E7531619E@qq.com>
- <51e1db37-3981-4ea5-9348-b6f6b31ecc8a@app.fastmail.com>
+        Sun, 4 Jun 2023 07:31:05 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F73AB;
+        Sun,  4 Jun 2023 04:31:04 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-977c963041dso17188066b.1;
+        Sun, 04 Jun 2023 04:31:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685878262; x=1688470262;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/aL+o2q9WhcJmMB5Yajs16jdTbmhGEnj7bHGrpS9KdA=;
+        b=iN2r8kC/5NpwelyNdhctUo8s2Ep1Apbf86V8bCG1jS6eAnCgJIAnYO54MehyMH0vTQ
+         PXKED8/EBZhhAsLP3Lri1aShN9dYQjDYAFXIns4bS08b8Fl9dj4tTdlf7BFfSfrTUbML
+         au5pMFJoMqy0dTeZ3fQo0nGb/Xr9t/ocySVRkdHLV9i3+mGsm+z/7St6BZnNS81S2Ogc
+         LEmwnJeYyR8vyubXRo5aiU8I1l8rVUx9b6YkOhKHycODqPuy8wQ1h6U/KWnDZmNbihbC
+         PEKPs/go7dWcxbCx13LsclhuLVp0c/NMtSpWh6XWVhSFa+VdBA0qTNny3DwEKnTci8NR
+         6Fyw==
+X-Gm-Message-State: AC+VfDx+XDrfmeWhbaqtpLHriXHTDNtpf/vKcfxKyuSSIYcaW4Qm66ae
+        6xwHnR6a/WhHD9Anql94jvD07fJ8eXtHY3E+Pz0=
+X-Google-Smtp-Source: ACHHUZ5ky9PsrrOle7rH26Nn34AShVg9V3oHbWiTjgDKaOLAUpJbWY6V40VeJUcdJJdH6NQQ2r2a1suc56BMKzb4kY8=
+X-Received: by 2002:a17:906:49:b0:953:2918:71e7 with SMTP id
+ 9-20020a170906004900b00953291871e7mr10405245ejg.5.1685878262158; Sun, 04 Jun
+ 2023 04:31:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51e1db37-3981-4ea5-9348-b6f6b31ecc8a@app.fastmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <ZHpPOzT0nm+vddPq@bhelgaas> <fda371a2-da84-c764-c809-2a361418b4ef@amd.com>
+In-Reply-To: <fda371a2-da84-c764-c809-2a361418b4ef@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 4 Jun 2023 13:30:48 +0200
+Message-ID: <CAJZ5v0gzSitt2zm2fhwkg51ZRUd_1ZBVB8akiUK_cnr8wupFQA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Call _REG when saving/restoring PCI state
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,52 +60,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 11:24:39AM +0200, Arnd Bergmann wrote:
-> On Sun, Jun 4, 2023, at 10:29, ??? wrote:
+On Fri, Jun 2, 2023 at 11:57 PM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
+>
+>
+> On 6/2/2023 3:21 PM, Bjorn Helgaas wrote:
+> > [+cc Rafael, Len, linux-acpi]
 > >
-> > Sorry for missing part of your feedbacks, I will check if -nostdlib 
-> > stops the linking of libgcc_s or my own separated test script forgot 
-> > linking the libgcc_s manually.
-> 
-> According to the gcc documentation, -nostdlib drops libgcc.a, but
-> adding -lgcc is the recommended way to bring it back.
-> 
-> > And as suggestion from Thomas' reply,
+> > Hi Mario,
 > >
-> >>> Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
-> >>> ones for the other architectures, or get one from lib/math/div64.c.
-> >
-> >>No, these ones come from the compiler via libgcc_s, we must not try to
-> > reimplement them. And we should do our best to avoid depending on them
-> > to avoid the error you got above.
-> >
-> > So, the explicit conversion is used instead in the patch.
-> 
-> I think a cast to a 32-bit type is ideal when converting the
-> clock_gettime() result into microseconds, since the kernel guarantees
-> that the timespec value is normalized, with all zeroes in the
-> upper 34 bits. Going through __aeabi_ldivmod would make the
-> conversion much slower.
-> 
-> For user supplied non-normalized timeval values, it's not obvious
-> whether we need the full 64-bit division
+> > On Thu, Jun 01, 2023 at 10:11:22PM -0500, Mario Limonciello wrote:
+> >> ASMedia PCIe GPIO controllers connected to AMD SOC fail functional tests
+> >> after returning from s2idle. This is because the BIOS checks whether the
+> >> OSPM has called the _REG method to determine whether it can interact with
+> >> the OperationRegion assigned to the device.
+> > "s2idle" is a Linux term; I'd prefer something that we can relate to
+> > the ACPI spec.
+> It's important for the symptoms of this issue though, this
+> problem doesn't trigger "just" by moving D-states.
+>
+> It happens as a result of system suspend.
 
-We don't have to care about these here for the microsecond part,
-because for decades these were exclusively 32-bit. Also the only
-one consuming this field would have been settimeofday() and it's
-already documented as returning EINVAL if tv_usec is not within
-the expected 0..999999 range.
+As I said in my response to Bjorn, s2idle is D0 from the ACPI
+standpoint.  It is not a system sleep and it has no special meaning in
+ACPI.
 
-And when in doubt we should keep in mind that nolibc's purpose is not
-to become a yet-another full-blown libc alternative but just a small
-piece of software allowing to produce portable and compact binaries
-for testing or booting. Being a bit stricter than other libcs for the
-sake of code compactness is better here. Originally for example it was
-necessary to always pass the 3 arguments to open(). Over time we managed
-to make simple code compile with both glibc and nolibc, but when it
-comes at the cost of adding size and burden for the developers, such
-as forcing them to add libgcc, I prefer that we slightly limit the
-domain of application instead.
+The problem seems to be related to the low-power S0 idle _DSM calls to me.
 
-Thanks!
-Willy
+> >
+> > Maybe a pointer to the specific function in the driver that has a
+> > problem?  Based on the patch, I assume the driver uses some control
+> > method that looks at PCI config space?
+>
+> The issue isn't in anything Linux code "does"; it's in the "lack"
+> of Linux code doing what it needs to IE using _REG.
+
+So the argument seems to be that under certain conditions the PCI
+config space becomes unavailable and so _REG(dev, 0) needs to be
+called when this is about to happen and _REG(dev, 1) needs to be
+called when the config space becomes available again.  Fair enough,
+but I'm not sure why this is limited to system suspend and resume.
+
+Moreover, "PCI_Config operation regions on a PCI root bus containing a
+_BBN object" are specifically mentioned as one of the cases when _REG
+need not be evaluated at all.  I guess the operation region in
+question doesn't fall into that category?
+
+> At least for this issue _REG is treated like a lock mechanism.
+> In the spec it says specifically:
+>
+> "When an operation region handler is unavailable, AML cannot access
+> data fields in that region".
+>
+> That is it's to ensure that OSPM and AML don't both simultaneously
+> access the same region.
+>
+> What happens is that AML normally wants to access this region during
+> suspend, but without the sequence of calling _REG it can't.
+
+Is this about being unable to access the opregion or racing with
+concurrent accesses on the OS side?
+
+> >
+> >> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
+> >> state of PCI devices.
+> > Please include the spec citation: ACPI r6.5, sec 6.5.4.  The URL has
+> > changed in the past and may change in the future, but the name/section
+> > number will not.
+> Sure.
+> >
+> >> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
+> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> ---
+> >>   drivers/pci/pci.c | 12 ++++++++++++
+> >>   1 file changed, 12 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> >> index e38c2f6eebd4..071ecba548b0 100644
+> >> --- a/drivers/pci/pci.c
+> >> +++ b/drivers/pci/pci.c
+> >> @@ -1068,6 +1068,12 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+> >>      return acpi_pci_bridge_d3(dev);
+> >>   }
+> >>
+> >> +static inline int platform_toggle_reg(struct pci_dev *dev, int c)
+> >> +{
+> >> +    return acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
+> >> +                             ACPI_ADR_SPACE_PCI_CONFIG, c);
+> >> +}
+> > You never check the return value, so why return it?
+>
+> _REG isn't mandatory for any of these uses, and I wanted to make
+> sure that if it does end up being mandatory in a future use that
+> the return code wasn't thrown away.  If you think it's better to
+> just throw it away now, I have no qualms making it a void instead.
+
+I don't think it can reasonably become mandatory without adding a
+specific _OSC bit for that.
+
+> >
+> > The function actually doesn't *toggle*; it connects or disconnects
+> > based on "c".
+> Can you suggest a better function name?
+> >
+> > This looks like it only builds when CONFIG_ACPI=y?
+>
+> The prototype for acpi_evaluate_reg isn't guarded by CONFIG_ACPI
+> so I figured it worked both ways.
+>
+> But looking again I don't see a dummy implementation version for
+> the lack of CONFIG_ACPI, so I'll double check it.
+>
+> >
+> >>   /**
+> >>    * pci_update_current_state - Read power state of given device and cache it
+> >>    * @dev: PCI device to handle.
+> >> @@ -1645,6 +1651,9 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
+> >>   int pci_save_state(struct pci_dev *dev)
+> >>   {
+> >>      int i;
+> >> +
+> >> +    platform_toggle_reg(dev, ACPI_REG_DISCONNECT);
+> > I would expect these to be in the PM code near the power state
+> > transitions, not in the state save/restore code.  These functions
+> > *are* used during suspend/resume, but are used in other places as
+> > well, where we probably don't want _REG executed.
+> >
+> > Cc'd Rafael and PM folks, who can give much better feedback.
+> My knee jerk reaction when we found the root cause for this issue
+> was to put the code right around the D-state transitions, but I
+> decided against this.
+>
+> I put it in save/restore intentionally because
+> like I mentioned above it's treated like a locking mechanism between
+> OSPM and AML and it's not functionally tied to a D-state transition.
+>
+> When the state is saved it's like Linux says
+> "I'm done using this region, go ahead and touch it firmware".
+> When it's restored it's like Linux says
+> "Don't use that region, I'm claiming it for now".
+
+So it looks like you want to use _REG for protecting PCI config space
+against concurrent accesses from AML and the OS.
+
+> Think about that other patch I wrote recently that controls D3
+> availability [1].  If it was only run in the D-state transitions and
+> the root port stays in D0 but has a _REG method it would never get
+> called.
+
+And why should it be evaluated in that case?
