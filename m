@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEB672167A
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9989721681
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjFDL6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 07:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S231382AbjFDL7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 07:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjFDL6J (ORCPT
+        with ESMTP id S229851AbjFDL7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 07:58:09 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE14A4;
-        Sun,  4 Jun 2023 04:58:08 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f7f864525fso41959461cf.1;
-        Sun, 04 Jun 2023 04:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685879888; x=1688471888;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T18QKAipN8vW8fTZCSkrcFHiXgR2OFXGMISa9G5pUdU=;
-        b=Tf5/QIh10fPABekvmYtfjVYVrCHUeFdeAJhYChgKRxDpBZaBGDVaUTYjZYbelx6gyY
-         /GubRiLI2i04OlgJ7x4oFquj6ehS926hjMqKCij95031EwHkBTfdje0BV2+rwUsVLEun
-         yyXgXWWCPZ8mlTRprYLzr7fGkQcj6SOrF6gj6CEKT9kqynhljWotO9SRlN4dOLRPixJT
-         Dv7AvdmKtTtXU6B3WCtvQ1Iz3MDxG6ghQ6898AmXEYH0LoDY8I41YD3uClKLo8fvpPrK
-         LjRrn1YkteeW/9dnkxipeb0SQgW0QfYeil4VB4wgsY0Ha4GwlOynpmy0xrrY/ahpvGOG
-         HX1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685879888; x=1688471888;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T18QKAipN8vW8fTZCSkrcFHiXgR2OFXGMISa9G5pUdU=;
-        b=URJjoCZZZZRYMX+nEqchjTJROO9rrMKRlH6YSb7/oHk5anQeneQqCMidZ4G3EbDFXc
-         ZalxSwuLcGC1WNEMmRlbF7yqhKpu6IUy81omma+gm4iQhsyGyGOJiMWcOzbhXPJw/ToC
-         0m8bcXm2LP213Hf5cFPuy9KH5h2h5TWJNfieVTFAJ6XTjRjDKahudAFSTUx5iJhfHEdB
-         FeBKfLhMjQZ2cQ5nmqKz5BVK8cDmbKXC9KY+3VMpizw2ayW61OFxelURZBAWnuKG+S73
-         u5VwYG5ZBnuuCnON4U/pZr0PXYsYtg5xD70xDMq4gL65lZuPP9Uaf8wd+ikuKHVd6EIv
-         nlrQ==
-X-Gm-Message-State: AC+VfDxYngUo3KFJVtRU33UHLLBhqiT7Q+J/3e+G9Hqv1Nl/V4TUOg7b
-        7kKeFor1s+7eGql+5NJ24FfjwIIWu3iRuo5qAtU=
-X-Google-Smtp-Source: ACHHUZ6fLvXz6Td/lh8jNS6ZNkXReU+YUmxjbGH4qHdHOUzIZfT7IJkWjTozo2wMAONw1IdmQ7ka+PV9zVx13/qOT+c=
-X-Received: by 2002:a05:622a:291:b0:3f8:698b:34a3 with SMTP id
- z17-20020a05622a029100b003f8698b34a3mr3555140qtw.67.1685879887741; Sun, 04
- Jun 2023 04:58:07 -0700 (PDT)
+        Sun, 4 Jun 2023 07:59:52 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09E0CDB;
+        Sun,  4 Jun 2023 04:59:50 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 354BxgFu001979;
+        Sun, 4 Jun 2023 13:59:42 +0200
+Date:   Sun, 4 Jun 2023 13:59:42 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Vincent Dagonneau <v@vda.io>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tools/nolibc: ensure fast64 integer types have 64 bits
+Message-ID: <ZHx8rshTueq8V5fC@1wt.eu>
+References: <20230530-nolibc-fast64-v1-1-883dea6bc666@weissschuh.net>
+ <ZHxsWyTf5K5bJqi8@1wt.eu>
 MIME-Version: 1.0
-References: <20230602152626.284324-1-hugo@hugovil.com> <20230602152626.284324-6-hugo@hugovil.com>
- <2023060454-cotton-paramount-e33e@gregkh>
-In-Reply-To: <2023060454-cotton-paramount-e33e@gregkh>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 4 Jun 2023 14:57:31 +0300
-Message-ID: <CAHp75Ve6W-hcB4YAeKukgv-uOEzBY7Tx5Sdf3doTRYKzNPcVGw@mail.gmail.com>
-Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO configuration
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Hugo Villeneuve <hugo@hugovil.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZHxsWyTf5K5bJqi8@1wt.eu>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 4, 2023 at 10:47=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
-> On Fri, Jun 02, 2023 at 11:26:21AM -0400, Hugo Villeneuve wrote:
+On Sun, Jun 04, 2023 at 12:50:03PM +0200, Willy Tarreau wrote:
+> On Tue, May 30, 2023 at 11:18:00AM +0200, Thomas Weiﬂschuh wrote:
+> > On 32bit platforms size_t is not enough to represent [u]int_fast64_t.
+> > 
+> > Fixes: 3e9fd4e9a1d5 ("tools/nolibc: add integer types and integer limit macros")
+> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> > ---
+> > Cc: Vincent Dagonneau <v@vda.io>
+> > 
+> > Note: We could also fall back to compiler-provided data like:
+> > 
+> > __UINT_FAST{8,16,32,64}_{TYPE,MIN,MAX}__
+> 
+> I'm fine with the way you did it. I'm wondering how we managed to miss
+> this one given the tests in place!
 
-...
+BTW, it failed on 32-bit platforms:
 
-> > +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
->
-> This returns what, mctrl?  If so, please document that, it doesn't look
-> obvious.
+4407 tests passed, 84 skipped, 63 failed
+$ grep '^linux_arch\|FAIL' test14.out
+linux_arch=i386 qemu_arch=i386 gcc_arch=i386
+52 limit_int_fast64_min = -2147483648                           [FAIL]
+53 limit_int_fast64_max = 2147483647                            [FAIL]
+54 limit_uint_fast64_max = 4294967295                           [FAIL]
 
-Good suggestion. Because I also stumbled over the returned type.
+The reason is that the constants also have to be adjusted. With the fix
+below everything works right:
 
->  And as the kernel test robot reported, you do nothing with the
-> return value so why compute it?
+--- a/tools/include/nolibc/stdint.h
++++ b/tools/include/nolibc/stdint.h
+@@ -84,17 +84,17 @@ typedef uint64_t          uintmax_t;
+ #define  INT_FAST8_MIN   INT8_MIN
+ #define INT_FAST16_MIN   INTPTR_MIN
+ #define INT_FAST32_MIN   INTPTR_MIN
+-#define INT_FAST64_MIN   INTPTR_MIN
++#define INT_FAST64_MIN   INT64_MIN
+ 
+ #define  INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX   INTPTR_MAX
+ #define INT_FAST32_MAX   INTPTR_MAX
+-#define INT_FAST64_MAX   INTPTR_MAX
++#define INT_FAST64_MAX   INT64_MAX
+ 
+ #define  UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX  SIZE_MAX
+ #define UINT_FAST32_MAX  SIZE_MAX
+-#define UINT_FAST64_MAX  SIZE_MAX
++#define UINT_FAST64_MAX  UINT64_MAX
+ 
+ #ifndef INT_MIN
+ #define INT_MIN          (-__INT_MAX__ - 1)
 
-It seems that the entire function and respective call has to be moved
-under #ifdef CONFIG_GPIOLIB.
 
-> And you have a real port here, no need to pass in a "raw" struct device,
-> right?
+4470 tests passed, 84 skipped, 0 failed
+$ grep '^linux_arch\|fast64' test15.out 
+linux_arch=i386 qemu_arch=i386 gcc_arch=i386
+52 limit_int_fast64_min = -9223372036854775808                   [OK]
+53 limit_int_fast64_max = 9223372036854775807                    [OK]
+54 limit_uint_fast64_max = -1                                    [OK]
 
+If you're fine with it, I'll squash it into your patch.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Willy
