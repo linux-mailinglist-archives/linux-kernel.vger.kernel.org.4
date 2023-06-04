@@ -2,116 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5410E7213E5
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 02:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A437213E7
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 02:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjFDAdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 20:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S229849AbjFDAf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 20:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjFDAdO (ORCPT
+        with ESMTP id S229706AbjFDAf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 20:33:14 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22361A5
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 17:33:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QYd4m3Tl9z4x3x;
-        Sun,  4 Jun 2023 10:33:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1685838792;
-        bh=HlEyZhE+LrdUOZTCV04b2fMeKrsIesj187fO09UzUIU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qdrVHzFHHkmCWaBGYXaFZALpDl71Ul/+uEYHsJoBvsLf5Voq/G5qpvVS5uMZ74ZUe
-         QeCAdykR4oSeykmCPAsmDKN1aC3cWaW7mQdzTNVf1smELK3eAx/WIT1wkIZiNQ1H2w
-         sloHkLmPm6iew9bbckurez6gINYBPmbmbItCyeXsOOclB+RvEo6sAscqA3Wm2E/pyP
-         OevPSmBbiXoH0CYgH/+G7EUJHcIjpwpotdabVZOWvpVlcB3fk79EV0seYADJPXAh6U
-         WF6UtIkmIqgB4lZCNL7lC5XQYEXm+SaogJtNiwIVpmmAYTOLW6GBHUWKqqWCPmvuR6
-         wgHQh/T3Om33Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     gbatra@linux.vnet.ibm.com, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, maninder1.s@samsung.com
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.4-4 tag
-Date:   Sun, 04 Jun 2023 10:33:12 +1000
-Message-ID: <87cz2cgj7b.fsf@mail.lhotse>
+        Sat, 3 Jun 2023 20:35:57 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521751A5
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 17:35:56 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77760439873so238483939f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 17:35:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685838955; x=1688430955;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1+Fa1Sb0xRcOOP/IGgofEUyl/eChZL4ZfhofxtA5tw8=;
+        b=LHweZeG5hz6EJoNJbT3D0DKtjby+osFboHb9RfFqXnr0mNL4uZvIErnXlSicWXZmPk
+         XDb91WbwdWuPieLFAxtVhXr/7XdUd0YHMhOODv5sVm2AHQ/MwYOFpzNh3dqbt9OHXF8M
+         AApPWe0G9Y1hMHo0DpqQPzxLI+Wdu5AiOtTthpRVSx5o6877wr51osV5I+LYXMZPFQz9
+         qcgbZxptwnLzmhAj80rgwk3LfLoEoidI7ExrUCSGL8Rxnq2I7VMZNXk3Jn/cCU4mkNzC
+         +KOZpKES3W7FwR3T7lWw4XB8IM4ktEnQtaLxiil/gfmgvSKudGjKM03FhjwfFDAeyq0Q
+         0nKQ==
+X-Gm-Message-State: AC+VfDygCrZgi+0gy83m5cS6Fn6qJjXfi0CBnV01+y19X8ljiOoFsQbT
+        d+4P2f7E1WYtjO0opXGwn8gS+tNGEPup2J1E30NgbAvZ3rnN
+X-Google-Smtp-Source: ACHHUZ78vzo3Rjc2DmT9M5pPpJ7gIXkQ9GfaWQgicZ9pV2vu8oZhESAYQC3ATZIBM5OZietck5Y0Xx5Vjq3qaQ32aYKeQX9aqA8y
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d405:0:b0:331:ac80:cca0 with SMTP id
+ q5-20020a92d405000000b00331ac80cca0mr5642267ilm.6.1685838955651; Sat, 03 Jun
+ 2023 17:35:55 -0700 (PDT)
+Date:   Sat, 03 Jun 2023 17:35:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000019a97c05fd42f8c8@google.com>
+Subject: [syzbot] [nilfs?] kernel BUG in end_buffer_async_write
+From:   syzbot <syzbot+5c04210f7c7f897c1e7f@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, konishi.ryusuke@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Hello,
 
-Hi Linus,
+syzbot found the following issue on:
 
-Please pull some more powerpc fixes for 6.4:
+HEAD commit:    51f269a6ecc7 Merge tag 'probes-fixes-6.4-rc4' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15ed0e7d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3da6c5d3e0a6c932
+dashboard link: https://syzkaller.appspot.com/bug?extid=5c04210f7c7f897c1e7f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1336c6b5280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c0a5a5280000
 
-The following changes since commit 358e526a1648cdd773ba169da5867874ae2408e3:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8a8c8e41a6b0/disk-51f269a6.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ffc3737b4233/vmlinux-51f269a6.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d49888e5beb1/bzImage-51f269a6.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/99d35f050c12/mount_0.gz
 
-  powerpc/mm: Reinstate ARCH_FORCE_MAX_ORDER ranges (2023-05-21 11:40:34 +1000)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5c04210f7c7f897c1e7f@syzkaller.appspotmail.com
 
-are available in the git repository at:
+------------[ cut here ]------------
+kernel BUG at fs/buffer.c:391!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.4.0-rc4-syzkaller-00268-g51f269a6ecc7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:end_buffer_async_write+0x2db/0x340 fs/buffer.c:391
+Code: 65 00 fe 4c 89 ff e8 d4 a3 ff ff be 08 00 00 00 48 89 c7 48 89 c3 e8 b4 31 e0 ff f0 80 4b 01 01 e9 07 fe ff ff e8 45 62 8d ff <0f> 0b e8 3e 62 8d ff 0f 0b 48 89 df e8 34 2b e0 ff e9 d9 fe ff ff
+RSP: 0018:ffffc90000147c98 EFLAGS: 00010246
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.4-4
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: ffff88801664bb80 RSI: ffffffff81f6e3fb RDI: 0000000000000001
+RBP: ffff88806fbde570 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffffffff81f6e120 R14: ffff88801e24ee00 R15: ffff88802a45a788
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f42b45b0000 CR3: 000000007b04a000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ end_bio_bh_io_sync+0xde/0x130 fs/buffer.c:2730
+ bio_endio+0x5af/0x6c0 block/bio.c:1608
+ req_bio_endio block/blk-mq.c:761 [inline]
+ blk_update_request+0x5c5/0x1620 block/blk-mq.c:906
+ blk_mq_end_request+0x59/0x4c0 block/blk-mq.c:1023
+ lo_complete_rq+0x1c6/0x280 drivers/block/loop.c:370
+ blk_complete_reqs+0xad/0xe0 block/blk-mq.c:1101
+ __do_softirq+0x1d4/0x905 kernel/softirq.c:571
+ run_ksoftirqd kernel/softirq.c:939 [inline]
+ run_ksoftirqd+0x31/0x60 kernel/softirq.c:931
+ smpboot_thread_fn+0x659/0x9e0 kernel/smpboot.c:164
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:end_buffer_async_write+0x2db/0x340 fs/buffer.c:391
+Code: 65 00 fe 4c 89 ff e8 d4 a3 ff ff be 08 00 00 00 48 89 c7 48 89 c3 e8 b4 31 e0 ff f0 80 4b 01 01 e9 07 fe ff ff e8 45 62 8d ff <0f> 0b e8 3e 62 8d ff 0f 0b 48 89 df e8 34 2b e0 ff e9 d9 fe ff ff
+RSP: 0018:ffffc90000147c98 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: ffff88801664bb80 RSI: ffffffff81f6e3fb RDI: 0000000000000001
+RBP: ffff88806fbde570 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffffffff81f6e120 R14: ffff88801e24ee00 R15: ffff88802a45a788
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f42b45b0000 CR3: 000000007b04a000 CR4: 0000000000350ef0
 
-for you to fetch changes up to 719dfd5925e186e09a2a6f23016936ac436f3d78:
 
-  powerpc/xmon: Use KSYM_NAME_LEN in array size (2023-05-30 16:46:56 +1000)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-- ------------------------------------------------------------------
-powerpc fixes for 6.4 #4
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
- - Fix link errors in new aes-gcm-p10 code when built-in with other drivers.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
- - Limit number of TCEs passed to H_STUFF_TCE hcall as per spec.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
- - Use KSYM_NAME_LEN in xmon array size to avoid possible OOB write.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Thanks to: Gaurav Batra, Maninder Singh Vishal Chourasia.
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-- ------------------------------------------------------------------
-Gaurav Batra (1):
-      powerpc/iommu: Limit number of TCEs to 512 for H_STUFF_TCE hcall
-
-Maninder Singh (1):
-      powerpc/xmon: Use KSYM_NAME_LEN in array size
-
-Michael Ellerman (1):
-      powerpc/crypto: Fix aes-gcm-p10 link errors
-
-
- arch/powerpc/crypto/Makefile                            | 10 +++++-----
- arch/powerpc/crypto/aes-gcm-p10-glue.c                  | 18 +++++++++---------
- arch/powerpc/crypto/{aesp8-ppc.pl => aesp10-ppc.pl}     |  2 +-
- arch/powerpc/crypto/{ghashp8-ppc.pl => ghashp10-ppc.pl} | 12 ++++++------
- arch/powerpc/platforms/pseries/iommu.c                  | 13 +++++++++++--
- arch/powerpc/xmon/xmon.c                                |  2 +-
- 6 files changed, 33 insertions(+), 24 deletions(-)
- rename arch/powerpc/crypto/{aesp8-ppc.pl => aesp10-ppc.pl} (99%)
- rename arch/powerpc/crypto/{ghashp8-ppc.pl => ghashp10-ppc.pl} (97%)
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmR724kACgkQUevqPMjh
-pYA43BAAndyoXJ2q+lOdn/tTHA0QUjefB8YON2/9OC/lkX//TWJfInpiZ3GI5DMn
-nx44N+zRdYMSjMKGw4NxOiFRoHguXb9Wns/9HEeLz2UpOS5nrxVPJRZsgGDQvzIx
-UN8pkOuAQF9nAHUD+ZRp2R61jxlxFrp2V3RvHsRTHyBUUVLcAdjk07GKTm5Z0hYx
-eLDka1FjAXUnd/6S4YJAsMpPKdHLxJOsz95mkT5eZJ6Mq67+HeYtd06Kcd6vgMaP
-gW91Z93THyKhiEIcSQSJhwngud3UyJfMj+6TIycSHC/21CE9yMHrmt+mjgprJpdd
-eLKLIC+I0Gj8rk0NW1AzLveXWoV0tN0rhs+pLA9/l4CbJUlHLq49IG451wksCnWM
-Esh3fmHgKQYn8MxNeYUC7h7NNCUWlVLXK4qzSB13ZNBdGVIEwMl5q0cXajXY6g7b
-jXwxNLDbuXoyFaZCHdfXkmyMKrxDLVG2kTzLdZ5y5nwmh2OgMu101CqgJyJP34ig
-Svu6IZmZepod/A3u4peNKMGHsMRCVI4TYdI3ItbnMV+SDLSLXDQhVvARZNe5PChb
-1bSfnFeDG0ib+WLZX85ZlQCsfzoNMRwZYMMOWlreMBKzypVALGFHVADEK+/v1c3w
-3bXw58YdrcsjNa5rI0BgucOpQLEzp0VMhB06LIzI0j5yFOjrPy0=
-=DY5l
------END PGP SIGNATURE-----
+If you want to undo deduplication, reply with:
+#syz undup
