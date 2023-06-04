@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4A6721674
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEB672167A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjFDLxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 07:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
+        id S231377AbjFDL6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 07:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjFDLxE (ORCPT
+        with ESMTP id S229879AbjFDL6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 07:53:04 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942BCDA;
-        Sun,  4 Jun 2023 04:53:02 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-5584f8ec30cso2932695eaf.0;
-        Sun, 04 Jun 2023 04:53:02 -0700 (PDT)
+        Sun, 4 Jun 2023 07:58:09 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE14A4;
+        Sun,  4 Jun 2023 04:58:08 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f7f864525fso41959461cf.1;
+        Sun, 04 Jun 2023 04:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685879581; x=1688471581;
+        d=gmail.com; s=20221208; t=1685879888; x=1688471888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cAxQCeI6h0I53x47uaZFC8WhX7hLCllFyhAD+lcGDv4=;
-        b=rySf5fpaWLJzjT0P1c/kJgwKFwZ9Tt8wrU7hLpeUR6dwkKo8g9Nj7ERLiz3bU7hFZu
-         411tykjibLrgcINJRpJcEILqV/iQT6Od2/lC8MknMBlRV1M03AREELTeBUkCu2KRrEv7
-         gxKMGLpLHpGue0hlZ3ri/5C1ZYOU1kfakjwKzo+tMQNBpsXITJ5Xh6CYZL4Qmhr6OvKb
-         9zd3BQMPmbiVk3zZXOjcW5F+O4tGMu5K/TL3C3fn7BDXrg7qYaSW5ebdDkuvy/LmbvOa
-         vtteyVhO3Y4nxD8HmJ0M3GzlwMqqjtIBUnXrjDvIZz89p58ILfhC2YDqys0m1xMLxEEQ
-         kxLg==
+        bh=T18QKAipN8vW8fTZCSkrcFHiXgR2OFXGMISa9G5pUdU=;
+        b=Tf5/QIh10fPABekvmYtfjVYVrCHUeFdeAJhYChgKRxDpBZaBGDVaUTYjZYbelx6gyY
+         /GubRiLI2i04OlgJ7x4oFquj6ehS926hjMqKCij95031EwHkBTfdje0BV2+rwUsVLEun
+         yyXgXWWCPZ8mlTRprYLzr7fGkQcj6SOrF6gj6CEKT9kqynhljWotO9SRlN4dOLRPixJT
+         Dv7AvdmKtTtXU6B3WCtvQ1Iz3MDxG6ghQ6898AmXEYH0LoDY8I41YD3uClKLo8fvpPrK
+         LjRrn1YkteeW/9dnkxipeb0SQgW0QfYeil4VB4wgsY0Ha4GwlOynpmy0xrrY/ahpvGOG
+         HX1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685879581; x=1688471581;
+        d=1e100.net; s=20221208; t=1685879888; x=1688471888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cAxQCeI6h0I53x47uaZFC8WhX7hLCllFyhAD+lcGDv4=;
-        b=BAv1UFukcW5YgFtCRLUE1Mj7vOg0VNpVjzRefTtzYiZPya3ZP/7JdI/o6AB7PxVC4g
-         V1Qsq8DhartDWz45m09r+cJMSmXRFa4akxhvGqCTxqrR+OhZumDF/mVI/qrUBfOfn6W1
-         QtiLmJu9AE0myUZxM6IMomf4enIeCxeapvemDw58dqSIzRuPUvlKBNP+pF+foMw/5BnM
-         5NUYakdsgZn7d1EWAXnJFqSvtcQuUYCU0nEj6KshmCyH3Zzuo1OtvGInuicC+SwgtHfp
-         T/67ByhJ0/Ewq6O0J9EDskc+W2B0pvqI6oFsaVXy7cJRa5rRpfijYwTIOr3ie/JuoVO6
-         yYcw==
-X-Gm-Message-State: AC+VfDyykeIu6uUgPxwJbJQ6rqRE7tlOYOSZt8ybschI9xGRkq0HQpSM
-        XLLebxWLQEpho0H5Ri7DoTl7ABdW8cnFWnDx2Kg=
-X-Google-Smtp-Source: ACHHUZ6FSK3g/x041TZw2kYx/GgOwTf9dC+wP/2FjR2+habIF8B3zERsL9TKuFMAATvtITwlSLVC++4q5tqefnjW4QI=
-X-Received: by 2002:a4a:97ed:0:b0:555:2ba8:a75b with SMTP id
- x42-20020a4a97ed000000b005552ba8a75bmr10953200ooi.1.1685879581254; Sun, 04
- Jun 2023 04:53:01 -0700 (PDT)
+        bh=T18QKAipN8vW8fTZCSkrcFHiXgR2OFXGMISa9G5pUdU=;
+        b=URJjoCZZZZRYMX+nEqchjTJROO9rrMKRlH6YSb7/oHk5anQeneQqCMidZ4G3EbDFXc
+         ZalxSwuLcGC1WNEMmRlbF7yqhKpu6IUy81omma+gm4iQhsyGyGOJiMWcOzbhXPJw/ToC
+         0m8bcXm2LP213Hf5cFPuy9KH5h2h5TWJNfieVTFAJ6XTjRjDKahudAFSTUx5iJhfHEdB
+         FeBKfLhMjQZ2cQ5nmqKz5BVK8cDmbKXC9KY+3VMpizw2ayW61OFxelURZBAWnuKG+S73
+         u5VwYG5ZBnuuCnON4U/pZr0PXYsYtg5xD70xDMq4gL65lZuPP9Uaf8wd+ikuKHVd6EIv
+         nlrQ==
+X-Gm-Message-State: AC+VfDxYngUo3KFJVtRU33UHLLBhqiT7Q+J/3e+G9Hqv1Nl/V4TUOg7b
+        7kKeFor1s+7eGql+5NJ24FfjwIIWu3iRuo5qAtU=
+X-Google-Smtp-Source: ACHHUZ6fLvXz6Td/lh8jNS6ZNkXReU+YUmxjbGH4qHdHOUzIZfT7IJkWjTozo2wMAONw1IdmQ7ka+PV9zVx13/qOT+c=
+X-Received: by 2002:a05:622a:291:b0:3f8:698b:34a3 with SMTP id
+ z17-20020a05622a029100b003f8698b34a3mr3555140qtw.67.1685879887741; Sun, 04
+ Jun 2023 04:58:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAFcO6XOacq3hscbXevPQP7sXRoYFz34ZdKPYjmd6k5sZuhGFDw@mail.gmail.com>
- <ZHxydoL06XHR1bOx@casper.infradead.org>
-In-Reply-To: <ZHxydoL06XHR1bOx@casper.infradead.org>
-From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Date:   Sun, 4 Jun 2023 19:52:50 +0800
-Message-ID: <CAFcO6XOLYskwg4GtH1X94rTjbGRvNy5jgau28UfYG3T6azkVLQ@mail.gmail.com>
-Subject: Re: A null-ptr-deref bug in reiserfs_breada in fs/reiserfs/journal.c
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, akpm@linux-foundation.org,
-        yi.zhang@huawei.com, trix@redhat.com, song@kernel.org,
-        bvanassche@acm.org, reiserfs-devel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20230602152626.284324-1-hugo@hugovil.com> <20230602152626.284324-6-hugo@hugovil.com>
+ <2023060454-cotton-paramount-e33e@gregkh>
+In-Reply-To: <2023060454-cotton-paramount-e33e@gregkh>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 4 Jun 2023 14:57:31 +0300
+Message-ID: <CAHp75Ve6W-hcB4YAeKukgv-uOEzBY7Tx5Sdf3doTRYKzNPcVGw@mail.gmail.com>
+Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO configuration
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Hugo Villeneuve <hugo@hugovil.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,47 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, it works! I have tested the patch.
+On Sun, Jun 4, 2023 at 10:47=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+> On Fri, Jun 02, 2023 at 11:26:21AM -0400, Hugo Villeneuve wrote:
 
-Regards,
- butt3rflyh4ck.
+...
 
+> > +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
+>
+> This returns what, mctrl?  If so, please document that, it doesn't look
+> obvious.
 
-On Sun, Jun 4, 2023 at 7:16=E2=80=AFPM Matthew Wilcox <willy@infradead.org>=
- wrote:
->
-> On Sun, Jun 04, 2023 at 04:12:56PM +0800, butt3rflyh4ck wrote:
-> > Hi, there is a null-ptr-deref  bug in reiserfs_breada in
-> > fs/reiserfs/journal.c, I reproduce it in the latest kernel too.
->
-> does this fix the problem?
->
-> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-> index 4d11d60f493c..dd58e0dca5e5 100644
-> --- a/fs/reiserfs/journal.c
-> +++ b/fs/reiserfs/journal.c
-> @@ -2326,7 +2326,7 @@ static struct buffer_head *reiserfs_breada(struct b=
-lock_device *dev,
->         int i, j;
->
->         bh =3D __getblk(dev, block, bufsize);
-> -       if (buffer_uptodate(bh))
-> +       if (!bh || buffer_uptodate(bh))
->                 return (bh);
->
->         if (block + BUFNR > max_block) {
-> @@ -2336,6 +2336,8 @@ static struct buffer_head *reiserfs_breada(struct b=
-lock_device *dev,
->         j =3D 1;
->         for (i =3D 1; i < blocks; i++) {
->                 bh =3D __getblk(dev, block + i, bufsize);
-> +               if (!bh)
-> +                       break;
->                 if (buffer_uptodate(bh)) {
->                         brelse(bh);
->                         break;
+Good suggestion. Because I also stumbled over the returned type.
 
+>  And as the kernel test robot reported, you do nothing with the
+> return value so why compute it?
+
+It seems that the entire function and respective call has to be moved
+under #ifdef CONFIG_GPIOLIB.
+
+> And you have a real port here, no need to pass in a "raw" struct device,
+> right?
 
 
 --=20
-Active Defense Lab of Venustech
+With Best Regards,
+Andy Shevchenko
