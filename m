@@ -2,129 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C86721713
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA617721715
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjFDMzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 08:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S229462AbjFDMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 08:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDMzL (ORCPT
+        with ESMTP id S231349AbjFDMzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 08:55:11 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FF3791;
-        Sun,  4 Jun 2023 05:55:10 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 354CsxC8002327;
-        Sun, 4 Jun 2023 14:54:59 +0200
-Date:   Sun, 4 Jun 2023 14:54:59 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/12] nolibc: add generic part1 of prepare for rv32
-Message-ID: <ZHyJo6Xo5BTf/Np9@1wt.eu>
-References: <cover.1685777982.git.falcon@tinylab.org>
- <9fd76795-65df-4964-bc80-fb1d4f92c402@t-8ch.de>
+        Sun, 4 Jun 2023 08:55:24 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749DFCE;
+        Sun,  4 Jun 2023 05:55:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977cc662f62so103756766b.3;
+        Sun, 04 Jun 2023 05:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685883321; x=1688475321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TDn8YYiBgXe3r21cm1jfI/woIIBtKXmlQB8jMG4QMOo=;
+        b=rCiLQm8r7AsBnR0YdaOOjhZjiaTSbli+RZPxkqHLqdZGIpUudPt4jMW0oaGLQumV20
+         VC3wBhx1K9m3OG/fOdrGjU/X2e21mZH51sVVVqYWByyxYW5XbC4ANM7Dh/e9zqdw/E4/
+         QgUG5MftcXEhHF705ui6Vvs4iPaUskAvWNVtGeSYYH4ZUOw+NGlCcdbU6VF4FQTEJn3H
+         jgbimlJwV4af5cQIR1GcDG5g2BGYhEEQFE0p7zCv93aH8M2uYv5HBTCYq85id/VgEphH
+         L4aNWgDV3qHr+T8BM5Z2hrx53Rmie7o5hwsBR5RUoNlQfW70ZrNPEyU7BVqxoy8WiY3y
+         ba2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685883321; x=1688475321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TDn8YYiBgXe3r21cm1jfI/woIIBtKXmlQB8jMG4QMOo=;
+        b=i8q0xNPXXL+7vw++7HSqtLoV8gOoHPDD4mcsg6xcPktVL+ubAXanj5se1BGFd94P7q
+         bkJR50pel8RAGWQj0O/sjXp+OwUU9h0gYqvq49M40v40XbTZ9/LVFUOSv8+MvwuWSWxG
+         ezN0dPBzFJwlYP+rGhW1BUCgbkDTOCPK1jroMXejNgjMgkBKuWOH9czN1PHb6FqvKJgs
+         GwgvEyQcCG4tmKEXleldu5ckxFsFcWCrhJib3P4dj3zrpeJGKPX8cxJFqFdvG1/bXdGP
+         QefNH18DEvW7IDJVEU4yHnzuFoN1zzPIeZoYik/8afsRkPSWtqBuM2U7DxDhthzBe/nM
+         Qodg==
+X-Gm-Message-State: AC+VfDzZDsyNZQ4GKpVrHHtRkH0AuNX40BD27tFaZeCQOisAIEd09JM6
+        62RCiqRq4P1qFxbZCY+cnOA=
+X-Google-Smtp-Source: ACHHUZ7ja9CDX3BNoyA2qTqEGzXUEEqIef58uTxByuQrtW5OxZTF515OuthTTD2Lh95XYymQeO7jeA==
+X-Received: by 2002:a17:907:8690:b0:96b:4ed5:a1c9 with SMTP id qa16-20020a170907869000b0096b4ed5a1c9mr3772273ejc.51.1685883320625;
+        Sun, 04 Jun 2023 05:55:20 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id gf18-20020a170906e21200b0096629607bb2sm3033939ejb.98.2023.06.04.05.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 05:55:20 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 15:55:17 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
+ to p{5,6}_configured
+Message-ID: <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-9-arinc.unal@arinc9.com>
+ <20230522121532.86610-9-arinc.unal@arinc9.com>
+ <20230524175107.hwzygo7p4l4rvawj@skbuf>
+ <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
+ <20230526130145.7wg75yoe6ut4na7g@skbuf>
+ <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+ <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
+ <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
+ <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9fd76795-65df-4964-bc80-fb1d4f92c402@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 08:49:52AM +0200, Thomas Weiﬂschuh wrote:
-> On 2023-06-03 15:59:29+0800, Zhangjin Wu wrote:
-> > Hi, Willy
-> > 
-> > This is the v3 generic part1 for rv32, all of the found issues of v2
-> > part1 [1] have been fixed up, several generic patches have been fixed up
-> > and merged from v2 part2 [2] to this series, the standalone test_fork
-> > patch [4] is merged with a Reviewed-by line into this series too.
-> > 
-> > This series is based on 20230528-nolibc-rv32+stkp5 branch of [5].
-> > 
-> > Changes from v2 -> v3:
-> > 
-> > * selftests/nolibc: fix up compile warning with glibc on x86_64
-> > 
-> >   Use simpler 'long long' conversion instead of old #ifdef ...
-> >   (Suggestion from Willy)
-> > 
-> > * tools/nolibc: add missing nanoseconds support for __NR_statx
-> > 
-> >   Split the compound assignment into two single assignments
-> >   (Suggestion from Thomas)
-> > 
-> > * selftests/nolibc: add new gettimeofday test cases
-> > 
-> >   Removed the gettimeofday(NULL, &tz)
-> >   (Suggestion from Thomas)
-> > 
-> > All of the commit messages have been re-checked, some missing
-> > Suggested-by lines are added.
-> > 
-> > The whole patchset have been tested on arm, aarch64, rv32 and rv64, no
-> > regressions (the next compile patchset is required to do rv32 test).
-> > 
-> > The nolibc-test has been tested with glibc on x86_64 too.
-> > 
-> > Btw, we have found such poll failures on arm (not introduced by this
-> > patchset), this will be fixed in our coming ppoll_time64 patchset:
-> > 
-> > 48 poll_null = -1 ENOSYS                                        [FAIL]
-> > 49 poll_stdout = -1 ENOSYS                                      [FAIL]
-> > 50 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
-> > 
-> > And the gettimeofday_null removal patch from Thomas [3] may conflicts
-> > with the gettimeofday removal and addition patches, but it is not hard
-> > to fix.
-> > 
-> > Best regards,
-> > Zhangjin
-> > ---
-> > 
-> > [1]: https://lore.kernel.org/linux-riscv/cover.1685362482.git.falcon@tinylab.org/T/#t
-> > [2]: https://lore.kernel.org/linux-riscv/cover.1685387484.git.falcon@tinylab.org/T/#t
-> > [3]: https://lore.kernel.org/lkml/20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net/
-> > [4]: https://lore.kernel.org/lkml/61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org/
-> > [5]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-> > 
-> > Zhangjin Wu (12):
-> >   selftests/nolibc: syscall_args: use generic __NR_statx
-> >   tools/nolibc: add missing nanoseconds support for __NR_statx
-> >   selftests/nolibc: allow specify extra arguments for qemu
-> >   selftests/nolibc: fix up compile warning with glibc on x86_64
-> >   selftests/nolibc: not include limits.h for nolibc
-> >   selftests/nolibc: use INT_MAX instead of __INT_MAX__
-> >   tools/nolibc: arm: add missing my_syscall6
-> >   tools/nolibc: open: fix up compile warning for arm
-> >   selftests/nolibc: support two errnos with EXPECT_SYSER2()
-> >   selftests/nolibc: remove gettimeofday_bad1/2 completely
-> >   selftests/nolibc: add new gettimeofday test cases
-> >   selftests/nolibc: test_fork: fix up duplicated print
-> > 
-> >  tools/include/nolibc/arch-arm.h              | 23 +++++++++++
-> >  tools/include/nolibc/stdint.h                | 14 +++++++
-> >  tools/include/nolibc/sys.h                   | 39 +++++++++---------
-> >  tools/testing/selftests/nolibc/Makefile      |  2 +-
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 42 ++++++++++++--------
-> >  5 files changed, 85 insertions(+), 35 deletions(-)
-> 
-> For the full series:
-> 
-> Reviewed-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+On Sun, Jun 04, 2023 at 01:18:04PM +0100, Russell King (Oracle) wrote:
+> I don't remember whether Vladimir's firmware validator will fail for
+> mt753x if CPU ports are not fully described, but that would be well
+> worth checking. If it does, then we can be confident that phylink
+> will always be used, and those bypassing calls should not be necessary.
 
-I forgot to say, all the series is now queued, and I squashed the
-__NR_statx fix into Thomas' patch.
+It does, I've just retested this:
 
-Willy
+[    8.469152] mscc_felix 0000:00:00.5: OF node /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 of CPU port 4 lacks the required "phy-handle", "fixed-link" or "managed" properties
+[    8.494571] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register DSA switch
+[    8.502151] mscc_felix: probe of 0000:00:00.5 failed with error -22
