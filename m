@@ -2,94 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D031721791
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 16:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83681721795
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 16:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjFDOBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 10:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S232204AbjFDOCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 10:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjFDOBe (ORCPT
+        with ESMTP id S230110AbjFDOBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 10:01:34 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6DCCF;
-        Sun,  4 Jun 2023 07:01:34 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b01d912924so36138905ad.1;
-        Sun, 04 Jun 2023 07:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685887293; x=1688479293;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SGHDepzavGuE83PchG6Ifo8HIEjyqsZ7nz/7LX1OmGI=;
-        b=ExlXXAf4O6jig1b/rfi43C25mDdUj5bJQHMsQMp5mBNHGPQmNDgxGDZhQdoJTxvt+w
-         1RuEvxdKrjJmTHhaibE6j9a2lkbR7GX9a1YbvxMsYx+70EfEcbW68PKn230qhxNSYvyN
-         wCF68SZcJqkkp91Pm/sIIzSJ9RzQCjkNHe/MzlSkn6XeNcTjEMLlZ/xGlHM8pZr1oKp6
-         e1bqmBvy0eE7g8Jgk4NiSy32bc5Ji28CPa1u3ShZRvlw/c0GH4751Vq+hmz6pWM6e2kJ
-         eNr4UyXH48zt1fMrqsAX8fHfOwUb2fMfd1eowirXpTcy9F6+8mQz49EtLQx3r3zttKAq
-         R85Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685887293; x=1688479293;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SGHDepzavGuE83PchG6Ifo8HIEjyqsZ7nz/7LX1OmGI=;
-        b=M0Gl1sZjks3MHOSiR1sJkJEsezFAeSGi9vN462KQHCcSD44wMOSJLaurhaoKAwORTU
-         sI7MEYc3MJ4O0UkMYp/Ju/T/KTW8xe94DS1kyUNuQlXSeln+X/ZcVEKABqg/hDYKUwl8
-         bMBMnkWanl4708azg2h8pxYIHZd0K0ebwKetcJDh7K681RNNnt68+OndQ7tPOYB4HqkV
-         adqgJpm8Mbmp6Kjttd6g6M36IGFs6V4Kj/Ot5dEJXQX1FTui8dcmXT98iOBZj6026hL3
-         1ondcNEXV9eA0z3q88Zfxt3EPeuyMT1Cqdr8qMe3SZlpz3de9rLg3Cka+H3eHSwuVJwy
-         V6Cw==
-X-Gm-Message-State: AC+VfDw7+PRo5MS30MYC8VvG/J2+g4JgT9sk9qD29ET7WDtla82qr5M9
-        1s0NknYXxMHCNxZkGHJfNNg=
-X-Google-Smtp-Source: ACHHUZ5olLI4H9tXFHWVTFNSmHMVCx5b78J0aCp08Om7tek2DOOaEL+crIoRBFaJK7sobABtfmcvww==
-X-Received: by 2002:a17:902:f550:b0:1af:c1a7:3bb5 with SMTP id h16-20020a170902f55000b001afc1a73bb5mr6244163plf.4.1685887293403;
-        Sun, 04 Jun 2023 07:01:33 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b001a96a6877fdsm4763410pls.3.2023.06.04.07.01.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 07:01:32 -0700 (PDT)
-Message-ID: <10e68064-42a3-c80e-10cc-079a3cf4eb35@gmail.com>
-Date:   Sun, 4 Jun 2023 21:01:29 +0700
+        Sun, 4 Jun 2023 10:01:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDD490;
+        Sun,  4 Jun 2023 07:01:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 03F9A21B0A;
+        Sun,  4 Jun 2023 14:01:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685887294; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tdBAE3HtKivHJVVv6ZeQodqReATNJ0yZv6/ntcLxKKI=;
+        b=f2q7SrLtQ19KSVlLOqKLMb1G7ft+VqaBrqlyDgcTC7SW8QXjDB4yII7+80ge7W4uaY1Bjb
+        /vRTKL6yindoIoAJSlHUOldn9pF8xA6jGXHR2i+CgmuyNou8KNTgC2ydJmP1PBwNs2u4TH
+        N/bRFVCawdzyTmtfaL6/Bpc++533oHM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685887294;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tdBAE3HtKivHJVVv6ZeQodqReATNJ0yZv6/ntcLxKKI=;
+        b=rcOXh8zYaXswpIdIkDQclBBRs+5s67EKUkp+yURNXW5hhJ5mv6Es17B4frOhyBlOmlrNMZ
+        ddYmlUJG62lr75AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF474139C8;
+        Sun,  4 Jun 2023 14:01:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oqjOMD2ZfGSWUQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Sun, 04 Jun 2023 14:01:33 +0000
+Date:   Sun, 4 Jun 2023 16:01:32 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Marius Hoch <mail@mariushoch.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
+Message-ID: <20230604160132.102dd6a7@endymion.delvare>
+In-Reply-To: <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
+References: <20230514103634.235917-1-mail@mariushoch.de>
+        <20230523200350.62ab4788@endymion.delvare>
+        <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [RFC] docs: process: Send patches 'To' maintainers and 'Cc' lists
-Content-Language: en-US
-To:     James Seo <james@equiv.tech>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Kalle Valo <kvalo@kernel.org>, workflows@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230603151447.29288-1-james@equiv.tech>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230603151447.29288-1-james@equiv.tech>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/23 22:14, James Seo wrote:
-> To reduce ambiguity and eliminate this class of potential (albeit
-> tangential) issues, prescribe sending patches 'To' maintainers and
-> 'Cc' lists. While we're at it, strengthen the recommendation to use
-> scripts/get_maintainer.pl to find patch recipients, and move Andrew
-> Morton's callout as the maintainer of last resort to the next
-> paragraph for better flow.
-> 
+Hi Marius,
 
-IMO, To: and Cc: don't have any practical differences between two,
-and I usually do vice-versa when sending patches: lists are in To:
-and individual maintainers are in Cc:
+On Sat, 3 Jun 2023 11:24:02 +0200, Marius Hoch wrote:
+> On 23/05/2023 20:03, Jean Delvare wrote:
+> > On Sun, 14 May 2023 12:36:32 +0200, Marius Hoch wrote:  
+> >> The Dell Latitude E7450 uses IRQ 18 for the accelerometer,
+> >> but also claims that the SMBus uses IRQ 18. This will
+> >> result in:
+> >>
+> >> i801_smbus 0000:00:1f.3: PCI INT C: failed to register GSI
+> >> i801_smbus 0000:00:1f.3: Failed to enable SMBus PCI device (-16)
+> >> i801_smbus: probe of 0000:00:1f.3 failed with error -16  
+> > The i2c-i801 driver supports shared IRQ. If this fails, this means that
+> > the other driver is not passing IRQF_SHARED when registering the
+> > interrupt. Which driver is this? I'd rather check whether sharing the
+> > IRQ is possible, rather that falling back to polling, which has a
+> > performance cost.  
+> I don't think this is a conflict rather than a completely bogus entry: 
+> smo8800 uses IRQ 18 (the freefall sensor).
 
-Thanks.
+You're probably right. I admit I misread your report originally and
+thought requesting the IRQ was failing. But actually the failure
+happens before that, when enabling the PCI device. So its not related
+to sharing the interrupt.
+
+> For the SMBus in acpi_pci_irq_enable, acpi_register_gsi fails for GSI 18 
+> with IRQ 255 (dev->irq), independently from the presence of the 
+> dell_smo8800 module.
+>
+> Now looking into this again, seeing dev->irq at 255 seems very 
+> suspicious here? Doesn't that mean not connected (although I'm not sure 
+> how this relates to it supposedly having GSI 18)?
+
+I admit I don't know. I'm not familiar with how GSI numbers relate to
+IRQ numbers. I think I understand that GSI numbers are an ACPI thing,
+and the ACPI layer is responsible for mapping these to actual IRQ
+numbers? Is there a GSI-to-IRQ table available somewhere as part of the
+ACPI tables? If so, it would be interesting to disassemble the ACPI
+tables on your system and check what this looks like for you.
+
+If this is a bug in the ACPI data then it might be worth booting with
+acpi=noirq and see if it helps. This option might break other things
+though (like free fall detection or thermal management) so be cautious.
+
+IRQ number 255 indeed looks suspicious, but I'm also not aware of this
+being a special value (nr_irqs is defined as an unsigned int, which
+suggest that large IRQ numbers, albeit unusual on desktop and laptop
+systems, are supported and frequently seen on large server systems), so
+the i2c-i801 driver has no reason to handle it in a particular way.
+
+Out of curiosity, did you check for a BIOS update for your laptop? Did
+you look at BIOS option to see if by any chance enabling/disabling the
+SMBus interrupt is an option there?
+
+I'm also curious how you collected the IRQ value. Did you boot with
+some debug kernel parameter, like dyndbg="file pci_irq.c +p"?
+
+Did you manage to figure out where in the function call chain (starting
+with pcim_enable_device) the failure actually happens? Even if IRQ
+value 255 is most probably wrong in your case, I'm surprised that this
+causes an error at device activation time, rather than when later
+requesting the IRQ.
+
+> >> Force the SMBus IRQ to IRQ_NOTCONNECTED in this case, so that
+> >> we fall back to polling, which also seems to be what the (very
+> >> dated) Windows 7 drivers on the Dell Latitude E7450 do.  
+> > What makes you think so?
+>
+> According to the Windows 7 device manager IRQ view, the SMBus has no IRQ 
+> assigned, which I assumed implies that polling is used. If there is 
+> another way to check this on Windows 7, please let me know.
+
+That's a reasonable assumption, and not being familiar with Windows, I
+don't have any other suggestion. However that doesn't necessarily mean
+that interrupts can't work. After all, the original i2c-i801 Linux
+driver also did not support interrupts.
 
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Jean Delvare
+SUSE L3 Support
