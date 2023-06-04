@@ -2,86 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630ED721822
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC09721832
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjFDPOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 11:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S231767AbjFDPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 11:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDPON (ORCPT
+        with ESMTP id S230493AbjFDPYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 11:14:13 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7277CA;
-        Sun,  4 Jun 2023 08:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bleTwqLDy63DUKjND0vhxknWwf9IMmoH1kBo/dk1g7E=; b=XC5ajlHrTHkMlFDqkqNWH1oZJY
-        sVDDIMYBBA8B8P3k9AYiopTZhWhx9pehmlZA85PPrw4w234JrYGvdN8k5BcyQ/RWU9+yHjGPyzCph
-        VgxT5vETval6ij6ANVR+7lAN1E0sMlEx02+a2vWs1/4E2EVZpsgbDQjAX2G+0I9nRXInMRh691k2t
-        +duMlyG186mcHE3WUJyYUhi/HfQT6yE0sNRQNcK4D+By0iAyMROuEsxiQ9w8GihvOrxmfFl/gRDaL
-        ubyr9R6elsjoSNlkVbKtqiynH8Z4t8e0G3cLToDhBgSVOksTEzw88n2qTH3F4p97QRF6J68DI6gPH
-        Ym4G3sPQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43062)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q5pQU-0002iu-Uo; Sun, 04 Jun 2023 16:13:50 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q5pQJ-0005A1-GU; Sun, 04 Jun 2023 16:13:39 +0100
-Date:   Sun, 4 Jun 2023 16:13:39 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
- to p{5,6}_configured
-Message-ID: <ZHyqI2oOI4KkvgB8@shell.armlinux.org.uk>
-References: <20230524175107.hwzygo7p4l4rvawj@skbuf>
- <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
- <20230526130145.7wg75yoe6ut4na7g@skbuf>
- <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
- <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
- <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
- <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
- <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
- <ZHyMezyKizkz2+Wg@shell.armlinux.org.uk>
- <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
+        Sun, 4 Jun 2023 11:24:37 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CBACA;
+        Sun,  4 Jun 2023 08:24:36 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id f4b8a39ed7b90b15; Sun, 4 Jun 2023 17:24:35 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 9F0EE961C82;
+        Sun,  4 Jun 2023 17:24:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>
+Subject: [RFT][PATCH v1 0/4] ACPI: Install notify or event handlers in ACPI button drivers
+Date:   Sun, 04 Jun 2023 17:17:22 +0200
+Message-ID: <1847933.atdPhlSkOF@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeljedgkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhitghhrghlrdifihhltgiihihnshhkihesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,138 +48,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 04:14:31PM +0300, Arınç ÜNAL wrote:
-> On 4.06.2023 16:07, Russell King (Oracle) wrote:
-> > On Sun, Jun 04, 2023 at 03:55:17PM +0300, Vladimir Oltean wrote:
-> > > On Sun, Jun 04, 2023 at 01:18:04PM +0100, Russell King (Oracle) wrote:
-> > > > I don't remember whether Vladimir's firmware validator will fail for
-> > > > mt753x if CPU ports are not fully described, but that would be well
-> > > > worth checking. If it does, then we can be confident that phylink
-> > > > will always be used, and those bypassing calls should not be necessary.
-> > > 
-> > > It does, I've just retested this:
-> > > 
-> > > [    8.469152] mscc_felix 0000:00:00.5: OF node /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 of CPU port 4 lacks the required "phy-handle", "fixed-link" or "managed" properties
-> > > [    8.494571] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register DSA switch
-> > > [    8.502151] mscc_felix: probe of 0000:00:00.5 failed with error -22
-> > 
-> > ... which isn't listed in dsa_switches_apply_workarounds[], and
-> > neither is mt753x. Thanks.
-> > 
-> > So, that should be sufficient to know that the CPU port will always
-> > properly described, and thus bypassing phylink in mt753x for the CPU
-> > port should not be necessary.
-> 
-> Perfect! If I understand correctly, there's this code - specific to MT7531
-> and MT7988 ports being used as CPU ports - which runs in addition to what's
-> in mt753x_phylink_mac_config():
-> 
-> 	mt7530_write(priv, MT7530_PMCR_P(port),
-> 		     PMCR_CPU_PORT_SETTING(priv->id));
-> 
-> This should be put on mt753x_phylink_mac_config(), under priv->id ==
-> ID_MT7531, priv->id == ID_MT7988, and dsa_is_cpu_port(ds, port) checks?
+Hi Folks,
 
-Please remember that I have very little knowledge of MT753x, so in
-order to answer this question, I've read through the mt7530 driver
-code.
+This series reworks the two ACPI button drivers to install notify or fixed
+event handlers (depending on the device type) by themselves, so the core
+code need not take the "fixed event handler for a button driver" case in
+the general driver notify handler installer.
 
-Looking at mt7530.h:
+As a bonus, it separates the notify handler in the "generic" button driver
+into a lid notify handler and a proper button notify handler.
 
-#define  PMCR_CPU_PORT_SETTING(id)      (PMCR_FORCE_MODE_ID((id)) | \
-                                         PMCR_IFG_XMIT(1) | PMCR_MAC_MODE | \
-                                         PMCR_BACKOFF_EN | PMCR_BACKPR_EN | \
-                                         PMCR_TX_EN | PMCR_RX_EN | \
-                                         PMCR_TX_FC_EN | PMCR_RX_FC_EN | \
-                                         PMCR_FORCE_SPEED_1000 | \
-                                         PMCR_FORCE_FDX | PMCR_FORCE_LNK)
+It modifies also the core to drop the "fixed event handler for a button driver"
+case from there (last patch).
 
-This seems to be some kind of port control register that sets amongst
-other things parameters such as whether flow control is enabled, the
-port speed, the duplex setting, whether link is forced up, etc.
+It works for me, but I would appreciate as much testing of this as possible
+especially on old hardware.
 
-Looking at what mt753x_phylink_mac_link_up() does:
+Obviously, it replaces
 
-1. it sets PMCR_RX_EN | PMCR_TX_EN | PMCR_FORCE_LNK.
-2. it sets PMCR_FORCE_SPEED_1000 if speed was 1000Mbps, or if using
-   an internal, TRGMII, 1000base-X or 2500base-X phy interface mode.
-3. it sets PMCR_FORCE_FDX if full duplex was requested.
-4. it sets PMCR_TX_FC_EN if full duplex was requested with tx pause.
-5. it sets PMCR_RX_FC_EN if full duplex was requested with rx pause.
+https://lore.kernel.org/linux-acpi/4500594.LvFx2qVVIh@kreacher/T/#m064d4130b57cbcb0ece1bb415fae1465ebc20f42
 
-So, provided this is called with the appropriate parameters, for a
-fixed link, that will leave the following:
+and its followers to some extent, but I think that it's better to deal with the
+special case first and then take care of the rest.
 
-	PMCR_FORCE_MODE_ID(id)
-	PMCR_IFG_XMIT(1)
-	PMCR_MAC_MODE
-	PMCR_BACKOFF_EN
-	PMCR_BACKPR_EN
+Thanks!
 
-If we now look at mt753x_phylink_mac_config(), this sets
-PMCR_IFG_XMIT(1), PMCR_MAC_MODE, PMCR_BACKOFF_EN, PMCR_BACKPR_EN,
-and PMCR_FORCE_MODE_ID(priv->id), which I believe is everything that
-PMCR_CPU_PORT_SETTING(priv->id) is doing.
 
-So, Wouldn't a fixed-link description indicating 1Gbps, full duplex
-with pause cause phylink to call both mt753x_phylink_mac_config() and
-mt753x_phylink_mac_link_up() with appropriate arguments to set all
-of these parameters in PMCR?
 
-Now, I'm going to analyse something else. mt7531_cpu_port_config()
-is called from mt753x_cpu_port_enable(), which is itself called from
-mt7531_setup_common(). That is ultimately called from the DSA switch
-ops .setup() method.
-
-This method is called from dsa_switch_setup() for each switch in the
-DSA tree. dsa_tree_setup_switches() calls this, and is called from
-dsa_tree_setup().  Once dsa_tree_setup_switches() finishes
-successfully, dsa_tree_setup_ports() will be called. This will then
-setup DSA and CPU ports, which will then setup a phylink instance
-for these ports. phylink will parse the firmware description for
-the port. DSA will then call dsa_port_enable().
-
-dsa_port_enable() will then call any port_enable() method in the
-mt7530.c driver, which will be mt7530_port_enable(). This then...
-
-        mt7530_clear(priv, MT7530_PMCR_P(port), PMCR_LINK_SETTINGS_MASK);
-
-which is:
-
-#define  PMCR_LINK_SETTINGS_MASK        (PMCR_TX_EN | PMCR_FORCE_SPEED_1000 | \
-                                         PMCR_RX_EN | PMCR_FORCE_SPEED_100 | \
-                                         PMCR_TX_FC_EN | PMCR_RX_FC_EN | \
-                                         PMCR_FORCE_FDX | PMCR_FORCE_LNK | \
-                                         PMCR_FORCE_EEE1G | PMCR_FORCE_EEE100)
-
-So it wipes out all the PMCR settings that mt7531_cpu_port_config()
-performed - undoing *everything* below that switch() statement in
-mt7531_cpu_port_config()!
-
-Once the port_enable() method returns, DSA will then call
-phylink_start(), which will trigger phylink to bring up the link
-according to the settings it has, which will mean phylink calls
-the mac_config(), pcs_config(), pcs_link_up() and mac_link_up()
-with the appropriate parameters for the firmware described link.
-
-So I think I have the answer to my initial thought: do the calls in
-mt7531_cpu_port_config() to the phylink methods have any use what so
-ever? The answer is no, they are entirely useless. The same goes for
-the other cpu_port_config() methods that do something similar. The
-same goes for the PMCR register write that's changing any bits
-included in PMCR_LINK_SETTINGS_MASK.
-
-What that means is that mt7988_cpu_port_config() can be entirely
-removed, it serves no useful purpose what so ever. For
-mt7531_cpu_port_config(), it only needs to set priv->p[56]_interface
-which, as far as I can see, probably only avoids mac_config() doing
-any pad setup (that's a guess.)
-
-At least that's what I gather from reading through the driver and
-DSA code. It may be I've missed something, but currently, I think
-that these cpu_port_config() functions aren't doing too much that
-is actually useful work.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
