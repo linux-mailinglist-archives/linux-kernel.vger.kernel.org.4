@@ -2,80 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D498E7213EE
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 03:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5410E7213E5
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 02:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjFDBCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 21:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        id S229814AbjFDAdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 20:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDBCy (ORCPT
+        with ESMTP id S229546AbjFDAdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 21:02:54 -0400
-X-Greylist: delayed 1971 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 18:02:52 PDT
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [IPv6:2a0c:5a00:149::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC6D1A4
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 18:02:52 -0700 (PDT)
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-        by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <mhal@rbox.co>)
-        id 1q5bd8-007fc1-F6; Sun, 04 Jun 2023 02:29:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-        s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-        bh=ajmFOvwxptlWBTZW4DWkzyimVQmkTbolr3tsod6TmuY=; b=D6C5KOOFud2dCyCRvWq8yvA0M5
-        3Qdd2ChbHfPYr6iWwpQtq7q/I8ROPJiFd2XtNQ5wHkSr6JqfKUafkGDHn7bzTypkvAhZEKrBWHqKz
-        P4+i3GWWmIRhDJXk/PEvfXsbNaMBsuItGQco5Xz1ERCaV8bD84r7tF9TapYQLg86bYn0ojPiQGeBO
-        82Wa7EwqVG+D8g8RQLSyYGH95MGtQW5/ERxbj/qKstVGpq5JIpGwZ9gecWn6xazC0U5ZzF0RLH1o2
-        mfb9bQeNKtfahXFdPtVNDl/IddZ8PghjTCO7Ngq6hZZYKTwFQ3o/Rtpe+tBALiRUSVCfUPCtSLrJC
-        LCxC7vFQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <mhal@rbox.co>)
-        id 1q5bd7-00034M-VD; Sun, 04 Jun 2023 02:29:58 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1q5bcz-0002z3-Co; Sun, 04 Jun 2023 02:29:49 +0200
-Message-ID: <002f1c33-e899-1d17-bfb4-24a116451fe6@rbox.co>
-Date:   Sun, 4 Jun 2023 02:29:48 +0200
+        Sat, 3 Jun 2023 20:33:14 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22361A5
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 17:33:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QYd4m3Tl9z4x3x;
+        Sun,  4 Jun 2023 10:33:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1685838792;
+        bh=HlEyZhE+LrdUOZTCV04b2fMeKrsIesj187fO09UzUIU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qdrVHzFHHkmCWaBGYXaFZALpDl71Ul/+uEYHsJoBvsLf5Voq/G5qpvVS5uMZ74ZUe
+         QeCAdykR4oSeykmCPAsmDKN1aC3cWaW7mQdzTNVf1smELK3eAx/WIT1wkIZiNQ1H2w
+         sloHkLmPm6iew9bbckurez6gINYBPmbmbItCyeXsOOclB+RvEo6sAscqA3Wm2E/pyP
+         OevPSmBbiXoH0CYgH/+G7EUJHcIjpwpotdabVZOWvpVlcB3fk79EV0seYADJPXAh6U
+         WF6UtIkmIqgB4lZCNL7lC5XQYEXm+SaogJtNiwIVpmmAYTOLW6GBHUWKqqWCPmvuR6
+         wgHQh/T3Om33Q==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     gbatra@linux.vnet.ibm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maninder1.s@samsung.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.4-4 tag
+Date:   Sun, 04 Jun 2023 10:33:12 +1000
+Message-ID: <87cz2cgj7b.fsf@mail.lhotse>
 MIME-Version: 1.0
-User-Agent: Thunderbird
-Subject: Re: [PATCH v3 2/3] KVM: x86: Retry APIC optimized map recalc if vCPU
- is added/enabled
-Content-Language: pl-PL, en-GB
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230602233250.1014316-1-seanjc@google.com>
- <20230602233250.1014316-3-seanjc@google.com>
-From:   Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <20230602233250.1014316-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/23 01:32, Sean Christopherson wrote:
-> +	 * Read kvm->arch.apic_map_dirty before kvm->arch.apic_map (if clean)
-> +	 * or the APIC registers (if dirty).  Note, on retry the map may have
-> +	 * not yet been marked dirty by whatever task changed a vCPU's x2APIC
-> +	 * ID, i.e. the map may still show up as in-progress.  In that case
-> +	 * this task still needs to retry and copmlete its calculation.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-s/copmlete/complete ?
+Hi Linus,
 
-Speaking of nits, if you're planning to do some more work around
-kvm_recalculate_phys_map(), there's that old comment typo I've failed
-to notice earlier:
+Please pull some more powerpc fixes for 6.4:
 
-"Apply KVM's hotplug hack if userspace has enable 32-bit APIC IDs."
+The following changes since commit 358e526a1648cdd773ba169da5867874ae2408e3:
 
-enabled?
+  powerpc/mm: Reinstate ARCH_FORCE_MAX_ORDER ranges (2023-05-21 11:40:34 +1000)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.4-4
+
+for you to fetch changes up to 719dfd5925e186e09a2a6f23016936ac436f3d78:
+
+  powerpc/xmon: Use KSYM_NAME_LEN in array size (2023-05-30 16:46:56 +1000)
+
+- ------------------------------------------------------------------
+powerpc fixes for 6.4 #4
+
+ - Fix link errors in new aes-gcm-p10 code when built-in with other drivers.
+
+ - Limit number of TCEs passed to H_STUFF_TCE hcall as per spec.
+
+ - Use KSYM_NAME_LEN in xmon array size to avoid possible OOB write.
+
+Thanks to: Gaurav Batra, Maninder Singh Vishal Chourasia.
+
+- ------------------------------------------------------------------
+Gaurav Batra (1):
+      powerpc/iommu: Limit number of TCEs to 512 for H_STUFF_TCE hcall
+
+Maninder Singh (1):
+      powerpc/xmon: Use KSYM_NAME_LEN in array size
+
+Michael Ellerman (1):
+      powerpc/crypto: Fix aes-gcm-p10 link errors
+
+
+ arch/powerpc/crypto/Makefile                            | 10 +++++-----
+ arch/powerpc/crypto/aes-gcm-p10-glue.c                  | 18 +++++++++---------
+ arch/powerpc/crypto/{aesp8-ppc.pl => aesp10-ppc.pl}     |  2 +-
+ arch/powerpc/crypto/{ghashp8-ppc.pl => ghashp10-ppc.pl} | 12 ++++++------
+ arch/powerpc/platforms/pseries/iommu.c                  | 13 +++++++++++--
+ arch/powerpc/xmon/xmon.c                                |  2 +-
+ 6 files changed, 33 insertions(+), 24 deletions(-)
+ rename arch/powerpc/crypto/{aesp8-ppc.pl => aesp10-ppc.pl} (99%)
+ rename arch/powerpc/crypto/{ghashp8-ppc.pl => ghashp10-ppc.pl} (97%)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmR724kACgkQUevqPMjh
+pYA43BAAndyoXJ2q+lOdn/tTHA0QUjefB8YON2/9OC/lkX//TWJfInpiZ3GI5DMn
+nx44N+zRdYMSjMKGw4NxOiFRoHguXb9Wns/9HEeLz2UpOS5nrxVPJRZsgGDQvzIx
+UN8pkOuAQF9nAHUD+ZRp2R61jxlxFrp2V3RvHsRTHyBUUVLcAdjk07GKTm5Z0hYx
+eLDka1FjAXUnd/6S4YJAsMpPKdHLxJOsz95mkT5eZJ6Mq67+HeYtd06Kcd6vgMaP
+gW91Z93THyKhiEIcSQSJhwngud3UyJfMj+6TIycSHC/21CE9yMHrmt+mjgprJpdd
+eLKLIC+I0Gj8rk0NW1AzLveXWoV0tN0rhs+pLA9/l4CbJUlHLq49IG451wksCnWM
+Esh3fmHgKQYn8MxNeYUC7h7NNCUWlVLXK4qzSB13ZNBdGVIEwMl5q0cXajXY6g7b
+jXwxNLDbuXoyFaZCHdfXkmyMKrxDLVG2kTzLdZ5y5nwmh2OgMu101CqgJyJP34ig
+Svu6IZmZepod/A3u4peNKMGHsMRCVI4TYdI3ItbnMV+SDLSLXDQhVvARZNe5PChb
+1bSfnFeDG0ib+WLZX85ZlQCsfzoNMRwZYMMOWlreMBKzypVALGFHVADEK+/v1c3w
+3bXw58YdrcsjNa5rI0BgucOpQLEzp0VMhB06LIzI0j5yFOjrPy0=
+=DY5l
+-----END PGP SIGNATURE-----
