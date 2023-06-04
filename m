@@ -2,87 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A2E72191F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D06721922
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjFDSFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 14:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S232115AbjFDSH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 14:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjFDSFB (ORCPT
+        with ESMTP id S229886AbjFDSH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 14:05:01 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A12ACA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 11:04:59 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9745c5fed21so451194966b.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 11:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685901898; x=1688493898;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ihBL6TJ8C6mU92dx3ETVIyIXq8wWv0W19OQrtjTVS6E=;
-        b=FI30/lnyqGkqjoM7lJFPYMooptVi/7DeeM1KS/E0KPhdJXv8U4Eow239gWj/7KQwc+
-         /V02myVs6yai/PTWZ4tQHmE+oXtxhX/cb4AVwYcQC4+6KvkTKclOH4chqPK78JOhhSjk
-         O1bW0TsyxsAPdLAaE0FwspvFT84WXU2OEHSZkWrNXa4DolOdbGqinLMfbpGTLuNJgIk4
-         8Q+iGmfaMAuoLpO76CTFxPzJGtJ4VTmDGFIw5uVp9e41q0z56jjWnQNBf2Te8K/OKO+n
-         hzjArDemAds0fl9w5QcqedUGh6NfUTl90unSsFR4mMr+Axl1lcDhJBrIXd3HWWrI7Vvj
-         yqRg==
+        Sun, 4 Jun 2023 14:07:26 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCE3B0
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 11:07:25 -0700 (PDT)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 53D643F556
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 18:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685902042;
+        bh=eXPLCKZ8Jj450duZJrO5FmwhWWg+s1j3KuC7Lhd1iI4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=UT+GSj6ZbTUtj0SZd4TFaqO7MhJn4MztOSWUZXe2Qsu7VkQJHhD+JGb2c3I73+yUE
+         9ZHrCaREQv4acw+vhpIWfXMagxGjsqEhVryW2YzC+n5gqHJ2UqwcGdpg9FWFRokwpV
+         8HxJ3daXWjWBIdhwNSsDf0+nT2ZfK5/kmAgo9VRr5BiQPdslscoLxEyWZ/XSn/z5B4
+         r0MZPXBUewPVcBHXs+mcVw8V4zes4gTQcJN0UzetByCswdsB+XxeXVe3en7Acjak31
+         NJMplBoYvL5yKYLpYd4bvy2TaPFu8cK+BZ3tSsJfapcKPRz06pbP6xlyDYgk/WCtM9
+         J6UD8FdVAPZ5w==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-568960f4596so69772017b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 11:07:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685901898; x=1688493898;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihBL6TJ8C6mU92dx3ETVIyIXq8wWv0W19OQrtjTVS6E=;
-        b=SNSGyjVpmddymQLx00aXdB/Xx9RA+zLdRs9yViIYhwjDeWVDQPYlmR9E4MAcucHWng
-         bnDPVDk2GlR51AS3+w3BCF+G9kEoY0VjkFIMz/IYyBRrNbOPWSnXtWux2RTKe7TBAXHw
-         If+ER+arqD1q63lpSx5P/ClHiVgYz37nPawSrzXu8mLGBld93sDarDdX+dm1Hxl3bJGM
-         Hh/ZdYVi0VkItmndvOIdlrC7Jl5AQgsKyVA9VXxqdHQNya+YSdrI4nlmOLd7/hViJfUb
-         IRe015z/87zIrRLdSlg/FIeT/C6bwyOA6hTORVW0e+yGxAiUbXJFuRrwqtx8Fim5Z8ae
-         8iBA==
-X-Gm-Message-State: AC+VfDy99UYdgKcA3MqF2GH4GfGmJp0BesJX/J/8u0FlCeQUNWnl5UZb
-        On4D8Nd6CE1ERiaVaCxi00molQ==
-X-Google-Smtp-Source: ACHHUZ4+vFM/nr8fGvYX+DNeO5lxMdAF0enwX9IrUSUB6khhTQ6PAinPxZOCuZMqppzelTPW9qs6IQ==
-X-Received: by 2002:a17:907:9444:b0:974:391f:ed7d with SMTP id dl4-20020a170907944400b00974391fed7dmr4950469ejc.49.1685901898018;
-        Sun, 04 Jun 2023 11:04:58 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170906924800b00977cc473b41sm1356087ejx.142.2023.06.04.11.04.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 11:04:57 -0700 (PDT)
-Message-ID: <3fe03b31-0cab-82cf-cbdb-766fdf34c44d@linaro.org>
-Date:   Sun, 4 Jun 2023 20:04:52 +0200
+        d=1e100.net; s=20221208; t=1685902041; x=1688494041;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eXPLCKZ8Jj450duZJrO5FmwhWWg+s1j3KuC7Lhd1iI4=;
+        b=bTjqSaVp7cBNN4FFzBtHKJDjb4kfBQFfmkAdTu7ysyFfJWElUTECOgynStqYPFy4CC
+         jvznEbBlThdURZhLUQUTb1T/ekCO70rg4D9do2bvudHCcMe/QFjrft/5Qd9yae2Eu20C
+         cShOwjNfbMgizERiq4Uv9vjhsYNnrAKb25pIiq2GqDDGD+o41PUIxavc9hrBsaUtL9Mb
+         6jDhSSunUfzQq+8HXnOv8TVdLEc0tu5uMFtRebUf5+t3q6xBfySpG8QS00hfr2jBS3Tg
+         i/0bXVHQDSaTeBWrCSaGiPVQPIK4iKFwxdb1C1G1sQ8Byoy4I40Y8DNktKwbRpEURZpC
+         p+iw==
+X-Gm-Message-State: AC+VfDx0y6xfTRuD+QVc1JVMVMtOYlAYBnPKk3WsgQOxsqJm0HDl6DxQ
+        x4pFCdRvddwaJfzZgIv0ygq7HZujpSzY1JuP+4j7N2R6XPljUMXwzK+u84CkeY/vd2d0qyW8SPf
+        SmHLyMAitJqfcUyHnQL4b2z4+TCvGF1w9mLPnDehXFHacc+6Tn7I6/LqtMQ==
+X-Received: by 2002:a25:210b:0:b0:b9d:7887:4423 with SMTP id h11-20020a25210b000000b00b9d78874423mr6768247ybh.16.1685902040983;
+        Sun, 04 Jun 2023 11:07:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ41k0JQ0Rgb4oamIPtOl2YDqXm2k+gWqhdlPbfMaObYYGP+EpFNoMd2Xr14SJFNxI1Y9SMEiabdS0cOpOTA3WE=
+X-Received: by 2002:a25:210b:0:b0:b9d:7887:4423 with SMTP id
+ h11-20020a25210b000000b00b9d78874423mr6768237ybh.16.1685902040769; Sun, 04
+ Jun 2023 11:07:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 04/12] dt-bindings: display/msm: Add SM6350 MDSS
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev
-References: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
- <20230411-topic-straitlagoon_mdss-v5-4-998b4d2f7dd1@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v5-4-998b4d2f7dd1@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+ <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+ <20230523140844.5895d645@kernel.org> <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
+ <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
+ <20230524081933.44dc8bea@kernel.org> <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
+ <20230604110211.3f6401c6@kernel.org>
+In-Reply-To: <20230604110211.3f6401c6@kernel.org>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Sun, 4 Jun 2023 20:07:09 +0200
+Message-ID: <CAEivzxeVeuFW+ADJFO-kCBtyn345nTX=T3aKTdwWY01JgsLPQg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Luca Boccassi <bluca@debian.org>,
+        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,71 +94,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 09:46, Konrad Dybcio wrote:
-> Document the SM6350 MDSS.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 214 +++++++++++++++++++++
->  1 file changed, 214 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml
-> new file mode 100644
-> index 000000000000..6674040d2172
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml
-> @@ -0,0 +1,214 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6350-mdss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SM6350 Display MDSS
-> +
-> +maintainers:
-> +  - Krishna Manikandan <quic_mkrishn@quicinc.com>
-> +
-> +description:
-> +  SM6350 MSM Mobile Display Subsystem (MDSS), which encapsulates sub-blocks
-> +  like DPU display controller, DSI and DP interfaces etc.
-> +
-> +$ref: /schemas/display/msm/mdss-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
+On Sun, Jun 4, 2023 at 8:02=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Wed, 24 May 2023 17:45:25 +0200 Aleksandr Mikhalitsyn wrote:
+> > > How about you put the UNIX -> bool patch at the end of the series,
+> > > (making it a 4 patch series) and if there's a discussion about it
+> > > I'll just skip it and apply the first 3 patches?
+> >
+> > Sure, I will do that!
+>
+> Hi Aleksandr! Did you disappear? Have I missed v7?
 
-Drop items. It's just const.
+Dear Jakub,
 
+of course I'm not, I've just got distracted with other things last
+week. Will send -v7 this week!
+Thanks for paying attention to the series ;-)
 
-> +      - const: qcom,sm6350-mdss
-> +
-> +  clocks:
-> +    items:
-> +      - description: Display AHB clock from gcc
-> +      - description: Display AXI clock from gcc
-> +      - description: Display core clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: iface
-> +      - const: bus
-> +      - const: core
-> +
-> +  iommus:
-> +    maxItems: 1
-> +
-> +  interconnects:
-> +    maxItems: 2
-> +
-> +  interconnect-names:
-> +    maxItems: 2
-
-Are you sure you have two interconnects? Example is missing them.
-
-
-
-Best regards,
-Krzysztof
-
+Kind regards,
+Alex
