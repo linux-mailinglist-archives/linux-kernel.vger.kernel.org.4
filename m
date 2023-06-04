@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9937216D7
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60327216D5
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjFDMV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 08:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S230160AbjFDMV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 08:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjFDMVY (ORCPT
+        with ESMTP id S229670AbjFDMVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 4 Jun 2023 08:21:24 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DADDC4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DDEB5;
         Sun,  4 Jun 2023 05:21:22 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 337a253912c127a8; Sun, 4 Jun 2023 14:21:21 +0200
+ id ac3ac691e1f6ec71; Sun, 4 Jun 2023 14:21:20 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8C654963C55;
-        Sun,  4 Jun 2023 14:21:20 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id C35A1963C55;
+        Sun,  4 Jun 2023 14:21:19 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -31,9 +31,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Michal Wilczynski <michal.wilczynski@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 6/7] ACPI: thermal: Drop struct acpi_thermal_state
-Date:   Sun, 04 Jun 2023 14:19:43 +0200
-Message-ID: <3443012.QJadu78ljV@kreacher>
+Subject: [PATCH v2 7/7] ACPI: thermal: Drop struct acpi_thermal_flags
+Date:   Sun, 04 Jun 2023 14:21:13 +0200
+Message-ID: <2581616.Lt9SDvczpP@kreacher>
 In-Reply-To: <2703629.mvXUDI8C0e@kreacher>
 References: <2703629.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
@@ -54,11 +54,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Drop struct acpi_thermal_state which is not really used.
+Drop struct acpi_thermal_flags which is not really used (only one
+flag in it is ever set, but it is never read) and call
+acpi_execute_simple_method() directly to evaluate _SCP instead of
+using acpi_thermal_set_cooling_mode(), which has no callers after
+that change, so drop it.
 
-No functional impact.
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
@@ -66,45 +70,65 @@ Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 v1 -> v2: New patch
 
 ---
- drivers/acpi/thermal.c |   11 -----------
- 1 file changed, 11 deletions(-)
+ drivers/acpi/thermal.c |   24 ++----------------------
+ 1 file changed, 2 insertions(+), 22 deletions(-)
 
 Index: linux-pm/drivers/acpi/thermal.c
 ===================================================================
 --- linux-pm.orig/drivers/acpi/thermal.c
 +++ linux-pm/drivers/acpi/thermal.c
-@@ -96,15 +96,6 @@ MODULE_PARM_DESC(psv, "Disable or overri
+@@ -129,12 +129,6 @@ struct acpi_thermal_trips {
+ 	struct acpi_thermal_active active[ACPI_THERMAL_MAX_ACTIVE];
+ };
  
- static struct workqueue_struct *acpi_thermal_pm_queue;
- 
--struct acpi_thermal_state {
--	u8 critical:1;
--	u8 hot:1;
--	u8 passive:1;
--	u8 active:1;
--	u8 reserved:4;
--	int active_index;
+-struct acpi_thermal_flags {
+-	u8 cooling_mode:1;	/* _SCP */
+-	u8 devices:1;		/* _TZD */
+-	u8 reserved:6;
 -};
 -
- struct acpi_thermal_critical {
- 	unsigned long temperature;
- 	bool valid;
-@@ -152,7 +143,6 @@ struct acpi_thermal {
+ struct acpi_thermal {
+ 	struct acpi_device *device;
+ 	acpi_bus_id name;
+@@ -142,7 +136,6 @@ struct acpi_thermal {
+ 	unsigned long last_temperature;
  	unsigned long polling_frequency;
  	volatile u8 zombie;
- 	struct acpi_thermal_flags flags;
--	struct acpi_thermal_state state;
+-	struct acpi_thermal_flags flags;
  	struct acpi_thermal_trips trips;
  	struct acpi_handle_list devices;
  	struct thermal_zone_device *thermal_zone;
-@@ -1083,7 +1073,6 @@ static int acpi_thermal_resume(struct de
- 				break;
- 			}
- 		}
--		tz->state.active |= tz->trips.active[i].enabled;
- 	}
+@@ -197,18 +190,6 @@ static int acpi_thermal_get_polling_freq
+ 	return 0;
+ }
  
- 	acpi_queue_thermal_check(tz);
+-static int acpi_thermal_set_cooling_mode(struct acpi_thermal *tz, int mode)
+-{
+-	if (!tz)
+-		return -EINVAL;
+-
+-	if (ACPI_FAILURE(acpi_execute_simple_method(tz->device->handle,
+-						    "_SCP", mode)))
+-		return -ENODEV;
+-
+-	return 0;
+-}
+-
+ static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
+ {
+ 	acpi_status status;
+@@ -926,9 +907,8 @@ static int acpi_thermal_get_info(struct
+ 		return result;
+ 
+ 	/* Set the cooling mode [_SCP] to active cooling (default) */
+-	result = acpi_thermal_set_cooling_mode(tz, ACPI_THERMAL_MODE_ACTIVE);
+-	if (!result)
+-		tz->flags.cooling_mode = 1;
++	acpi_execute_simple_method(tz->device->handle, "_SCP",
++				   ACPI_THERMAL_MODE_ACTIVE);
+ 
+ 	/* Get default polling frequency [_TZP] (optional) */
+ 	if (tzp)
 
 
 
