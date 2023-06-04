@@ -2,145 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5106272182F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783C5721833
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjFDPYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 11:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S231338AbjFDP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 11:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjFDPYf (ORCPT
+        with ESMTP id S230403AbjFDP3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 11:24:35 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632CBCD;
-        Sun,  4 Jun 2023 08:24:34 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 08b175b11797ce0d; Sun, 4 Jun 2023 17:24:32 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 4 Jun 2023 11:29:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F082CA
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:29:50 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B326F961C82;
-        Sun,  4 Jun 2023 17:24:31 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>
-Subject: [RFT][PATCH v1 4/4] ACPI: bus: Simplify installation and removal of notify callback
-Date:   Sun, 04 Jun 2023 17:23:40 +0200
-Message-ID: <2130740.OBFZWjSADL@kreacher>
-In-Reply-To: <1847933.atdPhlSkOF@kreacher>
-References: <1847933.atdPhlSkOF@kreacher>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F1D71EC0683;
+        Sun,  4 Jun 2023 17:29:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685892589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=2JhXyOfrE12rw0X1ImypxS0UQbXXSprS/uY05wp6fqc=;
+        b=Z38K8UjsHXFeD79dSHACJVgDlP9hjP+F12qD5rCCIQ40exHjXamA1RCANeoLDv5XRXbvjC
+        qjJlK4VMY8g1ayPlDUjJQ7dSNJe+e1CFKrUfUnnmbW9xCPSsxj6DXgRPsRhdXZZJYbiBGJ
+        1bZAnCg4fZNleMETQF+Ucm0kBmoJn9I=
+Date:   Sun, 4 Jun 2023 17:29:43 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Marc Zyngier <maz@kernel.org>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] irq/urgent for v6.4-rc5
+Message-ID: <20230604152943.GAZHyt59c0xJh2YtBq@fat_crate.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeljedgkeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepfedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihgthhgrlhdrfihilhgtiiihnhhskhhisehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Linus,
 
-Because the only drivers that cared about button fixed events take care
-of those events by themselves now, eliminate the code related to them
-from acpi_device_install_notify_handler() and
-acpi_device_remove_notify_handler().
+please pull a urgent irqchip fix by way of Marc Zyngier, for 6.4.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Thx.
+
 ---
- drivers/acpi/bus.c |   53 +++++++++--------------------------------------------
- 1 file changed, 9 insertions(+), 44 deletions(-)
 
-Index: linux-pm/drivers/acpi/bus.c
-===================================================================
---- linux-pm.orig/drivers/acpi/bus.c
-+++ linux-pm/drivers/acpi/bus.c
-@@ -530,65 +530,30 @@ static void acpi_notify_device(acpi_hand
- 	acpi_drv->ops.notify(device, event);
- }
- 
--static void acpi_notify_device_fixed(void *data)
--{
--	struct acpi_device *device = data;
--
--	/* Fixed hardware devices have no handles */
--	acpi_notify_device(NULL, ACPI_FIXED_HARDWARE_EVENT, device);
--}
--
--static u32 acpi_device_fixed_event(void *data)
--{
--	acpi_os_execute(OSL_NOTIFY_HANDLER, acpi_notify_device_fixed, data);
--	return ACPI_INTERRUPT_HANDLED;
--}
--
- static int acpi_device_install_notify_handler(struct acpi_device *device,
- 					      struct acpi_driver *acpi_drv)
- {
--	acpi_status status;
--
--	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
--		status =
--		    acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
--						     acpi_device_fixed_event,
--						     device);
--	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
--		status =
--		    acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
--						     acpi_device_fixed_event,
--						     device);
--	} else {
--		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
-+	u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
- 				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
-+	acpi_status status;
- 
--		status = acpi_install_notify_handler(device->handle, type,
--						     acpi_notify_device,
--						     device);
--	}
--
-+	status = acpi_install_notify_handler(device->handle, type,
-+					     acpi_notify_device, device);
- 	if (ACPI_FAILURE(status))
- 		return -EINVAL;
-+
- 	return 0;
- }
- 
- static void acpi_device_remove_notify_handler(struct acpi_device *device,
- 					      struct acpi_driver *acpi_drv)
- {
--	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
--		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
--						acpi_device_fixed_event);
--	} else if (device->device_type == ACPI_BUS_TYPE_SLEEP_BUTTON) {
--		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
--						acpi_device_fixed_event);
--	} else {
--		u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
-+	u32 type = acpi_drv->flags & ACPI_DRIVER_ALL_NOTIFY_EVENTS ?
- 				ACPI_ALL_NOTIFY : ACPI_DEVICE_NOTIFY;
- 
--		acpi_remove_notify_handler(device->handle, type,
--					   acpi_notify_device);
--	}
-+	acpi_remove_notify_handler(device->handle, type,
-+				   acpi_notify_device);
-+
- 	acpi_os_wait_events_complete();
- }
- 
+The following changes since commit 4115af49d2c24e840461fb83027315e2d2de6db4:
 
+  Merge tag 'irqchip-fixes-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent (2023-05-22 08:11:01 +0200)
 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/irq_urgent_for_v6.4_rc5
+
+for you to fetch changes up to 2d5b205dfa32b5f0f357ebc9db73931d2186391e:
+
+  Merge tag 'irqchip-fixes-6.4-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent (2023-05-31 19:42:53 +0200)
+
+----------------------------------------------------------------
+- Fix open firmware quirks validation so that they don't get applied
+  wrongly
+
+----------------------------------------------------------------
+Marc Zyngier (1):
+      irqchip/gic: Correctly validate OF quirk descriptors
+
+Thomas Gleixner (1):
+      Merge tag 'irqchip-fixes-6.4-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+
+ drivers/irqchip/irq-gic-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
