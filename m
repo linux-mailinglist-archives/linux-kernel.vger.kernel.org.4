@@ -2,210 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBB972165C
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AD072165E
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjFDLbH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 4 Jun 2023 07:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S231314AbjFDLdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 07:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDLbF (ORCPT
+        with ESMTP id S229462AbjFDLdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 07:31:05 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F73AB;
-        Sun,  4 Jun 2023 04:31:04 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-977c963041dso17188066b.1;
-        Sun, 04 Jun 2023 04:31:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685878262; x=1688470262;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/aL+o2q9WhcJmMB5Yajs16jdTbmhGEnj7bHGrpS9KdA=;
-        b=iN2r8kC/5NpwelyNdhctUo8s2Ep1Apbf86V8bCG1jS6eAnCgJIAnYO54MehyMH0vTQ
-         PXKED8/EBZhhAsLP3Lri1aShN9dYQjDYAFXIns4bS08b8Fl9dj4tTdlf7BFfSfrTUbML
-         au5pMFJoMqy0dTeZ3fQo0nGb/Xr9t/ocySVRkdHLV9i3+mGsm+z/7St6BZnNS81S2Ogc
-         LEmwnJeYyR8vyubXRo5aiU8I1l8rVUx9b6YkOhKHycODqPuy8wQ1h6U/KWnDZmNbihbC
-         PEKPs/go7dWcxbCx13LsclhuLVp0c/NMtSpWh6XWVhSFa+VdBA0qTNny3DwEKnTci8NR
-         6Fyw==
-X-Gm-Message-State: AC+VfDx+XDrfmeWhbaqtpLHriXHTDNtpf/vKcfxKyuSSIYcaW4Qm66ae
-        6xwHnR6a/WhHD9Anql94jvD07fJ8eXtHY3E+Pz0=
-X-Google-Smtp-Source: ACHHUZ5ky9PsrrOle7rH26Nn34AShVg9V3oHbWiTjgDKaOLAUpJbWY6V40VeJUcdJJdH6NQQ2r2a1suc56BMKzb4kY8=
-X-Received: by 2002:a17:906:49:b0:953:2918:71e7 with SMTP id
- 9-20020a170906004900b00953291871e7mr10405245ejg.5.1685878262158; Sun, 04 Jun
- 2023 04:31:02 -0700 (PDT)
+        Sun, 4 Jun 2023 07:33:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC79DA;
+        Sun,  4 Jun 2023 04:33:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A3361134;
+        Sun,  4 Jun 2023 11:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B0EC433EF;
+        Sun,  4 Jun 2023 11:32:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685878381;
+        bh=xvMJ3ehOlg6D/nr4URcRAcKPQ4ful8e1IqWXQ7fGVTU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A/bfpTrs/Szu+hLTZ7Srx57g028noNj6jn2mk6mZA+NjjpagxNvNfPmX6tzwExgOa
+         uXyrJ45DOOym/aafOG9FrP0gJiqKRIvPX3byCqrjlepCWAbOdeEGghRLYX7vHclWEz
+         AU4RNnM+796Y2GLLgf7NAgY3He7zmg8x+xuuhhHuf3nLgCACmZVDM5/s9G485+sbr1
+         ILmEPZD3JTl+rkgNBC2FsmoEpVrc7UUhrgDh2TEDScyI1Ii3LzpCjwt92Rez/uhsXp
+         EpOPaiJzJSbvlYJqgSBe8swgm9TREs1WCKvxMUB5zzVAw682CjSw6KB5Gw93ipr8MZ
+         yiF1aVE8xQskA==
+Date:   Sun, 4 Jun 2023 12:32:56 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     fl.scratchpad@gmail.com
+Cc:     Alexandru Tachici <alexandru.tachici@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nuno Sa <nuno.sa@analog.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v3 1/5] iio: adc: ad7192: Fix null ad7192_state pointer
+ access
+Message-ID: <20230604123256.6cf470bc@jic23-huawei>
+In-Reply-To: <20230530075311.400686-2-fl.scratchpad@gmail.com>
+References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
+        <20230530075311.400686-2-fl.scratchpad@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <ZHpPOzT0nm+vddPq@bhelgaas> <fda371a2-da84-c764-c809-2a361418b4ef@amd.com>
-In-Reply-To: <fda371a2-da84-c764-c809-2a361418b4ef@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 4 Jun 2023 13:30:48 +0200
-Message-ID: <CAJZ5v0gzSitt2zm2fhwkg51ZRUd_1ZBVB8akiUK_cnr8wupFQA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: Call _REG when saving/restoring PCI state
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 11:57 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
->
-> On 6/2/2023 3:21 PM, Bjorn Helgaas wrote:
-> > [+cc Rafael, Len, linux-acpi]
-> >
-> > Hi Mario,
-> >
-> > On Thu, Jun 01, 2023 at 10:11:22PM -0500, Mario Limonciello wrote:
-> >> ASMedia PCIe GPIO controllers connected to AMD SOC fail functional tests
-> >> after returning from s2idle. This is because the BIOS checks whether the
-> >> OSPM has called the _REG method to determine whether it can interact with
-> >> the OperationRegion assigned to the device.
-> > "s2idle" is a Linux term; I'd prefer something that we can relate to
-> > the ACPI spec.
-> It's important for the symptoms of this issue though, this
-> problem doesn't trigger "just" by moving D-states.
->
-> It happens as a result of system suspend.
+On Tue, 30 May 2023 09:53:07 +0200
+fl.scratchpad@gmail.com wrote:
 
-As I said in my response to Bjorn, s2idle is D0 from the ACPI
-standpoint.  It is not a system sleep and it has no special meaning in
-ACPI.
+> From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+> 
+> Pointer to indio_dev structure is obtained via spi_get_drvdata() at
+> the beginning of function ad7192_setup(), but the spi->dev->driver_data
+> member is not initialized, hence a NULL pointer is returned.
+> 
+> Fix by changing ad7192_setup() signature to take pointer to struct
+> iio_dev, and get ad7192_state pointer via st = iio_priv(indio_dev);
+> 
+> Fixes: bd5dcdeb3fd0 ("iio: adc: ad7192: convert to device-managed functions")
+> Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+> Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+I'll pick those of this series up that everyone seems happy with.
 
-The problem seems to be related to the low-power S0 idle _DSM calls to me.
+Applied to the fixes-togreg branch of iio.git
+Thanks,
 
-> >
-> > Maybe a pointer to the specific function in the driver that has a
-> > problem?  Based on the patch, I assume the driver uses some control
-> > method that looks at PCI config space?
->
-> The issue isn't in anything Linux code "does"; it's in the "lack"
-> of Linux code doing what it needs to IE using _REG.
+Jonathan
 
-So the argument seems to be that under certain conditions the PCI
-config space becomes unavailable and so _REG(dev, 0) needs to be
-called when this is about to happen and _REG(dev, 1) needs to be
-called when the config space becomes available again.  Fair enough,
-but I'm not sure why this is limited to system suspend and resume.
+> ---
+>  drivers/iio/adc/ad7192.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
+> index 55a6ab591016..94a9cf34a255 100644
+> --- a/drivers/iio/adc/ad7192.c
+> +++ b/drivers/iio/adc/ad7192.c
+> @@ -380,9 +380,9 @@ static int ad7192_of_clock_select(struct ad7192_state *st)
+>  	return clock_sel;
+>  }
+>  
+> -static int ad7192_setup(struct ad7192_state *st, struct device_node *np)
+> +static int ad7192_setup(struct iio_dev *indio_dev, struct device_node *np)
+>  {
+> -	struct iio_dev *indio_dev = spi_get_drvdata(st->sd.spi);
+> +	struct ad7192_state *st = iio_priv(indio_dev);
+>  	bool rej60_en, refin2_en;
+>  	bool buf_en, bipolar, burnout_curr_en;
+>  	unsigned long long scale_uv;
+> @@ -1073,7 +1073,7 @@ static int ad7192_probe(struct spi_device *spi)
+>  		}
+>  	}
+>  
+> -	ret = ad7192_setup(st, spi->dev.of_node);
+> +	ret = ad7192_setup(indio_dev, spi->dev.of_node);
+>  	if (ret)
+>  		return ret;
+>  
 
-Moreover, "PCI_Config operation regions on a PCI root bus containing a
-_BBN object" are specifically mentioned as one of the cases when _REG
-need not be evaluated at all.  I guess the operation region in
-question doesn't fall into that category?
-
-> At least for this issue _REG is treated like a lock mechanism.
-> In the spec it says specifically:
->
-> "When an operation region handler is unavailable, AML cannot access
-> data fields in that region".
->
-> That is it's to ensure that OSPM and AML don't both simultaneously
-> access the same region.
->
-> What happens is that AML normally wants to access this region during
-> suspend, but without the sequence of calling _REG it can't.
-
-Is this about being unable to access the opregion or racing with
-concurrent accesses on the OS side?
-
-> >
-> >> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
-> >> state of PCI devices.
-> > Please include the spec citation: ACPI r6.5, sec 6.5.4.  The URL has
-> > changed in the past and may change in the future, but the name/section
-> > number will not.
-> Sure.
-> >
-> >> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >>   drivers/pci/pci.c | 12 ++++++++++++
-> >>   1 file changed, 12 insertions(+)
-> >>
-> >> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> >> index e38c2f6eebd4..071ecba548b0 100644
-> >> --- a/drivers/pci/pci.c
-> >> +++ b/drivers/pci/pci.c
-> >> @@ -1068,6 +1068,12 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
-> >>      return acpi_pci_bridge_d3(dev);
-> >>   }
-> >>
-> >> +static inline int platform_toggle_reg(struct pci_dev *dev, int c)
-> >> +{
-> >> +    return acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
-> >> +                             ACPI_ADR_SPACE_PCI_CONFIG, c);
-> >> +}
-> > You never check the return value, so why return it?
->
-> _REG isn't mandatory for any of these uses, and I wanted to make
-> sure that if it does end up being mandatory in a future use that
-> the return code wasn't thrown away.  If you think it's better to
-> just throw it away now, I have no qualms making it a void instead.
-
-I don't think it can reasonably become mandatory without adding a
-specific _OSC bit for that.
-
-> >
-> > The function actually doesn't *toggle*; it connects or disconnects
-> > based on "c".
-> Can you suggest a better function name?
-> >
-> > This looks like it only builds when CONFIG_ACPI=y?
->
-> The prototype for acpi_evaluate_reg isn't guarded by CONFIG_ACPI
-> so I figured it worked both ways.
->
-> But looking again I don't see a dummy implementation version for
-> the lack of CONFIG_ACPI, so I'll double check it.
->
-> >
-> >>   /**
-> >>    * pci_update_current_state - Read power state of given device and cache it
-> >>    * @dev: PCI device to handle.
-> >> @@ -1645,6 +1651,9 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
-> >>   int pci_save_state(struct pci_dev *dev)
-> >>   {
-> >>      int i;
-> >> +
-> >> +    platform_toggle_reg(dev, ACPI_REG_DISCONNECT);
-> > I would expect these to be in the PM code near the power state
-> > transitions, not in the state save/restore code.  These functions
-> > *are* used during suspend/resume, but are used in other places as
-> > well, where we probably don't want _REG executed.
-> >
-> > Cc'd Rafael and PM folks, who can give much better feedback.
-> My knee jerk reaction when we found the root cause for this issue
-> was to put the code right around the D-state transitions, but I
-> decided against this.
->
-> I put it in save/restore intentionally because
-> like I mentioned above it's treated like a locking mechanism between
-> OSPM and AML and it's not functionally tied to a D-state transition.
->
-> When the state is saved it's like Linux says
-> "I'm done using this region, go ahead and touch it firmware".
-> When it's restored it's like Linux says
-> "Don't use that region, I'm claiming it for now".
-
-So it looks like you want to use _REG for protecting PCI config space
-against concurrent accesses from AML and the OS.
-
-> Think about that other patch I wrote recently that controls D3
-> availability [1].  If it was only run in the D-state transitions and
-> the root port stays in D0 but has a _REG method it would never get
-> called.
-
-And why should it be evaluated in that case?
