@@ -2,154 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FD872195D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22EC72196C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 21:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjFDS66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 14:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S231777AbjFDTH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 15:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjFDS6y (ORCPT
+        with ESMTP id S230437AbjFDTH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 14:58:54 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6DFCE;
-        Sun,  4 Jun 2023 11:58:53 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f4bdcde899so4894859e87.0;
-        Sun, 04 Jun 2023 11:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685905131; x=1688497131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0uLDA7fQ1eFEBxyVgNGzB8pTMv55u419IbeoR7nu4AQ=;
-        b=MuCQKaUvVjjMXgniF8sNia9BsE7FRRYHz4Pk2pNq+aYgc4wvJ8CTRJGdo+nbfVftES
-         0hxG70Lob7NRmTRU/wZ7rFKxlOHaf+bLZfEXsEHXlPGGnwIjbHOxuqPlb+PCb1k9uFZB
-         L067AQi559bjdLcW3ShTD9ijZydSFUoyLMjtjHd+0mubagCLzd4hAEVcMoWANSfs0b/0
-         +W0q6iQxWYUZkysfY/GD86Xy8xsPmbE8VxSSF5ZMDRLJazBN7VWS/j7DZ7q1eciJgMeD
-         e38B0pNnrSxkLEjE7kMJYpSX1Eadx7Fb8cWNM3+6zrihsL6oC318QsCO7fOK365jKiHb
-         9UOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685905131; x=1688497131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0uLDA7fQ1eFEBxyVgNGzB8pTMv55u419IbeoR7nu4AQ=;
-        b=HmfM9ZcK3+bsjV0bktpahVnl5YOX4FfwSvA7pGXbdHnRWU2RY7XQtglTmWwJgOjM+e
-         mQnVOqIZeeqwn4SP+9JqmJmv3v/CgLHBEqsIGseQShBHz0v5p3ikbEmuzTZn0PRNlv4H
-         2HfETI3ueVcUBZ4JAoa6uH99gYaNe5b7kZKvP5yZVtav8x8dm87hOjMOMbJ2h5MXGqtB
-         PTxCzL+AgmV/0w/x02bk1xtfXC+Sdi7AQweqDBbzeXk2nrLNRYJte7rAXx9RGxzBfx/C
-         4MabZraEAkbmH4VrONGHX7UCUGPKjur/NViqZoOr0bTKqWnLp+vuJqj5nJaKKkSJasi2
-         85Iw==
-X-Gm-Message-State: AC+VfDwHHgl5MIGH2fytV8xkhQ+o5dg1EtY5gRKPk+g/Gb3o0XY/PlMM
-        zP+L9ID5/r9A2nFuQD3/n0o=
-X-Google-Smtp-Source: ACHHUZ5EkaqP6x5GqtWx1BZ2gJzmxHf/jE8v3IHyZU6SL7aUosESZU4nC8UiF+0Xk6nOGWSAa+UFKA==
-X-Received: by 2002:ac2:5eca:0:b0:4f3:a0f5:92e5 with SMTP id d10-20020ac25eca000000b004f3a0f592e5mr3904178lfq.31.1685905130670;
-        Sun, 04 Jun 2023 11:58:50 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id u9-20020a056512040900b004eb0dcc52ddsm858329lfk.41.2023.06.04.11.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 11:58:49 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 21:58:47 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2 2/6] dt-bindings: ata: ahci: add RK3588 AHCI controller
-Message-ID: <20230604185847.r23v53eetd53okyg@mobilestation>
-References: <20230522173423.64691-1-sebastian.reichel@collabora.com>
- <20230522173423.64691-3-sebastian.reichel@collabora.com>
+        Sun, 4 Jun 2023 15:07:28 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21072A4;
+        Sun,  4 Jun 2023 12:07:27 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 21:07:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685905645; bh=tVL6rua96sFgrYX+hG+hECHYZwYEGKbaivsDiNvbYyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sa7eVeipLe2kCWP0XMt2fU3wqRXYQ5/Xf+VesjJK5KPZMG3Loir696DyY/gMAmOVq
+         R+P2+Yz/Gasv1bgoR+57TyuWfQi1YbWHUluQsgyiQvOnS69jUgmzuURcr+laWblmRz
+         BAR3FOS5k0JdfPSZr2hDYzPc/bTRqq2h1/5idb74=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 0/4] selftests/nolibc: add user-space 'efault' handler
+Message-ID: <c6129c15-7e95-4f6c-b4db-c6b5daa6d3cc@t-8ch.de>
+References: <cover.1685443199.git.falcon@tinylab.org>
+ <ZHxv7kIm2kEAfin2@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522173423.64691-3-sebastian.reichel@collabora.com>
+In-Reply-To: <ZHxv7kIm2kEAfin2@1wt.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 07:34:19PM +0200, Sebastian Reichel wrote:
-> Just like RK3568, the RK3588 has a DWC based AHCI controller.
+On 2023-06-04 13:05:18+0200, Willy Tarreau wrote:
+> Hi Zhangjin,
 > 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../devicetree/bindings/ata/snps,dwc-ahci-common.yaml     | 8 ++++++--
->  Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml  | 6 ++++--
->  2 files changed, 10 insertions(+), 4 deletions(-)
+> On Tue, May 30, 2023 at 06:47:38PM +0800, Zhangjin Wu wrote:
+> > Hi, Willy, Thomas
+> > 
+> > This is not really for merge, but only let it work as a demo code to
+> > test whether it is possible to restore the next test when there is a bad
+> > pointer access in user-space [1].
+> > 
+> > Besides, a new 'run' command is added to 'NOLIBC_TEST' environment
+> > variable or arguments to control the running iterations, this may be
+> > used to test the reentrancy issues, but no failures found currently ;-)
 > 
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> index c1457910520b..34c5bf65b02d 100644
-
-> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> @@ -31,11 +31,11 @@ properties:
->        PM-alive clock, RxOOB detection clock, embedded PHYs reference (Rx/Tx)
->        clock, etc.
->      minItems: 1
-> -    maxItems: 4
-> +    maxItems: 6
->  
->    clock-names:
->      minItems: 1
-> -    maxItems: 4
-> +    maxItems: 6
->      items:
->        oneOf:
->          - description: Application APB/AHB/AXI BIU clock
-> @@ -48,6 +48,10 @@ properties:
->            const: pmalive
->          - description: RxOOB detection clock
->            const: rxoob
-> +        - description: PHY Transmit Clock
-> +          const: asic
-> +        - description: PHY Receive Clock
-> +          const: rbc
->          - description: SATA Ports reference clock
->            const: ref
-
-This part looks good but as I mentioned in my comment to the previous
-patchset revision these are generic clocks. Extending the common
-schema could be done in a framework of a preparation patch with
-the justification described in my comment back then.
-
->  
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> index 5afa4b57ce20..c6a0d6c8b62c 100644
-> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> @@ -23,9 +23,11 @@ properties:
->          const: snps,dwc-ahci
->        - description: SPEAr1340 AHCI SATA device
->          const: snps,spear-ahci
-
-> -      - description: Rockhip RK3568 AHCI controller
-> +      - description: Rockhip AHCI controller
->          items:
-> -          - const: rockchip,rk3568-dwc-ahci
-> +          - enum:
-> +              - rockchip,rk3568-dwc-ahci
-> +              - rockchip,rk3588-dwc-ahci
-
-Regarding this part. I would suggest to just create a separate
-DT-schema instead of extending the generic one. See my comment to the
-next patch in the series and my suggestion posted in a comment to
-the previous patchset revision.
-
--Serge(y)
-
->            - const: snps,dwc-ahci
->  
->  patternProperties:
-> -- 
-> 2.39.2
+> Since the tests we're running are essentially API tests, I'm having
+> a hard time seeing in which case it can be useful to repeat the tests.
+> I'm not necessarily against doing it, I'm used to repeating tests for
+> example in anything sensitive to timing or race conditions, it's just
+> that here I'm not seeing the benefit. And the fact you found no failure
+> is rather satisfying because the opposite would have surprised me.
 > 
+> Regarding the efault handler, I don't think it's a good idea until we
+> have signal+longjmp support in nolibc. Because running different tests
+> with different libcs kind of defeats the purpose of the test in the
+> first place. The reason why I wanted nolibc-test to be portable to at
+> least one other libc is to help the developer figure if a failure is in
+> the nolibc syscall they're implementing or in the test itself. Here if
+> we start to say that some parts cannot be tested similarly, the benefit
+> disappears.
+> 
+> I mentioned previously that I'm not particularly impatient to work on
+> signals and longjmp. But in parallel I understand how this can make the
+> life of some developers easier and even allow to widen the spectrum of
+> some tests. Thus, maybe in the end it could be beneficial to make progress
+> on this front and support these. We should make sure that this doesn't
+> inflate the code base however. I guess I'd be fine with ignoring libc-
+> based restarts on EINTR, alt stacks and so on and keeping this minimal
+> (i.e. catch a segfault/bus error/sigill in a test program, or a Ctrl-C
+> in a tiny shell).
+> 
+> Just let us know if you think that's something you could be interested
+> in exploring. There might be differences between architectures, I have
+> not checked.
+
+If the goal is to handle hard errors like segfaults more gracefully,
+would it not be easier to run each testcase in a subprocess?
+
+Then we can just check if the child exited successfully.
+
+It should also be completely architecture agnostic.
+
+Thomas
