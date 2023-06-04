@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57158721A00
+	by mail.lfdr.de (Postfix) with ESMTP id 02BEC7219FF
 	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 22:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjFDUtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 16:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S231739AbjFDUtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 16:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjFDUtv (ORCPT
+        with ESMTP id S229670AbjFDUtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 16:49:51 -0400
-X-Greylist: delayed 510 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Jun 2023 13:49:49 PDT
-Received: from mail2.medvecky.net (mail2.medvecky.net [85.118.132.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD0DB;
-        Sun,  4 Jun 2023 13:49:49 -0700 (PDT)
-Message-ID: <ae93843f-7ab0-9d10-cf93-261f986962a5@assembler.cz>
-Date:   Sun, 4 Jun 2023 22:41:15 +0200
+        Sun, 4 Jun 2023 16:49:13 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A303DCE
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 13:49:12 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565cdb77b01so42833127b3.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 13:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685911752; x=1688503752;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hrzRhdPWgyFGA5EQAoArkXGFEb9XgbN+NGmVY0Sg/3A=;
+        b=EwrOAuRy4PeqUV1EyNpJ1ymgFa87VwLN5JYf46fZ3Pm21IKKSYgFVpQFzsBBRYJGWF
+         rGHj4styziiD0rQitQOKJzd5MrbHeFjyeD8SzXwnL9xIn0JfAQtrW7/ZhV91W+ghoD9b
+         R3TcRspWr7L5SDhqal9aIbxtSPTGcR4pJJd8KwGf77Pl+3KnJAyzj4zru5FSiFBlQwl9
+         pegJKSD/AbSv10yN3IV7tKjwWM/CUKXXZ1UzP5MhVmqAoS4/iyY3Nz11WdRDbr+Bazjv
+         gNAym3p+K2WUhR76UBserf7j+x33TOc3u8gqNE34Dp39CKMeVJkJpW1tz/X0r66m/SDB
+         nKBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685911752; x=1688503752;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hrzRhdPWgyFGA5EQAoArkXGFEb9XgbN+NGmVY0Sg/3A=;
+        b=RWPJpt9947RLf0py1w7KW7g0NdtSO7vz3vYEOZo8rYsLvWXocz6HktSIowYiO9x3lX
+         Sswkf6nwOfFt2maK8ofD20rnZqYdeaqxrYxAZadH+Lk8SIRsSbtD1MNamYH1K8GLMY3W
+         1esjjg4/2a3jmGh1YFj+UrIPJA4y/8A0g+LhvuZcnMnWuTkAQSreHAxEHSjPHpKjbiT/
+         A4SvztMinumis9MJAmQ/bvDTLEm22tLTEshY7o2+4+BcB6WYrGfiIxz1pXlmHxQmoXnr
+         iWW84JjkMRAoHG7caiGUPbPjcyad8zSxN6r1BD/az9jQxxBA+rJAMVFr9MqdDAQUtZ4n
+         xJcA==
+X-Gm-Message-State: AC+VfDxwmKn2JDwiacSTDnSEo439OTLTIEgofbWfhm9h7NIdi5ZGsC1b
+        BUFWafqhkTRLRYcuCtzDNqZ/GA97F3yo24UHw3w=
+X-Google-Smtp-Source: ACHHUZ7kYjbjYsj3LPihZL/TAU1vfpq+stfMAVVcNxIsnUmtH3ZFTlPbGJ87az659jTxlqiUL9ILwPtcStT1eAsqv0g=
+X-Received: by 2002:a0d:e288:0:b0:565:c7dd:95b9 with SMTP id
+ l130-20020a0de288000000b00565c7dd95b9mr6977494ywe.12.1685911751719; Sun, 04
+ Jun 2023 13:49:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>, Marius Hoch <mail@mariushoch.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230514103634.235917-1-mail@mariushoch.de>
- <20230523200350.62ab4788@endymion.delvare>
- <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
- <20230604160132.102dd6a7@endymion.delvare>
-From:   Rudolf Marek <r.marek@assembler.cz>
-Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-In-Reply-To: <20230604160132.102dd6a7@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Authentication-Results: mail2.medvecky.net;
-        auth=pass smtp.mailfrom=r.marek@assembler.cz
-X-Spamd-Bar: /
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230601075333.14021-1-ihuguet@redhat.com> <d8afcd26-af64-b062-8e40-b59eff9b4180@digikod.net>
+In-Reply-To: <d8afcd26-af64-b062-8e40-b59eff9b4180@digikod.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 4 Jun 2023 22:49:00 +0200
+Message-ID: <CANiq72kDJA8e0b+Mo_sxLUXs70E-P2un8GM+XtADr7RpM4eaKA@mail.gmail.com>
+Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>,
+        ojeda@kernel.org, danny@kdrag0n.dev, masahiroy@kernel.org,
+        jgg@nvidia.com, linux-kernel@vger.kernel.org, corbet@lwn.net,
+        joe@perches.com, linux@rasmusvillemoes.dk, willy@infradead.org,
+        mailhol.vincent@wanadoo.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean,
+On Fri, Jun 2, 2023 at 5:37=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digiko=
+d.net> wrote:
+>
+> Looks good to me, thanks!
+>
+> Acked-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+>
+> It would be nice to have a script to check files and output a diff if
+> they are not in line with this configuration. That could also be used to
+> measure how many files are compliant with these rules, and add this
+> stats in the commit message.
 
-Dne 04. 06. 23 v 16:01 Jean Delvare napsal(a):
-> I admit I don't know. I'm not familiar with how GSI numbers relate to
-> IRQ numbers. I think I understand that GSI numbers are an ACPI thing,
-> and the ACPI layer is responsible for mapping these to actual IRQ
-> numbers? Is there a GSI-to-IRQ table available somewhere as part of the
-> ACPI tables? If so, it would be interesting to disassemble the ACPI
-> tables on your system and check what this looks like for you.
+Agreed.
 
-You need to check _PRT method of PCI0 device in APIC mode.
-This will tell you to what GSI (APIC/pin) it goes.
-To check you need to have a look to the DSDT table and decompile
-it. You can obtain it by running acpidump > tables.txt and the acpixtract -a tables.txt
-and finally running iasl -d dsdt.asl.
+> For some reasons, maintainers may want to exclude some files from these
+> constraints. It would be useful to add some documentation explaining how
+> to do it.
 
-Then, because the SMBUS lives on bus0, you just need to check _PRT method
-under PCI0 device for the entry of 001fffff (INT C).
-If this entry exists it will tell you where is it connected.
+I would suggest adding it directly as a comment on top of the
+`.editorconfig` file itself. Or, at least, put there the link to the
+official page (https://editorconfig.org), which mentions `unset`,
+assuming that is the way to do so.
 
-I assume this has no entry and then as a last chance Linux tries the PCI IRQ entry
-in the configuration space gets queried. And this has 0xff which is
-telling no IRQ connected.
+=C3=8D=C3=B1igo, I would also suggest sending the patch to Andrew Morton.
 
-The southbridge has a IRQ routing configuration register which can be used to verify
-if this is routed anywhere or really left "unconnected". This is usually in the the RCBA base + something
-register. Have a look to "D31IP" register:
-
-SMBus Pin (SMIP) — R/W. Indicates which pin the SMBus controller drives as its
-interrupt. bits 15:12
-
-If there is 0, it is not routed anywhere. Also you need to check "D31IR" where the PIN C is going:
-
-Interrupt C Pin Route (ICR) — R/W. Indicates which physical pin on the PCH is
-connected to the INTC# pin reported for device 31 functions.
-
-The PIRQA corresponds to the PIN 16 of IOAPIC etc.
-
-If you need more info on that feel free to contact me. I can try to help.
-
-
-Thanks,
-Rudolf
-
+Cheers,
+Miguel
