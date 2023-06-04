@@ -2,97 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E75721878
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 18:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF73721881
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 18:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjFDQNq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 4 Jun 2023 12:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S231752AbjFDQQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 12:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDQNo (ORCPT
+        with ESMTP id S231620AbjFDQQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 12:13:44 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56508B3;
-        Sun,  4 Jun 2023 09:13:43 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96fc07d7e6bso81201166b.1;
-        Sun, 04 Jun 2023 09:13:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685895222; x=1688487222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RB2Pk7LaCOIDMRL6UqKdMxKSwM8bP2MfrOVz+JJM6Wk=;
-        b=RZBNKkCCsupRLCUuLxhby92kIXSoEQbuFGwT8Iz9bWnWGHE2ZIvSUSnSfW3Z5DWZZr
-         BWw30p4AESPFuQ+Ub+B86eWGANEIRsguArhKBL5QmmxrcvYSKG6GT1v80WKa03opZ9xU
-         zEG8M9ywifTofTHnOjgeEYSoqLSVNMk27VOWn+mdkFiimpBUGGMcl3rDQzZrN+zavFQ0
-         ywaKYpxN8N4CeUM9iErrU89/M/dlo1igT3HTAs3GCfUk2+n58Qt+FKDUZoQ67iYxB663
-         n9ZFzctTmrcEQH8yG8ffTxlcVUl4mZaMPu2Jc1QyJw8QKic4Ay3gqxB/KHHhMT6rqxmS
-         qNnQ==
-X-Gm-Message-State: AC+VfDyZhyNMXsfxiSBNyYEVh/n73+kyRTqGnm6VdKZVLyYg/KIZT6Pp
-        KuEvxD8w6AxntKsk4uFzRCSGtuFIRTMPztMXgoI=
-X-Google-Smtp-Source: ACHHUZ4o/XAUWrrN3YEUVlphWtsHh4juwhMe0A5KiJ5rZexwbh8w4h1U4k/cuW5UPLOVkAyWlrgAmdrrdf7AJsa8Lcc=
-X-Received: by 2002:a17:906:73cc:b0:929:b101:937d with SMTP id
- n12-20020a17090673cc00b00929b101937dmr10488832ejl.1.1685895221737; Sun, 04
- Jun 2023 09:13:41 -0700 (PDT)
+        Sun, 4 Jun 2023 12:16:12 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258DFB3;
+        Sun,  4 Jun 2023 09:16:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685895309; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SC1faauJLwgPgvkubwjC3WUExNQ05U8IPxBxXBr1oc87sJu0EvCm+1Zh+9YwqZvgzP2rCgFpMc2d6DVYxFxKk7WilzAF7WeQ4cHCL/xSntQ1ZhA0F/HdYWgFCPpZ7RqtSmRqUHr3d5Eq/tEglPVCTyzcnAIaNo69RzNFvAfDGLo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685895309; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=jDvl+5Gwb0Z1Fj/7pG7iYCRwIcEjBREw3uMwlZ2p9B0=; 
+        b=ka1sFShCH/wf7qi4N8wSVHnP2xVSuBJMREyUQtfN9JfxTcwI0y5mkpPkgNxVgKKUMTdqN6viWUss47WwBIfwR+SZdY8gzIYf3aNLpJTNJihB7ab2dA/7vIROXsf3+s4N1mWgzmBMYSiVfJCDrIMl1vQ8/1MedPRCxhs76IGEkQQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685895309;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=jDvl+5Gwb0Z1Fj/7pG7iYCRwIcEjBREw3uMwlZ2p9B0=;
+        b=fGw+0ugjnjBX+3SF5LgsRzl8U27NCxEwHRRcq6HAKMiIEA5zMc6/E5s99IVtE3mm
+        MccmoWMbRdEYePxXlifd69ouPwPhJSBVmiGgCWB8tzAiGDV7HoSHGULcvTr5eGxfhy3
+        kNx4wPGnBPOIXebFfKbM1aOMmr9yRhkV4ceahr00=
+Received: from [192.168.66.198] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1685895307084897.9178477634476; Sun, 4 Jun 2023 09:15:07 -0700 (PDT)
+Message-ID: <0542e150-5ff4-5f74-361a-1a531d19eb7d@arinc9.com>
+Date:   Sun, 4 Jun 2023 19:14:55 +0300
 MIME-Version: 1.0
-References: <20230602085546.376086-1-d.dulov@aladdin.ru>
-In-Reply-To: <20230602085546.376086-1-d.dulov@aladdin.ru>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 4 Jun 2023 18:13:30 +0200
-Message-ID: <CAJZ5v0iyDvApQVjY=BopVSXZSg3tqmcYBnDQN2HORp3Oy8atEQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Check for a possible array out
- of bounds access.
-To:     Daniil Dulov <d.dulov@aladdin.ru>, Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
+ to p{5,6}_configured
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230526130145.7wg75yoe6ut4na7g@skbuf>
+ <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+ <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
+ <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
+ <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
+ <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
+ <ZHyMezyKizkz2+Wg@shell.armlinux.org.uk>
+ <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
+ <ZHyqI2oOI4KkvgB8@shell.armlinux.org.uk>
+ <ZHy1C7wzqaj5KCmy@shell.armlinux.org.uk>
+ <ZHy2jQLesdYFMQtO@shell.armlinux.org.uk>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZHy2jQLesdYFMQtO@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc list trimmed.
+On 4.06.2023 19:06, Russell King (Oracle) wrote:
+> On Sun, Jun 04, 2023 at 05:00:11PM +0100, Russell King (Oracle) wrote:
+>> On Sun, Jun 04, 2023 at 04:13:39PM +0100, Russell King (Oracle) wrote:
+>>> On Sun, Jun 04, 2023 at 04:14:31PM +0300, Arınç ÜNAL wrote:
+>>>> On 4.06.2023 16:07, Russell King (Oracle) wrote:
+>>>>> On Sun, Jun 04, 2023 at 03:55:17PM +0300, Vladimir Oltean wrote:
+>>>>>> On Sun, Jun 04, 2023 at 01:18:04PM +0100, Russell King (Oracle) wrote:
+>>>>>>> I don't remember whether Vladimir's firmware validator will fail for
+>>>>>>> mt753x if CPU ports are not fully described, but that would be well
+>>>>>>> worth checking. If it does, then we can be confident that phylink
+>>>>>>> will always be used, and those bypassing calls should not be necessary.
+>>>>>>
+>>>>>> It does, I've just retested this:
+>>>>>>
+>>>>>> [    8.469152] mscc_felix 0000:00:00.5: OF node /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 of CPU port 4 lacks the required "phy-handle", "fixed-link" or "managed" properties
+>>>>>> [    8.494571] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register DSA switch
+>>>>>> [    8.502151] mscc_felix: probe of 0000:00:00.5 failed with error -22
+>>>>>
+>>>>> ... which isn't listed in dsa_switches_apply_workarounds[], and
+>>>>> neither is mt753x. Thanks.
+>>>>>
+>>>>> So, that should be sufficient to know that the CPU port will always
+>>>>> properly described, and thus bypassing phylink in mt753x for the CPU
+>>>>> port should not be necessary.
+>>>>
+>>>> Perfect! If I understand correctly, there's this code - specific to MT7531
+>>>> and MT7988 ports being used as CPU ports - which runs in addition to what's
+>>>> in mt753x_phylink_mac_config():
+>>>>
+>>>> 	mt7530_write(priv, MT7530_PMCR_P(port),
+>>>> 		     PMCR_CPU_PORT_SETTING(priv->id));
+>>>>
+>>>> This should be put on mt753x_phylink_mac_config(), under priv->id ==
+>>>> ID_MT7531, priv->id == ID_MT7988, and dsa_is_cpu_port(ds, port) checks?
+>>>
+>>> Please remember that I have very little knowledge of MT753x, so in
+>>> order to answer this question, I've read through the mt7530 driver
+>>> code.
+>>>
+>>> Looking at mt7530.h:
+>>>
+>>> #define  PMCR_CPU_PORT_SETTING(id)      (PMCR_FORCE_MODE_ID((id)) | \
+>>>                                           PMCR_IFG_XMIT(1) | PMCR_MAC_MODE | \
+>>>                                           PMCR_BACKOFF_EN | PMCR_BACKPR_EN | \
+>>>                                           PMCR_TX_EN | PMCR_RX_EN | \
+>>>                                           PMCR_TX_FC_EN | PMCR_RX_FC_EN | \
+>>>                                           PMCR_FORCE_SPEED_1000 | \
+>>>                                           PMCR_FORCE_FDX | PMCR_FORCE_LNK)
+>>>
+>>> This seems to be some kind of port control register that sets amongst
+>>> other things parameters such as whether flow control is enabled, the
+>>> port speed, the duplex setting, whether link is forced up, etc.
+>>>
+>>> Looking at what mt753x_phylink_mac_link_up() does:
+>>>
+>>> 1. it sets PMCR_RX_EN | PMCR_TX_EN | PMCR_FORCE_LNK.
+>>> 2. it sets PMCR_FORCE_SPEED_1000 if speed was 1000Mbps, or if using
+>>>     an internal, TRGMII, 1000base-X or 2500base-X phy interface mode.
+>>> 3. it sets PMCR_FORCE_FDX if full duplex was requested.
+>>> 4. it sets PMCR_TX_FC_EN if full duplex was requested with tx pause.
+>>> 5. it sets PMCR_RX_FC_EN if full duplex was requested with rx pause.
+>>>
+>>> So, provided this is called with the appropriate parameters, for a
+>>> fixed link, that will leave the following:
+>>>
+>>> 	PMCR_FORCE_MODE_ID(id)
+>>> 	PMCR_IFG_XMIT(1)
+>>> 	PMCR_MAC_MODE
+>>> 	PMCR_BACKOFF_EN
+>>> 	PMCR_BACKPR_EN
+>>>
+>>> If we now look at mt753x_phylink_mac_config(), this sets
+>>> PMCR_IFG_XMIT(1), PMCR_MAC_MODE, PMCR_BACKOFF_EN, PMCR_BACKPR_EN,
+>>> and PMCR_FORCE_MODE_ID(priv->id), which I believe is everything that
+>>> PMCR_CPU_PORT_SETTING(priv->id) is doing.
+>>>
+>>> So, Wouldn't a fixed-link description indicating 1Gbps, full duplex
+>>> with pause cause phylink to call both mt753x_phylink_mac_config() and
+>>> mt753x_phylink_mac_link_up() with appropriate arguments to set all
+>>> of these parameters in PMCR?
+>>>
+>>> Now, I'm going to analyse something else. mt7531_cpu_port_config()
+>>> is called from mt753x_cpu_port_enable(), which is itself called from
+>>> mt7531_setup_common(). That is ultimately called from the DSA switch
+>>> ops .setup() method.
+>>>
+>>> This method is called from dsa_switch_setup() for each switch in the
+>>> DSA tree. dsa_tree_setup_switches() calls this, and is called from
+>>> dsa_tree_setup().  Once dsa_tree_setup_switches() finishes
+>>> successfully, dsa_tree_setup_ports() will be called. This will then
+>>> setup DSA and CPU ports, which will then setup a phylink instance
+>>> for these ports. phylink will parse the firmware description for
+>>> the port. DSA will then call dsa_port_enable().
+>>>
+>>> dsa_port_enable() will then call any port_enable() method in the
+>>> mt7530.c driver, which will be mt7530_port_enable(). This then...
+>>>
+>>>          mt7530_clear(priv, MT7530_PMCR_P(port), PMCR_LINK_SETTINGS_MASK);
+>>>
+>>> which is:
+>>>
+>>> #define  PMCR_LINK_SETTINGS_MASK        (PMCR_TX_EN | PMCR_FORCE_SPEED_1000 | \
+>>>                                           PMCR_RX_EN | PMCR_FORCE_SPEED_100 | \
+>>>                                           PMCR_TX_FC_EN | PMCR_RX_FC_EN | \
+>>>                                           PMCR_FORCE_FDX | PMCR_FORCE_LNK | \
+>>>                                           PMCR_FORCE_EEE1G | PMCR_FORCE_EEE100)
+>>>
+>>> So it wipes out all the PMCR settings that mt7531_cpu_port_config()
+>>> performed - undoing *everything* below that switch() statement in
+>>> mt7531_cpu_port_config()!
+>>>
+>>> Once the port_enable() method returns, DSA will then call
+>>> phylink_start(), which will trigger phylink to bring up the link
+>>> according to the settings it has, which will mean phylink calls
+>>> the mac_config(), pcs_config(), pcs_link_up() and mac_link_up()
+>>> with the appropriate parameters for the firmware described link.
+>>>
+>>> So I think I have the answer to my initial thought: do the calls in
+>>> mt7531_cpu_port_config() to the phylink methods have any use what so
+>>> ever? The answer is no, they are entirely useless. The same goes for
+>>> the other cpu_port_config() methods that do something similar. The
+>>> same goes for the PMCR register write that's changing any bits
+>>> included in PMCR_LINK_SETTINGS_MASK.
+>>>
+>>> What that means is that mt7988_cpu_port_config() can be entirely
+>>> removed, it serves no useful purpose what so ever. For
+>>> mt7531_cpu_port_config(), it only needs to set priv->p[56]_interface
+>>> which, as far as I can see, probably only avoids mac_config() doing
+>>> any pad setup (that's a guess.)
+>>>
+>>> At least that's what I gather from reading through the driver and
+>>> DSA code. It may be I've missed something, but currently, I think
+>>> that these cpu_port_config() functions aren't doing too much that
+>>> is actually useful work.
+>>
+>> Essentially, I think this change will have no effect at all on the
+>> driver, because any effect this code has is totally undone when the
+>> driver's port_enable() method is called:
+>>
+>> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+>> index 9bc54e1348cb..447e63d74e0c 100644
+>> --- a/drivers/net/dsa/mt7530.c
+>> +++ b/drivers/net/dsa/mt7530.c
+>> @@ -2859,8 +2859,6 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
+>>   {
+>>   	struct mt7530_priv *priv = ds->priv;
+>>   	phy_interface_t interface;
+>> -	int speed;
+>> -	int ret;
+>>   
+>>   	switch (port) {
+>>   	case 5:
+>> @@ -2880,36 +2878,6 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> -	if (interface == PHY_INTERFACE_MODE_2500BASEX)
+>> -		speed = SPEED_2500;
+>> -	else
+>> -		speed = SPEED_1000;
+>> -
+>> -	ret = mt7531_mac_config(ds, port, MLO_AN_FIXED, interface);
+>> -	if (ret)
+>> -		return ret;
+>> -	mt7530_write(priv, MT7530_PMCR_P(port),
+>> -		     PMCR_CPU_PORT_SETTING(priv->id));
+>> -	mt753x_phylink_pcs_link_up(&priv->pcs[port].pcs, MLO_AN_FIXED,
+>> -				   interface, speed, DUPLEX_FULL);
+>> -	mt753x_phylink_mac_link_up(ds, port, MLO_AN_FIXED, interface, NULL,
+>> -				   speed, DUPLEX_FULL, true, true);
+>> -
+>> -	return 0;
+>> -}
+>> -
+>> -static int
+>> -mt7988_cpu_port_config(struct dsa_switch *ds, int port)
+>> -{
+>> -	struct mt7530_priv *priv = ds->priv;
+>> -
+>> -	mt7530_write(priv, MT7530_PMCR_P(port),
+>> -		     PMCR_CPU_PORT_SETTING(priv->id));
+>> -
+>> -	mt753x_phylink_mac_link_up(ds, port, MLO_AN_FIXED,
+>> -				   PHY_INTERFACE_MODE_INTERNAL, NULL,
+>> -				   SPEED_10000, DUPLEX_FULL, true, true);
+>> -
+>>   	return 0;
+>>   }
+>>   
+>> @@ -3165,7 +3133,6 @@ const struct mt753x_info mt753x_table[] = {
+>>   		.phy_read_c45 = mt7531_ind_c45_phy_read,
+>>   		.phy_write_c45 = mt7531_ind_c45_phy_write,
+>>   		.pad_setup = mt7988_pad_setup,
+>> -		.cpu_port_config = mt7988_cpu_port_config,
+>>   		.mac_port_get_caps = mt7988_mac_port_get_caps,
+>>   		.mac_port_config = mt7988_mac_config,
+>>   	},
+> 
+> ... and with that patch we can remove the definition of
+> PMCR_CPU_PORT_SETTING() as well!
+> 
+> There is one possibility why we may not be able to remove this code -
+> whether there's something in this which requires the CPU port to be
+> setup prior to something else. Only someone knowledgeable of the
+> hardware, or who has the hardware in front and can test would be able
+> to work that out.
 
-On Fri, Jun 2, 2023 at 11:12 AM Daniil Dulov <d.dulov@aladdin.ru> wrote:
->
-> ratio may be equal to MAX_TARGET_RATIO - 1 that will result in
-> out of bound access.
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: d6d71ee4a14a ("PM: Introduce Intel PowerClamp Driver")
-> Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
-> ---
->  drivers/thermal/intel/intel_powerclamp.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index fb04470d7d4b..9deaf2b8ccf6 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -277,7 +277,8 @@ static unsigned int get_compensation(int ratio)
->                 comp = (cal_data[ratio].steady_comp +
->                         cal_data[ratio - 1].steady_comp +
->                         cal_data[ratio - 2].steady_comp) / 3;
-> -       } else if (cal_data[ratio].confidence >= CONFIDENCE_OK &&
-> +       } else if (ratio < MAX_TARGET_RATIO - 1 &&
-> +               cal_data[ratio].confidence >= CONFIDENCE_OK &&
->                 cal_data[ratio - 1].confidence >= CONFIDENCE_OK &&
->                 cal_data[ratio + 1].confidence >= CONFIDENCE_OK) {
->                 comp = (cal_data[ratio].steady_comp +
-> --
+I am on the same page with your explanation so far. I will test this out 
+on MT7531. Thanks a lot for looking at this!
 
-Rui, Srinivas, can you have a look at this, please?
+Arınç
