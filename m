@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E5E721730
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4746972172E
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjFDNHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S231814AbjFDNH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 09:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjFDNHi (ORCPT
+        with ESMTP id S229611AbjFDNH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:07:38 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1267BB8;
-        Sun,  4 Jun 2023 06:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UzzrhBNawZ31nGxvXXuqa4J3SochyxihEmrfIV4DZvY=; b=PelkEpSR3NnJ2cgM83e2WDHOll
-        K07RelK5yOLv8J8HBKdF4PjKS1SkWSDmh0aM/GN3rj9Po+21pkbm8ZHmV5kIt0quivrYckxH04EiK
-        mI1MgVfcMFmLFzY3ggf8RfPa3mzXd3eXaBrRDmy7z5L+mhMCqN/ZSDgGPws7EdlP72LEE7kE0nKcz
-        5iYspNj739l3n5PHgOsxOYfDIn7+ZAPay1zcnPaHHnaeC1WMmPikJDR3htiVWtbafIsvxmjBSAEHZ
-        qUdKdxUUkFtdLuVA/sxGTMvlfy12PskuB5qGj9LNbWg+eo8D3OXdWofb2nJSTEEIlOx0CCt/xFHci
-        Zwsje9xw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48974)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q5nRx-0002cf-68; Sun, 04 Jun 2023 14:07:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q5nRr-00054c-EH; Sun, 04 Jun 2023 14:07:07 +0100
-Date:   Sun, 4 Jun 2023 14:07:07 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
- to p{5,6}_configured
-Message-ID: <ZHyMezyKizkz2+Wg@shell.armlinux.org.uk>
-References: <20230522121532.86610-9-arinc.unal@arinc9.com>
- <20230522121532.86610-9-arinc.unal@arinc9.com>
- <20230524175107.hwzygo7p4l4rvawj@skbuf>
- <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
- <20230526130145.7wg75yoe6ut4na7g@skbuf>
- <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
- <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
- <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
- <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
- <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
+        Sun, 4 Jun 2023 09:07:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1EDB1;
+        Sun,  4 Jun 2023 06:07:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1B7560ECC;
+        Sun,  4 Jun 2023 13:07:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861F3C433D2;
+        Sun,  4 Jun 2023 13:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685884046;
+        bh=0P33fMw15N/rBZGu2NM+90HF89luwm9sJg51r4dQ4ks=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L36Et4KUtUDohC5eMsKNMO0QBkJcZHH0MQsrrvnO7I1K3AQQf5UtDKB/WL1F6VteV
+         tFJ0ygW7y+odH+jYP24sWUh4nOvf1W1AUOZ25zA6sSUM6bnjQxFnGjNYhFM1/Qz7he
+         Ke6417XTlv9ZyPZbsdVcgXklbfJPEiQcCoH6ov/L/NxYQwDAJeVmyp61/kbwAUjyEC
+         Xfe9XQK5R5NV7vcQQ7F12ZQKSdCDxgzzqvOmDpPOJc11e1Rd2aupwg9XfPeBC12Ir7
+         Z5o58q6jTu9UIzqfABSefzfeB9VEJiuKeUG/kOvFebn5H7Xh7ceFV05Fc/pU2B5AV9
+         1z41ziHNzdzog==
+Date:   Sun, 4 Jun 2023 14:07:22 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     andy.shevchenko@gmail.com
+Cc:     Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] iio: pressure: Honeywell mprls0025pa pressure
+ sensor
+Message-ID: <20230604140722.5eef740b@jic23-huawei>
+In-Reply-To: <ZHPVn4xzErSZfqVy@surfacebook>
+References: <ZGNpZM137jF5yzie@arbad>
+        <ZGNp3SqyOJeEcLsj@arbad>
+        <ZHPVn4xzErSZfqVy@surfacebook>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 03:55:17PM +0300, Vladimir Oltean wrote:
-> On Sun, Jun 04, 2023 at 01:18:04PM +0100, Russell King (Oracle) wrote:
-> > I don't remember whether Vladimir's firmware validator will fail for
-> > mt753x if CPU ports are not fully described, but that would be well
-> > worth checking. If it does, then we can be confident that phylink
-> > will always be used, and those bypassing calls should not be necessary.
+
+
 > 
-> It does, I've just retested this:
+> > +	if (dev_fwnode(dev)) {  
 > 
-> [    8.469152] mscc_felix 0000:00:00.5: OF node /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 of CPU port 4 lacks the required "phy-handle", "fixed-link" or "managed" properties
-> [    8.494571] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register DSA switch
-> [    8.502151] mscc_felix: probe of 0000:00:00.5 failed with error -22
+> Why not simply use defaults?
 
-... which isn't listed in dsa_switches_apply_workarounds[], and
-neither is mt753x. Thanks.
+Potential for inconsistent set if a firmware provides some but not others?
+(at least that was my assumption that could well be wrong)
 
-So, that should be sufficient to know that the CPU port will always
-properly described, and thus bypassing phylink in mt753x for the CPU
-port should not be necessary.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> 
+> > +		ret = device_property_read_u32(dev, "honeywell,pmin-pascal",
+> > +								&data->pmin);
+> > +		if (ret)
+> > +			return dev_err_probe(dev, ret,
+> > +				"honeywell,pmin-pascal could not be read\n");
+> > +		ret = device_property_read_u32(dev, "honeywell,pmax-pascal",
+> > +								&data->pmax);
+> > +		if (ret)
+> > +			return dev_err_probe(dev, ret,
+> > +				"honeywell,pmax-pascal could not be read\n");
+> > +		ret = device_property_read_u32(dev,
+> > +				"honeywell,transfer-function", &data->function);
+> > +		if (ret)
+> > +			return dev_err_probe(dev, ret,
+> > +				"honeywell,transfer-function could not be read\n");
+> > +		if (data->function > MPR_FUNCTION_C)
+> > +			return dev_err_probe(dev, -EINVAL,  
