@@ -2,176 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6627213EF
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 03:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9F37213FC
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 03:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjFDBEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 21:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S229890AbjFDBiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 21:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDBEJ (ORCPT
+        with ESMTP id S229490AbjFDBiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 21:04:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC2E1A4;
-        Sat,  3 Jun 2023 18:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685840648; x=1717376648;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+wJqTTbsk/iHJD7CbhDVzaKecBsql3rMokp64c3Bl3M=;
-  b=X9NrkbLtLLVqQ/+/w+E4ME2kSyGlkhz2qlLfW5BhNxCMWEQYFJ5QCIPn
-   ZG2332nzqnsQM857qzhyxrC4uLu9gXjvVMylZH44aItO+WEMumzx1u8/9
-   FIrIfS4Wekf+pAGqKuzMw5DaA2xuDhEpJCLwy+TIazYo1mtDSsmAa/4z0
-   5WGJ6VmDj+XLjbF3rKOCY5hJp0nhLWmEDIUlROvdajERDiDMd1vRmIBgR
-   3X7bkRZMis09vpCDzFDDWLKMRXg9An879vXP6ZjjPNRUnbEvL6JiA4hzn
-   6d2VfN6zZSGxt/mDWr5SGBWrxHGpkzM5mRC4j2OSYX+KAMv5GMFryDGMQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="442508655"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="442508655"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 18:04:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="741236515"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="741236515"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 Jun 2023 18:04:04 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q5cA8-0002Bn-0F;
-        Sun, 04 Jun 2023 01:04:04 +0000
-Date:   Sun, 4 Jun 2023 09:03:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hongyu Xie <xiehongyu1@kylinos.cn>, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, corbet@lwn.net
-Cc:     oe-kbuild-all@lists.linux.dev, rdunlap@infradead.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xy521521@gmail.com, Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [PATCH v2 -next] tty: serial: add panic serial helper
-Message-ID: <202306040839.IrnnKYxH-lkp@intel.com>
-References: <20230602011835.582430-1-xiehongyu1@kylinos.cn>
+        Sat, 3 Jun 2023 21:38:03 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E771A7;
+        Sat,  3 Jun 2023 18:38:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AjbRVKv5W9IkKeLJzQH2wybdmJuk+aVROpgQabY+tCkiRsSmldYp7dOrIJODlD9DNJgVZZDxT+RQ8yKm247xt8kPiDke8ub3diF5BDrynoiRwaE5PQZBoChQT8/w5dlkbTRjxaA6am5SCvMsr79oz5E8xJ9om6rAgMPwluAXfgcpQthVGLH7zUb+2xh7oW+UifQkdt/QXIGFx8EAs5E+Yiqh5tndii9mvDvXWp+jSV6x6ph8cOIiBoVE/zR2rNYcDhh19nd1ZSKgqzOiGdYwVDOVi4lvHzKz5FOV0Hky2SGzD4ACCu/LoyLO+RQzTxNr87fmlcCuNmMkOehkcVUOqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uvv+s8qBLJz2k4c+kDEAOagrqhFac5jQQKnaAxYvobE=;
+ b=YO/6sPTXWA/u026609Ie+vLLD4ChrhtgK7+yNCQ6ppDPymJTRk81x+3lbEWD/U+JRZ2NHPOlYwIAfyWBRYziGVCa/36CKDiM6ENN/v4zwHauDF9qgClf3nPR4GwAmyQAj1bLg4bWbunEqqTAZLoZYXy0Nz73FFD6XVaJhTMSvYih4E2RW0t2WRap7BF1L5arMI4kFG/guIi6tjVvu46weJbF93/WS9RRe7FpApn368sipjU1f+J71t8Y4a4VLin5OqIcVE4uAaOWhjJ4iditLGySlk3uMlDGL0Q3qWgWaNSzfl8W8V58r8wHjl8T+py8GP7GRXL18CqwKU8oZLZBgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uvv+s8qBLJz2k4c+kDEAOagrqhFac5jQQKnaAxYvobE=;
+ b=J1ByB9LDD5fWLdFFd4YJ6SLsw/n3JgTfegy6+8LSpAX8FRHR0YT1arCC3o5/4nFCqp+f2F+jm/PsrKMvj8BRUbZuroDEpFgVxcsZrZ5/W2aJVOM2XbFgTizIeQhOyhz6jU02nm8C2FavThYLnhQ3Xg6Yp3VJ0fWfCK7hBRLeHCsLgqgT5IWqjvplwwnGyVpRDHWof428pZ9RkmSZHAeITPHgk+phfZPcqtkMyVG/p0/jj7HnxIXLkNFjfmC3lxU9WSqQX+IvJjAj4+YkwfAsFLWybtfja0O7e6cYxRXdxNf36I9KAnU3VOfiUIYp+T6CvVXZMeqWl7syFY+wGc73kA==
+Received: from SA1P222CA0104.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c5::14)
+ by SJ0PR12MB6808.namprd12.prod.outlook.com (2603:10b6:a03:47a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Sun, 4 Jun
+ 2023 01:36:57 +0000
+Received: from SN1PEPF000252A2.namprd05.prod.outlook.com
+ (2603:10b6:806:3c5:cafe::92) by SA1P222CA0104.outlook.office365.com
+ (2603:10b6:806:3c5::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.31 via Frontend
+ Transport; Sun, 4 Jun 2023 01:36:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SN1PEPF000252A2.mail.protection.outlook.com (10.167.242.9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.13 via Frontend Transport; Sun, 4 Jun 2023 01:36:56 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sat, 3 Jun 2023
+ 18:36:44 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Sat, 3 Jun 2023 18:36:43 -0700
+Received: from sandstorm.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Sat, 3 Jun 2023 18:36:43 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Muhammad Usama Anjum" <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: [PATCH 0/1] selftests: error out if kernel header files are not yet built
+Date:   Sat, 3 Jun 2023 18:36:36 -0700
+Message-ID: <20230604013637.203330-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602011835.582430-1-xiehongyu1@kylinos.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000252A2:EE_|SJ0PR12MB6808:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1866bd4-a5c4-44bf-f2af-08db649c2efb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c9GUBV2tW2jDkBtc9+/NRQ0YTp+rhXpgJQarArjN/BYHHV7cTzDS6hsO3cNqzid32tCbz3OGPiYEjJOBB9+fVulCS7+KT7Yp97FvwFMpaY9tkpgAla8jX7HJkYirZ7jJkmqthFUavM80ZFsB+TCGgiugqjV9u+T9Klxn8exUAB4k4mSdWL3CZL7QBESUMKn49lFGXs0HP87pJAv+wsjWq+Eg5qWV7MqjFTgfGTlYwgCslxgf2VIGQYRMQR904GoZYNLzywbZ8J3K177dCuhzYNl8A3qG/jcrJLTOa6aE+zBqzNrw2uLsx+CH14VcQSq22xzwPbJM13a8NTZHTH05UJ1AIM3r17qUSKgS1ujZGL/DtNTLsz1NCiRcDY8xqBFdjTE2Rn3QIXKt0m6Az14SBeQvR26MRQSdPJJ53giVChjXe4atzdQYIUwoQPuux3L0pdFFnrRZC0mfQ/o+FuLvECwyUa4t2afOHbb6amC21yl8nZ7aPAPj7ymkm56BPa5QT19qzhONkEYXpDgl7DWf0z/XCPaRBQPZfZezxfknXBHGypLijRnmcRmVnBL2c8VOWf4eDABL0ncdnGgwoTPcAcd6PiPaChunp00kxN/YdpezgsiZYdUQDHA82qO1ZiYM3n/JwBEuPpHkuPAgqCMJm0dscn926GC5w3jvuUiV+P+i+bHFeiAyOYIFFMR+u144JUFBbyEIddSjtugTBbkERDUcILIBtm285J2MYefQfu21AQ+NTpLrrCrx9zkI+aiwRXw41Pxu+nlFXhYno4Q8Bw==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199021)(40470700004)(46966006)(36840700001)(7416002)(8936002)(5660300002)(8676002)(2906002)(316002)(41300700001)(4744005)(4326008)(70206006)(70586007)(6916009)(966005)(54906003)(6666004)(7696005)(426003)(26005)(1076003)(336012)(186003)(36756003)(2616005)(83380400001)(47076005)(36860700001)(7636003)(356005)(478600001)(40460700003)(82310400005)(82740400003)(40480700001)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2023 01:36:56.7746
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1866bd4-a5c4-44bf-f2af-08db649c2efb
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF000252A2.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6808
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hongyu,
+Hi,
 
-kernel test robot noticed the following build warnings:
+This is somewhat related to the 11-patch series that I just posted [1],
+but I hadn't originally planned to go this far with it. But since David
+Hildenbrand asked if we could warn in this case [2], here it is.
 
-[auto build test WARNING on next-20230601]
+It turns out that automatically doing the "make headers" correctly is
+much harder than just warning, so I stopped at that point. It works well,
+though.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongyu-Xie/tty-serial-add-panic-serial-helper/20230602-092109
-base:   next-20230601
-patch link:    https://lore.kernel.org/r/20230602011835.582430-1-xiehongyu1%40kylinos.cn
-patch subject: [PATCH v2 -next] tty: serial: add panic serial helper
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/0d2aa58f592716807757b3c92fb62fe7aa4eef66
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hongyu-Xie/tty-serial-add-panic-serial-helper/20230602-092109
-        git checkout 0d2aa58f592716807757b3c92fb62fe7aa4eef66
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306040839.IrnnKYxH-lkp@intel.com/
+[1] https://lore.kernel.org/all/20230603021558.95299-1-jhubbard@nvidia.com/
 
-All warnings (new ones prefixed by >>):
+[2] https://lore.kernel.org/all/a4fbc191-9acb-5db8-a375-96c0c1ba3fcd@redhat.com/
 
->> Documentation/dev-tools/panic_serial_helper.rst:66: WARNING: Unexpected indentation.
->> Documentation/dev-tools/panic_serial_helper.rst:62: WARNING: Inline interpreted text or phrase reference start-string without end-string.
->> Documentation/dev-tools/panic_serial_helper.rst:69: WARNING: Block quote ends without a blank line; unexpected unindent.
->> Documentation/dev-tools/panic_serial_helper.rst:86: WARNING: Enumerated list ends without a blank line; unexpected unindent.
->> Documentation/dev-tools/panic_serial_helper.rst:92: WARNING: Option list ends without a blank line; unexpected unindent.
->> Documentation/dev-tools/panic_serial_helper.rst:130: WARNING: Inconsistent literal block quoting.
+thanks,
+John Hubbard
 
-vim +66 Documentation/dev-tools/panic_serial_helper.rst
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
 
-    61	
-  > 62	First you need to enable ``CONFIG_PANIC_SERIAL_HELPER`` in your
-    63	config. To enable ``CONFIG_PANIC_SERIAL_HELPER`` you should look under
-    64	:menuselection:
-    65	`Device Drivers
-  > 66	  --> Character devices
-    67	    --> Enable TTY (TTY [=y])
-    68	      --> Serial drivers`
-  > 69	and select
-    70	:menuselection:`debug through UART after panic`.
-    71	
-    72	Second, build and update the kernel image. Then wait for panic.
-    73	
-    74	After panic, you need to do the following,
-    75	1. connect the UART side of an USB-to-UART tool to any UART
-    76	  port on your device (PC, server, Laptop, etc...).
-    77	  Connect the USB side of that tool to another PC. Open
-    78	  minicom (or other app) on that PC, and set "/dev/ttyUSB0"(or
-    79	  "/dev/ttyUSB1 if there is already another USB-to-UART tool
-    80	  connected to your device) with "115200 8N1".
-    81	
-    82	  It automatically selects the port where you first press the
-    83	  "Enter" key (some keyboard labeled this with "Return").
-    84	
-    85	2. press "Enter" (or "Return") in that
-  > 86	  minicom window; you'll get a help menu:
-    87	  "
-    88	  help:
-    89	      -a      show all kernel msg
-    90	      -3      show S3 msg
-    91	      -4      show S4 msg
-  > 92	      -filter-[string]        show msg containing [string]
-    93	      -q-     quit
-    94	  "
-    95	
-    96	see ``Help menu options`` for details.
-    97	
-    98	3. finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
-    99	 "Enter" to get what you want.
-   100	
-   101	Help menu options
-   102	-----------------
-   103	Available options:
-   104	
-   105	 - a
-   106	
-   107	   Show all the messages starting from ``Booting Linux on ...``
-   108	
-   109	 - 3
-   110	
-   111	   If STR happened before panic, this will show messages starting from
-   112	   ``PM: suspend entry...``
-   113	
-   114	 - 4
-   115	
-   116	   If STD happened before panic, this will show messages starting from
-   117	   ``PM: hibernation entry...``
-   118	
-   119	 - filter-[string]
-   120	
-   121	   Provide case-ignored filter matching. Only show messages that containing
-   122	   ``string``. For example, if you're only interesting in message lines
-   123	   that containing ``CPU`` or ``cpu``, you just input
-   124	   ``filter-CPU`` or ``filter-cpu``.
-   125	   Here is an output example for filtering ``CPU``::
-   126	
-   127	   <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6633
-   128	   <6>[    0.000000] Detected PIPT I-cache on CPU0
-   129	   <6>[    0.000000] CPU features: detected: Kernel page table isolation (K
- > 130	   ...
+John Hubbard (1):
+  selftests: error out if kernel header files are not yet built
 
+ tools/testing/selftests/lib.mk | 36 +++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
+
+
+base-commit: e5282a7d8f6b604f2bb6a06457734b8cf1e2f8f2
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.40.1
+
