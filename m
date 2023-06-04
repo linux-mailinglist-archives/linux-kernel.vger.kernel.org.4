@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968AE721908
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCCB721910
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjFDSCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 14:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S229788AbjFDSDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 14:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjFDSCO (ORCPT
+        with ESMTP id S231481AbjFDSC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 14:02:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5F7BD;
-        Sun,  4 Jun 2023 11:02:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01D0C6102C;
-        Sun,  4 Jun 2023 18:02:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AFCC433EF;
-        Sun,  4 Jun 2023 18:02:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685901732;
-        bh=tsgHg/5R2crKomKyj+7Pho6UFoS2AQKQ8Lkd87r9ko8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VPSCfy/0/VfmjnkJ26s0+N3hVhu4/HnrUCquzI2efOtUvDs/4Yi/JlPrsd6b8FGRP
-         TyJA63shtiLXlSp/yXjn24pXjiAID96auxASntrPNEF0UlR20gOlNB4B19siwHEReV
-         YXzZtRNHKcfkTKg5pZZ5yscqbcv2C/Cdn9lEK+oOgM8n5x0G0biqmaW1qSXevUP/64
-         VB8+4Sz9RdRD9EYH2/JGjHGVRbcSZyqYd/mWdQSJbck9euIo+KjHYtBIH+79oSfRrE
-         nIjjdTwBqhBroLQzxaKfpO5LPZ6XepshB3PXgabN5/RDVX1omJghFQYfI4eDAIRFVM
-         5NMZfTgqRNE4A==
-Date:   Sun, 4 Jun 2023 11:02:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Christian Brauner <brauner@kernel.org>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <20230604110211.3f6401c6@kernel.org>
-In-Reply-To: <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
-        <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
-        <20230522133409.5c6e839a@kernel.org>
-        <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
-        <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
-        <20230523140844.5895d645@kernel.org>
-        <CAEivzxeS2J5i0RJDvFHq-U_RAU5bbKVF5ZbphYDGoPcMZTsE3Q@mail.gmail.com>
-        <CAMw=ZnRmNaoRb2uceatrV8EAufJSKZzD2AsfT5PJE8NBBOrHCg@mail.gmail.com>
-        <20230524081933.44dc8bea@kernel.org>
-        <CAEivzxcTEghPqk=9hQMReSGzE=ruWnJyiuPhW5rGd7eUOEg12A@mail.gmail.com>
+        Sun, 4 Jun 2023 14:02:56 -0400
+Received: from out-27.mta1.migadu.com (out-27.mta1.migadu.com [95.215.58.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EFACA
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 11:02:54 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 14:02:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685901772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8eVzj7/BTcLqy7wFCwl6xnZsISP/KN6jro+z/mha3Xk=;
+        b=PqQAVjJ04ndqRoRQANhzjXtWIXqTHWREPNCE9YGBCSItM5aGzg9r4emrFDvZxP/xuQ2bpU
+        DTvQnUtepgxbciT5z6M6Z+EoNGC8g2gnKTdxk1x+F2TTQDaLu6DFNHuJfLzV07K3aFkiY5
+        e/eoFzp+TyP07cOwDSzIUjGa6eo5mqQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Song Liu <song@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org,
+        Puranjay Mohan <puranjay12@gmail.com>
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+Message-ID: <ZHzRxE5V6YzGVsHy@moria.home.lan>
+References: <20230601101257.530867-1-rppt@kernel.org>
+ <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan>
+ <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+ <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW7Euczff_KB70nuH=Hhf2EYHAf=xiQR7mFqVfByhD34XA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 17:45:25 +0200 Aleksandr Mikhalitsyn wrote:
-> > How about you put the UNIX -> bool patch at the end of the series,
-> > (making it a 4 patch series) and if there's a discussion about it
-> > I'll just skip it and apply the first 3 patches?  
-> 
-> Sure, I will do that!
+On Fri, Jun 02, 2023 at 11:20:58AM -0700, Song Liu wrote:
+> IIUC, arm64 uses VMALLOC address space for BPF programs. The reason
+> is each BPF program uses at least 64kB (one page) out of the 128MB
+> address space. Puranjay Mohan (CC'ed) is working on enabling
+> bpf_prog_pack for arm64. Once this work is done, multiple BPF programs
+> will be able to share a page. Will this improvement remove the need to
+> specify a different address range for BPF programs?
 
-Hi Aleksandr! Did you disappear? Have I missed v7?
+Can we please stop working on BPF specific sub page allocation and focus
+on doing this in mm/? This never should have been in BPF in the first
+place.
