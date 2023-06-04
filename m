@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24ABC7213DE
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 02:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D498E7213EE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 03:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjFDAXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 20:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
+        id S229662AbjFDBCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 21:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjFDAXE (ORCPT
+        with ESMTP id S229490AbjFDBCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 20:23:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D12A19A;
-        Sat,  3 Jun 2023 17:23:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QYcrs11C6z4x3x;
-        Sun,  4 Jun 2023 10:22:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1685838176;
-        bh=AUJ7jHGZlU1IgO9OqyJ4jwSVRZvI7dVMmKTNxQxKoeI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qd2YyRXsuhpUARRns0XW/38b+R1sW7dr4usqM/UPRmx59J5EK5CrM7vQ4ROSYmYcg
-         4UILf3rybeo9IVOT6KNFMUY2uox4B+heOXB4A0kqAIOgjeuEv5hoc6sSy6L0B0imXg
-         yVii0FpGZVB4mwB5tgEDHEANGRPnikIhFd3Waos+0a73UAszqP6EODPT49dqN4k1Lm
-         h1xrxTiQJ8Hrnbb/iQp2q2vIXA3niI7q7Ls2loypcmzfXq67Vt/zY27jAKKzBNEToh
-         jHuBh0k8NWaQImrEUUhu3MEr3yfCqzS6aEWGlahbygEZPNHqVtTBPNKFg/1I3KWdKE
-         EuBtbBTyBoqGQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Timothy Pearson <tpearson@raptorengineering.com>
-Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
-In-Reply-To: <2d188c87-ef34-3812-7330-a985f756d959@infradead.org>
-References: <20230602140143.0af52cee@canb.auug.org.au>
- <2d188c87-ef34-3812-7330-a985f756d959@infradead.org>
-Date:   Sun, 04 Jun 2023 10:22:51 +1000
-Message-ID: <87h6rogjok.fsf@mail.lhotse>
+        Sat, 3 Jun 2023 21:02:54 -0400
+X-Greylist: delayed 1971 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 18:02:52 PDT
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [IPv6:2a0c:5a00:149::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC6D1A4
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 18:02:52 -0700 (PDT)
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+        by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mhal@rbox.co>)
+        id 1q5bd8-007fc1-F6; Sun, 04 Jun 2023 02:29:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+        s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+        bh=ajmFOvwxptlWBTZW4DWkzyimVQmkTbolr3tsod6TmuY=; b=D6C5KOOFud2dCyCRvWq8yvA0M5
+        3Qdd2ChbHfPYr6iWwpQtq7q/I8ROPJiFd2XtNQ5wHkSr6JqfKUafkGDHn7bzTypkvAhZEKrBWHqKz
+        P4+i3GWWmIRhDJXk/PEvfXsbNaMBsuItGQco5Xz1ERCaV8bD84r7tF9TapYQLg86bYn0ojPiQGeBO
+        82Wa7EwqVG+D8g8RQLSyYGH95MGtQW5/ERxbj/qKstVGpq5JIpGwZ9gecWn6xazC0U5ZzF0RLH1o2
+        mfb9bQeNKtfahXFdPtVNDl/IddZ8PghjTCO7Ngq6hZZYKTwFQ3o/Rtpe+tBALiRUSVCfUPCtSLrJC
+        LCxC7vFQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <mhal@rbox.co>)
+        id 1q5bd7-00034M-VD; Sun, 04 Jun 2023 02:29:58 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1q5bcz-0002z3-Co; Sun, 04 Jun 2023 02:29:49 +0200
+Message-ID: <002f1c33-e899-1d17-bfb4-24a116451fe6@rbox.co>
+Date:   Sun, 4 Jun 2023 02:29:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Thunderbird
+Subject: Re: [PATCH v3 2/3] KVM: x86: Retry APIC optimized map recalc if vCPU
+ is added/enabled
+Content-Language: pl-PL, en-GB
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230602233250.1014316-1-seanjc@google.com>
+ <20230602233250.1014316-3-seanjc@google.com>
+From:   Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <20230602233250.1014316-3-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-> On 6/1/23 21:01, Stephen Rothwell wrote:
->> Hi all,
->> 
->> Changes since 20230601:
->> 
->
-> On powerpc64, a randconfig failed with:
->
-> In file included from ../include/linux/list.h:5,
->                  from ../include/linux/preempt.h:11,
->                  from ../include/linux/spinlock.h:56,
->                  from ../include/linux/mmzone.h:8,
->                  from ../include/linux/gfp.h:7,
->                  from ../include/linux/slab.h:15,
->                  from ../arch/powerpc/kernel/iommu.c:15:
-> ../arch/powerpc/kernel/iommu.c: In function 'spapr_tce_setup_phb_iommus_initcall':
-> ../arch/powerpc/kernel/iommu.c:1391:36: error: 'hose_list' undeclared (first use in this function); did you mean 'zonelist'?
->  1391 |         list_for_each_entry(hose, &hose_list, list_node) {
->       |                                    ^~~~~~~~~
-...
+On 6/3/23 01:32, Sean Christopherson wrote:
+> +	 * Read kvm->arch.apic_map_dirty before kvm->arch.apic_map (if clean)
+> +	 * or the APIC registers (if dirty).  Note, on retry the map may have
+> +	 * not yet been marked dirty by whatever task changed a vCPU's x2APIC
+> +	 * ID, i.e. the map may still show up as in-progress.  In that case
+> +	 * this task still needs to retry and copmlete its calculation.
 
-hose_list is in pci-common.c which is built when PCI=y.
+s/copmlete/complete ?
 
-PSERIES and POWERNV force PCI=y.
+Speaking of nits, if you're planning to do some more work around
+kvm_recalculate_phys_map(), there's that old comment typo I've failed
+to notice earlier:
 
-But this config has neither:
+"Apply KVM's hotplug hack if userspace has enable 32-bit APIC IDs."
 
-# CONFIG_PPC_POWERNV is not set
-# CONFIG_PPC_PSERIES is not set
-CONFIG_HAVE_PCI=y
-# CONFIG_PCI is not set
-# CONFIG_COMMON_CLK_RS9_PCIE is not set
-
-
-Probably the spapr_tce code should be wrapped in an #ifdef that is only
-enabled when POWERNV || PSERIES is enabled.
-
-cheers
+enabled?
