@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C07721607
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8EA72160A
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjFDKZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 06:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S229734AbjFDK0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 06:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFDKZY (ORCPT
+        with ESMTP id S230055AbjFDK0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 06:25:24 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B11CB6
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 03:25:23 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149e65c218so5737135a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 03:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685874321; x=1688466321;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YJMkEbWSHnrMMvY5aFflCgy+a09GUp8CaxfqQLYJPe8=;
-        b=McBfv3wHyWsk0SGbQ5NzvzBcitJkpkYBCcKhIr4LcsTctO8BBHr9h/hsEhg8Fwk08r
-         jxWQO8ouTtG0WQ/67m/YleqKfdsKI8g4SmaRsT2cyy7crwB4kazGiiVxcix7QbzpMnE6
-         DK8pL2ch++6vYrfXmnJrYN/juEihCEFhmCTbkAvudj4pc324In23ZX1khGt4c3s2lbpe
-         JjT+9JehWk/oLAC+BSlGx3R48D2WhjGidNVcQkpsWiIdAo0V2GgTxD+C4eAw/JvdC54R
-         ASeBAQqc2dWC+mVcPjhJ60goUepdbj+uC/u0TWXpZrP/CxVrU0XWRvVEVcT43XLIez7i
-         CUjw==
+        Sun, 4 Jun 2023 06:26:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F361BD
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 03:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685874344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6QuVff0D6XaAXOCOopebXuwGjm2V9RJJEXXLpHUrRf4=;
+        b=fwTyQBg8mT21H/fpY9k+1vxZi7nTAkADSzGTT6GY358kEfCP/+CzNLEC5S7ojptiPNxiS+
+        Y2CHQ8edKnrYqW/zi3+AlRdKLXn0Md+/niBVjMuQnnzepzNAsYAI5K45XGnzhvElUrRS/I
+        Xe4PNvWvAKXnBzeN7apYeFH+YIUmtVM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-498-pc1F0zy0Mwer03OD8jcRNg-1; Sun, 04 Jun 2023 06:25:41 -0400
+X-MC-Unique: pc1F0zy0Mwer03OD8jcRNg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-97542592eb9so131350766b.2
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 03:25:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685874321; x=1688466321;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJMkEbWSHnrMMvY5aFflCgy+a09GUp8CaxfqQLYJPe8=;
-        b=iFW+/uGc2F3maF1YSyx8B8p3chsOV0tV8Pck8fipfaKR+7z6VRz4KpQExZ6I1eJXaT
-         kN8RVfdCiNQqC2SaWfgn/n5u/hsi9KJWKWfIhrcxgWvHko2QRJrnU5/vJZw2Ds0ur/gx
-         FWVNR2CoK2ojXCC1ahoOer5z1u1qeH2dL/dtyWIb8Avn+QwsOBfp9ALLax796zbK15EG
-         ybbXYZQvnaVC8o1rRqzCZ0aJnz38bdACK6MAss9yhiOf6FYx61BU0D1S3ghwP5a4rwWJ
-         zX4vemfceuBv51NNvkSVENCwzb90pxIxOVEunBlbJ9VIaNAQAinkqAeQV6QUJS1o0ZZf
-         iNMw==
-X-Gm-Message-State: AC+VfDzsGUMEmrLnae2fQH++kgZ9SD1WucNKxHRfNww7wHYx7Ze+ufs7
-        XhpsHWLcihmWUdp+mhUpNW88rQ==
-X-Google-Smtp-Source: ACHHUZ6fMJ/yHO+vKOlsfo5f9HIUMEEqhsXTkY3yEn808RCHlyky7VTMAEu8r0kM8MxtmIPIP/E1Gg==
-X-Received: by 2002:aa7:d405:0:b0:514:ad09:44df with SMTP id z5-20020aa7d405000000b00514ad0944dfmr5493938edq.28.1685874321665;
-        Sun, 04 Jun 2023 03:25:21 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id w15-20020a056402070f00b00514bb73b8casm2712792edx.57.2023.06.04.03.25.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 03:25:21 -0700 (PDT)
-Message-ID: <6187d1a4-1667-21c5-00ba-4689caa6cac8@linaro.org>
-Date:   Sun, 4 Jun 2023 12:25:19 +0200
+        d=1e100.net; s=20221208; t=1685874340; x=1688466340;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6QuVff0D6XaAXOCOopebXuwGjm2V9RJJEXXLpHUrRf4=;
+        b=Us1WXFHozB/mVbMf/+u69ReUGIeKJwB1HmNyzTjIi7KAhgosDfVa8uMsHcWsFb0wSL
+         Y2O6kFHaqRzGzOOm5mi7vU51XnNCvaGoqIKkVisLnZOz9o+gDAN7f4K96vPSRqEsD6MU
+         IWaZAWv3cdPGPcNWo8ZBkzghRRm5Iox71Ni6OC0kUaXYEWhqZYw4SpDgGGSqAWIrYmoF
+         TtmOGnRLBkPlt9dy3pruYVXu1heCWla6oJaleD6fTNdxcN+jpRDr+28BVqk9zUjOkrvM
+         vtkigwPez0SniGYzrQdRakMnXbzrgAWcdHr9mvIj6yMuonz9cBOEheBsvxvzvLXROL6E
+         FOaQ==
+X-Gm-Message-State: AC+VfDythPSHTLbGIq4lvQy6smsakYQz9yRL6u/Sxw1UT/MPhDgNukx8
+        442CJM3WyRS3dU/z0UPcNZRgZfU5IJZJi7PWxUFJY9vVHEkRw0lGaRn00g9UzAlDJaSGgyzt4L4
+        Lc3TSjEtItBXDpBLP1rtCze3P
+X-Received: by 2002:a17:907:36cd:b0:974:4457:b6f with SMTP id bj13-20020a17090736cd00b0097444570b6fmr3774098ejc.23.1685874340243;
+        Sun, 04 Jun 2023 03:25:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ53MNg5eFT+A6Y7ISahP3Zp1j3vd9ETNRvngzAMX7tdW0nnEjhgKaL7fFs7ARigZ11uJ1ffZg==
+X-Received: by 2002:a17:907:36cd:b0:974:4457:b6f with SMTP id bj13-20020a17090736cd00b0097444570b6fmr3774085ejc.23.1685874339862;
+        Sun, 04 Jun 2023 03:25:39 -0700 (PDT)
+Received: from [192.168.10.118] ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.gmail.com with ESMTPSA id bi1-20020a170906a24100b009664cdb3fc5sm2904639ejb.138.2023.06.04.03.25.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 03:25:39 -0700 (PDT)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 6.4-rc5
+Date:   Sun,  4 Jun 2023 12:25:38 +0200
+Message-Id: <20230604102538.8867-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/3] dt-bindings: reserved-memory: rmtfs: Allow guard
- pages
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230530233643.4044823-1-quic_bjorande@quicinc.com>
- <20230530233643.4044823-2-quic_bjorande@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530233643.4044823-2-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,49 +74,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 01:36, Bjorn Andersson wrote:
-> On some Qualcomm platforms it's required that the rmtfs memory is not
-> placed adjacent to allocations performed by other clients. Some
-> DeviceTree authors have solved this by reserving the space around
-> the region, but this prevents such author to use rely on the OS to place
-> the region, through the use of "size" (instead of a fixed location).
-> 
-> So introduce a flag to indicate that guard pages should be carved at the
-> beginning and end of the memory region. The user shall account for the
-> two 4k blocks in the defined size.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Drop qcom,alloc-size in favour of using reserved-memory/size
-> - Introduce explicit property to signal that guard pages should be
->   carved out from this region (rather than always do it in the dynamic
->   case).
-> 
->  .../bindings/reserved-memory/qcom,rmtfs-mem.yaml           | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> index bab982f00485..26e24e7b08cf 100644
-> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> @@ -26,6 +26,13 @@ properties:
->      description: >
->        identifier of the client to use this region for buffers
->  
-> +  qcom,use-guard-pages:
-> +    type: boolean
-> +    description: >
-> +      Indicates that the OS should ignore the first and last 4k block of the
-> +      memory region, for the purpose of ensuring that the allocation is not
-> +      adjacent to other protected regions.
+Linus,
 
-Property name and description: do not describe the OS behavior. Describe
-the hardware or firmware. Describe the actual problem or characteristic
-which will be then interpreted by OS to do what you want. DT is not for
-instructing OS what to do.
+The following changes since commit b9846a698c9aff4eb2214a06ac83638ad098f33f:
 
-Best regards,
-Krzysztof
+  KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save (2023-05-21 04:05:51 -0400)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to f211b45057d8b0264b494f1acebf2e8d7f9432c9:
+
+  Merge tag 'kvm-x86-fixes-6.4' of https://github.com/kvm-x86/linux into HEAD (2023-06-03 15:16:58 -0400)
+
+----------------------------------------------------------------
+ARM:
+
+* Address some fallout of the locking rework, this time affecting
+  the way the vgic is configured
+
+* Fix an issue where the page table walker frees a subtree and
+  then proceeds with walking what it has just freed...
+
+* Check that a given PA donated to the guest is actually memory
+  (only affecting pKVM)
+
+* Correctly handle MTE CMOs by Set/Way
+
+* Fix the reported address of a watchpoint forwarded to userspace
+
+* Fix the freeing of the root of stage-2 page tables
+
+* Stop creating spurious PMU events to perform detection of the
+  default PMU and use the existing PMU list instead.
+
+x86:
+
+* Fix a memslot lookup bug in the NX recovery thread that could
+   theoretically let userspace bypass the NX hugepage mitigation
+
+* Fix a s/BLOCKING/PENDING bug in SVM's vNMI support
+
+* Account exit stats for fastpath VM-Exits that never leave the super
+  tight run-loop
+
+* Fix an out-of-bounds bug in the optimized APIC map code, and add a
+  regression test for the race.
+
+----------------------------------------------------------------
+Akihiko Odaki (1):
+      KVM: arm64: Populate fault info for watchpoint
+
+Fuad Tabba (1):
+      KVM: arm64: Reload PTE after invoking walker callback on preorder traversal
+
+Jean-Philippe Brucker (4):
+      KVM: arm64: vgic: Fix a circular locking issue
+      KVM: arm64: vgic: Wrap vgic_its_create() with config_lock
+      KVM: arm64: vgic: Fix locking comment
+      KVM: arm64: vgic: Fix a comment
+
+Maciej S. Szmigiero (1):
+      KVM: SVM: vNMI pending bit is V_NMI_PENDING_MASK not V_NMI_BLOCKING_MASK
+
+Marc Zyngier (2):
+      arm64: Add missing Set/Way CMO encodings
+      KVM: arm64: Handle trap of tagged Set/Way CMOs
+
+Michal Luczaj (1):
+      KVM: selftests: Add test for race in kvm_recalculate_apic_map()
+
+Oliver Upton (3):
+      KVM: arm64: Drop last page ref in kvm_pgtable_stage2_free_removed()
+      KVM: arm64: Iterate arm_pmus list to probe for default PMU
+      KVM: arm64: Document default vPMU behavior on heterogeneous systems
+
+Paolo Bonzini (3):
+      Merge tag 'kvmarm-fixes-6.4-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge tag 'kvmarm-fixes-6.4-3' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge tag 'kvm-x86-fixes-6.4' of https://github.com/kvm-x86/linux into HEAD
+
+Sean Christopherson (3):
+      KVM: x86/mmu: Grab memslot for correct address space in NX recovery worker
+      KVM: x86: Account fastpath-only VM-Exits in vCPU stats
+      KVM: x86: Bail from kvm_recalculate_phys_map() if x2APIC ID is out-of-bounds
+
+Will Deacon (1):
+      KVM: arm64: Prevent unconditional donation of unmapped regions from the host
+
+ arch/arm64/include/asm/kvm_pgtable.h               |  6 +-
+ arch/arm64/include/asm/sysreg.h                    |  6 ++
+ arch/arm64/kvm/hyp/include/hyp/switch.h            |  8 ++-
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c              | 14 ++--
+ arch/arm64/kvm/hyp/nvhe/switch.c                   |  2 +
+ arch/arm64/kvm/hyp/pgtable.c                       | 17 ++++-
+ arch/arm64/kvm/hyp/vhe/switch.c                    |  1 +
+ arch/arm64/kvm/pmu-emul.c                          | 58 +++++++----------
+ arch/arm64/kvm/sys_regs.c                          | 19 ++++++
+ arch/arm64/kvm/vgic/vgic-init.c                    | 27 ++++++--
+ arch/arm64/kvm/vgic/vgic-its.c                     | 14 ++--
+ arch/arm64/kvm/vgic/vgic-kvm-device.c              | 10 ++-
+ arch/arm64/kvm/vgic/vgic-mmio-v3.c                 | 31 ++++++---
+ arch/arm64/kvm/vgic/vgic-mmio.c                    |  9 +--
+ arch/arm64/kvm/vgic/vgic-v2.c                      |  6 --
+ arch/arm64/kvm/vgic/vgic-v3.c                      |  7 --
+ arch/arm64/kvm/vgic/vgic-v4.c                      |  3 +-
+ arch/x86/kvm/lapic.c                               | 20 +++++-
+ arch/x86/kvm/mmu/mmu.c                             |  5 +-
+ arch/x86/kvm/svm/svm.c                             |  2 +-
+ arch/x86/kvm/x86.c                                 |  3 +
+ tools/testing/selftests/kvm/Makefile               |  1 +
+ .../selftests/kvm/x86_64/recalc_apic_map_test.c    | 74 ++++++++++++++++++++++
+ 23 files changed, 248 insertions(+), 95 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/recalc_apic_map_test.c
 
