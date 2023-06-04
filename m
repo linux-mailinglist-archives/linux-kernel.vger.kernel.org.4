@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9817215A1
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F9C7215A4
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjFDIi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 04:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S230517AbjFDImY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 04:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjFDIiX (ORCPT
+        with ESMTP id S229879AbjFDImX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 04:38:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E526DA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 01:38:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF8D860ADE
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DB9C433AC
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685867902;
-        bh=KnudFN4jNcEutuFxf6DNoM8rGgneiw4Lp3ZjTygxhr8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Jk1iDIy0AZGsHq3dxk3q2oDmG16NwRs5ys11ZUg7tkxZNROZOXoUuq0VsTqcMZm6V
-         YCbPG7GkVbBBsB0FHun7uKhoD74dasItwdpbhFfagSlLDv8twFRhkMN5qvSPQ1vnAE
-         bZ/KyWN7MzT51MByrCVeh6PRcjEAwDaOOHc1WPE3oaex9HnQKwsgj3FOoPbaxnoIaT
-         iyMKe461BKSsGM5zYiumtRtrq3fkADzQKw5R6nkBoInt+b9DUBtxJYTMsmFVecI6Zp
-         ppgECVckS+20TxdGsEN4q6tGhHl2jGBjxRVJIoplwBWSYVfTZboVUJTETOU/3/p32y
-         beJ6yIP5wjpxg==
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-bb1f7c5495dso3646380276.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 01:38:22 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwLoZwp8VE4ijE8JqtnHt1R+oE0r5p8f2J8xNuAhVMYqsUrDIkA
-        MQM6+lPMRwLXHAHFoUlSSctqsmS4yR3uad+aW+M=
-X-Google-Smtp-Source: ACHHUZ4JPFHwUpGaNVEQxuGlSXgjpG5Bx6zVuVp9ongH9xrFwkFWDOGNXQ+eva+U1KI6qIraorqXGvm/Bu5D7fIk6XM=
-X-Received: by 2002:a25:8108:0:b0:bac:26d2:53dd with SMTP id
- o8-20020a258108000000b00bac26d253ddmr8410051ybk.43.1685867901040; Sun, 04 Jun
- 2023 01:38:21 -0700 (PDT)
+        Sun, 4 Jun 2023 04:42:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA5DDA;
+        Sun,  4 Jun 2023 01:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685868141; x=1717404141;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ol4jthsEZQ6jVMwcAd4LFYahEFGdZmy7s4uUbJjAyYM=;
+  b=iFwUW/O38/0/sNRYzQNPHCuX3DJ6WhhA1ACYqMpb5x6VrfUATyKPqRJM
+   SZGehlJSE7QoMIzVOydhoLfTRioh+0zRiAG4XJxg/fMAcf7qrbiV2c1By
+   rJHWbGV0mCDWDs65JT+fFjeV3f4Bal2V8s8+qPf00JqECeXa1k8OjdiJY
+   EUv0wAFvqgZFMOae37qFAqvQzF/GeZPf+VUs34AWJMF+/6Ol+liNzcTlz
+   2/TjNxNKrsBAYaYV69jb3z0OGrQ+rqq0TOvHrUJQIUOdc8nelTtFtVxFx
+   fXSI62loJW3sGD/V2CWeOGwXCBIXy7iNOU7dN6qNWy7y81bhAa3HZAT3m
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="356179024"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="356179024"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 01:42:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="708313688"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="708313688"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2023 01:42:19 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q5jJb-0002Uw-0n;
+        Sun, 04 Jun 2023 08:42:19 +0000
+Date:   Sun, 4 Jun 2023 16:42:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] cdx: Drop useless LIST_HEAD
+Message-ID: <202306041613.FCYOdhUW-lkp@intel.com>
+References: <cee692c7babd754c1c36186af116c4bb4dad0a17.1685853842.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20230603170747.1753842-1-masahiroy@kernel.org> <20230604045202.GA29881@pendragon.ideasonboard.com>
-In-Reply-To: <20230604045202.GA29881@pendragon.ideasonboard.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 4 Jun 2023 17:37:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQFc_jEOTyKC429Ee5_F+QnhS88TYudebQ7LH82SbJ+Eg@mail.gmail.com>
-Message-ID: <CAK7LNAQFc_jEOTyKC429Ee5_F+QnhS88TYudebQ7LH82SbJ+Eg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/bridge: imx: fix mixed module-builtin object
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cee692c7babd754c1c36186af116c4bb4dad0a17.1685853842.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +66,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 4, 2023 at 1:52=E2=80=AFPM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Yamada-san,
->
-> Thank you for the patch.
->
-> On Sun, Jun 04, 2023 at 02:07:46AM +0900, Masahiro Yamada wrote:
-> > With CONFIG_DRM_IMX8QM_LDB=3Dm and CONFIG_DRM_IMX8QXP_LDB=3Dy (or vice
-> > versa), imx-ldb-helper.o is linked to a module and also to vmlinux
-> > even though the expected CFLAGS are different between builtins and
-> > modules.
-> >
-> > This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
-> > Fixing mixed module-builtin objects").
-> >
-> > Turn helpers in imx-ldb-helper.c into inline functions.
->
-> Wouldn't it be better to turn it into a module ? It could then be
-> built-in for the above configuration, are compiled as a module when all
-> its users are module as well.
+Hi Christophe,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.4-rc4 next-20230602]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/cdx-Drop-useless-LIST_HEAD/20230604-124432
+base:   linus/master
+patch link:    https://lore.kernel.org/r/cee692c7babd754c1c36186af116c4bb4dad0a17.1685853842.git.christophe.jaillet%40wanadoo.fr
+patch subject: [PATCH] cdx: Drop useless LIST_HEAD
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230604/202306041613.FCYOdhUW-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0836d9a86cf6d803585f7d9810ec8622ec81b2f7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-JAILLET/cdx-Drop-useless-LIST_HEAD/20230604-124432
+        git checkout 0836d9a86cf6d803585f7d9810ec8622ec81b2f7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306041613.FCYOdhUW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/cdx/controller/mcdi.c: In function 'cdx_mcdi_process_cmd':
+>> drivers/cdx/controller/mcdi.c:637:64: error: 'cleanup_list' undeclared (first use in this function)
+     637 |                 cdx_mcdi_complete_cmd(mcdi, cmd, outbuf, len, &cleanup_list);
+         |                                                                ^~~~~~~~~~~~
+   drivers/cdx/controller/mcdi.c:637:64: note: each undeclared identifier is reported only once for each function it appears in
 
 
-Yes, two ways to fix it.
-inline line functions vs a separate module
+vim +/cleanup_list +637 drivers/cdx/controller/mcdi.c
 
-I do not have a strong opinion.
+eb96b740192b2a0 Nipun Gupta 2023-03-13  609  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  610  void cdx_mcdi_process_cmd(struct cdx_mcdi *cdx, struct cdx_dword *outbuf, int len)
+eb96b740192b2a0 Nipun Gupta 2023-03-13  611  {
+eb96b740192b2a0 Nipun Gupta 2023-03-13  612  	struct cdx_mcdi_iface *mcdi;
+eb96b740192b2a0 Nipun Gupta 2023-03-13  613  	struct cdx_mcdi_cmd *cmd;
+eb96b740192b2a0 Nipun Gupta 2023-03-13  614  	unsigned int respseq;
+eb96b740192b2a0 Nipun Gupta 2023-03-13  615  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  616  	if (!len || !outbuf) {
+eb96b740192b2a0 Nipun Gupta 2023-03-13  617  		pr_err("Got empty MC response\n");
+eb96b740192b2a0 Nipun Gupta 2023-03-13  618  		return;
+eb96b740192b2a0 Nipun Gupta 2023-03-13  619  	}
+eb96b740192b2a0 Nipun Gupta 2023-03-13  620  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  621  	mcdi = cdx_mcdi_if(cdx);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  622  	if (!mcdi)
+eb96b740192b2a0 Nipun Gupta 2023-03-13  623  		return;
+eb96b740192b2a0 Nipun Gupta 2023-03-13  624  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  625  	respseq = CDX_DWORD_FIELD(outbuf[0], MCDI_HEADER_SEQ);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  626  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  627  	mutex_lock(&mcdi->iface_lock);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  628  	cmd = mcdi->seq_held_by[respseq];
+eb96b740192b2a0 Nipun Gupta 2023-03-13  629  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  630  	if (cmd) {
+eb96b740192b2a0 Nipun Gupta 2023-03-13  631  		if (cmd->state == MCDI_STATE_FINISHED) {
+eb96b740192b2a0 Nipun Gupta 2023-03-13  632  			mutex_unlock(&mcdi->iface_lock);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  633  			kref_put(&cmd->ref, cdx_mcdi_cmd_release);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  634  			return;
+eb96b740192b2a0 Nipun Gupta 2023-03-13  635  		}
+eb96b740192b2a0 Nipun Gupta 2023-03-13  636  
+eb96b740192b2a0 Nipun Gupta 2023-03-13 @637  		cdx_mcdi_complete_cmd(mcdi, cmd, outbuf, len, &cleanup_list);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  638  	} else {
+eb96b740192b2a0 Nipun Gupta 2023-03-13  639  		pr_err("MC response unexpected for seq : %0X\n", respseq);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  640  	}
+eb96b740192b2a0 Nipun Gupta 2023-03-13  641  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  642  	mutex_unlock(&mcdi->iface_lock);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  643  
+eb96b740192b2a0 Nipun Gupta 2023-03-13  644  	cdx_mcdi_process_cleanup_list(mcdi->cdx, &cleanup_list);
+eb96b740192b2a0 Nipun Gupta 2023-03-13  645  }
+eb96b740192b2a0 Nipun Gupta 2023-03-13  646  
 
-
-I sent v2.
-https://lore.kernel.org/lkml/20230604075713.1027261-1-masahiroy@kernel.org/=
-T/#t
-
-Please pick a preferred one.
-
-
-
-
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
