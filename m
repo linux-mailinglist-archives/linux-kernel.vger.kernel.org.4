@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1912D721656
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10BB721659
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjFDLUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 07:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S231286AbjFDL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 07:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDLUV (ORCPT
+        with ESMTP id S229462AbjFDL2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 07:20:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B2D2;
-        Sun,  4 Jun 2023 04:20:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0144860C22;
-        Sun,  4 Jun 2023 11:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40EFC433EF;
-        Sun,  4 Jun 2023 11:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685877619;
-        bh=OsT04YCHMN5MqW4NW2NAHo0FOaoVoBBMNab3Jjr9zlM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KYq6RQ//h7A8/skmKmA3ol1phPbS39NKta5uWZH1E7E390eihXtXR0CX5p2XjLtaz
-         W6/DwZOWtj6B6OmeFecr2hpB9YEUoeT6ThSSW7G/VL2uXqOXzVrZDDTKheASH2/mIT
-         L3CVS0gOKJtI8lLJplLJ6aY2d4m7vNxKmOy5DS70k/feykKPYANTmmeuEBooUPXtiO
-         IL5WlO2/P2xL8wmfDpDZBiYpnbADydbbc16AkrjuafYKjV1oPJx/PVvHQ9roVcQyYe
-         BCGFgJiIgGIGGu5irpg0bE/upDylVNXsuDasnrHB4L5zJ73vLBP5qWZLYE5Ewvgnr/
-         3ewTjkf8pGUcA==
-Date:   Sun, 4 Jun 2023 12:20:15 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     andy.shevchenko@gmail.com
-Cc:     Astrid Rost <astrid.rost@axis.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mathieu Othacehe <m.othacehe@gmail.com>
-Subject: Re: [PATCH v5 0/7] iio: light: vcnl4000: Add features for
- vncl4040/4200
-Message-ID: <20230604122015.38e7b8a5@jic23-huawei>
-In-Reply-To: <ZHtGAn8ZF_fhgNQn@surfacebook>
-References: <20230530142405.1679146-1-astrid.rost@axis.com>
-        <ZHtGAn8ZF_fhgNQn@surfacebook>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sun, 4 Jun 2023 07:28:06 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BE17DA;
+        Sun,  4 Jun 2023 04:28:04 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 354BRs1j001843;
+        Sun, 4 Jun 2023 13:27:54 +0200
+Date:   Sun, 4 Jun 2023 13:27:54 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Zhangjin Wu <falcon@tinylab.org>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v3 11/12] selftests/nolibc: add new gettimeofday test
+ cases
+Message-ID: <ZHx1OliMqHx9U1Lw@1wt.eu>
+References: <cover.1685777982.git.falcon@tinylab.org>
+ <68dace9e2532316ff454894697ecfd99e419a523.1685777982.git.falcon@tinylab.org>
+ <2fccaff5-2354-4ac0-8389-1004d47d8dc9@t-8ch.de>
+ <tencent_4668A50A08C3D31E7531619E@qq.com>
+ <51e1db37-3981-4ea5-9348-b6f6b31ecc8a@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51e1db37-3981-4ea5-9348-b6f6b31ecc8a@app.fastmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 3 Jun 2023 16:54:10 +0300
-andy.shevchenko@gmail.com wrote:
+On Sun, Jun 04, 2023 at 11:24:39AM +0200, Arnd Bergmann wrote:
+> On Sun, Jun 4, 2023, at 10:29, ??? wrote:
+> >
+> > Sorry for missing part of your feedbacks, I will check if -nostdlib 
+> > stops the linking of libgcc_s or my own separated test script forgot 
+> > linking the libgcc_s manually.
+> 
+> According to the gcc documentation, -nostdlib drops libgcc.a, but
+> adding -lgcc is the recommended way to bring it back.
+> 
+> > And as suggestion from Thomas' reply,
+> >
+> >>> Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
+> >>> ones for the other architectures, or get one from lib/math/div64.c.
+> >
+> >>No, these ones come from the compiler via libgcc_s, we must not try to
+> > reimplement them. And we should do our best to avoid depending on them
+> > to avoid the error you got above.
+> >
+> > So, the explicit conversion is used instead in the patch.
+> 
+> I think a cast to a 32-bit type is ideal when converting the
+> clock_gettime() result into microseconds, since the kernel guarantees
+> that the timespec value is normalized, with all zeroes in the
+> upper 34 bits. Going through __aeabi_ldivmod would make the
+> conversion much slower.
+> 
+> For user supplied non-normalized timeval values, it's not obvious
+> whether we need the full 64-bit division
 
-> Tue, May 30, 2023 at 04:23:58PM +0200, Astrid Rost kirjoitti:
-> > Add a more complete support for vncl4040 and vcnl4200, which allows to
-> > change the distance of proximity detection and interrupt support for the
-> > illuminance sensor.
-> >=20
-> > Proximity functionality:
-> >   - Interrupt support (new on vcnl4200).
-> >=20
-> > Proximity reduce the amount of interrupts:
-> >   - Adaptable integration time (new on vcnl4200) - the sampling rate
-> >     changes according to this value.
-> >   - Period - interrupt is asserted if the value is above or
-> >     below a certain threshold.
-> >=20
-> > Proximity change the activity distance:
-> >   - Oversampling ratio - Amount of LED pulses per measured raw value.
-> >   - Calibration bias - LED current calibration of the sensor.
-> >=20
-> > Illuminance functionality:
-> >   - Interrupt support.
-> >=20
-> > Illuminance reduce the amount of interrupts:
-> >   - Adaptable integration time - the sampling rate and scale changes
-> >     according to this value.
-> >   - Period =E2=80=93 interrupt is asserted if the value is above or
-> >     below a certain threshold. =20
->=20
-> It's a good work, thank you for doing it!
->=20
-> But it has a lot of small style and inconsistent issues. They are not maj=
-or
-> per se, but since there is more than 3, it makes sense to address. Also c=
-heck
-> if you can split your patches to two or three where it makes sense.
->=20
+We don't have to care about these here for the microsecond part,
+because for decades these were exclusively 32-bit. Also the only
+one consuming this field would have been settimeofday() and it's
+already documented as returning EINVAL if tv_usec is not within
+the expected 0..999999 range.
 
-FWIW nothing to add from me.  Agree with Andy that we are down to style
-things that would be good to tidy up before applying these.
+And when in doubt we should keep in mind that nolibc's purpose is not
+to become a yet-another full-blown libc alternative but just a small
+piece of software allowing to produce portable and compact binaries
+for testing or booting. Being a bit stricter than other libcs for the
+sake of code compactness is better here. Originally for example it was
+necessary to always pass the 3 arguments to open(). Over time we managed
+to make simple code compile with both glibc and nolibc, but when it
+comes at the cost of adding size and burden for the developers, such
+as forcing them to add libgcc, I prefer that we slightly limit the
+domain of application instead.
 
-Adding levels to switch nests always makes for ugly diffs so I fully agree
-with Andy that, though trivial, it is probably better to do those in two st=
-eps
-for ease of review.  If there is just one in a patch then meh, we can proba=
-bly
-cope with the extra thinking required to review them , but where it happens
-several times it's worth making reviewer's lives that little bit easier!
-
-Jonathan
-
+Thanks!
+Willy
