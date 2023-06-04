@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A42721509
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 08:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF63172150F
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 08:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjFDGEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 02:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S230254AbjFDGQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 02:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDGEn (ORCPT
+        with ESMTP id S229462AbjFDGQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 02:04:43 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B37E5120;
-        Sat,  3 Jun 2023 23:04:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id B52C0804D;
-        Sun,  4 Jun 2023 06:04:37 +0000 (UTC)
-Date:   Sun, 4 Jun 2023 09:04:36 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <20230604060436.GT14287@atomide.com>
-References: <20230525113034.46880-1-tony@atomide.com>
- <20230602083335.GA181647@google.com>
- <87a5xii33r.fsf@jogness.linutronix.de>
- <20230603054139.GR14287@atomide.com>
- <20230603215718.ca5hdzdsj4btnlc2@mercury.elektranox.org>
+        Sun, 4 Jun 2023 02:16:33 -0400
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EBC0DE;
+        Sat,  3 Jun 2023 23:16:31 -0700 (PDT)
+Received: from localhost.localdomain (unknown [77.239.252.99])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id A6B66140760;
+        Sun,  4 Jun 2023 06:16:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1685859390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FP2gB0fKqHSs01B3FaMvtRymVwZ6icFMWCiGtpOYCwY=;
+        b=jn4lexKq14Ovc4PGc+RAT08+m3ll/F6TyQcs0VvAibSpL9QIp0V5slunkQNFLS8XiBUSBa
+        AhuzcbR9nGFW34X/oGCIKkqpxQouFt5L7pEma+VTWCYwoEHofjgF12LKz8f0P3xevx5eqy
+        1Vin7B9qrVnIWm0YB9JssgX1xQ12brA=
+From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>
+Subject: [PATCH 1/3] dt-bindings: remoteproc: qcom,msm8996-mss-pil: Add SDM660 compatible
+Date:   Sun,  4 Jun 2023 09:14:19 +0300
+Message-Id: <20230604061421.3787649-1-alexeymin@postmarketos.org>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603215718.ca5hdzdsj4btnlc2@mercury.elektranox.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Mention sdm660-mss-pil in compatibles list.
 
-* Sebastian Reichel <sebastian.reichel@collabora.com> [230603 21:57]:
-> On Sat, Jun 03, 2023 at 08:41:39AM +0300, Tony Lindgren wrote:
-> > Looking at the kernelci.org test boot results for Linux next [0], seems
-> > this issue is somehow 8250_mtk specific. I don't think the rk3399 boot
-> > issue is serial port related.
-> 
-> The rk3399-gru-kevin board is broken because of a change from me
-> renaming CONFIG_MFD_RK808 to CONFIG_MFD_RK8XX and forgetting to
-> update the defconfig :( This means the board is missing its PMIC
-> driver. It should be fixed once the defconfig update is queued:
-> 
-> https://lore.kernel.org/all/20230518040541.299189-1-sebastian.reichel@collabora.com/
+Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
+---
+ .../devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-OK thanks for the info.
-
-> Unfortuantely nobody seems to feel responsible for the generic arm
-> defconfig files :(
-
-You could put together a git branch with the defconfig changes and
-send a pull request to the SoC maintainers if it does not get picked
-up before that.
-
-Regards,
-
-Tony
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+index c1ac6ca1e759d..09da5616e1e5a 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
+@@ -19,6 +19,7 @@ properties:
+     enum:
+       - qcom,msm8996-mss-pil
+       - qcom,msm8998-mss-pil
++      - qcom,sdm660-mss-pil
+       - qcom,sdm845-mss-pil
+ 
+   reg:
+@@ -245,7 +246,9 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          const: qcom,msm8998-mss-pil
++          enum:
++            - qcom,msm8998-mss-pil
++            - qcom,sdm660-mss-pil
+     then:
+       properties:
+         clocks:
+-- 
+2.39.3
 
