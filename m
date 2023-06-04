@@ -2,75 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1E2721722
+	by mail.lfdr.de (Postfix) with ESMTP id 766BA721721
 	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbjFDM7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 08:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S231788AbjFDM71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 08:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbjFDM7M (ORCPT
+        with ESMTP id S231748AbjFDM7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 08:59:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36427CA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 05:59:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFA7360BFC
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 12:59:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30D51C433EF;
-        Sun,  4 Jun 2023 12:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685883550;
-        bh=wQLhoLK2jxIxr4KrKFijkC+AqoLLiwLctCnXIHmyEC4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=b3R93riDkfDx60PhSCiG7gahLZyrc863OrLNe7B7u1VzYyUsMe41gs3bj4sMG9c6Q
-         BeK6VtmgzLypmHcwgeLPNySuagNvirHCpxGES/ZBspVCnuvt00MWnlVw3iMHbdJSZM
-         rpURsnujy0pUduQPl53OsuNaarta8vltamrr/i7Bt9VMC9WZrQKSoj+KlnHH2h7ySU
-         eZwGHaY1WMlYvqSibxg8VUYu6kV0Rk0Xsv8hBknZtAbXnFlXG/3v4YmowkY+OKi+hK
-         r0SKDm8tr+EQqT4tRx2q48y/Iu2PBVL8evo7RiBf6Jm3QG6CL7Wjfay9BqR+9YDtia
-         6cBBZZOxj91Ng==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B12FE29F3F;
-        Sun,  4 Jun 2023 12:59:10 +0000 (UTC)
-Subject: Re: [GIT PULL] Char/Misc driver fixes for 6.4-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZHxF1BbkBOaDv56j@kroah.com>
-References: <ZHxF1BbkBOaDv56j@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZHxF1BbkBOaDv56j@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.4-rc5
-X-PR-Tracked-Commit-Id: 48e156023059e57a8fc68b498439832f7600ffff
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 209835e8ecb01a2f60b7da153d223ba182447197
-Message-Id: <168588355010.18655.5717443634481351930.pr-tracker-bot@kernel.org>
-Date:   Sun, 04 Jun 2023 12:59:10 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 4 Jun 2023 08:59:25 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62543AB;
+        Sun,  4 Jun 2023 05:59:23 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 354CxDHH002392;
+        Sun, 4 Jun 2023 14:59:13 +0200
+Date:   Sun, 4 Jun 2023 14:59:13 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH 1/4] tools/nolibc: unistd.h: add __syscall() and
+ __syscall_ret() helpers
+Message-ID: <ZHyKoeSMaOHtSr58@1wt.eu>
+References: <cover.1685856497.git.falcon@tinylab.org>
+ <f549b27981484b429b7c7f98e212bf3c5561724f.1685856497.git.falcon@tinylab.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f549b27981484b429b7c7f98e212bf3c5561724f.1685856497.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 4 Jun 2023 10:05:40 +0200:
+Hi Zhangjin,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-6.4-rc5
+On Sun, Jun 04, 2023 at 01:34:29PM +0800, Zhangjin Wu wrote:
+> most of the library routines share the same code model, let's add some
+> macros to simplify the coding and shrink the code lines too.
+> 
+> One added for syscall return, one added for syscall call, both of them
+> can get the typeof 'return value' automatically.
+> 
+> To get the return type of syscalls, __auto_type is better than typeof(),
+> but it is not supported by the old compilers (before 2013, see [1]), so,
+> use typeof() here.
+> 
+> [1]: https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
+> 
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/include/nolibc/sys.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> index 1d6f33f58629..937a8578e3d4 100644
+> --- a/tools/include/nolibc/sys.h
+> +++ b/tools/include/nolibc/sys.h
+> @@ -28,6 +28,21 @@
+>  #include "errno.h"
+>  #include "types.h"
+>  
+> +/* Syscall call and return helpers */
+> +#define __syscall_ret(ret)						\
+> +({									\
+> +	if (ret < 0) {							\
+> +		SET_ERRNO(-ret);					\
+> +		ret = (typeof(ret))-1;					\
+> +	}								\
+> +	ret;								\
+> +})
+> +
+> +#define __syscall(name, ...)						\
+> +({									\
+> +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
+> +	__syscall_ret(ret);						\
+> +})
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/209835e8ecb01a2f60b7da153d223ba182447197
+Well, I personally don't find that it increases legibility, on the
+opposite. At first when reading the series, I thought you had dropped
+errno setting on return. I think the reason is that when reading that
+last macro, it's not at all obvious that __syscall_ret() is actually
+modifying this ret value *and* returning it as the macro's result.
 
-Thank you!
+If we'd want to go down that route, I suspect that something like this
+would at least hint about what is being returned:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
++#define __syscall(name, ...)						\
++({									\
++	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
++	ret = __syscall_ret(ret);					\
++})
+
+But I'm interested in others' opinion on this, particularly Thomas and
+Arnd who review a significant number of patches. For now I prefer not
+to take it before we've settled on a choice.
+
+Thanks,
+Willy
