@@ -2,64 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3652772140F
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 04:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2D7721412
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 04:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjFDCGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 22:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S229629AbjFDCKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 22:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjFDCGM (ORCPT
+        with ESMTP id S229485AbjFDCKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 22:06:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F05DD;
-        Sat,  3 Jun 2023 19:06:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685844370; x=1717380370;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H17Z52NC1fO7RmCPvzwNM5L0g6cLDt+b4SXw0TWfuCI=;
-  b=l7vZlKjQM9SWBL5qNY9qmbWa2NLooAqUh1omOLqx+exCV67fMETUNpfY
-   VQ/1EVHOTie56hP/9lsX6hk1eNYbMAV8hKsO+vEgonvhPSiKdFN8Fae7A
-   716AFz6XAbzq+XCidGAAw+kswRJIoOo23ACW+b6o6Pc7XYWyNMHSjrM3Q
-   zTAP4DraXJKF0yIkGFPFhb16ztUF32qt+Z6WXeil8cpIK88RnnsqIaggJ
-   6kK0bqdkqM2x7HnRXOkLHQ0sLLP9nOAoLIvF6eKvPMu9MG47W5clye8Zr
-   9ZNlxR0kr7KC3zu8kNFo3lE31Yft0cdCyZFihlGyzLYRMwYO4V1s4R9KJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="359453116"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="359453116"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2023 19:06:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10730"; a="852563279"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="852563279"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Jun 2023 19:06:07 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q5d8A-0002ER-1R;
-        Sun, 04 Jun 2023 02:06:06 +0000
-Date:   Sun, 4 Jun 2023 10:05:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        mikelley@microsoft.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/5] uio: Add hv_vmbus_client driver
-Message-ID: <202306040910.13oLufQd-lkp@intel.com>
-References: <1685692629-31351-2-git-send-email-ssengar@linux.microsoft.com>
+        Sat, 3 Jun 2023 22:10:01 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5979DD
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 19:09:59 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso165354e87.2
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 19:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685844597; x=1688436597;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V9eSsxUopAOhh02C1XZ5Y2iHb3zpn16hh2Ni/D7tYJk=;
+        b=ojlqA7jxB8ljYaLIc3w25f2B0Hz3Rbu6nhF4qLAg0A6Iex8uquzsqsUfwIkL+CAuSZ
+         sK6q0+ub8EPNp6MMtDhGwQoiIkgV2O256BdHkzGDpYw2gtvumhg1zD2XDs7tDm6qhgYS
+         XHwRhieg4zlvhSO+VU8bAG8LfkOwR8sITNRtC9j3kuMjDlDe/iWcVV69OFOoqSJb/YPy
+         4EmmPvVRYYYWlTyW/uxvT9zYNe31Jb1oMPwq/HASwSo4oCdfr1fB+6SfDlyPLLvvv0uU
+         9pnOvh77elcWHiI3WhRnWx+GwoOsqezkf0oIbwbKwcWhHP5KVC8vOCQeEONcxZ1qOkpk
+         ywBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685844597; x=1688436597;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V9eSsxUopAOhh02C1XZ5Y2iHb3zpn16hh2Ni/D7tYJk=;
+        b=FL6anRZmlhI91sxYoj8k4DpaArpRFIcpSdlOXUjinYdvjYUSnveFA7EClbBavshryM
+         6JOcBlbrlQM65qqbCr0EafkMPjSJE4r4otYxksW137D0wHSiD6spC2sK2Y2PBrejGM6D
+         QiQXGEGOmELXInVGxhZqrPIPPiSIpj+XBG0/poZHHEpEj9iCwabWK1aucwEbwRjWh56i
+         GtTNXKoWNQse6ev4Lvj6rmd+vpPdV/5ej0eVd8mG58zzZJ1HDd2NdzKUPVNq4L8elIDd
+         A6uCiFzOFt7cVlfFz9XeN6tKm8BKpBJDEfinkfBtBpOfH9NjpiioUeZ/dgOHgjHWzaqh
+         7Ezg==
+X-Gm-Message-State: AC+VfDyXhj/0DCz5GF7AZExNAspKDdYjIJX6nCDatgwLVpI1WHtqpKHm
+        jZVQS0MK0URFmrCIIBH4bDWroA==
+X-Google-Smtp-Source: ACHHUZ7VlK4xbclyxPlsscCr4C6Comy8dBU2iSY/G5l/WNa8ffpmH3mxhNOZS+SIEZf7DeEu+xrQtw==
+X-Received: by 2002:a2e:3803:0:b0:2b1:c389:c425 with SMTP id f3-20020a2e3803000000b002b1c389c425mr405969lja.25.1685844597625;
+        Sat, 03 Jun 2023 19:09:57 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id n5-20020a2e86c5000000b002ac7a715585sm848818ljj.30.2023.06.03.19.09.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Jun 2023 19:09:57 -0700 (PDT)
+Message-ID: <07d11141-02f8-6920-9c96-70cbefe6c05b@linaro.org>
+Date:   Sun, 4 Jun 2023 05:09:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685692629-31351-2-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 02/10] drm/msm/dpu: add DSC blocks to the catalog of
+ MSM8998 and SC8180X
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1685036458-22683-1-git-send-email-quic_khsieh@quicinc.com>
+ <1685036458-22683-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1685036458-22683-3-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,74 +83,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saurabh,
+On 25/05/2023 20:40, Kuogee Hsieh wrote:
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> 
+> Some platforms have DSC blocks which have not been declared in the catalog.
+> Complete DSC 1.1 support for all platforms by adding the missing blocks to
+> MSM8998 and SC8180X.
+> 
+> Changes in v9:
+> -- add MSM8998 and SC8180x to commit title
+> 
+> Changes in v10:
+> -- fix grammar at commit text
+> 
+> Changes in v12:
+> -- fix "titil" with "title" at changes in v9
+> 
+> Changes in v14:
+> -- "dsc" tp "DSC" at commit title
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
+>   2 files changed, 18 insertions(+)
 
-kernel test robot noticed the following build warnings:
+The sc8180x changes conflict with the patch at [1], which is already 
+applied.
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.4-rc4 next-20230602]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Saurabh-Sengar/uio-Add-hv_vmbus_client-driver/20230602-160029
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/1685692629-31351-2-git-send-email-ssengar%40linux.microsoft.com
-patch subject: [PATCH 1/5] uio: Add hv_vmbus_client driver
-config: i386-randconfig-c001-20230604 (https://download.01.org/0day-ci/archive/20230604/202306040910.13oLufQd-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306040910.13oLufQd-lkp@intel.com/
-
-cocci warnings: (new ones prefixed by >>)
->> drivers/uio/uio_hv_vmbus_client.c:195:1-6: WARNING: invalid free of devm_ allocated data
-
-vim +195 drivers/uio/uio_hv_vmbus_client.c
-
-   158	
-   159	static int uio_hv_vmbus_probe(struct hv_device *dev, const struct hv_vmbus_device_id *dev_id)
-   160	{
-   161		struct uio_hv_vmbus_dev *pdata;
-   162		int ret = 0;
-   163		char *name = NULL;
-   164	
-   165		pdata = devm_kzalloc(&dev->device, sizeof(*pdata), GFP_KERNEL);
-   166		if (!pdata)
-   167			return -ENOMEM;
-   168	
-   169		name = kasprintf(GFP_KERNEL, "%pUl", &dev->dev_instance);
-   170	
-   171		/* Fill general uio info */
-   172		pdata->info.name = name; /* /sys/class/uio/uioX/name */
-   173		pdata->info.version = DRIVER_VERSION;
-   174		pdata->info.irqcontrol = uio_hv_vmbus_irqcontrol;
-   175		pdata->info.open = uio_hv_vmbus_open;
-   176		pdata->info.release = uio_hv_vmbus_release;
-   177		pdata->info.irq = UIO_IRQ_CUSTOM;
-   178		pdata->info.priv = pdata;
-   179		pdata->device = dev;
-   180	
-   181		ret = uio_register_device(&dev->device, &pdata->info);
-   182		if (ret) {
-   183			dev_err(&dev->device, "uio_hv_vmbus register failed\n");
-   184			goto fail;
-   185		}
-   186	
-   187		ret = sysfs_create_file(&dev->device.kobj, &dev_attr_ring_size.attr);
-   188		if (ret)
-   189			dev_notice(&dev->device, "sysfs create ring size file failed; %d\n", ret);
-   190	
-   191		hv_set_drvdata(dev, pdata);
-   192		return 0;
-   193	
-   194	fail:
- > 195		kfree(pdata);
-   196		return ret;
-   197	}
-   198	
+[1] https://patchwork.freedesktop.org/patch/531490/
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
+
