@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8A6721516
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 08:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59754721526
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 08:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjFDGRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 02:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S230103AbjFDGap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 02:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjFDGRB (ORCPT
+        with ESMTP id S229462AbjFDGan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 02:17:01 -0400
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06A1C19A;
-        Sat,  3 Jun 2023 23:16:58 -0700 (PDT)
-Received: from localhost.localdomain (unknown [77.239.252.99])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 0A57C1407E0;
-        Sun,  4 Jun 2023 06:16:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1685859417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3HSupLYAa9gVgOh1YuT4Y/uEh4nL+buaplsKnZQtZQE=;
-        b=p1a7OZ3xcF4HcWso6WiAhnNTE7ryqEDBIW3o7abpfvFJVB7egGuro6/wFkdN2npD5urn9r
-        f+nV1WpbR1Z1rfkO97nZpBFnHlxz7IOJwH+6MIS341C3VNmVQgImCDvzL2XEWm32h5mLwe
-        ZbRlwUg0GDq2vRWIxswOQiGjY9anDTk=
-From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
+        Sun, 4 Jun 2023 02:30:43 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06905BD;
+        Sat,  3 Jun 2023 23:30:42 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75d44cb20a2so71648585a.3;
+        Sat, 03 Jun 2023 23:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685860241; x=1688452241;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SbqYJAHskzU5DpmVfI7uhOaA6IbRO1C4pvsLQyJWA6o=;
+        b=n4wXNxl+K400gB1Ir/Qmwa1PG4A0CdCHuO3n26/m7JRfeqUYaC6QmPPeFE+sHuy9ER
+         3FkmS/JP9ThGJws0SVJl8IZxnjyLtmPPUknFTJvflPMGlbMFws+2TjVRm217Sy9rV8x5
+         bP/aBOFOfuZ+d/JWFg33GFlBZKXMFAzCsUS7Tq61FLWbir7XaY8KqwHV3oX3cHyMhsv0
+         qQmRoJJvGfFExjXQdLe3rELNFYFPH/97TD0Xcxi23Rgv8xecAlJ71eySA5mvqSD21Om3
+         egN8WTiBKBh2FSzGd3iRe/b6RbUH28UYaZ1ii/k/FcC6xW24YZT+rSrdfDU1ji8/uAhM
+         9qyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685860241; x=1688452241;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SbqYJAHskzU5DpmVfI7uhOaA6IbRO1C4pvsLQyJWA6o=;
+        b=Dx0m5HOTRyvE1VeLeSHVwaGzrpRBAhCQU0ZNqBvysWl8C6HPWrP4x4DZHWdO+EUeOl
+         zEqq24WD37BjIX5KTVmcAyalKnz2tpz0iy1qSwuxxQnq/CUSSRI/ERsCSgcR4RLEqrMj
+         wdmEYrLQpEtdbjKJZ5q5wtzXNHavi/oC4ix8SZC++4aEXluE/bvc8mYPLUeOhLTaKfz2
+         j3dsEQTJPemfTpNgs6w9eL+msgupdlloetv41MSkmH++UbkgFFRpLi0OzI8YtnoBg4QW
+         gvxOrsuJ/2PUgjCmPWUc/R3cCaUtQSoZoRV0yG62mV/IRxLUv4rs5XNY4YjXSkKUK37q
+         JBIw==
+X-Gm-Message-State: AC+VfDyVfnmonbjAeRBp50S1UktjAcGbFrobntFRyB0rZeQwgVRHsjnC
+        Kz+Th8f6oLE6lKEtfOwc3oONBzSnDzkJ7Q==
+X-Google-Smtp-Source: ACHHUZ6IUiD2zJzv9IRX3p+2i7RHR6TC4L//qeKiNXgoHsvBjkZf4Y2adSGmxeR2gcKQg2LBugYnqw==
+X-Received: by 2002:ac8:5812:0:b0:3f6:a015:d9d4 with SMTP id g18-20020ac85812000000b003f6a015d9d4mr4419511qtg.65.1685860241025;
+        Sat, 03 Jun 2023 23:30:41 -0700 (PDT)
+Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:ab78:dd77:aea4:8d1a])
+        by smtp.gmail.com with ESMTPSA id e10-20020ac85dca000000b003f018e18c35sm3044163qtx.27.2023.06.03.23.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jun 2023 23:30:40 -0700 (PDT)
+From:   Rudraksha Gupta <guptarud@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: sdm630: Add support for modem remoteproc
-Date:   Sun,  4 Jun 2023 09:14:21 +0300
-Message-Id: <20230604061421.3787649-3-alexeymin@postmarketos.org>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230604061421.3787649-1-alexeymin@postmarketos.org>
-References: <20230604061421.3787649-1-alexeymin@postmarketos.org>
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org
+Cc:     Rudraksha Gupta <guptarud@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/4] Samsung Galaxy Express SGH-I437 Support
+Date:   Sun,  4 Jun 2023 02:30:17 -0400
+Message-Id: <20230604063032.365775-1-guptarud@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modem subsystem in SDM630/660 is similar to MSM8998 and
-device tree node for it is based on the one from msm8998.dtsi.
+This patch series adds support for the Samsung Galaxy Express SGH-I437.
+Currently the following things work on this phone: UART, eMMC, SD Card, and
+USB.
 
-Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
----
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 57 ++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+version 3:
+- Added Ack
+- Fixed compatible in qcom,usb-hs-phy.yaml. `make dt_binding_check dtbs_check`
+  no longer complains about USB
+- Fixed formatting in qcom-msm8960.dtsi and qcom-msm8960-samsung-expressatt.dts
+- Fixed the spi1_default node in qcom-msm8960-samsung-expressatt.dts.
+  `make dt_binding_check dtbs_check` no longer complains
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 5c4086d2fa99c..5e68972d48fb4 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1026,6 +1026,63 @@ data-pins {
- 			};
- 		};
- 
-+		remoteproc_mss: remoteproc@4080000 {
-+			compatible = "qcom,sdm660-mss-pil";
-+			reg = <0x04080000 0x100>, <0x04180000 0x40>;
-+			reg-names = "qdsp6", "rmb";
-+
-+			interrupts-extended =
-+				<&intc GIC_SPI 448 IRQ_TYPE_EDGE_RISING>,
-+				<&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+				<&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+				<&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+				<&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-+				<&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+					"handover", "stop-ack",
-+					"shutdown-ack";
-+
-+			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
-+				<&gcc GCC_BIMC_MSS_Q6_AXI_CLK>,
-+				<&gcc GCC_BOOT_ROM_AHB_CLK>,
-+				<&gcc GPLL0_OUT_MSSCC>,
-+				<&gcc GCC_MSS_SNOC_AXI_CLK>,
-+				<&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
-+				<&rpmcc RPM_SMD_QDSS_CLK>,
-+				<&rpmcc RPM_SMD_XO_CLK_SRC>;
-+			clock-names = "iface", "bus", "mem", "gpll0_mss",
-+				"snoc_axi", "mnoc_axi", "qdss", "xo";
-+
-+			qcom,smem-states = <&modem_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			resets = <&gcc GCC_MSS_RESTART>;
-+			reset-names = "mss_restart";
-+
-+			qcom,halt-regs = <&tcsr_regs_1 0x3000 0x5000 0x4000>;
-+
-+			power-domains = <&rpmpd SDM660_VDDCX>,
-+					<&rpmpd SDM660_VDDMX>;
-+			power-domain-names = "cx", "mx";
-+
-+			status = "disabled";
-+
-+			mba {
-+				memory-region = <&mba_region>;
-+			};
-+
-+			mpss {
-+				memory-region = <&mpss_region>;
-+			};
-+
-+			glink-edge {
-+				interrupts = <GIC_SPI 452 IRQ_TYPE_EDGE_RISING>;
-+				label = "modem";
-+				qcom,remote-pid = <1>;
-+				mboxes = <&apcs_glb 15>;
-+			};
-+		};
-+
- 		adreno_gpu: gpu@5000000 {
- 			compatible = "qcom,adreno-508.0", "qcom,adreno";
- 
+version 2:
+- Combined patch 1 into patch 4, as the sleep_clk label is specifically needed
+  for the USB node.
+- Reformatted the commit messages to align with the style used in other commit
+  messages that modify the same files.
+- Included a cover letter to provide an overview of the patch series.
+- Slight refactoring of the device tree source (DTS) file.
+
+Rudraksha Gupta (4):
+  dt-bindings: arm: qcom: Add Samsung Galaxy Express
+  dt-bindings: phy: qcom,usb-hs-phy: Add compatible
+  ARM: dts: qcom: msm8960: Add USB node
+  ARM: dts: qcom: Add Samsung Galaxy Express support
+
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ .../bindings/phy/qcom,usb-hs-phy.yaml         |   5 +-
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/qcom-msm8960-samsung-expressatt.dts   | 331 ++++++++++++++++++
+ arch/arm/boot/dts/qcom-msm8960.dtsi           |  34 +-
+ 5 files changed, 370 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
+
 -- 
-2.39.3
+2.34.1
 
