@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D01F721619
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C29721625
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjFDKau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 06:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S231163AbjFDKhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 06:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjFDKar (ORCPT
+        with ESMTP id S229892AbjFDKhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 06:30:47 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC22B6
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 03:30:45 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9768fd99c0cso329343966b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 03:30:45 -0700 (PDT)
+        Sun, 4 Jun 2023 06:37:09 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511A4C1;
+        Sun,  4 Jun 2023 03:37:06 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-43b148975e0so1135366137.0;
+        Sun, 04 Jun 2023 03:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685874644; x=1688466644;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h3vNtqVcROm9cmZSGS8p4DNNUaV8+gQlhQTyNTjrVxA=;
-        b=sIAWbBAdGBryZiwlY/mxdtpBJH501zroa5MrYPht8XNpeAuh3rCyvqrasCFIOIzj3Y
-         ZSthWz30e9fCXpHBTQBqC9N8QevoGrxDGC3QqnusdLiNQg4cNeQ/DPmuu2Ocksp+Z+U1
-         lPgQKtqcEYhr3kG0EDbhVFPpizaeRKwlD9u1+7BHwiKUR45OH5lh4fa86EjKtHvP4T5H
-         aeX/xUxZLk/HHp47e9zJBgLwbxDkrLo5X02HbARjsTK/AAt8oD/6Jp+ZDWJSR0AQcmpt
-         gZg2NXBSq5A3R6Mzxc6VR4jhonHy0N2GMBbThuna3Tszq7PDt5HGXCDIDGMVMCFRYsED
-         8Vjw==
+        d=gmail.com; s=20221208; t=1685875025; x=1688467025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J+cW+W+2ToTmL5Y4D5MrCTf7iqNWcTE2j9X0ITTZBzs=;
+        b=JExgNb84ODfc1n2XYy4S5jPF5F4lLgn7e28BYdaq3YfVbJndWp2rO96Rdh2dExcsHU
+         o6OARLsIs0cAT76nDYzVxjtwNmLABQakff6/4TpMI/yozfxXxqm6sFLyqf/w5LZIXBbJ
+         zC+DbBMB32zQiqJxDneHHS2/E0CYotb8OIUKI+V5VTIv2lWE148GMOVcB3Sz6inUchTf
+         5S7GFwgSCoO5P0QRbPejsO+0c74YvVvfAxGr0+h5lK3heEBzYzXCSo+dzGKndszXGaVs
+         IA/ycRfW5pKCmGcjO/I0uEXZ0x0f1bvZpRvY9SSAGseCrXor94SjXYofHsJViBEkHaHA
+         FT0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685874644; x=1688466644;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h3vNtqVcROm9cmZSGS8p4DNNUaV8+gQlhQTyNTjrVxA=;
-        b=f/S4c7Pdc/TSi5ogdb0bX8Mlidz41wCd71lXo6K0hHKwpIdqmtCdLOkURs0GcbQAqL
-         F478d25AUaME6o8UaC3xy1A6nLYUjKgjtrVqv+p5lNRjHCZN0ihKAm+KL2yI0+Bjbc2P
-         cK5H9P2pV+IBXuK37o+GDONSRNSxe1++wHBvgnWHLnYbkhnyPNwht4uZOsa6DItfJALK
-         6MA04WWkG/KpbZ9vf44uLUhwZNPlO/BY6ZNuHP52DsGpMsol5Q5bS8RQWQwJrI4IvacE
-         VWSQT5ovaJGeXTMjPlxSeYfi3ppxKwmHUdYi1U2ksQNrr7+7zfw9vYUH2vnJRzCIxbyF
-         xsmA==
-X-Gm-Message-State: AC+VfDy8EQNqOdBdxTy0YW7c4WvzZw+ILLhGFT9WqvxXmN7XRveT+jQM
-        V2t2E05MBMux4hoELNDboB7Elw==
-X-Google-Smtp-Source: ACHHUZ4u0X18Wv6y5mJX9vW4ELGhL1rGBQ1iVfd46vcj0kfhIfImleIiVNDPTsUMG7E9UKpX3WbtOg==
-X-Received: by 2002:a17:907:6d86:b0:96f:94f1:b0a5 with SMTP id sb6-20020a1709076d8600b0096f94f1b0a5mr3247852ejc.8.1685874644395;
-        Sun, 04 Jun 2023 03:30:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id sd17-20020a170906ce3100b0095fbb1b72c2sm2910853ejb.63.2023.06.04.03.30.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 03:30:43 -0700 (PDT)
-Message-ID: <3c781ae6-4a45-1d6d-840c-d25f33684b00@linaro.org>
-Date:   Sun, 4 Jun 2023 12:30:41 +0200
+        d=1e100.net; s=20221208; t=1685875025; x=1688467025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J+cW+W+2ToTmL5Y4D5MrCTf7iqNWcTE2j9X0ITTZBzs=;
+        b=PwvDFW2X9EzaeO8vFkUZqGrOBqv3R1yqh39nS8ul0TyoFOB0CVEB3M2J11Giyo2Iz2
+         KHWu6GSP0q20t94vqw64JO3fTy/BXhi08cFuIsK6UgqOZLbpn/zUEC52gN/qqj14BzF3
+         5jC+AHfRjfy4s5iJ6Po/8rhEVKMEOXJX91Znh3acAl1n778uZz/TpKy6LG7BmuNo/Est
+         KxHFmJtlqvIOewr4RsKmKT4l1Sa6Q0czd4xgI4iWDp3cWi/G/8VxywtXABO+3NuByi2o
+         mbzoZjSiWgD7VVxPkYqtLeWAAIXLqnwXQEiMZ7aAcLa2KopkRkh/oOFEGoMDhA7YHqzN
+         uEuA==
+X-Gm-Message-State: AC+VfDyB2NPD6FgPfZsWnvhXA3FGHniBBTjq95s91WCAnRH/FqocZjmH
+        HhdMgjdRIfVk/hUopH8HaLfD1/R5BLgsmxtusTk=
+X-Google-Smtp-Source: ACHHUZ513qxEIwWk8MOPLcnOJPrO/Wo2Uzw+66oaJBk/NI2yjIIxpjaDAYLrj9ZkQ4LfwiupswBKzQbJRpPjBu09Eu4=
+X-Received: by 2002:a1f:c10f:0:b0:463:12f:d38e with SMTP id
+ r15-20020a1fc10f000000b00463012fd38emr1281952vkf.1.1685875025217; Sun, 04 Jun
+ 2023 03:37:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add compatible
-Content-Language: en-US
-To:     Rudraksha Gupta <guptarud@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230604063032.365775-1-guptarud@gmail.com>
- <20230604063032.365775-3-guptarud@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230604063032.365775-3-guptarud@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230602081135.75424-1-wuyun.abel@bytedance.com>
+ <20230602081135.75424-3-wuyun.abel@bytedance.com> <20230602204159.vo7fmuvh3y2pdfi5@google.com>
+In-Reply-To: <20230602204159.vo7fmuvh3y2pdfi5@google.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 4 Jun 2023 12:36:25 +0200
+Message-ID: <CAF=yD-LFQRreWq1RMkvLw9Nj3NQpJwbDSCfECUhh-aVchR-jsg@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 2/3] sock: Always take memcg pressure into consideration
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Abel Wu <wuyun.abel@bytedance.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/06/2023 08:30, Rudraksha Gupta wrote:
-> Adds qcom,usb-hs-phy-msm8960 compatible
-> 
-> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-> index aa97478dd016..63b6914993fe 100644
-> --- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-> @@ -13,7 +13,9 @@ if:
->    properties:
->      compatible:
->        contains:
-> -        const: qcom,usb-hs-phy-apq8064
-> +        items:
-> +          - const: qcom,usb-hs-phy-apq8064
-> +          - const: qcom,usb-hs-phy-msm8960
+On Fri, Jun 2, 2023 at 10:42=E2=80=AFPM Shakeel Butt <shakeelb@google.com> =
+wrote:
+>
+> On Fri, Jun 02, 2023 at 04:11:34PM +0800, Abel Wu wrote:
+> > The sk_under_memory_pressure() is called to check whether there is
+> > memory pressure related to this socket. But now it ignores the net-
+> > memcg's pressure if the proto of the socket doesn't care about the
+> > global pressure, which may put burden on its memcg compaction or
+> > reclaim path (also remember that socket memory is un-reclaimable).
+> >
+> > So always check the memcg's vm status to alleviate memstalls when
+> > it's in pressure.
+> >
+>
+> This is interesting. UDP is the only protocol which supports memory
+> accounting (i.e. udp_memory_allocated) but it does not define
+> memory_pressure. In addition, it does have sysctl_udp_mem. So
+> effectively UDP supports a hard limit and ignores memcg pressure at the
+> moment. This patch will change its behavior to consider memcg pressure
+> as well. I don't have any objection but let's get opinion of UDP
+> maintainer.
 
-I have no clue what you want to achieve here. You break the bindings.
+Others have more experience with memory pressure on UDP, for the
+record. Paolo worked on UDP memory pressure in
+https://lore.kernel.org/netdev/cover.1579281705.git.pabeni@redhat.com/
 
-It does not look like you tested the bindings, at least after quick
-look. Please run `make dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint.
+It does seem odd to me to modify sk_under_memory_pressure only. See
+for instance its use in __sk_mem_raise_allocated:
 
-Best regards,
-Krzysztof
+        if (sk_has_memory_pressure(sk)) {
+                u64 alloc;
 
+                if (!sk_under_memory_pressure(sk))
+                        return 1;
+
+This is not even reached as sk_has_memory_pressure is false for UDP.
+So this commit only affects the only other protocol-independent
+caller, __sk_mem_reduce_allocated, to possibly call
+sk_leave_memory_pressure if now under the global limit.
+
+What is the expected behavioral change in practice of this commit?
+
+
+> > Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> > ---
+> >  include/net/sock.h | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/net/sock.h b/include/net/sock.h
+> > index 3f63253ee092..ad1895ffbc4a 100644
+> > --- a/include/net/sock.h
+> > +++ b/include/net/sock.h
+> > @@ -1411,13 +1411,11 @@ static inline bool sk_has_memory_pressure(const=
+ struct sock *sk)
+> >
+> >  static inline bool sk_under_memory_pressure(const struct sock *sk)
+> >  {
+> > -     if (!sk->sk_prot->memory_pressure)
+> > -             return false;
+> > -
+> >       if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
+> >               return true;
+> >
+> > -     return !!*sk->sk_prot->memory_pressure;
+> > +     return sk->sk_prot->memory_pressure &&
+> > +             *sk->sk_prot->memory_pressure;
+> >  }
+> >
+> >  static inline long
+> > --
+> > 2.37.3
+> >
