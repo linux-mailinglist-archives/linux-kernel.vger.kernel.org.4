@@ -2,119 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1C17215B2
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 11:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9132E7215CD
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 11:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjFDJL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 05:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S230133AbjFDJSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 05:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjFDJLZ (ORCPT
+        with ESMTP id S229462AbjFDJSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 05:11:25 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7575ED
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 02:11:23 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9741a0fd134so617612266b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 02:11:23 -0700 (PDT)
+        Sun, 4 Jun 2023 05:18:36 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36713B1;
+        Sun,  4 Jun 2023 02:18:35 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-4652fcb2ac1so54031e0c.1;
+        Sun, 04 Jun 2023 02:18:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685869881; x=1688461881;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcvHDMkzrwljyNeqpGNC3T31sTZEZ5CPQHa0w+swo54=;
-        b=VoEiuTKhox4FxPtyHUZo0MDz2jEB3iPUWcOtskKnYlgI5xUfeeyHR80H/Xd8y50x4a
-         Xmz4lF80hj3Awe6QSk3OFrXBJ2mkg+wRmUa4AjbiHmGbb2tYYEgvqKnOQfZ4sEECVaNu
-         wwlQZ7svBYxm1tVo4PPoADDBNcrY2uWK1BdZV8ka2tAD/hs6CQ44W1hRMwqYFWSvtq8F
-         7KDq9y+DqpD5/x0//twWxOTfI4trd7Dt2MUNdSUpPnWHfR75VnBQB+87sYRTB0z+cZTJ
-         kzciNhrKF1dibz+jtrTEw/oClcIrGdK57FbxsIioAzw/5C6ky22BUiBGH1ukKkYn6bru
-         k0YA==
+        d=gmail.com; s=20221208; t=1685870314; x=1688462314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aox3XK8tx72aeNja1udkD88JAZ0aWEszFBLsOxbe+fI=;
+        b=rSfoJfS2X8Zx0gaX8WEMmFcIYgSg25rCZ+TYlggJeZcpKateZrWXEbic+aLXjMv2GR
+         gjjZI0N+ru+UqG9tRNfDeqiJB9NSP/YBse9KnKB4ov97mKBPgeYSpjB+I+rJFaeRquxk
+         Q8kCSN4N48veUEAxUTT3rcE0aHfP3FIjZ5UCEANBn5J4AFUCV8SdSYuZcSnKYoGqxtOA
+         x3hNvruleQUDpiRe8e2S6c9ZDbAhV10jcwWwQ9w65XG/9MX7IGHroZUMTKUtepX057C3
+         9CVX+K1Y0WwQvZQFvme2NWhA1VtLGqamnw7qtm4ZCD+1CyeTsOEc6lTtRVdp06jsDWDF
+         N9QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685869881; x=1688461881;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcvHDMkzrwljyNeqpGNC3T31sTZEZ5CPQHa0w+swo54=;
-        b=iOsTocKfKR53Wm+7inECJbydDI+GZD3YSp2vynXBHxBwvQ8abtq1au8OhR4GJTw+xh
-         tZ8BhnG7AO4PIjI9PSVOTojlln6c6z0gAZaHkKy0mJQ0fW/p59z/xibH+By5ifmak4eT
-         0DsLqCz2y00QeKzfGNU/r9ke9ShuMzTiVRgGOcQ52ujQnjA2msAegkYoMep8/tS55KeK
-         Y7v5KnN0X2JqisvtasWIveP6FvV72TFlAbW38gAu9gmfzXTxB/HCsP1OYc7/Wjz15X7w
-         HTqnJmcAAFdGqybrE9YJHTGj+adkzxlYB2FFLKVqE3pKBCWEkMpP5hIE39g4rUV+pF19
-         xiWQ==
-X-Gm-Message-State: AC+VfDyTkoj90aH5S6JqRu+NjH6L4jrahNDdVuFEu+VIxIgBGvbVS7TT
-        bh2Ed4wtdeUKSSpQ7kmOJDajbg==
-X-Google-Smtp-Source: ACHHUZ6Ja8AuRkcS56tswppum6NJfV+7Lt04jvt9yGevB0CVpYfVOuZ3hgOMDkFyPLTTP0esvYYDTQ==
-X-Received: by 2002:a17:906:fe04:b0:96f:45cd:6c21 with SMTP id wy4-20020a170906fe0400b0096f45cd6c21mr3643942ejb.30.1685869880966;
-        Sun, 04 Jun 2023 02:11:20 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id be21-20020a0564021a3500b00514b0f6a75esm2525893edb.97.2023.06.04.02.11.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 02:11:20 -0700 (PDT)
-Message-ID: <05658f98-ddc1-702b-ea4b-4ea95d0b3313@linaro.org>
-Date:   Sun, 4 Jun 2023 11:11:18 +0200
+        d=1e100.net; s=20221208; t=1685870314; x=1688462314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aox3XK8tx72aeNja1udkD88JAZ0aWEszFBLsOxbe+fI=;
+        b=gTHDl2qU1P2foAPXvM+sqNzoaVwA3l8cpJS/fXb9nSiBFTS+YGMoKc/+Hdf813BLME
+         BL3PzG5sB161/Ukg7kK3T9FGTmECloWdl3TfkH7aJBAdzSKSi9sVdJNQMvNyUKhrue/s
+         S/0pu2WMP11tjzld3zxQ41y2d1xMULMqHxPqa+IraTRMSxVABdHyEUjgV0+6LYHFDfSi
+         1RZeZSUC1tJGUgMJZjnPU8s2mTuABX0DyP+y7opV77Gj+Hsp1koBlR/NXP+JISFjmZnD
+         rjMILkymIxf6PmD3enKKu4gprClM87zlWaL/OHOeE+bT4EwSOcaXQLPwmS1urS9vdTmO
+         N/dA==
+X-Gm-Message-State: AC+VfDy+VkvvloSnw5x8g8kOGY9zacntpbqXmnRNgOQbVKlZ2VWOswA/
+        M28ksQDGgWUo/lrXtHU2UYvSvRwrd1MLxVipRQ0=
+X-Google-Smtp-Source: ACHHUZ4eCakEWsPBp89FEc1u6EWVeN0rw7V8m/x6CRpEQwG051tQBrs1bgGohAOKHeCdHM/ijFvcBlc1oEI7P0Nb/aA=
+X-Received: by 2002:a1f:45d5:0:b0:460:d627:22ca with SMTP id
+ s204-20020a1f45d5000000b00460d62722camr2332346vka.1.1685870314156; Sun, 04
+ Jun 2023 02:18:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/3] dt-bindings: remoteproc: qcom,msm8996-mss-pil: Add
- SDM660 compatible
-To:     Alexey Minnekhanov <alexeymin@postmarketos.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230604061421.3787649-1-alexeymin@postmarketos.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230604061421.3787649-1-alexeymin@postmarketos.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230602163044.1820619-1-leitao@debian.org> <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+ <ZHxEX0TlXX7VV9kX@gmail.com>
+In-Reply-To: <ZHxEX0TlXX7VV9kX@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 4 Jun 2023 11:17:56 +0200
+Message-ID: <CAF=yD-LvTDmWp+wAqwuQ7vKLT0hAHcQjV9Ef2rEag5J4cSZrkA@mail.gmail.com>
+Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, axboe@kernel.dk,
+        asml.silence@gmail.com, leit@fb.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/06/2023 08:14, Alexey Minnekhanov wrote:
-> Mention sdm660-mss-pil in compatibles list.
-> 
-> Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
-> ---
->  .../devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-> index c1ac6ca1e759d..09da5616e1e5a 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-> @@ -19,6 +19,7 @@ properties:
->      enum:
->        - qcom,msm8996-mss-pil
->        - qcom,msm8998-mss-pil
-> +      - qcom,sdm660-mss-pil
->        - qcom,sdm845-mss-pil
->  
->    reg:
-> @@ -245,7 +246,9 @@ allOf:
->    - if:
->        properties:
->          compatible:
-> -          const: qcom,msm8998-mss-pil
-> +          enum:
-> +            - qcom,msm8998-mss-pil
-> +            - qcom,sdm660-mss-pil
+> On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
+> > On Fri, Jun 2, 2023 at 6:31=E2=80=AFPM Breno Leitao <leitao@debian.org>=
+ wrote:
+> > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> >
+> > Please check the checkpatch output
+> >
+> > https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdo=
+ut
+>
+> I am checking my current checkpatch before sending the patch, but I am
+> not seeing the problems above.
+>
+> My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
+> reproduce the problems above.
+>
+>         $ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on=
+-protocol-ioctl-cal.patch
+>         total: 0 errors, 0 warnings, 0 checks, 806 lines checked
+>         v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patc=
+h has no obvious style problems and is ready for submission.
+>
+> Let me investigate what options I am missing when running checkpatch.
 
-You also need to restrict/constrain power domains and resets.
+The reference is to the checkpatch as referenced by patchwork:
 
-Best regards,
-Krzysztof
+https://patchwork.kernel.org/project/netdevbpf/patch/20230602163044.1820619=
+-1-leitao@debian.org/
 
+The 80 character limit is a soft limit. But also note the CHECK
+statements on whitespace.
+
+>
+> > > +/* A wrapper around sock ioctls, which copies the data from userspac=
+e
+> > > + * (depending on the protocol/ioctl), and copies back the result to =
+userspace.
+> > > + * The main motivation for this function is to pass kernel memory to=
+ the
+> > > + * protocol ioctl callbacks, instead of userspace memory.
+> > > + */
+> > > +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+> > > +{
+> > > +       int rc =3D 1;
+> > > +
+> > > +       if (sk_is_ipmr(sk))
+> > > +               rc =3D ipmr_sk_ioctl(sk, cmd, arg);
+> > > +       else if (sk_is_icmpv6(sk))
+> > > +               rc =3D ip6mr_sk_ioctl(sk, cmd, arg);
+> > > +       else if (sk_is_phonet(sk))
+> > > +               rc =3D phonet_sk_ioctl(sk, cmd, arg);
+> >
+> > Does this handle all phonet ioctl cases correctly?
+> >
+> > Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u=
+16.
+>
+> We are not touching  "struct proto_ops" in this patch at all.  And
+> pn_socket_ioctl() is part of "struct proto_ops".
+>
+>         const struct proto_ops phonet_stream_ops =3D {
+>                   ...
+>                   .ioctl          =3D pn_socket_ioctl,
+>         }
+>
+> That said, all the "struct proto_ops" ioctl calls backs continue to use
+> "unsigned long arg" with userspace information, at least for now.
+
+Ok. Perhaps good to call out in the commit message that this does not
+convert all protocol ioctl callbacks.
