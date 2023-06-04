@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220F172159C
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FFF7215A0
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjFDIct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 04:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S230497AbjFDIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 04:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjFDIcr (ORCPT
+        with ESMTP id S229879AbjFDIhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 04:32:47 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E63DA;
-        Sun,  4 Jun 2023 01:32:45 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f7353993cbso4792675e9.0;
-        Sun, 04 Jun 2023 01:32:45 -0700 (PDT)
+        Sun, 4 Jun 2023 04:37:34 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F9DA;
+        Sun,  4 Jun 2023 01:37:33 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-307d58b3efbso3219730f8f.0;
+        Sun, 04 Jun 2023 01:37:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685867564; x=1688459564;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hoNSr+a8hKeak/jlvIJQdpZkUkH6J7s10yAW9PEDstY=;
-        b=pNj3Oyg+/a18FAg4qCfrZlPrEdtNVXSOpymnHw+UFQB5bgOKFCv/+OCZA92njKoeF6
-         +96kOqySqt6TrFNnIgeXgo5N/bcZf+dnoZNu2E4qbTJFp/iJUXK/hVd1d0Pk6eIIXYxS
-         KFBtC3EMnY8eTOgtau+cvFnr+Qwt/YtXNrv0NmoAONZh52YCr4kIoOKQVhXFYeZYzl1N
-         fL1sQZu+nn/zpeh7mN7VzUYxCs4w6krjc1xxC/HvISxOPDu07ShsBhHC+Jcp08WeYXzk
-         qTA+6yGqnm/6ARoYGMlyR8ClohjVk64R6dkh1CekouBdneJmNgb9th4kbzW7qHWIylKu
-         cJfA==
+        d=gmail.com; s=20221208; t=1685867851; x=1688459851;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/RW4TbjF3qcw7YmxPDw6GL8ZaIlrSZn8h5/QVYrrPp8=;
+        b=EbrdZUBU0Mji0L16MSXokIObTH9SYRfFZ9gA94biGdVBS0x4jvyCuw88nbgVmLXeA/
+         dBIZXIkJM4USV1s1QzfjXqPlQ/mkCcSFfHkMxq+V4UbBCW0jCU86+n2p7b7lwz/SHUbB
+         6oBwcfFk8E7dJ74MnTPLfF8tL0+RwRLT2hwbIogBWWwm/iQeXR4mqAdOEqG2qEjzJ4gK
+         mp74hHZR1+daJ1JAGQX947XUR6kYqFMaA6Kmp6GKKYgdiTNglrCsD/P3W9m/uQ0kXYBo
+         Bb7sXpIjaqG3xkkf/ZXKvxX7PwFOj+mznLXJ5s44FskVQxyhUz6ViuYAfzoqxKjsZRTZ
+         UK3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685867564; x=1688459564;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hoNSr+a8hKeak/jlvIJQdpZkUkH6J7s10yAW9PEDstY=;
-        b=e/VH/UonSiCiVfXEKf44VoRcnnD93hkLixr0YMDEp619/Ph02ZjnLX6KRNoT7u4BsJ
-         +F5Z3ktDjFRGaPDcj9c5rkpZXzy5YdaapjcC85QmHzJWbmpOvPiogXBn1llTwDv5rDVV
-         hCyMIlpsXolk0FqdVnZSuM6ql1HgUElaKMNtIDiz+d6YlKy7+syEl6RA3ravrIhXyghh
-         t3CJUCAy/xSAituf3Rn03qkdExFpZr1zU95kJxBZfGU8AvIALbIyxvsvWJ8UeLD8ennN
-         MSgWx1DicQzK+EMtZaMAqd3yXT5xkCOp0EPowJQde+TJk6uDcELMN4J54tfgJ31yd8Qf
-         DExw==
-X-Gm-Message-State: AC+VfDzef6eEUKF3ek/6o7+VlGVqq0BvtGNUicH3qzqQEhQWIh7PMv2R
-        yjSIxIs+UicMQpSPX/0fAvE=
-X-Google-Smtp-Source: ACHHUZ7hlAQTqglbbeUTEkcdqQMatfDQIzDzIU2717+u3LLOMIUrwME1wrk1VRzF4edNoByT7MCRzw==
-X-Received: by 2002:a05:600c:c0c:b0:3f6:11e2:b971 with SMTP id fm12-20020a05600c0c0c00b003f611e2b971mr5155835wmb.20.1685867563427;
-        Sun, 04 Jun 2023 01:32:43 -0700 (PDT)
-Received: from localhost ([2a01:e0a:32f:1f0:ae0b:3bc8:c743:b2d8])
-        by smtp.gmail.com with ESMTPSA id n11-20020a7bcbcb000000b003f60d0eef36sm10762188wmi.48.2023.06.04.01.32.42
+        d=1e100.net; s=20221208; t=1685867851; x=1688459851;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/RW4TbjF3qcw7YmxPDw6GL8ZaIlrSZn8h5/QVYrrPp8=;
+        b=B/x1gx2qNUmN+0HqqGPV3cAjwxQ3vBwPpsurJ8ADckyqDoZXSIFSmCDuc1fbtnwGPl
+         yDFsKem7xVpi7+QLZwDHrWAMdaxPk6K8Nc5NTTRHv0NrDjoW8DSzpydZ9FHUSIu9YnzC
+         n/jclClIRJ39d/HSxf3zNTpj3ro74XdCVxqgxuqmOgS455R/d8LYDsK4Y7pjZjHOZW1q
+         4z48qyLni9elup3kMEATakLZVoMIJHpxp6rznCx0Q656NjRok9L/7k9vj0pMGrOW4yxr
+         aNqDtbkrWeHKAqz80b47niHOt3ta1MFhjD63EuDOVeANYFaoZbSXSj56mp76oKUTVs4l
+         XvjQ==
+X-Gm-Message-State: AC+VfDzDya47MGKHkG0y6qszGi0Mz1LJ0nAX+6KycIDhCGCKRdvgIFoj
+        je6Y5C24mMbhXt3k3VVi7L5auwuPYvI=
+X-Google-Smtp-Source: ACHHUZ6L4JF0jW2JC0FX5JeRF+CeIhBoPYgf9/5C1p+83UpPGn6iPCqD+sXs46KxF7D+/zjqgYrtuw==
+X-Received: by 2002:a5d:58e3:0:b0:309:31ac:6663 with SMTP id f3-20020a5d58e3000000b0030931ac6663mr2692479wrd.16.1685867851220;
+        Sun, 04 Jun 2023 01:37:31 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id j6-20020a5d6186000000b002ffbf2213d4sm6466544wru.75.2023.06.04.01.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 01:32:42 -0700 (PDT)
-From:   Raphael Gallais-Pou <rgallaispou@gmail.com>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: st-asc: fix typo in property name
-Date:   Sun,  4 Jun 2023 10:35:58 +0200
-Message-Id: <20230604083558.16661-1-rgallaispou@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Sun, 04 Jun 2023 01:37:30 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 09:37:29 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/35] 5.15.115-rc3 review
+Message-ID: <ZHxNSQkgrZsyV6OT@debian>
+References: <20230603143543.855276091@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603143543.855276091@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,28 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes the property name read in the driver according to the YAML.
-According to device-tree documentation, property names should not
-include underscores.
+Hi Greg,
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
----
- drivers/tty/serial/st-asc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Jun 03, 2023 at 04:37:18PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.115 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 5215e6910f68..6ef99a037a9b 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -754,7 +754,7 @@ static struct asc_port *asc_of_get_asc_port(struct platform_device *pdev)
- 
- 	asc_ports[id].hw_flow_control = of_property_read_bool(np,
- 							"uart-has-rtscts");
--	asc_ports[id].force_m1 =  of_property_read_bool(np, "st,force_m1");
-+	asc_ports[id].force_m1 =  of_property_read_bool(np, "st,force-m1");
- 	asc_ports[id].port.line = id;
- 	asc_ports[id].rts = NULL;
- 
+Build test (gcc version 12.2.1 20230511):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/3687
+[2]. https://openqa.qa.codethink.co.uk/tests/3688
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
 -- 
-2.40.1
-
+Regards
+Sudip
