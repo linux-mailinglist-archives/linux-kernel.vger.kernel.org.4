@@ -2,62 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE027215FD
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44221721600
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjFDKU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 06:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S230476AbjFDKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 06:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDKU4 (ORCPT
+        with ESMTP id S230061AbjFDKXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 06:20:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AFEA3;
-        Sun,  4 Jun 2023 03:20:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24D6D60F55;
-        Sun,  4 Jun 2023 10:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D51C433EF;
-        Sun,  4 Jun 2023 10:20:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685874049;
-        bh=KNWTkBNxkUm0++34/5RGlpBQ8nek3uIrv2ErreqYNkw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ET68GUTN8XQJzGbSbl3yHcepbNoqbblEZuRWjiDbNT52xCz3Es63iVrSuT2hGzd6x
-         n52iZlrLTDbd7ipeLxVTqbZhITWiTJq0VrKNuWpzQ5iP/u6w6Dwyx1XB5FZmdyBUBt
-         Rde+1BNaRYyH0jHUAIugHRSYI1Szx4a/MNIlv4ytVGD4eyms/jj6xV/8naJ6Ej4ims
-         qJoxFCD5Zs+OoYg8dVqOGbx3bHVv4tBsnpq4hWVFCGxOt+buRU5gwDQPJIRcDqcM2H
-         uBsqjrXhoNqwWPM1Nxd+JH/qo0s+SqDb/xBgdjICr6YRq8D9omNpyqnZNcXOKMHORx
-         qGw0JU6f+hPsg==
-Date:   Sun, 4 Jun 2023 11:20:43 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     andy.shevchenko@gmail.com
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>, lars@metafoo.de,
-        heiko@sntech.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gustavo.padovan@collabora.com, kernel@collabora.com,
-        serge.broslavsky@collabora.com, Simon Xue <xxm@rock-chips.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v3 2/8] iio: adc: rockchip_saradc: Add support for
- RK3588
-Message-ID: <20230604112043.43b1ada0@jic23-huawei>
-In-Reply-To: <ZHunAIbK7-tIvsm1@surfacebook>
-References: <20230603185340.13838-1-shreeya.patel@collabora.com>
-        <20230603185340.13838-3-shreeya.patel@collabora.com>
-        <ZHunAIbK7-tIvsm1@surfacebook>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sun, 4 Jun 2023 06:23:48 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF82AD
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 03:23:46 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-977d0288fd2so76366966b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 03:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685874224; x=1688466224;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vLMm5DGpDatFx+iGfB1PGjzh6TWD0e3Bij8YPp4BPK0=;
+        b=hA42wvBEQEoy/ol3inkkl+8m9hOWi3p/t4ViqX2m3wbo+Amc55Ya+fhrFHIxXK8jAj
+         vBSI0TpaxkkDXQ9Bl4h9Xda41ghedF44x/U5PQAQycbFXhJnUVqrg++0M2WKqgokZuZt
+         rukDxgyeBXn9E65WHxLVOI61gbh/rmJH9fuVnpEmHGbWkXOjofj3x2p8Gn4XctyyQr1s
+         CRVUTxTE4ngIbm1yFTHN8zYF3gKfQTxVLdi+A2Yt7aQE2/W7bfSvSGzRJPzPvKR3Sp6V
+         5zS9qNzFUlMWEd5LEa+Kq0fUD6VplRx9xap3P4666BUfNTRokF7Kk3T3no7ConhL8v8k
+         0JCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685874224; x=1688466224;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vLMm5DGpDatFx+iGfB1PGjzh6TWD0e3Bij8YPp4BPK0=;
+        b=O9V7+ZKwi0vlwaSLrKjgP35p4ZavKNH68tt3mMeySK5MXk/+fRUajUdBWDve42X1JA
+         v5sJrw2Ro5T2FOwuLv/XLVaDcZ59Wyqf+7ex76B2PVW98rjjeXa0B3gTrfeeKL1JVAE4
+         feUYeWltBzRQFtTf5ZNCjv5gbMkTzcyTioc5Ye7WN4fOL0emU4LP4u/5kFWIZf/0EMzt
+         4PefdIU3ARvBs6z1ob8PGgRdj3GnCNik5CuJBgRU/5ff30cjh7d2Zlg76xvo7cNHwY6I
+         nzKCpLnP4qYXOskyNUuG4NYKH3xPgZ5FbmEDXyj6C060B1W2fwq1UDwfDr9XFSsfD+Ry
+         VLQw==
+X-Gm-Message-State: AC+VfDxc9DtO0T8gcxEdiOs9UF9GlPD7t00y8zKfK2M9IVCZewQR0iW2
+        172tXqLF2uEDTJ3gEy+iwAXfTg==
+X-Google-Smtp-Source: ACHHUZ4N/HEfFBnFfUte5O2O2Kpj1Q+ZF88Ax3cbwxbUT05XnXYC0ICFB4J+r2mgGOVOqIg7od3XSw==
+X-Received: by 2002:a17:907:25c8:b0:949:cb6a:b6f7 with SMTP id ae8-20020a17090725c800b00949cb6ab6f7mr3378039ejc.56.1685874224153;
+        Sun, 04 Jun 2023 03:23:44 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id a12-20020a1709063a4c00b009745c84b24bsm2995317ejf.15.2023.06.04.03.23.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Jun 2023 03:23:43 -0700 (PDT)
+Message-ID: <a08a3317-7f3d-02d3-adba-f01e78940d16@linaro.org>
+Date:   Sun, 4 Jun 2023 12:23:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment option
+Content-Language: en-US
+To:     Paul Fertser <fercerpav@gmail.com>
+Cc:     Ivan Mikhaylov <fr0st61te@gmail.com>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <20230509143504.30382-4-fr0st61te@gmail.com>
+ <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
+ <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
+ <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+ <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
+ <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
+ <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
+ <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
+ <5d7421b6a419a9645f97e6240b1dfbf47ffcab4e.camel@gmail.com>
+ <408ee74c-e6ed-d654-af04-58bd7d1e087b@linaro.org>
+ <ZHUSQkXwruFQbvSC@home.paul.comp>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZHUSQkXwruFQbvSC@home.paul.comp>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,35 +93,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 3 Jun 2023 23:48:00 +0300
-andy.shevchenko@gmail.com wrote:
+On 29/05/2023 22:59, Paul Fertser wrote:
+> Hello Krzysztof,
+> 
+> Let me try to clarify a bit on the particular usecase and answer your
+> questions.
+> 
+> Let's consider a server motherboard manufactured and sold by a single
+> company. This motherboard includes I210 (Ethernet Controlleer) chip
+> along with the other necessary parts right there, soldered to the PCB,
+> non-replaceable. This I210 is connected to the host CPU with a PCIe
+> lane and acts as a regular network adapter. In addition to that this
+> chip is connected using NC-SI (management channel) to the BMC SoC
+> (also permanently soldered to the board).
+> 
+> There is a separate EEPROM connected directly to I210 which hosts its
+> firmware and many operational parameters, including the MAC
+> address. This EEPROM is not anyhow accessible by the BMC (the host can
+> read/write it using special protocol over PCIe). Intel expects the
+> board manufacturer to embed a MAC address from the manufacturer's
+> range in the EEPROM configuration. But in many cases it's desirable to
+> use a separate MAC address for the BMC (then I210 acts as if it has an
+> integrated switch), so the board manufacturer can, by its internal
+> policy, allocate two consecutive MAC addresses to each motherboard.
+> 
+> The only way BMC can learn the MAC address used by I210 is by a
+> special vendor-specific NC-SI command, and it can provide just a
+> single address, the one used by the host. NC-SI is using Ethernet
+> frames with a special type, so to execute this command the network
+> driver needs to be (at least partially) functional. I do not really
+> imagine nvmem getting support to read it this way.
+> 
+> On Wed, May 17, 2023 at 09:26:35PM +0200, Krzysztof Kozlowski wrote:
+>> I would like to remind this question.
+>> "why different boards with same device should have different offset/value?"
+> 
+> In the usecase we're aiming for the DT is describing a specific board
+> from manufacturer that guarantees the offset to be correct, as none of
+> the parts are replaceable and the MAC address is flashed into the
+> I210 EEPROM during manufacturing.
+> 
+>> Let me extend this question with one more:
+>> "Why for all your boards of one type, so using the same DTS, would you
+>> use one value of incrementing MAC address?"
+> 
+> Here we assume that for all the boards supported by a particular DT
+> the board manufacturer guarantees the MAC address offset by internal
+> production policy, by allocating the addresses from the manufacturer's
+> pool.
 
-> Sun, Jun 04, 2023 at 12:23:34AM +0530, Shreeya Patel kirjoitti:
-> > From: Simon Xue <xxm@rock-chips.com>
-> > 
-> > Add new start and read functions to support rk3588 device.
-> > Also, add a device compatible string for the same.  
+OK, embed such information in the commit or property description.
+
 > 
-> ...
+>> But you hard-code the number, just in BMC DTS. How does it differ from
+>> BMC hard-coding it differently?
+>>
+>> You encode policy - or software decisions - into Devicetree.
 > 
-> > +/* v2 registers */
-> > +#define SARADC2_CONV_CON		0x0
-> > +#define SARADC_T_PD_SOC			0x4
-> > +#define SARADC_T_DAS_SOC		0xc  
+> But MAC address of an Ethernet equipment is an inherent part of the
+> hardware. It's just that we can't store it in an nvmem-addressable
+> cell in this case, unfortunately.
 > 
-> Can you use fixed-width values for all registers?
+>> Why devices with same board cannot use different values? One board "1"
+>> and second "2" for MAC increments? I am sure that one customer could
+>> have it different.
 > 
-> 	0x000
-> 	0x004
-> 	0x00c
+> You assume that the customers might be allocating their own MAC
+> addresses for the network interface of a motherboard, that might be
+> true if the customer gets such a board from an ODM. But such a
+> customer not willing to follow the MAC address offsets policy is not
+> much different from a customer who e.g. modifies flash partitions or
+> storage format making the nvmem references invalid, and so requiring a
+> separate DT.
 > 
-> > +#define SARADC2_END_INT_EN		0x104
-> > +#define SARADC2_ST_CON			0x108
-> > +#define SARADC2_STATUS			0x10c
-> > +#define SARADC2_END_INT_ST		0x110
-> > +#define SARADC2_DATA_BASE		0x120  
+>> If you want to convince us, please illustrate it in a real world
+>> upstreamed DTS (or explain why it cannot). Otherwise I don't see
+>> justification as it is not a hardware property.
+> 
+> Can you please tell how you would imagine a responsible vendor tackle
+> the usecase I outlined?
+
+I would imagine him to upstream the DTS. I asked yo illustrate it. There
+is still no DTS user for it so I have doubts it is used as intended.
+
+> Guess it's not by a startup script that would
+> be getting a MAC address from an interface, applying the offset, and
+> then change it on the same interface?
+> 
+> Thank you for the review and discussion.
 > 
 
-I tidied this up whilst applying.
+Best regards,
+Krzysztof
 
-Jonathan
