@@ -2,120 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79DB721429
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 04:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FB3721432
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 04:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjFDCjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 22:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S229957AbjFDCtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 22:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjFDCjQ (ORCPT
+        with ESMTP id S229571AbjFDCtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 22:39:16 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC45A9
-        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 19:39:15 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f3bb61f860so4589447e87.3
-        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 19:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685846353; x=1688438353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oMukeZsIPK9VY+jN6lO5nE+HniRt3DWSTDLIp8k6jQc=;
-        b=jtROz0fXdfiIHIOYlEGo1RqI57Xt9Eh7ZYyQddwsfunow3aWsMu+/HxczEcLuRPp4Z
-         dKNJIgsMVM+VI9k3As1NYL/xM04D0fuv5WSC60Osribmnui3GsuILV5nN7UdslLRJOr4
-         GTgyMtPEEn9aI5eHz3iisjsZ2bfqOL6povcl77pSnghRPbZVb4BoDtq/QDjEmBNZmgU2
-         Atsa6su2/AssHHBu/bWGpBELJ1aj3i046yFYYR6rwNaF/4Lt6eBARlYFG0VqxSjOciIT
-         yRbwGjO6oWfFV+za0yY6Wfz7P7JcI7raZvcOfx4x8MZ/FdPqu+kJOZpK46YhRY8rZ3TX
-         u2qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685846353; x=1688438353;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMukeZsIPK9VY+jN6lO5nE+HniRt3DWSTDLIp8k6jQc=;
-        b=LrAMWxKj/Z0iNG66n3k8OJ991mc5b+6VWKRYQxAhJSCPnWdlkEGOJfd4CZl3MrbZB2
-         /GvhcFMTRQD6c1lrwBvjcZG0HCWSdkhBZajraOt7k8Dzt0zbxQzr7/ia1IbEd6/1C0Bh
-         6lOrVhR/d1CPpi200d9LTZlX26kUqEWDLvd9c6/TeIrVnFTGgQDcCZLvy7iBqpEh/eMA
-         +7mt3wSwf8rC4fDwy7HOFhHAUGvXR2n7K0r/nMNPQ5J3gB35xzdWoYblHIWULilpIxeH
-         HHF6amMR8iy6ZVStugw02rSAb2f3oY9A8zdLrhjo1H1RN5jtYMtkTd6o38RKN5yA8XZV
-         YNEw==
-X-Gm-Message-State: AC+VfDwinxmfE9nxsxcxuN/pXvGcuG54AI6W6tGKEL+Le3UkTU2c9Jf3
-        70G4aOzPNgubaENEAzjIr3dcTA==
-X-Google-Smtp-Source: ACHHUZ5D9QfTFJ7LYIjyZ34kZ1xnm+FM48ToTGYMYOaQS6D5GlphlJ2LfDuS/Lo1Qo+BuGyfh75rVw==
-X-Received: by 2002:a2e:6a18:0:b0:2b1:af36:93d9 with SMTP id f24-20020a2e6a18000000b002b1af3693d9mr1987200ljc.26.1685846353479;
-        Sat, 03 Jun 2023 19:39:13 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id d9-20020ac244c9000000b004f24db9248dsm210750lfm.141.2023.06.03.19.39.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 19:39:12 -0700 (PDT)
-Message-ID: <b038052c-c8e2-9aa1-2b80-792563d219ba@linaro.org>
-Date:   Sun, 4 Jun 2023 05:39:12 +0300
+        Sat, 3 Jun 2023 22:49:22 -0400
+X-Greylist: delayed 147 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 19:49:17 PDT
+Received: from pb-smtp2.pobox.com (pb-smtp2.pobox.com [64.147.108.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EF3F2;
+        Sat,  3 Jun 2023 19:49:17 -0700 (PDT)
+Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id 56FF718FCCE;
+        Sat,  3 Jun 2023 22:46:48 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+        :to:cc:subject:message-id:mime-version:content-type; s=sasl; bh=
+        dqDBRzC7tcn7+DMkBVjjohLM8iy8N4hgg2tVjJuNb/4=; b=yhGJ8/xEZG7kopHr
+        kdZBOQwNVvbFb4XSF9hvBLKevM/nZFg0X4K6TNE9d5DBQSlhqMOs049rhjr3TuoJ
+        VRGFfzgNAh9wbckxGccfzEMV+MbJGQjIot+Hl9utM/SIkmtI+ftQwwl8qEDyseOG
+        wq+yCSbZhCs6X4X4G8XFV/3ji8M=
+Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id 4D04D18FCCD;
+        Sat,  3 Jun 2023 22:46:48 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
+ h=date:from:to:cc:subject:message-id:mime-version:content-type;
+ s=2019-09.pbsmtp; bh=dqDBRzC7tcn7+DMkBVjjohLM8iy8N4hgg2tVjJuNb/4=;
+ b=ZZypp/ISH1Lee9Io0GliZs/9oNn9OO4oO1KaewKaKbWb1t5snNrbEc0neN/Z3xCYsFFCXefpYcG7X+qkNyYhyZxPbAKdz9IYuIKcQhg+EtuCBalXExvj38XOJTyeH8NcT3FvcLT+t63wnUbPm0zIc2Atjya9YxEc5/Z92FnBZY8=
+Received: from oatmeal.darkphysics (unknown [76.146.178.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp2.pobox.com (Postfix) with ESMTPSA id 020BD18FCCC;
+        Sat,  3 Jun 2023 22:46:46 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+Date:   Sat, 3 Jun 2023 19:46:40 -0700
+From:   Tree Davies <tdavies@darkphysics.net>
+To:     anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     tdavies@darkphysics.net, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Patch] net/e1000: Fix extern warnings
+Message-ID: <ZHv7EDzikZPikoRh@oatmeal.darkphysics>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 6/7] drm/msm/dsi: Add phy configuration for MSM8226
-Content-Language: en-GB
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308-msm8226-mdp-v3-0-b6284145d67a@z3ntu.xyz>
- <20230308-msm8226-mdp-v3-6-b6284145d67a@z3ntu.xyz>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230308-msm8226-mdp-v3-6-b6284145d67a@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="ELWD20BX7LFhUz03"
+Content-Disposition: inline
+X-Pobox-Relay-ID: 0CB3580A-0282-11EE-BF0C-307A8E0A682E-45285927!pb-smtp2.pobox.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 20:00, Luca Weiss wrote:
-> MSM8226 uses a modified PLL lock sequence compared to MSM8974, which is
-> based on the function dsi_pll_enable_seq_m in the msm-3.10 kernel.
-> 
-> Worth noting that the msm-3.10 downstream kernel also will try other
-> sequences in case this one doesn't work, but during testing it has shown
-> that the _m sequence succeeds first time also:
-> 
->    .pll_enable_seqs[0] = dsi_pll_enable_seq_m,
->    .pll_enable_seqs[1] = dsi_pll_enable_seq_m,
->    .pll_enable_seqs[2] = dsi_pll_enable_seq_d,
->    .pll_enable_seqs[3] = dsi_pll_enable_seq_d,
->    .pll_enable_seqs[4] = dsi_pll_enable_seq_f1,
->    .pll_enable_seqs[5] = dsi_pll_enable_seq_c,
->    .pll_enable_seqs[6] = dsi_pll_enable_seq_e,
-> 
-> We may need to expand this in the future.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c      |  2 +
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy.h      |  3 +-
->   drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c | 97 ++++++++++++++++++++++++++++++
->   3 files changed, 101 insertions(+), 1 deletion(-)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+--ELWD20BX7LFhUz03
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+
+--ELWD20BX7LFhUz03
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-net-e1000-Fix-extern-warnings.patch"
+
+From 407d0e4641d67118c954d36cc829c35300669fc8 Mon Sep 17 00:00:00 2001
+From: Tree Davies <tdavies@darkphysics.net>
+Date: Sat, 3 Jun 2023 19:02:06 -0700
+Subject: [PATCH] net/e1000: Fix extern warnings
+
+This patch fixes 11 checkpatch.pl warnings of type:
+WARNING: externs should be avoided in .c files
+
+Signed-off-by: Tree Davies <tdavies@darkphysics.net>
+---
+ drivers/net/ethernet/intel/e1000/e1000_main.c | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/e1000/e1000_main.c b/drivers/net/ethernet/intel/e1000/e1000_main.c
+index da6e303ad99b..44f1bfba8a1a 100644
+--- a/drivers/net/ethernet/intel/e1000/e1000_main.c
++++ b/drivers/net/ethernet/intel/e1000/e1000_main.c
+@@ -63,14 +63,6 @@ static const struct pci_device_id e1000_pci_tbl[] = {
+ 
+ MODULE_DEVICE_TABLE(pci, e1000_pci_tbl);
+ 
+-int e1000_up(struct e1000_adapter *adapter);
+-void e1000_down(struct e1000_adapter *adapter);
+-void e1000_reinit_locked(struct e1000_adapter *adapter);
+-void e1000_reset(struct e1000_adapter *adapter);
+-int e1000_setup_all_tx_resources(struct e1000_adapter *adapter);
+-int e1000_setup_all_rx_resources(struct e1000_adapter *adapter);
+-void e1000_free_all_tx_resources(struct e1000_adapter *adapter);
+-void e1000_free_all_rx_resources(struct e1000_adapter *adapter);
+ static int e1000_setup_tx_resources(struct e1000_adapter *adapter,
+ 				    struct e1000_tx_ring *txdr);
+ static int e1000_setup_rx_resources(struct e1000_adapter *adapter,
+@@ -79,7 +71,6 @@ static void e1000_free_tx_resources(struct e1000_adapter *adapter,
+ 				    struct e1000_tx_ring *tx_ring);
+ static void e1000_free_rx_resources(struct e1000_adapter *adapter,
+ 				    struct e1000_rx_ring *rx_ring);
+-void e1000_update_stats(struct e1000_adapter *adapter);
+ 
+ static int e1000_init_module(void);
+ static void e1000_exit_module(void);
+@@ -87,8 +78,6 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent);
+ static void e1000_remove(struct pci_dev *pdev);
+ static int e1000_alloc_queues(struct e1000_adapter *adapter);
+ static int e1000_sw_init(struct e1000_adapter *adapter);
+-int e1000_open(struct net_device *netdev);
+-int e1000_close(struct net_device *netdev);
+ static void e1000_configure_tx(struct e1000_adapter *adapter);
+ static void e1000_configure_rx(struct e1000_adapter *adapter);
+ static void e1000_setup_rctl(struct e1000_adapter *adapter);
 -- 
-With best wishes
-Dmitry
+2.30.2
 
+
+--ELWD20BX7LFhUz03--
