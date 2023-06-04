@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C057219A9
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 22:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B74A7219AE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 22:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjFDUTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 16:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S231195AbjFDUVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 16:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDUTV (ORCPT
+        with ESMTP id S229449AbjFDUVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 16:19:21 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E4ECA;
-        Sun,  4 Jun 2023 13:19:20 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f7f73e90f9so36837661cf.2;
-        Sun, 04 Jun 2023 13:19:20 -0700 (PDT)
+        Sun, 4 Jun 2023 16:21:00 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6300CA;
+        Sun,  4 Jun 2023 13:20:57 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5148e4a2f17so6330423a12.1;
+        Sun, 04 Jun 2023 13:20:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685909959; x=1688501959;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685910056; x=1688502056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5j+oBLDtdK4BN/9zbs7Zl5vxVBNHYX58rbUl4UduvXQ=;
-        b=noneqbGZvGf7kWMFEP3GSCjQQ/prSj+IAzJ/e+cnrbptRrDztGmQKPB05r0JiheRJq
-         /hxPU4CScVCBv3V+j3op35gamqdpZ21JPipEF7ni618ixHhxWGinrMJ1IG80lR/wTHsg
-         7hR1L0GycD9Aeorczm2KdLzOXg9Wfj1Msx1c2U29/vQw2hltYPABE03hOkVXa75tp6OL
-         Dqrii/VB3CBBNWWsW+iRRAhizpYZbYZn4LZ22XMalFTipd5tNva5ZpEDNqDtX4+03J4z
-         I/U/7iobaEssZg0pZZ15WX/Om8t6JLN9IvJeYZEToWlum/T+RPeI3T90WQFyJZu+LLRY
-         tT9g==
+        bh=pc901lSB1t/5njyHaOGc8Szlz99xchoB9LNubqrB9pc=;
+        b=DoNX4mNR4KsN0iXSQQhd4DQCDKAy/YiYQuMQD6ru8VRddZ5HU9qYoL1jaIugifNuZq
+         7hZI3Fc7GCBMSXoxGBPUIekHPqx6cxXD+ifUYBWCSSi1VxGnmjlKDVzY3Yvqt0gsz7by
+         B2jj1+gU6W63y37bzdsUk55TL10jVRoYRWDmsiD4IE/iyREUrHeUWdo8ZdmSmYW9byyP
+         o2kUCLPpNeIMZDxH6g03V2Zx2o13q5xifpMdawywWXXZV1tF8ye3f/8BbGvMrNCYwByX
+         WBLHgmVUNzFsAOQHrT9LEk6onwWScg0UncK9BSgbit/tQBh0JmLCWszHpOpeYgs7u2fl
+         BSpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685909959; x=1688501959;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5j+oBLDtdK4BN/9zbs7Zl5vxVBNHYX58rbUl4UduvXQ=;
-        b=auJ+GSX/mR39uoXM6OBgboGf6jYFDBuQYa3W7sdsJWoeTvHvm/djW59ST2KGIXgTFQ
-         mH+2/djnJufg8GrMqGik88n1QPuq9xiBUVUvV+FhFlDinC7wMi2b9P56/hROODagCM21
-         AYAqoVZP22NFLly5U07ed8PIQU0cWYh3qjfCdMj7ZkPglgvmSnn2oFUIequuTGrmijhh
-         9CvcraE7RayJePu8WdahpTCv0AEk+8J6PXXvrBbW86YtHLcxvDy5FjqYUbdDnzPoQxtT
-         h0hDre78vd7nvsSsct4Qu/Tdt8yGa7Iv6izBIGAARwhecx7lfHTGeADgxnflLraOVzo6
-         Q/ng==
-X-Gm-Message-State: AC+VfDxjIRqdU6cedLE7jtEn01yATUiqPF7XENFPd1SZ/MulggwUzUh3
-        ArFiWfpXw4J6pdxGH/lv4gwMGas/4w==
-X-Google-Smtp-Source: ACHHUZ6mbYS2e7NA2EYCjSZfRyqe4+0XcgKq+uRfDlIl4Jn9EW7XXkl/pMArcAPx1gOk2FWLkwzOFA==
-X-Received: by 2002:ac8:7fce:0:b0:3f6:820e:5e8e with SMTP id b14-20020ac87fce000000b003f6820e5e8emr4915411qtk.9.1685909959034;
-        Sun, 04 Jun 2023 13:19:19 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id v22-20020ac87296000000b003bf9f9f1844sm3580485qto.71.2023.06.04.13.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 13:19:18 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:40d3:18db:d1d3:341e])
-        by serve.minyard.net (Postfix) with ESMTPSA id 5B7A81800C3;
-        Sun,  4 Jun 2023 20:19:17 +0000 (UTC)
-Date:   Sun, 4 Jun 2023 15:19:16 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] USB: serial: return errors from break handling
-Message-ID: <ZHzxxOvUvTfl1ATL@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <20230604123505.4661-1-johan@kernel.org>
+        d=1e100.net; s=20221208; t=1685910056; x=1688502056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pc901lSB1t/5njyHaOGc8Szlz99xchoB9LNubqrB9pc=;
+        b=DprAyRMGGl92/HehGDVoK686WLj28+7ZhXYy4/5ruDQFUfYfjffb5EDAqeB4C8ShfI
+         YRwp/6D1SprIzbiAhHkM4DA2FxcDWVDuZaBKkLiMRMaT45imA8dU6aP4S+7qjbfCB00U
+         OR6MVdF0YMUQ+IzduLvP8QDfGFmAcyglRvXUkhxc5lCvefnajZwUJ/J34vc9NwmqUuar
+         AsmhNH8q/XPchpw4A61ruzg7bMf0dks3TBImgx9gmhodc4UB781t+VjHEerqPMg1R71V
+         0L7D/bSqiFyNfofCYLPSPtMT+krMzI2TS6AAGTZTyHckEU7Dmrzf8OjuxENDNCryFjjn
+         ucqw==
+X-Gm-Message-State: AC+VfDwskFtNqjk0jsDdXZ/QKcFHBfcAEJoUqKfSFlebaYAGduOMSbjG
+        vajI6Kzc04UcgX/qAd7bUpzWr5WEEn4FPymeb40=
+X-Google-Smtp-Source: ACHHUZ7HJh+h9S1Y+0QLnh+mPkHQqhlWKeX5TeLGIsBww9yr2NxJpXCvJ2n+CmB71U+vMZhwSkpXWhlo0NM6x+JnCj0=
+X-Received: by 2002:a17:906:730b:b0:970:132f:698f with SMTP id
+ di11-20020a170906730b00b00970132f698fmr5945181ejc.2.1685910055898; Sun, 04
+ Jun 2023 13:20:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230604123505.4661-1-johan@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230601223104.1243871-1-bigunclemax@gmail.com>
+ <20230601223104.1243871-3-bigunclemax@gmail.com> <fbcc5688-387c-32fb-edac-17848c92b936@linaro.org>
+In-Reply-To: <fbcc5688-387c-32fb-edac-17848c92b936@linaro.org>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Sun, 4 Jun 2023 23:20:43 +0300
+Message-ID: <CALHCpMizv52yj0rw0pR8pYjSys2UivS4L4GkWLgc-d91bdmDCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: iio: adc: Add Allwinner
+ D1/T113s/R329/T507 SoCs GPADC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 02:35:02PM +0200, Johan Hovold wrote:
-> This series starts returning errors from break handling and also uses
-> that mechanism to report to user space when break signalling is not
-> supported (e.g. when device or driver support is missing).
-> 
-> Note that the tty layer currently returns early but without reporting
-> errors when a tty driver does not support break signalling. The intent
-> expressed in commit 9e98966c7bb9 ("tty: rework break handling") from
-> 2008 appears to be to allow missing support to be reported to user
-> space however.
+=D0=BF=D1=82, 2 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 11:38, Krzy=
+sztof Kozlowski
+<krzysztof.kozlowski@linaro.org>:
+Hi Krzysztof,
+>
+> On 02/06/2023 00:30, Maksim Kiselev wrote:
+> > From: Maxim Kiselev <bigunclemax@gmail.com>
+> >
+> > Allwinner's D1/T113s/R329/T507 SoCs have a new general purpose ADC.
+> > This ADC is the same for all of this SoCs. The only difference is
+> > the number of available channels.
+>
+> Except that it wasn't tested...
 
-This worked as expected for me.
+Yes, you are right. I tested it only on the T113s board. And I will be glad=
+ if
+someone tests it on another SoC.
 
-Tested-by: Corey Minyard <cminyard@mvista.com>
+...
 
-> 
-> Johan
-> 
-> 
-> Changes in v2
->  - fix return of potentially uninitialised status variable in
->    io_edgeport as reported by kernel test robot <lkp@intel.com> and Dan
->    Carpenter:
-> 
->    https://lore.kernel.org/all/202306031014.qzAY3uQ6-lkp@intel.com/
-> 
-> 
-> Johan Hovold (3):
->   USB: serial: return errors from break handling
->   USB: serial: cp210x: disable break signalling on CP2105 SCI
->   USB: serial: report unsupported break signalling
-> 
->  drivers/usb/serial/ark3116.c          |  7 +++--
->  drivers/usb/serial/belkin_sa.c        | 12 ++++++---
->  drivers/usb/serial/ch341.c            | 37 +++++++++++++++++----------
->  drivers/usb/serial/cp210x.c           | 14 +++++++---
->  drivers/usb/serial/digi_acceleport.c  |  7 ++---
->  drivers/usb/serial/f81232.c           |  4 ++-
->  drivers/usb/serial/f81534.c           |  4 ++-
->  drivers/usb/serial/ftdi_sio.c         | 10 +++++---
->  drivers/usb/serial/io_edgeport.c      |  6 +++--
->  drivers/usb/serial/io_ti.c            |  9 +++++--
->  drivers/usb/serial/keyspan.c          |  5 +++-
->  drivers/usb/serial/keyspan_pda.c      |  8 ++++--
->  drivers/usb/serial/mct_u232.c         |  6 ++---
->  drivers/usb/serial/mos7720.c          |  9 ++++---
->  drivers/usb/serial/mos7840.c          |  7 ++---
->  drivers/usb/serial/mxuport.c          |  6 ++---
->  drivers/usb/serial/pl2303.c           | 14 ++++++----
->  drivers/usb/serial/quatech2.c         |  8 ++++--
->  drivers/usb/serial/ti_usb_3410_5052.c | 10 +++++---
->  drivers/usb/serial/upd78f0730.c       |  7 +++--
->  drivers/usb/serial/usb-serial.c       |  4 +--
->  drivers/usb/serial/usb_debug.c        | 13 +++++++---
->  drivers/usb/serial/whiteheat.c        |  7 ++---
->  drivers/usb/serial/xr_serial.c        |  4 +--
->  include/linux/usb/serial.h            |  2 +-
->  25 files changed, 147 insertions(+), 73 deletions(-)
-> 
-> -- 
-> 2.39.3
-> 
+> Please run scripts/checkpatch.pl and fix reported warnings. Some
+> warnings can be ignored, but the code here looks like it needs a fix.
+> Feel free to get in touch if the warning is not clear.
+
+I got a warning about required maintainer property. Should I do
+anything with this?
+If yes, then who should be a maintainer?
+
+...
+
+> Hm? So you do not allow anything from adc.yaml related? Are you sure
+> this is your intention?
+
+I'm not sure about it. I looked at other ADC bindings and didn't find
+another driver with 'additionalProperties: true'
