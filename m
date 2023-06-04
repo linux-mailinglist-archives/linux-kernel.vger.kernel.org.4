@@ -2,191 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C26B7213F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 03:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC17B721406
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 03:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjFDBhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 3 Jun 2023 21:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S229919AbjFDBrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 3 Jun 2023 21:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDBhG (ORCPT
+        with ESMTP id S229903AbjFDBrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 3 Jun 2023 21:37:06 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2063.outbound.protection.outlook.com [40.107.243.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75811B1;
-        Sat,  3 Jun 2023 18:37:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MPACAR2yQJ4F6oa7rXn3+iBpMmN5QR+Z0uoVrN8xUjVkP8WM46l2zhitZGahNYq9fJk75koUw51CRgCZSom8oi9GxH2GS5uSNskFk7FGpl8BJ9v7aTIX25RIRzvHDtfUMWHQYADeptWKrXINNnFCDe4oEbDxR3XmzBzexGHnR4h/bY5YeDBkVwDQXZqu+NwkH+ZZsck6M5b4GXjiZNC4Z9DZUcIzYa8vyFmBavBMdXvKx+0bns9eZ1qzoOigvHtjOXeLQZ7DDwIHhpn18bMUaF/5W5LRJGSQDwhqJ5cINfSu+w+ijTaJZuSBGOVpy6tMW5XUkmd/f60I+/QMee/JlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4Fine+ULcirLmEqNWkiHf+fbRUQNrgpAQqF8Q8I9Jv8=;
- b=MdzxRR3TZKcLeiUaWCfxSwlYFXYJcpfoRDZ9p6YAuJpetYlXOUkwkJ+/R3ykmKe/lZf9mhmZpsKmXxjThBy9ZY4FLSL7/4mYmD4/AXkLaGDcHM2ZBntHSR7z9/6KfYdqaVDXyqIUV83zV2mhKMKQo/YOpUhpn2q/Q9XlBiWHPRs35DO7lotfJMtlaOGHVFypTT83AJTMH5f1mmO/4CpjI9DuEkzQGKoj5IknP9HpaNuKFoAd0kQJ6H6wdoMO5xjXkw3mpoQjST7Qdc6KUf0y0qnwAiQjfryn66Ij7y0zwBGgS8D3/2NE+9DvR0F+McfLcakHLunmlWz8mw4HzeBK4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Fine+ULcirLmEqNWkiHf+fbRUQNrgpAQqF8Q8I9Jv8=;
- b=OrI2m++9//JoC4ACk196ao5xHrEWWVeaOx2P0WZH4LjPEJyfWQl/MvogU5jaU4aBO6fenHTHyogoE8YHokrKy7MwpwLZ0McFrrYkYgLXDMVVxNmnIP2MenBKlXbZ1nZuOJXiSjHU+0XPcRu5hPtYri6sBV25obA+Gsz3x0Buo5uDrPqj/0hj9R8qeqzcFnadhHVxX18duclW+q1A1xUgM2viYmjCaMBhLOZOkB98x5YYEAevHE4yRzyhs58t1Fk6ikBbvwy7tJp91vYxWr2DXuEWAZByE6LOrajvG6am9+OMks1A8utYw8r/UAG98514F31kn9CtKIpceFhfadyw6g==
-Received: from SA9P221CA0017.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25::22)
- by CH3PR12MB7594.namprd12.prod.outlook.com (2603:10b6:610:140::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Sun, 4 Jun
- 2023 01:36:58 +0000
-Received: from SN1PEPF000252A3.namprd05.prod.outlook.com
- (2603:10b6:806:25:cafe::a8) by SA9P221CA0017.outlook.office365.com
- (2603:10b6:806:25::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.30 via Frontend
- Transport; Sun, 4 Jun 2023 01:36:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- SN1PEPF000252A3.mail.protection.outlook.com (10.167.242.10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.13 via Frontend Transport; Sun, 4 Jun 2023 01:36:57 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sat, 3 Jun 2023
- 18:36:44 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Sat, 3 Jun 2023 18:36:43 -0700
-Received: from sandstorm.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Sat, 3 Jun 2023 18:36:43 -0700
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Muhammad Usama Anjum" <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-Subject: [PATCH 1/1] selftests: error out if kernel header files are not yet built
-Date:   Sat, 3 Jun 2023 18:36:37 -0700
-Message-ID: <20230604013637.203330-2-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230604013637.203330-1-jhubbard@nvidia.com>
-References: <20230604013637.203330-1-jhubbard@nvidia.com>
+        Sat, 3 Jun 2023 21:47:11 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EFFA6
+        for <linux-kernel@vger.kernel.org>; Sat,  3 Jun 2023 18:47:10 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b1a7e31dcaso35249951fa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 03 Jun 2023 18:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685843228; x=1688435228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x6uhed2cRD1eObTiku8eArjPbSJO8HLDvaDTuRDrq6w=;
+        b=HKnoeDu8EixKceqBBFvpU9P+QRH3IX8FEk9TQYQDJ3iJmrbDnQyTK6252KRtnWZtWM
+         QZJVYxY4zLK+zBCiLLceEp85IvFU7yx8a/4p193Yweeo3x37BVrHcVLmeKyCKSA9JxWI
+         WdLGLx6LUDhlpcSADD9xD/8g76UpIYvA6NKtzjLWHN39321b0orl7QcKRqSRLOHUH1Z/
+         vf0hbDSvMBE26B7OgbPvf9WEs3q2kaXoK+T7P1Pv1yJM1ukZGRftryr4ZZ0I+bM2ADP2
+         qht3NBfcbgLy0MU422PpCnSSZNMp9WV1KDKvqTTxCHYDpPVvQC6nQHaK4RynWSGafQRO
+         arpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685843228; x=1688435228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x6uhed2cRD1eObTiku8eArjPbSJO8HLDvaDTuRDrq6w=;
+        b=TSE87bmUysPbVSaBqJ7QoRqjrWGbxwHXlotl63cN5oEVh5A269GBesGgU01lVpqRlZ
+         Iwcbka1fvn/z9jtsEItAVy1WH1+gA0t76lsFg7Mfya47673zTqQeK99zA29c8YHfH2ay
+         R8ilvrJIzRIXrqdYah6fwPWT5jBPpCzVwiMnQX+Zk4fchJRxtWmOfmK+nLClLRTd7smb
+         nNh2/7rpL8flzAqj0lwGD4HnnmVqbIxgNykwrtremEjkXaZ9FKQGEhdpv0d5PYo/PWrw
+         ++wDQ6jMV8vSOz+ng12Uhx4T7gKDm5VSg7l8Y6/k3MyT7aSN60XKV57ux4rd/ls2yMHQ
+         GWaA==
+X-Gm-Message-State: AC+VfDy3h07ACEfnIJwyFpmYhXZAQ/jcsr0hwHwrfSQBHWihpitLZQiw
+        yU0bykTgWKwoUv3TlHlzPrG8GA==
+X-Google-Smtp-Source: ACHHUZ69Mr3ytCwbUFh1zGQoEbiGYyUW20IKowwatT9sHBg2KFGkbsAZRez464428oxbWJ2XCzKDRQ==
+X-Received: by 2002:a2e:3318:0:b0:2b1:b68d:b10c with SMTP id d24-20020a2e3318000000b002b1b68db10cmr2079491ljc.32.1685843228375;
+        Sat, 03 Jun 2023 18:47:08 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id d4-20020a2e8904000000b002b1bb9a3febsm464479lji.74.2023.06.03.18.47.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Jun 2023 18:47:07 -0700 (PDT)
+Message-ID: <e242509b-6602-9a70-a624-0141673fd75c@linaro.org>
+Date:   Sun, 4 Jun 2023 04:47:06 +0300
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000252A3:EE_|CH3PR12MB7594:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1f3a09b-c919-4a52-1891-08db649c2fa5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BfSfAzMPoASKlerMip8fOPLFriCPAAIezR2vgk+T31bRmXTJHlmw/VbtrNDT3NFWSBfKP91+9tJG+pR9f80IOf/KC9EnLHJblGc9uQnwrSKt081eTg8YD1W0IP1+7wnv/8ia4OeWgnA0KcfQdvsAY2I1tlTrWQdpkYUr0mSmRL8AMC/7BEdybJ951do7xKbMyK0yAc3SirFZ1RPUOpi0unxJL4fvK52/qL8ihEgtLOlAmFx0fq3otxyY1Z/W0DGHs2NO3WZ/nzJkS4x6CWFPtbmIRvrs7p+q8hq2anWWEH4xq2eMZLCOz3zZ34W28wGxRbujIyC/wuj1o3vwaRf6lEEZk0Xn22OyBvmcVHMNzndKkTOAgLXyex7FpwDu1a0f0q1eyhB+f7sMT32La+doh3qivG1ap2UElcsdss6V2O4ciRDQ+s+axnd+aacQrkB5arQPjOXZFlwXX4XnYbgJWAVmRBsyWqtix4xqeZPMxENcAHtulGiVMDOX1B8Nd3FfqzF+FfFNVezkUShq9VYKYy8KXfqv6LlVKmTo7/+oZnmxgm3HY/H/f/Bg1rJCV0E+KfURPac5s7MNhid1PMt4NL5dcu8JmNKVhtzFnVPkM4dzQmq9ie/gAFqGNaE2QoAIBcyvY1sBMWIFBbfSjCUG/nWdb3AAsYOo0XMUAe61q/ex+txr2nPWMnDGkVSrCHHS8/3O0+2xyco8dWXgPq7iE9TkTXoTj1H6d5xzHFO2vph4epJxZWzi0rgERSg9jRecSt6mdC+x7sdDcLdC1iyjOQ==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(7416002)(5660300002)(8676002)(8936002)(316002)(4326008)(41300700001)(2906002)(70206006)(70586007)(6916009)(966005)(54906003)(7696005)(6666004)(426003)(1076003)(26005)(336012)(186003)(36756003)(2616005)(83380400001)(47076005)(36860700001)(40460700003)(7636003)(356005)(478600001)(82310400005)(82740400003)(40480700001)(86362001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2023 01:36:57.8831
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1f3a09b-c919-4a52-1891-08db649c2fa5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF000252A3.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7594
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/3] drm/msm/dp: Clean up pdev/dev duplication in dp_power
+Content-Language: en-GB
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+References: <20230515030256.300104-1-quic_bjorande@quicinc.com>
+ <20230515030256.300104-3-quic_bjorande@quicinc.com>
+ <d7d27051-2853-c979-b965-3cad47f2b693@linaro.org>
+ <euxiqfx3q5cs3z2unai67w3h33y225whstauqezwbcx4pcqegl@jct5c7crcet7>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <euxiqfx3q5cs3z2unai67w3h33y225whstauqezwbcx4pcqegl@jct5c7crcet7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per a discussion with Muhammad Usama Anjum [1], the following is how
-one is supposed to build selftests:
+On 21/05/2023 06:53, Bjorn Andersson wrote:
+> On Sat, May 20, 2023 at 04:26:59AM +0300, Dmitry Baryshkov wrote:
+>> On 15/05/2023 06:02, Bjorn Andersson wrote:
+>>> The dp_power module keeps track of both the DP controller's struct
+>>> platform_device and struct device - with the prior pulled out of the
+>>> dp_parser module.
+>>>
+>>> Clean up the duplication by dropping the platform_device reference and
+>>> just track the passed struct device.
+>>>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>>>    drivers/gpu/drm/msm/dp/dp_power.c | 16 +++++++---------
+>>>    1 file changed, 7 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
+>>> index 031d2eefef07..9be645f91211 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_power.c
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_power.c
+>>> @@ -14,7 +14,6 @@
+>>>    struct dp_power_private {
+>>>    	struct dp_parser *parser;
+>>> -	struct platform_device *pdev;
+>>>    	struct device *dev;
+>>>    	struct drm_device *drm_dev;
+>>>    	struct clk *link_clk_src;
+>>> @@ -28,7 +27,7 @@ static int dp_power_clk_init(struct dp_power_private *power)
+>>>    {
+>>>    	int rc = 0;
+>>>    	struct dss_module_power *core, *ctrl, *stream;
+>>> -	struct device *dev = &power->pdev->dev;
+>>> +	struct device *dev = power->dev;
+>>>    	core = &power->parser->mp[DP_CORE_PM];
+>>>    	ctrl = &power->parser->mp[DP_CTRL_PM];
+>>> @@ -153,7 +152,7 @@ int dp_power_client_init(struct dp_power *dp_power)
+>>>    	power = container_of(dp_power, struct dp_power_private, dp_power);
+>>> -	pm_runtime_enable(&power->pdev->dev);
+>>> +	pm_runtime_enable(power->dev);
+>>>    	return dp_power_clk_init(power);
+>>>    }
+>>> @@ -164,7 +163,7 @@ void dp_power_client_deinit(struct dp_power *dp_power)
+>>>    	power = container_of(dp_power, struct dp_power_private, dp_power);
+>>> -	pm_runtime_disable(&power->pdev->dev);
+>>> +	pm_runtime_disable(power->dev);
+>>>    }
+>>>    int dp_power_init(struct dp_power *dp_power, bool flip)
+>>> @@ -174,11 +173,11 @@ int dp_power_init(struct dp_power *dp_power, bool flip)
+>>>    	power = container_of(dp_power, struct dp_power_private, dp_power);
+>>> -	pm_runtime_get_sync(&power->pdev->dev);
+>>> +	pm_runtime_get_sync(power->dev);
+>>>    	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
+>>>    	if (rc)
+>>> -		pm_runtime_put_sync(&power->pdev->dev);
+>>> +		pm_runtime_put_sync(power->dev);
+>>>    	return rc;
+>>>    }
+>>> @@ -190,7 +189,7 @@ int dp_power_deinit(struct dp_power *dp_power)
+>>>    	power = container_of(dp_power, struct dp_power_private, dp_power);
+>>>    	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
+>>> -	pm_runtime_put_sync(&power->pdev->dev);
+>>> +	pm_runtime_put_sync(power->dev);
+>>>    	return 0;
+>>>    }
+>>> @@ -199,12 +198,11 @@ struct dp_power *dp_power_get(struct device *dev, struct dp_parser *parser)
+>>
+>> Technically we don't even need to pass struct device here, we can get it
+>> from parser->pdev->dev.
+>>
+> 
+> Right, but afaict dp_init_sub_modules() passes struct device * as first
+> parameter to all the "module" initializers. So it feels reasonable to
+> keep it, for now, for symmetry.
+> 
+> What do you think?
 
-    make headers && make -C tools/testing/selftests/mm
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Change the selftest build system's lib.mk to fail out with a helpful
-message if that prerequisite "make headers" has not been done yet.
-
-[1] https://lore.kernel.org/all/bf910fa5-0c96-3707-cce4-5bcc656b6274@collabora.com/
-
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/lib.mk | 36 +++++++++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 05400462c779..b8ea03b9a015 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -44,10 +44,22 @@ endif
- selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
- top_srcdir = $(selfdir)/../../..
- 
--ifeq ($(KHDR_INCLUDES),)
--KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
-+ifneq ($(KBUILD_OUTPUT),)
-+  # Make's built-in functions such as $(abspath ...), $(realpath ...) cannot
-+  # expand a shell special character '~'. We use a somewhat tedious way here.
-+  abs_objtree := $(shell cd $(top_srcdir) && mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) && pwd)
-+  $(if $(abs_objtree),, \
-+    $(error failed to create output directory "$(KBUILD_OUTPUT)"))
-+  # $(realpath ...) resolves symlinks
-+  abs_objtree := $(realpath $(abs_objtree))
-+  KHDR_DIR := ${abs_objtree}/usr/include
-+else
-+  abs_srctree := $(shell cd $(top_srcdir) && pwd)
-+  KHDR_DIR := ${abs_srctree}/usr/include
- endif
- 
-+KHDR_INCLUDES := -isystem $(KHDR_DIR)
-+
- # The following are built by lib.mk common compile rules.
- # TEST_CUSTOM_PROGS should be used by tests that require
- # custom build rule and prevent common build rule use.
-@@ -58,7 +70,25 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
- TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
- TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
- 
--all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
-+all: kernel_header_files $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) \
-+     $(TEST_GEN_FILES)
-+
-+kernel_header_files:
-+	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
-+	if [ $$? -ne 0 ]; then                                                 \
-+            RED='\033[1;31m';                                                  \
-+            NOCOLOR='\033[0m';                                                 \
-+            echo;                                                              \
-+            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
-+            echo "Please run this and try again:";                             \
-+            echo;                                                              \
-+            echo "    cd $(top_srcdir)";                                       \
-+            echo "    make headers";                                           \
-+            echo;                                                              \
-+	    exit 1; \
-+	fi
-+
-+.PHONY: kernel_header_files
- 
- define RUN_TESTS
- 	BASE_DIR="$(selfdir)";			\
 -- 
-2.40.1
+With best wishes
+Dmitry
 
