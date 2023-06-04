@@ -2,145 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1D3721773
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2FE721777
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjFDNeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S232145AbjFDNfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 09:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjFDNeI (ORCPT
+        with ESMTP id S229578AbjFDNfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:34:08 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9100ADA;
-        Sun,  4 Jun 2023 06:34:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685885608; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=DPnm3klMFsV5I+wpRudckd2hAgFIn6ljkvX/NMTxREfdp5cxEvlcc28W8zn3rqInhGaONTvdWZI+7CIVnsyn80IlY5WFjxzEh3vgwIQtQGguGyggQU4dYfAQ6HAQs+yPV2oXw6auRPNe0E0sK6/weNzbadAjwOGvdPGyawby8/w=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685885608; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=BzcElPlulU+8xjoOMrgsQgOCoANsPHLfjay0Dt8SHEY=; 
-        b=NKGrUXTER60OMO2P6gB4dCh5pQFottY0WzoXZwJPNbvD9nE9LpQMqtq9PSTKoOLtJhkuZB9ZxZPc3284YIAcCxrKep8YMJtZsTk4MQruLz+Xpc1ec94i/W3kyK9Dr8R1RqN164rj/mBR8DoI9DRp1jBvEfhv+VykkLmIW6h2zto=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685885608;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=BzcElPlulU+8xjoOMrgsQgOCoANsPHLfjay0Dt8SHEY=;
-        b=fndRkYd6lUAGZrs3zb0Cco21VEpzO/i+OsXd3S2j6P+YDuEBxRJ2zHnt5sMGQsVK
-        CwSC66PgCJ/1vExUMGWTL6wq+Jf7TkApctmM0ObIoLgO43bmXX27udCLcfpiwjPdci6
-        QUMuEPLlf7ssYtCX6X24XzpPpLGHe+74VPq5m8VQ=
-Received: from [192.168.99.249] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 1685885607262824.205537190085; Sun, 4 Jun 2023 06:33:27 -0700 (PDT)
-Message-ID: <9ce13208-a20d-44ef-8b47-456801c075a1@arinc9.com>
-Date:   Sun, 4 Jun 2023 16:33:17 +0300
+        Sun, 4 Jun 2023 09:35:13 -0400
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ACA8DA;
+        Sun,  4 Jun 2023 06:35:12 -0700 (PDT)
+Received: from [192.168.20.2] (unknown [77.239.252.99])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 9FB2D1407E3;
+        Sun,  4 Jun 2023 13:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1685885711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hWSdLvdNVWuD5AVS9UvtS8NdUTlSKL3owLdgzwv6oRQ=;
+        b=XzHiyYY8t9XMYJATI9brPQhkzMKLrRnM67HCzUAb9CMZ9qsod9uCiBLufJ1oDGM29ORz/I
+        C4n2TqYDRsxR+zemBOBC0l8UWorC42CQEOGFqmuqpVjU8MwHwW62ERD7ESLinn53y+GCgo
+        KUASu+xuJBy/G6iiLMpW3sl2EDA+lLc=
+Message-ID: <06cd3bc1-ce97-3b62-c5f1-98b22c8c24b0@postmarketos.org>
+Date:   Sun, 4 Jun 2023 16:35:10 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH net-next 25/30] net: dsa: mt7530: properly set
- MT7531_CPU_PMAP
+Subject: Re: [PATCH 1/3] dt-bindings: remoteproc: qcom,msm8996-mss-pil: Add
+ SDM660 compatible
 Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-26-arinc.unal@arinc9.com>
- <20230522121532.86610-26-arinc.unal@arinc9.com>
- <20230526155124.sps74wayui6bydao@skbuf>
- <9423a818-f9c0-d867-7f7d-27f05e1536b9@arinc9.com>
- <20230604130808.3lxuz5ezsouhku57@skbuf>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230604130808.3lxuz5ezsouhku57@skbuf>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230604061421.3787649-1-alexeymin@postmarketos.org>
+ <05658f98-ddc1-702b-ea4b-4ea95d0b3313@linaro.org>
+From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
+In-Reply-To: <05658f98-ddc1-702b-ea4b-4ea95d0b3313@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.06.2023 16:08, Vladimir Oltean wrote:
-> On Sun, Jun 04, 2023 at 11:21:48AM +0300, Arınç ÜNAL wrote:
->>> Stylistically, the existence of an indirect call to priv->info->cpu_port_config()
->>> per switch family is a bit dissonant with an explicit check for device id later
->>> in the same function.
->>
->> mt753x_cpu_port_enable() is not being called from priv->info->cpu_port_config()
->> though.
+On 04.06.2023 12:11, Krzysztof Kozlowski wrote:>
+> You also need to restrict/constrain power domains and resets.
 > 
-> Quite the other way around. I'm saying that mt753x_cpu_port_enable(),
-> the function whose logic you're changing, already has a mechanism to
-> execute code specific to one switch family.
-
-Ah, makes sense.
-
+> Best regards,
+> Krzysztof
 > 
->> I'm not sure how I would do this without the device ID check here.
-> 
-> Hmm, by defining a new mt7530_cpu_port_config() procedure for ID_MT7621
-> and ID_MT7530?
-> 
-> Although in a different thread we are perhaps challenging the idea that
-> what is currently in priv->info->cpu_port_config() is useful - at least
-> half of it are manual invocations of phylink methods which are possibly
-> not needed. If after the removal of those, it no longer makes sense to
-> have priv->info->cpu_port_config() at all, then I'm not saying that the
-> explicit check for device id here doesn't make sense. Just that it's not
-> in harmony with what currently exists 3 lines above.
 
-Regardless of the outcome of that conversation, I would like to avoid 
-structural changes like this since this patch will go to net.
+If I understand correctly, power domains and resets should be already 
+restricted together with msm8996+msm8998 by "else" branch [1]?
+Am I missing something?
 
-> 
->>>> -#define  MT7531_CPU_PMAP_MASK		GENMASK(7, 0)
->>>> +#define  MT7531_CPU_PMAP(x)		((x) & 0xff)
->>>
->>> You can leave this as ((x) & GENMASK(7, 0))
->>
->> Now that I've read Russell's comment on the previous patch, the below would
->> be even better?
->>
->> MT7531_CPU_PMAP(x)		FIELD_PREP(MT7531_CPU_PMAP_MASK, x)
->>
->>>
->>>> +#define  MT7531_CPU_PMAP_MASK		MT7531_CPU_PMAP(~0)
->>>
->>> There's no other user of MT7531_CPU_PMAP_MASK, you can remove this.
->>
->> Should I do above or remove this?
-> 
-> No specific preference. If you want to make this driver start using
-> FIELD_PREP() then go ahead.
-
-Will do.
-
-Arınç
+[1] 
+https://elixir.bootlin.com/linux/v6.4-rc4/source/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml#L311
+-- 
+Regards,
+Alexey Minnekhanov
