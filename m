@@ -2,127 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51759721836
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9996672183C
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFDPen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 11:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S231479AbjFDPmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 11:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjFDPel (ORCPT
+        with ESMTP id S230403AbjFDPmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 11:34:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FFACD;
-        Sun,  4 Jun 2023 08:34:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9584760B75;
-        Sun,  4 Jun 2023 15:34:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76917C433D2;
-        Sun,  4 Jun 2023 15:34:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685892879;
-        bh=Q2x+B61PRDU4ePo1k8Ni2aqUQ+O036qqTKi2Y9A/u1s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dRKGyRUZc/319m3B4YvFys4WpvGN849SulNSJTNhi058tPA0qSLak9puvoe1ObxB7
-         P4XM2CeG5VgSW9QkAAcYShVpr7bY9lr8dcWfG5pQLro6ADjhCsg+bctqEvVw515MY3
-         MEoGaObsL+9KRVYtXKHImXTfdDFbWiW2jzL+JB5Z2Cauws1wwT8q58N6NSiGEHJ885
-         MSCNBIJwzaJchmTGwEdHXSfFt4zMREUPrG+NKDBZHa3hEfXVMy8yCv/ZNSorIa/MQ/
-         eytlJUERhAd2pV+K57qjkmCaEGLMzcI6A74FelbUJtmkKRd/V11LzGi+Y9zLto1RXe
-         WJAOI4mXVZM8g==
-Date:   Sun, 4 Jun 2023 08:34:34 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dm-devel@redhat.com, elliott@hpe.com, gmazyland@gmail.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, tglx@linutronix.de,
-        bp@alien8.de, mingo@kernel.org, x86@kernel.org,
-        herbert@gondor.apana.org.au, ardb@kernel.org,
-        dan.j.williams@intel.com, bernie.keany@intel.com,
-        charishma1.gairuboyina@intel.com,
-        lalithambika.krishnakumar@intel.com, nhuck@google.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v8 10/12] crypto: x86/aesni - Use the proper data type in
- struct aesni_xts_ctx
-Message-ID: <20230604153434.GA1212@quark.localdomain>
-References: <20230524165717.14062-1-chang.seok.bae@intel.com>
- <20230603152227.12335-1-chang.seok.bae@intel.com>
- <20230603152227.12335-11-chang.seok.bae@intel.com>
+        Sun, 4 Jun 2023 11:42:37 -0400
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24D5D3
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:42:36 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 5psGqNLaQt9zc5psGqXS2j; Sun, 04 Jun 2023 17:42:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685893355;
+        bh=KSBCYH83xSlnxT9AqAr79v1PKm1DqpwXR0ggzhv2kFU=;
+        h=From:To:Cc:Subject:Date;
+        b=ZnL1ytK8458koQso49BCpWyOcEi755OnD8/aYZ70UWHbQUaXQ+XkwqFZLGG5+hG3Z
+         yaXTsYtK78QlhCXUpeznPk5AA2jU+eMpncJPkdKMUeAq8OcE53BPbyQ+T7f6CiQ7YP
+         zaQ6Wn66OPz1XYNoYQZH1LfM5PZRmm/Xg+BUaWjIxN9fHA97i0qZD7zpcpg7E+8+LX
+         UULF2+Wtpp9xj9ZFJyAa0pMqitEleMxEPKAUnIVNlsEpfr3PmbaXLiDiLnHrLjkNkk
+         Z6TIBh6/JrK674jq06KhMIcKUqxWNsn5aFWtT93SOOx+NN4lk8Ao7QlFbeKf9msp5Y
+         m4SnGCinLe35A==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 04 Jun 2023 17:42:35 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Helge Deller <deller@gmx.de>, Imre Deak <imre.deak@nokia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Krzysztof Helt <krzysztof.h1@wp.pl>,
+        Juha Yrjola <juha.yrjola@solidboot.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fbdev@vger.kernel.org, linux-omap@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] video: fbdev: omapfb: lcd_mipid: Fix an error handling path in mipid_spi_probe()
+Date:   Sun,  4 Jun 2023 17:42:28 +0200
+Message-Id: <f17221571f619c0829db56354f2b74d22f6702a7.1685893329.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603152227.12335-11-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 08:22:25AM -0700, Chang S. Bae wrote:
-> Every field in struct aesni_xts_ctx is a pointer to a byte array.
+If 'mipid_detect()' fails, we must free 'md' to avoid a memory leak.
 
-A byte array.  Not a pointer to a byte array.
+Fixes: 66d2f99d0bb5 ("omapfb: add support for MIPI-DCS compatible LCDs")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/video/fbdev/omap/lcd_mipid.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> Then, the field can be redefined as that struct type instead of the obscure
-> pointer.
+diff --git a/drivers/video/fbdev/omap/lcd_mipid.c b/drivers/video/fbdev/omap/lcd_mipid.c
+index e4a7f0b824ff..a0fc4570403b 100644
+--- a/drivers/video/fbdev/omap/lcd_mipid.c
++++ b/drivers/video/fbdev/omap/lcd_mipid.c
+@@ -571,11 +571,15 @@ static int mipid_spi_probe(struct spi_device *spi)
+ 
+ 	r = mipid_detect(md);
+ 	if (r < 0)
+-		return r;
++		goto free_md;
+ 
+ 	omapfb_register_panel(&md->panel);
+ 
+ 	return 0;
++
++free_md:
++	kfree(md);
++	return r;
+ }
+ 
+ static void mipid_spi_remove(struct spi_device *spi)
+-- 
+2.34.1
 
-There's no pointer.
-
->  static inline struct
->  aesni_rfc4106_gcm_ctx *aesni_rfc4106_gcm_ctx_get(struct crypto_aead *tfm)
->  {
-> -	unsigned long align = AESNI_ALIGN;
-> -
-> -	if (align <= crypto_tfm_ctx_alignment())
-> -		align = 1;
-> -	return PTR_ALIGN(crypto_aead_ctx(tfm), align);
-> +	return (struct aesni_rfc4106_gcm_ctx *)aes_align_addr(crypto_aead_ctx(tfm));
->  }
-
-Explicit casts from 'void *' are unnecessary.
-
->  static int xts_aesni_setkey(struct crypto_skcipher *tfm, const u8 *key,
->  			    unsigned int keylen)
->  {
-> -	struct aesni_xts_ctx *ctx = crypto_skcipher_ctx(tfm);
-> +	struct aesni_xts_ctx *ctx = aes_xts_ctx(tfm);
->  	int err;
->  
->  	err = xts_verify_key(tfm, key, keylen);
-> @@ -893,20 +892,20 @@ static int xts_aesni_setkey(struct crypto_skcipher *tfm, const u8 *key,
->  	keylen /= 2;
->  
->  	/* first half of xts-key is for crypt */
-> -	err = aes_set_key_common(crypto_skcipher_tfm(tfm), ctx->raw_crypt_ctx,
-> +	err = aes_set_key_common(crypto_skcipher_tfm(tfm), &ctx->crypt_ctx,
->  				 key, keylen);
->  	if (err)
->  		return err;
->  
->  	/* second half of xts-key is for tweak */
-> -	return aes_set_key_common(crypto_skcipher_tfm(tfm), ctx->raw_tweak_ctx,
-> +	return aes_set_key_common(crypto_skcipher_tfm(tfm), &ctx->tweak_ctx,
->  				  key + keylen, keylen);
->  }
-
-To re-iterate what I said on v6, the runtime alignment to a 16-byte boundary
-should happen when translating the raw crypto_skcipher_ctx() into the pointer to
-the aes_xts_ctx.  It should not happen when accessing each individual field in
-the aes_xts_ctx.
-
-Yet, this code is still doing runtime alignment when accessing each individual
-field, as the second argument to aes_set_key_common() is 'void *raw_ctx' which
-aes_set_key_common() runtime-aligns to crypto_aes_ctx.
-
-We should keep everything consistent, which means making aes_set_key_common()
-take a pointer to crypto_aes_ctx and not do the runtime alignment.
-
-- Eric
