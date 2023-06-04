@@ -2,145 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8EF72182C
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E2B72185D
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjFDPYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 11:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S231828AbjFDP6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 11:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDPYf (ORCPT
+        with ESMTP id S229904AbjFDP6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 11:24:35 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63349CE;
-        Sun,  4 Jun 2023 08:24:34 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 4b94dd63f174b4c0; Sun, 4 Jun 2023 17:24:32 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 69A92961C82;
-        Sun,  4 Jun 2023 17:24:32 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: [RFT][PATCH v1 3/4] ACPI: tiny-power-button: Eliminate the driver notify callback
-Date:   Sun, 04 Jun 2023 17:22:48 +0200
-Message-ID: <5392458.Sb9uPGUboI@kreacher>
-In-Reply-To: <1847933.atdPhlSkOF@kreacher>
-References: <1847933.atdPhlSkOF@kreacher>
+        Sun, 4 Jun 2023 11:58:23 -0400
+X-Greylist: delayed 1196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Jun 2023 08:58:21 PDT
+Received: from mail.distrito09d21.saludzona5.gob.ec (mail.distrito09d21.saludzona5.gob.ec [190.214.49.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE89BB
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:58:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id 9BB631312669;
+        Sun,  4 Jun 2023 10:23:22 -0500 (-05)
+Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
+        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id BQ9QMAdlKVoT; Sun,  4 Jun 2023 10:23:22 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTP id 4325A11789E7;
+        Sun,  4 Jun 2023 10:23:22 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.distrito09d21.saludzona5.gob.ec 4325A11789E7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=distrito09d21.saludzona5.gob.ec;
+        s=B3F564AE-DCCF-11EA-A8CE-DCDEBBF83439; t=1685892202;
+        bh=kdJOvUQPFLxqqxPcL+VS3LC/fqZKUkycd0eSH82FyfI=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=YxLEgsvpuifK2FLrT1ouzmb/IqQyZlA2JT2u63NTDe0ZATfpJH52wAtz5WpVVJN6g
+         MK6XkcZ2HWyT+mtvMK2ZwY68UE8LJbJCm87XI5fqWmfNyOKBy7bwKktD6ih0hBO+j5
+         spFys5mBSTDA6WGrrCXlrlETIR0yIq8dDN8FH1sWiwyCccdFvmNtW7ct6cRUshxd7m
+         JzzX0cOGW09mtyO29HEN5IumyLG2KvYGjVlbqUZ5P5CjFCcGGR+Malt9RcBSEFNRZ9
+         W2T3UEUbQFv98tLZ4e/IFGTqjr+kLez+/hHv1KUzEGPv5fgEcHvoWxeSgZiWRAv5Nf
+         X3IskB74tbAUg==
+X-Virus-Scanned: amavisd-new at distrito09d21.saludzona5.gob.ec
+Received: from mail.distrito09d21.saludzona5.gob.ec ([127.0.0.1])
+        by localhost (mail.distrito09d21.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6RsFhwdcrFYP; Sun,  4 Jun 2023 10:23:22 -0500 (-05)
+Received: from [156.96.56.93] (unknown [156.96.56.93])
+        by mail.distrito09d21.saludzona5.gob.ec (Postfix) with ESMTPSA id C96FB1312669;
+        Sun,  4 Jun 2023 10:23:19 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeljedgkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihgthhgrlhdrfihilhgtiiihnhhskhhisehinhhtvghlrdgtohhmpdhrtghpthhtohepjhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrghdprhgtphht
- thhopehguhhohhgrnhhjuhhnsehhuhgrfigvihdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?QVRFTkNJw5NO?=
+To:     Recipients <nelly.troya@distrito09d21.saludzona5.gob.ec>
+From:   "ZIMBRA WEBMAIL ADMIN" <nelly.troya@distrito09d21.saludzona5.gob.ec>
+Date:   Sun, 04 Jun 2023 08:23:01 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230604152319.C96FB1312669@mail.distrito09d21.saludzona5.gob.ec>
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ATENCI=D3N:
 
-Rework the ACPI tiny-power-button driver to install a notify handler or
-a fixed event handler for the device it binds to by itself and drop its
-notify callback.
+Quiero notificarle que si no env=EDa su contrase=F1a y cualquier otra infor=
+maci=F3n que solicitamos para la actualizaci=F3n posterior de su cuenta, de=
+sactivaremos su cuenta de correo electr=F3nico con efecto inmediato, as=ED =
+que env=EDela ahora.
 
-This will allow acpi_device_install_notify_handler() and
-acpi_device_remove_notify_handler() to be simplified going forward.
+1) Contrase=F1a: =
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/tiny-power-button.c |   49 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 41 insertions(+), 8 deletions(-)
-
-Index: linux-pm/drivers/acpi/tiny-power-button.c
-===================================================================
---- linux-pm.orig/drivers/acpi/tiny-power-button.c
-+++ linux-pm/drivers/acpi/tiny-power-button.c
-@@ -19,18 +19,52 @@ static const struct acpi_device_id tiny_
- };
- MODULE_DEVICE_TABLE(acpi, tiny_power_button_device_ids);
- 
--static int acpi_noop_add(struct acpi_device *device)
-+static void acpi_tiny_power_button_notify(acpi_handle handle, u32 event, void *data)
- {
--	return 0;
-+	kill_cad_pid(power_signal, 1);
- }
- 
--static void acpi_noop_remove(struct acpi_device *device)
-+static void acpi_tiny_power_button_notify_run(void *not_used)
- {
-+	acpi_tiny_power_button_notify(NULL, ACPI_FIXED_HARDWARE_EVENT, NULL);
- }
- 
--static void acpi_tiny_power_button_notify(struct acpi_device *device, u32 event)
-+static u32 acpi_tiny_power_button_event(void *not_used)
- {
--	kill_cad_pid(power_signal, 1);
-+	acpi_os_execute(OSL_NOTIFY_HANDLER, acpi_tiny_power_button_notify_run, NULL);
-+	return ACPI_INTERRUPT_HANDLED;
-+}
-+
-+static int acpi_tiny_power_button_add(struct acpi_device *device)
-+{
-+	acpi_status status;
-+
-+	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-+		status = acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
-+							  acpi_tiny_power_button_event,
-+							  NULL);
-+	} else {
-+		status = acpi_install_notify_handler(device->handle,
-+						     ACPI_DEVICE_NOTIFY,
-+						     acpi_tiny_power_button_notify,
-+						     NULL);
-+	}
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+
-+static void acpi_tiny_power_button_remove(struct acpi_device *device)
-+{
-+	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-+		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
-+						acpi_tiny_power_button_event);
-+	} else {
-+		acpi_remove_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
-+					   acpi_tiny_power_button_notify);
-+	}
-+	acpi_os_wait_events_complete();
- }
- 
- static struct acpi_driver acpi_tiny_power_button_driver = {
-@@ -38,9 +72,8 @@ static struct acpi_driver acpi_tiny_powe
- 	.class = "tiny-power-button",
- 	.ids = tiny_power_button_device_ids,
- 	.ops = {
--		.add = acpi_noop_add,
--		.remove = acpi_noop_remove,
--		.notify = acpi_tiny_power_button_notify,
-+		.add = acpi_tiny_power_button_add,
-+		.remove = acpi_tiny_power_button_remove,
- 	},
- };
- 
+2) Vuelva a escribir la contrase=F1a: =
 
 
-
+EQUIPO DE CORREO WEB DE ZIMBRA
