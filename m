@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF2C72154D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 09:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49027721552
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 09:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjFDHTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 03:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S230292AbjFDHXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 03:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjFDHTI (ORCPT
+        with ESMTP id S230168AbjFDHXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 03:19:08 -0400
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A18D2;
-        Sun,  4 Jun 2023 00:19:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685863111; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Du25Szoeq7xfXqGzr1DFoJ2H6FK1MGnor4r1Es1MjuKbi/OTLokEFgD9W8YMF8dDhi2/haKqJBQwx2Klwg9E2BcZzkrq1MMdaUPR3tMyRsZ0i7/2jBU4tZ4ApncIU97x2LB3n/tVsy3ByEqgQqbidck0MKZtElHu69xauBwRnwU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685863111; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=kxiz5zm70BezbuNN8v6JP8irFq1B+lspoXHQDQtRgY8=; 
-        b=IZiqA7xnNyrietBNPyKPoWFW5JgzzXWn+ffU/xeZ4iwTU0Er7pX4JSF5sommXubs/yARDCDyBx0tc3TYIUVHS5KJX3jFK4KWc+Emez4OF+lsxNB4fZdztXbE3uxvTlbGleKGe8+vtGn3Ac3LIQh1JQemQ8lutcmALSqDXlc7Xr0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685863111;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=kxiz5zm70BezbuNN8v6JP8irFq1B+lspoXHQDQtRgY8=;
-        b=WqnPFherLeb3ujWwy+TWDONE0esDoCe9Hni1i8msdr7WjxD3Rld6yT243QyesWW8
-        FSsar+Kqm3hVIkvyFZ9VvLJXVdMsavztoFI1xafRplkHthXrzTms8qVVNNRlQc+y5eb
-        i7ot0nsqDNtRoxUbjYPJY0NPDUXOaN4JjhBd/QgQ=
-Received: from [192.168.83.218] (62.74.60.162 [62.74.60.162]) by mx.zohomail.com
-        with SMTPS id 1685863109616710.6883935588407; Sun, 4 Jun 2023 00:18:29 -0700 (PDT)
-Message-ID: <4d2bd4fb-923a-96c9-395c-5e2127695933@arinc9.com>
-Date:   Sun, 4 Jun 2023 10:18:20 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next 19/30] net: dsa: mt7530: set interrupt register
- only for MT7530
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-20-arinc.unal@arinc9.com>
- <20230526132508.fxgljrpozuuzelal@skbuf>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230526132508.fxgljrpozuuzelal@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 4 Jun 2023 03:23:30 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE8CDF;
+        Sun,  4 Jun 2023 00:23:29 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33aa60f4094so12024045ab.1;
+        Sun, 04 Jun 2023 00:23:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685863408; x=1688455408;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zgPKCKVWGaVP4PRgO+7v9O84nNu7FFnZbyDG2O38/nk=;
+        b=TEeUW7+YvLKNYJN6nNn/Ch8rU4TALPH/9HH25DuQlm72ogNRmUQuV1hLdVHSjELapf
+         wpEedZnkb/jaSnCzYaymACy7PsXAVU/vEVwpqMCzkiz5NF49ZnqNVBoF/NfJZzgVqdgq
+         0Ro1vxKgmnHWRXJP32XIR3ehfEO+2heJ54Rlq3XXXvYjk325oh/vU1GsPqOaZr2/ctlt
+         2mv4QD7Y20ncoqtq05v2GDmo/zYyGo6daBBqL0jdKW1AgUiNWT4WwG0UO61BI77O/DKT
+         wgIeCCMeO5L3B6/9y9+75G2tKZcQtD8rRa9QFxJ5MDsJWKv0Bi97BHuH42CUzz2yvBGA
+         WjuQ==
+X-Gm-Message-State: AC+VfDw8PvIgkURkxD1NlU3frLBrOXRpmPg7Sq1/QMWoxbK47MDs/JNZ
+        zC1IFWqP+6G0zrX30PmB1Q==
+X-Google-Smtp-Source: ACHHUZ5mPo1CZA0UQUsgNUIwwXRnjWLAemMxRkV8hskeXDFwOSorGRHi5TrEITG+gXvs83p52nltEA==
+X-Received: by 2002:a92:2808:0:b0:331:acc9:b554 with SMTP id l8-20020a922808000000b00331acc9b554mr8701509ilf.14.1685863408372;
+        Sun, 04 Jun 2023 00:23:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id m13-20020a924b0d000000b003231580e8e2sm1529159ilg.6.2023.06.04.00.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 00:23:27 -0700 (PDT)
+Received: (nullmailer pid 3052774 invoked by uid 1000);
+        Sun, 04 Jun 2023 07:23:25 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Rudraksha Gupta <guptarud@gmail.com>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-phy@lists.infradead.org, Olof Johansson <olof@lixom.net>,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+In-Reply-To: <20230604063032.365775-3-guptarud@gmail.com>
+References: <20230604063032.365775-1-guptarud@gmail.com>
+ <20230604063032.365775-3-guptarud@gmail.com>
+Message-Id: <168586340547.3052749.2763112173580157119.robh@kernel.org>
+Subject: Re: [PATCH v3 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add
+ compatible
+Date:   Sun, 04 Jun 2023 01:23:25 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.05.2023 16:25, Vladimir Oltean wrote:
-> On Mon, May 22, 2023 at 03:15:21PM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Setting this register related to interrupts is only needed for the MT7530
->> switch. Make an exclusive check to ensure this.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> Acked-by: Daniel Golle <daniel@makrotopia.org>
->> Tested-by: Daniel Golle <daniel@makrotopia.org>
->> ---
+
+On Sun, 04 Jun 2023 02:30:19 -0400, Rudraksha Gupta wrote:
+> Adds qcom,usb-hs-phy-msm8960 compatible
 > 
-> Why does it matter? What prompted you to make this change? I guess it's
-> not needed for MT7988? Or the register is not present? Or?...
+> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
-It's not needed for the switch on the MT7988 SoC. The register is also 
-likely specific to the MT7530 switch.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Arınç
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.example.dtb: phy: resets: [[4294967295, 10], [1, 0]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.example.dtb: phy: reset-names:0: 'por' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.example.dtb: phy: reset-names: ['phy', 'por'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230604063032.365775-3-guptarud@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
