@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC6F721604
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C07721607
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjFDKYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 06:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
+        id S229997AbjFDKZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 06:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFDKYe (ORCPT
+        with ESMTP id S229522AbjFDKZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 06:24:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99B9A3;
-        Sun,  4 Jun 2023 03:24:33 -0700 (PDT)
-Received: from [IPV6:2405:201:0:21ea:e49:10dd:40c0:e842] (unknown [IPv6:2405:201:0:21ea:e49:10dd:40c0:e842])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: shreeya)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 513C56603050;
-        Sun,  4 Jun 2023 11:24:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685874272;
-        bh=G8Vk4YtafBa+Pb7sMLpiLgNRNeR4Wa7C+A6DNmqd86o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HrYJlw7MM2qYuiRvq+qE41QzDb7R6Nd4mJqho1ydq3uRjdUluf6wEkCz7LX8JAy1b
-         5a3638jRUzq37UenKgYnEHcGBe7DNv2iVZMLuRsEyfgCu8MdNbi0NZnpkBUgVnt2BA
-         /CtSkQ3Op89NP6eXIY9txFw+PHoZ+ED/4HVINlHXP+q5RIt1qfN4mJju9F2FUBulxY
-         0xrf4MGr4AcgDrTNrS6KHWG4b+UVvjgfwWyTVwSku4POZcRmTqEdNVuV+jZbGUvV71
-         MzLYebvmx+yo1rJY0BdywLnOAAYwfnCH0i9Md/I1l/0TGnE7huA9nk3sgdWQiLS9qA
-         idZRsjfelVuJA==
-Message-ID: <d9b1e05a-6b32-3033-cbc4-c87bda711e4d@collabora.com>
-Date:   Sun, 4 Jun 2023 15:54:24 +0530
+        Sun, 4 Jun 2023 06:25:24 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B11CB6
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 03:25:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149e65c218so5737135a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 03:25:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685874321; x=1688466321;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YJMkEbWSHnrMMvY5aFflCgy+a09GUp8CaxfqQLYJPe8=;
+        b=McBfv3wHyWsk0SGbQ5NzvzBcitJkpkYBCcKhIr4LcsTctO8BBHr9h/hsEhg8Fwk08r
+         jxWQO8ouTtG0WQ/67m/YleqKfdsKI8g4SmaRsT2cyy7crwB4kazGiiVxcix7QbzpMnE6
+         DK8pL2ch++6vYrfXmnJrYN/juEihCEFhmCTbkAvudj4pc324In23ZX1khGt4c3s2lbpe
+         JjT+9JehWk/oLAC+BSlGx3R48D2WhjGidNVcQkpsWiIdAo0V2GgTxD+C4eAw/JvdC54R
+         ASeBAQqc2dWC+mVcPjhJ60goUepdbj+uC/u0TWXpZrP/CxVrU0XWRvVEVcT43XLIez7i
+         CUjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685874321; x=1688466321;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJMkEbWSHnrMMvY5aFflCgy+a09GUp8CaxfqQLYJPe8=;
+        b=iFW+/uGc2F3maF1YSyx8B8p3chsOV0tV8Pck8fipfaKR+7z6VRz4KpQExZ6I1eJXaT
+         kN8RVfdCiNQqC2SaWfgn/n5u/hsi9KJWKWfIhrcxgWvHko2QRJrnU5/vJZw2Ds0ur/gx
+         FWVNR2CoK2ojXCC1ahoOer5z1u1qeH2dL/dtyWIb8Avn+QwsOBfp9ALLax796zbK15EG
+         ybbXYZQvnaVC8o1rRqzCZ0aJnz38bdACK6MAss9yhiOf6FYx61BU0D1S3ghwP5a4rwWJ
+         zX4vemfceuBv51NNvkSVENCwzb90pxIxOVEunBlbJ9VIaNAQAinkqAeQV6QUJS1o0ZZf
+         iNMw==
+X-Gm-Message-State: AC+VfDzsGUMEmrLnae2fQH++kgZ9SD1WucNKxHRfNww7wHYx7Ze+ufs7
+        XhpsHWLcihmWUdp+mhUpNW88rQ==
+X-Google-Smtp-Source: ACHHUZ6fMJ/yHO+vKOlsfo5f9HIUMEEqhsXTkY3yEn808RCHlyky7VTMAEu8r0kM8MxtmIPIP/E1Gg==
+X-Received: by 2002:aa7:d405:0:b0:514:ad09:44df with SMTP id z5-20020aa7d405000000b00514ad0944dfmr5493938edq.28.1685874321665;
+        Sun, 04 Jun 2023 03:25:21 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id w15-20020a056402070f00b00514bb73b8casm2712792edx.57.2023.06.04.03.25.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Jun 2023 03:25:21 -0700 (PDT)
+Message-ID: <6187d1a4-1667-21c5-00ba-4689caa6cac8@linaro.org>
+Date:   Sun, 4 Jun 2023 12:25:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/8] iio: adc: rockchip_saradc: Add support for RK3588
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/3] dt-bindings: reserved-memory: rmtfs: Allow guard
+ pages
 Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     lars@metafoo.de, heiko@sntech.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gustavo.padovan@collabora.com, kernel@collabora.com,
-        serge.broslavsky@collabora.com, Simon Xue <xxm@rock-chips.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        andy.shevchenko@gmail.com
-References: <20230603185340.13838-1-shreeya.patel@collabora.com>
- <20230603185340.13838-3-shreeya.patel@collabora.com>
- <ZHunAIbK7-tIvsm1@surfacebook> <20230604112043.43b1ada0@jic23-huawei>
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <20230604112043.43b1ada0@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230530233643.4044823-1-quic_bjorande@quicinc.com>
+ <20230530233643.4044823-2-quic_bjorande@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530233643.4044823-2-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 31/05/2023 01:36, Bjorn Andersson wrote:
+> On some Qualcomm platforms it's required that the rmtfs memory is not
+> placed adjacent to allocations performed by other clients. Some
+> DeviceTree authors have solved this by reserving the space around
+> the region, but this prevents such author to use rely on the OS to place
+> the region, through the use of "size" (instead of a fixed location).
+> 
+> So introduce a flag to indicate that guard pages should be carved at the
+> beginning and end of the memory region. The user shall account for the
+> two 4k blocks in the defined size.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+> 
+> Changes since v1:
+> - Drop qcom,alloc-size in favour of using reserved-memory/size
+> - Introduce explicit property to signal that guard pages should be
+>   carved out from this region (rather than always do it in the dynamic
+>   case).
+> 
+>  .../bindings/reserved-memory/qcom,rmtfs-mem.yaml           | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+> index bab982f00485..26e24e7b08cf 100644
+> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+> @@ -26,6 +26,13 @@ properties:
+>      description: >
+>        identifier of the client to use this region for buffers
+>  
+> +  qcom,use-guard-pages:
+> +    type: boolean
+> +    description: >
+> +      Indicates that the OS should ignore the first and last 4k block of the
+> +      memory region, for the purpose of ensuring that the allocation is not
+> +      adjacent to other protected regions.
 
-On 04/06/23 15:50, Jonathan Cameron wrote:
-> On Sat, 3 Jun 2023 23:48:00 +0300
-> andy.shevchenko@gmail.com wrote:
->
->> Sun, Jun 04, 2023 at 12:23:34AM +0530, Shreeya Patel kirjoitti:
->>> From: Simon Xue <xxm@rock-chips.com>
->>>
->>> Add new start and read functions to support rk3588 device.
->>> Also, add a device compatible string for the same.
->> ...
->>
->>> +/* v2 registers */
->>> +#define SARADC2_CONV_CON		0x0
->>> +#define SARADC_T_PD_SOC			0x4
->>> +#define SARADC_T_DAS_SOC		0xc
->> Can you use fixed-width values for all registers?
->>
->> 	0x000
->> 	0x004
->> 	0x00c
->>
->>> +#define SARADC2_END_INT_EN		0x104
->>> +#define SARADC2_ST_CON			0x108
->>> +#define SARADC2_STATUS			0x10c
->>> +#define SARADC2_END_INT_ST		0x110
->>> +#define SARADC2_DATA_BASE		0x120
-> I tidied this up whilst applying.
+Property name and description: do not describe the OS behavior. Describe
+the hardware or firmware. Describe the actual problem or characteristic
+which will be then interpreted by OS to do what you want. DT is not for
+instructing OS what to do.
 
-  Ah, I was just about to send a v4 with the change. Thank you for 
-making the changes.
+Best regards,
+Krzysztof
 
-
-Regards,
-Shreeya Patel
-
-
-> Jonathan
