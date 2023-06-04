@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6247215E5
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 11:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88DF7215EA
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 11:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjFDJuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 05:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S230379AbjFDJxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 05:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjFDJuK (ORCPT
+        with ESMTP id S229522AbjFDJxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 05:50:10 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60A7D3;
-        Sun,  4 Jun 2023 02:50:09 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 40D975C00D1;
-        Sun,  4 Jun 2023 05:50:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 04 Jun 2023 05:50:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1685872209; x=1685958609; bh=jB
-        pSfKUu6g0tTh7kun5Pd9yKmiW3zyzac/8DZ01kT8g=; b=oJbdWX55eMSWq+02KI
-        fRuMpx1qCk5Z6EmEHNTxJ/9fY1O9EwSkMTJ0U621i8SO5m8hNbXBly2ZdmkI9oBw
-        MrW+rXFBtPKWQsh+eubuTktF8EiAmSymTwSedENUv5rb59onYz30bOXY9y8bbNcx
-        CNCFb5C7bONp4HBlsCF15ahCMTtBrvzger2KL7zbzi0/P4dVidtvdZNnXDMeve38
-        iha011cuAYIbyFmEzRV0l5GU562mvKRa4u8+ANyRiruCM4SZmDaYfgeNcsKUoZBw
-        wPjSvwinNQm0nLFygzOIAykjVgQ3QwDEV9LLMhqb6lmTyP8AGVr26cF0h3MaGEUE
-        pQ+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685872209; x=1685958609; bh=jBpSfKUu6g0tT
-        h7kun5Pd9yKmiW3zyzac/8DZ01kT8g=; b=ZJ7ZqSZvdfTNq4EwCH4RGXcIV6jHU
-        YaAlsG9hRyLfDhtcj1IJZ7irMJmASH/Gp6NrcZWAGwaRDgeZOWWJXEmzurL6YNC6
-        rSvoHQTxBv+UoQeWX00gR8CoGjM8F/MYP2FS+6m3DkzfTl+3ngVQKecAnedQgxJG
-        qWUQFvcjO/0pwY773+89etlzQweH0IHZ+oIh14pBeg/keoKvGCp4Kx7tpW1HguHK
-        aFHkoGuIka5CUnmTjLJH/nxm2wPH6DUb3sxydGo0TDobkxNZQAMpyQ2P/JMp/KDn
-        ofGvXOUeeV5detfqylU6uuIMpiYWEYi+iwqA4IB0uuMP/s6pBChaMMcww==
-X-ME-Sender: <xms:UF58ZFDkXvUfT_kpYfCql7e_tG7AIFp6eOT2Mpn6h3_rzq_qGK-9Ig>
-    <xme:UF58ZDgyPdwZtSZr0A8wGMMAQen99qWzOZcQ0HIfm3IqrxBnS_XU4IG1lomrhIqPQ
-    ACoktosoZJBnBBtpiI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeljedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:UF58ZAkKLZTntqZL03bWn0CngTJJhscpwa1yGJ2ulsVNzq2m5LuPuA>
-    <xmx:UF58ZPzHYOHAr8cyqxDbK8D65-kYtraE7NvYfVxaeq_NsD7AYn-kCA>
-    <xmx:UF58ZKRSdQooc9lvDs9hQksGNU0Z_hi0UWdWdFpMGYU1DZENuFlpww>
-    <xmx:UV58ZD2G9wXgl_EejQe5nWqgbsh89fAMALZCeXwz8EQ3_O_rpVB7Kw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AC67BB60086; Sun,  4 Jun 2023 05:50:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
-In-Reply-To: <20230603-sanded-blunderer-73cdd7c290c1@spud>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-16-varshini.rajendran@microchip.com>
- <20230603-fervor-kilowatt-662c84b94853@spud>
- <20230603-sanded-blunderer-73cdd7c290c1@spud>
-Date:   Sun, 04 Jun 2023 11:49:48 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Conor Dooley" <conor@kernel.org>,
-        "Varshini Rajendran" <varshini.rajendran@microchip.com>
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>,
-        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com
-Subject: Re: [PATCH 15/21] dt-bindings: irqchip/atmel-aic5: Add support for sam9x7 aic
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 4 Jun 2023 05:53:12 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF99EDB;
+        Sun,  4 Jun 2023 02:53:11 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso5047381a12.0;
+        Sun, 04 Jun 2023 02:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685872390; x=1688464390;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iB2FRr+iV4uFJJk72mDgzFzP+Ys3k17GDqpjb9bxqMs=;
+        b=nUd4cQ8v6H3eScmxHQqV++PApfZ3+7ucw1+5vtk9QnrwE/h3oDbr631cGvfsX6tE8X
+         e5oAanHdF0IHE70lbzXe/qWD8hz5I5M5AJBULo10fDGyrXbBCkJipu9QlKQ2+BzdWmhU
+         cS7vvRuk0Amv1fxl3AD5mIt4H9VewDstKSGg4MuHb4Ni7Oovn2EtrPNudIwdMvPQ3XfK
+         rCoewAV02ufHx9id+DWo6oNGlyabQ1TTdPgprqq4mjKQo43sADuyoNi3P3gXQP112S+F
+         ARBmyUwsfobuUKW+sIJ2wfG6a/GazprJy615u2ek4tXaTxh3zIE9SbdBK1anq2KLqzo1
+         qLiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685872390; x=1688464390;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iB2FRr+iV4uFJJk72mDgzFzP+Ys3k17GDqpjb9bxqMs=;
+        b=ihLT/93XVtxI3XoGFPRgCswTzvDaYHIKFdybF1LxTzcBJrqa1QAdzwsJM3uyMi3UaH
+         JXT//YSO7g2XlM9BUk2saataNWl/apD1A1TqQHq+nj4vVQIXdIUcPZY8hYfniu8TRRaJ
+         4ClZdn6pV7jtFeCMzvOjJ5bw4ZSMX3vgyFUZcjGV2RBhCdBc3Gn013xv0zsGj7IpLxes
+         kQNwhgGd9yU36yUJ0WqsBXO9h/AZp/JmKw9k8Dnf47kU+0v9/pYxrX9pR1/HHPvQ9S0j
+         lTv2VvJ4Z2qJolrENcbeTPwigRBYInwBdbfacBXO/SFqfPjIcIuqnjsKXA4lraaSR1nC
+         h53w==
+X-Gm-Message-State: AC+VfDw+NMDi5aJgT9Cqw6A/L09SOhtMoHU+PXzC55d8R9Cm8OxlHSc7
+        eEAiu5G6neo6ssxROGdiLo/w/RAOn2PPpHz7JmI=
+X-Google-Smtp-Source: ACHHUZ58FUBQiGi5Ds9JmJwAS2B+xK7MFRStELAVOENnrCmJLi/I/KeBEk7KpaNp9+RPVda9PzvVF4wSqOMcfksQGlQ=
+X-Received: by 2002:aa7:d657:0:b0:510:487a:ca3d with SMTP id
+ v23-20020aa7d657000000b00510487aca3dmr5563421edr.23.1685872390104; Sun, 04
+ Jun 2023 02:53:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230603143543.855276091@linuxfoundation.org> <ZHxNSQkgrZsyV6OT@debian>
+In-Reply-To: <ZHxNSQkgrZsyV6OT@debian>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Sun, 4 Jun 2023 10:52:34 +0100
+Message-ID: <CADVatmOVpK4PvcEB89PU7qCXhGxqJ148AtAkyS6JoKv4QA6XDw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/35] 5.15.115-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 3, 2023, at 23:23, Conor Dooley wrote:
-> On Sat, Jun 03, 2023 at 10:19:50PM +0100, Conor Dooley wrote:
->> Hey Varshini,
->> 
->> On Sun, Jun 04, 2023 at 01:32:37AM +0530, Varshini Rajendran wrote:
->> > Document the support added for the Advanced interrupt controller(AIC)
->> > chip in the sam9x7 soc family
->> 
->> Please do not add new family based compatibles, but rather use per-soc
->> compatibles instead.
+On Sun, 4 Jun 2023 at 09:37, Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
 >
-> These things leave me penally confused. Afaiu, sam9x60 is a particular
-> SoC. sam9x7 is actually a family, containing sam9x70, sam9x72 and
-> sam9x75. It would appear to me that each should have its own compatible,
-> no?
+> Hi Greg,
+>
+> On Sat, Jun 03, 2023 at 04:37:18PM +0200, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.115 release.
+> > There are 35 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+>
+> Build test (gcc version 12.2.1 20230511):
+> mips: 62 configs -> no failure
+> arm: 99 configs -> no failure
+> arm64: 3 configs -> no failure
+> x86_64: 4 configs -> no failure
+> alpha allmodconfig -> no failure
+> csky allmodconfig -> no failure
+> powerpc allmodconfig -> no failure
+> riscv allmodconfig -> no failure
+> s390 allmodconfig -> no failure
+> xtensa allmodconfig -> no failure
+>
+> Boot test:
+> x86_64: Booted on my test laptop. No regression.
+> x86_64: Booted on qemu. No regression. [1]
+> arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-I think the usual way this works is that the sam9x7 refers to the
-SoC design as in what is actually part of the chip, whereas the 70,
-72 and 75 models are variants that have a certain subset of the
-features enabled.
+mips: Booted on ci20. No regression.
+https://openqa.qa.codethink.co.uk/tests/3695
 
-If that is the case here, then referring to the on-chip parts by
-the sam9x7 name makes sense, and this is similar to what we do
-on TI AM-series chips.
-
-There is a remaining risk that a there would be a future
-sam9x71/73/74/76/... product based on a new chip that uses
-incompatible devices, but at that point we can still use the
-more specific model number to identify those without being
-ambiguous. The same thing can of course happen when a SoC
-vendor reuses a specific name of a prior product with an update
-chip that has software visible changes.
-
-I'd just leave this up to Varshini and the other at91 maintainers
-here, provided they understand the exact risks.
-
-It's different for the parts that are listed as just sam9x60
-compatible in the DT, I think those clearly need to have sam9x7
-in the compatible list, but could have the sam9x60 identifier
-as a fallback if the hardware is compatible.
-
-     Arnd
+-- 
+Regards
+Sudip
