@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663A47216CC
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEC17216CF
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjFDMQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 08:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S230523AbjFDMRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 08:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjFDMQl (ORCPT
+        with ESMTP id S230237AbjFDMRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 08:16:41 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA92C4
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 05:16:40 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-565ba53f434so41522107b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 05:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685881000; x=1688473000;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=69qYVcOgpdEYJVTzLtwWj8d8T2NR6kepXdK/z6duacw=;
-        b=fO/vs34UPn5tiLVtLC9aLurcIwjTl0TdRP665w8MhitO/3wCkD/36Uk0J3lTf3w5bj
-         UaLTEopuWVofhoImuBgWdik5eRkeHxgs1ln7BBX6RoMP2P0MZqvlzOynM5NKO7NPoc6P
-         B20R5IC0kaT83Vl+ywBdggbqcX+4fv6TCPG8GE1n5kBWj4BySppUV4exrUkBsrtuo655
-         ZbNcmDOIwmjAYM1Q3kk1TAjeXyp+QkGdtlx2yAP9kjt9kCTEm4QTH1G7/gOWlPHUwt58
-         uDOmfP+hayAbm5YzZkmb33hY2dTp/9Nwe+aorADdC4GKBLY2QjVVXVxqBJHzwLAc5NPc
-         vSMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685881000; x=1688473000;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=69qYVcOgpdEYJVTzLtwWj8d8T2NR6kepXdK/z6duacw=;
-        b=KrW/lVumH7uyNioH0z5dHViLkycIspXqNQD+fZQVNEifNL9K2EC4VNjLqxbfnNHVxt
-         B6iuaMoW0xQWUdePtH0ZxfN1pSHQPa5WMWOy5ByDqYp3GEu2Fx2Vo73JNLlACqAEoGXu
-         rpKfgEpz3z/Z4+LuKtU3ygxTkFHCw1S9C1lSeGQwgKXBFWS5N5jU3iCxT4E1mUsDguV5
-         2waCN9fmZFcZqUCUgYN7AtdrMwZUHjmBNv+vTcbf84fr/iYvitX4Qufoto/NIXX4Gjsr
-         G2WFy/2vp+64jaF5Cq4JicWcgd6SKySLVYkggEAT7fq9BouV4ZZNnQgSJD5b5eloYI3Y
-         LRXA==
-X-Gm-Message-State: AC+VfDzHWGDBuPeKg2m0in0LPGPXlEiergd4rP9b0decflp2gQxFexZO
-        jFy62s75XdyCsOaYoJ9FnVpZhov3RYGACSm+UMI=
-X-Google-Smtp-Source: ACHHUZ4iwcPk9qVktEgt3TmbmVmb8eIbHD+yubANDgJ+RRXvpUJT4TbnI7KtErCpOPPMr2SrKuIB3viC4V+PBkZ7N4E=
-X-Received: by 2002:a81:a0ce:0:b0:561:abb8:3b38 with SMTP id
- x197-20020a81a0ce000000b00561abb83b38mr7120374ywg.17.1685880999925; Sun, 04
- Jun 2023 05:16:39 -0700 (PDT)
+        Sun, 4 Jun 2023 08:17:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8432DA;
+        Sun,  4 Jun 2023 05:17:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7904561C54;
+        Sun,  4 Jun 2023 12:17:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5645C433D2;
+        Sun,  4 Jun 2023 12:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685881021;
+        bh=/1HqXi4TSfWej43agQT+61s1sRoWQcpHBT+TRBBJJwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gQS7nn5bpR6TCVKUjWsJyJRYDOQN9n2zuN0jpExVeP22UmfXhVyhVx45fc8YAkS8n
+         QQeKJkXe+nQ+vcVQPE6/fjuHkUDDUOtU8YDzX3vYI8JR5rupssU/w008zzU7GEYkLM
+         AKdQmcGbupKccfqEGF9PhKhSPxtG7u3Odqra69Gma71MfErM/iva1pkYgtGMuhHA68
+         KSkapGRJ5q4Qjv8+40XRC+oOqFR20GOv6Zs8kSnYGgcXekRWJiLu3hhVHo0XOBQs4r
+         83KpT1WE1TFzT7xc0wqRFtL5kAtyr0B1Qx+Ero01vXIFph2doaBD3g+g9iX9Iyl+7i
+         OKgQaCKZ/J6nw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q5mfc-00008R-30; Sun, 04 Jun 2023 14:17:16 +0200
+Date:   Sun, 4 Jun 2023 14:17:16 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Corey Minyard <minyard@acm.org>
+Cc:     Craig Shelley <craig@microtron.org.uk>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Break doesn't work on a CP2105
+Message-ID: <ZHyAzHVAu3DVgJG_@hovoldconsulting.com>
+References: <ZEmDs0ASdnEAnpsL@minyard.net>
+ <ZGtZKCvo71woGf9T@hovoldconsulting.com>
+ <ZGtlnWGSc31Wdhxa@mail.minyard.net>
+ <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
+ <ZHodALMLTWk72Vvm@mail.minyard.net>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:6911:b0:30f:c292:e9f8 with HTTP; Sun, 4 Jun 2023
- 05:16:39 -0700 (PDT)
-Reply-To: jonescook558@gmail.com
-From:   jamartin473 <jamartin473@gmail.com>
-Date:   Sun, 4 Jun 2023 13:16:39 +0100
-Message-ID: <CAAhTPbfJNOq5BYpWJ-r_nypZMi=pC1HmvUN=H+p2PQZxz++LnQ@mail.gmail.com>
-Subject: Good day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHodALMLTWk72Vvm@mail.minyard.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1130 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4981]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jamartin473[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jonescook558[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jamartin473[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.0 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
+On Fri, Jun 02, 2023 at 11:46:56AM -0500, Corey Minyard wrote:
+> On Fri, Jun 02, 2023 at 02:53:31PM +0200, Johan Hovold wrote:
 
-I would like to bring to your notice to supply my company a material
-used in production of veterinary vaccines and feed supplements.
-This product we request may fall out of your scope of work, hence we
-would like you to source the product and supply it to my company on a
-monthly basis.
+> > I just posted a patch series which does that. The USB serial drivers do
+> > not currently return any errors related to break signalling even though
+> > this has been possible since 2008.
+> > 
+> > The same mechanism can be used to report that break signalling is not
+> > supported by a device or driver, but the USB serial drivers would be the
+> > first tty drivers that actually do this. If it turns out to cause any
+> > trouble we can still use this series to avoid the unnecessary wait.
+> > 
+> > Care to give the series a try?
+> > 
+> > 	https://lore.kernel.org/lkml/20230602124642.19076-1-johan@kernel.org
+> 
+> I have tested this series.  I can verify that one of the CP2105 ports
+> (ttyUSB0) does not return an error on sending the break, and the other
+> (ttyUSB1) does.  This is the only USB serial device on the system.
 
-Please note this is an urgent business proposal to you for our mutual
-benefit, therefore I require these components at your earliest
-convenience.
+Thanks for testing.
 
-Kindly reply to my private email (jonescook558@gmail.com )
-if you are interested so that I will share in details with you
-regarding this offer.
+> However, the device hooked to the remote console (ttyUSB0), the one not
+> returning an error on sending a break, still doesn't send a break.  So
+> my problem isn't fixed :-(.
+> 
+> # ls -l /dev/serial/by-path
+> total 0
+> lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.0-port0 -> ../../ttyUSB0
+> lrwxrwxrwx 1 root root 13 Jun  2 15:28 pci-0000:00:1d.0-usb-0:1.1:1.1-port0 -> ../../ttyUSB1
 
-I now await your urgent response.
+Ok, at least that matches what you found in schematics about this being
+the ECI (and thus first) port.
 
-Thank you
+I just verified break signalling on the first port of my CP2105 using a
+logic analyser and everything seems to work as expected.
 
-Regard
+There's also no mention of any issue with break in the errata.
+
+Could you check which firmware revision you have by enabling debugging
+and reconnecting the device?
+
+For example:
+
+	echo func cp210x_get_fw_version +p > /sys/kernel/debug/dynamic_debug/control
+
+Johan
