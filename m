@@ -2,192 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C307F72158D
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F10272158F
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 10:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjFDIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 04:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S230409AbjFDIXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 04:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjFDIXV (ORCPT
+        with ESMTP id S229891AbjFDIXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 04:23:21 -0400
-Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382BFDC;
-        Sun,  4 Jun 2023 01:23:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685866925; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=AuCOY2I/0s6oDXBcar0ULPGQGW5nDQmOr0/LEQXwRC2d2eTZOGt0+zhjg3gKQUVjLAMkkqZ06BtGZ0VQCHSiOM2/nBsTOVr7CLFPRQ/AuZqXCfnrvpRwDRHpVOjgB1InSg2m65MM6jZ7Nt2nKEUjs809LNMfe2q+0yC8jzcm5NY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685866925; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=pdL5Ne9Pz+dUQOaZMPqJzW+PoASYoCWnGHeubyQw/e4=; 
-        b=ndWuuahEoBRtqPYBHvCX/C0T6zvmbXVHry2GbbxjoDW17DNJfbPf7qe6iPH/tZK8cJTBnfQOZENDpX3Z0/f6EOXU69KfPT48PdcbaqLCPNiqzu767Hkg/VLV8vEoycrbY5DiqOIAtF++2XIzAghylTW4w2vIrYsPBezMaV/g7NU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685866924;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=pdL5Ne9Pz+dUQOaZMPqJzW+PoASYoCWnGHeubyQw/e4=;
-        b=kSJKviUHmtkTO7jbJFz1KsvLJDxe6R3XyfQ+eC+JncMlzoUzlQlShmZPzD38tSSc
-        ur2WliWe8+vjbDR51ndPKOtlkW2iU9hN9bHlLZuO2BvoS3mLnRvI8/ddS7sJacSXOpy
-        j+qDwSoqXQVuLY8mHHxBs3Fowvz0xhKtxYC97hc4=
-Received: from [192.168.66.198] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 1685866922808204.7165874943779; Sun, 4 Jun 2023 01:22:02 -0700 (PDT)
-Message-ID: <9423a818-f9c0-d867-7f7d-27f05e1536b9@arinc9.com>
-Date:   Sun, 4 Jun 2023 11:21:48 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next 25/30] net: dsa: mt7530: properly set
- MT7531_CPU_PMAP
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-26-arinc.unal@arinc9.com>
- <20230522121532.86610-26-arinc.unal@arinc9.com>
- <20230526155124.sps74wayui6bydao@skbuf>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230526155124.sps74wayui6bydao@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 4 Jun 2023 04:23:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25077135;
+        Sun,  4 Jun 2023 01:23:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A420B60BC3;
+        Sun,  4 Jun 2023 08:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC518C433EF;
+        Sun,  4 Jun 2023 08:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685867026;
+        bh=0o/Sg7LuWV2tXQmiYJm5thgkVxTQtCibmRXbS1usirY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=df2rk5iuYxLPAV1plu/eo3/bECha8oi2VdbrqlbT6kwMdiAU9cI+Bm8L0J7XkgUFs
+         XVGCobHYCAcew+sKuVe2ZhE2wvHZYAbk0gQ6y9w6pfcRMGUUB/1bdbi0Q+oAE5vzE1
+         JvmJaiLL8UIpvkgxDXIJmPQijdsDUf2rRAzUt1zVCc5unkBAfqObfnudtmzLOkNw4Z
+         uvq3PYyYphRGykWwSVJDKysDZr9Zyf1PnNEfQTwqNPe/57FSj1IJNexasvMknKv28n
+         dJGAISg/5OpefG98K8ea1fRPM9Svdx6DnVvzjGIWGaFJBnhiXBB3yyI5E8vih2grgT
+         qvwtY9WRr6CPA==
+Received: from [37.166.236.89] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q5j1a-002gi6-HG;
+        Sun, 04 Jun 2023 09:23:43 +0100
+Date:   Sun, 04 Jun 2023 09:23:39 +0100
+Message-ID: <87sfb7octw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Colton Lewis <coltonlewis@google.com>
+Cc:     kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev
+Subject: Re: [PATCH 3/3] KVM: arm64: Skip break phase when we have FEAT_BBM level 2
+In-Reply-To: <20230602170147.1541355-4-coltonlewis@google.com>
+References: <20230602170147.1541355-1-coltonlewis@google.com>
+        <20230602170147.1541355-4-coltonlewis@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 37.166.236.89
+X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.05.2023 18:51, Vladimir Oltean wrote:
-> On Mon, May 22, 2023 at 03:15:27PM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
->> SoC represents a CPU port to trap frames to. Currently only the bit that
->> corresponds to the first found CPU port is set on the bitmap. Introduce the
->> MT7531_CPU_PMAP macro to individually set the bits of the CPU port bitmap.
->> Set the CPU port bitmap for MT7531 and the switch on the MT7988 SoC on
->> mt753x_cpu_port_enable() which runs on a loop for each CPU port. Add
->> comments to explain this.
->>
->> According to the document MT7531 Reference Manual for Development Board
->> v1.0, the MT7531_CPU_PMAP bits are unset after reset so no need to clear it
->> beforehand. Since there's currently no public document for the switch on
->> the MT7988 SoC, I assume this is also the case for this switch.
->>
->> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
+On Fri, 02 Jun 2023 18:01:47 +0100,
+Colton Lewis <coltonlewis@google.com> wrote:
 > 
-> Is this supposed to be a bug fix? (incompatibility with past or future
-> device trees also counts as bugs) If so, it needs a Fixes: tag and to be
-> targeted towards the "net" tree. Also, the impact of the current behavior
-> and of the change need to be explained better.
+> Skip the break phase of break-before-make when the CPU has FEAT_BBM
+> level 2. This allows skipping some expensive invalidation and
+> serialization and should result in significant performance
+> improvements when changing block size.
+> 
+> The ARM manual section D5.10.1 specifically states under heading
+> "Support levels for changing block size" that FEAT_BBM Level 2 support
+> means changing block size does not break coherency, ordering
+> guarantees, or uniprocessor semantics.
 
-Yes, this fixes a bug for future devicetrees. I will send this to net 
-with a more detailed explanation, thanks.
+I'd like to have that sort of reference in the code itself (spelling
+out the revision on the ARM ARM this is taken from, as this section is
+in D8.14.2 in DDI0487J.a). I'd also like it to point out that this
+only applies when the *output addresses* are the same.
 
 > 
->>   drivers/net/dsa/mt7530.c | 15 ++++++++-------
->>   drivers/net/dsa/mt7530.h |  3 ++-
->>   2 files changed, 10 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
->> index 58d8738d94d3..0b513e3628fe 100644
->> --- a/drivers/net/dsa/mt7530.c
->> +++ b/drivers/net/dsa/mt7530.c
->> @@ -963,6 +963,13 @@ mt753x_cpu_port_enable(struct dsa_switch *ds, int port)
->>   		mt7530_rmw(priv, MT753X_MFC, MT7530_CPU_MASK, MT7530_CPU_EN |
->>   			   MT7530_CPU_PORT(port));
->>   
->> +	/* Add the CPU port to the CPU port bitmap for MT7531 and the switch on
->> +	 * the MT7988 SoC. Any frames set for trapping to CPU port will be
->> +	 * trapped to the CPU port the user port is affine to.
->> +	 */
->> +	if (priv->id == ID_MT7531 || priv->id == ID_MT7988)
->> +		mt7530_set(priv, MT7531_CFC, MT7531_CPU_PMAP(BIT(port)));
->> +
+> Because a compare-and-exchange operation was used in the break phase
+> to serialize access to the PTE, an analogous compare-and-exchange is
+> introduced in the make phase to ensure serialization remains even if
+> the break phase is skipped and proper handling is introduced to
+> account for this function now having a way to fail.
 > 
-> Stylistically, the existence of an indirect call to priv->info->cpu_port_config()
-> per switch family is a bit dissonant with an explicit check for device id later
-> in the same function.
-
-mt753x_cpu_port_enable() is not being called from 
-priv->info->cpu_port_config() though. I'm not sure how I would do this 
-without the device ID check here.
-
+> Considering the possibility that the new pte has different permissions
+> than the old pte, the minimum necessary tlb invalidations are used.
 > 
->>   	/* CPU port gets connected to all user ports of
->>   	 * the switch.
->>   	 */
->> @@ -2315,15 +2322,9 @@ static int
->>   mt7531_setup_common(struct dsa_switch *ds)
->>   {
->>   	struct mt7530_priv *priv = ds->priv;
->> -	struct dsa_port *cpu_dp;
->>   	int ret, i;
->>   
->> -	/* BPDU to CPU port */
->> -	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
->> -		mt7530_rmw(priv, MT7531_CFC, MT7531_CPU_PMAP_MASK,
->> -			   BIT(cpu_dp->index));
->> -		break;
->> -	}
->> +	/* Trap BPDUs to the CPU port(s) */
->>   	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
->>   		   MT753X_BPDU_CPU_ONLY);
->>   
->> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
->> index 5ebb942b07ef..fd2a2f726b8a 100644
->> --- a/drivers/net/dsa/mt7530.h
->> +++ b/drivers/net/dsa/mt7530.h
->> @@ -53,7 +53,8 @@ enum mt753x_id {
->>   #define  MT7531_MIRROR_MASK		(0x7 << 16)
->>   #define  MT7531_MIRROR_PORT_GET(x)	(((x) >> 16) & 0x7)
->>   #define  MT7531_MIRROR_PORT_SET(x)	(((x) & 0x7) << 16)
->> -#define  MT7531_CPU_PMAP_MASK		GENMASK(7, 0)
->> +#define  MT7531_CPU_PMAP(x)		((x) & 0xff)
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> ---
+>  arch/arm64/kvm/hyp/pgtable.c | 58 +++++++++++++++++++++++++++++++-----
+>  1 file changed, 51 insertions(+), 7 deletions(-)
 > 
-> You can leave this as ((x) & GENMASK(7, 0))
-
-Now that I've read Russell's comment on the previous patch, the below 
-would be even better?
-
-MT7531_CPU_PMAP(x)		FIELD_PREP(MT7531_CPU_PMAP_MASK, x)
-
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 8acab89080af9..6778e3df697f7 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -643,6 +643,11 @@ static bool stage2_has_fwb(struct kvm_pgtable *pgt)
+>  	return !(pgt->flags & KVM_PGTABLE_S2_NOFWB);
+>  }
 > 
->> +#define  MT7531_CPU_PMAP_MASK		MT7531_CPU_PMAP(~0)
+> +static bool stage2_has_bbm_level2(void)
+> +{
+> +	return cpus_have_const_cap(ARM64_HAS_STAGE2_BBM2);
+
+By the time we look at unmapping things from S2, the capabilities
+should be finalised, so this should read cpus_have_final_cap()
+instead.
+
+> +}
+> +
+>  #define KVM_S2_MEMATTR(pgt, attr) PAGE_S2_MEMATTR(attr, stage2_has_fwb(pgt))
 > 
-> There's no other user of MT7531_CPU_PMAP_MASK, you can remove this.
+>  static int stage2_set_prot_attr(struct kvm_pgtable *pgt, enum kvm_pgtable_prot prot,
+> @@ -730,7 +735,7 @@ static bool stage2_try_set_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_
+>   * @ctx: context of the visited pte.
+>   * @mmu: stage-2 mmu
+>   *
+> - * Returns: true if the pte was successfully broken.
+> + * Returns: true if the pte was successfully broken or there is no need.
 
-Should I do above or remove this?
+No need of what? Why? The rationale should be captured in the comments
+below.
 
-Arınç
+>   *
+>   * If the removed pte was valid, performs the necessary serialization and TLB
+>   * invalidation for the old value. For counted ptes, drops the reference count
+> @@ -750,6 +755,10 @@ static bool stage2_try_break_pte(const struct kvm_pgtable_visit_ctx *ctx,
+>  		return false;
+>  	}
+> 
+> +	/* There is no need to break the pte. */
+> +	if (stage2_has_bbm_level2())
+> +		return true;
+> +
+>  	if (!stage2_try_set_pte(ctx, KVM_INVALID_PTE_LOCKED))
+>  		return false;
+> 
+> @@ -771,16 +780,45 @@ static bool stage2_try_break_pte(const struct kvm_pgtable_visit_ctx *ctx,
+>  	return true;
+>  }
+> 
+> -static void stage2_make_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_t new)
+> +static bool stage2_pte_perms_equal(kvm_pte_t p1, kvm_pte_t p2)
+> +{
+> +	u64 perms1 = p1 & KVM_PGTABLE_PROT_RWX;
+> +	u64 perms2 = p2 & KVM_PGTABLE_PROT_RWX;
+
+Huh? The KVM_PGTABLE_PROT_* constants are part of an *enum*, and do
+*not* represent the bit layout of the PTE.
+
+How did you test this code?
+
+> +
+> +	return perms1 == perms2;
+> +}
+> +
+> +/**
+> + * stage2_try_make_pte() - Attempts to install a new pte.
+> + *
+> + * @ctx: context of the visited pte.
+> + * @new: new pte to install
+> + *
+> + * Returns: true if the pte was successfully installed
+> + *
+> + * If the old pte had different permissions, perform appropriate TLB
+> + * invalidation for the old value. For counted ptes, drops the
+> + * reference count on the containing table page.
+> + */
+> +static bool stage2_try_make_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu, kvm_pte_t new)
+>  {
+>  	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
+> 
+> -	WARN_ON(!stage2_pte_is_locked(*ctx->ptep));
+> +	if (!stage2_has_bbm_level2())
+> +		WARN_ON(!stage2_pte_is_locked(*ctx->ptep));
+> +
+> +	if (!stage2_try_set_pte(ctx, new))
+> +		return false;
+> +
+> +	if (kvm_pte_table(ctx->old, ctx->level))
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
+> +	else if (kvm_pte_valid(ctx->old) && !stage2_pte_perms_equal(ctx->old, new))
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa_nsh, mmu, ctx->addr, ctx->level);
+
+Why a non-shareable invalidation? Nothing in this code captures the
+rationale for it. What if the permission change was a *restriction* of
+the permission? It should absolutely be global, and not local.
+
+>
+>  	if (stage2_pte_is_counted(new))
+>  		mm_ops->get_page(ctx->ptep);
+> 
+> -	smp_store_release(ctx->ptep, new);
+> +	return true;
+>  }
+> 
+>  static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu,
+> @@ -879,7 +917,8 @@ static int stage2_map_walker_try_leaf(const struct kvm_pgtable_visit_ctx *ctx,
+>  	    stage2_pte_executable(new))
+>  		mm_ops->icache_inval_pou(kvm_pte_follow(new, mm_ops), granule);
+> 
+> -	stage2_make_pte(ctx, new);
+> +	if (!stage2_try_make_pte(ctx, data->mmu, new))
+> +		return -EAGAIN;
+
+So we don't have forward-progress guarantees anymore? I'm not sure
+this is a change I'm overly fond of.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
