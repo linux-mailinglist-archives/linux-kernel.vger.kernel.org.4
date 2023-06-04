@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40579721784
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D031721791
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 16:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjFDN4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S230385AbjFDOBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 10:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjFDN4j (ORCPT
+        with ESMTP id S229635AbjFDOBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:56:39 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934B7C4;
-        Sun,  4 Jun 2023 06:56:37 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-651f2f38634so3337585b3a.0;
-        Sun, 04 Jun 2023 06:56:37 -0700 (PDT)
+        Sun, 4 Jun 2023 10:01:34 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6DCCF;
+        Sun,  4 Jun 2023 07:01:34 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b01d912924so36138905ad.1;
+        Sun, 04 Jun 2023 07:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685886997; x=1688478997;
+        d=gmail.com; s=20221208; t=1685887293; x=1688479293;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=117yVyRXLiZbNEVSmtDOgF7WMAgwu5egOkvBC/5odcI=;
-        b=Nza6NKslXjutBq54b2HRVSaCwcmingt2EQQnlYugloMgti34dhsfd0DBZxtEgIIX13
-         hVs+Sfc5RwPj4AprLd7GgS5z5rEJjlta/OHHdf5S4rGobWG4obbr5iuTVQ6blGKP6PIw
-         VLJTkWLIiH6HGyAW/2iTYkGYbWPpEkerqEo4y/GzR63W2dmh4lpOZ4DTpYtG0zgo+5ih
-         II7kYmryIjdJazcoOuaqAffYH9nS8M8032cgKha5NOmYloJdTB/Kp1CouQxSj19Bf4pm
-         PPfW1OECf27AACVlOaKXfzjp9ey3qHnBLmxXySvPCnk4rNO6MagoJahXNsFUWejbX4bh
-         9klg==
+        bh=SGHDepzavGuE83PchG6Ifo8HIEjyqsZ7nz/7LX1OmGI=;
+        b=ExlXXAf4O6jig1b/rfi43C25mDdUj5bJQHMsQMp5mBNHGPQmNDgxGDZhQdoJTxvt+w
+         1RuEvxdKrjJmTHhaibE6j9a2lkbR7GX9a1YbvxMsYx+70EfEcbW68PKn230qhxNSYvyN
+         wCF68SZcJqkkp91Pm/sIIzSJ9RzQCjkNHe/MzlSkn6XeNcTjEMLlZ/xGlHM8pZr1oKp6
+         e1bqmBvy0eE7g8Jgk4NiSy32bc5Ji28CPa1u3ShZRvlw/c0GH4751Vq+hmz6pWM6e2kJ
+         eNr4UyXH48zt1fMrqsAX8fHfOwUb2fMfd1eowirXpTcy9F6+8mQz49EtLQx3r3zttKAq
+         R85Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685886997; x=1688478997;
+        d=1e100.net; s=20221208; t=1685887293; x=1688479293;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=117yVyRXLiZbNEVSmtDOgF7WMAgwu5egOkvBC/5odcI=;
-        b=kh5nZ+q76K9hV6xJsbFVG3GC5R+XNoHwOT8fa7bJ4W7iMdDWucCW5jn4qzhfQ34lB3
-         Bkmz3DQ3APo5VJ7NJ5DK1p73D6VBLPsBrtfN2Bk4/YKh958UF3ddUNZzUAJyJr7H+xgz
-         isvH5csgC5Qlkgqvtvz14RBIVpxq3Ij/LFprAKejExuW79q/5JvuKMsUGnS9FWHo3jcx
-         CP30pB4D+XVMR5vbzrz4ZGjfhBv1n60CnYlptvROlD/lmdiHfMTPkQjcc/XRhHKs4dXE
-         SBVxNSBb5TrJA6GBtiBvdWL6D3U8/GQy1t1Y/+H3Qj1CTGdOSXoYje4LM/BOuBtW0T0k
-         bkyg==
-X-Gm-Message-State: AC+VfDxtoEqcVqTxWmj4TETUxTuIps3xBG2jFbBQNJxzgMg+JYsTrN09
-        PyI+6BLzMGUwVNJLGqM9dFc=
-X-Google-Smtp-Source: ACHHUZ6MBAd8Gnu5v81tMunkT6WV7jiquUQY99c9qc3eYJFzdT7nI9SCx/hOFkmgwXU4AvgAkDgfqA==
-X-Received: by 2002:a05:6a20:8f17:b0:111:11a6:920e with SMTP id b23-20020a056a208f1700b0011111a6920emr4828938pzk.18.1685886996922;
-        Sun, 04 Jun 2023 06:56:36 -0700 (PDT)
+        bh=SGHDepzavGuE83PchG6Ifo8HIEjyqsZ7nz/7LX1OmGI=;
+        b=M0Gl1sZjks3MHOSiR1sJkJEsezFAeSGi9vN462KQHCcSD44wMOSJLaurhaoKAwORTU
+         sI7MEYc3MJ4O0UkMYp/Ju/T/KTW8xe94DS1kyUNuQlXSeln+X/ZcVEKABqg/hDYKUwl8
+         bMBMnkWanl4708azg2h8pxYIHZd0K0ebwKetcJDh7K681RNNnt68+OndQ7tPOYB4HqkV
+         adqgJpm8Mbmp6Kjttd6g6M36IGFs6V4Kj/Ot5dEJXQX1FTui8dcmXT98iOBZj6026hL3
+         1ondcNEXV9eA0z3q88Zfxt3EPeuyMT1Cqdr8qMe3SZlpz3de9rLg3Cka+H3eHSwuVJwy
+         V6Cw==
+X-Gm-Message-State: AC+VfDw7+PRo5MS30MYC8VvG/J2+g4JgT9sk9qD29ET7WDtla82qr5M9
+        1s0NknYXxMHCNxZkGHJfNNg=
+X-Google-Smtp-Source: ACHHUZ5olLI4H9tXFHWVTFNSmHMVCx5b78J0aCp08Om7tek2DOOaEL+crIoRBFaJK7sobABtfmcvww==
+X-Received: by 2002:a17:902:f550:b0:1af:c1a7:3bb5 with SMTP id h16-20020a170902f55000b001afc1a73bb5mr6244163plf.4.1685887293403;
+        Sun, 04 Jun 2023 07:01:33 -0700 (PDT)
 Received: from [192.168.43.80] (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id m3-20020aa78a03000000b005a8173829d5sm3709111pfa.66.2023.06.04.06.56.34
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b001a96a6877fdsm4763410pls.3.2023.06.04.07.01.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 06:56:36 -0700 (PDT)
-Message-ID: <49fa3dc5-ffdb-2af4-9b7a-3d19e88bcbda@gmail.com>
-Date:   Sun, 4 Jun 2023 20:56:32 +0700
+        Sun, 04 Jun 2023 07:01:32 -0700 (PDT)
+Message-ID: <10e68064-42a3-c80e-10cc-079a3cf4eb35@gmail.com>
+Date:   Sun, 4 Jun 2023 21:01:29 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
 Subject: Re: [RFC] docs: process: Send patches 'To' maintainers and 'Cc' lists
 Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, James Seo <james@equiv.tech>,
-        Jonathan Corbet <corbet@lwn.net>
+To:     James Seo <james@equiv.tech>, Jonathan Corbet <corbet@lwn.net>
 Cc:     Kalle Valo <kvalo@kernel.org>, workflows@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230603151447.29288-1-james@equiv.tech>
- <975d35cb-e0aa-8ea7-5520-238d1aa4cbaf@infradead.org>
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <975d35cb-e0aa-8ea7-5520-238d1aa4cbaf@infradead.org>
+In-Reply-To: <20230603151447.29288-1-james@equiv.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,19 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/23 22:55, Randy Dunlap wrote:
-> It sounds to me like we should just prohibit (not allow) emails that
-> don't have a To: recipient in them. It also sounds like mutt (and maybe
-> other software) have problems.
+On 6/3/23 22:14, James Seo wrote:
+> To reduce ambiguity and eliminate this class of potential (albeit
+> tangential) issues, prescribe sending patches 'To' maintainers and
+> 'Cc' lists. While we're at it, strengthen the recommendation to use
+> scripts/get_maintainer.pl to find patch recipients, and move Andrew
+> Morton's callout as the maintainer of last resort to the next
+> paragraph for better flow.
 > 
 
-In mutt, there is a command for reply-to-all (named group-chat-reply),
-but you need to assign key binding for it. I'd like to type Esc-g
-for this purpose. The corresponding .muttrc is:
+IMO, To: and Cc: don't have any practical differences between two,
+and I usually do vice-versa when sending patches: lists are in To:
+and individual maintainers are in Cc:
 
-```
-bind index,pager "<esc>g" group-chat-reply
-```
+Thanks.
 
 -- 
 An old man doll... just what I always wanted! - Clara
