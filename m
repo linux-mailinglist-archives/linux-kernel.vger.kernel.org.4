@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CD27216F1
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B897216EE
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 14:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjFDM1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 08:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S231274AbjFDM1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 08:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjFDM1g (ORCPT
+        with ESMTP id S231264AbjFDM1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 08:27:36 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1411BF;
-        Sun,  4 Jun 2023 05:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1685881633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s1RJUCGj4nB1iNY8d5w8aIK40sAZLfxM8ksgaf5zRXc=;
-        b=cPQrviulFS4Raq43BCRWx1X92wf5oie9PpfnuONQ1O9WBlIBs4bGm+zEjfv/TlHWHMrP0m
-        w1g8C+Oe7vEwEoN/NXgKazr8ZnhNniDtFc55i7ELZtAkjQhvS1Y7ZHJaBI59wQWOr0Fj85
-        HsfTgp0jXbE2xhp81GiE3SlEPOC0CaM=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Siarhei Volkau <lis8215@gmail.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, list@opendingux.net,
-        Paul Cercueil <paul@crapouillou.net>,
+        Sun, 4 Jun 2023 08:27:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B50C4;
+        Sun,  4 Jun 2023 05:27:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FAD60EF8;
+        Sun,  4 Jun 2023 12:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADA9C43444;
+        Sun,  4 Jun 2023 12:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685881642;
+        bh=gxQ6nKoPBAQ1Q8i3faPhlPwgOkXsdkQ9hFmYeNlDbFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gal9K4zSCMMc+QtYTb9i3Yd78n1ELFVa+hWxX54/+LbW+YQ6h1nrUn9RtYzXcDJgA
+         3ctUTJ6Di0/Y/sgjCrbVa0fz18qfMk6Ur5N4UcxAfzcRPzLGtNiM7TjqDJcguuIgcI
+         jHIoRYjLfM+4ivCgRke4jwqQACfrV9nCBlvGhB8qBxBjZ/oNsj3WTCtdOimjd0tjiQ
+         ROo21i6wapbfskycdsfu13kUolu4E5Bc96lVUYBxPOvCdiZLiHWxpAMJxrSxjBPw4+
+         pLEcRxq5IStOkOQk5su1zhI1AT8XZjIReQIVicUSk/cBmU0pYfzpHGWUTJJ2OfUgbo
+         bWCRAmQ3MVBdA==
+Date:   Sun, 4 Jun 2023 20:27:10 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH 4/4] MIPS: DTS: qi_lb60: Don't use unit address for regulators
-Date:   Sun,  4 Jun 2023 14:26:55 +0200
-Message-Id: <20230604122655.69698-4-paul@crapouillou.net>
-In-Reply-To: <20230604122655.69698-1-paul@crapouillou.net>
-References: <20230604122655.69698-1-paul@crapouillou.net>
+        Conor Dooley <conor+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] arm64: dts: imx8mp-beacon-kit: Enable WM8962 Audio
+ CODEC
+Message-ID: <20230604122710.GH4199@dragon>
+References: <20230528110119.2632850-1-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230528110119.2632850-1-aford173@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regulators don't have any "reg" property, and therefore shouldn't
-use an unit address in their node names.
+On Sun, May 28, 2023 at 06:01:19AM -0500, Adam Ford wrote:
+> The baseboard has an WM8962 Audio CODEC connected to the SAI3
+> peripheral.  The CODEC supports stereo in and out
+> and a microphone input connected to the headphone jack.
+> Route this CODEC through the simple-audio-card driver.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: devicetree@vger.kernel.org
----
- arch/mips/boot/dts/ingenic/qi_lb60.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/mips/boot/dts/ingenic/qi_lb60.dts b/arch/mips/boot/dts/ingenic/qi_lb60.dts
-index ba0218971572..24f987244a12 100644
---- a/arch/mips/boot/dts/ingenic/qi_lb60.dts
-+++ b/arch/mips/boot/dts/ingenic/qi_lb60.dts
-@@ -27,7 +27,7 @@ chosen {
- 		stdout-path = &uart0;
- 	};
- 
--	vcc: regulator@0 {
-+	vcc: regulator-0 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc";
- 
-@@ -36,7 +36,7 @@ vcc: regulator@0 {
- 		regulator-always-on;
- 	};
- 
--	mmc_power: regulator@1 {
-+	mmc_power: regulator-1 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "mmc_vcc";
- 		gpio = <&gpd 2 0>;
-@@ -45,7 +45,7 @@ mmc_power: regulator@1 {
- 		regulator-max-microvolt = <3300000>;
- 	};
- 
--	amp_supply: regulator@2 {
-+	amp_supply: regulator-2 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "amp_supply";
- 		gpio = <&gpd 4 0>;
--- 
-2.39.2
-
+Applied, thanks!
