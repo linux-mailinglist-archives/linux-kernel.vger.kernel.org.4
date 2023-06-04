@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F9C721566
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 09:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFEC721568
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 09:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjFDH51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 03:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S230364AbjFDH5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 03:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFDH5Z (ORCPT
+        with ESMTP id S229490AbjFDH52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 03:57:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A52C1
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 00:57:23 -0700 (PDT)
+        Sun, 4 Jun 2023 03:57:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A360FC1
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 00:57:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 750FB61004
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 07:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EA3C433D2;
-        Sun,  4 Jun 2023 07:57:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FCA26125E
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 07:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E5D1C433A0;
+        Sun,  4 Jun 2023 07:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685865442;
-        bh=pfN7MtvEyz0xI8/oMJRI3AUQu2hJ7hNUCoAXRMgE07I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tgiVWN/3d/b8q9RIQ/JvaVjsAVhVSv/NmgS2WY5U4eWmdBNBTzPGbZFDkI0Oi88gA
-         JRWlS12PvByvOi0q1oER0bln6v48cRo12zCFY79P+4rtLbh8naB/Z2chuS95GXa6Gy
-         03a2rFmEF3PNP0CpKvmAVlG+KdBHa/gY/y8KjRZsyuiEu+4WtzrstYXI5WHW78su6o
-         VCTnfUoB1n67Itub6DtlTFs0pPhetYJqEqJsoaXm9hfmwU2Zx4Sfp64QjsXc2bF3Oc
-         EZ7Y4NVwsJdiSTZZ3SUEHwzS9Yz83uVLk6CYu/sgjAQy4c8+wWuzaojCpO7vgGXrUk
-         QyoJa2VeiShXw==
+        s=k20201202; t=1685865446;
+        bh=XiSFINADjkUDmu+qcRcfsnLeAcqgKHZ9Wa515Osz/sg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YXTwAPzi5CsfeBMeF5IUlsSsggm0Pv46OYwv+rV3pwo4w0bWfE0tqO2K2QiNPxuFI
+         i6eSDr7+w3prjA2eQVej++FNY/t4oM30Uyi/6c9Hod5yrrsWHrdvLnagZicceDGYMz
+         QxLjsZjIMuafzEkdYcDMrW94IFh8y1K2E/IezlZFKTSXqX1FaQJiYkyqkyvHwEfeh+
+         trHja77VU94yTFEGA+T1hgFrAsXuuHJW2w/ym4h5wPMeRLdx1xumEOUcOycrCBFx5B
+         ck0iOtnT9r+B8JnMQZ/xDOIERm/RLFDGiaigfIaUtX5VJfVy/E2Yh9O4PI1Oetd0Gv
+         D7Ozlwz4I1BJA==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -46,19 +46,20 @@ Cc:     linux-kernel@vger.kernel.org, Liu Ying <victor.liu@nxp.com>,
         David Airlie <airlied@gmail.com>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Nick Terrell <terrelln@fb.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/2] drm/bridge: imx: fix mixed module-builtin object
-Date:   Sun,  4 Jun 2023 16:57:12 +0900
-Message-Id: <20230604075713.1027261-1-masahiroy@kernel.org>
+Subject: [PATCH v2 2/2] drm/bridge: imx: turn imx8{qm,qxp}-ldb into single-object modules
+Date:   Sun,  4 Jun 2023 16:57:13 +0900
+Message-Id: <20230604075713.1027261-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230604075713.1027261-1-masahiroy@kernel.org>
+References: <20230604075713.1027261-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,178 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_DRM_IMX8QM_LDB=m and CONFIG_DRM_IMX8QXP_LDB=y (or vice
-versa), imx-ldb-helper.o is linked to a module and also to vmlinux
-even though the expected CFLAGS are different between builtins and
-modules.
+With the previous fix, these modules are built from a single C file.
 
-This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
-Fixing mixed module-builtin objects").
-
-Split imx-ldb-helper.c into a separate module.
+Rename the source files so they match the module names.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
-Changes in v2:
- - Add a separate module instead of making the functions static inline
+(no changes since v1)
 
- drivers/gpu/drm/bridge/imx/Kconfig          |  5 +++++
- drivers/gpu/drm/bridge/imx/Makefile         |  5 +++--
- drivers/gpu/drm/bridge/imx/imx-ldb-helper.c | 20 ++++++++++++++++++++
- 3 files changed, 28 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/imx/Makefile                           | 4 ----
+ drivers/gpu/drm/bridge/imx/{imx8qm-ldb-drv.c => imx8qm-ldb.c} | 0
+ .../gpu/drm/bridge/imx/{imx8qxp-ldb-drv.c => imx8qxp-ldb.c}   | 0
+ 3 files changed, 4 deletions(-)
+ rename drivers/gpu/drm/bridge/imx/{imx8qm-ldb-drv.c => imx8qm-ldb.c} (100%)
+ rename drivers/gpu/drm/bridge/imx/{imx8qxp-ldb-drv.c => imx8qxp-ldb.c} (100%)
 
-diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-index 608f47f41bcd..9fae28db6aa7 100644
---- a/drivers/gpu/drm/bridge/imx/Kconfig
-+++ b/drivers/gpu/drm/bridge/imx/Kconfig
-@@ -1,9 +1,13 @@
- if ARCH_MXC || COMPILE_TEST
- 
-+config DRM_IMX_LDB_HELPER
-+	tristate
-+
- config DRM_IMX8QM_LDB
- 	tristate "Freescale i.MX8QM LVDS display bridge"
- 	depends on OF
- 	depends on COMMON_CLK
-+	select DRM_IMX_LDB_HELPER
- 	select DRM_KMS_HELPER
- 	help
- 	  Choose this to enable the internal LVDS Display Bridge(LDB) found in
-@@ -13,6 +17,7 @@ config DRM_IMX8QXP_LDB
- 	tristate "Freescale i.MX8QXP LVDS display bridge"
- 	depends on OF
- 	depends on COMMON_CLK
-+	select DRM_IMX_LDB_HELPER
- 	select DRM_KMS_HELPER
- 	help
- 	  Choose this to enable the internal LVDS Display Bridge(LDB) found in
 diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
-index aa90ec8d5433..5fc821278693 100644
+index 5fc821278693..8e2ebf3399a1 100644
 --- a/drivers/gpu/drm/bridge/imx/Makefile
 +++ b/drivers/gpu/drm/bridge/imx/Makefile
-@@ -1,7 +1,8 @@
--imx8qm-ldb-objs := imx-ldb-helper.o imx8qm-ldb-drv.o
-+obj-$(CONFIG_DRM_IMX_LDB_HELPER) += imx-ldb-helper.o
-+imx8qm-ldb-objs := imx8qm-ldb-drv.o
+@@ -1,10 +1,6 @@
+ obj-$(CONFIG_DRM_IMX_LDB_HELPER) += imx-ldb-helper.o
+-imx8qm-ldb-objs := imx8qm-ldb-drv.o
  obj-$(CONFIG_DRM_IMX8QM_LDB) += imx8qm-ldb.o
- 
--imx8qxp-ldb-objs := imx-ldb-helper.o imx8qxp-ldb-drv.o
-+imx8qxp-ldb-objs := imx8qxp-ldb-drv.o
+-
+-imx8qxp-ldb-objs := imx8qxp-ldb-drv.o
  obj-$(CONFIG_DRM_IMX8QXP_LDB) += imx8qxp-ldb.o
- 
+-
  obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
-diff --git a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
-index 7338b84bc83d..7382cb1fbfd7 100644
---- a/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
-+++ b/drivers/gpu/drm/bridge/imx/imx-ldb-helper.c
-@@ -4,8 +4,10 @@
-  * Copyright 2019,2020,2022 NXP
-  */
- 
-+#include <linux/export.h>
- #include <linux/media-bus-format.h>
- #include <linux/mfd/syscon.h>
-+#include <linux/module.h>
- #include <linux/of.h>
- #include <linux/regmap.h>
- 
-@@ -15,16 +17,20 @@
- 
- #include "imx-ldb-helper.h"
- 
-+#define DRIVER_NAME		"imx-ldb-helper"
-+
- bool ldb_channel_is_single_link(struct ldb_channel *ldb_ch)
- {
- 	return ldb_ch->link_type == LDB_CH_SINGLE_LINK;
- }
-+EXPORT_SYMBOL_GPL(ldb_channel_is_single_link);
- 
- bool ldb_channel_is_split_link(struct ldb_channel *ldb_ch)
- {
- 	return ldb_ch->link_type == LDB_CH_DUAL_LINK_EVEN_ODD_PIXELS ||
- 	       ldb_ch->link_type == LDB_CH_DUAL_LINK_ODD_EVEN_PIXELS;
- }
-+EXPORT_SYMBOL_GPL(ldb_channel_is_split_link);
- 
- int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
- 				   struct drm_bridge_state *bridge_state,
-@@ -38,6 +44,7 @@ int ldb_bridge_atomic_check_helper(struct drm_bridge *bridge,
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_atomic_check_helper);
- 
- void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
- 				const struct drm_display_mode *mode,
-@@ -69,6 +76,7 @@ void ldb_bridge_mode_set_helper(struct drm_bridge *bridge,
- 		break;
- 	}
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_mode_set_helper);
- 
- void ldb_bridge_enable_helper(struct drm_bridge *bridge)
- {
-@@ -81,6 +89,7 @@ void ldb_bridge_enable_helper(struct drm_bridge *bridge)
- 	 */
- 	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_enable_helper);
- 
- void ldb_bridge_disable_helper(struct drm_bridge *bridge)
- {
-@@ -95,6 +104,7 @@ void ldb_bridge_disable_helper(struct drm_bridge *bridge)
- 
- 	regmap_write(ldb->regmap, ldb->ctrl_reg, ldb->ldb_ctrl);
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_disable_helper);
- 
- int ldb_bridge_attach_helper(struct drm_bridge *bridge,
- 			     enum drm_bridge_attach_flags flags)
-@@ -117,6 +127,7 @@ int ldb_bridge_attach_helper(struct drm_bridge *bridge,
- 				ldb_ch->next_bridge, bridge,
- 				DRM_BRIDGE_ATTACH_NO_CONNECTOR);
- }
-+EXPORT_SYMBOL_GPL(ldb_bridge_attach_helper);
- 
- int ldb_init_helper(struct ldb *ldb)
- {
-@@ -157,6 +168,7 @@ int ldb_init_helper(struct ldb *ldb)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(ldb_init_helper);
- 
- int ldb_find_next_bridge_helper(struct ldb *ldb)
- {
-@@ -184,6 +196,7 @@ int ldb_find_next_bridge_helper(struct ldb *ldb)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(ldb_find_next_bridge_helper);
- 
- void ldb_add_bridge_helper(struct ldb *ldb,
- 			   const struct drm_bridge_funcs *bridge_funcs)
-@@ -204,6 +217,7 @@ void ldb_add_bridge_helper(struct ldb *ldb,
- 		drm_bridge_add(&ldb_ch->bridge);
- 	}
- }
-+EXPORT_SYMBOL_GPL(ldb_add_bridge_helper);
- 
- void ldb_remove_bridge_helper(struct ldb *ldb)
- {
-@@ -219,3 +233,9 @@ void ldb_remove_bridge_helper(struct ldb *ldb)
- 		drm_bridge_remove(&ldb_ch->bridge);
- 	}
- }
-+EXPORT_SYMBOL_GPL(ldb_remove_bridge_helper);
-+
-+MODULE_DESCRIPTION("i.MX8 LVDS Display Bridge(LDB)/Pixel Mapper bridge helper");
-+MODULE_AUTHOR("Liu Ying <victor.liu@nxp.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:" DRIVER_NAME);
+ obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK) += imx8qxp-pixel-link.o
+ obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK_TO_DPI) += imx8qxp-pxl2dpi.o
+diff --git a/drivers/gpu/drm/bridge/imx/imx8qm-ldb-drv.c b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+similarity index 100%
+rename from drivers/gpu/drm/bridge/imx/imx8qm-ldb-drv.c
+rename to drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+diff --git a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb-drv.c b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+similarity index 100%
+rename from drivers/gpu/drm/bridge/imx/imx8qxp-ldb-drv.c
+rename to drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
 -- 
 2.39.2
 
