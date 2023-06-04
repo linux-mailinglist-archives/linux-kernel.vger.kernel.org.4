@@ -2,194 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406E6721844
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40039721847
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 17:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjFDPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 11:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S231796AbjFDPtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 11:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbjFDPov (ORCPT
+        with ESMTP id S231355AbjFDPth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 11:44:51 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1537FDE
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:44:49 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 5puJqUJl3xbtx5puJqV5WT; Sun, 04 Jun 2023 17:44:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685893488;
-        bh=4MVPujWGEC2Hbr//Xyamq+0YVn6N8CNGZocur4O5qgA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=WgnLOsZnQ0uUapvPl9OVnQvD2I/zNbKmRWJ1GXclXg7Alpp8751PpITUE4RtsSJiL
-         InZLFVeCEtJkJbUNxjf1E+WS6aLhATHITZHgD3PAp4frjWOlMqrEO53s6Eef8MUuNC
-         wD+Bjg7O6kI76uiHo5rRAy/4pj8zQfBmwVcCK1Css5Sg5Xd5f7Edq4/Ub1k35j7J6T
-         ph8kLyzqzPL+yOukLEJr/PjtMLLpuxjz4JvgWAbivPVrkyET0WPlot4QKe/4B2W/VN
-         Gmxhe28+9GYJ3BjflsZZdPm/Kr5ZWPcMapN6YNjDGe5+VCHdwdITzd9IJT/wPBl5Qp
-         KmTbuW2T35xIQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 04 Jun 2023 17:44:48 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <ac6ef7f2-0d7a-ba43-4b63-0a23d899230f@wanadoo.fr>
-Date:   Sun, 4 Jun 2023 17:44:39 +0200
+        Sun, 4 Jun 2023 11:49:37 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D229BBB
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 08:49:35 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so8267171a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 08:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685893774; x=1688485774;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HA8d4mfGyM8ahx5rcFKDUCtao1aRBeffRHpcG0ji6xQ=;
+        b=csBdki4UIyooYMokZLc/oOBv1j6g31/Z+DsaWXDHcPUt+E/hgi65jVEs5n6Ii13FDU
+         FFTv4IgWkT0xnWxSSQ/5FRYLSkNS5Bc/6efYPdQ/RWbeR2brbsOzSNa2a/U4EG2mYNZY
+         ojDmvqZLsF3bltFvxLcbokZ6gK448qhPPqqqNfsq9ZqU4Yu/cgHVfy97J0h/zvcXvVuS
+         V6OE3uJXV2cuPteK0GwpiolCzb8OYl6Im+741ibcgp8Ygoq3Km41+tE+F0uLkEVtB7D4
+         cuvrU5SGNKsSiE/XNq1P9ySnQvfONwWI/irxA3tEHkofNZqlOaFI0nLpXVT1fKMgT1sJ
+         1UDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685893774; x=1688485774;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HA8d4mfGyM8ahx5rcFKDUCtao1aRBeffRHpcG0ji6xQ=;
+        b=KKcVkW1SBsYzcvEFD520CayjpeAmo5mSBQd1emPn6YQ7vNT8odki7iOihacNBxTVx8
+         /b+RiJiZe014BUPl/6zRcpUGS3ZjMKlM0Oc1Vt9hQ9oyy3hEd6YHmOpVkhnJn/Q/mbTG
+         6mN/If/XV7DYMbMun/9RNiJPTYxMIuP7GvxL/rtXHtSS7xdRyUtvMbmdtHOxxMDHQc2K
+         MGmQD8OhKA7UphIJargRLLxDtGOQ9xjmnWkkhBUwiSA3Qo17mqfj0PobdM9TxwWHy61e
+         cEfpOCEvBxxHpAo+L0uCs1zIa22vaZlD/tHX2ElfXkUBWLlqgKyh6c/1Ho9+Q7HtO3/Z
+         uE1g==
+X-Gm-Message-State: AC+VfDxEs3YJCzVj99wKP189v7SVIjhgGn/asj2W74YbAMW+Uyv3duZT
+        g7A3OimEEUYvPqegPdYTT3AEkHnPiGJbjw==
+X-Google-Smtp-Source: ACHHUZ7WujvHuqt9pQmqgBXmzHV3ueYSMcTO4YGSH1LDMXxFB0gcCwxys7aJC8nZ7tghoU50Bp4UkQ==
+X-Received: by 2002:a05:6402:50ce:b0:510:e8dc:f2a7 with SMTP id h14-20020a05640250ce00b00510e8dcf2a7mr7770006edb.7.1685893774076;
+        Sun, 04 Jun 2023 08:49:34 -0700 (PDT)
+Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id u23-20020aa7d897000000b0050cc4461fc5sm2876820edq.92.2023.06.04.08.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 08:49:32 -0700 (PDT)
+Message-ID: <5a8e8af8a81fac84e13f9ece46a73028243ff276.camel@gmail.com>
+Subject: Re: [PATCH v1 09/43] clocksource: ep93xx: Add driver for Cirrus
+ Logic EP93xx
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 04 Jun 2023 17:49:31 +0200
+In-Reply-To: <20230601053546.9574-10-nikita.shubin@maquefel.me>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230601053546.9574-10-nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/4] Input: ads7846 - Convert to use software nodes
-Content-Language: fr
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Helge Deller <deller@gmx.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mmc@vger.kernel.org
-References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
- <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 08/05/2023 à 23:20, Linus Walleij a écrit :
-> The Nokia 770 is using GPIOs from the global numberspace on the
-> CBUS node to pass down to the LCD controller. This regresses when we
-> let the OMAP GPIO driver use dynamic GPIO base.
-> 
-> The Nokia 770 now has dynamic allocation of IRQ numbers, so this
-> needs to be fixed for it to work.
-> 
-> As this is the only user of LCD MIPID we can easily augment the
-> driver to use a GPIO descriptor instead and resolve the issue.
-> 
-> The platform data .shutdown() callback wasn't even used in the
-> code, but we encode a shutdown asserting RESET in the remove()
-> callback for completeness sake.
-> 
-> The CBUS also has the ADS7846 touchscreen attached.
-> 
-> Populate the devices on the Nokia 770 CBUS I2C using software
-> nodes instead of platform data quirks. This includes the LCD
-> and the ADS7846 touchscreen so the conversion just brings the LCD
-> along with it as software nodes is an all-or-nothing design
-> pattern.
-> 
-> The ADS7846 has some limited support for using GPIO descriptors,
-> let's convert it over completely to using device properties and then
-> fix all remaining boardfile users to provide all platform data using
-> software nodes.
-> 
-> Dump the of includes and of_match_ptr() in the ADS7846 driver as part
-> of the job.
-> 
-> Since we have to move ADS7846 over to obtaining the GPIOs it is
-> using exclusively from descriptors, we provide descriptor tables
-> for the two remaining in-kernel boardfiles using ADS7846:
-> 
-> - PXA Spitz
-> - MIPS Alchemy DB1000 development board
-> 
-> It was too hard for me to include software node conversion of
-> these two remaining users at this time: the spitz is using a
-> hscync callback in the platform data that would require further
-> GPIO descriptor conversion of the Spitz, and moving the hsync
-> callback down into the driver: it will just become too big of
-> a job, but it can be done separately.
-> 
-> The MIPS Alchemy DB1000 is simply something I cannot test, so take
-> the easier approach of just providing some GPIO descriptors in
-> this case as I don't want the patch to grow too intrusive.
-> 
-> As we see that several device trees have incorrect polarity flags
-> and just expect to bypass the gpiolib polarity handling, fix up
-> all device trees too, in a separate patch.
-> 
-> Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Fixes: 92bf78b33b0b ("gpio: omap: use dynamic allocation of base")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+T24gVGh1LCAyMDIzLTA2LTAxIGF0IDA4OjM0ICswMzAwLCBOaWtpdGEgU2h1YmluIHdyb3RlOgo+
+IFRoaXMgdXMgYSByZXdyaXRlIG9mIEVQOTN4eCB0aW1lciBkcml2ZXIgaW4KPiBhcmNoL2FybS9t
+YWNoLWVwOTN4eC90aW1lci1lcDkzeHguYyB0cnlpbmcgdG8gZG8gZXZlcnl0aGluZwo+IHRoZSBk
+ZXZpY2UgdHJlZSB3YXk6Cj4gCj4gLSBNYWtlIGV2ZXJ5IElPLWFjY2VzcyByZWxhdGl2ZSB0byBh
+IGJhc2UgYWRkcmVzcyBhbmQgZHluYW1pYwo+IMKgIHNvIHdlIGNhbiBkbyBhIGR5bmFtaWMgaW9y
+ZW1hcCBhbmQgZ2V0IGdvaW5nLgo+IC0gRmluZCByZWdpc3RlciByYW5nZSBhbmQgaW50ZXJydXB0
+IGZyb20gdGhlIGRldmljZSB0cmVlLgo+IAo+IFJldmlld2VkLWJ5OiBMaW51cyBXYWxsZWlqIDxs
+aW51cy53YWxsZWlqQGxpbmFyby5vcmc+Cj4gU2lnbmVkLW9mZi1ieTogTmlraXRhIFNodWJpbiA8
+bmlraXRhLnNodWJpbkBtYXF1ZWZlbC5tZT4KClRlc3RlZC1ieTogQWxleGFuZGVyIFN2ZXJkbGlu
+IDxhbGV4YW5kZXIuc3ZlcmRsaW5AZ21haWwuY29tPgoKPiAtLS0KPiAKPiBOb3RlczoKPiDCoMKg
+wqAgdjAgLT4gdjE6Cj4gwqDCoMKgIAo+IMKgwqDCoCAtIGZpeGVkIGhlYWRlcnMKPiAKPiDCoGRy
+aXZlcnMvY2xvY2tzb3VyY2UvS2NvbmZpZ8KgwqDCoMKgwqDCoMKgIHzCoCAxMSArKwo+IMKgZHJp
+dmVycy9jbG9ja3NvdXJjZS9NYWtlZmlsZcKgwqDCoMKgwqDCoCB8wqDCoCAxICsKPiDCoGRyaXZl
+cnMvY2xvY2tzb3VyY2UvdGltZXItZXA5M3h4LmMgfCAxODkgKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysKPiDCoDMgZmlsZXMgY2hhbmdlZCwgMjAxIGluc2VydGlvbnMoKykKPiDCoGNyZWF0
+ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2Nsb2Nrc291cmNlL3RpbWVyLWVwOTN4eC5jCj4gCj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvY2xvY2tzb3VyY2UvS2NvbmZpZyBiL2RyaXZlcnMvY2xvY2tzb3Vy
+Y2UvS2NvbmZpZwo+IGluZGV4IDVmYzhmMGU3ZmIzOC4uNDBiZmM3Yzg2NzU2IDEwMDY0NAo+IC0t
+LSBhL2RyaXZlcnMvY2xvY2tzb3VyY2UvS2NvbmZpZwo+ICsrKyBiL2RyaXZlcnMvY2xvY2tzb3Vy
+Y2UvS2NvbmZpZwo+IEBAIC03MjEsNCArNzIxLDE1IEBAIGNvbmZpZyBHT0xERklTSF9USU1FUgo+
+IMKgwqDCoMKgwqDCoMKgwqBoZWxwCj4gwqDCoMKgwqDCoMKgwqDCoMKgIFN1cHBvcnQgZm9yIHRo
+ZSB0aW1lci9jb3VudGVyIG9mIGdvbGRmaXNoLXJ0Ywo+IMKgCj4gK2NvbmZpZyBFUDkzWFhfVElN
+RVIKPiArwqDCoMKgwqDCoMKgwqBib29sICJDaXJydXMgTG9naWMgZXA5M3h4IHRpbWVyIGRyaXZl
+ciIgaWYgQ09NUElMRV9URVNUCj4gK8KgwqDCoMKgwqDCoMKgZGVwZW5kcyBvbiBBUkNIX0VQOTNY
+WAo+ICvCoMKgwqDCoMKgwqDCoGRlcGVuZHMgb24gR0VORVJJQ19DTE9DS0VWRU5UUwo+ICvCoMKg
+wqDCoMKgwqDCoGRlcGVuZHMgb24gSEFTX0lPTUVNCj4gK8KgwqDCoMKgwqDCoMKgc2VsZWN0IENM
+S1NSQ19NTUlPCj4gK8KgwqDCoMKgwqDCoMKgc2VsZWN0IFRJTUVSX09GCj4gK8KgwqDCoMKgwqDC
+oMKgaGVscAo+ICvCoMKgwqDCoMKgwqDCoMKgIEVuYWJsZXMgc3VwcG9ydCBmb3IgdGhlIENpcnJ1
+cyBMb2dpYyB0aW1lciBibG9jawo+ICvCoMKgwqDCoMKgwqDCoMKgIEVQOTNYWC4KPiArCj4gwqBl
+bmRtZW51Cj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xvY2tzb3VyY2UvTWFrZWZpbGUgYi9kcml2
+ZXJzL2Nsb2Nrc291cmNlL01ha2VmaWxlCj4gaW5kZXggNjRhYjU0N2RlOTdiLi4wOWMyZDRlNWQ4
+MDkgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9jbG9ja3NvdXJjZS9NYWtlZmlsZQo+ICsrKyBiL2Ry
+aXZlcnMvY2xvY2tzb3VyY2UvTWFrZWZpbGUKPiBAQCAtODgsMyArODgsNCBAQCBvYmotJChDT05G
+SUdfTUlDUk9DSElQX1BJVDY0QinCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHRp
+bWVyLW1pY3JvY2hpcC1waXQ2NGIubwo+IMKgb2JqLSQoQ09ORklHX01TQzMxM0VfVElNRVIpwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgKz0gdGltZXItbXNjMzEzZS5vCj4gwqBvYmotJChDT05GSUdf
+R09MREZJU0hfVElNRVIpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHRpbWVyLWdvbGRmaXNoLm8K
+PiDCoG9iai0kKENPTkZJR19HWFBfVElNRVIpwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgKz0gdGltZXItZ3hwLm8KPiArb2JqLSQoQ09ORklHX0VQOTNYWF9U
+SU1FUinCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCs9IHRpbWVyLWVwOTN4eC5vCj4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvY2xvY2tzb3VyY2UvdGltZXItZXA5M3h4LmMgYi9kcml2ZXJzL2Nsb2Nr
+c291cmNlL3RpbWVyLWVwOTN4eC5jCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwMDAuLjk2NjUwMjE2OWFhMAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9kcml2ZXJzL2Ns
+b2Nrc291cmNlL3RpbWVyLWVwOTN4eC5jCj4gQEAgLTAsMCArMSwxODkgQEAKPiArLy8gU1BEWC1M
+aWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKPiArLyoKPiArICogQ2lycnVzIExvZ2ljIEVQOTN4
+eCB0aW1lciBkcml2ZXIuCj4gKyAqIENvcHlyaWdodCAoQykgMjAyMSBOaWtpdGEgU2h1YmluIDxu
+aWtpdGEuc2h1YmluQG1hcXVlZmVsLm1lPgo+ICsgKgo+ICsgKiBCYXNlZCBvbiBhIHJld3JpdGUg
+b2YgYXJjaC9hcm0vbWFjaC1lcDkzeHgvdGltZXIuYzoKPiArICovCj4gKwo+ICsjaW5jbHVkZSA8
+bGludXgva2VybmVsLmg+Cj4gKyNpbmNsdWRlIDxsaW51eC9pbml0Lmg+Cj4gKyNpbmNsdWRlIDxs
+aW51eC9jbG9ja3NvdXJjZS5oPgo+ICsjaW5jbHVkZSA8bGludXgvY2xvY2tjaGlwcy5oPgo+ICsj
+aW5jbHVkZSA8bGludXgvc2NoZWRfY2xvY2suaD4KPiArI2luY2x1ZGUgPGxpbnV4L2ludGVycnVw
+dC5oPgo+ICsjaW5jbHVkZSA8bGludXgvaXJxLmg+Cj4gKyNpbmNsdWRlIDxsaW51eC9vZl9pcnEu
+aD4KPiArI2luY2x1ZGUgPGxpbnV4L29mX2FkZHJlc3MuaD4KPiArI2luY2x1ZGUgPGxpbnV4L2lv
+Lmg+Cj4gKyNpbmNsdWRlIDxhc20vbWFjaC90aW1lLmg+Cj4gKwo+ICsvKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+Kgo+ICsgKiBUaW1lciBoYW5kbGluZyBmb3IgRVA5M3h4Cj4gKyAqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCj4g
+KyAqIFRoZSBlcDkzeHggaGFzIGZvdXIgaW50ZXJuYWwgdGltZXJzLsKgIFRpbWVycyAxLCAyIChi
+b3RoIDE2IGJpdCkgYW5kCj4gKyAqIDMgKDMyIGJpdCkgY291bnQgZG93biBhdCA1MDgga0h6LCBh
+cmUgc2VsZi1yZWxvYWRpbmcsIGFuZCBjYW4gZ2VuZXJhdGUKPiArICogYW4gaW50ZXJydXB0IG9u
+IHVuZGVyZmxvdy7CoCBUaW1lciA0ICg0MCBiaXQpIGNvdW50cyBkb3duIGF0IDk4My4wNCBrSHos
+Cj4gKyAqIGlzIGZyZWUtcnVubmluZywgYW5kIGNhbid0IGdlbmVyYXRlIGludGVycnVwdHMuCj4g
+KyAqCj4gKyAqIFRoZSA1MDgga0h6IHRpbWVycyBhcmUgaWRlYWwgZm9yIHVzZSBmb3IgdGhlIHRp
+bWVyIGludGVycnVwdCwgYXMgdGhlCj4gKyAqIG1vc3QgY29tbW9uIHZhbHVlcyBvZiBIWiBkaXZp
+ZGUgNTA4IGtIeiBuaWNlbHkuwqAgV2UgcGljayB0aGUgMzIgYml0Cj4gKyAqIHRpbWVyICh0aW1l
+ciAzKSB0byBnZXQgYXMgbG9uZyBzbGVlcCBpbnRlcnZhbHMgYXMgcG9zc2libGUgd2hlbiB1c2lu
+Zwo+ICsgKiBDT05GSUdfTk9fSFouCj4gKyAqCj4gKyAqIFRoZSBoaWdoZXIgY2xvY2sgcmF0ZSBv
+ZiB0aW1lciA0IG1ha2VzIGl0IGEgYmV0dGVyIGNob2ljZSB0aGFuIHRoZQo+ICsgKiBvdGhlciB0
+aW1lcnMgZm9yIHVzZSBhcyBjbG9jayBzb3VyY2UgYW5kIGZvciBzY2hlZF9jbG9jaygpLCBwcm92
+aWRpbmcKPiArICogYSBzdGFibGUgNDAgYml0IHRpbWUgYmFzZS4KPiArICoqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioKPiArICovCj4gKwo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjFfTE9BRMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgMHgwMAo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjFfVkFMVUXCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAweDA0Cj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSMV9DT05UUk9MwqDCoMKg
+wqDCoMKgwqDCoMKgwqAweDA4Cj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSMTIzX0NPTlRST0xfRU5B
+QkxFwqBCSVQoNykKPiArI2RlZmluZSBFUDkzWFhfVElNRVIxMjNfQ09OVFJPTF9NT0RFwqDCoMKg
+QklUKDYpCj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSMTIzX0NPTlRST0xfQ0xLU0VMwqBCSVQoMykK
+PiArI2RlZmluZSBFUDkzWFhfVElNRVIxX0NMRUFSwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgMHgw
+Ywo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjJfTE9BRMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+MHgyMAo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjJfVkFMVUXCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAweDI0Cj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSMl9DT05UUk9MwqDCoMKgwqDCoMKgwqDCoMKg
+wqAweDI4Cj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSMl9DTEVBUsKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoDB4MmMKPiArLyogVGhpcyByZWFkLW9ubHkgcmVnaXN0ZXIgY29udGFpbnMgdGhlIGxvdyB3
+b3JkIG9mIHRoZSB0aW1lIHN0YW1wIGRlYnVnIHRpbWVyCj4gKyAqICggVGltZXI0KS4gV2hlbiB0
+aGlzIHJlZ2lzdGVyIGlzIHJlYWQsIHRoZSBoaWdoIGJ5dGUgb2YgdGhlIFRpbWVyNCBjb3VudGVy
+IGlzCj4gKyAqIHNhdmVkIGluIHRoZSBUaW1lcjRWYWx1ZUhpZ2ggcmVnaXN0ZXIuCj4gKyAqLwo+
+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjRfVkFMVUVfTE9XwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAweDYwCj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSNF9WQUxVRV9ISUdIwqDCoMKgwqDC
+oMKgwqAweDY0Cj4gKyNkZWZpbmUgRVA5M1hYX1RJTUVSNF9WQUxVRV9ISUdIX0VOQUJMRcKgwqDC
+oMKgwqDCoMKgwqBCSVQoOCkKPiArI2RlZmluZSBFUDkzWFhfVElNRVIzX0xPQUTCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoDB4ODAKPiArI2RlZmluZSBFUDkzWFhfVElNRVIzX1ZBTFVFwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgMHg4NAo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjNfQ09OVFJPTMKg
+wqDCoMKgwqDCoMKgwqDCoMKgMHg4OAo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjNfQ0xFQVLCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAweDhjCj4gKwo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjEyM19S
+QVRFwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDUwODQ2OQo+ICsjZGVmaW5lIEVQOTNYWF9USU1FUjRf
+UkFURcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgOTgzMDQwCj4gKwo+ICtzdHJ1Y3QgZXA5M3h4
+X3RjdSB7Cj4gK8KgwqDCoMKgwqDCoMKgdm9pZCBfX2lvbWVtICpiYXNlOwo+ICt9Owo+ICsKPiAr
+c3RhdGljIHN0cnVjdCBlcDkzeHhfdGN1ICplcDkzeHhfdGN1Owo+ICsKPiArc3RhdGljIHU2NCBl
+cDkzeHhfY2xvY2tzb3VyY2VfcmVhZChzdHJ1Y3QgY2xvY2tzb3VyY2UgKmMpCj4gK3sKPiArwqDC
+oMKgwqDCoMKgwqBzdHJ1Y3QgZXA5M3h4X3RjdSAqdGN1ID0gZXA5M3h4X3RjdTsKPiArwqDCoMKg
+wqDCoMKgwqB1NjQgcmV0Owo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXQgPSByZWFkbCh0Y3UtPmJh
+c2UgKyBFUDkzWFhfVElNRVI0X1ZBTFVFX0xPVyk7Cj4gK8KgwqDCoMKgwqDCoMKgcmV0IHw9ICgo
+dTY0KSAocmVhZGwodGN1LT5iYXNlICsgRVA5M1hYX1RJTUVSNF9WQUxVRV9ISUdIKSAmIDB4ZmYp
+IDw8IDMyKTsKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gKHU2NCkgcmV0Owo+ICt9Cj4gKwo+ICtz
+dGF0aWMgdTY0IG5vdHJhY2UgZXA5M3h4X3JlYWRfc2NoZWRfY2xvY2sodm9pZCkKPiArewo+ICvC
+oMKgwqDCoMKgwqDCoHJldHVybiBlcDkzeHhfY2xvY2tzb3VyY2VfcmVhZChOVUxMKTsKPiArfQo+
+ICsKPiArc3RhdGljIGludCBlcDkzeHhfY2xrZXZ0X3NldF9uZXh0X2V2ZW50KHVuc2lnbmVkIGxv
+bmcgbmV4dCwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGNsb2NrX2V2ZW50X2Rldmlj
+ZSAqZXZ0KQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IGVwOTN4eF90Y3UgKnRjdSA9IGVw
+OTN4eF90Y3U7Cj4gK8KgwqDCoMKgwqDCoMKgLyogRGVmYXVsdCBtb2RlOiBwZXJpb2RpYywgb2Zm
+LCA1MDgga0h6ICovCj4gK8KgwqDCoMKgwqDCoMKgdTMyIHRtb2RlID0gRVA5M1hYX1RJTUVSMTIz
+X0NPTlRST0xfTU9ERSB8Cj4gK8KgwqDCoMKgwqDCoMKgRVA5M1hYX1RJTUVSMTIzX0NPTlRST0xf
+Q0xLU0VMOwo+ICsKPiArwqDCoMKgwqDCoMKgwqAvKiBDbGVhciB0aW1lciAqLwo+ICvCoMKgwqDC
+oMKgwqDCoHdyaXRlbCh0bW9kZSwgdGN1LT5iYXNlICsgRVA5M1hYX1RJTUVSM19DT05UUk9MKTsK
+PiArCj4gK8KgwqDCoMKgwqDCoMKgLyogU2V0IG5leHQgZXZlbnQgKi8KPiArwqDCoMKgwqDCoMKg
+wqB3cml0ZWwobmV4dCwgdGN1LT5iYXNlICsgRVA5M1hYX1RJTUVSM19MT0FEKTsKPiArwqDCoMKg
+wqDCoMKgwqB3cml0ZWwodG1vZGUgfCBFUDkzWFhfVElNRVIxMjNfQ09OVFJPTF9FTkFCTEUsCj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRjdS0+YmFzZSArIEVQOTNYWF9USU1FUjNfQ09O
+VFJPTCk7Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gK30KPiArCj4gK3N0YXRpYyBpbnQg
+ZXA5M3h4X2Nsa2V2dF9zaHV0ZG93bihzdHJ1Y3QgY2xvY2tfZXZlbnRfZGV2aWNlICpldnQpCj4g
+K3sKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgZXA5M3h4X3RjdSAqdGN1ID0gZXA5M3h4X3RjdTsK
+PiArwqDCoMKgwqDCoMKgwqAvKiBEaXNhYmxlIHRpbWVyICovCj4gK8KgwqDCoMKgwqDCoMKgd3Jp
+dGVsKDAsIHRjdS0+YmFzZSArIEVQOTNYWF9USU1FUjNfQ09OVFJPTCk7Cj4gKwo+ICvCoMKgwqDC
+oMKgwqDCoHJldHVybiAwOwo+ICt9Cj4gKwo+ICtzdGF0aWMgc3RydWN0IGNsb2NrX2V2ZW50X2Rl
+dmljZSBlcDkzeHhfY2xvY2tldmVudCA9IHsKPiArwqDCoMKgwqDCoMKgwqAubmFtZcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgPSAidGltZXIxIiwKPiArwqDCoMKgwqDCoMKg
+wqAuZmVhdHVyZXPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA9IENMT0NLX0VWVF9GRUFU
+X09ORVNIT1QsCj4gK8KgwqDCoMKgwqDCoMKgLnNldF9zdGF0ZV9zaHV0ZG93bsKgwqDCoMKgwqA9
+IGVwOTN4eF9jbGtldnRfc2h1dGRvd24sCj4gK8KgwqDCoMKgwqDCoMKgLnNldF9zdGF0ZV9vbmVz
+aG90wqDCoMKgwqDCoMKgPSBlcDkzeHhfY2xrZXZ0X3NodXRkb3duLAo+ICvCoMKgwqDCoMKgwqDC
+oC50aWNrX3Jlc3VtZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoD0gZXA5M3h4X2Nsa2V2dF9zaHV0
+ZG93biwKPiArwqDCoMKgwqDCoMKgwqAuc2V0X25leHRfZXZlbnTCoMKgwqDCoMKgwqDCoMKgwqA9
+IGVwOTN4eF9jbGtldnRfc2V0X25leHRfZXZlbnQsCj4gK8KgwqDCoMKgwqDCoMKgLnJhdGluZ8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA9IDMwMCwKPiArfTsKPiArCj4gK3N0YXRp
+YyBpcnFyZXR1cm5fdCBlcDkzeHhfdGltZXJfaW50ZXJydXB0KGludCBpcnEsIHZvaWQgKmRldl9p
+ZCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBlcDkzeHhfdGN1ICp0Y3UgPSBlcDkzeHhf
+dGN1Owo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBjbG9ja19ldmVudF9kZXZpY2UgKmV2dCA9IGRl
+dl9pZDsKPiArCj4gK8KgwqDCoMKgwqDCoMKgLyogV3JpdGluZyBhbnkgdmFsdWUgY2xlYXJzIHRo
+ZSB0aW1lciBpbnRlcnJ1cHQgKi8KPiArwqDCoMKgwqDCoMKgwqB3cml0ZWwoMSwgdGN1LT5iYXNl
+ICsgRVA5M1hYX1RJTUVSM19DTEVBUik7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGV2dC0+ZXZlbnRf
+aGFuZGxlcihldnQpOwo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gSVJRX0hBTkRMRUQ7Cj4g
+K30KPiArCj4gK3N0YXRpYyBpbnQgX19pbml0IGVwOTN4eF90aW1lcl9vZl9pbml0KHN0cnVjdCBk
+ZXZpY2Vfbm9kZSAqbnApCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBpbnQgaXJxOwo+ICvCoMKgwqDC
+oMKgwqDCoHVuc2lnbmVkIGxvbmcgZmxhZ3MgPSBJUlFGX1RJTUVSIHwgSVJRRl9JUlFQT0xMOwo+
+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBlcDkzeHhfdGN1ICp0Y3U7Cj4gK8KgwqDCoMKgwqDCoMKg
+aW50IHJldDsKPiArCj4gK8KgwqDCoMKgwqDCoMKgdGN1ID0ga3phbGxvYyhzaXplb2YoKnRjdSks
+IEdGUF9LRVJORUwpOwo+ICvCoMKgwqDCoMKgwqDCoGlmICghdGN1KQo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVOT01FTTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgdGN1
+LT5iYXNlID0gb2ZfaW9tYXAobnAsIDApOwo+ICvCoMKgwqDCoMKgwqDCoGlmICghdGN1LT5iYXNl
+KSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHByX2VycigiQ2FuJ3QgcmVtYXAg
+cmVnaXN0ZXJzXG4iKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gLUVO
+WElPOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dF9mcmVlOwo+ICvC
+oMKgwqDCoMKgwqDCoH0KPiArCj4gK8KgwqDCoMKgwqDCoMKgZXA5M3h4X3RjdSA9IHRjdTsKPiAr
+Cj4gK8KgwqDCoMKgwqDCoMKgaXJxID0gaXJxX29mX3BhcnNlX2FuZF9tYXAobnAsIDApOwo+ICvC
+oMKgwqDCoMKgwqDCoGlmIChpcnEgPD0gMCkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBwcl9lcnIoIkVSUk9SOiBpbnZhbGlkIGludGVycnVwdCBudW1iZXJcbiIpOwo+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSAtRUlOVkFMOwo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dF9mcmVlOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiArCj4g
+K8KgwqDCoMKgwqDCoMKgLyogRW5hYmxlIGFuZCByZWdpc3RlciBjbG9ja3NvdXJjZSBhbmQgc2No
+ZWRfY2xvY2sgb24gdGltZXIgNCAqLwo+ICvCoMKgwqDCoMKgwqDCoHdyaXRlbChFUDkzWFhfVElN
+RVI0X1ZBTFVFX0hJR0hfRU5BQkxFLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0Y3Ut
+PmJhc2UgKyBFUDkzWFhfVElNRVI0X1ZBTFVFX0hJR0gpOwo+ICvCoMKgwqDCoMKgwqDCoGNsb2Nr
+c291cmNlX21taW9faW5pdChOVUxMLCAidGltZXI0IiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBFUDkzWFhfVElNRVI0X1JB
+VEUsIDIwMCwgNDAsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgZXA5M3h4X2Nsb2Nrc291cmNlX3JlYWQpOwo+ICvCoMKgwqDC
+oMKgwqDCoHNjaGVkX2Nsb2NrX3JlZ2lzdGVyKGVwOTN4eF9yZWFkX3NjaGVkX2Nsb2NrLCA0MCwK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IEVQOTNYWF9USU1FUjRfUkFURSk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoC8qIFNldCB1cCBjbG9j
+a2V2ZW50IG9uIHRpbWVyIDMgKi8KPiArwqDCoMKgwqDCoMKgwqBpZiAocmVxdWVzdF9pcnEoaXJx
+LCBlcDkzeHhfdGltZXJfaW50ZXJydXB0LCBmbGFncywgImVwOTN4eCB0aW1lciIsCj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCZlcDkzeHhfY2xvY2tldmVudCkpCj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoHByX2VycigiRmFpbGVkIHRvIHJlcXVlc3QgaXJxICVkIChl
+cDkzeHggdGltZXIpXG4iLCBpcnEpOwo+ICvCoMKgwqDCoMKgwqDCoGNsb2NrZXZlbnRzX2NvbmZp
+Z19hbmRfcmVnaXN0ZXIoJmVwOTN4eF9jbG9ja2V2ZW50LAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoEVQOTNYWF9USU1FUjEy
+M19SQVRFLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoDEsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgMHhmZmZmZmZmZlUpOwo+ICsKPiArwqDCoMKgwqDC
+oMKgwqByZXR1cm4gMDsKPiArCj4gK291dF9mcmVlOgo+ICvCoMKgwqDCoMKgwqDCoGtmcmVlKHRj
+dSk7Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsKPiArfQo+ICsKPiArVElNRVJfT0ZfREVD
+TEFSRShlcDkzeHhfdGltZXIsICJjaXJydXMsZXA5MzAxLXRpbWVyIiwgZXA5M3h4X3RpbWVyX29m
+X2luaXQpOwoKLS0gCkFsZXhhbmRlciBTdmVyZGxpbi4KCg==
 
-[...]
-
-> diff --git a/drivers/video/fbdev/omap/lcd_mipid.c b/drivers/video/fbdev/omap/lcd_mipid.c
-> index 03cff39d392d..e4a7f0b824ff 100644
-> --- a/drivers/video/fbdev/omap/lcd_mipid.c
-> +++ b/drivers/video/fbdev/omap/lcd_mipid.c
-> @@ -7,6 +7,7 @@
->    */
->   #include <linux/device.h>
->   #include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
->   #include <linux/slab.h>
->   #include <linux/workqueue.h>
->   #include <linux/spi/spi.h>
-> @@ -41,6 +42,7 @@ struct mipid_device {
->   						   when we can issue the
->   						   next sleep in/out command */
->   	unsigned long	hw_guard_wait;		/* max guard time in jiffies */
-> +	struct gpio_desc	*reset;
->   
->   	struct omapfb_device	*fbdev;
->   	struct spi_device	*spi;
-> @@ -556,6 +558,12 @@ static int mipid_spi_probe(struct spi_device *spi)
->   		return -ENOMEM;
->   	}
->   
-> +	/* This will de-assert RESET if active */
-> +	md->reset = gpiod_get(&spi->dev, "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(md->reset))
-> +		return dev_err_probe(&spi->dev, PTR_ERR(md->reset),
-> +				     "no reset GPIO line\n");
-> +
->   	spi->mode = SPI_MODE_0;
->   	md->spi = spi;
->   	dev_set_drvdata(&spi->dev, md);
-> @@ -574,6 +582,8 @@ static void mipid_spi_remove(struct spi_device *spi)
->   {
->   	struct mipid_device *md = dev_get_drvdata(&spi->dev);
->   
-> +	/* Asserts RESET */
-> +	gpiod_set_value(md->reset, 1);
-
-Hi,
-
-should this also be done in the probe if mipid_detect() fails?
-
-If yes, please also look at [1], that I've just sent, which introduces 
-an error handling path in the probe.
-
-CJ
-
-[1]: 
-https://lore.kernel.org/all/8b82e34724755b69f34f15dddb288cd373080390.1620505229.git.christophe.jaillet@wanadoo.fr/
-
->   	mipid_disable(&md->panel);
->   	kfree(md);
->   }
-
-[...]
