@@ -2,222 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8283A7218D6
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 19:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4C47218DF
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 19:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjFDRbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 13:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S231709AbjFDRoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 13:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDRbR (ORCPT
+        with ESMTP id S229449AbjFDRoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 13:31:17 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2B3D3;
-        Sun,  4 Jun 2023 10:31:15 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-256e1d87998so3404055a91.3;
-        Sun, 04 Jun 2023 10:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685899875; x=1688491875;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WuZXC8GCsPypNwiYsJHvBO2PQoUqa9X0C4ZuKWfxTxU=;
-        b=JCgHtLJz1SCGhb5dDTA6M86IYU28+EguiJYKI73ckeaV30cZ1uV1eu/K4l8LCso2LB
-         Ds6RH8M4uMvIInsDBJKbejwOyKfu1eRdoJxrfQl61mfWNWr7Akz8VCpI8KEQccSoo6Xv
-         HwRNwlLAeS3GKthC/AqXCtW4A7IGHdr7J11CF0Bb59ezFs557oQ6E3EtJaFUtEYs6dl6
-         Nn8snvk/NdcF0m71hPBQZWjixiWai7SRe1kJQWEK/lZaOTZboaZ45gQwA7qK7JQu2IaF
-         TKSx3rtTfUtGNPxkV2Q41sWmqFjLBV1clriOFSq0S9/Lu9hD4SHR6qc1OwmD/d9im21n
-         ddyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685899875; x=1688491875;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WuZXC8GCsPypNwiYsJHvBO2PQoUqa9X0C4ZuKWfxTxU=;
-        b=ecsLQ6D+rW3FVPknTq+MUbCxMlZf1xKJeYgqNdxDatgMTYrKqy0C92Cn8ES+6Vk/Yz
-         sDNfuxabVp0gBYx9EJryMJ5N7nC6I2YGhoZy+8NsQoPsR/JV5g53o0JI6gEbDsXZ/QJh
-         b4Qhx+oE1BG8Y7378n1OUgAlCe3yfUHX1Gusssi/vBXa1T23f4bY4/sjCI1GIgn/q4xe
-         WIG5JHExfJDoUJD8CqhAHYM5+6coP0/ZJqQBggLdB+BhArV2vjKObkXaSZ90aE0rQjVO
-         Z25etQgCgHy1makYSwjz6Fla/rzd3HjuIzgj3d16MPUXlEjnw9+ZbOhyityqQQyijje5
-         Rn3A==
-X-Gm-Message-State: AC+VfDwhHlyuU4XW7v8BBwostnHvBAzd1kMQwOXPA7lmSeL/L9c0VOVF
-        74px60j2fcT3QoLB3ogO/OE=
-X-Google-Smtp-Source: ACHHUZ7SXjPhfonWsM71FEMQKgIfD1Mxv3Fna9qH142Ah0mN/dtvSy0yF6K29g+syKXMcrvDPk/6Tw==
-X-Received: by 2002:a17:90a:6903:b0:256:544a:74c9 with SMTP id r3-20020a17090a690300b00256544a74c9mr5362200pjj.25.1685899874890;
-        Sun, 04 Jun 2023 10:31:14 -0700 (PDT)
-Received: from localhost.localdomain ([110.46.146.116])
-        by smtp.gmail.com with ESMTPSA id a14-20020a17090abe0e00b0023a84911df2sm4316741pjs.7.2023.06.04.10.31.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 10:31:14 -0700 (PDT)
-From:   SungHwan Jung <onenowy@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     SungHwan Jung <onenowy@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] platform/x86: hp-wmi: Add thermal profile for Victus 16-d1xxx
-Date:   Mon,  5 Jun 2023 02:30:23 +0900
-Message-ID: <20230604173023.4675-1-onenowy@gmail.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 4 Jun 2023 13:44:02 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25F9DA;
+        Sun,  4 Jun 2023 10:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=8Z6PfFP6zRo9DlPnznqiNNc4wG4kWbC1Jiv5BsdVuvQ=; b=Q5a77oaHUDamCEZelb08p4/uN+
+        p9YXYIqAl8/AeNsh1tv5gCODANU2JDYeedxFkJRAN+XA11Jsb/I735qNqJcu/5ZxznjhNWIil1Eo0
+        +Ztz7p/ek7HUTELTRXRuNOvRF0I2l9rjsLXrAIu+fuGmGpvYd6rrJmJcG2eVKHIbbAWQ=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:57854 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q5rlZ-00067R-JR; Sun, 04 Jun 2023 13:43:46 -0400
+Date:   Sun, 4 Jun 2023 13:43:44 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
+Message-Id: <20230604134344.73dc3cbb57d335d4a0b4b33a@hugovil.com>
+In-Reply-To: <2023060454-cotton-paramount-e33e@gregkh>
+References: <20230602152626.284324-1-hugo@hugovil.com>
+        <20230602152626.284324-6-hugo@hugovil.com>
+        <2023060454-cotton-paramount-e33e@gregkh>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch includes Platform Profile support (performance, balanced, quiet)
-for Victus 16-d1xxx (8A25).
+On Sun, 4 Jun 2023 09:47:44 +0200
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
-Signed-off-by: SungHwan Jung <onenowy@gmail.com>
+> On Fri, Jun 02, 2023 at 11:26:21AM -0400, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> > and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> > changed the function of the GPIOs pins to act as modem control
+> > lines without any possibility of selecting GPIO function.
+> > 
+> > As a consequence, applications that depends on GPIO lines configured
+> > by default as GPIO pins no longer work as expected.
+> > 
+> > Also, the change to select modem control lines function was done only
+> > for channel A of dual UART variants (752/762). This was not documented
+> > in the log message.
+> > 
+> > Allow to specify GPIO or modem control line function in the device
+> > tree, and for each of the ports (A or B).
+> > 
+> > Do so by using the new device-tree property named
+> > "modem-control-line-ports" (property added in separate patch).
+> > 
+> > When registering GPIO chip controller, mask-out GPIO pins declared as
+> > modem control lines according to this new "modem-control-line-ports"
+> > DT property.
+> > 
+> > Boards that need to have GPIOS configured as modem control lines
+> > should add that property to their device tree. Here is a list of
+> > boards using the sc16is7xx driver in their device tree and that may
+> > need to be modified:
+> >     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+> >     mips/boot/dts/ingenic/cu1830-neo.dts
+> >     mips/boot/dts/ingenic/cu1000-neo.dts
+> > 
+> > Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> > Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> > Cc: <stable@vger.kernel.org> # 6.1.x: 35210b22 dt-bindings: sc16is7xx: Add property to change GPIO function
+> > Cc: <stable@vger.kernel.org> # 6.1.x: 7d61ca47 serial: sc16is7xx: refactor GPIO controller registration
+> > Cc: <stable@vger.kernel.org> # 6.1.x: 322470ed serial: sc16is7xx: mark IOCONTROL register as volatile
+> > Cc: <stable@vger.kernel.org> # 6.1.x: a0077362 serial: sc16is7xx: fix broken port 0 uart init
+> > Cc: <stable@vger.kernel.org> # 6.1.x
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > ---
+> >  drivers/tty/serial/sc16is7xx.c | 103 ++++++++++++++++++++++++++-------
+> >  1 file changed, 82 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+> > index 7d50674d2d0e..edc83f5f6340 100644
+> > --- a/drivers/tty/serial/sc16is7xx.c
+> > +++ b/drivers/tty/serial/sc16is7xx.c
+> > @@ -236,7 +236,8 @@
+> >  
+> >  /* IOControl register bits (Only 750/760) */
+> >  #define SC16IS7XX_IOCONTROL_LATCH_BIT	(1 << 0) /* Enable input latching */
+> > -#define SC16IS7XX_IOCONTROL_MODEM_BIT	(1 << 1) /* Enable GPIO[7:4] as modem pins */
+> > +#define SC16IS7XX_IOCONTROL_MODEM_A_BIT	(1 << 1) /* Enable GPIO[7:4] as modem A pins */
+> > +#define SC16IS7XX_IOCONTROL_MODEM_B_BIT	(1 << 2) /* Enable GPIO[3:0] as modem B pins */
+> >  #define SC16IS7XX_IOCONTROL_SRESET_BIT	(1 << 3) /* Software Reset */
+> >  
+> >  /* EFCR register bits */
+> > @@ -301,12 +302,12 @@
+> >  /* Misc definitions */
+> >  #define SC16IS7XX_FIFO_SIZE		(64)
+> >  #define SC16IS7XX_REG_SHIFT		2
+> > +#define SC16IS7XX_GPIOS_PER_BANK	4
+> >  
+> >  struct sc16is7xx_devtype {
+> >  	char	name[10];
+> >  	int	nr_gpio;
+> >  	int	nr_uart;
+> > -	int	has_mctrl;
+> >  };
+> >  
+> >  #define SC16IS7XX_RECONF_MD		(1 << 0)
+> > @@ -336,6 +337,7 @@ struct sc16is7xx_port {
+> >  	struct clk			*clk;
+> >  #ifdef CONFIG_GPIOLIB
+> >  	struct gpio_chip		gpio;
+> > +	unsigned long			gpio_valid_mask;
+> >  #endif
+> >  	unsigned char			buf[SC16IS7XX_FIFO_SIZE];
+> >  	struct kthread_worker		kworker;
+> > @@ -447,35 +449,30 @@ static const struct sc16is7xx_devtype sc16is74x_devtype = {
+> >  	.name		= "SC16IS74X",
+> >  	.nr_gpio	= 0,
+> >  	.nr_uart	= 1,
+> > -	.has_mctrl	= 0,
+> >  };
+> >  
+> >  static const struct sc16is7xx_devtype sc16is750_devtype = {
+> >  	.name		= "SC16IS750",
+> > -	.nr_gpio	= 4,
+> > +	.nr_gpio	= 8,
+> >  	.nr_uart	= 1,
+> > -	.has_mctrl	= 1,
+> >  };
+> >  
+> >  static const struct sc16is7xx_devtype sc16is752_devtype = {
+> >  	.name		= "SC16IS752",
+> > -	.nr_gpio	= 0,
+> > +	.nr_gpio	= 8,
+> >  	.nr_uart	= 2,
+> > -	.has_mctrl	= 1,
+> >  };
+> >  
+> >  static const struct sc16is7xx_devtype sc16is760_devtype = {
+> >  	.name		= "SC16IS760",
+> > -	.nr_gpio	= 4,
+> > +	.nr_gpio	= 8,
+> >  	.nr_uart	= 1,
+> > -	.has_mctrl	= 1,
+> >  };
+> >  
+> >  static const struct sc16is7xx_devtype sc16is762_devtype = {
+> >  	.name		= "SC16IS762",
+> > -	.nr_gpio	= 0,
+> > +	.nr_gpio	= 8,
+> >  	.nr_uart	= 2,
+> > -	.has_mctrl	= 1,
+> >  };
+> >  
+> >  static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
+> > @@ -1350,16 +1347,45 @@ static int sc16is7xx_gpio_direction_output(struct gpio_chip *chip,
+> >  	return 0;
+> >  }
+> >  
+> > -static int sc16is7xx_setup_gpio_chip(struct device *dev)
+> > +static int sc16is7xx_gpio_init_valid_mask(struct gpio_chip *chip,
+> > +					  unsigned long *valid_mask,
+> > +					  unsigned int ngpios)
+> > +{
+> > +	struct sc16is7xx_port *s = gpiochip_get_data(chip);
+> > +
+> > +	*valid_mask = s->gpio_valid_mask;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int sc16is7xx_setup_gpio_chip(struct device *dev, u8 mctrl_mask)
+> >  {
+> >  	struct sc16is7xx_port *s = dev_get_drvdata(dev);
+> >  
+> >  	if (!s->devtype->nr_gpio)
+> >  		return 0;
+> >  
+> > +	switch (mctrl_mask) {
+> > +	case 0:
+> > +		s->gpio_valid_mask = GENMASK(7, 0);
+> > +		break;
+> > +	case SC16IS7XX_IOCONTROL_MODEM_A_BIT:
+> > +		s->gpio_valid_mask = GENMASK(3, 0);
+> > +		break;
+> > +	case SC16IS7XX_IOCONTROL_MODEM_B_BIT:
+> > +		s->gpio_valid_mask = GENMASK(7, 4);
+> > +		break;
+> > +	default:
+> > +		break;
+> > +	}
+> > +
+> > +	if (s->gpio_valid_mask == 0)
+> > +		return 0;
+> > +
+> >  	s->gpio.owner		 = THIS_MODULE;
+> >  	s->gpio.parent		 = dev;
+> >  	s->gpio.label		 = dev_name(dev);
+> > +	s->gpio.init_valid_mask	 = sc16is7xx_gpio_init_valid_mask;
+> >  	s->gpio.direction_input	 = sc16is7xx_gpio_direction_input;
+> >  	s->gpio.get		 = sc16is7xx_gpio_get;
+> >  	s->gpio.direction_output = sc16is7xx_gpio_direction_output;
+> > @@ -1371,6 +1397,44 @@ static int sc16is7xx_setup_gpio_chip(struct device *dev)
+> >  }
+> >  #endif
+> >  
+> > +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
+> 
+> This returns what, mctrl?  If so, please document that, it doesn't look
+> obvious.  And as the kernel test robot reported, you do nothing with the
+> return value so why compute it?
 
----
-changes in v2 : clean up code
----
- drivers/platform/x86/hp/hp-wmi.c | 96 +++++++++++++++++++++++++++++++-
- 1 file changed, 95 insertions(+), 1 deletion(-)
+Hi Greg,
+I will  the following comment to document return value:
 
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 6364ae262..04c05c6b0 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -66,6 +66,11 @@ static const char *const omen_thermal_profile_force_v0_boards[] = {
- 	"8607", "8746", "8747", "8749", "874A", "8748"
- };
- 
-+/* DMI Board names of Victus laptops */
-+static const char * const victus_thermal_profile_boards[] = {
-+	"8A25"
-+};
-+
- enum hp_wmi_radio {
- 	HPWMI_WIFI	= 0x0,
- 	HPWMI_BLUETOOTH	= 0x1,
-@@ -176,6 +181,12 @@ enum hp_thermal_profile_omen_v1 {
- 	HP_OMEN_V1_THERMAL_PROFILE_COOL		= 0x50,
- };
- 
-+enum hp_thermal_profile_victus {
-+	HP_VICTUS_THERMAL_PROFILE_DEFAULT		= 0x00,
-+	HP_VICTUS_THERMAL_PROFILE_PERFORMANCE		= 0x01,
-+	HP_VICTUS_THERMAL_PROFILE_QUIET			= 0x03,
-+};
-+
- enum hp_thermal_profile {
- 	HP_THERMAL_PROFILE_PERFORMANCE	= 0x00,
- 	HP_THERMAL_PROFILE_DEFAULT		= 0x01,
-@@ -1246,6 +1257,70 @@ static int hp_wmi_platform_profile_set(struct platform_profile_handler *pprof,
- 	return 0;
- }
- 
-+static bool is_victus_thermal_profile(void)
-+{
-+	const char *board_name = dmi_get_system_info(DMI_BOARD_NAME);
-+
-+	if (!board_name)
-+		return false;
-+
-+	return match_string(victus_thermal_profile_boards,
-+			    ARRAY_SIZE(victus_thermal_profile_boards),
-+			    board_name) >= 0;
-+}
-+
-+static int platform_profile_victus_get(struct platform_profile_handler *pprof,
-+				     enum platform_profile_option *profile)
-+{
-+	int tp;
-+
-+	tp = omen_thermal_profile_get();
-+	if (tp < 0)
-+		return tp;
-+
-+	switch (tp) {
-+	case HP_VICTUS_THERMAL_PROFILE_PERFORMANCE:
-+		*profile = PLATFORM_PROFILE_PERFORMANCE;
-+		break;
-+	case HP_VICTUS_THERMAL_PROFILE_DEFAULT:
-+		*profile = PLATFORM_PROFILE_BALANCED;
-+		break;
-+	case HP_VICTUS_THERMAL_PROFILE_QUIET:
-+		*profile = PLATFORM_PROFILE_QUIET;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int platform_profile_victus_set(struct platform_profile_handler *pprof,
-+				     enum platform_profile_option profile)
-+{
-+	int err, tp;
-+
-+	switch (profile) {
-+	case PLATFORM_PROFILE_PERFORMANCE:
-+		tp = HP_VICTUS_THERMAL_PROFILE_PERFORMANCE;
-+		break;
-+	case PLATFORM_PROFILE_BALANCED:
-+		tp = HP_VICTUS_THERMAL_PROFILE_DEFAULT;
-+		break;
-+	case PLATFORM_PROFILE_QUIET:
-+		tp = HP_VICTUS_THERMAL_PROFILE_QUIET;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	err = omen_thermal_profile_set(tp);
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
-+}
-+
- static int thermal_profile_setup(void)
- {
- 	int err, tp;
-@@ -1266,6 +1341,25 @@ static int thermal_profile_setup(void)
- 
- 		platform_profile_handler.profile_get = platform_profile_omen_get;
- 		platform_profile_handler.profile_set = platform_profile_omen_set;
-+
-+		set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
-+	} else if (is_victus_thermal_profile()) {
-+		tp = omen_thermal_profile_get();
-+		if (tp < 0)
-+			return tp;
-+
-+		/*
-+		 * call thermal profile write command to ensure that the
-+		 * firmware correctly sets the OEM variables
-+		 */
-+		err = omen_thermal_profile_set(tp);
-+		if (err < 0)
-+			return err;
-+
-+		platform_profile_handler.profile_get = platform_profile_victus_get;
-+		platform_profile_handler.profile_set = platform_profile_victus_set;
-+
-+		set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
- 	} else {
- 		tp = thermal_profile_get();
- 
-@@ -1284,9 +1378,9 @@ static int thermal_profile_setup(void)
- 		platform_profile_handler.profile_set = hp_wmi_platform_profile_set;
- 
- 		set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
-+		set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
- 	}
- 
--	set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
- 	set_bit(PLATFORM_PROFILE_BALANCED, platform_profile_handler.choices);
- 	set_bit(PLATFORM_PROFILE_PERFORMANCE, platform_profile_handler.choices);
- 
--- 
-2.41.0
+/*
+ * Configure ports designated to operate as modem control lines.
+ * Return mask of ports configured as modem control lines.
+ */
+static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
 
+
+The kernel test robot identified a case, when CONFIG_GPIOLIB is not defined, where the value returned by sc16is7xx_setup_mctrl_ports() is not used. But the function sc16is7xx_setup_mctrl_ports() still need to be called to configure the modem status line ports correctly in that case.
+
+And if CONFIG_GPIOLIB is defined, the value is definitely used (and needed).
+
+Here is what I suggest to silence the warning:
+
+	mctrl_mask = sc16is7xx_setup_mctrl_ports(dev);
+
+#ifdef CONFIG_GPIOLIB
+	ret = sc16is7xx_setup_gpio_chip(dev, mctrl_mask);
+	if (ret)
+		goto out_thread;
+#else
+	(void) mctrl_mask;
+#endif
+
+I could also store (define new variable) mctrl_mask directly inside struct sc16is7xx_port...
+
+
+> And you have a real port here, no need to pass in a "raw" struct device,
+> right?
+
+The function operates globally on both ports (or nr_uart), not just a single port. That is why I pass the "raw" struct device, in order to extract the 
+struct sc16is7xx_port from it:
+
+    struct sc16is7xx_port *s = dev_get_drvdata(dev);
+
+Inside the function, I also need the "raw" struc device. If we pass a struct sc16is7xx_port to the function, then I can get the "raw" struc device with this:
+
+static u8 sc16is7xx_setup_mctrl_ports(struct sc16is7xx_port *s)
+{
+	struct device *dev = &s->p[0].port.dev;
+
+But I find this more obfuscated and hard to understand than to simply pass a "raw" struct device...
+
+Hugo.
