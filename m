@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA48721940
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5C9721948
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 20:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbjFDSaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 14:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S231809AbjFDSdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 14:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjFDSaC (ORCPT
+        with ESMTP id S229578AbjFDSdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 14:30:02 -0400
+        Sun, 4 Jun 2023 14:33:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AC0AB;
-        Sun,  4 Jun 2023 11:30:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A19AB;
+        Sun,  4 Jun 2023 11:33:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BE1F60EAB;
-        Sun,  4 Jun 2023 18:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88032C433EF;
-        Sun,  4 Jun 2023 18:30:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685903401;
-        bh=kxsomFjsOAjnBRkBjyMWAFWDP5rHAxHvBrACL6M2log=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LiYZhJr09wNN2Z3m5zJBGOXol0IkquTe0Y239i4CvEU4oPvGUJWJ097Dr1TM3n/2Y
-         WbiTNydY2FNGqyB9Rkm0H3i5AGoftW0MDFcsDonqCFS2g9Bamcvkby5KlUtwUCgKXa
-         I6YZBV37/vlU6IghSGwKgnThF07K8B9oIixECHeY=
-Date:   Sun, 4 Jun 2023 20:29:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
- configuration
-Message-ID: <2023060406-scarcity-clear-cc56@gregkh>
-References: <20230602152626.284324-1-hugo@hugovil.com>
- <20230602152626.284324-6-hugo@hugovil.com>
- <2023060454-cotton-paramount-e33e@gregkh>
- <20230604134344.73dc3cbb57d335d4a0b4b33a@hugovil.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1F1F60C5A;
+        Sun,  4 Jun 2023 18:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06535C433D2;
+        Sun,  4 Jun 2023 18:33:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685903630;
+        bh=f9OEWGFCtPKI2b4MzFeQoinmiSfu+SBsi+GIqnpBvug=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V7aLN7nmeRaVCU5w3shveuB0uB9SCuAhN6eLAg7Oo/PhSyQzwM/UGr/hLE5AI3ocj
+         m2qBzvf+rNcdCWUkNInqA+yp2c5Mv8q2VxKuZT2TUjimu08UJBHEn85TDJR6/wuBC7
+         /jsVRM9fPBCkJ4mgYSpvNRtCOKk5Rp5lbc0WveP2e+cxJCecOLIjaTnbiCtw57wLsM
+         T5/bu9hsRnmd/zbtofyljRN58YtpZpDFp7F9SjbqhB8QQjg3SixZ/u6ikeTcPLcQGQ
+         0SRBWWtYkXbOVMDtetcoWuUCjepg+txKhwOUV9jjhKr05FWbO8wMeuCQlg+k5yrIJe
+         Tr5KZMBLiV8kA==
+Date:   Sun, 4 Jun 2023 11:33:49 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     James Seo <james@equiv.tech>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Kalle Valo <kvalo@kernel.org>,
+        workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] docs: process: Send patches 'To' maintainers and 'Cc'
+ lists
+Message-ID: <20230604113349.495f8e79@kernel.org>
+In-Reply-To: <20230603151447.29288-1-james@equiv.tech>
+References: <20230603151447.29288-1-james@equiv.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230604134344.73dc3cbb57d335d4a0b4b33a@hugovil.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,60 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 01:43:44PM -0400, Hugo Villeneuve wrote:
-> Here is what I suggest to silence the warning:
-> 
-> 	mctrl_mask = sc16is7xx_setup_mctrl_ports(dev);
-> 
-> #ifdef CONFIG_GPIOLIB
-> 	ret = sc16is7xx_setup_gpio_chip(dev, mctrl_mask);
-> 	if (ret)
-> 		goto out_thread;
-> #else
-> 	(void) mctrl_mask;
-> #endif
+On Sat,  3 Jun 2023 08:14:47 -0700 James Seo wrote:
+> +You should always notify the appropriate subsystem maintainer(s) and list(s)
 
-Eeek,  no, please no...
+s/notify/specify as recipients/ ?
+notify sounds like an out of band ping, maybe just to me.
 
-First off, please don't put #ifdef in .c files if at all possible.
-Secondly, that (void) craziness is just that.  Rework this to not be an
-issue some other way please.
+> +about any patch to code that they maintain.  Identify them by looking through
+> +the MAINTAINERS file and the source code revision history, and by using the
+> +script scripts/get_maintainer.pl (pass paths to your patches as arguments to
+> +scripts/get_maintainer.pl).  Send your patch e-mail "To:" those maintainers and
+> +"Cc:" those lists.
 
-> I could also store (define new variable) mctrl_mask directly inside struct sc16is7xx_port...
+There's a handful of people who run get_maintainer on the file paths,
 
-Sure, that sounds best.
+ ./scripts/get_maintainer.pl net/core/dev.c
+rather than
+ ./scripts/get_maintainer.pl 0001-my.patch
 
-> > And you have a real port here, no need to pass in a "raw" struct device,
-> > right?
-> 
-> The function operates globally on both ports (or nr_uart), not just a single port. That is why I pass the "raw" struct device, in order to extract the 
-> struct sc16is7xx_port from it:
-> 
->     struct sc16is7xx_port *s = dev_get_drvdata(dev);
-> 
-> Inside the function, I also need the "raw" struc device. If we pass a struct sc16is7xx_port to the function, then I can get the "raw" struc device with this:
-> 
-> static u8 sc16is7xx_setup_mctrl_ports(struct sc16is7xx_port *s)
-> {
-> 	struct device *dev = &s->p[0].port.dev;
-> 
-> But I find this more obfuscated and hard to understand than to simply pass a "raw" struct device...
+This leads to ignoring Fixes tags, and authors of fixed commits should
+really be CCed.
 
-You should never need a "raw" struct device for stuff (if so, something
-is really odd).  Except for error messages, but that's not really a big
-deal, right?
+Since we're touching this paragraph maybe we can massage the wording 
+a bit:
 
-Don't pass around struct device in a driver, use the real types as you
-know you have it and it saves odd casting around and it just doesn't
-look safe at all to do so.
+(pass paths to your patches generated by git format-patch as arguments
+to scripts/get_maintainer.pl)
 
-And if you have that crazy s->p.... stuff in multiple places, then
-perhaps you might want to rethink the structure somehow?  Or at the very
-least, write an inline function to get it when needed.
+> +If you cannot find a maintainer for the subsystem you are working on, Andrew
+> +Morton (akpm@linux-foundation.org) serves as a maintainer of last resort.  Also,
 
-Also, meta comment, you might want to use some \n characters in your
-emails, your lines are really long :)
-
-thanks,
-
-greg k-h
+Thanks for the patch, btw, we also see To-less patches a couple times 
+a month on netdev@ :(
