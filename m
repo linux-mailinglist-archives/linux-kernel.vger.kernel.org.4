@@ -2,246 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515FC7215EE
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 11:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484A77215F1
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 12:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjFDJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 05:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S230360AbjFDKDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 06:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjFDJ7B (ORCPT
+        with ESMTP id S229737AbjFDKDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 05:59:01 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E580DB
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 02:59:00 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f7f864525fso41373961cf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 02:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685872739; x=1688464739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rhU1FXPYdlb9iSGIG8lbwlkpDKW5OB+bZCuIFDtfOH0=;
-        b=obJTcQGs0hARCk0eYgzjgTj//bL7RStx1eItN3M32H4CJ1j85m8aInaWwr4tvXIAFk
-         Dow1NZEDOTsV1b0j4cyt634kB9uuV9a0IbEQzCVXsO0XHCqBY/TDHDZVw3/lwqn05bLz
-         gYaoHKfOKhzIqQDygaxB6UCtXV9VZq/DTUTvM329rjlirAofR8f+yOQnv3bSzZJaT49U
-         goo+tX+SNKvimSazbCDScdI+NodgxPI+i1ltotKljSQQkSFSY3aaLqukj5Q7jJpvx/9V
-         jyIKLmLi1gxnl/EFZyP9ARwNv02f8ESoX8uD80OCc3MzJa8EXmM+VdG1CxUuN10Rd+Bi
-         1EDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685872739; x=1688464739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rhU1FXPYdlb9iSGIG8lbwlkpDKW5OB+bZCuIFDtfOH0=;
-        b=TrUxUJTO8OQAL/8OnTyfvMwD+rCUY/khI6a/+O0Q5EL2PYLLRdI9b79JalUaW2CnDU
-         9Wp+67G2erhduxvcGgA5WNfCI3yAw7Tln7x2oCRcYNOJlN6+9qvqca00TR5oVj4YXGlF
-         sSzhq9DPoDSKGjsarkB1LDhq8JLrcDUTnu8+q1qd97UDJM1FKWqrLu0jt2foX2gh6sO/
-         6gQGgPLGmrn47bAaGgMOtbV0MmZD1RBcSyp26z2wgyfCh39opZLQ72b6WhmXakpOr77m
-         qc5fonkaMS2Ek1of9GYJqCaeX0vcpHBbtrDQhT/yJHdBxZfmqF2caRpPaeksqdw6Jj49
-         bvlA==
-X-Gm-Message-State: AC+VfDztqx2eyvCnYlIxlbUldfcBlL1588JhyHYgREXo00aC1U+sI74m
-        KUua7Ct4tKnwPut/lHnlxNI+HXDzIWWNoLL/IGvGFX4C0i6mdNyt6wM=
-X-Google-Smtp-Source: ACHHUZ4eTcpeyy75bxMkt02Ojc6r+CM5ClNVt0Ig5+uPMTs5U21Lbl+XNdZDsHiFKaLgwpXATl38jV/DfHEBdA+C1A4=
-X-Received: by 2002:ac8:5a12:0:b0:3f2:ba:62b3 with SMTP id n18-20020ac85a12000000b003f200ba62b3mr4880854qta.32.1685872739202;
- Sun, 04 Jun 2023 02:58:59 -0700 (PDT)
+        Sun, 4 Jun 2023 06:03:12 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C9ADB;
+        Sun,  4 Jun 2023 03:03:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685872952; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=J8patjHW9ynL8BHuov7mXyIPxdNaQB4XOgPZQbfzqaeMFVaWFCtmA8kh1hF+025LELepaeK0POwe5a8c5+WbTPXXDo3/M86+GMA6z9p+joNGIGqv52dZ1PMQAQdJBhXfcylPgkULLD4DD2ayrokEnF9kRnE9WSaX1vpqAp/LTig=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685872952; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Za6ndI+MEe04AGEZDtIym5+jQuU3s03LuT4qImN10tE=; 
+        b=iHfk098mpTG1ZWNHI67m0NYYESxapk35H5G8x8AqApV997bYoEDqdv/Ub+GizUsNrZaZDCzy45kBoH5grcqKqDjVEM5mNIFYANAUUze2ymFV2H27A06evvMV1Nup3ascLytQ1QIi8QGmYHdZy4viVV+ON9/sNQMPOVVmxN+JoYo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685872952;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=Za6ndI+MEe04AGEZDtIym5+jQuU3s03LuT4qImN10tE=;
+        b=FWtOOdjKi8oCtbl/ZrcE+FbvWQlToqcMkyOkdsmPn62ajmAt5GELk1lwNQ+jAkAa
+        6Rxi2w8lVQXA9XC1NRLYZwG+PISeXhluC7io4HxRWLbpxeX0dwGlYtacU2svYx5CBJ3
+        w81L5/uf3wb/WEOY12OsCCC3bNZ3oqTa34m7k0og=
+Received: from [192.168.99.249] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1685872950208345.1966686433153; Sun, 4 Jun 2023 03:02:30 -0700 (PDT)
+Message-ID: <886ae203-1aca-0cb3-cf32-416984a7c37c@arinc9.com>
+Date:   Sun, 4 Jun 2023 13:02:20 +0300
 MIME-Version: 1.0
-References: <20230603143543.855276091@linuxfoundation.org>
-In-Reply-To: <20230603143543.855276091@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sun, 4 Jun 2023 15:28:48 +0530
-Message-ID: <CA+G9fYvNK=g4GKPD+OFhDbOUEn-cHeqgKOuUYceVHwb79=s9RA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/35] 5.15.115-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next 29/30] net: dsa: introduce
+ preferred_default_local_cpu_port and use on MT7530
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-30-arinc.unal@arinc9.com>
+ <20230522121532.86610-30-arinc.unal@arinc9.com>
+ <20230526171755.nk643aphoojvhjpg@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230526171755.nk643aphoojvhjpg@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 3 Jun 2023 at 20:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.115 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Mon, 05 Jun 2023 14:35:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.115-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 26.05.2023 20:17, Vladimir Oltean wrote:
+> On Mon, May 22, 2023 at 03:15:31PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Vladimir Oltean <olteanv@gmail.com>
+>>
+>> When multiple CPU ports are being used, the numerically smallest CPU port
+>> becomes the port all user ports become affine to. This may not be the best
+>> choice for all switches as there may be a numerically greater CPU port with
+>> more bandwidth than the numerically smallest one.
+>>
+>> Such switches are MT7530 and MT7531BE, which the MT7530 DSA subdriver
+>> controls. Port 5 of these switches has got RGMII whilst port 6 has got
+>> either TRGMII or SGMII.
+>>
+>> Therefore, introduce the preferred_default_local_cpu_port operation to the
+>> DSA subsystem and use it on the MT7530 DSA subdriver to prefer port 6 as
+>> the default CPU port.
+>>
+>> To prove the benefit of this operation, I (Arınç) have done a bidirectional
+>> speed test between two DSA user ports on the MT7531BE switch using iperf3.
+>> The user ports are 1 Gbps full duplex and on different networks so the SoC
+>> MAC would have to do 2 Gbps TX and 2 Gbps RX to deliver full speed.
+> 
+> I think the real argument would sound like this:
+> 
+> Since the introduction of the OF bindings, DSA has always had a policy
+> that in case multiple CPU ports are present in the device tree, the
+> numerically first one is always chosen.
+> 
+> The MT7530 switch family has 2 CPU ports, 5 and 6, where port 6 is
+> preferable because it has higher bandwidth.
+> 
+> The MT7530 driver developers had 3 options:
+> - to modify DSA when the driver was introduced, such as to prefer the
+>    better port
+> - to declare both CPU ports in device trees as CPU ports, and live with
+>    the sub-optimal performance resulting from not preferring the better
+>    port
+> - to declare just port 6 in the device tree as a CPU port
+> 
+> Of course they chose the path of least resistance (3rd option), kicking
+> the can down the road. The hardware description in the device tree is
+> supposed to be stable - developers are not supposed to adopt the
+> strategy of piecemeal hardware description, where the device tree is
+> updated in lockstep with the features that the kernel currently supports.
+> 
+> Now, as a result of the fact that they did that, any attempts to modify
+> the device tree and describe both CPU ports as CPU ports would make DSA
+> change its default selection from port 6 to 5, effectively resulting in
+> a performance degradation visible to users as can be seen below vvvvv
+> 
+>>
+>> Without preferring port 6:
+>>
+>> [ ID][Role] Interval           Transfer     Bitrate         Retr
+>> [  5][TX-C]   0.00-20.00  sec   374 MBytes   157 Mbits/sec  734    sender
+>> [  5][TX-C]   0.00-20.00  sec   373 MBytes   156 Mbits/sec    receiver
+>> [  7][RX-C]   0.00-20.00  sec  1.81 GBytes   778 Mbits/sec    0    sender
+>> [  7][RX-C]   0.00-20.00  sec  1.81 GBytes   777 Mbits/sec    receiver
+>>
+>> With preferring port 6:
+>>
+>> [ ID][Role] Interval           Transfer     Bitrate         Retr
+>> [  5][TX-C]   0.00-20.00  sec  1.99 GBytes   856 Mbits/sec  273    sender
+>> [  5][TX-C]   0.00-20.00  sec  1.99 GBytes   855 Mbits/sec    receiver
+>> [  7][RX-C]   0.00-20.00  sec  1.72 GBytes   737 Mbits/sec   15    sender
+>> [  7][RX-C]   0.00-20.00  sec  1.71 GBytes   736 Mbits/sec    receiver
+>>
+>> Using one port for WAN and the other ports for LAN is a very popular use
+>> case which is what this test emulates.
+> 
+> As such, this change proposes that we retroactively modify stable
+> kernels to keep the mt7530 driver preferring port 6 even with device
+> trees where the hardware is more fully described.
+> 
+> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+> 
+>>
+>> This doesn't affect the remaining switches, MT7531AE and the switch on the
+>> MT7988 SoC. Both CPU ports of the MT7531AE switch have got SGMII and there
+>> is only one CPU port on the switch on the MT7988 SoC.
+>>
+>> Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+> 
+> See the difference in intent?
 
+Yeah, nicely put.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.115-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: e43ef124b08b3125f1560d34f33fe33bce33c1ce
-* git describe: v5.15.114-36-ge43ef124b08b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.114-36-ge43ef124b08b
-
-## Test Regressions (compared to v5.15.114)
-
-## Metric Regressions (compared to v5.15.114)
-
-## Test Fixes (compared to v5.15.114)
-
-## Metric Fixes (compared to v5.15.114)
-
-## Test result summary
-total: 133100, pass: 110484, fail: 4281, skip: 18135, xfail: 200
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 117 total, 116 passed, 1 failed
-* arm64: 45 total, 43 passed, 2 failed
-* i386: 35 total, 32 passed, 3 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 27 total, 26 passed, 1 failed
-* riscv: 11 total, 11 passed, 0 failed
-* s390: 12 total, 11 passed, 1 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 38 total, 36 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Arınç
