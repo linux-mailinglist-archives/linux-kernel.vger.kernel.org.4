@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA15721643
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601A772164B
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 13:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbjFDLGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 07:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S230388AbjFDLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 07:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjFDLGj (ORCPT
+        with ESMTP id S229749AbjFDLL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 07:06:39 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190B5CF
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 04:06:38 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so7928797a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 04:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685876796; x=1688468796;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jLmAPaKPTIsWpZacEK868wP6gS+UBFwlLQ/Dm8ei63A=;
-        b=JwzeDQschIu218wiqvNOfDuAq76M7pg5gmsP8/RUITW7iJoBjFCF8D7pqMxVHyISq2
-         CFSMHQmpqPT+V6vTaHE56figKErOg9sNbHSo3EKppaKZIQnMZTxfbAi2+OOMTLzV27nl
-         kxdTqEIqgQR91WxWh++TzeSfK79/Yy8Z6vCqzB8d+3LJ2Pkm4SmMwdt9JpHD1xzl32H1
-         /yi7BlCBaex9diwjMu/9y55mEUU/slM0H9TiISYzzDM1bcwLV9e4O/XiZhvpWRvTau/2
-         hxA5DzvS9+eOOsWXpodEApIpeMcVGwG4hAtvCvsL+9P2vq02Tza0oNkmW0Kf7cmIPy/A
-         s4NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685876796; x=1688468796;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jLmAPaKPTIsWpZacEK868wP6gS+UBFwlLQ/Dm8ei63A=;
-        b=jkrOKU8BLWUP88N8Umd+qbrxF1aVGxDRSkIzUfPiX+TfHb1k99UB9J62G51dqbWqiL
-         CG42/aBKPnetMV641HjE+EHKNZeBT8gIho15u0m3az0eVcS1KYi0fISNIQoidohgRcxr
-         DUqmXhNY0h6xxwCREdSUcRf25z3y5946UxfL8XooZr6TtvywJma09MyDf3o5/CEli5Rl
-         n8aSlHm1JEib5bv9SP/SZtXTeWPnecwHkxd1/UgBxXhQw+YNgMTfxYyrpVXE2aDt4z7s
-         AqvIzamMADPwQ+J43/mJdA6JjJyq3bw5Gh7hYB+fnH+P/vfyGFsFgyh4O8YDBYTUqrh+
-         zqow==
-X-Gm-Message-State: AC+VfDx014G56sdVwuusHF7eDo/YXKzhjst5PwkVKvoxLMNrw0kch/rK
-        /gexQC3Kmf4K8RpaDnWQ+dYvoAj0LyaJo26QchQ=
-X-Google-Smtp-Source: ACHHUZ4mkYQHZCEbhWqE8xQb6h6QMSbTN3VB5nEZN8xZjk54+uvGUzGiflAs3riqn+IP0AP7ojiNs0fLFd9+GnE2ujQ=
-X-Received: by 2002:a05:6402:4406:b0:514:8fdb:6354 with SMTP id
- y6-20020a056402440600b005148fdb6354mr7261956eda.18.1685876795974; Sun, 04 Jun
- 2023 04:06:35 -0700 (PDT)
+        Sun, 4 Jun 2023 07:11:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F483
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 04:11:26 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 5ldsqSy1Rxbtx5ldsqUd84; Sun, 04 Jun 2023 13:11:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685877085;
+        bh=UutA+4HoQTrFvBUHKvF3cps73mebreJXZd7+xMeN1VI=;
+        h=From:To:Cc:Subject:Date;
+        b=UsygrdGW7TEBua2m9lk+P1GEARd5eoHSENJLiRV7uHBr/96ImlKJnfFampPX9oA8i
+         9BqlrZmF/G6WbxRg6mVW6ys29WSBPsvOHYj+xDOJNoeboRk97thIDWLKbFUcSiytfU
+         mKDdOe4/AiH/H1HIr0vD4pez4GUJ49X4boTQDQm9IgBTkKGuvER/Mc1SXlc/ykUs14
+         YVTmxnD0mB4pR6hntAKl09H5XBdYGKH0NOMORkUDG0wNovDJft+8h2NCVEJHucy1WM
+         KcoeBu/uBhJokHg0eAUb5nMmjt1q2y1R+/Sn1xqbXK/4yZu3yqxEajXyZnk7K4d1Kz
+         XWkTCFBz+8Whg==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 04 Jun 2023 13:11:25 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Richard Leitner <richard.leitner@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: usb251xb: Use of_property_read_u16()
+Date:   Sun,  4 Jun 2023 13:11:18 +0200
+Message-Id: <97478908a814d4fa694e0ca44212c3776cf3e6e9.1685877052.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:7208:20d5:b0:6b:66be:add5 with HTTP; Sun, 4 Jun 2023
- 04:06:35 -0700 (PDT)
-Reply-To: wormer.amos@aol.com
-From:   Wormer Amos <claudiakhaledyahya02@gmail.com>
-Date:   Sun, 4 Jun 2023 12:06:35 +0100
-Message-ID: <CANcjk_Dsy34O1+d7PRXpZEzutw53sRqi7=FiAN7cmJnM4bEbiQ@mail.gmail.com>
-Subject: FOR INVESTMENT PROPOSAL ONLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5101]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [claudiakhaledyahya02[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [claudiakhaledyahya02[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good evening Sir, I want to know if you can handle it.
-investment
-projects in
-your country because of me
-Looking for a serious business partner with a good background, please reply.
-me to discuss the details immediately I will appreciate you contacting me.
-in the same email?
+Use of_property_read_u16() instead of of_property_read_u16_array() when
+only 1 element is read.
+This slightly simplifies the code.
 
-Thank you and waiting for your quick reply.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/usb/misc/usb251xb.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Wormer,
+diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+index 1f3329ef5c7a..e4edb486b69e 100644
+--- a/drivers/usb/misc/usb251xb.c
++++ b/drivers/usb/misc/usb251xb.c
+@@ -416,14 +416,13 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 		return dev_err_probe(dev, PTR_ERR(hub->gpio_reset),
+ 				     "unable to request GPIO reset pin\n");
+ 
+-	if (of_property_read_u16_array(np, "vendor-id", &hub->vendor_id, 1))
++	if (of_property_read_u16(np, "vendor-id", &hub->vendor_id))
+ 		hub->vendor_id = USB251XB_DEF_VENDOR_ID;
+ 
+-	if (of_property_read_u16_array(np, "product-id",
+-				       &hub->product_id, 1))
++	if (of_property_read_u16(np, "product-id", &hub->product_id))
+ 		hub->product_id = data->product_id;
+ 
+-	if (of_property_read_u16_array(np, "device-id", &hub->device_id, 1))
++	if (of_property_read_u16(np, "device-id", &hub->device_id))
+ 		hub->device_id = USB251XB_DEF_DEVICE_ID;
+ 
+ 	hub->conf_data1 = USB251XB_DEF_CONFIG_DATA_1;
+@@ -532,7 +531,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
+ 	if (!of_property_read_u32(np, "power-on-time-ms", &property_u32))
+ 		hub->power_on_time = min_t(u8, property_u32 / 2, 255);
+ 
+-	if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
++	if (of_property_read_u16(np, "language-id", &hub->lang_id))
+ 		hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
+ 
+ 	if (of_property_read_u8(np, "boost-up", &hub->boost_up))
+-- 
+2.34.1
+
