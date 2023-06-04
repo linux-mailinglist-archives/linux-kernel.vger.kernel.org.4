@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7225E721768
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C36721765
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbjFDN0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S231990AbjFDNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 09:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjFDN0N (ORCPT
+        with ESMTP id S229522AbjFDNZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:26:13 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688DFDB;
-        Sun,  4 Jun 2023 06:26:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685885132; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Bywjwr7BNZlcxr5xW8ywb/LUrth01TtuaIEzUscw5rmX06leIr3v9HwiIgRRsBgyEJc4eoyelom1Oino5farHt/6sHZURY6YCUS7RoAba0NmYE0NzKTYPHyrqR8cAtsget3hHm+HU64yCSGgpUg0A8CkA9QoJjdM/59P0AfbRIU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685885132; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Cb7bonRujnndbvNIQM4LPU8azHbUPLzM2mZY1a0gQGI=; 
-        b=cdNpsrhhpx7GhnTU3QZHNbQJOHRush/nD8ynZ4Vr6QPb56F4zPvSVpb95CUZIbLXKhjJeAgnH45xVaCFvwynvPVqv3Ul0GSLXInhJNlo45vukbffyz6ZtiwHDB3H98aEEqvq8hbVHCW12fQwG/IFn62cV7cU8bKfKbRkpwDk+kc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685885132;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=Cb7bonRujnndbvNIQM4LPU8azHbUPLzM2mZY1a0gQGI=;
-        b=XU6xkZ/2tPG385WlIaSzEZYOyvN4SYWSQsDarOdl4aeSruIqKCUFpqJSywK2srCK
-        5JWJRxHug9M8vooCWhCzIpB3mSv/KE/GxqeSgXih2vjpIpZNEpec6RdDx5PoLxXAdxv
-        FQUYrgPQ8VznvBx8djyvvcHdODAxEBj1A1CNSvRI=
-Received: from [192.168.99.249] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 1685885131523433.411804914748; Sun, 4 Jun 2023 06:25:31 -0700 (PDT)
-Message-ID: <77906053-62f4-bfbb-6b76-cb22c30bd102@arinc9.com>
-Date:   Sun, 4 Jun 2023 16:25:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next 24/30] net: dsa: mt7530: rename MT7530_MFC to
- MT753X_MFC
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
+        Sun, 4 Jun 2023 09:25:56 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02D9CA;
+        Sun,  4 Jun 2023 06:25:55 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso5204768a12.0;
+        Sun, 04 Jun 2023 06:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685885154; x=1688477154;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bIF2ahGzJpyo+TqeABEPHibTttnCkEMB3Njy7q/BSEo=;
+        b=N4P+EYIEs8NjOqM/Dmregn7Jp/GB1iY+W/H4AyYoNezm+92mg9UetM3yHca1fGjhZG
+         /4854DPF5NfM/9eUZ9OtKL7xYKYqfH6/WMLcpyDJ99JJIWC0FfbhoAkH+XHa8kN3RGGF
+         IinXBa20IFIEGo7ktOSH5SCo/YfLGjirKDKwBFrHvn+ez6wCqftSoQXBZkoAuiR/L6Jz
+         SzbrfVawaQrL22pGLzYX+8d3G+1g1r3A5iPwhBFti7nZed3oE+p5csx0oY5Uc1BZRuoG
+         UNxEZAE3M3+aQnaFi8fI3iEqLCyTOiU8fHXw+l2wkak1IVi1k9gIAWxEKr0ncVZYwTsn
+         3MXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685885154; x=1688477154;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bIF2ahGzJpyo+TqeABEPHibTttnCkEMB3Njy7q/BSEo=;
+        b=ZGB9W7aI5Q844+YSO1rX4C1GtxSR+wig231XLfn3UVcneck4ZzXDxlze0qllvLg4Sv
+         l9OEivejAcseAzirNY9cTZhdpFxsQst14hbs7mExAZ91vwSAJXty7uKbYcoH29SqzmK6
+         kR0Cz1lfVvD6r8DEBxBnMKONJdQ2YzNqE5syitWauZhFVN1OUTCHi21Eejbd9bTRH6dE
+         XHXPJ3fRTdjbUhjxFlc9FZ6htCmVyxLqpm8hWc0vPPiJWQ77wLlw9TYQoZcyYuWdT5e2
+         QS/L7Z6M6YL5s1ZgAclwMIVhEDZ+yTgFgaH4FEnrdC5rcUARm+zbJhTzi1F9GmA7cwhK
+         wsEA==
+X-Gm-Message-State: AC+VfDzVld7ElZ/WogiLae2TjSQJLKHPow9ZBqPw8zymgw9c/18c379p
+        ebp0f0sS/zOrfm6dO+nN/WA=
+X-Google-Smtp-Source: ACHHUZ7Xq1sZH47pNrsamktZ+ZKVyMGi7kuDL7zZxGwL/JJ/n4KR4qPLUyOyVhtiGxlWvPVgPOzNxA==
+X-Received: by 2002:a17:907:608c:b0:933:868:413a with SMTP id ht12-20020a170907608c00b009330868413amr4349728ejc.15.1685885153871;
+        Sun, 04 Jun 2023 06:25:53 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id x13-20020a170906710d00b0096f694609f3sm3098369ejj.31.2023.06.04.06.25.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 06:25:53 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 16:25:50 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
 Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
         Sean Wang <sean.wang@mediatek.com>,
         Landen Chao <Landen.Chao@mediatek.com>,
@@ -66,49 +75,69 @@ Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-25-arinc.unal@arinc9.com>
- <20230526154258.skbkk4p34ro5uivr@skbuf>
- <ZHDVUC1AqncfF2mK@shell.armlinux.org.uk>
- <e4aff9aa-d0c6-1f2e-7f16-35df59d51b90@arinc9.com>
- <20230604131735.f2clcinq67wspuun@skbuf>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230604131735.f2clcinq67wspuun@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH net-next 08/30] net: dsa: mt7530: change p{5,6}_interface
+ to p{5,6}_configured
+Message-ID: <20230604132550.zi32bvniqg7ztd5o@skbuf>
+References: <20230524175107.hwzygo7p4l4rvawj@skbuf>
+ <576f92b0-1900-f6ff-e92d-4b82e3436ea1@arinc9.com>
+ <20230526130145.7wg75yoe6ut4na7g@skbuf>
+ <7117531f-a9f2-63eb-f69d-23267e5745d0@arinc9.com>
+ <ZHsxdQZLkP/+5TF0@shell.armlinux.org.uk>
+ <826fd2fc-fbf8-dab7-9c90-b726d15e2983@arinc9.com>
+ <ZHyA/AmXmCxO6YMq@shell.armlinux.org.uk>
+ <20230604125517.fwqh2uxzvsa7n5hu@skbuf>
+ <ZHyMezyKizkz2+Wg@shell.armlinux.org.uk>
+ <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d269ac88-9923-c00c-8047-cc8c9f94ef2c@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.06.2023 16:17, Vladimir Oltean wrote:
-> On Sun, Jun 04, 2023 at 11:06:32AM +0300, Arınç ÜNAL wrote:
->>> Even better are:
->>> #define  MT7531_MIRROR_PORT_GET(x)	FIELD_GET(MT7531_MIRROR_MASK, x)
->>>
->>>>> +#define  MT7531_MIRROR_PORT_SET(x)	(((x) & 0x7) << 16)
->>>>
->>>> and here: (((x) << 16) & GENMASK(18, 16))
->>>
->>> #define  MT7531_MIRROR_PORT_SET(x)	FIELD_PREP(MT7531_MIRROR_MASK, x)
->>>
->>> No need to add parens around "x" in either of these uses as we're not
->>> doing anything with x other than passing it into another macro.
->>
->> Thanks. I suppose the GENMASK, FIELD_PREP, and FIELD_GET macros can be
->> widely used on mt7530.h? Like GENMASK(2, 0) on MT7530_MIRROR_MASK and
->> FIELD_PREP(MT7530_MIRROR_MASK, x) on MT7530_MIRROR_PORT(x)?
+On Sun, Jun 04, 2023 at 04:14:31PM +0300, Arınç ÜNAL wrote:
+> On 4.06.2023 16:07, Russell King (Oracle) wrote:
+> > On Sun, Jun 04, 2023 at 03:55:17PM +0300, Vladimir Oltean wrote:
+> > > On Sun, Jun 04, 2023 at 01:18:04PM +0100, Russell King (Oracle) wrote:
+> > > > I don't remember whether Vladimir's firmware validator will fail for
+> > > > mt753x if CPU ports are not fully described, but that would be well
+> > > > worth checking. If it does, then we can be confident that phylink
+> > > > will always be used, and those bypassing calls should not be necessary.
+> > > 
+> > > It does, I've just retested this:
+> > > 
+> > > [    8.469152] mscc_felix 0000:00:00.5: OF node /soc/pcie@1f0000000/ethernet-switch@0,5/ports/port@4 of CPU port 4 lacks the required "phy-handle", "fixed-link" or "managed" properties
+> > > [    8.494571] mscc_felix 0000:00:00.5: error -EINVAL: Failed to register DSA switch
+> > > [    8.502151] mscc_felix: probe of 0000:00:00.5 failed with error -22
+> > 
+> > ... which isn't listed in dsa_switches_apply_workarounds[], and
+> > neither is mt753x. Thanks.
+> > 
+> > So, that should be sufficient to know that the CPU port will always
+> > properly described, and thus bypassing phylink in mt753x for the CPU
+> > port should not be necessary.
 > 
-> I suppose the answer would be "yes, they can be used", but then, I'm not
-> really sure what answer you're expecting.
+> Perfect! If I understand correctly, there's this code - specific to MT7531
+> and MT7988 ports being used as CPU ports - which runs in addition to what's
+> in mt753x_phylink_mac_config():
+> 
+> 	mt7530_write(priv, MT7530_PMCR_P(port),
+> 		     PMCR_CPU_PORT_SETTING(priv->id));
+> 
+> This should be put on mt753x_phylink_mac_config(), under priv->id ==
+> ID_MT7531, priv->id == ID_MT7988, and dsa_is_cpu_port(ds, port) checks?
+> 
+> Arınç
 
-I was thinking of replacing all manual definitions with these macros on 
-mt7530.h. For now, I'll just make sure my current changes use them.
-
-Arınç
+Given that mt753x_phylink_mac_config() and mt753x_phylink_mac_link_up() also
+both modifies MT7530_PMCR_P(port), have you studied the code to see what
+really is changed compared to what's in the PMCR_CPU_PORT_SETTING() macro,
+after both phylink methods have run?
