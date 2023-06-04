@@ -2,98 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7626B721736
+	by mail.lfdr.de (Postfix) with ESMTP id C17BA721737
 	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 15:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjFDNIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 09:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
+        id S231865AbjFDNI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 09:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjFDNIZ (ORCPT
+        with ESMTP id S231828AbjFDNIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 09:08:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EECB8;
-        Sun,  4 Jun 2023 06:08:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9504D60ED6;
-        Sun,  4 Jun 2023 13:08:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9B9C433D2;
-        Sun,  4 Jun 2023 13:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685884104;
-        bh=2LqTjFF2rleq91T+MtNpIx+xU9UpvfhcduxECOp1GZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qw8dpqXP7PZmmHFJiUdxEOQ+2Guq3kug9+ZJRGJtTj4EcrsgiXOa7SwAuL78Ssi0l
-         qMpR2Rr6uZC/ebDg/40w0TRHJXEnn4kry03IWZTu0bf/ZFqhYjxqS7QF0RjNMOdom4
-         73Yip02KFCqmPFGirmJZGwWwz1IK8TYJ6PN+uea2wSBENN9IKbPHbIbO0PzggjdhzF
-         ApoDXT1r4wytW1cZWOqMvOoALDaFoPd/aBCB31mZj/fv6iIgUOijcPhPc12Iq3Dn53
-         cdgHFZ50V/Y6HdstcESKVE2O6jKjdrNiNtmQD/8Fi9AngqnVSU6JdcKOsMJVS6X/UZ
-         G8RSsZ2MMgLuw==
-Date:   Sun, 4 Jun 2023 21:08:03 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [PATCH v1 00/15] Maintenance updates for Protonic Holland boards
-Message-ID: <20230604130803.GO4199@dragon>
-References: <20230530120345.2874900-1-o.rempel@pengutronix.de>
+        Sun, 4 Jun 2023 09:08:21 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BB31A8;
+        Sun,  4 Jun 2023 06:08:13 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51456392cbbso10430978a12.0;
+        Sun, 04 Jun 2023 06:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685884092; x=1688476092;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ehsXLibKE7EsdL7h37Ey3hxWw2NtYcUCkyRCtwhN2Ag=;
+        b=ho+w3R3eBSHT8APyM7DlSIiJgXHu4swFXy6oR7N4hSWfBv4/VSLDlCoenkxDecIIlT
+         2+LSHeMWaiAkSJRBhQOF0gj8sXyagxD4+joGAovn0s8rgH4HAIg2vLslWxfoyu9ui6Fu
+         OlGh3SmmHNly48F0zQ4V/bEY/w6BNQ8D7iN64zGovx2m6blJc24vJnmkCGgr904JwbHJ
+         rRNMnRblhHbjaonYZhEO1tajssgFtoPZb8r4PLZ/J7ypsYZKbwhSe/TIVbaiZ+Tett0f
+         tLQ+5rBRC84k0ATMBhVTl2UcI9J8XkHk+h6psOo3h0xlqUICdWWX9pyvfey8ekmv1MZF
+         XDbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685884092; x=1688476092;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ehsXLibKE7EsdL7h37Ey3hxWw2NtYcUCkyRCtwhN2Ag=;
+        b=iBMWsl98xz5aVyHXlxaOpmlnobLjmHXmEhuNdOMlIkq7b6ts4+iRiviOW8CpxgkK5a
+         l8QEbi5bYf53IvjR9y/kYlyHRInLt3Rs2lZuAQyXlje0A1pVrJ8Ngpj1OXsApxr0C2NN
+         /4ybihCS3JUvmJIE6kD3vx1mdYwUi7vML8uJYO+TJGrH7u2CtnQvhx7nOwqAaWQ0d6Ub
+         he/iD4R/N0FtgFAtgb/e2noFKh+4w+sleEIGnJbVoXOx4QNqOw252DF1t26BQcZzJ5Mx
+         v36qfXp4NIkXzwoVgFrX7U5JIyFPNxzmjJ7hA3PR3UquZL1xtf/2BFtHcQPUzr5yhEH0
+         GucQ==
+X-Gm-Message-State: AC+VfDwpTnIHJBQMBl4X63HIVmspVTZDvu1CJ9sGOKj/DBPAdcBeJTab
+        vNSH7FeBvxNCjrHtq5P/5cQ=
+X-Google-Smtp-Source: ACHHUZ59tILfc6BM6SJHOqRlylQ71wlvooctdxI8yBhJwx+vZqx3AMdIhV5aVsgRYPcUsvofHoWPVQ==
+X-Received: by 2002:a05:6402:34c4:b0:516:5b18:a9f1 with SMTP id w4-20020a05640234c400b005165b18a9f1mr836092edc.0.1685884091938;
+        Sun, 04 Jun 2023 06:08:11 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id b9-20020aa7dc09000000b005149e64260esm2773600edu.16.2023.06.04.06.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 06:08:11 -0700 (PDT)
+Date:   Sun, 4 Jun 2023 16:08:08 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 25/30] net: dsa: mt7530: properly set
+ MT7531_CPU_PMAP
+Message-ID: <20230604130808.3lxuz5ezsouhku57@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-26-arinc.unal@arinc9.com>
+ <20230522121532.86610-26-arinc.unal@arinc9.com>
+ <20230526155124.sps74wayui6bydao@skbuf>
+ <9423a818-f9c0-d867-7f7d-27f05e1536b9@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230530120345.2874900-1-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9423a818-f9c0-d867-7f7d-27f05e1536b9@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 02:03:30PM +0200, Oleksij Rempel wrote:
-> This patchset consists of several updates that address issues on
-> Protonic Holland's supported i.MX6-based devices, with a particular
-> focus on the USB subsystem configuration, thermal zones, and the naming
-> of GPIO keys. Some of these changes include the activation of USB over-
-> current detection on certain ports, the disabling of unused USB PHY
-> nodes, fixing USB-related warnings, adding trip points to thermal zones
-> on several devices, and renaming the 'power' key to meet the necessary
-> conventions.
+On Sun, Jun 04, 2023 at 11:21:48AM +0300, Arınç ÜNAL wrote:
+> > Stylistically, the existence of an indirect call to priv->info->cpu_port_config()
+> > per switch family is a bit dissonant with an explicit check for device id later
+> > in the same function.
 > 
-> David Jander (1):
->   ARM: dts: imx6dl: prtvt7: Remove touchscreen inversion
-> 
-> Oleksij Rempel (11):
->   ARM: dts: imx6dl: lanmcu: Disable unused USB PHY nodes
->   ARM: dts: imx6dl: lanmcu: Configure over-current polarity for USB OTG
->     node
->   ARM: dts: imx6dl: Add trip points to thermal zones on several devices
->   ARM: dts: imx6dl: vicut1: Address USB related warnings
->   ARM: dts: imx6dl: alti6p: fix different USB related warnings
->   ARM: dts: imx6dl: prtmvt: fix different USB related warnings
->   ARM: dts: imx6qp: prtwd3: Enable USB over current detection on USB OTG
->     port
->   ARM: dts: imx6ul: prti6g: fix USB over-current detection on USB OTG
->     port
->   ARM: dts: imx6dl: plybas: fix USB over-current detection on USB OTG
->     port
->   ARM: dts: imx6dl: prtrvt, prtvt7, prti6q, prtwd2: fix USB related
->     warnings
->   ARM: dts: imx6qdl: vicut1: rename power to power-button
-> 
-> Robin van der Gracht (3):
->   ARM: dts: imx6qdl: vicut1: The sgtl5000 uses i2s not ac97
->   ARM: dts: imx6dl: prtvt7: Adjust default backlight brightness to 65
->   ARM: dts: imx6q: prtwd2: Correct iomux configuration for ENET MDIO and
->     MDC
+> mt753x_cpu_port_enable() is not being called from priv->info->cpu_port_config()
+> though.
 
-Applied all, thanks!
+Quite the other way around. I'm saying that mt753x_cpu_port_enable(),
+the function whose logic you're changing, already has a mechanism to
+execute code specific to one switch family.
+
+> I'm not sure how I would do this without the device ID check here.
+
+Hmm, by defining a new mt7530_cpu_port_config() procedure for ID_MT7621
+and ID_MT7530?
+
+Although in a different thread we are perhaps challenging the idea that
+what is currently in priv->info->cpu_port_config() is useful - at least
+half of it are manual invocations of phylink methods which are possibly
+not needed. If after the removal of those, it no longer makes sense to
+have priv->info->cpu_port_config() at all, then I'm not saying that the
+explicit check for device id here doesn't make sense. Just that it's not
+in harmony with what currently exists 3 lines above.
+
+> > > -#define  MT7531_CPU_PMAP_MASK		GENMASK(7, 0)
+> > > +#define  MT7531_CPU_PMAP(x)		((x) & 0xff)
+> > 
+> > You can leave this as ((x) & GENMASK(7, 0))
+> 
+> Now that I've read Russell's comment on the previous patch, the below would
+> be even better?
+> 
+> MT7531_CPU_PMAP(x)		FIELD_PREP(MT7531_CPU_PMAP_MASK, x)
+> 
+> > 
+> > > +#define  MT7531_CPU_PMAP_MASK		MT7531_CPU_PMAP(~0)
+> > 
+> > There's no other user of MT7531_CPU_PMAP_MASK, you can remove this.
+> 
+> Should I do above or remove this?
+
+No specific preference. If you want to make this driver start using
+FIELD_PREP() then go ahead.
