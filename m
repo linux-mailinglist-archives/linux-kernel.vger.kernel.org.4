@@ -2,92 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801CE7218E5
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 19:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58AE7218E7
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 19:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbjFDRpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 13:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S231887AbjFDRrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 13:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFDRpJ (ORCPT
+        with ESMTP id S229449AbjFDRrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 13:45:09 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C8DDA;
-        Sun,  4 Jun 2023 10:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=8tuReGumGx5Wv85MrtWjYRVw7RQeKVwg++eJQNKhbh8=; b=C959Vz1t371iA3KcP2+7GkI3oH
-        u7gxBzjQ0nkjAq+cyEyTSetir1R7BxSDkkRO7VncSemw3rzL9nr2D8LvB8ffjEgDKiJgoyMsnWuZ0
-        B5y299xuFhNeUD66r6OD76xDOK6ozzdE6IKI7UOHTiOo3+4PrzEU0wuLIv5KsyCzaTDA=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:37774 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q5rmn-00067x-Cm; Sun, 04 Jun 2023 13:45:01 -0400
-Date:   Sun, 4 Jun 2023 13:44:59 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org
-Message-Id: <20230604134459.3c3844012e9714fa2a61e642@hugovil.com>
-In-Reply-To: <CAHp75Ve6W-hcB4YAeKukgv-uOEzBY7Tx5Sdf3doTRYKzNPcVGw@mail.gmail.com>
-References: <20230602152626.284324-1-hugo@hugovil.com>
-        <20230602152626.284324-6-hugo@hugovil.com>
-        <2023060454-cotton-paramount-e33e@gregkh>
-        <CAHp75Ve6W-hcB4YAeKukgv-uOEzBY7Tx5Sdf3doTRYKzNPcVGw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Sun, 4 Jun 2023 13:47:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C68AAF
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 10:47:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D573C60FF5
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 17:47:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF716C433D2;
+        Sun,  4 Jun 2023 17:47:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685900840;
+        bh=L/YT96vOzfrD5Zbb2hKA+7cau17vtyz43WIU+qXB61k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bssiVLw+CmolrmdLynpKWU7Hg2h5P9/4yphu+aZQP8yn6Z9CRv+oC8r3PIYuhyj+w
+         kAwhaQeHgR9wBGGop1rzGFdh24x/OooN3lxpucq1CJ7rrFN+yMlGypkzbyYcX0lBZn
+         AVhrvpNU0Aua6anhLhanMt6XlQ672pqyW+65BOlXEl6thV8Ca+UYJtjEYYTXYnhgPT
+         H1Ku3dFaAjEMgcdOlZ42pJ+XTzVWGbh+FTThhW1ABtwQWIpVctMktHrqFFw+//HFWe
+         5oKpWGndOoFu8IjYFESL0zgEW6Hk3QVYFXRUniNsfLosQKoHLz0fsUN+Po10SUJvmF
+         M7RjP2hoev/Hg==
+Date:   Sun, 4 Jun 2023 10:47:18 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ding Hui <dinghui@sangfor.com.cn>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
+        huangcun@sangfor.com.cn
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+Message-ID: <20230604104718.4bf45faf@kernel.org>
+In-Reply-To: <5f0f2bab-ae36-8b13-2c6d-c69c6ff4a43f@sangfor.com.cn>
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+        <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+        <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn>
+        <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
+        <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
+        <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
+        <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
+        <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch>
+        <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
+        <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
+        <20230602225519.66c2c987@kernel.org>
+        <5f0f2bab-ae36-8b13-2c6d-c69c6ff4a43f@sangfor.com.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Jun 2023 14:57:31 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Sat, 3 Jun 2023 15:11:29 +0800 Ding Hui wrote:
+> Yes.
+> 
+> I checked the others ioctl (e.g. ethtool_get_eeprom(), ethtool_get_features()),
+> and searched the git log of ethtool utility, so I think that is an implicit
+> rule and the check is missed in kernel where the patch involves.
+> 
+> Without this rule, we cannot guarantee the safety of copy to user.
+> 
+> Should we keep to be compatible with that incorrect userspace usage?
 
-> On Sun, Jun 4, 2023 at 10:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Fri, Jun 02, 2023 at 11:26:21AM -0400, Hugo Villeneuve wrote:
-> 
-> ...
-> 
-> > > +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
-> >
-> > This returns what, mctrl?  If so, please document that, it doesn't look
-> > obvious.
-> 
-> Good suggestion. Because I also stumbled over the returned type.
-> 
-> >  And as the kernel test robot reported, you do nothing with the
-> > return value so why compute it?
-> 
-> It seems that the entire function and respective call has to be moved
-> under #ifdef CONFIG_GPIOLIB.
+If such incorrect user space exists we do, if it doesn't we don't.
+Problem is that we don't know what exists out there.
 
-Hi,
-it cannot. See my explanations in response to Greg's comments.
-
-Hugo.
+Maybe we can add a pr_err_once() complaining about bad usage for now
+and see if anyone reports back that they are hitting it?
