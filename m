@@ -2,40 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C6172153A
-	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 08:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A8E721541
+	for <lists+linux-kernel@lfdr.de>; Sun,  4 Jun 2023 09:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjFDGuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 02:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S230009AbjFDHDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 03:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFDGt4 (ORCPT
+        with ESMTP id S229462AbjFDHDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 02:49:56 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DD7CA;
-        Sat,  3 Jun 2023 23:49:55 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 08:49:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685861394; bh=he7Gt/dLnDRqfFgQJfpayqVRYgxbXUA13XCLFO53RAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p0eoEe82HhoSDGEZUAtAVvxCh2ITgcs+FPkqX15BtOaSmLiV/u1BQ8ClsoM7+zHRw
-         aNQU4UOh2M8uNS8/fNCk8xries42PY4dZ8slqKCGg6T0RebULQhalNVwKa0YzehOLD
-         JSGgLPvnQejdsHuDjXpq8cSdb/Cvv4WCmk0+L4/E=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/12] nolibc: add generic part1 of prepare for rv32
-Message-ID: <9fd76795-65df-4964-bc80-fb1d4f92c402@t-8ch.de>
-References: <cover.1685777982.git.falcon@tinylab.org>
+        Sun, 4 Jun 2023 03:03:03 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926ADB4
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 00:03:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id DD8185C0107;
+        Sun,  4 Jun 2023 03:02:59 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 04 Jun 2023 03:02:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1685862179; x=1685948579; bh=FQJ13Aq87t
+        YV6JYGYfyduSzT1CwAmRLXUL1KgqmPHmk=; b=W8fqjJIkD11IW5l3MAr6h09/zY
+        Cu/f06dNh7+20PCgVp/815GnvWEFY1ORUIYhRheeTGPzUopZvMnmd4KfskXsNs24
+        lfnBdl089tV8b1pLfSOw2LUZmrWx+4Xr+a6Piw4RVDCj+qoS3xrxrGruScI8mA+1
+        tf6e9l27Hvmn4JCU7G7Cjn24VmoszrHHfliACwGLguaP40Y+LnduYrwrqCVRxMzf
+        AHpgIt1Du7vKBPOe9Y1gZEII9Pc3BoQ1tbHwNKEjhbAss4nCF7At3EcBTB10n3EM
+        GfNiydiwpUThtjDBfjLOWGaLHBTeHKv6M3UDELM3uCxFfORWqYmiuVU3Lwgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:date:feedback-id:feedback-id:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1685862179; x=1685948579; bh=FQJ13Aq87tYV6JYGYfyduSzT1CwA
+        mRLXUL1KgqmPHmk=; b=uR4KDaQLvqDeWzWdcZO5/gmIzAY1Y4RES76/+999XOPo
+        rJBhqZqt54/HkLhKTjm+Y3emySsiH1qs8RZ38Lw+K0sMre4Xp/hWRUEx54Mll+q3
+        HIR7AaDuJ0LUFAZsaPwOa0DhoCz90fJR6znxVsF6qgaI6Uuo70U6Qpmevny2TgjE
+        q4a+ZMxBfsDAlmvygo1/1bAqKak1mW3G8ZZRgTsGNy3EMwJchl5CFH2gVfeZF5E0
+        19E/PewNldCuVKGUPkTt7EZInTmDrXOyezAaLKx6lN1rY6w35aYzLznHz8DDpz/u
+        6mI8xhrU9EbrNm+IFc6egjeXegTiyR2uLHzHzzHbWw==
+X-ME-Sender: <xms:Izd8ZJRgs7x8KQP_LsS3SvKHlbqr3j7gl1Nm8KzMybd4DEJLEl0LrQ>
+    <xme:Izd8ZCwziynRUu1sy9iHs2DrxUSd3qaPiCgIp50_BYsxEiSC_vB7PN4W1ypxxP80g
+    JzW8UgJyIm7Z4KlWpM>
+X-ME-Received: <xmr:Izd8ZO2pLgx6S43cdIh6yPZsoX2wRuwQDcXgHsFHUeHxzGpvz3599eQLPPhmblfJgUb7ANiSMZ2C60IHFxJtxIY9JhgFayM4j_qYOp967WI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeliedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghs
+    hhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpedujeetlefhtd
+    dtkefgtdeuieelhffgteejjeehkeegveduvdevgeeiheeuueekjeenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhisehsrg
+    hkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:Izd8ZBC06I3WaM4OYBrR1P_5BUlTHs0G-NEW8I2xhdn_gE9RI8NGOA>
+    <xmx:Izd8ZCjP3pjmKmYSrlVJW-urXSOr3LhJrsP6O6X-bxWOpZ4ONxl84g>
+    <xmx:Izd8ZFrAwm5YTIZhJjxhaoqxmCeZTO69yf8ctUv2VbK1M28t18nwWw>
+    <xmx:Izd8ZKI3HHhZKlcFK-AHgpHGLrlDYp1zI3AiXiJ_miCNrnfDJCd5Vg>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 4 Jun 2023 03:02:58 -0400 (EDT)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: [PATCH] firewire: core: obsolete usage of GFP_ATOMIC at building node tree
+Date:   Sun,  4 Jun 2023 16:02:55 +0900
+Message-Id: <20230604070255.172700-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1685777982.git.falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,87 +79,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-03 15:59:29+0800, Zhangjin Wu wrote:
-> Hi, Willy
-> 
-> This is the v3 generic part1 for rv32, all of the found issues of v2
-> part1 [1] have been fixed up, several generic patches have been fixed up
-> and merged from v2 part2 [2] to this series, the standalone test_fork
-> patch [4] is merged with a Reviewed-by line into this series too.
-> 
-> This series is based on 20230528-nolibc-rv32+stkp5 branch of [5].
-> 
-> Changes from v2 -> v3:
-> 
-> * selftests/nolibc: fix up compile warning with glibc on x86_64
-> 
->   Use simpler 'long long' conversion instead of old #ifdef ...
->   (Suggestion from Willy)
-> 
-> * tools/nolibc: add missing nanoseconds support for __NR_statx
-> 
->   Split the compound assignment into two single assignments
->   (Suggestion from Thomas)
-> 
-> * selftests/nolibc: add new gettimeofday test cases
-> 
->   Removed the gettimeofday(NULL, &tz)
->   (Suggestion from Thomas)
-> 
-> All of the commit messages have been re-checked, some missing
-> Suggested-by lines are added.
-> 
-> The whole patchset have been tested on arm, aarch64, rv32 and rv64, no
-> regressions (the next compile patchset is required to do rv32 test).
-> 
-> The nolibc-test has been tested with glibc on x86_64 too.
-> 
-> Btw, we have found such poll failures on arm (not introduced by this
-> patchset), this will be fixed in our coming ppoll_time64 patchset:
-> 
-> 48 poll_null = -1 ENOSYS                                        [FAIL]
-> 49 poll_stdout = -1 ENOSYS                                      [FAIL]
-> 50 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
-> 
-> And the gettimeofday_null removal patch from Thomas [3] may conflicts
-> with the gettimeofday removal and addition patches, but it is not hard
-> to fix.
-> 
-> Best regards,
-> Zhangjin
-> ---
-> 
-> [1]: https://lore.kernel.org/linux-riscv/cover.1685362482.git.falcon@tinylab.org/T/#t
-> [2]: https://lore.kernel.org/linux-riscv/cover.1685387484.git.falcon@tinylab.org/T/#t
-> [3]: https://lore.kernel.org/lkml/20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net/
-> [4]: https://lore.kernel.org/lkml/61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org/
-> [5]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-> 
-> Zhangjin Wu (12):
->   selftests/nolibc: syscall_args: use generic __NR_statx
->   tools/nolibc: add missing nanoseconds support for __NR_statx
->   selftests/nolibc: allow specify extra arguments for qemu
->   selftests/nolibc: fix up compile warning with glibc on x86_64
->   selftests/nolibc: not include limits.h for nolibc
->   selftests/nolibc: use INT_MAX instead of __INT_MAX__
->   tools/nolibc: arm: add missing my_syscall6
->   tools/nolibc: open: fix up compile warning for arm
->   selftests/nolibc: support two errnos with EXPECT_SYSER2()
->   selftests/nolibc: remove gettimeofday_bad1/2 completely
->   selftests/nolibc: add new gettimeofday test cases
->   selftests/nolibc: test_fork: fix up duplicated print
-> 
->  tools/include/nolibc/arch-arm.h              | 23 +++++++++++
->  tools/include/nolibc/stdint.h                | 14 +++++++
->  tools/include/nolibc/sys.h                   | 39 +++++++++---------
->  tools/testing/selftests/nolibc/Makefile      |  2 +-
->  tools/testing/selftests/nolibc/nolibc-test.c | 42 ++++++++++++--------
->  5 files changed, 85 insertions(+), 35 deletions(-)
+The flag of GFP_ATOMIC is given to the call of kmalloc when building node
+tree, but the call is not atomic context. The call of
+fw_core_handle_bus_reset() and fw_core_remove_card() builds the tree,
+while they are done in specific workqueue or pci remove callback.
 
-For the full series:
+This commit obsolete the usage of GFP_ATOMIC.
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+---
+ drivers/firewire/core-device.c   | 2 +-
+ drivers/firewire/core-topology.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> -- 
-> 2.25.1
-> 
+diff --git a/drivers/firewire/core-device.c b/drivers/firewire/core-device.c
+index aa597cda0d88..a3104e35412c 100644
+--- a/drivers/firewire/core-device.c
++++ b/drivers/firewire/core-device.c
+@@ -1211,7 +1211,7 @@ void fw_node_event(struct fw_card *card, struct fw_node *node, int event)
+ 		 * without actually having a link.
+ 		 */
+  create:
+-		device = kzalloc(sizeof(*device), GFP_ATOMIC);
++		device = kzalloc(sizeof(*device), GFP_KERNEL);
+ 		if (device == NULL)
+ 			break;
+ 
+diff --git a/drivers/firewire/core-topology.c b/drivers/firewire/core-topology.c
+index f40c81534381..88466b663482 100644
+--- a/drivers/firewire/core-topology.c
++++ b/drivers/firewire/core-topology.c
+@@ -101,7 +101,7 @@ static struct fw_node *fw_node_create(u32 sid, int port_count, int color)
+ {
+ 	struct fw_node *node;
+ 
+-	node = kzalloc(struct_size(node, ports, port_count), GFP_ATOMIC);
++	node = kzalloc(struct_size(node, ports, port_count), GFP_KERNEL);
+ 	if (node == NULL)
+ 		return NULL;
+ 
+-- 
+2.39.2
+
