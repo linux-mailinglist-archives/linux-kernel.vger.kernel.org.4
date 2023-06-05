@@ -2,131 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B6C722BF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1D1722BF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjFEPwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        id S229702AbjFEPxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234105AbjFEPvo (ORCPT
+        with ESMTP id S229455AbjFEPxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:51:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F650AF
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685980302; x=1717516302;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wBlzO0m7e+06ffK6F4CZHPjf68k4XsbL0e49Ityn51E=;
-  b=c5wjYYv6xmGdSrQoHLfcYPHU01rNn2Z+ToVVIdsPMB7dD7UPM9OiH2fa
-   n6iAQBKgmLAFUfHT2lp34PMQrSmaKi+NDHGLX8RPoRWdDP5jHzoOmeoEs
-   oCXTO4q5PHTCgSEIJbG7P6Gb36XYLiUG3WCmgzCx1VhFfIwlh6duq9mvh
-   I4D0A7l2Fq4JnCzw/M9YnWAVWoloansOuAQaYRdjnp6/kHUZtK1bE1B5M
-   i18B3xKb6kIwkzXih2s4r/A5hzwynXO0SgiwKH71icl2ZCtbZP4k76zJg
-   WfcRe1DqGwjW4POs8qupXyWz8G0nu3KhwiavNxGLc2yTCt+cyrJc/+bgR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="359714609"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="359714609"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 08:51:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="773779105"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="773779105"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.8.179])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 08:51:33 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Juergen Gross <jgross@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
-        Marek =?ISO-8859-1?Q?Marczykowski=2DG=F3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page protection modify
- mask
-Date:   Mon, 05 Jun 2023 17:51:31 +0200
-Message-ID: <2227080.iZASKD2KPV@jkrzyszt-mobl2.ger.corp.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
- 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <5083c051-dfcf-ae23-195f-4c92bb875009@suse.com>
-References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
- <bd70e7b8-1971-6982-979a-ce1eb4c93465@suse.com>
- <5083c051-dfcf-ae23-195f-4c92bb875009@suse.com>
+        Mon, 5 Jun 2023 11:53:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9603094
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:52:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685980339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sbYi2SqNkU8HcJmItNwFRpx+Pi9dAFWzLYDLig6jfuY=;
+        b=X5DwuWYsrNzsGJbneDvKQ/kBBVUwayju279pQT+jCSOIN8rHJemCeRcBG78ooge8SphsEE
+        TzBHpfuML8kBzdCuZmN5RIrZHFVipazdfwKwZ0HRnylD8eIVsQkdjdKCqn9z+4mIkjUUZZ
+        Q2N/2YOBlVfIp94pYmmfnsWWK4NikQE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-185-mCEpg48XNU-DQyoEqEYCzA-1; Mon, 05 Jun 2023 11:52:16 -0400
+X-MC-Unique: mCEpg48XNU-DQyoEqEYCzA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5604B811E8F;
+        Mon,  5 Jun 2023 15:52:15 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 436CB403174;
+        Mon,  5 Jun 2023 15:52:13 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <e94820ba53924e96b31ac983c84269f8@AcuMS.aculab.com>
+References: <e94820ba53924e96b31ac983c84269f8@AcuMS.aculab.com> <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com> <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk> <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com> <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com> <832277.1685630048@warthog.procyon.org.uk> <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     dhowells@redhat.com,
+        'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        "Boris Pismenny" <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: Bug in short splice to socket?
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-ID: <1732083.1685980332.1@warthog.procyon.org.uk>
+Date:   Mon, 05 Jun 2023 16:52:12 +0100
+Message-ID: <1732084.1685980332@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(fixed misspelled Cc: email address of intel-gfx list)
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-On Friday, 2 June 2023 16:53:30 CEST Juergen Gross wrote:
-> On 02.06.23 16:48, Juergen Gross wrote:
-> > On 02.06.23 16:43, Borislav Petkov wrote:
-> >> On Thu, Jun 01, 2023 at 10:47:39AM +0200, Juergen Gross wrote:
-> >>> As described in the commit message, this only works on bare metal due to 
-the
-> >>> PAT bit not being needed for WC mappings.
-> >>>
-> >>> Making this patch Xen specific would try to cure the symptoms without 
-fixing
-> >>> the underlying problem: _PAGE_PAT should be regarded the same way as the 
-bits
-> >>> for caching mode (_PAGE_CHG_MASK).
-> >>
-> >> So why isn't _PAGE_PAT part of _PAGE_CHG_MASK?
+> > > However, this might well cause a malfunction in UDP, for example.
+> > > MSG_MORE corks the current packet, so if I ask sendfile() say shove 32K
+> > > into a packet, if, say, 16K is read from the source and entirely
+> > > transcribed into the packet,
 > > 
-> > This would result in problems for large pages: _PAGE_PSE is at the same
-> > position as _PAGE_PAT (large pages are using _PAGE_PAT_LARGE instead).
-> > 
-> > Yes, x86 ABI is a mess.
+> > If you use splice() for UDP, I don't think you would normally expect
+> > to get all that well-defined packet boundaries.
 > 
-> Oh, wait: I originally thought _PAGE_CHG_MASK would be used for large pages,
-> too. There is _HPAGE_CHG_MASK for that purpose.
+> Especially since (assuming I've understood other bits of this thread)
+> the splice() can get split into multiple sendmsg() calls for other
+> reasons.
 
-Since _HPAGE_CHG_MASK has the _PAGE_PSE aka _PAGE_PAT bit already set, while 
-_PAGE_CHK_MASK has not, the real question is not about large pages processing, 
-I believe, which won't change whether we add _PAGE_PAT to _PAGE_CHG_MASK or 
-not.
+Yes - with SPLICE_F_MORE/MSG_MORE set on all but the last piece.  The issue is
+what happens if the input side gets a premature EOF after we've passed a chunk
+with MSG_MORE set when the caller didn't indicate SPLICE_F_MORE?
 
-If we extend _PAGE_CHG_MASK with _PAGE_PAT bit then its value will be not any 
-different from _HPAGE_CHG_MASK.  Then, one may ask why _HPAGE_CHG_MASK, with 
-_PAGE_PSE aka PAGE_PAT bit set unlike in _PAGE_CHG_MASK, was introduced once 
-for use with large pages, and _PAGE_CHG_MASK left intact for use with standard 
-pages, if we now think that adding that bit to _PAGE_CHG_MASK won't break 
-processing of standard pages.
+> What semantics are you trying to implement for AF_TLS?
 
-If we are sure that adding _PAGE_PAT to _PAGE_CHG_MASK won't break any of its 
-users then let's go for it.
+As I understand it, deasserting MSG_MORE causes a record boundary to be
+interposed on TLS.
 
-Thanks,
-Janusz
+> MSG_MORE has different effects on different protocols.
 
+Do you mean "different protocols" in relation to TLS specifically? Software vs
+device vs device-specific like Chelsio-TLS?
+
+> For UDP the next data is appended to the datagram being built.
+> (This is really pretty pointless, doing it in the caller will be faster!)
+
+Splice with SPLICE_F_MORE seems to work the same as sendmsg with MSG_MORE
+here.  You get an error if you try to append with splice or sendmsg more than
+a single packet will hold.
+
+> For TCP it stops the pending data being sent immediately.
+> And more data is appended.
+> I'm pretty sure it gets sent on timeout.
+
+Yeah - corking is used by some network filesystem protocols, presumably to
+better place RPC messages into TCP packets.
+
+> For SCTP the data chunk created for the sendmsg() isn't sent immediately.
+> Any more sendmsg(MSG_MORE) get queued until a full ethernet packet
+> is buffered.
+> The pending data is sent on timeout.
+> This is pretty much the only way to get two (or more) DATA chunks
+> into an ethernet frame when Nagle is disabled.
+
+SCTP doesn't support sendpage, so that's not an issue.
+
+> But I get the impression AF_TLS is deciding not to encode/send
+> the data because 'there isn't enough'.
+> That seems wrong.
 > 
-> So adding _PAGE_PAT to _PAGE_CHG_MASK and _PAGE_PAT_LARGE to _HPAGE_CHG_MASK
-> should do the job. At least I hope so.
-> 
-> 
-> Juergen
-> 
+> Note that you can't use a zero length sendmsg() to flush pending
+> data - if there is no pending data some protocols will send a 
+> zero length data message.
+> A socket option/ioctl (eg UNCORK) could be (ab)used to force
+> queued data be sent.
 
+Yeah - I've changed that, see v4.  I've implemented Linus's ->splice_eof()
+idea.
 
-
+David
 
