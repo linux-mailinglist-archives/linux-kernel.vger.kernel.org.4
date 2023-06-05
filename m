@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC4E723347
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9653E72334A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjFEWie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 18:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S231894AbjFEWls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 18:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjFEWic (ORCPT
+        with ESMTP id S229791AbjFEWlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 18:38:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDB7F3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686004711; x=1717540711;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LqOBzGUF/ig7ymEXy7eew8beh61DQfT0AV43emlgyR4=;
-  b=QYr3QYizDY4xeWMiBl9WQ9F6dfPyYwKf2/D7HtlvhtsvrMV542HfZgcv
-   5nITu7EPRig7c7+AZ28/xrNi2IYWmni92GHcDRSDMRO6H6/EVH+GAaINi
-   6UB7gB9xWfOO3cA4bT97SeUVnfZMs/ydWH+jqxYPEVAG0pLSBmZyM7FwH
-   PGBwg4RGHRgsiQFSAXAyiH5BsnJPG3AQMen2tOuU2JFtDj/vYHKAB6Uzf
-   HF78JI8HT0Q6Fhj7feRvO5Oy40d9FPycyurdretrJO0nfr028JuQqZMx0
-   5e3V0rOFB05zjDAhMGl1V3rPLbBunujG21cLRygpZYZ9w37BfipMhkJDe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341139298"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="341139298"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:38:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821347435"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="821347435"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jun 2023 15:38:29 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6IqK-0004UZ-13;
-        Mon, 05 Jun 2023 22:38:28 +0000
-Date:   Tue, 6 Jun 2023 06:37:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Christoph Lameter <cl@linux-foundation.org>
-Subject: drivers/scsi/csiostor/csio_lnode.o: warning: objtool:
- csio_ln_fdmi_rhba_cbfn() falls through to next function csio_lns_online()
-Message-ID: <202306060605.uO2QarfW-lkp@intel.com>
+        Mon, 5 Jun 2023 18:41:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68ADF3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:41:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686004904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LSPALKOMgu0znVAkTZi0egalZkDuKKFX0FmKFEoVp3U=;
+        b=IgFASXebsbHy0DHhjf+bWQPFvidaQRuzKyzdENs+T8rb5vFLB5bbQKAJ8XGvHnsOJz3PW6
+        /zjHUbXHmOomgRUQROKDD0twpXXdUuxLCL2MwdJ+dbz0cyXZGVY7zDOsmJ4ucIiePMXjdj
+        KHMkrE+zAJ2zjsGfQTmhLgCLBc2nMF4UVzIWLrGzNt8icMiA9jawB46xNPAzLWKzs4h4JI
+        a/Jiq5FqteUgvX24RzrtuUyrfT58dNWkmw4B0VDAJU3GceQpJz//EbSS9vIIik4GMTPmS9
+        SFSuXPYXjk25lwtvy8yAAqNdaVGgBi2NzfsuV3Om9gDdrWJRSDxzfknOJ/SYFw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686004904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LSPALKOMgu0znVAkTZi0egalZkDuKKFX0FmKFEoVp3U=;
+        b=U8Iu9pLnoMu12CiBh6aRsUyv7srg1+VWpBhDzRS/ttJ3r8KoRNg8JpGecuyHR5TvM87UBV
+        /EJ/VWV+t8tPqsCw==
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Ashok Raj <ashok.raj@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [patch 0/6] Cure kexec() vs. mwait_play_dead() troubles
+In-Reply-To: <ZH4eNL4Bf7yPItee@google.com>
+References: <20230603193439.502645149@linutronix.de>
+ <ZH4eNL4Bf7yPItee@google.com>
+Date:   Tue, 06 Jun 2023 00:41:43 +0200
+Message-ID: <87pm694jmg.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +61,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f8dba31b0a826e691949cd4fdfa5c30defaac8c5
-commit: e240e53ae0abb0896e0f399bdfef41c69cec3123 mm, slub: add CONFIG_SLUB_TINY
-date:   6 months ago
-config: x86_64-randconfig-a011-20230606 (https://download.01.org/0day-ci/archive/20230606/202306060605.uO2QarfW-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e240e53ae0abb0896e0f399bdfef41c69cec3123
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e240e53ae0abb0896e0f399bdfef41c69cec3123
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/crypto/ drivers/scsi/csiostor/
+On Mon, Jun 05 2023 at 10:41, Sean Christopherson wrote:
+> On Sat, Jun 03, 2023, Thomas Gleixner wrote:
+>> This is only half safe because HLT can resume execution due to NMI, SMI and
+>> MCE. Unfortunately there is no real safe mechanism to "park" a CPU reliably,
+>
+> On Intel.  On AMD, enabling EFER.SVME and doing CLGI will block everything except
+> single-step #DB (lol) and RESET.  #MC handling is implementation-dependent and
+> *might* cause shutdown, but at least there's a chance it will work.  And presumably
+> modern CPUs do pend the #MC until GIF=1.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060605.uO2QarfW-lkp@intel.com/
+Abusing SVME for that is definitely in the realm of creative bonus
+points, but not necessarily a general purpose solution.
 
-All warnings (new ones prefixed by >>):
+>> So parking them via INIT is not completely solving the problem, but it
+>> takes at least NMI and SMI out of the picture.
+>
+> Don't most SMM handlers rendezvous all CPUs?  I.e. won't blocking SMIs indefinitely
+> potentially cause problems too?
 
->> drivers/scsi/csiostor/csio_lnode.o: warning: objtool: csio_ln_fdmi_rhba_cbfn() falls through to next function csio_lns_online()
+Not that I'm aware of. If so then this would be a hideous firmware bug
+as firmware must be aware of CPUs which hang around in INIT independent
+of this.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Why not carve out a page that's hidden across kexec() to hold whatever code+data
+> is needed to safely execute a HLT loop indefinitely?
+
+See below.
+
+> E.g. doesn't the original kernel provide the e820 tables for the
+> post-kexec() kernel?
+
+Only for crash kernels if I'm not missing something.
+
+Making this work for regular kexec() including this:
+
+> To avoid OOM after many kexec(), reserving a page could be done iff
+> the current kernel wasn't itself kexec()'d.
+
+would be possible and I thought about it, but that needs a complete new
+design of "offline", "shutdown offline" and a non-trivial amount of
+backwards compatibility magic because you can't assume that the kexec()
+kernel version is greater or equal to the current one. kexec() is
+supposed to work both ways, downgrading and upgrading. IOW, that ship
+sailed long ago.
+
+Thanks,
+
+        tglx
+
+
+
