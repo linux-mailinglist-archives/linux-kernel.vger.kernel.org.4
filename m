@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9DE722B05
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A25722B0A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbjFEP3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S234368AbjFEP32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbjFEP3C (ORCPT
+        with ESMTP id S234328AbjFEP3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:29:02 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2058.outbound.protection.outlook.com [40.107.237.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C11894
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:29:00 -0700 (PDT)
+        Mon, 5 Jun 2023 11:29:19 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E515F1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:29:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EZRGk9bg8kkOl0ywdE+SPbldKLxhUiw5JXlTN04+H8iwiOcFKdyr4Kh5FrC70EkPlLvw2dHxWMbOBplf2YU5ZBRri19PcTE1/PN/A2fKs+kp2W71lK0KjZ+x5Qo42wSh0FckGZ8nIAPUhoIRmHFv53SKZE5xktAiPm7aBkQAYtihhP8e7FBGgkA1Lu+L/7xDscUfbr1++v0q1sw6kB/XcnnjXjzywB8GmpHQTK3gfjhbmMWcLosWpsRvTH4+3L+oIpPbgx6UDlB8jAH4M+JvfDx0oPU9HhwnGTfgtjVXzv5+82ICsJKlnE6K1bXrPClmC0FUbL+w+sypTj8BqOO9eQ==
+ b=UqQh+p05gRKKApJxe0bG6RuNWDteLpkClGEYAj+EtVl9n9EY1AqzliEowJ+RkPUTyfSs6FPmoRJPLgurQ5AhjsjMpzkJcZdtImURlzxHdMf/rSMsoEo6RcduduFNhfVmVVnxbNJhnTWAcCz6mV2rkvv2U6WfKVcOn8wCvGeUjRJx965QWMqlm+4mupZO4Q5GcnxLrlHSqBIARomsy0GKO2bg7ujEZfOoDhZBOffokZ5fzOfI+q+ks/+BWHqayra4le6YwGkGNVKDpV/HAkBjK9SAKMD19l2EY7+KhMTE7ob6OulJ2kU/4jPJEc7+/NtwdLt9YIbTj8oD4xttCt/ARA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZsLhMZ2mjYQFLctcUqqGtwIYERc+AniRGirTI53J+h8=;
- b=L5yww7TyAaJDENEUTHmJe8ZMYp6+TWv+mjqjr/kHqBegUnxkg8YJlzdvSxOUmBhgfPet9mVF2zGwFI/C/hMsEDP73VMgQbq62CssA2Kqv2RqmSYZey7ax1gZklssW2iAAbOviLXY2gC2HVQmPLMdq2od7MxvnIVCepOegiI1SVj33Tt41zGGnC8MZt0WTiLNm+8zs13gw+3IU/yJSxHU8w1Jgxq7qqBk+g85bf8gYnRlsQPYfTMXwb++m+ojGQIg9zd8j+DRIIOqeFYl4xFPvSoyyRGS0hu2wiUsMJEuudrv48d+E6XvZYIp5UXzdXMnd514T9Or6TObj60Rk3aMow==
+ bh=cf9b9k/5wNVh6WuC2Q5pgPgBzyy+MHPMXIKQrRG7NCw=;
+ b=EK8RJ28wRtYzjvMDH7euHFpoxTOLKyx3Gvbsv2bebW5O4dBzhKMakMYY067Msjl9SumQdYataNshhpojfKzAn/KzeJaaYa5JJLLUW6rATqvqdYyrbNDD7wMz6GIZBu0gtIowgQaJdtucW1XT6IaulmiVks2+pBRrn/Ww/QFWyyBw7p5UojRwH160pb2dUsZ2lMO6KppDSMRaYZApGHZ5qkKXK6r8CdUFl3Zf7g7apZxyzRVItrQ5SBPnbA/Ag/J5ltW2lfqBpCrpuqTcg+NE1zL8+OkLAasCgwH/AkNrqv734+w+Vb6U5wxwLx0zLcw2oKejAqoUZYB3qDiQXlbBFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZsLhMZ2mjYQFLctcUqqGtwIYERc+AniRGirTI53J+h8=;
- b=sHZGg75OeGYMMWUgqeywwoy3rXVaJek0vGRCIoIrhAD5DYrXdOveA0V2Ah+2xVuzakfgJeCciy3VggeztOMBMnj9oEAo1wv9aFU9fqLPkz64/mZ3Pfwjie8M91WGZuhO+z3bpFZ+XeqN1T/4HxGqBFJVDnkX6wtcbRxwWPhKpms=
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
- by CH0PR12MB5138.namprd12.prod.outlook.com (2603:10b6:610:bd::17) with
+ bh=cf9b9k/5wNVh6WuC2Q5pgPgBzyy+MHPMXIKQrRG7NCw=;
+ b=I2UsRV4F8LfirTyzssMsNaaQamJG9XbjVUQ8IEpI/hIH7iRh0wW6tOaD9p5cGIwRyRu2Rg7X5AAlZdgU1uqNtyy2ROm45g6YN84Ba/tO/87W6+e5Vy9y4TPHXEdwH5Mqoa59pwh9kSrqgKy4ooHjKaMlr/xzuNpxUP78EwI9VKI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB8308.namprd12.prod.outlook.com (2603:10b6:610:131::8)
+ by MW4PR12MB7016.namprd12.prod.outlook.com (2603:10b6:303:218::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 15:28:57 +0000
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::c549:4aeb:a02f:56b2]) by BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::c549:4aeb:a02f:56b2%4]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 15:28:57 +0000
-From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] drm/amdgpu: Log if device is unsupported
-Thread-Topic: [PATCH] drm/amdgpu: Log if device is unsupported
-Thread-Index: AQHZl8GmBf1fuDCUxkan6FATlzGhAa98VOew
-Date:   Mon, 5 Jun 2023 15:28:57 +0000
-Message-ID: <BL1PR12MB51449DDCC16D5E3035B5571CF74DA@BL1PR12MB5144.namprd12.prod.outlook.com>
-References: <20230605152300.171794-1-pmenzel@molgen.mpg.de>
-In-Reply-To: <20230605152300.171794-1-pmenzel@molgen.mpg.de>
-Accept-Language: en-US
+ 2023 15:29:15 +0000
+Received: from CH3PR12MB8308.namprd12.prod.outlook.com
+ ([fe80::e452:1914:1054:de79]) by CH3PR12MB8308.namprd12.prod.outlook.com
+ ([fe80::e452:1914:1054:de79%7]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 15:29:15 +0000
+Message-ID: <dcef3eff-47c0-25ba-a09a-c0fe3e4404ba@amd.com>
+Date:   Mon, 5 Jun 2023 20:59:02 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RESEND PATCH] cdx: fix driver managed dma support
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=929ec35b-e2c4-4b6d-8fef-54cc674948f3;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-05T15:27:16Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5144:EE_|CH0PR12MB5138:EE_
-x-ms-office365-filtering-correlation-id: 178d5a55-8064-4a72-be3c-08db65d9941e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J3wifOQ1vbZz7h3qBHz2cTEUUEZHVEsbvDv4xeymdsspKA262+rVcM2l/9hPhfjEL0kxZXBPRY7kwQEd9LSqBymhdVn6YlZSzEtFziYcaYeumNWQ+F3mpD++F5BPDQvU1SltPaRxfhQtgb84kLCKDvWCb6/xgh+Q47OKOIAv8/1KI81CqPaY3GD3K0VArK0+SoACIXOBzdmFb3lGNj1eZl1zWP8t9jR5CqmYFa2yy8+MsR2ayjtZKRDt8qnOlBbvtCGvLYS6UaBnMQD3TA42rQ0VHm4/xReLZtV2bThJKsbxiop8pdl+a+c9ayQR3cYqtoy8eN4+k1SOn58JIuJZxXgxjZaYCGfaaz30fTDTEevN2mooQs/r/aAQt7IWqAVXsb3PJLDIswpCI1xRoAS2rdtdIWya3Pr6gV8aTStLeCTrAO8NpxZl2prAHcinMrsc72XovJHGE3FsHAzVkIGIhLA16mPaD2fKNFyRvfV+oFsinkRkPaJMDdHO9G2PoK5zegtZRkG3Aadhe3oCRZSYvTutXRdBkQPCW4g7mN3xqBz9napIX+GjB8lTnrJNL9Pv
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199021)(110136005)(54906003)(2906002)(38070700005)(71200400001)(33656002)(478600001)(86362001)(52536014)(38100700002)(41300700001)(8936002)(8676002)(5660300002)(55016003)(316002)(4326008)(66556008)(76116006)(64756008)(66476007)(122000001)(83380400001)(66946007)(66446008)(6506007)(9686003)(53546011)(26005)(186003)(966005)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zf1UspMa/L5fHrRQN/LQMG/SSCaI/W0D/9L8ZyMmMD/qSw0z8VD9G+9E23TM?=
- =?us-ascii?Q?VWX1yaJQHa9uJD4NrSD7U38/dB0O3oqhu3d73Lb0/Z4qdXK7W8b/B+J+McP+?=
- =?us-ascii?Q?u8daC5ryDS1ifvuD4X396G7cwfZR1N7sB7rYj+JOtBPDbUGuwUpzrVsxS2sw?=
- =?us-ascii?Q?TZRibnctKof3UtMBPYkivncmcl3ozdVpzQROVyyp4OjNODepzFdQ6OvwYCrw?=
- =?us-ascii?Q?zX0pcnqi9k7/6SZBz2FijPbVh9ZdHBPtUTR6TZ8E5uBeaPUqUKMOL+GwwFkv?=
- =?us-ascii?Q?8vzjvLqjHXqIVBS5bjhoL4NMPBIINjPLzCWx4WHCYo3gl4ehEIsRis7CJTJn?=
- =?us-ascii?Q?MyLlycFH8ciEUBCTgfGOD2ysd4juncF0R0TP3Mc6a1MPCELIh1ozT7k0b2oa?=
- =?us-ascii?Q?rJVpYlUH1J3/B83Ph8zbqbAqQ3gl4CaUnGxIzEIjpl3M27mU07OA6l6YAmSW?=
- =?us-ascii?Q?vUEytsP2JAvNucq3/3WRMBlbfyN6978wrECnPsyq3q9lkuZxTrnhJ0w6Lxh8?=
- =?us-ascii?Q?rdiLGJj9voJme4oSiD0tJ8GNe1vzXU/O5AUDJpz86fGGMCek+h5A68G54GpT?=
- =?us-ascii?Q?2l0bkrIV/W8+k/iPruML65KiZGkm/ObmqqYA/OwBP7qa020++ItJ3yAfF01w?=
- =?us-ascii?Q?/cPZQy/XYOwxNUGA6Hm93lGf6arQ7oocVOKhE3OXGXAnAgoILITe913+vBw1?=
- =?us-ascii?Q?z2w0w9Lt+Q+GxFsZZRjgVL+V2I1HX1ingGJeFBimSSyvEvyfuVdYbA14oR4B?=
- =?us-ascii?Q?DXIHaM3/3Vrov91/k6+jCFuitm3YSA6/gg5+7dljGs2jvi+SJYVbDwSknzxt?=
- =?us-ascii?Q?UngZ5t/2A+5dXppg9z+CRiZURmb065KNAf42Okw0v7qxbQtlPbSURpBSfGbC?=
- =?us-ascii?Q?5WYnjvUtaABFs1Gonr2mu70xhfu7AzSFW+tX6QJTmWuqmkevuF9cn9UlqOPp?=
- =?us-ascii?Q?O08jxSLr1fNdc1P+4giK/2vRQDY/MkjvnLhKlpebiUd22OceRgKx5DGt7OMR?=
- =?us-ascii?Q?NVdUPlp1qUBwTixgERLr3TbkSgIsV9Zv3iLQR/Jt1knGRhBSvqNRSpAztqKT?=
- =?us-ascii?Q?9rKfov2Ie43yX8qUVDhpVTW3UVTXoNSTyw3j34wOZErPK5EZEVWcji6t8JvH?=
- =?us-ascii?Q?WXkfC8XJRlmTfVb+jpoywpO0vjnIit6tNznafI+sakM67VezeqfB1+/U8lSk?=
- =?us-ascii?Q?4E0y90VIucRcQmnoCVaY3kVSXMmeSk9oLK6ykI5v+tprN+vBYFlUmFcbQBB4?=
- =?us-ascii?Q?PcOwVMH1T/lfX9vv6Zl7xKpoYJeyb64Z/nr4z8RqLkyd8qQYy5Ce2yIqYmAb?=
- =?us-ascii?Q?hMKEz/lPUCxo3q1yMc2MGcZUylrnQfNWmQcigaxabrqrO4OCyU1YtgL/PlGv?=
- =?us-ascii?Q?6DrxSejKERuamZlnNpL+Jg16CpC8hSKH1Z4nP0JY+mHxWVjIr3OmOYO/NgR5?=
- =?us-ascii?Q?o0omB5XTZc7Ds78qEEyCS9jkyE51OpzHrGKfzok19aMfOllh1S+i1RhhJWMR?=
- =?us-ascii?Q?T2axzFaaMWKB8k511NdeNUpSw33X4XPB1O92IqrmL/9fe+y1zlBMKXktPk7b?=
- =?us-ascii?Q?Z4VdSVfSg1lQGjXogaI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     alex.williamson@redhat.com, jgg@ziepe.ca,
+        linux-kernel@vger.kernel.org, git@amd.com, harpreet.anand@amd.com,
+        pieter.jansen-van-vuuren@amd.com, nikhil.agarwal@amd.com,
+        michal.simek@amd.com
+References: <20230605131009.6869-1-nipun.gupta@amd.com>
+ <2023060533-reseal-glider-11e7@gregkh>
+From:   Nipun Gupta <nipun.gupta@amd.com>
+In-Reply-To: <2023060533-reseal-glider-11e7@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0046.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:98::22) To CH3PR12MB8308.namprd12.prod.outlook.com
+ (2603:10b6:610:131::8)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8308:EE_|MW4PR12MB7016:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a360a2b-e134-4af2-969d-08db65d99ea0
+X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rstwyQuM7Va//m3kU7DxMVjw9V5jOEwLpikkQYVPrb+NWHU8Rp1kdJM52k5F4Ew0YrC/HwSkwXfwWp3Em9YbeyrBvu/Mi8zFo1F0fcMOKU7lKvpa6FFXdnQK+C3joKlELu84sxKWLfwMpNGApEoC8fRKWCxH4TChPEB7hWNClMgriu/34K159r9OBRefKydAQrOknny6tHMGfQhGJ9dDRS02l8TfLClyQOCJL5QgWcORkuOTrEYspAjueXgPH4zDETNcxvNe5/reKWYvK03tsYZiNpFADzZNsb4lMtn9dSJm2TK2+70aFpo24+lxZIFOkMful/E0H82k77WXl9O/UqgfrcJGdfW5F1UHjOjOisHALCkJAVeAzTPDuZX5PD7abbm6rJgOp40neg7pc5ogr/c758Riy1Hg6qCsng4mw3m9UEtItvIEiNMEkZ/syKDbvk42Edse7wVa7Vk7m31oTQ+6vr5Got81jTUIQWGXTT05Nj0FSqqegBawIhk6UdBKzVVyDZYCRm9p8zN0Kx9cXCLuOXpYH4Cot2GC8Ia4u8R5RVvbiIHdrobjbyLhzPJUA3Ar7EsDQ5xhY/c8obgVIJymVObLNqMkR0Y7wpxR53Nf/2CoDSArHp7OZgdIxFR91d3IFJO3pRDtj2Zvq+Qw9w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8308.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199021)(55236004)(6506007)(53546011)(6512007)(38100700002)(2616005)(41300700001)(31686004)(6486002)(6666004)(26005)(186003)(966005)(83380400001)(478600001)(4326008)(66476007)(66556008)(6916009)(316002)(66946007)(8936002)(8676002)(5660300002)(44832011)(2906002)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cURxNnRMTnBVWVhwTGJxUmsvTjkrRzFhb3NVN3BSUVArbFYrRmJkdWxUWUta?=
+ =?utf-8?B?c3VEcEZpRTUzeHhJYzk2cTFWWFFTNU5zQ284azNRTXZBVlV6QXlvQzd1eWRB?=
+ =?utf-8?B?U2ZFRHE2RklFZVBRZ1JNeW9ScEc2SlFUSmFFNkJHVjBoWFl6eFd2MU12bHE2?=
+ =?utf-8?B?dXFXOHpUajZFcUIyQnlXQVFxNmlwcHBPZ05TemUwYUxlZVZBWUpXYitWK1lT?=
+ =?utf-8?B?Q2hxbjdFUHVER1RtU3lZbURtT0grL3pFNk10cmhNa2o5MmNyb2pQTWczRWQ3?=
+ =?utf-8?B?MEk5N0ZXU01UdGhQVlAzZ1RhemlYVlJ2RkdGZmU2akdTZEp5VHAyWDdKMEM2?=
+ =?utf-8?B?V2JpalpPK3VhUmVFQS9wUEN6cURpOExTKzVZWGpjQ1JMdnZJYUpPV05qejhK?=
+ =?utf-8?B?d1hmNDk2cFVWdVVvVzhKZXpncjU3RlEyRFVtZkxhc3l3dEF6Mmo0bWx3dnlS?=
+ =?utf-8?B?ejgvdk96RE1xYm5qN05WdEl6VkRjR20wcWhTSTc0ZlBneDVUMWdGamV5Q0hj?=
+ =?utf-8?B?T0dnTytiVWpyYXRIQm9xTmNTbGwyT0xac0dKL3NrbXNiRyt0Wk1xQmF3OXJh?=
+ =?utf-8?B?RVgvL2xnQ3NLK2dlcUtPVU5XVGlwWTNEV2h4UitGaFI3cHNDVUtHZmtMK2hN?=
+ =?utf-8?B?dmt3M3hqOHhwUWllY2JlREpvbURiNVZrZHQ5VEhPMll6eTNKanFPZlU3Nndn?=
+ =?utf-8?B?Y1JBSGsyVG1zYldqd3VwRmU0RmdLeDF0Ly9ITk1ZREJjMTZsTWpYZzd2M09G?=
+ =?utf-8?B?c0U3ejAwdno2YTZnVzcyRHpNdmJ6L0pvbFRjb0Z6enZlMDhTaEptcUlaSVhH?=
+ =?utf-8?B?T3R5Z3lTVWFCek96dlV2dVhScklpbDlhTXVET0UwSXVQODdmU2NlUXhxcGt6?=
+ =?utf-8?B?M0FSSnRIN3FndVU5UFkzQXpsSklOMXVEdCtBMlFabVVHQnhYVFNpcXY1SSt1?=
+ =?utf-8?B?NkszUi9yTzZYZGNFaGJNTGk1cmVQN3UzbGk1NXJvQ1VUZXA4cDRiMXhGV084?=
+ =?utf-8?B?WFk2am9IeFk3MVNSS0kzTm83SzRWaEp2SFYxTlpVUGVEelBRdXlQbEdFZlVs?=
+ =?utf-8?B?MXpRWXVUZzU0MnMvNW9nRExwc01KWS82dERWVzFrclAwazhueURGa3hTaEJF?=
+ =?utf-8?B?VEdsOUpNZGdZWWxYcUl5TGoxSTBXRHV6aXFPZHNnb2g5SXRZUUh0NkRTL2lK?=
+ =?utf-8?B?N3VCMzFWYkhvWXQrWDN6R2JDYVlISGxjeGpxNW9HSTNIdmxaaS9NNGh4T3Rx?=
+ =?utf-8?B?KzExa1V1ZEw5b05JbkpaR3FVOXVwanA5enlsNXFQNU1RamV4RGVsYVAvNVRP?=
+ =?utf-8?B?b3pyb1VUN3pUd3hnRUpqYk44a1UxSGdZRFN4OWgyUm1QRVlxNTduZVBrZUNH?=
+ =?utf-8?B?Mkk5R0MwaDZkdzQrTDVUL0oyNHNoV1FRZEdWQ1NrbjlrcHV1MzZMVzh1RmtH?=
+ =?utf-8?B?SEZubjZBK3pncmRHVmFUYWIzM1N3UUg4aGRuZWkyYythQ3NMVWhLMi9DYnFQ?=
+ =?utf-8?B?dlVFdzQ1SDhZbHVnUWlnWlVudVhDVFRKWFV3UXJJK2hNU3FSV2R1MFcxUDVi?=
+ =?utf-8?B?bUZtNUpwSU9HN3hPeHdsdUZzczd2YlNuckR4cit4aUkxYVhLZmwzS2psQUJU?=
+ =?utf-8?B?am9SdW9sbk80Sm5tVjBUMEh3c2MrQnFSR3pYWmIyVGl0ZnNiNGxPbWZ6ZTZ5?=
+ =?utf-8?B?RUFPb2tkdDVUMUJoVWdDTTVRTCtFOFl4anF1VnZQdlNPemhTc2xkMlNHc29D?=
+ =?utf-8?B?bG9hUFNvNVBmbXp3VTBNbWIrdHRkK0lHVFVrdkluZldPUVB6UEQxK2hSdEt6?=
+ =?utf-8?B?YkxYbWF4aXh5WTdGb2VUR2dYMEdCNjFaZzJLcmFycTd2N2ROWnVXdW1zTnJa?=
+ =?utf-8?B?SmhQZVJnKzliYWFwREpwQnNGZGI0Y3NRQ284dFMvelFsNnM2K1RzOFloVmRN?=
+ =?utf-8?B?QjVVODQwMFpXcGE2MkVuZ0lpRjBtL1ZIU1lGUHRXaEhLc1lRdEw0cll1dmw1?=
+ =?utf-8?B?UGRENGsrN01nVnpuaENQWDlzMmR0WERIQmpTNlNBcmordXUySzVIUnAxZ3VB?=
+ =?utf-8?B?SGRHOXY1OTl5TWpKTm5rVnYxS1BXU0drbjBqdG1GVCs0OXdYSmo4b0lvOEx6?=
+ =?utf-8?Q?K0G8=3D?=
 X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a360a2b-e134-4af2-969d-08db65d99ea0
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8308.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 178d5a55-8064-4a72-be3c-08db65d9941e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2023 15:28:57.0342
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 15:29:14.8427
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: o2oB7g3kuHAvo0FPuOhjhE+NhzVJgJaemDJ2f3lBMlx86HozWzdMTWMzP48bys5Q5DXtUZt1O9OdYcMVy11SHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5138
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7IbpRidD2cGIICdWyVeJyNI4JVU9l3PCzZ8LmKpizLA18Ne6KPGuB3fRr3fT8G77
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7016
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -121,61 +128,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
 
-> -----Original Message-----
-> From: Paul Menzel <pmenzel@molgen.mpg.de>
-> Sent: Monday, June 5, 2023 11:23 AM
-> To: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
-> Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>
-> Cc: Paul Menzel <pmenzel@molgen.mpg.de>; amd-gfx@lists.freedesktop.org;
-> dri-devel@lists.freedesktop.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH] drm/amdgpu: Log if device is unsupported
->
-> Since there is overlap in supported devices, both modules load, but only =
-one
-> will bind to a particular device depending on the model and user's
-> configuration.
->
-> amdgpu binds to all display class devices with VID 0x1002 and then
-> determines whether or not to bind to a device based on whether the
-> individual device is supported by the driver or not. Log that case, so us=
-ers
-> looking at the logs know what is going on.
->
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2608
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> index 86fbb4138285..410ff918c350 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> @@ -2062,8 +2062,10 @@ static int amdgpu_pci_probe(struct pci_dev
-> *pdev,
->
->       /* skip devices which are owned by radeon */
->       for (i =3D 0; i < ARRAY_SIZE(amdgpu_unsupported_pciidlist); i++) {
-> -             if (amdgpu_unsupported_pciidlist[i] =3D=3D pdev->device)
-> +             if (amdgpu_unsupported_pciidlist[i] =3D=3D pdev->device) {
-> +                     DRM_INFO("This hardware is only supported by
-> radeon.");
->                       return -ENODEV;
 
-I think this will confuse users even more.  As there will be a new "error" =
-message reported.  I'd suggest either dropping the message in init per my p=
-roposed patch or just leaving things as is.
+On 6/5/2023 8:52 PM, Greg KH wrote:
+> 
+> On Mon, Jun 05, 2023 at 06:40:09PM +0530, Nipun Gupta wrote:
+>> The devices on cdx could be bound to drivers with the device
+>> DMA managed by kernel drivers or user-space applications.
+>> As multiple devices can be placed in the same IOMMU group, the
+>> DMA on these devices must either be entirely under kernel control
+>> or userspace control. Fix the CDX bus driver to acknowlege the
+>> driver_managed_dma flag and call the appropriate iommu APIs.
+>>
+>> Fixes: 2959ab247061 ("cdx: add the cdx bus driver")
+>> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+>> Reported-by: Alex Williamson <alex.williamson@redhat.com>
+>> Closes: https://lore.kernel.org/lkml/20230524134831.28dc97e2.alex.williamson@redhat.com/
+>> ---
+>>
+>> I have resend this patch to include fixes, closes and
+>> reported by tags. We request that this fix be incorporated
+>> into the 6.4 release, along with the inclusion of CDX bus
+>> driver support.
+> 
+> What do you mean by "inclusion of CDX bus driver support"?  What patches
+> exactly?
 
-Alex
+Sorry for the confusion. I mean that CDX bus support would be coming up 
+in 6.4 release and this patch (cdx: fix driver managed dma support) is a 
+fix for the driver managed dma support in the bus. So if this patch can 
+be part of 6.4 release (i.e. added in upcoming rc release/s for 6.4)?
 
-> +             }
->       }
->
->       if (amdgpu_aspm =3D=3D -1 && !pcie_aspm_enabled(pdev))
-> --
-> 2.40.1
+Thanks,
+Nipun
 
+> 
+> confused,
+> 
+> greg k-h
