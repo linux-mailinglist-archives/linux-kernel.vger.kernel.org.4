@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71437228B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F297228BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbjFEOVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S233560AbjFEOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbjFEOVv (ORCPT
+        with ESMTP id S231451AbjFEOWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:21:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCD0ED
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685974863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qjyQfaah7kzAAP89Moz/93/MPg42FDVwN2Cl77zMEpo=;
-        b=bFvKU4CCkO+sRyaQa6AH37WvE49CfeylwxGzBaKcNV6wAhLMl9HRf3MOF1yPzxpqoQFTgs
-        t5WmPGcFC7yRjd26tIrHeKdp1Eg2q9HR0ueIjxofLuU4UT/kyCQAfTcmfDj98lt4OCiBDu
-        pxUk/YsUA1RdUDNCvHgpq3i3ziFQDss=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-NLSdgJxbOI2ev26fbE6asw-1; Mon, 05 Jun 2023 10:21:01 -0400
-X-MC-Unique: NLSdgJxbOI2ev26fbE6asw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CA2338025EA;
-        Mon,  5 Jun 2023 14:21:00 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.144])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 6DD771121314;
-        Mon,  5 Jun 2023 14:20:57 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon,  5 Jun 2023 16:20:39 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 16:20:35 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, stefanha@redhat.com, brauner@kernel.org
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230605142034.GD32275@redhat.com>
-References: <20230523121506.GA6562@redhat.com>
- <26c87be0-8e19-d677-a51b-e6821e6f7ae4@redhat.com>
- <20230531072449.GA25046@redhat.com>
- <CACGkMEv2kB9J1qGYkGkywk1YHV2gU2fMr7qx4vEv9L5f6qL5mg@mail.gmail.com>
- <20230531091432.GB25046@redhat.com>
- <CACGkMEvNrC5gc4ppp0QG-SNSbs_snrqwPkNBotffRRDJA1VJjQ@mail.gmail.com>
- <20230601074315.GA13133@redhat.com>
- <CACGkMEss2LkUiUKaEkhBWwFDBBz31T3N94a0=zSD1d+Fhb1zyQ@mail.gmail.com>
- <20230602175846.GC555@redhat.com>
- <CAHk-=whKyWvzg=7_m1o_KLC3zb9FjTBHftc36-5M9X78AxwRXg@mail.gmail.com>
+        Mon, 5 Jun 2023 10:22:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A619E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:22:45 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6B6P-0003sp-Cu; Mon, 05 Jun 2023 16:22:33 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6B6H-005ILy-VI; Mon, 05 Jun 2023 16:22:25 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6B6H-00BPoh-7V; Mon, 05 Jun 2023 16:22:25 +0200
+Date:   Mon, 5 Jun 2023 16:22:25 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        kernel@pengutronix.de,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, Nicholas Piggin <npiggin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liang He <windhl@126.com>
+Subject: Re: [PATCH v3 2/2] serial: 8250: Apply FSL workarounds also without
+ SERIAL_8250_CONSOLE
+Message-ID: <20230605142225.75l6px3ep5ythkl6@pengutronix.de>
+References: <20230605130857.85543-1-u.kleine-koenig@pengutronix.de>
+ <20230605130857.85543-3-u.kleine-koenig@pengutronix.de>
+ <2d70e8b-7722-71e7-76f3-d27a2b2caa55@linux.intel.com>
+ <20230605133445.vi762odw2v7pkrog@pengutronix.de>
+ <f01b13f5-34c9-62fc-52fd-33e923e2a2ba@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="67aykvgma767d2t7"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whKyWvzg=7_m1o_KLC3zb9FjTBHftc36-5M9X78AxwRXg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <f01b13f5-34c9-62fc-52fd-33e923e2a2ba@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,71 +73,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02, Linus Torvalds wrote:
->
-> On Fri, Jun 2, 2023 at 1:59 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> >
-> > As I said from the very beginning, this code is fine on x86 because
-> > atomic ops are fully serialised on x86.
->
-> Yes. Other architectures require __smp_mb__{before,after}_atomic for
-> the bit setting ops to actually be memory barriers.
->
-> We *should* probably have acquire/release versions of the bit test/set
-> helpers, but we don't, so they end up being full memory barriers with
-> those things. Which isn't optimal, but I doubt it matters on most
-> architectures.
->
-> So maybe we'll some day have a "test_bit_acquire()" and a
-> "set_bit_release()" etc.
 
-In this particular case we need clear_bit_release() and iiuc it is
-already here, just it is named clear_bit_unlock().
+--67aykvgma767d2t7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So do you agree that vhost_worker() needs smp_mb__before_atomic()
-before clear_bit() or just clear_bit_unlock() to avoid the race with
-vhost_work_queue() ?
+Hello Ilpo,
 
-Let me provide a simplified example:
+On Mon, Jun 05, 2023 at 04:44:08PM +0300, Ilpo J=E4rvinen wrote:
+> On Mon, 5 Jun 2023, Uwe Kleine-K=F6nig wrote:
+> > On Mon, Jun 05, 2023 at 04:22:55PM +0300, Ilpo J=E4rvinen wrote:
+> > > On Mon, 5 Jun 2023, Uwe Kleine-K=F6nig wrote:
+> > >=20
+> > > > The need to handle the FSL variant of 8250 in a special way is also
+> > > > present without console support. So soften the dependency for
+> > > > SERIAL_8250_FSL accordingly. Note that with the 8250 driver compile=
+d as
+> > > > a module, some devices still might not make use of the needed
+> > > > workarounds. That affects the ports instantiated in
+> > > > arch/powerpc/kernel/legacy_serial.c.
+> > > >=20
+> > > > This issue was identified by Dominik Andreas Schorpp.
+> > > >=20
+> > > > To cope for CONFIG_SERIAL_8250=3Dm + CONFIG_SERIAL_8250_FSL=3Dy, 82=
+50_fsl.o
+> > > > must be put in the same compilation unit as 8250_port.o because the
+> > > > latter defines some functions needed in the former and so 8250_fsl.o
+> > > > must not be built-in if 8250_port.o is available in a module.
+> > > >=20
+> > > > Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+> > > > Link: https://lore.kernel.org/r/20230531083230.2702181-1-u.kleine-k=
+oenig@pengutronix.de
+> > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > ---
+> > > >  drivers/tty/serial/8250/Kconfig  | 2 +-
+> > > >  drivers/tty/serial/8250/Makefile | 2 +-
+> > > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > > >=20
+> > > > diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8=
+250/Kconfig
+> > > > index 5313aa31930f..10c09b19c871 100644
+> > > > --- a/drivers/tty/serial/8250/Kconfig
+> > > > +++ b/drivers/tty/serial/8250/Kconfig
+> > > > @@ -378,7 +378,7 @@ config SERIAL_8250_BCM2835AUX
+> > > > =20
+> > > >  config SERIAL_8250_FSL
+> > > >  	bool "Freescale 16550 UART support" if COMPILE_TEST && !(PPC || A=
+RM || ARM64)
+> > > > -	depends on SERIAL_8250_CONSOLE
+> > > > +	depends on SERIAL_8250
+> > >=20
+> > > Just one additional thought: After the adding the arch side=20
+> > > workaround/hack, SERIAL_8250_FSL could become a tristate?
+> >=20
+> > I see no benefit for a module separate from 8250_base.ko. There are
+> > dependencies in both directions between 8250_port.o and 8250_fsl.o[1].
+> > So in my book a bool SERIAL_8250_FSL that modifies 8250_base.ko (with
+> > SERIAL_8250=3Dm) is fine.
+> >=20
+> > Best regards
+> > Uwe
+> >=20
+> > [1] 8250_port.o uses fsl8250_handle_irq() from 8250_fsl.o
+>=20
+> Is that after some fix which isn't in tty-next? I see only these:
+>=20
+> $ git grep -l fsl8250_handle_irq
+> arch/powerpc/kernel/legacy_serial.c
+> drivers/tty/serial/8250/8250_fsl.c
+> drivers/tty/serial/8250/8250_of.c
+> include/linux/serial_8250.h
+>=20
+> No users of fsl8250_handle_irq in 8250_port.c.
 
-	struct item {
-		struct llist_node	llist;
-		unsigned long		flags;
-	};
+Ah right, I was too quick:
 
-	struct llist_head HEAD = {};	// global
+	8250_of.o uses fsl8250_handle_irq() from 8250_fsl.o
+	8250_fsl.o uses serial8250_modem_status() from 8250_port.o (which is in 82=
+50_base.o)
 
-	void queue(struct item *item)
-	{
-		// ensure this item was already flushed
-		if (!test_and_set_bit(0, &item->flags))
-			llist_add(item->llist, &HEAD);
 
-	}
+However linking 8250_fsl.o in 8250_of.o isn't a good solution either as
+8250_fsl.o should also be available with CONFIG_SERIAL_OF_PLATFORM
+disabled to provide the ACPI driver. And as 8250_of.o already depends on
+8250_port.o (e.g. via serial8250_em485_config()) adding 8250_fsl.o
+together with 8250_port.o into 8250_base.ko is fine and doesn't add new
+dependencies.
 
-	void flush(void)
-	{
-		struct llist_node *head = llist_del_all(&HEAD);
-		struct item *item, *next;
+Best regards
+Uwe
 
-		llist_for_each_entry_safe(item, next, head, llist)
-			clear_bit(0, &item->flags);
-	}
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-I think this code is buggy in that flush() can race with queue(), the same
-way as vhost_worker() and vhost_work_queue().
+--67aykvgma767d2t7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Once flush() clears bit 0, queue() can come on another CPU and re-queue
-this item and change item->llist.next. We need a barrier before clear_bit()
-to ensure that next = llist_entry(item->next) in llist_for_each_entry_safe()
-completes before the result of clear_bit() is visible to queue().
+-----BEGIN PGP SIGNATURE-----
 
-And, I do not think we can rely on control dependency because... because
-I fail to see the load-store control dependency in this code,
-llist_for_each_entry_safe() loads item->llist.next but doesn't check the
-result until the next iteration.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR976AACgkQj4D7WH0S
+/k4MGAf/VAEWzwsb0OBa1vOhvfkbQuHbzxtBbk4SzWstL1H66G7NOx0pYEhOLDBt
+iqYVGKZCV55/BRtmAEKirmAzN2Md1jp0moODFRw8LCt6oEHONOJIJlAkasX20E3W
+0eCtlz3MeTf0Ik4cVaV2x5XnmpaFKa4ZlycRx77ge/P/rV7f1phT62t8f032kbhu
+5jKdgbQ8fHOxrOqwqCXfMc9BPsbXJOXomIFAPdmPQnTBF4Q7z9/CO83HASFQfucV
+8ptleADX4EGVisg1/I+fzx8GVdN0PaRfiiN+VuilpyaIjXGq3MEGM0+E3NmG2Tu0
+GfoDtqjgsgnrNQUQk+jOJkLB7seySg==
+=tDp/
+-----END PGP SIGNATURE-----
 
-No?
-
-Oleg.
-
+--67aykvgma767d2t7--
