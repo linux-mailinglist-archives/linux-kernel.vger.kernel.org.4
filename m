@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D808721FEF
+	by mail.lfdr.de (Postfix) with ESMTP id 32ED7721FEE
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjFEHnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S231765AbjFEHnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjFEHm4 (ORCPT
+        with ESMTP id S230348AbjFEHm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 03:42:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C8ED2;
-        Mon,  5 Jun 2023 00:42:54 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 07:42:51 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AF9DC;
+        Mon,  5 Jun 2023 00:42:55 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 07:42:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1685950972;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mFL93DotU4qHpSdkfRIIq0+Yi+1+PlieQD+ueNn+SlA=;
-        b=mWBrrjPFf8gDuQA3HgySm46tLFzxJUJNsPpb4X10irLUunxvR2GDgSUtKFsUVTybX6BVfa
-        aCik11pj97tii4uVyIO9TGgOviOmT662ZJosxpkEdRba2C20S0IpOTBUh5SKWpC7sST/sA
-        cs5dsKDirZd9Wn76zrhKz5QjvBBi8yXqkS5infoULr1e9NUJL0kdFF+EFgjmDRxfF514Wd
-        borgfFVi9jAw7PRMc/XIQzjwywGmt8TF+9fulF1unMtrWPpMS+rmG+lPjbxDPuageLrq1B
-        vxSG5XwPtxxK6Y9bYNSyAetwAB9dRII6AZh+CRQAwP6ovortEwXvjla56g+KyA==
+        bh=87LHS78qU0tXTJ4OWMNRvsdB8W6EhQkin3Tqf0S3DQs=;
+        b=cagHLG0YrqGzvwb4ezKjZaql413Ins33mX+jnhNgGHGJIRYevw+Fw4ej2Io6MAPCwqaDZ6
+        AR9Sb9bYdQHjnffT+4JJqQOszqVNGDcCFriJHcH4IjT3nK78tazt/flWVBm61EzFoJ++eX
+        A4e9Zt28kf0P9hipVFBQPaN1SFMuN5nvrSYCi/OsnHptDPGjKbM9QauS887XQ+G8kJUpCT
+        NDbIf6Lr341XJs+MntHhsAlpWLPQFP/vyt0EmI9W0XFt2Uyqx9m7pI3c7M6sNUdfKlJ8Ka
+        G4z4oAJR+ePD9hfqRue7B9y0J8u6sg8o8YbJR1chepXD+A/d1V5i5Q4p0pZL3w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1685950972;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mFL93DotU4qHpSdkfRIIq0+Yi+1+PlieQD+ueNn+SlA=;
-        b=DkLicMTuBfMFdpHnFYzz6betvxy2Pud76iDNJ4Bgr3v+owGBaCcyJQMekBZlexq+/C/WZK
-        Ypgf8z3gvlweVtAw==
+        bh=87LHS78qU0tXTJ4OWMNRvsdB8W6EhQkin3Tqf0S3DQs=;
+        b=ZnQvlu2bWsc1G++UbjofJynkkGdAnfNTKO9Md7TZsQoPq8DO50blo7HgYSOhsQzl2k2mjz
+        3jeBWCoOxYcG8pAQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] instrumentation: Wire up cmpxchg128()
+Subject: [tip: locking/core] types: Introduce [us]128
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230531132323.519237070@infradead.org>
-References: <20230531132323.519237070@infradead.org>
+In-Reply-To: <20230531132323.385005581@infradead.org>
+References: <20230531132323.385005581@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168595097170.404.10443718027819954718.tip-bot2@tip-bot2>
+Message-ID: <168595097228.404.8187769988838401263.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,308 +69,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     8c8b096a23d12fedf3c0f50524f30113ef97aa8c
-Gitweb:        https://git.kernel.org/tip/8c8b096a23d12fedf3c0f50524f30113ef97aa8c
+Commit-ID:     224d80c584d3016cb8d83d1c33914fdd3508aa8c
+Gitweb:        https://git.kernel.org/tip/224d80c584d3016cb8d83d1c33914fdd3508aa8c
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 31 May 2023 15:08:37 +02:00
+AuthorDate:    Wed, 31 May 2023 15:08:35 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 05 Jun 2023 09:36:36 +02:00
+CommitterDate: Mon, 05 Jun 2023 09:36:35 +02:00
 
-instrumentation: Wire up cmpxchg128()
+types: Introduce [us]128
 
-Wire up the cmpxchg128 family in the atomic wrapper scripts.
+Introduce [us]128 (when available). Unlike [us]64, ensure they are
+always naturally aligned.
 
-These provide the generic cmpxchg128 family of functions from the
-arch_ prefixed version, adding explicit instrumentation where needed.
+This also enables 128bit wide atomics (which require natural
+alignment) such as cmpxchg128().
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 Tested-by: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/r/20230531132323.519237070@infradead.org
+Link: https://lore.kernel.org/r/20230531132323.385005581@infradead.org
 ---
- include/linux/atomic/atomic-arch-fallback.h | 95 +++++++++++++++++++-
- include/linux/atomic/atomic-instrumented.h  | 86 +++++++++++++++++-
- scripts/atomic/gen-atomic-fallback.sh       |  4 +-
- scripts/atomic/gen-atomic-instrumented.sh   |  4 +-
- 4 files changed, 183 insertions(+), 6 deletions(-)
+ include/linux/types.h          | 5 +++++
+ include/uapi/linux/types.h     | 4 ++++
+ lib/crypto/curve25519-hacl64.c | 2 --
+ lib/crypto/poly1305-donna64.c  | 2 --
+ 4 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
-index a6e4437..1722ddb 100644
---- a/include/linux/atomic/atomic-arch-fallback.h
-+++ b/include/linux/atomic/atomic-arch-fallback.h
-@@ -77,6 +77,29 @@
+diff --git a/include/linux/types.h b/include/linux/types.h
+index 688fb94..becb8cd 100644
+--- a/include/linux/types.h
++++ b/include/linux/types.h
+@@ -10,6 +10,11 @@
+ #define DECLARE_BITMAP(name,bits) \
+ 	unsigned long name[BITS_TO_LONGS(bits)]
  
- #endif /* arch_cmpxchg64_relaxed */
- 
-+#ifndef arch_cmpxchg128_relaxed
-+#define arch_cmpxchg128_acquire arch_cmpxchg128
-+#define arch_cmpxchg128_release arch_cmpxchg128
-+#define arch_cmpxchg128_relaxed arch_cmpxchg128
-+#else /* arch_cmpxchg128_relaxed */
-+
-+#ifndef arch_cmpxchg128_acquire
-+#define arch_cmpxchg128_acquire(...) \
-+	__atomic_op_acquire(arch_cmpxchg128, __VA_ARGS__)
++#ifdef __SIZEOF_INT128__
++typedef __s128 s128;
++typedef __u128 u128;
 +#endif
 +
-+#ifndef arch_cmpxchg128_release
-+#define arch_cmpxchg128_release(...) \
-+	__atomic_op_release(arch_cmpxchg128, __VA_ARGS__)
+ typedef u32 __kernel_dev_t;
+ 
+ typedef __kernel_fd_set		fd_set;
+diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
+index 308433b..6375a06 100644
+--- a/include/uapi/linux/types.h
++++ b/include/uapi/linux/types.h
+@@ -13,6 +13,10 @@
+ 
+ #include <linux/posix_types.h>
+ 
++#ifdef __SIZEOF_INT128__
++typedef __signed__ __int128 __s128 __attribute__((aligned(16)));
++typedef unsigned __int128 __u128 __attribute__((aligned(16)));
 +#endif
-+
-+#ifndef arch_cmpxchg128
-+#define arch_cmpxchg128(...) \
-+	__atomic_op_fence(arch_cmpxchg128, __VA_ARGS__)
-+#endif
-+
-+#endif /* arch_cmpxchg128_relaxed */
-+
- #ifndef arch_try_cmpxchg_relaxed
- #ifdef arch_try_cmpxchg
- #define arch_try_cmpxchg_acquire arch_try_cmpxchg
-@@ -217,6 +240,76 @@
  
- #endif /* arch_try_cmpxchg64_relaxed */
+ /*
+  * Below are truly Linux-specific types that should never collide with
+diff --git a/lib/crypto/curve25519-hacl64.c b/lib/crypto/curve25519-hacl64.c
+index 771d82d..c40e5d9 100644
+--- a/lib/crypto/curve25519-hacl64.c
++++ b/lib/crypto/curve25519-hacl64.c
+@@ -14,8 +14,6 @@
+ #include <crypto/curve25519.h>
+ #include <linux/string.h>
  
-+#ifndef arch_try_cmpxchg128_relaxed
-+#ifdef arch_try_cmpxchg128
-+#define arch_try_cmpxchg128_acquire arch_try_cmpxchg128
-+#define arch_try_cmpxchg128_release arch_try_cmpxchg128
-+#define arch_try_cmpxchg128_relaxed arch_try_cmpxchg128
-+#endif /* arch_try_cmpxchg128 */
-+
-+#ifndef arch_try_cmpxchg128
-+#define arch_try_cmpxchg128(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg128((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg128 */
-+
-+#ifndef arch_try_cmpxchg128_acquire
-+#define arch_try_cmpxchg128_acquire(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg128_acquire((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg128_acquire */
-+
-+#ifndef arch_try_cmpxchg128_release
-+#define arch_try_cmpxchg128_release(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg128_release((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg128_release */
-+
-+#ifndef arch_try_cmpxchg128_relaxed
-+#define arch_try_cmpxchg128_relaxed(_ptr, _oldp, _new) \
-+({ \
-+	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
-+	___r = arch_cmpxchg128_relaxed((_ptr), ___o, (_new)); \
-+	if (unlikely(___r != ___o)) \
-+		*___op = ___r; \
-+	likely(___r == ___o); \
-+})
-+#endif /* arch_try_cmpxchg128_relaxed */
-+
-+#else /* arch_try_cmpxchg128_relaxed */
-+
-+#ifndef arch_try_cmpxchg128_acquire
-+#define arch_try_cmpxchg128_acquire(...) \
-+	__atomic_op_acquire(arch_try_cmpxchg128, __VA_ARGS__)
-+#endif
-+
-+#ifndef arch_try_cmpxchg128_release
-+#define arch_try_cmpxchg128_release(...) \
-+	__atomic_op_release(arch_try_cmpxchg128, __VA_ARGS__)
-+#endif
-+
-+#ifndef arch_try_cmpxchg128
-+#define arch_try_cmpxchg128(...) \
-+	__atomic_op_fence(arch_try_cmpxchg128, __VA_ARGS__)
-+#endif
-+
-+#endif /* arch_try_cmpxchg128_relaxed */
-+
- #ifndef arch_try_cmpxchg_local
- #define arch_try_cmpxchg_local(_ptr, _oldp, _new) \
- ({ \
-@@ -2668,4 +2761,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
- #endif
+-typedef __uint128_t u128;
+-
+ static __always_inline u64 u64_eq_mask(u64 a, u64 b)
+ {
+ 	u64 x = a ^ b;
+diff --git a/lib/crypto/poly1305-donna64.c b/lib/crypto/poly1305-donna64.c
+index d34cf40..988702c 100644
+--- a/lib/crypto/poly1305-donna64.c
++++ b/lib/crypto/poly1305-donna64.c
+@@ -10,8 +10,6 @@
+ #include <asm/unaligned.h>
+ #include <crypto/internal/poly1305.h>
  
- #endif /* _LINUX_ATOMIC_FALLBACK_H */
--// ad2e2b4d168dbc60a73922616047a9bfa446af36
-+// 52dfc6fe4a2e7234bbd2aa3e16a377c1db793a53
-diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
-index 03a232a..8583720 100644
---- a/include/linux/atomic/atomic-instrumented.h
-+++ b/include/linux/atomic/atomic-instrumented.h
-@@ -2034,6 +2034,36 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
- })
- 
-+#define cmpxchg128(ptr, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	kcsan_mb(); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	arch_cmpxchg128(__ai_ptr, __VA_ARGS__); \
-+})
-+
-+#define cmpxchg128_acquire(ptr, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	arch_cmpxchg128_acquire(__ai_ptr, __VA_ARGS__); \
-+})
-+
-+#define cmpxchg128_release(ptr, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	kcsan_release(); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	arch_cmpxchg128_release(__ai_ptr, __VA_ARGS__); \
-+})
-+
-+#define cmpxchg128_relaxed(ptr, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	arch_cmpxchg128_relaxed(__ai_ptr, __VA_ARGS__); \
-+})
-+
- #define try_cmpxchg(ptr, oldp, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
-@@ -2110,6 +2140,44 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	arch_try_cmpxchg64_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-+#define try_cmpxchg128(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	kcsan_mb(); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg128(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
-+#define try_cmpxchg128_acquire(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg128_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
-+#define try_cmpxchg128_release(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	kcsan_release(); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg128_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
-+#define try_cmpxchg128_relaxed(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg128_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
- #define cmpxchg_local(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
-@@ -2124,6 +2192,13 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
- })
- 
-+#define cmpxchg128_local(ptr, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	arch_cmpxchg128_local(__ai_ptr, __VA_ARGS__); \
-+})
-+
- #define sync_cmpxchg(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
-@@ -2150,6 +2225,15 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	arch_try_cmpxchg64_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-+#define try_cmpxchg128_local(ptr, oldp, ...) \
-+({ \
-+	typeof(ptr) __ai_ptr = (ptr); \
-+	typeof(oldp) __ai_oldp = (oldp); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	arch_try_cmpxchg128_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-+})
-+
- #define cmpxchg_double(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
-@@ -2167,4 +2251,4 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- })
- 
- #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
--// 6b513a42e1a1b5962532a019b7fc91eaa044ad5e
-+// 82d1be694fab30414527d0877c29fa75ed5a0b74
-diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
-index 6e853f0..a70acd5 100755
---- a/scripts/atomic/gen-atomic-fallback.sh
-+++ b/scripts/atomic/gen-atomic-fallback.sh
-@@ -217,11 +217,11 @@ cat << EOF
- 
- EOF
- 
--for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64"; do
-+for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64" "arch_cmpxchg128"; do
- 	gen_xchg_fallbacks "${xchg}"
- done
- 
--for cmpxchg in "cmpxchg" "cmpxchg64"; do
-+for cmpxchg in "cmpxchg" "cmpxchg64" "cmpxchg128"; do
- 	gen_try_cmpxchg_fallbacks "${cmpxchg}"
- done
- 
-diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
-index d9ffd74..4f80347 100755
---- a/scripts/atomic/gen-atomic-instrumented.sh
-+++ b/scripts/atomic/gen-atomic-instrumented.sh
-@@ -166,14 +166,14 @@ grep '^[a-z]' "$1" | while read name meta args; do
- done
- 
- 
--for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg" "try_cmpxchg64"; do
-+for xchg in "xchg" "cmpxchg" "cmpxchg64" "cmpxchg128" "try_cmpxchg" "try_cmpxchg64" "try_cmpxchg128"; do
- 	for order in "" "_acquire" "_release" "_relaxed"; do
- 		gen_xchg "${xchg}" "${order}" ""
- 		printf "\n"
- 	done
- done
- 
--for xchg in "cmpxchg_local" "cmpxchg64_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" ; do
-+for xchg in "cmpxchg_local" "cmpxchg64_local" "cmpxchg128_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" "try_cmpxchg128_local"; do
- 	gen_xchg "${xchg}" "" ""
- 	printf "\n"
- done
+-typedef __uint128_t u128;
+-
+ void poly1305_core_setkey(struct poly1305_core_key *key,
+ 			  const u8 raw_key[POLY1305_BLOCK_SIZE])
+ {
