@@ -2,145 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55436722587
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB7472258F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbjFEMWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S232997AbjFEMYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjFEMWk (ORCPT
+        with ESMTP id S233392AbjFEMX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:22:40 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1FAE68;
-        Mon,  5 Jun 2023 05:22:15 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 9A3D53200913;
-        Mon,  5 Jun 2023 08:22:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 05 Jun 2023 08:22:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1685967731; x=1686054131; bh=7W
-        iLrLsF5xVxXNcAy4Mh7e7hxHBVb5egJsZ8LOLNRvo=; b=2o1kwlV3Do2loqfo88
-        8E8nDDB5CavhahXYo6NRabED24JsbSPlA/28nBdwLSv8pPi6tdbInnX6ZLfYGJIm
-        d/ZZHp7m3paDvnOH0noWl7Ko/QtboQpabiwAApHaYpbnOwCG8p32w6UHX3sH2Ryu
-        +1MCyFRdDI/RN6Vs811t++D4ZDUd9Q086Ay7fCnXsIeNNYynG3hZ+0AZcg8R/dGf
-        /pCFJ5fYIIzQeWOQ9TU+7r18p7N0MpyKzCac44ZpElncC9G/hZJVnXyo8ZaNm+H5
-        Xu64ngLXypJBb9h19upA8yk8tu8iWMkH+/NUkndFMdFatP/V6RtvpzMYJ0L+1GlG
-        BYjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685967731; x=1686054131; bh=7WiLrLsF5xVxX
-        NcAy4Mh7e7hxHBVb5egJsZ8LOLNRvo=; b=bMOmsPyCvbE5xOYlrfbDXKiyTdvl0
-        h1VBo3CiJg9/m3T4yfz7v6rr4FNGm/olLi+ic+M4vg1lnfrcUE5OFFK2K9z+7YPV
-        1uLrhqglfmTMp0PhHZ40d1x813XFyKNPtEhylYRwrnhGTJrWr6J4kNdDxDPFe7HG
-        Bq3psbyd1ZbIVb5pPBWyAH2s78xfNogW1DvNWuncHMbTSH7xFkyBLGVqKRpaEK1Q
-        u+SEAeHhjPQPRh6JCOdsylGdjmsMme9LyKKeqNNtfyhSVnrf2ka0IyRtrUXjnn/C
-        A8jkfIUvqaljFkLxBRaemIN76g3qGznuTBwEZYlOUJEyOl1SkhQw2DpNA==
-X-ME-Sender: <xms:ctN9ZDmD-tSymJN54hej2KEc-SLnn0p6xZC_NVsNaNZlh6NPqUqI2g>
-    <xme:ctN9ZG0xEW8krpuXFulA_rknWNdgRDA6LQIUcgWN1ZWQM7VKvzUCWUu-a9tdf802u
-    avA_EX3MyQOR_4oRfo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelledgheduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ctN9ZJpRlsoxA7UiHkqptL34w_v_IjkGD8QhakerALnfohbmRYGSYQ>
-    <xmx:ctN9ZLmGLFrIAbb-zW7rxXN7J0076toHehHcVydIzI9Z0PlSSDgacg>
-    <xmx:ctN9ZB1Xz0IQNNTMSL3_dcw1XG4Q85C4_eI4tBnm94D3uLNNSd1GFQ>
-    <xmx:c9N9ZOLlaiJV7ZDVd7olUsSd-GhbZoNUddglv_9XL9y0u-TTf6ke2w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 96776B60086; Mon,  5 Jun 2023 08:22:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <d98d050a-29dd-4ee7-86cd-bad4e6a04584@app.fastmail.com>
-In-Reply-To: <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-22-varshini.rajendran@microchip.com>
- <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
- <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
-Date:   Mon, 05 Jun 2023 14:21:50 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Varshini Rajendran" <varshini.rajendran@microchip.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Sudeep Holla" <sudeep.holla@arm.com>,
-        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>,
-        "Mihai.Sain" <mihai.sain@microchip.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com
-Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Jun 2023 08:23:59 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3C0A1;
+        Mon,  5 Jun 2023 05:23:53 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZXpD6Ks9z4f3lXJ;
+        Mon,  5 Jun 2023 20:23:48 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgBn0LPU031kd577Kw--.18844S4;
+        Mon, 05 Jun 2023 20:23:49 +0800 (CST)
+From:   Zhong Jinghua <zhongjinghua@huaweicloud.com>
+To:     josef@toxicpanda.com, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org, zhongjinghua@huawei.com,
+        yi.zhang@huawei.com, yukuai3@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next] nbd: Add the maximum limit of allocated index in nbd_dev_add
+Date:   Mon,  5 Jun 2023 20:21:59 +0800
+Message-Id: <20230605122159.2134384-1-zhongjinghua@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBn0LPU031kd577Kw--.18844S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrur4rtFW7JF4UGr48Kw17ZFb_yoWfWrg_CF
+        18Cws7ZrZ3KryfCr4ayryYvry0yw1qqF48uFnIgrWfXay7AFn7W3ZrXrZ8Zr1DZFW7urZ5
+        Zry29rs7Arn7KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbokYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: x2kr0wpmlqwxtxd6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023, at 14:07, Nicolas Ferre wrote:
-> On 05/06/2023 at 08:42, Krzysztof Kozlowski wrote:
->>>
->>> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
->>> index 29a1199dad14..609c8e9305ba 100644
->>> --- a/drivers/net/ethernet/cadence/macb_main.c
->>> +++ b/drivers/net/ethernet/cadence/macb_main.c
->>> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
->>>        { .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
->>>        { .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
->>>        { .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
->>> +     { .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
->> 
->> These are compatible, aren't they? Why do you need new entry?
->
-> The hardware itself is different, even if the new features are not 
-> supported yet in the macb driver.
-> The macb driver will certainly evolve in order to add these features so 
-> we decided to match a new compatible string all the way to the driver.
+From: Zhong Jinghua <zhongjinghua@huawei.com>
 
-It sounds like you can still drop this patch though, and only add a
-specific entry here after the .data field is actually different
-when those features get added.
+If the index allocated by idr_alloc greater than MINORMASK >> part_shift,
+the device number will overflow, resulting in failure to create a block
+device.
 
-The important bit for now is to have the specific string in the binding
-and in the dtb, along with the fallback for I assume "microchip,sama7g5-gem".
+Fix it by imiting the size of the max allocation.
 
-     Arnd
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+---
+ drivers/block/nbd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 592cfa8b765a..cb38477f359f 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1770,7 +1770,8 @@ static struct nbd_device *nbd_dev_add(int index, unsigned int refs)
+ 		if (err == -ENOSPC)
+ 			err = -EEXIST;
+ 	} else {
+-		err = idr_alloc(&nbd_index_idr, nbd, 0, 0, GFP_KERNEL);
++		err = idr_alloc(&nbd_index_idr, nbd, 0,
++				(MINORMASK >> part_shift) + 1, GFP_KERNEL);
+ 		if (err >= 0)
+ 			index = err;
+ 	}
+-- 
+2.31.1
+
