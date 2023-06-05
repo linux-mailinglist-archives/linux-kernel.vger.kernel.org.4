@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9B5722882
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3950722879
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234172AbjFEONn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S234466AbjFEONJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbjFEONZ (ORCPT
+        with ESMTP id S234335AbjFEOMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:13:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AC81985;
-        Mon,  5 Jun 2023 07:12:36 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355DQNb1010118;
-        Mon, 5 Jun 2023 14:11:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=J6spjeZSHivNH3RNmesMtSKJnvJqRAmSwJdeKD0qAjs=;
- b=PzNaT1cv091teOjH/TOAOdnVwxTN+HqoZGqgfkHl3ztdWaDpZNq/mq1NIZiyxR1VPOEK
- 7PEXGmQfg+f3mFR8gmk2xfgU8Pl+oCdyzgNgRD/8JJ+96R3zz3n6QKhfvyjl1mMWRnR4
- Xzl+fipzl0D+6jEt2NQ59LqeRGvWbZMf+IywDraaHIsyjaxidc4lTooTDs2RmQzVkuvU
- HngTz/b4/8x9DyhEbQQff013/ToXe8PjiJeFPRh01vYFOB7K4N8UWPPkgT++79tYYraR
- +cOcmssb99DeH7GIu5chFoTiRWbEVJp9ClwYPNqQuZKbNFu/0es9kPlL3lbsLlZAI2S1 Fg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyx9p3qxp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 14:11:25 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 355EBO20011354
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Jun 2023 14:11:24 GMT
-Received: from ekangupt-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 5 Jun 2023 07:11:21 -0700
-From:   Ekansh Gupta <quic_ekangupt@quicinc.com>
-To:     <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>
-CC:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
-        <ekangupt@qti.qualcomm.com>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <bkumar@qti.qualcomm.com>,
-        <fastrpc.upstream@qti.qualcomm.com>, stable <stable@kernel.org>
-Subject: [PATCH v1] misc: fastrpc: Fix remote heap allocation request
-Date:   Mon, 5 Jun 2023 19:41:16 +0530
-Message-ID: <1685974276-23435-1-git-send-email-quic_ekangupt@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 5 Jun 2023 10:12:52 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106DAE79;
+        Mon,  5 Jun 2023 07:11:57 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685974292;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uHfp+IyYPxqhLvbm8OYS3Lo9uaz8M1hK/LpKpngruro=;
+        b=I2dvsEv0zE3yipuHlMDg7UA6Ckx9wEa+H7t4VCmIJcET1px6TWlt7rNFPhb/SO9IEr87xN
+        wBDLyJFUk2WuVLIjnpLpNczEg7ezgRrWzNXcHfM72l4s1aK3/1FBXifJpSNNg7ovgpqdnU
+        sEbgtIJ38z5zNlZtLiHlgEiq1hUq9FBgXbrBSv7ldAgs719ePTGOKJszV3E6vSlhEkmwO6
+        3Y8BW+LvafTVtnj1GhZ43dI/oLHQTUVjlzbkrqkGemXrN7lKXZWEQbi28a5jY0iiatAb96
+        D7cll8e4nHqA9hc6bkHvRmCcrDjnK9xkByDt3YyE/qSkEUNvWMff9ZOfwZSYKw==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 32278C0003;
+        Mon,  5 Jun 2023 14:11:30 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 16:11:29 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 5/9] iio: inkern: Add a helper to query an available
+ minimum raw value
+Message-ID: <20230605161129.4ac3231b@bootlin.com>
+In-Reply-To: <CAHp75Vec3fXT6phqvLGSn0c09USCXXF6ZoE+X1VNJGM6jyf=aQ@mail.gmail.com>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-6-herve.codina@bootlin.com>
+        <ZHtIdTZbULl6t4RT@surfacebook>
+        <20230605094637.7615b689@bootlin.com>
+        <CAHp75Vec3fXT6phqvLGSn0c09USCXXF6ZoE+X1VNJGM6jyf=aQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2pQAyMiJqJNcepXDyO2d-h4qiX3A9b99
-X-Proofpoint-GUID: 2pQAyMiJqJNcepXDyO2d-h4qiX3A9b99
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_28,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- clxscore=1015 mlxscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306050123
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -75,69 +87,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remote heap is used by DSP audioPD on need basis. This memory is
-allocated from reserved CMA memory region and is then shared with
-audioPD to use it for it's functionality.
+Hi Andy,
 
-Current implementation of remote heap is not allocating the memory
-from CMA region, instead it is allocating the memory from SMMU
-context bank. The arguments passed to scm call for the reassignment
-of ownership is also not correct. Added changes to allocate CMA
-memory and have a proper ownership reassignment.
+On Mon, 5 Jun 2023 12:45:24 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Fixes: 532ad70c6d44 ("misc: fastrpc: Add mmap request assigning for static PD pool")
-Cc: stable <stable@kernel.org>
-Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
-Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
----
- drivers/misc/fastrpc.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+> On Mon, Jun 5, 2023 at 10:46 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> > On Sat, 3 Jun 2023 17:04:37 +0300
+> > andy.shevchenko@gmail.com wrote:  
+> > > Tue, May 23, 2023 at 05:12:19PM +0200, Herve Codina kirjoitti:  
+> 
+> ...
+> 
+> > > > +           case IIO_VAL_INT:
+> > > > +                   *val = vals[--length];  
+> > >  
+> > > > +                   while (length) {  
+> > >
+> > >                       while (length--) {
+> > >
+> > > will do the job and at the same time...
+> > >  
+> > > > +                           if (vals[--length] < *val)
+> > > > +                                   *val = vals[length];  
+> > >
+> > > ...this construction becomes less confusing (easier to parse).  
+> >
+> > Indeed, I will change in the next iteration.  
+> 
+> And looking into above line, this whole construction I would prefer to
+> have a macro in minmax.h like
+> 
+> #define min_array(array, len) \
+> {( \
+>   typeof(len) __len = (len); \
+>   typeof(*(array)) __element = (array)[--__len]; \
+>   while (__len--) \
+>     __element = min(__element, (array)[__len]); \
+>   __element; \
+> )}
+> 
+> (it might need more work, but you got the idea)
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 30d4d04..f5fc2de 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1866,7 +1866,11 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- 		return -EINVAL;
- 	}
- 
--	err = fastrpc_buf_alloc(fl, fl->sctx->dev, req.size, &buf);
-+	if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR)
-+		err = fastrpc_remote_heap_alloc(fl, dev, req.size, &buf);
-+	else
-+		err = fastrpc_buf_alloc(fl, dev, req.size, &buf);
-+
- 	if (err) {
- 		dev_err(dev, "failed to allocate buffer\n");
- 		return err;
-@@ -1905,12 +1909,22 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- 
- 	/* Add memory to static PD pool, protection thru hypervisor */
- 	if (req.flags == ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
--		struct qcom_scm_vmperm perm;
-+		u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
-+		struct qcom_scm_vmperm *dst_perms;
-+		u32 i;
- 
--		perm.vmid = QCOM_SCM_VMID_HLOS;
--		perm.perm = QCOM_SCM_PERM_RWX;
--		err = qcom_scm_assign_mem(buf->phys, buf->size,
--			&fl->cctx->perms, &perm, 1);
-+		dst_perms = kcalloc(fl->cctx->vmcount,
-+			sizeof(struct qcom_scm_vmperm), GFP_KERNEL);
-+		if (!dst_perms)
-+			return -ENOMEM;
-+		for (i = 0; i < fl->cctx->vmcount; i++) {
-+			dst_perms[i].vmid = fl->cctx->vmperms[i].vmid;
-+			dst_perms[i].perm = fl->cctx->vmperms[i].perm;
-+		}
-+
-+		err = qcom_scm_assign_mem(buf->phys,(u64)buf->size,
-+			&src_perms, dst_perms, fl->cctx->vmcount);
-+		kfree(dst_perms);
- 		if (err) {
- 			dev_err(fl->sctx->dev, "Failed to assign memory phys 0x%llx size 0x%llx err %d",
- 					buf->phys, buf->size, err);
--- 
-2.7.4
+I will also introduce max_array() and update both iio_channel_read_max()
+and iio_channel_read_min() to use these macros.
 
+Will be available in the next series iteration.
+
+Thanks,
+Hervé
+
+> 
+> > > > +                   }
+> > > > +                   break;  
+> 
+> ...
+> 
+> > > > +           default:
+> > > > +                   /* FIXME: learn about min for other iio values */  
+> > >
+> > > I believe in a final version this comment won't be here.  
+> >
+> > We have the same FIXME comment in the iio_channel_read_max() function I
+> > copied to create this iio_channel_read_min() and, to be honest, I
+> > don't really know how to handle these other cases.
+> >
+> > In this series, I would prefer to keep this FIXME.  
+> 
+> I see, Jonathan needs to be involved here then.
+> 
+> > > > +                   return -EINVAL;  
+> 
