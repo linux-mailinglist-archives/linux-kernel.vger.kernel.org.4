@@ -2,219 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD05722FB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE6B722FB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbjFETVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        id S235672AbjFETVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235649AbjFETU4 (ORCPT
+        with ESMTP id S235428AbjFETVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:20:56 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12143E49
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:20:42 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355H9Nkj016762
-        for <linux-kernel@vger.kernel.org>; Mon, 5 Jun 2023 12:20:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=Jst2Lp+guze+PlobngIdDpSIritglNJll7WtUVF7Ztc=;
- b=ZzYdNmfzlN68a21AEWXResS+uoM0vqu62MVw4h6fyL4kXafwgTICa/sQxawnsXepf5+t
- jWvu8rwLfL2QXHK6UTOyJ4aq6MBKpWg/vX19NRCjlqQhSWZOR44Lyuy/2k6FIXqnpWyR
- 9ST7djVUxLn8rSAwtQQ5yAQt1E37/o9kxr5JFU82X1hv/KbegavThu+zwA9v4Trrcj+k
- bz+nJ9AfxHNZPJ1T5PlzOJx2+EO+Tyoh857OxAM/HB6GlO3yVhXdLeEbJwSK4jG/VP1G
- xAIsdxUaYofBxFJZcac3oJHLIpXcsLFCa2a18NtL54cTTYC6nldIpyasE8HuIDy+iIn1 /A== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r1fxsu0ke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:20:41 -0700
-Received: from twshared4466.29.prn2.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 5 Jun 2023 12:20:40 -0700
-Received: by devbig863.prn1.facebook.com (Postfix, from userid 2982)
-        id 55AC573CC1DC; Mon,  5 Jun 2023 12:20:29 -0700 (PDT)
-From:   Tomislav Novak <tnovak@meta.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Tomislav Novak <tnovak@meta.com>,
-        Samuel Gosselin <sgosselin@google.com>
-Subject: [PATCH v2] hw_breakpoint: fix single-stepping when using bpf_overflow_handler
-Date:   Mon, 5 Jun 2023 12:19:23 -0700
-Message-ID: <20230605191923.1219974-1-tnovak@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ZH40hgYbWc0x+1c3@tnovak-mbp.dhcp.thefacebook.com>
-References: <ZH40hgYbWc0x+1c3@tnovak-mbp.dhcp.thefacebook.com>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: vYfw4KwpKXJgeAb4lP4uMlXCBeQ-VZZk
-X-Proofpoint-ORIG-GUID: vYfw4KwpKXJgeAb4lP4uMlXCBeQ-VZZk
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 5 Jun 2023 15:21:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E687EED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685992808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l3gJegw+Nxk7RoiwTPjGOLisSvTSWuH40t9k+gDBIZk=;
+        b=eXCOKhabRkMbTlgDzP6HAhnO92suGAqi6bAxuxB2sL6e6YEHl5BvAYFmKCnK+eqdeP51UL
+        BpI0hb8f0sC+C5vz+z+OgGHE4mhslNchLly2J1ywTb5HZpoDL9/AxP0iqisLSNQ+fU/taU
+        q23ZMh8cANmZ/tQYsDc9sFrCzlWfXWo=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-439-q3XU63thOX682ZIKY7aMBg-1; Mon, 05 Jun 2023 15:20:07 -0400
+X-MC-Unique: q3XU63thOX682ZIKY7aMBg-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b337f2504so102082385a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:20:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685992806; x=1688584806;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l3gJegw+Nxk7RoiwTPjGOLisSvTSWuH40t9k+gDBIZk=;
+        b=bGvTX801pk6dVTNeKowJZ3iSEi2Y/uVLYBUoyKoRh/B3x6HqiLeCG+mvM+77JlzELU
+         H1vWP3nBkmc6ly6rj+GR+RnSxJGUiDh+gc0engFgPZGjbmEe4EWpDAjI9SrlFbUO9nyR
+         KtqiqZ+uO+7xmF1R+xh0mIEKy6JAm+uEkVaJgDXoZuM8UIUMvYlHm/mWZ81kwcJ1T3yx
+         JIqQ6Ed9uXAqk8zHOm2ObBwmfU4iuwz6EO1f999r9ICaSRd3h0CNz7zLpsZYQ3WEEp6G
+         mWgzj3nwbfwSxgnPlmDq1QdeQ9JFSxgxPrfH7JC0J3Zt/rvXbd03K+xEKZE0sV+i72xD
+         rDFQ==
+X-Gm-Message-State: AC+VfDzZ9dYe+iB9UYRHH63Jfb/IJVHSYZbuQIcyjNyfUBNzyl4tGUh2
+        nUrpXfdthMyt/3hjbKjjPBniqd7GEEFUOXuWSRkUuLxOnbHwxL4ePpzf8wp3W7fC1tm8v/OVdNa
+        5mmC3vdXSS7KGpIW8tPAFbsB6
+X-Received: by 2002:a05:620a:4608:b0:75b:23a1:69e4 with SMTP id br8-20020a05620a460800b0075b23a169e4mr24924952qkb.4.1685992806494;
+        Mon, 05 Jun 2023 12:20:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6KaZbrUbHfUOAQ4MJPPCdYmmSw75EyCtKDwbv6P1YuOokJkf5Zw/bRz0vcgCeVP/isTdSzsQ==
+X-Received: by 2002:a05:620a:4608:b0:75b:23a1:69e4 with SMTP id br8-20020a05620a460800b0075b23a169e4mr24924927qkb.4.1685992806193;
+        Mon, 05 Jun 2023 12:20:06 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id t17-20020a05620a035100b0075cdb0381ebsm4430076qkm.67.2023.06.05.12.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 12:20:05 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 15:20:03 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 4/4] mm: Make most walk page paths with
+ pmd_trans_unstable() to retry
+Message-ID: <ZH41YzZ0DBoF8csH@x1n>
+References: <20230602230552.350731-1-peterx@redhat.com>
+ <20230602230552.350731-5-peterx@redhat.com>
+ <CAHbLzkp_tzN8SZVeWTKxtMAnFSzUvk2064KFg3quj=raOSHPrA@mail.gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_31,2023-06-02_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHbLzkp_tzN8SZVeWTKxtMAnFSzUvk2064KFg3quj=raOSHPrA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arm platforms use is_default_overflow_handler() to determine if the
-hw_breakpoint code should single-step over the breakpoint trigger or
-let the custom handler deal with it.
+On Mon, Jun 05, 2023 at 11:46:04AM -0700, Yang Shi wrote:
+> On Fri, Jun 2, 2023 at 4:06 PM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > For most of the page walk paths, logically it'll always be good to have the
+> > pmd retries if hit pmd_trans_unstable() race.  We can treat it as none
+> > pmd (per comment above pmd_trans_unstable()), but in most cases we're not
+> > even treating that as a none pmd.  If to fix it anyway, a retry will be the
+> > most accurate.
+> >
+> > I've went over all the pmd_trans_unstable() special cases and this patch
+> > should cover all the rest places where we should retry properly with
+> > unstable pmd.  With the newly introduced ACTION_AGAIN since 2020 we can
+> > easily achieve that.
+> >
+> > These are the call sites that I think should be fixed with it:
+> >
+> > *** fs/proc/task_mmu.c:
+> > smaps_pte_range[634]           if (pmd_trans_unstable(pmd))
+> > clear_refs_pte_range[1194]     if (pmd_trans_unstable(pmd))
+> > pagemap_pmd_range[1542]        if (pmd_trans_unstable(pmdp))
+> > gather_pte_stats[1891]         if (pmd_trans_unstable(pmd))
+> > *** mm/memcontrol.c:
+> > mem_cgroup_count_precharge_pte_range[6024] if (pmd_trans_unstable(pmd))
+> > mem_cgroup_move_charge_pte_range[6244] if (pmd_trans_unstable(pmd))
+> > *** mm/memory-failure.c:
+> > hwpoison_pte_range[794]        if (pmd_trans_unstable(pmdp))
+> > *** mm/mempolicy.c:
+> > queue_folios_pte_range[517]    if (pmd_trans_unstable(pmd))
+> > *** mm/madvise.c:
+> > madvise_cold_or_pageout_pte_range[425] if (pmd_trans_unstable(pmd))
+> > madvise_free_pte_range[625]    if (pmd_trans_unstable(pmd))
+> >
+> > IIUC most of them may or may not be a big issue even without a retry,
+> > either because they're already not strict (smaps, pte_stats, MADV_COLD,
+> > .. it can mean e.g. the statistic may be inaccurate or one less 2M chunk to
+> > cold worst case), but some of them could have functional error without the
+> > retry afaiu (e.g. pagemap, where we can have the output buffer shifted over
+> > the unstable pmd range.. so IIUC the pagemap result can be wrong).
+> >
+> > While these call sites all look fine, and don't need any change:
+> >
+> > *** include/linux/pgtable.h:
+> > pmd_devmap_trans_unstable[1418] return pmd_devmap(*pmd) || pmd_trans_unstable(pmd);
+> > *** mm/gup.c:
+> > follow_pmd_mask[695]           if (pmd_trans_unstable(pmd))
+> > *** mm/mapping_dirty_helpers.c:
+> > wp_clean_pmd_entry[131]        if (!pmd_trans_unstable(&pmdval))
+> > *** mm/memory.c:
+> > do_anonymous_page[4060]        if (unlikely(pmd_trans_unstable(vmf->pmd)))
+> > *** mm/migrate_device.c:
+> > migrate_vma_insert_page[616]   if (unlikely(pmd_trans_unstable(pmdp)))
+> > *** mm/mincore.c:
+> > mincore_pte_range[116]         if (pmd_trans_unstable(pmd)) {
+> >
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  fs/proc/task_mmu.c  | 17 +++++++++++++----
+> >  mm/madvise.c        |  8 ++++++--
+> >  mm/memcontrol.c     |  8 ++++++--
+> >  mm/memory-failure.c |  4 +++-
+> >  mm/mempolicy.c      |  4 +++-
+> >  5 files changed, 31 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > index 6259dd432eeb..823eaba5c6bf 100644
+> > --- a/fs/proc/task_mmu.c
+> > +++ b/fs/proc/task_mmu.c
+> > @@ -631,8 +631,11 @@ static int smaps_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+> >                 goto out;
+> >         }
+> >
+> > -       if (pmd_trans_unstable(pmd))
+> > +       if (pmd_trans_unstable(pmd)) {
+> > +               walk->action = ACTION_AGAIN;
+> >                 goto out;
+> > +       }
+> > +
+> >         /*
+> >          * The mmap_lock held all the way back in m_start() is what
+> >          * keeps khugepaged out of here and from collapsing things
+> > @@ -1191,8 +1194,10 @@ static int clear_refs_pte_range(pmd_t *pmd, unsigned long addr,
+> >                 return 0;
+> >         }
+> >
+> > -       if (pmd_trans_unstable(pmd))
+> > +       if (pmd_trans_unstable(pmd)) {
+> > +               walk->action = ACTION_AGAIN;
+> >                 return 0;
+> > +       }
+> >
+> >         pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+> >         for (; addr != end; pte++, addr += PAGE_SIZE) {
+> > @@ -1539,8 +1544,10 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+> >                 return err;
+> >         }
+> >
+> > -       if (pmd_trans_unstable(pmdp))
+> > +       if (pmd_trans_unstable(pmdp)) {
+> > +               walk->action = ACTION_AGAIN;
+> >                 return 0;
+> 
+> Had a quick look at the pagemap code, I agree with your analysis,
+> "returning 0" may mess up pagemap, retry should be fine. But I'm
+> wondering whether we should just fill in empty entries. Anyway I don't
+> have a  strong opinion on this, just a little bit concerned by
+> potential indefinite retry.
 
-Since bpf_overflow_handler() currently isn't recognized as a default
-handler, attaching a BPF program to a PERF_TYPE_BREAKPOINT event causes
-it to keep firing (the instruction triggering the data abort exception
-is never skipped). For example:
+Yes, none pte is still an option.  But if we're going to fix this anyway,
+it seems better to fix it with the accurate new thing that poped up, and
+it's even less change (just apply walk->action rather than doing random
+stuff in different call sites).
 
-  # bpftrace -e 'watchpoint:0x10000:4:w { print("hit") }' -c ./test
-  Attaching 1 probe...
-  hit
-  hit
-  [...]
-  ^C
+I see that you have worry on deadloop over this, so I hope to discuss
+altogether here.
 
-(./test performs a single 4-byte store to 0x10000)
+Unlike normal checks, pmd_trans_unstable() check means something must have
+changed in the past very short period or it should just never if nothing
+changed concurrently from under us, so it's not a "if (flag==true)" check
+which is even more likely to loop.
 
-This patch replaces the check with uses_default_overflow_handler(),
-which accounts for the bpf_overflow_handler() case by also testing
-if one of the perf_event_output functions gets invoked indirectly,
-via orig_default_handler.
+If we see the places that I didn't touch, most of them suggested a retry in
+one form or another.  So if there's a worry this will also not the first
+time to do a retry (and for such a "unstable" API, that's really the most
+natural thing to do which is to retry until it's stable).
 
-Signed-off-by: Tomislav Novak <tnovak@meta.com>
-Tested-by: Samuel Gosselin <sgosselin@google.com> # arm64
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/linux-arm-kernel/20220923203644.2731604-1-tno=
-vak@fb.com/
----
- arch/arm/kernel/hw_breakpoint.c   |  8 ++++----
- arch/arm64/kernel/hw_breakpoint.c |  4 ++--
- include/linux/perf_event.h        | 22 +++++++++++++++++++---
- 3 files changed, 25 insertions(+), 9 deletions(-)
+So in general, it seems to me if we deadloop over pmd_trans_unstable() for
+whatever reason then something more wrong could have happened..
 
-diff --git a/arch/arm/kernel/hw_breakpoint.c b/arch/arm/kernel/hw_breakpoin=
-t.c
-index 054e9199f30d..dc0fb7a81371 100644
---- a/arch/arm/kernel/hw_breakpoint.c
-+++ b/arch/arm/kernel/hw_breakpoint.c
-@@ -626,7 +626,7 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
- 	hw->address &=3D ~alignment_mask;
- 	hw->ctrl.len <<=3D offset;
-=20
--	if (is_default_overflow_handler(bp)) {
-+	if (uses_default_overflow_handler(bp)) {
- 		/*
- 		 * Mismatch breakpoints are required for single-stepping
- 		 * breakpoints.
-@@ -798,7 +798,7 @@ static void watchpoint_handler(unsigned long addr, unsi=
-gned int fsr,
- 		 * Otherwise, insert a temporary mismatch breakpoint so that
- 		 * we can single-step over the watchpoint trigger.
- 		 */
--		if (!is_default_overflow_handler(wp))
-+		if (!uses_default_overflow_handler(wp))
- 			continue;
- step:
- 		enable_single_step(wp, instruction_pointer(regs));
-@@ -811,7 +811,7 @@ static void watchpoint_handler(unsigned long addr, unsi=
-gned int fsr,
- 		info->trigger =3D addr;
- 		pr_debug("watchpoint fired: address =3D 0x%x\n", info->trigger);
- 		perf_bp_event(wp, regs);
--		if (is_default_overflow_handler(wp))
-+		if (uses_default_overflow_handler(wp))
- 			enable_single_step(wp, instruction_pointer(regs));
- 	}
-=20
-@@ -886,7 +886,7 @@ static void breakpoint_handler(unsigned long unknown, s=
-truct pt_regs *regs)
- 			info->trigger =3D addr;
- 			pr_debug("breakpoint fired: address =3D 0x%x\n", addr);
- 			perf_bp_event(bp, regs);
--			if (is_default_overflow_handler(bp))
-+			if (uses_default_overflow_handler(bp))
- 				enable_single_step(bp, addr);
- 			goto unlock;
- 		}
-diff --git a/arch/arm64/kernel/hw_breakpoint.c b/arch/arm64/kernel/hw_break=
-point.c
-index b29a311bb055..9659a9555c63 100644
---- a/arch/arm64/kernel/hw_breakpoint.c
-+++ b/arch/arm64/kernel/hw_breakpoint.c
-@@ -654,7 +654,7 @@ static int breakpoint_handler(unsigned long unused, uns=
-igned long esr,
- 		perf_bp_event(bp, regs);
-=20
- 		/* Do we need to handle the stepping? */
--		if (is_default_overflow_handler(bp))
-+		if (uses_default_overflow_handler(bp))
- 			step =3D 1;
- unlock:
- 		rcu_read_unlock();
-@@ -733,7 +733,7 @@ static u64 get_distance_from_watchpoint(unsigned long a=
-ddr, u64 val,
- static int watchpoint_report(struct perf_event *wp, unsigned long addr,
- 			     struct pt_regs *regs)
- {
--	int step =3D is_default_overflow_handler(wp);
-+	int step =3D uses_default_overflow_handler(wp);
- 	struct arch_hw_breakpoint *info =3D counter_arch_bp(wp);
-=20
- 	info->trigger =3D addr;
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d5628a7b5eaa..079e7e7c6428 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1305,15 +1305,31 @@ extern int perf_event_output(struct perf_event *eve=
-nt,
- 			     struct pt_regs *regs);
-=20
- static inline bool
--is_default_overflow_handler(struct perf_event *event)
-+__is_default_overflow_handler(perf_overflow_handler_t overflow_handler)
- {
--	if (likely(event->overflow_handler =3D=3D perf_event_output_forward))
-+	if (likely(overflow_handler =3D=3D perf_event_output_forward))
- 		return true;
--	if (unlikely(event->overflow_handler =3D=3D perf_event_output_backward))
-+	if (unlikely(overflow_handler =3D=3D perf_event_output_backward))
- 		return true;
- 	return false;
- }
-=20
-+#define is_default_overflow_handler(event) \
-+	__is_default_overflow_handler((event)->overflow_handler)
-+
-+#ifdef CONFIG_BPF_SYSCALL
-+static inline bool uses_default_overflow_handler(struct perf_event *event)
-+{
-+	if (likely(is_default_overflow_handler(event)))
-+		return true;
-+
-+	return __is_default_overflow_handler(event->orig_overflow_handler);
-+}
-+#else
-+#define uses_default_overflow_handler(event) \
-+	is_default_overflow_handler(event)
-+#endif
-+
- extern void
- perf_event_header__init_id(struct perf_event_header *header,
- 			   struct perf_sample_data *data,
---=20
-2.34.1
+Thanks,
+
+-- 
+Peter Xu
 
