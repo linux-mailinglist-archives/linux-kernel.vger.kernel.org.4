@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F0872300B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C6D723011
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbjFETr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S235813AbjFETri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjFETr0 (ORCPT
+        with ESMTP id S235819AbjFETr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:47:26 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3098F4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:47:18 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-777b0cae9ecso73095139f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:47:18 -0700 (PDT)
+        Mon, 5 Jun 2023 15:47:28 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5E0197
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:47:25 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-33dae9244a1so4153445ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685994438; x=1688586438;
+        d=linaro.org; s=google; t=1685994445; x=1688586445;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=K+K6g914agxSzdAPlI+h0RmOBH1n0CtAnyZzQVNjIUM=;
-        b=LGPCz9DvKsyT9C8LZ9HHpOOrT9bXarBQQ+BVreynXf2mlZl2hNRCwGBsNlryPGc8Pj
-         xpPDisLUTr2xtZgpybZjPFeBUdorJMXrAConsuhsjfWzExoSIn1TCIe87jfJQHKt40h0
-         fWIB1MgHX78h5bxP1DvOh3li1dehPTwfeCoC7LjYMibTSGlHZadmzJV+VmrZ2pedViBE
-         hwFqL+IHqxzpFWvp+ajunZH7d40P5DXlpE+K44PApHpL51fi7Cv9mkjXYJwIvOqy4QG8
-         rFSKoMoe5kAubUNzxGQX6HyhT+rSuaLwOD9lVPV2Nrzr00L3oROWkf7o4XNXddpuqIjb
-         gIsQ==
+        bh=h+VtIQmr/Eeizhg7ZG6ejVJVWApfxToiJ3FEXy8AU9k=;
+        b=sOaoyOIHM4FXhqKBIiG/CIsBhjefYzL1IPfWlM8YtiHfkgHNosl2yanqlPNLsnLH6A
+         j11lr1wnu0TQ39nYOnrrAZEcm+rnawjCFSl41PNYIseKmjkabmDUuI0/Xw0SNs28Y2Tt
+         9BV5rSkuzTPKQtOuQSoSdRVwPoIR9eniL7YL/brn3Qy3HhMXiXYd/qodKEARxEndxk/i
+         nsnsHYnEln18AZ5x0EpGVwD9fJnWvbhxRg6xm1ny9CznYT98RCXMWGOXY7ZChSUhWYnn
+         1rWHdtNIhzeaIRvONK528Z0u1owlGxzAwCx6zFEUlzqcEd5BiFgrvIxwLR17jskj2hdY
+         ZjJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685994438; x=1688586438;
+        d=1e100.net; s=20221208; t=1685994445; x=1688586445;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+K6g914agxSzdAPlI+h0RmOBH1n0CtAnyZzQVNjIUM=;
-        b=k2d3cIc1GHVEG5RJFUDSCAy9MLTOZ9LaZay4mhNyor7nkOMpz2N93Xykj8q7/MKnpT
-         fRI+m9Mzn1hcmbXzR+N/pUpiDPG0N9WX7J7H+GeaS5TIbEqsaMEErE4PZ+RUx0nN25AF
-         tXKK3UREgki/BbpMmt4nlPqPnTDjndDiynZeso6MPqCPID0aE1yxyG7aWPCXpptJ0cs/
-         WvarY27BuM/Wdpa+WhuLtRvPYHEf6o9KPsphZM613PXLrQ9OCI8Rf02+7cWudHXAhv1i
-         WMEyzFTpPRXe2WS0T6BGhdig72z0lkB6TZKNLwdMi99ZXA+LzAJeBP+sNjWksr6vQihB
-         5OvQ==
-X-Gm-Message-State: AC+VfDzCmFlFh1evsOlQE+Te3nwgao9EX7IyaF4bXDj8nxfBtRYXieOk
-        cJ32ke4xBDIOkDBYA66NNG3yVQ==
-X-Google-Smtp-Source: ACHHUZ5SoD1YOSrw3jMzia5Q4kjhwaSzD+xdYs4pIbAN8BkuqCkgDEzo0mvuY5RckZGzss9s1JBa2g==
-X-Received: by 2002:a6b:5909:0:b0:778:735c:9bed with SMTP id n9-20020a6b5909000000b00778735c9bedmr266718iob.0.1685994438313;
-        Mon, 05 Jun 2023 12:47:18 -0700 (PDT)
+        bh=h+VtIQmr/Eeizhg7ZG6ejVJVWApfxToiJ3FEXy8AU9k=;
+        b=TydGnJ8653lakpp7SrBZm6EEUienqpxIGX0o5lib/nSGZRpJT63MS6hYsfKd50YH18
+         foA9R9bTPZJRZFqV2plBmyJr1DQNrViCGYG9dNa24JMQuCYCjSpULvHqtFycpJRMAsFL
+         9aPQiUUP19BlOiXyOUDPnqwoz+VrJhhPtKy4ZHtRViZ+HmmEZ+yVgqwbZmNLAtR15vg4
+         ERGYIJomBKPkH3dsnGyqmSj6Wo/rN+hBj3ebVeTe7M3YnWW+yNeaZ9N70MmF4iYTuahI
+         NQngupsmpyvYh/CnJmRZ+Nr9kKDzVyupRiirhhJtb19y2uZj1typOPP6RgvrIeyHaxwn
+         LZyw==
+X-Gm-Message-State: AC+VfDxED4u+dR6kFcQEPa+mPdTGFOAKmXDLXOKzBiVCoYP+B2COib9Q
+        8zcWz0xvu/TTxQVW2SK9bwNs8g==
+X-Google-Smtp-Source: ACHHUZ40pfQLbMRvSs+oQ7vQ5RcmMWCR5fFuOXEI2OnsBSPojFMo4PN2TeNiR0UYiEyNF01UZGFGIQ==
+X-Received: by 2002:a05:6e02:1a4b:b0:33a:a77d:3072 with SMTP id u11-20020a056e021a4b00b0033aa77d3072mr483235ilv.7.1685994445204;
+        Mon, 05 Jun 2023 12:47:25 -0700 (PDT)
 Received: from [172.22.22.28] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05663811d100b0040fd1340997sm2408770jas.140.2023.06.05.12.47.17
+        by smtp.gmail.com with ESMTPSA id u10-20020a02c04a000000b004167410a9bcsm654180jam.113.2023.06.05.12.47.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 12:47:18 -0700 (PDT)
-Message-ID: <8ec23850-77af-7194-61dd-c3c1bf10ea00@linaro.org>
-Date:   Mon, 5 Jun 2023 14:47:16 -0500
+        Mon, 05 Jun 2023 12:47:24 -0700 (PDT)
+Message-ID: <44084cbf-7aaf-3e15-9bef-85f4a84381f0@linaro.org>
+Date:   Mon, 5 Jun 2023 14:47:23 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 From:   Alex Elder <elder@linaro.org>
-Subject: Re: [PATCH v13 01/24] dt-bindings: Add binding for gunyah hypervisor
+Subject: Re: [PATCH v13 02/24] gunyah: Common types and error codes for Gunyah
+ hypercalls
 To:     Elliot Berman <quic_eberman@quicinc.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
@@ -71,6 +70,8 @@ Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
@@ -78,11 +79,11 @@ Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+        linux-arm-kernel@lists.infradead.org
 References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
- <20230509204801.2824351-2-quic_eberman@quicinc.com>
+ <20230509204801.2824351-3-quic_eberman@quicinc.com>
 Content-Language: en-US
-In-Reply-To: <20230509204801.2824351-2-quic_eberman@quicinc.com>
+In-Reply-To: <20230509204801.2824351-3-quic_eberman@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,131 +97,113 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 5/9/23 3:47 PM, Elliot Berman wrote:
-> When Linux is booted as a guest under the Gunyah hypervisor, the Gunyah
-> Resource Manager applies a devicetree overlay describing the virtual
-> platform configuration of the guest VM, such as the message queue
-> capability IDs for communicating with the Resource Manager. This
-> information is not otherwise discoverable by a VM: the Gunyah hypervisor
-> core does not provide a direct interface to discover capability IDs nor
-> a way to communicate with RM without having already known the
-> corresponding message queue capability ID. Add the DT bindings that
-> Gunyah adheres for the hypervisor node and message queues.
+> Add architecture-independent standard error codes, types, and macros for
+> Gunyah hypercalls.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 
-Rob has reviewed this so I presume it's fine, but I wonder
-why there's no "qcom," prefix on the compatible strings.
+Looks OK to me.
 
-It also seems like there might be more bindings to define
-for Gunyah.  See a few more comments below.
-
-					-Alex
+Reviewed-by: Alex Elder <elder@linaro.org>
 
 > ---
->   .../bindings/firmware/gunyah-hypervisor.yaml  | 82 +++++++++++++++++++
->   1 file changed, 82 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+>   include/linux/gunyah.h | 83 ++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 83 insertions(+)
+>   create mode 100644 include/linux/gunyah.h
 > 
-> diff --git a/Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml b/Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
 > new file mode 100644
-> index 000000000000..3fc0b043ac3c
+> index 000000000000..a4e8ec91961d
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/firmware/gunyah-hypervisor.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/include/linux/gunyah.h
+> @@ -0,0 +1,83 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
 > +
-> +title: Gunyah Hypervisor
+> +#ifndef _LINUX_GUNYAH_H
+> +#define _LINUX_GUNYAH_H
 > +
-> +maintainers:
-> +  - Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> +  - Elliot Berman <quic_eberman@quicinc.com>
+> +#include <linux/errno.h>
+> +#include <linux/limits.h>
 > +
-> +description: |+
-> +  Gunyah virtual machines use this information to determine the capability IDs
-> +  of the message queues used to communicate with the Gunyah Resource Manager.
-> +  See also: https://github.com/quic/gunyah-resource-manager/blob/develop/src/vm_creation/dto_construct.c
+> +/******************************************************************************/
+> +/* Common arch-independent definitions for Gunyah hypercalls                  */
+> +#define GH_CAPID_INVAL	U64_MAX
+> +#define GH_VMID_ROOT_VM	0xff
+> +
+> +enum gh_error {
+> +	GH_ERROR_OK			= 0,
+> +	GH_ERROR_UNIMPLEMENTED		= -1,
+> +	GH_ERROR_RETRY			= -2,
 
-Looking at dto_create_msg_queue() at the above link, it seems
-that Gunyah message queues and capabilities get represented
-in DTS, but I don't see those things documented in bindings.
-I might be misinterpreting that code, but if not, should
-these other things be documented as well?
+I know you explained it "should be OK" to use a negative
+value (with unspecified bit width) here.  I continue to
+feel it's not well-enough specified for an external API,
+but I'm going to try to just let it go.
 
+> +	GH_ERROR_ARG_INVAL		= 1,
+> +	GH_ERROR_ARG_SIZE		= 2,
+> +	GH_ERROR_ARG_ALIGN		= 3,
 > +
-> +properties:
-> +  compatible:
-> +    const: gunyah-hypervisor
-
-Should this be qcom,gunyah-hypervisor?
-
+> +	GH_ERROR_NOMEM			= 10,
 > +
-> +  "#address-cells":
-> +    description: Number of cells needed to represent 64-bit capability IDs.
-> +    const: 2
+> +	GH_ERROR_ADDR_OVFL		= 20,
+> +	GH_ERROR_ADDR_UNFL		= 21,
+> +	GH_ERROR_ADDR_INVAL		= 22,
 > +
-> +  "#size-cells":
-> +    description: must be 0, because capability IDs are not memory address
-> +                  ranges and do not have a size.
-> +    const: 0
+> +	GH_ERROR_DENIED			= 30,
+> +	GH_ERROR_BUSY			= 31,
+> +	GH_ERROR_IDLE			= 32,
 > +
-> +patternProperties:
-> +  "^gunyah-resource-mgr(@.*)?":
-> +    type: object
-> +    description:
-> +      Resource Manager node which is required to communicate to Resource
-> +      Manager VM using Gunyah Message Queues.
+> +	GH_ERROR_IRQ_BOUND		= 40,
+> +	GH_ERROR_IRQ_UNBOUND		= 41,
 > +
-> +    properties:
-> +      compatible:
-> +        const: gunyah-resource-manager
-
-Here too, should this be qcom,gunyah-resource-manager?
-
+> +	GH_ERROR_CSPACE_CAP_NULL	= 50,
+> +	GH_ERROR_CSPACE_CAP_REVOKED	= 51,
+> +	GH_ERROR_CSPACE_WRONG_OBJ_TYPE	= 52,
+> +	GH_ERROR_CSPACE_INSUF_RIGHTS	= 53,
+> +	GH_ERROR_CSPACE_FULL		= 54,
 > +
-> +      reg:
-> +        items:
-> +          - description: Gunyah capability ID of the TX message queue
-> +          - description: Gunyah capability ID of the RX message queue
+> +	GH_ERROR_MSGQUEUE_EMPTY		= 60,
+> +	GH_ERROR_MSGQUEUE_FULL		= 61,
+> +};
 > +
-> +      interrupts:
-> +        items:
-> +          - description: Interrupt for the TX message queue
-> +          - description: Interrupt for the RX message queue
+> +/**
+> + * gh_error_remap() - Remap Gunyah hypervisor errors into a Linux error code
+> + * @gh_error: Gunyah hypercall return value
+> + */
+> +static inline int gh_error_remap(enum gh_error gh_error)
+> +{
+> +	switch (gh_error) {
+> +	case GH_ERROR_OK:
+> +		return 0;
+> +	case GH_ERROR_NOMEM:
+> +		return -ENOMEM;
+> +	case GH_ERROR_DENIED:
+> +	case GH_ERROR_CSPACE_CAP_NULL:
+> +	case GH_ERROR_CSPACE_CAP_REVOKED:
+> +	case GH_ERROR_CSPACE_WRONG_OBJ_TYPE:
+> +	case GH_ERROR_CSPACE_INSUF_RIGHTS:
+> +	case GH_ERROR_CSPACE_FULL:
+> +		return -EACCES;
+> +	case GH_ERROR_BUSY:
+> +	case GH_ERROR_IDLE:
+> +		return -EBUSY;
+> +	case GH_ERROR_IRQ_BOUND:
+> +	case GH_ERROR_IRQ_UNBOUND:
+> +	case GH_ERROR_MSGQUEUE_FULL:
+> +	case GH_ERROR_MSGQUEUE_EMPTY:
+> +		return -EIO;
+> +	case GH_ERROR_UNIMPLEMENTED:
+> +	case GH_ERROR_RETRY:
+> +		return -EOPNOTSUPP;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
 > +
-> +    additionalProperties: false
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - interrupts
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    hypervisor {
-> +        #address-cells = <2>;
-> +        #size-cells = <0>;
-> +        compatible = "gunyah-hypervisor";
-> +
-> +        gunyah-resource-mgr@0 {
-> +            compatible = "gunyah-resource-manager";
-> +            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX full IRQ */
-> +                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX empty IRQ */
-> +            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
-> +                  /* TX, RX cap ids */
-> +        };
-> +    };
+> +#endif
 
