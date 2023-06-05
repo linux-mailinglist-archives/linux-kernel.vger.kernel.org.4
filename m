@@ -2,143 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4259072232E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ED0722336
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjFEKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S230130AbjFEKQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjFEKPl (ORCPT
+        with ESMTP id S231825AbjFEKQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:15:41 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A95E9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:15:39 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:f07e:6d89:4e02:be9])
-        by albert.telenet-ops.be with bizsmtp
-        id 5NFc2A00N40Pbp606NFcML; Mon, 05 Jun 2023 12:15:36 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q67F5-00BZ6H-Lp
-        for linux-kernel@vger.kernel.org;
-        Mon, 05 Jun 2023 12:15:36 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q67FQ-007ovC-Eo
-        for linux-kernel@vger.kernel.org;
-        Mon, 05 Jun 2023 12:15:36 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.4-rc5
-Date:   Mon,  5 Jun 2023 12:15:36 +0200
-Message-Id: <20230605101536.1864030-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHk-=wifuPqAFXQQTTLkp_+FMzxGFHpSG-hEtZazG-46s=noAw@mail.gmail.com>
-References: <CAHk-=wifuPqAFXQQTTLkp_+FMzxGFHpSG-hEtZazG-46s=noAw@mail.gmail.com>
+        Mon, 5 Jun 2023 06:16:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D334E9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:16:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685960159;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DBJVxv+2bbU/jFEAEgHMvkuGix33HBO2Y8Ion9Bk6UQ=;
+        b=X/ZtxVICbkrOdv0PcIeWpd3qpWaPEbbJp8N0xBd3tXhqtkFB7uHW8ywWK9w8haoT8slIlM
+        WIp1xY7zX0lVZ2TYWUCyvYaG2wr7aeQihDerqXhFLgl4TkLNa22PeIEXfnmDhXo2+YJRsf
+        KxV0ikWbyxmPYN2W4/MeYGUz7oG8ppU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-639-rlLZdR9TNI6zy4dZNvzpXg-1; Mon, 05 Jun 2023 06:15:58 -0400
+X-MC-Unique: rlLZdR9TNI6zy4dZNvzpXg-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-51495d51e0fso2914073a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 03:15:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685960157; x=1688552157;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DBJVxv+2bbU/jFEAEgHMvkuGix33HBO2Y8Ion9Bk6UQ=;
+        b=KgbrUG9DGeNzB+lHdYeLZXmj8sBMAO4SO39Lk63Xipm1Hb2c4t1oFsbeSisBdk2ult
+         eCbBd9QlgjDXQni2yxdNjwi6YF42nCMhdPrz2mecd5btCfhyaJhhwxhTVRdszOovO2GY
+         iEEPKLdgPTpzP5PyhoaKZxN/I29yYO+xL1hjzLipL7v5L5dhf/9TwzYmfcACvL0COoDm
+         5BH2Nvu2dOE+h2oXeaxjm9+QRT9YpnP7v116zp5iXr8EloBKXWgZ+F0qMbfWHuJa491a
+         hR8z6NsKdkYU4ZfbCK2Nu38NxqqFUwWfPH9Gd/+DU3vEJk2nil/Er3nEyiVBJPtSAbN8
+         Ozsg==
+X-Gm-Message-State: AC+VfDy0aELzVAT4PEW3fdHouhI3n4ZQ5FgA6rxW74cJXU8O5gmtMytt
+        mHz2asGluB+Edil4QLU1vWHNazI2HB/7ylR3qTYvpbhHQl71EtFMhkNAyThgb1Fe8bzGrTLTsG3
+        ZtiN+puD1Ubyh6/a/BeiQL/Eb1+SQ24U0
+X-Received: by 2002:aa7:d783:0:b0:50c:52d:7197 with SMTP id s3-20020aa7d783000000b0050c052d7197mr5994948edq.2.1685960157058;
+        Mon, 05 Jun 2023 03:15:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4e/IZPp1mjvhFMHTvwSjaT+N1xcUUcHvSCTdIZXEODIoJzthHrh7LfdDG3WENCGNvap1pqlA==
+X-Received: by 2002:aa7:d783:0:b0:50c:52d:7197 with SMTP id s3-20020aa7d783000000b0050c052d7197mr5994942edq.2.1685960156767;
+        Mon, 05 Jun 2023 03:15:56 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id b26-20020aa7dc1a000000b005166663b8dcsm458765edu.16.2023.06.05.03.15.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 03:15:56 -0700 (PDT)
+Message-ID: <36fd1a0b-3dc5-973f-b367-5da5776fed74@redhat.com>
+Date:   Mon, 5 Jun 2023 12:15:55 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/3] KVM: x86: Use "standard" mmu_notifier hook for APIC
+ page
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20230602011518.787006-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230602011518.787006-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.4-rc5[1] compared to v6.3[2].
-
-Summarized:
-  - build errors: +1/-6
-  - build warnings: +29/-12
-
-JFYI, when comparing v6.4-rc5[1] to v6.4-rc4[3], the summaries are:
-  - build errors: +2/-4
-  - build warnings: +0/-1
-
-Note that there may be false regressions, as some logs are incomplete.
-Still, they're build errors/warnings.
-
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9561de3a55bed6bdd44a12820ba81ec416e705a7/ (151 out of 152 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/457391b0380335d5e9a5babdec90ac53928b23b4/ (all 152 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7877cb91f1081754a1487c144d85dc0d2e2e7fc4/ (151 out of 152 configs)
-
-
-*** ERRORS ***
-
-1 error regressions:
-  + /kisskb/src/fs/xfs/scrub/scrub.h: error: initializer element is not constant:  => 111:28
-
-6 error improvements:
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: 'struct cpuinfo_um' has no member named 'apicid': 2157:48, 2157:41 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]: 2161:1 => 
-  - /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant: 296:2, 300:2, 299:2 => 
-  - /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]: 641:28 => 
-  - /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]: 641:28 => 
-  - /kisskb/src/fs/btrfs/send.c: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]: 1902:23, 1909:13 => 
+On 6/2/23 03:15, Sean Christopherson wrote:
+> Convert VMX's handling of mmu_notifier invalidations of the APIC-access page
+> from invalidate_range() to KVM's standard invalidate_range_{start,end}().
+> 
+> KVM (ab)uses invalidate_range() to fudge around not stalling vCPUs until
+> relevant in-flight invalidations complete.  Abusing invalidate_range() works,
+> but it requires one-off code in KVM, sets a bad precedent in KVM, and is
+> blocking improvements to mmu_notifier's definition of invalidate_range()
+> due to KVM's usage diverging wildly from the original intent of notifying
+> IOMMUs of changes to shared page tables.
+> 
+> Clean up the mess by hooking x86's implementation of kvm_unmap_gfn_range()
+> and stalling vCPUs by re-requesting KVM_REQ_APIC_PAGE_RELOAD until the
+> invalidation completes.
+> 
+> Sean Christopherson (3):
+>    KVM: VMX: Retry APIC-access page reload if invalidation is in-progress
+>    KVM: x86: Use standard mmu_notifier invalidate hooks for APIC access
+>      page
+>    KVM: x86/mmu: Trigger APIC-access page reload iff vendor code cares
+> 
+>   arch/x86/kvm/mmu/mmu.c   |  4 ++++
+>   arch/x86/kvm/vmx/vmx.c   | 50 ++++++++++++++++++++++++++++++++++++----
+>   arch/x86/kvm/x86.c       | 14 -----------
+>   include/linux/kvm_host.h |  3 ---
+>   virt/kvm/kvm_main.c      | 18 ---------------
+>   5 files changed, 49 insertions(+), 40 deletions(-)
+> 
+> 
+> base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
 
 
-*** WARNINGS ***
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 
-29 warning regressions:
-  + /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1128 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 400:1
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/input/joystick/sidewinder.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/xilinx/xilinx_emac.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/virtio_net.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [fs/hfsplus/hfsplus.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashldi3" [net/mac80211/mac80211.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashrdi3" [drivers/usb/gadget/function/usb_f_mass_storage.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__ashrdi3" [fs/xfs/xfs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-writecache.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/hpsa.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/mpt3sas/mpt3sas.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/ext2/ext2.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/ext4/ext4.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/gfs2/gfs2.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [fs/ntfs3/ntfs3.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [net/mac80211/mac80211.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__lshrdi3" [net/sched/act_police.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/hwmon/sfctemp.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/media/platform/nxp/imx8-isi/imx8-isi.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-cadence.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_dfl_tod.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-davinci.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/thermal/mediatek/auxadc_thermal.ko] has no CRC!:  => N/A
+Paolo
 
-12 warning improvements:
-  - /kisskb/src/fs/btrfs/send.c: warning: 'right_gen' may be used uninitialized in this function [-Wmaybe-uninitialized]: 1902:23, 1909:27, 1909:13 => 
-  - /kisskb/src/fs/btrfs/volumes.c: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]: 2524:9, 2524:2 => 
-  - /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 404:1 => 
-  - /kisskb/src/include/linux/list.h: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]: 74:19, 74:12 => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/cm4000_cs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/synclink_cs.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/noon010pc30.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/vs6624.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ixgb/ixgb.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-thunderbay-emmc.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/u132-hcd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/misc/ftdi-elan.ko] has no CRC!: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
