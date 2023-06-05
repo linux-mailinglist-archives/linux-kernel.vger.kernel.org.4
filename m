@@ -2,131 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C8C7223D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C969D7223D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjFEKtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        id S231204AbjFEKtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjFEKt1 (ORCPT
+        with ESMTP id S230450AbjFEKtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:49:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293381B4;
-        Mon,  5 Jun 2023 03:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685962157; x=1717498157;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=RDSiOGvuWDvk0klatOSDgEpCizk0Ii4pCFeHhwpwOQU=;
-  b=Lvy0hqht0+3pPCFEKxO+Qrof4fpir7T5n+IEGWqVaJ50VUHNgN4KFTb0
-   3U/Osny/jRf4vGehXBj+74TKoTKRG/8iOTrM2QNAtzTSxxp6n8rZYwQXj
-   rrd7hE6ATmfj546ZzA3H+0wfm3WbnbyEph736LLSInuIfF5hI+FJ7A7Z9
-   On3f7McFuYasKF6XohFG3wAzoEx185vlf+u56KoEALi27B+ConOke/NU6
-   QhRHnKBcYE0q66HOVgUrQy0tYvROdlbb6nFQ5c3PeBpHdhdC1gL7pZ4lm
-   By1rw/OhjcyVulewDqpRTjV5V76re1LISByfUNok1abAQPHiWzVGXL4RD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="422162794"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="422162794"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 03:48:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="708620545"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="708620545"
-Received: from mylly.fi.intel.com (HELO [10.237.72.143]) ([10.237.72.143])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jun 2023 03:48:52 -0700
-Message-ID: <ed2cbf76-1868-9153-81c7-cc17b807421e@linux.intel.com>
-Date:   Mon, 5 Jun 2023 13:48:51 +0300
+        Mon, 5 Jun 2023 06:49:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6BD110D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:49:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C8A2D75;
+        Mon,  5 Jun 2023 03:50:23 -0700 (PDT)
+Received: from [10.57.85.135] (unknown [10.57.85.135])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 791263F587;
+        Mon,  5 Jun 2023 03:49:36 -0700 (PDT)
+Message-ID: <c8c2c7dd-ace1-709b-883b-0b774275f5ef@arm.com>
+Date:   Mon, 5 Jun 2023 11:49:32 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, David Zheng <david.zheng@intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com
-References: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
- <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
- <ZH2yr1sFvjbAiBTq@shikoro>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <ZH2yr1sFvjbAiBTq@shikoro>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 4/4] perf/arm_cspmu: Decouple APMT dependency
+Content-Language: en-GB
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Cc:     will@kernel.org, mark.rutland@arm.com, suzuki.poulose@arm.com,
+        bwicaksono@nvidia.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1685619571.git.robin.murphy@arm.com>
+ <3509b299b19b8bf89700c77c2bb695c740926ae7.1685619571.git.robin.murphy@arm.com>
+ <be916ba8-1d2a-89dd-7374-b07618fa9b29@os.amperecomputing.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <be916ba8-1d2a-89dd-7374-b07618fa9b29@os.amperecomputing.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 13:02, Wolfram Sang wrote:
-> On Fri, May 26, 2023 at 04:58:26PM +0300, Jarkko Nikula wrote:
->> On 5/24/23 21:14, David Zheng wrote:
->>> With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
->>> RX FIFO is empty. When testing with the slave-eeprom, each transaction
->>> has 2 bytes for address/index and 1 byte for value, the address byte
->>> can be written as data byte due to dropping STOP condition.
->>>
->>> In the test below, the master continuously writes to the slave, first 2
->>> bytes are index, 3rd byte is value and follow by a STOP condition.
->>>
->>>    i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
->>>    i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
->>>    i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
->>>
->>> Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
->>> next 2 bytes can be treated as buffer index for upcoming transaction.
->>> Supposedly the slave eeprom buffer would be written as
->>>
->>>    EEPROM[0x00D1] = 0xD1
->>>    EEPROM[0x00D2] = 0xD2
->>>    EEPROM[0x00D3] = 0xD3
->>>
->>> When CPU load is high the slave irq handler may not read fast enough,
->>> the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
->>> (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
->>> the transactions below.
->>>
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
->>>    0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->>>
->>> After `D1` is received, read loop continues to read `00` which is the
->>> first bype of next index. Since STOP condition is ignored by the loop,
->>> eeprom buffer index increased to `D2` and `00` is written as value.
->>>
->>> So the slave eeprom buffer becomes
->>>
->>>    EEPROM[0x00D1] = 0xD1
->>>    EEPROM[0x00D2] = 0x00
->>>    EEPROM[0x00D3] = 0xD3
->>>
->>> The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
->>> the transactions. The first index byte in this case would have bit 11
->>> set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
->>> which will reset `idx_write_cnt` in slave eeprom.
->>>
->>> Signed-off-by: David Zheng <david.zheng@intel.com>
+On 2023-06-05 08:12, Ilkka Koskinen wrote:
 > 
-> Applied to for-current, thanks!
+> Hi Robin,
 > 
-> Someone maybe has a Fixes tag for it?
+> I have a couple of comments below
 > 
-In my opinion this patch is more improvement rather than a regression fix.
+> On Thu, 1 Jun 2023, Robin Murphy wrote:
+>> The functional paths of the driver need not care about ACPI, so abstract
+>> the property of atomic doubleword access as its own flag (repacking the
+>> structure for a better fit). We also do not need to go poking directly
+>> at the APMT for standard resources which the ACPI layer has already
+>> dealt with, so deal with the optional MMIO page and interrupt in the
+>> normal firmware-agnostic manner. The few remaining portions of probing
+>> that *are* APMT-specific can still easily retrieve the APMT pointer as
+>> needed without us having to carry a duplicate copy around everywhere.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>> drivers/perf/arm_cspmu/arm_cspmu.c | 45 ++++++++----------------------
+>> drivers/perf/arm_cspmu/arm_cspmu.h |  4 +--
+>> 2 files changed, 13 insertions(+), 36 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c 
+>> b/drivers/perf/arm_cspmu/arm_cspmu.c
+>> index 3b91115c376d..f8daf252a488 100644
+>> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
+>> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+> 
+> ...
+> 
+>> @@ -319,7 +309,7 @@ static const char *arm_cspmu_get_name(const struct 
+>> arm_cspmu *cspmu)
+>>     static atomic_t pmu_idx[ACPI_APMT_NODE_TYPE_COUNT] = { 0 };
+>>
+>>     dev = cspmu->dev;
+>> -    apmt_node = cspmu->apmt_node;
+>> +    apmt_node = dev_get_platdata(dev);
+> 
+> Was platdata changed too? If not, I think this should be
+> 
+>      apmt_node = *(struct acpi_apmt_node **) dev_get_platdata(dev);
 
-I see it's continuation to the commits dcf1bf648f94 ("i2c: designware: 
-Empty receive FIFO in slave interrupt handler") and 3b5f7f10ff6e ("i2c: 
-designware: slave should do WRITE_REQUESTED before WRITE_RECEIVED").
+Oof, indeed it looks like I got the wrong thing into my head at the 
+critical moment :(
+
+Clearly this deserves a nice helpful wrapper so we only have to think 
+about the nasty casting once...
+
+>>     pmu_type = apmt_node->type;
+>>
+>>     if (pmu_type >= ACPI_APMT_NODE_TYPE_COUNT) {
+>> @@ -396,8 +386,8 @@ static const struct impl_match impl_match[] = {
+>> static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
+>> {
+>>     int ret;
+>> -    struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
+>>     struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
+>> +    struct acpi_apmt_node *apmt_node = dev_get_platdata(cspmu->dev);
+> 
+> Ditto
+> 
+>>     const struct impl_match *match = impl_match;
+>>
+>>     /*
+> 
+> ...
+> 
+>> @@ -910,24 +900,18 @@ static struct arm_cspmu *arm_cspmu_alloc(struct 
+>> platform_device *pdev)
+>> {
+>>     struct acpi_apmt_node *apmt_node;
+>>     struct arm_cspmu *cspmu;
+>> -    struct device *dev;
+>> -
+>> -    dev = &pdev->dev;
+>> -    apmt_node = *(struct acpi_apmt_node **)dev_get_platdata(dev);
+>> -    if (!apmt_node) {
+>> -        dev_err(dev, "failed to get APMT node\n");
+>> -        return NULL;
+>> -    }
+>> +    struct device *dev = &pdev->dev;
+>>
+>>     cspmu = devm_kzalloc(dev, sizeof(*cspmu), GFP_KERNEL);
+>>     if (!cspmu)
+>>         return NULL;
+>>
+>>     cspmu->dev = dev;
+>> -    cspmu->apmt_node = apmt_node;
+>> -
+>>     platform_set_drvdata(pdev, cspmu);
+>>
+>> +    apmt_node = dev_get_platdata(dev);
+> 
+> Ditto
+> 
+>> +    cspmu->has_atomic_dword = apmt_node->flags & ACPI_APMT_FLAGS_ATOMIC;
+>> +
+>>     return cspmu;
+>> }
+> 
+> ...
+> 
+>> @@ -1047,19 +1029,14 @@ static int arm_cspmu_request_irq(struct 
+>> arm_cspmu *cspmu)
+>>     int irq, ret;
+>>     struct device *dev;
+>>     struct platform_device *pdev;
+>> -    struct acpi_apmt_node *apmt_node;
+>>
+>>     dev = cspmu->dev;
+>>     pdev = to_platform_device(dev);
+>> -    apmt_node = cspmu->apmt_node;
+>>
+>>     /* Skip IRQ request if the PMU does not support overflow 
+>> interrupt. */
+>> -    if (apmt_node->ovflw_irq == 0)
+>> -        return 0;
+>> -
+>> -    irq = platform_get_irq(pdev, 0);
+>> +    irq = platform_get_irq_optional(pdev, 0);
+>>     if (irq < 0)
+>> -        return irq;
+>> +        return irq == -ENXIO ? 0 : irq;
+>>
+>>     ret = devm_request_irq(dev, irq, arm_cspmu_handle_irq,
+>>                    IRQF_NOBALANCING | IRQF_NO_THREAD, dev_name(dev),
+>> @@ -1109,7 +1086,7 @@ static int arm_cspmu_acpi_get_cpus(struct 
+>> arm_cspmu *cspmu)
+>>     int cpu;
+>>
+>>     dev = cspmu->pmu.dev;
+> 
+> You didn't touch this one but shouldn't this be
+> 
+>      dev = cspmu->dev;
+
+Good catch - attributing the error message to the wrong device doesn't 
+matter too much currently, but this change does then need it to be 
+right. Will fix that too.
+
+Thanks!
+Robin.
+
+> 
+>> -    apmt_node = cspmu->apmt_node;
+>> +    apmt_node = dev_get_platdata(dev);
+> 
+> Ditto
+> 
+>>     affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
+> 
+> 
+> Otherwise the patch looks good to me.
+> 
+> Cheers, Ilkka
