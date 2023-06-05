@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9246A722D42
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA733722D4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbjFERGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S235228AbjFERHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbjFERF6 (ORCPT
+        with ESMTP id S232400AbjFERG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:05:58 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D9EF1;
-        Mon,  5 Jun 2023 10:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685984753; x=1717520753;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Uqba7KW+LSTrR6KDuN+F/tgiTmPx6AhRcJexGJYfzL0=;
-  b=gZnt7i7S5RAKnCKhWoOseINM9UweFOim683+c0tM4l+IvhnrTiEsvNsw
-   JAbAU1C6zGh/Jgx/2ys2TRPKu32shLHlX47KJdo9lEMBGzeqdPFOutF6E
-   sXVfRKyebWO6uAl1SSnvYo2BJLsEGI2CyZNgM23CdLIWozuWyhe7pHjfY
-   l9Nxg6UnQShrJF8Q7HpHEZB+EtoN5++Oz4mwgOXik1k7dVyxUHOZIqEDC
-   eU/oQPvR4mY32FA+j5qW6AJJtHJwXa5CPKCnY9K/cT2jPhSqrirF88/rR
-   s3YfBWRqAuPdYQ4yjKUwKZbtbhqMVxwOqK5YTIKOdCtUO9LfCAyauBLRi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="356431378"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="356431378"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 10:05:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="773807505"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="773807505"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Jun 2023 10:05:49 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id AE297379; Mon,  5 Jun 2023 20:05:56 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v3 3/3] kobject: Use return value of strreplace()
-Date:   Mon,  5 Jun 2023 20:05:53 +0300
-Message-Id: <20230605170553.7835-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230605170553.7835-1-andriy.shevchenko@linux.intel.com>
-References: <20230605170553.7835-1-andriy.shevchenko@linux.intel.com>
+        Mon, 5 Jun 2023 13:06:59 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE41CE47;
+        Mon,  5 Jun 2023 10:06:38 -0700 (PDT)
+Received: from [172.27.2.41] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 355H6G5H3948784
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 5 Jun 2023 10:06:16 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 355H6G5H3948784
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023051001; t=1685984777;
+        bh=vGhVxD5zoDwQ5tRTjjgYq0ku41yGbDZA/+RRBNh+ffM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ypvr/F6YHfGHPoI0eDs0jXHWLjqZroJ+qx8YcOpCij/ZFphzx6rG0GKg10naaN6dO
+         Gtg0iVoC7VbeNwuBviYqrklg8/snNhOzQ4YWPIPq4qNiUda344ImQ6AXoBcZa/oRUe
+         jGtMa/k8zEXhCqzTyL6T6f0NxKSrR4tYpGAmx4s4EXwntG5DOjkxgVqda0DOxT3awK
+         6KUvPjUqVIdSau5ejdPqLFpcEaaB2MWIXpveGMqGk+F2NwH3qZjsro/s4YNqq1Av6l
+         qiuiDrR5p5olSy3mB5012Yy95T3j9PtgXTZrcpTVfMXXwGZWJVtyoBrXtZbWnWTCBz
+         qcfTsn6+6B+Bw==
+Message-ID: <e45b8bac-8df8-acf3-aa48-f8a51594ca13@zytor.com>
+Date:   Mon, 5 Jun 2023 10:06:16 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 09/33] x86/cpu: add X86_CR4_FRED macro
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, Xin Li <xin3.li@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
+        pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-10-xin3.li@intel.com> <87r0qq6rtm.ffs@tglx>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <87r0qq6rtm.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,28 +60,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since strreplace() returns the pointer to the string itself,
-we may use it directly in the code.
+On 6/5/23 05:01, Thomas Gleixner wrote:
+> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+> 
+>> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
+>>
+>> Add X86_CR4_FRED macro for the FRED bit in %cr4. This bit should be a
+> 
+> s/should/must/ no?
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- lib/kobject.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Technically no bit "must" be set in the fixed bit variable, but it would 
+obviously be insane not to. But it makes it a "should", both in 
+dictionary and RFC 2119 definitions.
 
-diff --git a/lib/kobject.c b/lib/kobject.c
-index f79a434e1231..16d530f9c174 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -281,8 +281,7 @@ int kobject_set_name_vargs(struct kobject *kobj, const char *fmt,
- 		kfree_const(s);
- 		if (!t)
- 			return -ENOMEM;
--		strreplace(t, '/', '!');
--		s = t;
-+		s = strreplace(t, '/', '!');
- 	}
- 	kfree_const(kobj->name);
- 	kobj->name = s;
--- 
-2.40.0.1.gaa8946217a0b
+Incidentally, I strongly advice everyone to use the RFC 2119 definitions 
+of technical requirement terms when possible.
 
+	-hpa
