@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37204722DD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFA4722E5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbjFERou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S234779AbjFESKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjFERos (ORCPT
+        with ESMTP id S229895AbjFESJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:44:48 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A67DC;
-        Mon,  5 Jun 2023 10:44:47 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-652a6cf1918so2291560b3a.1;
-        Mon, 05 Jun 2023 10:44:47 -0700 (PDT)
+        Mon, 5 Jun 2023 14:09:50 -0400
+X-Greylist: delayed 1651 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Jun 2023 11:09:49 PDT
+Received: from egress-ip4b.ess.de.barracuda.com (egress-ip4b.ess.de.barracuda.com [18.185.115.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE57BE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:09:48 -0700 (PDT)
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198]) by mx-outbound16-136.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 05 Jun 2023 18:09:46 +0000
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-53f84f75bf4so1841011a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685987087; x=1688579087;
+        d=mistralsolutions.com; s=google; t=1685988585; x=1688580585;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6fDPbYpxfUCf9MWy0YeBPZwa3RAS3wW7hTm0LfrIRI=;
-        b=IF8IckqYSdlmuzz93kiJFFDBMHYvRokzLjPNRyrMtLXZbStYbUv5anlXeITg6A00O3
-         vxOjVc1H6h2tK+7/+TQzx1f0lfsuIU9FKuGqWFlUn97MsG3LbAw1cKKCoiaafD+ekDJE
-         Fvqd+XyP5OAJELvmjthoik3OpmSXp+cJXzdbIGBEW7bUHkHptejbKz4n8K5lRerxrvvf
-         9PbKE3TiLOtrCoqWNrSyxQRAaV58BeZcrtw/LVs5dVG4bHCPdvroBV5W3JHOMLRegssZ
-         KafLAX6LMlQgZxngRmyk9o3S+rM05qt/k3Twcy3iNp9IZx7434G375XAWPsl9Km/h/FF
-         dJNQ==
+        bh=Ka0dLgOU3SOSpHh8q74Sw3feQDmjVZ2vWBXiiwU0uuo=;
+        b=e9FDF+t6FH/WKaDKzwT/sm4Amq1ktP9XYOtHu3gybOJgQ4MZmNFfHo7PF/DXeh/Qj4
+         8VCvJoqvWNXKgeeRjg6OSWCxQJphkANTWfukDtLJCPqJloh4iY/rys6scNV9WsArqhZH
+         58ThoUudgsk4PTvmYFxec2Ra8sULDC89jDZRY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685987087; x=1688579087;
+        d=1e100.net; s=20221208; t=1685988585; x=1688580585;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w6fDPbYpxfUCf9MWy0YeBPZwa3RAS3wW7hTm0LfrIRI=;
-        b=c5i+3qdc9REIMkH7meZ0JKoJ4lQ5gqqtK3Bi1ZCIEKM1Zetut4vhvFTaDT2GKPODIS
-         FxFz1kYTXHFbMI6bfRAO+VJ7CUvbTIgqBYnB8qX1iDXTP+w0QaJMOJhnOH1thyBpBuNB
-         f4g06oyYDPxbsByNK2GrLPRnE2k7aS0OTe0TiHvq5U36HB+E16b2JmsMhxNitRGBSLcg
-         qp+6UIbHwtxa2sSddHKgHa8knacA5GDbmscXfdhKCpLOg+doYrK92gzbsq7TTHUPluks
-         xdelucZleiRoKq7k6X0Txb3PNEnnKGETbOi+3bsocJK7Bs3UA1YkPMc0xJ+ngAfl8oFT
-         1aRw==
-X-Gm-Message-State: AC+VfDzCXHSqQwiX+6SpnaRWKl1Aj3N4p7l5OtGGup01jjNIx3rTU13W
-        OoNjY9Q4VQTmIINhH6RBU/U=
-X-Google-Smtp-Source: ACHHUZ7nzK694jwFW6EH99oHobKiVDDd6KLFqfI+qF070FSTszwBz7WTPeB/rcRTw4kbWG2AO2UN9g==
-X-Received: by 2002:a05:6a21:6d96:b0:117:1c52:ba7c with SMTP id wl22-20020a056a216d9600b001171c52ba7cmr1675549pzb.6.1685987086538;
-        Mon, 05 Jun 2023 10:44:46 -0700 (PDT)
-Received: from babbage.. (162-227-164-7.lightspeed.sntcca.sbcglobal.net. [162.227.164.7])
-        by smtp.gmail.com with ESMTPSA id fe16-20020a056a002f1000b00653dc27acadsm4519135pfb.205.2023.06.05.10.44.44
+        bh=Ka0dLgOU3SOSpHh8q74Sw3feQDmjVZ2vWBXiiwU0uuo=;
+        b=GUoe3izXX9mXQmdfyIe9VlDnZ/EK8CNRIGqa6xUBcgDDMyKvK46aPB1pIa8xbOQyig
+         zL0fCsQCthloTEdxMeRQBpZZStmfcFz4em3W347LRzV4jiJoE+pfR9/FKLHKMJ/QB921
+         z3SbV2U/ByPz7zt51RJv6nKftnQjJXZxDDSCYH65hi0udDrrqh3V9d2+y98P6QrxBplF
+         YB4zPYbsHrk5IRS/IbyrfWo9Xu49m7/rueS8xy0a3wt1Bl3zWPM1yHNM45p5eK3wtFud
+         h2xuQTpSH9/0D4LCzHnyODMONPALh4valXSgshLJ79NXVCyRtsNUkBWXrre9YC9KNQF5
+         918Q==
+X-Gm-Message-State: AC+VfDyKwpI1RBmK9ZEMsea7Aj82aJ9GAKZrQOLP+01QIA1FHnlp7pAk
+        24IwMOpa7dz0nZ9WvdU4CiGZzbpe6YM3qdePtAh2MKZNpZqYNa1Uxcq4fut4UNzAylAdX35Rmoy
+        GbWGcut/HD1UO1yPbG3CQ763R4yYuTiO3KvP0ACW+gTrguF6RoWsc/6sbT27w
+X-Received: by 2002:a17:903:2305:b0:1b0:61dd:e523 with SMTP id d5-20020a170903230500b001b061dde523mr5054987plh.41.1685987159013;
+        Mon, 05 Jun 2023 10:45:59 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5dFGH5RUHSCIKrPt8pUW9EBcAJtw6hTNlCcT2vaMXJ2vPnVhOOyVumgmm7oF8ujFweztfoAw==
+X-Received: by 2002:a17:903:2305:b0:1b0:61dd:e523 with SMTP id d5-20020a170903230500b001b061dde523mr5054968plh.41.1685987158744;
+        Mon, 05 Jun 2023 10:45:58 -0700 (PDT)
+Received: from LAP789U.mistral.in ([106.51.227.150])
+        by smtp.gmail.com with ESMTPSA id f10-20020a170902860a00b001aaecc0b6ffsm6816616plo.160.2023.06.05.10.45.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 10:44:46 -0700 (PDT)
-From:   msmulski2@gmail.com
-To:     andrew@lunn.ch
-Cc:     f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
-        kabel@kernel.org, ioana.ciornei@nxp.com,
-        Michal Smulski <michal.smulski@ooma.com>
-Subject: [PATCH net-next v8] net: dsa: mv88e6xxx: implement USXGMII mode for mv88e6393x
-Date:   Mon,  5 Jun 2023 10:44:42 -0700
-Message-Id: <20230605174442.12493-1-msmulski2@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 05 Jun 2023 10:45:58 -0700 (PDT)
+From:   sabiya.d@mistralsolutions.com
+X-Google-Original-From: sabiya.d@ti.com
+To:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, afd@ti.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, sabiya.d@mistralsolutions.com,
+        Dasnavis Sabiya <sabiya.d@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-am69-sk: Add eMMC mmc0 support
+Date:   Mon,  5 Jun 2023 23:15:51 +0530
+Message-Id: <20230605174551.160262-1-sabiya.d@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-BESS-ID: 1685988585-304232-5457-29635-1
+X-BESS-VER: 2019.1_20230525.1947
+X-BESS-Apparent-Source-IP: 209.85.215.198
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUirNy1bSUcovVrKyMDYGMjKAYoapKZZpRmmmyR
+        ZGqQZmZmkG5sbmSSaGJomW5uaGaYbmSrWxABee2KFAAAAA
+X-BESS-Outbound-Spam-Score: 0.00
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.248613 [from 
+        cloudscan18-126.eu-central-1b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+        0.00 NO_REAL_NAME           HEADER: From: does not include a real name 
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, NO_REAL_NAME, BSF_SC0_MISMATCH_TO
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,168 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Smulski <michal.smulski@ooma.com>
+From: Dasnavis Sabiya <sabiya.d@ti.com>
 
-Enable USXGMII mode for mv88e6393x chips. Tested on Marvell 88E6191X.
+Add support for eMMC card connected to main sdhci0 instance.
 
-Signed-off-by: Michal Smulski <michal.smulski@ooma.com>
+Signed-off-by: Dasnavis Sabiya <sabiya.d@ti.com>
 ---
-Changelist (v7 -> v8):
-1. added comments related to the link bit of lp_status register.
+ arch/arm64/boot/dts/ti/k3-am69-sk.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- drivers/net/dsa/mv88e6xxx/chip.c   |  3 +-
- drivers/net/dsa/mv88e6xxx/port.c   |  3 ++
- drivers/net/dsa/mv88e6xxx/serdes.c | 47 ++++++++++++++++++++++++++++--
- drivers/net/dsa/mv88e6xxx/serdes.h |  4 +++
- 4 files changed, 53 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 2af0c1145d36..8b51756bd805 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -812,11 +812,10 @@ static void mv88e6393x_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
- 			if (!is_6361) {
- 				__set_bit(PHY_INTERFACE_MODE_5GBASER, supported);
- 				__set_bit(PHY_INTERFACE_MODE_10GBASER, supported);
-+				__set_bit(PHY_INTERFACE_MODE_USXGMII, supported);
- 				config->mac_capabilities |= MAC_5000FD |
- 					MAC_10000FD;
- 			}
--			/* FIXME: USXGMII is not supported yet */
--			/* __set_bit(PHY_INTERFACE_MODE_USXGMII, supported); */
- 		}
- 	}
+diff --git a/arch/arm64/boot/dts/ti/k3-am69-sk.dts b/arch/arm64/boot/dts/ti/k3-am69-sk.dts
+index 4b7d9280d76f..ab8ec2cb396e 100644
+--- a/arch/arm64/boot/dts/ti/k3-am69-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am69-sk.dts
+@@ -22,6 +22,7 @@ chosen {
  
-diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-index e9b4a6ea4d09..dd66ec902d4c 100644
---- a/drivers/net/dsa/mv88e6xxx/port.c
-+++ b/drivers/net/dsa/mv88e6xxx/port.c
-@@ -566,6 +566,9 @@ static int mv88e6xxx_port_set_cmode(struct mv88e6xxx_chip *chip, int port,
- 	case PHY_INTERFACE_MODE_10GBASER:
- 		cmode = MV88E6393X_PORT_STS_CMODE_10GBASER;
- 		break;
-+	case PHY_INTERFACE_MODE_USXGMII:
-+		cmode = MV88E6393X_PORT_STS_CMODE_USXGMII;
-+		break;
- 	default:
- 		cmode = 0;
- 	}
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
-index 72faec8f44dc..80167d53212f 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -683,7 +683,8 @@ int mv88e6393x_serdes_get_lane(struct mv88e6xxx_chip *chip, int port)
- 	    cmode == MV88E6XXX_PORT_STS_CMODE_SGMII ||
- 	    cmode == MV88E6XXX_PORT_STS_CMODE_2500BASEX ||
- 	    cmode == MV88E6393X_PORT_STS_CMODE_5GBASER ||
--	    cmode == MV88E6393X_PORT_STS_CMODE_10GBASER)
-+	    cmode == MV88E6393X_PORT_STS_CMODE_10GBASER ||
-+	    cmode == MV88E6393X_PORT_STS_CMODE_USXGMII)
- 		lane = port;
+ 	aliases {
+ 		serial2 = &main_uart8;
++		mmc0 = &main_sdhci0;
+ 		mmc1 = &main_sdhci1;
+ 		i2c0 = &main_i2c0;
+ 	};
+@@ -191,6 +192,14 @@ exp1: gpio@21 {
+ 	};
+ };
  
- 	return lane;
-@@ -984,7 +985,42 @@ static int mv88e6393x_serdes_pcs_get_state_10g(struct mv88e6xxx_chip *chip,
- 			state->speed = SPEED_10000;
- 		state->duplex = DUPLEX_FULL;
- 	}
-+	return 0;
-+}
++&main_sdhci0 {
++	/* eMMC */
++	status = "okay";
++	non-removable;
++	ti,driver-strength-ohm = <50>;
++	disable-wp;
++};
 +
-+/* USXGMII registers for Marvell switch 88e639x are undocumented and this function is based
-+ * on some educated guesses. It appears that there are no status bits related to
-+ * autonegotiation complete or flow control.
-+ */
-+static int mv88e639x_serdes_pcs_get_state_usxgmii(struct mv88e6xxx_chip *chip,
-+						  int port, int lane,
-+						  struct phylink_link_state *state)
-+{
-+	u16 status, lp_status;
-+	int err;
- 
-+	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-+				    MV88E6390_USXGMII_PHY_STATUS, &status);
-+	if (err) {
-+		dev_err(chip->dev, "can't read Serdes USXGMII PHY status: %d\n", err);
-+		return err;
-+	}
-+	dev_dbg(chip->dev, "USXGMII PHY status: 0x%x\n", status);
-+
-+	state->link = !!(status & MDIO_USXGMII_LINK);
-+	state->an_complete = state->link;
-+
-+	if (state->link) {
-+		err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-+					    MV88E6390_USXGMII_LP_STATUS, &lp_status);
-+		if (err) {
-+			dev_err(chip->dev, "can't read Serdes USXGMII LP status: %d\n", err);
-+			return err;
-+		}
-+		dev_dbg(chip->dev, "USXGMII LP status: 0x%x\n", lp_status);
-+		/* lp_status appears to include the "link" bit as per USXGMII spec. */
-+		phylink_decode_usxgmii_word(state, lp_status);
-+	}
- 	return 0;
- }
- 
-@@ -1020,6 +1056,9 @@ int mv88e6393x_serdes_pcs_get_state(struct mv88e6xxx_chip *chip, int port,
- 	case PHY_INTERFACE_MODE_10GBASER:
- 		return mv88e6393x_serdes_pcs_get_state_10g(chip, port, lane,
- 							   state);
-+	case PHY_INTERFACE_MODE_USXGMII:
-+		return mv88e639x_serdes_pcs_get_state_usxgmii(chip, port, lane,
-+							   state);
- 
- 	default:
- 		return -EOPNOTSUPP;
-@@ -1173,6 +1212,7 @@ int mv88e6393x_serdes_irq_enable(struct mv88e6xxx_chip *chip, int port,
- 		return mv88e6390_serdes_irq_enable_sgmii(chip, lane, enable);
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
-+	case MV88E6393X_PORT_STS_CMODE_USXGMII:
- 		return mv88e6393x_serdes_irq_enable_10g(chip, lane, enable);
- 	}
- 
-@@ -1213,6 +1253,7 @@ irqreturn_t mv88e6393x_serdes_irq_status(struct mv88e6xxx_chip *chip, int port,
- 		break;
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
-+	case MV88E6393X_PORT_STS_CMODE_USXGMII:
- 		err = mv88e6393x_serdes_irq_status_10g(chip, lane, &status);
- 		if (err)
- 			return err;
-@@ -1477,7 +1518,8 @@ static int mv88e6393x_serdes_erratum_5_2(struct mv88e6xxx_chip *chip, int lane,
- 	 * to SERDES operating in 10G mode. These registers only apply to 10G
- 	 * operation and have no effect on other speeds.
- 	 */
--	if (cmode != MV88E6393X_PORT_STS_CMODE_10GBASER)
-+	if (cmode != MV88E6393X_PORT_STS_CMODE_10GBASER &&
-+	    cmode != MV88E6393X_PORT_STS_CMODE_USXGMII)
- 		return 0;
- 
- 	for (i = 0; i < ARRAY_SIZE(fixes); ++i) {
-@@ -1582,6 +1624,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
- 		break;
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
-+	case MV88E6393X_PORT_STS_CMODE_USXGMII:
- 		err = mv88e6390_serdes_power_10g(chip, lane, on);
- 		break;
- 	default:
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.h b/drivers/net/dsa/mv88e6xxx/serdes.h
-index 29bb4e91e2f6..e245687ddb1d 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.h
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.h
-@@ -48,6 +48,10 @@
- #define MV88E6393X_10G_INT_LINK_CHANGE	BIT(2)
- #define MV88E6393X_10G_INT_STATUS	0x9001
- 
-+/* USXGMII */
-+#define MV88E6390_USXGMII_LP_STATUS       0xf0a2
-+#define MV88E6390_USXGMII_PHY_STATUS      0xf0a6
-+
- /* 1000BASE-X and SGMII */
- #define MV88E6390_SGMII_BMCR		(0x2000 + MII_BMCR)
- #define MV88E6390_SGMII_BMSR		(0x2000 + MII_BMSR)
+ &main_sdhci1 {
+ 	/* SD card */
+ 	status = "okay";
 -- 
-2.34.1
+2.25.1
 
