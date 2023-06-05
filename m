@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22037226F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B924F7226F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbjFENKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S233995AbjFENKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjFENJv (ORCPT
+        with ESMTP id S233965AbjFENJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:09:51 -0400
+        Mon, 5 Jun 2023 09:09:48 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC0611A
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EF4116
         for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:09:44 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1q69xM-0001WH-KH; Mon, 05 Jun 2023 15:09:08 +0200
+        id 1q69xM-0001WI-KH; Mon, 05 Jun 2023 15:09:08 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1q69xF-005HiL-NM; Mon, 05 Jun 2023 15:09:01 +0200
+        id 1q69xF-005HiM-PH; Mon, 05 Jun 2023 15:09:01 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1q69xE-00BOyI-UI; Mon, 05 Jun 2023 15:09:00 +0200
+        id 1q69xF-00BOyL-3v; Mon, 05 Jun 2023 15:09:01 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -44,13 +44,15 @@ Cc:     kernel@pengutronix.de, Jiri Slaby <jirislaby@kernel.org>,
         Matthew Gerlach <matthew.gerlach@linux.intel.com>,
         Liang He <windhl@126.com>, linuxppc-dev@lists.ozlabs.org,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] serial: 8250: Apply FSL workarounds also without SERIAL_8250_CONSOLE
-Date:   Mon,  5 Jun 2023 15:08:55 +0200
-Message-Id: <20230605130857.85543-1-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v3 1/2] powerpc/legacy_serial: Warn about 8250 devices operated without active FSL workarounds
+Date:   Mon,  5 Jun 2023 15:08:56 +0200
+Message-Id: <20230605130857.85543-2-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230605130857.85543-1-u.kleine-koenig@pengutronix.de>
+References: <20230605130857.85543-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1598; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=efED1NBBshJCjtXaXpvTEIOYQwFkMPcUlShlRdzjsnY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkfd5jaEVvCEZommSXyTG8Eotcw/vYwgq1ooqwJ +LAQzQ3pFmJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZH3eYwAKCRCPgPtYfRL+ TmwrCACC5YJ4ou0Bm0/ZORk01u+NPrk7NEQRTwKiRveCNvUqIgkJq5nkbm4JH/fUBh8nt6j8Sog y5Fm+vyV2+4B8hY4dmrRXD3GYbJzpbmBklsuWSiLE8xJvmXJAWyfcn3JiOaiwQwdtyAETBCaqTJ DIK4OX5t9hevZ1Zy0hQbvhL+rIn28McI95kOHiwXlm0AiH0uNzfomg+thLKcIhPfkWaYbiLShxo X5oKuhC2OvdjB6E++At3yQPVM0/InkgF/Uw1Q/vaFgQOL8cgn4V+wIDz5aIXX1J22l+vJGh+mFT kyuN8lADoLdvK3avgRsPKqAn0R5Fsn7Drbm1zUPU/eCfDxTa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1676; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=OtOaPvHV+suEiSPknSI11DIRzLXr23I/hyoeM+NczkQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkfd5llrJCU4sjBgMwgCCNdyx9Kyzm5rtUF5+sf RdKQxmUQbeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZH3eZQAKCRCPgPtYfRL+ Tq7eB/9IStn2Ffu4XF3y20ak+X/QW+d/F/9OSKKrxvbue63tJH1XovgRrOqDXRCPotg42yDFPi5 4QcZBIlNrKxNhMRphq0LBtZVu0j8SpDQkzZ07G1GIst+sSI6e1AFmeg2sy++pKU+ZJE7O8YCwSK ioX/dZcnsbQ8j8ZZJ7oCD+PRUmwuEm7dcCVLFELf4THj/fSde9hLXZJNHCa9cLKr17Nbp/qe0VV W4OAAbiGQkcms4U7LQ6k3E2iYqVa+VAwVo41xada+WXokF676A3FrjUwrsyZhkzHRrVb0b7GmGQ 6ZHbfutMWtjnwG/Uk9lK3rX2n4aVCy7fz7qx/ge5PVsKxKj5
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,44 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+If the 8250 driver is built as a module (or built-in without console
+support) the Freescale specific workaround were silently not activated.
+Add a warning in this case.
 
-this is v3 of the series that now also copes for
-arch/powerpc/kernel/legacy_serial.c using fsl8250_handle_irq().
+Currently CONFIG_SERIAL_8250_FSL=y implies that the function
+fsl8250_handle_irq() is built-in and can be used. However with the
+changes of the next commit CONFIG_SERIAL_8250_FSL might be enabled also
+when the 8250 driver is a module and so more care is needed when
+fsl8250_handle_irq() is to be used. The code added here is able to
+handle the new situation already.
 
-For kernel configurations that already before were correctly using the
-Freescale workarounds, this is the case with this series applied, too.
-So in all cases the situation doesn't get worse. The upside is that even
-with the 8250 driver compiled as a module (or built-in but without
-console support) the workarounds are now applied for all devices but for
-the ones instantiated in arch/powerpc/kernel/legacy_serial.c. (And even
-for these there might not be a problem as they might benefit from
-enabling the workarounds in drivers/tty/serial/8250/8250_of.c. Not sure
-though.)
-
-Patch #1 is new here. Patch #2 only changed lightly: I restored
-alphabetic order in drivers/tty/serial/8250/Kconfig.
-
-As patch #1 is needed for patch #2 to not introduce a build failure,
-both patches should be taken together. I suggest to add them to Greg's
-serial tree, but the changes pending there should not conflict with this
-series such that taking them both via powerpc works, too.
-
-Best regards
-Uwe
-
-Uwe Kleine-König (2):
-  powerpc/legacy_serial: Warn about 8250 devices operated without active
-    FSL workarounds
-  serial: 8250: Apply FSL workarounds also without SERIAL_8250_CONSOLE
-
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
  arch/powerpc/kernel/legacy_serial.c | 14 +++++++++-----
- drivers/tty/serial/8250/Kconfig     |  2 +-
- drivers/tty/serial/8250/Makefile    |  2 +-
- 3 files changed, 11 insertions(+), 7 deletions(-)
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
+diff --git a/arch/powerpc/kernel/legacy_serial.c b/arch/powerpc/kernel/legacy_serial.c
+index c9ad12461d44..fdbd85aafeb1 100644
+--- a/arch/powerpc/kernel/legacy_serial.c
++++ b/arch/powerpc/kernel/legacy_serial.c
+@@ -508,12 +508,16 @@ static void __init fixup_port_irq(int index,
+ 
+ 	port->irq = virq;
+ 
+-#ifdef CONFIG_SERIAL_8250_FSL
+-	if (of_device_is_compatible(np, "fsl,ns16550")) {
+-		port->handle_irq = fsl8250_handle_irq;
+-		port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
++	if (IS_ENABLED(CONFIG_SERIAL_8250) &&
++	    of_device_is_compatible(np, "fsl,ns16550")) {
++		if (IS_REACHABLE(CONFIG_SERIAL_8250)) {
++			port->handle_irq = fsl8250_handle_irq;
++			port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
++		} else {
++			pr_warn_once("Not activating Freescale specific workaround for device %pOFP\n",
++				     np);
++		}
+ 	}
+-#endif
+ }
+ 
+ static void __init fixup_port_pio(int index,
 -- 
 2.39.2
 
