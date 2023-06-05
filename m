@@ -2,159 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7617C7222BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03B77222D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjFEJ5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S231579AbjFEKBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjFEJ5U (ORCPT
+        with ESMTP id S229459AbjFEKBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:57:20 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B1B0
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 02:57:18 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b038064d97so42825515ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 02:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1685959038; x=1688551038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TyuCPt1vQNlaWH7tCffqZV2k/RtNlXHoU62GbJy8Xjk=;
-        b=KKGiHDA+xwC+Nm4KS7WEjinOuCG1iVjs4z+FmI8SpBouzvSfV4RqeQidTBGyVkA19I
-         Oh0TRdzdP3GJkcP6FekYo8ImlboVTxzu/vCtrxiT+dkG2TBAvOliU6hwgC3b5yQCwkZV
-         ue8mOe5XCOP2vcouiSDq+wVpvmWTG/JDCIfoUa4Pyh87YXdvAXY7EDkQVKzI/nyoPaWV
-         gWrnFcvLgMQqHdqUnwpFVXl7QK+x1EbdnB8dsjpgLIjIozZlTX8BW9drTjYqqlP7v9oY
-         Igs9eoVOUVnNsUfVZM7CU8zm4TwVsb3znjj/lBNSD/l+EYn15Btp40XCSuplRIWpCx/E
-         4jxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685959038; x=1688551038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TyuCPt1vQNlaWH7tCffqZV2k/RtNlXHoU62GbJy8Xjk=;
-        b=XOnDs/kNynBVPJwIHj8My8Uvz6aK4L6XWkEV7IjmQhm1ArXQkS9IeWbkl7FFUKCJ0D
-         2joG9H2KVPw+sXAcR1kLpUtxK0rVNwU8HWSw0LgAbZTpiok79tViZ2r8sTDEDSpHtsDM
-         MQu4oKdoMhG/HSvXt//m6AoUtHm+IT4OG1MYGoMVuqEF/0xePllwbIFMOGlUx2dQ9GZO
-         Ju5UL/ewkthvvNhdmTVIT0ia8XQPFDSxTd++/CVEvo4cwCkQb/ptmf8lI0KDNfYVpz0g
-         4RboTODT0hiYP8ef+LXxTt72DGIx7zY4E2u8Is8cO8Za03OrE+YEOlx81sR9MbXrtQ1F
-         g2Cw==
-X-Gm-Message-State: AC+VfDxd4O5vp7iXSJa8+/bz03T9dY0CHea0Cq1Nm+We31XvUiBgGos8
-        Qh+bQ6COsu42QbmZYPBr/9ghgg==
-X-Google-Smtp-Source: ACHHUZ7UU+7VhOoZ+LaCsaa8oefNZLkAgK8CdKo9gcU9SGPUfv5AJPuReZuksUmH0QYq0D1i0CWW5Q==
-X-Received: by 2002:a17:903:2305:b0:1b0:4c6c:716 with SMTP id d5-20020a170903230500b001b04c6c0716mr9054747plh.4.1685959038094;
-        Mon, 05 Jun 2023 02:57:18 -0700 (PDT)
-Received: from [10.254.80.225] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id x21-20020a17090300d500b001ae469ca0c0sm6152081plc.245.2023.06.05.02.57.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 02:57:17 -0700 (PDT)
-Message-ID: <806149cf-cc07-ad5a-267e-94a6bc3b4106@bytedance.com>
-Date:   Mon, 5 Jun 2023 17:57:09 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: Re: Re: [PATCH net-next v5 2/3] sock: Always take memcg pressure
- into consideration
+        Mon, 5 Jun 2023 06:01:49 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2048.outbound.protection.outlook.com [40.107.20.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967EED3;
+        Mon,  5 Jun 2023 03:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pbcqn1K9SkzXE4jgb6WG17EyM/TsnH6TD1w3HWfUg5o=;
+ b=D+7J+Sx7hhYj3mZv4nEaMQIZaR5Z7MZElQWb6ibp1pkyl2lZRZE8gqwVAOrpmqHm3bxIeplEmE8jOepiKySQ6aJnmiNiNAHYusPScyldquDtXxQXz8Owbt/1yAWqrN4pDv2xRwUbdtsLDbzVodYmWUIxZ0MHmyGNW9z23EtRyFlTWFkEaEzlX+zt1GUtsPp3J6+l5CGWB3qkb9ST2QXYfVUevSd+h2U22w2dYi7IPODC54usWw4oeJY7eRQNUW5KkxDRZWDcny52xxZHwqePr6ckPYzP3hgMSwXQI+ndt8x+dNj5Ffp52piF8XGkMl62JqP8vzJ7XwLuq3aQvGXFXQ==
+Received: from ZR0P278CA0184.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:44::19)
+ by DBBPR04MB7660.eurprd04.prod.outlook.com (2603:10a6:10:20f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
+ 2023 10:01:41 +0000
+Received: from VE1EUR01FT023.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:910:44:cafe::50) by ZR0P278CA0184.outlook.office365.com
+ (2603:10a6:910:44::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 10:01:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
+ smtp.mailfrom=topicproducts.com; dkim=fail (signature did not verify)
+ header.d=topic.nl;dmarc=none action=none header.from=topic.nl;
+Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
+ designates 13.93.42.39 as permitted sender) receiver=protection.outlook.com;
+ client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
+Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
+ VE1EUR01FT023.mail.protection.outlook.com (10.152.2.218) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.18 via Frontend Transport; Mon, 5 Jun 2023 10:01:40 +0000
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (104.47.11.49) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 05 Jun 2023 10:01:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TrwTUfLGJNEQKzvTSv+LAbo5BDv/eHsbuyv6nKVX64SpZ9a6fis1Y9/HoNeol/E7Thognx8PVQ/QlG6taIDCzF8XH1CdMzBMDHdIEDG2MyzhfEMAwm6bVZIiRSsivK4qSRpNAPXnOQz7Sxd5EboDlP+FBvA/DNRzIRLr95+QDuyxPEjttZ01SO6ITZZYpdaMfFQM8dSrrvqfJD+Gpv0iJQ9gtiX35LgDXSoCuodoxYcHZpVhlGCThUVB45JdtmUFdOAsp+K0se0hNCz9Lfj0FAvTnVHpK5w1/zLnhpHp6tVQBvgpRzEfEOuZiDmw2oRxpPvIVPSt4uPRRb4cREMbaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V9u43TFUx+rCyt4zwj8CGK4Hio2R9CL3d6dzWzFRoK4=;
+ b=LXtmTg+vhJsYwdi2WQMMxBwzgMrFyKGq+D4IcJMsPQJR9JSLCyi8DUkRt5jU9BMrsFCjyqc3YyHhtnvu0WLRhv+8rf8EdE+AbIIA0q4E6pfkp8QkWSXYdTrlXAHJARukeeqWZP41wCXZy24AlAm9LqIuPOUha9z7td1ebZcLTyJCLZyQKh+24wOW9Xkvivw/ibqo4WSSmh+oo7EaQTwsKEOmVq7pJ8eLvIgjVqMp2mWNFq9mCy0O148F0Dd54PuHdM+ZA1dBHpQEHaBZbn5zxtYLyLgxAfsXZlbnkoK5dn1fkfahmAyjm6Pt/MynhhMfn/855CaEMTrzKCtGDVqSCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
+ dkim=pass header.d=topic.nl; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V9u43TFUx+rCyt4zwj8CGK4Hio2R9CL3d6dzWzFRoK4=;
+ b=pbNUGbXbFxwEyKe2CNgP9G2iPebeFZMYD4CtGpox8cN4HHshr40l2hfO5jdpwGKJv9DE3jY7a+rsn8DWQRTveBdBA18FsX30YojaFl5ON5HMGXyfz7+WGxVNj5SYIgFmbscktWNMML3xnFMbLAYJeyoce/mt8LYfyMVLA8856DBmo2xjmJ+BYh+N/oMxSLcISoT37sq2P32pkkxvrozoEGuiyMu/fl0fqVoWRXMHlBQDRwnT0O94hxZsegMQBe93UZYW2XGfKu8STJOlXleE2SsfxyvMvpAJmFfQ4zZSNMCWuCY1jwqJWFuBxLRpA8q9MlH6mgpgNdhY8rJxLXghXw==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=topic.nl;
+Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
+ by AS1PR04MB9683.eurprd04.prod.outlook.com (2603:10a6:20b:473::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
+ 2023 10:01:36 +0000
+Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
+ ([fe80::4cd1:3e90:54e5:9696]) by DB8PR04MB6523.eurprd04.prod.outlook.com
+ ([fe80::4cd1:3e90:54e5:9696%5]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 10:01:36 +0000
+Message-ID: <ae4e2041-9fd7-30e7-8c0a-22a423c5871e@topic.nl>
+Date:   Mon, 5 Jun 2023 12:01:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Mike Looijmans <mike.looijmans@topic.nl>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add nvmem-clock
 Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Simon Horman <simon.horman@corigine.com>,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230602081135.75424-1-wuyun.abel@bytedance.com>
- <20230602081135.75424-3-wuyun.abel@bytedance.com>
- <20230602204159.vo7fmuvh3y2pdfi5@google.com>
- <CAF=yD-LFQRreWq1RMkvLw9Nj3NQpJwbDSCfECUhh-aVchR-jsg@mail.gmail.com>
- <6f67c3ca-5e73-d7ac-f32a-42a21d3ea576@bytedance.com>
- <727b1fb64d04deb8b2a9ae1fec4b51dafa1ff2b5.camel@redhat.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <727b1fb64d04deb8b2a9ae1fec4b51dafa1ff2b5.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+CC:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.2167d5ad-7e99-4eb9-a313-030fc7a7d546@emailsignatures365.codetwo.com>
+ <20230526143807.10164-1-mike.looijmans@topic.nl>
+ <c6d886d9-8f74-7af3-5478-030f5d6e4b1c@linaro.org>
+Organization: Topic
+In-Reply-To: <c6d886d9-8f74-7af3-5478-030f5d6e4b1c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: AM0PR02CA0219.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28f::26) To DB8PR04MB6523.eurprd04.prod.outlook.com
+ (2603:10a6:10:10f::26)
+MIME-Version: 1.0
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|AS1PR04MB9683:EE_|VE1EUR01FT023:EE_|DBBPR04MB7660:EE_
+X-MS-Office365-Filtering-Correlation-Id: 30ec630e-0f1a-4abc-7b34-08db65abdc12
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: anrrKJCc2URoe/g3BRyIt6qSnW5MzMz4feqPO0nmGFOtZstwPc9oXDw9JLVuTCy/35bxhdaR58pZQaYqcTYOn883OA3sMevoZNrj8+yIB3aa+Oi8JEK8dM0hIdb3IpBB7g33+Z+dziNO1yjUKt62/hQzPh47w+u0oHVoIZ1+46nXnTW479xCgCjYyyTwUtmQjxIWk8+98Hp19DvN7Hi/IZJ6yLlhH3JIV+1fZuz2J4Vbn1lyttDvX69EGbmJem+s8OdD+UainMARjMEz2i5pZnEF9glvs4K4u+96h2dam4oVWur5g5lbfzBsngd5NnbQ3U7p2DnysWM+GEWDdbuQGd8/F8TMZJhFySIVilTtmtEShNMj7/CH204MuTjgz6hRrtt0q0VhddXAgM/Ii/7+RhQnGpAyIy9fAQxlRS6/PYkLXnbVekOJbXGSaMjnZCfxwK9HZdisxquqUdUTin8CCz9Mr7e1LanY9S2AJ8pErYhUXReUKYC00Yw9/XaSygCwqrn/GMa4FKzDWGNWEslmVeei2pKlzCYhyMVYx0yujTQMy6q1Ogv0mQSMisd/Tu9PWMXxmkvaGL4A3L10J4UE5lS9hY7B2V11roF47afgA5hU3z3ETyGvNjAGdQVD87KVhkcnjO5D/GjGDdMv9LF0cquzzAf7QDvFqzYvhItRazU=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(346002)(136003)(39840400004)(451199021)(53546011)(6512007)(6506007)(38100700002)(2616005)(41300700001)(38350700002)(31686004)(36916002)(6486002)(52116002)(186003)(26005)(42882007)(83380400001)(83170400001)(478600001)(54906003)(4326008)(66476007)(66556008)(316002)(66946007)(8936002)(8676002)(5660300002)(44832011)(2906002)(31696002)(15974865002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9683
+X-CodeTwo-MessageID: 0245adc9-b7a5-483c-ace2-196be3da7e17.20230605100139@westeu12-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT023.eop-EUR01.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 0afd62b1-0ba8-456e-5b6c-08db65abd948
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 69klB3EXCWIf61HqPkCPNdkbaADWlMw3KJnsGM1CfI5JRXyr2mFiHhZyO9meB2rNJkM0CSMHT0qVuPlJkQV7M3AsIG21TVIqa18/JufT7HwFDEKx2IT64fgVU8yoHXDbSsghIyFpfu2Hj+6PliewH7AB+oTSFwYqY3iGRDt7hXZl+B8oLgJwqsAGxCu94EbzpcpIPPTVd7r8pS+m8Zmd7kWBq9nfwHD2+pK2h+J3FCy1hJq8/VgM0/SeCdvliyCFPeuN8EKzd7ebgGS20xC4FKVwVnPb1HvNlxzRYkfK7r71FZma4O+RXAPWFalhm55DeeX3mKjbjPp4nqqqYorRM3WrhPfjpKOPm/Mbd4OIw6jvV0h7IndZylcMbo/pOMygZpLfuPYuFiTejJNgkiXmZOpP1/g9ZrQAFIfxvmRQGxnLBQZrarKMjPaKT3ijwULaAwsROu8L20wY93n9E3fogNC5Amufj/+4GXV0Ku9yAcrKZDmZ9Z9BHzIRRk0t14dKGS56MIfB5hH6oBZl9badZ2N9nC7cnksDOMc/9JyTHqriMTfp2GPLKKZ0ye4jorqZl0flM7CW7jSKPw0CBJ7aFLZ/ULBsh/EVrLl+i+PIN/Nc0pWl9wcDrUhnsasvKP/t9NxpdvY723Nu2wivTA3sdY/vNTh+mg4O1FX9wZ1fa3OjoS9MDB6q6+uWrmORKt3AF+UyHqjoNDFcZkEFh03mFxVmPc30Z+2BsybjDyUAoJTlWsUy+aoTot29o9WP07n3YkOeYpGmdT9nQRxggGFYmQ==
+X-Forefront-Antispam-Report: CIP:13.93.42.39;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39840400004)(396003)(451199021)(46966006)(36840700001)(47076005)(2616005)(26005)(6512007)(53546011)(6506007)(83380400001)(31686004)(41300700001)(36860700001)(36916002)(6486002)(186003)(42882007)(336012)(478600001)(83170400001)(54906003)(4326008)(82310400005)(40480700001)(7636003)(7596003)(356005)(70206006)(70586007)(316002)(8936002)(8676002)(5660300002)(44832011)(2906002)(31696002)(15974865002)(36756003)(43740500002)(18886075002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: topic.nl
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 10:01:40.6725
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30ec630e-0f1a-4abc-7b34-08db65abdc12
+X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[13.93.42.39];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT023.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7660
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 4:27 PM, Paolo Abeni wrote:
-> On Mon, 2023-06-05 at 11:44 +0800, Abel Wu wrote:
->> On 6/4/23 6:36 PM, Willem de Bruijn wrote:
->>> On Fri, Jun 2, 2023 at 10:42 PM Shakeel Butt <shakeelb@google.com> wrote:
->>>>
->>>> On Fri, Jun 02, 2023 at 04:11:34PM +0800, Abel Wu wrote:
->>>>> The sk_under_memory_pressure() is called to check whether there is
->>>>> memory pressure related to this socket. But now it ignores the net-
->>>>> memcg's pressure if the proto of the socket doesn't care about the
->>>>> global pressure, which may put burden on its memcg compaction or
->>>>> reclaim path (also remember that socket memory is un-reclaimable).
->>>>>
->>>>> So always check the memcg's vm status to alleviate memstalls when
->>>>> it's in pressure.
->>>>>
->>>>
->>>> This is interesting. UDP is the only protocol which supports memory
->>>> accounting (i.e. udp_memory_allocated) but it does not define
->>>> memory_pressure. In addition, it does have sysctl_udp_mem. So
->>>> effectively UDP supports a hard limit and ignores memcg pressure at the
->>>> moment. This patch will change its behavior to consider memcg pressure
->>>> as well. I don't have any objection but let's get opinion of UDP
->>>> maintainer.
-> 
-> Thanks for the head-up, I did not notice the side effect on UDP.
-> 
+On 31-05-2023 21:27, Krzysztof Kozlowski wrote:
+> On 26/05/2023 16:38, Mike Looijmans wrote:
+>> Add bindings for a fixed-rate clock that retrieves its rate from an
+>> NVMEM provider. This allows to store clock settings in EEPROM or EFUSE
+>> or similar device.
 >>
->>> So this commit only affects the only other protocol-independent
->>> caller, __sk_mem_reduce_allocated, to possibly call
->>> sk_leave_memory_pressure if now under the global limit.
->>>
->>> What is the expected behavioral change in practice of this commit?
->>
->> Be more conservative on sockmem alloc if under memcg pressure, to
->> avoid worse memstall/latency.
-> 
-> I guess the above is for TCP sockets only, right? Or at least not for
-> UDP sockets?
+>> Component shortages lead to boards being shipped with different clock
+>> crystals, based on what was available at the time. The clock frequency
+>> was written to EEPROM at production time. Systems can adapt to a wide
+>> range of input frequencies using the clock framework, but this required
+>> us to patch the devicetree at runtime or use some custom driver. This
+>> provides a more generic solution.
+> This does not look like real hardware. I mean, the clock does not fetch
+> its rate from nvmem, right? It's the Linux which does it, so basically
+> you described here driver, not hardware.
+Right, this just reads a setting from an NVMEM provider.
+> Extend existing fixed-clock bindings to allow reading frequency via
+> nvmem cells.
 
-Yes, I started off with TCP but wondering if it is applicable to the
-others too as the 'problem' sounds really generic to me.
+I just tried and implemented this, but it does not work. The reason is=20
+that the fixed-clock implementation returns "void" in its=20
+of_fixed_clk_setup() init function. The nvmem provider returns=20
+EPROBE_DEFER because it isn't ready at this early stage, and this error=20
+will not be propagated up because of the "void" signature. Thus, it's=20
+never retried and the clock just disappears.
 
-> 
-> If so, I think we should avoid change of behaviour for UDP - e.g.
-> keeping the initial 'if (!sk->sk_prot->memory_pressure)' in
-> sk_under_memory_pressure(), with some comments about the rationale for
-> future memory. That should preserve the whole patchset effect for other
-> protocols, right?
 
-Keeping the if statement as it is would imply the prot pressure as a
-master 'switch' to all kinds of pressure. IMHO this might hurt other
-protocols with pressure enabled if they are all used in one memcg which
-happens to be under vmpressure, IOW UDP allocations are given higher
-priority than others.
+> Best regards,
+> Krzysztof
+>
 
-> 
-> If instead you are also interested into UDP sockets under pressure, how
-> that is going to work? UDP sockets can reclaim memory only at send and
-> close time. A memcg under pressure could starve some sockets forever if
-> the the ones keeping the memory busy are left untouched.
+--=20
+Mike Looijmans
+System Expert
 
-Yes.. And it starts to get me confused that why&when should the memcg
-pressure be used given that we don't want to put harsh constrains on
-sockmem even under memcg pressure.
+TOPIC Embedded Products B.V.
+Materiaalweg 4, 5681 RJ Best
+The Netherlands
 
-Thanks!
-	Abel
+T: +31 (0) 499 33 69 69
+E: mike.looijmans@topic.nl
+W: www.topic.nl
+
+
+
