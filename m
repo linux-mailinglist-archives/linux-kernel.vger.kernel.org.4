@@ -2,72 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31FD722757
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6211772275E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjFEN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S233523AbjFEN1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjFEN0a (ORCPT
+        with ESMTP id S232714AbjFEN1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:26:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65F1A6;
-        Mon,  5 Jun 2023 06:26:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5234D6134A;
-        Mon,  5 Jun 2023 13:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99161C433D2;
-        Mon,  5 Jun 2023 13:26:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685971588;
-        bh=7jvreSULTAW1dgm4KKjWd49Rumkiyi/ADlztxfIhpqM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HSEWBQul/ibrJpxuKnHrM7PPPXULYqwQlh5aV06gtYuVUvbxKx6PdKk5az5fgPOiR
-         BVyoo7rT18zK9a6IWqdL5S7mllk2X18C5e0HKYhEa0cSzYfeuMopM0QqE0ZP6OskmM
-         SaQ1OGLILhXFBDTBOeOg367JhaCMWIXVEfj16Y0FfMeGJVJCr/0x/9WqokCPL2/SDZ
-         eSm9+SV7YKGrO2UVTxaQ4W8Hn5YMPXij2cm1dE5oOX/+8RrmfIvnd5j6agybPbasMZ
-         pq5QS+KrgPJJCDJ4eLHdMtOYs+RmNENiEPsAr8QCGwyOqMPJVGO6wHQuk427NlrTCd
-         D3/M7E2/NreIA==
-Date:   Mon, 5 Jun 2023 14:26:19 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
-        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, gregkh@linuxfoundation.org,
-        linux@armlinux.org.uk, mturquette@baylibre.com, sboyd@kernel.org,
-        sre@kernel.org, broonie@kernel.org, arnd@arndb.de,
-        gregory.clement@bootlin.com, sudeep.holla@arm.com,
-        balamanikandan.gunasundar@microchip.com, mihai.sain@microchip.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, Hari.PrasathGE@microchip.com,
-        cristian.birsan@microchip.com, durai.manickamkr@microchip.com,
-        manikandan.m@microchip.com, dharma.b@microchip.com,
-        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
-Subject: Re: [PATCH 17/21] power: reset: at91-poweroff: lookup for proper pmc
- dt node for sam9x7
-Message-ID: <20230605-sedan-gimmick-6381f121cc0a@spud>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-18-varshini.rajendran@microchip.com>
- <2a538004-351f-487a-361c-df723d186c27@linaro.org>
- <c3f7c08f-272a-5abb-da78-568c408f40de@microchip.com>
+        Mon, 5 Jun 2023 09:27:47 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2121.outbound.protection.outlook.com [40.107.113.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B46DDA;
+        Mon,  5 Jun 2023 06:27:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FPmi9MuUHMBFh0tPSrAQBY6tGlLeFyzPAephwEGNVJaSNe02nY7atNGlaw17wWkg2ayKVc05yyjVt39usG7rloSa+XAC6RnshbId/qJM9ugTBIcfd1OjE88aCo9uOdzRTnWF5n12Cq+D1BOAI1XaAKz+hSvQ7T+jqrNS3Or+c2EDor4Riu7xjwp3fwlzRfuP8nAEYKPTkKGF32TDFMAMRsQaEo1rFr0U2dX/yTNeDFBVbFN0d+ZKi5z+OAXVMxLYfDp3Y3/AJmJRrw3h9mgGZSXf7HuxT9ypnqHJM4LPXbqrg6E8FVJZAyHJSnRu8zuhKRY/ePvPdUjjsgLsg9Pzgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MNv7zCtv5R4coYkXfFKa7lkgO9fYlpkdBnuqlFiVCRE=;
+ b=Y9nh1GFzg0Zy+tWfT3S7IEsdh5nFDF4sV2kqSkAJhuYar+r/M/U8QmYu3qYKMGPf/2kW9eAOqkgp1z6lVeme9uki5KCFvmpsGDyE5MGzLRUuEYsWrrYf3HbvhDVdfs2DrOmUaJZUVIHdlodK0+EDwwhz77m9cDoC8KzzghiLum11jd+jrwVtSxwTJWT8kB573NSGraXGhGpbEuZyU77m8aqL72L+8W4Bsj+jy8IBCDRMSDUgTp04oQDDeayHIMfcSRYx6WMJFSxsr5EVXFBd+4Uuz+QEjO2VhXWjWWEitTjqdkvQHoqCebVqc8aE7Kh3K8vOFt776FDHc6Ih8OmG9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MNv7zCtv5R4coYkXfFKa7lkgO9fYlpkdBnuqlFiVCRE=;
+ b=n84ocE1O9wBNxDpU6AjKoB0Y89ndrnhn5S40hrUBsN0wifRjGwJ3sNqO9l84hjF9V3tMhdiZi4Z1foOKDGZ3U1Eax1ijTaL2rQr1XpHukQ/i6H6/gBZdxp8V9jjAyIF6owTWLBkyVRw28uJorxWHXnOdnC1RO6dwDXPl5kS4piU=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYAPR01MB5884.jpnprd01.prod.outlook.com (2603:1096:404:8056::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 13:27:42 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 13:27:42 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: RE: [PATCH v6 00/11] Add Renesas PMIC RAA215300 and built-in RTC
+ support
+Thread-Topic: [PATCH v6 00/11] Add Renesas PMIC RAA215300 and built-in RTC
+ support
+Thread-Index: AQHZlV30mPNpl/zsHU6y3jXrqwORkq98M1iAgAACh6A=
+Date:   Mon, 5 Jun 2023 13:27:42 +0000
+Message-ID: <OS0PR01MB59225AA8E68D7976BB57A0BC864DA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230602142426.438375-1-biju.das.jz@bp.renesas.com>
+ <31b1f83f-6baf-46de-a04c-373ad20a6c24@sirena.org.uk>
+In-Reply-To: <31b1f83f-6baf-46de-a04c-373ad20a6c24@sirena.org.uk>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYAPR01MB5884:EE_
+x-ms-office365-filtering-correlation-id: c29ceb5c-e3d0-4e71-c55e-08db65c8a43f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /zVgK3CN5CoYGeUFzIl7oo/VvsiTRzgmGClj799M22YglE5bTXcXH0hO4qQAB83ja8uugncaKiIAvirfD5HQAhRdMlOJ7VKzHxXQtXx8AvzWRFerSxqfoH6oAHuJ2tz2KeDVtOZ4BiThypGuIcKgiKcnI2bMYrWElbjUd4MUjlqRwUFZOWJqR8k4iErhlPFN9TUOqxF28k3Ct2FjMtgblcm0/7Wc8jiui0xqIdnMaaAjpYKYPi/B3Nrol0P+DlV0WF7sNFIEgUUJkvIhz0vjCdRjkbgzaxPFxOZHIiU7l0Qiu0szruvMv32WPkxNBP8Xz81pw4I1fSbLHO0kmuStzsO1KfqSEeQZoYaykZiYmgZ2Y90ChZXeN9dpm2BSmd7ZutbZLogFhJGK6De888zISeNkkJxFdUI93DJ7mg84IVCJg5qoMmWfrOCR+JhNq4JQr4jyMxRjNANSE3mIJ9WHnlyBRUuR8j7L08YIzLGm373y55qgBL1UIjXjABOpfU92jl56skBJLctEqfOAFtNYL6M+F0F8Hl1QwveECBzal/u7cZIotLBAZp+QGHpDoGLCJvc7kM1VINEQ58pd1udRNxT/pLsPz1DjMWj6IvaN3+A=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199021)(966005)(7416002)(54906003)(33656002)(55016003)(478600001)(8676002)(8936002)(41300700001)(38070700005)(316002)(76116006)(66946007)(66446008)(66476007)(52536014)(66556008)(64756008)(122000001)(5660300002)(38100700002)(6916009)(4326008)(86362001)(7696005)(71200400001)(2906002)(107886003)(186003)(9686003)(6506007)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XxgizD10iV65CWSNnJkrYaJIOMRcTA0rbhaQHCIljrkTT0V5kSbK9Y6WXCqj?=
+ =?us-ascii?Q?8n7lLG+nNxwQES9i074PUN5Js75Juv1Wy4uEc/BMGnBATLc+3w/n+PZPZwjL?=
+ =?us-ascii?Q?1NIvIIIDr4uqh2FX+9OVepWY+RUslx/ZeFJJPOcye/C/GVEAsKihpINJpMJe?=
+ =?us-ascii?Q?9oXzoCFjiNkBySn8tHblw9A/dYmHpOT7pOI9acOafPgFV9oV6bAfQaZ8ZY5n?=
+ =?us-ascii?Q?BxdLy+WsHFYEWZgFjWbo/+U0cu0oJgPu54W6gn3tLjgYXPxKnaCDHd4TqZ3H?=
+ =?us-ascii?Q?X1gw8MUMmppLPj2zD6HySmkHJfJSdxC3ZD75Jbh+wVknBZYsfWET5NQwHxT+?=
+ =?us-ascii?Q?/laih5SInUsxFOhm2EMMLWbgUr3Jf7jKTOIAYmNUFsPH4rKLW8AthwGHcxoh?=
+ =?us-ascii?Q?5oEp0MadNBd57ItPl/1LsKSv6jiOqrxMaCImG1AZ5zvS4qiLHJ8Tg5ET7Ca5?=
+ =?us-ascii?Q?IRrGDYGw723U0CI+WKQmbdm4rvrQSQB/bY9bkng5GBHDHDrNtPD5heP3Z05f?=
+ =?us-ascii?Q?X+d9YuiZ0GUYqbQwZXp1vvnoMOTkV7TLK3MpPAPqBEUmSf0U+l/Y4EwDyjxA?=
+ =?us-ascii?Q?kX7voI1/eTJiqdHmdxjyL6QlPSbiJoXW22KhPWqvL9V6JoOuOyQ9jO3+bvCB?=
+ =?us-ascii?Q?+fUgzmu3kSKircLYLOiZEW6RSJx1vRi6EO+YrWDQTj4eqXnc0uoyrpRPnQKV?=
+ =?us-ascii?Q?+MSRED/AB1COheNPcBKEBfU/prEIWlGTDxFYN26RhPyUFnTSpIimHaQDtH8B?=
+ =?us-ascii?Q?t66XdcJh3QuMG3Vukk2gjBSBv06Z5mgYav+R2ZEQj5L8U6nrJ3oA4QD73/wo?=
+ =?us-ascii?Q?O0GYKwzpH6KndvIVaCZef0TKDwUD0dRbKz3ecACG9KxPlnZ5yxVrcBa8zHPd?=
+ =?us-ascii?Q?/0BicqFUgBWz0B73dqL5TKy4TcUGyJV5D1b3wyqeqLGPWMugH1eqk/86pztC?=
+ =?us-ascii?Q?McP62SwplR4EJnKFbzRSZmZtT4cV1WSeK8HgLe7mWVmd8WR/d/wPqcaRKd0g?=
+ =?us-ascii?Q?Q6SC2JKNP3hCfp8BLDdhkbe+WYD3BMjW0KJXMjLiws3KhrxKZ6XvRodDGnIQ?=
+ =?us-ascii?Q?rlAdLvUPZSJWhL5aLc/HKHTsxnRrFuqJ7pIDnDJoOA4pRum1ljEB0o1ECAyC?=
+ =?us-ascii?Q?Ap1sklHPEE3/q2bjOM4EZqTDx0H7s41JO3/DE8lFa9IGOWsvPB6o0bVszu3f?=
+ =?us-ascii?Q?3dZTC01B+H/nzDk5D4boUmfO0BFgH7Ic4+98+0/o4VnvfQQBqGxir8cyG09L?=
+ =?us-ascii?Q?F5ebxlz4jiH1JAJWE8VOTTyuNU7R6/gCDDvK+3SnRTLctfBTfqRuQnIkw/r1?=
+ =?us-ascii?Q?yLF7fP4RbfH/krix5ZS67nf6QI35zFtAKlUbdUlkyZReKbhhlZ/8vQCMVCAY?=
+ =?us-ascii?Q?LBwF+q5mY7Ze8prBbj8JYjjIMR1w6PFfmoV/+YdRnTW1Nd7/aT+6ssWIoykF?=
+ =?us-ascii?Q?097Q7v30DhDV2DvspNf4FByl+DfeOfMW+h/Lt/o+6IgdilCDchj+F0QDqs5+?=
+ =?us-ascii?Q?Miyg2B0kZLP6M2U6Ia1WGBVGSUyclbXaBLSjK8jAMyIxoBgtMNbt9JZ+HTQZ?=
+ =?us-ascii?Q?sIy1u9QkxEu/i15yaJg99CZZD0VxuVBDmzX6DgdA?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qGD4Ahe9OQYksAQU"
-Content-Disposition: inline
-In-Reply-To: <c3f7c08f-272a-5abb-da78-568c408f40de@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c29ceb5c-e3d0-4e71-c55e-08db65c8a43f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2023 13:27:42.6110
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YhDYCRDQ/tBhJTB+koUjF/o7QIIB5CG+tzYy467ElFCCKROm/QCA3Jqq6azledVEZguVc6vgmktOcG8vvAqWVU6iCaKZQvYsCz5bomB5UHA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5884
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,112 +131,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mark Brown,
 
---qGD4Ahe9OQYksAQU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey,
-
-On Mon, Jun 05, 2023 at 03:04:34PM +0200, Nicolas Ferre wrote:
-> On 05/06/2023 at 08:43, Krzysztof Kozlowski wrote:
-> > On 03/06/2023 22:02, Varshini Rajendran wrote:
-> > > Use sam9x7 pmc's compatible to lookup for in the SHDWC driver
-> > >=20
-> > > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> > > ---
-> > >   drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > >=20
-> > > diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power=
-/reset/at91-sama5d2_shdwc.c
-> > > index d8ecffe72f16..d0f29b99f25e 100644
-> > > --- a/drivers/power/reset/at91-sama5d2_shdwc.c
-> > > +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-> > > @@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] =
-=3D {
-> > >        { .compatible =3D "atmel,sama5d2-pmc" },
-> > >        { .compatible =3D "microchip,sam9x60-pmc" },
-> > >        { .compatible =3D "microchip,sama7g5-pmc" },
-> > > +     { .compatible =3D "microchip,sam9x7-pmc" },
-> >=20
-> > Why do you need new entry if these are compatible?
+> Subject: Re: [PATCH v6 00/11] Add Renesas PMIC RAA215300 and built-in
+> RTC support
 >=20
-> Yes, PMC is very specific to a SoC silicon. As we must look for it in the
-> shutdown controller, I think we need a new entry here.
+> On Fri, Jun 02, 2023 at 03:24:15PM +0100, Biju Das wrote:
+>=20
+> > Biju Das (11):
+> >   i2c: Enhance i2c_new_ancillary_device API
+>=20
+> I assume there's some dependency from this patch in the others but
+> you've not copied me on it so I can't tell what the status is...
 
-Copy-pasting this for a wee bit of context as I have two questions.
+I will make sure you are in copy next time. Some how missed, sorry for that
 
-| static const struct of_device_id at91_shdwc_of_match[] =3D {
-| 	{
-| 		.compatible =3D "atmel,sama5d2-shdwc",
-| 		.data =3D &sama5d2_reg_config,
-| 	},
-| 	{
-| 		.compatible =3D "microchip,sam9x60-shdwc",
-| 		.data =3D &sam9x60_reg_config,
-| 	},
-| 	{
-| 		.compatible =3D "microchip,sama7g5-shdwc",
-| 		.data =3D &sama7g5_reg_config,
-| 	}, {
-| 		/*sentinel*/
-| 	}
-| };
-| MODULE_DEVICE_TABLE(of, at91_shdwc_of_match);
-|=20
-| static const struct of_device_id at91_pmc_ids[] =3D {
-| 	{ .compatible =3D "atmel,sama5d2-pmc" },
-| 	{ .compatible =3D "microchip,sam9x60-pmc" },
-| 	{ .compatible =3D "microchip,sama7g5-pmc" },
-| 	{ .compatible =3D "microchip,sam9x7-pmc" },
-| 	{ /* Sentinel. */ }
-| };
+The PMIC driver has build dependency on the i2c patch. The PMIC driver
+instantiates i2c client(RTC driver)
 
-If there's no changes made to the code, other than adding an entry to
-the list of pmc compatibles, then either this has the same as an
-existing SoC, or there is a bug in the patch, since the behaviour of
-the driver will not have changed.
+But RTC driver does not have build dependency rather it has functional
+dependency for PMIC rev a0 chips as the oscillator bit is inverted=20
 
-Secondly, this patch only updates the at91_pmc_ids and the dts patch
-contains:
-| shutdown_controller: shdwc@fffffe10 {
-| 	compatible =3D "microchip,sam9x60-shdwc";
-| 	reg =3D <0xfffffe10 0x10>;
-| 	clocks =3D <&clk32k 0>;
-| 	#address-cells =3D <1>;
-| 	#size-cells =3D <0>;
-| 	atmel,wakeup-rtc-timer;
-| 	atmel,wakeup-rtt-timer;
-| 	status =3D "disabled";
-| };
+please see [1], [2] and [3]
 
-=2E..which would mean that the there's nothing different between the
-programming models for the sam9x60 and sam9x7. If that's the case, the
-dt-binding & dts should list the sam9x60 as a fallback for the sam9x7 &
-there is no change required to the driver. If it's not the case, then
-there's a bug in this patch and the dts one :)
+[1] and [2] has build dependency
 
-In general, if things are the same as previous products, there's no need
-to change the drivers at all & just add fallback compatibles to the
-bindings and dts. IFF some difference pops up in the future, then the
-sam9x7 compatible will already exist in the dts, and can then be added
-to the driver.
+Between [2] and [3], RTC has functional dependency for PMIC version 0x11 as
+     oscillator bit is inverted
+
+[1] https://patchwork.kernel.org/project/linux-renesas-soc/patch/2023060214=
+2426.438375-2-biju.das.jz@bp.renesas.com/
+
+[2] https://patchwork.kernel.org/project/linux-renesas-soc/patch/2023060214=
+2426.438375-4-biju.das.jz@bp.renesas.com/
+
+[3] https://patchwork.kernel.org/project/linux-renesas-soc/patch/2023060214=
+2426.438375-12-biju.das.jz@bp.renesas.com/
 
 Cheers,
-Conor.
+Biju
 
 
---qGD4Ahe9OQYksAQU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH3iZQAKCRB4tDGHoIJi
-0k26AQCR+FNf+yO4bvvxn9btScRrtb3+MomV/4TeUvmr9kGqvgEAmNYYoMHrjOWk
-oCe+utfYdl8cSw8Jvst3LU6J2uVlQQI=
-=nGf/
------END PGP SIGNATURE-----
-
---qGD4Ahe9OQYksAQU--
