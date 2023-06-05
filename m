@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B824F722B03
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88580722B06
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjFEP3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S231984AbjFEP3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjFEP3C (ORCPT
+        with ESMTP id S234155AbjFEP3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:29:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B27FAD;
-        Mon,  5 Jun 2023 08:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1rcoNzbbjZnYRzwraIv0WdpuJsYjOVuqn77l2kvZLVc=; b=KuIODdFe+5VH/pYaz2po08qNKC
-        S/myRn+CjgR4roAT1GngpoQLir7DW0wRBGOaooq1EXBT6Ihp5/nIdWr3VXuo2Gf223ekag1aPD332
-        X8vzjPpOmNFFe4ktbZV2mS47wfHPSpT3BttlVorEHxyHM4yj7no8A4Ngz4gw04OAvIRJQ0a3U3V6Z
-        nRCRb009oifDS37IkiFTztNX3lErrtwbEn6ApW8aX2BV17XHgrvT/xZoiF9Jq8HiSbfruQPi9Dhu7
-        lSiy5E07rvBV+1uNKI8GvDnYhrN/Gsu44tRiac/vkevy7QO/uHh2k2xxAs85K5CALd+isgg5mSoc4
-        AvSNtQQg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q6C8P-00FxA8-2H;
-        Mon, 05 Jun 2023 15:28:41 +0000
-Date:   Mon, 5 Jun 2023 08:28:41 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>, song@kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZH3/KVCHhX4D4yh9@bombadil.infradead.org>
-References: <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
- <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
- <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
- <ZHoTFDkPIgglW0sU@bombadil.infradead.org>
- <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
- <ZH38lpTHZ/RISC1v@bombadil.infradead.org>
+        Mon, 5 Jun 2023 11:29:16 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69144AF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:29:15 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3558sEEF030588;
+        Mon, 5 Jun 2023 10:29:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=S1uQnmsd6XI75wdABbJ0fjbAZApoBOSHGSUOv9rvCkk=;
+ b=dVtrbMyXYgCf4pul4d65ZGFaruSCWu/pqTUtKD/pbep5bu8ide2FFp5mDfXVSAJbuRPH
+ hUO28lFwXB5H9IHnEdmaemODkRtKWTG5wAJaRd+IhYzfENYyYqY6rMJTz9dv1Z7XhPdI
+ JOZJmzOJ4vhoZbVZJl/PXgJV8B/0Ci1YSaPHIvfuZXyM5EojmRaSyH0+8qTujOTMxyID
+ 24TbKPg4twUXhnxD6TsXNrYufiHLGB7pVU3rbor5trCGCUs8DpwuxBoUbfAPggs7JMKp
+ myPz5ASYpkS6TX54I7o/E4OH9Fl/qEt7TecqDnXs09N07dfOHx5IC15egsjp5lkd3cIi qw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r01xna179-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 10:29:04 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 5 Jun
+ 2023 16:29:03 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Mon, 5 Jun 2023 16:29:03 +0100
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (NEWNC1SL3J3.ad.cirrus.com [198.90.238.20])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B4E3011AA;
+        Mon,  5 Jun 2023 15:29:02 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v2 0/3] Fixes and cleanup for CS35L41 HDA
+Date:   Mon, 5 Jun 2023 16:28:52 +0100
+Message-ID: <20230605152855.448115-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH38lpTHZ/RISC1v@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Ah15Nc8gmTzw_xqjB7ubQJvp2NZAMdxh
+X-Proofpoint-GUID: Ah15Nc8gmTzw_xqjB7ubQJvp2NZAMdxh
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 08:17:42AM -0700, Luis Chamberlain wrote:
-> We've gone down from ~6 GiB to ~6 MiB.
+Several minor issues were found during additional testing and
+static analysis. These patches fix these minor issues.
 
-And just to also highlight, that was just for for the KASAN enabled case, and
-for !KASAN we went from ~18 GiB to 0.
+CHANGES SINCE V1:
+Patch 2:
+- Removed unnecessary cast
 
-  Luis
+Stefan Binding (3):
+  ALSA: hda: cs35l41: Clean up Firmware Load Controls
+  ALSA: hda: cs35l41: Fix endian conversions
+  ALSA: hda/realtek: Delete cs35l41 component master during free
+
+ sound/pci/hda/cs35l41_hda.c   | 32 ++++++++++++++------------------
+ sound/pci/hda/patch_realtek.c |  2 ++
+ 2 files changed, 16 insertions(+), 18 deletions(-)
+
+-- 
+2.34.1
+
