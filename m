@@ -2,135 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D249722550
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D009722553
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbjFEMO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S232011AbjFEMPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjFEMOY (ORCPT
+        with ESMTP id S232272AbjFEMO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:14:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEE1A7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685967215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mFPAE5ohpVyr08nMX1EcEfF4UhhbllJe9amhr2huvq8=;
-        b=OIuE20Loc3LFxJuV0+LU1ZZKMLVEUgeQkmEIkO8gE+1Hv97fi4+hw8z26h/hXKuBMOOEL2
-        TgGVEWYeqOfJhmMK2GWfQVMkoIzxqL3rUV6R3qdvqBFb1tZftBuU9PeXaD8AAuFnYXbf/f
-        g6LFKDfO6tJEbN33BKozKTSBdNFaBvw=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-586-3EJTvmsrMAqTbg8fBEryIQ-1; Mon, 05 Jun 2023 08:13:33 -0400
-X-MC-Unique: 3EJTvmsrMAqTbg8fBEryIQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f9a9df0b85so2313251cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:13:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685967213; x=1688559213;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mFPAE5ohpVyr08nMX1EcEfF4UhhbllJe9amhr2huvq8=;
-        b=ZSNZlPm7cxWZmniwHVNGYPA+dgeSZx/ms7RLV20RzjPj8PQbKFCZaT97GfcxA9b3rV
-         BrCtXnQmA+8eADU7l8MG9TRpfqckIOR3b6BVpRgdxElSZESB2QjXiX8E9Fk+0uQuI/8E
-         TZupclqcQWsFO+VF1xxJG66RAFHEe9XWD6mCJ7ZTmX/QcKxqqUaBUAAWsocOqYWOnHxZ
-         cckyRQP8EB/WjnoFIBSteEXBnQ0qIUXKP2jkI6RmkppVlT3Dj9RId/aHllPZFBK2nuS1
-         rKDxKq30iD1vCFLOCdlgdV8EBFAA/WXHRFy+8eAsEJL/wHbVzKE/fgiaf92dZgjVjsWD
-         Q6oQ==
-X-Gm-Message-State: AC+VfDxVHXEXN8X79PUmk1NwNYyD0gjBwQjAPw8Tv18IySNVXomEGhYk
-        QqjCQDPCUeSeoc0cJ+JuEHWwYkBsUyYm1JV1Z8A2MgA+MXe4/IGL5fPAsenQYRdUuhDOWjOUuxe
-        6rsbRnPga9jGewqgSD/+S6L8qt0mHgNl/0nBB8g1K2fCfKZTC3bmq+X+thuzC+QcnrcOHyzhgBy
-        8T3hzIXCUw
-X-Received: by 2002:ac8:574b:0:b0:3f5:2177:eca0 with SMTP id 11-20020ac8574b000000b003f52177eca0mr6159136qtx.5.1685967213476;
-        Mon, 05 Jun 2023 05:13:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4JadlUNRHirs0VSuDH2KVG503ZN3GXJ9bc/XJ9WIKXlYivskf8yvoaOVreWjtOxl/p3DNR+Q==
-X-Received: by 2002:ac8:574b:0:b0:3f5:2177:eca0 with SMTP id 11-20020ac8574b000000b003f52177eca0mr6159102qtx.5.1685967213181;
-        Mon, 05 Jun 2023 05:13:33 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id h13-20020ac8714d000000b003f17f39af49sm4664985qtp.18.2023.06.05.05.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 05:13:32 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/9] x86/hyperv: Mark Hyper-V vp assist page unencrypted
- in SEV-SNP enlightened guest
-In-Reply-To: <20230601151624.1757616-4-ltykernel@gmail.com>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-4-ltykernel@gmail.com>
-Date:   Mon, 05 Jun 2023 14:13:29 +0200
-Message-ID: <873536ksye.fsf@redhat.com>
+        Mon, 5 Jun 2023 08:14:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932D39C;
+        Mon,  5 Jun 2023 05:14:51 -0700 (PDT)
+X-UUID: 8f035594039a11eeb20a276fd37b9834-20230605
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=rbrgKCEsggluIwIbzclii9/iGYei7Gnl+O00W9b23fY=;
+        b=sSw1lCRQeuMauBpgo2++zAl/EOv4GVrg2Mf93uZScT5vu7LJDUDuyGE5Qdlu461YuVyjkbtjedkL7DykUvzKjBjS9AaHqxAfSGIeRR+4jGai/43xC76TS2J+c6fH7jaFJTNbL5sdjsqhi0RJaYEh1SUtUgFMyW1xvAiiNcrT64A=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:e430c8fe-aa5f-4925-8cac-d4e5aae071c9,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.25,REQID:e430c8fe-aa5f-4925-8cac-d4e5aae071c9,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:df736e3d-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:2306052014477JQPGHMD,BulkQuantity:0,Recheck:0,SF:29|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 8f035594039a11eeb20a276fd37b9834-20230605
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <wenbin.mei@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1838001557; Mon, 05 Jun 2023 20:14:45 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 5 Jun 2023 20:14:44 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 5 Jun 2023 20:14:43 +0800
+From:   Wenbin Mei <wenbin.mei@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ritesh Harjani <riteshh@codeaurora.org>,
+        "Asutosh Das" <asutoshd@codeaurora.org>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>
+Subject: [PATCH v4] mmc: mtk-sd: reduce CIT for better performance
+Date:   Mon, 5 Jun 2023 20:14:42 +0800
+Message-ID: <20230605121442.23622-1-wenbin.mei@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tianyu Lan <ltykernel@gmail.com> writes:
+CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
+SEND_QUEUE_STATUS(CMD13) polling.
+Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+frequency to get the actual time.
+The default value 0x1000 that corresponds to 150us for MediaTek SoCs, let's
+decrease it to 0x40 that corresponds to 2.35us, which can improve the
+performance of some eMMC devices.
 
-> From: Tianyu Lan <tiala@microsoft.com>
->
-> hv vp assist page needs to be shared between SEV-SNP guest and Hyper-V.
-> So mark the page unencrypted in the SEV-SNP guest.
->
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  arch/x86/hyperv/hv_init.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index b4a2327c823b..331b855314b7 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -18,6 +18,7 @@
->  #include <asm/hyperv-tlfs.h>
->  #include <asm/mshyperv.h>
->  #include <asm/idtentry.h>
-> +#include <asm/set_memory.h>
->  #include <linux/kexec.h>
->  #include <linux/version.h>
->  #include <linux/vmalloc.h>
-> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
->  
->  	}
->  	if (!WARN_ON(!(*hvp))) {
-> +		if (hv_isolation_type_en_snp()) {
-> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
-> +			memset(*hvp, 0, PAGE_SIZE);
-> +		}
+Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+---
+ drivers/mmc/host/cqhci.h  |  1 +
+ drivers/mmc/host/mtk-sd.c | 45 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-Why do we need to set the page as decrypted here and not when we
-allocate the page (a few lines above)? And why do we need to clear it
-_after_ we made it decrypted? In case we care about not leaking the
-stale content to the hypervisor, we should've cleared it _before_, but
-the bigger problem I see is that memset() is problemmatic e.g. for KVM
-which uses enlightened VMCS. You put a CPU offline and then back online
-and this path will be taken. Clearing VP assist page will likely brake
-things. (AFAIU SEV-SNP Hyper-V guests don't expose SVM yet so the
-problem is likely theoretical only, but still).
-
-> +
->  		msr.enable = 1;
->  		wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
->  	}
-
+diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+index ba9387ed90eb..292b89ebd978 100644
+--- a/drivers/mmc/host/cqhci.h
++++ b/drivers/mmc/host/cqhci.h
+@@ -23,6 +23,7 @@
+ /* capabilities */
+ #define CQHCI_CAP			0x04
+ #define CQHCI_CAP_CS			0x10000000 /* Crypto Support */
++#define CQHCI_CAP_ITCFMUL(x)		(((x) & GENMASK(15, 12)) >> 12)
+ 
+ /* configuration */
+ #define CQHCI_CFG			0x08
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index edade0e54a0c..9f540973caff 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -473,6 +473,7 @@ struct msdc_host {
+ 	struct msdc_tune_para def_tune_para; /* default tune setting */
+ 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+ 	struct cqhci_host *cq_host;
++	u32 cq_ssc1_time;
+ };
+ 
+ static const struct mtk_mmc_compatible mt2701_compat = {
+@@ -2450,9 +2451,48 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
+ 	}
+ }
+ 
++static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
++{
++	struct mmc_host *mmc = mmc_from_priv(host);
++	struct cqhci_host *cq_host = mmc->cqe_private;
++	u8 itcfmul;
++	u64 hclk_freq;
++	u64 value;
++
++	/* Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
++	 * frequency to get the actual time for CIT.
++	 */
++	hclk_freq = clk_get_rate(host->h_clk);
++	itcfmul = CQHCI_CAP_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
++	switch (itcfmul) {
++	case 0x0:
++		do_div(hclk_freq, 1000);
++		break;
++	case 0x1:
++		do_div(hclk_freq, 100);
++		break;
++	case 0x2:
++		do_div(hclk_freq, 10);
++		break;
++	case 0x3:
++		break;
++	case 0x4:
++		hclk_freq = hclk_freq * 10;
++		break;
++	default:
++		host->cq_ssc1_time = 0x40;
++		return;
++	}
++
++	value = hclk_freq * timer_ns;
++	do_div(value, 1000000000);
++	host->cq_ssc1_time = value;
++}
++
+ static void msdc_cqe_enable(struct mmc_host *mmc)
+ {
+ 	struct msdc_host *host = mmc_priv(mmc);
++	struct cqhci_host *cq_host = mmc->cqe_private;
+ 
+ 	/* enable cmdq irq */
+ 	writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+@@ -2462,6 +2502,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
+ 	msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+ 	/* default read data timeout 1s */
+ 	msdc_set_timeout(host, 1000000000ULL, 0);
++
++	/* Set the send status command idle timer */
++	cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+ }
+ 
+ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+@@ -2803,6 +2846,8 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 		/* cqhci 16bit length */
+ 		/* 0 size, means 65536 so we don't have to -1 here */
+ 		mmc->max_seg_size = 64 * 1024;
++		/* Reduce CIT to 0x40 that corresponds to 2.35us */
++		msdc_cqe_cit_cal(host, 2350);
+ 	}
+ 
+ 	ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
 -- 
-Vitaly
+2.25.1
 
