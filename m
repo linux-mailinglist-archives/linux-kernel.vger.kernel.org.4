@@ -2,193 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B7D722E8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8218722EA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234953AbjFESVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S230213AbjFESXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFESVp (ORCPT
+        with ESMTP id S230189AbjFESXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:21:45 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE379D9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:21:43 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f62d93f38aso1364510e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:21:43 -0700 (PDT)
+        Mon, 5 Jun 2023 14:23:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3289C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:23:40 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977e7d6945aso150276966b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685989302; x=1688581302;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1a7qeHDbY8U7IPws28yR9PE9mlrMDd4/fVGJzd1zHvM=;
-        b=z8SoKftSjR2idoohEHt1qJgoL+qs/RzgPtD5hjB312bK/Ve5DM05RPQVtZ9FOHQMcU
-         O6SSCsrhyh/NxIFDdrrJyDMNZVGsA44NqGJDGEaKMb/pOlQ8r5ViqAZVtA1/aD7Sfh5t
-         3KyRJH1EbcOApoB2zy3YarLWFhlqmRv7Tsrh8W1Skqlo41JZuLrxKLwhyPoiTT/lBvG6
-         8leB77mD4q0Kzqk/2xPvKcST32yc2+C+h4DqEou6WCjzMEarMg6VT72qz2xsjp11Fj0S
-         gTde9gOCXknyMXcCIoawZzfdIGopZEWhT+8mwuwUqVXVu3iJSjUueVc+lekalGyqgDaP
-         4XEw==
+        d=google.com; s=20221208; t=1685989418; x=1688581418;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+HL7LtRo38rSnr6Yt2ZUnSYtZjcJWAoASEOUKNC+FfI=;
+        b=gdl9BZYroG0qaIxk7YA86KFT4AKV6+dIVkcfngm6sciZt1q02QM+UFdcxOBMvMVtBu
+         0ujgc+j5vdX5xc6F3hhhSb3/si+cvyzXE+mc5xs6CuMFQLPgVk9AtMrcaNWUhsLsVuTg
+         UknBQPkH31ZwZyB2sWpB3BjeA9org01sZ7UEXtNiHRb3l9ZIhDT6JG7vQvIVlOGg2xZD
+         mAH1ek8US+H1u7SG//mVfUnrVJqnZfH9LgiAjqq9so7KBiqCE7peCMgZQnq3Dp/zrfeo
+         o6U2iX9Ftyd3D+loqzK+7YB40kq33LkXPd0TsavtSgDVM+etK2CgMOlOB3uVD6NN1c9H
+         hBnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685989302; x=1688581302;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1a7qeHDbY8U7IPws28yR9PE9mlrMDd4/fVGJzd1zHvM=;
-        b=M34P5DByZdYgNb/x7F7Yh737HHjlu/Fq3xXaOcuqg/YW+e4dPbtfaY+orfKuSRr0Pp
-         CXb3YxYTQTJ7B+wgFO8ZESPPlvv7sTt1hlzTksxPOKNfCSIgrrPNN86bp7L4vn+Mi0RW
-         Q65v8PkBBcYmjPPRxpT5Ej8wmMuoiQm2svlrRJ2no7OTXNo+P5mkebWNqKhA8fmxshNk
-         F+hX6uG5NqB6sSR9DQgIA0TFafi56MurOARLHh2OswzhzJ40qQIXedqjFszkryX90FRv
-         xKou5EFbUwylE3z7s9hNLav66w9dqfs2obqD6mOxN1rnKc8JKHLyBT2WbF2ts8RTVckN
-         ZHbQ==
-X-Gm-Message-State: AC+VfDzL0etqIMuVIPCbpkmSJVdCAldbIBt7tdre6gL2LsrQK9d63Lqb
-        iau2CrNsvr+zk6/aYaUmbmq0Nw==
-X-Google-Smtp-Source: ACHHUZ5qrt9YLVbzaIErYVAr2UhMDppB7soLcqjGglnhQYolE5xnJC8GDsd5tEYebLZjxh93rTXGVA==
-X-Received: by 2002:a05:6512:21a7:b0:4f3:802c:771f with SMTP id c7-20020a05651221a700b004f3802c771fmr5866467lft.27.1685989301895;
-        Mon, 05 Jun 2023 11:21:41 -0700 (PDT)
-Received: from [192.168.1.101] (abyj96.neoplus.adsl.tpnet.pl. [83.9.29.96])
-        by smtp.gmail.com with ESMTPSA id m12-20020a19520c000000b004eb12850c40sm1207281lfb.14.2023.06.05.11.21.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 11:21:41 -0700 (PDT)
-Message-ID: <c4f34ad1-bea7-c5cf-dca8-9ededeafa4b4@linaro.org>
-Date:   Mon, 5 Jun 2023 20:21:39 +0200
+        d=1e100.net; s=20221208; t=1685989418; x=1688581418;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+HL7LtRo38rSnr6Yt2ZUnSYtZjcJWAoASEOUKNC+FfI=;
+        b=JrxP0HMFhd4K5jLcpCQHruHMPPH0QUpoJEA19CXnvHj2BMO4rbMj7Nr5ulcc5pYx7L
+         JnytRgmF6ecglEqIO83j82TXkhG1kpjZP0ZcoK95TQvyztVOGeMUE/cejrwmyTQdcOIF
+         jdd3X7IXPBxq9cBrsbcOa0dQGkfY3FjaHdwcQ8rQW8Bx9NWrCIYfp7cs00GmJrgPsPTY
+         AP3P4V0faEdobPhYYQyousuGVVNe1Eo6v7v7oQcB40OQLx6Cz6V7fsfnOfk6jmoQDcof
+         m/2qMtEiz3mA9bjwHB6qs95NIzlGq7BRTZPS01SxFBhm9RV5f4G504GllZgRGg5jL6YA
+         8S/Q==
+X-Gm-Message-State: AC+VfDzI+35ZnQUOfxf6NO+jTZ7lrZhsnkPVv3No1J5ug2BLuilYWKTt
+        ofp6usF5Jtlo97KaRoVWFM75LjPJ5xhclQPfDM0A+g==
+X-Google-Smtp-Source: ACHHUZ5uwKaEuBe9wYIGI0HuH4IIcIaMLwpiOJsGMJYBm9sUz4ar/aO2G6+XEhq/cl765C1WmCtjdhJmbcR+yeBbBlk=
+X-Received: by 2002:a17:907:745:b0:974:7713:293f with SMTP id
+ xc5-20020a170907074500b009747713293fmr6788752ejb.41.1685989418510; Mon, 05
+ Jun 2023 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 10/10] arm64: dts: qcom: Add the support of cpufreq on
- SDX75
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, tglx@linutronix.de,
-        maz@kernel.org, will@kernel.org, robin.murphy@arm.com,
-        joro@8bytes.org, mani@kernel.org, robimarko@gmail.com
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
-References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
- <1685982557-28326-11-git-send-email-quic_rohiagar@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1685982557-28326-11-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+ <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com> <CALMp9eRRzQKoFVHvgY8VfpS-8=RY6HYOanBuGYLRbRQ+9V8zng@mail.gmail.com>
+In-Reply-To: <CALMp9eRRzQKoFVHvgY8VfpS-8=RY6HYOanBuGYLRbRQ+9V8zng@mail.gmail.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Mon, 5 Jun 2023 11:23:02 -0700
+Message-ID: <CAL715WKVZKESoSyG-uv1v1+K1vgy=wEwCVdOVsT-JzA2zhWigA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 5, 2023 at 11:12=E2=80=AFAM Jim Mattson <jmattson@google.com> w=
+rote:
+>
+> On Mon, Jun 5, 2023 at 10:42=E2=80=AFAM Mingwei Zhang <mizhang@google.com=
+> wrote:
+> >
+> > On Mon, Jun 5, 2023 at 9:55=E2=80=AFAM Jim Mattson <jmattson@google.com=
+> wrote:
+> > >
+> > > On Sun, Jun 4, 2023 at 5:43=E2=80=AFPM Mingwei Zhang <mizhang@google.=
+com> wrote:
+> > > >
+> > > > Remove KVM MMU write lock when accessing indirect_shadow_pages coun=
+ter when
+> > > > page role is direct because this counter value is used as a coarse-=
+grained
+> > > > heuristics to check if there is nested guest active. Racing with th=
+is
+> > > > heuristics without mmu lock will be harmless because the correspond=
+ing
+> > > > indirect shadow sptes for the GPA will either be zapped by this thr=
+ead or
+> > > > some other thread who has previously zapped all indirect shadow pag=
+es and
+> > > > makes the value to 0.
+> > > >
+> > > > Because of that, remove the KVM MMU write lock pair to potentially =
+reduce
+> > > > the lock contension and improve the performance of nested VM. In ad=
+dition
+> > > > opportunistically change the comment of 'direct mmu' to make the
+> > > > description consistent with other places.
+> > > >
+> > > > Reported-by: Jim Mattson <jmattson@google.com>
+> > > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > > > ---
+> > > >  arch/x86/kvm/x86.c | 10 ++--------
+> > > >  1 file changed, 2 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > > index 5ad55ef71433..97cfa5a00ff2 100644
+> > > > --- a/arch/x86/kvm/x86.c
+> > > > +++ b/arch/x86/kvm/x86.c
+> > > > @@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm=
+_vcpu *vcpu, gpa_t cr2_or_gpa,
+> > > >
+> > > >         kvm_release_pfn_clean(pfn);
+> > > >
+> > > > -       /* The instructions are well-emulated on direct mmu. */
+> > > > +       /* The instructions are well-emulated on Direct MMUs. */
+> > > >         if (vcpu->arch.mmu->root_role.direct) {
+> > > > -               unsigned int indirect_shadow_pages;
+> > > > -
+> > > > -               write_lock(&vcpu->kvm->mmu_lock);
+> > > > -               indirect_shadow_pages =3D vcpu->kvm->arch.indirect_=
+shadow_pages;
+> > > > -               write_unlock(&vcpu->kvm->mmu_lock);
+> > > > -
+> > > > -               if (indirect_shadow_pages)
+> > > > +               if (READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages=
+))
+> > >
+> > > I don't understand the need for READ_ONCE() here. That implies that
+> > > there is something tricky going on, and I don't think that's the case=
+.
+> >
+> > READ_ONCE() is just telling the compiler not to remove the read. Since
+> > this is reading a global variable,  the compiler might just read a
+> > previous copy if the value has already been read into a local
+> > variable. But that is not the case here...
+>
+> Not a global variable, actually, but that's not relevant. What would
+> be wrong with using a previously read copy?
 
+Nothing will be wrong I think since this is already just a heuristic.
 
-On 5.06.2023 18:29, Rohit Agarwal wrote:
-> Add the support of cpufreq to enable the cpufreq scaling
-> on SDX75 SoC. Also add CPU specific information to build
-> energy model for EAS.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sdx75.dtsi | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> index 47170ae..e1887a4 100644
-> --- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> @@ -47,10 +47,14 @@
->  			device_type = "cpu";
->  			compatible = "arm,cortex-a55";
->  			reg = <0x0 0x0>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			power-domains = <&CPU_PD0>;
->  			power-domain-names = "psci";
->  			next-level-cache = <&L2_0>;
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> +			capacity-dmips-mhz = <1024>;
-> +			dynamic-power-coefficient = <100>;
->  			L2_0: l2-cache {
->  				compatible = "cache";
->  				next-level-cache = <&L3_0>;
-> @@ -64,10 +68,14 @@
->  			device_type = "cpu";
->  			compatible = "arm,cortex-a55";
->  			reg = <0x0 0x100>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			power-domains = <&CPU_PD1>;
->  			power-domain-names = "psci";
->  			next-level-cache = <&L2_100>;
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> +			capacity-dmips-mhz = <1024>;
-> +			dynamic-power-coefficient = <100>;
->  			L2_100: l2-cache {
->  				compatible = "cache";
->  				next-level-cache = <&L3_0>;
-> @@ -78,10 +86,14 @@
->  			device_type = "cpu";
->  			compatible = "arm,cortex-a55";
->  			reg = <0x0 0x200>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			power-domains = <&CPU_PD2>;
->  			power-domain-names = "psci";
->  			next-level-cache = <&L2_200>;
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> +			capacity-dmips-mhz = <1024>;
-> +			dynamic-power-coefficient = <100>;
->  			L2_200: l2-cache {
->  				compatible = "cache";
->  				next-level-cache = <&L3_0>;
-> @@ -92,10 +104,14 @@
->  			device_type = "cpu";
->  			compatible = "arm,cortex-a55";
->  			reg = <0x0 0x300>;
-> +			clocks = <&cpufreq_hw 0>;
->  			enable-method = "psci";
->  			power-domains = <&CPU_PD3>;
->  			power-domain-names = "psci";
->  			next-level-cache = <&L2_300>;
-> +			qcom,freq-domain = <&cpufreq_hw 0>;
-> +			capacity-dmips-mhz = <1024>;
-That sounds a bit bogus.. Thinking about it, it sounds bogus on most
-platforms we have support for! I guess SM8250 big cores aren't *really*
-equally as powerful..
+>
+> We don't always wrap reads in READ_ONCE(). It's actually pretty rare.
+> So, there should be an explicit and meaningful reason.
+>
+> > Note I see there is another READ_ONCE for
+> > kvm->arch.indirect_shadow_pages, so I am reusing the same thing.
+>
+> That's not a good reason. "If all of your friends jumped off a cliff,
+> would you?"
 
-> +			dynamic-power-coefficient = <100>;
->  			L2_300: l2-cache {
->  				compatible = "cache";
->  				next-level-cache = <&L3_0>;
-> @@ -605,6 +621,20 @@
->  			};
->  
->  		};
-> +
-> +		cpufreq_hw: cpufreq@17d91000 {
-> +			compatible = "qcom,sdx75-cpufreq-epss", "qcom,cpufreq-epss";
-> +			reg = <0 0x17d91000 0 0x1000>;
-You used 0x0 instead of 0 everywhere else, please do so here as well
-to keep things consistent.
+:)
 
-With that:
+>
+> > I did check the reordering issue but it should be fine because when
+> > 'we' see indirect_shadow_pages as 0, the shadow pages must have
+> > already been zapped. Not only because of the locking, but also the
+> > program order in __kvm_mmu_prepare_zap_page() shows that it will zap
+> > shadow pages first before updating the stats.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> +			reg-names = "freq-domain0";
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GPLL0>;
-> +			clock-names = "xo",
-> +				      "alternate";
-> +			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "dcvsh-irq-0";
-> +			#freq-domain-cells = <1>;
-> +			#clock-cells = <1>;
-> +		};
->  	};
->  
->  	timer {
+yeah, I forgot to mention that removing READ_ONCE() is ok for me.
