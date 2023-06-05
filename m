@@ -2,136 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD57721CA0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49BA721CA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbjFEDoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 23:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        id S232778AbjFEDpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 23:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjFEDoc (ORCPT
+        with ESMTP id S230193AbjFEDpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 23:44:32 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B433B4;
-        Sun,  4 Jun 2023 20:44:29 -0700 (PDT)
-Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx5OEXWn1k_S0AAA--.861S2;
-        Mon, 05 Jun 2023 11:44:23 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>, helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v2] PCI: Align pci memory space base address with page size
-Date:   Mon,  5 Jun 2023 11:44:23 +0800
-Message-Id: <20230605034423.1528206-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Sun, 4 Jun 2023 23:45:08 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF75B8
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 20:45:06 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b038064d97so40890775ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 20:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1685936706; x=1688528706;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X4SSVnlC4IwShHocep9s7ywh2nFdFJx4NP0mnzsxLtQ=;
+        b=As6EY1mjueMRZ7v0/kgCl2t91e15oNTmUA0m6RVlAOyhhApKue6wdKlKzvvava5Fcd
+         7bZlp0aFbor4T+wPcVB7EOsdXcZqEey4q983dLSdBzROsSVwnxGW1k2POoACXCndxFV5
+         jSTTeEVl43/bU4MYq8IlqIKpo6Z/kEFBPKMZWkj58lzSahNq5GkSQ/+j0IUvnyYmZVQ1
+         QcWOn71C3ALjIheNI740qF//drYAQpKWahvI3cPkZtsYHoE0W3WNF3tU2OWgzT71NEYM
+         knrOlEANyLAfubq+jUVTXFE11Cn7dEIw1kVc1JqQgJmORJYkQDRbzHG0pf5bFi2O+h+2
+         CUBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685936706; x=1688528706;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X4SSVnlC4IwShHocep9s7ywh2nFdFJx4NP0mnzsxLtQ=;
+        b=hI8ybP5zSO28E0tLJLLF06P4aYilC+1yENRSYXf5yvDjwT/CS5FIArh246UKnuNe3S
+         rb6y28lVtwRp5a3b/R2NBVW69d62UQuYeMBhXaUiGxKA+nmOzZqeqO4Wchr1XcIlE3Mm
+         ORFPa5onC7qbtVa7C29s5V2ytzLMJ56y98RxXS+b+sI+9HmfvM+WpqW3+CMVpjPn4eph
+         vgoXMb9dGik2djYbKf6le8ygORVsSV/BMdKCjsEegj+1OVjFx787cYc9T/DxnIansRiJ
+         j2B3ZwL8N/6odJhuHU52FnZTXHFy43l8AKxNBPTU4rewKVFeE/+UoRShx1d2Itnyf2m9
+         2/SQ==
+X-Gm-Message-State: AC+VfDyQ7gQYq6by8TViIepzLrbFDJxV29WnzrQ++45agsJVO507DnHC
+        hFegdeLkcpKQCK0QXIgMB7qHXg==
+X-Google-Smtp-Source: ACHHUZ4BO/9Z64c1dfqNlXO6bfWV+qB2TMgQnTpAnH1ehEOf3mlCBA7r9y4+HPsB7FnzNnLUZIyQ0w==
+X-Received: by 2002:a17:902:e84d:b0:1b0:3ab6:5140 with SMTP id t13-20020a170902e84d00b001b03ab65140mr7153073plg.4.1685936705787;
+        Sun, 04 Jun 2023 20:45:05 -0700 (PDT)
+Received: from [10.254.80.225] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id a12-20020a170902eccc00b00186a2274382sm5384273plh.76.2023.06.04.20.44.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Jun 2023 20:45:05 -0700 (PDT)
+Message-ID: <6f67c3ca-5e73-d7ac-f32a-42a21d3ea576@bytedance.com>
+Date:   Mon, 5 Jun 2023 11:44:55 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: Re: [PATCH net-next v5 2/3] sock: Always take memcg pressure into
+ consideration
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230602081135.75424-1-wuyun.abel@bytedance.com>
+ <20230602081135.75424-3-wuyun.abel@bytedance.com>
+ <20230602204159.vo7fmuvh3y2pdfi5@google.com>
+ <CAF=yD-LFQRreWq1RMkvLw9Nj3NQpJwbDSCfECUhh-aVchR-jsg@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CAF=yD-LFQRreWq1RMkvLw9Nj3NQpJwbDSCfECUhh-aVchR-jsg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx5OEXWn1k_S0AAA--.861S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rurW3JrykAr1fArykGrg_yoW5WFW3pF
-        yfAan5CFs8Gr13GwsxJw1DuF4fWan29wsxJrWfAr93KFsrZry3Xr1fJryUurW8Aw4DGFWj
-        gFs0yr1UuFyDXaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VU1a9aPUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some PCI devices has only 4K memory space size, it is normal in general
-machines and aligned with page size. However some architectures which
-support different page size, default page size on LoongArch is 16K, and
-ARM64 supports page size varying from 4K to 64K. On machines where larger
-page size is use, memory space region of two different pci devices may be
-in one page. It is not safe with mmu protection, also VFIO pci device
-driver requires base address of pci memory space page aligned, so that it
-can be memory mapped to qemu user space when it is pass-through to vm.
+On 6/4/23 6:36 PM, Willem de Bruijn wrote:
+> On Fri, Jun 2, 2023 at 10:42 PM Shakeel Butt <shakeelb@google.com> wrote:
+>>
+>> On Fri, Jun 02, 2023 at 04:11:34PM +0800, Abel Wu wrote:
+>>> The sk_under_memory_pressure() is called to check whether there is
+>>> memory pressure related to this socket. But now it ignores the net-
+>>> memcg's pressure if the proto of the socket doesn't care about the
+>>> global pressure, which may put burden on its memcg compaction or
+>>> reclaim path (also remember that socket memory is un-reclaimable).
+>>>
+>>> So always check the memcg's vm status to alleviate memstalls when
+>>> it's in pressure.
+>>>
+>>
+>> This is interesting. UDP is the only protocol which supports memory
+>> accounting (i.e. udp_memory_allocated) but it does not define
+>> memory_pressure. In addition, it does have sysctl_udp_mem. So
+>> effectively UDP supports a hard limit and ignores memcg pressure at the
+>> moment. This patch will change its behavior to consider memcg pressure
+>> as well. I don't have any objection but let's get opinion of UDP
+>> maintainer.
+> 
+> Others have more experience with memory pressure on UDP, for the
+> record. Paolo worked on UDP memory pressure in
+> https://lore.kernel.org/netdev/cover.1579281705.git.pabeni@redhat.com/
+> 
+> It does seem odd to me to modify sk_under_memory_pressure only. See
+> for instance its use in __sk_mem_raise_allocated:
+> 
+>          if (sk_has_memory_pressure(sk)) {
+>                  u64 alloc;
+> 
+>                  if (!sk_under_memory_pressure(sk))
+>                          return 1;
+> 
+> This is not even reached as sk_has_memory_pressure is false for UDP.
 
-It consumes more pci memory resource with page size alignment requirement,
-on 64 bit system it should not be a problem. And UEFI bios set pci memory
-base address with 4K fixed-size aligned, the safer solution is to align
-with larger size on UEFI BIOS stage on these architectures, linux kernel
-can reuse resource from UEFI bios. For new devices such hotplug pci
-devices and sriov devices, pci resource is assigned in Linux kernel side.
+I intended to make __sk_mem_raise_allocated() be aware of net-memcg
+pressure instead of just this bit [1][2].
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- arch/arm64/kernel/pci.c  | 13 +++++++++++++
- arch/loongarch/pci/pci.c | 18 ++++++++++++++++++
- 2 files changed, 31 insertions(+)
+[1] 
+https://lore.kernel.org/lkml/20230523094652.49411-5-wuyun.abel@bytedance.com/
+[2] 
+https://lore.kernel.org/lkml/20230523094652.49411-6-wuyun.abel@bytedance.com/
 
-diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
-index 2276689b5411..e2f7b176b156 100644
---- a/arch/arm64/kernel/pci.c
-+++ b/arch/arm64/kernel/pci.c
-@@ -232,4 +232,17 @@ void pcibios_remove_bus(struct pci_bus *bus)
- 	acpi_pci_remove_bus(bus);
- }
- 
-+resource_size_t pcibios_align_resource(void *data, const struct resource *res,
-+				resource_size_t size, resource_size_t align)
-+{
-+	resource_size_t start = res->start;
-+
-+	/*
-+	 * align base address of pci memory resource with page size
-+	 */
-+	if ((res->flags & IORESOURCE_MEM) && (align < PAGE_SIZE))
-+		start = ALIGN(start, PAGE_SIZE);
-+
-+	return start;
-+}
- #endif
-diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
-index 2726639150bc..943a48e60fb1 100644
---- a/arch/loongarch/pci/pci.c
-+++ b/arch/loongarch/pci/pci.c
-@@ -83,6 +83,24 @@ int pcibios_alloc_irq(struct pci_dev *dev)
- 	return acpi_pci_irq_enable(dev);
- }
- 
-+/*
-+ * memory space size of some pci cards is 4K, it is separated with
-+ * different pages for generic architectures, so that mmu protection can
-+ * work with different pci cards. However page size for LoongArch system
-+ * is 16K, memory space of different pci cards may share the same page
-+ * on LoongArch, it is not safe here.
-+ */
-+resource_size_t pcibios_align_resource(void *data, const struct resource *res,
-+				resource_size_t size, resource_size_t align)
-+{
-+	resource_size_t start = res->start;
-+
-+	if ((res->flags & IORESOURCE_MEM) && (align < PAGE_SIZE))
-+		start = ALIGN(start, PAGE_SIZE);
-+
-+	return start;
-+}
-+
- static void pci_fixup_vgadev(struct pci_dev *pdev)
- {
- 	struct pci_dev *devp = NULL;
--- 
-2.27.0
+And TBH I am wondering why considering memcg's pressure here, as the
+main part in this if statement is to allow the sockets that are below
+average memory usage to raise from a *global* memory view, which seems
+nothing to do with memcg.
 
+> So this commit only affects the only other protocol-independent
+> caller, __sk_mem_reduce_allocated, to possibly call
+> sk_leave_memory_pressure if now under the global limit.
+> 
+> What is the expected behavioral change in practice of this commit?
+
+Be more conservative on sockmem alloc if under memcg pressure, to
+avoid worse memstall/latency.
+
+> 
+> 
+>>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>>> ---
+>>>   include/net/sock.h | 6 ++----
+>>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/include/net/sock.h b/include/net/sock.h
+>>> index 3f63253ee092..ad1895ffbc4a 100644
+>>> --- a/include/net/sock.h
+>>> +++ b/include/net/sock.h
+>>> @@ -1411,13 +1411,11 @@ static inline bool sk_has_memory_pressure(const struct sock *sk)
+>>>
+>>>   static inline bool sk_under_memory_pressure(const struct sock *sk)
+>>>   {
+>>> -     if (!sk->sk_prot->memory_pressure)
+>>> -             return false;
+>>> -
+>>>        if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
+>>>                return true;
+>>>
+>>> -     return !!*sk->sk_prot->memory_pressure;
+>>> +     return sk->sk_prot->memory_pressure &&
+>>> +             *sk->sk_prot->memory_pressure;
+>>>   }
+>>>
+>>>   static inline long
+>>> --
+>>> 2.37.3
+>>>
