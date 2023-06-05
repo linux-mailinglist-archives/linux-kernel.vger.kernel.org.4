@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D047224EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05087224F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjFELwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S232698AbjFELxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjFELwT (ORCPT
+        with ESMTP id S232359AbjFELxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:52:19 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B685DA
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:52:18 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2568fc3d8a9so1621207a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1685965938; x=1688557938;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JyOkEllK607lv9MCxWlko/8/h878DjdboSx2KDG6rPU=;
-        b=eabMDt3oXuyeHqL6H95VDxv5qnDlp7C/hXkIKi9mE5RBAoY3t66MibAVJ1OyJOW3RI
-         LESpN9wTXsuJaXmyQk+hrcImYockzT2vENkn0uB59YWGFQT7hU0htS22r94rGoWZJ1YS
-         eoMFe+spUeV1gW22xOKgrGgYhj/hXExeWe7dvKuanyNNdN57KqW3msbApkAjrVNHxOtH
-         2EV24MAFpyA7wBZbT8EjHQGq6521MTjFuENHeMbCjF6EV2PW0DHne8ZVihA3/f7CW1fQ
-         8Bv+F4Ee4r1/xl5PFWZJhZqmG6IGRtjbIuE4DZGEOct1kfALIIWaFsW2cZWi2tbimrFI
-         H4JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685965938; x=1688557938;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JyOkEllK607lv9MCxWlko/8/h878DjdboSx2KDG6rPU=;
-        b=ZRCzgToleWHFib70ACZ2SEmUxP05PynKh6TRv5vHaSCGZu7iAVXmwDr9Tstfv8jZvl
-         fbZ5GIc/2KpfkXqwS9+bJcd/HvVJ+IANwpJpUGtXAgpeKfyyNiMnC8a9a1QUWAytNkRw
-         EHhWMSBYfHXCvxeVT+vQOhmxW5ZEyTRdeqnMXJGGcAhK+bF1x8LfF2PdtKrbqYOZulhg
-         of8dHq3kumMxO5iKgw6l9hQ4a3pEA7EP9zDrZ0dOqbHNINNAo1fj2MKYKODHWefLyWcv
-         zOEtT1Q6Lne/KaJ+41ixYWffqV9otv4M8UAVe4pItT6iLqSwgxR5l9bNk3RKRQzkWAdf
-         sOvA==
-X-Gm-Message-State: AC+VfDzdTGbja7h9cpHzeQVocRqJvOopYx9YlUUpAP/zqQ+EfQoVGWMu
-        HXkYZUVyIGvby45Oa2rT185UVw==
-X-Google-Smtp-Source: ACHHUZ7Fn8Dm7pVHQjYxiahDIQS4qNAmj5o8qKZRySqarCR1X7QLuv0XMXLIlT9L0JsS4a61YdP0fA==
-X-Received: by 2002:a17:90a:be10:b0:256:c324:7ae4 with SMTP id a16-20020a17090abe1000b00256c3247ae4mr2478790pjs.16.1685965937953;
-        Mon, 05 Jun 2023 04:52:17 -0700 (PDT)
-Received: from [10.254.80.225] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id p6-20020a17090a284600b00247735d1463sm6089046pjf.39.2023.06.05.04.52.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:52:17 -0700 (PDT)
-Message-ID: <2a45da69-b164-0a4f-eb45-fe57f301bc4b@bytedance.com>
-Date:   Mon, 5 Jun 2023 19:52:10 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: Re: [PATCH net-next v5 1/3] net-memcg: Fold dependency into memcg
- pressure cond
-Content-Language: en-US
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Simon Horman <simon.horman@corigine.com>,
-        netdev@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230602081135.75424-1-wuyun.abel@bytedance.com>
- <20230602081135.75424-2-wuyun.abel@bytedance.com>
- <20230602202549.7nvrv4bx4cu7qxdn@google.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <20230602202549.7nvrv4bx4cu7qxdn@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 5 Jun 2023 07:53:21 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA209C;
+        Mon,  5 Jun 2023 04:53:20 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355BEDpN001339;
+        Mon, 5 Jun 2023 11:53:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=ubyyPSC97o1Z+3zgpJUVy5xq3sfEJJCSMML79921pSA=;
+ b=TlidEiUYfghZaiI+Jdw49FKNuy7c56ifc/FA52xLVg0A9bdUzvLgzreJsa1oIxbQgRkT
+ zhrfOGSecKqo/054+ejyZayOomolZpCMWLwbQaxm1f2DHkBxub9gowhJkvuuXpjzbfeP
+ wR/E0j2R7i4ZQR8XIRCXQshMWNPB5caIKLTFB5JmnVJDXDNi4xIfJljVk2XHaa1SmJiY
+ zjwGPh1IUzVlp4uHnv3nB8SpmeA2Dr4iscSzIue/7cLE3nHywOm2siKMGxLAHyY+g4qw
+ 5dZzKo/OI/9oHHampVGMHAZ4AG12IKoK3MPEPjkTsi2Arw6ZKMF4X8SoXV9KquS1H0G/ Rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1ena8t20-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 11:53:10 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 355BS5C0015082;
+        Mon, 5 Jun 2023 11:53:09 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1ena8t1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 11:53:09 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3557S1wY024791;
+        Mon, 5 Jun 2023 11:53:09 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qyxep9p5q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 11:53:09 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 355Br8oH60227970
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Jun 2023 11:53:08 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C4AC58056;
+        Mon,  5 Jun 2023 11:53:08 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC48E58052;
+        Mon,  5 Jun 2023 11:53:07 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.0.86])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Jun 2023 11:53:07 +0000 (GMT)
+Message-ID: <85200358a6cab459dfc0fc32582d10a315af3ecd.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] integrity: Fix possible multiple allocation in
+ integrity_inode_get()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 05 Jun 2023 07:52:59 -0400
+In-Reply-To: <20230601064244.33633-1-tianjia.zhang@linux.alibaba.com>
+References: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
+         <20230601064244.33633-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QtuGVK-IvrXUMwBEZgd_dAJ4Sr8D1QxE
+X-Proofpoint-GUID: fASXrHGV3sZ7gDPXP1RAn5ldeCJdWVIt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1011 impostorscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=343 phishscore=0 spamscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306050103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,36 +98,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/23 4:25 AM, Shakeel Butt wrote:
-> On Fri, Jun 02, 2023 at 04:11:33PM +0800, Abel Wu wrote:
->> The callers of mem_cgroup_under_socket_pressure() should always make
->> sure that (mem_cgroup_sockets_enabled && sk->sk_memcg) is true. So
->> instead of coding around all the callsites, put the dependencies into
->> mem_cgroup_under_socket_pressure() to avoid redundancy and possibly
->> bugs.
->>
->> This change might also introduce slight function call overhead *iff*
->> the function gets expanded in the future. But for now this change
->> doesn't make binaries different (checked by vimdiff) except the one
->> net/ipv4/tcp_input.o (by scripts/bloat-o-meter), which is probably
->> negligible to performance:
->>
->> add/remove: 0/0 grow/shrink: 1/2 up/down: 5/-5 (0)
->> Function                                     old     new   delta
->> tcp_grow_window                              573     578      +5
->> tcp_try_rmem_schedule                       1083    1081      -2
->> tcp_check_space                              324     321      -3
->> Total: Before=44647, After=44647, chg +0.00%
->>
->> So folding the dependencies into mem_cgroup_under_socket_pressure()
->> is generally a good thing and provides better readablility.
->>
+On Thu, 2023-06-01 at 14:42 +0800, Tianjia Zhang wrote:
+> When integrity_inode_get() is querying and inserting the cache, there
+> is a conditional race in the concurrent environment.
 > 
-> I don't see how it is improving readability. If you have removed the use
-> of mem_cgroup_sockets_enabled completely from the networking then I can
-> understand but this change IMHO will actually decrease the readability
-> because the later readers will have to reason why we are doing this
-> check at some places but not other.
+> The race condition is the result of not properly implementing
+> "double-checked locking". In this case, it first checks to see if the
+> iint cache record exists before taking the lock, but doesn't check
+> again after taking the integrity_iint_lock.
+> 
+> Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Cc: <stable@vger.kernel.org> # v3.10+
 
-Yes, I agree. I am trying to let networking get rid of this macro
-entirely, but get stuck on inet_csk_accept().. :(
+Thanks, Tianjia.   The patch is now queued in next-integrity.
+
+Mimi
+
