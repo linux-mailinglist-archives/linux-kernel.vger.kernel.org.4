@@ -2,122 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428B8721B21
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB76721B23
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjFDX7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 19:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
+        id S232358AbjFEAI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 20:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjFDX7L (ORCPT
+        with ESMTP id S229886AbjFEAI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 19:59:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737E0C4
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 16:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685923103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=koo3yH5MPFViQPVYh2VWDsSwxsVmauul0f0H0scecGw=;
-        b=Yf6ycMWfM2J8FOvea5OuRJeaTNXuFStLtL5IWPc7OtlzhtTMYvZpdsFnMlhRbnRrClHcmq
-        6jcxURsH3yFPu5PbltCrNC2bC0RUKDORxpNUg00fwxMSVkVhpe+CItgHR/++5OwZY4fhT+
-        ioXkqOkq94AVym88H6vCzhsCUygI/3M=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-347-WPmxjeZBNguV2L6VK6rM-A-1; Sun, 04 Jun 2023 19:58:21 -0400
-X-MC-Unique: WPmxjeZBNguV2L6VK6rM-A-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62607e62fa8so5070316d6.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 16:58:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685923101; x=1688515101;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=koo3yH5MPFViQPVYh2VWDsSwxsVmauul0f0H0scecGw=;
-        b=VJO8BakGxDO6INTgMoMZ4mG7/KSXda9xtyiUfr3LUSbH5JDI7cfqBeb1vdz0YNNxmi
-         p8A7ZdFMGkDdUZyCQrcg2n2d4MeOcLCnTP93PQScXWGwj2xkYYdQreUiJE+YnoD8m672
-         96jlUsfUeKvVAKwStdGV0xiYvJi49Kf+T+ccailIJpqNbNSXNlu4fggqVin1sAhSs10g
-         myAdg1w1QLlGqV5aXBK6nRpL+5N5geCrJtnQRA/c+B3ejsDxxkB0XJCZu18ixcs+mJyJ
-         8/Kk8w5GfHPL7xBm5ps3Fi/5blmC3jo8rPoEwpP5QLA619FgxbLaOatTStIy7XvlvYLY
-         CJzA==
-X-Gm-Message-State: AC+VfDwRFA8tML8Oj6uZkGgPYs83QzyMZV/2ci6XYqLyfxTxSCclOQxf
-        gdOoj0PuArlg4SjDDnvB0n/ge6wXnOTfkikf4thUbE0qsjbH2sWskFU2Edp9kW6PU8SaLLKlejk
-        16nqItBuU5iQoxDXdm1mO8E8a
-X-Received: by 2002:a05:6214:d62:b0:625:88f5:7c62 with SMTP id 2-20020a0562140d6200b0062588f57c62mr19160384qvs.2.1685923100975;
-        Sun, 04 Jun 2023 16:58:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4LSRhaeGa+jP8jS2Pla4RAxoXEfKFtm5voEN4LshrtFdiTiJUOIVIpDUIrkE+Kh+yLufRM5A==
-X-Received: by 2002:a05:6214:d62:b0:625:88f5:7c62 with SMTP id 2-20020a0562140d6200b0062588f57c62mr19160374qvs.2.1685923100693;
-        Sun, 04 Jun 2023 16:58:20 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id ph14-20020a0562144a4e00b00605f796d30esm3813391qvb.51.2023.06.04.16.58.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 16:58:19 -0700 (PDT)
-Date:   Sun, 4 Jun 2023 19:58:18 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 1/4] mm/mprotect: Retry on pmd_trans_unstable()
-Message-ID: <ZH0lGt747WoemufM@x1n>
-References: <20230602230552.350731-1-peterx@redhat.com>
- <20230602230552.350731-2-peterx@redhat.com>
- <CAHbLzkq+Mf3N1FvjMRD8+SiEsry_39ycgCN92GHp5VsshyKE8w@mail.gmail.com>
+        Sun, 4 Jun 2023 20:08:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6CBCA;
+        Sun,  4 Jun 2023 17:08:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZDTZ5MLPz4x3x;
+        Mon,  5 Jun 2023 10:08:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685923699;
+        bh=pOuSQOaAtbYZsqBRiDrrigcw5i1OYkXIadN59Arc/E0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CwEbPaMySvPrNOJMWKcrPQ2k2yRRLUopa4U+AObiivGk8UZY3mxuwRhdvUKEAG68D
+         55ECZO3XcxU3XRa0iqCtNqAGH4FDhwOxuQ8sWov2L8EO8rTusoUNwUjvsyRrOAR7lv
+         PJx6e2mNnG8kWAzQTdR6ancCX3B6ttHoL6TDddGg57hw+jpWqq9XmvBEEzkmHai2e8
+         +XnZ6WarUIzwOcJcggjg3uQGC080HfwPooynDp8txv7NelD9MyERQsdWB5y8Q685JK
+         SPKRTkvOIxyHUUioNHZ2mYtFNG3Arb5ff/XOXhknoMoB9BnZlWdufpHZ2mHifyjtZa
+         Dp21JstSvMDJA==
+Date:   Mon, 5 Jun 2023 10:08:16 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>,
+        Akihiro Suda <suda.gitsendemail@gmail.com>,
+        David Morley <morleyd@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Neal Cardwell <ncardwell@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yuchung Cheng <ycheng@google.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230605100816.08d41a7b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHbLzkq+Mf3N1FvjMRD8+SiEsry_39ycgCN92GHp5VsshyKE8w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/u3D+RwDlPWSFsvlRdb6GZfK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 07:04:48PM -0700, Yang Shi wrote:
-> On Fri, Jun 2, 2023 at 4:06 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > When hit unstable pmd, we should retry the pmd once more because it means
-> > we probably raced with a thp insertion.
-> >
-> > Skipping it might be a problem as no error will be reported to the caller.
-> > I assume it means the user will expect prot changed (e.g. mprotect or
-> > userfaultfd wr-protections) applied but it's actually not.
-> 
-> IIRC, mprotect() holds write mmap_lock, so it should not matter. PROT
-> NUMA holds read mmap_lock, but returning 0 also doesn't matter (of
-> course retry is fine too). just skip that 2M area.
+--Sig_/u3D+RwDlPWSFsvlRdb6GZfK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-True.
+Hi all,
 
-> The userfaultfd-wp is your call :-)
+Today's linux-next merge of the net-next tree got a conflict in:
 
-Yeah I think uffd should still be a problem.  I'll reword the commit
-message (by dropping mprotect example) in the new version.
+  net/ipv4/sysctl_net_ipv4.c
 
-If you have time feel free to have a look at patch 4, where I think it's a
-bug for pagemap too (I didn't check as close as all the rest; the memcg one
-might be suspecious, that's also in patch 4).
+between commit:
 
-Thanks!
+  e209fee4118f ("net/ipv4: ping_group_range: allow GID from 2147483648 to 4=
+294967294")
 
--- 
-Peter Xu
+from the net tree and commit:
 
+  ccce324dabfe ("tcp: make the first N SYN RTO backoffs linear")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/ipv4/sysctl_net_ipv4.c
+index 88dfe51e68f3,6ae3345a3bdf..000000000000
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@@ -34,8 -34,9 +34,9 @@@ static int ip_ttl_min =3D 1
+  static int ip_ttl_max =3D 255;
+  static int tcp_syn_retries_min =3D 1;
+  static int tcp_syn_retries_max =3D MAX_TCP_SYNCNT;
++ static int tcp_syn_linear_timeouts_max =3D MAX_TCP_SYNCNT;
+ -static int ip_ping_group_range_min[] =3D { 0, 0 };
+ -static int ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
+ +static unsigned long ip_ping_group_range_min[] =3D { 0, 0 };
+ +static unsigned long ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX=
+ };
+  static u32 u32_max_div_HZ =3D UINT_MAX / HZ;
+  static int one_day_secs =3D 24 * 3600;
+  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =3D
+
+--Sig_/u3D+RwDlPWSFsvlRdb6GZfK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9J3AACgkQAVBC80lX
+0Gw4KAf/WUlZ1HiMtDpseIqqq8A4ZUoXPy7QxK8guXuvpKEBN7LIV8ZXr7vwVeOQ
+oQBEXwg18mLRT8L5KBVRrcg0GZXSgLkN/ZPcROcMiB9imC56Ag3j9H21zlLEpL29
+LEGDlfneaNTnJdSx3aBKsg6Wne7BTh9EQED/7a0IHAOOIfYLRT8Mf7ic6Y7Dl8p0
+Xl8j9O8bBvP+IB2dw/wOiTlECY+IIlQQyEr+zJKLjjFYV7Sw402J/IFhf+iihHhd
+BSlETxgZZyknOuN6PSUfAgXigaVKDi/LKuAXft37RTPRl6bdAgNpEmhWEMx17aJ3
+l8k0Kl+LEwpObX54frPxvZwuD94oZA==
+=HRyB
+-----END PGP SIGNATURE-----
+
+--Sig_/u3D+RwDlPWSFsvlRdb6GZfK--
