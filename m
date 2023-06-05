@@ -2,388 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0C0721F7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFED721F57
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjFEHZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        id S231317AbjFEHQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbjFEHZY (ORCPT
+        with ESMTP id S231293AbjFEHQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:25:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54F5B7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:25:21 -0700 (PDT)
-Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QZPk742mlzTkrJ;
-        Mon,  5 Jun 2023 15:04:47 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpemm500011.china.huawei.com
- (7.185.36.110) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 5 Jun
- 2023 15:05:04 +0800
-From:   Li Lingfeng <lilingfeng3@huawei.com>
-To:     <dm-devel@redhat.com>
-CC:     <agk@redhat.com>, <snitzer@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <houtao1@huawei.com>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
-        <lilingfeng3@huawei.com>
-Subject: [PATCH] dm thin: Fix ABBA deadlock by resetting dm_bufio_client
-Date:   Mon, 5 Jun 2023 15:03:16 +0800
-Message-ID: <20230605070316.1457957-1-lilingfeng3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500011.china.huawei.com (7.185.36.110)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 03:16:21 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B124DCD;
+        Mon,  5 Jun 2023 00:15:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6BE833200930;
+        Mon,  5 Jun 2023 03:05:10 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 05 Jun 2023 03:05:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685948710; x=1686035110; bh=J0
+        4p8yU7rVE6vzX9z1prBkDXh2NOANidZ1xruSUmk4M=; b=xESH+28mSbNvewmM34
+        Up/hdlUILTueD97esgYzbscRd60ilVfcpfoDyon9PX/5I4eb9emZYZttRcap4w2v
+        SzbLICvFXf19RbxskQgXMXAgPfMrGgYywpaKgZqN/3FwsZDeNIQuQkHrKXQquX0J
+        zGBnY5yV0G05Ffm35nQoCj0l0N3TttlcRFzBZcp/uiSeLT523Q2wTBQuBKAGcFu9
+        zXqaQqUgh1+kFRBCsEkM4D9JT0Q9gY8jI80o09gxTbXUcVfR37L+7wFjLyX0cxNa
+        er3jk69qZJppf4si3Z/kzBt6POV6a0qbw4kr9VV7V8HwfaCaukUxYIJl+ZAmYlOa
+        q1+A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685948710; x=1686035110; bh=J04p8yU7rVE6v
+        zX9z1prBkDXh2NOANidZ1xruSUmk4M=; b=dcek2dcj4hW59qVxhxiv+1GAwbfJo
+        3bI15R9XWreRXA5xZ9t+cgR17I65zcJ55OxOnlHtI7N2ThnLKNKE2eHALF8DygxK
+        BFMKCajAz/RWZFhfQVQQJJMB+DPCStWw3ZyKJ3MHQBtMMwbie/ct/9iuTtQU5aqh
+        SBqqjFuo6mbxfBnWH8qwfg5jNTPCNcW7THEY+Q/JuxancbNYQttD+fcDzGuu0fCr
+        A70MYoD4m7Tz6AYQ29qB16IhmZXjEWp/WJy+FSqdw7cLmZO2uhBL9WcFkIQGEVrx
+        oxAREy+RHVvXYbG45AZlJIR4GV21UUBElKxifAvknW5wRJ7J9Y46Gae+w==
+X-ME-Sender: <xms:JYl9ZDyzcJN2tZm3qfakgRiI1y5imTGnxR7-MuLB2tRDk5YY_Gxerg>
+    <xme:JYl9ZLRUSpN440X5x7P1Vtc0J7p_E8lBgS1af9_M1n9sJcoLS25CKxsoISa4hIME2
+    tjWCII_UMiJyaWTOjI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelkedguddugecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:JYl9ZNUgEKSUTETrHb50fCTrTlhY_d0UoqghJoTERcOFESCArCNDTQ>
+    <xmx:JYl9ZNjEnJfnpsJ9xR98LZyWCSVMml4ov4bLpXCAPEQgtoT9E-uwhA>
+    <xmx:JYl9ZFCk_Wk0zlS-yalrBx05lJPokB0F_tRm4KlE81akeqzRimmbng>
+    <xmx:Jol9ZPlt20zysWbBHN_DIfEqM8K5Ksh8LY_FKGIz15n8QCzYtKlyFg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5B29EB60086; Mon,  5 Jun 2023 03:05:09 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <d95d37f5-5bef-43a9-b319-0bbe0ac366b4@app.fastmail.com>
+In-Reply-To: <c72f45ec-c185-8676-b31c-ec48cd46278c@linaro.org>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-2-varshini.rajendran@microchip.com>
+ <c72f45ec-c185-8676-b31c-ec48cd46278c@linaro.org>
+Date:   Mon, 05 Jun 2023 09:04:49 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Varshini Rajendran" <varshini.rajendran@microchip.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>,
+        "Mihai.Sain" <mihai.sain@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 01/21] dt-bindings: microchip: atmel,at91rm9200-tcb: add sam9x60
+ compatible
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described in commit 8111964f1b85 ("dm thin: Fix ABBA deadlock between
-shrink_slab and dm_pool_abort_metadata"), ABBA deadlock will be triggered
-since shrinker_rwsem need to be held when operations failed on dm pool
-metadata.
+On Mon, Jun 5, 2023, at 08:35, Krzysztof Kozlowski wrote:
+> On 03/06/2023 22:02, Varshini Rajendran wrote:
+>> Add sam9x60 compatible string support in the schema file
+>> 
+>> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+>> ---
+>>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml  | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+>> index a46411149571..c70c77a5e8e5 100644
+>> --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
+>> @@ -20,6 +20,7 @@ properties:
+>>            - atmel,at91rm9200-tcb
+>>            - atmel,at91sam9x5-tcb
+>>            - atmel,sama5d2-tcb
+>> +          - microchip,sam9x60-tcb
+>
+> No wildcards.
 
-We have noticed the following three problem scenarios:
-1) Described by commit 8111964f1b85 ("dm thin: Fix ABBA deadlock between
-shrink_slab and dm_pool_abort_metadata")
+sam9x60 is the actual name of the chip, it's no wildcard. For sam9x70,
+sam9x72 and sam9x75, I think using sam9x7 as the compatible string
+is probably fine, as long as they are actually the same chip. Again,
+the 'x' in there is not a wildcard but part of the name.
 
-2) shrinker_rwsem and throttle->lock
-          P1(drop cache)                        P2(kworker)
-drop_caches_sysctl_handler
- drop_slab
-  shrink_slab
-   down_read(&shrinker_rwsem)  - LOCK A
-   do_shrink_slab
-    super_cache_scan
-     prune_icache_sb
-      dispose_list
-       evict
-        ext4_evict_inode
-         ext4_clear_inode
-          ext4_discard_preallocations
-           ext4_mb_load_buddy_gfp
-            ext4_mb_init_cache
-             ext4_wait_block_bitmap
-              __ext4_error
-               ext4_handle_error
-                ext4_commit_super
-                 ...
-                 dm_submit_bio
-                                     do_worker
-                                      throttle_work_update
-                                       down_write(&t->lock) -- LOCK B
-                                      process_deferred_bios
-                                       commit
-                                        metadata_operation_failed
-                                         dm_pool_abort_metadata
-                                          dm_block_manager_create
-                                           dm_bufio_client_create
-                                            register_shrinker
-                                             down_write(&shrinker_rwsem)
-                                             -- LOCK A
-                 thin_map
-                  thin_bio_map
-                   thin_defer_bio_with_throttle
-                    throttle_lock
-                     down_read(&t->lock)  - LOCK B
-
-3) shrinker_rwsem and wait_on_buffer
-          P1(drop cache)                            P2(kworker)
-drop_caches_sysctl_handler
- drop_slab
-  shrink_slab
-   down_read(&shrinker_rwsem)  - LOCK A
-   do_shrink_slab
-   ...
-    ext4_wait_block_bitmap
-     __ext4_error
-      ext4_handle_error
-       jbd2_journal_abort
-        jbd2_journal_update_sb_errno
-         jbd2_write_superblock
-          submit_bh
-           // LOCK B
-           // RELEASE B
-                             do_worker
-                              throttle_work_update
-                               down_write(&t->lock) - LOCK B
-                              process_deferred_bios
-                               process_bio
-                               commit
-                                metadata_operation_failed
-                                 dm_pool_abort_metadata
-                                  dm_block_manager_create
-                                   dm_bufio_client_create
-                                    register_shrinker
-                                     register_shrinker_prepared
-                                      down_write(&shrinker_rwsem)  - LOCK A
-                               bio_endio
-      wait_on_buffer
-       __wait_on_buffer
-
-Fix these by resetting dm_bufio_client without holding shrinker_rwsem.
-
-Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
----
- drivers/md/dm-bufio.c                         |  7 +++
- drivers/md/dm-thin-metadata.c                 | 58 ++++++++-----------
- drivers/md/persistent-data/dm-block-manager.c |  6 ++
- drivers/md/persistent-data/dm-block-manager.h |  1 +
- drivers/md/persistent-data/dm-space-map.h     |  3 +-
- .../persistent-data/dm-transaction-manager.c  |  3 +
- include/linux/dm-bufio.h                      |  2 +
- 7 files changed, 46 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/md/dm-bufio.c b/drivers/md/dm-bufio.c
-index eea977662e81..a7079b38756a 100644
---- a/drivers/md/dm-bufio.c
-+++ b/drivers/md/dm-bufio.c
-@@ -2592,6 +2592,13 @@ void dm_bufio_client_destroy(struct dm_bufio_client *c)
- }
- EXPORT_SYMBOL_GPL(dm_bufio_client_destroy);
- 
-+void dm_bufio_client_reset(struct dm_bufio_client *c)
-+{
-+	drop_buffers(c);
-+	flush_work(&c->shrink_work);
-+}
-+EXPORT_SYMBOL_GPL(dm_bufio_client_reset);
-+
- void dm_bufio_set_sector_offset(struct dm_bufio_client *c, sector_t start)
- {
- 	c->start = start;
-diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
-index 9f5cb52c5763..63d92d388ee6 100644
---- a/drivers/md/dm-thin-metadata.c
-+++ b/drivers/md/dm-thin-metadata.c
-@@ -603,6 +603,8 @@ static int __format_metadata(struct dm_pool_metadata *pmd)
- 	r = dm_tm_create_with_sm(pmd->bm, THIN_SUPERBLOCK_LOCATION,
- 				 &pmd->tm, &pmd->metadata_sm);
- 	if (r < 0) {
-+		pmd->tm = NULL;
-+		pmd->metadata_sm = NULL;
- 		DMERR("tm_create_with_sm failed");
- 		return r;
- 	}
-@@ -611,6 +613,7 @@ static int __format_metadata(struct dm_pool_metadata *pmd)
- 	if (IS_ERR(pmd->data_sm)) {
- 		DMERR("sm_disk_create failed");
- 		r = PTR_ERR(pmd->data_sm);
-+		pmd->data_sm = NULL;
- 		goto bad_cleanup_tm;
- 	}
- 
-@@ -641,11 +644,15 @@ static int __format_metadata(struct dm_pool_metadata *pmd)
- 
- bad_cleanup_nb_tm:
- 	dm_tm_destroy(pmd->nb_tm);
-+	pmd->nb_tm = NULL;
- bad_cleanup_data_sm:
- 	dm_sm_destroy(pmd->data_sm);
-+	pmd->data_sm = NULL;
- bad_cleanup_tm:
- 	dm_tm_destroy(pmd->tm);
-+	pmd->tm = NULL;
- 	dm_sm_destroy(pmd->metadata_sm);
-+	pmd->metadata_sm = NULL;
- 
- 	return r;
- }
-@@ -711,6 +718,8 @@ static int __open_metadata(struct dm_pool_metadata *pmd)
- 			       sizeof(disk_super->metadata_space_map_root),
- 			       &pmd->tm, &pmd->metadata_sm);
- 	if (r < 0) {
-+		pmd->tm = NULL;
-+		pmd->metadata_sm = NULL;
- 		DMERR("tm_open_with_sm failed");
- 		goto bad_unlock_sblock;
- 	}
-@@ -720,6 +729,7 @@ static int __open_metadata(struct dm_pool_metadata *pmd)
- 	if (IS_ERR(pmd->data_sm)) {
- 		DMERR("sm_disk_open failed");
- 		r = PTR_ERR(pmd->data_sm);
-+		pmd->data_sm = NULL;
- 		goto bad_cleanup_tm;
- 	}
- 
-@@ -746,9 +756,12 @@ static int __open_metadata(struct dm_pool_metadata *pmd)
- 
- bad_cleanup_data_sm:
- 	dm_sm_destroy(pmd->data_sm);
-+	pmd->data_sm = NULL;
- bad_cleanup_tm:
- 	dm_tm_destroy(pmd->tm);
-+	pmd->tm = NULL;
- 	dm_sm_destroy(pmd->metadata_sm);
-+	pmd->metadata_sm = NULL;
- bad_unlock_sblock:
- 	dm_bm_unlock(sblock);
- 
-@@ -795,9 +808,13 @@ static void __destroy_persistent_data_objects(struct dm_pool_metadata *pmd,
- 					      bool destroy_bm)
- {
- 	dm_sm_destroy(pmd->data_sm);
-+	pmd->data_sm = NULL;
- 	dm_sm_destroy(pmd->metadata_sm);
-+	pmd->metadata_sm = NULL;
- 	dm_tm_destroy(pmd->nb_tm);
-+	pmd->nb_tm = NULL;
- 	dm_tm_destroy(pmd->tm);
-+	pmd->tm = NULL;
- 	if (destroy_bm)
- 		dm_block_manager_destroy(pmd->bm);
- }
-@@ -1005,8 +1022,7 @@ int dm_pool_metadata_close(struct dm_pool_metadata *pmd)
- 			       __func__, r);
- 	}
- 	pmd_write_unlock(pmd);
--	if (!pmd->fail_io)
--		__destroy_persistent_data_objects(pmd, true);
-+	__destroy_persistent_data_objects(pmd, true);
- 
- 	kfree(pmd);
- 	return 0;
-@@ -1877,53 +1893,29 @@ static void __set_abort_with_changes_flags(struct dm_pool_metadata *pmd)
- int dm_pool_abort_metadata(struct dm_pool_metadata *pmd)
- {
- 	int r = -EINVAL;
--	struct dm_block_manager *old_bm = NULL, *new_bm = NULL;
- 
- 	/* fail_io is double-checked with pmd->root_lock held below */
- 	if (unlikely(pmd->fail_io))
- 		return r;
- 
--	/*
--	 * Replacement block manager (new_bm) is created and old_bm destroyed outside of
--	 * pmd root_lock to avoid ABBA deadlock that would result (due to life-cycle of
--	 * shrinker associated with the block manager's bufio client vs pmd root_lock).
--	 * - must take shrinker_mutex without holding pmd->root_lock
--	 */
--	new_bm = dm_block_manager_create(pmd->bdev, THIN_METADATA_BLOCK_SIZE << SECTOR_SHIFT,
--					 THIN_MAX_CONCURRENT_LOCKS);
--
- 	pmd_write_lock(pmd);
- 	if (pmd->fail_io) {
- 		pmd_write_unlock(pmd);
--		goto out;
-+		return r;
- 	}
--
- 	__set_abort_with_changes_flags(pmd);
-+
-+	/* destroy data_sm/metadata_sm/nb_tm/tm */
- 	__destroy_persistent_data_objects(pmd, false);
--	old_bm = pmd->bm;
--	if (IS_ERR(new_bm)) {
--		DMERR("could not create block manager during abort");
--		pmd->bm = NULL;
--		r = PTR_ERR(new_bm);
--		goto out_unlock;
--	}
- 
--	pmd->bm = new_bm;
-+	/* reset bm */
-+	dm_block_manager_reset(pmd->bm);
-+
-+	/* rebuild data_sm/metadata_sm/nb_tm/tm */
- 	r = __open_or_format_metadata(pmd, false);
--	if (r) {
--		pmd->bm = NULL;
--		goto out_unlock;
--	}
--	new_bm = NULL;
--out_unlock:
- 	if (r)
- 		pmd->fail_io = true;
- 	pmd_write_unlock(pmd);
--	dm_block_manager_destroy(old_bm);
--out:
--	if (new_bm && !IS_ERR(new_bm))
--		dm_block_manager_destroy(new_bm);
--
- 	return r;
- }
- 
-diff --git a/drivers/md/persistent-data/dm-block-manager.c b/drivers/md/persistent-data/dm-block-manager.c
-index 7bdfc23f758a..0e010e1204aa 100644
---- a/drivers/md/persistent-data/dm-block-manager.c
-+++ b/drivers/md/persistent-data/dm-block-manager.c
-@@ -421,6 +421,12 @@ void dm_block_manager_destroy(struct dm_block_manager *bm)
- }
- EXPORT_SYMBOL_GPL(dm_block_manager_destroy);
- 
-+void dm_block_manager_reset(struct dm_block_manager *bm)
-+{
-+	dm_bufio_client_reset(bm->bufio);
-+}
-+EXPORT_SYMBOL_GPL(dm_block_manager_reset);
-+
- unsigned int dm_bm_block_size(struct dm_block_manager *bm)
- {
- 	return dm_bufio_get_block_size(bm->bufio);
-diff --git a/drivers/md/persistent-data/dm-block-manager.h b/drivers/md/persistent-data/dm-block-manager.h
-index 5746b0f82a03..f706d3de8d5a 100644
---- a/drivers/md/persistent-data/dm-block-manager.h
-+++ b/drivers/md/persistent-data/dm-block-manager.h
-@@ -36,6 +36,7 @@ struct dm_block_manager *dm_block_manager_create(
- 	struct block_device *bdev, unsigned int block_size,
- 	unsigned int max_held_per_thread);
- void dm_block_manager_destroy(struct dm_block_manager *bm);
-+void dm_block_manager_reset(struct dm_block_manager *bm);
- 
- unsigned int dm_bm_block_size(struct dm_block_manager *bm);
- dm_block_t dm_bm_nr_blocks(struct dm_block_manager *bm);
-diff --git a/drivers/md/persistent-data/dm-space-map.h b/drivers/md/persistent-data/dm-space-map.h
-index dab490353781..6bf69922b5ad 100644
---- a/drivers/md/persistent-data/dm-space-map.h
-+++ b/drivers/md/persistent-data/dm-space-map.h
-@@ -77,7 +77,8 @@ struct dm_space_map {
- 
- static inline void dm_sm_destroy(struct dm_space_map *sm)
- {
--	sm->destroy(sm);
-+	if (sm)
-+		sm->destroy(sm);
- }
- 
- static inline int dm_sm_extend(struct dm_space_map *sm, dm_block_t extra_blocks)
-diff --git a/drivers/md/persistent-data/dm-transaction-manager.c b/drivers/md/persistent-data/dm-transaction-manager.c
-index 6dc016248baf..c88fa6266203 100644
---- a/drivers/md/persistent-data/dm-transaction-manager.c
-+++ b/drivers/md/persistent-data/dm-transaction-manager.c
-@@ -199,6 +199,9 @@ EXPORT_SYMBOL_GPL(dm_tm_create_non_blocking_clone);
- 
- void dm_tm_destroy(struct dm_transaction_manager *tm)
- {
-+	if (!tm)
-+		return;
-+
- 	if (!tm->is_clone)
- 		wipe_shadow_table(tm);
- 
-diff --git a/include/linux/dm-bufio.h b/include/linux/dm-bufio.h
-index 681656a1c03d..75e7d8cbb532 100644
---- a/include/linux/dm-bufio.h
-+++ b/include/linux/dm-bufio.h
-@@ -38,6 +38,8 @@ dm_bufio_client_create(struct block_device *bdev, unsigned int block_size,
-  */
- void dm_bufio_client_destroy(struct dm_bufio_client *c);
- 
-+void dm_bufio_client_reset(struct dm_bufio_client *c);
-+
- /*
-  * Set the sector range.
-  * When this function is called, there must be no I/O in progress on the bufio
--- 
-2.31.1
-
+    Arnd
