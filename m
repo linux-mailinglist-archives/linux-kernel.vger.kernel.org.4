@@ -2,80 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E519D721C12
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 04:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C8D721C14
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 04:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbjFECk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 22:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S232536AbjFECnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 22:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFECkz (ORCPT
+        with ESMTP id S229449AbjFECnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 22:40:55 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ADFBC;
-        Sun,  4 Jun 2023 19:40:50 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id ca18e2360f4ac-76c64da0e46so138859939f.0;
-        Sun, 04 Jun 2023 19:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685932850; x=1688524850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p5YXR/7kN4XSeeGZUdcHPRRNBlEU9Aj6mrRygyuZlqA=;
-        b=s4BZ04CQdSU599WEekNZ98RFN6inJIRExhh0YuH34COKYHVjviQwanbwbC7CM28c66
-         TSfSJLCjXf7OjsAPdQEct5jfAQfjV6Z7lMXdZ4xH9tlkDrzElHYcPG0vReeEWm6WmaUb
-         kCDwwxO64t3Y2H0pzYv3UXBRjeiX3WVVsb5++FMn4kPGKMHu2diH/Bh3CqqIeI1b5w2G
-         LzAf6kAaFZCRFBciLJ8Ob9kyQGC4gZxobm3/UWy19xgTJBQs2TffIfaG8mmMmVcxgJdJ
-         g8SSxpB76ziia14VCNU4bWhLqmlLDOKPQ28UPLcevf4pSMEuXaWj7Zt2wEXjhQLbff6w
-         U53A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685932850; x=1688524850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p5YXR/7kN4XSeeGZUdcHPRRNBlEU9Aj6mrRygyuZlqA=;
-        b=MmN0SWDSqQbicZ3EH2UF3KFRGG7OREyTh5VNXyqPftnpmi7neE8YtWha8ZKxxh5zQJ
-         ypmPif6EFjyPIwxq1vviaBn9wn8PpCG25Jm1q9ivGXeChBPf/VGGZkcWO3GddZ+FqDU6
-         stBIBGt3mQ/gnOS/o4b9llyz8XKj/RzoNvIgSddw8bZpIpQyZQNGtsqb/LI+PZU/FaN0
-         sYNIDbtbIOPaN7JgicJhqMD62/YbONWWWW+U2GOEGtOvA8LmMX+52a3E6B3nTLvx8uu5
-         6ixDIWR7RdgBmFIUHiI6rHXTiDK2CVB14K7MZgJc/xB0QYvCbQR+gbgnMAaLGQl6SL/W
-         v/cw==
-X-Gm-Message-State: AC+VfDxu5oVwoG/Cbd0xl6w6muppg7dd7L94bQUuOiRNYinpBvWjFVdW
-        d2hTcFUv8PF8DbuOAr1mXkdG9hyQfgrb6puZQPMwFM368j0/Bi0a
-X-Google-Smtp-Source: ACHHUZ4bfFVf2Dfx61VlrQH93GxPbJIJ9h/d4eKF4+XFcCaUHsbAL9KGiMWeSbW4KjjDDI6eHhnKNAtVYU7fZHc8bQ4=
-X-Received: by 2002:a0d:eb97:0:b0:561:3fb7:1333 with SMTP id
- u145-20020a0deb97000000b005613fb71333mr10563666ywe.43.1685932829170; Sun, 04
- Jun 2023 19:40:29 -0700 (PDT)
+        Sun, 4 Jun 2023 22:43:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D2B6BC;
+        Sun,  4 Jun 2023 19:43:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 746CBD75;
+        Sun,  4 Jun 2023 19:44:01 -0700 (PDT)
+Received: from [10.162.41.6] (a077893.blr.arm.com [10.162.41.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 44CA63F663;
+        Sun,  4 Jun 2023 19:43:10 -0700 (PDT)
+Message-ID: <58628cba-7ec4-b2b3-b993-14c2af1a67cb@arm.com>
+Date:   Mon, 5 Jun 2023 08:13:08 +0530
 MIME-Version: 1.0
-References: <20230602065958.2869555-1-imagedong@tencent.com>
- <20230602065958.2869555-3-imagedong@tencent.com> <CAADnVQ+fr_rpiO+P8Xi8Fiw+i8+hoLY6u7qixcCc9AizHT-BXg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+fr_rpiO+P8Xi8Fiw+i8+hoLY6u7qixcCc9AizHT-BXg@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Mon, 5 Jun 2023 10:40:17 +0800
-Message-ID: <CADxym3YBFXKKHF-KJENqcPorT=SwZO3JJCnO_UwWxU4wo8qEzA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] bpf, x86: allow function arguments up to
- 14 for TRACING
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        X86 ML <x86@kernel.org>, benbjiang@tencent.com,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
+ PMU
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-6-anshuman.khandual@arm.com>
+ <CAM9d7cioDUxzNos5b3ANkG-BkJUcROSGCG0gpLzSXnc-v6o9jw@mail.gmail.com>
+Content-Language: en-US
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <CAM9d7cioDUxzNos5b3ANkG-BkJUcROSGCG0gpLzSXnc-v6o9jw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,185 +56,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 3, 2023 at 2:31=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Jun 2, 2023 at 12:01=E2=80=AFAM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
->
-> Please trim your cc when you respin. It's unnecessary huge.
+Hello Namhyung,
 
-Sorry for bothering the unrelated people. The cc is generated
-from ./scripts/get_maintainer.pl, and I'll keep it less than 15.
+On 6/2/23 08:03, Namhyung Kim wrote:
+> On Tue, May 30, 2023 at 9:27 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>> This enables support for branch stack sampling event in ARMV8 PMU, checking
+>> has_branch_stack() on the event inside 'struct arm_pmu' callbacks. Although
+>> these branch stack helpers armv8pmu_branch_XXXXX() are just dummy functions
+>> for now. While here, this also defines arm_pmu's sched_task() callback with
+>> armv8pmu_sched_task(), which resets the branch record buffer on a sched_in.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Tested-by: James Clark <james.clark@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  arch/arm64/include/asm/perf_event.h | 33 +++++++++++++
+>>  drivers/perf/arm_pmuv3.c            | 76 ++++++++++++++++++++---------
+>>  2 files changed, 86 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm/perf_event.h
+>> index eb7071c9eb34..7548813783ba 100644
+>> --- a/arch/arm64/include/asm/perf_event.h
+>> +++ b/arch/arm64/include/asm/perf_event.h
+>> @@ -24,4 +24,37 @@ extern unsigned long perf_misc_flags(struct pt_regs *regs);
+>>         (regs)->pstate = PSR_MODE_EL1h; \
+>>  }
+>>
+>> +struct pmu_hw_events;
+>> +struct arm_pmu;
+>> +struct perf_event;
+>> +
+>> +#ifdef CONFIG_PERF_EVENTS
+>> +static inline bool has_branch_stack(struct perf_event *event);
+>> +
+>> +static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>> +{
+>> +       WARN_ON_ONCE(!has_branch_stack(event));
+>> +}
+>> +
+>> +static inline bool armv8pmu_branch_valid(struct perf_event *event)
+>> +{
+>> +       WARN_ON_ONCE(!has_branch_stack(event));
+>> +       return false;
+>> +}
+>> +
+>> +static inline void armv8pmu_branch_enable(struct perf_event *event)
+>> +{
+>> +       WARN_ON_ONCE(!has_branch_stack(event));
+>> +}
+>> +
+>> +static inline void armv8pmu_branch_disable(struct perf_event *event)
+>> +{
+>> +       WARN_ON_ONCE(!has_branch_stack(event));
+>> +}
+>> +
+>> +static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
+>> +static inline void armv8pmu_branch_reset(void) { }
+>> +static inline int armv8pmu_private_alloc(struct arm_pmu *arm_pmu) { return 0; }
+>> +static inline void armv8pmu_private_free(struct arm_pmu *arm_pmu) { }
+>> +#endif
+>>  #endif
+>> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+>> index c98e4039386d..86d803ff1ae3 100644
+>> --- a/drivers/perf/arm_pmuv3.c
+>> +++ b/drivers/perf/arm_pmuv3.c
+>> @@ -705,38 +705,21 @@ static void armv8pmu_enable_event(struct perf_event *event)
+>>          * Enable counter and interrupt, and set the counter to count
+>>          * the event that we're interested in.
+>>          */
+>> -
+>> -       /*
+>> -        * Disable counter
+>> -        */
+>>         armv8pmu_disable_event_counter(event);
+>> -
+>> -       /*
+>> -        * Set event.
+>> -        */
+>>         armv8pmu_write_event_type(event);
+>> -
+>> -       /*
+>> -        * Enable interrupt for this counter
+>> -        */
+>>         armv8pmu_enable_event_irq(event);
+>> -
+>> -       /*
+>> -        * Enable counter
+>> -        */
+>>         armv8pmu_enable_event_counter(event);
+>> +
+>> +       if (has_branch_stack(event))
+>> +               armv8pmu_branch_enable(event);
+>>  }
+>>
+>>  static void armv8pmu_disable_event(struct perf_event *event)
+>>  {
+>> -       /*
+>> -        * Disable counter
+>> -        */
+>> -       armv8pmu_disable_event_counter(event);
+>> +       if (has_branch_stack(event))
+>> +               armv8pmu_branch_disable(event);
+>>
+>> -       /*
+>> -        * Disable interrupt for this counter
+>> -        */
+>> +       armv8pmu_disable_event_counter(event);
+>>         armv8pmu_disable_event_irq(event);
+>>  }
+>>
+>> @@ -814,6 +797,11 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
+>>                 if (!armpmu_event_set_period(event))
+>>                         continue;
+>>
+>> +               if (has_branch_stack(event) && !WARN_ON(!cpuc->branches)) {
+>> +                       armv8pmu_branch_read(cpuc, event);
+>> +                       perf_sample_save_brstack(&data, event, &cpuc->branches->branch_stack);
+>> +               }
+>> +
+>>                 /*
+>>                  * Perf event overflow will queue the processing of the event as
+>>                  * an irq_work which will be taken care of in the handling of
+>> @@ -912,6 +900,14 @@ static int armv8pmu_user_event_idx(struct perf_event *event)
+>>         return event->hw.idx;
+>>  }
+>>
+>> +static void armv8pmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
+>> +{
+>> +       struct arm_pmu *armpmu = to_arm_pmu(pmu_ctx->pmu);
+>> +
+>> +       if (sched_in && arm_pmu_branch_stack_supported(armpmu))
+>> +               armv8pmu_branch_reset();
+>> +}
+>> +
+>>  /*
+>>   * Add an event filter to a given event.
+>>   */
+>> @@ -982,6 +978,9 @@ static void armv8pmu_reset(void *info)
+>>                 pmcr |= ARMV8_PMU_PMCR_LP;
+>>
+>>         armv8pmu_pmcr_write(pmcr);
+>> +
+>> +       if (arm_pmu_branch_stack_supported(cpu_pmu))
+>> +               armv8pmu_branch_reset();
+>>  }
+>>
+>>  static int __armv8_pmuv3_map_event_id(struct arm_pmu *armpmu,
+>> @@ -1019,6 +1018,9 @@ static int __armv8_pmuv3_map_event(struct perf_event *event,
+>>
+>>         hw_event_id = __armv8_pmuv3_map_event_id(armpmu, event);
+>>
+>> +       if (has_branch_stack(event) && !armv8pmu_branch_valid(event))
+>> +               return -EOPNOTSUPP;
+>> +
+>>         /*
+>>          * CHAIN events only work when paired with an adjacent counter, and it
+>>          * never makes sense for a user to open one in isolation, as they'll be
+>> @@ -1135,6 +1137,21 @@ static void __armv8pmu_probe_pmu(void *info)
+>>                 cpu_pmu->reg_pmmir = read_pmmir();
+>>         else
+>>                 cpu_pmu->reg_pmmir = 0;
+>> +       armv8pmu_branch_probe(cpu_pmu);
+>> +}
+>> +
+>> +static int branch_records_alloc(struct arm_pmu *armpmu)
+>> +{
+>> +       struct pmu_hw_events *events;
+>> +       int cpu;
+>> +
+>> +       for_each_possible_cpu(cpu) {
+>> +               events = per_cpu_ptr(armpmu->hw_events, cpu);
+>> +               events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
+>> +               if (!events->branches)
+>> +                       return -ENOMEM;
+>> +       }
+>> +       return 0;
+>>  }
+>>
+>>  static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+>> @@ -1145,12 +1162,24 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+>>         };
+>>         int ret;
+>>
+>> +       ret = armv8pmu_private_alloc(cpu_pmu);
+>> +       if (ret)
+>> +               return ret;
+> Wouldn't it be better to move it under the if statement below
+> if it's only needed for branch stack?
 
->
-[...]
-> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > index 1056bbf55b17..0e247bb7d6f6 100644
-> > --- a/arch/x86/net/bpf_jit_comp.c
-> > +++ b/arch/x86/net/bpf_jit_comp.c
-> > @@ -1868,7 +1868,7 @@ static void save_regs(const struct btf_func_model=
- *m, u8 **prog, int nr_regs,
-> >          * mov QWORD PTR [rbp-0x10],rdi
-> >          * mov QWORD PTR [rbp-0x8],rsi
-> >          */
-> > -       for (i =3D 0, j =3D 0; i < min(nr_regs, 6); i++) {
-> > +       for (i =3D 0, j =3D 0; i < min(nr_regs, MAX_BPF_FUNC_ARGS); i++=
-) {
-> >                 /* The arg_size is at most 16 bytes, enforced by the ve=
-rifier. */
-> >                 arg_size =3D m->arg_size[j];
-> >                 if (arg_size > 8) {
-> > @@ -1876,10 +1876,22 @@ static void save_regs(const struct btf_func_mod=
-el *m, u8 **prog, int nr_regs,
-> >                         next_same_struct =3D !next_same_struct;
-> >                 }
-> >
-> > -               emit_stx(prog, bytes_to_bpf_size(arg_size),
-> > -                        BPF_REG_FP,
-> > -                        i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
-> > -                        -(stack_size - i * 8));
-> > +               if (i <=3D 5) {
-> > +                       /* store function arguments in regs */
->
-> The comment is confusing.
-> It's not storing arguments in regs.
-> It copies them from regs into stack.
+armv8pmu_private_alloc() allocates arm_pmu's private structure which stores
+the BRBE HW attributes during armv8pmu_branch_probe(), called from this SMP
+callback __armv8pmu_probe_pmu(). Hence without the structure being allocated
+and assigned, following smp_call_function_any() cannot execute successfully.
 
-Right, I'll use "copy arguments from regs into stack"
-instead.
+armv8pmu_private_alloc()
+	{
+		......
+		Allocates arm_pmu->private as single 'struct brbe_hw_attr'
+		Allocates arm_pmu->pmu.task_ctx_cache
+		......
+	}
 
->
-> > +                       emit_stx(prog, bytes_to_bpf_size(arg_size),
-> > +                                BPF_REG_FP,
-> > +                                i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + =
-i,
-> > +                                -(stack_size - i * 8));
-> > +               } else {
-> > +                       /* store function arguments in stack */
-> > +                       emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> > +                                BPF_REG_0, BPF_REG_FP,
-> > +                                (i - 6) * 8 + 0x18);
-> > +                       emit_stx(prog, bytes_to_bpf_size(arg_size),
->
-> and we will have garbage values in upper bytes.
-> Probably should fix both here and in regular copy from reg.
->
+__armv8pmu_probe_pmu()
+	armv8pmu_branch_probe()
+		brbe_attributes_probe()
+		{
+			......
+			brbe_attr->brbe_version = brbe;
+			brbe_attr->brbe_format = brbe_get_format(brbidr);
+        		brbe_attr->brbe_cc = brbe_get_cc_bits(brbidr);
+        		brbe_attr->brbe_nr = brbe_get_numrec(brbidr);
+			......
+		}
 
-I noticed it too......I'll dig it deeper to find a solution.
+armv8pmu_private_alloc() cannot be moved inside armv8pmu_branch_probe(),
+because there cannot be any allocation while being in a SMP call context.
 
-> > +                                BPF_REG_FP,
-> > +                                BPF_REG_0,
-> > +                                -(stack_size - i * 8));
-> > +               }
-> >
-[......]
-> >         /* Generated trampoline stack layout:
-> > @@ -2170,7 +2219,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp=
-_image *im, void *image, void *i
-> >          *
-> >          * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
-> >          *
-> > +        * RBP - rbx_off   [ rbx value       ]  always
-> > +        *
->
-> That is the case already and we just didn't document it, right?
->
+> 
+>> +
+>>         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
+>>                                     __armv8pmu_probe_pmu,
+>>                                     &probe, 1);
+>>         if (ret)
+>>                 return ret;
+> Otherwise you might need to free it here.
+> 
+>> +       if (arm_pmu_branch_stack_supported(cpu_pmu)) {
+>> +               ret = branch_records_alloc(cpu_pmu);
+>> +               if (ret)
+>> +                       return ret;
+> And here too.
 
-I'm afraid not anymore. In the origin logic, we use
-"push rbx" after "sub rsp, stack_size". This will store
-"rbx" into the top of the stack.
+Not freeing the arm_pmu's private data, might not be a problem in cases
+where either pmu does not support BRBE or pmu probe itself fails. But for
+completeness, will change as following.
 
-However, now we need to make sure the arguments,
-which we copy from the stack frame of the caller into
-current stack frame in prepare_origin_stack(), stay in
-the top of the stack, to pass these arguments to the
-orig_call through stack.
-
-> >          * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
-> > +        *
-> > +        *                     [ stack_argN ]  BPF_TRAMP_F_CALL_ORIG
-> > +        *                     [ ...        ]
-> > +        *                     [ stack_arg2 ]
-> > +        * RBP - arg_stack_off [ stack_arg1 ]
-> >          */
-> >
-> >         /* room for return value of orig_call or fentry prog */
-> > @@ -2190,9 +2246,17 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp=
-_image *im, void *image, void *i
-> >
-> >         ip_off =3D stack_size;
-> >
-> > +       stack_size +=3D 8;
-> > +       rbx_off =3D stack_size;
-> > +
-> >         stack_size +=3D (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
-> >         run_ctx_off =3D stack_size;
-> >
-> > +       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG))
-> > +               stack_size +=3D (nr_regs - 6) * 8;
-> > +
-> > +       arg_stack_off =3D stack_size;
-> > +
-> >         if (flags & BPF_TRAMP_F_SKIP_FRAME) {
-> >                 /* skip patched call instruction and point orig_call to=
- actual
-> >                  * body of the kernel function.
-> > @@ -2212,8 +2276,9 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
-image *im, void *image, void *i
-> >         x86_call_depth_emit_accounting(&prog, NULL);
-> >         EMIT1(0x55);             /* push rbp */
-> >         EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
-> > -       EMIT4(0x48, 0x83, 0xEC, stack_size); /* sub rsp, stack_size */
-> > -       EMIT1(0x53);             /* push rbx */
-> > +       EMIT3_off32(0x48, 0x81, 0xEC, stack_size); /* sub rsp, stack_si=
-ze */
-> > +       /* mov QWORD PTR [rbp - rbx_off], rbx */
-> > +       emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, -rbx_off);
-> >
-> >         /* Store number of argument registers of the traced function:
-> >          *   mov rax, nr_regs
-> > @@ -2262,6 +2327,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
-image *im, void *image, void *i
-> >
-> >         if (flags & BPF_TRAMP_F_CALL_ORIG) {
-> >                 restore_regs(m, &prog, nr_regs, regs_off);
-> > +               prepare_origin_stack(m, &prog, nr_regs, arg_stack_off);
-> >
-> >                 if (flags & BPF_TRAMP_F_ORIG_STACK) {
-> >                         emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, =
-8);
-> > @@ -2321,14 +2387,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tram=
-p_image *im, void *image, void *i
-> >         if (save_ret)
-> >                 emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, -8);
-> >
-> > -       EMIT1(0x5B); /* pop rbx */
-> > +       emit_ldx(&prog, BPF_DW, BPF_REG_6, BPF_REG_FP, -rbx_off);
->
-> It can stay as 'pop', no?
->
-
-As now we don't use "push rbx" anymore,
-we can't use "pop" here either, as we store rbx in
-the stack of a specific location.
-
-Thanks!
-Menglong Dong
-
-> >         EMIT1(0xC9); /* leave */
-> >         if (flags & BPF_TRAMP_F_SKIP_FRAME)
-> >                 /* skip our return address and return to parent */
-> >                 EMIT4(0x48, 0x83, 0xC4, 8); /* add rsp, 8 */
-> >         emit_return(&prog, prog);
-> >         /* Make sure the trampoline generation logic doesn't overflow *=
-/
-> > -       if (WARN_ON_ONCE(prog > (u8 *)image_end - BPF_INSN_SAFETY)) {
-> > +       if (prog > (u8 *)image_end - BPF_INSN_SAFETY) {
-> >                 ret =3D -EFAULT;
-> >                 goto cleanup;
-> >         }
-> > --
-> > 2.40.1
-> >
+diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+index 9725a53d6799..fdbe52913cc7 100644
+--- a/drivers/perf/arm_pmuv3.c
++++ b/drivers/perf/arm_pmuv3.c
+@@ -1198,13 +1198,17 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+        ret = smp_call_function_any(&cpu_pmu->supported_cpus,
+                                    __armv8pmu_probe_pmu,
+                                    &probe, 1);
+-       if (ret)
++       if (ret) {
++               armv8pmu_private_free(cpu_pmu);
+                return ret;
++       }
+ 
+        if (arm_pmu_branch_stack_supported(cpu_pmu)) {
+                ret = branch_records_alloc(cpu_pmu);
+-               if (ret)
++               if (ret) {
++                       armv8pmu_private_free(cpu_pmu);
+                        return ret;
++               }
+        } else {
+                armv8pmu_private_free(cpu_pmu);
+        }
