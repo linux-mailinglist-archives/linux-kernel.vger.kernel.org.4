@@ -2,145 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2BC7233D2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3FB7233D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjFEX5N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 19:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S231735AbjFEX6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 19:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjFEX5L (ORCPT
+        with ESMTP id S230212AbjFEX6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 19:57:11 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B4BF2;
-        Mon,  5 Jun 2023 16:57:10 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-ba8374001abso6042088276.2;
-        Mon, 05 Jun 2023 16:57:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686009430; x=1688601430;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dT1VLgcbU914AmCWBxVB8Uqq7gnS8nT0HPPcjgOhVqA=;
-        b=AkXEPTzs2Ow/lRmO7T0kA4dNxsGqbM5gEQo6vZDx7pTP2Kzfbk4LztZ7bhzYYC0uZY
-         VZZalosfTHwPsMiVkb/lNJ9xmWX20Lf56u+439wCWtEAWVqUr24QAQjsY3xMaMmUb+Am
-         8qAHN0oHXGyBpyLZo6XR9EciJ4vHIq4JNYvD7rTnyIK/W3i9c/yVBD8ilwTDTOK7u6Ij
-         5/iyKPj4ldFjBgaE0SiG0TFJccsHgLN4+/uVnirTmobK2orpxXzme/sre0Ii9ZyytH/v
-         J0DD3ukCJnGC8w7S+SAD3HzZDeP2KhS7FXzGGp4QQ4b4Zzvc7GG6rkVc0edXQHDvyBjf
-         cCcA==
-X-Gm-Message-State: AC+VfDzVNs0URl2kVh5w5oF+BXXpg9+iqq6bFuEXA2tF9e0n2iuB7QCS
-        5+uiipxXKp0ye0YQQBgfK09SVDFEm9ewPjzq0TgbdFXERhXAbQ==
-X-Google-Smtp-Source: ACHHUZ6wxJN99gbp1wFCNM7foFqrCsQe1qe/8D+p4YucDPIiXBInk1KI8dw4snDZjTizyZbZiKZJAs78w3MQKcfhKLc=
-X-Received: by 2002:a25:8b87:0:b0:ba7:9c6f:e2de with SMTP id
- j7-20020a258b87000000b00ba79c6fe2demr99896ybl.27.1686009429930; Mon, 05 Jun
- 2023 16:57:09 -0700 (PDT)
+        Mon, 5 Jun 2023 19:58:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3A0F2;
+        Mon,  5 Jun 2023 16:58:38 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355NDL40000971;
+        Mon, 5 Jun 2023 23:58:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=EmTZWvjU+MwHPnG0fraAqfkIBhPrmyWTxxAMokOM/V0=;
+ b=SDOTy8fAY0+jh9wUMWFFmskPSHmxm6cgPFbIKLDF53f/MOV1wm/fDqjF17IVzzSbebMg
+ 7tZq7tqZZ4ihKkwCnkrBDjf3wnE07SAod5rI7135UxvrRwmRRfA/im3G65TSLRDYA2TV
+ GQw/+PpbVzaLbB3v1T8bPxjjAjtNVW0KZ6dGA3NtHcICg9Deb1YpngX564qwD1XSHPlv
+ QUioagJXb8IRSIPvQOcffM4dWyxSGeNWsUzf/ITNuxVJ6WJNc+8x3FCn3Y9aEpbMLZpz
+ BoSCT0hj9/Lyi/9UzZTKr9KHZmTA8YCxu+GOesKRaE5Zb51d92vPPG6IS/ai2MboFMtw BQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyw46cx58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 23:58:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 355NwP59012923
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 5 Jun 2023 23:58:25 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 5 Jun 2023 16:58:24 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@gmail.com>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
+        <marijn.suijten@somainline.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
+        <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v15] drm/msm/dpu: add DSC blocks to the catalog of MSM8998 and SC8180X
+Date:   Mon, 5 Jun 2023 16:58:14 -0700
+Message-ID: <1686009494-25127-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20230524205054.3087004-1-namhyung@kernel.org> <d6ef6936-e885-46db-40d6-e3cfbd1b2c22@intel.com>
-In-Reply-To: <d6ef6936-e885-46db-40d6-e3cfbd1b2c22@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 5 Jun 2023 16:56:58 -0700
-Message-ID: <CAM9d7cjoJL1+aHpmc-menWzYk_rfPV_UsDcmP0mXy0K2h6TPRA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] perf annotate: Handle x86 instruction suffix generally
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: sFwY9Kjx5GGkJe58of6QRZ8D283hX7U1
+X-Proofpoint-GUID: sFwY9Kjx5GGkJe58of6QRZ8D283hX7U1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-05_34,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306050207
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+From: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-On Wed, May 24, 2023 at 10:21 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 24/05/23 23:50, Namhyung Kim wrote:
-> > In AT&T asm syntax, most of x86 instructions can have size suffix like
-> > b, w, l or q.  Instead of adding all these instructions in the table,
-> > we can handle them in a general way.
-> >
-> > For example, it can try to find an instruction as is.  If not found,
-> > assuming it has a suffix and it'd try again without the suffix if it's
-> > one of the allowed suffixes.  This way, we can reduce the instruction
-> > table size for duplicated entries of the same instructions with a
-> > different suffix.
-> >
-> > If an instruction xyz and others like xyz<suffix> are completely
-> > different ones, then they both need to be listed in the table so that
-> > they can be found before the second attempt (without the suffix).
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
->
-> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Some platforms have DSC blocks which have not been declared in the catalog.
+Complete DSC 1.1 support for all platforms by adding the missing blocks to
+MSM8998 and SC8180X.
 
-Can you please pick this up?
+Changes in v9:
+-- add MSM8998 and SC8180x to commit title
 
-Thanks,
-Namhyung
+Changes in v10:
+-- fix grammar at commit text
 
->
-> > ---
-> >  tools/perf/util/annotate.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-> > index b708bbc49c9e..7f05f2a2aa83 100644
-> > --- a/tools/perf/util/annotate.c
-> > +++ b/tools/perf/util/annotate.c
-> > @@ -70,6 +70,7 @@ struct arch {
-> >       struct ins_ops  *(*associate_instruction_ops)(struct arch *arch, const char *name);
-> >       bool            sorted_instructions;
-> >       bool            initialized;
-> > +     const char      *insn_suffix;
-> >       void            *priv;
-> >       unsigned int    model;
-> >       unsigned int    family;
-> > @@ -179,6 +180,7 @@ static struct arch architectures[] = {
-> >               .init = x86__annotate_init,
-> >               .instructions = x86__instructions,
-> >               .nr_instructions = ARRAY_SIZE(x86__instructions),
-> > +             .insn_suffix = "bwlq",
-> >               .objdump =  {
-> >                       .comment_char = '#',
-> >               },
-> > @@ -720,6 +722,26 @@ static struct ins_ops *__ins__find(struct arch *arch, const char *name)
-> >       }
-> >
-> >       ins = bsearch(name, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
-> > +     if (ins)
-> > +             return ins->ops;
-> > +
-> > +     if (arch->insn_suffix) {
-> > +             char tmp[32];
-> > +             char suffix;
-> > +             size_t len = strlen(name);
-> > +
-> > +             if (len == 0 || len >= sizeof(tmp))
-> > +                     return NULL;
-> > +
-> > +             suffix = name[len - 1];
-> > +             if (strchr(arch->insn_suffix, suffix) == NULL)
-> > +                     return NULL;
-> > +
-> > +             strcpy(tmp, name);
-> > +             tmp[len - 1] = '\0'; /* remove the suffix and check again */
-> > +
-> > +             ins = bsearch(tmp, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
-> > +     }
-> >       return ins ? ins->ops : NULL;
-> >  }
-> >
->
+Changes in v12:
+-- fix "titil" with "title" at changes in v9
+
+Changes in v14:
+-- "dsc" tp "DSC" at commit title
+
+Changes in v15:
+-- fix merge conflicts at dpu_5_1_sc8180x.h
+
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
+ drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 2 ++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+index 3c732a0..7d0d0e7 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+@@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+ };
+ 
++static const struct dpu_dsc_cfg msm8998_dsc[] = {
++	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
++	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
++};
++
+ static const struct dpu_dspp_cfg msm8998_dspp[] = {
+ 	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+ 		 &msm8998_dspp_sblk),
+@@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+ 	.dspp = msm8998_dspp,
+ 	.pingpong_count = ARRAY_SIZE(msm8998_pp),
+ 	.pingpong = msm8998_pp,
++	.dsc_count = ARRAY_SIZE(msm8998_dsc),
++	.dsc = msm8998_dsc,
+ 	.intf_count = ARRAY_SIZE(msm8998_intf),
+ 	.intf = msm8998_intf,
+ 	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+index 8ed2b263..b5c575c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+@@ -230,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
+ 	.dsc = sc8180x_dsc,
+ 	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
+ 	.pingpong = sc8180x_pp,
++	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
++	.dsc = sc8180x_dsc,
+ 	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
+ 	.merge_3d = sc8180x_merge_3d,
+ 	.intf_count = ARRAY_SIZE(sc8180x_intf),
+-- 
+2.7.4
+
