@@ -2,177 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A247231DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C067231E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjFEVCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S232312AbjFEVC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbjFEVBu (ORCPT
+        with ESMTP id S229544AbjFEVC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:01:50 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAA418E;
-        Mon,  5 Jun 2023 14:01:43 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30af159b433so5346699f8f.3;
-        Mon, 05 Jun 2023 14:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685998902; x=1688590902;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0UuDqA9QdnJOky0P/4GZ0/HcprcAx5ORnIFMZhmVSsY=;
-        b=rscLBPynR6TMxI19jepJvNbfgpFoEHAykXLqe5/ReQZhBnrYAM433Wdoogv9R/Cjpw
-         3iCxKmox8WcVqKOJl2qYX30ykq1IsvFhawEeXY4RWis0gECfM/qEUL5a9gWlezCB5lIe
-         ckHtKbb3qaqlYiXz11eLiR9YwWXTDxGuGTx5KvA1pUTL6ziTHzTtGQ0fJTPPZHTs/zcF
-         3455YUmIVKgcrg1ABVjYpVODeCtJxC9XNCsPlegbQRVbAjq/e2gRvhV/5njs8NjNwOUK
-         5MW+XXMT8NoQn7pBEvm2vKjsDKiXcJNwG3KaHcppDnfIhza3ZNjcgyflDEyCB1uXlezC
-         SWnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685998902; x=1688590902;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0UuDqA9QdnJOky0P/4GZ0/HcprcAx5ORnIFMZhmVSsY=;
-        b=eIunUAvkr3uCaSEZe2xxqq6GZStZIWxhG+cQA6UqAKW/W9PCIg5iK1TmJMHVj8JpQ7
-         f0qjnPPWtKzF0o+ikd0/kc2hzD+VLGVwi5lPZSeQ1qzJafsajPNBkmJdTdN35BmBgb5R
-         Vd0x0K7pq5ULa2JheoO2k71ciRefnL6KVUrM2fgHoIR4VVhrmnt0i3j9PRWOFXfr2WJX
-         mmNjbtvsIzTNHvV2xXYfTf0+TdhkjZpuZQdTYRGjKC1XNAOj8yclTQXsgbBl/eu4Vj6q
-         itv5zNQE3zzTnYXjMVmDNb305a65F6Ctyn8XfTQf0KiUQfZhe9RPMm9pf149m2e33muB
-         QoyQ==
-X-Gm-Message-State: AC+VfDzguw3q6UfNHh3ggA3bz+vgjqJE1+7CJBt7qvCedur1QbXcV5HA
-        6L0YKCBx4B5zmUooDxj4cMdxUgLYJmQ=
-X-Google-Smtp-Source: ACHHUZ7mNV6YQu9OB99bLB58sGz6QL4pOrfMccnMO+NFakN92T72Pr6TOxLePg7g9xlKisTHCE0niA==
-X-Received: by 2002:adf:f8c9:0:b0:30a:ec3b:58d5 with SMTP id f9-20020adff8c9000000b0030aec3b58d5mr71328wrq.69.1685998902007;
-        Mon, 05 Jun 2023 14:01:42 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c1fe:b00:f181:5e69:a6b8:882f? (dynamic-2a01-0c23-c1fe-0b00-f181-5e69-a6b8-882f.c23.pool.telefonica.de. [2a01:c23:c1fe:b00:f181:5e69:a6b8:882f])
-        by smtp.googlemail.com with ESMTPSA id b12-20020a05600010cc00b003077a19cf75sm10601714wrx.60.2023.06.05.14.01.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 14:01:41 -0700 (PDT)
-Message-ID: <bf7c71bf-4f04-0dd3-91e1-eb639b36e7d1@gmail.com>
-Date:   Mon, 5 Jun 2023 23:01:40 +0200
+        Mon, 5 Jun 2023 17:02:57 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5395FEE;
+        Mon,  5 Jun 2023 14:02:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kgiuiu32p7f7vx0ZvO6Cj0jXONqR3E9mGlKSnMJsf5rN08MZUNWjxd1eAO0qJuJCoixhUz+pDE4g8nuscJgntSZOJpquLOkSHG3U88V4CWaDwLIC1JPHj1pVCPQRbBBUp/E3o3oGnXACBkNHzQG3tooBHvqbdDsQkPcBwB+xiZznDuIoGznTZ71x0eyVVkHEdBvwH3vfrR63w1GbsrmA0EXZFCF2mtM3hu8yXIYdbp+Yo+75bfRNKBwIC6qGaJnZrz/+uzi2hRmIWoAmyyUjG9wCFZIRpYmHvMWqIJTelkkWt4zye+KXqXdiewE80TNmK094gy6SFhy1+Wy+4KypTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZCDFlm4mgU1SCuMik1qhSnoLJxenSA7DFJawM2C+UZU=;
+ b=G4R1IVEOUD/ji7PbtqBYWPrU/CJDvJYjeQn3xm/KdtYLI7nNyuGe/ktqlDPZHcy2yqlu4T6vNMfzMNulSLZqgCWJfP8HiHzytBBRkd+PeWTNhyWGOarg0by17DDICSUQeFVeLSTNOdy+uxFnR7f0V5hVXebPc5DOOvAWRaPeDcJ55fwQwksTP6nMoG4YRMwQue+t/G6yBz6WM8SyUhm4hvyKi8pXC0ra+nEVt2OR/iXCLOr03o+2T+phiiwdQuKuZZh8zjFzyCOR0pAlbv+aeRaoxacVzkzyJkaPcAJfBLAaYqCd59yacAurQGYaEdGcNeNYoY0xXFL/R5aT1Ov0Nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZCDFlm4mgU1SCuMik1qhSnoLJxenSA7DFJawM2C+UZU=;
+ b=PWlJRyfiNT7Y3Va3jT9A+1SPEMyVOyGP7DzQgj7Zw152Wgy6YHTPbBPsRTr7li8ekQ37wciEktIHtAQMs2l7uyi98w8Nb6zH3aUCfM0jc6ijToT/yQFQhZKs2rKBfBGrYipRsHbfthD/xXDG4McvbV9LVBj/cM85dhk7q7uMkLE=
+Received: from DM6PR08CA0010.namprd08.prod.outlook.com (2603:10b6:5:80::23) by
+ PH7PR12MB6978.namprd12.prod.outlook.com (2603:10b6:510:1b8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
+ 2023 21:02:52 +0000
+Received: from CY4PEPF0000EE36.namprd05.prod.outlook.com
+ (2603:10b6:5:80:cafe::81) by DM6PR08CA0010.outlook.office365.com
+ (2603:10b6:5:80::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 21:02:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EE36.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6477.13 via Frontend Transport; Mon, 5 Jun 2023 21:02:52 +0000
+Received: from driver-dev1.pensando.io (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
+ 2023 16:02:48 -0500
+From:   Brett Creeley <brett.creeley@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <alvaro.karsz@solid-run.com>, <pabeni@redhat.com>,
+        <kuba@kernel.org>, <edumazet@google.com>, <davem@davemloft.net>,
+        <xuanzhuo@linux.alibaba.com>, <jasowang@redhat.com>,
+        <mst@redhat.com>
+CC:     <brett.creeley@amd.com>, <shannon.nelson@amd.com>
+Subject: [RFC PATCH net] virtio_net: Prevent napi_weight changes with VIRTIO_NET_F_NOTF_COAL support
+Date:   Mon, 5 Jun 2023 14:02:36 -0700
+Message-ID: <20230605210237.60988-1-brett.creeley@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     George Stark <gnstark@sberdevices.ru>
-Cc:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        kernel <kernel@sberdevices.ru>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "khilman@baylibre.com" <khilman@baylibre.com>
-References: <20230602103211.2199283-1-gnstark@sberdevices.ru>
- <bf2d2814-5881-0f42-8b62-89c043b66e22@gmail.com>
- <ed8f95d2-ef62-d91a-618c-402ba1c9d09f@sberdevices.ru>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] pwm: meson: compute cnt register value in proper way
-In-Reply-To: <ed8f95d2-ef62-d91a-618c-402ba1c9d09f@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE36:EE_|PH7PR12MB6978:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0e932df-8954-46c0-5a3e-08db66083a24
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UcKMaLgz0ojVSk6MUDTJAQVmHi3vWN4o37gWSjdp3OlJZqWtqML7uISJNjbVEo95NmzEq24iiywJcI+SccWw9uW403LQMRHRQQg8gWvG2L4lXVqtSPRcJl3bf+zXdFo41iNKtn335foIgDto8tPO7p9QKniGtirHMlVvlZMuCzc9ycqhnIWgrtw1M+WipPTwKtZ2FFw+AlE1OAV9yH+7fA5g6A1YVFniLVMHf1PVZi3MB3H9TF0mqsmrAcERzkELy2fRqv6Efluv0gT0WOihBbjlFEw34WYegPFQzL0lThnRVd+G/0Cn54Yg7SHwYMAdMtNPgCnjaNwjSe2m33TGu+8Dnag+6BUMn1UMDLNvzbUCLpBdl5hdTpYHTH0U0dX+E7FrslSElxaDVeUJUwXDqQCU1wSn6cmq9z8mSF/FQ0jX1oeX9EmdL7PxqCA8FXE8bvpp8XG4nzkizVs3m9x6M2PLMBNCy3PjQcwllw9sp+p5kHre4F6mwmpdmTJgwCWt4Z2jaiEkhMz5au6vfop3zXlBOI3PZXh2oW899hxXFBryxp3KMvSGKnoXXMYeSTocJ0MOvI/M++UDiy5EUXAk4kuw8A0IT+ZRZyltrRVPl6X7bZgvJ9QxB8HQlh3Lz4j2o4iES2UobI0cZrOMPqJQXWpHQUPz0LEXUAsKecBvp1VUxB3x9RlhE7xQBgtqY19RakywcsmnUL29pjr164+F6hqu/IXPbkv+/X4FLO+ymtWJsskShtMJJDZzOdSN+q2tyEySIz3rDALvL+Fl6tut1odr3nTevGV5OozkCTYNpTYOct6CGQ9/xXvY5aia8sjo
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(8676002)(7416002)(4326008)(5660300002)(8936002)(70586007)(70206006)(316002)(40480700001)(41300700001)(54906003)(110136005)(44832011)(40460700003)(2906002)(478600001)(921005)(82740400003)(81166007)(186003)(356005)(1076003)(26005)(86362001)(16526019)(36756003)(47076005)(36860700001)(2616005)(83380400001)(336012)(82310400005)(426003)(6666004)(16393002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 21:02:52.3195
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0e932df-8954-46c0-5a3e-08db66083a24
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE36.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6978
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.06.2023 09:11, George Stark wrote:
-> On 6/2/23 23:52, Heiner Kallweit wrote:
->> On 02.06.2023 12:32, George Stark wrote:
->>> According to the datasheet, the PWM high and low clock count values
->>> should be set to at least one. Therefore, setting the clock count
->>> register to 0 actually means 1 clock count.
->>>
->>> Signed-off-by: George Stark <GNStark@sberdevices.ru>
->>> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
->>> ---
->>> This patch is based on currently unmerged patch by Heiner Kallweit
->>> https://lore.kernel.org/linux-amlogic/23fe625e-dc23-4db8-3dce-83167cd3b206@gmail.com
->>> ---
->>> diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
->>> index 834acd7..57e7d9c 100644
->>> --- a/drivers/pwm/pwm-meson.c
->>> +++ b/drivers/pwm/pwm-meson.c
->>> @@ -206,6 +206,11 @@
->>>           channel->pre_div = pre_div;
->>>           channel->hi = duty_cnt;
->>>           channel->lo = cnt - duty_cnt;
->>> +
->>> +        if (channel->hi)
->>> +            channel->hi--;
->>> +        if (channel->lo)
->>> +            channel->lo--;
-> Hello Heiner
-> 
-> Thanks for review
->> I'm not sure whether we should do this. duty_cnt and cnt are results
->> of an integer division and therefore potentially rounded down.
->> The chip-internal increment may help to compensate such rounding
->> errors, so to say. With the proposed change we may end up with the
->> effective period being shorter than the requested one.
-> Although chip-internal increment sometimes may help accidentally
-> there are cases when the increment ruins precise calculation in unexpected way.
-> 
-> Here's our experience on meson a113l (meson-a1) with pwm driver based on ccf:
-> we need to get pwm period as close as possible to 32768hz.
-> config pwm to period 1/32768 = 30517ns, duty 15258n
-> How driver calculates hi\lo regs:
-> rate = NSEC_PER_SEC * 0xffff / 30517 = ~2147Mhz
-> rate = clk_round_rate(rate) clk_round_rate selects fastest parent clock which is 64Mhz in our case then calculating hi\lo at last: period= mul_u64_u64_div_u64(rate, state->period, NSEC_PER_SEC); // 1953
-> duty= mul_u64_u64_div_u64(rate, state->duty_cycle, NSEC_PER_SEC); // 976
-> channel->hi= duty;
-> channel->lo= period- duty;
-> with the internal increment we'll have real output (1953-976 + 1 + 976 + 1) * 1 / 64Mhz = 32736.57Hz but we should have (1953-976 + 976) * 1 / 64Mhz = 32770.09Hz
+Commit 699b045a8e43 ("net: virtio_net: notifications coalescing
+support") added support for VIRTIO_NET_F_NOTF_COAL. The get_coalesce
+call made changes to report "1" in tx_max_coalesced_frames if
+VIRTIO_NET_F_NOTF_COAL is not supported and napi.weight is non-zero.
+However, the napi_weight value could still be changed by the
+set_coalesce call regardless of whether or not the device supports
+VIRTIO_NET_F_NOTF_COAL.
 
-Supposedly, depending on the prior rounding errors, something incrementing,
-and sometimes not incrementing may provide the more precise result.
-Another source of error is shown your example, the duty cycle isn't 50%
-due to the rounding.
-Not sure however where there's any use case where such small deviations
-would cause problems. Therefore I don't have a strong opinion.
+It seems like the tx_max_coalesced_frames value should not control more
+than 1 thing (i.e. napi_weight and the device's tx_max_packets). So, fix
+this by only allowing the napi_weight change if VIRTIO_NET_F_NOTF_COAL
+is not supported by the virtio device.
 
-> | And IIRC this should not happen.
-> Could you please explain why or point out doc/description where it's stated?
-> If so we can add explicit check to prevent such a case
+It wasn't clear to me if this was the intended behavior, so that's why
+I'm sending this as an RFC patch initially. Based on the feedback, I
+will resubmit as an official patch.
 
-I think I got this wrong. When checking where I got this information from
-I found the following in pwm_apply_state_debug():
+Fixes: 699b045a8e43 ("net: virtio_net: notifications coalescing support")
+Signed-off-by: Brett Creeley <brett.creeley@amd.com>
+---
+ drivers/net/virtio_net.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-if (state->enabled && state->period < s2.period)
-  dev_warn(chip->dev,
-  ".apply is supposed to round down period (requested: %llu, applied: %llu)\n",
-  state->period, s2.period);
-
->>>       }
->>>         return 0;
->>> @@ -340,7 +345,8 @@
->>>       channel->lo = FIELD_GET(PWM_LOW_MASK, value);
->>>       channel->hi = FIELD_GET(PWM_HIGH_MASK, value);
->>>   -    state->period = meson_pwm_cnt_to_ns(chip, pwm, channel->lo + channel->hi);
->>> +    state->period = meson_pwm_cnt_to_ns(chip, pwm,
->>> +                        channel->lo + 1 + channel->hi + 1);
->>>       state->duty_cycle = meson_pwm_cnt_to_ns(chip, pwm, channel->hi);
->>>   
->> Doesn't channel->hi have to be incremented here too?
-> Yes, lost the line. I'll fix it
-> 
-> Best regards
-> George
->>>       return 0;
->>
-> 
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 486b5849033d..e28387866909 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2990,19 +2990,21 @@ static int virtnet_set_coalesce(struct net_device *dev,
+ 	int ret, i, napi_weight;
+ 	bool update_napi = false;
+ 
+-	/* Can't change NAPI weight if the link is up */
+-	napi_weight = ec->tx_max_coalesced_frames ? NAPI_POLL_WEIGHT : 0;
+-	if (napi_weight ^ vi->sq[0].napi.weight) {
+-		if (dev->flags & IFF_UP)
+-			return -EBUSY;
+-		else
+-			update_napi = true;
+-	}
+-
+-	if (virtio_has_feature(vi->vdev, VIRTIO_NET_F_NOTF_COAL))
++	if (virtio_has_feature(vi->vdev, VIRTIO_NET_F_NOTF_COAL)) {
+ 		ret = virtnet_send_notf_coal_cmds(vi, ec);
+-	else
++	} else {
++		/* Can't change NAPI weight if the link is up */
++		napi_weight = ec->tx_max_coalesced_frames ?
++			NAPI_POLL_WEIGHT : 0;
++		if (napi_weight ^ vi->sq[0].napi.weight) {
++			if (dev->flags & IFF_UP)
++				return -EBUSY;
++			else
++				update_napi = true;
++		}
++
+ 		ret = virtnet_coal_params_supported(ec);
++	}
+ 
+ 	if (ret)
+ 		return ret;
+-- 
+2.17.1
 
