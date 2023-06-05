@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D210C722E6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C03722E6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234833AbjFESPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S234945AbjFESPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjFESPo (ORCPT
+        with ESMTP id S229559AbjFESPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:15:44 -0400
+        Mon, 5 Jun 2023 14:15:43 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDEAD3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:15:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C334E6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685988943; x=1717524943;
+  t=1685988942; x=1717524942;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=huUH1HR4fszCoZuJr8Gz9MUwSwCUYWIuZ3BKksRCNQE=;
-  b=dKKaJmAs+L2sbIwH93ay/lVFGah+HyrtOwU1BnNd10WCPabGe7yfd3gt
-   cg8gskXNxoAZI83uMoFA/FuQKszKiXAOAl4Rg0YlYf4lgtiNV9HrMTNMM
-   hxbaGvHeiC0IrDYukNefgwSivmbnrFH/YzdcFluaeqZI8BytjdCsuBCNc
-   eZdBQ+4DFMoThke980wH0wycTftKG/4O5LK6fLN7V+n2Y4nYsg2xcCTrL
-   GXb2dJeVnNQ5Cde1ffHZJsH3aDvpL/CP1a3xuM9+2GANIkk/jtqK9oolB
-   2Le1cmPah564F3mi3mopZG0gUjpcu0i29f4hESklTmAhXli9740BEPjFh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355295416"
+  bh=Iq/6l2MKXd/312oLRMbvL1xATJY/aiiiJ78uMwOqNpw=;
+  b=TKquPkfgCttsc6iIpg/1LGC69wa0D2urhEq2c/czL4LK/qSiwVK4J7Ma
+   cabez+hB04vYQ19Ou1lY2gn0O5gkOWYCoIC+Gz7F5jAGu7hmdRjB06+ou
+   eQD7XgKYmnBbp76iRL99/o0iEAiKwqbM314CNCEZrChTcqST2cclds1tO
+   oFtCacKt20yCrEFM6joDjG3A74DB1xx5VBbjiOoFmE20NcFnl3Kdz4j3j
+   Wg3Gmb5xFUfW/kcThnJgg1P2jwJTiTxjQzAXMWnedKOcC6iIiFUQhwxsr
+   RwLnkoFvioyQz6wM/yFzu8oL2s84x2sx1UiVFqlfiApS/JPcInhx/QJ29
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355295411"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="355295416"
+   d="scan'208";a="355295411"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:15:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778658998"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778658997"
 X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="778658998"
+   d="scan'208";a="778658997"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
   by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 11:15:17 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q6Ejc-0004Kd-2R;
+        id 1q6Ejc-0004Kf-2V;
         Mon, 05 Jun 2023 18:15:16 +0000
-Date:   Tue, 6 Jun 2023 02:14:22 +0800
+Date:   Tue, 6 Jun 2023 02:14:23 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:timers/core 19/21] kernel/time/posix-timers.c:385:18: error:
- use of undeclared identifier 'TICK_NSECS'
-Message-ID: <202306060236.yHWiRzTI-lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: [tip:timers/core 19/21] kernel/time/posix-timers.c:385:46: error:
+ 'TICK_NSECS' undeclared; did you mean 'TICK_NSEC'?
+Message-ID: <202306060207.ZANMLerd-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,8 +66,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
 head:   1263a2a9d71bac5ffabf9603c36e36cb6edbcdcf
 commit: 63dede13d09850a8ace210f8e4227ac5a6b309ae [19/21] posix-timers: Clarify posix_timer_fn() comments
-config: hexagon-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060236.yHWiRzTI-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230606/202306060207.ZANMLerd-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -78,70 +78,24 @@ reproduce (this is a W=1 build):
         git checkout 63dede13d09850a8ace210f8e4227ac5a6b309ae
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/time/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306060236.yHWiRzTI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060207.ZANMLerd-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/time/posix-timers.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/time/posix-timers.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/time/posix-timers.c:13:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> kernel/time/posix-timers.c:385:18: error: use of undeclared identifier 'TICK_NSECS'
-                                   ktime_t kj = TICK_NSECS;
-                                                ^
-   6 warnings and 1 error generated.
+   kernel/time/posix-timers.c: In function 'posix_timer_fn':
+>> kernel/time/posix-timers.c:385:46: error: 'TICK_NSECS' undeclared (first use in this function); did you mean 'TICK_NSEC'?
+     385 |                                 ktime_t kj = TICK_NSECS;
+         |                                              ^~~~~~~~~~
+         |                                              TICK_NSEC
+   kernel/time/posix-timers.c:385:46: note: each undeclared identifier is reported only once for each function it appears in
 
 
-vim +/TICK_NSECS +385 kernel/time/posix-timers.c
+vim +385 kernel/time/posix-timers.c
 
    327	
    328	/*
