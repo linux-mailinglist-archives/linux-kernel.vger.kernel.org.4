@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269887222B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3CB7222B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjFEJy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S230486AbjFEJ4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjFEJy4 (ORCPT
+        with ESMTP id S229590AbjFEJ4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:54:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AD1F9;
-        Mon,  5 Jun 2023 02:54:54 -0700 (PDT)
+        Mon, 5 Jun 2023 05:56:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA9CB8;
+        Mon,  5 Jun 2023 02:56:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C8AE6101C;
-        Mon,  5 Jun 2023 09:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1332DC433D2;
-        Mon,  5 Jun 2023 09:54:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57E07621FF;
+        Mon,  5 Jun 2023 09:56:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B51EC433D2;
+        Mon,  5 Jun 2023 09:56:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685958893;
-        bh=Ry2SkmA+K00RMMRxzGwH6nLi2ayMp2/LpHhS6bn9nV0=;
+        s=k20201202; t=1685958978;
+        bh=E0sAzZZmP5WA1Nwo3dxOCDReq4iq5AIC9EGQphYjTpc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=toHpX+gklKJh1L5yc2c/GTNVoNN+0VS1HrIpySdQra3F3OzY8AJ6Xor8gOOt6uxoX
-         VZg5XtlZ+nEjaHNz9MgW7ZIBgcuZy/7+tibEQtNanNrxtZg+jyYTdMmFrfys1GvU1M
-         J9HIqPU3Fg2PLyA64MUSbFEGMPPNH0YfSTISRbmvCWIT5e6eefeylQt1ojeVGhSgIG
-         vzA9hAqoqVhytIL8oLgK5KG+b3o6C7R7uk5DgljkKUtBYcJ1kDNqsrPrDcg9Gp9+fR
-         74shnODvYY4j2YyxCWzrly366sni8imCjoWiqkaiB7bD3gYHalmUBd7J2+Yg50EF3p
-         9SStQpDrE699g==
-Date:   Mon, 5 Jun 2023 10:54:47 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Mason Huo <mason.huo@starfivetech.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+        b=bErdGzNY2CmDdzKa+JSuXnENnoWBEZhEfN1CjJA42rochcJAzsTmwhQgjeGA7RzKl
+         h/lT3hAkIPCwG8aXhHAVR+shMKLMbRjbUjGitdmddEBDMzFXDy03jqQa+2ZGCvJpKs
+         JBYPF5nOf/OBaU+evEXkwRnmc9TtQosKCKHvFGCI+hjlEyBGp+dLIC6gyZnz34tTAX
+         QgwpmaMeF9yT/D4/t3JtKiz+aUCNuPP7d/augH+oAAY34+2MH2+noUTSRfJhzSI9s2
+         ZX2zDaKS4KuAic9ukqDgdkfXu6YMIyYuA7NbK/dZVFliyw6lfaBgsb0RI/Hc9wen7l
+         67FeaF2Sct8vA==
+Date:   Mon, 5 Jun 2023 11:56:15 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Keith Zhao <keith.zhao@starfivetech.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 0/3] Add JH7110 cpufreq support
-Message-ID: <20230605-strive-caddie-e570c6c4f958@spud>
-References: <20230421031431.23010-1-mason.huo@starfivetech.com>
- <457c35b5-aec4-1147-673f-947052b5f944@starfivetech.com>
- <20230505-gusty-corset-e451d947c10d@wendy>
- <c5bde0d92d514250a21120ed33e0f6b2@EXMBX067.cuchost.com>
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>
+Subject: Re: [PATCH 9/9] drm/verisilicon: Add starfive hdmi driver
+Message-ID: <ayygsdwzogu4ygkobs7zkroxicxtixtp5bxayn5vzk4qlkwt6x@yo5s2qwt77mo>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <20230602074043.33872-10-keith.zhao@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="PLgiS43f5xmwF/2A"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c3ccdoac5xz7n6if"
 Content-Disposition: inline
-In-Reply-To: <c5bde0d92d514250a21120ed33e0f6b2@EXMBX067.cuchost.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230602074043.33872-10-keith.zhao@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,70 +78,350 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---PLgiS43f5xmwF/2A
+--c3ccdoac5xz7n6if
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 05, 2023 at 09:36:51AM +0000, Mason Huo wrote:
-> > On Fri, May 05, 2023 at 09:38:38AM +0800, Mason Huo wrote:
+Hi,
 
-> >> Thanks for your review, and is there any comments about these v3 patch=
-es?
+On Fri, Jun 02, 2023 at 03:40:43PM +0800, Keith Zhao wrote:
+> Add HDMI dirver for StarFive SoC JH7110.
 >=20
-> > Firstly there appears to have been some mess-up with the driver/bindings
-> > for 1/3, so I am waiting to see if the binding gets reverted before
-> > doing anything and secondly it's the merge window so I can't do anything
-> > about 3/3 until next week.
+> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
 
-> Could you help to check if this patch can be moved on?
+I have a few high level comments:
 
-The dependencies are in, I guess when I went checking through things on
-patchwork after the merge window I spotted some issue & didn't reply to
-the patch. So sorry about that.
+> +static int starfive_hdmi_setup(struct starfive_hdmi *hdmi,
+> +			       struct drm_display_mode *mode)
+> +{
+> +	hdmi_modb(hdmi, STARFIVE_BIAS_CONTROL, STARFIVE_BIAS_ENABLE, STARFIVE_B=
+IAS_ENABLE);
+> +	hdmi_writeb(hdmi, STARFIVE_RX_CONTROL, STARFIVE_RX_ENABLE);
+> +	hdmi->hdmi_data.vic =3D drm_match_cea_mode(mode);
+> +
+> +	hdmi->tmds_rate =3D mode->clock * 1000;
+> +	starfive_hdmi_phy_clk_set_rate(hdmi);
+> +
+> +	while (!(hdmi_readb(hdmi, STARFIVE_PRE_PLL_LOCK_STATUS) & 0x1))
+> +		continue;
+> +	while (!(hdmi_readb(hdmi, STARFIVE_POST_PLL_LOCK_STATUS) & 0x1))
+> +		continue;
+> +
+> +	/*turn on LDO*/
+> +	hdmi_writeb(hdmi, STARFIVE_LDO_CONTROL, STARFIVE_LDO_ENABLE);
+> +	/*turn on serializer*/
+> +	hdmi_writeb(hdmi, STARFIVE_SERIALIER_CONTROL, STARFIVE_SERIALIER_ENABLE=
+);
+> +
+> +	starfive_hdmi_tx_phy_power_down(hdmi);
+> +	starfive_hdmi_config_video_timing(hdmi, mode);
+> +	starfive_hdmi_tx_phy_power_on(hdmi);
+> +
+> +	starfive_hdmi_tmds_driver_on(hdmi);
+> +	starfive_hdmi_sync_tmds(hdmi);
+> +
+> +	return 0;
+> +}
 
-The issue that I must've spotted is that patch 1/3 doesn't pass
-dtbs_check:
+The PHY PLL supports rate until 594MHz, but I don't see any scrambler
+setup here?
 
-arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dtb: pmic@3=
-6: 'interrupts' is a required property
-        From schema: Documentation/devicetree/bindings/mfd/x-powers,axp152.=
-yaml
-arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dtb: pmic@3=
-6: '#interrupt-cells' is a required property
-        From schema: Documentation/devicetree/bindings/mfd/x-powers,axp152.=
-yaml
-arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dtb: pmic@3=
-6: 'interrupt-controller' is a required property
-        From schema: Documentation/devicetree/bindings/mfd/x-powers,axp152.=
-yaml
-arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dtb: pmic@3=
-6: 'interrupts' is a required property
-        From schema: Documentation/devicetree/bindings/mfd/x-powers,axp152.=
-yaml
-arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dtb: pmic@3=
-6: '#interrupt-cells' is a required property
-        From schema: Documentation/devicetree/bindings/mfd/x-powers,axp152.=
-yaml
-arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dtb: pmic@3=
-6: 'interrupt-controller' is a required property
-        From schema: Documentation/devicetree/bindings/mfd/x-powers,axp152.=
-yaml
+> +static void starfive_hdmi_encoder_mode_set(struct drm_encoder *encoder,
+> +					   struct drm_display_mode *mode,
+> +					   struct drm_display_mode *adj_mode)
+> +{
+> +	struct starfive_hdmi *hdmi =3D encoder_to_hdmi(encoder);
+> +
+> +	starfive_hdmi_setup(hdmi, adj_mode);
 
-Could you please fix that up & resend the 2 unapplied patches?
+You should put that call into the enable callback, there's no need to
+power it up at that point.
 
-Cheers,
-Conor.
+> +	memcpy(&hdmi->previous_mode, adj_mode, sizeof(hdmi->previous_mode));
 
---PLgiS43f5xmwF/2A
+You don't seem to be using that anywhere, and it's not the previous but
+the current mode.
+
+> +}
+> +
+> +static void starfive_hdmi_encoder_enable(struct drm_encoder *encoder)
+> +{
+> +	struct starfive_hdmi *hdmi =3D encoder_to_hdmi(encoder);
+> +
+> +	pm_runtime_get_sync(hdmi->dev);
+> +}
+> +
+> +static void starfive_hdmi_encoder_disable(struct drm_encoder *encoder)
+> +{
+> +	struct starfive_hdmi *hdmi =3D encoder_to_hdmi(encoder);
+> +
+> +	pm_runtime_put(hdmi->dev);
+> +}
+> +
+> +static bool starfive_hdmi_encoder_mode_fixup(struct drm_encoder *encoder,
+> +					     const struct drm_display_mode *mode,
+> +					     struct drm_display_mode *adj_mode)
+> +{
+> +	return true;
+> +}
+
+You can drop that one
+
+> +static int
+> +starfive_hdmi_encoder_atomic_check(struct drm_encoder *encoder,
+> +				   struct drm_crtc_state *crtc_state,
+> +				   struct drm_connector_state *conn_state)
+> +{
+> +	return 0;
+> +}
+
+Ditto
+
+> +static int starfive_hdmi_connector_get_modes(struct drm_connector *conne=
+ctor)
+> +{
+> +	struct starfive_hdmi *hdmi =3D connector_to_hdmi(connector);
+> +	struct edid *edid;
+> +	int ret =3D 0;
+> +
+> +	if (!hdmi->ddc)
+> +		return 0;
+> +
+> +	edid =3D drm_get_edid(connector, hdmi->ddc);
+> +	if (edid) {
+> +		hdmi->hdmi_data.sink_is_hdmi =3D drm_detect_hdmi_monitor(edid);
+> +		hdmi->hdmi_data.sink_has_audio =3D drm_detect_monitor_audio(edid);
+> +		drm_connector_update_edid_property(connector, edid);
+> +		ret =3D drm_add_edid_modes(connector, edid);
+> +		kfree(edid);
+> +	}
+> +
+> +	return ret;
+> +}
+
+get_modes can be called while the connector is inactive, you need to
+call pm_runtime_get_sync / pm_runtime_put here
+
+> +static enum drm_mode_status
+> +starfive_hdmi_connector_mode_valid(struct drm_connector *connector,
+> +				   struct drm_display_mode *mode)
+> +{
+> +	const struct pre_pll_config *cfg =3D pre_pll_cfg_table;
+> +	int pclk =3D mode->clock * 1000;
+> +	bool valid =3D false;
+> +	int i;
+> +
+> +	for (i =3D 0; cfg[i].pixclock !=3D (~0UL); i++) {
+> +		if (pclk =3D=3D cfg[i].pixclock) {
+> +			if (pclk > 297000000)
+> +				continue;
+> +
+> +			valid =3D true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return (valid) ? MODE_OK : MODE_BAD;
+> +}
+
+So I guess that's why you don't bother with the scrambler, you filter
+all the modes > 297MHz?
+
+If so, you also need to make sure it happens in atomic_check. mode_valid
+will only filter the modes exposed to userspace, but the userspace is
+free to send any mode it wants and that's checked by atomic_check.
+
+> +
+> +static int
+> +starfive_hdmi_probe_single_connector_modes(struct drm_connector *connect=
+or,
+> +					   u32 maxX, u32 maxY)
+> +{
+> +	struct starfive_hdmi *hdmi =3D connector_to_hdmi(connector);
+> +	int ret;
+> +
+> +	pm_runtime_get_sync(hdmi->dev);
+> +
+> +	ret =3D drm_helper_probe_single_connector_modes(connector, 3840, 2160);
+> +
+> +	pm_runtime_put(hdmi->dev);
+> +
+> +	return ret;
+> +}
+
+You already have a pm_runtime_get_sync call in get_modes, why is that
+necessary?
+
+> +
+> +static void starfive_hdmi_connector_destroy(struct drm_connector *connec=
+tor)
+> +{
+> +	drm_connector_unregister(connector);
+> +	drm_connector_cleanup(connector);
+> +}
+
+Use drmm_connector_init.
+
+> +static irqreturn_t starfive_hdmi_irq(int irq, void *dev_id)
+> +{
+> +	struct starfive_hdmi *hdmi =3D dev_id;
+> +
+> +	drm_helper_hpd_irq_event(hdmi->connector.dev);
+
+drm_connector_helper_hpd_irq_event()
+
+> +static int starfive_hdmi_get_clk_rst(struct device *dev, struct starfive=
+_hdmi *hdmi)
+> +{
+> +	hdmi->sys_clk =3D devm_clk_get(dev, "sysclk");
+> +	if (IS_ERR(hdmi->sys_clk)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI sysclk clk\n");
+> +		return PTR_ERR(hdmi->sys_clk);
+> +	}
+> +	hdmi->mclk =3D devm_clk_get(dev, "mclk");
+> +	if (IS_ERR(hdmi->mclk)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI mclk clk\n");
+> +		return PTR_ERR(hdmi->mclk);
+> +	}
+> +	hdmi->bclk =3D devm_clk_get(dev, "bclk");
+> +	if (IS_ERR(hdmi->bclk)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI bclk clk\n");
+> +		return PTR_ERR(hdmi->bclk);
+> +	}
+> +	hdmi->tx_rst =3D reset_control_get_shared(dev, "hdmi_tx");
+> +	if (IS_ERR(hdmi->tx_rst)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI tx rst\n");
+> +		return PTR_ERR(hdmi->tx_rst);
+> +	}
+
+That one isn't device-managed, you'll need to put back the reference in
+unbind.
+
+> +	return 0;
+> +}
+> +
+> +static int starfive_hdmi_bind(struct device *dev, struct device *master,
+> +			      void *data)
+> +{
+> +	struct platform_device *pdev =3D to_platform_device(dev);
+> +	struct drm_device *drm =3D data;
+> +	struct starfive_hdmi *hdmi;
+> +	struct resource *iores;
+> +	int irq;
+> +	int ret;
+> +
+> +	hdmi =3D devm_kzalloc(dev, sizeof(*hdmi), GFP_KERNEL);
+> +	if (!hdmi)
+> +		return -ENOMEM;
+
+Using device-managed actions to allocate memory that will eventually
+hold the connectors and encoders is unsafe.
+
+Please use drmm_kzalloc here, and test that it all works fine by
+enabling KASAN and removing the module.
+
+> +
+> +	hdmi->dev =3D dev;
+> +	hdmi->drm_dev =3D drm;
+> +
+> +	iores =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	hdmi->regs =3D devm_ioremap_resource(dev, iores);
+> +	if (IS_ERR(hdmi->regs))
+> +		return PTR_ERR(hdmi->regs);
+
+The main issue I was mentioning above is that whenever the device is
+unbound from its driver, all the device-managed actions are executed.
+
+However, the KMS device will still be there until the last (userspace)
+user closes its FD, so if anything happens between the time the module
+is removed and the FD is closed, you get plenty of use-after-free errors.
+
+For MMIO accesses, this is even more true since you need to use a
+device-managed action for the registers mapping (this is true for any
+resource tied to the device itself, so clocks, reset, etc. fit that
+description too).
+
+To protect against it, you need to protect any device access by a call
+to drm_dev_enter/drm_dev_exit.
+
+> +
+> +	ret =3D starfive_hdmi_get_clk_rst(dev, hdmi);
+> +	ret =3D starfive_hdmi_enable_clk_deassert_rst(dev, hdmi);
+
+Why does the device need to be powered here?
+
+> +	irq =3D platform_get_irq(pdev, 0);
+> +	if (irq < 0) {
+> +		ret =3D irq;
+> +		goto err_disable_clk;
+> +	}
+> +
+> +	hdmi->ddc =3D starfive_hdmi_i2c_adapter(hdmi);
+> +	if (IS_ERR(hdmi->ddc)) {
+> +		ret =3D PTR_ERR(hdmi->ddc);
+> +		hdmi->ddc =3D NULL;
+> +		goto err_disable_clk;
+> +	}
+> +
+> +	hdmi->tmds_rate =3D clk_get_rate(hdmi->sys_clk);
+
+It's not clear to me what tmds_rate is here, wouldn't that change from
+one mode to the next?
+
+> +	starfive_hdmi_i2c_init(hdmi);
+> +
+> +	ret =3D starfive_hdmi_register(drm, hdmi);
+> +	if (ret)
+> +		goto err_put_adapter;
+> +
+> +	dev_set_drvdata(dev, hdmi);
+> +
+> +	/* Unmute hotplug interrupt */
+> +	hdmi_modb(hdmi, HDMI_STATUS, m_MASK_INT_HOTPLUG, v_MASK_INT_HOTPLUG(1));
+> +
+> +	ret =3D devm_request_threaded_irq(dev, irq, starfive_hdmi_hardirq,
+> +					starfive_hdmi_irq, IRQF_SHARED,
+> +					dev_name(dev), hdmi);
+> +	if (ret < 0)
+> +		goto err_cleanup_hdmi;
+> +
+> +	pm_runtime_use_autosuspend(&pdev->dev);
+> +	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
+
+Autosuspend? Shouldn't we enable the device as long as there is an
+active video output (and you have that covered already)?
+
+> +	pm_runtime_enable(&pdev->dev);
+> +
+> +	starfive_hdmi_disable_clk_assert_rst(dev, hdmi);
+
+It would be clearer if you would move
+starfive_hdmi_enable_clk_deassert_rst()/disable_clk_assert_rst() into
+runtime_resume/runtime_suspend, and then in you bind just call
+pm_runtime_enable(), pm_runtime_get_sync(), do the registration, and
+pm_runtime_put.
+
+> +#define UPDATE(x, h, l)\
+> +({\
+> +	typeof(x) x_ =3D (x);\
+> +	typeof(h) h_ =3D (h);\
+> +	typeof(l) l_ =3D (l);\
+> +	(((x_) << (l_)) & GENMASK((h_), (l_)));\
+> +})
+
+That's FIELD_PREP, right?
+Maxime
+
+--c3ccdoac5xz7n6if
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH2w5wAKCRB4tDGHoIJi
-0pk3AP98k50f8b6t8gc+CLxz5l794W8A1lozutZce8eNutCddwD/ZWLXNAoLg/aP
-o8umGak3dTZZlLPTKRbxJal+Dq/i+AU=
-=vA5j
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZH2xPwAKCRDj7w1vZxhR
+xRFAAP0f3J6Tu7GQHeZqx5luoDhXXLf8/1gmqshwjcYtEt7awgEAoRRjwu25Pah9
+m5eSDewNpcJYQHuxezva0a9w+5vmPQk=
+=BH5E
 -----END PGP SIGNATURE-----
 
---PLgiS43f5xmwF/2A--
+--c3ccdoac5xz7n6if--
