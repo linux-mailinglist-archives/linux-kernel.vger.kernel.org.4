@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA57722F8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047A7722F82
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbjFETQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S233469AbjFETQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjFETQW (ORCPT
+        with ESMTP id S235323AbjFETQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:16:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5BD115;
+        Mon, 5 Jun 2023 15:16:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C8C109;
         Mon,  5 Jun 2023 12:16:18 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 19:16:16 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685992577;
+        s=2020; t=1685992576;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BSUJba/3OMHHFA7f0elDwG0YZzxrcX94s4XI3bmkqjc=;
-        b=C3elcbx1zVfpZu/vhVo196nw+PIbtbFqjkTS2/tK9d1WCS9+c61LVdhhf2aa/1oEO7xGsk
-        Jwn9MXXWLp9rSTab/TtYrzHMjaRZmNnXJryvnB8G9zWHjin9TQ3fMKjzsi43//L+7ioTh0
-        uUwxLQYghmhBNFLcOiM+L0eZlBuSk6nGLyZpEf9ICmUrz9W4KsdIGD8tqh1zOv1ZI6mwPw
-        mzin6Twt1UKGVDjgOSn7v+pYDbonX5oXOPvg5QPDdYCPkUhkBEFg8ZJmye1sbWNl+IHfAL
-        hE8VLgP94KfkNeQtbIslPDExxNaSN62WtJsJ7lzpI5TRwRu+xrci2t1yEGy/4g==
+        bh=YS7puzy0F12PrihIN3ZXJfwGTwkSXPTPP9QLsT1w4Xo=;
+        b=HCZYpTQaIRv87id4XWJ7/Nc2RiFuSbFFjS/ewDo8EBmJMTpAZIZwZrpb5Z6NjBwnbmrksP
+        ZnB8WsxgOG85PWcGNs278o66cv6/HR64Zkq3FfjcEC1Teh5osNlO+OmQk+bo216Ot89FyX
+        +0Oj2UkVqJNEhyk0MWteHxRdJ2NrlmnRt9zXVomx9WnVIauZr4v/xkg+v8T/uvXfnbujRe
+        y7H7ww7I5z5MY4cCzclDBoU6iDRv1vyJ8GrlqdYn78O5lDfJLaaz7Z6jl5F0OMFyGFQukw
+        hOqHxI4dSij0LfZ8ZUd1WiMqDI5yJtTBCIa8f+JuTETMz7mUZaXQq+2kpsnq3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685992577;
+        s=2020e; t=1685992576;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BSUJba/3OMHHFA7f0elDwG0YZzxrcX94s4XI3bmkqjc=;
-        b=cJqNpD+7MxrfvNCc8W2Jq7zdyjf8rv3J10NlR5h3rHhw4stcAFfgm/ZYatC49LgCy5/kwp
-        E4q1AsXqYofcHmDA==
+        bh=YS7puzy0F12PrihIN3ZXJfwGTwkSXPTPP9QLsT1w4Xo=;
+        b=2EvkrWzUbvn1X750HydIK1DU4jfxinvfYshYAlrl76rZZpPJC4Nm90i6Fev8PvImZT3E7d
+        Pe5o3nT3P7BNRjDQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] clocksource: hyper-v: Adjust hv_read_tsc_page_tsc()
- to avoid special casing U64_MAX
+Subject: [tip: sched/core] x86/tsc: Provide sched_clock_noinstr()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Michael Kelley <mikelley@microsoft.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230519102715.775630881@infradead.org>
-References: <20230519102715.775630881@infradead.org>
+In-Reply-To: <20230519102715.910937674@infradead.org>
+References: <20230519102715.910937674@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168599257684.404.16531675432812002461.tip-bot2@tip-bot2>
+Message-ID: <168599257618.404.5379549502996624214.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,161 +67,172 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     9397fa2ea3e7634f61da1ab76b9eb88ba04dfdfc
-Gitweb:        https://git.kernel.org/tip/9397fa2ea3e7634f61da1ab76b9eb88ba04dfdfc
+Commit-ID:     5c5e9a2b25b6a79d4b7a5f2a54d02ef1c36dc35a
+Gitweb:        https://git.kernel.org/tip/5c5e9a2b25b6a79d4b7a5f2a54d02ef1c36dc35a
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 19 May 2023 12:21:07 +02:00
+AuthorDate:    Fri, 19 May 2023 12:21:09 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 05 Jun 2023 21:11:07 +02:00
+CommitterDate: Mon, 05 Jun 2023 21:11:08 +02:00
 
-clocksource: hyper-v: Adjust hv_read_tsc_page_tsc() to avoid special casing U64_MAX
+x86/tsc: Provide sched_clock_noinstr()
 
-Currently hv_read_tsc_page_tsc() (ab)uses the (valid) time value of
-U64_MAX as an error return. This breaks the clean wrap-around of the
-clock.
+With the intent to provide local_clock_noinstr(), a variant of
+local_clock() that's safe to be called from noinstr code (with the
+assumption that any such code will already be non-preemptible),
+prepare for things by providing a noinstr sched_clock_noinstr()
+function.
 
-Modify the function signature to return a boolean state and provide
-another u64 pointer to store the actual time on success. This obviates
-the need to steal one time value and restores the full counter width.
+Specifically, preempt_enable_*() calls out to schedule(), which upsets
+noinstr validation efforts.
+
+  vmlinux.o: warning: objtool: native_sched_clock+0x96: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
+  vmlinux.o: warning: objtool: kvm_clock_read+0x22: call to preempt_schedule_notrace_thunk() leaves .noinstr.text section
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Michael Kelley <mikelley@microsoft.com>  # Hyper-V
-Link: https://lore.kernel.org/r/20230519102715.775630881@infradead.org
+Link: https://lore.kernel.org/r/20230519102715.910937674@infradead.org
 ---
- arch/x86/include/asm/vdso/gettimeofday.h | 10 ++++++----
- arch/x86/kvm/x86.c                       |  7 +++----
- drivers/clocksource/hyperv_timer.c       | 16 ++++++++++-----
- include/clocksource/hyperv_timer.h       | 24 ++++++++---------------
- 4 files changed, 29 insertions(+), 28 deletions(-)
+ arch/x86/kernel/kvmclock.c |  4 ++--
+ arch/x86/kernel/tsc.c      | 38 ++++++++++++++++++++++++++++---------
+ arch/x86/xen/time.c        |  3 +--
+ 3 files changed, 32 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/include/asm/vdso/gettimeofday.h b/arch/x86/include/asm/vdso/gettimeofday.h
-index 0badf0a..c81858d 100644
---- a/arch/x86/include/asm/vdso/gettimeofday.h
-+++ b/arch/x86/include/asm/vdso/gettimeofday.h
-@@ -238,10 +238,12 @@ static u64 vread_pvclock(void)
- #ifdef CONFIG_HYPERV_TIMER
- static u64 vread_hvclock(void)
- {
--	u64 ret = hv_read_tsc_page(&hvclock_page);
--	if (likely(ret != U64_MAX))
--		ret &= S64_MAX;
--	return ret;
-+	u64 tsc, time;
-+
-+	if (hv_read_tsc_page_tsc(&hvclock_page, &tsc, &time))
-+		return time & S64_MAX;
-+
-+	return U64_MAX;
+diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+index 0f35d44..fb8f521 100644
+--- a/arch/x86/kernel/kvmclock.c
++++ b/arch/x86/kernel/kvmclock.c
+@@ -71,7 +71,7 @@ static int kvm_set_wallclock(const struct timespec64 *now)
+ 	return -ENODEV;
  }
+ 
+-static noinstr u64 kvm_clock_read(void)
++static u64 kvm_clock_read(void)
+ {
+ 	u64 ret;
+ 
+@@ -88,7 +88,7 @@ static u64 kvm_clock_get_cycles(struct clocksource *cs)
+ 
+ static noinstr u64 kvm_sched_clock_read(void)
+ {
+-	return kvm_clock_read() - kvm_sched_clock_offset;
++	return pvclock_clocksource_read_nowd(this_cpu_pvti()) - kvm_sched_clock_offset;
+ }
+ 
+ static inline void kvm_sched_clock_init(bool stable)
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index 3446988..782a90e 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -69,12 +69,10 @@ static int __init tsc_early_khz_setup(char *buf)
+ }
+ early_param("tsc_early_khz", tsc_early_khz_setup);
+ 
+-__always_inline void cyc2ns_read_begin(struct cyc2ns_data *data)
++__always_inline void __cyc2ns_read(struct cyc2ns_data *data)
+ {
+ 	int seq, idx;
+ 
+-	preempt_disable_notrace();
+-
+ 	do {
+ 		seq = this_cpu_read(cyc2ns.seq.seqcount.sequence);
+ 		idx = seq & 1;
+@@ -86,6 +84,12 @@ __always_inline void cyc2ns_read_begin(struct cyc2ns_data *data)
+ 	} while (unlikely(seq != this_cpu_read(cyc2ns.seq.seqcount.sequence)));
+ }
+ 
++__always_inline void cyc2ns_read_begin(struct cyc2ns_data *data)
++{
++	preempt_disable_notrace();
++	__cyc2ns_read(data);
++}
++
+ __always_inline void cyc2ns_read_end(void)
+ {
+ 	preempt_enable_notrace();
+@@ -115,18 +119,25 @@ __always_inline void cyc2ns_read_end(void)
+  *                      -johnstul@us.ibm.com "math is hard, lets go shopping!"
+  */
+ 
+-static __always_inline unsigned long long cycles_2_ns(unsigned long long cyc)
++static __always_inline unsigned long long __cycles_2_ns(unsigned long long cyc)
+ {
+ 	struct cyc2ns_data data;
+ 	unsigned long long ns;
+ 
+-	cyc2ns_read_begin(&data);
++	__cyc2ns_read(&data);
+ 
+ 	ns = data.cyc2ns_offset;
+ 	ns += mul_u64_u32_shr(cyc, data.cyc2ns_mul, data.cyc2ns_shift);
+ 
+-	cyc2ns_read_end();
++	return ns;
++}
+ 
++static __always_inline unsigned long long cycles_2_ns(unsigned long long cyc)
++{
++	unsigned long long ns;
++	preempt_disable_notrace();
++	ns = __cycles_2_ns(cyc);
++	preempt_enable_notrace();
+ 	return ns;
+ }
+ 
+@@ -223,7 +234,7 @@ noinstr u64 native_sched_clock(void)
+ 		u64 tsc_now = rdtsc();
+ 
+ 		/* return the value in ns */
+-		return cycles_2_ns(tsc_now);
++		return __cycles_2_ns(tsc_now);
+ 	}
+ 
+ 	/*
+@@ -250,7 +261,7 @@ u64 native_sched_clock_from_tsc(u64 tsc)
+ /* We need to define a real function for sched_clock, to override the
+    weak default version */
+ #ifdef CONFIG_PARAVIRT
+-noinstr u64 sched_clock(void)
++noinstr u64 sched_clock_noinstr(void)
+ {
+ 	return paravirt_sched_clock();
+ }
+@@ -260,11 +271,20 @@ bool using_native_sched_clock(void)
+ 	return static_call_query(pv_sched_clock) == native_sched_clock;
+ }
+ #else
+-u64 sched_clock(void) __attribute__((alias("native_sched_clock")));
++u64 sched_clock_noinstr(void) __attribute__((alias("native_sched_clock")));
+ 
+ bool using_native_sched_clock(void) { return true; }
  #endif
  
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index ceb7c5e..99d97ba 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2799,14 +2799,13 @@ static u64 read_tsc(void)
- static inline u64 vgettsc(struct pvclock_clock *clock, u64 *tsc_timestamp,
- 			  int *mode)
++notrace u64 sched_clock(void)
++{
++	u64 now;
++	preempt_disable_notrace();
++	now = sched_clock_noinstr();
++	preempt_enable_notrace();
++	return now;
++}
++
+ int check_tsc_unstable(void)
  {
--	long v;
- 	u64 tsc_pg_val;
-+	long v;
+ 	return tsc_unstable;
+diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
+index b74ac25..52fa560 100644
+--- a/arch/x86/xen/time.c
++++ b/arch/x86/xen/time.c
+@@ -66,11 +66,10 @@ static noinstr u64 xen_sched_clock(void)
+         struct pvclock_vcpu_time_info *src;
+ 	u64 ret;
  
- 	switch (clock->vclock_mode) {
- 	case VDSO_CLOCKMODE_HVCLOCK:
--		tsc_pg_val = hv_read_tsc_page_tsc(hv_get_tsc_page(),
--						  tsc_timestamp);
--		if (tsc_pg_val != U64_MAX) {
-+		if (hv_read_tsc_page_tsc(hv_get_tsc_page(),
-+					 tsc_timestamp, &tsc_pg_val)) {
- 			/* TSC page valid */
- 			*mode = VDSO_CLOCKMODE_HVCLOCK;
- 			v = (tsc_pg_val - clock->cycle_last) &
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index bcd9042..c643bfe 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -393,14 +393,20 @@ struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
- }
- EXPORT_SYMBOL_GPL(hv_get_tsc_page);
- 
--static u64 notrace read_hv_clock_tsc(void)
-+static notrace u64 read_hv_clock_tsc(void)
- {
--	u64 current_tick = hv_read_tsc_page(hv_get_tsc_page());
-+	u64 cur_tsc, time;
- 
--	if (current_tick == U64_MAX)
--		current_tick = hv_get_register(HV_REGISTER_TIME_REF_COUNT);
-+	/*
-+	 * The Hyper-V Top-Level Function Spec (TLFS), section Timers,
-+	 * subsection Refererence Counter, guarantees that the TSC and MSR
-+	 * times are in sync and monotonic. Therefore we can fall back
-+	 * to the MSR in case the TSC page indicates unavailability.
-+	 */
-+	if (!hv_read_tsc_page_tsc(tsc_page, &cur_tsc, &time))
-+		time = hv_get_register(HV_REGISTER_TIME_REF_COUNT);
- 
--	return current_tick;
-+	return time;
+-	preempt_disable_notrace();
+ 	src = &__this_cpu_read(xen_vcpu)->time;
+ 	ret = pvclock_clocksource_read_nowd(src);
+ 	ret -= xen_sched_clock_offset;
+-	preempt_enable_notrace();
++
+ 	return ret;
  }
  
- static u64 notrace read_hv_clock_tsc_cs(struct clocksource *arg)
-diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
-index 536f897..6cdc873 100644
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -38,8 +38,9 @@ extern void hv_remap_tsc_clocksource(void);
- extern unsigned long hv_get_tsc_pfn(void);
- extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
- 
--static inline notrace u64
--hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
-+static __always_inline bool
-+hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
-+		     u64 *cur_tsc, u64 *time)
- {
- 	u64 scale, offset;
- 	u32 sequence;
-@@ -63,7 +64,7 @@ hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
- 	do {
- 		sequence = READ_ONCE(tsc_pg->tsc_sequence);
- 		if (!sequence)
--			return U64_MAX;
-+			return false;
- 		/*
- 		 * Make sure we read sequence before we read other values from
- 		 * TSC page.
-@@ -82,15 +83,8 @@ hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
- 
- 	} while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
- 
--	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
--}
--
--static inline notrace u64
--hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
--{
--	u64 cur_tsc;
--
--	return hv_read_tsc_page_tsc(tsc_pg, &cur_tsc);
-+	*time = mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
-+	return true;
- }
- 
- #else /* CONFIG_HYPERV_TIMER */
-@@ -104,10 +98,10 @@ static inline struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
- 	return NULL;
- }
- 
--static inline u64 hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
--				       u64 *cur_tsc)
-+static __always_inline bool
-+hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc, u64 *time)
- {
--	return U64_MAX;
-+	return false;
- }
- 
- static inline int hv_stimer_cleanup(unsigned int cpu) { return 0; }
