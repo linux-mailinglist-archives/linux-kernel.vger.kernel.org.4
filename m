@@ -2,87 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BAA721EA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1333A721EB1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjFEG7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 02:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S230120AbjFEHBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjFEG7n (ORCPT
+        with ESMTP id S229847AbjFEHBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:59:43 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A23BAD;
-        Sun,  4 Jun 2023 23:59:42 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3556gNN8028143;
-        Mon, 5 Jun 2023 06:58:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=EZQ2L225UF7EpySH1Ej360rO7oKz24TgQ4wLenyKS3U=;
- b=KsoUde3wMjzUz25vyt7NM/J5v5gov/WvhmA9SG6Dnc2H8igRBwPHW0B7SHopY6+H7Pv7
- P4a/OyEks43W8v19BqCQ/ugFUS8cXXE9CmWtFSd06gPo9KyNjS9K/klNPWrSY0wZcYMi
- xWltjpK9GECH/mXE3juq0L95hRYzPbjzrsvgi4oK2sqQAXOK9Lxw9+y9BkBBPMU7ysuu
- xO0LMTiFjeQ71Y9FL1se8ZHxzHKPJUqspw+114Xhl3fiFxJCQ8Ysnuf/4frxqr5bsrjt
- osp6eF7t1yiL+5njoh2xhyouRNqRp/wZ8FWhaFm6rlKlc/D+2EPgqKU8ekjColgcsZCP eg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyxq02qb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 06:58:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3556woEU022573
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Jun 2023 06:58:50 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 4 Jun 2023
- 23:58:45 -0700
-Message-ID: <2a775d11-346a-0dea-615e-51c2647b818a@quicinc.com>
-Date:   Mon, 5 Jun 2023 12:28:42 +0530
+        Mon, 5 Jun 2023 03:01:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FD1DB8;
+        Mon,  5 Jun 2023 00:01:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 261F6D75;
+        Mon,  5 Jun 2023 00:02:16 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D38683F793;
+        Mon,  5 Jun 2023 00:01:28 -0700 (PDT)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
+        keescook@chromium.org, linux@armlinux.org.uk,
+        linux-doc@vger.kernel.org, mark.rutland@arm.com,
+        mchehab@kernel.org, paulmck@kernel.org, peterz@infradead.org,
+        rdunlap@infradead.org, sstabellini@kernel.org, will@kernel.org
+Subject: [PATCH v2 00/27] locking/atomic: restructuring + kerneldoc
+Date:   Mon,  5 Jun 2023 08:00:57 +0100
+Message-Id: <20230605070124.3741859-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 5/8] arm64: dts: qcom: Add SDX75 platform and IDP board
- support
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <joro@8bytes.org>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>
-References: <1684487350-30476-1-git-send-email-quic_rohiagar@quicinc.com>
- <1684487350-30476-6-git-send-email-quic_rohiagar@quicinc.com>
- <405186ab-46df-fcf1-2894-a08c4b42c069@linaro.org>
- <ec664db0-ae0f-5046-25c4-315d0a2c8a3f@quicinc.com>
- <f839fd42-2d04-30b2-65b4-23df37a52f81@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <f839fd42-2d04-30b2-65b4-23df37a52f81@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: dC-JoBe2uPQAhfCiUDf2ZLM8UEcI2OLS
-X-Proofpoint-GUID: dC-JoBe2uPQAhfCiUDf2ZLM8UEcI2OLS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 phishscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306050062
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,291 +43,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
-On 5/30/2023 11:19 PM, Konrad Dybcio wrote:
->
-> On 30.05.2023 13:40, Rohit Agarwal wrote:
->> Thanks for reviewing. Sorry for the late reply was on leave.
->>
->> On 5/19/2023 10:58 PM, Konrad Dybcio wrote:
->>> On 19.05.2023 11:09, Rohit Agarwal wrote:
->>>> Add basic devicetree support for SDX75 platform and IDP board from
->>>> Qualcomm. The SDX75 platform features an ARM Cortex A55 CPU which forms
->>>> the Application Processor Sub System (APSS) along with standard Qualcomm
->>>> peripherals like GCC, TLMM, UART, QPIC, and BAM etc... Also, there
->>>> exists the networking parts such as IPA, MHI, PCIE-EP, EMAC, and Modem
->>>> etc..
->>>>
->>>> This commit adds basic devicetree support.
->>>>
->>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->>>> ---
->>>>    arch/arm64/boot/dts/qcom/Makefile      |   1 +
->>>>    arch/arm64/boot/dts/qcom/sdx75-idp.dts |  19 ++
->>>>    arch/arm64/boot/dts/qcom/sdx75.dtsi    | 534 +++++++++++++++++++++++++++++++++
->>>>    3 files changed, 554 insertions(+)
->>>>    create mode 100644 arch/arm64/boot/dts/qcom/sdx75-idp.dts
->>>>    create mode 100644 arch/arm64/boot/dts/qcom/sdx75.dtsi
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->>>> index d42c595..4fd5a18 100644
->>>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>>> @@ -173,6 +173,7 @@ dtb-$(CONFIG_ARCH_QCOM)    += sdm845-xiaomi-polaris.dtb
->>>>    dtb-$(CONFIG_ARCH_QCOM)    += sdm845-shift-axolotl.dtb
->>>>    dtb-$(CONFIG_ARCH_QCOM)    += sdm850-lenovo-yoga-c630.dtb
->>>>    dtb-$(CONFIG_ARCH_QCOM)    += sdm850-samsung-w737.dtb
->>>> +dtb-$(CONFIG_ARCH_QCOM)    += sdx75-idp.dtb
->>>>    dtb-$(CONFIG_ARCH_QCOM)    += sm4250-oneplus-billie2.dtb
->>>>    dtb-$(CONFIG_ARCH_QCOM)    += sm6115p-lenovo-j606f.dtb
->>>>    dtb-$(CONFIG_ARCH_QCOM)    += sm6125-sony-xperia-seine-pdx201.dtb
->>>> diff --git a/arch/arm64/boot/dts/qcom/sdx75-idp.dts b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
->>>> new file mode 100644
->>>> index 0000000..e2e803b
->>>> --- /dev/null
->>>> +++ b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
->>>> @@ -0,0 +1,19 @@
->>>> +// SPDX-License-Identifier: BSD-3-Clause
->>>> +/*
->>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
->>>> + */
->>>> +
->>>> +/dts-v1/;
->>>> +
->>>> +#include "sdx75.dtsi"
->>>> +
->>>> +/ {
->>>> +    model = "Qualcomm Technologies, Inc. SDX75 IDP";
->>>> +    compatible = "qcom,sdx75-idp", "qcom,sdx75";
->>>> +    qcom,board-id = <0x2010022 0x302>;
->>> You should be able to get by without qcom,{msm,board}-id.
->> Actually the bootloader requires the msm and board id. Shouldn't this become a necessary field then?
-> We generally discourage that, especially since at least on the LA front
-> it became unnecessary (no msm-id and appended dtb -> abl picks the only
-> one present).. I'm not sure at what point in product dev the SDX75 is,
-> but if we could get rid of that requirement, it'd be very nice..
->
-> OTOH getting rid of it just on one device and keeping it necessary with
-> fw builds that have been distributed to vendors sounds wouldn't be
-> very beneficial either :/
-Going deeper in the ABL code, Got to know that ABL does support the 
-single appended DTB.
-So will go ahead and remove the board-id and msm-id from this.
+These patches restructure the generated atomic headers, and add
+kerneldoc comments for all of the generic atomic{,64,_long}_t
+operations.
+
+The core headers now generate raw_atomic*() operations as the
+fundamental instrumentation-safe atomics, with the arch_atomic*()
+functions being an implementation detail that shouldn't be used
+directly.
+
+Each raw_atomic*() op is given a single definition with all related
+ifdeffery inside, e.g.
+
+| /**
+|  * raw_atomic_inc_return_acquire() - atomic increment with acquire ordering
+|  * @v: pointer to atomic_t
+|  *
+|  * Atomically updates @v to (@v + 1) with acquire ordering.
+|  *
+|  * Safe to use in noinstr code; prefer atomic_inc_return_acquire() elsewhere.
+|  *
+|  * Return: the updated value of @v.
+|  */
+| static __always_inline int
+| raw_atomic_inc_return_acquire(atomic_t *v)
+| {
+| #if defined(arch_atomic_inc_return_acquire)
+| 	return arch_atomic_inc_return_acquire(v);
+| #elif defined(arch_atomic_inc_return_relaxed)
+| 	int ret = arch_atomic_inc_return_relaxed(v);
+| 	__atomic_acquire_fence();
+| 	return ret;
+| #elif defined(arch_atomic_inc_return)
+| 	return arch_atomic_inc_return(v);
+| #else
+| 	return raw_atomic_add_return_acquire(1, v);
+| #endif
+| }
+
+Similarly, the regular atomic*() ops (which already have a single
+definition) are given kerneldoc comments, e.g.
+
+| /**
+|  * atomic_inc_return_acquire() - atomic increment with acquire ordering
+|  * @v: pointer to atomic_t
+|  *
+|  * Atomically updates @v to (@v + 1) with acquire ordering.
+|  *
+|  * Unsafe to use in noinstr code; use raw_atomic_inc_return_acquire() there.
+|  *
+|  * Return: the updated value of @v.
+|  */
+| static __always_inline int
+| atomic_inc_return_acquire(atomic_t *v)
+| {
+| 	instrument_atomic_read_write(v, sizeof(*v));
+| 	return raw_atomic_inc_return_acquire(v);
+| }
+
+The kerneldoc comments themselves are built from templates as with the
+fallbacks, which should allow them to be extended in future if necessary.
+
+I've compile-tested this for a number of architectures and
+configurations, but as usual this probably needs to see some testing by
+build robots.
+
+The patches are based on Peter Zijlstra's queued locking/core branch,
+specifically commit:
+
+  bb6e9a06cba6b850 ("s390/cpum_sf: Convert to cmpxchg128()")
+
+Which can be found in the git tree at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/
+
+Since v1 [1]:
+* Add kernel-doc handling of "~@v"
+* Add atomic-instrumented.h to included documentation headers
+* Fix typos and punctuation
+* Clarify kerneldoc wording
+
+[1] https://lore.kernel.org/lkml/20230522122429.1915021-1-mark.rutland@arm.com/
 
 Thanks,
-Rohit.
+Mark.
 
->
-> Konrad
->>>> +
->>>> +};
->>>> +
->>>> +&tlmm {
->>>> +    gpio-reserved-ranges = <110 6>;
->>>> +};
->>>> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
->>>> new file mode 100644
->>>> index 0000000..c2b8810
->>>> --- /dev/null
->>>> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
->>>> @@ -0,0 +1,534 @@
->>>> +// SPDX-License-Identifier: BSD-3-Clause
->>>> +/*
->>>> + * SDX75 SoC device tree source
->>>> + *
->>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
->>>> + *
->>>> + */
->>>> +
->>>> +#include <dt-bindings/clock/qcom,rpmh.h>
->>>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>>> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
->>>> +
->>>> +/ {
->>>> +    #address-cells = <2>;
->>>> +    #size-cells = <2>;
->>>> +    qcom,msm-id = <556 0x10000>;
->>>> +    interrupt-parent = <&intc>;
->>>> +
->>>> +    chosen: chosen { };
->>>> +
->>>> +    memory {
->>> The memory node should have a unit address.
->> Sure will update this.
->>>> +        device_type = "memory";
->>>> +        reg = <0 0 0 0>;
->>>> +    };
->>>> +
->>>> +    clocks { };
->>>> +
->>>> +    cpus {
->>>> +        #address-cells = <2>;
->>>> +        #size-cells = <0>;
->>>> +
->>> [...]
->>>
->>>> +
->>>> +        CLUSTER_PD: power-domain-cpu-cluster0 {
->>>> +            #power-domain-cells = <0>;
->>>> +            domain-idle-states = <&CLUSTER_SLEEP_0 &CX_RET &CLUSTER_SLEEP_1>;
->>> Is CLUSTER_SLEEP_1 deeper than CX retention?
->> Yes
->>>> +        };
->>>> +    };
->>>> +
->>>> +    firmware {
->>>> +        scm: scm {
->>>> +            compatible = "qcom,scm-sdx75", "qcom,scm";
->>>> +        };
->>>> +    };
->>>> +
->>>> +    pmu {
->>>> +        compatible = "arm,armv8-pmuv3";
->>>> +        interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
->>>> +    };
->>>> +
->>>> +    reserved-memory {
->>>> +        #address-cells = <2>;
->>>> +        #size-cells = <2>;
->>>> +        ranges;
->>>> +
->>>> +        gunyah_hyp_mem: memory@80000000 {
->>> reserved memory subnodes should have meaningful node names, e.g.
->>>
->>> hypervisor@800...
->> Will update this.
->>>> +            reg = <0x0 0x80000000 0x0 0x800000>;
->>>> +            no-map;
->>>> +        };
->>>> +
->>> [...]
->>>
->>>> +
->>>> +    smem: qcom,smem {
->>>> +        compatible = "qcom,smem";
->>>> +        memory-region = <&smem_mem>;
->>>> +        hwlocks = <&tcsr_mutex 3>;
->>>> +    };
->>>> +
->>>> +    soc: soc {
->>>> +        #address-cells = <2>;
->>>> +        #size-cells = <2>;
->>>> +        ranges;
->>> Are the SoC buses limited to 32b addresses?
->> No, Will fix this in the next.
->>>> +        compatible = "simple-bus";
->>> Compatible should go first.
->> Yes, Ok.
->>>> +
->>>> +        tcsr_mutex: hwlock@1f40000 {
->>>> +            compatible = "qcom,tcsr-mutex";
->>>> +            reg = <0x0 0x01f40000 0x0 0x40000>;
->>>> +            #hwlock-cells = <1>;
->>>> +        };
->>>> +
->>>> +        pdc: interrupt-controller@b220000 {
->>>> +            compatible = "qcom,sdx75-pdc", "qcom,pdc";
->>>> +            reg = <0x0 0xb220000 0x0 0x30000>,
->>>> +                  <0x0 0x174000f0 0x0 0x64>;
->>>> +            qcom,pdc-ranges = <0 147 52>,
->>>> +                      <52 266 32>,
->>>> +                      <84 500 59>;
->>>> +            #interrupt-cells = <2>;
->>>> +            interrupt-parent = <&intc>;
->>>> +            interrupt-controller;
->>>> +        };
->>>> +
->>>> +        tlmm: pinctrl@f000000 {
->>>> +            compatible = "qcom,sdx75-tlmm";
->>>> +            reg = <0x0 0x0f000000 0x0 0x400000>;
->>>> +            interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
->>>> +            gpio-controller;
->>>> +            #gpio-cells = <2>;
->>>> +            gpio-ranges = <&tlmm 0 0 133>;
->>>> +            interrupt-controller;
->>>> +            #interrupt-cells = <2>;
->>>> +            wakeup-parent = <&pdc>;
->>>> +        };
->>>> +
->>>> +        apps_smmu: iommu@15000000 {
->>>> +            compatible = "qcom,sdx75-smmu-500", "arm,mmu-500";
->>>> +            reg = <0x0 0x15000000 0x0 0x40000>;
->>>> +            #iommu-cells = <2>;
->>>> +            #global-interrupts = <2>;
->>>> +            interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 298 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 301 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 303 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>;
->>> Many newer SoCs have dma-coherent SMMUs. Is this the case here?
->> Yes, Will add the dma-coherent property here.
->>>> +        };
->>>> +
->>>> +        intc: interrupt-controller@17200000 {
->>>> +            compatible = "arm,gic-v3";
->>>> +            #interrupt-cells = <3>;
->>>> +            interrupt-controller;
->>>> +            #redistributor-regions = <1>;
->>>> +            redistributor-stride = <0x0 0x20000>;
->>>> +            reg = <0x0 0x17200000 0x0 0x10000>,
->>>> +                  <0x0 0x17260000 0x0 0x80000>;
->>>> +            interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->>>> +        };
->>>> +
->>>> +        timer@17420000 {
->>>> +            compatible = "arm,armv7-timer-mem";
->>>> +            #address-cells = <2>;
->>>> +            #size-cells = <2>;
->>>> +            ranges;
->>>> +            reg = <0x0 0x17420000 0x0 0x1000>;
->>>> +            clock-frequency = <19200000>;
->>> clock-frequency is discouraged, unless strictly necessary.
->>>
->>> Since gh is running, the timer is already programmed so it should be
->>> fine to drop this.
->>>
->>> [...]
->>>
->>>> +    timer {
->>>> +        compatible = "arm,armv8-timer";
->>>> +        interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
->>>> +                 <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
->>>> +                 <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
->>>> +                 <GIC_PPI 12 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
->>>> +        clock-frequency = <19200000>;
->>> Ditto
->> Ok Thanks for the info. Dropping the clock frequency property in the next version.
->>
->> Thanks,
->> Rohit.
->>> Konrad
->>>> +    };
->>>> +};
+Mark Rutland (26):
+  locking/atomic: arm: fix sync ops
+  locking/atomic: remove fallback comments
+  locking/atomic: hexagon: remove redundant arch_atomic_cmpxchg
+  locking/atomic: make atomic*_{cmp,}xchg optional
+  locking/atomic: arc: add preprocessor symbols
+  locking/atomic: arm: add preprocessor symbols
+  locking/atomic: hexagon: add preprocessor symbols
+  locking/atomic: m68k: add preprocessor symbols
+  locking/atomic: parisc: add preprocessor symbols
+  locking/atomic: sh: add preprocessor symbols
+  locking/atomic: sparc: add preprocessor symbols
+  locking/atomic: x86: add preprocessor symbols
+  locking/atomic: xtensa: add preprocessor symbols
+  locking/atomic: scripts: remove bogus order parameter
+  locking/atomic: scripts: remove leftover "${mult}"
+  locking/atomic: scripts: factor out order template generation
+  locking/atomic: scripts: add trivial raw_atomic*_<op>()
+  locking/atomic: treewide: use raw_atomic*_<op>()
+  locking/atomic: scripts: build raw_atomic_long*() directly
+  locking/atomic: scripts: restructure fallback ifdeffery
+  locking/atomic: scripts: split pfx/name/sfx/order
+  locking/atomic: scripts: simplify raw_atomic_long*() definitions
+  locking/atomic: scripts: simplify raw_atomic*() definitions
+  docs: scripts: kernel-doc: accept bitwise negation like ~@var
+  locking/atomic: scripts: generate kerneldoc comments
+  locking/atomic: treewide: delete arch_atomic_*() kerneldoc
+
+Paul E. McKenney (1):
+  locking/atomic: docs: Add atomic operations to the driver basic API
+    documentation
+
+ Documentation/driver-api/basics.rst          |    8 +-
+ arch/alpha/include/asm/atomic.h              |   35 -
+ arch/arc/include/asm/atomic-spinlock.h       |    9 +
+ arch/arc/include/asm/atomic.h                |   24 -
+ arch/arc/include/asm/atomic64-arcv2.h        |   19 +-
+ arch/arm/include/asm/assembler.h             |   17 +
+ arch/arm/include/asm/atomic.h                |   15 +-
+ arch/arm/include/asm/sync_bitops.h           |   29 +-
+ arch/arm/lib/bitops.h                        |   14 +-
+ arch/arm/lib/testchangebit.S                 |    4 +
+ arch/arm/lib/testclearbit.S                  |    4 +
+ arch/arm/lib/testsetbit.S                    |    4 +
+ arch/arm64/include/asm/atomic.h              |   28 -
+ arch/csky/include/asm/atomic.h               |   35 -
+ arch/hexagon/include/asm/atomic.h            |   69 +-
+ arch/ia64/include/asm/atomic.h               |    7 -
+ arch/loongarch/include/asm/atomic.h          |   56 -
+ arch/m68k/include/asm/atomic.h               |   18 +-
+ arch/mips/include/asm/atomic.h               |   11 -
+ arch/openrisc/include/asm/atomic.h           |    3 -
+ arch/parisc/include/asm/atomic.h             |   27 +-
+ arch/powerpc/include/asm/atomic.h            |   24 -
+ arch/powerpc/kernel/smp.c                    |   12 +-
+ arch/riscv/include/asm/atomic.h              |   72 -
+ arch/sh/include/asm/atomic-grb.h             |    9 +
+ arch/sh/include/asm/atomic-irq.h             |    9 +
+ arch/sh/include/asm/atomic-llsc.h            |    9 +
+ arch/sh/include/asm/atomic.h                 |    3 -
+ arch/sparc/include/asm/atomic_32.h           |   18 +-
+ arch/sparc/include/asm/atomic_64.h           |   29 +-
+ arch/x86/include/asm/atomic.h                |   87 -
+ arch/x86/include/asm/atomic64_32.h           |   76 -
+ arch/x86/include/asm/atomic64_64.h           |   81 -
+ arch/x86/include/asm/cmpxchg_64.h            |    4 +
+ arch/x86/kernel/alternative.c                |    4 +-
+ arch/x86/kernel/cpu/mce/core.c               |   16 +-
+ arch/x86/kernel/nmi.c                        |    2 +-
+ arch/x86/kernel/pvclock.c                    |    4 +-
+ arch/x86/kvm/x86.c                           |    2 +-
+ arch/xtensa/include/asm/atomic.h             |   12 +-
+ include/asm-generic/atomic.h                 |    3 -
+ include/asm-generic/bitops/atomic.h          |   12 +-
+ include/asm-generic/bitops/lock.h            |    8 +-
+ include/linux/atomic/atomic-arch-fallback.h  | 5200 ++++++++++++------
+ include/linux/atomic/atomic-instrumented.h   | 3484 ++++++++++--
+ include/linux/atomic/atomic-long.h           | 2122 ++++---
+ include/linux/context_tracking.h             |    4 +-
+ include/linux/context_tracking_state.h       |    2 +-
+ include/linux/cpumask.h                      |    2 +-
+ include/linux/jump_label.h                   |    2 +-
+ kernel/context_tracking.c                    |   12 +-
+ kernel/sched/clock.c                         |    2 +-
+ scripts/atomic/atomic-tbl.sh                 |  112 +-
+ scripts/atomic/atomics.tbl                   |    2 +-
+ scripts/atomic/fallbacks/acquire             |    4 -
+ scripts/atomic/fallbacks/add_negative        |   14 +-
+ scripts/atomic/fallbacks/add_unless          |   15 +-
+ scripts/atomic/fallbacks/andnot              |    6 +-
+ scripts/atomic/fallbacks/cmpxchg             |    3 +
+ scripts/atomic/fallbacks/dec                 |    6 +-
+ scripts/atomic/fallbacks/dec_and_test        |   14 +-
+ scripts/atomic/fallbacks/dec_if_positive     |    8 +-
+ scripts/atomic/fallbacks/dec_unless_positive |    8 +-
+ scripts/atomic/fallbacks/fence               |    4 -
+ scripts/atomic/fallbacks/fetch_add_unless    |   17 +-
+ scripts/atomic/fallbacks/inc                 |    6 +-
+ scripts/atomic/fallbacks/inc_and_test        |   14 +-
+ scripts/atomic/fallbacks/inc_not_zero        |   13 +-
+ scripts/atomic/fallbacks/inc_unless_negative |    8 +-
+ scripts/atomic/fallbacks/read_acquire        |    6 +-
+ scripts/atomic/fallbacks/release             |    4 -
+ scripts/atomic/fallbacks/set_release         |    6 +-
+ scripts/atomic/fallbacks/sub_and_test        |   15 +-
+ scripts/atomic/fallbacks/try_cmpxchg         |    6 +-
+ scripts/atomic/fallbacks/xchg                |    3 +
+ scripts/atomic/gen-atomic-fallback.sh        |  264 +-
+ scripts/atomic/gen-atomic-instrumented.sh    |   23 +-
+ scripts/atomic/gen-atomic-long.sh            |   38 +-
+ scripts/atomic/kerneldoc/add                 |   13 +
+ scripts/atomic/kerneldoc/add_negative        |   13 +
+ scripts/atomic/kerneldoc/add_unless          |   18 +
+ scripts/atomic/kerneldoc/and                 |   13 +
+ scripts/atomic/kerneldoc/andnot              |   13 +
+ scripts/atomic/kerneldoc/cmpxchg             |   14 +
+ scripts/atomic/kerneldoc/dec                 |   12 +
+ scripts/atomic/kerneldoc/dec_and_test        |   12 +
+ scripts/atomic/kerneldoc/dec_if_positive     |   12 +
+ scripts/atomic/kerneldoc/dec_unless_positive |   12 +
+ scripts/atomic/kerneldoc/inc                 |   12 +
+ scripts/atomic/kerneldoc/inc_and_test        |   12 +
+ scripts/atomic/kerneldoc/inc_not_zero        |   12 +
+ scripts/atomic/kerneldoc/inc_unless_negative |   12 +
+ scripts/atomic/kerneldoc/or                  |   13 +
+ scripts/atomic/kerneldoc/read                |   12 +
+ scripts/atomic/kerneldoc/set                 |   13 +
+ scripts/atomic/kerneldoc/sub                 |   13 +
+ scripts/atomic/kerneldoc/sub_and_test        |   13 +
+ scripts/atomic/kerneldoc/try_cmpxchg         |   15 +
+ scripts/atomic/kerneldoc/xchg                |   13 +
+ scripts/atomic/kerneldoc/xor                 |   13 +
+ scripts/kernel-doc                           |    2 +-
+ 101 files changed, 8979 insertions(+), 3689 deletions(-)
+ create mode 100755 scripts/atomic/fallbacks/cmpxchg
+ create mode 100755 scripts/atomic/fallbacks/xchg
+ create mode 100644 scripts/atomic/kerneldoc/add
+ create mode 100644 scripts/atomic/kerneldoc/add_negative
+ create mode 100644 scripts/atomic/kerneldoc/add_unless
+ create mode 100644 scripts/atomic/kerneldoc/and
+ create mode 100644 scripts/atomic/kerneldoc/andnot
+ create mode 100644 scripts/atomic/kerneldoc/cmpxchg
+ create mode 100644 scripts/atomic/kerneldoc/dec
+ create mode 100644 scripts/atomic/kerneldoc/dec_and_test
+ create mode 100644 scripts/atomic/kerneldoc/dec_if_positive
+ create mode 100644 scripts/atomic/kerneldoc/dec_unless_positive
+ create mode 100644 scripts/atomic/kerneldoc/inc
+ create mode 100644 scripts/atomic/kerneldoc/inc_and_test
+ create mode 100644 scripts/atomic/kerneldoc/inc_not_zero
+ create mode 100644 scripts/atomic/kerneldoc/inc_unless_negative
+ create mode 100644 scripts/atomic/kerneldoc/or
+ create mode 100644 scripts/atomic/kerneldoc/read
+ create mode 100644 scripts/atomic/kerneldoc/set
+ create mode 100644 scripts/atomic/kerneldoc/sub
+ create mode 100644 scripts/atomic/kerneldoc/sub_and_test
+ create mode 100644 scripts/atomic/kerneldoc/try_cmpxchg
+ create mode 100644 scripts/atomic/kerneldoc/xchg
+ create mode 100644 scripts/atomic/kerneldoc/xor
+
+-- 
+2.30.2
+
