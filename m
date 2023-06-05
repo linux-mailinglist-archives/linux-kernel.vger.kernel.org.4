@@ -2,101 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA67A722CEE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB19722CED
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbjFEQte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S234596AbjFEQt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjFEQtc (ORCPT
+        with ESMTP id S229825AbjFEQtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:49:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A316AD2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685983728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E/OIxezM2uYStzlyu+OjnotSbaNfvFepI69i/E1bObs=;
-        b=FB8e9Pm5+LaTsfordi4Gw+/RH8THi3x2yNbx2L/5R2Ma4OacsSKg0arQVwrZcMlpdThA00
-        sudVVt66KiSY+ok0r7isTUA4TyoRs3yIXYvv0i4BDuZ28UapokX5zbCLqR+pa0FrSWwqzl
-        9GwQmVxjuMoQy/8NqVHUaDcHiDOQR4c=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-321---mpz3MmNHahAWnuhwgqzQ-1; Mon, 05 Jun 2023 12:48:47 -0400
-X-MC-Unique: --mpz3MmNHahAWnuhwgqzQ-1
-Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2b1adee343dso23386031fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 09:48:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685983726; x=1688575726;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/OIxezM2uYStzlyu+OjnotSbaNfvFepI69i/E1bObs=;
-        b=hm4Zeaza2k7Xp1wYW+0PUf7r3NGACtOjSY+Qdebe8OiOy09/NIqjqeh1cLvojjxrDE
-         LecWnab/ai+zIYfd6FsH28bpiExEBk2tTU4+Hzbmm9pN9vLq3OIzc8qFSgQiFmRLFJn8
-         FHPo7dZ0Xy6jhIJr+tUuXCTK2bCzfeSg2Hc1RBs/FzVI1R6zQwZDNZitrm8NpZm8ib3q
-         2F9r1KblEJNSEXIEwmAzDhpf4o4eEkXp9Vw01+gC4UiY3Mc6FiwHnUr3Hg2jGoYgEnW5
-         g/jAjRnOc0SDgVfHmlQuJtpSKDIePJ8qfg34OWu1zRMMQtnb6yUnTIenV23LEP9+WzMW
-         qnTQ==
-X-Gm-Message-State: AC+VfDyK5wU5u6a6ldR3lfseDcIyqDaU1LSYJfqX+tTfPNGslQ1BQz1X
-        MrnVaIcUemddqoNztKDMaNa6goEPdz6HcU1KLNSu/kpfTlTUtM+6l3xDJAXRH+jDb6UhO1hZtuD
-        ROcKsDTJOHR+8d3dE6Trk3mxS
-X-Received: by 2002:a2e:b1d1:0:b0:2a8:a651:8098 with SMTP id e17-20020a2eb1d1000000b002a8a6518098mr4028403lja.38.1685983726251;
-        Mon, 05 Jun 2023 09:48:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ78L5uqt81ps8JytggP5F6lBBWC1TXae5N03SPl8+Il1Nomsggk+ISepK5qXMna580T4i/ECQ==
-X-Received: by 2002:a2e:b1d1:0:b0:2a8:a651:8098 with SMTP id e17-20020a2eb1d1000000b002a8a6518098mr4028394lja.38.1685983725921;
-        Mon, 05 Jun 2023 09:48:45 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id d13-20020aa7c1cd000000b0051425ba4faasm4129750edp.50.2023.06.05.09.48.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 09:48:45 -0700 (PDT)
-Message-ID: <b75c9696-9abb-7a3f-0fb2-56af8ef21bb6@redhat.com>
-Date:   Mon, 5 Jun 2023 18:48:44 +0200
+        Mon, 5 Jun 2023 12:49:25 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C64D9;
+        Mon,  5 Jun 2023 09:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=83NktPWyotPnIP6ctRP/lbvydHsK9DrqhUfJFfVVMCY=; b=Ix/RnCPT2/sRZIFzldq0mqWSyV
+        vdUg1T0JTIVInWRDJMfB9yqmx5rskWb8olvB+pa9YI+lYTAGYqQ+fKuVD2rSJgOlVOYyTj3PGaDHP
+        1ipA5LbMPchF5C7QrZTRp6eP9Qc5e32XuEGr8o1U8ILq+iXvDi7srxE4Eif76559b6Ac=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q6DOK-00Ev7j-OH; Mon, 05 Jun 2023 18:49:12 +0200
+Date:   Mon, 5 Jun 2023 18:49:12 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michal Smulski <michal.smulski@ooma.com>
+Cc:     "msmulski2@gmail.com" <msmulski2@gmail.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "simon.horman@corigine.com" <simon.horman@corigine.com>,
+        "kabel@kernel.org" <kabel@kernel.org>,
+        "ioana.ciornei@nxp.com" <ioana.ciornei@nxp.com>
+Subject: Re: [PATCH net-next v7 0/1] net: dsa: mv88e6xxx: implement USXGMII
+ mode for mv88e6393x
+Message-ID: <87a5491e-6697-48d3-94fe-aa2c6f5ab129@lunn.ch>
+References: <20230605053954.4051-1-msmulski2@gmail.com>
+ <b38bd01c-dbaa-440d-93ae-b1b772f8e8e1@lunn.ch>
+ <BYAPR14MB2918D3EBDA5120130D12BAB2E34DA@BYAPR14MB2918.namprd14.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] KVM: MAINTAINERS: note that linux-kvm.org isn't
- current
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20230525153204.27960-1-rdunlap@infradead.org>
- <ZHqSYbYscprsU2qT@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <ZHqSYbYscprsU2qT@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR14MB2918D3EBDA5120130D12BAB2E34DA@BYAPR14MB2918.namprd14.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/23 03:07, Sean Christopherson wrote:
-> It's definitely stale, though unless Red Hat (presumed hoster) plans on decomissioning
-> the site, I'd prefer to keep the reference and instead improve the site.  We (Google)
-> are planning on committing resources to update KVM documentation that doesn't belong
-> in the kernel itself, and updatingwww.linux-kvm.org  instead of creating something new
-> seems like a no-brainer.  I can't promise an updates will happen super quickly, but I
-> will do what I can to make 'em happen sooner than later.
+On Mon, Jun 05, 2023 at 04:32:03PM +0000, Michal Smulski wrote:
+> Andrew,
+> 
 
-We don't plan to decommission the website (especially not the old KVM 
-Forum content), though we might move it over to the same 
-(container-based) setup as wiki.qemu.org.
+> I will remove this line and resend v7. This was a mistake on my
+> part. However, could you clarify on what is the best way to let
+> reviewers know what changed between different version of the same
+> patch? It seemed to me that changlist should not be part of the git
+> commit message and hence I decided to add 'cover-letter' email for
+> each new version of the patch so that it would not be part of the
+> applied patch to net-next git repo (but it would also be easy to
+> match changelist email with patch email to people reviewing latest
+> patch)
 
-What content do you have in mind that doesn't fit in the kernel 
-Documentation/ tree?
+Some people think the history is actually useful, it shows what has
+been considered etc and the patch matured.
 
-Paolo
+However, anything text after the --- marker in a patch will get
+discarded by git am when the patch is merged. So you can place the
+history there.
 
+	Andrew
