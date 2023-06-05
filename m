@@ -2,159 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B6B722049
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CB072204F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbjFEH4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S231389AbjFEH6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjFEH4V (ORCPT
+        with ESMTP id S229455AbjFEH6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:56:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E976D3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:55:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 5 Jun 2023 03:58:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF939E;
+        Mon,  5 Jun 2023 00:58:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5AC4421B2E;
-        Mon,  5 Jun 2023 07:55:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685951758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VXaHPB8BNlakUIWezyFQAa9Z7HVGOiJDan/Axrkf5zw=;
-        b=JRpD4ctcwVaV1ctLM7gUmzd8wphoKwPD89Xjc7W0ASoydOMvjV+rP2Ny+ndcvJhV8ChVFD
-        Nakek+HhLzEPUDA7Va7N5PLilODa1xEa7M3RuIr4LuL9a+un+g69hcac86Hr3zIICnP25i
-        BUEvti0BBDtYIAVvQPAhWpBto9p8lp4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 40F1E139C8;
-        Mon,  5 Jun 2023 07:55:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BdQ1Dw6VfWRceQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 05 Jun 2023 07:55:58 +0000
-Date:   Mon, 5 Jun 2023 09:55:57 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2 2/3] vmstat: skip periodic vmstat update for nohz full
- CPUs
-Message-ID: <ZH2VDaF9uODTqAfV@dhcp22.suse.cz>
-References: <20230602185757.110910188@redhat.com>
- <20230602190115.521067386@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58A77611D9;
+        Mon,  5 Jun 2023 07:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D2CC433D2;
+        Mon,  5 Jun 2023 07:57:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685951880;
+        bh=zbCOojbpN/5xsH7NbHIY0TckYS2aMtS0mw5/YPigDoI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ReqWXoI65hxMS9lx7hIF2pJ2ypdxQUX51aNXweshbs+wRQfm7Rbhv6cgKiWCt1kW8
+         547gEoaSzSCTiY6ZrUAKO4Tp/acOnfn74gzppCfUQkm3RwUcu8dxpqhoTxJI83Ocey
+         vM4iZjlERcwicgyAFhfwn2G+99zfSn+fidNAxrnfdEyxi9d5mEGmjtJ28OTLn+6+kY
+         42509HYZXGj6D1kLDjgT9kLFsvsG2tQz2jztEOFq+luTnM/hDMZ0ufmxZNG0MCp9SK
+         rvAhqrMmLxKAY/Aplt1TJjV1agV1NZyvfprIN6ljZ+4fgHqjQ+y5SRK8txJ3meQxrF
+         WLhrMwscAFo6w==
+Date:   Mon, 5 Jun 2023 09:57:57 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Add myself as I2C host drivers maintainer
+Message-ID: <ZH2VhXA/1l96wq55@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230601190427.21388-1-andi.shyti@kernel.org>
+ <20230602012100.1096488-1-andi.shyti@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5jMVypSJ9Wn9opfi"
 Content-Disposition: inline
-In-Reply-To: <20230602190115.521067386@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230602012100.1096488-1-andi.shyti@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 02-06-23 15:57:59, Marcelo Tosatti wrote:
-> The interruption caused by vmstat_update is undesirable 
-> for certain aplications:
-> 
-> oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
-> oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
-> oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
-> kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
-> 
-> The example above shows an additional 7us for the
-> 
->        	oslat -> kworker -> oslat
-> 
-> switches. In the case of a virtualized CPU, and the vmstat_update  
-> interruption in the host (of a qemu-kvm vcpu), the latency penalty
-> observed in the guest is higher than 50us, violating the acceptable
-> latency threshold.
 
-I personally find the above problem description insufficient. I have
-asked several times and only got piece by piece information each time.
-Maybe there is a reason to be secretive but it would be great to get at
-least some basic expectations described  and what they are based on.
+--5jMVypSJ9Wn9opfi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-E.g. workloads are running on isolated cpus with nohz full mode to
-shield off any kernel interruption. Yet there are operations that update
-counters (like mlock, but not mlock alone) that update per cpu counters
-that will eventually get flushed and that will cause some interference.
-Now the host/guest transition and intereference. How that happens when
-the guest is running on an isolated and dedicated cpu?
 
-> Skip periodic updates for nohz full CPUs. Any callers who
-> need precise values should use a snapshot of the per-CPU
-> counters, or use the global counters with measures to 
-> handle errors up to thresholds (see calculate_normal_threshold).
+> in this v2 just changing the status from Odd Fixes to Maintained.
+> I forgot to set it before.
 
-I would rephrase this paragraph. 
-In kernel users of vmstat counters either require the precise value and
-they are using zone_page_state_snapshot interface or they can live with
-an imprecision as the regular flushing can happen at arbitrary time and
-cumulative error can grow (see calculate_normal_threshold).
+Great, I noticed this as well in v1
 
-From that POV the regular flushing can be postponed for CPUs that have
-been isolated from the kernel interference withtout critical
-infrastructure ever noticing. Skip regular flushing from vmstat_shepherd
-for all isolated CPUs to avoid interference with the isolated workload.
+Applied to for-current, thanks!
 
-> Suggested by Michal Hocko.
-> 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+Thank you very much and have fun!
 
-Acked-by: Michal Hocko <mhocko@suse.com>
 
-> 
-> ---
-> 
-> v2: use cpu_is_isolated		(Michal Hocko)
-> 
-> Index: linux-vmstat-remote/mm/vmstat.c
-> ===================================================================
-> --- linux-vmstat-remote.orig/mm/vmstat.c
-> +++ linux-vmstat-remote/mm/vmstat.c
-> @@ -28,6 +28,7 @@
->  #include <linux/mm_inline.h>
->  #include <linux/page_ext.h>
->  #include <linux/page_owner.h>
-> +#include <linux/sched/isolation.h>
->  
->  #include "internal.h"
->  
-> @@ -2022,6 +2023,16 @@ static void vmstat_shepherd(struct work_
->  	for_each_online_cpu(cpu) {
->  		struct delayed_work *dw = &per_cpu(vmstat_work, cpu);
->  
-> +		/*
-> +		 * Skip periodic updates for isolated CPUs.
-> +		 * Any callers who need precise values should use
-> +		 * a snapshot of the per-CPU counters, or use the global
-> +		 * counters with measures to handle errors up to
-> +		 * thresholds (see calculate_normal_threshold).
-> +		 */
-> +		if (cpu_is_isolated(cpu))
-> +			continue;
-> +
->  		if (!delayed_work_pending(dw) && need_update(cpu))
->  			queue_delayed_work_on(cpu, mm_percpu_wq, dw, 0);
->  
-> 
+--5jMVypSJ9Wn9opfi
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Michal Hocko
-SUSE Labs
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9lYUACgkQFA3kzBSg
+Kbbu9w//ezbU7S8/Jkbhu86fSgYZF1qYJNjt7hKmxOuvyDa8IcAOOmTibXnz3wmq
+xHRZiawF2o1tKMJZ40u9i7QBLHe+29kSqyRVhwyYsGBM6Xbvxi0MT1RYBfjXvnkC
+QrHDxR8Gxey5OJeyRcNZO6gKzwSUk1P+5i6AMCNo7StiI1V18xdBmLLgK8sQxVFy
+uy8r7+2+HyP3F8aWV96u01ghQfUjzmzRBb4jS4Rcr5xgZJL6YDXukYP8rvA3Lttg
+27uLnP+D4MPna/Ee/vz6cudYEYvFLr/sR/O0B5IVTvpVNwpu+KXSO84OZApKfcGp
+LTya66nJVZM2wqDQ6MMPtUjvngnw6fgZsh016iEvtMNd0Ap3+Evz4vp2T6NrRdkc
+uBs1+yRn42BYM/dmRxPoRZnNrw58EIi81bBVPIk2cEa9qCJOpvEp0OUa61L5Z50S
+UIgtSHqhD+1u8NSyW8koR8wp8xV6INYvPsLBt4l3oZZmsLVgnZuvA3KnN5z62oRa
+g8iBpvu/efjXg5vIB7XUYM27k82wQRKkg3479nQwV3eWTDEPRhze447O+wzdjuVZ
+tnQZYVUSy+bHr+JIOiaa7bSXv4UzW3T3JjImiBPECDRaJXr8GuuBJeg3p5qGeFgA
+2QQjX3Icj3uf4sswYpcRGm8o5v398y0sJiaCcPunCzWy6dIAyOk=
+=V+pT
+-----END PGP SIGNATURE-----
+
+--5jMVypSJ9Wn9opfi--
