@@ -2,111 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0290272241E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F276E72241F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjFELFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S231867AbjFELFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjFELFB (ORCPT
+        with ESMTP id S232006AbjFELFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:05:01 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0A5F2;
-        Mon,  5 Jun 2023 04:04:59 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 355B4lvN008502;
-        Mon, 5 Jun 2023 06:04:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685963087;
-        bh=ZgUYvyiKVgnOmW4p//WF3VcF42d3FC8Xm2zYqVM7i28=;
-        h=From:To:CC:Subject:Date;
-        b=UAW7cTULI4+z6p4wQnd8oTCXKUQGppslINJup18ncMrK3otzWMxs1rJw0Su9anl/L
-         Eot1l7NmGZdm9OXze81iC3lfJ5OHolQg65iUHp69nvi3lARpvRasPV4Q5YCJJLzltG
-         mQ+NqpOQj/UcpftIOlekvVyF5Cpu7idKSDxHUIII=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 355B4lUq114003
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 5 Jun 2023 06:04:47 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
- Jun 2023 06:04:47 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 5 Jun 2023 06:04:47 -0500
-Received: from ula0497641.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 355B4ieT111266;
-        Mon, 5 Jun 2023 06:04:44 -0500
-From:   Neha Malcom Francis <n-francis@ti.com>
-To:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <n-francis@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j721s2: Change CPTS clock parent
-Date:   Mon, 5 Jun 2023 16:34:43 +0530
-Message-ID: <20230605110443.84568-1-n-francis@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 5 Jun 2023 07:05:15 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32CEED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:05:10 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QZW3T4WZ7z9sCP;
+        Mon,  5 Jun 2023 13:05:09 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3wylewUK9X54; Mon,  5 Jun 2023 13:05:09 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QZW3T3jqJz9sB5;
+        Mon,  5 Jun 2023 13:05:09 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7A97C8B779;
+        Mon,  5 Jun 2023 13:05:09 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id lEUim57Ixwxf; Mon,  5 Jun 2023 13:05:09 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 54CD58B776;
+        Mon,  5 Jun 2023 13:05:09 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 355B51wO063384
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 5 Jun 2023 13:05:01 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 355B50RE063381;
+        Mon, 5 Jun 2023 13:05:00 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 1/4] powerpc/kuap: Avoid unnecessary reads of MD_AP
+Date:   Mon,  5 Jun 2023 13:04:50 +0200
+Message-Id: <1a3c69e38349b687c6c65240d7c09a7817a797d8.1685963081.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685963090; l=2619; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=MpFKL0d/EfDJ0kCQxhMEiBWz5R0LOuG+v/7pxC8nbYg=; b=yFk0cQtOBClqR7+PON7Sbs8qGOthFHJPTPLMFmfROgtuV2h1DKcrbU5GVFZnTR0oTJL2fA5Xv 0uBUcaS5bDvAOEdWghpXIcLzT15MN1cjfmVS8ULDaPc31r7tZEzPLaI
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAIN_PLL0 has a flag set in DM (Device Manager) that removes it's
-capability to re-initialise clock frequencies. CPTS and RGMII has
-MAIN_PLL3 as their parent which does not have this flag. While RGMII
-needs this reinitialisation to default frequency to be able to get
-250MHz with its divider, CPTS can not get its required 200MHz with its
-divider. Thus, move CPTS clock parent on J721S2 from MAIN_PLL3_HSDIV1 to
-MAIN_PLL0_HSDIV6.
+A disassembly of interrupt_exit_kernel_prepare() shows a useless read
+of MD_AP register. This is shown by r9 being re-used immediately without
+doing anything with the value read.
 
-(Note: even GTC will be moved from MAIN_PLL3 to MAIN_PLL0 in U-Boot side
-for the same reason)
+  c000e0e0:       60 00 00 00     nop
+  c000e0e4: ===>  7d 3a c2 a6     mfmd_ap r9	<====
+  c000e0e8:       7d 20 00 a6     mfmsr   r9
+  c000e0ec:       7c 51 13 a6     mtspr   81,r2
+  c000e0f0:       81 3f 00 84     lwz     r9,132(r31)
+  c000e0f4:       71 29 80 00     andi.   r9,r9,32768
 
-Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
+kuap_get_and_assert_locked() is paired with kuap_kernel_restore()
+and are only used in interrupt_exit_kernel_prepare(). The value
+returned by kuap_get_and_assert_locked() is only used by
+kuap_kernel_restore().
+
+On 8xx, kuap_kernel_restore() doesn't use the value read by
+kuap_get_and_assert_locked() so modify kuap_get_and_assert_locked()
+to not perform the read of MD_AP and return 0 instead.
+
+The same applies on BOOKE.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi       | 2 ++
- arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi | 2 ++
- 2 files changed, 4 insertions(+)
+ arch/powerpc/include/asm/nohash/32/kup-8xx.h | 8 ++------
+ arch/powerpc/include/asm/nohash/kup-booke.h  | 6 ++----
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-index 2dd7865f7654..331e0c9b4db8 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-@@ -738,6 +738,8 @@ cpts@310d0000 {
- 			reg-names = "cpts";
- 			clocks = <&k3_clks 226 5>;
- 			clock-names = "cpts";
-+			assigned-clocks = <&k3_clks 226 5>; /* NAVSS0_CPTS_0_RCLK */
-+			assigned-clock-parents = <&k3_clks 226 7>; /* MAIN_0_HSDIVOUT6_CLK */
- 			interrupts-extended = <&main_navss_intr 391>;
- 			interrupt-names = "cpts";
- 			ti,cpts-periodic-outputs = <6>;
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index a353705a7463..b55a3e9daf85 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -333,6 +333,8 @@ cpts@3d000 {
- 			reg = <0x0 0x3d000 0x0 0x400>;
- 			clocks = <&k3_clks 29 3>;
- 			clock-names = "cpts";
-+			assigned-clocks = <&k3_clks 29 3>; /* CPTS_RFT_CLK */
-+			assigned-clock-parents = <&k3_clks 29 5>; /* MAIN_0_HSDIVOUT6_CLK */
- 			interrupts-extended = <&gic500 GIC_SPI 858 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "cpts";
- 			ti,cpts-ext-ts-inputs = <4>;
+diff --git a/arch/powerpc/include/asm/nohash/32/kup-8xx.h b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
+index c44d97751723..8579210f2a6a 100644
+--- a/arch/powerpc/include/asm/nohash/32/kup-8xx.h
++++ b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
+@@ -41,14 +41,10 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kua
+ 
+ static inline unsigned long __kuap_get_and_assert_locked(void)
+ {
+-	unsigned long kuap;
+-
+-	kuap = mfspr(SPRN_MD_AP);
+-
+ 	if (IS_ENABLED(CONFIG_PPC_KUAP_DEBUG))
+-		WARN_ON_ONCE(kuap >> 16 != MD_APG_KUAP >> 16);
++		WARN_ON_ONCE(mfspr(SPRN_MD_AP) >> 16 != MD_APG_KUAP >> 16);
+ 
+-	return kuap;
++	return 0;
+ }
+ 
+ static inline void __allow_user_access(void __user *to, const void __user *from,
+diff --git a/arch/powerpc/include/asm/nohash/kup-booke.h b/arch/powerpc/include/asm/nohash/kup-booke.h
+index 49bb41ed0816..823c5a3a96d8 100644
+--- a/arch/powerpc/include/asm/nohash/kup-booke.h
++++ b/arch/powerpc/include/asm/nohash/kup-booke.h
+@@ -58,12 +58,10 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kua
+ 
+ static inline unsigned long __kuap_get_and_assert_locked(void)
+ {
+-	unsigned long kuap = mfspr(SPRN_PID);
+-
+ 	if (IS_ENABLED(CONFIG_PPC_KUAP_DEBUG))
+-		WARN_ON_ONCE(kuap);
++		WARN_ON_ONCE(mfspr(SPRN_PID));
+ 
+-	return kuap;
++	return 0;
+ }
+ 
+ static inline void __allow_user_access(void __user *to, const void __user *from,
 -- 
-2.34.1
+2.40.1
 
