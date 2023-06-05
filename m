@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C147222D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726DD7222D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbjFEKCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
+        id S231639AbjFEKCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjFEKCa (ORCPT
+        with ESMTP id S231513AbjFEKCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:02:30 -0400
+        Mon, 5 Jun 2023 06:02:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB84F3;
-        Mon,  5 Jun 2023 03:02:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A863E9;
+        Mon,  5 Jun 2023 03:02:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35193614C5;
-        Mon,  5 Jun 2023 10:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6E2C433EF;
-        Mon,  5 Jun 2023 10:02:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC3216145F;
+        Mon,  5 Jun 2023 10:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32815C433EF;
+        Mon,  5 Jun 2023 10:02:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685959346;
-        bh=wDMQp3EM29n8nZ/eyrN3WtLu2XgP5S4OYlBxnPAvpV4=;
+        s=k20201202; t=1685959330;
+        bh=5abGnYlpGeIkAbmWOgFaqsPnq9GUfYv18EA1sRFxf0o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hjwm58tFsNCa0MsNu2i76c25X16oi4OE3JGR95I3FoWfi+nj65agpOVa4H/8kFH0S
-         jzWsYGrabVmc+DCzT8o9uSx6Muz+ia13IneVTIb+V0+DrliQVxRQ6ClYvZ0wMjQXHD
-         9387CF1rXJOt9sDBFVmNRV6Spx45ubnYKPwMcX77YlMkBzu/JOnkdEtUZke8gXvjzb
-         QUaffNJ3L9/H/cc6MUzQDVxmxV1ZtYrbilCr5LVxQB4suX/54i3Q050iXvCvV2l4th
-         IsHNOmBZgKV6yi3V5g+Vc5e6iBwnXLg7ulAg8e7SOAAjwaLd0aBaQgP3npucHrzUnA
-         QKR0Gx2bk/z8w==
-Date:   Mon, 5 Jun 2023 12:02:23 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     David Zheng <david.zheng@intel.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com
-Subject: Re: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
-Message-ID: <ZH2yr1sFvjbAiBTq@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        David Zheng <david.zheng@intel.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com
-References: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
- <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
+        b=ks5F/7ZsXGFzvQYZkRtnA2uNecgZ73F6IwjUmpD7XAD38sPGLyy7BBTrNpEva1D/z
+         ggXUOAtJ5VJYMufV+7FEXksc92u6nFd6nANf1AWy53Ysh4q2DrerwLPml8KN3Ti94j
+         ckF2yIETt4QXljbFoh4CRE0/bF2eMPgVHhH4fRePhHhmP4VJW17UBpOThf/8PDalcO
+         lVa7FcCmpssWJQE07mdlWlFrRMzy1hICOKUbgKniepMEcl91r4WtBZi/TvBl6YNEy1
+         b0HDFg1cJuMDXrJWrV8j1eOTk6m+SOT6zHkxwQlx0NrNsSHTP+sbYejxW85OUGIpgg
+         EQzmGCEwlD94Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q672h-0005ky-7p; Mon, 05 Jun 2023 12:02:27 +0200
+Date:   Mon, 5 Jun 2023 12:02:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Johan Hovold <johan@kernel.org>, regressions@lists.linux.dev
+Subject: Re: [PATCH] Revert "drm/msm/dp: set self refresh aware based on PSR
+ support"
+Message-ID: <ZH2ys6dVeL02JLCU@hovoldconsulting.com>
+References: <20230523151646.28366-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kGhRtULe50q054Gw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
+In-Reply-To: <20230523151646.28366-1-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,97 +68,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[ +CC: Thorsten and regzbot so they can help with tracking this
+regression ]
 
---kGhRtULe50q054Gw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+#regzbot introduced: v6.3..v6.4-rc1
 
-On Fri, May 26, 2023 at 04:58:26PM +0300, Jarkko Nikula wrote:
-> On 5/24/23 21:14, David Zheng wrote:
-> > With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
-> > RX FIFO is empty. When testing with the slave-eeprom, each transaction
-> > has 2 bytes for address/index and 1 byte for value, the address byte
-> > can be written as data byte due to dropping STOP condition.
-> >=20
-> > In the test below, the master continuously writes to the slave, first 2
-> > bytes are index, 3rd byte is value and follow by a STOP condition.
-> >=20
-> >   i2c_write: i2c-3 #0 a=3D04b f=3D0000 l=3D3 [00-D1-D1]
-> >   i2c_write: i2c-3 #0 a=3D04b f=3D0000 l=3D3 [00-D2-D2]
-> >   i2c_write: i2c-3 #0 a=3D04b f=3D0000 l=3D3 [00-D3-D3]
-> >=20
-> > Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` =
-so
-> > next 2 bytes can be treated as buffer index for upcoming transaction.
-> > Supposedly the slave eeprom buffer would be written as
-> >=20
-> >   EEPROM[0x00D1] =3D 0xD1
-> >   EEPROM[0x00D2] =3D 0xD2
-> >   EEPROM[0x00D3] =3D 0xD3
-> >=20
-> > When CPU load is high the slave irq handler may not read fast enough,
-> > the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
-> > (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
-> > the transactions below.
-> >=20
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
-=3D0x4
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
-=3D0x4
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
-=3D0x4
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1794 : INTR_STAT=
-=3D0x204
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x0 : RAW_INTR_STAT=3D0x1790 : INTR_STAT=
-=3D0x200
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
-=3D0x4
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
-=3D0x4
-> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
-=3D0x4
-> >=20
-> > After `D1` is received, read loop continues to read `00` which is the
-> > first bype of next index. Since STOP condition is ignored by the loop,
-> > eeprom buffer index increased to `D2` and `00` is written as value.
-> >=20
-> > So the slave eeprom buffer becomes
-> >=20
-> >   EEPROM[0x00D1] =3D 0xD1
-> >   EEPROM[0x00D2] =3D 0x00
-> >   EEPROM[0x00D3] =3D 0xD3
-> >=20
-> > The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
-> > the transactions. The first index byte in this case would have bit 11
-> > set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
-> > which will reset `idx_write_cnt` in slave eeprom.
-> >=20
-> > Signed-off-by: David Zheng <david.zheng@intel.com>
+On Tue, May 23, 2023 at 05:16:46PM +0200, Johan Hovold wrote:
+> This reverts commit 1844e680d56bb0c4e0489138f2b7ba2dc1c988e3.
+> 
+> PSR support clearly is not ready for mainline and specifically breaks
+> virtual terminals which are no longer updated when PSR is enabled (e.g.
+> no keyboard input is echoed, no cursor blink).
+> 
+> Disable PSR support for now by reverting commit 1844e680d56b
+> ("drm/msm/dp: set self refresh aware based on PSR support").
+> 
+> Cc: Vinod Polimera <quic_vpolimer@quicinc.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+> 
+> Bjorn reported that PSR support broke virtual terminals two months ago, 
+> but this is still broken in 6.4-rc3:
+> 
+> 	https://lore.kernel.org/lkml/20230326162723.3lo6pnsfdwzsvbhj@ripper/
+> 
+> despite the following series that claimed to address this:
+> 
+> 	https://lore.kernel.org/lkml/1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com
+> 
+> Let's revert until this has been fixed properly.
 
-Applied to for-current, thanks!
+Virtual terminals are still broken with 6.4-rc5 on the Lenovo ThinkPad
+X13s two weeks after I reported this, and there has been no indication
+of any progress in the other related thread:
 
-Someone maybe has a Fixes tag for it?
+	https://lore.kernel.org/lkml/ZHYPHnWoDbXB-fqe@hovoldconsulting.com
 
+Seems like it is time to merge this revert to get this sorted.
 
---kGhRtULe50q054Gw
-Content-Type: application/pgp-signature; name="signature.asc"
+Rob, Abhinav, Dmitry, can either of you merge this one and get it into
+6.4-rc6?
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9sq8ACgkQFA3kzBSg
-Kbbc9Q//TCUXaQovPdQLkXwhp3QMwJf54s87beL/9vOqI/8zhPg25Y0UTtsQ/n36
-Rd5u61DEXqxYIXlKQXdIak8CUWgcuMpESPcY1M86roMBv/T+SjI7ROo7tQLBdFoD
-uLIQRjlQr4JSh3h4QJiK2SkrXmS/1FgsppH+lro9TsRm9WaFZkAU5M8FBZd06WpX
-1CES6MVSqLeQSO5TW5eDRBei2oKm+TJYjhGAovZhrgMxZ0SVzm6W0dY5x2t9kNpZ
-JoUx8oj81QR0JPNHLJIybmJ2C+Ea9yL3fmKfviLkbkBgz22jmHvG+gbDsx21vfyx
-oQUa9yHykwiAmAZXLCsGww9SW9uwCoLAvKy5Axj49iodocAMMUp7zwBzr3qciJpY
-B0LMA/oki2hVMQaywj9YY/rT9mkCw2wzDH185ltcvAMxXvy/AGWc7GLWDzabj+q9
-AryohX6UNs/3FIR7sbLcNPw/G8gwLsLI1ZPWnujqNSPsZBTeX0gX2kAmpouyd+co
-aTJ2TeCpCDUMoP8LS7vOFuPS7sJJvV1c4OAtDtpjr6QOCxRT9MapRcRp0yodcQx6
-a/Ze7/vNmYljDRpSLQF6oAkfar5nVTs9nlty5May/x7N22OrX8K/yXyZuv+2HX/0
-uxrdGwAUzf0M2/01YS6JaMkOig9hDnDkf6LU52Ey9sjcnO7TYs8=
-=SooM
------END PGP SIGNATURE-----
-
---kGhRtULe50q054Gw--
+Johan
