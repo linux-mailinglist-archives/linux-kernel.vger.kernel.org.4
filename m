@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E4D7220CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285557220DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjFEITH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S229871AbjFEIVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjFEITF (ORCPT
+        with ESMTP id S229785AbjFEIVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:19:05 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57126A9;
-        Mon,  5 Jun 2023 01:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=KubJxH4hHn+hbxhkRtiPesgcbwDHTIqMMOrkNxFfH1E=;
-        t=1685953143; x=1687162743; b=pyEhq2QG0FePUqaQGbC7yp2AdpfYcVDkYjRxPOUdY5FC50P
-        SBqwzkgCerym621cSzFmJe1qznUf9w5Dzzg26UFT3JiFQJjFmM6L42VHQwMbUjnJ2xyPbwMaz7FT7
-        HXo3dhpgQ2+/Z/+AZTD1vJgl28YGPYjyQ0Vmi0Ty8zAKfES65oKD1FaQ4u3KFzy88WCybLdAsOm/o
-        Puy02TXWrSnEtLtM++DI2wrzu3RyMJ9twq7i47MJNuWsFcTRkU/Jwj1RRVAIGpc32BCHtQwSFNwUQ
-        VGLr2pFWGIXOM0h8Rv2elBfQCItakm1XcnlzScO4YETAdzV8iVEJw8mbHYSaA03g==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1q65Qa-00ELtr-2S;
-        Mon, 05 Jun 2023 10:19:00 +0200
-Message-ID: <70071209bfa07b38df576c59341b935b9b95ae28.camel@sipsolutions.net>
-Subject: Re: [PATCH 1/2] kernel-doc: don't let V=1 change outcome
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Date:   Mon, 05 Jun 2023 10:18:59 +0200
-In-Reply-To: <CAK7LNAQ87U202fgqkd5T9G82h4F6sNOMW2=vH1HmgAoVA48CMw@mail.gmail.com>
-References: <20230602230014.a435aab03cee.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
-         <CAK7LNAQ87U202fgqkd5T9G82h4F6sNOMW2=vH1HmgAoVA48CMw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+        Mon, 5 Jun 2023 04:21:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A626100;
+        Mon,  5 Jun 2023 01:21:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8DAF61255;
+        Mon,  5 Jun 2023 08:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EFAC433EF;
+        Mon,  5 Jun 2023 08:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685953277;
+        bh=CzcsYZ4ufFeVcmQTCuhbju+7YVG2PkIJVUvG0kNtkwc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C3MLc2MW1y2lMhfmtMy6Gsq7lgzfzXhnzCGxT50lonpJf48e5l5hHFxXPsXuX1L55
+         2eYHC3HdC5K2Y8KmyDw7GodkrCQlykud/4pfIRjiFSds96lzbxVyHYD6RIAUHHTdaF
+         T/40BRKR133odc1W99U1LifMOGYgr1W+38VAZcZOLzbjLVFeBlRYwEC6DNyJhVQdh2
+         VDBZBtTUcW8r7S+OAhXjKjnddaYvBle14404g7q9qPoiPe0B9ZU+k6y7/B+uwPmzNI
+         fVL2+N6f+QP6Pmg43dAI/uf6aQIKfoLdO2MYHLeL/LtvIEFf6SiNl99G8lLYLUkITB
+         qJiCZWnYeNZrQ==
+Date:   Mon, 5 Jun 2023 10:21:13 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com
+Subject: Re: [PATCH v6 RESEND 2/2] i2c: tegra: Share same DMA channel for RX
+ and TX
+Message-ID: <ZH2a+S/1yeV5gN07@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
+        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com
+References: <20230427123915.38199-1-akhilrajeev@nvidia.com>
+ <20230427123915.38199-3-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LDeXN0taeq+/0mbk"
+Content-Disposition: inline
+In-Reply-To: <20230427123915.38199-3-akhilrajeev@nvidia.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-06-05 at 09:36 +0900, Masahiro Yamada wrote:
 
-> > +if (defined($ENV{'KDOC_WRETURN'})) {
-> > +       $Wreturn =3D "$ENV{'KDOC_WRETURN'}";
-> > +}
-> > +
-> > +if (defined($ENV{'KDOC_WSHORT_DESC'})) {
-> > +       $Wshort_desc =3D "$ENV{'KDOC_WSHORT_DESC'}";
-> > +}
-> > +
-> > +if (defined($ENV{'KDOC_WCONTENTS_BEFORE_SECTION'})) {
-> > +       $Wcontents_before_sections =3D "$ENV{'KDOC_WCONTENTS_BEFORE_SEC=
-TION'}";
-> > +}
-> > +
-> > +if (defined($ENV{'KDOC_WALL'})) {
-> > +       $Wreturn =3D "$ENV{'KDOC_WALL'}";
-> > +       $Wshort_desc =3D "$ENV{'KDOC_WALL'}";
-> > +       $Wcontents_before_sections =3D "$ENV{'KDOC_WALL'}";
-> > +}
+--LDeXN0taeq+/0mbk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Apr 27, 2023 at 06:09:15PM +0530, Akhil R wrote:
+> Allocate only one DMA channel for I2C and share it for both TX and RX
+> instead of using two different DMA hardware channels with the same
+> slave ID. Since I2C supports only half duplex, there is no impact on
+> perf with this.
 >=20
->=20
->=20
-> Adding an environment variable to each of them is tedious.
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
 
-Agree. And adding one for -Wall is especially tedious because you have
-to spell out the list of affected warnings in two places :)
+Applied to for-next, thanks!
 
-> If you enable -Wall via the command line option,
-> these lines are unneeded?
->=20
-> For example,
->=20
-> ifneq ($(KBUILD_EXTRA_WARN),)
->   cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
->          $(if $(findstring 2, $(KBUILD_EXTRA_WARN)), -Wall) $<
-> endif
->=20
+No, there wasn't an issue with this patch. I just needed to make sure
+patch 1 (which was for-current material) landed upstream to avoid merge
+conflicts.
 
-Yes, that should be possible.
 
-I feel like maybe we should still have individual settings for the three
-different classes, because you might want to have -Wshort-desc without
-the extra -Wcontents-before-sections (which I thought about removing
-entirely, kernel-doc seems to parse just fine that way, what's the point
-of it?)
+--LDeXN0taeq+/0mbk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-But we could even move the env var handling _completely_ to the Makefile
-if you don't mind, and then we don't have to have two places in the
-script that need to be aligned all the time.
+-----BEGIN PGP SIGNATURE-----
 
-johannes
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9mvkACgkQFA3kzBSg
+KbYXNQ/8D9obKSmFAjE8DXoSZo4dHrcRL8WFA2Bkt45Plpabai8HWhOfI2Th/P70
+1pgGZ6tPyrRVG5ZxuCaQ+xhwsm720AVLKIPEKSWFM7tGkzBGk2K+5UOHn8cesyd0
+g6Q/RPOoHZTmU9x6xFnWkj3jeFGyIdjmTjiTy7pUPkR5iw+cLPmGymq538BfxicH
+der5ucFnJ5RjhEOt1SEP7P7i5ZacJke3dMCNOKK5pC1Tp1Ky8IwvzIVSMJ3XQLVl
+sF64VKFkkrl8T28Lh42isLiS+ggDeleWiuFqZXIrZppcA4mnHEE0JgrTigIX+YXE
+K54HhsvQEM3w+FU1xh8GbZLukHFUGf7rS0zS7midFdN31aDbw28h2PAxPojKcfEQ
+yHsmg//l5aI7cL25hza0ZGKwqbrzd2OyWe2PMO+nWQ8FDBPKM0jAbzC7/bVQPj4j
+nj8/lN4gNWBGUGRmikNyoUJAqExvszSLpr6L8FXA+K96NlaznSt6IHYIW/O4wQqD
+UYh6sMPf3qA8YcRnB0RHZEZa8vigqTcZtq2hXclDH1K2yksxML25w/gkRR4AitpP
+XRhS1bwu/yWK3gDNXPyBrxcq9bqrY53GCNCnFA3t/yz20QHN3QK0mHwtk29O+xEq
+l4Rib6LWkDVMCQetMbolBe7jVFvH9mC8mY2El7o5tQwPjPPuW1c=
+=vSC3
+-----END PGP SIGNATURE-----
+
+--LDeXN0taeq+/0mbk--
