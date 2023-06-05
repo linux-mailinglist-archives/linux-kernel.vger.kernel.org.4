@@ -2,301 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0ECF721D2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A71721D32
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbjFEEl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 00:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
+        id S232816AbjFEEqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 00:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFEElW (ORCPT
+        with ESMTP id S229699AbjFEEqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 00:41:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE165BD
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 21:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685940081; x=1717476081;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=u7QqBp/3D4z/oAC1PlrRlGboFQ91SLvZusZT3gIityM=;
-  b=TNVj83bMdOch1DkuWFDP6YPl0UoIr626Nwg+9ePo/0wntMF61EWZE63/
-   0ldAbFB6MhKD9Ccrx6e80Of1UXlOj9YLWfVuVC7DrX8qyV9/4szdgLjnW
-   qY/xVufqA2UppKIUCR+ix6ybJkOG1XgG6cFYq3evKB3M6Ku6tTNERCfp7
-   D56CCMcfr3QTAypNUhJUpyGasgLjqPSLSQJ9XBZBt6TPrtuN5iVf0KcUz
-   L5s3wFnV5NfBvh7U1AFu7SPnKh6W3FNIgVkc795FMbiVMxteelOvvNYNe
-   nB8rtxPxipXSZl45SII7kHV2NGRT2y2lyZMFYdvuPH3lHlgQtRJvxoibE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="335898459"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="335898459"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 21:41:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="1038636028"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="1038636028"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Jun 2023 21:41:20 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 4 Jun 2023 21:41:19 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 4 Jun 2023 21:41:19 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sun, 4 Jun 2023 21:41:19 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sun, 4 Jun 2023 21:41:19 -0700
+        Mon, 5 Jun 2023 00:46:34 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B9998
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 21:46:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QX4bqV7hadmBBpMRH0W4py1mZKdQJ0QRSRd/ATyAgzH/Dz4JiSp4piyvrO7WcKIoG5zwsIPY2iv1G9RbA/crgSIy7eR1GT8padp0UTSt8kagZz0ZjB9Xp4lNuVwQPSfmpczRcnavFzWZ4Wy76KDOXM/WbxQY4CYQK2fHI4UT4TAO6BVEy3eLy/VBMyA0HoP5LBJzKwmJhAdiCftJuWzkUKmQBKbCCiy0EfJkhqlgVQaTlkpAb8wzPw8WUv0fDVwhpo40ERAtUzPCl7NDY4OYU/r4V2w9xhJM32LdBP0TWeLW9ISyndDNs6JfTZ3frfYn0sSxFdcs1i1YeZEsT/uCDw==
+ b=gzAeYQH+cc8QLjt46W7rZWQK1Dj4tXY2zaUBmb5/V6CnDpO2tjPnVbA+nh76KzCtM1ybCHRFvq0DxrrLX6pHRW+jaEu649RrIR8sQ37mWVES4PBGISUg43aCt9IVm1HUlefikFolb4KwdiGoL1f/evaHMy+T10GbrhtUhO83dhtw3aLBPk8CPM7Za7GYracby2ko2iLJ/xJvhOmtA9PHjBBzuYrXctiHHLlhOKFXmLXfXNHOIzzm9I4TylMzV8Wde1JvGgpLk6QTpsU48Z02S6mY/k39Qp3RKP0c6SYTRUHFCQ/5+OFITLh82pSQEqURWOSUrmj/V/bFLIqhyTR/jA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VPbVxa4cmAjbFB/uUmYuhe7sVCJZTWdgYZbQ0gd7LJs=;
- b=NajAWZ+qH2ouInZell/SLZ+S6Vz9h+P+i7enh0r2HNyZGHfHNWTxdNwJjXtOEitGy5YCj4YRfBVpIaDG4thbdXmuJAiOg0QjS9okNG0mtCATMbvFoYm0vI+BGSNrEINATjQbWCFMRHsGtD/h3y4anaynwHB8LGdC3gr5CMshpI4fTSL5T8dw1Y5CXM60mR8DgxE2ZM+T4txMxduOD5j93itZ/vmc973tEsXcf+O4f1SCsEbrirqCPtfUJEV8CcVG3zSQObn/HR0YAZO1JqWzz03bgmY5qMBxF7ARE8mAVfLNyeC2XUfq/RuRR1t4oU7+4STzSu/8yhjALDBJ4UdOiQ==
+ bh=pb+FKyki8jLWOFqFl9aDb7dSOdCutbpd3qsqcFSIqfI=;
+ b=DfSxcRidXDm/HVMLN+xUJDv5xBd2hUgJ7vl8aAC8CzSKysjjMpE2V+cczdKTCqWVZJkjdLGuoSMMY5Qir/bjiIwbmVFw3MFZ5Qs6mT52vXA3zFpQbd9OLzUj4dUPDqQPnZ9teYNTEhXP1dYMsGdniM/Nirb3lUtpJfpCT2xaMlHQRXZwlQ9YD2Z1Zidu3bPUQGc56C66adnkBfmEo5uz7fMTH75kU03QhuxDbl7h1xPFc6MSV5j0nWhteBE4nMSKPz/WePZa/F6eeViPCML8XhJaw+FOUYmrSrmIJtjvMwSsGpesKCotlzJuGW5yCjhArkkRAIl43MYZWIPO6YeTzw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pb+FKyki8jLWOFqFl9aDb7dSOdCutbpd3qsqcFSIqfI=;
+ b=TUEmec5vNf626/paVtTrfYUnDZ76WU9nFnBw1NrpQRI+IijcoTAzpAgd9Jku1pqT4ny1nXz5QUIpIKynalVRozPUSxGyuZc0nZsZ0RqoE31042gOJesJ03CV9jEasGF35P5IZ++0XFOHEcu1ACZcb4N9rPp37Mq/graNKuyCd2M=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
- by DM4PR11MB6501.namprd11.prod.outlook.com (2603:10b6:8:88::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.32; Mon, 5 Jun 2023 04:41:17 +0000
-Received: from CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::e6c7:a86d:68d6:f2f3]) by CO1PR11MB4820.namprd11.prod.outlook.com
- ([fe80::e6c7:a86d:68d6:f2f3%5]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 04:41:17 +0000
-Message-ID: <a9d2ab1b-23a5-8c06-9f7a-6872c726db03@intel.com>
-Date:   Mon, 5 Jun 2023 12:41:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 00/14] Reduce preallocations for maple tree
-Content-Language: en-US
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-CC:     <maple-tree@lists.infradead.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, "Liu, Yujie" <yujie.liu@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230601021605.2823123-1-Liam.Howlett@oracle.com>
- <7a5dc9ce-b58f-e1b3-db1a-d00a8a556ae5@intel.com>
- <fad3c833-1ab3-2d34-aa85-dcc7c40c3587@bytedance.com>
-From:   Yin Fengwei <fengwei.yin@intel.com>
-In-Reply-To: <fad3c833-1ab3-2d34-aa85-dcc7c40c3587@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR02CA0042.apcprd02.prod.outlook.com
- (2603:1096:3:18::30) To CO1PR11MB4820.namprd11.prod.outlook.com
- (2603:10b6:303:6f::8)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by IA1PR12MB8078.namprd12.prod.outlook.com (2603:10b6:208:3f1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
+ 2023 04:46:26 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1%4]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 04:46:26 +0000
+Date:   Mon, 5 Jun 2023 10:16:08 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, Tejun Heo <tj@kernel.org>,
+        jiangshanlai@gmail.com, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        joshdon@google.com, brho@google.com, briannorris@chromium.org,
+        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
+        void@manifault.com, libo.chen@oracle.com, srikar@linux.vnet.ibm.com
+Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
+ execution locality
+Message-ID: <ZH1okIz83ELfjy4o@BLR-5CG11610CF.amd.com>
+References: <20230519001709.2563-1-tj@kernel.org>
+ <20230523111818.GH4253@hirez.programming.kicks-ass.net>
+ <CAKfTPtB11Zwt9bgOJrNVDfs5yY7Dws_vnQBuXZHErSsbn9Edhw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtB11Zwt9bgOJrNVDfs5yY7Dws_vnQBuXZHErSsbn9Edhw@mail.gmail.com>
+X-ClientProxiedBy: PN3PR01CA0052.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:98::17) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4820:EE_|DM4PR11MB6501:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e4172ac-8b91-40ca-1e03-08db657f1967
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3286:EE_|IA1PR12MB8078:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2478ae17-6376-438d-e231-08db657fd1a3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wFwDFZKz9vrwUh/RChVngeKb6+7Op1GFVCjfno+/Wxk5gtO+1S+/I8exeU3fjyaxG45WClkNRGpblC3HYjIqDl6AM85iZUggIh81Tzs2A0I41QhpcXeK1uYG7WxkFmfJrXh+ljRSyL2Fok/geKRlRldMOaUop2PGSXUH5DApxXxndZT+90Oreo6oiAeBlymRLrh1divKN45/PSJqhsWyb8c9JWWV0JyTJS/nj8ZqxD/MntjAsgUKQUobq57jNlSAbvTXN3+HlemwO9kMoI4lHURlGXTJuNuiBPf0we0LB/+p/HAz0eh64m6mJhf+v7Cz7Yl/dsAN1/6bfOY6Kz7jeXL+AHfp6IScATf+tj6zwWPwlD8jWP7Tevf+mfKxBPBaFVInrPK4itKAjmaRNE4HYbPDcu0GPJE8INT1GcUDCoyr+AApmjop1ZBPFI/h4zwsTi5U7gs7t4jk6DhL1fBliTG6+sHVes+4bq6/X9Ar54mqrcMRoL4k4d5rZ2sdvGCnkQgiO1pI6/OhJzyPlc2W9V88Y/FCZydobJESGs3GkME8bs8PHAv8in5nU4Hp933Wsq9B9T5bMhomQ38RdoUILKzSBMENZQvkLqTYfgBNGMpInHERIBjPImcX0cbla9b+9TjWVn6D/9NyARo1NSmehw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(136003)(376002)(396003)(39860400002)(451199021)(8936002)(8676002)(478600001)(54906003)(966005)(41300700001)(5660300002)(6666004)(316002)(6486002)(26005)(186003)(31686004)(4326008)(66556008)(66946007)(66476007)(6916009)(6512007)(53546011)(6506007)(2616005)(83380400001)(2906002)(38100700002)(82960400001)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: D2yCBlrfjRiNKfrmraudMJ+lw/wICqiVRESm6nBib5dVxhHTSf2EV0MuKKq+opBZYTHVKg9JnPPvwdFX6YX0vyyJybjzJLKaF/NC/QDxYUadQSJhh4FJf7KucGaMDrJntUIwNxCojPOe6G6zOtg2K5rehRbXNXJLShNA/jW7LOEFG3EP2Bd8CaJ0+k9sYeIrbxFqtGgjGFAoiypXNfrLLoMdF3qbU8bqZDNknPPNDdrwyUHLG3nr1QloHKwC8tKZ9nC1M4PrndNXvgyz9Hu5cROI7axYetvpMcrSkV9HhsGOn+TnUkVvxCwRQU+tLfbWGVMLHHd+GSJ7z3fbPf3Ioo4yHSJqmK1J1gJt44WRV04PS/QAI1r5/H3jVw1k44dy3hqNUC11pQJ+DiGW0AbG37jksb6onXvvf+ZPizsPgokzLfSRLTHG3VbClBbwX9C0/VEPA1bgXsjh+0RGlavj+/SwoRsHneG/TjmbUwsP1tjOt1Y4c89yqvaqutf2gb5KETqz9uf878lCBoSX6mrM5Uuw0NEZQYMaY/J3ufLtE+c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(451199021)(66476007)(66946007)(2906002)(478600001)(6916009)(316002)(4326008)(8936002)(8676002)(41300700001)(54906003)(66556008)(6666004)(7416002)(5660300002)(6486002)(6512007)(6506007)(26005)(966005)(38100700002)(186003)(83380400001)(86362001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QkdCYUNYZ0QrbnlORWFnVDhZVkNZKzR5SC9aN1VjVUoremxQS0g3VStIVlRq?=
- =?utf-8?B?ZUdXWHZpalVOM0pNcWtBUVpwMEVjVkYwck5pMzYvdWZvYzV1UVhZby9CbXFE?=
- =?utf-8?B?TTNuNElKWkVJcmpnWXZYYXdSQllxbC9PSkNGaExUeU4yVzYrQkZObjBoSVZI?=
- =?utf-8?B?ekV1UXp1UEZJdUVNamJOTXEreXh0eFYrWi9XaWNkN1k2Mjh4L2k3YlNwenlD?=
- =?utf-8?B?QnA5d3MwbllXVzV6b0tlRVNaay8wWkdjM2diV3BlcER3a1Rzbkt5WmxnMVhH?=
- =?utf-8?B?MXgyMzV4MFpDYjBXdVJ1S1Q0QlVrNFNaWXVNMUxpSi9OSkdwQWxqVmIvdVlN?=
- =?utf-8?B?SWlXcFczMCttTkJDcmlSUFpwWFhoVysyVGpNaVFrcHNwc1lGRU12NXl1aVB5?=
- =?utf-8?B?VXdOOGdkQ2hiYnN6UW5lMHdabWYyanhLOHFCSVZ6T05LS0V3VmdBVUFKSTBx?=
- =?utf-8?B?ZnZSL0xZYldOcWdyc1dlZThxWWE3OTFwM3lUMzg3ZmVpNC8rQXBWbFZWOS8y?=
- =?utf-8?B?djZ3c1F5Ylo2R3J2Q3AzR254RitZa2ZmL0JjclcybTMrcGh6d0N3dXp5ZDgw?=
- =?utf-8?B?WmRTYmpuZTFrRGRxZlY4RHZEODFyVHQzV0RMNmhidi9IYm5RMEM0QWdQRitt?=
- =?utf-8?B?eW5ZMG9pR20xeEJ4b0VsVFYwOTdQL0tXZDVlZGo1cEc2T2ZKaXRpZW55SThS?=
- =?utf-8?B?OXpnS1pFVmpIYVRVZzYyWmc3b01jdTIzeEFEaC9pcHFCbStCZW9zQ2FtZEdQ?=
- =?utf-8?B?Sm5EZUVsTllPamxzelhQRjVFZWxPOUg1bHpVR24xaS9rWkxSWjdiMWFsNVJS?=
- =?utf-8?B?elJ6cTU2YmtZeEdYSzB4TDl6UDZ2ajFCR3VoTFFibkN3VTMzU0puRk1KVHpk?=
- =?utf-8?B?OWh3UGF5MGIvbmRaVHlrcGNFK0w2dmluRUVTUnFNVDZ0VWVSaXlsa3VRa1J5?=
- =?utf-8?B?TmVabXJzTTZUNU5ZVC9rbmdWbmQwVWVEbUdMendOQnB2SUdwMjc3MEtaL3lM?=
- =?utf-8?B?ZERaRCtJSHFSSWIrMXFJNklOYXFiMFNKeVlQSDBiNXRPTVJqTGd3bWdMRVpq?=
- =?utf-8?B?U3U0YjdJTUpxZmhhZDI1alVieFJwTjZ5Nk5hcllXUW5zeWFyV2d5djh6ZkQ0?=
- =?utf-8?B?SEErYlVTN1d3WXZhMGRieFJTUjJpTHVQZFJoaHpGU1ptVXE1VUdoSFJoTGx5?=
- =?utf-8?B?VElPeml3UGlOWlRJY1BSdVYwM2ZQK2c0cDdRQUZkcGplV09xa3pOZ3VSZGxJ?=
- =?utf-8?B?aGh4Qm5ScGZYWmJjNlA3a3Z0RWhnVEdlQU5DRlREaFFkU0NJa0IzYi8zYXor?=
- =?utf-8?B?NFZpNHgwc2dTcGd2YTdGNEpnYzRuVFpza1N0WVdWRHNZYXNFUmM4NmtNeHpL?=
- =?utf-8?B?bzZDWXJWdy93dlVZUGJXK2lSS0hjaGFGV0Z1eFExaE9vNXFiN1hHR0pFTG1D?=
- =?utf-8?B?bk5yNjdnTXg0TEtxQjFITDZEZXRoc0VsV1ZtU3FlckpZOXN6a3ZabG1DUlE3?=
- =?utf-8?B?ZGpRcHBRRjVFVm42MGd4RDlSejVLK1pzOFRxVDFsMXFEa0poUFBQOFhKa2xU?=
- =?utf-8?B?bzA2VEJCWThpc0NsYlU1MGpzWjcxYlRtRk5kSDRoTWNGK3MyUE9VbXA0cDNV?=
- =?utf-8?B?UThoV2NFbkJseHQ1a1JkY3ZQZ0g3cGFQQ2dPN3BGSnNpaENQUXNHUXVma2dx?=
- =?utf-8?B?eUQvd2l3U0RxNTBCczY3SHB3Y09NRXE4dFd6a2NTUVJoOTh1T3QwTEtiU2xK?=
- =?utf-8?B?c28xcXA4RldQbW93bmtpU1o5d1RTaGtvSFlDT1BHcSsySmhtTkhmY1BSYU1V?=
- =?utf-8?B?YnpaNkh4S1QrK0RRa25GeW5kQkN5SXc0Ullmc1lxc0gybm14bTFSQ2JJbGJa?=
- =?utf-8?B?cHcxVHFEMXp5TDlyMnNiTnBRYXY3bE54SDdJaGZzZEpJSkhqUkI5d3BxaVh1?=
- =?utf-8?B?VlJJbXNmRFZXcjNGcnB0T2ptSitHNnNkSFdiODFnSmRWdFNtV3V0T1h4UWl3?=
- =?utf-8?B?M1JrVWFTbXRtL2hZRmcrM1FaUWo3TXY2dnYzVjlxSjRqZDBxNjZoZUNwUFdz?=
- =?utf-8?B?eHl3TTBTQTNFQUpmQTljMzZwVTNVZHpIcEM3RzlVQ2lsNWJiMWVvQ2xGMFNF?=
- =?utf-8?Q?aq179+AAXyFrW9mHXZYcvcVKd?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e4172ac-8b91-40ca-1e03-08db657f1967
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bw7bDrkaFVmMNHbJmTdlAAII0/G+pZn0fMENFfKha0zQ+4urc2bMAAeTpl3U?=
+ =?us-ascii?Q?24pkxBp+rxF1xhjPZtebUukuU8m1fpWkL5yVIeMVp9CHsr4hGUEO1ZbiLrGc?=
+ =?us-ascii?Q?8STWhPq56wxQHStD60MM8CFHKh+2+J1EyynsiwyEIy4RmkzuF3kjn3NxW2ia?=
+ =?us-ascii?Q?7IUKbUw5xSHuAYTgt+mk2OfCETAQ0B9b4tk2b2IUCarR9JcH8Xyv+iJ1D5fU?=
+ =?us-ascii?Q?SvIU0S9K5ApAHNIna1/KvWLc9KzR4yUst6LgeowzpOHuxKONh9o2afrd0k/1?=
+ =?us-ascii?Q?JrubWVy6cZUmUtdVTcvQ3c09lnGZzLevufBt9fmMA/yU5iozcIgoV+v4YyMl?=
+ =?us-ascii?Q?riy3HRuTndppJ7vFGqEgMlDhcTvFy7yxAzVnmSNv/8o898tNjlHrl89MBBr6?=
+ =?us-ascii?Q?6N3DrJt/g0uteDAgvk2boI3RWdbUfy3xscfG0yv4f3LY4S/0AihLPxH7teND?=
+ =?us-ascii?Q?k/2zQ94hvpaq3xQpDIY/ociI95KYg5kkuKEbj3xClay4g8p2JI84Bbbb9OyQ?=
+ =?us-ascii?Q?/uzeVBaQlOg1EETIHMwURVMhanTGkaJB6EjN8E/J1g8dx5ox33UjWvIYl3Wo?=
+ =?us-ascii?Q?U9gAg3GGPCTu3NvdpiZ4xqJpn/5afsp1EbR3SIIPS4PO7lSjPEO1s4X0fp3V?=
+ =?us-ascii?Q?wlU3Bl+FS1FoZnGbT4TE8VMJDScrbj5FPqi19zukESjdHn0UC2ck9Gop9Zoo?=
+ =?us-ascii?Q?GxwxjXvV6gtn/9xMNgiFFrI4JLi0+bX81G/72g+j2gdfBfKD2LTLEWcnI2+a?=
+ =?us-ascii?Q?Eede/nbQN763UX9kkBS9T07/YMW3yWm9pSLrrh4bJKyP/WAN2ckXOSxjpfI/?=
+ =?us-ascii?Q?ItMflsB1h55Z6pgJ7uc8cgMMpHu4es7YKXsgRoyNSwaErcozXdUF4RyOPMcN?=
+ =?us-ascii?Q?KSq3aGdNvfPlXudCzVMgPGQmcKa59oKeNbkTVkz44U3UhOez8InscPHyzmER?=
+ =?us-ascii?Q?QWVwSH6IAp8qETiA1EBTe3oDvhTXNZQYAtlg2O7/7pnKwpSvIWKxWWxT1WL3?=
+ =?us-ascii?Q?HvwNRPYJdNN+ZkVfutjRfiQa1urb9V2r67ZGMlvF+c4QnXaJ8xCrRBrsILAu?=
+ =?us-ascii?Q?/klF+bm2qfbInyDciisK3xo1lA3LF3NTROwMj//VSFh49RDP8OD6J8PW2bom?=
+ =?us-ascii?Q?OI/WYVk8ohLQ80IYejzAjfYAU8Vuh8rEdx3F9V404vrMSBbLLvEAU0QwyunZ?=
+ =?us-ascii?Q?gCtFgH11CqdIIUPBLY3yLk7pV+rUmP00R1N98Qthm/d+i4GFJQ/PBzoVjKXn?=
+ =?us-ascii?Q?tONVjMOqXil3s+popTz29cD8IMJye8tfWqrx+y211k4asyw/yHz1/aLNidXM?=
+ =?us-ascii?Q?YiYuZRRMrCrbNvgv9oJAitoMN6fDH2AnRLBMI8EexcQJvWpSVZCHyRidTdlg?=
+ =?us-ascii?Q?mP3VDVtlj6hRuHjmwOhCc2Tro5E21pMJykD2dXhulCMQzDuGGQouTcgJpQX5?=
+ =?us-ascii?Q?6vClaRU9KUeCeNG03IfgbJUZy3Vw59506y3apd5LU9EsDhKNIqXiJX1UnbQ8?=
+ =?us-ascii?Q?/aodMDy1uoENk0q1wfmrHbl30WdsFFx0SKXPMeOSXmD92gk/V3PZXgq4tCZ7?=
+ =?us-ascii?Q?LoXMPJEMLjT4y6k+u9EMGqSeitv+Ye/E4hZZV8Jx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2478ae17-6376-438d-e231-08db657fd1a3
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 04:41:16.6117
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 04:46:25.8260
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aM34Bsu7Pf5KNu+dAcowx4syy6ncv946DTtYK+e48sLlSX37D23+AUo0fdnv4YBiz7DyMqkA+EQiaO5KgFf92A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6501
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: HAoF+/IPCYfHSXU7eRXkBIXrVlqCyIrWrtasMbTtNZHlouQIPMJEvo0SE/eMro5J+J2AlTK4JM9w2RVtX2YGBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8078
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+Hello Vincent,
 
-On 6/5/23 11:28, Peng Zhang wrote:
+On Tue, May 23, 2023 at 06:12:45PM +0200, Vincent Guittot wrote:
+> On Tue, 23 May 2023 at 13:18, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > So wakeup based placement is mostly all about LLC, and given this thing
+> > has dinky small LLCs it will pile up on the one LLC you target and leave
+> > the others idle until the regular idle balancer decides to make an
+> > appearance and move some around.
+> >
+> > But if these are fairly short running tasks, I can well see that not
+> > going to help much.
+> >
+> >
+> > Much of this was tuned back when there was 1 L3 per Node; something
+> > which is still more or less true for Intel but clearly not for these
+> > things.
+> >
+> >
+> > The below is a bit crude and completely untested, but it might help. The
+> > flip side of that coin is of course that people are going to complain
+> > about how selecting a CPU is more expensive now and how this hurts their
+> > performance :/
+> >
+> > Basically it will try and iterate all L3s in a node; wakeup will still
+> > refuse to cross node boundaries.
 > 
-> 
-> 在 2023/6/2 16:10, Yin, Fengwei 写道:
->> Hi Liam,
->>
->> On 6/1/2023 10:15 AM, Liam R. Howlett wrote:
->>> Initial work on preallocations showed no regression in performance
->>> during testing, but recently some users (both on [1] and off [android]
->>> list) have reported that preallocating the worst-case number of nodes
->>> has caused some slow down.  This patch set addresses the number of
->>> allocations in a few ways.
->>>
->>> During munmap() most munmap() operations will remove a single VMA, so
->>> leverage the fact that the maple tree can place a single pointer at
->>> range 0 - 0 without allocating.  This is done by changing the index in
->>> the 'sidetree'.
->>>
->>> Re-introduce the entry argument to mas_preallocate() so that a more
->>> intelligent guess of the node count can be made.
->>>
->>> Patches are in the following order:
->>> 0001-0002: Testing framework for benchmarking some operations
->>> 0003-0004: Reduction of maple node allocation in sidetree
->>> 0005:      Small cleanup of do_vmi_align_munmap()
->>> 0006-0013: mas_preallocate() calculation change
->>> 0014:      Change the vma iterator order
->> I did run The AIM:page_test on an IceLake 48C/96T + 192G RAM platform with
->> this patchset.
->>
->> The result has a little bit improvement:
->> Base (next-20230602):
->>    503880
->> Base with this patchset:
->>    519501
->>
->> But they are far from the none-regression result (commit 7be1c1a3c7b1):
->>    718080
->>
->>
->> Some other information I collected:
->> With Base, the mas_alloc_nodes are always hit with request: 7.
->> With this patchset, the request are 1 or 5.
->>
->> I suppose this is the reason for improvement from 503880 to 519501.
->>
->> With commit 7be1c1a3c7b1, mas_store_gfp() in do_brk_flags never triggered
->> mas_alloc_nodes() call. Thanks.
-> Hi Fengwei,
-> 
-> I think it may be related to the inaccurate number of nodes allocated
-> in the pre-allocation. I slightly modified the pre-allocation in this
-> patchset, but I don't know if it works. It would be great if you could
-> help test it, and help pinpoint the cause. Below is the diff, which can
-> be applied based on this pachset.
-I tried the patch, it could eliminate the call of mas_alloc_nodes() during
-the test. But the result of benchmark got a little bit improvement:
-  529040
+> That remember me some discussion about system with fast on die
+> interconnect where we would like to run wider than llc at wakeup (i.e.
+> DIE level) something like the CLUSTER level but on the other side of
+> MC
+>
 
-But it's still much less than none-regression result. I will also double
-confirm the none-regression result.
+Adding Libo Chen who was a part of this discussion. IIRC, the problem was
+that there was no MC domain on that system, which would have made the
+SMT domain to be the sd_llc. But since the core is single threaded,
+the SMT domain would be degnerated thus leaving no domain which has
+the SD_SHARE_PKG_RESOURCES flag.
+
+If I understand correctly, Peter's patch won't help in such a
+situation.
+
+However, it should help POWER10 which has the SMT domain as the LLC
+and previously it was observed that moving the wakeup search to the
+parent domain was helpful (Ref:
+https://lore.kernel.org/lkml/1617341874-1205-1-git-send-email-ego@linux.vnet.ibm.com/)
 
 
-Regards
-Yin, Fengwei
+--
+Thanks and Regards
+gautham.
 
+
+> Another possibility to investigate would be that each wakeup of a
+> worker is mostly unrelated to the previous one and it cares only
+> waker. so we should use -1 for the prev_cpu
 > 
-> Thanks,
-> Peng
-> 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 5ea211c3f186..e67bf2744384 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5575,9 +5575,11 @@ int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->          goto ask_now;
->      }
-> 
-> -    /* New root needs a singe node */
-> -    if (unlikely(mte_is_root(mas->node)))
-> -        goto ask_now;
-> +    if ((node_size == wr_mas.node_end + 1 &&
-> +         mas->offset == wr_mas.node_end) ||
-> +        (node_size == wr_mas.node_end &&
-> +         wr_mas.offset_end - mas->offset == 1))
-> +        return 0;
-> 
->      /* Potential spanning rebalance collapsing a node, use worst-case */
->      if (node_size  - 1 <= mt_min_slots[wr_mas.type])
-> @@ -5590,7 +5592,6 @@ int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->      if (likely(!mas_is_err(mas)))
->          return 0;
-> 
-> -    mas_set_alloc_req(mas, 0);
->      ret = xa_err(mas->node);
->      mas_reset(mas);
->      mas_destroy(mas);
-> 
-> 
->>
->>
->> Regards
->> Yin, Fengwei
->>
->>>
->>> [1] https://lore.kernel.org/linux-mm/202305061457.ac15990c-yujie.liu@intel.com/
->>>
->>> Liam R. Howlett (14):
->>>    maple_tree: Add benchmarking for mas_for_each
->>>    maple_tree: Add benchmarking for mas_prev()
->>>    mm: Move unmap_vmas() declaration to internal header
->>>    mm: Change do_vmi_align_munmap() side tree index
->>>    mm: Remove prev check from do_vmi_align_munmap()
->>>    maple_tree: Introduce __mas_set_range()
->>>    mm: Remove re-walk from mmap_region()
->>>    maple_tree: Re-introduce entry to mas_preallocate() arguments
->>>    mm: Use vma_iter_clear_gfp() in nommu
->>>    mm: Set up vma iterator for vma_iter_prealloc() calls
->>>    maple_tree: Move mas_wr_end_piv() below mas_wr_extend_null()
->>>    maple_tree: Update mas_preallocate() testing
->>>    maple_tree: Refine mas_preallocate() node calculations
->>>    mm/mmap: Change vma iteration order in do_vmi_align_munmap()
->>>
->>>   fs/exec.c                        |   1 +
->>>   include/linux/maple_tree.h       |  23 ++++-
->>>   include/linux/mm.h               |   4 -
->>>   lib/maple_tree.c                 |  78 ++++++++++----
->>>   lib/test_maple_tree.c            |  74 +++++++++++++
->>>   mm/internal.h                    |  40 ++++++--
->>>   mm/memory.c                      |  16 ++-
->>>   mm/mmap.c                        | 171 ++++++++++++++++---------------
->>>   mm/nommu.c                       |  45 ++++----
->>>   tools/testing/radix-tree/maple.c |  59 ++++++-----
->>>   10 files changed, 331 insertions(+), 180 deletions(-)
->>>
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 48b6f0ca13ac..ddb7f16a07a9 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -7027,6 +7027,33 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+> >         return idle_cpu;
+> >  }
+> >
+> > +static int
+> > +select_idle_node(struct task_struct *p, struct sched_domain *sd, int target)
+> > +{
+> > +       struct sched_domain *sd_node = rcu_dereference(per_cpu(sd_node, target));
+> > +       struct sched_group *sg;
+> > +
+> > +       if (!sd_node || sd_node == sd)
+> > +               return -1;
+> > +
+> > +       sg = sd_node->groups;
+> > +       do {
+> > +               int cpu = cpumask_first(sched_group_span(sg));
+> > +               struct sched_domain *sd_child;
+> > +
+> > +               sd_child = per_cpu(sd_llc, cpu);
+> > +               if (sd_child != sd) {
+> > +                       int i = select_idle_cpu(p, sd_child, test_idle_cores(cpu), cpu);
+> > +                       if ((unsigned int)i < nr_cpumask_bits)
+> > +                               return i;
+> > +               }
+> > +
+> > +               sg = sg->next;
+> > +       } while (sg != sd_node->groups);
+> > +
+> > +       return -1;
+> > +}
+> > +
+> >  /*
+> >   * Scan the asym_capacity domain for idle CPUs; pick the first idle one on which
+> >   * the task fits. If no CPU is big enough, but there are idle ones, try to
+> > @@ -7199,6 +7226,12 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+> >         if ((unsigned)i < nr_cpumask_bits)
+> >                 return i;
+> >
+> > +       if (sched_feat(SIS_NODE)) {
+> > +               i = select_idle_node(p, sd, target);
+> > +               if ((unsigned)i < nr_cpumask_bits)
+> > +                       return i;
+> > +       }
+> > +
+> >         return target;
+> >  }
+> >
+> > diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+> > index ee7f23c76bd3..f965cd4a981e 100644
+> > --- a/kernel/sched/features.h
+> > +++ b/kernel/sched/features.h
+> > @@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+> >   */
+> >  SCHED_FEAT(SIS_PROP, false)
+> >  SCHED_FEAT(SIS_UTIL, true)
+> > +SCHED_FEAT(SIS_NODE, true)
+> >
+> >  /*
+> >   * Issue a WARN when we do multiple update_rq_clock() calls
+> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > index 678446251c35..d2e0e2e496a6 100644
+> > --- a/kernel/sched/sched.h
+> > +++ b/kernel/sched/sched.h
+> > @@ -1826,6 +1826,7 @@ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+> >  DECLARE_PER_CPU(int, sd_llc_size);
+> >  DECLARE_PER_CPU(int, sd_llc_id);
+> >  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+> > +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_node);
+> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+> >  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> > index ca4472281c28..d94cbc2164ca 100644
+> > --- a/kernel/sched/topology.c
+> > +++ b/kernel/sched/topology.c
+> > @@ -667,6 +667,7 @@ DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+> >  DEFINE_PER_CPU(int, sd_llc_size);
+> >  DEFINE_PER_CPU(int, sd_llc_id);
+> >  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+> > +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_node);
+> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+> >  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+> > @@ -691,6 +692,18 @@ static void update_top_cache_domain(int cpu)
+> >         per_cpu(sd_llc_id, cpu) = id;
+> >         rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
+> >
+> > +       while (sd && sd->parent) {
+> > +               /*
+> > +                * SD_NUMA is the first domain spanning nodes, therefore @sd
+> > +                * must be the domain that spans a single node.
+> > +                */
+> > +               if (sd->parent->flags & SD_NUMA)
+> > +                       break;
+> > +
+> > +               sd = sd->parent;
+> > +       }
+> > +       rcu_assign_pointer(per_cpu(sd_node, cpu), sd);
+> > +
+> >         sd = lowest_flag_domain(cpu, SD_NUMA);
+> >         rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
+> >
