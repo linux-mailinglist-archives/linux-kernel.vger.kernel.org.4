@@ -2,250 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4357231D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A247231DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbjFEVBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S233587AbjFEVCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbjFEVB3 (ORCPT
+        with ESMTP id S233709AbjFEVBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:01:29 -0400
-Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D27F7F7;
-        Mon,  5 Jun 2023 14:01:27 -0700 (PDT)
-Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id 1DC6041D13A6;
-        Mon,  5 Jun 2023 22:01:26 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Mon, 05 Jun 2023 22:01:26 +0100
-Date:   Mon, 5 Jun 2023 22:01:26 +0100
-From:   Liviu Dudau <liviu@dudau.co.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-Message-ID: <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
-References: <20230605150114.601102-1-liviu@dudau.co.uk>
- <20230605150114.601102-2-liviu@dudau.co.uk>
- <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
+        Mon, 5 Jun 2023 17:01:50 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAA418E;
+        Mon,  5 Jun 2023 14:01:43 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30af159b433so5346699f8f.3;
+        Mon, 05 Jun 2023 14:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685998902; x=1688590902;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0UuDqA9QdnJOky0P/4GZ0/HcprcAx5ORnIFMZhmVSsY=;
+        b=rscLBPynR6TMxI19jepJvNbfgpFoEHAykXLqe5/ReQZhBnrYAM433Wdoogv9R/Cjpw
+         3iCxKmox8WcVqKOJl2qYX30ykq1IsvFhawEeXY4RWis0gECfM/qEUL5a9gWlezCB5lIe
+         ckHtKbb3qaqlYiXz11eLiR9YwWXTDxGuGTx5KvA1pUTL6ziTHzTtGQ0fJTPPZHTs/zcF
+         3455YUmIVKgcrg1ABVjYpVODeCtJxC9XNCsPlegbQRVbAjq/e2gRvhV/5njs8NjNwOUK
+         5MW+XXMT8NoQn7pBEvm2vKjsDKiXcJNwG3KaHcppDnfIhza3ZNjcgyflDEyCB1uXlezC
+         SWnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685998902; x=1688590902;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0UuDqA9QdnJOky0P/4GZ0/HcprcAx5ORnIFMZhmVSsY=;
+        b=eIunUAvkr3uCaSEZe2xxqq6GZStZIWxhG+cQA6UqAKW/W9PCIg5iK1TmJMHVj8JpQ7
+         f0qjnPPWtKzF0o+ikd0/kc2hzD+VLGVwi5lPZSeQ1qzJafsajPNBkmJdTdN35BmBgb5R
+         Vd0x0K7pq5ULa2JheoO2k71ciRefnL6KVUrM2fgHoIR4VVhrmnt0i3j9PRWOFXfr2WJX
+         mmNjbtvsIzTNHvV2xXYfTf0+TdhkjZpuZQdTYRGjKC1XNAOj8yclTQXsgbBl/eu4Vj6q
+         itv5zNQE3zzTnYXjMVmDNb305a65F6Ctyn8XfTQf0KiUQfZhe9RPMm9pf149m2e33muB
+         QoyQ==
+X-Gm-Message-State: AC+VfDzguw3q6UfNHh3ggA3bz+vgjqJE1+7CJBt7qvCedur1QbXcV5HA
+        6L0YKCBx4B5zmUooDxj4cMdxUgLYJmQ=
+X-Google-Smtp-Source: ACHHUZ7mNV6YQu9OB99bLB58sGz6QL4pOrfMccnMO+NFakN92T72Pr6TOxLePg7g9xlKisTHCE0niA==
+X-Received: by 2002:adf:f8c9:0:b0:30a:ec3b:58d5 with SMTP id f9-20020adff8c9000000b0030aec3b58d5mr71328wrq.69.1685998902007;
+        Mon, 05 Jun 2023 14:01:42 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:c1fe:b00:f181:5e69:a6b8:882f? (dynamic-2a01-0c23-c1fe-0b00-f181-5e69-a6b8-882f.c23.pool.telefonica.de. [2a01:c23:c1fe:b00:f181:5e69:a6b8:882f])
+        by smtp.googlemail.com with ESMTPSA id b12-20020a05600010cc00b003077a19cf75sm10601714wrx.60.2023.06.05.14.01.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 14:01:41 -0700 (PDT)
+Message-ID: <bf7c71bf-4f04-0dd3-91e1-eb639b36e7d1@gmail.com>
+Date:   Mon, 5 Jun 2023 23:01:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     George Stark <gnstark@sberdevices.ru>
+Cc:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        kernel <kernel@sberdevices.ru>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
+        "khilman@baylibre.com" <khilman@baylibre.com>
+References: <20230602103211.2199283-1-gnstark@sberdevices.ru>
+ <bf2d2814-5881-0f42-8b62-89c043b66e22@gmail.com>
+ <ed8f95d2-ef62-d91a-618c-402ba1c9d09f@sberdevices.ru>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH] pwm: meson: compute cnt register value in proper way
+In-Reply-To: <ed8f95d2-ef62-d91a-618c-402ba1c9d09f@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 07:35:44PM +0300, Arınç ÜNAL wrote:
-> On 5.06.2023 18:01, Liviu Dudau wrote:
-> > This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> > a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
-> > connected to the main SoC over PCIe.
-> > 
-> > The device uses NMBM over NAND, which is not currently supported in the
-> > mainline, so NAND node is skipped in this revision.
-> > 
-> > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> > ---
-> >   arch/mips/boot/dts/ralink/Makefile            |  3 +-
-> >   .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 92 +++++++++++++++++++
-> >   2 files changed, 94 insertions(+), 1 deletion(-)
-> >   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > 
-> > diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
-> > index 11732b8c8163a..d27d7e8c700fe 100644
-> > --- a/arch/mips/boot/dts/ralink/Makefile
-> > +++ b/arch/mips/boot/dts/ralink/Makefile
-> > @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
-> >   dtb-$(CONFIG_SOC_MT7621) += \
-> >   	mt7621-gnubee-gb-pc1.dtb \
-> > -	mt7621-gnubee-gb-pc2.dtb
-> > +	mt7621-gnubee-gb-pc2.dtb \
-> > +	mt7621-tplink-hc220-g5-v1.dtb
-> >   obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-> > diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > new file mode 100644
-> > index 0000000000000..859aaa1c1bc2b
-> > --- /dev/null
-> > +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > @@ -0,0 +1,92 @@
-> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +/dts-v1/;
-> > +
-> > +#include "mt7621.dtsi"
-> > +
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/input/input.h>
-> > +#include <dt-bindings/leds/common.h>
-> > +
-> > +/ {
-> > +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
-> > +	model = "TP-Link HC220 G5 v1";
-> > +
-> > +	memory@0 {
-> > +		device_type = "memory";
-> > +		reg = <0x00000000 0x8000000>;
+On 05.06.2023 09:11, George Stark wrote:
+> On 6/2/23 23:52, Heiner Kallweit wrote:
+>> On 02.06.2023 12:32, George Stark wrote:
+>>> According to the datasheet, the PWM high and low clock count values
+>>> should be set to at least one. Therefore, setting the clock count
+>>> register to 0 actually means 1 clock count.
+>>>
+>>> Signed-off-by: George Stark <GNStark@sberdevices.ru>
+>>> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>>> ---
+>>> This patch is based on currently unmerged patch by Heiner Kallweit
+>>> https://lore.kernel.org/linux-amlogic/23fe625e-dc23-4db8-3dce-83167cd3b206@gmail.com
+>>> ---
+>>> diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
+>>> index 834acd7..57e7d9c 100644
+>>> --- a/drivers/pwm/pwm-meson.c
+>>> +++ b/drivers/pwm/pwm-meson.c
+>>> @@ -206,6 +206,11 @@
+>>>           channel->pre_div = pre_div;
+>>>           channel->hi = duty_cnt;
+>>>           channel->lo = cnt - duty_cnt;
+>>> +
+>>> +        if (channel->hi)
+>>> +            channel->hi--;
+>>> +        if (channel->lo)
+>>> +            channel->lo--;
+> Hello Heiner
 > 
-> Please use 8 digit addressing for the memory start and size offsets:
+> Thanks for review
+>> I'm not sure whether we should do this. duty_cnt and cnt are results
+>> of an integer division and therefore potentially rounded down.
+>> The chip-internal increment may help to compensate such rounding
+>> errors, so to say. With the proposed change we may end up with the
+>> effective period being shorter than the requested one.
+> Although chip-internal increment sometimes may help accidentally
+> there are cases when the increment ruins precise calculation in unexpected way.
 > 
-> 0x00000000 0x08000000
+> Here's our experience on meson a113l (meson-a1) with pwm driver based on ccf:
+> we need to get pwm period as close as possible to 32768hz.
+> config pwm to period 1/32768 = 30517ns, duty 15258n
+> How driver calculates hi\lo regs:
+> rate = NSEC_PER_SEC * 0xffff / 30517 = ~2147Mhz
+> rate = clk_round_rate(rate) clk_round_rate selects fastest parent clock which is 64Mhz in our case then calculating hi\lo at last: period= mul_u64_u64_div_u64(rate, state->period, NSEC_PER_SEC); // 1953
+> duty= mul_u64_u64_div_u64(rate, state->duty_cycle, NSEC_PER_SEC); // 976
+> channel->hi= duty;
+> channel->lo= period- duty;
+> with the internal increment we'll have real output (1953-976 + 1 + 976 + 1) * 1 / 64Mhz = 32736.57Hz but we should have (1953-976 + 976) * 1 / 64Mhz = 32770.09Hz
 
-Will do.
+Supposedly, depending on the prior rounding errors, something incrementing,
+and sometimes not incrementing may provide the more precise result.
+Another source of error is shown your example, the duty cycle isn't 50%
+due to the rounding.
+Not sure however where there's any use case where such small deviations
+would cause problems. Therefore I don't have a strong opinion.
 
+> | And IIRC this should not happen.
+> Could you please explain why or point out doc/description where it's stated?
+> If so we can add explicit check to prevent such a case
+
+I think I got this wrong. When checking where I got this information from
+I found the following in pwm_apply_state_debug():
+
+if (state->enabled && state->period < s2.period)
+  dev_warn(chip->dev,
+  ".apply is supposed to round down period (requested: %llu, applied: %llu)\n",
+  state->period, s2.period);
+
+>>>       }
+>>>         return 0;
+>>> @@ -340,7 +345,8 @@
+>>>       channel->lo = FIELD_GET(PWM_LOW_MASK, value);
+>>>       channel->hi = FIELD_GET(PWM_HIGH_MASK, value);
+>>>   -    state->period = meson_pwm_cnt_to_ns(chip, pwm, channel->lo + channel->hi);
+>>> +    state->period = meson_pwm_cnt_to_ns(chip, pwm,
+>>> +                        channel->lo + 1 + channel->hi + 1);
+>>>       state->duty_cycle = meson_pwm_cnt_to_ns(chip, pwm, channel->hi);
+>>>   
+>> Doesn't channel->hi have to be incremented here too?
+> Yes, lost the line. I'll fix it
 > 
-> > +	};
-> > +
-> > +	chosen {
-> > +		bootargs = "earlycon console=ttyS0,115200";
-> > +	};
-> > +
-> > +	gpio-keys {
-> > +		compatible = "gpio-keys";
-> > +
-> > +		key-reset {
-> > +			label = "reset";
-> > +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-> > +			linux,code = <KEY_RESTART>;
-> > +		};
-> > +
-> > +		key-wps {
-> > +			label = "wps";
-> > +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
-> > +			linux,code = <KEY_WPS_BUTTON>;
-> > +		};
-> > +	};
-> > +
-> > +	leds {
-> > +		compatible = "gpio-leds";
-> > +
-> > +		red {
+> Best regards
+> George
+>>>       return 0;
+>>
 > 
-> Usually the led name would point to the component the LED is used for.
 
-These are "generic" LEDs controlled from the userspace. The original firmware
-uses GREEN for normal operations, RED for faults and BLUE for when WPS is
-enabled. I'm not sure if there are any standard bindings that I can use here.
-
-> 
-> > +			color = <LED_COLOR_ID_RED>;
-> > +			function = LED_FUNCTION_FAULT;
-> 
-> Is there a specific reason you're using leds/common.h,
-> color & function instead of 'label = "red:ledname"'?
-
-I actually can't remember why I've created them this way. I might've been
-under the impression that giving them standard colour names will make it
-easier for userspace to identify and use them, but as I haven't yet
-investigated into how I'm going to use the device I'm unaware of any
-userspace requirements. It's possible OpenWRT or LEDE have some strong
-definitions, but I'm not aware of them as I don't use any of the distros.
-
-
-> 
-> > +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
-> > +		};
-> > +
-> > +		green {
-> > +			color = <LED_COLOR_ID_GREEN>;
-> > +			function = LED_FUNCTION_POWER;
-> > +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
-> > +			linux,default-trigger = "default-on";
-> > +		};
-> > +
-> > +		blue {
-> > +			color = <LED_COLOR_ID_BLUE>;
-> > +			function = LED_FUNCTION_WPS;
-> > +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
-> > +		};
-> 
-> Every led node needs the "led-" prefix to satisfy the leds-gpio.yaml
-> schema. You can check for dt-schema warnings using this command:
-> 
-> ARCH=mips make clean dtbs_check
-> 
-> Ignore the warning for mediatek,mt7621-eth.
-
-Sure, will run the checks before submitting v4.
-
-> 
-> > +	};
-> > +};
-> > +
-> > +&pcie {
-> > +	status = "okay";
-> > +
-> > +	pcie@0,0 {
-> > +		compatible = "mediatek,mt76";
-> > +	};
-> > +
-> > +	pcie@1,0 {
-> > +		compatible = "mediatek,mt76";
-> > +	};
-> 
-> Both radios work with this then?
-
-Yes, they work with and without the compatible property.
-
-> 
-> Also, I see a bunch of warnings now that the mediatek,mt76 compatible
-> string is added. The warning from schemas/pci/pci-bus.yaml is concerning.
-> 
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0:compatible: ['mediatek,mt76'] does not contain items matching the given schema
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0: Unevaluated properties are not allowed ('compatible' was unexpected)
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'reset-gpios' were unexpected)
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0:compatible: ['mediatek,mt76'] does not contain items matching the given schema
-> 	From schema: /usr/lib/python3/dist-packages/dtschema/schemas/pci/pci-bus.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@0,0: clocks: [[2, 23]] is too short
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@0,0: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'clocks', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'phy-names', 'phys', 'ranges' were unexpected)
-> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-> 
-> Rob, Krzysztof any ideas what to do? The PCI child node is supposed to
-> be the properties of the wireless device. But the compatible string
-> doesn't match the schema on schemas/pci/pci-bus.yaml.
-
-TBH, I've always found the attempts to add device tree nodes for PCI(e) devices
-amusing. The bus is supposed to be queried and one can learn from device ID
-what hardware they're talking to. But then you need device tree (or ACPI for x86_64)
-to layer on top of that information about where EEPROM data might be, and other
-metadata that blurs the "DT describes the hardware" line (you could technically
-reformat the NAND and place the EEPROM data somewhere else on this platform).
-
-> 
->       compatible:
->         contains:
->           pattern: "^(pci[0-9a-f]{3,4},[0-9a-f]{1,4}|pciclass,[0-9a-f]{4,6})$"
-> 
-> Liviu, in the meantime, you should submit this patch without this
-> compatible string. I will handle this issue.
-
-OK, I will drop the compatible strings from v4.
-
-Thanks for the quick review!
-
-Best regards,
-Liviu
-
-> 
-> Arınç
-
--- 
-Everyone who uses computers frequently has had, from time to time,
-a mad desire to attack the precocious abacus with an axe.
-       	   	      	     	  -- John D. Clark, Ignition!
