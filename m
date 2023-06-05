@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68D2722861
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1E472285F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbjFEOJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S230371AbjFEOJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbjFEOIe (ORCPT
+        with ESMTP id S234202AbjFEOIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 10:08:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EB9114;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C7F100;
         Mon,  5 Jun 2023 07:08:18 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 14:08:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6ySiat6WU1J2CA4+tNRFmgwTIF7Allh68HcFpjr3VHw=;
-        b=W9eTlqCWDINf5d6FlEaVwh+RxxzvfwpY1uc5mIkjjUzs4fAGIJjBg/3j2QAECRx03LdQJj
-        AjrFUlMAscuFho8u4lo+lXG+fK9Swn5SGcvMXnn+byC2SdS1ps91iAWlVa0LWIgzYR2z22
-        OEewDZ9Zzas31edepKeqqV/UaixpVEStI1BmfnovdRCISdU4y+7q3RbSR3KaqqzBjlzF5b
-        t6kUKrx0zXyBSeVmY/D3/huzQQTEgpgpHlMmtQ6FQnRbEEp0Z7e9TetTk7gslu2XNZjgFs
-        863c7UC3eTmx4PNeGGVQBtwh0aKr0381rRPZXVJnjG0vdb89N5DsA1wiSYcyIQ==
+        bh=flAU8Kxin3DTwjlsDB2c7PPQk1Z5ZpuKbdc2pbw8unw=;
+        b=01ZIvxV6sxX09zqB3WyumyD0LvvmROtUBVIF0ZqM4rO+ZZhUJ2SmASKrZCxcT4jKoX8QAX
+        DLx5s/Lya2T14dzSIOracDvgT2/7XNCJHisM9sobybXZJHuXKueHojVKSTEu7QRCXw9Fmo
+        xy4f7vt99CoY+/R4JMLUG/cZgaho3m1JIy5pzh5RJ6XInxkh/XiSXUiD65bQu4nNXQaXjA
+        H3D5ShFiOvV6PsmhooKgNVYswfr0bvi4TkFo2kV14rRvrv+sxbtn7tOQBNri3q7y18QHGN
+        A0YGlk9HXc/z5gwN55ZyJERL0YuCvLm/I/C2IsfY28MIT+31rFqAfioy7U8TFg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1685974096;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6ySiat6WU1J2CA4+tNRFmgwTIF7Allh68HcFpjr3VHw=;
-        b=YGAqPfzS2sQ+AEFAaLWaI1h8bOLtgXjkYyvZzW+ORPB1HA9RSRh/Hv0cn9mtLdFkNnyyRw
-        qk9ElqsT+P1f+YAA==
+        bh=flAU8Kxin3DTwjlsDB2c7PPQk1Z5ZpuKbdc2pbw8unw=;
+        b=/4wSTnir7TH5e1pHiPxpNRw7d7duAyR8PMw4cgM23e76Qrrzxb/BpyMTEpk+ZfyQvDMF3V
+        iKMGwLBtn997Q4Bg==
 From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mtrr] x86/mtrr: Move 32-bit code from mtrr.c to legacy.c
-Cc:     Borislav Petkov <bp@alien8.de>, Juergen Gross <jgross@suse.com>,
+Subject: [tip: x86/mtrr] x86/mtrr: Have only one set_mtrr() variant
+Cc:     Juergen Gross <jgross@suse.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
         Michael Kelley <mikelley@microsoft.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230502120931.20719-9-jgross@suse.com>
-References: <20230502120931.20719-9-jgross@suse.com>
+In-Reply-To: <20230502120931.20719-8-jgross@suse.com>
+References: <20230502120931.20719-8-jgross@suse.com>
 MIME-Version: 1.0
-Message-ID: <168597409561.404.2307944206335343244.tip-bot2@tip-bot2>
+Message-ID: <168597409590.404.1718981891238519233.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,262 +68,103 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mtrr branch of tip:
 
-Commit-ID:     b5d3c72829b1f2b181cd7c5b426f7deaae452045
-Gitweb:        https://git.kernel.org/tip/b5d3c72829b1f2b181cd7c5b426f7deaae452045
+Commit-ID:     34cf2d19552bbe3b72b34fc859a19cd5070c466a
+Gitweb:        https://git.kernel.org/tip/34cf2d19552bbe3b72b34fc859a19cd5070c466a
 Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Tue, 02 May 2023 14:09:23 +02:00
+AuthorDate:    Tue, 02 May 2023 14:09:22 +02:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Thu, 01 Jun 2023 15:04:33 +02:00
+CommitterDate: Thu, 01 Jun 2023 15:04:32 +02:00
 
-x86/mtrr: Move 32-bit code from mtrr.c to legacy.c
+x86/mtrr: Have only one set_mtrr() variant
 
-There is some code in mtrr.c which is relevant for old 32-bit CPUs
-only. Move it to a new source legacy.c.
+Today there are two variants of set_mtrr(): one calling stop_machine()
+and one calling stop_machine_cpuslocked().
 
-While modifying mtrr_init_finalize() fix spelling of its name.
+The first one (set_mtrr()) has only one caller, and this caller is
+running only when resuming from suspend when the interrupts are still
+off and only one CPU is active. Additionally this code is used only on
+rather old 32-bit CPUs not supporting SMP.
 
-Suggested-by: Borislav Petkov <bp@alien8.de>
+For these reasons the first variant can be replaced by a simple call of
+mtrr_if->set().
+
+Rename the second variant set_mtrr_cpuslocked() to set_mtrr() now that
+there is only one variant left, in order to have a shorter function
+name.
+
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20230502120931.20719-9-jgross@suse.com
+Link: https://lore.kernel.org/r/20230502120931.20719-8-jgross@suse.com
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 ---
- arch/x86/kernel/cpu/mtrr/Makefile |  2 +-
- arch/x86/kernel/cpu/mtrr/legacy.c | 84 ++++++++++++++++++++++++++++++-
- arch/x86/kernel/cpu/mtrr/mtrr.c   | 80 ++---------------------------
- arch/x86/kernel/cpu/mtrr/mtrr.h   |  7 +++-
- 4 files changed, 98 insertions(+), 75 deletions(-)
- create mode 100644 arch/x86/kernel/cpu/mtrr/legacy.c
+ arch/x86/kernel/cpu/mtrr/mtrr.c | 28 ++++++++--------------------
+ 1 file changed, 8 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/Makefile b/arch/x86/kernel/cpu/mtrr/Makefile
-index cc4f9f1..aee4bc5 100644
---- a/arch/x86/kernel/cpu/mtrr/Makefile
-+++ b/arch/x86/kernel/cpu/mtrr/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-y		:= mtrr.o if.o generic.o cleanup.o
--obj-$(CONFIG_X86_32) += amd.o cyrix.o centaur.o
-+obj-$(CONFIG_X86_32) += amd.o cyrix.o centaur.o legacy.o
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index 85113af..007ecca 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -173,20 +173,8 @@ static inline int types_compatible(mtrr_type type1, mtrr_type type2)
+  * Note that the mechanism is the same for UP systems, too; all the SMP stuff
+  * becomes nops.
+  */
+-static void
+-set_mtrr(unsigned int reg, unsigned long base, unsigned long size, mtrr_type type)
+-{
+-	struct set_mtrr_data data = { .smp_reg = reg,
+-				      .smp_base = base,
+-				      .smp_size = size,
+-				      .smp_type = type
+-				    };
+-
+-	stop_machine(mtrr_rendezvous_handler, &data, cpu_online_mask);
+-}
+-
+-static void set_mtrr_cpuslocked(unsigned int reg, unsigned long base,
+-				unsigned long size, mtrr_type type)
++static void set_mtrr(unsigned int reg, unsigned long base, unsigned long size,
++		     mtrr_type type)
+ {
+ 	struct set_mtrr_data data = { .smp_reg = reg,
+ 				      .smp_base = base,
+@@ -316,7 +304,7 @@ int mtrr_add_page(unsigned long base, unsigned long size,
+ 	/* Search for an empty MTRR */
+ 	i = mtrr_if->get_free_region(base, size, replace);
+ 	if (i >= 0) {
+-		set_mtrr_cpuslocked(i, base, size, type);
++		set_mtrr(i, base, size, type);
+ 		if (likely(replace < 0)) {
+ 			mtrr_usage_table[i] = 1;
+ 		} else {
+@@ -324,7 +312,7 @@ int mtrr_add_page(unsigned long base, unsigned long size,
+ 			if (increment)
+ 				mtrr_usage_table[i]++;
+ 			if (unlikely(replace != i)) {
+-				set_mtrr_cpuslocked(replace, 0, 0, 0);
++				set_mtrr(replace, 0, 0, 0);
+ 				mtrr_usage_table[replace] = 0;
+ 			}
+ 		}
+@@ -452,7 +440,7 @@ int mtrr_del_page(int reg, unsigned long base, unsigned long size)
+ 		goto out;
+ 	}
+ 	if (--mtrr_usage_table[reg] < 1)
+-		set_mtrr_cpuslocked(reg, 0, 0, 0);
++		set_mtrr(reg, 0, 0, 0);
+ 	error = reg;
+  out:
+ 	mutex_unlock(&mtrr_mutex);
+@@ -582,9 +570,9 @@ static void mtrr_restore(void)
  
-diff --git a/arch/x86/kernel/cpu/mtrr/legacy.c b/arch/x86/kernel/cpu/mtrr/legacy.c
-new file mode 100644
-index 0000000..7d379fb
---- /dev/null
-+++ b/arch/x86/kernel/cpu/mtrr/legacy.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/types.h>
-+#include <linux/syscore_ops.h>
-+#include <asm/cpufeature.h>
-+#include <asm/mtrr.h>
-+#include <asm/processor.h>
-+#include "mtrr.h"
-+
-+void mtrr_set_if(void)
-+{
-+	switch (boot_cpu_data.x86_vendor) {
-+	case X86_VENDOR_AMD:
-+		/* Pre-Athlon (K6) AMD CPU MTRRs */
-+		if (cpu_feature_enabled(X86_FEATURE_K6_MTRR))
-+			mtrr_if = &amd_mtrr_ops;
-+		break;
-+	case X86_VENDOR_CENTAUR:
-+		if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR))
-+			mtrr_if = &centaur_mtrr_ops;
-+		break;
-+	case X86_VENDOR_CYRIX:
-+		if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR))
-+			mtrr_if = &cyrix_mtrr_ops;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+/*
-+ * The suspend/resume methods are only for CPUs without MTRR. CPUs using generic
-+ * MTRR driver don't require this.
-+ */
-+struct mtrr_value {
-+	mtrr_type	ltype;
-+	unsigned long	lbase;
-+	unsigned long	lsize;
-+};
-+
-+static struct mtrr_value mtrr_value[MTRR_MAX_VAR_RANGES];
-+
-+static int mtrr_save(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < num_var_ranges; i++) {
-+		mtrr_if->get(i, &mtrr_value[i].lbase,
-+				&mtrr_value[i].lsize,
-+				&mtrr_value[i].ltype);
-+	}
-+	return 0;
-+}
-+
-+static void mtrr_restore(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < num_var_ranges; i++) {
-+		if (mtrr_value[i].lsize) {
+ 	for (i = 0; i < num_var_ranges; i++) {
+ 		if (mtrr_value[i].lsize) {
+-			set_mtrr(i, mtrr_value[i].lbase,
+-				    mtrr_value[i].lsize,
+-				    mtrr_value[i].ltype);
 +			mtrr_if->set(i, mtrr_value[i].lbase,
 +				     mtrr_value[i].lsize,
 +				     mtrr_value[i].ltype);
-+		}
-+	}
-+}
-+
-+static struct syscore_ops mtrr_syscore_ops = {
-+	.suspend	= mtrr_save,
-+	.resume		= mtrr_restore,
-+};
-+
-+void mtrr_register_syscore(void)
-+{
-+	/*
-+	 * The CPU has no MTRR and seems to not support SMP. They have
-+	 * specific drivers, we use a tricky method to support
-+	 * suspend/resume for them.
-+	 *
-+	 * TBD: is there any system with such CPU which supports
-+	 * suspend/resume? If no, we should remove the code.
-+	 */
-+	register_syscore_ops(&mtrr_syscore_ops);
-+}
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 007ecca..b7793a4 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -541,49 +541,6 @@ int arch_phys_wc_index(int handle)
- }
- EXPORT_SYMBOL_GPL(arch_phys_wc_index);
- 
--/* The suspend/resume methods are only for CPU without MTRR. CPU using generic
-- * MTRR driver doesn't require this
-- */
--struct mtrr_value {
--	mtrr_type	ltype;
--	unsigned long	lbase;
--	unsigned long	lsize;
--};
--
--static struct mtrr_value mtrr_value[MTRR_MAX_VAR_RANGES];
--
--static int mtrr_save(void)
--{
--	int i;
--
--	for (i = 0; i < num_var_ranges; i++) {
--		mtrr_if->get(i, &mtrr_value[i].lbase,
--				&mtrr_value[i].lsize,
--				&mtrr_value[i].ltype);
--	}
--	return 0;
--}
--
--static void mtrr_restore(void)
--{
--	int i;
--
--	for (i = 0; i < num_var_ranges; i++) {
--		if (mtrr_value[i].lsize) {
--			mtrr_if->set(i, mtrr_value[i].lbase,
--				     mtrr_value[i].lsize,
--				     mtrr_value[i].ltype);
--		}
--	}
--}
--
--
--
--static struct syscore_ops mtrr_syscore_ops = {
--	.suspend	= mtrr_save,
--	.resume		= mtrr_restore,
--};
--
- int __initdata changed_by_mtrr_cleanup;
- 
- /**
-@@ -611,27 +568,10 @@ void __init mtrr_bp_init(void)
- 		return;
+ 		}
  	}
- 
--	if (generic_mtrrs) {
-+	if (generic_mtrrs)
- 		mtrr_if = &generic_mtrr_ops;
--	} else {
--		switch (boot_cpu_data.x86_vendor) {
--		case X86_VENDOR_AMD:
--			/* Pre-Athlon (K6) AMD CPU MTRRs */
--			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR))
--				mtrr_if = &amd_mtrr_ops;
--			break;
--		case X86_VENDOR_CENTAUR:
--			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR))
--				mtrr_if = &centaur_mtrr_ops;
--			break;
--		case X86_VENDOR_CYRIX:
--			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR))
--				mtrr_if = &cyrix_mtrr_ops;
--			break;
--		default:
--			break;
--		}
--	}
-+	else
-+		mtrr_set_if();
- 
- 	if (mtrr_enabled()) {
- 		/* Get the number of variable MTRR ranges. */
-@@ -673,7 +613,7 @@ void mtrr_save_state(void)
- 	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
  }
- 
--static int __init mtrr_init_finialize(void)
-+static int __init mtrr_init_finalize(void)
- {
- 	if (!mtrr_enabled())
- 		return 0;
-@@ -684,16 +624,8 @@ static int __init mtrr_init_finialize(void)
- 		return 0;
- 	}
- 
--	/*
--	 * The CPU has no MTRR and seems to not support SMP. They have
--	 * specific drivers, we use a tricky method to support
--	 * suspend/resume for them.
--	 *
--	 * TBD: is there any system with such CPU which supports
--	 * suspend/resume? If no, we should remove the code.
--	 */
--	register_syscore_ops(&mtrr_syscore_ops);
-+	mtrr_register_syscore();
- 
- 	return 0;
- }
--subsys_initcall(mtrr_init_finialize);
-+subsys_initcall(mtrr_init_finalize);
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
-index 6f3312b..e1e8864 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.h
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
-@@ -61,6 +61,13 @@ extern u32 phys_hi_rsvd;
- void mtrr_state_warn(void);
- const char *mtrr_attrib_to_str(int x);
- void mtrr_wrmsr(unsigned, unsigned, unsigned);
-+#ifdef CONFIG_X86_32
-+void mtrr_set_if(void);
-+void mtrr_register_syscore(void);
-+#else
-+static inline void mtrr_set_if(void) { }
-+static inline void mtrr_register_syscore(void) { }
-+#endif
- 
- /* CPU specific mtrr_ops vectors. */
- extern const struct mtrr_ops amd_mtrr_ops;
