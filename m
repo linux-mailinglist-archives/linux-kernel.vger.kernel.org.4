@@ -2,226 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE6B722FB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3839722FAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235672AbjFETVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S235450AbjFETUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235428AbjFETVZ (ORCPT
+        with ESMTP id S232159AbjFETUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:21:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E687EED
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685992808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 5 Jun 2023 15:20:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BA0EE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:20:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 043FA1F8AB;
+        Mon,  5 Jun 2023 19:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685992813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=l3gJegw+Nxk7RoiwTPjGOLisSvTSWuH40t9k+gDBIZk=;
-        b=eXCOKhabRkMbTlgDzP6HAhnO92suGAqi6bAxuxB2sL6e6YEHl5BvAYFmKCnK+eqdeP51UL
-        BpI0hb8f0sC+C5vz+z+OgGHE4mhslNchLly2J1ywTb5HZpoDL9/AxP0iqisLSNQ+fU/taU
-        q23ZMh8cANmZ/tQYsDc9sFrCzlWfXWo=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-439-q3XU63thOX682ZIKY7aMBg-1; Mon, 05 Jun 2023 15:20:07 -0400
-X-MC-Unique: q3XU63thOX682ZIKY7aMBg-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b337f2504so102082385a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:20:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685992806; x=1688584806;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l3gJegw+Nxk7RoiwTPjGOLisSvTSWuH40t9k+gDBIZk=;
-        b=bGvTX801pk6dVTNeKowJZ3iSEi2Y/uVLYBUoyKoRh/B3x6HqiLeCG+mvM+77JlzELU
-         H1vWP3nBkmc6ly6rj+GR+RnSxJGUiDh+gc0engFgPZGjbmEe4EWpDAjI9SrlFbUO9nyR
-         KtqiqZ+uO+7xmF1R+xh0mIEKy6JAm+uEkVaJgDXoZuM8UIUMvYlHm/mWZ81kwcJ1T3yx
-         JIqQ6Ed9uXAqk8zHOm2ObBwmfU4iuwz6EO1f999r9ICaSRd3h0CNz7zLpsZYQ3WEEp6G
-         mWgzj3nwbfwSxgnPlmDq1QdeQ9JFSxgxPrfH7JC0J3Zt/rvXbd03K+xEKZE0sV+i72xD
-         rDFQ==
-X-Gm-Message-State: AC+VfDzZ9dYe+iB9UYRHH63Jfb/IJVHSYZbuQIcyjNyfUBNzyl4tGUh2
-        nUrpXfdthMyt/3hjbKjjPBniqd7GEEFUOXuWSRkUuLxOnbHwxL4ePpzf8wp3W7fC1tm8v/OVdNa
-        5mmC3vdXSS7KGpIW8tPAFbsB6
-X-Received: by 2002:a05:620a:4608:b0:75b:23a1:69e4 with SMTP id br8-20020a05620a460800b0075b23a169e4mr24924952qkb.4.1685992806494;
-        Mon, 05 Jun 2023 12:20:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6KaZbrUbHfUOAQ4MJPPCdYmmSw75EyCtKDwbv6P1YuOokJkf5Zw/bRz0vcgCeVP/isTdSzsQ==
-X-Received: by 2002:a05:620a:4608:b0:75b:23a1:69e4 with SMTP id br8-20020a05620a460800b0075b23a169e4mr24924927qkb.4.1685992806193;
-        Mon, 05 Jun 2023 12:20:06 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05620a035100b0075cdb0381ebsm4430076qkm.67.2023.06.05.12.20.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 12:20:05 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 15:20:03 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
+        bh=fk9hKNzcZ8kHfwYU6A35s2rZGW0gG6jzBk9enONxz1U=;
+        b=Jo0yYNkNpmE8N1QPiKpa1SzLijBJVHUZeq58M45Xf20KNMG5bUZo6gEPJN0XuqN0JqfXuz
+        bdXR1X76x0cLj4R9vP2xd4SP5F4QVyE7q6RJzQPPss/Hnl0IIyBYM2m/YtSvmqNa+5Q3Lp
+        PvWkKWbvese4EvF7JDjbWUtcKDpEOGI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D7FA2139C8;
+        Mon,  5 Jun 2023 19:20:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dBZPMmw1fmSvZgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 05 Jun 2023 19:20:12 +0000
+Date:   Mon, 5 Jun 2023 21:20:12 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 4/4] mm: Make most walk page paths with
- pmd_trans_unstable() to retry
-Message-ID: <ZH41YzZ0DBoF8csH@x1n>
-References: <20230602230552.350731-1-peterx@redhat.com>
- <20230602230552.350731-5-peterx@redhat.com>
- <CAHbLzkp_tzN8SZVeWTKxtMAnFSzUvk2064KFg3quj=raOSHPrA@mail.gmail.com>
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v3 3/3] mm/vmstat: do not refresh stats for isolated CPUs
+Message-ID: <ZH41bFWrc0LWae/U@dhcp22.suse.cz>
+References: <20230605185627.923698377@redhat.com>
+ <20230605190132.087124739@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHbLzkp_tzN8SZVeWTKxtMAnFSzUvk2064KFg3quj=raOSHPrA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230605190132.087124739@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 11:46:04AM -0700, Yang Shi wrote:
-> On Fri, Jun 2, 2023 at 4:06 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > For most of the page walk paths, logically it'll always be good to have the
-> > pmd retries if hit pmd_trans_unstable() race.  We can treat it as none
-> > pmd (per comment above pmd_trans_unstable()), but in most cases we're not
-> > even treating that as a none pmd.  If to fix it anyway, a retry will be the
-> > most accurate.
-> >
-> > I've went over all the pmd_trans_unstable() special cases and this patch
-> > should cover all the rest places where we should retry properly with
-> > unstable pmd.  With the newly introduced ACTION_AGAIN since 2020 we can
-> > easily achieve that.
-> >
-> > These are the call sites that I think should be fixed with it:
-> >
-> > *** fs/proc/task_mmu.c:
-> > smaps_pte_range[634]           if (pmd_trans_unstable(pmd))
-> > clear_refs_pte_range[1194]     if (pmd_trans_unstable(pmd))
-> > pagemap_pmd_range[1542]        if (pmd_trans_unstable(pmdp))
-> > gather_pte_stats[1891]         if (pmd_trans_unstable(pmd))
-> > *** mm/memcontrol.c:
-> > mem_cgroup_count_precharge_pte_range[6024] if (pmd_trans_unstable(pmd))
-> > mem_cgroup_move_charge_pte_range[6244] if (pmd_trans_unstable(pmd))
-> > *** mm/memory-failure.c:
-> > hwpoison_pte_range[794]        if (pmd_trans_unstable(pmdp))
-> > *** mm/mempolicy.c:
-> > queue_folios_pte_range[517]    if (pmd_trans_unstable(pmd))
-> > *** mm/madvise.c:
-> > madvise_cold_or_pageout_pte_range[425] if (pmd_trans_unstable(pmd))
-> > madvise_free_pte_range[625]    if (pmd_trans_unstable(pmd))
-> >
-> > IIUC most of them may or may not be a big issue even without a retry,
-> > either because they're already not strict (smaps, pte_stats, MADV_COLD,
-> > .. it can mean e.g. the statistic may be inaccurate or one less 2M chunk to
-> > cold worst case), but some of them could have functional error without the
-> > retry afaiu (e.g. pagemap, where we can have the output buffer shifted over
-> > the unstable pmd range.. so IIUC the pagemap result can be wrong).
-> >
-> > While these call sites all look fine, and don't need any change:
-> >
-> > *** include/linux/pgtable.h:
-> > pmd_devmap_trans_unstable[1418] return pmd_devmap(*pmd) || pmd_trans_unstable(pmd);
-> > *** mm/gup.c:
-> > follow_pmd_mask[695]           if (pmd_trans_unstable(pmd))
-> > *** mm/mapping_dirty_helpers.c:
-> > wp_clean_pmd_entry[131]        if (!pmd_trans_unstable(&pmdval))
-> > *** mm/memory.c:
-> > do_anonymous_page[4060]        if (unlikely(pmd_trans_unstable(vmf->pmd)))
-> > *** mm/migrate_device.c:
-> > migrate_vma_insert_page[616]   if (unlikely(pmd_trans_unstable(pmdp)))
-> > *** mm/mincore.c:
-> > mincore_pte_range[116]         if (pmd_trans_unstable(pmd)) {
-> >
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  fs/proc/task_mmu.c  | 17 +++++++++++++----
-> >  mm/madvise.c        |  8 ++++++--
-> >  mm/memcontrol.c     |  8 ++++++--
-> >  mm/memory-failure.c |  4 +++-
-> >  mm/mempolicy.c      |  4 +++-
-> >  5 files changed, 31 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > index 6259dd432eeb..823eaba5c6bf 100644
-> > --- a/fs/proc/task_mmu.c
-> > +++ b/fs/proc/task_mmu.c
-> > @@ -631,8 +631,11 @@ static int smaps_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
-> >                 goto out;
-> >         }
-> >
-> > -       if (pmd_trans_unstable(pmd))
-> > +       if (pmd_trans_unstable(pmd)) {
-> > +               walk->action = ACTION_AGAIN;
-> >                 goto out;
-> > +       }
-> > +
-> >         /*
-> >          * The mmap_lock held all the way back in m_start() is what
-> >          * keeps khugepaged out of here and from collapsing things
-> > @@ -1191,8 +1194,10 @@ static int clear_refs_pte_range(pmd_t *pmd, unsigned long addr,
-> >                 return 0;
-> >         }
-> >
-> > -       if (pmd_trans_unstable(pmd))
-> > +       if (pmd_trans_unstable(pmd)) {
-> > +               walk->action = ACTION_AGAIN;
-> >                 return 0;
-> > +       }
-> >
-> >         pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-> >         for (; addr != end; pte++, addr += PAGE_SIZE) {
-> > @@ -1539,8 +1544,10 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
-> >                 return err;
-> >         }
-> >
-> > -       if (pmd_trans_unstable(pmdp))
-> > +       if (pmd_trans_unstable(pmdp)) {
-> > +               walk->action = ACTION_AGAIN;
-> >                 return 0;
+On Mon 05-06-23 15:56:30, Marcelo Tosatti wrote:
+> schedule_work_on API uses the workqueue mechanism to
+> queue a work item on a queue. A kernel thread, which
+> runs on the target CPU, executes those work items.
 > 
-> Had a quick look at the pagemap code, I agree with your analysis,
-> "returning 0" may mess up pagemap, retry should be fine. But I'm
-> wondering whether we should just fill in empty entries. Anyway I don't
-> have a  strong opinion on this, just a little bit concerned by
-> potential indefinite retry.
+> Therefore, when using the schedule_work_on API,
+> it is necessary for the kworker kernel thread to
+> be scheduled in, for the work function to be executed.
+> 
+> Time sensitive applications such as SoftPLCs
+> (https://tum-esi.github.io/publications-list/PDF/2022-ETFA-How_Real_Time_Are_Virtual_PLCs.pdf),
+> have their response times affected by such interruptions.
+> 
+> The /proc/sys/vm/stat_refresh file was originally introduced
+> with the goal to:
+> 
+> "Provide /proc/sys/vm/stat_refresh to force an immediate update of
+>  per-cpu into global vmstats: useful to avoid a sleep(2) or whatever
+>  before checking counts when testing.  Originally added to work around a
+>  bug which left counts stranded indefinitely on a cpu going idle (an
+>  inaccuracy magnified when small below-batch numbers represent "huge"
+>  amounts of memory), but I believe that bug is now fixed: nonetheless,
+>  this is still a useful knob."
+> 
+> Other than the potential interruption to a time sensitive application,
+> if using SCHED_FIFO or SCHED_RR priority on the isolated CPU, then
+> system hangs can occur:
 
-Yes, none pte is still an option.  But if we're going to fix this anyway,
-it seems better to fix it with the accurate new thing that poped up, and
-it's even less change (just apply walk->action rather than doing random
-stuff in different call sites).
+The same thing can happen without isolated CPUs and this patch doesn't
+help at all.
 
-I see that you have worry on deadloop over this, so I hope to discuss
-altogether here.
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978688
 
-Unlike normal checks, pmd_trans_unstable() check means something must have
-changed in the past very short period or it should just never if nothing
-changed concurrently from under us, so it's not a "if (flag==true)" check
-which is even more likely to loop.
+And this is an example of that...
 
-If we see the places that I didn't touch, most of them suggested a retry in
-one form or another.  So if there's a worry this will also not the first
-time to do a retry (and for such a "unstable" API, that's really the most
-natural thing to do which is to retry until it's stable).
+> To avoid the problems above, do not schedule the work to synchronize
+> per-CPU mm counters on isolated CPUs. Given the possibility for
+> breaking existing userspace applications, avoid returning
+> errors from access to /proc/sys/vm/stat_refresh.
+> 
+> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-So in general, it seems to me if we deadloop over pmd_trans_unstable() for
-whatever reason then something more wrong could have happened..
+It would be really helpful to not post new versions while discussion of
+the previous one is still not done.
 
-Thanks,
+Anyway
+Nacked-by: Michal Hocko <mhocko@suse.com>
+
+This is silently changing semantic and I do not think you have actually
+shown this is a real life problem. To me it sounds like a theoretical
+issue at most and it can be worked around by disalowing to use this
+interface from userspace. stat_refresh is mostly for debugging purposes
+and I strongly doubt it is ever used in environments you refer to in
+this series.
+> 
+> ---
+> v3: improve changelog		  (Michal Hocko)
+> v2: opencode schedule_on_each_cpu (Michal Hocko)
+> 
+> Index: linux-vmstat-remote/mm/vmstat.c
+> ===================================================================
+> --- linux-vmstat-remote.orig/mm/vmstat.c
+> +++ linux-vmstat-remote/mm/vmstat.c
+> @@ -1881,8 +1881,13 @@ int vmstat_refresh(struct ctl_table *tab
+>  		   void *buffer, size_t *lenp, loff_t *ppos)
+>  {
+>  	long val;
+> -	int err;
+>  	int i;
+> +	int cpu;
+> +	struct work_struct __percpu *works;
+> +
+> +	works = alloc_percpu(struct work_struct);
+> +	if (!works)
+> +		return -ENOMEM;
+>  
+>  	/*
+>  	 * The regular update, every sysctl_stat_interval, may come later
+> @@ -1896,9 +1901,24 @@ int vmstat_refresh(struct ctl_table *tab
+>  	 * transiently negative values, report an error here if any of
+>  	 * the stats is negative, so we know to go looking for imbalance.
+>  	 */
+> -	err = schedule_on_each_cpu(refresh_vm_stats);
+> -	if (err)
+> -		return err;
+> +	cpus_read_lock();
+> +	for_each_online_cpu(cpu) {
+> +		struct work_struct *work;
+> +
+> +		if (cpu_is_isolated(cpu))
+> +			continue;
+> +		work = per_cpu_ptr(works, cpu);
+> +		INIT_WORK(work, refresh_vm_stats);
+> +		schedule_work_on(cpu, work);
+> +	}
+> +
+> +	for_each_online_cpu(cpu) {
+> +		if (cpu_is_isolated(cpu))
+> +			continue;
+> +		flush_work(per_cpu_ptr(works, cpu));
+> +	}
+> +	cpus_read_unlock();
+> +	free_percpu(works);
+>  	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
+>  		/*
+>  		 * Skip checking stats known to go negative occasionally.
+> 
 
 -- 
-Peter Xu
-
+Michal Hocko
+SUSE Labs
