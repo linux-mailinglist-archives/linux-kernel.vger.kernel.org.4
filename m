@@ -2,149 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD1F722D84
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D25B5722D8D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbjFERV7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 13:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S234866AbjFERWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjFERV5 (ORCPT
+        with ESMTP id S234695AbjFERWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:21:57 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B5D8F;
-        Mon,  5 Jun 2023 10:21:56 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-974539fd9f0so91572066b.0;
-        Mon, 05 Jun 2023 10:21:56 -0700 (PDT)
+        Mon, 5 Jun 2023 13:22:08 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B5C106
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:22:05 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-39c40b94fedso29661b6e.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 10:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685985725; x=1688577725;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6XZ3PYFTW8wBOrcxa44gmTJZRL7p9p613s1N10mZMVY=;
+        b=ycFVn/L/naAjRsAnEqR9ysNncUv/HbQfjetBqXx4erHA+VIlFcLYsCCYZpKwYV2LfY
+         KG9fKbgqWBtjwwWULsEPR4hELvi+OZ1caxlR7XcilK6EroWpiY6H/p7eKLSZ+XxaHD3z
+         Np995JYCblZZVyD3K7OFjrqfChq6ClFMXNni2e95MICclPFh9tYtD96AnJBnDqL0e5h3
+         gNQx/XCZtwcC6ZUYiuGd7rF+gU4oSsIdadeHa4vlVuCgI+cVs0ugq+AgzEMh9VhTYA88
+         lKTzoHiM5hZHwFCpR2aBwpBWlk5yBK2tuS/6r6Rh0flFXVi7X0z9nkLjh+5izffZ0SFk
+         gqwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685985714; x=1688577714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685985725; x=1688577725;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wbfuCX3KeuduJF8G+hJppxoK/oLfHykbG+OR5oxUZ7w=;
-        b=CThqsbtnRxYVXAwHJ2NDtAqfLp+z+mXHZXhF9zY6mv5eZOblKa7nsNb7eoUkXqF96/
-         2OLZY2gv+Bdir2dBDyvhHpKpUIecYjjxx7EWQXq0ttzgEs7UlWVEWFjm2ggXST3XaOac
-         St5Ffp7PMZLBpiAxY5gF2y51XaeJupgNyu9JtkAP+ot2B/n2GLzG2rRK0TKBDGS+R29R
-         FH+6oETEJ3k5a/uVXNn05awHq2r6OoMVebAEZ7TYKpGifcvJII3QHsF5VqcdkHB45+aw
-         emLFdDzWnGRvh2atUab5vNMSTvLycazYsHYGupMX9HhH6GtKQsw2EF6KarnRwPLfDEuI
-         Al1w==
-X-Gm-Message-State: AC+VfDycJPR5WWXu+2lillQ4LOroEVhvEhh+fNDD2kNWy7vtQBN0j0HB
-        kB3N9nNrhqAhv+HzjSverjH1dxXzUHw/Lfh5sIs=
-X-Google-Smtp-Source: ACHHUZ6IIMkr8cREMNLySIQBDWbdoz2BkL3etn1uvisfJ75KGhwsywwPE4Aos4yMV3rZlBCrLwiCHWJj0UvbrI5YP/8=
-X-Received: by 2002:a17:906:5199:b0:975:bb7:5dc3 with SMTP id
- y25-20020a170906519900b009750bb75dc3mr7278685ejk.7.1685985714469; Mon, 05 Jun
- 2023 10:21:54 -0700 (PDT)
+        bh=6XZ3PYFTW8wBOrcxa44gmTJZRL7p9p613s1N10mZMVY=;
+        b=gESMy2t7GGRPIPRqdO9JvRZlueFbZaOy8BZSeHpTOxsUFfkVfTjaTyo9a1c88FHgyM
+         suQks9VqbeKKZcPPDWIzRwN2AsToLPtsxd35qr5vs5zelqSWBzs13lRxmd7FdfdPBZsp
+         IPj/qzbc36nCb3QWyxS8s5hDmJvsT76vCNv20BNXKjfsIpbLEbNBcuD5/Mcfliz3sfqO
+         BdZxfYLz2Gx41XtK4w5AZnntAbtockQIYeGg+KTpRAeVCiP0RS0Mo1CWZTYY6khFUTi4
+         cKdUUQOIklBeiWW9DcA1peu89TGzZU4gk9KsK+WhhqU8oKmEkgsw3Ai/E7jGBvXVK/fu
+         NXaQ==
+X-Gm-Message-State: AC+VfDwE/7du6PqQSbdOiF/KTVS0EK8C1bsnx6eZvPmPVvkHB3Anehd4
+        LwOb4ZfF9ZhvATXj8NtRLbx8Kg==
+X-Google-Smtp-Source: ACHHUZ55ijmtRxUtr2PJeE7u8S0QvWcKyGSmOe2wfBtgxRK6mvg8iopMfucIMuRB5AN9ZmOkwUXzHA==
+X-Received: by 2002:a05:6358:c401:b0:127:6a3c:2280 with SMTP id ff1-20020a056358c40100b001276a3c2280mr4551121rwb.2.1685985724648;
+        Mon, 05 Jun 2023 10:22:04 -0700 (PDT)
+Received: from [127.0.0.1] ([2600:380:c01c:32f0:eff8:7692:bf8a:abc6])
+        by smtp.gmail.com with ESMTPSA id cl9-20020a17090af68900b0025643e5da99sm7993666pjb.37.2023.06.05.10.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 10:22:03 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+In-Reply-To: <20230531125535.676098-2-hch@lst.de>
+References: <20230531125535.676098-1-hch@lst.de>
+ <20230531125535.676098-2-hch@lst.de>
+Subject: Re: [PATCH 01/24] driver core: return bool from driver_probe_done
+Message-Id: <168598572280.2504.3952473013804137907.b4-ty@kernel.dk>
+Date:   Mon, 05 Jun 2023 11:22:02 -0600
 MIME-Version: 1.0
-References: <20230601221151.670-1-mario.limonciello@amd.com>
- <CAJsYDVKoB1AEL47Ud+8jbxMrbZedM0i9p44-PLQTFR9PKLfy6A@mail.gmail.com> <9d420293-f5af-7563-e7ec-1e42bd69bb8e@amd.com>
-In-Reply-To: <9d420293-f5af-7563-e7ec-1e42bd69bb8e@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Jun 2023 19:21:43 +0200
-Message-ID: <CAJZ5v0ia97k3_1SC6tAbgpQqq-EYCkMk1mUvn1=ex=twXVmgpg@mail.gmail.com>
-Subject: Re: [PATCH v3] ACPI: resource: Remove "Zen" specific match and quirks
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-acpi@vger.kernel.org,
-        rafael@kernel.org, linux-kernel@vger.kernel.org,
-        ofenfisch@googlemail.com, wse@tuxedocomputers.com,
-        adam.niederer@gmail.com, adrian@freund.io, jirislaby@kernel.org,
-        Renjith.Pananchikkal@amd.com, anson.tsao@amd.com,
-        Richard.Gong@amd.com, evilsnoo@proton.me, ruinairas1992@gmail.com,
-        nmschulte@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 4:46 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
->
-> On 6/3/2023 5:19 AM, Chuanhong Guo wrote:
-> > Hi!
-> >
-> > On Fri, Jun 2, 2023 at 6:12 AM Mario Limonciello
-> > <mario.limonciello@amd.com> wrote:
-> >> commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
-> >> AMD Zen platforms") attempted to overhaul the override logic so it
-> >> didn't apply on X86 AMD Zen systems.  This was intentional so that
-> >> systems would prefer DSDT values instead of default MADT value for
-> >> IRQ 1 on Ryzen 6000 systems which typically uses ActiveLow for IRQ1.
-> >>
-> >> This turned out to be a bad assumption because several vendors
-> >> add Interrupt Source Override but don't fix the DSDT. A pile of
-> >> quirks was collecting that proved this wasn't sustaintable.
-> >>
-> >> Furthermore some vendors have used ActiveHigh for IRQ1.
-> >> To solve this problem revert the following commits:
-> >> * commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
-> >> GMxRGxx")
-> >> * commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
-> >> * commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
-> >> * commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
-> >> * commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen
-> >> platforms")
-> >>
-> >> Cc: ofenfisch@googlemail.com
-> >> Cc: wse@tuxedocomputers.com
-> >> Cc: adam.niederer@gmail.com
-> >> Cc: adrian@freund.io
-> >> Cc: jirislaby@kernel.org
-> >> Cc: Renjith.Pananchikkal@amd.com
-> >> Cc: anson.tsao@amd.com
-> >> Cc: Richard.Gong@amd.com
-> >> Cc: Chuanhong Guo <gch981213@gmail.com>
-> >> Reported-by: evilsnoo@proton.me
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217394
-> >> Reported-by: ruinairas1992@gmail.com
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217406
-> >> Reported-by: nmschulte@gmail.com
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217336
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >> v2->v3:
-> >>   * Adjust to drop heuristics entirely
-> >>   * Drop tested tags
-> >>   * Add more links and people to Cc
-> >>   * Drop Fixes tag as this got a lot more risky
-> >> v1->v2:
-> >>   * Rebase on 71a485624c4c ("ACPI: resource: Add IRQ override quirk for LG UltraPC 17U70P")
-> >>   * Pick up tag
-> >>
-> >> Rafael,
-> >> Please hold off on picking this up until the majority of those on CC
-> >> have tested it on hardware they have and reported results.
-> >>
-> >> Everyone else,
-> >> Please test. If you have problems with this applied, please share
-> >> an acpidump and dmesg either on a bug or to me privately.
-> > I was expecting this patch to break my keyboard again but
-> > that didn't happen. I'm on the latest UEFI from Lenovo.
-> > By dumping ACPI APIC I found that there's this:
-> >
-> > [0C4h 0196   1]                Subtable Type : 02 [Interrupt Source Override]
-> > [0C5h 0197   1]                       Length : 0A
-> > [0C6h 0198   1]                          Bus : 00
-> > [0C7h 0199   1]                       Source : 01
-> > [0C8h 0200   4]                    Interrupt : 00000001
-> > [0CCh 0204   2]        Flags (decoded below) : 0007
-> >                                      Polarity : 3
-> >                                  Trigger Mode : 1
-> >
-> > I don't have a dump of the ACPI table from older UEFIs anymore.
-> >
-> > Tested on Lenovo Thinkbook 14G4+ ARA with the latest
-> > UEFI (J6CN45WW).
-> >
-> > Tested-by: Chuanhong Guo <gch981213@gmail.com>
-> Thanks!  Yours is the one I was most worried about.
 
-I've applied the patch as 6.5 material, thanks!
+On Wed, 31 May 2023 14:55:12 +0200, Christoph Hellwig wrote:
+> bool is the most sensible return value for a yes/no return.  Also
+> add __init as this funtion is only called from the early boot code.
+> 
+> 
+
+Applied, thanks!
+
+[01/24] driver core: return bool from driver_probe_done
+        commit: aa5f6ed8c21ec1aa5fd688118d8d5cd87c5ffc1d
+[02/24] PM: hibernate: factor out a helper to find the resume device
+        commit: 02b42d58f3898134b900ff3030561099e38adb32
+[03/24] PM: hibernate: remove the global snapshot_test variable
+        commit: d6545e687271ab27472eebff770f2de6a5f1a464
+[04/24] PM: hibernate: move finding the resume device out of software_resume
+        commit: cc89c63e2fe37d476357c82390dfb12edcd41cdd
+[05/24] init: remove pointless Root_* values
+        commit: f5524c3fadba35c075a5131bad74e3041507a694
+[06/24] init: rename mount_block_root to mount_root_generic
+        commit: e3102722ffe77094ba9e7e46380792b3dd8a7abd
+[07/24] init: refactor mount_root
+        commit: a6a41d39c2d91ff2543d31b6cc6070f3957e3aea
+[08/24] init: pass root_device_name explicitly
+        commit: c8643c72bc42781fc169c6498a3902bec447099e
+[09/24] init: don't remove the /dev/ prefix from error messages
+        commit: 73231b58b1b496d631fa0ecf9fa7f64f5a07c6e3
+[10/24] init: handle ubi/mtd root mounting like all other root types
+        commit: 07d63cbb67cdb5e2a7720fdd8579b3be979c2d66
+[11/24] init: factor the root_wait logic in prepare_namespace into a helper
+        commit: 3701c600a3e735b9fbac6f7a73e4c086090c97ca
+[12/24] init: move the nfs/cifs/ram special cases out of name_to_dev_t
+        commit: c0c1a7dcb6f5db4500e6574294674213bc24940c
+[13/24] init: improve the name_to_dev_t interface
+        commit: cf056a43121559d3642419917d405c3237ded90a
+[14/24] init: clear root_wait on all invalid root= strings
+        commit: 079caa35f7863cd9958b4555ae873ea4d352a502
+[15/24] block: move the code to do early boot lookup of block devices to block/
+        commit: 702f3189e454b3c3c2f3c99dbf30acf41aab707c
+[16/24] block: move more code to early-lookup.c
+        commit: 7cadcaf1d82618852745e7206fffa2c72c17ce4b
+[17/24] dm-snap: simplify the origin_dev == cow_dev check in snapshot_ctr
+        commit: 26110d5afe8117d1b505fe735ac709bdf063f4da
+[18/24] dm: open code dm_get_dev_t in dm_init_init
+        commit: 49177377e910a8fd5cd1388c966d8fbb51075c3c
+[19/24] dm: remove dm_get_dev_t
+        commit: d4a28d7defe79006e59293a4b43d518ba8483fb0
+[20/24] dm: only call early_lookup_bdev from early boot context
+        commit: 7a126d5bf975f082281fb9b45d110cd49b7c3ee4
+[21/24] PM: hibernate: don't use early_lookup_bdev in resume_store
+        commit: 1e8c813b083c4122dfeaa5c3b11028331026e85d
+[22/24] mtd: block2mtd: factor the early block device open logic into a helper
+        commit: b2baa57475e3a24bb9ad27bb9047ea3be94627f5
+[23/24] mtd: block2mtd: don't call early_lookup_bdev after the system is running
+        commit: 8d03187ee7328af8e18ef1782289e0b034e75485
+[24/24] block: mark early_lookup_bdev as __init
+        commit: 2577f53f42947d8ca01666e3444bb7307319ea38
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
