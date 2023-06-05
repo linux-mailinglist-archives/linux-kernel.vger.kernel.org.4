@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDAE723183
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53409723187
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbjFEUiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S232790AbjFEUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjFEUir (ORCPT
+        with ESMTP id S230212AbjFEUkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:38:47 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04815E6;
-        Mon,  5 Jun 2023 13:38:47 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f6bb5e8ed2so50015841cf.0;
-        Mon, 05 Jun 2023 13:38:46 -0700 (PDT)
+        Mon, 5 Jun 2023 16:40:18 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9780EC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:40:17 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25690e009c8so2277018a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 13:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685997526; x=1688589526;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tBzUGtWYUz/h/GEtZLWVJ9w7DC65D2cvEG+PU1++rdk=;
-        b=GiYGyKA/2hN1rkG7MtNWRc4nL1bnZ7G8u+iQG2a1SvNE64Q9yKIMAmVeLgV0Qx2ByW
-         OrZ0XpvL45XOMZzfDajXu+uW9HdrRURuiRaEdz/rlp0t/TkUbAhrp7uk2JlLtoZb8USQ
-         sntoMWGDApTL8H799RGcSw9+tYHQlEWUc67Cb/svn/UNiAjuCk/Bxz6qjnFV8yg5o24r
-         uFhUTJDN04dJUnEschdXrtLF9LV2xpDskausF+trh7tPHOO6h9LenJ8mOJU8Dmm5kdAS
-         MNGV5FiXMxtLGJeRIvRfMSj0ZaUVjJzUT6cTKtHKlGVpUqRd4SNt/FDqFhH5WEI5ApF6
-         QogA==
+        d=chromium.org; s=google; t=1685997617; x=1688589617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s61dUGW3dRqRsf0EIIajPOoZu748hERq4U0K4FORw/U=;
+        b=G4Ago2bnhIX81aaUyZz4fBCbPl9Q1pccJhwJICFCury9DiakrUUN44NERJZsZewjMa
+         OAFqxyu6FwSkX3p1lRWU8V9XcHtr8+OHFmJlTxQP6YHIUJXCtHT3uWaZIYUM6ovh/TN2
+         ZOxKqIn9/XIGsOM4bklvCKjzHDedPmFr/BmLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685997526; x=1688589526;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tBzUGtWYUz/h/GEtZLWVJ9w7DC65D2cvEG+PU1++rdk=;
-        b=gsClqd1i/fDzzHX9gKh8tMMaO4HncwJKbALwrhAsKKmHI+9uFiKSgclmNujpySfWe8
-         t0lAR6gHXDcjWk44R37KDY/bG6c989cxQ7HQARQEN+2Pd/gzWbh5W2n9rBCLuhqNiGTe
-         fL/bGMVgaelWnBZ7bQIFmaWiKtekY9F1cGQ4SlRzUvM/WcTPVkB+SZmA9MesFA7Lxm20
-         PVWQyBVJ92cLdioZDgv9MuCFbpSgR81uXoWkABrNclK0jcW/Ssk2EoCluh441rf/Ik/i
-         NLlF1BEeAjYPMg8hkI51GeRjIPBe/XwYMIKziek3VBF8nP2WcxSS1BJ3WJs6jwYWEpBw
-         hVnw==
-X-Gm-Message-State: AC+VfDx6hS6oAJIhb9oFBCILT4+OOCrVlW46PG5ccB2t1rb1493vzwEz
-        f8zOM/+I4vh+TXmOcA1CntY=
-X-Google-Smtp-Source: ACHHUZ72TxA5rtCZJe9S6Nu0SPOvnqmAh41OVTEXtwof33pAaD38MPlQwbZ5A/HVVMrDpdVBbJnpww==
-X-Received: by 2002:a05:622a:1055:b0:3f6:aff0:6dfd with SMTP id f21-20020a05622a105500b003f6aff06dfdmr9548580qte.32.1685997526080;
-        Mon, 05 Jun 2023 13:38:46 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id f10-20020ac8068a000000b003eabcc29132sm4986051qth.29.2023.06.05.13.38.40
+        d=1e100.net; s=20221208; t=1685997617; x=1688589617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s61dUGW3dRqRsf0EIIajPOoZu748hERq4U0K4FORw/U=;
+        b=ZFsxNUzJKGwR7X82cSVEDB/GFhzCey0TBCc2+i7P0XZU4KyIafDa53xb2f7VAy1dm1
+         QHLwGzkk2fMIbqgVf80sYBWd2ltPM9zrm3eeG1GIVAk+9l7/HS0NKd/r/vngvsSq1biS
+         ddZaIlY0foGkGazZUq1n0D93Ltv2apzwHVtLfhH9v8E95Zp1vAt1wc6DH+wDoVmZ8Pbb
+         gKWFvkKbz920SLsqrzd2KlQFqiCXORc6dpMEpQ6aSpbi5hnuF2sZmmAwsZHwXLg6TquG
+         cLDZQ2nxO9f+ZqLZWj/M2Weiy8J1QMvIUUoMFgsTXf2zU8j0aRxHUKkDdEsnXZFASMR6
+         LLJA==
+X-Gm-Message-State: AC+VfDwJ6+xQAxigvAB5qjt5HxMbHDHTm9xzQN2EqzbYRJxnDSmGtCno
+        g4v4LqckKOSV0LuKmMCotTMfGA==
+X-Google-Smtp-Source: ACHHUZ5FfG8eKcJfoeYh3r6VvQ+sgGN2Lb2+zgbXYJK68C+sAQwd4e8sFyQMq5MQJFB+DojAqJPTaA==
+X-Received: by 2002:a17:90a:db12:b0:258:89d3:d950 with SMTP id g18-20020a17090adb1200b0025889d3d950mr3774065pjv.46.1685997617434;
+        Mon, 05 Jun 2023 13:40:17 -0700 (PDT)
+Received: from localhost (139.11.82.34.bc.googleusercontent.com. [34.82.11.139])
+        by smtp.gmail.com with UTF8SMTPSA id q14-20020a65494e000000b00530914c3bc1sm5521574pgs.21.2023.06.05.13.40.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 13:38:45 -0700 (PDT)
-Message-ID: <6f75392b-7cef-3595-5422-1aa00384dab3@gmail.com>
-Date:   Mon, 5 Jun 2023 13:38:36 -0700
+        Mon, 05 Jun 2023 13:40:16 -0700 (PDT)
+From:   Pavan Holla <pholla@chromium.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     bleung@chromium.org, pmalani@chromium.org,
+        Pavan Holla <pholla@chromium.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: Fix fast_role_swap_current show function
+Date:   Mon,  5 Jun 2023 20:40:09 +0000
+Message-ID: <20230605204010.2239676-1-pholla@chromium.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5.15 00/35] 5.15.115-rc3 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230603143543.855276091@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230603143543.855276091@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/23 07:37, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.115 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Mon, 05 Jun 2023 14:35:25 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+The current implementation mistakenly performs a & operation on
+the output of sysfs_emit. This patch performs the & operation before
+calling sysfs_emit.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Series-to: LKML <linux-kernel@vger.kernel.org>
+Signed-off-by: Pavan Holla <pholla@chromium.org>
+---
+ drivers/usb/typec/pd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+index 0bcde1ff4d39..8cc66e4467c4 100644
+--- a/drivers/usb/typec/pd.c
++++ b/drivers/usb/typec/pd.c
+@@ -95,7 +95,7 @@ peak_current_show(struct device *dev, struct device_attribute *attr, char *buf)
+ static ssize_t
+ fast_role_swap_current_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+-	return sysfs_emit(buf, "%u\n", to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3;
++	return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3);
+ }
+ static DEVICE_ATTR_RO(fast_role_swap_current);
+ 
 -- 
-Florian
+2.41.0.rc0.172.g3f132b7071-goog
 
