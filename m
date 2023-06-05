@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0963722168
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B49722177
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjFEItn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S230119AbjFEIyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFEItk (ORCPT
+        with ESMTP id S229490AbjFEIyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:49:40 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C785CD;
-        Mon,  5 Jun 2023 01:49:39 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1q65ti-00GsWv-Lb; Mon, 05 Jun 2023 16:49:07 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 05 Jun 2023 16:49:06 +0800
-Date:   Mon, 5 Jun 2023 16:49:06 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
-Message-ID: <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
-References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
- <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
- <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com>
+        Mon, 5 Jun 2023 04:54:13 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7836CDB;
+        Mon,  5 Jun 2023 01:54:11 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685955249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dNvkGsaRNjcLUAaRAQc2wTZtlEs619LxRWDYK7s9IYw=;
+        b=WDaiNeGp/8dW6v+ebqBLy0MPRo35NcuuRkxke6vf8dj8iHnv5Nl6xKEKMBGvu3VvsREio8
+        sDRcdg9puN/CvYQJb68brM5++QqwFvsZsz71TJrspS9Cmj2Z3785dOBfNEcjaW/nNYIZUx
+        DR4nw6QbTBQmnaF8CnzvwCAlu9yIWWblgKAkQru2+p183k8RpBWbfjuHpHwLAvtdmDOcHP
+        UVgnW/riry09OBZ7IviYz6ag1wV9o3fs1lij42CwZ8vQpC52/iEAlAGi60WDAGCvV2CcbB
+        289lKtWAcOcXHzS3SOO9YwRZHw2q6YOftNf9Zn+MqlmPFyr666NuUf9vSlA0lw==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5089E1C0005;
+        Mon,  5 Jun 2023 08:54:06 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 10:54:05 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     andy.shevchenko@gmail.com
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 6/9] ASoC: soc-dapm.h: Add a helper to build a DAPM
+ widget dynamically
+Message-ID: <20230605105405.39bcebef@bootlin.com>
+In-Reply-To: <ZHtJLxNReoc4Yjqj@surfacebook>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-7-herve.codina@bootlin.com>
+        <ZHtJLxNReoc4Yjqj@surfacebook>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 08:02:23PM -0400, Linus Torvalds wrote:
->
-> I absolutely abhor the crypto interfaces. They all seem designed for
-> that "external DMA engine" case that seems so horrendously pointless
-> and slow.  In practice so few of them are that, and we have all those
-> optimized routines for doing it all on the CPU - but have in the
-> meantime wasted all that time and effort into copying everything,
-> turning simple buffers into sg-bufs etc etc. The amount of indirection
-> and "set this state in the state machine" is just nasty, and this
-> seems to all be a prime example of it all. With some of it then
-> randomly going through some kthread too.
+On Sat, 3 Jun 2023 17:07:43 +0300
+andy.shevchenko@gmail.com wrote:
 
-You're right.  Originally SG lists were used as the majority of
-our input came from network packets, in the form of skb's.  They
-are easily translated into SG lists.  This is still somewhat the
-case for parts of the Crypto API (e.g., skcipher and ahash).
+> Tue, May 23, 2023 at 05:12:20PM +0200, Herve Codina kirjoitti:
+> > The SND_SOC_DAPM_* helpers family are used to build widgets array in a
+> > static way.
+> > 
+> > Introduce SND_SOC_DAPM_WIDGET() in order to use the SND_SOC_DAPM_*
+> > helpers family in a dynamic way. The different SND_SOC_DAPM_* parameters
+> > can be computed by the code and the widget can be built based on this
+> > parameter computation.
+> > For instance:
+> >   static int create_widget(char *input_name)
+> >   {
+> > 	struct snd_soc_dapm_widget widget;
+> > 	char name*;
+> > 	...
+> > 	name = input_name;
+> > 	if (!name)
+> > 		name = "default";
+> > 
+> > 	widget = SND_SOC_DAPM_WIDGET(SND_SOC_DAPM_INPUT(name));
+> > 	...
+> >   }  
+> 
+> Maybe instead of adding a helper, simply convert those macros to provide
+> a compaund literal? (See, for example,
+> https://elixir.bootlin.com/linux/v6.4-rc4/source/include/linux/pinctrl/pinctrl.h#L42)
+> 
 
-However, for akcipher the only user of the underlying API is the
-file in question so I absolutely agree that forcing it to go through
-an SG list is just wrong.
+Indeed, I will convert macros and remove the helper in the next iteration.
 
-I'll change the underlying akcipher interface to take pointers
-instead and hide the SG list stuff (along with the copying) inside
-API.
-
-In the mean time feel free to take this patch as it appears to be
-correct and should keep things chugging along while we work on the
-API.
-
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Thanks for the review,
+Hervé
