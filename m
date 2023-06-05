@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB1A722A8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF7F722AA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjFEPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S234835AbjFEPO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbjFEPLY (ORCPT
+        with ESMTP id S234678AbjFEPN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:11:24 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BC0173A
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:10:21 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f738f579ceso12502845e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 08:10:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685977820; x=1688569820;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EV6BEOUnr2VyeVz7cBaVxhxNpGZy8Oum7xe1cgF/ZR8=;
-        b=G2eLQmH90GYtOTiU+urKVmW16CkdBhxrc3ninRslVe5DfiNJ/M83cPrCu0CSVuvV+Y
-         DB5pBDn9vzt1Yudd5q3OAzUC3YwgDypnZtHx8FfNW/O6uaTYy6Awqqm/IsqqZEXlSqmy
-         zBCNN2wFcdW5MGM028qrPsmDmzowZV6uyDyNE0BsXHtcN45VBP4+FTHch5nqFCyWILkS
-         82ntoxzZdnkWBGJNDVh/Z2ly8cq6/L1h37ARSqUvdENGtfRX9N95OR8PFRUVukjYGmbS
-         GvpyiBid0XQ0NesW3WulZLSq7D+WzU/wV6kmJopjBGQiJqI6wzVFEXVdXsylbVGTmdrA
-         IgtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685977820; x=1688569820;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EV6BEOUnr2VyeVz7cBaVxhxNpGZy8Oum7xe1cgF/ZR8=;
-        b=ifTZfkqdRh8JgK6qsacD/wwDleblKsJzZmX2NYd25EibkMK6OMq0kNXxqgTrprKJ8f
-         jKQGM9uOCJShH2SscTtk4m/e/NYEbztL93/QYqkCN2JxlJhF/rijFlwfnexaejHWcCY3
-         iZ8al+uleVlHMxi8vrE24USm77YFL5QtcJ0rf4L+lDoHbo0GBAuT8b69HchcHBxhSNWa
-         Pe4VeGuFUUg4UGkaJsTg+8sQj7UlSbm1/hTTBk39/pI30fmCkebUBORtIry1CMVi0wag
-         Iwa4cxLCvtNOeFUv7WhyqMLOq3SmGUrsh6pR9JXzickaEbE7QpDrokGdRXimQ1ImDpUm
-         bt/Q==
-X-Gm-Message-State: AC+VfDy/7OLmLfYKwynnzomBmlVcWvvszn4NnRSK1sO3Y6/U+qf0mxXZ
-        patYMQ1E3ko9ilpdmetw+fHcOg==
-X-Google-Smtp-Source: ACHHUZ5+aU/ZOAxsKiY+JK1rkcOIyJPyhpE1Ik7mmpFeQUPq1cpkK+xP98Uq3+93HhhKUjslQRz3iA==
-X-Received: by 2002:a1c:7716:0:b0:3f7:e70c:8ea4 with SMTP id t22-20020a1c7716000000b003f7e70c8ea4mr1130215wmi.34.1685977820098;
-        Mon, 05 Jun 2023 08:10:20 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:b467:b060:6671:840c])
-        by smtp.gmail.com with ESMTPSA id s6-20020a1cf206000000b003f60a9ccd34sm11094339wmc.37.2023.06.05.08.10.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 08:10:19 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] MAINTAINERS: add Andy Shevchenko as reviewer for the GPIO subsystem
-Date:   Mon,  5 Jun 2023 17:10:15 +0200
-Message-Id: <20230605151015.564547-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Mon, 5 Jun 2023 11:13:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA17106
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685977930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bywKZhtlg51wzfiscYPd6CmyliJ7OItYPiep19smH9g=;
+        b=BNFk9haRfXbEl8y3C+1jeb3Miwvov2smSVb8rp0nF7t/HrLRrpFcdqdaS0pldKnoFe0ARE
+        LYXae0q+zstbTtsulzgCkxhYfwwx5ZZv/3Ss3YNbm2mLIOiqRSW85r7GlzCps41zYsM2ng
+        z75u6SeOudhoU8RrJ9Wyau/LQCzJH9A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-eP_K2iQ2Pr6AedXeMPAcpQ-1; Mon, 05 Jun 2023 11:12:07 -0400
+X-MC-Unique: eP_K2iQ2Pr6AedXeMPAcpQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A2FC8EF5BB;
+        Mon,  5 Jun 2023 15:11:03 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.144])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 813AF9E72;
+        Mon,  5 Jun 2023 15:11:00 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon,  5 Jun 2023 17:10:42 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 17:10:38 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     michael.christie@oracle.com
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+Subject: Re: [CFT][PATCH v3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Message-ID: <20230605151037.GE32275@redhat.com>
+References: <20230601183232.8384-1-michael.christie@oracle.com>
+ <20230602192254.GD555@redhat.com>
+ <87r0qt18qq.fsf_-_@email.froward.int.ebiederm.org>
+ <ae250076-7d55-c407-1066-86b37014c69c@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae250076-7d55-c407-1066-86b37014c69c@oracle.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 06/03, michael.christie@oracle.com wrote:
+>
+> On 6/2/23 11:15 PM, Eric W. Biederman wrote:
+> The problem is that as part of the flush the drivers/vhost/scsi.c code
+> will wait for outstanding commands, because we can't free the device and
+> it's resources before the commands complete or we will hit the accessing
+> freed memory bug.
 
-Andy has been a de-facto reviewer for all things GPIO for a long time so
-let's make it official.
+ignoring send-fd/clone issues, can we assume that the final fput/release
+should always come from vhost_worker's sub-thread (which shares mm/etc) ?
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7e0b87d5aa2e..62e33c4da40a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8799,6 +8799,7 @@ F:	include/linux/gpio/regmap.h
- GPIO SUBSYSTEM
- M:	Linus Walleij <linus.walleij@linaro.org>
- M:	Bartosz Golaszewski <brgl@bgdev.pl>
-+R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- L:	linux-gpio@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
--- 
-2.39.2
+Oleg.
 
