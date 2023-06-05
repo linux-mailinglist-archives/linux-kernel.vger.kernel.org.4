@@ -2,66 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798D6723231
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D93723233
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbjFEV0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S232757AbjFEV0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjFEV0i (ORCPT
+        with ESMTP id S232600AbjFEV0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:26:38 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A36D9;
-        Mon,  5 Jun 2023 14:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=pjkBZVUgc3CiLu0gi0p3NgsM5Xuycekxxtcs51fqFw8=; b=LxF5UxaufA4Sp8u2YbbNXlz7Cy
-        6Mrb3XFZ3WVTzuZkC/ngcGvAzcJs13Eg/khUwkc5te1pigBfwwVzXm0LzLBYq8x7U6i21YssND6ya
-        6Joxt8oq5bSsm5+xLTTTHFUqNKkZyGGUUs7OVFx46OvUvIUBP9uGPeW6oQJvRn6Hu1GU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q6HiJ-00EwXx-SM; Mon, 05 Jun 2023 23:26:07 +0200
-Date:   Mon, 5 Jun 2023 23:26:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "conor@kernel.org" <conor@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v8 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Message-ID: <609c032d-0912-4ef0-b04a-4d40a7d2f0d0@lunn.ch>
-References: <20230531234923.2307013-1-chris.packham@alliedtelesis.co.nz>
- <20230531234923.2307013-4-chris.packham@alliedtelesis.co.nz>
- <a23dd485-a3d9-e31f-be3e-0ab293fcfc4a@linaro.org>
- <785368df-1881-e62e-6172-d902cee814a8@alliedtelesis.co.nz>
- <eaf9d7cf-c9f5-a5d5-67af-c43761c3c6cf@linaro.org>
- <4ea0b16e-0cec-00db-c598-e0364a7edef8@alliedtelesis.co.nz>
+        Mon, 5 Jun 2023 17:26:50 -0400
+Received: from out-45.mta1.migadu.com (out-45.mta1.migadu.com [IPv6:2001:41d0:203:375::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058FEC5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 14:26:49 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 17:26:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686000408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wnph7+oPyMmNyxdAR2lSsW9n2332H95DQGe3lGJ+RnM=;
+        b=wwd5yLEgvSH4d+5xWJ6tolwo006zpdwkSJPNKLhPDVlmDucLbB43zlTx4L3qDNrxG2EuXQ
+        3uiAAV5lhacpa4y7Tu1zknaaEHIixORHvG/LZeJ0X89Q+f3vXAM6MfzR01MFNjROJmYhzI
+        3jTaKKS6JK/JJk/69GvKgK3Oow939nU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 0/7] block layer patches for bcachefs
+Message-ID: <ZH5TFBy5j1eUxg00@moria.home.lan>
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
+ <ZHEaKQH22Uxk9jPK@moria.home.lan>
+ <8e874109-db4a-82e3-4020-0596eeabbadf@kernel.dk>
+ <ZHYfGvPJFONm58dA@moria.home.lan>
+ <2a56b6d4-5f24-9738-ec83-cefb20998c8c@kernel.dk>
+ <ZH0gjyuBgYzqhZh7@moria.home.lan>
+ <b1b43d30-8c7c-1a71-0ead-8b967b8af0a4@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4ea0b16e-0cec-00db-c598-e0364a7edef8@alliedtelesis.co.nz>
+In-Reply-To: <b1b43d30-8c7c-1a71-0ead-8b967b8af0a4@kernel.dk>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,19 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Then you are doing something different than all other bindings.
+On Mon, Jun 05, 2023 at 10:49:37AM -0600, Jens Axboe wrote:
+> On 6/4/23 5:38?PM, Kent Overstreet wrote:
+> > On Tue, May 30, 2023 at 10:50:55AM -0600, Jens Axboe wrote:
+> >> Sorry typo, I meant text. Just checked stack and it looks identical, but
+> >> things like blk-map grows ~6% more text, and bio ~3%. Didn't check all
+> >> of them, but at least those two are consistent across x86-64 and
+> >> aarch64. Ditto on the data front. Need to take a closer look at where
+> >> exactly that is coming from, and what that looks like.
+> > 
+> > A good chunk of that is because I added warnings and assertions for
+> > e.g. running past the end of the bvec array. These bugs are rare and
+> > shouldn't happen with normal iterator usage (e.g. the bio_for_each_*
+> > macros), but I'd like to keep them as a debug mode thing.
+> > 
+> > But we don't yet have CONFIG_BLOCK_DEBUG - perhaps we should.
 > 
-> Not intentionally. I should probably check that the existing bindings 
-> actually work as expected.
+> Let's split those out then, especially as we don't have a BLOCK_DEBUG
+> option right now.
 
-This binding supports marvell,pxa3xx-nand. That is really really
-old. So it could well be it works in the kernel, but the YAML does not
-fully implement what the kernel actually supports. Best practices
-could of pushed modern day DT to a subset, and YAML only supports that
-subset of reality. And once you get outside of this subset, you run
-into trouble.
+Already did that; there's a patch in the branch that adds
+CONFIG_BLK_DEBUG with the new assertions.
 
-I don't actually know this is the case, but you should keep it in
-mind.
+> Cn you resend just the iterator changes in their current form? The
+> various re-exports are a separate discussion, I think we should focus on
+> the iterator bits first.
 
-     Andrew
+They're up in that branch with the iterator changes first now; I'll mail
+them out too.
