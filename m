@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38F2722BC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1370D722BBA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbjFEPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S235016AbjFEPp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234400AbjFEPrC (ORCPT
+        with ESMTP id S235439AbjFEPph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:47:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931721B8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:45:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685979840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uqr8cXAKFqCk2YnqjL4KjwaNLI7luK4gqpzwm6zg+eU=;
-        b=gAvC/TLk+Umfo3ZIbhLEYnb5nYIBosvOgJP5GHus/yelkLjltfx7mKXRghDy7S6wZnEKCU
-        uzyyopM69T8DeAN4Zsb1KJSAUH4illvEvluvYDnihXRr/NLtWWwglZ+L9fF7JrsiqOu4kq
-        Vgd+uWkU5y7dHZW3ppfgES+tOYFr3fs=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-357-Ryi_AbQ1Mwq9settJCbrrA-1; Mon, 05 Jun 2023 11:43:59 -0400
-X-MC-Unique: Ryi_AbQ1Mwq9settJCbrrA-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f9aa9aee8cso1362121cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 08:43:59 -0700 (PDT)
+        Mon, 5 Jun 2023 11:45:37 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8378E54
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:45:06 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-628f267aa5aso22753486d6.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 08:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685979847; x=1688571847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nkLUpVI1lRm5o5xemq0WhMisepgmj/y0uGONlgnlU+A=;
+        b=nOGLwaP+U7e8L3HcxgP9meigUb3oKF+35bxZbXYh5Yd2H8J1HwaID+4tNrRb/LxHzn
+         DQod8hD+QSWMsxjJEi8fir6WWG5xx+K7JWoMYyslKd/X3i71ddrQAZ5K94P152gPKoxT
+         gbTkWqO25P8cQUGyKt6xI/5k/S9BEXqU1zfAlwF0vGfbbJsJY3JSzGlfT/NDV55Hb6Qs
+         CqEaDxt8T6ajGoXt/MgIBiGpgqQlHLWE1BeN//5yQcGvPN80Gm3zVWnhMjjuliMvxCjf
+         x9+rSfGd46tDrFCUhdF+W6QQlBGcWkcrJLfBdDZ3O3d2pwxtLG4YQGXj/6Z+3EhDOcA0
+         h8zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685979838; x=1688571838;
+        d=1e100.net; s=20221208; t=1685979847; x=1688571847;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Uqr8cXAKFqCk2YnqjL4KjwaNLI7luK4gqpzwm6zg+eU=;
-        b=f2wSv8gGPhmcANvCcpP0fW9V4bb5untmBHy6fPN7ms5i/LzXaikVGdaOkUgLR+mk3W
-         VBT2QotfBT56JNiNn8dlD6z55ed8uZWubNlD0Bmv+DIwB7i85VZYoOKpLdszI0uBLDGM
-         xNKsqlyLsnlB2YO2vh7dedT1IRuAVF3EcbMUY/f99spFrhAWtzID5z1lTQRpaOW3uQxG
-         p1mCxwEqBQFDpJ9UD9IIpLAUeICo9tToEP4SyepUKCNqXhHa6SmKQf1jPjIptQyk0aET
-         TMZJKkNTkYYAra3QcTQeMrYwz2hfv1Ana12JpwIbPvh2hA4D5KSfiwIq90mnj/VN+O1r
-         IKwQ==
-X-Gm-Message-State: AC+VfDzumZ2S9Eiu3QP72CWXjzaGeK4nc3Ez9BaRjnQnW3z9IngeYVTL
-        1QSiEah/tJ5V/Em6jejEfg4q1qAKPlX9NsGn2OzRCL0wc68+/eeYmI8ZAiXtCqvxqcJ7Sfx+80d
-        8f9uRqLwIp79liQanOJiHghPj
-X-Received: by 2002:ac8:5bcf:0:b0:3f6:b330:4bfb with SMTP id b15-20020ac85bcf000000b003f6b3304bfbmr22480312qtb.0.1685979838649;
-        Mon, 05 Jun 2023 08:43:58 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5jznbCgExyaLNQztYMzHdFKbqFXFxr8ajJUyuToLJ3v/+o3EtdG/wbnhNA/zQiIpX8t+oH7Q==
-X-Received: by 2002:ac8:5bcf:0:b0:3f6:b330:4bfb with SMTP id b15-20020ac85bcf000000b003f6b3304bfbmr22480298qtb.0.1685979838422;
-        Mon, 05 Jun 2023 08:43:58 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id ey5-20020a05622a4c0500b003f6bbd7863csm3196694qtb.86.2023.06.05.08.43.57
+        bh=nkLUpVI1lRm5o5xemq0WhMisepgmj/y0uGONlgnlU+A=;
+        b=UyUrI2igZx6OZMT9nlwwWSLwiZgEoGAlyU83kLlOZGi9Lc99CaUM29ni+8InkKMY84
+         I8x5rAkwdhc61TXFqWehtYL3byBTCp7e3iswzI1he/NOc/x+MFWAEnobwKEIfbJw8xyg
+         qrBNzu58GWybcwoxMUoh4hbdqQwh6a0whp6TPkAQsk2+GwN2+Y3XJV3Zzpb/2/phI99v
+         cHXQO+MpS5pToLgN83IxhRucV44Y0nHkboRQ+GpBu8i6U+pezVSJh+9EI0a/19FqSYuj
+         KTpPeSycZSZNiCZkwKEJxGACtCz24W7SxC6qBKXjpEttJbBaKdN1rSNezgsTFtwIt394
+         VV/g==
+X-Gm-Message-State: AC+VfDw8nV4A0cjvfArAPWChrp2tWJkZVcfUXJI6ke92pNiuaXuQGp7K
+        JaFwbQyFVjoA2RBfoeFYO7URWQ==
+X-Google-Smtp-Source: ACHHUZ4NUbgNApLfe1kSENP43g3/Z5rp+V5OU4b4f5roTjrGPmcUF6GOU1MjyEq7GllgINkpoSHyfg==
+X-Received: by 2002:a05:6214:765:b0:626:1862:7d75 with SMTP id f5-20020a056214076500b0062618627d75mr6815337qvz.44.1685979846818;
+        Mon, 05 Jun 2023 08:44:06 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:ec58])
+        by smtp.gmail.com with ESMTPSA id j27-20020a05620a001b00b007592af6fce6sm4258887qki.43.2023.06.05.08.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 08:43:57 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 11:43:56 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 03/11] selftests/mm: fix "warning: expression which
- evaluates to zero..." in mlock2-tests.c
-Message-ID: <ZH4CvMFgu7IFFMwk@x1n>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
- <20230603021558.95299-4-jhubbard@nvidia.com>
+        Mon, 05 Jun 2023 08:44:06 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 11:44:05 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        nphamcs@gmail.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH 6/7] mm: zswap: simplify writeback function
+Message-ID: <20230605154405.GC221380@cmpxchg.org>
+References: <20230605085419.44383-1-cerasuolodomenico@gmail.com>
+ <20230605085419.44383-7-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230603021558.95299-4-jhubbard@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230605085419.44383-7-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 07:15:50PM -0700, John Hubbard wrote:
-> The stop variable is a char*, and the code was assigning a char value to
-> it. This was generating a warning when compiling with clang.
-> 
-> However, as both David and Peter pointed out, stop is not even used
-> after the problematic assignment to a char type. So just delete that
-> line entirely.
-> 
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  tools/testing/selftests/mm/mlock2-tests.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
-> index 11b2301f3aa3..80cddc0de206 100644
-> --- a/tools/testing/selftests/mm/mlock2-tests.c
-> +++ b/tools/testing/selftests/mm/mlock2-tests.c
-> @@ -50,7 +50,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
->  			printf("cannot parse /proc/self/maps\n");
->  			goto out;
->  		}
-> -		stop = '\0';
+On Mon, Jun 05, 2023 at 10:54:18AM +0200, Domenico Cerasuolo wrote:
+> @@ -1142,9 +1122,6 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+>  	zswap_written_back_pages++;
 >  
->  		sscanf(line, "%lx", &start);
->  		sscanf(end_addr, "%lx", &end);
+>  	spin_lock(&tree->lock);
+> -	/* drop local reference */
+> -	zswap_entry_put(tree, entry);
+> -
+>  	/*
+>  	* There are two possible situations for entry here:
+>  	* (1) refcount is 1(normal case),  entry is valid and on the tree
+> @@ -1152,7 +1129,7 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
+>  	*     because invalidate happened during writeback
+>  	*  search the tree and free the entry if find entry
+>  	*/
+> -	if (entry == zswap_rb_search(&tree->rbroot, offset))
+> +	if (entry == zswap_rb_search(&tree->rbroot, swp_offset(swpentry)))
+>  		zswap_entry_put(tree, entry);
+>  	spin_unlock(&tree->lock);
 
-I'd rather simply make it "*stop = '\0'", or as David suggested dropping
-stop completely when we're it (assumes that scanf() will always work with
-number ending with space ' ').
+This can be moved to zswap_shrink() as well. It already has a
+post-writeback tree->lock section for lru putback and dropping its
+local reference, it should do this as well.
 
-No strong opinion here, though.
-
--- 
-Peter Xu
-
+Writeback is then is done after it bumped zswap_written_pages.
