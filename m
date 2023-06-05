@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F86722C69
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA14722C66
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbjFEQVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S234948AbjFEQVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbjFEQVi (ORCPT
+        with ESMTP id S234903AbjFEQVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:21:38 -0400
+        Mon, 5 Jun 2023 12:21:40 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698EC106;
-        Mon,  5 Jun 2023 09:21:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB11E9;
+        Mon,  5 Jun 2023 09:21:39 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E67D26602242;
-        Mon,  5 Jun 2023 17:21:33 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AED526606E75;
+        Mon,  5 Jun 2023 17:21:36 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685982096;
-        bh=0r6cQNK3uGc3pJiztNyfHAD9LI2rH/+twn3IcKzXoIo=;
+        s=mail; t=1685982098;
+        bh=eYWIdhW4aakZCc9KT/m2mXuoGNz20gM45H5p6PtQfaA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V4JpGvCB73IwzBPjm0YatoVY3mRol/XEoRAZ3+D1ASiZxJth7e6ICWfWJeqBWhimK
-         BcLbtD6U02KToCRPB6XzmesJlXIS/Bt+u6XO1cnk9kZk2hWb/eHHFYuKyi5Wv5T55I
-         MSiybdyFVOttuRwEafHjMNlGmffYoW0qo6JWIpPRPJoxAa1XhLwHnQcGQ+3Vi/7Ssn
-         M02O2owhQXpJCltgx4O1yvn8hJ6vzkJjNqVR+5JccMrpLw2v/DHhr3w78kjHFm/pPU
-         2IKG13naY6jadkBvhkwOxpqvKNoUP8NnUZKrkymSyF+rRzOStH1OucJWsyLdIn5bL3
-         Y2Yd5t9Hi0zAw==
+        b=Nyshmm6ObK9GxFVtiLunGY3XtIz9xexeLx/ePQwXglIhayFfZxi3sM4omcgO83LkK
+         fIDCGlZexBM8iCi/9LZzmQHh/n+AGsC7CzWquCziocDuPiZZleX36sbD7So7qKe6U2
+         a14M9u+sY45vC2QNBgNfu1hIRjVXzcX9WuJEqKkRqHjtc2TtAd0H6LRC8JTsQsIE8q
+         cIkHLvz4hxBdmrO6i8M3nl0Xhn5OA7N0BSypRMas2Siw2oDLjQBnYvYyiRU5zEVv84
+         lI1f2ImGC2qDbLdOsfIYKM4T8usjS4EZIxQU0k7MtKHkDa0EDYtymStIrURM8vbprx
+         Z5zoOPbPdaCfA==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Conor Dooley <conor+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH 5/6] clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
-Date:   Mon,  5 Jun 2023 12:20:29 -0400
-Message-Id: <20230605162030.274395-6-nfraprado@collabora.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 6/6] arm64: dts: mediatek: mt8183: Add decoder
+Date:   Mon,  5 Jun 2023 12:20:30 -0400
+Message-Id: <20230605162030.274395-7-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230605162030.274395-1-nfraprado@collabora.com>
 References: <20230605162030.274395-1-nfraprado@collabora.com>
@@ -66,53 +63,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the CLK_VDEC_ACTIVE clock to the vdec clock driver. This clock is
-enabled by the VPU once it starts decoding.
+From: Yunfei Dong <yunfei.dong@mediatek.com>
 
+Add node for the hardware decoder present on the MT8183 SoC.
+
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Signed-off-by: Qianqian Yan <qianqian.yan@mediatek.com>
+Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
+Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
 
- drivers/clk/mediatek/clk-mt8183-vdec.c | 5 +++++
- include/dt-bindings/clock/mt8183-clk.h | 3 ++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 39 ++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/drivers/clk/mediatek/clk-mt8183-vdec.c b/drivers/clk/mediatek/clk-mt8183-vdec.c
-index 513b7956cbea..5830934a6d25 100644
---- a/drivers/clk/mediatek/clk-mt8183-vdec.c
-+++ b/drivers/clk/mediatek/clk-mt8183-vdec.c
-@@ -27,6 +27,10 @@ static const struct mtk_gate_regs vdec1_cg_regs = {
- 	GATE_MTK(_id, _name, _parent, &vdec0_cg_regs, _shift,	\
- 		&mtk_clk_gate_ops_setclr_inv)
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 5169779d01df..8bb10ed67e87 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -2019,6 +2019,45 @@ vdecsys: syscon@16000000 {
+ 			#clock-cells = <1>;
+ 		};
  
-+#define GATE_VDEC0(_id, _name, _parent, _shift)		\
-+	GATE_MTK(_id, _name, _parent, &vdec0_cg_regs, _shift,	\
-+		&mtk_clk_gate_ops_setclr)
++		vcodec_dec: video-codec@16020000 {
++			compatible = "mediatek,mt8183-vcodec-dec";
++			reg = <0 0x16020000 0 0x1000>,		/* VDEC_MISC */
++			      <0 0x16021000 0 0x800>,		/* VDEC_VLD */
++			      <0 0x16021800 0 0x800>,		/* VDEC_TOP */
++			      <0 0x16022000 0 0x1000>,		/* VDEC_MC */
++			      <0 0x16023000 0 0x1000>,		/* VDEC_AVCVLD */
++			      <0 0x16024000 0 0x1000>,		/* VDEC_AVCMV */
++			      <0 0x16025000 0 0x1000>,		/* VDEC_PP */
++			      <0 0x16026800 0 0x800>,		/* VP8_VD */
++			      <0 0x16027000 0 0x800>,		/* VP6_VD */
++			      <0 0x16027800 0 0x800>,		/* VP8_VL */
++			      <0 0x16028400 0 0x400>;		/* VP9_VD */
++			reg-names = "misc",
++				    "ld",
++				    "top",
++				    "cm",
++				    "ad",
++				    "av",
++				    "pp",
++				    "hwd",
++				    "hwq",
++				    "hwb",
++				    "hwg";
++			interrupts = <GIC_SPI 250 IRQ_TYPE_LEVEL_LOW>;
++			iommus = <&iommu M4U_PORT_HW_VDEC_MC_EXT>,
++				 <&iommu M4U_PORT_HW_VDEC_PP_EXT>,
++				 <&iommu M4U_PORT_HW_VDEC_VLD_EXT>,
++				 <&iommu M4U_PORT_HW_VDEC_AVC_MV_EXT>,
++				 <&iommu M4U_PORT_HW_VDEC_PRED_RD_EXT>,
++				 <&iommu M4U_PORT_HW_VDEC_PRED_WR_EXT>,
++				 <&iommu M4U_PORT_HW_VDEC_PPWRAP_EXT>;
++			mediatek,scp = <&scp>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_VDEC>;
++			clocks = <&vdecsys CLK_VDEC_VDEC>,
++				 <&vdecsys CLK_VDEC_ACTIVE>;
++			clock-names = "vdec", "active";
++		};
 +
- #define GATE_VDEC1_I(_id, _name, _parent, _shift)		\
- 	GATE_MTK(_id, _name, _parent, &vdec1_cg_regs, _shift,	\
- 		&mtk_clk_gate_ops_setclr_inv)
-@@ -34,6 +38,7 @@ static const struct mtk_gate_regs vdec1_cg_regs = {
- static const struct mtk_gate vdec_clks[] = {
- 	/* VDEC0 */
- 	GATE_VDEC0_I(CLK_VDEC_VDEC, "vdec_vdec", "mm_sel", 0),
-+	GATE_VDEC0(CLK_VDEC_ACTIVE, "vdec_active", "mm_sel", 4),
- 	/* VDEC1 */
- 	GATE_VDEC1_I(CLK_VDEC_LARB1, "vdec_larb1", "mm_sel", 0),
- };
-diff --git a/include/dt-bindings/clock/mt8183-clk.h b/include/dt-bindings/clock/mt8183-clk.h
-index a7b470b0ec8a..32dd7d91dbe2 100644
---- a/include/dt-bindings/clock/mt8183-clk.h
-+++ b/include/dt-bindings/clock/mt8183-clk.h
-@@ -357,7 +357,8 @@
- /* VDEC_GCON */
- #define CLK_VDEC_VDEC			0
- #define CLK_VDEC_LARB1			1
--#define CLK_VDEC_NR_CLK			2
-+#define CLK_VDEC_ACTIVE			2
-+#define CLK_VDEC_NR_CLK			3
- 
- /* VENC_GCON */
- #define CLK_VENC_LARB			0
+ 		larb1: larb@16010000 {
+ 			compatible = "mediatek,mt8183-smi-larb";
+ 			reg = <0 0x16010000 0 0x1000>;
 -- 
 2.40.1
 
