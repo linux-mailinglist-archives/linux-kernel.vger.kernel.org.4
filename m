@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65074722D6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C01722D71
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbjFERQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S234785AbjFERQz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 13:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFERQd (ORCPT
+        with ESMTP id S234383AbjFERQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:16:33 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E5599;
-        Mon,  5 Jun 2023 10:16:32 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685985391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HoFThzoC6fpGbyKMWpymWNyMC8yF8MkWrY/0sdSvLaM=;
-        b=qYs3b+XYRheTQwx8sI81c6CL/R1wf6tORczaI42iys/0RquQlzzNG/RVd0UZgRM2zjxjNT
-        pANs066B0NYB5NJtx16V8iAvbtKlxsLi2oKTojr7OyBQa/4kx1SuE/M9fvohfn9jOJMk8s
-        NXyQcrYz6iYcxyI1Li5Mzzg6B+t6Uy/dAJUstkPB/TWfPzZ7d8MtIlCQdLdE+kXADNbcK2
-        C6G4i8O4zMweKs6oeHjxETfHSwmnO3a/U7N+vRWv+m1YGSZXErNRjacyQQ0X6iAsn8l92W
-        4WyGLujM+IB6H94D2tau0b4N9AcIHYuBI0cl9VgBh9XygpoFbT6AdO/dRTOehQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685985391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HoFThzoC6fpGbyKMWpymWNyMC8yF8MkWrY/0sdSvLaM=;
-        b=IjHpsn+24ddQtcYcLfzp3sbTNCbaQmTvSs/U3EkdGNpPsewY7AFpvj38aI+hxR18avSSdv
-        JD5aKZjqXx30PsBQ==
-To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
-        pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 31/33] x86/fred: BUG() when ERETU with %rsp not equal
- to that when the ring 3 event was just delivered
-In-Reply-To: <c33c4087-eb55-de45-fdb4-b9e0a567cc37@zytor.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-32-xin3.li@intel.com> <87ttvm572h.ffs@tglx>
- <c33c4087-eb55-de45-fdb4-b9e0a567cc37@zytor.com>
-Date:   Mon, 05 Jun 2023 19:16:30 +0200
-Message-ID: <878rcx6d8x.ffs@tglx>
+        Mon, 5 Jun 2023 13:16:54 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862CDF2;
+        Mon,  5 Jun 2023 10:16:52 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-94ea38c90ccso99621366b.1;
+        Mon, 05 Jun 2023 10:16:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685985411; x=1688577411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uIbP3FT06Bqfrrnf4uXT+R2nnTjQ/h9BisXJxhTGbb4=;
+        b=T2RemKIhb957Cf+M930edgAZ8DOcKpSOFXIh00hvVWjIHbRrnMBJ8RMJNA4jrx7uKr
+         GLFGHySolIn5lOBJjVsLCJEdjRts+LLYIvBZx/TNIHnQYKEspGeE4yoxLytsQN8sE4EZ
+         0b5V/pIaKdgqdhz2Bzj24RLX+4i3Sf5jppdEz0c6oOrsoSywai6nQTny+kf4NoeXX6Pr
+         j0cBGjPYRjm3bIzWCG986cQpmOoCasGdsNt+UWbVH0IQgHTBvkY18r2VavLWY6IOAWPv
+         mUYhz/Id7mKD+qQ68XTUbxVLDOPLPRkLY5Al5zT3/+MysYY96TtvszAVfVCmy1L25WsQ
+         c/cg==
+X-Gm-Message-State: AC+VfDzvt2+xwPzoe7SGd1rFsxjr5g3DomljFH8S86cKplBMiDuJ2ENi
+        nYEqtpGAEhbJXiDpbn8qEsH9fQDhHuhFg44gmeQ=
+X-Google-Smtp-Source: ACHHUZ5ATJMAgTFQRLZaSki3/or39XJvk7wjX5ejaDkoA8irtuJEsa6KEt3JSSP/xpbRH8puvn/A7k+6d8IMesvJDYg=
+X-Received: by 2002:a17:906:1d9:b0:974:ae1d:ad0b with SMTP id
+ 25-20020a17090601d900b00974ae1dad0bmr8058822ejj.3.1685985410685; Mon, 05 Jun
+ 2023 10:16:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230601213319.3304080-1-arnd@kernel.org>
+In-Reply-To: <20230601213319.3304080-1-arnd@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Jun 2023 19:16:39 +0200
+Message-ID: <CAJZ5v0gvs=3GVE_1GpP1mKsQAkc0+gC6AQYoWP7r+60kUtjfAw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: s2idle: fix section mismatch warning
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <lenb@kernel.org>,
+        Manyi Li <limanyi@uniontech.com>,
+        Juergen Gross <jgross@suse.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Simon Gaiser <simon@invisiblethingslab.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05 2023 at 09:42, H. Peter Anvin wrote:
-> On 6/5/23 07:15, Thomas Gleixner wrote:
->> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
->>> A FRED stack frame generated by a ring 3 event should never be messed up, and
->>> the first thing we must make sure is that at the time an ERETU instruction is
->>> executed, %rsp must have the same address as that when the user level event
->>> was just delivered.
->>>
->>> However we don't want to bother the normal code path of ERETU because it's on
->>> the hotest code path, a good choice is to do this check when ERETU
->>> faults.
->> 
->> Which might be not catching bugs where the wrong frame makes ERETU not
->> fault.
->> 
->> We have CONFIG_DEBUG_ENTRY for catching this at the proper place.
->> 
+On Thu, Jun 1, 2023 at 11:33 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> This is true, but this BUG() is a cheap test on a slow path, and thus 
-> can be included in production code.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The acpi_sleep_suspend_setup() function is missing an __init annotation,
+> which causes a warning in rare configurations that end up not inlining
+> it into its caller:
+>
+> WARNING: modpost: vmlinux.o: section mismatch in reference: acpi_sleep_suspend_setup (section: .text) -> acpi_s2idle_setup (section: .init.text)
+>
+> It's only called from an __init function, so adding the annotation is
+> correct here.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/acpi/sleep.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+> index 72470b9f16c45..552adc04743b5 100644
+> --- a/drivers/acpi/sleep.c
+> +++ b/drivers/acpi/sleep.c
+> @@ -840,7 +840,7 @@ void __weak acpi_s2idle_setup(void)
+>         s2idle_set_ops(&acpi_s2idle_ops);
+>  }
+>
+> -static void acpi_sleep_suspend_setup(void)
+> +static void __init acpi_sleep_suspend_setup(void)
+>  {
+>         bool suspend_ops_needed = false;
+>         int i;
+> --
 
-No objection.
+Applied as 6.5 material, thanks!
