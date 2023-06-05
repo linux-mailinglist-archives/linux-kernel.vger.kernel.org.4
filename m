@@ -2,173 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DDE7220B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565F37220C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjFEINH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S230396AbjFEIRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjFEINE (ORCPT
+        with ESMTP id S229902AbjFEIRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:13:04 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::603])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918DDA9;
-        Mon,  5 Jun 2023 01:13:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jLdPN8xgzeNezD5btOSKq9HAUV3Y1YrcYukeAnmBqH4yGRPV/hWGa7TWybJVRQgfV6PwqK7T7b1GJojpH/gLgpNaUpVce2tVsWKqHPiOylo+RVbO9NsACjYIaQTvvNjXXGj3WxpKZViAmSA3NQGnX59CjfyimeCevrddt8LJj9WK9HU+WJXesZOFNRr0qYtJIzf/0mJAbRwpsAFn/CK3DSyGJICSGW5MDu1bTW9sdAf0f2r5R+MDLTPgsI1ppLw8tcR0dRag9QHjE5EwkFY8tgCJ/7J36FCLxhHHNpZaB2EZMZPWa83s0FUFQ1A1TbZfubQMMMdS3QV/ZZQS91FSqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HskrjQTHtVsKOxc3AhKTql+Wr/0OAstnXmFMD6ONbRE=;
- b=aLLAhYeCadWsS9SkE/QU5yphLWnJashxjGqAcVGuwJg9+PsmNqHHpirVGzntkjtjB66GjYud9gYTx9wXM1LMs4eZddFPHyQybro6/ZzQ4qblWmiV1sALeZLLzbBEcTckX3AsbNvWvxgwmikhtzNxdug/lR0QT9hGpYlNyIfiFxvKz/lc6P3qo7JPab+asELmVL4Oeh1i3xGO6Z4IMNxTr75oh5HmDnRvZ0dv+zQgBSuuTf07oZVFAVo4+bj1UQLE/xlVhH+UtNZDlkSx/ZObgVlxgCJ3Sm7hoesaP/Pz7s+oR635Iu2nVF9HeU508eMt9rjEFRLDL3ixkAaitQ6CoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HskrjQTHtVsKOxc3AhKTql+Wr/0OAstnXmFMD6ONbRE=;
- b=JzPmBqLmCt0bq32eJaoh+9W/EYtx9M9GE8bmcjT0UhHTw73dtN5GzcK9hEGmnP+Pd8Aye8rHNDiXW/zDXVs7QrSEw/X4eukchP6DWp2tYeSg9DXpVhdsaAVQFwqldSpNw/IdJzVqxuP1Nq3YcMT79mm9kJjwOk97rp632sRdFnY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
- by MW3PR12MB4411.namprd12.prod.outlook.com (2603:10b6:303:5e::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 08:13:00 +0000
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::401e:2e7f:7c2b:6bff]) by BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::401e:2e7f:7c2b:6bff%4]) with mapi id 15.20.6455.024; Mon, 5 Jun 2023
- 08:13:00 +0000
-Message-ID: <e337dec6-0b0e-7e53-e38d-ae1791b98418@amd.com>
-Date:   Mon, 5 Jun 2023 10:12:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/radeon: fix race condition UAF in
- radeon_gem_set_domain_ioctl
-Content-Language: en-US
-To:     Min Li <lm0963hack@gmail.com>, alexander.deucher@amd.com
-Cc:     Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20230603074345.17907-1-lm0963hack@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230603074345.17907-1-lm0963hack@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0199.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a5::16) To BYAPR12MB3589.namprd12.prod.outlook.com
- (2603:10b6:a03:df::29)
+        Mon, 5 Jun 2023 04:17:46 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFE7AD;
+        Mon,  5 Jun 2023 01:17:44 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685953062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gdAlxoLc+mdMpOk5isWATrbVT+kMTap6Q3uXBMQmEUc=;
+        b=lbmd7wKAXRz20bqQebmTUQ3lA8oFmKhG78pmycCoMN+7cJ3zihD6ZWJApUzgpDmZr44UFh
+        BZymwwSHqmpod20ANFdYpqmCdYz7czRvJYTUk/aWywLf/d7o7p2vrZQkXZGfulaATEInx8
+        oGth25NHshSCMzwgI+aU+hIwUcF4D8uvVTyVBAtp+U9dlIy0oYqxkuN53zPO28b6srNL/0
+        FJeFv69+2zWvzRoOq1tbQ/I/+nml5DKOTkBIEugYeXx2jU9FHpO3akER025fuLBPfZmBSX
+        XlhLlq0Tmu3Z++ZNoUiWEyYwy7VUqu6vpp3m+0fWbfFmqfNCA2bCCcu1g3iLfw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DAAAFC000D;
+        Mon,  5 Jun 2023 08:17:40 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 10:17:39 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <stable@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>
+Subject: Re: [PATCH v1] mtd: rawnand: meson: fix ready/busy command
+Message-ID: <20230605101739.069b98af@xps-13>
+In-Reply-To: <19f809ab-218e-8da5-6d5e-ac47902fa706@sberdevices.ru>
+References: <20230605061048.485622-1-AVKrasnov@sberdevices.ru>
+        <19f809ab-218e-8da5-6d5e-ac47902fa706@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|MW3PR12MB4411:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07e04105-cc5b-4e5a-35c1-08db659cad3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GPJLOMH1CmRGCAxkA6+swQI1cAYpQA024v7OEsCsC1L9e3UOen8MhSMJ1rUXaQpQXR7DYmjZVV9uskmToxk9+rguJs2GM1Zx91K0cnL0cBn5YeB+yU5hP03KNwjpr7o0+QNuyKHgIIOVUf8lET1KkCq9cMgrnQGr0r7GGnrFF4USfuYZLmb5cwfzsGGpVykL1haZnikBimpBneuB53H9Djz/09dBqAotAvnVDZGM36xMiQuMZcrz/Fu2/wn4f/vtuGL+9VvrtcXK6+qOz3QZ0Zv8pYQB3TI851A/wQNp2HtbXGJ5dKJBJpLbeJgF1gfs9zPHxE30l1VHMQZv0XibDKfZAgEnb8iJRD6coa3+Jv7g58mu19DWZZMPXX/Gx6C7djgJIN1dDiylFbCqdlIIIZ8Cmsh+xdDvQmSVh2LKFq+6nBcTuZjFkg/T1tsX+7ZGwmDWvxcAUsFFM/LuVQbNYz5u2qKhThEPabw+zc2qZYPdRmleJa056q8CaLxAZA5CpIQofCaM6VbMLVZcY/zyMih6rxLb8qB64X3adqr5lA/xttWMoWC7fX8PiWzMvBZiYMIV+OkhRmfeJN4IWhQYT1yd43xacWI9JnCiFJUi2d1oP6UTktDbNsuXIQWvXd6dL1XssT2zfA6LUUHblCiqHw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(451199021)(6506007)(6512007)(31686004)(83380400001)(186003)(2906002)(36756003)(316002)(5660300002)(31696002)(86362001)(41300700001)(8936002)(8676002)(2616005)(6666004)(38100700002)(66556008)(66946007)(66476007)(6636002)(4326008)(66574015)(6486002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEM3dWVnMHNPTTZwQUtwOVRManVnN1pablBBcXBNWE1uQ0VmOEdCOUM4S2xF?=
- =?utf-8?B?TUZlQVVTd2ZFNno2ZDJwQ0QzdFJvQmM0ZjAxcGRMTG1XRU95TjRBQnNmczZ5?=
- =?utf-8?B?MmdtczNIWWl5OVE0WDNmRXk4WkZEM3pXSkNBcDFmOFFya29zQXJLZ2tieWht?=
- =?utf-8?B?ZHNsWGlEUHp5VldubkJINEVIdFRQZlJTd0RCRXpWKzZLNHBhdkUwZTVWcUVB?=
- =?utf-8?B?UmNDS0xBTWpXTHNBazlqQSttZml4VVJqOEdMU3IzV2VsZGVEWjJjYVcwTUhV?=
- =?utf-8?B?Zm9MdjRnbXFHYXpmcCtTK250T0h1T09RQ3pUYituR3NGTVEyME9vdUFiTEJW?=
- =?utf-8?B?ZUkwbEJCTk9QTWNUL2JscmxjR0dTTjJ2MWh2UXZ2aW5RZFRmdFc5ZS9rcmFS?=
- =?utf-8?B?MmFLdVBDb2h5M2kzSzZBM0pJOTVYQXNQREZOdmF0cFgyRXljR0tiSE1RcWMz?=
- =?utf-8?B?M2VZaE5iZzJNSXZGSlEzajJzQ1NmclhVQnh0OUMvTVh1bEsyMkxybWNYNk9n?=
- =?utf-8?B?WTJRTEh5K1E0MG9jdk5iT3psSDhYdE9mNmlsMmF0VHdKbElJaU5BVG83VUF0?=
- =?utf-8?B?NTRDT1NnL1FCR2dySUNCUlZnTjAyN1NmWTRsc2IycHNrTUtSc21VMlZxaFNK?=
- =?utf-8?B?RmZ5RFlKWEh0S1lEdWIxMXFMZVI0S25Ec0J1MXBoSWRhQ2pPK1k5Q1dvQlVD?=
- =?utf-8?B?dC9XMU1Oa1p1RGdiVWxhaDRPTHNSUFloeTBlNW1GZnZ5eTNoVnRkZ1Jzc0V4?=
- =?utf-8?B?WUdRVjFWTTVjeVZqWk9NdmlLZEJxMmJTZ2NWVGhPVDJsaDBWQTRpcVc2azNC?=
- =?utf-8?B?TklQTGxPZU4vcG54Mnhrc25hYXpFNTU5NnlWc1ZPZ3JDb2d3QlJaNUN5cEtt?=
- =?utf-8?B?Vnh4K1Z5R3dnYjQ1UU40b3JLNzRxOThselB6Wkl2ZVdnWTNQak5WRytQZGs0?=
- =?utf-8?B?QytCZk1lVS9oQjNDWDBPeEZOU1BEVGpuNHJvTmhMbmJ1U2xlREdicWxxREtT?=
- =?utf-8?B?bTlqRDd0dzNoRFpUSk1lVXo5QmI4cW9XcHkrRTAxOENxb2Y3N2hRdW83WlFI?=
- =?utf-8?B?QkE0TTFmdjhFcUQ1QXVEekdQN0lnUzdGL3lweStrUHk5ODFqbHg5Mm5GYjlm?=
- =?utf-8?B?eGxuRSttZTFjTVA3OWFMdEVRMUNWWURmcG5PN2t4emtGU21iajhMcHEyUmJW?=
- =?utf-8?B?T0NzSzc4ck1WTDc1MWxaMW9ZU1NCNVdrUDY0VW51T1VyQnFvU0RYWGZZRzFC?=
- =?utf-8?B?S0tUZjF2WUVVWlN3QU9ZMkl3elgwNS85dDB0RGRPbnFOeHVwei9Pc2pUUCtj?=
- =?utf-8?B?WDhhRUNxREs5WFZRL2NMNlM1a0xrL05VSFJiV1JtVkhzRFlrNC9PN21FT29D?=
- =?utf-8?B?SVFTNjQzZTQzSlZPbWNWbERRaVhlVGY4RTJCYXlEVDFhOVNaSUR1U0hsR2xW?=
- =?utf-8?B?ZG94ODNSYUZxK0hvdEgyWTZxMDVldFVyOG41NjBtYkczZWp2MG4wY2pVZFNv?=
- =?utf-8?B?RTNadUgwNk11a0tCSXUxczU0Vk5uUExOdzN4TzFZdFdlTDlqWUtsQW9MNHE4?=
- =?utf-8?B?WmJ5d1l3Z0xGclJjZ3JqRG05U1YyR0xtQk9sOWJNaitzQ3RRWm9xZklWd1ZM?=
- =?utf-8?B?bG90S0RpUFVzNzRDZFJVMFZrKzRXUWdMZ1N0ejZYZGlFUmJPbDJzNENzQWRz?=
- =?utf-8?B?Y0d0eFk3c0wzVWpzRW9obS9xNE1CbkMzWm1JUlNmTEVmYU52cDFWWjczd2s1?=
- =?utf-8?B?ZWJ3emdUcHFHdFBEMlJ4QXp1TEVrV1JsSENJV2tUazhTVW90RjdNaUZQY2R6?=
- =?utf-8?B?S1ROcnY0OEhZcmxyQUxiK0xmc1RIbWx6OW5wTXRFU2F3WHh6Q2NhYjduUlFN?=
- =?utf-8?B?dU1ob2VSbTRxVEdGY2Y2SnZ4WFRjK2cyTHZ0VUdQZTFyM2xYN2pPWWF6Rllx?=
- =?utf-8?B?YXBPeXlzUXhyeDEweWxjV245QVVUL0tLY0VURWxKUk5GQUY3aExyV056WThT?=
- =?utf-8?B?THVGaCs5S1gzNkxoYWg2NjFMTE5zdE9RcmhhbjduNjhyU0xac3h0NkhRRFEw?=
- =?utf-8?B?dmVoMnJuWE5tZlV6em8zYitRNlR0ZkYwajlVNkhLQ0dyRE9RbjJyNHg3SXo5?=
- =?utf-8?B?a2s1bXNOc0RKMDhVZ0pNMWlLOUJXNzFyNXNGODBKeGkyQThpaGtscGF0NTA0?=
- =?utf-8?Q?0YWAKChRb6mvxZi+U8gh7pgXkN3P1OcSSMHJVPcON55e?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07e04105-cc5b-4e5a-35c1-08db659cad3b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 08:13:00.2127
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ame2J5l14sSzO+urw3TissM/LGlgzlb71KTWjl07qOYfsTcf7SAyqNE8SF8Ns0KZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4411
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.06.23 um 09:43 schrieb Min Li:
-> Userspace can race to free the gobj(robj converted from), robj should not
-> be accessed again after drm_gem_object_put, otherwith it will result in
-> use-after-free.
->
-> Signed-off-by: Min Li <lm0963hack@gmail.com>
+Hi Arseniy,
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+avkrasnov@sberdevices.ru wrote on Mon, 5 Jun 2023 09:39:40 +0300:
 
-> ---
-> Changes in v2:
-> - Remove unused robj, avoid compile complain
->
->   drivers/gpu/drm/radeon/radeon_gem.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-> index bdc5af23f005..d3f5ddbc1704 100644
-> --- a/drivers/gpu/drm/radeon/radeon_gem.c
-> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
-> @@ -459,7 +459,6 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
->   	struct radeon_device *rdev = dev->dev_private;
->   	struct drm_radeon_gem_set_domain *args = data;
->   	struct drm_gem_object *gobj;
-> -	struct radeon_bo *robj;
->   	int r;
->   
->   	/* for now if someone requests domain CPU -
-> @@ -472,13 +471,12 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
->   		up_read(&rdev->exclusive_lock);
->   		return -ENOENT;
->   	}
-> -	robj = gem_to_radeon_bo(gobj);
->   
->   	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
->   
->   	drm_gem_object_put(gobj);
->   	up_read(&rdev->exclusive_lock);
-> -	r = radeon_gem_handle_lockup(robj->rdev, r);
-> +	r = radeon_gem_handle_lockup(rdev, r);
->   	return r;
->   }
->   
+> Hello Miquel!
+>=20
+> I exclude this patch from the recent Meson patchset, as it is fix and not=
+ related to another patches.
+> Also I think that I can split Meson patchset (from links below) in the fo=
+llowing way:
+> 1) Patch/patchset for OOB layout
+> 2) Patchset for "nand-rb" logic (meson_nand.c + DT bindings)
+> These two can also go independently:
+> 3) https://lore.kernel.org/linux-mtd/20230601061850.3907800-6-AVKrasnov@s=
+berdevices.ru/
+> 4) https://lore.kernel.org/linux-mtd/20230601061850.3907800-7-AVKrasnov@s=
+berdevices.ru/
 
+LGTM.
+
+>=20
+> What do You think?
+>=20
+> Thanks, Arseniy
+>=20
+> On 05.06.2023 09:10, Arseniy Krasnov wrote:
+> > Fix the ready/busy command value.
+> >=20
+> > Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND=
+ flash controller")
+> > Cc: stable@vger.kernel.org
+> > Suggested-by: Liang Yang <liang.yang@amlogic.com>
+> > Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> > ---
+> >  drivers/mtd/nand/raw/meson_nand.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/m=
+eson_nand.c
+> > index 074e14225c06..9dd4a676497b 100644
+> > --- a/drivers/mtd/nand/raw/meson_nand.c
+> > +++ b/drivers/mtd/nand/raw/meson_nand.c
+> > @@ -37,7 +37,7 @@
+> >  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
+> >  #define NFC_CMD_SCRAMBLER_DISABLE	0
+> >  #define NFC_CMD_SHORTMODE_DISABLE	0
+> > -#define NFC_CMD_RB_INT		BIT(14)
+> > +#define NFC_CMD_RB_INT		((0xb << 10) | BIT(18) | BIT(16))
+> > =20
+> >  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+> >   =20
+
+
+Thanks,
+Miqu=C3=A8l
