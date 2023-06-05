@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB41B722B8D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD3B722B96
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234176AbjFEPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S234975AbjFEPnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbjFEPm0 (ORCPT
+        with ESMTP id S231540AbjFEPmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:42:26 -0400
-Received: from out-39.mta1.migadu.com (out-39.mta1.migadu.com [IPv6:2001:41d0:203:375::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E941A7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:42:03 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 15:41:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685979676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GoZGAOTBvlr1nlPErXnetSaPgiXMcLx2bMeCqDLA1dk=;
-        b=PivUa3rReYTnWwK9qzsAl7TVQSXztMg4Tj2jSXkRklNXzzHrH9eEHLzBq1b1cu/7VjtJAQ
-        r3iniQ+ra6KyqjFwT2g0zigWYeRj+dReKT6T78yu35CWbJtDe0fLF7Qt64ZoPF9/0vbLKn
-        ibqWLX433iGoUtvLnqtuA/o+6gp4rm8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kristina Martsenko <kristina.martsenko@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] KVM: arm64: initialize HCRX_EL2
-Message-ID: <ZH4CFmwo+BBPMWiY@linux.dev>
-References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
- <20230509142235.3284028-2-kristina.martsenko@arm.com>
- <ZHnzfhi2KCMPucQJ@arm.com>
+        Mon, 5 Jun 2023 11:42:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A83210C7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:42:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C07C62729
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC14C433D2;
+        Mon,  5 Jun 2023 15:41:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685979688;
+        bh=+WQQuLVMz0dVlwh4gz6ce/VTv4FW4L+Vcxee8MeZteg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQQ95xeeJteSYArjXKbL6Y7mfg2Kz9Dn04aVgJQg7f3UGL5EM8kLg97nECoBqhWwg
+         eBjLjgE0rAvfVkwGKysPRPSv4qAuXUamw1nFE8TxHlMMhleDNYojHgAJ43tU6Wq5W5
+         CLgRujVLKctujLgVIRlfezUhoSk6RUcHMI/UjiTFDZEDfQ7xViOoJJon0zlE6/Gi7+
+         Ncl5JTST1IeNVHvvdeLnX1tZefc24b7gfgREJ2oE6HeeHnlLHtDSdba1qm9/bGNK/Z
+         6iIuuRRBtPXE4GSYKmJgAVC7UzNG5ft9DmCWP3yJB9QaU9qJ5XBFdtAqnO9VOQa5t0
+         AELOVhiFsikbw==
+Date:   Mon, 5 Jun 2023 08:41:26 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Li Yang <leoyang.li@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        kernel@pengutronix.de, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 2/2] bus: fsl-mc: fsl-mc-allocator: Drop a write-only
+ variable
+Message-ID: <20230605154126.GC2480995@dev-arch.thelio-3990X>
+References: <20230605112025.80061-1-u.kleine-koenig@pengutronix.de>
+ <20230605112025.80061-2-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZHnzfhi2KCMPucQJ@arm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230605112025.80061-2-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:49:50PM +0100, Catalin Marinas wrote:
-> On Tue, May 09, 2023 at 03:22:25PM +0100, Kristina Martsenko wrote:
-> > ARMv8.7/9.2 adds a new hypervisor configuration register HCRX_EL2.
-> > Initialize the register to a safe value (all fields 0), to be robust
-> > against firmware that has not initialized it. This is also needed to
-> > ensure that the register is reinitialized after a kexec by a future
-> > kernel.
-> > 
-> > In addition, move SMPME setup over to the new flags, as it would
-> > otherwise get overridden. It is safe to set the bit even if SME is not
-> > (uniformly) supported, as it will write to a RES0 bit (having no
-> > effect), and SME will be disabled by the cpufeature framework.
-> > (Similar to how e.g. the API bit is handled in HCR_HOST_NVHE_FLAGS.)
+On Mon, Jun 05, 2023 at 01:20:25PM +0200, Uwe Kleine-König wrote:
+> Fixes a clang compiler warning:
 > 
-> This looks fine to me but I may have lost track of the VHE/nVHE code
-> initialisation paths.
+>    drivers/bus/fsl-mc/fsl-mc-allocator.c:565:6: warning: variable 'free_count' set but not used [-Wunused-but-set-variable]
+>            int free_count = 0;
 > 
-> Marc/Oliver, are you ok with this patch (or this series in general)? I'd
-> like to merge it through the arm64 tree.
+> Fixes: d8e026a44919 ("staging: fsl-mc: remove some superfluous WARN_ONs")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Oliver Upton <oliver.upton@linux.dev>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
--- 
-Thanks,
-Oliver
+> ---
+>  drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> index 991273f956ce..b5e8c021fa1f 100644
+> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> @@ -563,12 +563,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_mc_device *mc_bus_dev,
+>  	struct fsl_mc_bus *mc_bus = to_fsl_mc_bus(mc_bus_dev);
+>  	struct fsl_mc_resource_pool *res_pool =
+>  					&mc_bus->resource_pools[pool_type];
+> -	int free_count = 0;
+>  
+> -	list_for_each_entry_safe(resource, next, &res_pool->free_list, node) {
+> -		free_count++;
+> +	list_for_each_entry_safe(resource, next, &res_pool->free_list, node)
+>  		devm_kfree(&mc_bus_dev->dev, resource);
+> -	}
+>  }
+>  
+>  void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
+> -- 
+> 2.39.2
+> 
