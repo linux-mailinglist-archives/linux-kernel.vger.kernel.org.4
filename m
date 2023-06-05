@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FCA72241B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0290272241E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbjFELDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S231825AbjFELFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjFELDi (ORCPT
+        with ESMTP id S231578AbjFELFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:03:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85934BD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:03:36 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-128-_ofKSFr2OpKNCh_xjBwMWA-1; Mon, 05 Jun 2023 12:03:33 +0100
-X-MC-Unique: _ofKSFr2OpKNCh_xjBwMWA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 5 Jun
- 2023 12:03:22 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 5 Jun 2023 12:03:22 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>
-CC:     Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        "Boris Pismenny" <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: RE: Bug in short splice to socket?
-Thread-Topic: Bug in short splice to socket?
-Thread-Index: AQHZlJtzNwrvw6NqbEOlRWOj/YHtG698Dbjg
-Date:   Mon, 5 Jun 2023 11:03:21 +0000
-Message-ID: <e94820ba53924e96b31ac983c84269f8@AcuMS.aculab.com>
-References: <20230524153311.3625329-1-dhowells@redhat.com>
- <20230524153311.3625329-10-dhowells@redhat.com>
- <20230526180844.73745d78@kernel.org>
- <499791.1685485603@warthog.procyon.org.uk>
- <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
- <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com>
- <832277.1685630048@warthog.procyon.org.uk>
- <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 5 Jun 2023 07:05:01 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0A5F2;
+        Mon,  5 Jun 2023 04:04:59 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 355B4lvN008502;
+        Mon, 5 Jun 2023 06:04:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685963087;
+        bh=ZgUYvyiKVgnOmW4p//WF3VcF42d3FC8Xm2zYqVM7i28=;
+        h=From:To:CC:Subject:Date;
+        b=UAW7cTULI4+z6p4wQnd8oTCXKUQGppslINJup18ncMrK3otzWMxs1rJw0Su9anl/L
+         Eot1l7NmGZdm9OXze81iC3lfJ5OHolQg65iUHp69nvi3lARpvRasPV4Q5YCJJLzltG
+         mQ+NqpOQj/UcpftIOlekvVyF5Cpu7idKSDxHUIII=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 355B4lUq114003
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 5 Jun 2023 06:04:47 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
+ Jun 2023 06:04:47 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 5 Jun 2023 06:04:47 -0500
+Received: from ula0497641.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 355B4ieT111266;
+        Mon, 5 Jun 2023 06:04:44 -0500
+From:   Neha Malcom Francis <n-francis@ti.com>
+To:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <n-francis@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j721s2: Change CPTS clock parent
+Date:   Mon, 5 Jun 2023 16:34:43 +0530
+Message-ID: <20230605110443.84568-1-n-francis@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMDEgSnVuZSAyMDIzIDE2OjEyDQo+IA0KPiBP
-biBUaHUsIEp1biAxLCAyMDIzIGF0IDEwOjM04oCvQU0gRGF2aWQgSG93ZWxscyA8ZGhvd2VsbHNA
-cmVkaGF0LmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBBdCB0aGUgbW9tZW50LCBpdCB0cmFuc2NyaWJl
-cyAxNiBwYWdlcyBhdCBhIHRpbWUuICBJIGNvdWxkIG1ha2UgaXQgc2V0DQo+ID4gTVNHX01PUkUg
-b25seSBpZiAoYSkgU1BMSUNFX0ZfTU9SRSB3YXMgcGFzc2VkIGludG8gdGhlIHNwbGljZSgpIHN5
-c2NhbGwgb3IgKGIpDQo+ID4gdGhlcmUncyB5ZXQgbW9yZSBkYXRhIGluIHRoZSBidWZmZXIuDQo+
-IA0KPiBUaGF0IHdvdWxkIGF0IGxlYXN0IGJlIGEgZ29vZCBmaXJzdCBzdGVwLg0KPiANCj4gPiBI
-b3dldmVyLCB0aGlzIG1pZ2h0IHdlbGwgY2F1c2UgYSBtYWxmdW5jdGlvbiBpbiBVRFAsIGZvciBl
-eGFtcGxlLiAgTVNHX01PUkUNCj4gPiBjb3JrcyB0aGUgY3VycmVudCBwYWNrZXQsIHNvIGlmIEkg
-YXNrIHNlbmRmaWxlKCkgc2F5IHNob3ZlIDMySyBpbnRvIGEgcGFja2V0LA0KPiA+IGlmLCBzYXks
-IDE2SyBpcyByZWFkIGZyb20gdGhlIHNvdXJjZSBhbmQgZW50aXJlbHkgdHJhbnNjcmliZWQgaW50
-byB0aGUgcGFja2V0LA0KPiANCj4gSWYgeW91IHVzZSBzcGxpY2UoKSBmb3IgVURQLCBJIGRvbid0
-IHRoaW5rIHlvdSB3b3VsZCBub3JtYWxseSBleHBlY3QNCj4gdG8gZ2V0IGFsbCB0aGF0IHdlbGwt
-ZGVmaW5lZCBwYWNrZXQgYm91bmRhcmllcy4NCg0KRXNwZWNpYWxseSBzaW5jZSAoYXNzdW1pbmcg
-SSd2ZSB1bmRlcnN0b29kIG90aGVyIGJpdHMgb2YgdGhpcyB0aHJlYWQpDQp0aGUgc3BsaWNlKCkg
-Y2FuIGdldCBzcGxpdCBpbnRvIG11bHRpcGxlIHNlbmRtc2coKSBjYWxscyBmb3Igb3RoZXINCnJl
-YXNvbnMuDQoNCldoYXQgc2VtYW50aWNzIGFyZSB5b3UgdHJ5aW5nIHRvIGltcGxlbWVudCBmb3Ig
-QUZfVExTPw0KTVNHX01PUkUgaGFzIGRpZmZlcmVudCBlZmZlY3RzIG9uIGRpZmZlcmVudCBwcm90
-b2NvbHMuDQoNCkZvciBVRFAgdGhlIG5leHQgZGF0YSBpcyBhcHBlbmRlZCB0byB0aGUgZGF0YWdy
-YW0gYmVpbmcgYnVpbHQuDQooVGhpcyBpcyByZWFsbHkgcHJldHR5IHBvaW50bGVzcywgZG9pbmcg
-aXQgaW4gdGhlIGNhbGxlciB3aWxsIGJlIGZhc3RlciEpDQoNCkZvciBUQ1AgaXQgc3RvcHMgdGhl
-IHBlbmRpbmcgZGF0YSBiZWluZyBzZW50IGltbWVkaWF0ZWx5Lg0KQW5kIG1vcmUgZGF0YSBpcyBh
-cHBlbmRlZC4NCkknbSBwcmV0dHkgc3VyZSBpdCBnZXRzIHNlbnQgb24gdGltZW91dC4NCg0KRm9y
-IFNDVFAgdGhlIGRhdGEgY2h1bmsgY3JlYXRlZCBmb3IgdGhlIHNlbmRtc2coKSBpc24ndCBzZW50
-IGltbWVkaWF0ZWx5Lg0KQW55IG1vcmUgc2VuZG1zZyhNU0dfTU9SRSkgZ2V0IHF1ZXVlZCB1bnRp
-bCBhIGZ1bGwgZXRoZXJuZXQgcGFja2V0DQppcyBidWZmZXJlZC4NClRoZSBwZW5kaW5nIGRhdGEg
-aXMgc2VudCBvbiB0aW1lb3V0Lg0KVGhpcyBpcyBwcmV0dHkgbXVjaCB0aGUgb25seSB3YXkgdG8g
-Z2V0IHR3byAob3IgbW9yZSkgREFUQSBjaHVua3MNCmludG8gYW4gZXRoZXJuZXQgZnJhbWUgd2hl
-biBOYWdsZSBpcyBkaXNhYmxlZC4NCg0KQnV0IEkgZ2V0IHRoZSBpbXByZXNzaW9uIEFGX1RMUyBp
-cyBkZWNpZGluZyBub3QgdG8gZW5jb2RlL3NlbmQNCnRoZSBkYXRhIGJlY2F1c2UgJ3RoZXJlIGlz
-bid0IGVub3VnaCcuDQpUaGF0IHNlZW1zIHdyb25nLg0KDQpOb3RlIHRoYXQgeW91IGNhbid0IHVz
-ZSBhIHplcm8gbGVuZ3RoIHNlbmRtc2coKSB0byBmbHVzaCBwZW5kaW5nDQpkYXRhIC0gaWYgdGhl
-cmUgaXMgbm8gcGVuZGluZyBkYXRhIHNvbWUgcHJvdG9jb2xzIHdpbGwgc2VuZCBhIA0KemVybyBs
-ZW5ndGggZGF0YSBtZXNzYWdlLg0KQSBzb2NrZXQgb3B0aW9uL2lvY3RsIChlZyBVTkNPUkspIGNv
-dWxkIGJlIChhYil1c2VkIHRvIGZvcmNlDQpxdWV1ZWQgZGF0YSBiZSBzZW50Lg0KDQoJRGF2aWQN
-Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
-cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
-KFdhbGVzKQ0K
+MAIN_PLL0 has a flag set in DM (Device Manager) that removes it's
+capability to re-initialise clock frequencies. CPTS and RGMII has
+MAIN_PLL3 as their parent which does not have this flag. While RGMII
+needs this reinitialisation to default frequency to be able to get
+250MHz with its divider, CPTS can not get its required 200MHz with its
+divider. Thus, move CPTS clock parent on J721S2 from MAIN_PLL3_HSDIV1 to
+MAIN_PLL0_HSDIV6.
+
+(Note: even GTC will be moved from MAIN_PLL3 to MAIN_PLL0 in U-Boot side
+for the same reason)
+
+Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi       | 2 ++
+ arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+index 2dd7865f7654..331e0c9b4db8 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+@@ -738,6 +738,8 @@ cpts@310d0000 {
+ 			reg-names = "cpts";
+ 			clocks = <&k3_clks 226 5>;
+ 			clock-names = "cpts";
++			assigned-clocks = <&k3_clks 226 5>; /* NAVSS0_CPTS_0_RCLK */
++			assigned-clock-parents = <&k3_clks 226 7>; /* MAIN_0_HSDIVOUT6_CLK */
+ 			interrupts-extended = <&main_navss_intr 391>;
+ 			interrupt-names = "cpts";
+ 			ti,cpts-periodic-outputs = <6>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+index a353705a7463..b55a3e9daf85 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+@@ -333,6 +333,8 @@ cpts@3d000 {
+ 			reg = <0x0 0x3d000 0x0 0x400>;
+ 			clocks = <&k3_clks 29 3>;
+ 			clock-names = "cpts";
++			assigned-clocks = <&k3_clks 29 3>; /* CPTS_RFT_CLK */
++			assigned-clock-parents = <&k3_clks 29 5>; /* MAIN_0_HSDIVOUT6_CLK */
+ 			interrupts-extended = <&gic500 GIC_SPI 858 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "cpts";
+ 			ti,cpts-ext-ts-inputs = <4>;
+-- 
+2.34.1
 
