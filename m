@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D740B721CB7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D8D721CB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbjFED6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 23:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S232865AbjFED6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 23:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbjFED6N (ORCPT
+        with ESMTP id S232559AbjFED61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 23:58:13 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3608FEA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 20:58:12 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30ad99fa586so4359461f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 20:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685937490; x=1688529490;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C1INtN/KwPq/Kh+/tuqCsXKBvEKli+VsBh43RgsVDQQ=;
-        b=CNJgdIQWmGpb04ERz1Ys1nZrFf5/mzRxPH6KaKPjMO/3ffHex71sKR7RzjL48hpK23
-         7nGHLu+rmyyzYpb/kRA1/17nnxrMFAT0PuuxqWCtMnWJZB2fyxvreBAWcjNc55O32PVY
-         vl+6m3g9FI7LaUsjVyfboXH2VuXHRFE3Z0hPlkHGcRdmg255pieg9l+0prOmR/AnRMvI
-         pYX4RsS/sxwLEPA/5IneiOqDd0fblgwJ5evcpRLsfl81aaU/F+23pDwIhXYD9pgRzkjW
-         F5u/VYEE6E2x8G0sBGYcVEJHMsP0DzY2ckxmZBQBJSYZmm9z5dpoj8ETASH5ezPYTL5H
-         W2tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685937490; x=1688529490;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C1INtN/KwPq/Kh+/tuqCsXKBvEKli+VsBh43RgsVDQQ=;
-        b=XrzWIzyvPmBhQ2bnfK4WH3FChdL+Bwm+UWLzfeCBx5csolN4IRLD6Z8zNJNKtUKKED
-         NbXYPIwT/JzktAKoG70nHIykyxdSln+nr9XDtLV/cmlk0PugzLMTIykayoAHetLXIjSJ
-         NjgWf8QsDnoKnABnNSQegSibhIbudJ2RxZLTOUYtv8AQasBAy6zvFsyUl6uJbi6jzrmc
-         KgnfM2uSlSnjvR9wnfRHIeSD2OA13qtLLo/91D3c5e5VZrxy7y0r3oWGokWTdFr1DYsm
-         gTPEinOSr9sqnoE1uxu88LNOuHObPQ6Z2GfUc55wXuv5kICq1D3zKcpk6btmyptE+8Tl
-         WDVg==
-X-Gm-Message-State: AC+VfDxMGd9zMuuqDOkJ04CeYGEcZoRdtMBllohlU72Y0LTXxBhYbXmW
-        PWcyST9wqTInBGTLIk4OlcSPew==
-X-Google-Smtp-Source: ACHHUZ4DJGhaMm7brMwF3P8AN9X/VOOOSJlkXVvH96yVnAEoah1Hx3Zw7Ukr9AL0H+eD7KQMt0LyCw==
-X-Received: by 2002:adf:fb45:0:b0:30a:ee5e:5cf5 with SMTP id c5-20020adffb45000000b0030aee5e5cf5mr4968771wrs.31.1685937490193;
-        Sun, 04 Jun 2023 20:58:10 -0700 (PDT)
-Received: from localhost.localdomain ([2.223.46.74])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05600c1d1200b003f61177faffsm22761574wms.0.2023.06.04.20.58.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 20:58:09 -0700 (PDT)
-From:   Alexey Klimov <alexey.klimov@linaro.org>
-To:     linux-sunxi@lists.linux.dev
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        daniel.lezcano@linaro.org, peter.griffin@linaro.org,
-        klimov.linux@gmail.com
-Subject: [PATCH] arm64: dts: allwinner: a64: Add thermal trip points for GPU
-Date:   Mon,  5 Jun 2023 04:58:08 +0100
-Message-Id: <20230605035808.594686-1-alexey.klimov@linaro.org>
-X-Mailer: git-send-email 2.40.1
+        Sun, 4 Jun 2023 23:58:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699F8DF;
+        Sun,  4 Jun 2023 20:58:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E621E61DE8;
+        Mon,  5 Jun 2023 03:58:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5394FC4339E;
+        Mon,  5 Jun 2023 03:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685937504;
+        bh=Lozl+B9c9ZtOgU9jlGHLMSW0ijTaUHs8B+vJDZaxmP0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mgErmNctkUMj3Cg5fufF5WtfEHwtkGjsoSQf/8rbdjspHdQIHDDPJQHQgGOItjHpg
+         elJD8LbmhcJDo/sQ0FTE267hTCcyb6uM2z3tEFrhOIWFfJyTC099VWljAOwmxI8zx4
+         8SElgRpma4jSIuXrX3LwXFTtqnUzTBzaXxoKIzC1/rNkvvl6ehN+sL6hU1JwxeqaO6
+         NJYAUFQz5Z95djQor7BeNs+CikjXG92aMc8fE1WUrM66l5t+gPiGSn+oKs3F25rAUj
+         l4wDa3jUXSHgtTLyijLRrR5awkrjlyx9/66jpmBFYvDoynwxIX+QQnZj6rVVDlRd+J
+         RnkhWX1ANKVIw==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so9141696a12.0;
+        Sun, 04 Jun 2023 20:58:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyQ8Vqr73e6Z8kwnvW5u3n0LNgRLWU2Zg1Nd1Aqpg3gk1qfFLgD
+        nuRhDj7EJ6dXzbihNTOWd9+aq/zi5nx2bsYfJa4=
+X-Google-Smtp-Source: ACHHUZ6uzVN8ZGQlBo5csuBzT7qJ3sVK7iqjj3ky0+eHZij/P+I6xMbn/J0KyxfD9kmwLT9TeQvP2RVjDJKQEOHKUaU=
+X-Received: by 2002:aa7:c252:0:b0:514:a302:c334 with SMTP id
+ y18-20020aa7c252000000b00514a302c334mr9117220edo.14.1685937502492; Sun, 04
+ Jun 2023 20:58:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230605034423.1528206-1-maobibo@loongson.cn>
+In-Reply-To: <20230605034423.1528206-1-maobibo@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 5 Jun 2023 11:58:10 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6O+_EnmDU6kE-19PP+8tD3wwbzzuakE_vHZGCtjZWDbg@mail.gmail.com>
+Message-ID: <CAAhV-H6O+_EnmDU6kE-19PP+8tD3wwbzzuakE_vHZGCtjZWDbg@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: Align pci memory space base address with page size
+To:     Bibo Mao <maobibo@loongson.cn>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,94 +67,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without trip points for GPU, the following errors are printed in the
-dmesg log and the sun8i-thermal driver fails to load:
+Hi, Bibo,
 
-thermal_sys: Failed to find 'trips' node
-thermal_sys: Failed to find trip points for thermal-sensor id=1
-sun8i-thermal: probe of 1c25000.thermal-sensor failed with error -22
+Three suggestions:
+1, split to two patches.
+2, the "(align < PAGE_SIZE)" condition can be removed.
+3, you can unify the comments between ARM64 and LoongArch.
 
-When thermal zones are defined, trip points definitions are mandatory.
-Trip values for the GPU are assumed to be the same values as the CPU
-ones. The available specs do not provide any hints about thermal regimes
-for the GPU and it seems GPU is implemented on the same die as the CPU.
+Huacai
 
-Tested on Pine a64+.
-
-Cc: Samuel Holland <samuel@sholland.org>
-Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Alexey Klimov <alexey.klimov@linaro.org>
----
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-index 62f45f71ec65..07963eea1bf0 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-@@ -243,6 +243,29 @@ gpu0_thermal: gpu0-thermal {
- 			polling-delay-passive = <0>;
- 			polling-delay = <0>;
- 			thermal-sensors = <&ths 1>;
-+
-+			trips {
-+				gpu0_alert0: gpu0_alert0 {
-+					/* milliCelsius */
-+					temperature = <75000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				gpu0_alert1: gpu0_alert1 {
-+					/* milliCelsius */
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "hot";
-+				};
-+
-+				gpu0_crit: gpu0_crit {
-+					/* milliCelsius */
-+					temperature = <110000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
- 		};
- 
- 		gpu1_thermal: gpu1-thermal {
-@@ -250,6 +273,29 @@ gpu1_thermal: gpu1-thermal {
- 			polling-delay-passive = <0>;
- 			polling-delay = <0>;
- 			thermal-sensors = <&ths 2>;
-+
-+			trips {
-+				gpu1_alert0: gpu1_alert0 {
-+					/* milliCelsius */
-+					temperature = <75000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				gpu1_alert1: gpu1_alert1 {
-+					/* milliCelsius */
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "hot";
-+				};
-+
-+				gpu1_crit: gpu1_crit {
-+					/* milliCelsius */
-+					temperature = <110000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
- 		};
- 	};
- 
--- 
-2.40.1
-
+On Mon, Jun 5, 2023 at 11:44=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wrot=
+e:
+>
+> Some PCI devices has only 4K memory space size, it is normal in general
+> machines and aligned with page size. However some architectures which
+> support different page size, default page size on LoongArch is 16K, and
+> ARM64 supports page size varying from 4K to 64K. On machines where larger
+> page size is use, memory space region of two different pci devices may be
+> in one page. It is not safe with mmu protection, also VFIO pci device
+> driver requires base address of pci memory space page aligned, so that it
+> can be memory mapped to qemu user space when it is pass-through to vm.
+>
+> It consumes more pci memory resource with page size alignment requirement=
+,
+> on 64 bit system it should not be a problem. And UEFI bios set pci memory
+> base address with 4K fixed-size aligned, the safer solution is to align
+> with larger size on UEFI BIOS stage on these architectures, linux kernel
+> can reuse resource from UEFI bios. For new devices such hotplug pci
+> devices and sriov devices, pci resource is assigned in Linux kernel side.
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  arch/arm64/kernel/pci.c  | 13 +++++++++++++
+>  arch/loongarch/pci/pci.c | 18 ++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+>
+> diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
+> index 2276689b5411..e2f7b176b156 100644
+> --- a/arch/arm64/kernel/pci.c
+> +++ b/arch/arm64/kernel/pci.c
+> @@ -232,4 +232,17 @@ void pcibios_remove_bus(struct pci_bus *bus)
+>         acpi_pci_remove_bus(bus);
+>  }
+>
+> +resource_size_t pcibios_align_resource(void *data, const struct resource=
+ *res,
+> +                               resource_size_t size, resource_size_t ali=
+gn)
+> +{
+> +       resource_size_t start =3D res->start;
+> +
+> +       /*
+> +        * align base address of pci memory resource with page size
+> +        */
+> +       if ((res->flags & IORESOURCE_MEM) && (align < PAGE_SIZE))
+> +               start =3D ALIGN(start, PAGE_SIZE);
+> +
+> +       return start;
+> +}
+>  #endif
+> diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
+> index 2726639150bc..943a48e60fb1 100644
+> --- a/arch/loongarch/pci/pci.c
+> +++ b/arch/loongarch/pci/pci.c
+> @@ -83,6 +83,24 @@ int pcibios_alloc_irq(struct pci_dev *dev)
+>         return acpi_pci_irq_enable(dev);
+>  }
+>
+> +/*
+> + * memory space size of some pci cards is 4K, it is separated with
+> + * different pages for generic architectures, so that mmu protection can
+> + * work with different pci cards. However page size for LoongArch system
+> + * is 16K, memory space of different pci cards may share the same page
+> + * on LoongArch, it is not safe here.
+> + */
+> +resource_size_t pcibios_align_resource(void *data, const struct resource=
+ *res,
+> +                               resource_size_t size, resource_size_t ali=
+gn)
+> +{
+> +       resource_size_t start =3D res->start;
+> +
+> +       if ((res->flags & IORESOURCE_MEM) && (align < PAGE_SIZE))
+> +               start =3D ALIGN(start, PAGE_SIZE);
+> +
+> +       return start;
+> +}
+> +
+>  static void pci_fixup_vgadev(struct pci_dev *pdev)
+>  {
+>         struct pci_dev *devp =3D NULL;
+> --
+> 2.27.0
+>
