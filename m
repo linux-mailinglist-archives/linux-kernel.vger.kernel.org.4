@@ -2,166 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3984722A11
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67210722A17
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjFEO6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S232828AbjFEO73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjFEO6P (ORCPT
+        with ESMTP id S230324AbjFEO71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:58:15 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817FC8F;
-        Mon,  5 Jun 2023 07:58:14 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355Bg6CU009521;
-        Mon, 5 Jun 2023 14:58:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=dgGv8QEIdFezBM3kgu0g3lbupUEXEGZUsGBp2SFVS/E=;
- b=ONzrKtbUwEJGvWPKMukJ0iyQM8UowpQQaCMU4g2y4/h0drwojVzdOzltfiJtXNYXx2Cj
- DLrFILK7AM7Gd2FBSEORN0Rx2bLJAIHDKLwujq/LKk9eURXvE5aaCUfHIje/lC/gGJf8
- cXqX7RG8pQbq5nz/TyLPQGoDFSLmMvRxCXB4zcGkOzsWq7/ytdNKCfNgH+pHiToukVFo
- v42hbWPNHOg/RNnzVmspysyfyrndmi/+JFn9kU2PCjE97PCWeNhx2xSgoQ6pIuQGHsV2
- lySpuJzm3qX3l0U1IulPbLaxrTL8hxHo8RVojzGa4d/fS33K8I5t3A/Lbkpfttr2AImu WQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qyx5ek3ty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 05 Jun 2023 14:58:02 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 355E4e1c011374;
-        Mon, 5 Jun 2023 14:58:01 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r0tjy3err-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 05 Jun 2023 14:58:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OKoVGJRxjSJMbSYHX/I0BaH4Dvn9vCHyvnuKTECqcnI+tvVtZ/BFl05ANaNcBJxHsuj5XT+/ujy/QYqFbzoE3//4mpqBAxYPpJ93LAtMvdQQziV+l/LXbN7hd3GfFdNqtRqDCotgxIfO1KxpbfrwUygz28XSn7YLJQktyWkW1IB4mvdYd46WT/An/RbNQ0ucL2zbjz7hgvjBi0FHwvHjtcv7RLCckI+va22RBeXwOEn2J83wMdhfwXiX1tDTortjq/fXEuFWh1vhPALJhZBrs7TOcQKRgpAXIuo2fP4BAL42IfWZtyENwJ+xiwlGTC1FIbP49LSysDGtotBOfVXBNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dgGv8QEIdFezBM3kgu0g3lbupUEXEGZUsGBp2SFVS/E=;
- b=E5sq6gpjx60ECR9R6PfE66Z1Py90sN5QAg4qMrMEiIoZqR7ax+zNKq0fG46n6qmyQxkDY4RL42cQ8J4qXwX0Gkh1K2wYzrkj+t51sYO2jWu8fbAKwdwi3m4MrgQ+5oNwQjvzMM2KCG/46eBVhn/mY5R9x8ZDa2qnjx+GF7tnq3SM94XQBaclP/aSfEFQYkbCWVkKA/1BYSiF24fdqHPR7Wkzwd5gsk6WD5o8Z8pANWshRUfMSst+BlOkdZoIi8ng9Tq7b7MPLnuks6Fe4mft/EKZlJ+FwSzRoiHFbVkJhlky8VPVBQDWvwobbgvFZ+CH/Ig5xZraZ9TM9qGchRcSkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 5 Jun 2023 10:59:27 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8078F;
+        Mon,  5 Jun 2023 07:59:25 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3347149a12.0;
+        Mon, 05 Jun 2023 07:59:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dgGv8QEIdFezBM3kgu0g3lbupUEXEGZUsGBp2SFVS/E=;
- b=Luls0JBiFoW4zl12+kMslygarjQ3c/EMiMrmz3BALPfEoNO7IPlZZvx0Il9eK3i2HDIjSo49IYovWd1JyjMPlX4FZUQByNnlmVVJcU4/9oQ1BlST7VwGjr0LKFulsmjxbOqyl428y/d+oTtE6dbaV4uhKtCnctMrIo/exeXhlWk=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by PH0PR10MB4472.namprd10.prod.outlook.com (2603:10b6:510:30::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
- 2023 14:57:59 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 14:57:59 +0000
-Date:   Mon, 5 Jun 2023 10:57:56 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm tree
-Message-ID: <20230605145756.6pl2l2hm7obtqxv4@revolver>
-References: <20230605131034.3e795180@canb.auug.org.au>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605131034.3e795180@canb.auug.org.au>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT1PR01CA0047.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2e::16) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        d=gmail.com; s=20221208; t=1685977165; x=1688569165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YPVoFPQaGIK7J+doIKsWB8yKXS2zKs4QnModq673ow0=;
+        b=NzDq5oWgIw7ic7DFHJQdaBf+HI70tjjJ+EY/KqFAFt1hj5Bl2yOCacl4L1Ua3KxhDI
+         Ukf52cjdK/GHzT6+FADj/HM7kVIflGYeirVpxa2OFBq0IdytPqqx5jUF30/PLscyc0I8
+         WwvZOYt9YffRA/UL6qPULX6OQaNT8Rf9v1A8p/tCiTqkDniPS7IEA2DLl6nfNqDn1H6J
+         5cyY16Q+3pgAvC3nh7Np3XUFqss3PBuzgSFd/NXrHR4A6xnW+WDlcC4mRyNr6V7p/aHK
+         5jdqqfaoPzps7nvUJ6Wp62kRUx9IFSOe4abJx7ejH65QqquWGg/FrybSnZKfq8SjmkYF
+         xMdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685977165; x=1688569165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YPVoFPQaGIK7J+doIKsWB8yKXS2zKs4QnModq673ow0=;
+        b=PT6xAgYxexMqVqwd3TAeXRVfslGXrdXthTP35sKoUpJ4AjGXISZJARNK7HvS3c2kij
+         ttZKsf7NdxN5SYEbz2s256QXeQw5tns1K8V4LVCzp0FxbrHqISApsjocKKTdzwfRQCej
+         QSLiaSIWK/sLKWaYvjZXTqsqkGjnRtmkCL/BVR88nibVVNsW8yO6xNMyd4drzulDqfJ2
+         AXOjsNG3sd+fzl0Mq3x2sz86gZeV9RJFT4nBUZlDc785YBIPLMFxsjLSnZbp2GcBN+1p
+         bSV9Kqn6l3QUahndiRZTW8z4uUX+YixwyAKsdJ8CQmMXoIi7VQPCIdsXs0rF/iNdvH90
+         WR+A==
+X-Gm-Message-State: AC+VfDwosX2+D7GeHG1+d2ftFzv86OD36cXTHRCjYk6ANJgFO8X20URB
+        TNWLc5zDOhawZzda5HHBm1cSXLhoXexDm4IXz6o=
+X-Google-Smtp-Source: ACHHUZ5gRMw/PWzA8jpMbIK3JVfYemw7m73U71b/Jab+zSPFcssD3WQ+YnphkegpOup7e+OzjaGFIY/Q9pA6oy9Tjvs=
+X-Received: by 2002:a17:90a:357:b0:252:7372:460c with SMTP id
+ 23-20020a17090a035700b002527372460cmr8383980pjf.4.1685977164401; Mon, 05 Jun
+ 2023 07:59:24 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|PH0PR10MB4472:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a9bc23c-81f4-4f46-1437-08db65d540ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HZe1sXYboRx5efyhDgg74MBKFKgbHzQMjW3O64w7DC47XlN7CaWUMuJYu25yzFCahFz32xvZP/4T0ye4huzywlQbudzxI4ZCxVK56RPIsh7+jCmvcr7DegWCWJX24m00kBufogrNpPb932D51zEO6Yb6YW01QB0oICrj321CTnM31viUyLdQK7ZjGQXb6tDmEJ44axla4Xm131rYL0PSQGGT8Xqx/xw2dHnZcTzGKlwS7+p+GVWOOUB2WRk4GA/ai9AUPdV/VOCKxB0k58uv2ND4y2vH5r++Z7lbl1swRgSe/yQB8sRp4pBpelBzdSjvAHi7Kx1LTt5sMSsOMjjoIcYygbGC+7JCIpOkNI6l9gHdIWLHRnV33KvMQr4eu/rhQh0jaYmftPLGQJ2IOmRgt+40bpK8G4IcPe0cQabs2OTep0QPhb0z1Vl8RwuXjYESqIaSE+sgtvv0M0rIW+Q/N4pDeHZiVnLoeSJYJqe1PJeeFfoumf0HGBXYV1nKC2AGx2ECa6dnwOLoLDNiwfQFZNQRvxa1f++TLzGeOmGZas3GMo9WenmbUjB0yfE91Xkx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(54906003)(478600001)(8936002)(8676002)(4326008)(6916009)(66946007)(66556008)(66476007)(316002)(38100700002)(41300700001)(186003)(83380400001)(6666004)(6486002)(9686003)(6512007)(1076003)(26005)(6506007)(33716001)(86362001)(5660300002)(2906002)(4744005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j22tFMfjswujqUFUf+uXdGFlQH2VtZM5VOgze7ft5pssXWmGdCzlEoWWg7WN?=
- =?us-ascii?Q?y8Bi3+b8QHByuv1ghU9Sb0ZjMEQvQeajdrUR0ooKWDAYgAxBtTlT0YhsId3f?=
- =?us-ascii?Q?8B6BLSV+Y/MRl0+GFiHbU46g0r02paQ9IHelBJ0CPesq7tywdVogW9iVyCbZ?=
- =?us-ascii?Q?Y4fx7H+9mo8/UFbjr325LHe2i0vDQpIQkTatJ2IXOxl/WN7QfH90ggeAlstL?=
- =?us-ascii?Q?/Aqc427gaNcMqVr9lsatb03Lx5PlyBt1NjJbxhfq3AzwEC9sJR4/OSmXJfaR?=
- =?us-ascii?Q?amxkpLIShzWqk88AfiunL8ZqL1K8lYcNw6eGt6d6kEhw75gpBsMAVntMdP9+?=
- =?us-ascii?Q?M9fvmbq/PmgO7Di0vH9H/w1Uxo9VgvYZwNnu9kZzQnjW3sMr0aufLGJQqZrg?=
- =?us-ascii?Q?WjyYgECgkpt+ALK9vwoS09BvPqZGMY8GYYeREJwXeuQNHLuUDcpXUjBOB6to?=
- =?us-ascii?Q?t58N4hKQGwOaXIG6EAPzw/i4aHY8qvh7ZV8cIz4KpcpuqFLUD0ELDmWKG9uq?=
- =?us-ascii?Q?MDQ69Dk7r427MFVMBFOPUpm2UNq1jsjGN3GYjZ0SR7z793yEIf1ue24jtp+L?=
- =?us-ascii?Q?V1ZjgmwdN4/+SOOQj9K1kR901my0azADrLxT/rs8CYd5u24t0SuWzygp0uiC?=
- =?us-ascii?Q?847igVZPp/xCzN0yTXX2Nyt2WR0Y0MuMImEvZDAq/gjR+fzLXwW+26jRE3Vy?=
- =?us-ascii?Q?3dpe3SWktJE9XwYqogVCHU/Mn5gcDp60NgVCgvvA6IO61r5i5H0P4+By9w79?=
- =?us-ascii?Q?9tsX5jRLC8g7ykycCsP9bHodb8YyfUhkCy2l5Samk2LUk6ettWVfmXHBSu7s?=
- =?us-ascii?Q?25W2LsI+a6Ay8JdUsPqgpqZuN0W8a/VGs1u5HUis5SiRm/TJMZ+sy+KuQesd?=
- =?us-ascii?Q?6cjruDVREkAC0T8iiYWbkfeTZTBeJz1kYjEOmJu6z1awkQgXtpteG/S9B6rn?=
- =?us-ascii?Q?waKK+o1hTer3bL1ecwHAcvFcfCH3ewabONbtz5eQglQEULxiUApztvtjIMvy?=
- =?us-ascii?Q?pEcLtbpVKdhnI0zabUHOm3gqLu4xvjLoi7faueXFLrRWDFu3g7h0nYA++HWj?=
- =?us-ascii?Q?Wngea1LC8K9jIMyKUtx7H3v3+qX+JFYWG3ixC9GE8Hk/GBPmPedYZpPcSA+3?=
- =?us-ascii?Q?nYALpLSQV7kD7R2KELRgPOPHr03tZi+hBtZ3cQweMRX0qul7/WQ7oFuQvvp2?=
- =?us-ascii?Q?21LIylt14/L5o1BJtcEKWV7pafWBSgFOWvoMqpZDqdGdPGJfabw4SA5GqXwb?=
- =?us-ascii?Q?O4RgjUj7wunTDrNRMHem5GiL3dqi/gEgkC4aprOSsB/7JU7NJGEhU5IiPwnk?=
- =?us-ascii?Q?hbOrm2dgWijGe220TeIZp3bU8oiBN4Lo5Lw9GRur4Fgs2jyDzLFixqaT02hw?=
- =?us-ascii?Q?JykAAtQIwsghyizJIrQWMbI0wMlXr18rFN8mdpA8vlbFjvMHE91vseKe0Xps?=
- =?us-ascii?Q?Dxrmes4w/9A6N5noi0YRthcMRblt/zdAzOCutAshKnx1Y/hCvvL9ymdGYJl0?=
- =?us-ascii?Q?vp4Ho+4ul1bVHYCpIfbziHIpeQenwOhuP8V3K1pVgC7rIQbNsLjdwr1W6ywA?=
- =?us-ascii?Q?ZC9s52u8mkZSgfraRplbmbsMmDzq3X4hvrDnYYYmbUFaqB6fcelZQGNJ+p9Z?=
- =?us-ascii?Q?oA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: UQoVGM0uFTEsGfkOMf5UGxiOEG01K8oVVTIuxQHNjBFSN8SY82hbCNi8CoyrqHmbjVqH3f/+j0EeMUKO810tvrs+QWBjJRrojKtizk0v/YijxMQ8OTBGMeSI8wz92DQX7WsPZ+W20/x+kjAtRkDB9xTz2BKS2lJAp5zVYy5w2Wmwabo/nZyU6CYnX56dGhntX7jBWR8RPnjWVeyvs7Od2fukBI+p6AUiGJXdD1twKAV0FmBh7qD0QXhhxqdLgaTZm7Qbp9gksxSGvqUzRDbmYgm6Wb/R821r+SLxDFG3AtNl5/WnXuCAYXeST95ZBqSDh2j5g61HYZigYfPi8ME6PRyZ9TmJSVOfZullo4zV63mLUKmadbP953ee3D/PtIsEUC5M6nvqKXo/MzuLm901XRkA/mbWDtER/kNy78TnTFtl6HWndFWgVgs2H9KeaEQ4idLBYdCCUkMK3Ya5gY2iddauSzEKH7HRHdA3B7JNis0o61pTPm7++cfKnDue0WH8lT1AZHsslXwDlK17denhc5iml2BhbqrdvLvYz2B8dLo+YlitjvgKl+kPMPPR0dXV3v00kOtLQ4h3IG+utRfid6Bs/RAHgdN5q3v35vPpiVl8UPXyx1qDzwJ37sdsM1B+aL0+NdO9poOePSg6KrwrwHto9MKX3RFEeFm6FqgLYvTcfOUb/1aJ1IVpz72CPkmybTiOHG8lRF94TzqRWcpRJ8K4+6/yUlwP9t0iaSMyrX6D99XZskZrlJtHGV73JIsN+4ZyLF+g3KuM+2uGDFnjMV+bEoAloAeNdzgxc72aDj+89+6AYb19UPcjmnnH+Pn2d8zLzA6eUqaNxLwrGRvIQiR7wVqAbuaDmcplI+CIEMo=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a9bc23c-81f4-4f46-1437-08db65d540ac
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 14:57:59.1666
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kUpliCyj3rtPJzgBTKm79sUsX3jarPMsk9tmPy7CuW0mquHU+e1ZqV/+N0QaVxua8nxgyMc7APJJpAjpS5rfGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4472
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_30,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 malwarescore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306050128
-X-Proofpoint-ORIG-GUID: JQiHV9yynJHWnp_cMlxL5R5WyyQVGUMj
-X-Proofpoint-GUID: JQiHV9yynJHWnp_cMlxL5R5WyyQVGUMj
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230529092840.40413-1-linyunsheng@huawei.com>
+ <20230529092840.40413-2-linyunsheng@huawei.com> <e8db47e3fe99349a998ded1ce4f8da88ea9cc660.camel@gmail.com>
+ <5d728f88-2bd0-7e78-90d5-499e85dc6fdf@huawei.com> <160fea176559526b38a4080cc0f52666634a7a4f.camel@gmail.com>
+ <21f2fe04-8674-cc73-7a6c-cb0765c84dba@gmail.com>
+In-Reply-To: <21f2fe04-8674-cc73-7a6c-cb0765c84dba@gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Mon, 5 Jun 2023 07:58:47 -0700
+Message-ID: <CAKgT0Ueoq9WgSPz1anWdCH1mkRt9cKmRz+wNJSZfdo-YwLjXCQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/3] page_pool: unify frag page and non-frag
+ page handling
+To:     Yunsheng Lin <yunshenglin0825@gmail.com>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Stephen Rothwell <sfr@canb.auug.org.au> [230604 23:10]:
-> Hi all,
-> 
-> After merging the mm tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> mm/memory.c:1705: warning: Excess function parameter 'mt' description in 'unmap_vmas'
-> 
-> Introduced by commit
-> 
->   c57d0b88196f ("mm: change do_vmi_align_munmap() side tree index")
+On Sat, Jun 3, 2023 at 5:59=E2=80=AFAM Yunsheng Lin <yunshenglin0825@gmail.=
+com> wrote:
+>
+> On 2023/6/3 0:37, Alexander H Duyck wrote:
+> ...
+>
+> >>
+> >> Please let me know if the above makes sense, or if misunderstood your
+> >> concern here.
+> >
+> > So my main concern is that what this is doing is masking things so that
+> > the veth and virtio_net drivers can essentially lie about the truesize
+> > of the memory they are using in order to improve their performance by
+> > misleading the socket layer about how much memory it is actually
+> > holding onto.
+> >
+> > We have historically had an issue with reporting the truesize of
+> > fragments, but generally the underestimation was kept to something less
+> > than 100% because pages were generally split by at least half. Where it
+> > would get messy is if a misbehaviing socket held onto packets for an
+> > exceedingly long time.
+> >
+> > What this patch set is doing is enabling explicit lying about the
+> > truesize, and it compounds that by allowing for mixing small
+> > allocations w/ large ones.
+> >
+> >>>
+> >>> The problem is there are some architectures where we just cannot
+> >>> support having pp_frag_count due to the DMA size. So it makes sense t=
+o
+> >>> leave those with just basic page pool instead of trying to fake that =
+it
+> >>> is a fragmented page.
+> >>
+> >> It kind of depend on how you veiw it, this patch view it as only suppo=
+rting
+> >> one frag when we can't support having pp_frag_count, so I would not ca=
+ll it
+> >> faking.
+> >
+> > So the big thing that make it "faking" is the truesize underestimation
+> > that will occur with these frames.
+>
+> Let's discuss truesize issue in patch 2 instead of here.
+> Personally, I still believe that if the driver can compute the
+> truesize correctly by manipulating the page->pp_frag_count and
+> frag offset directly, the page pool can do that too.
+>
+> >
+> >>
+> >>>
+> >>>> ---
+>
+> ...
+>
+> >>>
+> >>> What is the point of this line? It doesn't make much sense to me. Are
+> >>> you just trying to force an optiimization? You would be better off ju=
+st
+> >>> taking the BUILD_BUG_ON contents and feeding them into an if statemen=
+t
+> >>> below since the statement will compile out anyway.
+> >>
+> >> if the "if statement" you said refers to the below, then yes.
+> >>
+> >>>> +          if (!__builtin_constant_p(nr))
+> >>>> +                  atomic_long_set(&page->pp_frag_count, 1);
+> >>
+> >> But it is a *BUILD*_BUG_ON(), isn't it compiled out anywhere we put it=
+?
+> >>
+> >> Will move it down anyway to avoid confusion.
+> >
+> > Actually now that I look at this more it is even more confusing. The
+> > whole point of this function was that we were supposed to be getting
+> > pp_frag_count to 0. However you are setting it to 1.
+> >
+> > This is seriously flawed. If we are going to treat non-fragmented pages
+> > as mono-frags then that is what we should do. We should be pulling this
+> > acounting into all of the page pool freeing paths, not trying to force
+> > the value up to 1 for the non-fragmented case.
+>
+> I am not sure I understand what do you mean by 'non-fragmented ',
+> 'mono-frags', 'page pool freeing paths' and 'non-fragmented case'
+> here. maybe describe it more detailed with something like the
+> pseudocode?
 
-Thanks, I'll address this in v2.
+What you are attempting to generate are "mono-frags" where a page pool
+page has a frag count of 1. I refer to "non-fragmented pages" as the
+legacy page pool page without pp_frags set.
 
+The "page-pool freeing paths" are the ones outside of the fragmented
+bits here. Basically __page_pool_put_page and the like. What you
+should be doing is pushing the reference counting code down deeper
+into the page pool logic. Currently it is more of a surface setup.
 
-Regards,
-Liam
+The whole point I am getting at with this is that we should see the
+number of layers reduced for the fragmented pages, and by converting
+the non-fragmented pages to mono-frags we should see that maintain its
+current performance and total number of layers instead of having more
+layers added to it.
+
+> >
+> >>>
+> >>> It seems like what you would want here is:
+> >>>     BUG_ON(!PAGE_POOL_DMA_USE_PP_FRAG_COUNT);
+> >>>
+> >>> Otherwise you are potentially writing to a variable that shouldn't
+> >>> exist.
+> >>
+> >> Not if the driver use the page_pool_alloc_frag() API instead of manipu=
+lating
+> >> the page->pp_frag_count directly using the page_pool_defrag_page() lik=
+e mlx5.
+> >> The mlx5 call the page_pool_create() with with PP_FLAG_PAGE_FRAG set, =
+and
+> >> it does not seems to have a failback for PAGE_POOL_DMA_USE_PP_FRAG_COU=
+NT
+> >> case, and we may need to keep PP_FLAG_PAGE_FRAG for it. That's why we =
+need
+> >> to keep the driver from implementation detail(pp_frag_count handling s=
+pecifically)
+> >> of the frag support unless we have a very good reason.
+> >>
+> >
+> > Getting the truesize is that "very good reason". The fact is the
+> > drivers were doing this long before page pool came around. Trying to
+> > pull that away from them is the wrong way to go in my opinion.
+>
+> If the truesize is really the concern here, I think it make more
+> sense to enforce it in the page pool instead of each driver doing
+> their trick, so I also think we can do better here to handle
+> pp_frag_count in the page pool instead of driver handling it, so
+> let's continue the truesize disscussion in patch 2 to see if we
+> can come up with something better there.
+
+The problem is we don't free the page until the next allocation so the
+truesize will be false as the remainder of the page should be added to
+the truesize. The drivers tend to know what they are doing with the
+page and when they are freeing it. We don't have that sort of
+knowledge when we are doing the allocation.
+
+> >
+> >>>>    /* If nr =3D=3D pp_frag_count then we have cleared all remaining
+> >>>>     * references to the page. No need to actually overwrite it, inst=
+ead
+> >>>>     * we can leave this to be overwritten by the calling function.
+> >>>> @@ -311,19 +321,36 @@ static inline long page_pool_defrag_page(struc=
+t page *page, long nr)
+> >>>>     * especially when dealing with a page that may be partitioned
+> >>>>     * into only 2 or 3 pieces.
+> >>>>     */
+> >>>> -  if (atomic_long_read(&page->pp_frag_count) =3D=3D nr)
+> >>>> +  if (atomic_long_read(&page->pp_frag_count) =3D=3D nr) {
+> >>>> +          /* As we have ensured nr is always one for constant case
+> >>>> +           * using the BUILD_BUG_ON() as above, only need to handle
+> >>>> +           * the non-constant case here for frag count draining.
+> >>>> +           */
+> >>>> +          if (!__builtin_constant_p(nr))
+> >>>> +                  atomic_long_set(&page->pp_frag_count, 1);
+> >>>> +
+> >>>>            return 0;
+> >>>> +  }
+> >>>>
+> >
+> > The optimization here was already the comparison since we didn't have
+> > to do anything if pp_frag_count =3D=3D nr. The whole point of pp_frag_c=
+ount
+> > going to 0 is that is considered non-fragmented in that case and ready
+> > to be freed. By resetting it to 1 you are implying that there is still
+> > one *other* user that is holding a fragment so the page cannot be
+> > freed.
+> >
+> > We weren't bothering with writing the value since the page is in the
+> > free path and this value is going to be unused until the page is
+> > reallocated anyway.
+>
+> I am not sure what you meant above.
+> But I will describe what is this patch trying to do again:
+> When PP_FLAG_PAGE_FRAG is set and that flag is per page pool, not per
+> page, so page_pool_alloc_pages() is not allowed to be called as the
+> page->pp_frag_count is not setup correctly for the case.
+>
+> So in order to allow calling page_pool_alloc_pages(), as best as I
+> can think of, either we need a per page flag/bit to decide whether
+> to do something like dec_and_test for page->pp_frag_count in
+> page_pool_is_last_frag(), or we unify the page->pp_frag_count handling
+> in page_pool_is_last_frag() so that we don't need a per page flag/bit.
+>
+> This patch utilizes the optimization you mentioned above to unify the
+> page->pp_frag_count handling.
+
+Basically what should be happening if all page-pool pages are to be
+considered "fragmented" is that we should be folding this into the
+freeing logic. What we now have a 2 stage setup where we are dropping
+the count to 0, then rebounding it and setting it back to 1. If we are
+going to have all page pool pages fragmented then the freeing path for
+page pool pages should just be handling frag count directly instead of
+hacking on it here and ignoring it in the actual freeing paths.
+
+> >
+> >>>>    ret =3D atomic_long_sub_return(nr, &page->pp_frag_count);
+> >>>>    WARN_ON(ret < 0);
+> >>>> +
+> >>>> +  /* Reset frag count back to 1, this should be the rare case when
+> >>>> +   * two users call page_pool_defrag_page() currently.
+> >>>> +   */
+> >>>> +  if (!ret)
+> >>>> +          atomic_long_set(&page->pp_frag_count, 1);
+> >>>> +
+> >>>>    return ret;
+> >>>>  }
+> >>>>
+>
+> ...
+>
+> >> As above, it is about unifying handling for frag and non-frag page in
+> >> page_pool_is_last_frag(). please let me know if there is any better wa=
+y
+> >> to do it without adding statements here.
+> >
+> > I get what you are trying to get at but I feel like the implementation
+> > is going to cause more problems than it helps. The problem is it is
+> > going to hurt base page pool performance and it just makes the
+> > fragmented pages that much more confusing to deal with.
+>
+> For base page pool performance, as I mentioned before:
+> It remove PP_FLAG_PAGE_FRAG checking and only add the cost of
+> page_pool_fragment_page() in page_pool_set_pp_info(), which I
+> think it is negligible as we are already dirtying the same cache
+> line in page_pool_set_pp_info().
+
+I have no problem with getting rid of the flag.
+
+> For the confusing, sometimes it is about personal taste, so I am
+> not going to argue with it:) But it would be good to provide a
+> non-confusing way to do that with minimal overhead. I feel like
+> you have provided it in the begin, but I am not able to understand
+> it yet.
+
+The problem here is that instead of treating all page pool pages as
+fragmented, what the patch set has done is added a shim layer so that
+you are layering fragmentation on top of page pool pages which was
+already the case.
+
+That is why I have suggested make page pool pages a "mono-frag" as
+your first patch. Basically it is going to force you to have to set
+the pp_frag value for these pages, and verify it is 1 when you are
+freeing it.
+
+Then you are going to have to modify the fragmented cases to make use
+of lower level calls because now instead of us defragging a fragmented
+page, and then freeing it the two operations essentially have to be
+combined into one operation.
+
+> >
+> > My advice as a first step would be to look at first solving how to
+> > enable the PP_FLAG_PAGE_FRAG mode when you have
+> > PAGE_POOL_DMA_USE_PP_FRAG_COUNT as true. That should be creating mono-
+> > frags as we are calling them, and we should have a way to get the
+> > truesize for those so we know when we are consuming significant amount
+> > of memory.
+>
+> Does the way to get the truesize in the below RFC make sense to you?
+> https://patchwork.kernel.org/project/netdevbpf/patch/20230516124801.2465-=
+4-linyunsheng@huawei.com/
+
+It doesn't add any value. All you are doing is passing the "size"
+value as "truesize". The whole point of the "truesize" would be to
+report the actual size. So a step in that direction would be to bump
+truesize to include the remainder that isn't used when you decide it
+is time to allocate a new page. The problem is that it requires some
+fore-knowledge of what the next requested size is going to be. That is
+why it is better to just have the drivers manage this since they know
+what size they typically request and when they are going to close
+pages.
+
+Like I said, if you are wanting to go down this path you are better
+off starting with page pool and making all regular page pool pages
+into mono-frags. Then from there we can start building things out.
+
+With that you could then let drivers like the Mellanox one handle its
+own fragmenting knowing it has to return things to a mono-frag in
+order for it to be working correctly.
