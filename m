@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3865722A7E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33709722A77
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbjFEPJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
+        id S234270AbjFEPJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234202AbjFEPIe (ORCPT
+        with ESMTP id S234231AbjFEPIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 11:08:34 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4782F9;
-        Mon,  5 Jun 2023 08:08:32 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 15:08:30 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59780F1;
+        Mon,  5 Jun 2023 08:08:33 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 15:08:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1685977711;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gYWfKdbZQ3j9N07sb0OGHBVpTwEqk9DubNlrO7xIl8g=;
-        b=B5M6XhrmNX4qBgzO2zorbnEYC2WWxgw2fHR+GlQGoqdT0064OArXx/NwNLGPW+0VWGpBFW
-        8UVMgyJoXUeMcI+IG331HjoiYOd9RljcjlUnNyomqcpFSFyZmkDRQlQ7xAZ95I6PVR24gF
-        4qoTpd7Tfr2oFNOVgyC8CPU22ro6wrTtNR3Rpb+KgN/6jezTzDZ2W1dpEqaCH5LrCSm9ns
-        ktqbgQh+Kj7EAJBINT5jFw0HabiLdki1xJ1SbQXIOmUHCMfY6g9Jp+4eygl3jGQKeCqoeq
-        cnA6o0Qo2IV5vsnyt7tB33Jq+ZzyUzH7veD5xtDnh/mimIGroVGM+uzCgw8pvw==
+        bh=if2dVjYa5Bi/ydn9IhPeAQMayijHDMtDpj3hYChXRrM=;
+        b=3V9VYLj+6bPxodnXQaHdrFFS1L2pA2xBGBUlnifBtNBdlVEd6L3Q3upqiOOc22u6UgW8xw
+        nqhoZJuo3iEj82TpsrYHFbkKPFwtNYI6FOjmlYTfq4OHMAuFUx5joR1mZ0izXYGHoYYfEE
+        ViBDZJ+dlhwLEazUHDkQUp7EzaOtPCfkP8MX7EC9QvYL0LZ9d+t/yMocKpJCXwAN441IfP
+        xGxL6CEKe1EjY7TKMyriHl2xFJA/V7gF/GTS1LJoMolQtRdSY6AS7TXTZK7xuGdVpOzpCS
+        W8/qRNGBgI1wSHkCdpGuiZZOd1NDoUDVfMWwddWKp8mLnWyOBfA2/u8hKGOEVA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1685977711;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gYWfKdbZQ3j9N07sb0OGHBVpTwEqk9DubNlrO7xIl8g=;
-        b=dCJnDuB/4GnRDvwDM57VrzjmCv00R45OrfJaN/hmFVY1reApv70fybtZPsBqFLH+5sID6C
-        xJmSZP1VGeGj1QAg==
+        bh=if2dVjYa5Bi/ydn9IhPeAQMayijHDMtDpj3hYChXRrM=;
+        b=QEr+VH/c5GfbB0LGGQXy4t2GAp43L2wpyw5CwdXMnijOCP921O73PvP6WuIq6Dey50yXqw
+        KadpD0q/VdcMdwAQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Add comments about timer lookup
+Subject: [tip: timers/core] posix-timers: Clarify timer_wait_running() comment
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.091081515@linutronix.de>
-References: <20230425183313.091081515@linutronix.de>
+In-Reply-To: <20230425183312.985681995@linutronix.de>
+References: <20230425183312.985681995@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168597771092.404.9646873933731226661.tip-bot2@tip-bot2>
+Message-ID: <168597771152.404.15026662809779436776.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,97 +67,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     46c7863e061f64c96745003f699912667c2a1bd6
-Gitweb:        https://git.kernel.org/tip/46c7863e061f64c96745003f699912667c2a1bd6
+Commit-ID:     07ca14d623d8b0e6c4a0d3de4ca8a8ea35a85470
+Gitweb:        https://git.kernel.org/tip/07ca14d623d8b0e6c4a0d3de4ca8a8ea35a85470
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:03 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:00 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Jun 2023 17:03:37 +02:00
 
-posix-timers: Add comments about timer lookup
+posix-timers: Clarify timer_wait_running() comment
 
-Document how the timer ID validation in the hash table works.
+Explain it better and add the CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y aspect
+for completeness.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.091081515@linutronix.de
+Link: https://lore.kernel.org/r/20230425183312.985681995@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 39 ++++++++++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 7 deletions(-)
+ kernel/time/posix-timers.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 355c6f4..f6650c1 100644
+index 2c5daeb..4017533 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -506,6 +506,12 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 		return -EAGAIN;
- 
- 	spin_lock_init(&new_timer->it_lock);
-+
-+	/*
-+	 * Add the timer to the hash table. The timer is not yet valid
-+	 * because new_timer::it_signal is still NULL. The timer id is also
-+	 * not yet visible to user space.
-+	 */
- 	new_timer_id = posix_timer_add(new_timer);
- 	if (new_timer_id < 0) {
- 		error = new_timer_id;
-@@ -551,6 +557,7 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 		goto out;
- 
- 	spin_lock_irq(&current->sighand->siglock);
-+	/* This makes the timer valid in the hash table */
- 	new_timer->it_signal = current->signal;
- 	list_add(&new_timer->list, &current->signal->posix_timers);
- 	spin_unlock_irq(&current->sighand->siglock);
-@@ -597,13 +604,6 @@ COMPAT_SYSCALL_DEFINE3(timer_create, clockid_t, which_clock,
+@@ -836,10 +836,18 @@ static void common_timer_wait_running(struct k_itimer *timer)
  }
- #endif
  
--/*
-- * Locking issues: We need to protect the result of the id look up until
-- * we get the timer locked down so it is not deleted under us.  The
-- * removal is done under the idr spinlock so we use that here to bridge
-- * the find to the timer lock.  To avoid a dead lock, the timer id MUST
-- * be release with out holding the timer lock.
-- */
- static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags)
- {
- 	struct k_itimer *timr;
-@@ -615,10 +615,35 @@ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags)
- 	if ((unsigned long long)timer_id > INT_MAX)
- 		return NULL;
- 
-+	/*
-+	 * The hash lookup and the timers are RCU protected.
-+	 *
-+	 * Timers are added to the hash in invalid state where
-+	 * timr::it_signal == NULL. timer::it_signal is only set after the
-+	 * rest of the initialization succeeded.
-+	 *
-+	 * Timer destruction happens in steps:
-+	 *  1) Set timr::it_signal to NULL with timr::it_lock held
-+	 *  2) Release timr::it_lock
-+	 *  3) Remove from the hash under hash_lock
-+	 *  4) Call RCU for removal after the grace period
-+	 *
-+	 * Holding rcu_read_lock() accross the lookup ensures that
-+	 * the timer cannot be freed.
-+	 *
-+	 * The lookup validates locklessly that timr::it_signal ==
-+	 * current::it_signal and timr::it_id == @timer_id. timr::it_id
-+	 * can't change, but timr::it_signal becomes NULL during
-+	 * destruction.
-+	 */
- 	rcu_read_lock();
- 	timr = posix_timer_by_id(timer_id);
- 	if (timr) {
- 		spin_lock_irqsave(&timr->it_lock, *flags);
-+		/*
-+		 * Validate under timr::it_lock that timr::it_signal is
-+		 * still valid. Pairs with #1 above.
-+		 */
- 		if (timr->it_signal == current->signal) {
- 			rcu_read_unlock();
- 			return timr;
+ /*
+- * On PREEMPT_RT this prevent priority inversion against softirq kthread in
+- * case it gets preempted while executing a timer callback. See comments in
+- * hrtimer_cancel_wait_running. For PREEMPT_RT=n this just results in a
+- * cpu_relax().
++ * On PREEMPT_RT this prevents priority inversion and a potential livelock
++ * against the ksoftirqd thread in case that ksoftirqd gets preempted while
++ * executing a hrtimer callback.
++ *
++ * See the comments in hrtimer_cancel_wait_running(). For PREEMPT_RT=n this
++ * just results in a cpu_relax().
++ *
++ * For POSIX CPU timers with CONFIG_POSIX_CPU_TIMERS_TASK_WORK=n this is
++ * just a cpu_relax(). With CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y this
++ * prevents spinning on an eventually scheduled out task and a livelock
++ * when the task which tries to delete or disarm the timer has preempted
++ * the task which runs the expiry in task work context.
+  */
+ static struct k_itimer *timer_wait_running(struct k_itimer *timer,
+ 					   unsigned long *flags)
