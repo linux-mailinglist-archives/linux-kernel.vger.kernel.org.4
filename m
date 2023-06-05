@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C94F721F03
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DC9721F3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjFEHKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S229654AbjFEHNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbjFEHKU (ORCPT
+        with ESMTP id S229822AbjFEHNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:10:20 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245F9E47;
-        Mon,  5 Jun 2023 00:09:57 -0700 (PDT)
+        Mon, 5 Jun 2023 03:13:39 -0400
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAA2F0;
+        Mon,  5 Jun 2023 00:13:14 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; t=1685948955; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=D7XlZBqJodlO1/trmVZ9E0fJMP+YSpO1UHkUT5t1IQy9gi7MVHiPBN6dhB19NUy6St
-    LbsbWO3KDW8qhjVV2jgh9ybTF4kxtKBwi2m32gmnwWKAKcYSfWUcK+uZera7oZuGPStA
-    Ys1VXY4TS+VGm82VUI7FkKA+GQrm46Y3D7Ijyesv5Brsvsgv2Nni/vpl6jVC1oJObikp
-    mYO2kq0E6tHWl6IPGcIRlqMQ5TOfdyu1lJL3OfCBEnC7xrMplB1de6DLYVN+WvQ8hAX2
-    0M0R9y2GFykcKIGYtJMbLDjv31tJuY1vFBSPBuilCh8slZyNQrqCGenAvSttb1ZXmkYa
-    VDgw==
+    b=cwqBvPNM+VvqUjLiWgVckJS195JahM1GQX9x3EycAlVQp9XQimx387YIzTVNi/YCPw
+    VKBv5yhD1UuHwXH8gx27bC4r+bgzsyoHoM22Bm/QVrsDgET0VTaRtSCScCPME6ckh/vS
+    LQYRixDFrCrf0MOT5zrE6pM2Rp6mGsHUcXu5R0aQlYGVSOR2k3EDQzQMfsc/bHvY+cdP
+    1f91eMmkb1BaRULdRXMJYbI2oN53wGxDx6heWCyvSVvJD+3pKJTChS9PX7zkc2EuEBW8
+    N4mSo4AM1w95WET1sjqV6fFdBkJAP2S4hbjego2OHmG8B4xJo7Zj3bWgs2tHRj0HxXGK
+    WbwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685948955;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=+npGgjzfjdX6BHWaITrIYD9gk4zOqfuT40I/KSZiv44=;
-    b=DknVha/VsiJFh7Pp8po0CeJ5A1xmrxy1Ahz/VS+lYPfyQ3f4SPR2X/dE9EGk8BLlyU
-    Cc3GkM4R87UP0qQ7SR8kA+27hzjJh3zo/WBBCYfIxqD2DFievwclVBfr7MDaXWt59iPZ
-    QOzLhpMw7J754VLKzu0+ULLzeeDuap0CHbh+inFgP5EIOLREbU9zZTKwR41Oa/5goMF+
-    SvKHN2VT2aRXYcBm5zxSIFnxaTTO5jhdzA/gH/QpQlNl+B/NSqU6EM8qfAef0NioKspi
-    L2janq2WzOpmugKNlav354dWE9SPXQAI4yAG0UFMJ5VZ6q2nuZzeVGnjtXEkI2CfUWB9
-    xGqg==
+    bh=l/8mcRN+TlGYtBCi00HTVZhrkyxZgFaeeP1BtcLCr2U=;
+    b=Kgk43ALbbJRRB/4dAMVCA27IfUzmALJO580LB/2wK9CnvP1iQjip3KTRSJ4xuL9/Ff
+    uaxTwPOts8fcgWX42J4ZrZaGbzYYD1XKv43IiBQsHxVR6/SFs9vPMl/cg63CtjmLlsfX
+    ks/2dAOtPJ//lNvjGmWdd01zQxwPZYojpZ2B/gkdvcGYsrjg3GWgf/PytfywE82GrkUm
+    9Yg7QbgQFalkIA5AD+hid/9fOY+PeP6Rop6+0NKQifN+uAoZypGZLmLMLkijIOd1ncqW
+    //LQiTwoWF0Qm0BEBR42e8tX3n0e5KgPFNiwegNWqJBXLVzFHY1J9DhVOhcjCjwkpkp2
+    WY2A==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -42,34 +42,34 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685948955;
     s=strato-dkim-0002; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=+npGgjzfjdX6BHWaITrIYD9gk4zOqfuT40I/KSZiv44=;
-    b=O6Xko2UDLApY+us9VBR+bFjaT6Gl4a4qdBnLTZe5WdMf4naIQYdo6WJXgbNO03m8W9
-    cKnDavlv5i/SPg9mVsnAjFRTmUtfI2GjoBzAOic2b5VuS+TjZ2dWvpOzOTUz2vw8GdNz
-    nSeLyQa6btqg82bsi1bigG2CUX6TZcedJRBpMhpatNGadq1CUEFSfgRcmRBdQ+2mejst
-    W/j/LcbgTxrLCRE2eKuYGEAfkjvIKFs1pqGb5tbUuaWiJuyDaOlrGbdOFk2UES3qtaqZ
-    fuB9zVugmC4alZFl7IYGVhzjIzH1BNOfgircLEs+xIPW0hmbAa2/Vxo0uU8o1UAIJyMV
-    31ww==
+    bh=l/8mcRN+TlGYtBCi00HTVZhrkyxZgFaeeP1BtcLCr2U=;
+    b=OS1qsySklIX77dE17tXfnCaHnboXobLaTvon+gR49pqZv5DbmEHwREeK//sG7VIROd
+    UfiOXE95Q7umwnnIwt5q1tKJa1SkuswTukAfIuQxz6yOmrJPdgTAX8KfJdszB28C3LHZ
+    phS8h9zEjyiapZXWo0tVfK0PmCSoL8UXOAGQmLjaejsMUCcSHYuAHgpWNMXisVQR1kLQ
+    LipXj/ncsuyt/Xgi74klTcc9SrCq9PgzJ+QVJ3HeJT5/wPFSHO8ZWZNTU/O1ht/YUerF
+    nfao0Y1QaHLhFbNV+AFdgOcFcRz6aY5scsce58EZ/wwXIkfxI6DP+o8ix9QSYZS3/Qa4
+    o8LQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685948955;
     s=strato-dkim-0003; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=+npGgjzfjdX6BHWaITrIYD9gk4zOqfuT40I/KSZiv44=;
-    b=g8Z+6Z7MCNOKmDPllzkNa/Z/wdZy/DYfEakkoH0VsrCUyL09TAkT8x5sYGN0f8d4Gx
-    4srufWDbTWRK/YG1amAw==
+    bh=l/8mcRN+TlGYtBCi00HTVZhrkyxZgFaeeP1BtcLCr2U=;
+    b=uil1PyV8cxT/FRkWdYTQBkGVZO4FN77Ojzp/pl8jFjdIRsLcHnpiJiVRGlf4IfFHJJ
+    8HaSurreoGfQQD+lNHAg==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn9VOL5nz0="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5579E8a7
+    with ESMTPSA id Z82ec2z5579F8a8
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 5 Jun 2023 09:09:14 +0200 (CEST)
+    Mon, 5 Jun 2023 09:09:15 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Mon, 05 Jun 2023 09:08:24 +0200
-Subject: [PATCH 08/14] soc: qcom: smem: Add qcom_smem_is_available()
+Date:   Mon, 05 Jun 2023 09:08:25 +0200
+Subject: [PATCH 09/14] rpmsg: qcom_smd: Use qcom_smem_is_available()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-rpm-rproc-v1-8-e0a3b6de1f14@gerhold.net>
+Message-Id: <20230531-rpm-rproc-v1-9-e0a3b6de1f14@gerhold.net>
 References: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
 In-Reply-To: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
 To:     Bjorn Andersson <andersson@kernel.org>
@@ -93,47 +93,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid having to look up a dummy item from SMEM to detect if it is
-already available or if we need to defer probing.
+Rather than looking up a dummy item from SMEM, use the new
+qcom_smem_is_available() function to make the code more clear
+(and reduce the overhead slightly).
+
+Add the same check to qcom_smd_register_edge() as well to ensure that
+it only succeeds if SMEM is already available - if a driver calls the
+function and SMEM is not available yet then the initial state will be
+read incorrectly and the RPMSG devices might never become available.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
- drivers/soc/qcom/smem.c       | 9 +++++++++
- include/linux/soc/qcom/smem.h | 1 +
- 2 files changed, 10 insertions(+)
+ drivers/rpmsg/qcom_smd.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-index b0d59e815c3b..3d93a6681494 100644
---- a/drivers/soc/qcom/smem.c
-+++ b/drivers/soc/qcom/smem.c
-@@ -359,6 +359,15 @@ static struct qcom_smem *__smem;
- /* Timeout (ms) for the trylock of remote spinlocks */
- #define HWSPINLOCK_TIMEOUT	1000
+diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+index 7b9c298aa491..43f601c84b4f 100644
+--- a/drivers/rpmsg/qcom_smd.c
++++ b/drivers/rpmsg/qcom_smd.c
+@@ -1479,6 +1479,9 @@ struct qcom_smd_edge *qcom_smd_register_edge(struct device *parent,
+ 	struct qcom_smd_edge *edge;
+ 	int ret;
  
-+/**
-+ * qcom_smem_is_available() - Checks if SMEM is available
-+ */
-+bool qcom_smem_is_available(void)
-+{
-+	return !!__smem;
-+}
-+EXPORT_SYMBOL(qcom_smem_is_available);
++	if (!qcom_smem_is_available())
++		return ERR_PTR(-EPROBE_DEFER);
 +
- static int qcom_smem_alloc_private(struct qcom_smem *smem,
- 				   struct smem_partition *part,
- 				   unsigned item,
-diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
-index 223db6a9c733..a36a3b9d4929 100644
---- a/include/linux/soc/qcom/smem.h
-+++ b/include/linux/soc/qcom/smem.h
-@@ -4,6 +4,7 @@
+ 	edge = kzalloc(sizeof(*edge), GFP_KERNEL);
+ 	if (!edge)
+ 		return ERR_PTR(-ENOMEM);
+@@ -1553,12 +1556,9 @@ EXPORT_SYMBOL(qcom_smd_unregister_edge);
+ static int qcom_smd_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *node;
+-	void *p;
  
- #define QCOM_SMEM_HOST_ANY -1
+-	/* Wait for smem */
+-	p = qcom_smem_get(QCOM_SMEM_HOST_ANY, smem_items[0].alloc_tbl_id, NULL);
+-	if (PTR_ERR(p) == -EPROBE_DEFER)
+-		return PTR_ERR(p);
++	if (!qcom_smem_is_available())
++		return -EPROBE_DEFER;
  
-+bool qcom_smem_is_available(void);
- int qcom_smem_alloc(unsigned host, unsigned item, size_t size);
- void *qcom_smem_get(unsigned host, unsigned item, size_t *size);
- 
+ 	for_each_available_child_of_node(pdev->dev.of_node, node)
+ 		qcom_smd_register_edge(&pdev->dev, node);
 
 -- 
 2.40.1
