@@ -2,138 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510FF722031
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC0372203C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjFEHx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S231190AbjFEHzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjFEHxE (ORCPT
+        with ESMTP id S231158AbjFEHzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:53:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F34E9;
-        Mon,  5 Jun 2023 00:52:42 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 5 Jun 2023 03:55:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE4210E5;
+        Mon,  5 Jun 2023 00:54:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D2CF366056AA;
-        Mon,  5 Jun 2023 08:52:39 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685951561;
-        bh=ma8BsYbgBg4IWVmjxVkOdcEeWuXb2Q5wJV89M9WEafQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fPWZk0y1402kA+YZQ63ycsSDCF70dv82ThEZDWUKgjAM19Ezcmg9BuXaMBSW5r3eG
-         v5HY8RyJPmXdjOpab1yj3AJGh0K1nZbygk9BYHkj2DBBrgljsi9bDpqQTvTVib2f0d
-         IjlHgzHbpOkT7zvjeuyQty8h7zekYuuzxm3d1K6v+WhxfiKSjX94kMTfOerY4NuHz9
-         42D14zFM+hwhGtvd9eRF6fb8M//9CH4Ybf1Sww1lUD9I8munXPK2+ORGJO7B+b4g2m
-         t/rajBjUgz0i9YqDVFXZ7G/K1AK0kZotmW4GnVin4RAJPoYbeMrZxVmiwOj9fpV980
-         NgAic0Zt1XTvw==
-Message-ID: <fdc3cfa9-3221-c422-a42b-602410dc22f4@collabora.com>
-Date:   Mon, 5 Jun 2023 09:52:37 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00DA4612FE;
+        Mon,  5 Jun 2023 07:54:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D28C433D2;
+        Mon,  5 Jun 2023 07:54:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685951657;
+        bh=rmdkJYpI3/LXSafXa70F/fUmwmNmdhyZ+VfJnsbJCdE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T64BH0R02IcyqAxlm6ybeVysJe5aOUtcsqeUlk5s83Q+0kfPsj6kC6hro0bW/wCTi
+         Ozm35kzMCxIj6tvR3RN0ypvilHm1CWO0O+LDVOH/LBQFPnells1i32QtWrHI5xlZ+I
+         qsgZg5fya6Va7M29gT3swelLzddd0TEJ6kQfxUy6phmnAlxocu9jEh5SE7i0y8N/8n
+         ysfNC6bHl9qmPpZq74ZH7R4tw44K8xuKf7yBkbkTB6dEN3Lv2r4leO0HesR4su3EAk
+         QXLxQA4aYWrxy6mpEvRs2oXz3FC+G1FEen7scnbNVvQ8ckHkKZNjM3K/OeK0EXvCxd
+         aX72aNDORmsUg==
+Date:   Mon, 5 Jun 2023 13:24:08 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     Kishon Vijay Abraham I <kvijayab@amd.com>,
+        Shunsuke Mie <mie@igel.co.jp>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Frank Li <Frank.Li@nxp.com>, Li Chen <lchen@ambarella.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] PCI: endpoint: support an alignment aware
+ map/unmaping
+Message-ID: <20230605075408.GA5536@thinkpad>
+References: <20230113090350.1103494-1-mie@igel.co.jp>
+ <20230113090350.1103494-2-mie@igel.co.jp>
+ <e417f2c9-1fcb-cf57-3524-1408c9aae5fa@amd.com>
+ <978b63ac-90b5-b909-d259-0668b77f1cc8@kernel.org>
+ <52b8f850-af8c-1971-9729-c5de37875bf9@amd.com>
+ <38d41f97-14d5-e24b-3d19-6c4f96305c58@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>
-Cc:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230530195132.2286163-1-bero@baylibre.com>
- <CAGXv+5EVfgEBDm=7MmQ=OsP322KmE23PwycJ-0LjU+3dEZygUQ@mail.gmail.com>
- <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <38d41f97-14d5-e24b-3d19-6c4f96305c58@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/06/23 19:09, Nícolas F. R. A. Prado ha scritto:
-> On Wed, May 31, 2023 at 12:49:43PM +0800, Chen-Yu Tsai wrote:
->> On Wed, May 31, 2023 at 3:51 AM Bernhard Rosenkränzer <bero@baylibre.com> wrote:
->>>
->>> From: Balsam CHIHI <bchihi@baylibre.com>
->>>
->>> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
->>> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
->>> and update the documentation that describes the Calibration Data Offsets.
->>>
->>> Changelog:
->>>      v4 :
->>>          - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
->>>            room for SVS support, pointed out by
->>>            AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>
->>>      v3 :
->>>          - Rebased :
->>>              base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
->>>          - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
->>>            Use filtered mode to make sure threshold interrupts are triggered,
->>
->> I'm seeing sensor readout (either through sysfs/thermal/<x>/temp or hwmon)
->> fail frequently on MT8192. If I run `sensors` (lm-sensors), at least a couple
->> of the LVTS sensors would be N/A. Not sure if this is related to this change.
+On Fri, Jun 02, 2023 at 09:10:22PM +0900, Damien Le Moal wrote:
+> On 6/2/23 20:39, Kishon Vijay Abraham I wrote:
+> > 
+> > 
+> > On 6/2/2023 5:13 AM, Damien Le Moal wrote:
+> >> On 6/2/23 00:06, Kishon Vijay Abraham I wrote:
+> >>> Hi Shunsuke,
+> >>>
+> >>> On 1/13/2023 2:33 PM, Shunsuke Mie wrote:
+> >>>> Add an align_mem operation to the EPC ops, which function is used to
+> >>>> pci_epc_map/unmap_addr(). These change to enable mapping for any alignment
+> >>>> restriction of EPC. The map function maps an aligned memory to include a
+> >>>> requested memory region.
+> >>>
+> >>> I'd prefer all the PCIe address alignment restriction be handled in the
+> >>> endpoint function drivers and not inside the core layer (esp in map and
+> >>> unmap calls).
+> >>
+> >> That is a really *bad* idea ! Most function drivers should be able to work with
+> >> any EP controller hardware. Asking these drivers to support all the alignment
+> >> peculiarities of every possible EP controller is impossible.
+> > 
+> > Function drivers already work with various restrictions of EP controller 
+> > hardware. pci_epc_features was added to provide such restrictions to 
+> > function drivers. Not sure why it has to be different here.
+> >>
+> >>> IMO, get the pci address alignment restriction using pci_epc_features.
+> >>> And use a bigger size (based on alignment restriction) in
+> >>> pci_epc_mem_alloc_addr() and access the allocated window using an offset
+> >>> (based on alignment value). You can add separate helpers if required.
+> >>
+> >> That is too simplistic and not enough. Example: Rick and I working on an nvme
+> >> function driver are facing a lot of issues with the EPC API for mem & mapping
+> >> management because we have 0 control over the PCI address that the host will
+> >> use. Alignment is all over the place, and the current EPC memory API
+> >> restrictions (window size limitations) make it impossible to transparently
+> >> handle all cases. We endup with NVMe command failures simply because of the API
+> >> limitations.
+> > 
+> > You mean restrictions w.r.t OB window address and not PCIe address?
+> >>
+> >> And sure, we can modify that driver to better support the EP controller we are
+> >> using (rockchip). But we need to support other EP controllers as well. So API
+> > 
+> > Every EP controller can provide it's restrictions in pci_epc_features. 
+> > Unless the alignment is going to change dynamically, don't see a need 
+> > for adding new epc ops.
+> > 
+> > Not sure why the following cannot be handled from function driver?
+> > 
+> > From
+> > 
+> >         A                    A + S
+> >          ┌────────────────────────┐
+> >          │                        │
+> >          │        OB WIN          │
+> >          ├────────────────────────┤
+> > mapping │                        │
+> >          ▼                  B + S ▼
+> >        B ┌────────────────────────┐
+> >          │                        │
+> >          │       PCI Address      │
+> >          └────────────────────────┘
+> > 
+> > To
+> > 
+> > 
+> >       A   A'│              A + S      A+S+alignment
+> >        ┌────┼───────────────────┬──────┐
+> >        │    │                   │      │
+> >        │    │       OB WIN      │      │
+> >        ├────┴───────────────────┴──────┤
+> >        │                               |
+> >        │                               |
+> >     B' ▼   B                     B + S ▼
+> >        ┌────┬──────────────────────────┐
+> >        │    │                          │
+> >        │    │     PCI Address          │
+> >        └────┴──────────────────────────┘
+> > 
+> > So the changes in function driver will be
+> > 1) Get alignment value in epc_features
+> > 2) pci_epc_mem_alloc_addr()/pci_epc_map_addr() will take into account 
+> > the alignment value (change in size parameter)
+> > 3) Access host memory from an offset in the provided 
+> > pci_epc_mem_alloc_addr().
 > 
-> Yes, it is. Filtered mode has some delay associated with reading, meaning most
-> of the time the value isn't ready, while immediate mode is, well, pretty much
-> immediate and the read always succeeds.
+> The problem with all this is that some EP controllers (at least the rockchip for
+> sure, likely the Cadence one as well) have alignment constraints that depend on
+> the *host* PCI address (yes, the rockchip driver is still buggy in that respect,
+> fixes coming, see at the end for the details about the rockchip). The current
+> API does not allow for that to be gracefully handled and using the epc_features
+> for that would not work at all.
 > 
-> For temperature monitoring, filtered mode should be used. It supports triggering
-> interrupts when crossing the thresholds. Immediate mode is meant for one-off
-> readings of the temperature. This is why I suggested using filtered mode.
+> With this dynamic constraint based on the host PCI address (which the EPF cannot
+> control), we need EPC core functions that:
+> 1) allocate memory from windows based on the PCI address they will be mapped to
+> 2) Depending on the size of the transfer + the alignment need for a PCI address,
+> a single memory window may not be enough, so we need the ability to allocate
+> memory over multiple windows
+> 3) Some nice helpers that avoid that pattern of mem alloc + map pci addr and
+> simplify them with "map this PCI address for me and tell me the local CPU
+> address for it, completely hiding any alignment concerns.
 > 
-> As far as the thermal framework goes, it's ok that filtered mode doesn't always
-> return a value, as it will keep the old one. But of course, having the
-> temperature readout always work would be a desired improvement.
+> >> changes are definitely needed. Working on that. That is not easy as the mapping
+> >> API and its semantic impacts data transfers (memcpy_from|toio and DMA).
+> >>
+> >> I do have a patch that does something similar as this one, but at a much higher
+> >> level with a helper function that gives the function driver the offset into the
+> >> allocated memory region to use for mapping a particular PCI address. And then
+> >> this helper is then in turn used into a new pci_epc_map() function which does
+> >> mem alloc + mapping in one go based on the EPC constraints. That hides all
+> > 
+> > pci_epc_map() was added only to perform mapping functionality. I'd 
+> > prefer it stays that way instead of adding bunch of other things into it.
 > 
-> As for ways to achieve that, I think the intended way would be to enable the
-> interrupts that signal data ready on filtered mode (bits 19, 20, 21, 28), read
-> the temperature and cache it so it is always available when the get_temp()
-> callback is called. The issue with this is that it would cause *a lot* of
-> interrupts, which doesn't seem worth it.
+> I am not proposing to add to it or to modify it. That function can remain the
+> basic one for simple cases. But we need better functions for more complex EPF
+> functions that need to map potentially large memory areas to random PCI addresses.
 > 
-> Another option that comes to mind would be to enable immediate mode only during
-> the get_temp() callback, to immediately read a value, and return to filtered
-> mode at the end. That might work, but I haven't tried yet.
+> What I am proposing is to have more intelligent helpers using the current simple
+> functions: essentially wrapping pci_epc_mem_alloc_addr()+pci_epc_map_addr() with
+> pci_epc_map(), and similar for unmap. That would greatly simplify the code of
+> EPF drivers that constantly need to map/unmap PCI address to serve IOs/transfers
+> as requested by the host/RP side. Developers would still be free to use the
+> verbose path if they wish to do so, modulo the mandatory fixes for gracefully
+> handling alignment and allocation size, for which we need either to modify
+> pci_epc_mem_alloc_addr() or new functions.
 > 
 
-The issue with keeping all as filtered mode comes when we want to add MediaTek
-SVS functionality which, on most SoCs, is used only for the GPU (apart from the
-MT8183 which has cpu+gpu svs).
+I agree with this new API idea. Handling the alignment restrictions in the EPF
+core reduces code duplication among the EPF drivers.
 
-It makes sense to cache the readings, but I'm concerned about possible
-instabilities that we could get through the SVS voltage adjustment flows, as
-that algorithm takes current IP temperature to shape the DVFS "V" curve; please
-keep in mind that this concern is valid only if temperature readings get updated
-"very slowly" (>100ms would be too slow).
+- Mani
 
-So, point of the situation:
-  - Filtered mode, less than 100ms per temperature reading -> cache it, it's ok
-  - Filtered mode, more than 100ms per temp reading -> switch GPU to Immediate mode.
+> Note about the rk3399 EP controller: it has 1MB memory windows that can be used
+> to map up to 1MB of PCI address space. This limits comes from the fact that the
+> mapping controller uses at most the lower 22 bits from the local CPU address as
+> the lower bits for the PCI address. But this also implies that the offset (the
+> alignment) into the memory window must be equal to the mask of the PCI address
+> to map over the number of bits of PCI address that will change over the range of
+> addresses mapped (the number of bits of address changing over the address range
+> [PCI_addr .. PCI_addr + mapping_size - 1]).
+> 
+> Notifying this alignment need to an EPF driver can only be done using an API.
+> Cannot do that with epc_features fields.
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research
+> 
 
-Your call.
-
-Keep up the good work!
-- Angelo
-
+-- 
+மணிவண்ணன் சதாசிவம்
