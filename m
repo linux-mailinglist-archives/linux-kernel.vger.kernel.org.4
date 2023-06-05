@@ -2,116 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F137226D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01647226D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbjFENFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S233899AbjFENF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbjFENEv (ORCPT
+        with ESMTP id S233966AbjFENE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:04:51 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD2BEC7;
-        Mon,  5 Jun 2023 06:04:43 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8CxaPFq3X1k7BgAAA--.513S3;
-        Mon, 05 Jun 2023 21:04:42 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauVp3X1kI4EAAA--.2345S3;
-        Mon, 05 Jun 2023 21:04:42 +0800 (CST)
-Message-ID: <0f4a5125-5028-2070-76a6-a901a7ddaddb@loongson.cn>
-Date:   Mon, 5 Jun 2023 21:04:41 +0800
+        Mon, 5 Jun 2023 09:04:57 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52D1CD;
+        Mon,  5 Jun 2023 06:04:56 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-655d1fc8ad8so827507b3a.1;
+        Mon, 05 Jun 2023 06:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685970296; x=1688562296;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PwnioUR0ZjoyRGzrp5k5mjXo7WPIskiZGVP9H/Ozl1w=;
+        b=ikWXlcNmcjTchboSGAIljatHvSG1Z4LVpxBFkZ9O1es07NKSLDjhDfsLYrkfj8J8re
+         JLiOzSxDdNlnBMcKLYmB/eFroD/t8DpaSJZLaNskfnHACkfLND8sljVzpqiA3FtKk8Hf
+         bl3rK/ew+hxR6lwA9ZX/w9ulk67kwP7kJZ0katk94Gpvw76pFfAoi7r6QuYK/3QqFFbD
+         +TQ5MtVRhCOp47VRQeNhtXolsiEpyYmSczhBNeDAZh5T7LjPM1S21GZa9GtZRTVMjgeP
+         5WdqyznmnMtecDf/2/bMpuU9NUZKDFS1F1MIqN/S9qCaEkUnd/7tViMEV3qLUiR6vk4R
+         49KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685970296; x=1688562296;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PwnioUR0ZjoyRGzrp5k5mjXo7WPIskiZGVP9H/Ozl1w=;
+        b=dQ2XCtinI+BmghI4xuYbqxXoa9naxvG7fvHyGG9A1dy9wM1Rx6Q8t/pxmdPWYGqPMH
+         L0GYwjSBlxewz9kMSZ+CF2bbhWTfWKhGQSU5WdtpppHlT9PVj5vOwVPmPpjBW29Wq7Y8
+         vXRQv+P0rrHUFm2o/kA7/qIGJ9mlKAeGEjqTOUg6T5939JQR9HYnEhHYfKrQ4D/8D0nR
+         fs3wimI5XO0GAfN0Ak7We36ugnWYI05w35KlTz2br7Tz7xvc4SDoMU8QAQjnXkGn3MtL
+         eLySoN2Znt9h13TWLGiyhZtyhSErsj0AZZr3xKNgZNoOP48O8YOcnEAXQEhZvkJvLepN
+         HWQw==
+X-Gm-Message-State: AC+VfDy3PQXncpcpxmaH5kaXut3IfGw6NPa8SRsoZxPXur3udoE5WtiO
+        El+AZdjgKw8aEnfKy8zl6Gh1rfkZVhiepA==
+X-Google-Smtp-Source: ACHHUZ7miuHK34uaTVj6DOG0mrTSKpA9i8bxkHFhaSRxgIqRpgqzRZ/Rou6isPLiTMK58927DUHTOQ==
+X-Received: by 2002:a05:6a20:1587:b0:115:e834:7bc1 with SMTP id h7-20020a056a20158700b00115e8347bc1mr1427573pzj.30.1685970295850;
+        Mon, 05 Jun 2023 06:04:55 -0700 (PDT)
+Received: from localhost.localdomain ([162.219.34.248])
+        by smtp.gmail.com with ESMTPSA id j2-20020aa78d02000000b0065ebeb9bb23sm302300pfe.149.2023.06.05.06.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 06:04:54 -0700 (PDT)
+From:   Zou Cao <zoucaox@gmail.com>
+X-Google-Original-From: Zou Cao <zoucao@kuaishou.com>
+To:     linux-kernel@vger.kernel.org, tj@kernel.org
+Cc:     cgroups@vger.kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, brauner@kernel.org,
+        Zou Cao <zoucao@kuaishou.com>
+Subject: [PATCH] cgroup: fixed the cset refcnt leak when fork() failed
+Date:   Mon,  5 Jun 2023 21:04:44 +0800
+Message-Id: <20230605130444.1421-1-zoucao@kuaishou.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 15/31] LoongArch: KVM: Implement vcpu status
- description
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-16-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-16-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxauVp3X1kI4EAAA--.2345S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFyxuF17tFykKw4rZF17CFX_yoW8Xr47pF
-        nrC3WjgrWrWwnIgw1fJr9xXw4aqrZ3G3WS9F9FqryYkFn8Krn5XFWrKrWDGFWvy34Fyr4I
-        vaySk3ZI9a90y3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-        XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
-        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUI0
-        eHUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
+TeamID: B1486294
 
-在 2023/5/30 09:52, Tianrui Zhao 写道:
-> Implement LoongArch vcpu status description such as idle exits counter,
-> signal exits counter, cpucfg exits counter, etc.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/kvm/vcpu.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> index c41de76d0a79..79599e69b2c9 100644
-> --- a/arch/loongarch/kvm/vcpu.c
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -12,6 +12,23 @@
->  #define CREATE_TRACE_POINTS
->  #include "trace.h"
->  
-> +const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-> +	KVM_GENERIC_VCPU_STATS(),
-> +	STATS_DESC_COUNTER(VCPU, idle_exits),
-> +	STATS_DESC_COUNTER(VCPU, signal_exits),
-> +	STATS_DESC_COUNTER(VCPU, int_exits),
-> +	STATS_DESC_COUNTER(VCPU, cpucfg_exits),
-> +};
-> +
-> +const struct kvm_stats_header kvm_vcpu_stats_header = {
-> +	.name_size = KVM_STATS_NAME_SIZE,
-> +	.num_desc = ARRAY_SIZE(kvm_vcpu_stats_desc),
-> +	.id_offset = sizeof(struct kvm_stats_header),
-> +	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_NAME_SIZE,
-> +	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_NAME_SIZE +
-> +		       sizeof(kvm_vcpu_stats_desc),
-> +};
-> +
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu)
->  {
->  	return !!(vcpu->arch.irq_pending) &&
+when fork, cset will be increased by commit "ef2c41cf38a7", the refcnt will
+be decrease by child exit, but when failed in fork(), this refcnt will
+be lost decrease in cgroup_cancel_fork as follow:
+
+copy_process
+     |
+cgroup_can_fork    //  increase the css refcount
+  ......
+  spin_lock_irq(&css_set_lock);
+  cset = task_css_setcurrent);
+  get_css_set(cset);
+  spin_unlock_irq&css_set_lock);
+  ......
+     |
+goto cgroup_cancel_fork    // if failed in  copy_process
+     |
+cgroup_cancel_fork  // lost the decrease refcount if flag not CLONE_INTO_CGROUP
+
+Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
+Signed-off-by: Zou Cao <zoucao@kuaishou.com>
+---
+ kernel/cgroup/cgroup.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index d18c2ef..5ecd706 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -6284,6 +6284,11 @@ void cgroup_cancel_fork(struct task_struct *child,
+ 		if (ss->cancel_fork)
+ 			ss->cancel_fork(child, kargs->cset);
+ 
++	if (!(kargs->flags & CLONE_INTO_CGROUP) &&
++			kargs->cset) {
++		put_css_set(kargs->cset);
++	}
++
+ 	cgroup_css_set_put_fork(kargs);
+ }
+ 
+-- 
+1.8.3.1
 
