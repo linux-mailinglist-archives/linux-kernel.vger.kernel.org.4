@@ -2,112 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E67F721F9E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C34721F4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjFEHdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S230161AbjFEHO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjFEHdZ (ORCPT
+        with ESMTP id S231392AbjFEHOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:33:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90C8CD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:33:18 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QZPtc5H8XztQWV;
-        Mon,  5 Jun 2023 15:12:08 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
- (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 5 Jun
- 2023 15:14:27 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <tglx@linutronix.de>, <dave.hansen@linux.intel.com>,
-        <hpa@zytor.com>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <linux-kernel@vger.kernel.org>, <xiexiuqi@huawei.com>,
-        <x86@kernel.org>, <liwei391@huawei.com>
-Subject: [PATCH] x86/microcode/AMD: shrink the size of amd_ucode_patch array
-Date:   Mon, 5 Jun 2023 15:12:56 +0800
-Message-ID: <20230605071256.1813504-1-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 03:14:04 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA23EE47;
+        Mon,  5 Jun 2023 00:13:42 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id A149020BC618; Mon,  5 Jun 2023 00:13:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A149020BC618
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1685949197;
+        bh=VnwuA4SKT0DIE2uS0aw8iGgaRmOgZDkkNsh8tdxtnxU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TvNjA9LZdCpCDGKLvEMtUgdRObcMH8/bmQL3Y/ErhDDgAHB8VApQDMQ3aPS8SyIuV
+         H3gv7mVtmLXYuMlA3bwoWs1OcE6ixwfJD23+DIqUWcg3DBlVyloS5B2/etA1QXPC5M
+         JIZ0rVY3HZ9eop5/znW1JLTf4Qf8bjT2P0j/TfyQ=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH v5] hv_netvsc: Allocate rx indirection table size dynamically
+Date:   Mon,  5 Jun 2023 00:13:16 -0700
+Message-Id: <1685949196-16175-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-About the commit <7ff6edf4fef3>, the amd_ucode_patch is expanded as
-two-dimensional array. When CONFIG_MAXSMP is enabled or CONFIG_NODES_SHIFT
-is set as 10, this array would occupy memory up to 12M.
+Allocate the size of rx indirection table dynamically in netvsc
+from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
+query instead of using a constant value of ITAB_NUM.
 
-Here we allocate amd_ucode_patch array dynamically in need instead of
-static declaration.
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
+Testcases:
+1. ethtool -x eth0 output
+2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
+3. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-SRIOV
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 ---
- arch/x86/kernel/cpu/microcode/amd.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Changes in v5:
+ * Follwoed the RCT format for varible declarations in rndix_filter.c
+---
+ drivers/net/hyperv/hyperv_net.h   |  5 ++++-
+ drivers/net/hyperv/netvsc_drv.c   | 10 ++++++----
+ drivers/net/hyperv/rndis_filter.c | 27 +++++++++++++++++++++++----
+ 3 files changed, 33 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index f5fdeb1e3606..b6cd6ce9c016 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -57,7 +57,8 @@ struct cont_desc {
- static u32 ucode_new_rev;
+diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
+index dd5919ec408b..c40868f287a9 100644
+--- a/drivers/net/hyperv/hyperv_net.h
++++ b/drivers/net/hyperv/hyperv_net.h
+@@ -74,6 +74,7 @@ struct ndis_recv_scale_cap { /* NDIS_RECEIVE_SCALE_CAPABILITIES */
+ #define NDIS_RSS_HASH_SECRET_KEY_MAX_SIZE_REVISION_2   40
  
- /* One blob per node. */
--static u8 amd_ucode_patch[MAX_NUMNODES][PATCH_MAX_SIZE];
-+static u8 amd_ucode_patch_0[PATCH_MAX_SIZE];
-+static u8 *amd_ucode_patch[MAX_NUMNODES] = { amd_ucode_patch_0 };
+ #define ITAB_NUM 128
++#define ITAB_NUM_MAX 256
  
- /*
-  * Microcode patch container file is prepended to the initrd in cpio
-@@ -420,17 +421,17 @@ static int __apply_microcode_amd(struct microcode_amd *mc)
- static bool early_apply_microcode(u32 cpuid_1_eax, void *ucode, size_t size, bool save_patch)
- {
- 	struct cont_desc desc = { 0 };
--	u8 (*patch)[PATCH_MAX_SIZE];
-+	u8 *patch;
- 	struct microcode_amd *mc;
- 	u32 rev, dummy, *new_rev;
- 	bool ret = false;
+ struct ndis_recv_scale_param { /* NDIS_RECEIVE_SCALE_PARAMETERS */
+ 	struct ndis_obj_header hdr;
+@@ -1034,7 +1035,9 @@ struct net_device_context {
  
- #ifdef CONFIG_X86_32
- 	new_rev = (u32 *)__pa_nodebug(&ucode_new_rev);
--	patch	= (u8 (*)[PATCH_MAX_SIZE])__pa_nodebug(&amd_ucode_patch);
-+	patch	= (u8 *)__pa_nodebug(amd_ucode_patch_0);
- #else
- 	new_rev = &ucode_new_rev;
--	patch	= &amd_ucode_patch[0];
-+	patch	= amd_ucode_patch_0;
- #endif
+ 	u32 tx_table[VRSS_SEND_TAB_SIZE];
  
- 	desc.cpuid_1_eax = cpuid_1_eax;
-@@ -881,8 +882,11 @@ static enum ucode_state load_microcode_amd(u8 family, const u8 *data, size_t siz
- 
- 		ret = UCODE_NEW;
- 
--		memset(&amd_ucode_patch[nid], 0, PATCH_MAX_SIZE);
--		memcpy(&amd_ucode_patch[nid], p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
-+		if (!amd_ucode_patch[nid])
-+			amd_ucode_patch[nid] = kmalloc(PATCH_MAX_SIZE, GFP_KERNEL);
+-	u16 rx_table[ITAB_NUM];
++	u16 *rx_table;
 +
-+		memset(amd_ucode_patch[nid], 0, PATCH_MAX_SIZE);
-+		memcpy(amd_ucode_patch[nid], p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
++	u32 rx_table_sz;
+ 
+ 	/* Ethtool settings */
+ 	u8 duplex;
+diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+index 0103ff914024..3ba3c8fb28a5 100644
+--- a/drivers/net/hyperv/netvsc_drv.c
++++ b/drivers/net/hyperv/netvsc_drv.c
+@@ -1747,7 +1747,9 @@ static u32 netvsc_get_rxfh_key_size(struct net_device *dev)
+ 
+ static u32 netvsc_rss_indir_size(struct net_device *dev)
+ {
+-	return ITAB_NUM;
++	struct net_device_context *ndc = netdev_priv(dev);
++
++	return ndc->rx_table_sz;
+ }
+ 
+ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
+@@ -1766,7 +1768,7 @@ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
+ 
+ 	rndis_dev = ndev->extension;
+ 	if (indir) {
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			indir[i] = ndc->rx_table[i];
  	}
  
- 	return ret;
+@@ -1792,11 +1794,11 @@ static int netvsc_set_rxfh(struct net_device *dev, const u32 *indir,
+ 
+ 	rndis_dev = ndev->extension;
+ 	if (indir) {
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			if (indir[i] >= ndev->num_chn)
+ 				return -EINVAL;
+ 
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			ndc->rx_table[i] = indir[i];
+ 	}
+ 
+diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
+index eea777ec2541..5a5dd5007590 100644
+--- a/drivers/net/hyperv/rndis_filter.c
++++ b/drivers/net/hyperv/rndis_filter.c
+@@ -21,6 +21,7 @@
+ #include <linux/rtnetlink.h>
+ #include <linux/ucs2_string.h>
+ #include <linux/string.h>
++#include <linux/slab.h>
+ 
+ #include "hyperv_net.h"
+ #include "netvsc_trace.h"
+@@ -927,7 +928,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
+ 	struct rndis_set_request *set;
+ 	struct rndis_set_complete *set_complete;
+ 	u32 extlen = sizeof(struct ndis_recv_scale_param) +
+-		     4 * ITAB_NUM + NETVSC_HASH_KEYLEN;
++		     4 * ndc->rx_table_sz + NETVSC_HASH_KEYLEN;
+ 	struct ndis_recv_scale_param *rssp;
+ 	u32 *itab;
+ 	u8 *keyp;
+@@ -953,7 +954,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
+ 	rssp->hashinfo = NDIS_HASH_FUNC_TOEPLITZ | NDIS_HASH_IPV4 |
+ 			 NDIS_HASH_TCP_IPV4 | NDIS_HASH_IPV6 |
+ 			 NDIS_HASH_TCP_IPV6;
+-	rssp->indirect_tabsize = 4*ITAB_NUM;
++	rssp->indirect_tabsize = 4 * ndc->rx_table_sz;
+ 	rssp->indirect_taboffset = sizeof(struct ndis_recv_scale_param);
+ 	rssp->hashkey_size = NETVSC_HASH_KEYLEN;
+ 	rssp->hashkey_offset = rssp->indirect_taboffset +
+@@ -961,7 +962,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
+ 
+ 	/* Set indirection table entries */
+ 	itab = (u32 *)(rssp + 1);
+-	for (i = 0; i < ITAB_NUM; i++)
++	for (i = 0; i < ndc->rx_table_sz; i++)
+ 		itab[i] = ndc->rx_table[i];
+ 
+ 	/* Set hask key values */
+@@ -1548,6 +1549,18 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
+ 	if (ret || rsscap.num_recv_que < 2)
+ 		goto out;
+ 
++	if (rsscap.num_indirect_tabent &&
++	    rsscap.num_indirect_tabent <= ITAB_NUM_MAX)
++		ndc->rx_table_sz = rsscap.num_indirect_tabent;
++	else
++		ndc->rx_table_sz = ITAB_NUM;
++
++	ndc->rx_table = kcalloc(ndc->rx_table_sz, sizeof(u16), GFP_KERNEL);
++	if (!ndc->rx_table) {
++		ret = -ENOMEM;
++		goto err_dev_remv;
++	}
++
+ 	/* This guarantees that num_possible_rss_qs <= num_online_cpus */
+ 	num_possible_rss_qs = min_t(u32, num_online_cpus(),
+ 				    rsscap.num_recv_que);
+@@ -1558,7 +1571,7 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
+ 	net_device->num_chn = min(net_device->max_chn, device_info->num_chn);
+ 
+ 	if (!netif_is_rxfh_configured(net)) {
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			ndc->rx_table[i] = ethtool_rxfh_indir_default(
+ 						i, net_device->num_chn);
+ 	}
+@@ -1596,11 +1609,17 @@ void rndis_filter_device_remove(struct hv_device *dev,
+ 				struct netvsc_device *net_dev)
+ {
+ 	struct rndis_device *rndis_dev = net_dev->extension;
++	struct net_device_context *ndc = netdev_priv(net);
++	struct net_device *net = hv_get_drvdata(dev);
+ 
+ 	/* Halt and release the rndis device */
+ 	rndis_filter_halt_device(net_dev, rndis_dev);
+ 
+ 	netvsc_device_remove(dev);
++
++	ndc->rx_table_sz = 0;
++	kfree(ndc->rx_table);
++	ndc->rx_table = NULL;
+ }
+ 
+ int rndis_filter_open(struct netvsc_device *nvdev)
 -- 
-2.25.1
+2.34.1
 
