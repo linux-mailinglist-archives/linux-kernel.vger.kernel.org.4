@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0365772272F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F82C722725
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbjFENQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        id S234005AbjFENPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbjFENOn (ORCPT
+        with ESMTP id S233990AbjFENPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:14:43 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B5610D;
-        Mon,  5 Jun 2023 06:14:38 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZYhq5LLMz9y4yN;
-        Mon,  5 Jun 2023 21:04:11 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHc+6p331kUnURAw--.3902S2;
-        Mon, 05 Jun 2023 14:14:24 +0100 (CET)
-Message-ID: <02a411f0b2cf4dd7908c8810035a166928870f3e.camel@huaweicloud.com>
-Subject: Re: [PATCH] evm: Complete description of evm_inode_setattr()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 05 Jun 2023 15:14:14 +0200
-In-Reply-To: <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
-References: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
-         <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
-         <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 5 Jun 2023 09:15:22 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DD383;
+        Mon,  5 Jun 2023 06:15:20 -0700 (PDT)
+X-GND-Sasl: maxime.chevallier@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685970918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ezVCXA59R6OoUuoJw4TkUJ8Lfny/r5hrMVf+Oit43HM=;
+        b=pFe/JDymlb8lWaJnLc+kVSQv2RGWrE5mG4o7pyvP3LBJ5Ypix7HyK1wfxtPo1LU+Mq62s+
+        xRdi5Pg+15iCku3Rx/BTziSPmQlJQOpOjlP0eh9SiWM3PnoIL/O1T61yprHFzySc6ilP2H
+        jmfxuqRP8U/FdZApLzD8W9mgqOC9eWuaIfYDmrUHPqC7wcj0GXdIDZbRyIo0Dk09L5v1Kr
+        UEiaAT+IPPC2FyGfv2iRQDK5zNGrRWJ4nKmvvaGJ/lYx0zecNYeQfhdE4LtUplA5aiziTp
+        Kln0ykC1Zef0iG561jiN1eHtpeiAH7WFw5WP9gmx/9f87HciFBXjcAY0dSFcEw==
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 661EE60010;
+        Mon,  5 Jun 2023 13:15:15 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 15:15:14 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH net-next v4 2/4] net: ethernet: altera-tse: Convert to
+ mdio-regmap and use PCS Lynx
+Message-ID: <20230605151514.20112956@pc-7.home>
+In-Reply-To: <20230601141454.67858-3-maxime.chevallier@bootlin.com>
+References: <20230601141454.67858-1-maxime.chevallier@bootlin.com>
+        <20230601141454.67858-3-maxime.chevallier@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAHc+6p331kUnURAw--.3902S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFWkXw1fCFW8Ar4rXryfCrg_yoWDCwb_ur
-        1jyr1fu3yDXFs7GrZ0gFW7Wrs29ayFvr90gw4DGrnxZwsxG3srXFs7KFWFvw1kGF48Ar9x
-        uFyftFZ8Cry2gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbo8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-        JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-        kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-        6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-        xhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o68wABsm
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-06-05 at 09:12 -0400, Mimi Zohar wrote:
-> On Mon, 2023-06-05 at 13:57 +0200, Roberto Sassu wrote:
-> > On Mon, 2023-03-06 at 11:40 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > Add the description for missing parameters of evm_inode_setattr() to
-> > > avoid the warning arising with W=n compile option.
-> > > 
-> > > Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
-> > > Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Hi Mimi
-> > 
-> > this probably got lost. It was also reviewed by Stefan:
-> > 
-> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> > 
-> > Could you please take it?
+Hi,
+
+On Thu,  1 Jun 2023 16:14:52 +0200
+Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
+
+> The newly introduced regmap-based MDIO driver allows for an easy mapping
+> of an mdiodevice onto the memory-mapped TSE PCS, which is actually a
+> Lynx PCS.
 > 
-> Thanks for the reminder.  In case kernel-doc changes are backported to
-> stable, I've added # v3.2+ and # v6.3+ respectively to the Fixes lines.
+> Convert Altera TSE to use this PCS instead of the pcs-altera-tse, which
+> is nothing more than a memory-mapped Lynx PCS.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+[ ... ]
 
-Thanks!
+> -	ret = request_and_map(pdev, "pcs", &pcs_res,
+> -			      &priv->pcs_base);
+> +	ret = request_and_map(pdev, "pcs", &pcs_res, &priv->pcs_base);
 
-> There are two other warnings in EVM.  Any chance you're planning on
-> fixing them as well?
+It turns out I'm missing the zeroing of pcs_regmap_cfg, which can trigger
+errors at probe time. I know this series has been applied, and that I can
+send a followup fix, but due to the missing regmap patch in the net-next
+tree, this series will break altera_tse and dwmac_socfpga anyway,as
+mentionned here (and in the cover):
 
-Yes, will do.
+https://lore.kernel.org/netdev/20230605142039.3f8d1530@pc-7.home/
 
-Roberto
+Is reverting the way to go then ?
+
+Best regards,
+
+Maxime
 
