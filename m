@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126ED72208F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA26722094
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjFEIIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S230329AbjFEIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjFEIIT (ORCPT
+        with ESMTP id S229974AbjFEIJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:08:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58508A1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 01:08:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD121611E6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 453B1C433EF;
-        Mon,  5 Jun 2023 08:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685952497;
-        bh=TpPjlkIU5EWObdMV+nSZFG8cwg9HbzjckLadCVt3k1I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OkBB8p7aQFZz1fRe9MXHNxHv4DKDVy3UOSy0DG9k3ykbAtkiudIIntqqEcOGyNmQJ
-         BiSk+A07iKDwgupsiINQ96xNs6ro1W8hoL99J37uXiHxPhiUKALpIX4lvxEYBBWl2x
-         CNcp2/kCEJBWkdSit/+vwSBet9u8mGtC+oV/eyY4TVSwgm04vO8M4EGVrBW4cgIr+5
-         AID8/GwHIQowmhK9TosI6J5U9VcrtIm6KEqojJ4muD48HDkENeesGUqPUPShBFzczD
-         1eGlXMiV+iEw/lgjWphpRxYVj0Kayd9Yg7h8+He4bpzJ4qSwu7Unzch1ONJSsMG3u8
-         bJb1KFkr9xmDA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q65GU-00081o-Cn; Mon, 05 Jun 2023 10:08:34 +0200
-Date:   Mon, 5 Jun 2023 10:08:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 1/2] ASoC: codecs: wsa883x: do not set can_multi_write
- flag
-Message-ID: <ZH2YAmBY-GNKABSB@hovoldconsulting.com>
-References: <20230523154605.4284-1-srinivas.kandagatla@linaro.org>
- <168492769030.49784.4719862081052299023.b4-ty@kernel.org>
+        Mon, 5 Jun 2023 04:09:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28636A1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 01:09:02 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1q65Gn-00021e-UX; Mon, 05 Jun 2023 10:08:53 +0200
+Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <pza@pengutronix.de>)
+        id 1q65Gi-0003OO-3S; Mon, 05 Jun 2023 10:08:48 +0200
+Date:   Mon, 5 Jun 2023 10:08:48 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Keith Zhao <keith.zhao@starfivetech.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>
+Subject: Re: [PATCH 9/9] drm/verisilicon: Add starfive hdmi driver
+Message-ID: <20230605080848.GA4802@pengutronix.de>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <20230602074043.33872-10-keith.zhao@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <168492769030.49784.4719862081052299023.b4-ty@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230602074043.33872-10-keith.zhao@starfivetech.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: pza@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,36 +75,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 12:28:10PM +0100, Mark Brown wrote:
-> On Tue, 23 May 2023 16:46:04 +0100, Srinivas Kandagatla wrote:
-> > regmap-sdw does not support multi register writes, so there is
-> > no point in setting this flag. This also leads to incorrect
-> > programming of WSA codecs with regmap_multi_reg_write() call.
-> > 
-> > This invalid configuration should have been rejected by regmap-sdw.
-> > 
-> > 
-> > [...]
-> 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-> 
-> Thanks!
-> 
-> [1/2] ASoC: codecs: wsa883x: do not set can_multi_write flag
->       commit: 40ba0411074485e2cf1bf8ee0f3db27bdff88394
-> [2/2] ASoC: codecs: wsa881x: do not set can_multi_write flag
->       commit: 6e7a6d4797ef521c0762914610ed682e102b9d36
+Hi Keith,
 
-These were merged for 6.5 but the corresponding sanity check for regmap
-has now been included in 6.4-rc5 which consequently breaks these codecs
-(similar for wcd938x-sdw):
+On Fri, Jun 02, 2023 at 03:40:43PM +0800, Keith Zhao wrote:
+> Add HDMI dirver for StarFive SoC JH7110.
+> 
+> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
+> ---
+>  drivers/gpu/drm/verisilicon/Kconfig         |  11 +
+>  drivers/gpu/drm/verisilicon/Makefile        |   1 +
+>  drivers/gpu/drm/verisilicon/starfive_hdmi.c | 928 ++++++++++++++++++++
+>  drivers/gpu/drm/verisilicon/starfive_hdmi.h | 296 +++++++
+>  drivers/gpu/drm/verisilicon/vs_drv.c        |   6 +
+>  drivers/gpu/drm/verisilicon/vs_drv.h        |   4 +
+>  6 files changed, 1246 insertions(+)
+>  create mode 100644 drivers/gpu/drm/verisilicon/starfive_hdmi.c
+>  create mode 100644 drivers/gpu/drm/verisilicon/starfive_hdmi.h
+> 
+[...]
+> diff --git a/drivers/gpu/drm/verisilicon/starfive_hdmi.c b/drivers/gpu/drm/verisilicon/starfive_hdmi.c
+> new file mode 100644
+> index 000000000000..128ecca03309
+> --- /dev/null
+> +++ b/drivers/gpu/drm/verisilicon/starfive_hdmi.c
+> @@ -0,0 +1,928 @@
+[...]
+> +static int starfive_hdmi_enable_clk_deassert_rst(struct device *dev, struct starfive_hdmi *hdmi)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(hdmi->sys_clk);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(dev, "Cannot enable HDMI sys clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(hdmi->mclk);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(dev, "Cannot enable HDMI mclk clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +	ret = clk_prepare_enable(hdmi->bclk);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(dev, "Cannot enable HDMI bclk clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +	ret = reset_control_deassert(hdmi->tx_rst);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to deassert tx_rst\n");
 
-[   11.443485] wsa883x-codec sdw:0:0217:0202:00:1: error -ENOTSUPP: regmap_init failed
-[   11.443525] wsa883x-codec sdw:0:0217:0202:00:1: Probe of wsa883x-codec failed: -524
-[   11.443554] wsa883x-codec: probe of sdw:0:0217:0202:00:1 failed with error -52
+The error paths should clk_disable_unprepare() enabled clocks.
 
-Is it possible to get also these fixes into 6.4 final?
+> +		return ret;
+> +	}
+> +	return 0;
+> +}
+> +
+[...]
+> +static int starfive_hdmi_get_clk_rst(struct device *dev, struct starfive_hdmi *hdmi)
+> +{
+> +	hdmi->sys_clk = devm_clk_get(dev, "sysclk");
+> +	if (IS_ERR(hdmi->sys_clk)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI sysclk clk\n");
+> +		return PTR_ERR(hdmi->sys_clk);
+> +	}
+> +	hdmi->mclk = devm_clk_get(dev, "mclk");
+> +	if (IS_ERR(hdmi->mclk)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI mclk clk\n");
+> +		return PTR_ERR(hdmi->mclk);
+> +	}
+> +	hdmi->bclk = devm_clk_get(dev, "bclk");
+> +	if (IS_ERR(hdmi->bclk)) {
+> +		DRM_DEV_ERROR(dev, "Unable to get HDMI bclk clk\n");
+> +		return PTR_ERR(hdmi->bclk);
+> +	}
+> +	hdmi->tx_rst = reset_control_get_shared(dev, "hdmi_tx");
 
-Johan
+Use devm_reset_control_get_shared() for consistency, otherwise this is missing
+a reset_control_put() somewhere.
+
+regards
+Philipp
