@@ -2,261 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E16D722D35
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C224D722D37
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235299AbjFERCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S234235AbjFERDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjFERBz (ORCPT
+        with ESMTP id S232856AbjFERDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:01:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F0A0A6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:01:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90EA015BF;
-        Mon,  5 Jun 2023 10:02:36 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0F4753F587;
-        Mon,  5 Jun 2023 10:01:49 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     will@kernel.org
-Cc:     mark.rutland@arm.com, suzuki.poulose@arm.com,
-        bwicaksono@nvidia.com, ilkka@os.amperecomputing.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] perf/arm_cspmu: Decouple APMT dependency
-Date:   Mon,  5 Jun 2023 18:01:34 +0100
-Message-Id: <88f97268603e1aa6016d178982a1dc2861f6770d.1685983270.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
-In-Reply-To: <cover.1685983270.git.robin.murphy@arm.com>
-References: <cover.1685983270.git.robin.murphy@arm.com>
+        Mon, 5 Jun 2023 13:03:02 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4828BE62;
+        Mon,  5 Jun 2023 10:02:35 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 355H2Nd1091456;
+        Mon, 5 Jun 2023 12:02:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685984543;
+        bh=RuYR7IYFkECl4W0iqlW22Tj9fVd8u3TlObzGxgDPA0k=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=fuPwlMcTMQ2PKeUKbN/T2tLcs3zh1vrkVnK7eOkDqMv/UqIx8MdSMI8vHgJr7XDH7
+         uapWuTgDCLQt0V0hCYVatpuCiVrgMlt3Z/xLjZmspNyKf+sYOpmt7aU+XZjV0lQJx5
+         MPLbqhw1/LhdilpBe4LuG/tQ0VcCzr4KG24n0Erk=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 355H2N8t041575
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 5 Jun 2023 12:02:23 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
+ Jun 2023 12:02:23 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 5 Jun 2023 12:02:23 -0500
+Received: from [10.249.141.75] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 355H2JGl083839;
+        Mon, 5 Jun 2023 12:02:20 -0500
+Message-ID: <720c8c43-9a95-d7b5-3267-405ff0149eea@ti.com>
+Date:   Mon, 5 Jun 2023 22:32:18 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 08/12] arm64: dts: ti: k3-am64-evm: Fixup reference to
+ phandles array
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, <u-kumar1@ti.com>
+References: <20230601152636.858553-1-nm@ti.com>
+ <20230601152636.858553-9-nm@ti.com>
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+In-Reply-To: <20230601152636.858553-9-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functional paths of the driver need not care about ACPI, so abstract
-the property of atomic doubleword access as its own flag (repacking the
-structure for a better fit). We also do not need to go poking directly
-at the APMT for standard resources which the ACPI layer has already
-dealt with, so deal with the optional MMIO page and interrupt in the
-normal firmware-agnostic manner. The few remaining portions of probing
-that *are* APMT-specific can still easily retrieve the APMT pointer as
-needed without us having to carry a duplicate copy around everywhere.
+Hi Nishanth
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+On 6/1/2023 8:56 PM, Nishanth Menon wrote:
+> When referring to array of phandles, using <> to separate the array
+> entries is better notation as it makes potential errors with phandle and
+> cell arguments easier to catch. Fix the outliers to be consistent with
+> the rest of the usage.
+>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/k3-am642-evm.dts | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+> index 91bdc6026d1f..fef68a778ac9 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+> @@ -467,8 +467,8 @@ &usb0 {
+>   
+>   &cpsw3g {
+>   	pinctrl-names = "default";
+> -	pinctrl-0 = <&rgmii1_pins_default
+> -		     &rgmii2_pins_default>;
+> +	pinctrl-0 = <&rgmii1_pins_default>,
+> +		    <&rgmii2_pins_default>;
 
----
-v2: Fix platdata dereferences, clean up now-unused acpi.h include too.
----
- drivers/perf/arm_cspmu/arm_cspmu.c | 54 ++++++++++--------------------
- drivers/perf/arm_cspmu/arm_cspmu.h |  5 ++-
- 2 files changed, 19 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-index 3b91115c376d..38e1170af347 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.c
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-@@ -100,10 +100,6 @@
- #define ARM_CSPMU_ACTIVE_CPU_MASK		0x0
- #define ARM_CSPMU_ASSOCIATED_CPU_MASK		0x1
- 
--/* Check if field f in flags is set with value v */
--#define CHECK_APMT_FLAG(flags, f, v) \
--	((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
--
- /* Check and use default if implementer doesn't provide attribute callback */
- #define CHECK_DEFAULT_IMPL_OPS(ops, callback)			\
- 	do {							\
-@@ -121,6 +117,11 @@
- 
- static unsigned long arm_cspmu_cpuhp_state;
- 
-+static struct acpi_apmt_node *arm_cspmu_apmt_node(struct device *dev)
-+{
-+	return *(struct acpi_apmt_node **)dev_get_platdata(dev);
-+}
-+
- /*
-  * In CoreSight PMU architecture, all of the MMIO registers are 32-bit except
-  * counter register. The counter register can be implemented as 32-bit or 64-bit
-@@ -155,12 +156,6 @@ static u64 read_reg64_hilohi(const void __iomem *addr, u32 max_poll_count)
- 	return val;
- }
- 
--/* Check if PMU supports 64-bit single copy atomic. */
--static inline bool supports_64bit_atomics(const struct arm_cspmu *cspmu)
--{
--	return CHECK_APMT_FLAG(cspmu->apmt_node->flags, ATOMIC, SUPP);
--}
--
- /* Check if cycle counter is supported. */
- static inline bool supports_cycle_counter(const struct arm_cspmu *cspmu)
- {
-@@ -319,7 +314,7 @@ static const char *arm_cspmu_get_name(const struct arm_cspmu *cspmu)
- 	static atomic_t pmu_idx[ACPI_APMT_NODE_TYPE_COUNT] = { 0 };
- 
- 	dev = cspmu->dev;
--	apmt_node = cspmu->apmt_node;
-+	apmt_node = arm_cspmu_apmt_node(dev);
- 	pmu_type = apmt_node->type;
- 
- 	if (pmu_type >= ACPI_APMT_NODE_TYPE_COUNT) {
-@@ -396,8 +391,8 @@ static const struct impl_match impl_match[] = {
- static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
- {
- 	int ret;
--	struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
- 	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
-+	struct acpi_apmt_node *apmt_node = arm_cspmu_apmt_node(cspmu->dev);
- 	const struct impl_match *match = impl_match;
- 
- 	/*
-@@ -719,7 +714,7 @@ static u64 arm_cspmu_read_counter(struct perf_event *event)
- 		offset = counter_offset(sizeof(u64), event->hw.idx);
- 		counter_addr = cspmu->base1 + offset;
- 
--		return supports_64bit_atomics(cspmu) ?
-+		return cspmu->has_atomic_dword ?
- 			       readq(counter_addr) :
- 			       read_reg64_hilohi(counter_addr, HILOHI_MAX_POLL);
- 	}
-@@ -910,24 +905,18 @@ static struct arm_cspmu *arm_cspmu_alloc(struct platform_device *pdev)
- {
- 	struct acpi_apmt_node *apmt_node;
- 	struct arm_cspmu *cspmu;
--	struct device *dev;
--
--	dev = &pdev->dev;
--	apmt_node = *(struct acpi_apmt_node **)dev_get_platdata(dev);
--	if (!apmt_node) {
--		dev_err(dev, "failed to get APMT node\n");
--		return NULL;
--	}
-+	struct device *dev = &pdev->dev;
- 
- 	cspmu = devm_kzalloc(dev, sizeof(*cspmu), GFP_KERNEL);
- 	if (!cspmu)
- 		return NULL;
- 
- 	cspmu->dev = dev;
--	cspmu->apmt_node = apmt_node;
--
- 	platform_set_drvdata(pdev, cspmu);
- 
-+	apmt_node = arm_cspmu_apmt_node(dev);
-+	cspmu->has_atomic_dword = apmt_node->flags & ACPI_APMT_FLAGS_ATOMIC;
-+
- 	return cspmu;
- }
- 
-@@ -935,11 +924,9 @@ static int arm_cspmu_init_mmio(struct arm_cspmu *cspmu)
- {
- 	struct device *dev;
- 	struct platform_device *pdev;
--	struct acpi_apmt_node *apmt_node;
- 
- 	dev = cspmu->dev;
- 	pdev = to_platform_device(dev);
--	apmt_node = cspmu->apmt_node;
- 
- 	/* Base address for page 0. */
- 	cspmu->base0 = devm_platform_ioremap_resource(pdev, 0);
-@@ -950,7 +937,7 @@ static int arm_cspmu_init_mmio(struct arm_cspmu *cspmu)
- 
- 	/* Base address for page 1 if supported. Otherwise point to page 0. */
- 	cspmu->base1 = cspmu->base0;
--	if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
-+	if (platform_get_resource(pdev, IORESOURCE_MEM, 1)) {
- 		cspmu->base1 = devm_platform_ioremap_resource(pdev, 1);
- 		if (IS_ERR(cspmu->base1)) {
- 			dev_err(dev, "ioremap failed for page-1 resource\n");
-@@ -1047,19 +1034,14 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
- 	int irq, ret;
- 	struct device *dev;
- 	struct platform_device *pdev;
--	struct acpi_apmt_node *apmt_node;
- 
- 	dev = cspmu->dev;
- 	pdev = to_platform_device(dev);
--	apmt_node = cspmu->apmt_node;
- 
- 	/* Skip IRQ request if the PMU does not support overflow interrupt. */
--	if (apmt_node->ovflw_irq == 0)
--		return 0;
--
--	irq = platform_get_irq(pdev, 0);
-+	irq = platform_get_irq_optional(pdev, 0);
- 	if (irq < 0)
--		return irq;
-+		return irq == -ENXIO ? 0 : irq;
- 
- 	ret = devm_request_irq(dev, irq, arm_cspmu_handle_irq,
- 			       IRQF_NOBALANCING | IRQF_NO_THREAD, dev_name(dev),
-@@ -1103,13 +1085,11 @@ static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
- 
- static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
- {
--	struct device *dev;
- 	struct acpi_apmt_node *apmt_node;
- 	int affinity_flag;
- 	int cpu;
- 
--	dev = cspmu->pmu.dev;
--	apmt_node = cspmu->apmt_node;
-+	apmt_node = arm_cspmu_apmt_node(cspmu->dev);
- 	affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
- 
- 	if (affinity_flag == ACPI_APMT_FLAGS_AFFINITY_PROC) {
-@@ -1131,7 +1111,7 @@ static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
- 	}
- 
- 	if (cpumask_empty(&cspmu->associated_cpus)) {
--		dev_dbg(dev, "No cpu associated with the PMU\n");
-+		dev_dbg(cspmu->dev, "No cpu associated with the PMU\n");
- 		return -ENODEV;
- 	}
- 
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
-index 51323b175a4a..83df53d1c132 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.h
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.h
-@@ -8,7 +8,6 @@
- #ifndef __ARM_CSPMU_H__
- #define __ARM_CSPMU_H__
- 
--#include <linux/acpi.h>
- #include <linux/bitfield.h>
- #include <linux/cpumask.h>
- #include <linux/device.h>
-@@ -118,16 +117,16 @@ struct arm_cspmu_impl {
- struct arm_cspmu {
- 	struct pmu pmu;
- 	struct device *dev;
--	struct acpi_apmt_node *apmt_node;
- 	const char *name;
- 	const char *identifier;
- 	void __iomem *base0;
- 	void __iomem *base1;
--	int irq;
- 	cpumask_t associated_cpus;
- 	cpumask_t active_cpu;
- 	struct hlist_node cpuhp_node;
-+	int irq;
- 
-+	bool has_atomic_dword;
- 	u32 pmcfgr;
- 	u32 num_logical_ctrs;
- 	u32 num_set_clr_reg;
--- 
-2.39.2.101.g768bb238c484.dirty
+Please see, if  pinctrl-0 can be defined in one line, instead of two, to 
+be inline with most of changes in this series.
 
+> [..]
