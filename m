@@ -2,281 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555457224B0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F597224B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjFELf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
+        id S232475AbjFELgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFELfZ (ORCPT
+        with ESMTP id S232449AbjFELgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:35:25 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F0B99;
-        Mon,  5 Jun 2023 04:35:23 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q68UW-0001j2-C3; Mon, 05 Jun 2023 13:35:16 +0200
-Message-ID: <31e7fbbb-3f66-0b2b-804d-1fb61cc62a59@leemhuis.info>
-Date:   Mon, 5 Jun 2023 13:35:15 +0200
+        Mon, 5 Jun 2023 07:36:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7699
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685964961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kYARy8HibsJRuVCsxN/w1opXBP1A7Z939kJomrPeo3k=;
+        b=gx4+vO5yukSO1rHywesm9BglIwuDitnv5aHOAz/JdDAZEmHmFi062i9Ag/BEpoDFiCHf2e
+        GyYbEXPU3NkinCbbVHle0LBnEx1H8PdKDCtxHz8a7ghK17EQG0Q/5bDmL2iFH697T1hJxO
+        KyUzoZPnyWDTJslsoyH67IpvM/7MZvo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-177-u6tKp_a8NAyyiNa5KeGhjA-1; Mon, 05 Jun 2023 07:36:00 -0400
+X-MC-Unique: u6tKp_a8NAyyiNa5KeGhjA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f5ec8aac77so27909505e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:36:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685964959; x=1688556959;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kYARy8HibsJRuVCsxN/w1opXBP1A7Z939kJomrPeo3k=;
+        b=iN4V96FBXrFV81OQElIvNcr0lDnEXzsMUF9mGPMgOZLpvgUnyaxntj+BpdWCqx68/y
+         XD7riF1G4yjWx2tRv3z7ty3xxrDD5G+uoO6FjfsvbEMaEWz7T6PnG/o7uEtJCi8QzWzL
+         W/Exua0P1nO66fLqbIc9WqBP53I9dvPh1UgvURHE6sIQIoO9u0KTtjwziSoqirqESNm1
+         1gXUPWav6BVuLC+wGnU1XRbMP+5DKCjcXv53cqzPB0t31y0eG2e3rioxU0INq3ajl98J
+         YZyHRTAQpb7zd05dmsdN4Inq0Iwjc9yQoymPhTRxr0WPefBSkaV88BY2pu5TEnNAdfR8
+         re8A==
+X-Gm-Message-State: AC+VfDzLXTAwO4Tlnvp0Pen0KUAUuJLLF3IAbN161KJKWHaWXZHnjruz
+        KjA1usCrT/URwAoQRmqgIErAn1zlRtmOp1WumtU0uoc7Im2cJf9aDYJu+4fkQqS/KEVp4o8BS04
+        0JaD9pmiHCOhWaNJqhJGJk4ZR
+X-Received: by 2002:a1c:7208:0:b0:3f7:4961:52ad with SMTP id n8-20020a1c7208000000b003f7496152admr2513978wmc.3.1685964959155;
+        Mon, 05 Jun 2023 04:35:59 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4kqLKmA6Uaca3flnGm41wNf/22uPch19FG6pqRuK+wk+si/v/bT8+LCR0C/BaP0urg5ol3tQ==
+X-Received: by 2002:a1c:7208:0:b0:3f7:4961:52ad with SMTP id n8-20020a1c7208000000b003f7496152admr2513963wmc.3.1685964958842;
+        Mon, 05 Jun 2023 04:35:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
+        by smtp.gmail.com with ESMTPSA id n2-20020a5d4c42000000b00306415ac69asm9435530wrt.15.2023.06.05.04.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:35:58 -0700 (PDT)
+Message-ID: <0764cf72-26fe-627b-f56c-b0d2629bc9e3@redhat.com>
+Date:   Mon, 5 Jun 2023 13:35:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
- drm_kms_helper_poll_disable during suspend
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Janne Grunau <j@jannau.net>, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-        daniel@ffwll.ch, neil.armstrong@linaro.org, tony.luck@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
-        regressions@lists.linux.dev, zongmin zhou <zhouzongmin@kylinos.cn>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
- <20230420200148.GD3280@jannau.net>
- <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
- <1682386644754589.204.seg@mailgw>
- <1186d62a5fe7f2aa6e06f06a3dc7605c0072f1eb.camel@kylinos.cn>
- <CAA8EJppmUtuhAF+VHPh3Q8tNYp1m4T6P7dZ0wYZ8Vzwo0DF6cg@mail.gmail.com>
- <6599319fea8ed1e3d6968e5b986661f0cf175902.camel@kylinos.cn>
- <48deb3fa-1784-a08d-aa8c-93ccf63a4aba@leemhuis.info>
-In-Reply-To: <48deb3fa-1784-a08d-aa8c-93ccf63a4aba@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685964923;8d0b85c2;
-X-HE-SMSGID: 1q68UW-0001j2-C3
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 02/11] selftests/mm: fix unused variable warnings in
+ hugetlb-madvise.c, migration.c
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230603021558.95299-1-jhubbard@nvidia.com>
+ <20230603021558.95299-3-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230603021558.95299-3-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.05.23 17:15, Linux regression tracking (Thorsten Leemhuis) wrote:
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
+On 03.06.23 04:15, John Hubbard wrote:
+> Dummy variables are required in order to make these two (similar)
+> routines work, so in both cases, declare the variables as volatile in
+> order to avoid the clang compiler warning.
 > 
-> Dmitry, was any progress made to address this regression? Doesn't look
-> like it, but I strongly suspect I'm missing something,
+> Furthermore, in order to ensure that each test actually does what is
+> intended, add an asm volatile invocation (thanks to David Hildenbrand
+> for the suggestion), with a clarifying comment so that it survives
+> future maintenance.
+> 
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/mm/hugetlb-madvise.c | 8 ++++++--
+>   tools/testing/selftests/mm/migration.c       | 5 ++++-
+>   2 files changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index 28426e30d9bc..d55322df4b73 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -65,11 +65,15 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
+>   
+>   void read_fault_pages(void *addr, unsigned long nr_pages)
+>   {
+> -	unsigned long dummy = 0;
+> +	volatile unsigned long dummy = 0;
+>   	unsigned long i;
+>   
+> -	for (i = 0; i < nr_pages; i++)
+> +	for (i = 0; i < nr_pages; i++) {
+>   		dummy += *((unsigned long *)(addr + (i * huge_page_size)));
+> +
+> +		/* Prevent the compiler from optimizing out the entire loop: */
+> +		asm volatile("" : "+r" (dummy));
+> +	}
+>   }
+>   
+>   int main(int argc, char **argv)
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index 1cec8425e3ca..379581567f27 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -95,12 +95,15 @@ int migrate(uint64_t *ptr, int n1, int n2)
+>   
+>   void *access_mem(void *ptr)
+>   {
+> -	uint64_t y = 0;
+> +	volatile uint64_t y = 0;
+>   	volatile uint64_t *x = ptr;
+>   
+>   	while (1) {
+>   		pthread_testcancel();
+>   		y += *x;
+> +
+> +		/* Prevent the compiler from optimizing out the writes to y: */
+> +		asm volatile("" : "+r" (y));
+>   	}
+>   
+>   	return NULL;
 
-FWIW, I'm dropping this from the regression tracking. It might be still
-around, but it's a warning and nothing that really breaks things afaics.
+With the asm, I think the "volatile" might be completely unnecessary. 
+But it doesn't hurt.
 
-Please holler if I got this wrong and think it's something that needs to
-be fixed to ensure the "no regressions" rule is adhered.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-#regzbot inconclusive: a warn() without serious impact, see discussion
-#regzbot ignore-activity
+-- 
+Cheers,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+David / dhildenb
 
-> as I'm not really
-> sure if I properly understood this thread. It sounded a bit like
-> a4e771729a51 should be reverted for now until all
-> drm_kms_helper_poll_disable() calls have been verified. Is that right?
-> Or did somebody already verify and fix all of them with bugs?
->
-> On 28.04.23 03:17, zongmin zhou wrote:
->> On Wed, 2023-04-26 at 16:10 +0300, Dmitry Baryshkov wrote:
->>> On Wed, 26 Apr 2023 at 12:09, zongmin zhou <zhouzongmin@kylinos.cn>
->>> wrote:
->>>> On Sun, 2023-04-23 at 22:51 +0200, Janne Grunau wrote:
->>>>> On 2023-04-20 23:07:01 +0300, Dmitry Baryshkov wrote:
->>>>>> On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net>
->>>>>> wrote:
->>>>>>>
->>>>>>> On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
->>>>>>>> When drivers call drm_kms_helper_poll_disable from
->>>>>>>> their device suspend implementation without enabled output
->>>>>>>> polling before,
->>>>>>>> following warning will be reported,due to work->func not be
->>>>>>>> initialized:
->>>>>>>
->>>>>>> we see the same warning with the wpork in progress kms driver
->>>>>>> for
->>>>>>> apple
->>>>>>> silicon SoCs. The connectors do not need to polled so the
->>>>>>> driver
->>>>>>> never
->>>>>>> calls drm_kms_helper_poll_init().
->>>>>>>
->>>>>>>> [   55.141361] WARNING: CPU: 3 PID: 372 at
->>>>>>>> kernel/workqueue.c:3066 __flush_work+0x22f/0x240
->>>>>>>> [   55.141382] Modules linked in: nls_iso8859_1
->>>>>>>> snd_hda_codec_generic ledtrig_audio snd_hda_intel
->>>>>>>> snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec
->>>>>>>> snd_hda_core
->>>>>>>> snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event
->>>>>>>> snd_rawmidi
->>>>>>>> snd_seq intel_rapl_msr intel_rapl_common bochs
->>>>>>>> drm_vram_helper
->>>>>>>> drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul
->>>>>>>> snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3
->>>>>>>> aesni_intel drm_kms_helper joydev input_leds syscopyarea
->>>>>>>> crypto_simd snd cryptd sysfillrect sysimgblt mac_hid
->>>>>>>> serio_raw
->>>>>>>> soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp
->>>>>>>> parport drm ramoops reed_solomon pstore_blk pstore_zone
->>>>>>>> efi_pstore virtio_rng ip_tables x_tables autofs4
->>>>>>>> hid_generic
->>>>>>>> usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse
->>>>>>>> virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover
->>>>>>>> virtio_blk xhci_pci_renesas failover
->>>>>>>> [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not
->>>>>>>> tainted
->>>>>>>> 6.2.0-rc6+ #16
->>>>>>>> [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9,
->>>>>>>> 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org
->>>>>>>> 04/01/2014
->>>>>>>> [   55.141435] Workqueue: events_unbound async_run_entry_fn
->>>>>>>> [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
->>>>>>>> [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff
->>>>>>>> ff
->>>>>>>> 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff
->>>>>>>> ff
->>>>>>>> 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2
->>>>>>>> 54
->>>>>>>> d8 00 66 90 90 90 90 90 90
->>>>>>>> [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
->>>>>>>> [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000
->>>>>>>> RCX:
->>>>>>>> ffffffff9b72bcbe
->>>>>>>> [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001
->>>>>>>> RDI:
->>>>>>>> ff3ea01e4265e330
->>>>>>>> [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000
->>>>>>>> R09:
->>>>>>>> 8080808080808080
->>>>>>>> [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f
->>>>>>>> R12:
->>>>>>>> ff3ea01e4265e330
->>>>>>>> [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80
->>>>>>>> R15:
->>>>>>>> 0000000000000001
->>>>>>>> [   55.141455] FS:  0000000000000000(0000)
->>>>>>>> GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
->>>>>>>> [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0:
->>>>>>>> 0000000080050033
->>>>>>>> [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005
->>>>>>>> CR4:
->>>>>>>> 0000000000771ee0
->>>>>>>> [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000
->>>>>>>> DR2:
->>>>>>>> 0000000000000000
->>>>>>>> [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0
->>>>>>>> DR7:
->>>>>>>> 0000000000000400
->>>>>>>> [   55.141466] PKRU: 55555554
->>>>>>>> [   55.141467] Call Trace:
->>>>>>>> [   55.141469]  <TASK>
->>>>>>>> [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
->>>>>>>> [   55.141478]  ? mptcp_seq_show+0xe0/0x180
->>>>>>>> [   55.141484]  __cancel_work_timer+0x124/0x1b0
->>>>>>>> [   55.141487]  cancel_delayed_work_sync+0x17/0x20
->>>>>>>> [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40
->>>>>>>> [drm_kms_helper]
->>>>>>>> [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90
->>>>>>>> [drm_kms_helper]
->>>>>>>> [   55.141531]  ? __pm_runtime_resume+0x64/0x90
->>>>>>>> [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
->>>>>>>> [   55.141540]  pci_pm_suspend+0x8b/0x1b0
->>>>>>>> [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
->>>>>>>> [   55.141547]  dpm_run_callback+0x4c/0x160
->>>>>>>> [   55.141550]  __device_suspend+0x14c/0x4c0
->>>>>>>> [   55.141553]  async_suspend+0x24/0xa0
->>>>>>>> [   55.141555]  async_run_entry_fn+0x34/0x120
->>>>>>>> [   55.141557]  process_one_work+0x21a/0x3f0
->>>>>>>> [   55.141560]  worker_thread+0x4e/0x3c0
->>>>>>>> [   55.141563]  ? __pfx_worker_thread+0x10/0x10
->>>>>>>> [   55.141565]  kthread+0xf2/0x120
->>>>>>>> [   55.141568]  ? __pfx_kthread+0x10/0x10
->>>>>>>> [   55.141570]  ret_from_fork+0x29/0x50
->>>>>>>> [   55.141575]  </TASK>
->>>>>>>> [   55.141575] ---[ end trace 0000000000000000 ]---
->>>>>>>>
->>>>>>>> Fixes: a4e771729a51 ("drm/probe_helper: sort out
->>>>>>>> poll_running
->>>>>>>> vs poll_enabled")
->>>>>>>> Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
->>>>>>>> ---
->>>>>>>>  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
->>>>>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/gpu/drm/drm_probe_helper.c
->>>>>>>> b/drivers/gpu/drm/drm_probe_helper.c
->>>>>>>> index 8127be134c39..ac72b18e2257 100644
->>>>>>>> --- a/drivers/gpu/drm/drm_probe_helper.c
->>>>>>>> +++ b/drivers/gpu/drm/drm_probe_helper.c
->>>>>>>> @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct
->>>>>>>> drm_device *dev)
->>>>>>>>       if (dev->mode_config.poll_running)
->>>>>>>>               drm_kms_helper_disable_hpd(dev);
->>>>>>>>
->>>>>>>> -     cancel_delayed_work_sync(&dev-
->>>>>>>>> mode_config.output_poll_work);
->>>>>>>> +     if (dev->mode_config.poll_enabled)
->>>>>>>> +             cancel_delayed_work_sync(&dev-
->>>>>>>>> mode_config.output_poll_work);
->>>>>>>
->>>>>>> Checking for dev->mode_config.poll_enabled at the start of
->>>>>>> the
->>>>>>> function
->>>>>>> and return early if it is not true looks more in style with
->>>>>>> the
->>>>>>> rest of
->>>>>>> drm_probe_helper.c.
->>>>>>
->>>>>> I think it is an error to call drm_kms_helper_poll_disable() if
->>>>>> polling was not initialized. So, in my opinion the fix should
->>>>>> go to
->>>>>> the drm_mode_config_helper_suspend() / _resume() instead.
->>>>>> Please
->>>>>> add a
->>>>>> guard there using dev->mode_config.poll_enabled.
->>>>>
->>>>> While I tend to agree to the sentiment I do not think this is the
->>>>> correct fix in this situation. drm_kms_helper_poll_disable had
->>>>> the
->>>>> check since at least 2014. a4e771729a51 is a regression. If we
->>>>> want
->>>>> to
->>>>> change the behavior it should be done explicitly and after
->>>>> verifying
->>>>> all
->>>>> drm_kms_helper_poll_disable() calls.
->>>>>
->>>>> #regzbot ^introduced a4e771729a51
->>>>>
->>>>> ciao
->>>>> Janne
->>>>
->>>> Dear Janne:
->>>>
->>>> I agree with you like I mentioned on last letter.
->>>> Thanks for your time.
->>>>
->>>>
->>>> Dear Dmitry:
->>>>
->>>> Is there anything else I can do?
->>>> Looking forward to your reply.
->>>
->>> If it is a common consensus, I'm fine with your approach.
->>>
->> Dear Dmitry:
->>
->> Ok.Thanks for your reply.
->>
->> Best regards!
->>
->>
