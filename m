@@ -2,148 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B560722EBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F0B722EB7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbjFESa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S235206AbjFESav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbjFESar (ORCPT
+        with ESMTP id S232140AbjFESar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 14:30:47 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2046.outbound.protection.outlook.com [40.107.100.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACECBCD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:30:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O+9NnUvFL0EoW9tjtoDo4IV/fFjEcjbxQ4ZXZgWv2xgf3plVQMvVRcUC8paNgnwJxWVMWUYDqpEe7svVc+dvQeSxwR/4noyUNJcUxsfaHnAm6vdP1Qbtcpfjg8YHcsrq51IM+51DhR+1r93ncIu8FAS/bHLfZlJg+tVEpeDEDEjg7vrQZNBzx4DWlEdBOiEzgZw6pEy5cPb2yb9gzCCJiG5XokKTnoB1fT15guSN2bPhODYEJLLFQdsorGOvJB5BhbXzwS4BGZd7xdTBIn/8/bMLAmcXv9MMVVmfVJVIzh4dBtr9x6emH6oU9QTXPALmUFPmdM8afw2eiCk4JOVZDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pppZ9m01uGrkWk8pix1ay+7Y+tLg7NlvaxtIw9LKlVw=;
- b=QvvVe0ZHyof6FcciGDfVOeoqJzYXp8mn80fXDw0cVcRQYSKTPvkOgvLHXwwwfPYDYUeRYleOR+oFP1Us/vEQF9jneFTWSqnP3j8oCCRpgAv4SI29Fkzm4x1vRO4Zsdw9egAX5W9ZE4FAAjcpVBaYW/znfScG6/EmjYLlsH7C5h9W823KuwoD1nh3V4bK0JlDpyPaTuNEdWzvB0OxX91BdklzKQqxAJu1R0/wx0Uo+c6cjGXomOH0XPHLRdiS/ZpSLRgtjyiPf8eyeb7bwr9+7v3chzOCRAw+c8/T4kqluGLlNcvnM/S6X2IVfkKJAyruARogs3NHLqC59DIeGhM8Pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pppZ9m01uGrkWk8pix1ay+7Y+tLg7NlvaxtIw9LKlVw=;
- b=2KHgmptyNE8yN4+ff/ZDz4ZI5759KkQmljzKTDXtEFA1PirTLJFepdi2kLH1T4fH55Mp/43YygPA/h6WqhQBcO2bHIxw3v8oVKWjCMhgpCYN2pnRrkaeFEFLgVWqcU8OkZpz0G7hjvp91dIhI/J8bPkkoxWJMzF8PR00S7fm6xE=
-Received: from DM6PR06CA0019.namprd06.prod.outlook.com (2603:10b6:5:120::32)
- by DM4PR12MB6062.namprd12.prod.outlook.com (2603:10b6:8:b2::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.32; Mon, 5 Jun 2023 18:30:43 +0000
-Received: from DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::cb) by DM6PR06CA0019.outlook.office365.com
- (2603:10b6:5:120::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 18:30:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT113.mail.protection.outlook.com (10.13.173.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 18:30:43 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
- 2023 13:30:41 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Charlene Liu <Charlene.Liu@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        "Paul Hsieh" <Paul.Hsieh@amd.com>, Aric Cyr <aric.cyr@amd.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: [PATCH 2/2] drm/amd/display: mark dml314's UseMinimumDCFCLK() as noinline_for_stack
-Date:   Mon, 5 Jun 2023 14:30:05 -0400
-Message-ID: <20230605183007.204399-2-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230605183007.204399-1-hamza.mahfooz@amd.com>
-References: <20230605183007.204399-1-hamza.mahfooz@amd.com>
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62FDF9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:30:45 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bacfa9fa329so5325461276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685989845; x=1688581845;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bCD5PZj1At8yqhL4CYuYaQGs7kVSIn0/Mt/nLV2HXs=;
+        b=c5a8KY3tXAcIgrvqx6pKcIyicw4mhKUoO7L6uvtT5vI+5nzchsky91+qaYZuDhZWgk
+         loqPxlttSDTnongyVNVNRJw46CKmugZ4Q5VIalUbQjK5O9X9gCKOZn70yBFlBtwX5GgJ
+         gySIHVqIxIpPzWsFxS1u+wOtokXml2HheNIg0+4LdlbaZuy/3n/GmU2iR5097ifqOFBZ
+         9hyNiMEde/WN0CU5S8l8NNOmrYr2h5H4DbB4SrjtsHqqWGhMBtMD+Cu3SGuY4dIiwbo2
+         q5mHLcwYphvgfbYJO9U/a2Ft+KsZX8f2RJhBOKsg8sTjvMvsGJqdQEPRWQCiwXIUojff
+         qrNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685989845; x=1688581845;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2bCD5PZj1At8yqhL4CYuYaQGs7kVSIn0/Mt/nLV2HXs=;
+        b=FUm1A3ySJT61YQRr2OOTjHUYMzmdhAItHFvNXjB4jqsgZW3bvmQiRZRmaZLfCPtx8B
+         xWX6uz8EadvZ62xMcYPZHFi/THP8DNDb5eVXSNiBTvD5WJJlHVFRkiYCu9760uDhRNTx
+         MYaB916jUL2Hy08raPKAvLm61SWBUCuGZsgnHp0X8osEZ29hL6yTtRpaPtiLgDVniXTL
+         7I/dlwI7Nt2CFB8tnNAuiNZFTtb84i+8zCroJ6oDOPzycOUKz6cCgHKFnWYFhE2MCta4
+         3yq0YXhxLP3TGL2nBj/Cbqg+yoOR0JnXOuHXd/mCFJUT9E5EcYjqwSxeaa0pYd99fTkT
+         iCMg==
+X-Gm-Message-State: AC+VfDwnOCGjNHjD12grwYCgmu4b2srC6vfcd4wvWqJI3H2Q1b/UV+vu
+        HIKNi3kRZkH/fe2IFscb9+JSNlvKX0cMi103NbzPsg==
+X-Google-Smtp-Source: ACHHUZ6mF0HQB1db3oxZ/PWuW6L+XmF5rCHXz5idoZNIDLqw0b82MU/KjjtQYOFBLP++iwX0UEUHhBXI+vEEnCK+zB4=
+X-Received: by 2002:a25:2413:0:b0:bad:1159:1aea with SMTP id
+ k19-20020a252413000000b00bad11591aeamr11057933ybk.8.1685989844815; Mon, 05
+ Jun 2023 11:30:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT113:EE_|DM4PR12MB6062:EE_
-X-MS-Office365-Filtering-Correlation-Id: e407c002-ce7e-4afc-5c13-08db65f2f8ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eGLibnA3SNv38TYgXc9CR/CbnCnLXNTC5fwvBRo60CVfht3+xvAVDnlGDe2YzXgWki45KVnnvxDwrn4sKhhhyMC1zRiw+CqVVKOo4SgRtwvs0HwdDUQ5ASiSASDRXKHsEW4GjcT1qTTJCW5zSwCqG85dcia+c2i4HKT+sK8/3gHH3s67/A6oMLkqQkjkWZm51/rc2zZnhe3Q10bVALlO8Ef7oTPXEjpRghEl25lRbxFh5sFVbhUPogSDyWmTpapkzIdh3wsIi1MtsGekV2ntiOC5ag7joPyvnbp8EF2DI2XEbkK0bbh8O4F4BobpR/iOPscNJ1FWh2mFGNDR2mAZFPC0IJGbkGdUhsf7jMOHmjuDFF2EIOQODSrhQ7ShPlsxvh3ff8+3EHBgiPxbLWCS5837ifIC3GPElUa3xZunF3j8/KpCa7qKY22K19utt+dxsThB34WKAHt8alt3buc1XLPkTwHePwuCsvcLVivhZOrf7sEk5MZZGP+y3wWo63WUHN2Kaa5gUbG3LH/V+5qUV9r3bcPmrQWiZDLtMx22NxTbkNlSusi9zgziIStHDP7B4VdloQN7SEGeIWJ3Rc2dftWlnv/rnRgVHCAtiEH0oDd60AkIlzqAteIoEQof3rNd5oGo+IHtwOu+JSW4lWSA5cYTp0adyNXsW+kQzxvzzpnLzu+jmHjrr8/DaVyzrlYZPWnyt2eJdU9MKpeopYnPenrsn4L7GNLa7u4PA1W1sDyshSUU/p4TQD5WgRCEtdhsBj9rMZCOFnDlHAJ4zPnlmpNvsyJEklBFZgElr6gAtSqY9X8g7f/cAY9gsNm5Xkod
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199021)(40470700004)(46966006)(36840700001)(83380400001)(186003)(40460700003)(47076005)(336012)(426003)(2906002)(2616005)(36756003)(86362001)(82310400005)(81166007)(356005)(82740400003)(36860700001)(40480700001)(316002)(41300700001)(6666004)(5660300002)(8936002)(8676002)(54906003)(478600001)(6916009)(4326008)(70586007)(70206006)(26005)(1076003)(16526019)(7416002)(44832011)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 18:30:43.5072
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e407c002-ce7e-4afc-5c13-08db65f2f8ed
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6062
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com> <1685982557-28326-8-git-send-email-quic_rohiagar@quicinc.com>
+In-Reply-To: <1685982557-28326-8-git-send-email-quic_rohiagar@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 5 Jun 2023 21:30:34 +0300
+Message-ID: <CAA8EJpogj0uzQdk-kDqm7Pju7Q5aXJg6FHswkJy+ugawqePWLw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] arm64: dts: qcom: Add support for GCC and RPMHCC
+ for SDX75
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, will@kernel.org,
+        robin.murphy@arm.com, joro@8bytes.org, mani@kernel.org,
+        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, Imran Shaik <quic_imrashai@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang reports:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c:3892:6: error: stack frame size (2632) exceeds limit (2048) in 'dml314_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
- 3892 | void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
-      |      ^
-1 error generated.
+On Mon, 5 Jun 2023 at 19:30, Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
+>
+> From: Imran Shaik <quic_imrashai@quicinc.com>
+>
+> Add support for GCC and RPMHCC clock nodes for SDX75 platform.
+>
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sdx75.dtsi | 37 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+> index 3d1646b..f83eef8 100644
+> --- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+> @@ -7,6 +7,7 @@
+>   */
+>
+>  #include <dt-bindings/clock/qcom,rpmh.h>
+> +#include <dt-bindings/clock/qcom,sdx75-gcc.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>
+> @@ -22,7 +23,21 @@
+>                 reg = <0 0x80000000 0 0>;
+>         };
+>
+> -       clocks { };
+> +       clocks {
+> +               xo_board: xo_board {
 
-So, since UseMinimumDCFCLK() consumes a lot of stack space, mark it as
-noinline_for_stack to prevent it from blowing up
-dml314_ModeSupportAndSystemConfigurationFull()'s stack size.
+No underscores in node names
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- .../gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +                       compatible = "fixed-clock";
+> +                       clock-frequency = <76800000>;
+> +                       clock-output-names = "xo_board";
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-index 27b83162ae45..1532a7e0ed6c 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
-@@ -7061,7 +7061,7 @@ static double CalculateUrgentLatency(
- 	return ret;
- }
- 
--static void UseMinimumDCFCLK(
-+static noinline_for_stack void UseMinimumDCFCLK(
- 		struct display_mode_lib *mode_lib,
- 		int MaxPrefetchMode,
- 		int ReorderingBytes)
+Why do you need this?
+
+> +                       #clock-cells = <0>;
+> +               };
+> +
+> +               sleep_clk: sleep_clk {
+
+No underscores in node names
+
+> +                       compatible = "fixed-clock";
+> +                       clock-frequency = <32000>;
+> +                       clock-output-names = "sleep_clk";
+
+Why do you need this?
+
+> +                       #clock-cells = <0>;
+> +               };
+> +       };
+>
+>         cpus {
+>                 #address-cells = <2>;
+> @@ -358,6 +373,18 @@
+>                 ranges = <0 0 0 0 0x10 0>;
+>                 dma-ranges = <0 0 0 0 0x10 0>;
+>
+> +               gcc: clock-controller@80000 {
+> +                       compatible = "qcom,sdx75-gcc";
+> +                       reg = <0x0 0x0080000 0x0 0x1f7400>;
+> +                       clocks = <&rpmhcc RPMH_CXO_CLK>,
+> +                                <&sleep_clk>;
+> +                       clock-names = "bi_tcxo",
+> +                                     "sleep_clk";
+
+As this is a new platform, it should not be using clock-names to bind
+gcc clocks. Please use clock indices instead.
+
+> +                       #clock-cells = <1>;
+> +                       #reset-cells = <1>;
+> +                       #power-domain-cells = <1>;
+> +               };
+> +
+>                 tcsr_mutex: hwlock@1f40000 {
+>                         compatible = "qcom,tcsr-mutex";
+>                         reg = <0x0 0x01f40000 0x0 0x40000>;
+> @@ -520,6 +547,14 @@
+>                         apps_bcm_voter: bcm_voter {
+>                                 compatible = "qcom,bcm-voter";
+>                         };
+> +
+> +                       rpmhcc: clock-controller {
+> +                               compatible = "qcom,sdx75-rpmh-clk";
+> +                               clocks = <&xo_board>;
+
+> +                               clock-names = "xo";
+> +                               #clock-cells = <1>;
+> +                       };
+> +
+>                 };
+>         };
+>
+> --
+> 2.7.4
+>
+
+
 -- 
-2.40.1
-
+With best wishes
+Dmitry
