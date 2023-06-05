@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB90E722898
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8466472288C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbjFEORQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S232930AbjFEOPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjFEORF (ORCPT
+        with ESMTP id S234335AbjFEOOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:17:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD9910E3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685974556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DACW0kCzVuT5IFaBn71kjqbpg34q1clPenVlI/hF2Iw=;
-        b=f2sAlmbi3BUTXwH1e3mczMPQEDehfEhWqavh/t9C5Zml+E7qfflbEUCj3CtJZWshnQRsDv
-        yK0RtHRS3MMpAJbGNPSrApmOaz1yDDj81rQnk3WRmzPKGbftJQZ2+NEA6UFqu1iGH1uZWM
-        OUGSl6YbxHdwiHQqGJJSR2yvdZ49eAE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-392-ogMX25KYN5epLTHPlLAQ2Q-1; Mon, 05 Jun 2023 10:15:18 -0400
-X-MC-Unique: ogMX25KYN5epLTHPlLAQ2Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFE3F2A2AD53;
-        Mon,  5 Jun 2023 14:12:26 +0000 (UTC)
-Received: from [10.22.10.186] (unknown [10.22.10.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B36E49BB98;
-        Mon,  5 Jun 2023 14:12:26 +0000 (UTC)
-Message-ID: <e0d1998f-c081-30e6-7646-cf6460c2d67c@redhat.com>
-Date:   Mon, 5 Jun 2023 10:12:25 -0400
+        Mon, 5 Jun 2023 10:14:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303B51FCB;
+        Mon,  5 Jun 2023 07:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685974427; x=1717510427;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GfKziZD35fNJ09mFCN3tpjRPym+2PZlHeYnbNWOYIPk=;
+  b=mnn3+rKRZafWO++ql4/Y1y1NY6o/FZaj58QZz5QLJRek+K3RVAjxFUp8
+   eP+vQD71YeSLaNYQznO/mJXpCttwy9nPovdSuN9YcWjZ+txnpQAyNqer7
+   gfBGHAb5+dFErp2TDgptb/DQFao5/1R5HOs1U+4B0XeJdYj21fvWEmSC4
+   qNcLKSafgaEgI9Oa5PmiRMcXzKOOwW3Zcb+yFKmRVokp56vJgB7KfouDr
+   ocKZQVqvBGsxgv9p3nDkpVVuJYxvKYk2BuXliYmLCoAGbbvwCamfjy2kR
+   1R5Mf9rUDNsC37r+RbaHTtdNEPXv/vq6oLvsGgcJjFcrRYToFFHxdBYI9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422202924"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="422202924"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 07:13:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="798456293"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="798456293"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jun 2023 07:13:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q6Axb-001OG5-0A;
+        Mon, 05 Jun 2023 17:13:27 +0300
+Date:   Mon, 5 Jun 2023 17:13:26 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v3 1/1] PCI: of: Propagate firmware node by calling
+ device_set_node()
+Message-ID: <ZH3thu1rk3H3BmVd@smile.fi.intel.com>
+References: <20230421100939.68225-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] cgroup: fixed the cset refcnt leak when fork() failed
-Content-Language: en-US
-To:     Zou Cao <zoucaox@gmail.com>, linux-kernel@vger.kernel.org,
-        tj@kernel.org
-Cc:     cgroups@vger.kernel.org, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, brauner@kernel.org,
-        Zou Cao <zoucao@kuaishou.com>
-References: <20230605130444.1421-1-zoucao@kuaishou.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230605130444.1421-1-zoucao@kuaishou.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421100939.68225-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 09:04, Zou Cao wrote:
-> TeamID: B1486294
-What is this?
->
-> when fork, cset will be increased by commit "ef2c41cf38a7", the refcnt will
-> be decrease by child exit, but when failed in fork(), this refcnt will
-> be lost decrease in cgroup_cancel_fork as follow:
->
-> copy_process
->       |
-> cgroup_can_fork    //  increase the css refcount
->    ......
->    spin_lock_irq(&css_set_lock);
->    cset = task_css_setcurrent);
->    get_css_set(cset);
->    spin_unlock_irq&css_set_lock);
->    ......
+On Fri, Apr 21, 2023 at 01:09:39PM +0300, Andy Shevchenko wrote:
+> Insulate pci_set_of_node() and pci_set_bus_of_node() from possible
+> changes to fwnode_handle implementation by using device_set_node()
+> instead of open-coding dev->dev.fwnode assignments.
 
-The code quoted above is actually in cgroup_css_set_fork(). You may want 
-to list it as well.
+Any news on this change? Should I do anything?
 
-I believe the problem is in
+-- 
+With Best Regards,
+Andy Shevchenko
 
-         if (!(kargs->flags & CLONE_INTO_CGROUP)) {
-                 kargs->cset = cset;
-                 return 0;
-         }
-
-When CLONE_INTO_CGROUP isn't set, a reference to the current cset is taken.
-
->       |
-> goto cgroup_cancel_fork    // if failed in  copy_process
->       |
-> cgroup_cancel_fork  // lost the decrease refcount if flag not CLONE_INTO_CGROUP
->
-> Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
-> Signed-off-by: Zou Cao <zoucao@kuaishou.com>
-> ---
->   kernel/cgroup/cgroup.c | 5 +++++
->   1 file changed, 5 insertions(+)
->
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index d18c2ef..5ecd706 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -6284,6 +6284,11 @@ void cgroup_cancel_fork(struct task_struct *child,
->   		if (ss->cancel_fork)
->   			ss->cancel_fork(child, kargs->cset);
->   
-> +	if (!(kargs->flags & CLONE_INTO_CGROUP) &&
-> +			kargs->cset) {
-> +		put_css_set(kargs->cset);
-> +	}
-> +
-I believe the out_revert error path of cgroup_can_fork() has a similar 
-issue. Perhaps you may want to put the put_css_set() call in 
-cgroup_css_set_put_fork().
->   	cgroup_css_set_put_fork(kargs);
->   }
->   
-Cheers,
-Longman
 
