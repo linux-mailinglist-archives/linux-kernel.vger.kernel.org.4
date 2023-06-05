@@ -2,257 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008ED722CF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D8B722D00
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbjFEQuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S233019AbjFEQwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235144AbjFEQuL (ORCPT
+        with ESMTP id S234908AbjFEQwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:50:11 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CAD11A
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:50:02 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 2450C1410D9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 16:49:59 +0000 (UTC)
-Received: from pdx1-sub0-mail-a246.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A7D83141834
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 16:49:58 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1685983798; a=rsa-sha256;
-        cv=none;
-        b=1QgnDrluNgZcDmTsAnFlp6eM/5OyNB0k1lHJkU5JsMaxn/6OpSCikblUOYcmRNY7X8s51a
-        YyVV4O0iKGss9uvx2Xs9BarikNTxsECdgZB1j+7T8rjmzmTtj9HzIZ80rYz1Z0FBcp6nHv
-        f3+fXOU682u6rqcEaHVEQOzlEVM5zAYsGspC/y3kRGdkAjfXF4kzeZvL5m99queHRwB8OR
-        O5prC8PR20XtM4vPyhZb96h6FPoBKd1URCoa3XZ/+f+NnHyiUQOx+FlKxRrv9AmN1oy5uX
-        KVoVy7nHABp/BPFeeYR98hcpLNQpqWXoLAeJXjuRwpQUEICVnrP+2eorqf50mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1685983798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         dkim-signature; bh=bA9dwwrLWaPkBczdJGZf0n7gtEXmPiDCbFmELkXgQMQ=;
-        b=5FF7+4MC7pnCJqP4ztm2btcbno3MEi4ravdrr7yjHDFhjp4iajktMh3/uFfxznKypUvMB1
-        y5plCjYtzSK6P7BXlp+Fco37WnQa6VNPY/lp3+PT+YiLCeA5Fq8SItdASgBZeow9NS01qc
-        TRADG/aDgYrB1Y+rOW1xW37TGD8pM9Ql4PLavpJfHtxml3MFyyL2xg5QegWVBvY8PIK/An
-        ahT4JncbnKw6du7mqbyqlu++zeXICm+DCLuyAKG9G+nTGA4GCLVLS/84Tu0DcG4TfmiPNO
-        8btachC613jsbn/EBPGYRT5nSo9R0aQi1j6UxZbiflr95agoV5OejdJe3pLU/A==
-ARC-Authentication-Results: i=1;
-        rspamd-56648fb6f9-kpfxq;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Daffy-Tasty: 3a9af1092a6e1cee_1685983798946_1938343841
-X-MC-Loop-Signature: 1685983798946:2334458798
-X-MC-Ingress-Time: 1685983798946
-Received: from pdx1-sub0-mail-a246.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.109.138.46 (trex/6.8.1);
-        Mon, 05 Jun 2023 16:49:58 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a246.dreamhost.com (Postfix) with ESMTPSA id 4QZfjL2kkwz4T
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1685983798;
-        bh=bA9dwwrLWaPkBczdJGZf0n7gtEXmPiDCbFmELkXgQMQ=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=GRh1O24h56VOD69FVspvvFrfKJDz125mN0N07VKMg7XGYe/cfg041XaIe60pBCdUq
-         6Y4me79JxShLfWOPtV+UvBSMGH62zQS/kzw0ic+Ir5FQPqiuVOuqoC5/h8szQysweq
-         rOun9wLRRodw/T2HjeAgqIk0/lRTPf56fQF0UA80=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0044
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Mon, 05 Jun 2023 09:49:55 -0700
-Date:   Mon, 5 Jun 2023 09:49:55 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: [PATCH bpf] bpf: search_bpf_extables should search subprogram
- extables
-Message-ID: <20230605164955.GA1977@templeofstupid.com>
+        Mon, 5 Jun 2023 12:52:22 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED3AD9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:52:21 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2562b1b1af0so799765a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 09:52:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685983940; x=1688575940;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zJNMYZ5ZlCwWFShxq5SVp0goxBjUhrKSnIdXymTHIMA=;
+        b=eCI7hkAM00pEJVL1uVIG+L7F7tIEbviV3dizbWupXZgZzYGGiWUr/7YXVjom0pGngN
+         WMyAc4/5g8N1IWO57Lf7ZbI1Dpd3DRD7xiNQ6esKC+///UVz4SiZeeL9RqDvxOdRT0aI
+         HCgziPbLo3f4sgMozOg6ysKkvbB9rpz+7YNk3gwIBd/KKPclRk9pq0wqepC7lMvg16Hj
+         Y8I4Ax7sbrmn/0MZwlznYVucPkBvxHXODAyLSRJf34g5tv6JDP0tZH5jpmIQHxtLgTnd
+         rTd0RWlvFe0+NxhfAp8K579bNuj8fVyY93kZAB2Q8MV+sOK0T6ychjXdysLTuJro4Dv7
+         iFDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685983940; x=1688575940;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zJNMYZ5ZlCwWFShxq5SVp0goxBjUhrKSnIdXymTHIMA=;
+        b=YdV6Pe67g0cTnM/3zjTmmP2jax8CyOPplQD94c1nUXk4ptA/OOSf39pIAdTJxwlVAY
+         imgfjgcVrknASju9vxF8FNSkxYgLOj6Q6e9OqNsToey33j98nkF+hx8erpqb19Ie2O0t
+         f0r/NDh49LrpUrfXzrG7DqQcRAD9c4gfRuLXN5mIvvbFUA6i8j0HIfJx1CApBeFII/43
+         DN4cPvPLSMZRs3XkT+wRinnlo3PzqItqFPJrSgIlWDKkXaYQhudvZSqcRD+9H/H5BLGL
+         5dhzVSO3DEJ4RcC2DgbffpSv2+yd5WMMfnLqh+zMbrXF90TT5svMNyMxIiprOta5t8uQ
+         odmA==
+X-Gm-Message-State: AC+VfDzYsbJt7cnen4zyvwsjuAm9gWEI7bCkZFYDB0Srlwz5AxR/EpAF
+        O1hG7d0yDKASPaTYOF+m/b16pw==
+X-Google-Smtp-Source: ACHHUZ4plkQPRc81+FMyI3pGvSItsM7r3Pq1a0SJx1hFlpW/XJG6VQ5dkmCpuLqzdFwsuXFaoVWJVw==
+X-Received: by 2002:a17:90b:4f47:b0:255:c3a3:43a with SMTP id pj7-20020a17090b4f4700b00255c3a3043amr18747151pjb.4.1685983940422;
+        Mon, 05 Jun 2023 09:52:20 -0700 (PDT)
+Received: from ?IPV6:2600:380:c01c:32f0:eff8:7692:bf8a:abc6? ([2600:380:c01c:32f0:eff8:7692:bf8a:abc6])
+        by smtp.gmail.com with ESMTPSA id e91-20020a17090a6fe400b002508d73f4e8sm8440142pjk.57.2023.06.05.09.52.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 09:52:19 -0700 (PDT)
+Message-ID: <286f350c-b1b3-694d-b969-d06747b52144@kernel.dk>
+Date:   Mon, 5 Jun 2023 10:52:18 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] blk-ioc: protect ioc_destroy_icq() by 'queue_lock'
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, dlemoal@kernel.org,
+        quic_pragalla@quicinc.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230531073435.2923422-1-yukuai1@huaweicloud.com>
+ <03ffbdc4-66e2-5508-f632-e3a1999f40df@huaweicloud.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <03ffbdc4-66e2-5508-f632-e3a1999f40df@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JIT'd bpf programs that have subprograms can have a postive value for
-num_extentries but a NULL value for extable.  This is problematic if one of
-these bpf programs encounters a fault during its execution.  The fault
-handlers correctly identify that the faulting IP belongs to a bpf program.
-However, performing a search_extable call on a NULL extable leads to a
-second fault.
+On 6/5/23 6:58 AM, Yu Kuai wrote:
+> Hi, Jens
+> 
+> 在 2023/05/31 15:34, Yu Kuai 写道:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Currently, icq is tracked by both request_queue(icq->q_node) and
+>> task(icq->ioc_node), and ioc_clear_queue() from elevator exit is not
+>> safe because it can access the list without protection:
+>>
+>> ioc_clear_queue            ioc_release_fn
+>>   lock queue_lock
+>>   list_splice
+>>   /* move queue list to a local list */
+>>   unlock queue_lock
+>>   /*
+>>    * lock is released, the local list
+>>    * can be accessed through task exit.
+>>    */
+>>
+>>                 lock ioc->lock
+>>                 while (!hlist_empty)
+>>                  icq = hlist_entry
+>>                  lock queue_lock
+>>                   ioc_destroy_icq
+>>                    delete icq->ioc_node
+>>   while (!list_empty)
+>>    icq = list_entry()           list_del icq->q_node
+>>    /*
+>>     * This is not protected by any lock,
+>>     * list_entry concurrent with list_del
+>>     * is not safe.
+>>     */
+>>
+>>                  unlock queue_lock
+>>                 unlock ioc->lock
+>>
+>> Fix this problem by protecting list 'icq->q_node' by queue_lock from
+>> ioc_clear_queue().
+>>
+>> Reported-and-tested-by: Pradeep Pragallapati <quic_pragalla@quicinc.com>
+>> Link: https://lore.kernel.org/lkml/20230517084434.18932-1-quic_pragalla@quicinc.com/
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   block/blk-ioc.c | 30 +++++++++++++-----------------
+>>   1 file changed, 13 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/block/blk-ioc.c b/block/blk-ioc.c
+>> index 63fc02042408..d5db92e62c43 100644
+>> --- a/block/blk-ioc.c
+>> +++ b/block/blk-ioc.c
+>> @@ -77,6 +77,10 @@ static void ioc_destroy_icq(struct io_cq *icq)
+>>       struct elevator_type *et = q->elevator->type;
+>>         lockdep_assert_held(&ioc->lock);
+>> +    lockdep_assert_held(&q->queue_lock);
+>> +
+>> +    if (icq->flags & ICQ_DESTROYED)
+>> +        return;
+>>         radix_tree_delete(&ioc->icq_tree, icq->q->id);
+>>       hlist_del_init(&icq->ioc_node);
+>> @@ -128,12 +132,7 @@ static void ioc_release_fn(struct work_struct *work)
+>>               spin_lock(&q->queue_lock);
+>>               spin_lock(&ioc->lock);
+>>   -            /*
+>> -             * The icq may have been destroyed when the ioc lock
+>> -             * was released.
+>> -             */
+>> -            if (!(icq->flags & ICQ_DESTROYED))
+>> -                ioc_destroy_icq(icq);
+>> +            ioc_destroy_icq(icq);
+>>                 spin_unlock(&q->queue_lock);
+>>               rcu_read_unlock();
+>> @@ -171,23 +170,20 @@ static bool ioc_delay_free(struct io_context *ioc)
+>>    */
+>>   void ioc_clear_queue(struct request_queue *q)
+>>   {
+>> -    LIST_HEAD(icq_list);
+>> -
+>>       spin_lock_irq(&q->queue_lock);
+>> -    list_splice_init(&q->icq_list, &icq_list);
+>> -    spin_unlock_irq(&q->queue_lock);
+>> -
+>> -    rcu_read_lock();
+>> -    while (!list_empty(&icq_list)) {
+>> +    while (!list_empty(&q->icq_list)) {
+>>           struct io_cq *icq =
+>> -            list_entry(icq_list.next, struct io_cq, q_node);
+>> +            list_first_entry(&q->icq_list, struct io_cq, q_node);
+>>   +        /*
+>> +         * Other context won't hold ioc lock to wait for queue_lock, see
+>> +         * details in ioc_release_fn().
+>> +         */
+>>           spin_lock_irq(&icq->ioc->lock);
+> 
+> Sorry that I made a mistake here to use spin_lock_irq() for recursive
+> locking.
+> 
+> Should I resend this patch or send a new fix patch?
 
-Fix up by refusing to search a NULL extable, and by checking the
-subprograms' extables if the umbrella program has subprograms configured.
+Your patch is already staged in for-6.5/block, so please send a patch
+that fixes up the current tree.
 
-Once I realized what was going on, I was able to use the following bpf
-program to get an oops from this failure:
-
-   #include "vmlinux.h"
-   #include <bpf/bpf_helpers.h>
-   #include <bpf/bpf_tracing.h>
-   
-   char LICENSE[] SEC("license") = "Dual BSD/GPL";
-   
-   #define PATH_MAX 4096
-   
-   struct callback_ctx {
-           u8 match;
-   };
-   
-   struct filter_value {
-           char prefix[PATH_MAX];
-   };
-   struct {
-           __uint(type, BPF_MAP_TYPE_ARRAY);
-           __uint(max_entries, 256);
-           __type(key, int);
-           __type(value, struct filter_value);
-   } test_filter SEC(".maps");
-   
-   static __u64 test_filter_cb(struct bpf_map *map, __u32 *key,
-                               struct filter_value *val,
-                               struct callback_ctx *data)
-   {
-       return 1;
-   }
-   
-   SEC("fentry/__sys_bind")
-   int BPF_PROG(__sys_bind, int fd, struct sockaddr *umyaddr, int addrlen)
-   {
-     pid_t pid;
-   
-     struct callback_ctx cx = { .match = 0 };
-     pid = bpf_get_current_pid_tgid() >> 32;
-     bpf_for_each_map_elem(&test_filter, test_filter_cb, &cx, 0);
-     bpf_printk("fentry: pid = %d, family = %llx\n", pid, umyaddr->sa_family);
-     return 0;
-   }
-
-And then the following code to actually trigger a failure:
-
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <unistd.h>
-  #include <sys/socket.h>
-  #include <netinet/in.h>
-  #include <netinet/ip.h>
-  
-  int
-  main(int argc, char *argv[])
-  {
-    int sfd, rc;
-    struct sockaddr *sockptr = (struct sockaddr *)0x900000000000;
-  
-    sfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sfd < 0) {
-      perror("socket");
-      exit(EXIT_FAILURE);
-    }
-  
-    while (1) {
-      rc = bind(sfd, (struct sockaddr *) sockptr, sizeof(struct sockaddr_in));
-      if (rc < 0) {
-        perror("bind");
-        sleep(5);
-      } else {
-        break;
-      }
-    }
-  
-    return 0;
-  }
-
-I was able to validate that this problem does not occur when subprograms
-are not in use, or when the direct pointer accesses are replaced with
-bpf_probe_read calls.  I further validated that this did not break the
-extable handling in existing bpf programs.  The same program caused no
-failures when subprograms were removed, but the exception was still
-injected.
-
-Cc: stable@vger.kernel.org
-Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
----
- kernel/bpf/core.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7421487422d4..0e12238e4340 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -736,15 +736,33 @@ const struct exception_table_entry *search_bpf_extables(unsigned long addr)
- {
- 	const struct exception_table_entry *e = NULL;
- 	struct bpf_prog *prog;
-+	struct bpf_prog_aux *aux;
-+	int i;
- 
- 	rcu_read_lock();
- 	prog = bpf_prog_ksym_find(addr);
- 	if (!prog)
- 		goto out;
--	if (!prog->aux->num_exentries)
-+	aux = prog->aux;
-+	if (!aux->num_exentries)
- 		goto out;
- 
--	e = search_extable(prog->aux->extable, prog->aux->num_exentries, addr);
-+	/* prog->aux->extable can be NULL if subprograms are in use. In that
-+	 * case, check each sub-function's aux->extables to see if it has a
-+	 * matching entry.
-+	 */
-+	if (aux->extable != NULL) {
-+		e = search_extable(prog->aux->extable,
-+		    prog->aux->num_exentries, addr);
-+	} else {
-+		for (i = 0; (i < aux->func_cnt) && (e == NULL); i++) {
-+			if (!aux->func[i]->aux->num_exentries ||
-+			    aux->func[i]->aux->extable == NULL)
-+				continue;
-+			e = search_extable(aux->func[i]->aux->extable,
-+			    aux->func[i]->aux->num_exentries, addr);
-+		}
-+	}
- out:
- 	rcu_read_unlock();
- 	return e;
 -- 
-2.25.1
+Jens Axboe
+
 
