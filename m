@@ -2,142 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B366722E4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B745C722E51
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235602AbjFESGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S232308AbjFESGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235598AbjFESFn (ORCPT
+        with ESMTP id S235553AbjFESF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:05:43 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FA2E68;
-        Mon,  5 Jun 2023 11:04:52 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1b084620dso46963051fa.0;
-        Mon, 05 Jun 2023 11:04:52 -0700 (PDT)
+        Mon, 5 Jun 2023 14:05:56 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C3C10FD;
+        Mon,  5 Jun 2023 11:05:05 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-256931ec244so4382252a91.3;
+        Mon, 05 Jun 2023 11:05:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685988285; x=1688580285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OAS8KjW8aXhbcROMsGHD4vAxja4tcWVmSzN6Q5h/kKA=;
-        b=krXrUQQsE02mGtZwrvqP4k8TSbvyXI2+wF1qLsFZ3hLPbaNHk1NFeRzqB6qdW2vCSR
-         JqbJTI801dKZlhGsq9JIXQXvnJY3iZT1w1tWJ3CkEtZ4DyZN2AHCH5TYaQk+jmCy9vtk
-         RaD2qrHu1FO9mAmiOFuR19LY5hTZj/4IoT+y+Jv+ySkx1waPGvztOdVqN3/eiBAYLQRj
-         aRlo769d/ysWywYuRhv6MFDXb6mo7MPuaNHO86j5MBa/H5xEz5qWT4xG8Wu5+RefHauf
-         6glX6kMdnRb3kBN5Mu4CNNuTN1DNzKU2jn6qP5Gd+SeATq07vAcF4nKqtCepfvLVC3Od
-         zHFw==
+        d=gmail.com; s=20221208; t=1685988300; x=1688580300;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t2136RPrE8cIqKFm6zKV8pbC6YzWjr8qGOFW6BAbSLU=;
+        b=JlVEo8WjgnOT89+kJYMSrKxEpAoprSjV4/2bNXjFC/7jh3lUEN0ff4hOOeUv+EgfOu
+         wGmYHMvrCFJo18+Lj0Ff3lCTRgDTsp+dprXa8SKYXVV0oqA63oDU4WYJNhOnhZnp4cjP
+         Nos7N88L+AFufa1BC/J3cKCMwyjRwdfaAxaILKfVDPEiAc5CLuTex8Y9LjPEsY7ISPIU
+         OZqcON9mDAoMNWeba1eD72jSl3NYCWJI8Wju+vbW/BsvCfj93bf5jaSyBLt2jv1+VOzo
+         KPlDGWq9wwdAcA4AcrMCq5fiaqK4S0SYH3qSnABSs2xiDx1PiBSoF0SFkKQW8FHC3ygB
+         GmVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685988285; x=1688580285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685988300; x=1688580300;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OAS8KjW8aXhbcROMsGHD4vAxja4tcWVmSzN6Q5h/kKA=;
-        b=hggS3seeJWYRlQk1mWbUFBh6ZD+ct3xWTGY2G6n0hgUD1PIksgd/NeJWZZGXxpQ3/A
-         a5G1HRlhyMTxIXzc2j2EzMuL1UZqhD7sTkPsNvyN77M7Wa0yIAvV/gg0pXhhfKlrhnSt
-         Wpr9rsghbUm+P/6bX/JFhCNctpvbMHUnN8Vsx3WbhTJSDKVu1Zz8ZXOXB1yTICsJvY/n
-         F9a5jff18dDWRjoRImVuY0jXKiLJ4aHQoUm4fYGFy29A6/TyQ/6ziFrbmoEkjHjNtL3K
-         Q5Dw0exBhIiswu5fmok7IyFwr4Frpk6lGDY4lES2fLILodCZjIJSpTb0tqpCU3Zq3kjC
-         Ak8Q==
-X-Gm-Message-State: AC+VfDwWGywj7qsjlKBvcdfL11nz36TQ3ANrgcxo/Tlgngci/Z6HeEWG
-        9DDTYwT506INbbUkfXr9tRSrxlY3IAuVFM+JOO7VW8fgER/ltg==
-X-Google-Smtp-Source: ACHHUZ5DIiBGFRkxgZRim7IgGbCYpyYs4F+cZxiyBQhpoDr6bKiePBzeUbm4XFjMCxNRz7LSsx+iQFYQEQT9nOywmI8=
-X-Received: by 2002:a05:651c:145:b0:2a8:ac69:bfe with SMTP id
- c5-20020a05651c014500b002a8ac690bfemr4880809ljd.42.1685988285076; Mon, 05 Jun
- 2023 11:04:45 -0700 (PDT)
+        bh=t2136RPrE8cIqKFm6zKV8pbC6YzWjr8qGOFW6BAbSLU=;
+        b=X5jdqxDFastSD/3GedwpkDfCvVwcxhZtHMYu80ft5OdPwJRbpmw5v1HTODaF4KHfvY
+         OrPLWDsohN7/FOGjUI1Ek8y+Jw/g6Y6iQrSABkXxEBT9fRdf3imw09ZNMH9AvWDQ7zrY
+         BjdNKfe1SBvzqbAbWWCb8mlkFTq067zau2yySkvfELtdRYyhLgNhbSYY1aq2vp7i02J3
+         pBhY7JH7Ad6D1llD+lvGOQ+22UHlyI4FIdYQML8MuHH7L9W3BNNbovhtSFc8dOHN8iI/
+         ZlxUU/1WIRVB4Y4JvLb7XodQ7IADJxsZ6axdQCyYcJnHde2I/2EmHuHNtvYuyphCneCn
+         RA4Q==
+X-Gm-Message-State: AC+VfDxvnqGQh8lfVRxpVEgfzv/buzbXXj9CGe+5yurCF4xmAnMw0x+M
+        LqCNPbJRUD9OWTTjlCSIcqHpIpKX41U=
+X-Google-Smtp-Source: ACHHUZ4G5EbFEVFbUgHvfDHyn+GEx/ry6DCqp1Kux+aO+qXvM8xy/gYHe7hg0/NgUrngbL6UptTM4A==
+X-Received: by 2002:a17:90a:5e09:b0:256:d262:e686 with SMTP id w9-20020a17090a5e0900b00256d262e686mr8223342pjf.19.1685988299873;
+        Mon, 05 Jun 2023 11:04:59 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id m6-20020a17090a34c600b00256471db12bsm6534599pjf.8.2023.06.05.11.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 11:04:58 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 5 Jun 2023 08:04:57 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     linan666@huaweicloud.com
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+        houtao1@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH] blk-iocost: use spin_lock_irqsave in
+ adjust_inuse_and_calc_cost
+Message-ID: <ZH4jya9ksKbHEf7s@slm.duckdns.org>
+References: <20230527091904.3001833-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
-References: <20230605074024.1055863-1-puranjay12@gmail.com>
- <20230605074024.1055863-3-puranjay12@gmail.com> <CAPhsuW5-+eBuNGFes3i5-A4vA_f3woLwL_WbUcg6gNXssyi_Xg@mail.gmail.com>
-In-Reply-To: <CAPhsuW5-+eBuNGFes3i5-A4vA_f3woLwL_WbUcg6gNXssyi_Xg@mail.gmail.com>
-From:   Puranjay Mohan <puranjay12@gmail.com>
-Date:   Mon, 5 Jun 2023 20:04:34 +0200
-Message-ID: <CANk7y0jOkTTKPFse96GNZ24GGc3n8qRFHL6ZE4+QTX5nwN5Bsw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] arm64: patching: Add aarch64_insn_copy()
-To:     Song Liu <song@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, catalin.marinas@arm.com,
-        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527091904.3001833-1-linan666@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 6:42=E2=80=AFPM Song Liu <song@kernel.org> wrote:
->
-> On Mon, Jun 5, 2023 at 12:40=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.=
-com> wrote:
-> >
-> > This will be used by BPF JIT compiler to dump JITed binary to a RX huge
-> > page, and thus allow multiple BPF programs sharing the a huge (2MB)
-> > page.
-> >
-> > The bpf_prog_pack allocator that implements the above feature allocates
-> > a RX/RW buffer pair. The JITed code is written to the RW buffer and the=
-n
-> > this function will be used to copy the code from RW to RX buffer.
-> >
-> > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
->
-> Acked-by: Song Liu <song@kernel.org>
->
-> With a nit below.
->
-> > ---
-> >  arch/arm64/include/asm/patching.h |  1 +
-> >  arch/arm64/kernel/patching.c      | 39 +++++++++++++++++++++++++++++++
-> >  2 files changed, 40 insertions(+)
-> >
-> > diff --git a/arch/arm64/include/asm/patching.h b/arch/arm64/include/asm=
-/patching.h
-> > index 68908b82b168..dba9eb392bf1 100644
-> > --- a/arch/arm64/include/asm/patching.h
-> > +++ b/arch/arm64/include/asm/patching.h
-> > @@ -8,6 +8,7 @@ int aarch64_insn_read(void *addr, u32 *insnp);
-> >  int aarch64_insn_write(void *addr, u32 insn);
-> >
-> >  int aarch64_insn_write_literal_u64(void *addr, u64 val);
-> > +void *aarch64_insn_copy(void *addr, const void *opcode, size_t len);
-> >
-> >  int aarch64_insn_patch_text_nosync(void *addr, u32 insn);
-> >  int aarch64_insn_patch_text(void *addrs[], u32 insns[], int cnt);
-> > diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.=
-c
-> > index b4835f6d594b..48c710f6a1ff 100644
-> > --- a/arch/arm64/kernel/patching.c
-> > +++ b/arch/arm64/kernel/patching.c
-> > @@ -105,6 +105,45 @@ noinstr int aarch64_insn_write_literal_u64(void *a=
-ddr, u64 val)
-> >         return ret;
-> >  }
-> >
-> > +/**
-> > + * aarch64_insn_copy - Copy instructions into (an unused part of) RX m=
-emory
-> > + * @addr: address to modify
-> > + * @opcode: source of the copy
-> > + * @len: length to copy
-> > + *
-> > + * Useful for JITs to dump new code blocks into unused regions of RX m=
-emory.
-> > + */
->
-> nit:
-> I understand "addr" and "opcode" are used by x86 text_poke_copy(). But ma=
-ybe
-> we should call them "dst" and "src" or "to" and "from" or something simil=
-ar?
+On Sat, May 27, 2023 at 05:19:04PM +0800, linan666@huaweicloud.com wrote:
+> From: Li Nan <linan122@huawei.com>
+> 
+> adjust_inuse_and_calc_cost() use spin_lock_irq() and IRQ will be enabled
+> when unlock. DEADLOCK might happen if we have held other locks and disabled
+> IRQ before invoking it.
+> 
+> Fix it by using spin_lock_irqsave() instead, which can keep IRQ state
+> consistent with before when unlock.
+...
+> Fixes: b0853ab4a238 ("blk-iocost: revamp in-period donation snapbacks")
+> Signed-off-by: Li Nan <linan122@huawei.com>
 
-Sure, I will call it "dst" and "src" in the next version.
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Thanks,
-Puranjay
+Thanks.
+
+-- 
+tejun
