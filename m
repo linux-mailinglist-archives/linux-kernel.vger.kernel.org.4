@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC90722A4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7003722A51
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjFEPIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S234084AbjFEPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbjFEPI1 (ORCPT
+        with ESMTP id S233783AbjFEPI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:08:27 -0400
+        Mon, 5 Jun 2023 11:08:28 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD204EA;
-        Mon,  5 Jun 2023 08:08:26 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 15:08:24 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D42F2;
+        Mon,  5 Jun 2023 08:08:27 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 15:08:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1685977705;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y8OW7mNLB3v0H4YFi6rliOeKhkABoAx15A5MO4MS50I=;
-        b=E0xqgxC2VTZvipboSYI7RTh8oNURjcetGVs3OHTp6pELrxPJg5+UUsRjW9A453HYTN6wed
-        Ba0h4rK7ftrGl73ObYCaV7S/n7aQxtNdKyDq8B2u848UilnF4RSfPzIyjcYVs75ncECfLF
-        NWVyaS6OsxokwB/UZn11pF6v3o4G8kFRYXAOgL/p1/VmRaK6UeCu3LtT8EHucVibsOXWc9
-        wAtIZRRrdj9p2bu+UP9OqA0qUHocTHs6GA0MfP0zy4kBxmkKX9N12gpvzFMLgpDIjLrUev
-        wOCnjoVVUNeZK0oyzugeyd5txqlGL/xwukByDnQROhVcJxOyuMqk4Q5rN2gN8Q==
+        bh=3d2BXh0h4elG7qlNWfNxWWJunObZyqtevvQxFq0QGqk=;
+        b=b47SumWDvZeaFmpDa6FA91TVSgKCjqZCMGCI7q6ZAIXHuxqElCP8qpywL1Hv6Viq4wc9CU
+        9pxsrIvP6WgfWZEmja1byPkaYoq2xc9A9yH1lztlBoqyXjkhqzN30dPEpa1C+cExhX8CXG
+        dwlMizUAz9LUOJaaLgwuMZcN2Eh5TAUJgVPwZUwvokaRIx7LPmHkCuh93nIEYjAgWGCHaj
+        p/Xcr/TRgOxiDCBgptM4rBxqKInd+MfrimaNRGVN2QvMDANAjmm6AHVrdt4bGLqclq8t+Q
+        yKCeDf6Jes56KSQF+iXk7D318cXIKiaKNfC+A78247J9HGy4SWHTxGkz8/A/Gw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1685977705;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y8OW7mNLB3v0H4YFi6rliOeKhkABoAx15A5MO4MS50I=;
-        b=Yjy2j4uy/w0xJYi1KC2hF6T32einOMYvyMef/djO0OYvzzLfcHMTy6qNcwDbUuZ3U3W+vP
-        5W1zb0l4QnPDolDQ==
+        bh=3d2BXh0h4elG7qlNWfNxWWJunObZyqtevvQxFq0QGqk=;
+        b=KPb4qNTEyU/y2Iu48TwVlekYqI6/OdQUxtTg9A0jKHtCHJ0bgGQ3x355a8RVV2RGfWKC8m
+        bNzPiea7sWGcuUAQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Polish coding style in a few places
+Subject: [tip: timers/core] posix-timers: Remove pointless comments
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.888493625@linutronix.de>
-References: <20230425183313.888493625@linutronix.de>
+In-Reply-To: <20230425183313.832240451@linutronix.de>
+References: <20230425183313.832240451@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168597770464.404.17603246020123754187.tip-bot2@tip-bot2>
+Message-ID: <168597770528.404.15468213878026107518.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,87 +67,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     1263a2a9d71bac5ffabf9603c36e36cb6edbcdcf
-Gitweb:        https://git.kernel.org/tip/1263a2a9d71bac5ffabf9603c36e36cb6edbcdcf
+Commit-ID:     478a93ac9ed7da5e7cd98e00502b142e22dab4d7
+Gitweb:        https://git.kernel.org/tip/478a93ac9ed7da5e7cd98e00502b142e22dab4d7
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:27 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:25 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Jun 2023 17:03:39 +02:00
 
-posix-timers: Polish coding style in a few places
+posix-timers: Remove pointless comments
 
-Make it consistent with the TIP tree documentation.
+Documenting the obvious is just consuming space for no value.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.888493625@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.832240451@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/time/posix-timers.c | 25 -------------------------
+ 1 file changed, 25 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index fde1ca9..276f231 100644
+index a22c183..fde1ca9 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -309,10 +309,10 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
-  */
- static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+@@ -59,19 +59,6 @@ static const struct k_clock clock_realtime, clock_monotonic;
+ #error "SIGEV_THREAD_ID must not share bit with other SIGEV values!"
+ #endif
+ 
+-/*
+- * CLOCKs: The POSIX standard calls for a couple of clocks and allows us
+- *	    to implement others.  This structure defines the various
+- *	    clocks.
+- *
+- * FUNCTIONS: The CLOCKs structure defines possible functions to
+- *	    handle various clock functions.
+- *
+- *	    The standard POSIX timer management code assumes the
+- *	    following: 1.) The k_itimer struct (sched.h) is used for
+- *	    the timer.  2.) The list, it_lock, it_clock, it_id and
+- *	    it_pid fields are not modified by timer code.
+- */
+ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags);
+ 
+ #define lock_timer(tid, flags)						   \
+@@ -141,7 +128,6 @@ static inline void unlock_timer(struct k_itimer *timr, unsigned long flags)
+ 	spin_unlock_irqrestore(&timr->it_lock, flags);
+ }
+ 
+-/* Get clock_realtime */
+ static int posix_get_realtime_timespec(clockid_t which_clock, struct timespec64 *tp)
  {
-+	enum hrtimer_restart ret = HRTIMER_NORESTART;
- 	struct k_itimer *timr;
- 	unsigned long flags;
- 	int si_private = 0;
--	enum hrtimer_restart ret = HRTIMER_NORESTART;
+ 	ktime_get_real_ts64(tp);
+@@ -153,7 +139,6 @@ static ktime_t posix_get_realtime_ktime(clockid_t which_clock)
+ 	return ktime_get_real();
+ }
  
- 	timr = container_of(timer, struct k_itimer, it.real.timer);
- 	spin_lock_irqsave(&timr->it_lock, flags);
-@@ -400,8 +400,8 @@ static struct pid *good_sigevent(sigevent_t * event)
- 
- static struct k_itimer * alloc_posix_timer(void)
+-/* Set clock_realtime */
+ static int posix_clock_realtime_set(const clockid_t which_clock,
+ 				    const struct timespec64 *tp)
  {
--	struct k_itimer *tmr;
--	tmr = kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
-+	struct k_itimer *tmr = kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
-+
- 	if (!tmr)
- 		return tmr;
- 	if (unlikely(!(tmr->sigq = sigqueue_alloc()))) {
-@@ -695,8 +695,8 @@ void common_timer_get(struct k_itimer *timr, struct itimerspec64 *cur_setting)
+@@ -166,9 +151,6 @@ static int posix_clock_realtime_adj(const clockid_t which_clock,
+ 	return do_adjtimex(t);
+ }
  
- static int do_timer_gettime(timer_t timer_id,  struct itimerspec64 *setting)
+-/*
+- * Get monotonic time for posix timers
+- */
+ static int posix_get_monotonic_timespec(clockid_t which_clock, struct timespec64 *tp)
  {
--	struct k_itimer *timr;
- 	const struct k_clock *kc;
-+	struct k_itimer *timr;
- 	unsigned long flags;
- 	int ret = 0;
+ 	ktime_get_ts64(tp);
+@@ -181,9 +163,6 @@ static ktime_t posix_get_monotonic_ktime(clockid_t which_clock)
+ 	return ktime_get();
+ }
  
-@@ -767,8 +767,8 @@ SYSCALL_DEFINE2(timer_gettime32, timer_t, timer_id,
- SYSCALL_DEFINE1(timer_getoverrun, timer_t, timer_id)
+-/*
+- * Get monotonic-raw time for posix timers
+- */
+ static int posix_get_monotonic_raw(clockid_t which_clock, struct timespec64 *tp)
  {
- 	struct k_itimer *timr;
--	int overrun;
- 	unsigned long flags;
-+	int overrun;
+ 	ktime_get_raw_ts64(tp);
+@@ -191,7 +170,6 @@ static int posix_get_monotonic_raw(clockid_t which_clock, struct timespec64 *tp)
+ 	return 0;
+ }
  
- 	timr = lock_timer(timer_id, &flags);
- 	if (!timr)
-@@ -941,8 +941,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t, timer_id, int, flags,
- 		const struct __kernel_itimerspec __user *, new_setting,
- 		struct __kernel_itimerspec __user *, old_setting)
+-
+ static int posix_get_realtime_coarse(clockid_t which_clock, struct timespec64 *tp)
  {
--	struct itimerspec64 new_spec, old_spec;
--	struct itimerspec64 *rtn = old_setting ? &old_spec : NULL;
-+	struct itimerspec64 new_spec, old_spec, *rtn;
- 	int error = 0;
+ 	ktime_get_coarse_real_ts64(tp);
+@@ -242,9 +220,6 @@ static int posix_get_hrtimer_res(clockid_t which_clock, struct timespec64 *tp)
+ 	return 0;
+ }
  
- 	if (!new_setting)
-@@ -951,6 +950,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t, timer_id, int, flags,
- 	if (get_itimerspec64(&new_spec, new_setting))
- 		return -EFAULT;
- 
-+	rtn = old_setting ? &old_spec : NULL;
- 	error = do_timer_settime(timer_id, flags, &new_spec, rtn);
- 	if (!error && old_setting) {
- 		if (put_itimerspec64(&old_spec, old_setting))
+-/*
+- * Initialize everything, well, just everything in Posix clocks/timers ;)
+- */
+ static __init int init_posix_timers(void)
+ {
+ 	posix_timers_cache = kmem_cache_create("posix_timers_cache",
