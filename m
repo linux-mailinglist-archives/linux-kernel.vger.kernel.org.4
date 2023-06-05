@@ -2,310 +2,485 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522B9722AF0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D681F722AF5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbjFEPZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S232558AbjFEPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjFEPZZ (ORCPT
+        with ESMTP id S233691AbjFEPZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:25:25 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F41F1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:25:23 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355BQfEt029296;
-        Mon, 5 Jun 2023 15:25:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2023-03-30;
- bh=M4bNE60H3wBm6XILT6IQfT6VJN6vrtFS1Iz3h1PVj84=;
- b=syqpFvqeZZrbki06btCAKLM7aJddzREWMnlhJQVO4H/r5jvOG5BZ0prSCSKhgl9e9TBi
- ZcoXblYHu7kWDWse70jLmbw9RMI410wP/A5QDqckkY+FfDnRwWVy4pQ1swYr8uWeIFDQ
- /mH5CgyIgt/qgxBtNUfi/dYFd+izAgfx5XixagOinDOv8sR6lxGsVQF+2aVdUL4WYFqU
- J33PAtdnDeQpZoRIqLDCvaTdyKRnm+gO2fWh3CqDpv56hQYtqwo8LN7HIgs7tS9C7UgV
- OFI7lR3BhGqDb8BOF7eqcUI1HIU/Ui2O2IwRltVddtNo4GD32tax9wSBdJKRe0W2i392 vg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qyx2wk84p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 05 Jun 2023 15:25:04 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 355EF97o001776;
-        Mon, 5 Jun 2023 15:25:03 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r0tqyc48p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 05 Jun 2023 15:25:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YLZ5PJFL6f8p2xCOF3tB6+GsvoqA44faNP2ZK1u8C9YOmHxzLSBglU4SD4nAJ9r18i7x2LahYCKJlZ6zZwgUa9UeGEdwU2UpLhF0kVc96mefVHVVfQf3Vgj5+19RZGlmcqht6vBVzKxj5SjGvN68auzqmZddHm6MGKqp80QePiJf6kJF0s2fuzwhcZXFUySOS1WVSDHiriMI6b0UnT24UIHOTrbr82U3N53vxxiiiG7CXnxd/J11Ga0orsjxZOvMIOUUI8HehtnuWuxNw6HuTTdfWW18dbwwFcqc1gH08Phqrwuc8jOV216td9EGkuTMPWlJGetwxB43J3m39smmeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M4bNE60H3wBm6XILT6IQfT6VJN6vrtFS1Iz3h1PVj84=;
- b=cWPTu1y9inYIIZ4OoDoCucjHIdxsAeLKc5UvueC9WN+eFAANLA9c7Ux9YpvUPeN9uAAjp/XHpyVxtbAqVoza/gEOnZycUQ0bq2DlNUVOavJRdVsodJop2/rr8QyaC6IpqYBtz6VNsRI2Axh3krXXDF5h1vKmrTjIFikZICyPy1TRtFz8gtGeAU/tZ3YWi43QUOGD5F43ck3rd9ms9Nmqa9PLQL+ghO6ODAUxAUzPcvTmXo5C5AN3WP7vo5So53+kYKYdPTX5nLbIdW3RvivrraPBhLtZtUQIEv9mE96cT517z+a5P88rUDcfkrqpBMN0wAJSIhjWbK3XWXpSxulIug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M4bNE60H3wBm6XILT6IQfT6VJN6vrtFS1Iz3h1PVj84=;
- b=IAOGpzIlI28BLQe9qAObQhhXYYpIEo8MzmnYfnPjcnkUOzGwBsktpJhhUFfJXzUAvSjZNSvXiDWtemczdBqIi+9h228qcOawpfoRg0UPR02rUmRV/pUpX9srk5BbiY+o0ba2w8rsM/BEf/dES1nagKadrkGjekYmLvpU6BWRpVU=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DS7PR10MB5133.namprd10.prod.outlook.com (2603:10b6:5:3a7::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
- 2023 15:25:00 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 15:25:00 +0000
-Date:   Mon, 5 Jun 2023 11:24:57 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-Subject: Re: [PATCH 2/2] maple_tree: add a fast path case in
- mas_wr_slot_store()
-Message-ID: <20230605152457.vrfudboixmscr5mj@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org
-References: <20230602075353.5917-1-zhangpeng.00@bytedance.com>
- <20230602075353.5917-2-zhangpeng.00@bytedance.com>
- <20230602164134.uw6m7t2pb3zhydkl@revolver>
- <39952baf-9bda-5b22-5ba0-1b6b377d238a@bytedance.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <39952baf-9bda-5b22-5ba0-1b6b377d238a@bytedance.com>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT4PR01CA0345.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:fc::26) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        Mon, 5 Jun 2023 11:25:41 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAF7F2
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:25:36 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230605152531euoutp0264913d484b9833db8d3b2c0db065de0c~lzLlSKXKw2035520355euoutp027
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:25:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230605152531euoutp0264913d484b9833db8d3b2c0db065de0c~lzLlSKXKw2035520355euoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685978731;
+        bh=JLdQSs5ydSiYwwf0V6JSfMEX7LpM/2u51VDj0NoTgww=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=HFzX2n9rJUWP62B5EvCIgVuxyj56zlTRCOHY81R1Xi0ZTVf/hckPbP6LUqoDO+745
+         Ker8YaRTMA1NjuPrqRjq4WLPQEgg0ZE+afxhB/qR1KBBiyd8uqv3A03NFHxlH64xnX
+         wjCK0ZYDFGlqoiWYQEox6cGWyWFpVCerhraDQfCc=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230605152531eucas1p26e20654f186d63aecf0b068d82fc7971~lzLlM5BBx1928319283eucas1p2a;
+        Mon,  5 Jun 2023 15:25:31 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id DD.19.42423.B6EFD746; Mon,  5
+        Jun 2023 16:25:31 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca~lzLk3XxbB0458304583eucas1p2A;
+        Mon,  5 Jun 2023 15:25:31 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230605152531eusmtrp19e5aeba2b908ed211286d6a07a861777~lzLk2z8pS2505125051eusmtrp1Y;
+        Mon,  5 Jun 2023 15:25:31 +0000 (GMT)
+X-AuditID: cbfec7f2-a3bff7000002a5b7-5a-647dfe6b12c0
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id EB.EF.14344.B6EFD746; Mon,  5
+        Jun 2023 16:25:31 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230605152530eusmtip108b92cde714c9c6495c32c0c926d0bba~lzLkbZytj0820208202eusmtip1X;
+        Mon,  5 Jun 2023 15:25:30 +0000 (GMT)
+Message-ID: <3051ad44-0ac3-e77b-3178-fac7cac3b3f2@samsung.com>
+Date:   Mon, 5 Jun 2023 17:25:30 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|DS7PR10MB5133:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4519389-427e-4b82-ab77-08db65d9072b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 31+UrvObxZkuO9wweQoNS0DrO5oASNJt4ilLZl6kkhRqBYn6UiPAJBfAbkrSEVy+vwg2KaKnxd7uGIIw8i0ta4mStlFx45pjrIGrWXyRSa+kwy1CIsKlEZDoKsj0rxynhyROABzlMPDriBLMQdjSHx3/ddnX8Hxrr5f4gqhBL3Hled1TbF9zS8ounqZX0zqcnNdgOZa4jS7Vqe51YTkkpDtTi1YNHKzkw65YHwYBbpWq5N3dIu5d2YS0lzgb9T3oZyDqRXQ+RDmTx4dhZaXW2pe+lRtadXWne7nKHlOC9K+wp8SoSpropLcFkw7WTS5+f52P9uD2uC6po0eXRPIGG1K2+p2fIpbVy3VuartegW9gFNw/wy5i6c1sQfesm0ssSLJq/dFe82Gh8w3aR0HLgS/tuBj/Ew4qZ75ZX0e7GSwrn/+Q+PYvA56ooJ5o5krGl4Isup9Dmfc0NFq180TcwyXg2g9rWAzQBtC3IjPgOHdN/gfXNY2bmqOlxr1JuDlPUTrebxT68VMwEMHrkNFjTPDJyzkZsOAhird+vDm4TDeMKj/J5YVp+D8CWDgdjsPo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(478600001)(8936002)(8676002)(4326008)(6916009)(66946007)(66556008)(66476007)(316002)(38100700002)(41300700001)(186003)(83380400001)(6666004)(6486002)(9686003)(6512007)(1076003)(26005)(6506007)(33716001)(86362001)(5660300002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SzRuV3BJYXN1Qk5SclgranhlUmxSVU82cEhiUjUxajdJbVNZUjRwWGQ3MFZu?=
- =?utf-8?B?WjhJWTArMml0Mlg1L0k5M2o4Y0g2emEycFlHSzBibGpzNjNvYnBiZUlwRHRB?=
- =?utf-8?B?VmR1TUV5VnZTUXI0QzV0UzZFUUIyZ2RLVFFtYzdyZElrS0FzdzU0dEVzUU1m?=
- =?utf-8?B?azFVT2o2cUVRdG5ydjAyU1A3SlMvN3hoMi9zR0JyKzJ0WXM4N1FnTXdiYzBq?=
- =?utf-8?B?T0daYktFSkFSc3VMYit3SDJPamN5NkRYb1hFQlBiVFdxVGhGQzlpekFIS2tp?=
- =?utf-8?B?VnBTRDVQK3c3QkJ6YWNNSkZQKzNpRUIxL2l5blJlME9KZ2dTanN3WCtqUnpn?=
- =?utf-8?B?WS9WS0VxV0lrNHZDUzhtZ2tPRjM2MEV2c0dlMTFzNUoyeFNRMWRpSEl1QkFQ?=
- =?utf-8?B?NDZySWdtL1lwamlibGI5L051Z3dxZlh2WEVncFR0ZXNGbFRoaVZnWkQ4T21B?=
- =?utf-8?B?SU9ScjAxdlEyazZWY0EzWCtJTU5BVGdhNFNvSlYrNGVNVkMzT2xHRElmWWJ4?=
- =?utf-8?B?U2RsSVVYcVlUUTNKWFNSQ3pMZmIwRVlvODh3QTd0Szh0U1p0YW9UMkNEbkE1?=
- =?utf-8?B?TVNnMitPZWlUcUdCZ1FsQ2JFZVNnR3AyNG8vRSswMVRqMHExYnFINFZsK3lB?=
- =?utf-8?B?SFZxaUJMVzdHZGR4QVRJbERFTG94ZFh4RFU1a2k2ZkRZaTJ0WjJKd0l1czRp?=
- =?utf-8?B?SFUzcTN2ZGxxMXRNQlFvbThiZ0U0emorb3BnYVgrT3hwS0pZbXlINWQrbWZ5?=
- =?utf-8?B?ZVljd0RQZTNseWgvMER3elplSUc5U1lSemM1QlJQNXdSUDl6aThVdkVqVVVU?=
- =?utf-8?B?M2Noa0FJTEZyNCtLcG9IcUxObXdKb3dHWWx1bVBGblgxcUNmZEYyTkZJdzlu?=
- =?utf-8?B?VjlodEcwSkxJb2l3bUp3QWpMWExhTlBuUWdTM3B1QWMyYXBoVDdSRVJQdW45?=
- =?utf-8?B?YU1LYnV3aU43ZjdLTDUzbVloUXB2YmJwWGxSN2N5K0h3Q2k3M0Y1ZjNCRGJF?=
- =?utf-8?B?U053V2ZEWXc2UmZtWXp2aUdEWjNzdDdmb1FMYnN0Ync4Z1UxZWxZcHI3ejdp?=
- =?utf-8?B?VGxPMnBQZTJvQ1VCdHZsenU3bGM3RkxtRkNZQWxodlNvdXVyblg5MmpxS2M2?=
- =?utf-8?B?QVJBaTRQYWF1cEV5L3N2SVNxMFlFMkxqNnNjc3MxejVFR2QyZGh2VHk0K2JO?=
- =?utf-8?B?N1k0am1VOG1Pc3JxVVFvaHJkMXllYnpXNDljVU54N1ovV2ovSG11NmFHRzlO?=
- =?utf-8?B?cWlTbG1zWE52RDcyRWJxNklHdFQxSVVkbmxyd01yTXQ1dThIUnQ0eUE2eFRm?=
- =?utf-8?B?enFTWUtYaTQveHlrb2hrOW0yVWhGYkRzYTMvQ3pUVE14d0R0TzJJWWhBK3lH?=
- =?utf-8?B?eXNjM3JBQzExSkhlL2N5N2dNYnJXc2ZvWC9VRFN0RVYvcnpNdnpkUEFGN29S?=
- =?utf-8?B?emJ1QjFUMmJ5MU94R0pYc3pERWpmYjFLckhMYm56clBZMXltWUcyT0lqMGVW?=
- =?utf-8?B?VWd2NWtnbnVsRDAvQWhCUmdPMkRWa1FaV0htbWYzNGs3R3kxV3ZiZ01kbEQ5?=
- =?utf-8?B?NkRMbHJxRmNlL2VxWnZ1Yld2bzkyaXh2SDJtSjg0KzNhZWxmQkJBaGlGVHor?=
- =?utf-8?B?YXBsK09ic2ppUWNoS21MbmpHekhDd0plMmRpbzVvWTlnRE5jUFFMclJTU1dM?=
- =?utf-8?B?STBtUExtUEFsN2FBdW43Q21aak95a29tTjVYcjI0TGcwclNPeC9WMDJrQTBs?=
- =?utf-8?B?M2NGbjVPMlRmYit3NzFocWZiRlVFZnFxYkVsbU10di92M2NFbXdGdmp6SWVC?=
- =?utf-8?B?eUllaWRSSWlNckwvZ1MvaGFWY0hLVm04WVZpbG1od3h1SHNlSkZjSm9qa0l4?=
- =?utf-8?B?cHFwTmIxZGFOLzZ1MmJRbnllWGtqeER4aFM5Z3Fka1prcW5kK1FBVnVjTHBQ?=
- =?utf-8?B?WG12Rjg1UG0yOE95RkN1RStMdktjRjZZeU1kbDZKWjV2TjdDdkxLVnZCNzUz?=
- =?utf-8?B?MzNKdHRLQURkOStqUk40TC9WaWk5QmM3SjdWL1l3cGZGVHB2VEs1aGZuVFVE?=
- =?utf-8?B?VjR3bkljcmMzeW55OXcrVFFlU2U1SWM3WGtEajZrZFBIZkxPakpITWRPaVZv?=
- =?utf-8?B?OXh2MTJPL284dzcxaWhjMHpFNkNLRjBYUzNDQVc0N2Q5Nkw0Sks5d2kwVzBQ?=
- =?utf-8?B?a0E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RFV2aEZDM2lqT3ZGRFI5RzRVM1pCVVJSTE5wRHdONHhnTDYzZnVlcWMzaWhk?=
- =?utf-8?B?aHVBUko0TzA5UXRPdEErazVXS2hBZitraEhnUmZSdnU2dUwrNS9hZlhsSWFG?=
- =?utf-8?B?WWpqbk9nWUxWbnNHL0tFeW1Bc0k2SHowMzFIOUdtazFiL3VJZktPS09CL0JV?=
- =?utf-8?B?aVN6V3lxdDFoenI3ZGRvT2RTLzNDUWQyVFR0VEZBZzI3NnRWUk9MbTMwTVVk?=
- =?utf-8?B?a3VFM0wzdlVJMEpoTGo2d0pnajliUElvUFZ6TFdOYUNiOC9PSnIyN3EwUzdm?=
- =?utf-8?B?Vm02R0ViOG9JMERLS0xVeUN2Q2Y1V21UNXFWNW5WVkd0dHVuV3E1NVk5WVo0?=
- =?utf-8?B?N082dll3K3VWVjNtL21NR0Z3bTM0L2VWQ05GenJnRkk0ZlJjTlJ6ZTMveStl?=
- =?utf-8?B?YmJFOVlkMnBwRXZaYTdHRDIwRVUyUCs4c0hOOXBBK0dQTjZhOE11T3ZlTFhV?=
- =?utf-8?B?VjNFNk14MSsvTUkrNUxhVHEvSlpvaEo0T0F5VzJ6RUNOZlVRYTUyOVRZemxw?=
- =?utf-8?B?dzFITVBhRmJwa1NDV2RXZmdhdHZzQlFBbDl6b0wwNEg2WHZ1Q2xvOU50aUNU?=
- =?utf-8?B?NHZiL3FrT0krbWJJK0gxZ1JOdnFKMUdNcTdDQi9meklNcTBmWWxBbnk0bHdu?=
- =?utf-8?B?VTdGcmRiOWpIc1A4ZGdRRGlIWkVNQ09oY0pNd2Y0YlMxSk5LTGZoaDl0OUY5?=
- =?utf-8?B?bE1ZWG9vV0p6TitwQmwvdHA5cHRHczh6RHlldkVMZkVQK3NXKzZ2Ny93anBC?=
- =?utf-8?B?NExtRy91ZUpDQlVURWI4MTh1bFRxVHpQbjg0S0pFQWRFRTFhZFdXZVpZRlFq?=
- =?utf-8?B?TUdOUzVSc2hya09sSWQvaTY4U1FmMmZwbzVFZzQzSTZNcGt5UStDSm8xMXp6?=
- =?utf-8?B?czVIbVYxaHpvekVrL2UzTDM3MzBYZGJnSWRlck5EZ1NaWS9DRVNqZWFqQWMw?=
- =?utf-8?B?RjBkZm9iTkRRZnQ5THMyTGdBWTRDU3VocHFqMkhnRm1NRGVsZnUwczJ4OXF4?=
- =?utf-8?B?bjV6aFlkQUVuSU0zN21HNGxPM2ZCcHdmeXdETDJlZFNLUTZ1akhyYUtUbFY4?=
- =?utf-8?B?U053YmJieEY5S2JlK1VMa1BtTjRVNzk5dmk4Vmlhc21lQnBhbUJUQUNhWUV5?=
- =?utf-8?B?QVZBc3RJQmpGMG1tV01VWkhRVC9yTWRjRktOK0hlL29aSDJGNlFoRDNoc20r?=
- =?utf-8?B?MkJaQWJvckNCcEk0d1EyZVhqRGdQOVBicXFmZ29DM2VUK29ocVUrL0JGSjl5?=
- =?utf-8?Q?WQmtFTeZ/3uYSTW?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4519389-427e-4b82-ab77-08db65d9072b
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 15:25:00.6864
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WPCmpSUg4XHZtfzW7idWhXPx24GuSYCVeMWEdFwI2IvMQj7e7oYvEAG6BTwXD2WzDrxrAPW9CghM/Gpb1smAuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5133
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_30,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306050132
-X-Proofpoint-GUID: 0O6nwI0d9pS8aQhf8m6jSC1ias1M_vlm
-X-Proofpoint-ORIG-GUID: 0O6nwI0d9pS8aQhf8m6jSC1ias1M_vlm
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org
+Cc:     Tejun Heo <tj@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgleLIzCtJLcpLzFFi42LZduznOd3sf7UpBodmqFtc3jWHzeL8mVXs
+        Fsd7DzBZ/Fp+lNHix4bHrA6sHptXaHlsWtXJ5vF5k1wAcxSXTUpqTmZZapG+XQJXxuP5ZQUv
+        ciuWXD3E1sA4Oa6LkZNDQsBE4tPBR+xdjFwcQgIrGCUON6xjg3C+MEo8W7CLFcL5zChxfOof
+        dpiWG8/nMUEkljNKrNvxCKrqI6PE1ourWLoYOTh4BewkZh9hAWlgEVCRWPdvHTOIzSsgKHFy
+        5hOwuKhAqsTuawdYQWxhAS+J2Vfa2UBsZgFxiVtP5jOB2CICzhL77zRDxRMklm6/BFbPJmAo
+        0fW2CyzOKeAq0T13DSNEjbxE89bZzCD3SAjs4JB4N+sbE8TVLhJfF51lgbCFJV4d3wL1jYzE
+        6ck9LBAN7YwSC37fZ4JwJjBKNDy/xQhRZS1x59wvNpDPmAU0Jdbv0ocIO0qcnt/PBBKWEOCT
+        uPFWEOIIPolJ26YzQ4R5JTrahCCq1SRmHV8Ht/bghUvMExiVZiEFyywk789C8s4shL0LGFlW
+        MYqnlhbnpqcWG+allusVJ+YWl+al6yXn525iBCaW0/+Of9rBOPfVR71DjEwcjIcYJTiYlUR4
+        d3lVpwjxpiRWVqUW5ccXleakFh9ilOZgURLn1bY9mSwkkJ5YkpqdmlqQWgSTZeLglGpg4j0V
+        dtFG7fvKj+cX7IzctqXwrZf8QfEdj6fH90rfSpou7proIKrBJdGxOyd2Uku1rPrX5ay+TZFH
+        8+u8IuoSvjiciWqP3PtVbhvbI83PJU9N2uI+9HueN8mNUzym/Hnate0P2T6paV+pYZXcaLt1
+        3faVS9OF9yszniqXbdjSMKX2h2lUkMbONdey/Rkk5gdWz9w5afEq9kv9KtYnd577535TPmqX
+        jMH+xwrb7dcG6997HjnlSemjeyeOnxA+vjVoSvCprQxC1dobFpSKHuk++v5BcJFJ497NLGJb
+        zAJPhfg7HdGwm59r6Byiukzjeu7Dzy12Px9sYkqe38eu+O3M6VjRDct3FE/Vn3xqwqOD6Uos
+        xRmJhlrMRcWJAHOHWn+bAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsVy+t/xu7rZ/2pTDM5cFbC4vGsOm8X5M6vY
+        LY73HmCy+LX8KKPFjw2PWR1YPTav0PLYtKqTzePzJrkA5ig9m6L80pJUhYz84hJbpWhDCyM9
+        Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jMfzywpe5FYsuXqIrYFxclwXIyeHhICJ
+        xI3n85i6GLk4hASWMkos7JrGCJGQkTg5rYEVwhaW+HOtiw2i6D2jxMzZO4ASHBy8AnYSs4+w
+        gNSwCKhIrPu3jhnE5hUQlDg58wlYXFQgVeLukn42EFtYwEti9pV2MJtZQFzi1pP5TCC2iICz
+        xP47zVDxBIltxyeCjRcScJHoeasOEmYTMJToetsFVsIp4CrRPXcNI0S5mUTX1i4oW16ieets
+        5gmMQrOQXDELybZZSFpmIWlZwMiyilEktbQ4Nz232EivODG3uDQvXS85P3cTIzCKth37uWUH
+        48pXH/UOMTJxMB5ilOBgVhLh3eVVnSLEm5JYWZValB9fVJqTWnyI0RQYFBOZpUST84FxnFcS
+        b2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwMRvt0k03YzxFA+/xbNp
+        HzW62q431N/pfhrYVrZ65ZHsKxN/s3A3/D4gE3JY37N+mfdUWa9Q9d95v97o7NXKr5JuuJJ9
+        L/rvgvPm7nKm73LsHA4pp5//HaNx08e8Yu2jZvW/zKJLhP8+yCwp4SzblOX9OzPKuvqQS1uK
+        Yn1ytsMhrd/txu/ldlbVhHyXsLj0ZMoJr4mCeiECJhOjcxcdl5jCZxktY71v1tFoPX0mO5GS
+        wBkHV8+wW8MQJDg3QTPnTUe2XG3ElRDhXW0RPfKPAjuKoxW03aUmHp7iWN/larvwnNJBra6X
+        bwIEpotb/ufe0CxQFnNqfu3a9J5MhcO9t2T3HtqzIuI1t/IBhnlKLMUZiYZazEXFiQBVL771
+        KwMAAA==
+X-CMS-MailID: 20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca
+References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
+        <CGME20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Peng Zhang <zhangpeng.00@bytedance.com> [230605 07:11]:
->=20
->=20
-> =E5=9C=A8 2023/6/3 00:41, Liam R. Howlett =E5=86=99=E9=81=93:
-> > * Peng Zhang <zhangpeng.00@bytedance.com> [230602 03:54]:
-> > > When the new range overwrites three ranges and does not touch the
-> > > boundaries on both sides, the number of entries will not be increased=
-,
-> > > so we can just update the pivots as a fast path. However, it may
-> > > introduce potential risks in RCU mode (although it can pass the test)=
-,
-> > > because it updates two pivots. We only enable it in non-RCU mode for =
-now.
-> >=20
-> > So what you are saying is that you are expanding one entry to consume
-> > portions of the previous and next into a new entry.  We know this is th=
-e
-> > case because the end of the node is not moving and we are modifying mor=
-e
-> > than one slot (so it must be 2 slots)
-> >=20
-> > This scenario is not tested in the testing framework.  We should add
-> > testing before we can add this.
-> >=20
-> > >=20
-> > > Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
-> > > ---
-> > >   lib/maple_tree.c | 33 +++++++++++++++++++++------------
-> > >   1 file changed, 21 insertions(+), 12 deletions(-)
-> > >=20
-> > > diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> > > index cfd9fad308a2..ec82441ca3e8 100644
-> > > --- a/lib/maple_tree.c
-> > > +++ b/lib/maple_tree.c
-> > > @@ -4100,23 +4100,32 @@ static inline bool mas_wr_slot_store(struct m=
-a_wr_state *wr_mas)
-> > >   {
-> > >   	struct ma_state *mas =3D wr_mas->mas;
-> > >   	unsigned char offset =3D mas->offset;
-> > > +	void __rcu **slots =3D wr_mas->slots;
-> > >   	bool gap =3D false;
-> > > -	if (wr_mas->offset_end - offset !=3D 1)
-> > > -		return false;
-> > > -
-> > > -	gap |=3D !mt_slot_locked(mas->tree, wr_mas->slots, offset);
-> > > -	gap |=3D !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
-> > > +	gap |=3D !mt_slot_locked(mas->tree, slots, offset);
-> > > +	gap |=3D !mt_slot_locked(mas->tree, slots, offset + 1);
-> > > -	if (mas->index =3D=3D wr_mas->r_min) {
-> > > -		/* Overwriting the range and over a part of the next range. */
-> > > -		rcu_assign_pointer(wr_mas->slots[offset], wr_mas->entry);
-> > > -		wr_mas->pivots[offset] =3D mas->last;
-> > > -	} else {
-> > > -		/* Overwriting a part of the range and over the next range */
-> > > -		rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
-> > > +	if (wr_mas->offset_end - offset =3D=3D 1) {
-> > > +		if (mas->index =3D=3D wr_mas->r_min) {
-> > > +			/* Overwriting the range and a part of the next one */
-> > > +			rcu_assign_pointer(slots[offset], wr_mas->entry);
-> > > +			wr_mas->pivots[offset] =3D mas->last;
-> > > +		} else {
-> > > +			/* Overwriting a part of the range and the next one */
-> > > +			rcu_assign_pointer(slots[offset + 1], wr_mas->entry);
-> > > +			wr_mas->pivots[offset] =3D mas->index - 1;
-> > > +			mas->offset++; /* Keep mas accurate. */
-> > > +		}
-> > > +	} else if (!mt_in_rcu(mas->tree)) {
-> > > +		/* Overwriting three ranges, but don't touch the boundaries */
-> >=20
-> > I find this comment misleading.  You actually touch both boundaries for
-> > the entry in this case (start and end).  We are just increasing the
-> > space in both directions.  You are also not overwriting two of the thre=
-e
-> > entries or ranges, you are expanding one entry in two directions, so
-> > both the previous and next ranges will shrink but they will remain. It'=
-s
-> > more of a "modify three ranges but don't change the outside limits." Th=
-e
-> > similar statement in the commit message should also be changed.
-> Yes, your understanding is correct.
-> Sorry my comment is not well written, I mean the left boundary of the
-> leftmost range and the right boundary of the rightmost range are not
-> touched, I will fix it in v2.
->=20
-> >=20
-> > Right now, I don't see this code executed by the test program.
-> > Inserting a BUG_ON() here and it will not be hit.
-> Yes, the current test program does not run to this branch, I will add
-> the corresponding test cases in v2.
->=20
-> >=20
-> > > +		gap |=3D !mt_slot_locked(mas->tree, slots, offset + 2);
-> > > +		rcu_assign_pointer(slots[offset + 1], wr_mas->entry);
-> > >   		wr_mas->pivots[offset] =3D mas->index - 1;
-> > > +		wr_mas->pivots[offset + 1] =3D mas->last;
-> > >   		mas->offset++; /* Keep mas accurate. */
-> > > +	} else {
-> >=20
-> > We are hitting this else in check_locky at maple.c:35780 only, I think.
-> > You've identified a lack of testing here by the looks of it.
-> >=20
-> > The VMA code does not do this today, and I don't know of any other user=
-s
-> > which expand/contract entries like this.  Do you think this will be
-> > common enough for the optimisation vs a node store?
-> I also thought about this problem, but I still regard it as an
-> optimization of the slot store. Although it is useless for VMA
-> now, I don't know if it will be used in the future. I think that
-> if we enter this function, we will most likely enter the first if
-> branch now, which will not cause additional overhead and have no
-> negative impact, so try to add this case.
+On 31.05.2023 14:04, tip-bot2 for Peter Zijlstra wrote:
+> The following commit has been merged into the sched/core branch of tip:
+>
+> Commit-ID:     c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
+> Gitweb:        https://git.kernel.org/tip/c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
+> Author:        Peter Zijlstra <peterz@infradead.org>
+> AuthorDate:    Tue, 30 May 2023 13:20:46 +02:00
+> Committer:     Peter Zijlstra <peterz@infradead.org>
+> CommitterDate: Tue, 30 May 2023 22:46:27 +02:00
+>
+> sched/fair: Multi-LLC select_idle_sibling()
+>
+> Tejun reported that when he targets workqueues towards a specific LLC
+> on his Zen2 machine with 3 cores / LLC and 4 LLCs in total, he gets
+> significant idle time.
+>
+> This is, of course, because of how select_idle_sibling() will not
+> consider anything outside of the local LLC, and since all these tasks
+> are short running the periodic idle load balancer is ineffective.
+>
+> And while it is good to keep work cache local, it is better to not
+> have significant idle time. Therefore, have select_idle_sibling() try
+> other LLCs inside the same node when the local one comes up empty.
+>
+> Reported-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Sounds good.  Thanks.
+This patch landed in today's linux next-20230605 as commit c5214e13ad60 
+("sched/fair: Multi-LLC select_idle_sibling()"). Unfortunately it causes 
+regression on my ARM 64bit Exynos5433-based TM2e test board during the 
+CPU hotplug tests. From time to time I get the NULL pointer dereference. 
+Reverting $subject on top of linux-next fixes the issue. Let me know if 
+I can help somehow debugging this issue. Here is a complete log (I've 
+intentionally kept all the stack dumps, although they don't look very 
+relevant...):
 
->=20
-> >=20
-> > > +		return false;
-> > >   	}
-> > >   	trace_ma_write(__func__, mas, 0, wr_mas->entry);
-> > > --=20
-> > > 2.20.1
-> > >=20
-> > >=20
+# for i in /sys/devices/system/cpu/cpu[1-9]; do echo 0 >$i/online; done
+Unable to handle kernel NULL pointer dereference at virtual address 
+0000000000000090
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc1+ #13640 Not tainted
+------------------------------------------------------
+cpuhp/6/43 is trying to acquire lock:
+ffff80000ab65598 (console_owner){..-.}-{0:0}, at: 
+console_flush_all+0x1ac/0x4fc
+
+but task is already holding lock:
+ffff00002836ed48 (&p->pi_lock){-.-.}-{2:2}, at: try_to_wake_up+0x58/0x46c
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (&p->pi_lock){-.-.}-{2:2}:
+        _raw_spin_lock_irqsave+0x60/0x88
+        try_to_wake_up+0x58/0x46c
+        default_wake_function+0x14/0x20
+        autoremove_wake_function+0x18/0x44
+        __wake_up_common+0x94/0x170
+        __wake_up_common_lock+0x7c/0xcc
+        __wake_up+0x18/0x24
+        tty_wakeup+0x34/0x70
+        tty_port_default_wakeup+0x20/0x38
+        tty_port_tty_wakeup+0x18/0x24
+        uart_write_wakeup+0x18/0x28
+        s3c24xx_serial_tx_chars+0x20c/0x218
+        s3c64xx_serial_handle_irq+0x9c/0xe0
+        __handle_irq_event_percpu+0xb0/0x2d4
+        handle_irq_event+0x4c/0xb8
+        handle_fasteoi_irq+0xa4/0x198
+        generic_handle_domain_irq+0x2c/0x44
+        gic_handle_irq+0x44/0xc4
+        call_on_irq_stack+0x24/0x4c
+        do_interrupt_handler+0x80/0x84
+        el1_interrupt+0x34/0x64
+        el1h_64_irq_handler+0x18/0x24
+        el1h_64_irq+0x64/0x68
+        default_idle_call+0x9c/0x150
+        do_idle+0x230/0x294
+        cpu_startup_entry+0x28/0x2c
+        rest_init+0x100/0x190
+        arch_post_acpi_subsys_init+0x0/0x8
+        start_kernel+0x594/0x684
+        __primary_switched+0xbc/0xc4
+
+-> #2 (&tty->write_wait){-.-.}-{2:2}:
+        _raw_spin_lock_irqsave+0x60/0x88
+        __wake_up_common_lock+0x5c/0xcc
+        __wake_up+0x18/0x24
+        tty_wakeup+0x34/0x70
+        tty_port_default_wakeup+0x20/0x38
+        tty_port_tty_wakeup+0x18/0x24
+        uart_write_wakeup+0x18/0x28
+        s3c24xx_serial_tx_chars+0x20c/0x218
+        s3c64xx_serial_handle_irq+0x9c/0xe0
+        __handle_irq_event_percpu+0xb0/0x2d4
+        handle_irq_event+0x4c/0xb8
+        handle_fasteoi_irq+0xa4/0x198
+        generic_handle_domain_irq+0x2c/0x44
+        gic_handle_irq+0x44/0xc4
+        call_on_irq_stack+0x24/0x4c
+        do_interrupt_handler+0x80/0x84
+        el1_interrupt+0x34/0x64
+        el1h_64_irq_handler+0x18/0x24
+        el1h_64_irq+0x64/0x68
+        default_idle_call+0x9c/0x150
+        do_idle+0x230/0x294
+        cpu_startup_entry+0x28/0x2c
+        rest_init+0x100/0x190
+        arch_post_acpi_subsys_init+0x0/0x8
+        start_kernel+0x594/0x684
+        __primary_switched+0xbc/0xc4
+
+-> #1 (&port_lock_key){-.-.}-{2:2}:
+        _raw_spin_lock_irqsave+0x60/0x88
+        s3c24xx_serial_console_write+0xfc/0x124
+        console_flush_all+0x208/0x4fc
+        console_unlock+0x5c/0x14c
+        vprintk_emit+0x15c/0x3b0
+        vprintk_default+0x38/0x44
+        vprintk+0xc0/0xe4
+        _printk+0x5c/0x84
+        register_console+0x1f4/0x420
+        uart_add_one_port+0x50c/0x53c
+        s3c24xx_serial_probe+0x34c/0x72c
+        platform_probe+0x68/0xd8
+        really_probe+0x148/0x2b4
+        __driver_probe_device+0x78/0x12c
+        driver_probe_device+0xd8/0x160
+        __driver_attach+0x9c/0x1ac
+        bus_for_each_dev+0x74/0xd4
+        driver_attach+0x24/0x30
+        bus_add_driver+0xe4/0x1e8
+        driver_register+0x60/0x128
+        __platform_driver_register+0x28/0x34
+        samsung_serial_init+0x30/0x8c
+        do_one_initcall+0x74/0x2f0
+        kernel_init_freeable+0x288/0x4d8
+        kernel_init+0x24/0x1dc
+        ret_from_fork+0x10/0x20
+
+-> #0 (console_owner){..-.}-{0:0}:
+        __lock_acquire+0x13d0/0x217c
+        lock_acquire+0x1e8/0x310
+        console_flush_all+0x1f4/0x4fc
+        console_unlock+0x5c/0x14c
+        vprintk_emit+0x15c/0x3b0
+        vprintk_default+0x38/0x44
+        vprintk+0xc0/0xe4
+        _printk+0x5c/0x84
+        die_kernel_fault+0x48/0x37c
+        __do_kernel_fault+0xd8/0x19c
+        do_page_fault+0xac/0x6d8
+        do_translation_fault+0xac/0xb8
+        do_mem_abort+0x44/0x94
+        el1_abort+0x44/0x70
+        el1h_64_sync_handler+0xd8/0xe4
+        el1h_64_sync+0x64/0x68
+        __bitmap_and+0x4c/0x78
+        select_task_rq_fair+0x724/0x1a30
+        try_to_wake_up+0x17c/0x46c
+        wake_up_process+0x18/0x24
+        complete+0x58/0x8c
+        __kthread_parkme+0x74/0xc8
+        kthread_parkme+0x20/0x44
+        smpboot_thread_fn+0x118/0x2a0
+        kthread+0x124/0x128
+        ret_from_fork+0x10/0x20
+
+other info that might help us debug this:
+
+Chain exists of:
+   console_owner --> &tty->write_wait --> &p->pi_lock
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&p->pi_lock);
+                                lock(&tty->write_wait);
+                                lock(&p->pi_lock);
+   lock(console_owner);
+
+  *** DEADLOCK ***
+
+5 locks held by cpuhp/6/43:
+  #0: ffff000023e68440 (&x->wait){....}-{2:2}, at: complete+0x24/0x8c
+  #1: ffff00002836ed48 (&p->pi_lock){-.-.}-{2:2}, at: 
+try_to_wake_up+0x58/0x46c
+  #2: ffff80000abd6ac0 (rcu_read_lock){....}-{1:2}, at: 
+select_task_rq_fair+0x114/0x1a30
+  #3: ffff80000ab65390 (console_lock){+.+.}-{0:0}, at: 
+vprintk_default+0x38/0x44
+  #4: ffff80000ab65440 (console_srcu){....}-{0:0}, at: 
+console_flush_all+0x7c/0x4fc
+
+stack backtrace:
+CPU: 6 PID: 43 Comm: cpuhp/6 Not tainted 6.4.0-rc1+ #13640
+Hardware name: Samsung TM2E board (DT)
+Call trace:
+  dump_backtrace+0x98/0xf0
+  show_stack+0x18/0x24
+  dump_stack_lvl+0x60/0xac
+  dump_stack+0x18/0x24
+  print_circular_bug+0x26c/0x348
+  check_noncircular+0x134/0x148
+  __lock_acquire+0x13d0/0x217c
+  lock_acquire+0x1e8/0x310
+  console_flush_all+0x1f4/0x4fc
+  console_unlock+0x5c/0x14c
+  vprintk_emit+0x15c/0x3b0
+  vprintk_default+0x38/0x44
+  vprintk+0xc0/0xe4
+  _printk+0x5c/0x84
+  die_kernel_fault+0x48/0x37c
+  __do_kernel_fault+0xd8/0x19c
+  do_page_fault+0xac/0x6d8
+  do_translation_fault+0xac/0xb8
+  do_mem_abort+0x44/0x94
+  el1_abort+0x44/0x70
+  el1h_64_sync_handler+0xd8/0xe4
+  el1h_64_sync+0x64/0x68
+  __bitmap_and+0x4c/0x78
+  select_task_rq_fair+0x724/0x1a30
+  try_to_wake_up+0x17c/0x46c
+  wake_up_process+0x18/0x24
+  complete+0x58/0x8c
+  __kthread_parkme+0x74/0xc8
+  kthread_parkme+0x20/0x44
+  smpboot_thread_fn+0x118/0x2a0
+  kthread+0x124/0x128
+  ret_from_fork+0x10/0x20
+Mem abort info:
+   ESR = 0x0000000096000006
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x06: level 2 translation fault
+Data abort info:
+   ISV = 0, ISS = 0x00000006
+   CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000002783e000
+[0000000000000090] pgd=080000002738f003, p4d=080000002738f003, 
+pud=0800000027a24003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in: brcmfmac_wcc cpufreq_powersave cpufreq_conservative 
+brcmfmac brcmutil cfg80211 crct10dif_ce hci_uart btqca btbcm bluetooth 
+s5p_jpeg exynos_gsc s3fwrn5_i2c s3fwrn5 s5p_mfc nci v4l2_mem2mem 
+ecdh_generic nfc ecc videobuf2_dma_contig videobuf2_memops 
+videobuf2_v4l2 videodev rfkill panfrost videobuf2_common 
+drm_shmem_helper gpu_sched mc ip_tables x_tables ipv6
+
+CPU: 6 PID: 43 Comm: cpuhp/6 Not tainted 6.4.0-rc1+ #13640
+Hardware name: Samsung TM2E board (DT)
+pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __bitmap_and+0x4c/0x78
+lr : select_idle_cpu+0x64/0x450
+sp : ffff80000bd83b50
+x29: ffff80000bd83b50 x28: ffff80000a152ad8 x27: ffff00002836e500
+x26: ffff00002814f600 x25: ffff80000ab43e78 x24: 0000000000000000
+x23: ffff80000ab3f000 x22: 0000000000000000 x21: ffff80000ab43e78
+x20: 0000000000000000 x19: 0000000000000000 x18: ffff8000099ac098
+x17: 0000000000000000 x16: 0000000000000067 x15: 0000000000000001
+x14: 0000000000000000 x13: 00000000000000d8 x12: 0000000000000000
+x11: 0000000000000001 x10: ffff80000b7c6e90 x9 : 0000000000000000
+x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+x5 : 0000000000000020 x4 : 00000000000000ff x3 : 00000000fffffff8
+x2 : ffff00002836e7e0 x1 : 0000000000000090 x0 : ffff0000d5fc2ad8
+Call trace:
+  __bitmap_and+0x4c/0x78
+  select_task_rq_fair+0x724/0x1a30
+  try_to_wake_up+0x17c/0x46c
+  wake_up_process+0x18/0x24
+  complete+0x58/0x8c
+  __kthread_parkme+0x74/0xc8
+  kthread_parkme+0x20/0x44
+  smpboot_thread_fn+0x118/0x2a0
+  kthread+0x124/0x128
+  ret_from_fork+0x10/0x20
+Code: 2a0803e8 4b0303e3 92800004 9ac32484 (f8687823)
+---[ end trace 0000000000000000 ]---
+Kernel panic - not syncing: Oops: Fatal exception
+SMP: stopping secondary CPUs
+Kernel Offset: disabled
+CPU features: 0x8c0004,1c780800,0000421b
+Memory Limit: none
+---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
+
+
+> ---
+>   kernel/sched/fair.c     | 38 ++++++++++++++++++++++++++++++++++++++
+>   kernel/sched/features.h |  1 +
+>   2 files changed, 39 insertions(+)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 48b6f0c..0172458 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7028,6 +7028,38 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>   }
+>   
+>   /*
+> + * For the multiple-LLC per node case, make sure to try the other LLC's if the
+> + * local LLC comes up empty.
+> + */
+> +static int
+> +select_idle_node(struct task_struct *p, struct sched_domain *sd, int target)
+> +{
+> +	struct sched_domain *parent = sd->parent;
+> +	struct sched_group *sg;
+> +
+> +	/* Make sure to not cross nodes. */
+> +	if (!parent || parent->flags & SD_NUMA)
+> +		return -1;
+> +
+> +	sg = parent->groups;
+> +	do {
+> +		int cpu = cpumask_first(sched_group_span(sg));
+> +		struct sched_domain *sd_child;
+> +
+> +		sd_child = per_cpu(sd_llc, cpu);
+> +		if (sd_child != sd) {
+> +			int i = select_idle_cpu(p, sd_child, test_idle_cores(cpu), cpu);
+> +			if ((unsigned)i < nr_cpumask_bits)
+> +				return i;
+> +		}
+> +
+> +		sg = sg->next;
+> +	} while (sg != parent->groups);
+> +
+> +	return -1;
+> +}
+> +
+> +/*
+>    * Scan the asym_capacity domain for idle CPUs; pick the first idle one on which
+>    * the task fits. If no CPU is big enough, but there are idle ones, try to
+>    * maximize capacity.
+> @@ -7199,6 +7231,12 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+>   	if ((unsigned)i < nr_cpumask_bits)
+>   		return i;
+>   
+> +	if (sched_feat(SIS_NODE)) {
+> +		i = select_idle_node(p, sd, target);
+> +		if ((unsigned)i < nr_cpumask_bits)
+> +			return i;
+> +	}
+> +
+>   	return target;
+>   }
+>   
+> diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+> index ee7f23c..9e390eb 100644
+> --- a/kernel/sched/features.h
+> +++ b/kernel/sched/features.h
+> @@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+>    */
+>   SCHED_FEAT(SIS_PROP, false)
+>   SCHED_FEAT(SIS_UTIL, true)
+> +SCHED_FEAT(SIS_NODE, true)
+>   
+>   /*
+>    * Issue a WARN when we do multiple update_rq_clock() calls
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
