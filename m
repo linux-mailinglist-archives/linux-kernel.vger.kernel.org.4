@@ -2,93 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EB2722555
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE1E722558
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjFEMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S233296AbjFEMPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbjFEMP2 (ORCPT
+        with ESMTP id S233291AbjFEMPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:15:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E999C;
-        Mon,  5 Jun 2023 05:15:27 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685967325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JoudT+AdU0Ws+QSwN1SBTdwy6Vmg7eTtWGfmIGNYxT8=;
-        b=jUWdFgaFbghhqynIQWDCI6OaFTOq39+leYg3swzXM8amANFKHqT2rFnvK5IzPWqwffJ9lz
-        WWLK563F0/1iZHR6SkgtTLXi8yd/gjnqt14XE8M1ZgRS0LrGdNL60ur52z7EB3p3wX7fdG
-        +44dciYN00d2HD+gnDssnuXM7lg3Tojd+4Myiwx/yBujqwdD8z0Rd1TVjgfQIFfltokncF
-        0gwNyGs4k8cxLIBOaovNMHekaFdUOpunIS02ydN7i41D9yK7mErOMcZ8GAaJt+x+6/+xoo
-        ZLuUctDpy3tsdPk/2PXCvgrrQ+oNsOGk0f5O/21EHupTOrjf/sxi5e/5+/LwyQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685967325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JoudT+AdU0Ws+QSwN1SBTdwy6Vmg7eTtWGfmIGNYxT8=;
-        b=b5TK60DL6+9N2hDuMdzVIjQrfXCDUjO0EoEqoOgjqkuvZej0u8i+Ld/yQX20qddnLKMNVD
-        FaX8eBrX0gfnIyDg==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 21/33] x86/fred: FRED initialization code
-In-Reply-To: <20230410081438.1750-22-xin3.li@intel.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-22-xin3.li@intel.com>
-Date:   Mon, 05 Jun 2023 14:15:25 +0200
-Message-ID: <87jzwi6r6q.ffs@tglx>
+        Mon, 5 Jun 2023 08:15:30 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F82D9C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:15:29 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33d34e7c905so38105415ab.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:15:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685967328; x=1688559328;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xzcC4Hey3TlLF+JCJrqaNKZNKoPcd2adswJZJqNI+pU=;
+        b=lD0U4q/nUjlY5qBerkNSXYEJkAT/45rbFMDaj1YdpDZ2EF3HTikYX+CeZsq6V7JzcH
+         y29/AgbzvwL14UpviSmQ4tdJqr+vq1GLpOlsZP7jv2eqzD/e4LCuWFqX91fKXbLLVkCh
+         /tq59gJS9TYkoNHX/eg2QMOSkcSQ2YyV3S3QEM5lDe9kR3tS03WsAWg3KntqH1DNejbO
+         HMWMyEmTQS3f08KL9KpfZRT5zBsZcovl9r56l0HQbyBB/6VrKe8vE3N4d9rqhPlw7rVG
+         5vmfhhHxknn8O3qIkDjN/WipizRnWm3469Y0PnR2rdkUWhJQ155PRyXtMuq47xIjSdRq
+         x14g==
+X-Gm-Message-State: AC+VfDzgh58sGUqJFwnvNt4TS2TUJfi5oXrhRNBWOCyxF9hg+YPv9+Of
+        yZSzzUkLHNZlPkqk6obDvVMLaer987wfVEV1VlbFzSQ+ccWL
+X-Google-Smtp-Source: ACHHUZ5NyG760LvUIyh6Ghxb2pDPhqoTUCNhKpeEkwbtVO0go/50gBRFGI2dD9aDpFftz+yrb8n66ibdtn+dNeVhDMtDK08pOHt2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:d405:0:b0:338:b0de:5e5c with SMTP id
+ q5-20020a92d405000000b00338b0de5e5cmr7036919ilm.4.1685967328467; Mon, 05 Jun
+ 2023 05:15:28 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 05:15:28 -0700
+In-Reply-To: <000000000000d1149605fd5b0c0d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b763f505fd60db7a@google.com>
+Subject: Re: [syzbot] [ext4?] WARNING: locking bug in ext4_ioctl
+From:   syzbot <syzbot+a3c8e9ac9f9d77240afd@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
-> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
->
-> The code to initialize FRED when it's available and _not_ disabled.
->
-> cpu_init_fred_exceptions() is the core function to initialize FRED,
-> which
->   1. Sets up FRED entrypoints for events happening in ring 0 and 3.
->   2. Sets up a default stack for event handling.
->   3. Sets up dedicated event stacks for DB/NMI/MC/DF, equivalent to
->      the IDT IST stacks.
->   4. Forces 32-bit system calls to use "int $0x80" only.
->   5. Enables FRED and invalidtes IDT.
->
-> When the FRED is used, cpu_init_exception_handling() initializes FRED
-> through calling cpu_init_fred_exceptions(), otherwise it sets up TSS
-> IST and loads IDT.
->
-> As FRED uses the ring 3 FRED entrypoint for SYSCALL and SYSENTER,
-> it skips setting up SYSCALL/SYSENTER related MSRs, e.g., MSR_LSTAR.
+syzbot has bisected this issue to:
 
-So how is this supposed to work? FRED is enabled in Kconfig, the feature
-is detected and FRED is initialized _before_ the rest of the required
-changes is in place.
+commit aff3bea95388299eec63440389b4545c8041b357
+Author: Theodore Ts'o <tytso@mit.edu>
+Date:   Wed May 24 03:49:51 2023 +0000
 
-Documentation/process/* is not just there because people have nothing
-better to do than writing pointless documents.
+    ext4: add lockdep annotations for i_data_sem for ea_inode's
 
-Thanks,
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11bdb895280000
+start commit:   9561de3a55be Linux 6.4-rc5
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=13bdb895280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=15bdb895280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+dashboard link: https://syzkaller.appspot.com/bug?extid=a3c8e9ac9f9d77240afd
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ff6e93280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11824101280000
 
-        tglx
+Reported-by: syzbot+a3c8e9ac9f9d77240afd@syzkaller.appspotmail.com
+Fixes: aff3bea95388 ("ext4: add lockdep annotations for i_data_sem for ea_inode's")
 
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
