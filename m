@@ -2,170 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A250722EDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774A2722EE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjFESqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S234938AbjFESqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjFESp6 (ORCPT
+        with ESMTP id S229529AbjFESqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:45:58 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2063.outbound.protection.outlook.com [40.107.212.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85DBCD;
-        Mon,  5 Jun 2023 11:45:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QM/+Qa/JZgVQ9hQD7L007metcDkf5MIGgZSYH815d5TZC25PRh1ChCf1rpLeiemIGE49jywAy1lmNwb8yybiaatJiZg1M9sIA4Y93FI3n4cm7aiCAwCxV9DucSMDzVDavMAEC1Tl71Gjk+SKSsTjvYXy2woKerpau4l2lUvpLiUxWgk1vq3IID2QsLFe4C9tM4lYixsvbJKe0C23K+aGeaYaSnM9T8X8CWOgO4No9/9W8/AnlxeNeelspwwPr9tj7UAYz0bFr8UauVaZ8COmh+SDr3U6sa3aP/6A7q8xvZ429LybxqNZmJgcqgAeKTn4LkQwOlrFT+pOQxD4j40hgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ScM44XN/sTIIV8+HD+uJL/SUy+T4f338lVor4+vf5aU=;
- b=ldc/7gMfdMX9+grA0EpyP2+P62D0w0F/5uSOdkvmTEWT20kfSF0iJaQjkUyvDa4seIkbKbtUYONkC40ND6bMKEZEC7h2Md64fK9dQBwII5Gm3i/8iAkKZj7JPaxeRSUdVUN4fWkAVEHEfv+Ql9ihg9jeVv8ywSih2lU8wE6TKw6477ZuOvO+g8x7id8AeN381ZgKlnbl9wPyDfRi6gHqOSTZiRyLp4ZfkZMokdPPlTak/jLNrtwBTPtLbDovD+UdgbTXETgdTB4pKxVydmZzWZSOLNdyyeAxzttAqkS2b3SGRb4YC+QUoRq85XymIZE6AGdKuCddYbdIKcwK2QPdew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ScM44XN/sTIIV8+HD+uJL/SUy+T4f338lVor4+vf5aU=;
- b=j+PWzaB4ZL/Dw2+dXe+moiklob1q2pG5Gpq4iBgiojOfy+mFDsOJW/O/7KloVhMLxSsgYnA71HYiPhO9oCzZw1uLQRx301a/E3RtUXxCPS79slF0MuDZbYVH0yd7iOs6KOdJAuLhpjtUbsvJ/zqXJIUw2l9lEISslqUWP5NcPw74HVXwQs0oLesLHS7F2z+YwviWrW25ndsdfJbWToyIHx/6lwVCvNpIjZps2VxfjBlwlmu1Y6vCzlGrrOv9G1HJqsfwz85fNXE/Hf7m68KwWsNvTkDKhF2qLsoIIwDR5LhcIYrjsM9KOUVhClLhYcI5x910EfkA1fV+/a4rPsFagw==
-Received: from SN1PR12CA0044.namprd12.prod.outlook.com (2603:10b6:802:20::15)
- by PH8PR12MB6745.namprd12.prod.outlook.com (2603:10b6:510:1c0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
- 2023 18:45:55 +0000
-Received: from SN1PEPF000252A3.namprd05.prod.outlook.com
- (2603:10b6:802:20:cafe::7a) by SN1PR12CA0044.outlook.office365.com
- (2603:10b6:802:20::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 18:45:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF000252A3.mail.protection.outlook.com (10.167.242.10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.13 via Frontend Transport; Mon, 5 Jun 2023 18:45:55 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 5 Jun 2023
- 11:45:36 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 5 Jun 2023
- 11:45:35 -0700
-Message-ID: <58ff372c-a917-e580-80ff-f1118f82320a@nvidia.com>
-Date:   Mon, 5 Jun 2023 11:45:35 -0700
+        Mon, 5 Jun 2023 14:46:21 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A3DEC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:46:16 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2568befcf1dso3868369a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685990776; x=1688582776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DaVk6E4U+kAgIxFMy9FI+O5YJ5qeJtYzqpjAD97QKBE=;
+        b=LJL3O4+kc/OrgJvlHxYVr5y7cjdPWiDloM3k8mPaQ9dNPTstAbOWQR9avkysmrauhd
+         CKdGMLy4Rwkv2Y72N5RjK7Qb2PTVlAtOLcZONZQCW2dTgCjcBDQ0kL1SgFouKnrLstU+
+         uq0s7zr1HbySTUxJOFBDM1rlNlc3A/a/7d9SDiFyQxkgZjEc7BrlbF3rEUm9jJlf5UAp
+         sMNFbqcR7cRpuwz6i+rUVcz6YMLSg7ZxrlpsHF11ywuQZBr7W6rG21Kwd0oqNJL+aeXl
+         QXnokSwPbt8kZo2ijFlEgh7ApJgutt7m40sAxbW4ACIVrwQWlDSTwhfEWQqYBQXxFRro
+         QxEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685990776; x=1688582776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DaVk6E4U+kAgIxFMy9FI+O5YJ5qeJtYzqpjAD97QKBE=;
+        b=diDMo53Dd9XcxMnvSM1G2UeYmIDg+HjAFEj1Snda6RBEet1GybqF7i3udkN85SMd6L
+         OXZRP+Dps+2F2M+DuATneIOtaLIE85/GMKyQcxWJbmxH/8AMqw4QYmgq2xhNE1Ok863h
+         yLstMBn4t4Rz+K0jn/fI86LLz2ar/MtPZaz/qEUmHhiENShfTV2AFbv9oJ4G60GcPXdr
+         sh32xFwSkmmmPoVtXDnolkG+bnqXlJ7Os7oBLjrZegp01cANDDIWRfVF37vL7Q6n9Lu8
+         VcNH3tzgAuZVgNyNKVPy+9DuTfZRTbqVskW7obSgdAUgdkFIvUrrS5KGgAixdC2mtr8M
+         aM5Q==
+X-Gm-Message-State: AC+VfDyYUuzgZEe/kLvJKwbL64Rucam84dAvNVJ8Q2j6Auhy+o6ZpaVJ
+        u831/wUhCO6uV04OFyeQUc5Oo5EFeosrJSMnSdU=
+X-Google-Smtp-Source: ACHHUZ5Ruv+bIACcQOaymAFusISJmR4Ih5yWY0uyOttuPeu2em6CMcdYgMk/6PCPwIHM4rGlPW/G15gsjZ9cHkscikE=
+X-Received: by 2002:a17:90a:4006:b0:23f:9445:318e with SMTP id
+ u6-20020a17090a400600b0023f9445318emr9263568pjc.3.1685990775937; Mon, 05 Jun
+ 2023 11:46:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 04/12] selftests/mm: fix a char* assignment in
- mlock2-tests.c
-Content-Language: en-US
+References: <20230602230552.350731-1-peterx@redhat.com> <20230602230552.350731-5-peterx@redhat.com>
+In-Reply-To: <20230602230552.350731-5-peterx@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 5 Jun 2023 11:46:04 -0700
+Message-ID: <CAHbLzkp_tzN8SZVeWTKxtMAnFSzUvk2064KFg3quj=raOSHPrA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] mm: Make most walk page paths with
+ pmd_trans_unstable() to retry
 To:     Peter Xu <peterx@redhat.com>
-CC:     David Hildenbrand <david@redhat.com>,
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-5-jhubbard@nvidia.com>
- <18e69073-1007-07d8-bf0d-5f400ecab8ea@redhat.com> <ZHoJxAWtwBo33l6B@x1n>
- <f61fb7c1-64ab-c3c3-bd95-92a962f07226@nvidia.com> <ZH4BkqDh0MXqx8ae@x1n>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <ZH4BkqDh0MXqx8ae@x1n>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000252A3:EE_|PH8PR12MB6745:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e7776cf-433e-4508-e042-08db65f5186d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FBanSuRMnoKzYlEwYvgBq573IXfYiW28QvRv534LzG6GwJ0z3xNDP4Fvp1n1i79u94zfGD21IZcvrO48Ks6UOPvAUiV95U9PP3zw7RehgwJXl8bGxYYY/j2B6RWsgxvPTXm92LqHcLSE3XNYW72rlV+u1pyRPOaBGCy4wr2+lUGERnaBX7c9nU+uetsnfGls3Xl/3zrvjssMdSLCBTQWQ8p9+cVQv1+DqDZLJibtgTwTNGE4vTI9hCyby73r59dtU4iT4rybm61ElSZgfgXPccxssrDC0MhiDLwc8R0Kjn0aLXKxMNYMLfOfRUBbZlAN7niotMDzRjhKe62P5MijsjGyOhVuLGJmsgYXnvQGmvS/hklYsYN7dRtg4AyB80xUDuy2tbZh7gL+Sw01hycTwECAbl4WY35yVYoYQ/FPf9ba4eThzKx09Z+10Pvknv5v2lErRXq6qM4C17ulA7RsGiWfDCaT/YSHOyEro2ojoJjkp9CZqCsqDg8AaLFWEY+yg9vVb6GHPGGOk2kBqzY8k01BTJC2cXcMVD3CXiDshW2JVOf+cjVAaWJflD+sgdpxkBb/UgGZliEgcAwAzMk36vMk/Gsc4Bj97+g+iPoMBorBOHNnl5PiEXbgI8/SwY+ZQDes419FsskweKZLvAQBSCex0vWlwSrPKqS5uGbv+fwUI90ZVkdDLU2Mn6/PI5A0YDx25ZCeSTaONe4ghEAj6jNYv1ndJoW4LOoAvph+riak9SfYC+27wfrASGABRLW5YJwTSoDFWzFWaC///ZWDog==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(2906002)(86362001)(31696002)(82310400005)(5660300002)(31686004)(40480700001)(47076005)(83380400001)(16526019)(426003)(336012)(186003)(36860700001)(26005)(53546011)(356005)(7636003)(478600001)(82740400003)(16576012)(40460700003)(54906003)(70586007)(70206006)(6916009)(316002)(4326008)(2616005)(41300700001)(8936002)(8676002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 18:45:55.3054
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e7776cf-433e-4508-e042-08db65f5186d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF000252A3.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6745
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 08:38, Peter Xu wrote:
-...
->>>> I'm probably missing something, but what is the stop variable supposed to do
->>>> here? It's completely unused, no?
->>>>
->>>> if (!strchr(end_addr, ' ')) {
->>>> 	printf("cannot parse /proc/self/maps\n");
->>>> 	goto out;
->>>> }
->>
->> Yes it is! I certainly had tunnel vision on that one. I've changed the
->> patch to simply delete that line, for v2, thanks.
->>
->>>
->>> I guess it wanted to do "*stop = '\0'" but it just didn't matter a lot
->>> since the sscanf() just worked..
->>>
->>
->> Maybe, yes. Hard to tell the original intent at this point...it might
->> have been used in an early draft version of the loop that didn't get
->> posted, perhaps.
-> 
-> I'm pretty sure of it.. see the pattern:
-> 
-> 		end_addr = strchr(line, '-');
-> 		if (!end_addr) {
-> 			printf("cannot parse /proc/self/maps\n");
-> 			goto out;
-> 		}
-> 		*end_addr = '\0';
-> 
-> And...
-> 
-> 		stop = strchr(end_addr, ' ');
-> 		if (!stop) {
-> 			printf("cannot parse /proc/self/maps\n");
-> 			goto out;
-> 		}
-> 		stop = '\0';    <------------------- only diff here
-> 
+On Fri, Jun 2, 2023 at 4:06=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> For most of the page walk paths, logically it'll always be good to have t=
+he
+> pmd retries if hit pmd_trans_unstable() race.  We can treat it as none
+> pmd (per comment above pmd_trans_unstable()), but in most cases we're not
+> even treating that as a none pmd.  If to fix it anyway, a retry will be t=
+he
+> most accurate.
+>
+> I've went over all the pmd_trans_unstable() special cases and this patch
+> should cover all the rest places where we should retry properly with
+> unstable pmd.  With the newly introduced ACTION_AGAIN since 2020 we can
+> easily achieve that.
+>
+> These are the call sites that I think should be fixed with it:
+>
+> *** fs/proc/task_mmu.c:
+> smaps_pte_range[634]           if (pmd_trans_unstable(pmd))
+> clear_refs_pte_range[1194]     if (pmd_trans_unstable(pmd))
+> pagemap_pmd_range[1542]        if (pmd_trans_unstable(pmdp))
+> gather_pte_stats[1891]         if (pmd_trans_unstable(pmd))
+> *** mm/memcontrol.c:
+> mem_cgroup_count_precharge_pte_range[6024] if (pmd_trans_unstable(pmd))
+> mem_cgroup_move_charge_pte_range[6244] if (pmd_trans_unstable(pmd))
+> *** mm/memory-failure.c:
+> hwpoison_pte_range[794]        if (pmd_trans_unstable(pmdp))
+> *** mm/mempolicy.c:
+> queue_folios_pte_range[517]    if (pmd_trans_unstable(pmd))
+> *** mm/madvise.c:
+> madvise_cold_or_pageout_pte_range[425] if (pmd_trans_unstable(pmd))
+> madvise_free_pte_range[625]    if (pmd_trans_unstable(pmd))
+>
+> IIUC most of them may or may not be a big issue even without a retry,
+> either because they're already not strict (smaps, pte_stats, MADV_COLD,
+> .. it can mean e.g. the statistic may be inaccurate or one less 2M chunk =
+to
+> cold worst case), but some of them could have functional error without th=
+e
+> retry afaiu (e.g. pagemap, where we can have the output buffer shifted ov=
+er
+> the unstable pmd range.. so IIUC the pagemap result can be wrong).
+>
+> While these call sites all look fine, and don't need any change:
+>
+> *** include/linux/pgtable.h:
+> pmd_devmap_trans_unstable[1418] return pmd_devmap(*pmd) || pmd_trans_unst=
+able(pmd);
+> *** mm/gup.c:
+> follow_pmd_mask[695]           if (pmd_trans_unstable(pmd))
+> *** mm/mapping_dirty_helpers.c:
+> wp_clean_pmd_entry[131]        if (!pmd_trans_unstable(&pmdval))
+> *** mm/memory.c:
+> do_anonymous_page[4060]        if (unlikely(pmd_trans_unstable(vmf->pmd))=
+)
+> *** mm/migrate_device.c:
+> migrate_vma_insert_page[616]   if (unlikely(pmd_trans_unstable(pmdp)))
+> *** mm/mincore.c:
+> mincore_pte_range[116]         if (pmd_trans_unstable(pmd)) {
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  fs/proc/task_mmu.c  | 17 +++++++++++++----
+>  mm/madvise.c        |  8 ++++++--
+>  mm/memcontrol.c     |  8 ++++++--
+>  mm/memory-failure.c |  4 +++-
+>  mm/mempolicy.c      |  4 +++-
+>  5 files changed, 31 insertions(+), 10 deletions(-)
+>
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 6259dd432eeb..823eaba5c6bf 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -631,8 +631,11 @@ static int smaps_pte_range(pmd_t *pmd, unsigned long=
+ addr, unsigned long end,
+>                 goto out;
+>         }
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 goto out;
+> +       }
+> +
+>         /*
+>          * The mmap_lock held all the way back in m_start() is what
+>          * keeps khugepaged out of here and from collapsing things
+> @@ -1191,8 +1194,10 @@ static int clear_refs_pte_range(pmd_t *pmd, unsign=
+ed long addr,
+>                 return 0;
+>         }
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
+> +       }
+>
+>         pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+>         for (; addr !=3D end; pte++, addr +=3D PAGE_SIZE) {
+> @@ -1539,8 +1544,10 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned=
+ long addr, unsigned long end,
+>                 return err;
+>         }
+>
+> -       if (pmd_trans_unstable(pmdp))
+> +       if (pmd_trans_unstable(pmdp)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
 
-Yes, and that pattern shows why it wants to be "*stop = '\0';", but
-it doesn't show why the author wasted a line of code in the first
-place, setting a variable that is not used afterwards.
+Had a quick look at the pagemap code, I agree with your analysis,
+"returning 0" may mess up pagemap, retry should be fine. But I'm
+wondering whether we should just fill in empty entries. Anyway I don't
+have a  strong opinion on this, just a little bit concerned by
+potential indefinite retry.
 
-In other words, changing this to "*stop = '\0';" would make it
-look pretty, but it's a non-functional line of code to add. Which
-is why I think it should just be deleted at this point.
+> +       }
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>
+>         /*
+> @@ -1888,8 +1895,10 @@ static int gather_pte_stats(pmd_t *pmd, unsigned l=
+ong addr,
+>                 return 0;
+>         }
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
+> +       }
+>  #endif
+>         orig_pte =3D pte =3D pte_offset_map_lock(walk->mm, pmd, addr, &pt=
+l);
+>         do {
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 78cd12581628..0fd81712022c 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -424,8 +424,10 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *=
+pmd,
+>         }
+>
+>  regular_folio:
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
+> +       }
+>  #endif
+>         tlb_change_page_size(tlb, PAGE_SIZE);
+>         orig_pte =3D pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &=
+ptl);
+> @@ -626,8 +628,10 @@ static int madvise_free_pte_range(pmd_t *pmd, unsign=
+ed long addr,
+>                 if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+>                         goto next;
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
+> +       }
+>
+>         tlb_change_page_size(tlb, PAGE_SIZE);
+>         orig_pte =3D pte =3D pte_offset_map_lock(mm, pmd, addr, &ptl);
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 6ee433be4c3b..15e50f033e41 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -6021,8 +6021,10 @@ static int mem_cgroup_count_precharge_pte_range(pm=
+d_t *pmd,
+>                 return 0;
+>         }
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+Either retry or keep as is is fine to me. I'm not aware of anyone
+complaining about noticeable inaccurate charges due to this. But we
+may have potential indefinite retry anyway, so if you don't want to
+risk this, it may be better just keep it as is.
 
+> +       }
+>         pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+>         for (; addr !=3D end; pte++, addr +=3D PAGE_SIZE)
+>                 if (get_mctgt_type(vma, addr, *pte, NULL))
+> @@ -6241,8 +6243,10 @@ static int mem_cgroup_move_charge_pte_range(pmd_t =
+*pmd,
+>                 return 0;
+>         }
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
+> +       }
+>  retry:
+>         pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+>         for (; addr !=3D end; addr +=3D PAGE_SIZE) {
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 004a02f44271..c97fb2b7ab4a 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -791,8 +791,10 @@ static int hwpoison_pte_range(pmd_t *pmdp, unsigned =
+long addr,
+>                 goto out;
+>         }
+>
+> -       if (pmd_trans_unstable(pmdp))
+> +       if (pmd_trans_unstable(pmdp)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 goto out;
+> +       }
+
+This may be worth retrying IMHO.
+
+>
+>         mapped_pte =3D ptep =3D pte_offset_map_lock(walk->vma->vm_mm, pmd=
+p,
+>                                                 addr, &ptl);
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index f06ca8c18e62..af8907b4aad1 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -514,8 +514,10 @@ static int queue_folios_pte_range(pmd_t *pmd, unsign=
+ed long addr,
+>         if (ptl)
+>                 return queue_folios_pmd(pmd, ptl, addr, end, walk);
+>
+> -       if (pmd_trans_unstable(pmd))
+> +       if (pmd_trans_unstable(pmd)) {
+> +               walk->action =3D ACTION_AGAIN;
+>                 return 0;
+> +       }
+
+Either retry or keep it as is is fine.
+
+>
+>         mapped_pte =3D pte =3D pte_offset_map_lock(walk->mm, pmd, addr, &=
+ptl);
+>         for (; addr !=3D end; pte++, addr +=3D PAGE_SIZE) {
+> --
+> 2.40.1
+>
+>
