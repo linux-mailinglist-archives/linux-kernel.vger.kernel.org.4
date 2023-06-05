@@ -2,83 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B98F72212A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD16722130
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjFEIic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S229992AbjFEIjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjFEIia (ORCPT
+        with ESMTP id S229655AbjFEIjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:38:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B654B0;
-        Mon,  5 Jun 2023 01:38:28 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685954307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K6vr5fb0CXEJhD03e4srj5+jUXBNJXWKeJF05xRhs7g=;
-        b=zHMBd0Wf44emQIGIDsifyM5TkRgpKtJBEmvNOUUSHdyqxhoyx0hNk6F9Gd8RnnHoVzwyBq
-        xo8qFBJzyuPI0DxrlpXftircixE9kORcjNl4tOEVUB2eZg3MaFw9pnydQD6oV+a3gio/vB
-        mjNqRPlqVnFCSfeJ6I/Ecoue7o5nop5BgoSyLyklKqYiQbL31SElm3v7YgJv4QvMD5YPJA
-        m3nsC4Bh1tq/uDzeimF/VMOS4IC4ureazi8CNz/2RJD1RgM9IL0oR/e7Xcr0JsdmPv2tvQ
-        LIWj+enU6jPpMtwXGc2Ta00ZtD5fv1CpJghke6kypSQULsOw18DNFRWpJZUZHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685954307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K6vr5fb0CXEJhD03e4srj5+jUXBNJXWKeJF05xRhs7g=;
-        b=impXIJLmTYJ2dUd0vlUvSmRQ58bfsTXLS0aux4Y3EvFIas2xIo5Ux5DHKWUJ7fjPrd1Ulr
-        lNT7cIlANr6wlrDg==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 03/33] x86/traps: add a system interrupt table for
- system interrupt dispatch
-In-Reply-To: <20230410081438.1750-4-xin3.li@intel.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-4-xin3.li@intel.com>
-Date:   Mon, 05 Jun 2023 10:38:26 +0200
-Message-ID: <874jnm8fst.ffs@tglx>
+        Mon, 5 Jun 2023 04:39:20 -0400
+Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CCFB0;
+        Mon,  5 Jun 2023 01:39:19 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QZRYV6S2zz9xtV7;
+        Mon,  5 Jun 2023 16:27:26 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAH110In31k6doIAw--.3833S2;
+        Mon, 05 Jun 2023 09:38:47 +0100 (CET)
+Message-ID: <9f4b7bef5d090da9de50ed1aa1e103abc19b125f.camel@huaweicloud.com>
+Subject: Re: [PATCH v11 2/4] smack: Set the SMACK64TRANSMUTE xattr in
+ smack_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mengchi Cheng <mengcc@amazon.com>
+Cc:     miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
+        kamatam@amazon.com, yoonjaeh@amazon.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 05 Jun 2023 10:38:29 +0200
+In-Reply-To: <20230603191518.1397490-3-roberto.sassu@huaweicloud.com>
+References: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
+         <20230603191518.1397490-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAH110In31k6doIAw--.3833S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw43ZrykCFyrJrWfWr1kAFb_yoW7Xr4rpF
+        WUKa43Kr4rtF1DGrWFyF4UW3ya9ayrGrWUW3sxWrWfZ3ZrXr1xKrykXr1YkF17XrykurnY
+        qF4jvry5Xrn0y37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o2BAAAsc
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
->  #ifdef CONFIG_SMP
-> -DECLARE_IDTENTRY(RESCHEDULE_VECTOR,			sysvec_reschedule_ipi);
-> +DECLARE_IDTENTRY_SYSVEC(RESCHEDULE_VECTOR,		sysvec_reschedule_ipi);
+On Sat, 2023-06-03 at 21:15 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> With the newly added ability of LSMs to supply multiple xattrs, set
+> SMACK64TRASMUTE in smack_inode_init_security(), instead of d_instantiate().
+> Do it by incrementing SMACK_INODE_INIT_XATTRS to 2 and by calling
+> lsm_get_xattr_slot() a second time, if the transmuting conditions are met.
+> 
+> The LSM infrastructure passes all xattrs provided by LSMs to the
+> filesystems through the initxattrs() callback, so that filesystems can
+> store xattrs in the disk.
+> 
+> After the change, the SMK_INODE_TRANSMUTE inode flag is always set by
+> d_instantiate() after fetching SMACK64TRANSMUTE from the disk. Before it
+> was done by smack_inode_post_setxattr() as result of the __vfs_setxattr()
+> call.
+> 
+> Removing __vfs_setxattr() also prevents invalidating the EVM HMAC, by
+> adding a new xattr without checking and updating the existing HMAC.
 
-Please do not hide unrelated semantical changes in a big pile of
-supposed to be mechanical changes. Split it out and provide a proper
-explanation why this is correct and required.
+Hi Mengchi
 
+could you please redo your tests with this patch set applied?
+
+https://lore.kernel.org/linux-integrity/20230603191518.1397490-1-roberto.sassu@huaweicloud.com/
+
+You need:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/log/?h=next
+
+https://github.com/cschaufler/smack-next/commits/next
+
+Thanks
+
+Roberto
+
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/smack/smack.h     |  2 +-
+>  security/smack/smack_lsm.c | 43 +++++++++++++++++++++++---------------
+>  2 files changed, 27 insertions(+), 18 deletions(-)
+> 
+> diff --git a/security/smack/smack.h b/security/smack/smack.h
+> index aa15ff56ed6..041688e5a77 100644
+> --- a/security/smack/smack.h
+> +++ b/security/smack/smack.h
+> @@ -128,7 +128,7 @@ struct task_smack {
+>  
+>  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
+>  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
+> -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
+> +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
+>  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
+>  
+>  /*
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index a1c30275692..b67d901ee74 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -52,7 +52,14 @@
+>  #define SMK_RECEIVING	1
+>  #define SMK_SENDING	2
+>  
+> -#define SMACK_INODE_INIT_XATTRS 1
 > +/*
-> + * How system interrupt handlers are called.
+> + * Smack uses multiple xattrs.
+> + * SMACK64 - for access control,
+> + * SMACK64TRANSMUTE - label initialization,
+> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
+> + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
 > + */
-> +#define DECLARE_SYSTEM_INTERRUPT_HANDLER(f)	\
-> +	void f (struct pt_regs *regs)
-> +typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
+> +#define SMACK_INODE_INIT_XATTRS 2
+>  
+>  #ifdef SMACK_IPV6_PORT_LABELING
+>  static DEFINE_MUTEX(smack_ipv6_lock);
+> @@ -935,7 +942,6 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  				     struct xattr *xattrs, int *xattr_count)
+>  {
+>  	struct task_smack *tsp = smack_cred(current_cred());
+> -	struct inode_smack *issp = smack_inode(inode);
+>  	struct smack_known *skp = smk_of_task(tsp);
+>  	struct smack_known *isp = smk_of_inode(inode);
+>  	struct smack_known *dsp = smk_of_inode(dir);
+> @@ -963,6 +969,8 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  		if ((tsp->smk_task == tsp->smk_transmuted) ||
+>  		    (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+>  		     smk_inode_transmutable(dir))) {
+> +			struct xattr *xattr_transmute;
+> +
+>  			/*
+>  			 * The caller of smack_dentry_create_files_as()
+>  			 * should have overridden the current cred, so the
+> @@ -971,7 +979,16 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+>  			 */
+>  			if (tsp->smk_task != tsp->smk_transmuted)
+>  				isp = dsp;
+> -			issp->smk_flags |= SMK_INODE_CHANGED;
+> +			xattr_transmute = lsm_get_xattr_slot(xattrs, xattr_count);
+> +			if (xattr_transmute) {
+> +				xattr_transmute->value = kmemdup(TRANS_TRUE,
+> +						TRANS_TRUE_SIZE, GFP_NOFS);
+> +				if (xattr_transmute->value == NULL)
+> +					return -ENOMEM;
+> +
+> +				xattr_transmute->value_len = TRANS_TRUE_SIZE;
+> +				xattr_transmute->name = XATTR_SMACK_TRANSMUTE;
+> +			}
+>  		}
+>  
+>  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> @@ -3518,20 +3535,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+>  			 * If there is a transmute attribute on the
+>  			 * directory mark the inode.
+>  			 */
+> -			if (isp->smk_flags & SMK_INODE_CHANGED) {
+> -				isp->smk_flags &= ~SMK_INODE_CHANGED;
+> -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
+> -					XATTR_NAME_SMACKTRANSMUTE,
+> -					TRANS_TRUE, TRANS_TRUE_SIZE,
+> -					0);
+> -			} else {
+> -				rc = __vfs_getxattr(dp, inode,
+> -					XATTR_NAME_SMACKTRANSMUTE, trattr,
+> -					TRANS_TRUE_SIZE);
+> -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
+> -						       TRANS_TRUE_SIZE) != 0)
+> -					rc = -EINVAL;
+> -			}
+> +			rc = __vfs_getxattr(dp, inode,
+> +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
+> +					    TRANS_TRUE_SIZE);
+> +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
+> +					       TRANS_TRUE_SIZE) != 0)
+> +				rc = -EINVAL;
+>  			if (rc >= 0)
+>  				transflag = SMK_INODE_TRANSMUTE;
+>  		}
 
-How is this related to the other changes and why is it required. Please
-make this reviewable.
-
-Thanks,
-
-        tglx
