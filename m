@@ -2,227 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D667229C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF127229BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbjFEOvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S232825AbjFEOuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbjFEOvC (ORCPT
+        with ESMTP id S233079AbjFEOub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:51:02 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3F6F9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:50:58 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-974f4897d87so483834566b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 07:50:58 -0700 (PDT)
+        Mon, 5 Jun 2023 10:50:31 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on20703.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8c::703])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C898FF4;
+        Mon,  5 Jun 2023 07:50:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eDT4Up6us2wDQkNfH9nY9tIZbYxAmA9HlzHF4B2QlsScFXJOLf2BUmNzC2bQ0QP3LPW/cVPLQEGNbs0jeHre5mGa65kl9WxbA6NE+cCUO+XqRtpIARwQgcHEV9UhX+C/RJiNP8RrgTdKRr1Z2BkCK4++vQR0UA/5rMTX0wlaGBV8cHhGZSjb9nJEYOu21y5j50hTfIyx4EbIYzUPLs1IhNj79SEdv8yjLAC0SgHIDN35o8cDWQdrVvevkg8V3E6LbU2PhyGWb2Csjh6Jkgg5RccUI354S5y1q2m/hPaT3RhrHbQZOlg7pxnF1iosrQ1nIcYRln/Nz6TY5Z3TIUjv8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q0Lqbt8ble/NChODwwCaMGvDxdiT+CRU8csEPHRvCE4=;
+ b=dfrZVubqTrMtV8LvhynDyj4h/u3oMVydbUCcY/mRea+jW0i2cKx9hMJqpxHtqL3CJ11++OsBiHRWOK/7RuoNXq4/Lgy0kb8wcKIzzB+CSuodkpKaUWCyyk+XyffEUEbSRA1CwulT4tpyceKTm0JDkSGrepM1k/30NRZb6S1rqKgnP17y7oXL3de6MY/JcsuqzcCD/7WKU6CiM7tE1cheLFpPcWOVuEOAyMeDOS0d1dGq9OZgWabYsybpiJxeyuGjpzWS8qlQrYfPP49ladIi3NZtbH/sgNy4E3sWS/885Laq1qWPSqqGHS4L5C0BCvBaDr/CTnlLPKcMYe6MmYjvUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685976657; x=1688568657;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oa3Kb0uleOyfAZUVBo8LLmiqNWtNL+oEgrNfP9PyhYY=;
-        b=cqvmTTfD3rkn0C55pKA8zV8vG2QdW1k2W4cYDsDMg7He4X5pTW1bH7FuYTj8Nr5jkC
-         DfeAO02ThiqyjfpXyEX6Kdpqvgi6f01e4RuEu+qCg/v4hjFra6AbmutaNApDu7Jk2Qhi
-         x+61e1rd9O6gth4c3thedWKEfdjNXDTEDnGLsrbvZCzOd3txMFWJvsy46YNc1RQ0tXO/
-         x/dEFsNLloLZzyDQiSreUVUdk/QzXypk09YUVqXE/y3+YNAUM5zfOXVdG4E9+17t5MUd
-         vaWytz+O1CsFflPPd5O3EitW5Ig0HuJZOwcumLu52hm8w7V91UFtFMBaKP3hi7LWY57B
-         dcZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685976657; x=1688568657;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Oa3Kb0uleOyfAZUVBo8LLmiqNWtNL+oEgrNfP9PyhYY=;
-        b=gIpQ0G3yi8GCPnBMiY+5fJwBpwag7uhS2UjsQbG3gQPAkE0t16l9IcIG/klz7c7Pf1
-         nkxe6TRfmZfpa4cbWeUigx74JfgMb00550ETvEJ+GRhnuntij8yYoBmMCWHarmfisood
-         F0y/DGpBzQXb32nPW8O/eEDlQKZHpOQ6zg/fhp3sErD6d7T3+OvEo+HenXtrIx3ioHtn
-         JphOYG0goBTOXbW4CmhFwHAJVodFtkjqgpLkfHBRMCdehI6GuY+3GU0q/MwbzJOdWiOz
-         zT3qjpvjuVvbpC+vhxMh+fE6u0KowlQzlIJHW54AqlT73qQhugyQBUutXas+9go8SUbu
-         A+cg==
-X-Gm-Message-State: AC+VfDyNFiMgR73R6kX+2/ntFsM/jCoJh8ZyCKi7quqswLph0ZeN0Txd
-        S/vwaRFHpMRw65uLKjZ7p82diw==
-X-Google-Smtp-Source: ACHHUZ7Abdsxz+XW7dDVkAMw8hmQmN9bR8Sw4/+it37KDlfDXlATezY3EHhhXjzCL1IyMjjOTACiXw==
-X-Received: by 2002:a17:906:7956:b0:966:1fef:22d8 with SMTP id l22-20020a170906795600b009661fef22d8mr6587405ejo.7.1685976657235;
-        Mon, 05 Jun 2023 07:50:57 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id ks9-20020a170906f84900b00965fdb90801sm4347893ejb.153.2023.06.05.07.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 07:50:56 -0700 (PDT)
-References: <20230601134946.3887870-1-aliceryhl@google.com>
- <20230601134946.3887870-4-aliceryhl@google.com>
- <87v8g61119.fsf@metaspace.dk> <20230605153142.28a4093c.gary@garyguo.net>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v2 3/8] rust: sync: add `Arc::{from_raw, into_raw}`
-Date:   Mon, 05 Jun 2023 16:49:53 +0200
-In-reply-to: <20230605153142.28a4093c.gary@garyguo.net>
-Message-ID: <87ttvmyncg.fsf@metaspace.dk>
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q0Lqbt8ble/NChODwwCaMGvDxdiT+CRU8csEPHRvCE4=;
+ b=hz7x51N4dBm09lbzvotEJdWqn804c+p22SySdFy5oX1IwopH3uWOgpkaaqwZ7mqfnSnYqZTxg0Mivo1ISyuKpFPT050nn+v4Ti2v11bZd3qhjhRHjwD58rh44Hsoc8zK/QUV6UVff69qvHEk/P7ywHoGxLi0Sox1OdwcSCTp3GY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BLAPR13MB4692.namprd13.prod.outlook.com (2603:10b6:208:324::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
+ 2023 14:50:21 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 14:50:21 +0000
+Date:   Mon, 5 Jun 2023 16:50:14 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 03/11] splice, net: Use
+ sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+Message-ID: <ZH32Jp1Iop8FaDtC@corigine.com>
+References: <20230605124600.1722160-1-dhowells@redhat.com>
+ <20230605124600.1722160-4-dhowells@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605124600.1722160-4-dhowells@redhat.com>
+X-ClientProxiedBy: AM0PR03CA0098.eurprd03.prod.outlook.com
+ (2603:10a6:208:69::39) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4692:EE_
+X-MS-Office365-Filtering-Correlation-Id: 681c2313-d569-4b1f-19dc-08db65d42fcd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vsdtqJta2yVT93iNXAvTWciNVnRCSyRtky23T/+tqLySDVeWOD6Ejln7Psfk9ZO6ZGma3W3TKnBYP6ZFaH8BSVHhDg1ahlUo+8wU9D8uquuh8gYKas3XxZ65bQi9uUb9QGpvUdbv1QW9+s5eJb4FcolYTPEs/51xYQhSudbgAqsCNs3d8mmG81M0wrDWY9YrJGj20SHiexkdhE2//ywrwT1EexM3En1pfvi6Jih1GCz28kzILL0BhMKFbuoFDzj4F/mZABM7uzHfT5WdceFjIYQzr8b9eqxeSSua8DimaQOgip49xhNVQJeJvhfn4xnUbXPldmj7G6QOIqYwgKhfnjnssbxnpHvv82mwM2Mdm7EhGwN7fh42h5AHt3qgY7M/MBfh4RhAi3GcYRuwfEz4+5xw/9dIaZYVHvW91NpezYn7V0fm2DK7qRvL6cU4kR66MGiNCy1ctnu1ef0L3PQOrC0cD3k4Tmr/QIzwH82KSmGCUbb3Q4rE3BsXiEubCCyCK6hWMOFVeLVXfPhUViEXZw1N4/s2iNynNPNWRSqb2DuPg+T9ADD3kpfYVTtpoH+R87SgMv1KZRlaFZpcZ9/8xkoNedcWrSnhbpig41O/1Q0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(136003)(39840400004)(346002)(451199021)(83380400001)(7416002)(44832011)(54906003)(478600001)(8676002)(8936002)(41300700001)(316002)(66476007)(66946007)(66556008)(5660300002)(38100700002)(6916009)(86362001)(4326008)(6486002)(36756003)(6666004)(2906002)(6512007)(186003)(6506007)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3j7qU7nBqxfa7u7F/HPXtjwosK6qv/dHF1UdQ06AROJETzxmx4VUySCuT6Sg?=
+ =?us-ascii?Q?lm8vg7M1ZzN5x/Zc96YsIOfvB16nlkkTPxgiwayAMpZtPkpCNAseRfJv+AlB?=
+ =?us-ascii?Q?lXwci7T+r9eAwJubzWDrlhSLKfFjDb4Uu7BtoZ7HVGXzYqniefyeWe4Lp6Pf?=
+ =?us-ascii?Q?8GMdZAzbxzFtaFipuBNPwGHqVKVCcc+d8F3NEZl4LZ/Mw4BQzKFbKGtwlKxd?=
+ =?us-ascii?Q?rv3WMtSGORelIhPA+yr6S8H0QvvJFXY0Nhj3QYutzBKFYEnbL4mP+OQwuKWG?=
+ =?us-ascii?Q?JRmTbMSsozS79jrrtEl9uk1ioUPMltv6G/teSJc3l6JIXTFqeKsUQobf5NUZ?=
+ =?us-ascii?Q?zqR8Mh4Db5DD8otrOc+SlCCBWFuBmmD337nyAK2Xbdx4P7tdWHpDcpLFrq8B?=
+ =?us-ascii?Q?cvdq7QchDGGTuplRnmqt2lln6flpzqGzpDIxlNgj7/X0oQDibjJ4HQCogIN7?=
+ =?us-ascii?Q?d1CnWf/2orMUlrdUBXBZxqPQwamwmHgcPSo9blc25CvMAUiBnXGEVWgTUKXC?=
+ =?us-ascii?Q?ZqMM4zwpaZXcQ7o/7KkHHJ2UpO38kYH9by2LFE7egahvd7NdcyCQ6JZ1q3zX?=
+ =?us-ascii?Q?Y8k9ogohnOKokbOCkVllkL3llmAs9W9nXYUzF8mdHVm/IKK4opZ76UojoX2p?=
+ =?us-ascii?Q?sSjyHk7fhGeHdRRFtWvOTC9CIp4ThnMME+HM60ENgUTuhxI2eRvxsWW6c33r?=
+ =?us-ascii?Q?LcnImEj1KIEjMVF4DaYMandWIxpZwwnR8UsmPcJmpcVLBShyi3F2SHImWyaA?=
+ =?us-ascii?Q?Lf0jpdzaoFTmem3Aafn/Ozojo/FqKxSSYNvr2DT7Hq9MeE7EHqN0mY+d9Wym?=
+ =?us-ascii?Q?wqF0lVuKVTDT7Z/DjHEHvVLIaPxVQyW5PZ/0/Bj+o0W+HJCv1PXoHuy0Yh6v?=
+ =?us-ascii?Q?4par7adY1M3F5+J5dXUc2QvcuzQ0OZ8Q0UIFwyySAiOScx5yUyUcfNUnHb1u?=
+ =?us-ascii?Q?ywqoJtrkjmFxOrAefMhjgDItSmAS7sG+UyBfePyIa7Hwma7iE+OmIqlDWC3z?=
+ =?us-ascii?Q?65Rg9dxKBZ9cluqgkEa5hq+3aKNjMz6Qxx/0G8hn9D/PPMPdp27LfuicXxW7?=
+ =?us-ascii?Q?K+21g41rCnE0I7vTwla9RzA609Cx4tf4ORespTjGe/lTTAElMgBN0bua2EfQ?=
+ =?us-ascii?Q?VmZf7FYJ5e4UVUm2vIUFLpVrr6JLX1EKVC1f2jPGxrRha9w9WaiKQ5FWD0s/?=
+ =?us-ascii?Q?HaCkjv/arvFf2lrmhsiHrL9FcIxpT/3e8twyaHxY3d5JrCKt0FbHwezMJwo6?=
+ =?us-ascii?Q?wSfqTSVyj9QfZKXQB3hwSyxYY6vCqwrgUfIlqB7keicMk9HS6a/8PSl9dVqm?=
+ =?us-ascii?Q?d6IfMUi5bGE57ydp49vRluM+U/vuYGP1dhxjrkGWnMG2PMuSS3g8GvqHGGVD?=
+ =?us-ascii?Q?gPtt9FeIpQiuoI3JG9YS7CbFexaArXGtCdAD6TO++LZ+6aJI8G6uB9uYMFtt?=
+ =?us-ascii?Q?0w1svCso2J0b0tluINKiOtnWi8w1nJcoWYrzthvGrTBb0NDqp/INLV2wCweq?=
+ =?us-ascii?Q?cn6fk8FMUFzRJqCcOtWdrSgYpylvKnv2qPjUpXsvKIULv5uZskzXrkOG7osC?=
+ =?us-ascii?Q?lKo1lCHK66gv1qnOgrE96dIVFCqAfw/j3RJ7Y43vwNipGyhcPVjxslbkdzab?=
+ =?us-ascii?Q?sTtwBhexXnst8egT9WgXnAmUphPuTTqZta8eRY+ChGBGjhasrR19K4ApHJMS?=
+ =?us-ascii?Q?V+uA5g=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 681c2313-d569-4b1f-19dc-08db65d42fcd
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 14:50:21.5424
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JIfUpE2+iBpCvi7+VtnVyobQPnk9L7Ltqno4yHC11FdiBMQavbioSos4D7tpckDnwCiCgIg1Cu2HpEhlHKj9jCnjhRmnSVsMRnucvnvzLDU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4692
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 05, 2023 at 01:45:52PM +0100, David Howells wrote:
 
-Gary Guo <gary@garyguo.net> writes:
+...
 
-> On Fri, 02 Jun 2023 12:51:08 +0200
-> "Andreas Hindborg (Samsung)" <nmi@metaspace.dk> wrote:
->
->> Alice Ryhl <aliceryhl@google.com> writes:
->>=20
->> > From: Wedson Almeida Filho <walmeida@microsoft.com>
->> >
->> > These methods can be used to turn an `Arc` into a raw pointer and back,
->> > in a way that preserves the metadata for fat pointers.
->> >
->> > This is done using the unstable ptr_metadata feature [1]. However, it
->> > could also be done using the unstable pointer_byte_offsets feature [2],
->> > which is likely to have a shorter path to stabilization than
->> > ptr_metadata.
->> >
->> > Link: https://github.com/rust-lang/rust/issues/81513 [1]
->> > Link: https://github.com/rust-lang/rust/issues/96283 [2]
->> > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
->> > Co-developed-by: Alice Ryhl <aliceryhl@google.com>
->> > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
->> > Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
->> > ---
->> >  rust/kernel/lib.rs      |  1 +
->> >  rust/kernel/sync/arc.rs | 42 ++++++++++++++++++++++++++++++++++++++++-
->> >  2 files changed, 42 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
->> > index 7ea777b731e6..ad9142928fb1 100644
->> > --- a/rust/kernel/lib.rs
->> > +++ b/rust/kernel/lib.rs
->> > @@ -17,6 +17,7 @@
->> >  #![feature(const_refs_to_cell)]
->> >  #![feature(dispatch_from_dyn)]
->> >  #![feature(new_uninit)]
->> > +#![feature(ptr_metadata)]
->> >  #![feature(receiver_trait)]
->> >  #![feature(unsize)]
->> >=20=20
->> > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
->> > index a89843cacaad..684be9f73aca 100644
->> > --- a/rust/kernel/sync/arc.rs
->> > +++ b/rust/kernel/sync/arc.rs
->> > @@ -24,7 +24,7 @@
->> >  };
->> >  use alloc::boxed::Box;
->> >  use core::{
->> > -    alloc::AllocError,
->> > +    alloc::{AllocError, Layout},
->> >      fmt,
->> >      marker::{PhantomData, Unsize},
->> >      mem::{ManuallyDrop, MaybeUninit},
->> > @@ -212,6 +212,46 @@ unsafe fn from_inner(inner: NonNull<ArcInner<T>>)=
- -> Self {
->> >          }
->> >      }
->> >=20=20
->> > +    /// Convert the [`Arc`] into a raw pointer.
->> > +    ///
->> > +    /// The raw pointer has ownership of the refcount that this Arc o=
-bject owned.
->> > +    pub fn into_raw(self) -> *const T {
->> > +        let ptr =3D self.ptr.as_ptr();
->> > +        core::mem::forget(self);
->> > +        // SAFETY: The pointer is valid.
->> > +        unsafe { core::ptr::addr_of!((*ptr).data) }
->> > +    }
->> > +
->> > +    /// Recreates an [`Arc`] instance previously deconstructed via [`=
-Arc::into_raw`].
->> > +    ///
->> > +    /// This code relies on the `repr(C)` layout of structs as descri=
-bed in
->> > +    /// <https://doc.rust-lang.org/reference/type-layout.html#reprc-s=
-tructs>.
->> > +    ///
->> > +    /// # Safety
->> > +    ///
->> > +    /// `ptr` must have been returned by a previous call to [`Arc::in=
-to_raw`]. Additionally, it
->> > +    /// can only be called once for each previous call to [`Arc::into=
-_raw`].
->> > +    pub unsafe fn from_raw(ptr: *const T) -> Self {
->> > +        let refcount_layout =3D Layout::new::<bindings::refcount_t>();
->> > +        // SAFETY: The caller guarantees that the pointer is valid.
->> > +        let val_layout =3D unsafe { Layout::for_value(&*ptr) };
->> > +        // SAFETY: We're computing the layout of a real struct that e=
-xisted when compiling this
->> > +        // binary, so its layout is not so large that it can trigger =
-arithmetic overflow.
->> > +        let val_offset =3D unsafe { refcount_layout.extend(val_layout=
-).unwrap_unchecked().1 };
->> > +
->> > +        // This preserves the metadata in the pointer, if any.
->> > +        //
->> > +        // Note that `*const T` and `*const ArcInner<T>` have the sam=
-e metadata as documented at
->> > +        // <https://doc.rust-lang.org/std/ptr/trait.Pointee.html>.
->> > +        let metadata =3D core::ptr::metadata(ptr as *const ArcInner<T=
->);=20=20
->>=20
->> Thanks for updating the comment with the link. I looked into this and I
->> find that what we are doing here, even though it works, does not feel
->> right at all. We should be able to do this:
->>=20
->>         let metadata =3D core::ptr::metadata(ptr);
->>         let ptr =3D (ptr as *mut u8).wrapping_sub(val_offset) as *mut ();
->>         let ptr =3D core::ptr::from_raw_parts_mut(ptr, metadata);
->>=20
->> but the way `Pointee::Metadata` is defined will not allow this, even
->> though we know it is valid. I would suggest the following instead:
->>=20
->>         let metadata =3D core::ptr::metadata(ptr);
->>         // Convert <T as Pointee>::Metadata to <ArcInner<T> as
->>         // Pointee>::Metadata. We know they have identical representatio=
-n and thus this is OK.
->>         let metadata: <ArcInner<T> as Pointee>::Metadata =3D *unsafe {
->>             &*((&metadata as *const <T as Pointee>::Metadata as *const (=
-))
->>                 as *const <ArcInner<T> as Pointee>::Metadata)
->>         };
->
-> This could just be a `transmute_copy`.
+> @@ -846,13 +824,131 @@ EXPORT_SYMBOL(iter_file_splice_write);
+>   *    is involved.
+>   *
+>   */
+> -ssize_t generic_splice_sendpage(struct pipe_inode_info *pipe, struct file *out,
+> -				loff_t *ppos, size_t len, unsigned int flags)
+> +ssize_t splice_to_socket(struct pipe_inode_info *pipe, struct file *out,
+> +			 loff_t *ppos, size_t len, unsigned int flags)
+>  {
+> -	return splice_from_pipe(pipe, out, ppos, len, flags, pipe_to_sendpage);
+> -}
+> +	struct socket *sock = sock_from_file(out);
+> +	struct bio_vec bvec[16];
+> +	struct msghdr msg = {};
+> +	ssize_t ret;
+> +	size_t spliced = 0;
+> +	bool need_wakeup = false;
+> +
+> +	pipe_lock(pipe);
+> +
+> +	while (len > 0) {
 
-Even better =F0=9F=91=8D
+Hi David,
 
-BR Andreas
+I'm assuming the answer is that this cannot occur,
+but I thought I should mention this anyway.
 
->
->>         let ptr =3D (ptr as *mut u8).wrapping_sub(val_offset) as *mut ();
->>         let ptr =3D core::ptr::from_raw_parts_mut(ptr, metadata);
->>=20
->> Even though it is a bit more complex, it captures what we are trying to
->> do better.
->
-> I agree this captures the semantics better.
->
-> Best,
-> Gary
+If the initial value of len is 0 (or less).
 
+...
+
+> +
+> +out:
+> +	pipe_unlock(pipe);
+> +	if (need_wakeup)
+> +		wakeup_pipe_writers(pipe);
+> +	return spliced ?: ret;
+
+Then ret will be used uninitialised here.
+
+> +}
+> +#endif
+>  
+>  static int warn_unsupported(struct file *file, const char *op)
+>  {
+
+...
