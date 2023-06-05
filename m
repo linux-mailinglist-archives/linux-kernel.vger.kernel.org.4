@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE76722A3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA01722A46
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbjFEPHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S233754AbjFEPIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjFEPHT (ORCPT
+        with ESMTP id S233691AbjFEPII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:07:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A8D59C;
-        Mon,  5 Jun 2023 08:07:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60B7FD75;
-        Mon,  5 Jun 2023 08:08:03 -0700 (PDT)
-Received: from [10.57.85.135] (unknown [10.57.85.135])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BED333F663;
-        Mon,  5 Jun 2023 08:07:14 -0700 (PDT)
-Message-ID: <79f43d6b-7407-56c5-3c7d-c8fc48625e95@arm.com>
-Date:   Mon, 5 Jun 2023 16:07:09 +0100
+        Mon, 5 Jun 2023 11:08:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44D9F7;
+        Mon,  5 Jun 2023 08:08:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66F1961A33;
+        Mon,  5 Jun 2023 15:08:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96EDBC433D2;
+        Mon,  5 Jun 2023 15:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685977686;
+        bh=TUnJ2BXVl10ANhL4RWDXm6wNiv5IcJXcwpqMUue5pMk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lu1c1KUbihrACAZM1WwkhlEc2SjxpozUb7R3/hWKHvBodTdd+k0vJ5jHNVZXF7p1H
+         QU3OOUHV5iizqplgo9tz1Dz35cYSjVLP3YTdvbq7Pte0BR42A9FB3izWmoLYQ/WPmU
+         WaB8MfFZ8jnXjGki1AOPR3+JKf8zViE5lAmSX+qhF4uceYl5PPvtlxJ4GFihhnqNYV
+         A8s2MnOm0bdNu9FSRpHmpRf8SyqX9fUOZco5cs8CuHHut1Xh2S+Q/TwxQmHfs6keLJ
+         5nkpG3ii+iNTrkDUNsOEdLouO9FAzIZIPvbfSBuLV8yFpoL6E1hw6EdqkNin/Y8Hx5
+         D7A9VBTkXHo3g==
+Date:   Mon, 5 Jun 2023 16:08:02 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Paulo Pavacic <pavacic.p@gmail.com>
+Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: display: panel: add fannal,c3004
+Message-ID: <20230605-untracked-trillion-d30cb9cb77c5@spud>
+References: <20230519142456.2588145-1-pavacic.p@gmail.com>
+ <20230519142456.2588145-2-pavacic.p@gmail.com>
+ <20230519-emerald-void-066fad80950a@spud>
+ <CAO9szn2sYRezCUQKFZ_qsVfne0gpWoirZoE-HpWTPS4G1U5fNQ@mail.gmail.com>
+ <20230605-handyman-rebound-0c10df9dfaf2@spud>
+ <CAO9szn0crQzy0L2Y-NZGKEVbpspxZMkO0oPpYr1WMS081ZxKRw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/3] arm64: Add a capability for FEAT_BBM level 2
-Content-Language: en-GB
-To:     Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, Ricardo Koller <ricarkol@google.com>
-References: <20230602170147.1541355-1-coltonlewis@google.com>
- <20230602170147.1541355-2-coltonlewis@google.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230602170147.1541355-2-coltonlewis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GT4Wjy9c0rngJLum"
+Content-Disposition: inline
+In-Reply-To: <CAO9szn0crQzy0L2Y-NZGKEVbpspxZMkO0oPpYr1WMS081ZxKRw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-02 18:01, Colton Lewis wrote:
-> From: Ricardo Koller <ricarkol@google.com>
-> 
-> Add a new capability to detect "Stage-2 Translation table
-> break-before-make" (FEAT_BBM) level 2.
 
-Why does this patch invent spurious "stage 2" references everywhere? The 
-full name of FEAT_BBM is "Translation table break-before-make levels", 
-and it is not specific to one stage of translation.
+--GT4Wjy9c0rngJLum
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Robin.
+On Mon, Jun 05, 2023 at 04:56:13PM +0200, Paulo Pavacic wrote:
+> Hello Conor,
+>=20
+> pon, 5. lip 2023. u 16:43 Conor Dooley <conor@kernel.org> napisao je:
 
-> Signed-off-by: Ricardo Koller <ricarkol@google.com>
-> ---
->   arch/arm64/kernel/cpufeature.c | 11 +++++++++++
->   arch/arm64/tools/cpucaps       |  1 +
->   2 files changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index c331c49a7d19c..c538060f7f66b 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -2455,6 +2455,17 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
->   		.min_field_value = 1,
->   		.matches = has_cpuid_feature,
->   	},
-> +	{
-> +		.desc = "Stage-2 Translation table break-before-make level 2",
-> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> +		.capability = ARM64_HAS_STAGE2_BBM2,
-> +		.sys_reg = SYS_ID_AA64MMFR2_EL1,
-> +		.sign = FTR_UNSIGNED,
-> +		.field_pos = ID_AA64MMFR2_EL1_BBM_SHIFT,
-> +		.field_width = 4,
-> +		.min_field_value = 2,
-> +		.matches = has_cpuid_feature,
-> +	},
->   	{
->   		.desc = "TLB range maintenance instructions",
->   		.capability = ARM64_HAS_TLB_RANGE,
-> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> index 40ba95472594d..010aca1892642 100644
-> --- a/arch/arm64/tools/cpucaps
-> +++ b/arch/arm64/tools/cpucaps
-> @@ -41,6 +41,7 @@ HAS_PAN
->   HAS_RAS_EXTN
->   HAS_RNG
->   HAS_SB
-> +HAS_STAGE2_BBM2
->   HAS_STAGE2_FWB
->   HAS_TIDCP1
->   HAS_TLB_RANGE
-> --
-> 2.41.0.rc0.172.g3f132b7071-goog
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+> Sorry this is my first patch, I still don't understand, why should I
+> add `maxItems: 1` to the 'reg:' ?
+> Isn't  part of the code:
+> > required:
+> >  - compatible
+> >  - reg
+> >  - reset-gpios
+>=20
+> making `minItems: 1` redundant for reg properties?
+
+I went and had another look, and you get enforcement of this from the
+dsi-controller binding if extra reg entries are added.
+Sorry for the noise.
+
+
+
+--GT4Wjy9c0rngJLum
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH36UgAKCRB4tDGHoIJi
+0oonAQD3lGSB2k18Pg6DEw5Bz+u2pdmbiD39MplQ8K9WA5ojCgD5Aco+KHU0HRlL
+h6BQhlYAo5Sm6sACbPSTCiSyVp/qIwY=
+=RxHH
+-----END PGP SIGNATURE-----
+
+--GT4Wjy9c0rngJLum--
