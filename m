@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C19F722197
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E9972219C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjFEI6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S230310AbjFEI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjFEI6s (ORCPT
+        with ESMTP id S230265AbjFEI6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:58:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B771583
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 01:58:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52F3E61354
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A715C433EF;
-        Mon,  5 Jun 2023 08:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685955526;
-        bh=bet3Rij8GrGk8PCMTrChExTjViLqa8FMBXDGdTe4cGE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Rk4OFN4ecvfEeSlgc06OshwB29bpXB7fJ+DBeGVuEBL5L1jtNCzJL0SF0gl/G3Ccn
-         Mx0bUz5wwZmHPHCnVCo/wJcPRCy4B5m3s7IHm3K/GR7U9/NBnDlqxQlg/TDrW/YWeL
-         /ERoZT3OBaUPjipvw8HbbXD1CWYI5zSJ/CK8v9TJzSsNf7SMG009VcyKm5AgCac/W6
-         t8wI2cFadGynLgaBLlc14KwODdA7MyMfAtond+RoxivabJAyu6oDo0vvTyrtvuDg0X
-         y54vt2TZCATRc8m28++wpJebgxIySopdf1krl5Htv3UN0Q2CBCa+i5194NUC+B+Auo
-         jU8eMrD9RRG0g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] ASoC: amd: vangogh: select CONFIG_SND_AMD_ACP_CONFIG
-Date:   Mon,  5 Jun 2023 10:58:29 +0200
-Message-Id: <20230605085839.2157268-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 5 Jun 2023 04:58:54 -0400
+X-Greylist: delayed 162 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Jun 2023 01:58:52 PDT
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0875083
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 01:58:51 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QZSFk66W0z9sBr;
+        Mon,  5 Jun 2023 10:58:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rWPWtAMjftiO; Mon,  5 Jun 2023 10:58:50 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QZSFk5WDJz9s1X;
+        Mon,  5 Jun 2023 10:58:50 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BA2138B776;
+        Mon,  5 Jun 2023 10:58:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id SzEmAE8Jgjaw; Mon,  5 Jun 2023 10:58:50 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 901FC8B763;
+        Mon,  5 Jun 2023 10:58:50 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 3558wg3s050781
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 5 Jun 2023 10:58:42 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 3558wgm7050776;
+        Mon, 5 Jun 2023 10:58:42 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/signal32: Force inlining of __unsafe_save_user_regs() and save_tm_user_regs_unsafe()
+Date:   Mon,  5 Jun 2023 10:58:35 +0200
+Message-Id: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685955512; l=2749; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=RMTGueSHDzqKafetVlF3QOmbe9ITMrXbgHIuvAD0zik=; b=CPrsdxrYnE08wgVnz2TmMhMmNqWHsg4+ey0N40QDgfuLJuiLub26/bPK9h7TWPJGy/nnes3m5 f1zJo3eIxD5AZuaag0RL8FN62weX4gAxuu81po9fB++7yLe8+1p5dPR
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Looking at generated code for handle_signal32() shows calls to a
+function called __unsafe_save_user_regs.constprop.0 while user access
+is open.
 
-The vangogh driver just gained a link time dependency that now causes
-randconfig builds to fail:
+And that __unsafe_save_user_regs.constprop.0 function has two nops at
+the begining, allowing it to be traced, which is unexpected during
+user access open window.
 
-x86_64-linux-ld: sound/soc/amd/vangogh/pci-acp5x.o: in function `snd_acp5x_probe':
-pci-acp5x.c:(.text+0xbb): undefined reference to `snd_amd_acp_find_config'
+The solution could be to mark __unsafe_save_user_regs() no trace, but
+to be on the safe side the most efficient is to flag it __always_inline
+as already done for function __unsafe_restore_general_regs(). The
+function is relatively small and only called twice, so the size
+increase will remain in the noise.
 
-Fixes: e89f45edb747e ("ASoC: amd: vangogh: Add check for acp config flags in vangogh platform")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Do the same with save_tm_user_regs_unsafe() as it may suffer the
+same issue.
+
+Fixes: ef75e7318294 ("powerpc/signal32: Transform save_user_regs() and save_tm_user_regs() in 'unsafe' version")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
-v2: select CONFIG_SND_AMD_ACP_CONFIG from all ACP5, not just VANGOGH_MACH.
----
- sound/soc/amd/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/kernel/signal_32.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-index 08e42082f5e96..713348508001a 100644
---- a/sound/soc/amd/Kconfig
-+++ b/sound/soc/amd/Kconfig
-@@ -71,6 +71,7 @@ config SND_SOC_AMD_RENOIR_MACH
- config SND_SOC_AMD_ACP5x
- 	tristate "AMD Audio Coprocessor-v5.x I2S support"
- 	depends on X86 && PCI
-+	select SND_AMD_ACP_CONFIG
- 	help
- 	 This option enables ACP v5.x support on AMD platform
+diff --git a/arch/powerpc/kernel/signal_32.c b/arch/powerpc/kernel/signal_32.c
+index c114c7f25645..7a718ed32b27 100644
+--- a/arch/powerpc/kernel/signal_32.c
++++ b/arch/powerpc/kernel/signal_32.c
+@@ -264,8 +264,9 @@ static void prepare_save_user_regs(int ctx_has_vsx_region)
+ #endif
+ }
  
+-static int __unsafe_save_user_regs(struct pt_regs *regs, struct mcontext __user *frame,
+-				   struct mcontext __user *tm_frame, int ctx_has_vsx_region)
++static __always_inline int
++__unsafe_save_user_regs(struct pt_regs *regs, struct mcontext __user *frame,
++			struct mcontext __user *tm_frame, int ctx_has_vsx_region)
+ {
+ 	unsigned long msr = regs->msr;
+ 
+@@ -364,8 +365,9 @@ static void prepare_save_tm_user_regs(void)
+ 		current->thread.ckvrsave = mfspr(SPRN_VRSAVE);
+ }
+ 
+-static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *frame,
+-				    struct mcontext __user *tm_frame, unsigned long msr)
++static __always_inline int
++save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *frame,
++			 struct mcontext __user *tm_frame, unsigned long msr)
+ {
+ 	/* Save both sets of general registers */
+ 	unsafe_save_general_regs(&current->thread.ckpt_regs, frame, failed);
+@@ -444,8 +446,9 @@ static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user
+ #else
+ static void prepare_save_tm_user_regs(void) { }
+ 
+-static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *frame,
+-				    struct mcontext __user *tm_frame, unsigned long msr)
++static __always_inline int
++save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *frame,
++			 struct mcontext __user *tm_frame, unsigned long msr)
+ {
+ 	return 0;
+ }
 -- 
-2.39.2
+2.40.1
 
