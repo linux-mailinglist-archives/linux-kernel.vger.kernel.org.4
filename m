@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AEE72319A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C107231A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbjFEUnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        id S233330AbjFEUop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbjFEUnQ (ORCPT
+        with ESMTP id S229806AbjFEUon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:43:16 -0400
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403AAA7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:43:14 -0700 (PDT)
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <mhal@rbox.co>)
-        id 1q6H2k-00CXHA-Tb; Mon, 05 Jun 2023 22:43:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-        s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-        bh=v4Bi7tyyUd+tjqQMljkfix7e2ZExX/wnrFV+XOW9EBo=; b=fsBLH7sbx0GB/OI9OLBiFm18h1
-        zi96BbiX5fCLMBT7yeuu4vAbghAgVnav/RSvdejSlfAiVbL82JGE3DJHtmXQrBswvg+VAc3uYOIsP
-        jyoabMRGp6Jbin0xJfl6oQ9Vqy2sYWmoU9HqRsm3Da3G1Ygfg2B3D9JyFli2mPpWK52J08G9oUXfn
-        SL2YDKPbNFomdNIpdAXlRDcDyczVjtQNfsBZTFOvAv6FTynydbu4DWw6l67HGArw5vR9eHdhJ5AYL
-        tdCaNKgl76nRmAdlcPOFJuAfQzO1WYAAjUenQjYCAyxf0Qk9Mr6Fx7Q3te9IQ3BM6B3xBJgJfl0zU
-        lt3jgvbA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-        (envelope-from <mhal@rbox.co>)
-        id 1q6H2k-0007Tg-1U; Mon, 05 Jun 2023 22:43:10 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        id 1q6H2b-0004Fs-82; Mon, 05 Jun 2023 22:43:01 +0200
-Message-ID: <80f7f3dc-285f-39c3-655e-fd4a499f81a1@rbox.co>
-Date:   Mon, 5 Jun 2023 22:42:59 +0200
+        Mon, 5 Jun 2023 16:44:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D641A7;
+        Mon,  5 Jun 2023 13:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE0AA62ABD;
+        Mon,  5 Jun 2023 20:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD57C433EF;
+        Mon,  5 Jun 2023 20:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685997881;
+        bh=rWefc/ANOkPtVL5TDKN6PcHHH/l7CvZ6hNvzZ/IQc6E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kljRR52hpUJJrXaUy0nT5D97KbHxhD7F+8w9vJyDHFqc6UslXjgCuL8MS56Un9I1U
+         epWdbHY1tyvU9wuWoVa7WotVVplRn/8hEWqjF6NiNozsFhfTiURMDFxdXE1gLpKzmY
+         0L8A52Jecg2pcbTjUgQ4hgBiRewqcBiTwATffZni0ZZSlhRE+hDF9p4Vx34hSrQ18k
+         1TBOGK7o+a9Rc/A1NTLpq+Ly8M8AqlL8VypB37VERBPv16zjffYG0v9e0CQhc7uNlc
+         YxD3VboSgUIZIY4KtW7BaPG5bJBOwPhqao1xDEXY1lV7zB5fCpUHf6W3NB9zB0GPEa
+         PqmbYiyqlu41A==
+Date:   Mon, 5 Jun 2023 22:44:38 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     David Wu <david.wu@rock-chips.com>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhang aihui <zah@rock-chips.com>
+Subject: Re: [PATCH] i2c: Devices which have some i2c addr can work in same
+ i2c bus
+Message-ID: <20230605204438.dopx6qvmpdou6xwu@intel.intel>
+References: <20230601033423.172021-1-david.wu@rock-chips.com>
 MIME-Version: 1.0
-User-Agent: Thunderbird
-Subject: Re: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Content-Language: pl-PL, en-GB
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     dmatlack@google.com, mizhang@google.com, isaku.yamahata@gmail.com,
-        pbonzini@redhat.com, Wei Wang <wei.w.wang@intel.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230307135233.54684-1-wei.w.wang@intel.com>
- <168565180722.660019.15543226381784798973.b4-ty@google.com>
- <8f319a1e-a869-b666-b606-c0b4764ef7b1@rbox.co> <ZHofVKJxjaUxIDUN@google.com>
- <7a4a503d-9fc4-d366-02b4-bc145943bd45@rbox.co> <ZH39H0gpNX4ak6yM@google.com>
-From:   Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <ZH39H0gpNX4ak6yM@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601033423.172021-1-david.wu@rock-chips.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,35 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 17:19, Sean Christopherson wrote:
-> On Mon, Jun 05, 2023, Michal Luczaj wrote:
->> OK, so xa_store() aside[*], I see some bool-to-bools:
->>
->> arch/x86/kvm/x86.c:
->> 	kvm_msr_allowed():allowed = !!test_bit(index - start, bitmap);
->> arch/x86/kvm/hyperv.c:
->> 	kvm_hv_hypercall():hc.rep = !!(hc.rep_cnt || hc.rep_idx);
->> arch/x86/kvm/mmu/mmu.c:
->> 	update_pkru_bitmask():
->> 		pkey_bits = !!check_pkey;
->> 		pkey_bits |= (!!check_write) << 1;
->> arch/x86/kvm/svm/svm.c:
->> 	msr_write_intercepted():return !!test_bit(bit_write,  &tmp);
->> 	svm_vcpu_after_set_cpuid():
->> 		2x set_msr_interception...
->> tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c:
->> 	set_or_clear_invalid_guest_state():sregs.tr.unusable = !!set;
->>
->> But perhaps this is a matter of style and those were meant to be this kind-of
->> explicit?
-> 
-> I doubt it, I'm guessing most cases are due to the author being overzealous for
-> one reason or another, e.g. I suspect the test_bit() ones are due to the original
-> author incorrectly assuming test_bit() returned an unsigned long, i.e. the bit,
-> as opposed to the bool.
-> 
-> If you want to clean these up, I'd say "fix" the test_bit() cases, but leave the
-> others alone.  The test_bit() ones are clearly redundant, and IMO can be actively
-> due to implying test_bit() returns something other than a bool.
+Hi David,
 
-Done: https://lore.kernel.org/kvm/20230605200158.118109-1-mhal@rbox.co/
+On Thu, Jun 01, 2023 at 11:34:23AM +0800, David Wu wrote:
+> From: Zhang aihui <zah@rock-chips.com>
+> 
+> If i2c slave devices don't work at the same time, which have
+> the same i2c addr, it would register two devices, can make them
+> working.
+
+can you please rephrase this?
+
+I understand you want to register multiple devices, how is this
+going to work in hardware?
+
+> Change-Id: I1bfb7783924b08bdc6e12bf47c2de01bdac7c2e2
+
+please drop the Change-Id
+
+> Signed-off-by: Zhang aihui <zah@rock-chips.com>
+> Signed-off-by: David Wu <david.wu@rock-chips.com>
+> ---
+>  drivers/i2c/i2c-core-base.c | 51 +++++++++++++++++++++++++++++--------
+>  1 file changed, 41 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index ae3af738b03f..53a8141e6238 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -62,6 +62,7 @@
+>  static DEFINE_MUTEX(core_lock);
+>  static DEFINE_IDR(i2c_adapter_idr);
+>  
+> +static int i2c_check_addr_ex(struct i2c_adapter *adapter, int addr);
+>  static int i2c_detect(struct i2c_adapter *adapter, struct i2c_driver *driver);
+>  
+>  static DEFINE_STATIC_KEY_FALSE(i2c_trace_msg_key);
+> @@ -849,7 +850,8 @@ static void i2c_adapter_unlock_bus(struct i2c_adapter *adapter,
+>  
+>  static void i2c_dev_set_name(struct i2c_adapter *adap,
+>  			     struct i2c_client *client,
+> -			     struct i2c_board_info const *info)
+> +			     struct i2c_board_info const *info,
+> +			     int status)
+
+what exactly is status, is it a counter? If so, please call it
+count or similar.
+
+>  {
+>  	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+>  
+> @@ -863,8 +865,12 @@ static void i2c_dev_set_name(struct i2c_adapter *adap,
+>  		return;
+>  	}
+>  
+> -	dev_set_name(&client->dev, "%d-%04x", i2c_adapter_id(adap),
+> -		     i2c_encode_flags_to_addr(client));
+> +	if (status == 0)
+> +		dev_set_name(&client->dev, "%d-%04x", i2c_adapter_id(adap),
+> +			i2c_encode_flags_to_addr(client));
+> +	else
+> +		dev_set_name(&client->dev, "%d-%04x-%01x", i2c_adapter_id(adap),
+> +			i2c_encode_flags_to_addr(client), status);
+>  }
+>  
+>  int i2c_dev_irq_from_resources(const struct resource *resources,
+> @@ -940,9 +946,11 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>  	}
+>  
+>  	/* Check for address business */
+> -	status = i2c_check_addr_busy(adap, i2c_encode_flags_to_addr(client));
+> +	status = i2c_check_addr_ex(adap, i2c_encode_flags_to_addr(client));
+
+"status" as such was indicating that the device is busy, i.e. the
+device exists. If you want to use it as a counter, then make
+another variable, u8, possibly.
+
+>  	if (status)
+> -		goto out_err;
+> +		dev_err(&adap->dev,
+> +			"%d i2c clients have been registered at 0x%02x",
+
+I think rather than dev_err() it should be a dev_warn() (or
+dev_info() as the message doesn't sound very threatening).
+
+dev_err() should be normally followed by a failure. Perhaps to
+make it sound more as a warning the message should be:
+
+	"client %d is already registere in 0x%02x\n"
+
+Andi
+
+> +			status, client->addr);
