@@ -2,65 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC8F7231E3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD5F7231F8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbjFEVEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S232314AbjFEVLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjFEVET (ORCPT
+        with ESMTP id S231495AbjFEVLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:04:19 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB30EEE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 14:04:18 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75d4a4cf24aso265035985a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 14:04:18 -0700 (PDT)
+        Mon, 5 Jun 2023 17:11:43 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A404ED;
+        Mon,  5 Jun 2023 14:11:41 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so4561552a91.0;
+        Mon, 05 Jun 2023 14:11:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1685999058; x=1688591058;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8tLbIUuv5lgaEeoqnLtnBMIzF9WaGkUC0lTRYTnhjLY=;
-        b=CURFfuND+w9EpS4CBMuYDAtf4AQRaiKtH+aPQKwanjanSK4cJJrzSVZansct4nIFtb
-         JVtVZvgcQB35AZZNRCyC7KO7K7TCdLQMEVtiSBOWcueMna25en8AxctGxR+eDDM4omgC
-         zBuAU0nZlJAVRMIEsPXU/eVBrHj43nMWJiZhJxxxntOeEQpfEoBGQLffNNIo4FXTb9sI
-         gz33U0mStlUVRZ41MrmVSvoE+NnwZEbjguMXmCmME+p/MxLtGzlGJ4oLn7GiK9YPfZue
-         2+p0jYeRPD6sBhsQHIIr1j67OOLvBRlpQz4bhklTtLXLVVdPPpMkqpyk2hDFfjdtS5cY
-         /Tsg==
+        d=gmail.com; s=20221208; t=1685999501; x=1688591501;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zh4jJxTAKzbJ9SX27hDt/5kPD49tOPRL7suMPY4/khA=;
+        b=HQ7E4KTQocAnFq6ymEbiyQe+71wz1QqkMTqstF6yByE1aQ/3L9xGlsoHE2ty/KmNGx
+         kkEIZdBdUpFN5pBuGWGPof3JHvwTsAFbFOBh8LvcbfvZDQcWxan7GhR3qRzMUhCbsynv
+         VMO/o8hLS0MUfiw6kmRJdp5TDSqJf1Z98tzNg0TBILGUxmterYeS+YBt+Dmye8jo/cGp
+         xxgae6ukPX27OAi5ZxAJI04J0vRi0aYxFh2wrhremSn2C6an+j6jLOUDoZZnWpJAGoFM
+         QcM8CesR+0JfQo9SpvdWxAM1li3oZzB0tJjW4MpOn6edHy3LBmjFeUMOqWOY59vgg4DJ
+         JYag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685999058; x=1688591058;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tLbIUuv5lgaEeoqnLtnBMIzF9WaGkUC0lTRYTnhjLY=;
-        b=XoAcDIoAviMIthaHpDO6xEafs+VoYk5KJS0d/V2XANgQU+QPViOxjuqarMcUsbqS5c
-         v3HIbZ4YhZtvGyHDn7Ad0vwEppzx/wuk+USPvyefVCU3VvCPyXEfEe/4P3KCVzL4VCvu
-         PoMZ3l38Y+oVr3nDZd/W9hMDQO/gS1d4jrBYcv0zIFnCnonBtrXql6vC0aBKS8MalI1o
-         YE18ZmHN803/C90psC9qv081e7GNId3Xl+9//mi4qmW9sd8eDWqaSHtTgji6+7DV/ZKZ
-         j2DvCi+2I7b7wkazYRvpA08KSEmoQ8+FHbwkMXn6AB6b3mMWuBGS48+oL392gStwrOHO
-         RiEw==
-X-Gm-Message-State: AC+VfDy4tH22sl4eGQK3RJtE9M30qP7SjxIfKYqZyMV3vgpGjuZtw97a
-        0C1EtdbOQhEosd/6VetESUev
-X-Google-Smtp-Source: ACHHUZ6DNQxwPJvuRFMN55TajOTfrEzsxKPLCwOnacjxiCw/Lil/yh4+xY7MA2kgUc5OPfmmAnS93g==
-X-Received: by 2002:a37:64c4:0:b0:75b:23a0:d9c1 with SMTP id y187-20020a3764c4000000b0075b23a0d9c1mr943116qkb.23.1685999057142;
-        Mon, 05 Jun 2023 14:04:17 -0700 (PDT)
-Received: from localhost (static-96-237-115-254.bstnma.fios.verizon.net. [96.237.115.254])
-        by smtp.gmail.com with ESMTPSA id s15-20020a05620a16af00b00746b2ca65edsm4453045qkj.75.2023.06.05.14.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 14:04:16 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 17:04:15 -0400
-Message-ID: <0be47690050b0d5aa3eaf2422d4feac2.paul@paul-moore.com>
-From:   Paul Moore <paul@paul-moore.com>
-To:     =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selinux: avoid bool as identifier name
-References: <20230602133511.30239-1-cgzones@googlemail.com>
-In-Reply-To: <20230602133511.30239-1-cgzones@googlemail.com>
+        d=1e100.net; s=20221208; t=1685999501; x=1688591501;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zh4jJxTAKzbJ9SX27hDt/5kPD49tOPRL7suMPY4/khA=;
+        b=GW0+fjMMwHvn/EUwctN+yNljKAGIzWHs8mQ2TQ9xwKHzWXX8xA+25xqMgpX3ksUsLO
+         dSUDEC4eHITWu2mX07+7MQHvOz7mDIY9acicwIk3jzAl5MfSUM9l1B1yNCzBXB6mxDMC
+         B9drTk8qLxI1Nt/aEcw0mmlIIUKXqSi3gIs7iLdXYPr9MuFphU8/zwQsspmy040Dmnfh
+         9gvD9aV608+UhTexp4yNDNavub2dhRIziYocETy2PCZ6wOk5CGIC+CiAiVHQlLRECwIl
+         OD75x9nlKcgi5z+/fEEeped4MA9cPAW1VRe2//N99eR219ZFCQ/wPncb/jv2ylYcuN/B
+         MY+w==
+X-Gm-Message-State: AC+VfDxeOaomLjcMbmPj3aD2xU2svtNHmsaw6gyzCY236Q0/4+sAsyxy
+        1AIZ9WY13/Hrkx9Hs3FVQg4=
+X-Google-Smtp-Source: ACHHUZ7ezCBLFh/r5MtsTw99vS986tpwZwM/H7CRc906oLC1p2PgTYZQRvrDYW2mCxZli0+0MYt3BQ==
+X-Received: by 2002:a17:90b:1c06:b0:258:9180:1999 with SMTP id oc6-20020a17090b1c0600b0025891801999mr8816659pjb.32.1685999500386;
+        Mon, 05 Jun 2023 14:11:40 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id gz18-20020a17090b0ed200b00246f9725ffcsm6255974pjb.33.2023.06.05.14.11.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Jun 2023 14:11:39 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
+ memory as ROX
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
+Date:   Mon, 5 Jun 2023 14:11:26 -0700
+Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B021EE82-9741-4B41-8FF7-91A9336EDD7C@gmail.com>
+References: <20230601101257.530867-1-rppt@kernel.org>
+ <20230601101257.530867-13-rppt@kernel.org>
+ <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
+ <ZHjcr26YskTm+0EF@moria.home.lan>
+ <a51c041b61e2916d2b91c990349aabc6cb9836aa.camel@intel.com>
+ <ZHjljJfQjhVV/jNS@moria.home.lan>
+ <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
+ <50D768D7-15BF-43B8-A5FD-220B25595336@gmail.com>
+ <20230604225244.65be9103@rorschach.local.home>
+ <20230605081143.GA3460@kernel.org>
+ <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+X-Mailer: Apple Mail (2.3731.600.7)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PP_MIME_FAKE_ASCII_TEXT,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,18 +120,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun  2, 2023 =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com> wrote:
-> 
-> Avoid using the identifier `bool` to improve support with future C
-> standards.  C23 is about to make `bool` a predefined macro (see N2654).
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/ss/conditional.c | 8 ++++----
->  security/selinux/ss/conditional.h | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Merged into selinux/next, thanks.
 
---
-paul-moore.com
+> On Jun 5, 2023, at 9:10 AM, Edgecombe, Rick P =
+<rick.p.edgecombe@intel.com> wrote:
+>=20
+> On Mon, 2023-06-05 at 11:11 +0300, Mike Rapoport wrote:
+>> On Sun, Jun 04, 2023 at 10:52:44PM -0400, Steven Rostedt wrote:
+>>> On Thu, 1 Jun 2023 16:54:36 -0700
+>>> Nadav Amit <nadav.amit@gmail.com> wrote:
+>>>=20
+>>>>> The way text_poke() is used here, it is creating a new writable
+>>>>> alias
+>>>>> and flushing it for *each* write to the module (like for each
+>>>>> write of
+>>>>> an individual relocation, etc). I was just thinking it might
+>>>>> warrant
+>>>>> some batching or something. =20
+>>=20
+>>>> I am not advocating to do so, but if you want to have many
+>>>> efficient
+>>>> writes, perhaps you can just disable CR0.WP. Just saying that if
+>>>> you
+>>>> are about to write all over the memory, text_poke() does not
+>>>> provide
+>>>> too much security for the poking thread.
+>>=20
+>> Heh, this is definitely and easier hack to implement :)
+>=20
+> I don't know the details, but previously there was some strong dislike
+> of CR0.WP toggling. And now there is also the problem of CET. Setting
+> CR0.WP=3D0 will #GP if CR4.CET is 1 (as it currently is for kernel =
+IBT).
+> I guess you might get away with toggling them both in some controlled
+> situation, but it might be a lot easier to hack up then to be made
+> fully acceptable. It does sound much more efficient though.
+
+Thanks for highlighting this issue. I understand the limitations of
+CR0.WP. There is also always the concerns that without CET or other
+control flow integrity mechanism, someone would abuse (using ROP/JOP)
+functions that clear CR0.WP=E2=80=A6
+
