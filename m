@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DE8722537
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11559722540
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbjFEMHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S233265AbjFEMJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjFEMHv (ORCPT
+        with ESMTP id S229815AbjFEMJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:07:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5702292;
-        Mon,  5 Jun 2023 05:07:50 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685966868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KXCmDfvj9l+154x1gPShTvQOI2Ax76Udy+UmUVwfA9A=;
-        b=EHRctzJyGTaUBHd5gaBmROCxEN4c1Oe/9jBSeNe9frLeCG4bn61BHCqeXrmHqPsPkqAKFa
-        11LI8UGe1726OEEwo/Gh7jxQa+HR5GExjqMk0Y6p8IqDHCG4AMSdqllsX5d6vJZ+nT03iV
-        2zSweQ483LCOJpnJAF23v8Qkj7ouqeyEpPpBNPEp5cmO1TlvPYkfxMkzDNiSGTo92yNvhQ
-        4qTeY7N4s9zcB4t+wdrWFKD73D7/UYFy5KfGGziV70E3UzdmhUhe/00m4fy+GH0A93xEAz
-        ibNw80DhnPCcHdAKj7eieCgYBVxHQZzDyN+FLaLloX9SvRsL1HvWtwqMTtfGmA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685966868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KXCmDfvj9l+154x1gPShTvQOI2Ax76Udy+UmUVwfA9A=;
-        b=bi7gJKNK43gslB/6sAajAZsqNLxl8cIkdUxehfFmm6TB9ooPuOegaNSD/p7HKhgJg4OLIn
-        bKTx4VcD0SWKG+CA==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 02/33] x86/fred: make unions for the cs and ss fields
- in struct pt_regs
-In-Reply-To: <20230410081438.1750-3-xin3.li@intel.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-3-xin3.li@intel.com>
-Date:   Mon, 05 Jun 2023 14:07:48 +0200
-Message-ID: <87o7lu6rjf.ffs@tglx>
+        Mon, 5 Jun 2023 08:09:11 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D33F92;
+        Mon,  5 Jun 2023 05:09:09 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3559ncW7006719;
+        Mon, 5 Jun 2023 14:08:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=6wZOLEa3GpVYAhxU6J6dt+YaBwVxP3xhhj2G/143fFg=;
+ b=Fogd2R/WBJ4wh35TzPUkP03ulMrCzWoqkt+rnvCmoTVL/6gMqmifu04UxXgNMTcAHHig
+ HEm5ReXaYqrlfd6ZInaShg22w6JysJOuF6mnfetSkvXsdM9ivBoHVewJiY401QpWiTX1
+ fgJ8comiS5lyiRSvHgfLre/v36q1FyzKCRsPwdZl71e3jCuBAs+5fms4nm1ls3r5zVug
+ mvfiYyMdqR+tgb/BYdNa8aI7AFCojuwW2fZGe+AwgOMygk2vUyPvF4yK/huh7b18Uql9
+ nzcCn7Pc7X4/imH4tXSbONwK4JGunf+kR7AegxaCye9VbXe9mPkVbcDXd2IVoey2G02f 6A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r1ddqru9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 14:08:53 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1B25610002A;
+        Mon,  5 Jun 2023 14:08:51 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1478222788C;
+        Mon,  5 Jun 2023 14:08:51 +0200 (CEST)
+Received: from [10.201.20.56] (10.201.20.56) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 5 Jun
+ 2023 14:08:50 +0200
+Message-ID: <63e2c1bc-4a80-4857-899a-dd87d92c6f7e@foss.st.com>
+Date:   Mon, 5 Jun 2023 14:08:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] serial: st-asc: fix typo in property name
+Content-Language: en-US
+To:     Raphael Gallais-Pou <rgallaispou@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230604083558.16661-1-rgallaispou@gmail.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20230604083558.16661-1-rgallaispou@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.20.56]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,47 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
-> +	union {
-> +		unsigned long  csx;	/* cs extended: CS + any fields above it */
-> +		struct __attribute__((__packed__)) {
-> +			unsigned short cs;	/* CS selector proper */
-> +			unsigned int current_stack_level: 2;
-> +			unsigned int __csx_resv1	: 6;
-> +			unsigned int interrupt_shadowed	: 1;
-> +			unsigned int software_initiated	: 1;
-> +			unsigned int __csx_resv2	: 2;
-> +			unsigned int nmi		: 1;
-> +			unsigned int __csx_resv3	: 3;
-> +			unsigned int __csx_resv4	: 32;
-> +		};
-> +	};
->  	unsigned long flags;
->  	unsigned long sp;
-> -	unsigned long ss;
-> +	union {
-> +		unsigned long  ssx;	/* ss extended: SS + any fields above it */
-> +		struct __attribute__((__packed__)) {
-> +			unsigned short ss;	/* SS selector proper */
-> +			unsigned int __ssx_resv1	: 16;
-> +			unsigned int vector		: 8;
-> +			unsigned int __ssx_resv2	: 8;
-> +			unsigned int type		: 4;
-> +			unsigned int __ssx_resv3	: 4;
-> +			unsigned int enclv		: 1;
-> +			unsigned int long_mode		: 1;
-> +			unsigned int nested		: 1;
-> +			unsigned int __ssx_resv4	: 1;
-> +			unsigned int instr_len		: 4;
-> +		};
-> +	};
+Hi Raphael
 
-This does not match section
+On 6/4/23 10:35, Raphael Gallais-Pou wrote:
+> Changes the property name read in the driver according to the YAML.
+> According to device-tree documentation, property names should not
+> include underscores.
+> 
+> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+> ---
+>  drivers/tty/serial/st-asc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+> index 5215e6910f68..6ef99a037a9b 100644
+> --- a/drivers/tty/serial/st-asc.c
+> +++ b/drivers/tty/serial/st-asc.c
+> @@ -754,7 +754,7 @@ static struct asc_port *asc_of_get_asc_port(struct platform_device *pdev)
+>  
+>  	asc_ports[id].hw_flow_control = of_property_read_bool(np,
+>  							"uart-has-rtscts");
+> -	asc_ports[id].force_m1 =  of_property_read_bool(np, "st,force_m1");
+> +	asc_ports[id].force_m1 =  of_property_read_bool(np, "st,force-m1");
+>  	asc_ports[id].port.line = id;
+>  	asc_ports[id].rts = NULL;
+>  
 
-    5.2.1 Saving Information on the Regular Stack?
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-of version 4 and later of the specification.
-
-Thanks,
-
-        tglx
+Thanks
+Patrice
