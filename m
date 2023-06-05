@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247E3722E57
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F94722E5C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235715AbjFESHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S229687AbjFESJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235543AbjFESHF (ORCPT
+        with ESMTP id S229895AbjFESJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:07:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41E010C0
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:06:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB3A4628F8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E17CAC433D2;
-        Mon,  5 Jun 2023 18:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685988393;
-        bh=140neydbH4NqzueFi/85G/gtjGnfr6/Oyl6MerHqEJU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ho2ugw8Dg07or4Fp1vy7jflDC1s+g84MnwRmDDKuGLEQbpTxvhPn5lsrmZTyKsD18
-         nqzwogkfebsMUdpKDyJ/jGyyfnpLb8j9OyJKBHGy28xtpT7a59QohfImK07jz9nPC1
-         AuBjAV1HON8TDCSyGs1qY7jNAFkihFTaZc8quFVfvjg7Ttd1oNBBVXlBQ1vZCO4Cox
-         H5maUUFbo7YwAgZmMBHQ6mvbO6bTXu4ItY2cqKsWrVQTbzEAZlYXeTWulQ7WUHbPei
-         rMvaDg2QC0FTXcFdwcb23Ahc6dX1fQ1crzYhS4d9pTsO5t7hefF9Z42N/DAYRgbSGG
-         nClEkX1QwEvRA==
-Date:   Mon, 5 Jun 2023 11:06:31 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
-        chuck.lever@oracle.com
-Subject: Re: [PATCH 66/69] ynl: fix nested policy attribute type
-Message-ID: <20230605110631.5a7d8074@kernel.org>
-In-Reply-To: <20230605094617.3564079-1-arkadiusz.kubalewski@intel.com>
-References: <20230605094617.3564079-1-arkadiusz.kubalewski@intel.com>
+        Mon, 5 Jun 2023 14:09:04 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA90ED2
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:09:02 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25945de43c3so323961a91.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685988542; x=1688580542;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SbhZgeRfrMzo8RZUjiv5Kr8KvV2/iK/o9SdLtbvSVL4=;
+        b=M12TBi/qdCVHqFYGFxUaq8Xsf9tqgm2Saa+5o3o1AI1a3KbqNFyMgmbcVKqIov05Ci
+         uMu1xJio3U6fVN1G/jl2PUsd6FfTM2VoZDOwX7lR25xQYp21IAoM8ZUY/ZFgfbyD0/sV
+         1KfXLD/Y35e9+smYan7Kr0Rem30tgZYv9c1pkZmEhNS3G64FQ4tbzn+Z96fOlAH7oCKE
+         70Mug7V/5btfozq7bpQdOHu/l9UdwCtFocNQzW7AxzrKfoRhhwBlyuGyqmjY35AoVCsP
+         1bBlhI363MBzD9H2yKJRzFRGAoewe0XkRBxhBpjKASyBecCg93NxosUIBRL4RHua0PUg
+         e6fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685988542; x=1688580542;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SbhZgeRfrMzo8RZUjiv5Kr8KvV2/iK/o9SdLtbvSVL4=;
+        b=La7zioeqeDvHs5P1+v+pGnES8m7oaxQD/+dYVK9UplexF4g325h8J9gRwtnkW9xbeb
+         1Dl7JwL/MVJn3reIHopi9GjzW5B/Oy5qCTUP3qP5EWdCPuJGnm+39hnallRNm5He1pt+
+         X/rxP4xIxnwdaYhOUN8JCVBcvpm4MoKc6Khgo3E5N87iCu8TCNg0tkvt0qmURZUadfIH
+         n4ty7Of8nJ2Zp4lqN9oLRIgA/yO/M5Jw3PGJ0svl2IAOfFjyvf65kwYIuEtoLL3y+JSD
+         T2a90tENQnq6J9YMJtFCPRWCbI6DZg49AlEcRrfDhe2hu5r4fDZgP8NQeDvYNYqVhbCn
+         93iw==
+X-Gm-Message-State: AC+VfDxXdSxaAlosrpBD7CSnceUE1O8uZ+0RSawfiF4S0Q9qzABwvmHn
+        AB/me2LzqYaOxaFO2sxP8ud5Gw==
+X-Google-Smtp-Source: ACHHUZ5x1VhEu0cbk+F9o60l7ZlBAYq207KYwhSkbPgBXjs/jRHW4y+9It3zndPrTP6WOfYfW5+i8g==
+X-Received: by 2002:a17:90a:e7d0:b0:256:4bc:6bc8 with SMTP id kb16-20020a17090ae7d000b0025604bc6bc8mr23198257pjb.2.1685988542338;
+        Mon, 05 Jun 2023 11:09:02 -0700 (PDT)
+Received: from [127.0.0.1] ([2620:10d:c090:400::5:a83f])
+        by smtp.gmail.com with ESMTPSA id i9-20020a17090a2ac900b0025645d118adsm6656422pjg.14.2023.06.05.11.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 11:09:01 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org, josef@toxicpanda.com, linan666@huaweicloud.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linan122@huawei.com,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+In-Reply-To: <20230527091904.3001833-1-linan666@huaweicloud.com>
+References: <20230527091904.3001833-1-linan666@huaweicloud.com>
+Subject: Re: [PATCH] blk-iocost: use spin_lock_irqsave in
+ adjust_inuse_and_calc_cost
+Message-Id: <168598854044.127564.8532399641861277056.b4-ty@kernel.dk>
+Date:   Mon, 05 Jun 2023 12:09:00 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  5 Jun 2023 11:46:17 +0200 Arkadiusz Kubalewski wrote:
-> When nested attribute is used, generated type in the netlink policy
-> is NLA_NEST, which is wrong as there is no such type. Fix be adding
-> `ed` sufix for policy generated for 'nest' type attribute.
+
+On Sat, 27 May 2023 17:19:04 +0800, linan666@huaweicloud.com wrote:
+> adjust_inuse_and_calc_cost() use spin_lock_irq() and IRQ will be enabled
+> when unlock. DEADLOCK might happen if we have held other locks and disabled
+> IRQ before invoking it.
 > 
-> Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-> ---
->  tools/net/ynl/ynl-gen-c.py | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Fix it by using spin_lock_irqsave() instead, which can keep IRQ state
+> consistent with before when unlock.
 > 
-> diff --git a/tools/net/ynl/ynl-gen-c.py b/tools/net/ynl/ynl-gen-c.py
-> index 28afb0846143..89603866d4a0 100755
-> --- a/tools/net/ynl/ynl-gen-c.py
-> +++ b/tools/net/ynl/ynl-gen-c.py
-> @@ -113,7 +113,10 @@ class Type(SpecAttr):
->          return '{ .type = ' + policy + ', }'
->  
->      def attr_policy(self, cw):
-> -        policy = c_upper('nla-' + self.attr['type'])
-> +        if (self.attr['type'] == 'nest'):
-> +            policy = c_upper('nla-' + self.attr['type'] + 'ed')
-> +        else:
-> +            policy = c_upper('nla-' + self.attr['type'])
->  
->          spec = self._attr_policy(policy)
->          cw.p(f"\t[{self.enum_name}] = {spec},")
+> [...]
 
-For nests the policy should come from
+Applied, thanks!
 
-  class TypeNest -> def _attr_policy()
+[1/1] blk-iocost: use spin_lock_irqsave in adjust_inuse_and_calc_cost
+      commit: 8d211554679d0b23702bd32ba04aeac0c1c4f660
 
-why do we need to tweak the default implementation in the parent class?
+Best regards,
 -- 
-pw-bot: cr
+Jens Axboe
+
+
+
