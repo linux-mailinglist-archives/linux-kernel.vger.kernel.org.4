@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DAD722864
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064AC722866
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbjFEOJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S234508AbjFEOJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbjFEOIh (ORCPT
+        with ESMTP id S233137AbjFEOIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:08:37 -0400
+        Mon, 5 Jun 2023 10:08:35 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62130E56;
-        Mon,  5 Jun 2023 07:08:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A94E52;
+        Mon,  5 Jun 2023 07:08:19 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 14:08:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685974098;
+        s=2020; t=1685974097;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Bj5n/9FycideN6LU31c0B+GZeQ9PsxS1vDH3fWVWczY=;
-        b=XJO4GVwk+YQeD9zvB2g9Mv/NBkPBQI/tq/N1Wi6IC2kxOSy7wA/weigIJGM3d5FAwcffMB
-        5ZFMQK94BokzCfuaELb22KK+sam+lo1UhBcj9DllnpHZJ+EiGseg/HLwQPwJ3uCyDOKCZb
-        Qr1KzYtCaNCXPmwuC72OjFFbOoWZc+E4syLOcUVnZ2vmUVKuAHh7Y7/b6OLhezA2BI4aAK
-        x0g3aMD3k3/teR8MmWXcgARJUq8k03amXrS+pbE9JsEaiUpAnA0aATZD9nWzATmqeGfm4W
-        JeK7E458n4TUos06xA8AyJkia2P8R7p2ilJtgRkvnbeMf6L265szLk2gN65Qrg==
+        bh=IMASNQXLiYv3zDUFUZ6wkhcxEXx/lGSnr/FdQPi8F0U=;
+        b=m0lnw26ZZEv8DMw4AdcHHEbhb0lBD+XjamMRqED38/wuOOdIXv9JaEU+Mcaqd0KaxsbyFs
+        zv3RHLjMGtjyI/KI/R2/0+D698nEiKAXHM1I6/jcne5UAqmUdIaH6PGcQFcH+6FBc0kZFl
+        s08s/CLkbi/B/YizFGwA52vHhalQNA3gShoE/6RB72dvQH+Dw15knueut+vvAHMRuQUawJ
+        2za2n0/tsjLJh3Hq8p34HUCeeCfi5obzC6QgoCRkJvFW79py7GhvFHX1GAhqqqLpQbqQtn
+        D6hPcV48LgdxC8P1E53+w6Fev8J03CKKoGwoNP6ntP6xOLeNuAtpROWqoZYrBw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685974098;
+        s=2020e; t=1685974097;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Bj5n/9FycideN6LU31c0B+GZeQ9PsxS1vDH3fWVWczY=;
-        b=2NMsi91AZCjxi90JBMn97Vzqx3SO8C0uV9MyCR7NB4p9RdU6Yhts1nuo2mv+TkJad4EL8q
-        jemN1kCkwRFSjQDg==
+        bh=IMASNQXLiYv3zDUFUZ6wkhcxEXx/lGSnr/FdQPi8F0U=;
+        b=14aBrR2N2jYuXU1ZMsbNouiw4p4L+eevkEUKtELerL3RsrDyPBtJ4MnrmIwtTMOBIWGzK/
+        uWvr+YG6qSpnh9Bw==
 From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mtrr] x86/mtrr: Remove physical address size calculation
+Subject: [tip: x86/mtrr] x86/mtrr: Support setting MTRR state for software
+ defined MTRRs
 Cc:     Juergen Gross <jgross@suse.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
         Michael Kelley <mikelley@microsoft.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230502120931.20719-2-jgross@suse.com>
-References: <20230502120931.20719-2-jgross@suse.com>
+In-Reply-To: =?utf-8?q?=3CBYAPR21MB16883ABC186566BD4D2A1451D7FE9=40BYAPR21MB?=
+ =?utf-8?q?1688=2Enamprd21=2Eprod=2Eoutlook=2Ecom=3E?=
+References: =?utf-8?q?=3CBYAPR21MB16883ABC186566BD4D2A1451D7FE9=40BYAPR21M?=
+ =?utf-8?q?B1688=2Enamprd21=2Eprod=2Eoutlook=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <168597409795.404.3288881453243222973.tip-bot2@tip-bot2>
+Message-ID: <168597409717.404.6474758887257669176.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,277 +71,196 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mtrr branch of tip:
 
-Commit-ID:     f6b980646b93a8c585b4ed991b8a34e8fc6ef847
-Gitweb:        https://git.kernel.org/tip/f6b980646b93a8c585b4ed991b8a34e8fc6ef847
+Commit-ID:     29055dc74287467bd7a053d60b4afe753832960d
+Gitweb:        https://git.kernel.org/tip/29055dc74287467bd7a053d60b4afe753832960d
 Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Tue, 02 May 2023 14:09:16 +02:00
+AuthorDate:    Tue, 02 May 2023 14:09:18 +02:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 09 May 2023 14:13:30 +02:00
+CommitterDate: Thu, 01 Jun 2023 15:04:32 +02:00
 
-x86/mtrr: Remove physical address size calculation
+x86/mtrr: Support setting MTRR state for software defined MTRRs
 
-The physical address width calculation in mtrr_bp_init() can easily be
-replaced with using the already available value x86_phys_bits from
-struct cpuinfo_x86.
+When running virtualized, MTRR access can be reduced (e.g. in Xen PV
+guests or when running as a SEV-SNP guest under Hyper-V). Typically, the
+hypervisor will not advertize the MTRR feature in CPUID data, resulting
+in no MTRR memory type information being available for the kernel.
 
-The same information source can be used in mtrr/cleanup.c, removing the
-need to pass that value on to mtrr_cleanup().
+This has turned out to result in problems (Link tags below):
 
-In print_mtrr_state() use x86_phys_bits instead of recalculating it
-from size_or_mask.
+- Hyper-V SEV-SNP guests using uncached mappings where they shouldn't
+- Xen PV dom0 mapping memory as WB which should be UC- instead
 
-Move setting of size_or_mask and size_and_mask into a dedicated new
-function in mtrr/generic.c, enabling to make those 2 variables static,
-as they are used in generic.c only now.
+Solve those problems by allowing an MTRR static state override,
+overwriting the empty state used today. In case such a state has been
+set, don't call get_mtrr_state() in mtrr_bp_init().
+
+The set state will only be used by mtrr_type_lookup(), as in all other
+cases mtrr_enabled() is being checked, which will return false. Accept
+the overwrite call only for selected cases when running as a guest.
+Disable X86_FEATURE_MTRR in order to avoid any MTRR modifications by
+just refusing them.
+
+  [ bp: Massage. ]
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20230502120931.20719-2-jgross@suse.com
+Link: https://lore.kernel.org/all/4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de/
+Link: https://lore.kernel.org/lkml/BYAPR21MB16883ABC186566BD4D2A1451D7FE9@BYAPR21MB1688.namprd21.prod.outlook.com
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 ---
- arch/x86/kernel/cpu/mtrr/cleanup.c | 16 ++++----
- arch/x86/kernel/cpu/mtrr/generic.c | 12 +++++-
- arch/x86/kernel/cpu/mtrr/mtrr.c    | 61 +++--------------------------
- arch/x86/kernel/cpu/mtrr/mtrr.h    |  4 +-
- 4 files changed, 29 insertions(+), 64 deletions(-)
+ arch/x86/include/asm/mtrr.h        |  8 ++++-
+ arch/x86/kernel/cpu/mtrr/generic.c | 60 ++++++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/mtrr/mtrr.c    | 14 ++++++-
+ arch/x86/kernel/setup.c            |  2 +-
+ 4 files changed, 82 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mtrr/cleanup.c b/arch/x86/kernel/cpu/mtrr/cleanup.c
-index b5f4304..7031409 100644
---- a/arch/x86/kernel/cpu/mtrr/cleanup.c
-+++ b/arch/x86/kernel/cpu/mtrr/cleanup.c
-@@ -173,7 +173,7 @@ early_param("mtrr_cleanup_debug", mtrr_cleanup_debug_setup);
- 
- static void __init
- set_var_mtrr(unsigned int reg, unsigned long basek, unsigned long sizek,
--	     unsigned char type, unsigned int address_bits)
-+	     unsigned char type)
- {
- 	u32 base_lo, base_hi, mask_lo, mask_hi;
- 	u64 base, mask;
-@@ -183,7 +183,7 @@ set_var_mtrr(unsigned int reg, unsigned long basek, unsigned long sizek,
- 		return;
- 	}
- 
--	mask = (1ULL << address_bits) - 1;
-+	mask = (1ULL << boot_cpu_data.x86_phys_bits) - 1;
- 	mask &= ~((((u64)sizek) << 10) - 1);
- 
- 	base = ((u64)basek) << 10;
-@@ -209,7 +209,7 @@ save_var_mtrr(unsigned int reg, unsigned long basek, unsigned long sizek,
- 	range_state[reg].type = type;
- }
- 
--static void __init set_var_mtrr_all(unsigned int address_bits)
-+static void __init set_var_mtrr_all(void)
- {
- 	unsigned long basek, sizek;
- 	unsigned char type;
-@@ -220,7 +220,7 @@ static void __init set_var_mtrr_all(unsigned int address_bits)
- 		sizek = range_state[reg].size_pfn << (PAGE_SHIFT - 10);
- 		type = range_state[reg].type;
- 
--		set_var_mtrr(reg, basek, sizek, type, address_bits);
-+		set_var_mtrr(reg, basek, sizek, type);
- 	}
- }
- 
-@@ -680,7 +680,7 @@ static int __init mtrr_search_optimal_index(void)
- 	return index_good;
- }
- 
--int __init mtrr_cleanup(unsigned address_bits)
-+int __init mtrr_cleanup(void)
- {
- 	unsigned long x_remove_base, x_remove_size;
- 	unsigned long base, size, def, dummy;
-@@ -742,7 +742,7 @@ int __init mtrr_cleanup(unsigned address_bits)
- 		mtrr_print_out_one_result(i);
- 
- 		if (!result[i].bad) {
--			set_var_mtrr_all(address_bits);
-+			set_var_mtrr_all();
- 			pr_debug("New variable MTRRs\n");
- 			print_out_mtrr_range_state();
- 			return 1;
-@@ -786,7 +786,7 @@ int __init mtrr_cleanup(unsigned address_bits)
- 		gran_size = result[i].gran_sizek;
- 		gran_size <<= 10;
- 		x86_setup_var_mtrrs(range, nr_range, chunk_size, gran_size);
--		set_var_mtrr_all(address_bits);
-+		set_var_mtrr_all();
- 		pr_debug("New variable MTRRs\n");
- 		print_out_mtrr_range_state();
- 		return 1;
-@@ -802,7 +802,7 @@ int __init mtrr_cleanup(unsigned address_bits)
- 	return 0;
- }
- #else
--int __init mtrr_cleanup(unsigned address_bits)
-+int __init mtrr_cleanup(void)
- {
- 	return 0;
- }
-diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index ee09d35..3922552 100644
---- a/arch/x86/kernel/cpu/mtrr/generic.c
-+++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -38,6 +38,16 @@ u64 mtrr_tom2;
- struct mtrr_state_type mtrr_state;
- EXPORT_SYMBOL_GPL(mtrr_state);
- 
-+static u64 size_or_mask, size_and_mask;
-+
-+void __init mtrr_set_mask(void)
+diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
+index 1421fe8..1bae790 100644
+--- a/arch/x86/include/asm/mtrr.h
++++ b/arch/x86/include/asm/mtrr.h
+@@ -58,6 +58,8 @@ struct mtrr_state_type {
+  */
+ # ifdef CONFIG_MTRR
+ void mtrr_bp_init(void);
++void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
++			  mtrr_type def_type);
+ extern u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform);
+ extern void mtrr_save_fixed_ranges(void *);
+ extern void mtrr_save_state(void);
+@@ -75,6 +77,12 @@ void mtrr_disable(void);
+ void mtrr_enable(void);
+ void mtrr_generic_set_state(void);
+ #  else
++static inline void mtrr_overwrite_state(struct mtrr_var_range *var,
++					unsigned int num_var,
++					mtrr_type def_type)
 +{
-+	unsigned int phys_addr = boot_cpu_data.x86_phys_bits;
-+
-+	size_or_mask = ~GENMASK_ULL(phys_addr - PAGE_SHIFT - 1, 0);
-+	size_and_mask = ~size_or_mask & GENMASK_ULL(39, 20);
 +}
 +
- /*
-  * BIOS is expected to clear MtrrFixDramModEn bit, see for example
-  * "BIOS and Kernel Developer's Guide for the AMD Athlon 64 and AMD
-@@ -422,7 +432,7 @@ static void __init print_mtrr_state(void)
- 	}
- 	pr_debug("MTRR variable ranges %sabled:\n",
- 		 mtrr_state.enabled & MTRR_STATE_MTRR_ENABLED ? "en" : "dis");
--	high_width = (__ffs64(size_or_mask) - (32 - PAGE_SHIFT) + 3) / 4;
-+	high_width = (boot_cpu_data.x86_phys_bits - (32 - PAGE_SHIFT) + 3) / 4;
+ static inline u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform)
+ {
+ 	/*
+diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
+index 08ba558..e81d832 100644
+--- a/arch/x86/kernel/cpu/mtrr/generic.c
++++ b/arch/x86/kernel/cpu/mtrr/generic.c
+@@ -8,10 +8,12 @@
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/mm.h>
+-
++#include <linux/cc_platform.h>
+ #include <asm/processor-flags.h>
+ #include <asm/cacheinfo.h>
+ #include <asm/cpufeature.h>
++#include <asm/hypervisor.h>
++#include <asm/mshyperv.h>
+ #include <asm/tlbflush.h>
+ #include <asm/mtrr.h>
+ #include <asm/msr.h>
+@@ -243,6 +245,62 @@ static u8 mtrr_type_lookup_variable(u64 start, u64 end, u64 *partial_end,
+ }
  
- 	for (i = 0; i < num_var_ranges; ++i) {
- 		if (mtrr_state.var_ranges[i].mask_lo & (1 << 11))
+ /**
++ * mtrr_overwrite_state - set static MTRR state
++ *
++ * Used to set MTRR state via different means (e.g. with data obtained from
++ * a hypervisor).
++ * Is allowed only for special cases when running virtualized. Must be called
++ * from the x86_init.hyper.init_platform() hook.  It can be called only once.
++ * The MTRR state can't be changed afterwards.  To ensure that, X86_FEATURE_MTRR
++ * is cleared.
++ */
++void mtrr_overwrite_state(struct mtrr_var_range *var, unsigned int num_var,
++			  mtrr_type def_type)
++{
++	unsigned int i;
++
++	/* Only allowed to be called once before mtrr_bp_init(). */
++	if (WARN_ON_ONCE(mtrr_state_set))
++		return;
++
++	/* Only allowed when running virtualized. */
++	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
++		return;
++
++	/*
++	 * Only allowed for special virtualization cases:
++	 * - when running as Hyper-V, SEV-SNP guest using vTOM
++	 * - when running as Xen PV guest
++	 * - when running as SEV-SNP or TDX guest to avoid unnecessary
++	 *   VMM communication/Virtualization exceptions (#VC, #VE)
++	 */
++	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP) &&
++	    !hv_is_isolation_supported() &&
++	    !cpu_feature_enabled(X86_FEATURE_XENPV) &&
++	    !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return;
++
++	/* Disable MTRR in order to disable MTRR modifications. */
++	setup_clear_cpu_cap(X86_FEATURE_MTRR);
++
++	if (var) {
++		if (num_var > MTRR_MAX_VAR_RANGES) {
++			pr_warn("Trying to overwrite MTRR state with %u variable entries\n",
++				num_var);
++			num_var = MTRR_MAX_VAR_RANGES;
++		}
++		for (i = 0; i < num_var; i++)
++			mtrr_state.var_ranges[i] = var[i];
++		num_var_ranges = num_var;
++	}
++
++	mtrr_state.def_type = def_type;
++	mtrr_state.enabled |= MTRR_STATE_MTRR_ENABLED;
++
++	mtrr_state_set = 1;
++}
++
++/**
+  * mtrr_type_lookup - look up memory type in MTRR
+  *
+  * Return Values:
 diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 783f321..1bdab16 100644
+index 1067f12..be35a0b 100644
 --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
 +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -67,8 +67,6 @@ static bool mtrr_enabled(void)
- unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
- static DEFINE_MUTEX(mtrr_mutex);
- 
--u64 size_or_mask, size_and_mask;
--
- const struct mtrr_ops *mtrr_if;
- 
- /*  Returns non-zero if we have the write-combining memory type  */
-@@ -619,77 +617,34 @@ static struct syscore_ops mtrr_syscore_ops = {
- 
- int __initdata changed_by_mtrr_cleanup;
- 
--#define SIZE_OR_MASK_BITS(n)  (~((1ULL << ((n) - PAGE_SHIFT)) - 1))
- /**
-- * mtrr_bp_init - initialize mtrrs on the boot CPU
-+ * mtrr_bp_init - initialize MTRRs on the boot CPU
-  *
-  * This needs to be called early; before any of the other CPUs are
-  * initialized (i.e. before smp_init()).
-- *
+@@ -625,11 +625,23 @@ int __initdata changed_by_mtrr_cleanup;
   */
  void __init mtrr_bp_init(void)
  {
++	bool generic_mtrrs = cpu_feature_enabled(X86_FEATURE_MTRR);
  	const char *why = "(not available)";
--	u32 phys_addr;
  
--	phys_addr = 32;
-+	mtrr_set_mask();
+ 	phys_hi_rsvd = GENMASK(31, boot_cpu_data.x86_phys_bits - 32);
  
--	if (boot_cpu_has(X86_FEATURE_MTRR)) {
-+	if (cpu_feature_enabled(X86_FEATURE_MTRR)) {
+-	if (cpu_feature_enabled(X86_FEATURE_MTRR)) {
++	if (!generic_mtrrs && mtrr_state.enabled) {
++		/*
++		 * Software overwrite of MTRR state, only for generic case.
++		 * Note that X86_FEATURE_MTRR has been reset in this case.
++		 */
++		init_table();
++		pr_info("MTRRs set to read-only\n");
++
++		return;
++	}
++
++	if (generic_mtrrs) {
  		mtrr_if = &generic_mtrr_ops;
--		size_or_mask = SIZE_OR_MASK_BITS(36);
--		size_and_mask = 0x00f00000;
--		phys_addr = 36;
--
--		/*
--		 * This is an AMD specific MSR, but we assume(hope?) that
--		 * Intel will implement it too when they extend the address
--		 * bus of the Xeon.
--		 */
--		if (cpuid_eax(0x80000000) >= 0x80000008) {
--			phys_addr = cpuid_eax(0x80000008) & 0xff;
--			/* CPUID workaround for Intel 0F33/0F34 CPU */
--			if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
--			    boot_cpu_data.x86 == 0xF &&
--			    boot_cpu_data.x86_model == 0x3 &&
--			    (boot_cpu_data.x86_stepping == 0x3 ||
--			     boot_cpu_data.x86_stepping == 0x4))
--				phys_addr = 36;
--
--			size_or_mask = SIZE_OR_MASK_BITS(phys_addr);
--			size_and_mask = ~size_or_mask & 0xfffff00000ULL;
--		} else if (boot_cpu_data.x86_vendor == X86_VENDOR_CENTAUR &&
--			   boot_cpu_data.x86 == 6) {
--			/*
--			 * VIA C* family have Intel style MTRRs,
--			 * but don't support PAE
--			 */
--			size_or_mask = SIZE_OR_MASK_BITS(32);
--			size_and_mask = 0;
--			phys_addr = 32;
--		}
  	} else {
  		switch (boot_cpu_data.x86_vendor) {
- 		case X86_VENDOR_AMD:
--			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR)) {
--				/* Pre-Athlon (K6) AMD CPU MTRRs */
-+			/* Pre-Athlon (K6) AMD CPU MTRRs */
-+			if (cpu_feature_enabled(X86_FEATURE_K6_MTRR))
- 				mtrr_if = &amd_mtrr_ops;
--				size_or_mask = SIZE_OR_MASK_BITS(32);
--				size_and_mask = 0;
--			}
- 			break;
- 		case X86_VENDOR_CENTAUR:
--			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR)) {
-+			if (cpu_feature_enabled(X86_FEATURE_CENTAUR_MCR))
- 				mtrr_if = &centaur_mtrr_ops;
--				size_or_mask = SIZE_OR_MASK_BITS(32);
--				size_and_mask = 0;
--			}
- 			break;
- 		case X86_VENDOR_CYRIX:
--			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR)) {
-+			if (cpu_feature_enabled(X86_FEATURE_CYRIX_ARR))
- 				mtrr_if = &cyrix_mtrr_ops;
--				size_or_mask = SIZE_OR_MASK_BITS(32);
--				size_and_mask = 0;
--			}
- 			break;
- 		default:
- 			break;
-@@ -703,7 +658,7 @@ void __init mtrr_bp_init(void)
- 			/* BIOS may override */
- 			if (get_mtrr_state()) {
- 				memory_caching_control |= CACHE_MTRR;
--				changed_by_mtrr_cleanup = mtrr_cleanup(phys_addr);
-+				changed_by_mtrr_cleanup = mtrr_cleanup();
- 			} else {
- 				mtrr_if = NULL;
- 				why = "by BIOS";
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
-index 02eb587..a00987e 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.h
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
-@@ -51,7 +51,6 @@ void fill_mtrr_var_range(unsigned int index,
- 		u32 base_lo, u32 base_hi, u32 mask_lo, u32 mask_hi);
- bool get_mtrr_state(void);
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 16babff..0cccfeb 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -1037,6 +1037,8 @@ void __init setup_arch(char **cmdline_p)
+ 	/*
+ 	 * VMware detection requires dmi to be available, so this
+ 	 * needs to be done after dmi_setup(), for the boot CPU.
++	 * For some guest types (Xen PV, SEV-SNP, TDX) it is required to be
++	 * called before cache_bp_init() for setting up MTRR state.
+ 	 */
+ 	init_hypervisor_platform();
  
--extern u64 size_or_mask, size_and_mask;
- extern const struct mtrr_ops *mtrr_if;
- 
- #define is_cpu(vnd)	(mtrr_if && mtrr_if->vendor == X86_VENDOR_##vnd)
-@@ -60,6 +59,7 @@ extern unsigned int num_var_ranges;
- extern u64 mtrr_tom2;
- extern struct mtrr_state_type mtrr_state;
- 
-+void mtrr_set_mask(void);
- void mtrr_state_warn(void);
- const char *mtrr_attrib_to_str(int x);
- void mtrr_wrmsr(unsigned, unsigned, unsigned);
-@@ -70,4 +70,4 @@ extern const struct mtrr_ops cyrix_mtrr_ops;
- extern const struct mtrr_ops centaur_mtrr_ops;
- 
- extern int changed_by_mtrr_cleanup;
--extern int mtrr_cleanup(unsigned address_bits);
-+extern int mtrr_cleanup(void);
