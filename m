@@ -2,156 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2618B722E64
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D210C722E6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbjFESMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S234833AbjFESPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbjFESMF (ORCPT
+        with ESMTP id S229974AbjFESPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:12:05 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061A4D9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:12:04 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so20765ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685988723; x=1688580723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1v9H+aU/5MHg3n8/buk5HlYHhoHgA0ZUnQMJqGpMQJA=;
-        b=gw03rkY2VpY+Vru936UGtYoAX16IZyS5hd3OHHog78K7Dvpq4TBluKU7gtif/3w5rp
-         ye0RfevEZZ6jTOGi5G7VLdTevL4ZMODtlV8xlZGLD9DJz+i37yh6rv/JH5y5X6agRpXe
-         fV8TWvMcjLK3PNCeAQrS93sWoYofkauour4Aazx5Z0IxnN1XUt8Eeq1eBDJmUXtGpZjG
-         kDu9knKK33Ge2wQag5BQycHWxOa3SvPfV5AZ/UEbzSRQVa1QOSQlGefOlY4T2eGbLv5E
-         QWDOaDjXT5rvKzZOFKi4fgTveJ7ov5u2N4YabOK16pcVDAc96eejtpjhCCZ++4+mIJVz
-         Pjbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685988723; x=1688580723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1v9H+aU/5MHg3n8/buk5HlYHhoHgA0ZUnQMJqGpMQJA=;
-        b=Z8U3VrpUZdyV5183iVchi96KFmkf5c4lQA+QvOHN/npSG+Q3Fw79hVd5NdHyhcwvEy
-         +34Ir4KoCiYNDhVwvydBd4M1bOqvulFGC/vL6mwVoAiH/hRjgU/NAqM1uXZ3Vpockjdc
-         Kl06w6oUhLUJbHdOApq7e01957otZtifEUEd1Anc7ulTZ7KEVH35IgEV+D5cik+m/wbN
-         +aSsU1CGrUnmAHC/Y/8Rovtdi7qzt/nouMy3LmIn7YDipT1iIakzf9VLFC3JRcvAfXuE
-         0x1/YvAdyIIfquP8Pmi0tkyj3ww6Qu32JzPIkhEDeQYtkhoR6ZlZPZwrVl6QVJn8TWgo
-         0U7A==
-X-Gm-Message-State: AC+VfDyJS+Q9ClKYGd1BAl6h1zw4c+3JgvDOpPzdmY1sJFztJ9Q7oe7i
-        PW3c0gcSgkUjsGALZRM5mCxV7gxyAx6rAGcWbjRuGw==
-X-Google-Smtp-Source: ACHHUZ672rcdLzlt2TMtoZbpzHauyvyUWezDXI8ZRdcdXNwd9xa7Gpvfgbo3dXGDPFoIev1sMhSHkIoArtW1/9/Ol1s=
-X-Received: by 2002:a92:c24b:0:b0:33d:b6ed:8bf3 with SMTP id
- k11-20020a92c24b000000b0033db6ed8bf3mr17037ilo.27.1685988723232; Mon, 05 Jun
- 2023 11:12:03 -0700 (PDT)
+        Mon, 5 Jun 2023 14:15:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDEAD3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685988943; x=1717524943;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=huUH1HR4fszCoZuJr8Gz9MUwSwCUYWIuZ3BKksRCNQE=;
+  b=dKKaJmAs+L2sbIwH93ay/lVFGah+HyrtOwU1BnNd10WCPabGe7yfd3gt
+   cg8gskXNxoAZI83uMoFA/FuQKszKiXAOAl4Rg0YlYf4lgtiNV9HrMTNMM
+   hxbaGvHeiC0IrDYukNefgwSivmbnrFH/YzdcFluaeqZI8BytjdCsuBCNc
+   eZdBQ+4DFMoThke980wH0wycTftKG/4O5LK6fLN7V+n2Y4nYsg2xcCTrL
+   GXb2dJeVnNQ5Cde1ffHZJsH3aDvpL/CP1a3xuM9+2GANIkk/jtqK9oolB
+   2Le1cmPah564F3mi3mopZG0gUjpcu0i29f4hESklTmAhXli9740BEPjFh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355295416"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="355295416"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:15:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778658998"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="778658998"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 11:15:17 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6Ejc-0004Kd-2R;
+        Mon, 05 Jun 2023 18:15:16 +0000
+Date:   Tue, 6 Jun 2023 02:14:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:timers/core 19/21] kernel/time/posix-timers.c:385:18: error:
+ use of undeclared identifier 'TICK_NSECS'
+Message-ID: <202306060236.yHWiRzTI-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
- <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
-In-Reply-To: <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 5 Jun 2023 11:11:51 -0700
-Message-ID: <CALMp9eRRzQKoFVHvgY8VfpS-8=RY6HYOanBuGYLRbRQ+9V8zng@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 10:42=E2=80=AFAM Mingwei Zhang <mizhang@google.com> =
-wrote:
->
-> On Mon, Jun 5, 2023 at 9:55=E2=80=AFAM Jim Mattson <jmattson@google.com> =
-wrote:
-> >
-> > On Sun, Jun 4, 2023 at 5:43=E2=80=AFPM Mingwei Zhang <mizhang@google.co=
-m> wrote:
-> > >
-> > > Remove KVM MMU write lock when accessing indirect_shadow_pages counte=
-r when
-> > > page role is direct because this counter value is used as a coarse-gr=
-ained
-> > > heuristics to check if there is nested guest active. Racing with this
-> > > heuristics without mmu lock will be harmless because the correspondin=
-g
-> > > indirect shadow sptes for the GPA will either be zapped by this threa=
-d or
-> > > some other thread who has previously zapped all indirect shadow pages=
- and
-> > > makes the value to 0.
-> > >
-> > > Because of that, remove the KVM MMU write lock pair to potentially re=
-duce
-> > > the lock contension and improve the performance of nested VM. In addi=
-tion
-> > > opportunistically change the comment of 'direct mmu' to make the
-> > > description consistent with other places.
-> > >
-> > > Reported-by: Jim Mattson <jmattson@google.com>
-> > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> > > ---
-> > >  arch/x86/kvm/x86.c | 10 ++--------
-> > >  1 file changed, 2 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 5ad55ef71433..97cfa5a00ff2 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm_v=
-cpu *vcpu, gpa_t cr2_or_gpa,
-> > >
-> > >         kvm_release_pfn_clean(pfn);
-> > >
-> > > -       /* The instructions are well-emulated on direct mmu. */
-> > > +       /* The instructions are well-emulated on Direct MMUs. */
-> > >         if (vcpu->arch.mmu->root_role.direct) {
-> > > -               unsigned int indirect_shadow_pages;
-> > > -
-> > > -               write_lock(&vcpu->kvm->mmu_lock);
-> > > -               indirect_shadow_pages =3D vcpu->kvm->arch.indirect_sh=
-adow_pages;
-> > > -               write_unlock(&vcpu->kvm->mmu_lock);
-> > > -
-> > > -               if (indirect_shadow_pages)
-> > > +               if (READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
-> >
-> > I don't understand the need for READ_ONCE() here. That implies that
-> > there is something tricky going on, and I don't think that's the case.
->
-> READ_ONCE() is just telling the compiler not to remove the read. Since
-> this is reading a global variable,  the compiler might just read a
-> previous copy if the value has already been read into a local
-> variable. But that is not the case here...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+head:   1263a2a9d71bac5ffabf9603c36e36cb6edbcdcf
+commit: 63dede13d09850a8ace210f8e4227ac5a6b309ae [19/21] posix-timers: Clarify posix_timer_fn() comments
+config: hexagon-randconfig-r036-20230605 (https://download.01.org/0day-ci/archive/20230606/202306060236.yHWiRzTI-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=63dede13d09850a8ace210f8e4227ac5a6b309ae
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip timers/core
+        git checkout 63dede13d09850a8ace210f8e4227ac5a6b309ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/time/
 
-Not a global variable, actually, but that's not relevant. What would
-be wrong with using a previously read copy?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306060236.yHWiRzTI-lkp@intel.com/
 
-We don't always wrap reads in READ_ONCE(). It's actually pretty rare.
-So, there should be an explicit and meaningful reason.
+All errors (new ones prefixed by >>):
 
-> Note I see there is another READ_ONCE for
-> kvm->arch.indirect_shadow_pages, so I am reusing the same thing.
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/time/posix-timers.c:13:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/time/posix-timers.c:385:18: error: use of undeclared identifier 'TICK_NSECS'
+                                   ktime_t kj = TICK_NSECS;
+                                                ^
+   6 warnings and 1 error generated.
 
-That's not a good reason. "If all of your friends jumped off a cliff,
-would you?"
 
-> I did check the reordering issue but it should be fine because when
-> 'we' see indirect_shadow_pages as 0, the shadow pages must have
-> already been zapped. Not only because of the locking, but also the
-> program order in __kvm_mmu_prepare_zap_page() shows that it will zap
-> shadow pages first before updating the stats.
+vim +/TICK_NSECS +385 kernel/time/posix-timers.c
+
+   327	
+   328	/*
+   329	 * This function gets called when a POSIX.1b interval timer expires from
+   330	 * the HRTIMER interrupt (soft interrupt on RT kernels).
+   331	 *
+   332	 * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
+   333	 * based timers.
+   334	 */
+   335	static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+   336	{
+   337		struct k_itimer *timr;
+   338		unsigned long flags;
+   339		int si_private = 0;
+   340		enum hrtimer_restart ret = HRTIMER_NORESTART;
+   341	
+   342		timr = container_of(timer, struct k_itimer, it.real.timer);
+   343		spin_lock_irqsave(&timr->it_lock, flags);
+   344	
+   345		timr->it_active = 0;
+   346		if (timr->it_interval != 0)
+   347			si_private = ++timr->it_requeue_pending;
+   348	
+   349		if (posix_timer_event(timr, si_private)) {
+   350			/*
+   351			 * The signal was not queued due to SIG_IGN. As a
+   352			 * consequence the timer is not going to be rearmed from
+   353			 * the signal delivery path. But as a real signal handler
+   354			 * can be installed later the timer must be rearmed here.
+   355			 */
+   356			if (timr->it_interval != 0) {
+   357				ktime_t now = hrtimer_cb_get_time(timer);
+   358	
+   359				/*
+   360				 * FIXME: What we really want, is to stop this
+   361				 * timer completely and restart it in case the
+   362				 * SIG_IGN is removed. This is a non trivial
+   363				 * change to the signal handling code.
+   364				 *
+   365				 * For now let timers with an interval less than a
+   366				 * jiffie expire every jiffie and recheck for a
+   367				 * valid signal handler.
+   368				 *
+   369				 * This avoids interrupt starvation in case of a
+   370				 * very small interval, which would expire the
+   371				 * timer immediately again.
+   372				 *
+   373				 * Moving now ahead of time by one jiffie tricks
+   374				 * hrtimer_forward() to expire the timer later,
+   375				 * while it still maintains the overrun accuracy
+   376				 * for the price of a slight inconsistency in the
+   377				 * timer_gettime() case. This is at least better
+   378				 * than a timer storm.
+   379				 *
+   380				 * Only required when high resolution timers are
+   381				 * enabled as the periodic tick based timers are
+   382				 * automatically aligned to the next tick.
+   383				 */
+   384				if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
+ > 385					ktime_t kj = TICK_NSECS;
+   386	
+   387					if (timr->it_interval < kj)
+   388						now = ktime_add(now, kj);
+   389				}
+   390	
+   391				timr->it_overrun += hrtimer_forward(timer, now, timr->it_interval);
+   392				ret = HRTIMER_RESTART;
+   393				++timr->it_requeue_pending;
+   394				timr->it_active = 1;
+   395			}
+   396		}
+   397	
+   398		unlock_timer(timr, flags);
+   399		return ret;
+   400	}
+   401	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
