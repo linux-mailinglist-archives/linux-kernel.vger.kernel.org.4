@@ -2,54 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AEF722FC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A29722FC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbjFETYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
+        id S234922AbjFETZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235611AbjFETYU (ORCPT
+        with ESMTP id S232101AbjFETZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:24:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4724F100;
-        Mon,  5 Jun 2023 12:24:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C944B629BD;
-        Mon,  5 Jun 2023 19:24:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C59C433EF;
-        Mon,  5 Jun 2023 19:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685993056;
-        bh=/WDyoVWJW0+RL4lZqzCjYAg8N+jMy841frN5yAjoCpo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HgvB8F5Jfmf1m1qTLHtMR8qLMlu+GpubdEHohI8KocZdLlLe457V20z7hB+p/vYKW
-         KSNlUncQT1N3JrQDj4KDFhp/tly6TbWsgT8IdbGZ8VzNpFX6pcBWy5x4hRs6zjOmJl
-         vuGtUV7+RSHQLhXzM8KT6oPkZu/D2Z67GOYMnzma0F0nW39ZrUPe32NZZHKtNWFoak
-         2gEf8416j90jGKQgWz9epB+rFSNKlulLr9aeQgx+RilAKjp2Ogkz3Qa8SPsLAQ38Wv
-         vyz+pnMMt0/Vk2ZI1YrVZ+DFdxzdZELtl/dx8xbyEB6qdkiWNsLEoh8tO2NUUN0s7L
-         YFPkcjE4GZevg==
-Date:   Mon, 5 Jun 2023 20:24:13 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Kim Seer Paller <kimseer.paller@analog.com>
-Cc:     <lars@metafoo.de>, <krzysztof.kozlowski@linaro.org>,
-        <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
-Message-ID: <20230605202413.5eb0c0f3@jic23-huawei>
-In-Reply-To: <20230605130755.92642-3-kimseer.paller@analog.com>
-References: <20230605130755.92642-1-kimseer.paller@analog.com>
-        <20230605130755.92642-3-kimseer.paller@analog.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Mon, 5 Jun 2023 15:25:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3200FEA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685993095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JoPaSgBjJj58dV7BGiXU3uSF8sQlJSVxH8VXpwcoLMw=;
+        b=UhWLSPi6ymb0BfI1e/oPQpi709q1fMiyXU1ZD9pwjiiUff3CA/Gk3diykROF1XjdDtIyx3
+        3LqxRxy8qCS+YfcHrP0joC56bLzC4Lp7Yw7/m19mZv5d9t5Oppn4mvOh+64fm8GDdcZbcs
+        Z5EU08R40J95SNG5E6YnHR7X9znsVPs=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-74-csKnSMjFMTS826mo4R3N9A-1; Mon, 05 Jun 2023 15:24:54 -0400
+X-MC-Unique: csKnSMjFMTS826mo4R3N9A-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-39aea2541c8so93871b6e.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:24:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685993093; x=1688585093;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JoPaSgBjJj58dV7BGiXU3uSF8sQlJSVxH8VXpwcoLMw=;
+        b=YBg7RslhJJjSC2KkHShoC1m0YObU7ufsMOGyLzCF15XUK5+xUWpv/tA1s1YYhS496k
+         MoVR8ACc/MXozE6IDIZe2FDnUrhTtu+ngwD8ekVDNsgvGcvX4a2IPIYba4lC3+s5u8J+
+         jCdRxWQrdenXwLKNyJaXMtGpsZSIHi29y1uOdNO8jtF8GtuTrpNdg97LPYHDLB2Dtimj
+         +c/E996V2e/w/EGWA5UZKA4Pt1yc9Xt/udMBhWZWrnOVYgHufHsnLCJxkaaPMPsc5E8f
+         gCWgIlr2/jmDjLYezIvuI2JfpzxnC09H8W5Fn0c1f1w/qmd82W70fXdvVchv/F8/DQIY
+         GxhQ==
+X-Gm-Message-State: AC+VfDzxpG1FzjmeR9QPh6IUr93hAqwz4n7iA4nIGIW/n65jsE4qUD+w
+        cnrPZaW20oMq2pW/4hNRJ1QdIQJYcUnV/5leNB5nHrHB8jNTlnav3oqNU8IetvSMKBa/SlpWZsn
+        ZOL1KkRVLJg4djmLZFTy74dgiJZaT+nWg
+X-Received: by 2002:aca:a996:0:b0:39a:a954:27c4 with SMTP id s144-20020acaa996000000b0039aa95427c4mr2884853oie.3.1685993093195;
+        Mon, 05 Jun 2023 12:24:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Mfdj34eQ1b4i+fRAgLjlkKw0kQ8EH2tf7A1gWHk0CuRloljMcckNNyN5sTy89XgfAwILYMw==
+X-Received: by 2002:aca:a996:0:b0:39a:a954:27c4 with SMTP id s144-20020acaa996000000b0039aa95427c4mr2884838oie.3.1685993092878;
+        Mon, 05 Jun 2023 12:24:52 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id m13-20020a05621402ad00b00623839cba8csm4828284qvv.44.2023.06.05.12.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 12:24:52 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 15:24:50 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 10/11] selftests/mm: move uffd* routines from
+ vm_util.c to uffd-common.c
+Message-ID: <ZH42gkoHIsgMbvHn@x1n>
+References: <20230603021558.95299-1-jhubbard@nvidia.com>
+ <20230603021558.95299-11-jhubbard@nvidia.com>
+ <ZH4GUODwj9L9paey@x1n>
+ <64e21a2c-1bbe-4ab6-e67a-29b2d1d1978e@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <64e21a2c-1bbe-4ab6-e67a-29b2d1d1978e@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,289 +85,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Jun 2023 21:07:55 +0800
-Kim Seer Paller <kimseer.paller@analog.com> wrote:
-
-> The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
-> binary inputs.
+On Mon, Jun 05, 2023 at 12:09:56PM -0700, John Hubbard wrote:
+> On 6/5/23 08:59, Peter Xu wrote:
+> ...
+> > > -$(OUTPUT)/uffd-stress: uffd-common.c
+> > > -$(OUTPUT)/uffd-unit-tests: uffd-common.c
+> > > +$(OUTPUT)/uffd-stress:          uffd-common.c
+> > > +$(OUTPUT)/uffd-unit-tests:      uffd-common.c
+> > > +$(OUTPUT)/hugepage-mremap:      uffd-common.c
+> > > +$(OUTPUT)/write_to_hugetlbfs:   uffd-common.c
+> > > +$(OUTPUT)/ksm_functional_tests: uffd-common.c
+> > 
+> > Sorry, John, I still cannot follow..
+> > 
+> > As I said before uffd-common.[ch] was for uffd stress/unit tests.  I
+> > confess my fault to not have named it uffd-test-common.[ch] already.
 > 
-> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
-> ---
-...
+> Actually, given that there is nothing *except* test code in this
+> directory, I think your original choice of file names is just right.
+> 
+> > 
+> > I think it's fine to keep uffd_*() helpers in vm_util.[ch] for now, until
+> > it grows.  Just like if one day we'll have a pagemap.c test we don't
+> > necessary need to move pagemap_*() helpers from vm_utils.[ch] into
+> > pagemap.[ch].  It just keeps common test helpers.
+> > 
+> > Can we avoid linking those into other tests in whatever way?  Maybe
+> > renaming it to uffd-test-common.[ch] may be cleaner?
+> > 
+> 
+> It sounds like you are suggesting this:
+> 
+> $(OUTPUT)/uffd-stress:          uffd-common.c uffd-test-common.c
+> $(OUTPUT)/uffd-unit-tests:      uffd-common.c uffd-test-common.c
+> $(OUTPUT)/hugepage-mremap:      uffd-test-common.c
+> $(OUTPUT)/write_to_hugetlbfs:   uffd-test-common.c
+> $(OUTPUT)/ksm_functional_tests: uffd-test-common.c
+> 
+> ...approximately. Do I have that correct? I can arrange it that way
+> if you feel it's a better end result. (And it's better than leaving
+> uffd*() helpers in vm_utils, imho.)
 
-Hi Kim,
+Yes, as long as we don't link (especially) the uffd test specific globals
+into non-uffd test programs I'll have no issue.  Thanks.
 
-A few comments inline.
-
-> diff --git a/drivers/iio/adc/max14001.c b/drivers/iio/adc/max14001.c
-> new file mode 100644
-> index 000000000..7c5272756
-> --- /dev/null
-> +++ b/drivers/iio/adc/max14001.c
-> @@ -0,0 +1,333 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-> +/*
-> + * Analog Devices MAX14001 ADC driver
-> + *
-> + * Copyright 2023 Analog Devices Inc.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bitrev.h>
-> +#include <linux/device.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/slab.h>
-> +#include <linux/types.h>
-> +
-> +#include <asm/unaligned.h>
-> +
-> +/* MAX14001 Registers Address */
-> +#define MAX14001_ADC			0x00
-> +#define MAX14001_FADC			0x01
-> +#define MAX14001_FLAGS			0x02
-> +#define MAX14001_FLTEN			0x03
-> +#define MAX14001_THL			0x04
-> +#define MAX14001_THU			0x05
-> +#define MAX14001_INRR			0x06
-> +#define MAX14001_INRT			0x07
-> +#define MAX14001_INRP			0x08
-> +#define MAX14001_CFG			0x09
-> +#define MAX14001_ENBL			0x0A
-> +#define MAX14001_ACT			0x0B
-> +#define MAX14001_WEN			0x0C
-> +
-> +#define MAX14001_VERIFICATION_REG(x)	((x) + 0x10)
-> +
-> +#define MAX14001_CFG_EXRF		BIT(5)
-> +
-> +#define MAX14001_ADDR_MASK		GENMASK(15, 11)
-> +#define MAX14001_DATA_MASK		GENMASK(9, 0)
-> +#define MAX14001_FILTER_MASK		GENMASK(3, 2)
-> +
-> +#define MAX14001_SET_WRITE_BIT		BIT(10)
-> +#define MAX14001_WRITE_WEN		0x294
-> +
-> +struct max14001_state {
-> +	struct spi_device	*spi;
-> +	/* lock protect agains multiple concurrent accesses */
-
-To what?  Here I suspect it's RMW sequence on device and perhaps
-more importantly the buffers below.
-
-> +	struct mutex		lock;
-> +	struct regmap		*regmap;
-> +	int			vref_mv;
-> +	/*
-> +	 * DMA (thus cache coherency maintenance) requires the
-> +	 * transfer buffers to live in their own cache lines.
-
-You are looking at an old kernel I guess - we fixed all of these - and
-introduced IIO_DMA_MINALIGN for __aligned(IIO_DMA_MINALIGN) to make
-it easier to fix any such problems in future.
-
-Upshot is that ___cacheline_aligned aligns to the l1 cacheline length.
-Some fun systems (such as the big servers I use in my dayjob) have higher
-cacheline sizes for their larger / further from CPU caches.
-One group of SoCs out there is known to both do non coherent DMA and have
-a larger line size for the bit relevant to that than ___cacheline_aligned
-gives you. So on that rare platform this is currently broken.
- 
-> +	 */
-> +	__be16			spi_tx_buffer ____cacheline_aligned;
-> +	__be16			spi_rx_buffer;
-> +};
-> +
-> +static int max14001_read(void *context, unsigned int reg_addr,
-> +					unsigned int *data)
-> +{
-> +	struct max14001_state *st = context;
-> +	u16 tx = 0;
-> +	int ret;
-> +
-> +	struct spi_transfer xfers[] = {
-> +		{
-> +			.tx_buf = &st->spi_tx_buffer,
-> +			.len = 2,
-> +			.cs_change = 1,
-> +		}, {
-> +			.rx_buf = &st->spi_rx_buffer,
-> +			.len = 2,
-> +		},
-> +	};
-> +
-> +	tx = FIELD_PREP(MAX14001_ADDR_MASK, reg_addr);
-> +	st->spi_tx_buffer = bitrev16(cpu_to_be16(tx));
-> +
-> +	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-> +	if (ret)
-> +		return ret;
-> +
-> +	*data = bitrev16(be16_to_cpu(st->spi_rx_buffer)) & MAX14001_DATA_MASK;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max14001_write(void *context, unsigned int reg_addr,
-> +					unsigned int data)
-> +{
-> +	struct max14001_state *st = context;
-> +	u16 tx = 0;
-> +
-> +	tx = FIELD_PREP(MAX14001_ADDR_MASK, reg_addr);
-> +	tx |= FIELD_PREP(MAX14001_SET_WRITE_BIT, 1);
-> +	tx |= FIELD_PREP(MAX14001_DATA_MASK, data);
-> +
-> +	st->spi_tx_buffer = bitrev16(cpu_to_be16(tx));
-> +
-> +	return spi_write(st->spi, &st->spi_tx_buffer, 2);
-> +}
-> +
-> +static int max14001_write_verification_reg(struct max14001_state *st,
-> +				     unsigned int reg_addr)
-> +{
-> +	unsigned int reg_data;
-> +	int ret;
-> +
-> +	ret = max14001_read(st, reg_addr, &reg_data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return max14001_write(st, MAX14001_VERIFICATION_REG(reg_addr),
-> +				reg_data);
-
-Even though this is a bit unusual, I'd still expect this to use
-the regmap_read / regmap_write interfaces not directly use the callbacks.
-
-> +}
-> +
-> +static int max14001_reg_update(struct max14001_state *st,
-> +				unsigned int reg_addr,
-> +				unsigned int mask,
-> +				unsigned int val)
-> +{
-> +	int ret;
-> +
-> +	/* Enable SPI Registers Write */
-> +	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
-
-Mixing regmap and non regmap rather defeats the point of
-having a standard interface.  Use regmap_read and regmap_write
-throughout or not at all.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_update_bits(st->regmap, reg_addr, mask, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = max14001_write_verification_reg(st, reg_addr);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Disable SPI Registers Write */
-> +	return max14001_write(st, MAX14001_WEN, 0);
-> +}
-> +
-> +static int max14001_read_raw(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     int *val, int *val2, long mask)
-> +{
-> +	struct max14001_state *st = iio_priv(indio_dev);
-> +	unsigned int data;
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		mutex_lock(&st->lock);
-> +		ret = max14001_read(st, MAX14001_ADC, &data);
-> +		mutex_unlock(&st->lock);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		*val = data;
-> +
-> +		return IIO_VAL_INT;
-> +
-> +	case IIO_CHAN_INFO_SCALE:
-> +		*val = st->vref_mv;
-> +		*val2 = 10;
-> +
-> +		return IIO_VAL_FRACTIONAL_LOG2;
-> +
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static const struct regmap_config max14001_regmap_config = {
-> +	.reg_read = max14001_read,
-> +	.reg_write = max14001_write,
-
-I'd keep this up by the callbacks, so all the regmap setup stuff
-is in one place.
-
-> +};
-> +
-> +static const struct iio_info max14001_info = {
-> +	.read_raw = max14001_read_raw,
-> +};
-> +
-
-...
-
-> +static int max14001_probe(struct spi_device *spi)
-> +{
-
-...
-
-> +
-> +	vref = devm_regulator_get_optional(&spi->dev, "vref");
-> +	if (IS_ERR(vref)) {
-> +		if (PTR_ERR(vref) != -ENODEV)
-> +			return dev_err_probe(&spi->dev, PTR_ERR(vref),
-> +					     "Failed to get vref regulator");
-> +
-> +		/* internal reference */
-> +		st->vref_mv = 1250;
-> +	} else {
-> +		ret = regulator_enable(vref);
-> +		if (ret)
-> +			return dev_err_probe(&spi->dev, ret,
-> +					"Failed to enable vref regulators\n");
-> +
-> +		ret = devm_add_action_or_reset(&spi->dev,
-> +					       max14001_regulator_disable,
-> +					       vref);
-> +		if (ret)
-> +			return ret;
-> +
-> +		/* enable external voltage reference */
-
-use external voltage reference?
-
-It's enabled by the regulator_enable() above, not this line.
-
-> +		ret = max14001_reg_update(st, MAX14001_CFG,
-> +					  MAX14001_CFG_EXRF, 1);
-> +
-> +		ret = regulator_get_voltage(vref);
-> +		if (ret < 0)
-> +			return dev_err_probe(&spi->dev, ret,
-> +					     "Failed to get vref\n");
-> +
-> +		st->vref_mv = ret / 1000;
-> +	}
-> +
-> +	mutex_init(&st->lock);
-> +
-> +	return devm_iio_device_register(&spi->dev, indio_dev);
-> +}
+-- 
+Peter Xu
 
