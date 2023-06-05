@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08645722629
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05EE722627
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbjFEMm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S233373AbjFEMmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbjFEMmv (ORCPT
+        with ESMTP id S232908AbjFEMmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 08:42:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0793EE8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685968922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mOmw6tP0FZFUTC7PGHcbRuETRmz8QZ6Xd4tQSfJHTaA=;
-        b=VeCXpes5lipf15yqdEfJFqwnqCl8wRV3lhTX62evDOIpJ2Q9rVPepZpiY9TOIYg9/3PHDc
-        N17/DmSAHJbtkSTJuccRPG1SIbAKlDxYGoZCAkbgrcCLXCsqhpz6GrVmgfNMVdLdh3xI6e
-        iB2Xre8geBFjOAPhgft4/Y7nxHLmZpQ=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-244-XxNjSFAiOuuFcZ0y9uqE5Q-1; Mon, 05 Jun 2023 08:42:00 -0400
-X-MC-Unique: XxNjSFAiOuuFcZ0y9uqE5Q-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f01644f62eso3211429e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:42:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685968919; x=1688560919;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mOmw6tP0FZFUTC7PGHcbRuETRmz8QZ6Xd4tQSfJHTaA=;
-        b=Frqf8Gq5sj5g+y9iHpDjxxxJx+SOfGnYAlxTiNCLSeY8jKoxni16Lm/f2+0Xb1dvK1
-         q+xvJ7YQNsYkkfFyC1fkTxE5IizzGIkS4GMe5XFGdY8D3Fv/Mu5+w/0G1pgkdEzCsL91
-         BqMrPrOG9m0rD6aKe30C1YSgz9W/Z5e4/dlffZme8VzlTuzO5JX8YcBmoRWfSHoVjq2a
-         oKUqsLjYjF7FRoGZrmGPMXWhnXXrkA9rsVdeJmJrHa7+nj/M9YqsA7wXEqOo1sJR/Xb6
-         jIr3x8Gb+dbCzdE2HIK5nYlYenHdubaIjzey3P//hee0XRZpCapHHT/1v1HF131qG+7m
-         omMw==
-X-Gm-Message-State: AC+VfDxp8OuIkvLZe8kb9pqJVRJL0UQTpxeWmTrOGlSbs0q/RcrSqUPO
-        Mjv1s8lbElZ4M3HnS+l8wZj9bWoH3DdaBIVq6u0gR5HD5u3ufObnBwjFxyhkks5SQZg1diZrxDi
-        Bgfc6/wenr6AuhFPLBSQSh++6NTvkMBgV
-X-Received: by 2002:a05:6512:96c:b0:4f5:a181:97b8 with SMTP id v12-20020a056512096c00b004f5a18197b8mr4498039lft.25.1685968918876;
-        Mon, 05 Jun 2023 05:41:58 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7c02ynCF81jcSmROQilZ0qb05p4TMq5PV+aVib550acBLMoEwSQbxeF+apcaXIC3Jw7wScGQ==
-X-Received: by 2002:a05:6512:96c:b0:4f5:a181:97b8 with SMTP id v12-20020a056512096c00b004f5a18197b8mr4498025lft.25.1685968918475;
-        Mon, 05 Jun 2023 05:41:58 -0700 (PDT)
-Received: from redhat.com ([2.55.4.169])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c231800b003f6041f5a6csm10669207wmo.12.2023.06.05.05.41.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 05:41:58 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 08:41:54 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <20230605084104-mutt-send-email-mst@kernel.org>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8422FDA;
+        Mon,  5 Jun 2023 05:42:49 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4QZY076XM8z9yhr6;
+        Mon,  5 Jun 2023 20:32:23 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwA3muUp2H1kqFsRAw--.4008S2;
+        Mon, 05 Jun 2023 13:42:27 +0100 (CET)
+Message-ID: <6a9f6314f21c5e4dd2960c12626e14c4ce8c8163.camel@huaweicloud.com>
+Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>,
+        Jeff Mahoney <jeffm@suse.com>
+Date:   Mon, 05 Jun 2023 14:42:13 +0200
+In-Reply-To: <20230605123604.7juo5siuooy2dip2@quack3>
+References: <000000000000be039005fc540ed7@google.com>
+         <00000000000018faf905fc6d9056@google.com>
+         <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com>
+         <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
+         <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
+         <58cebdd9318bd4435df6c0cf45318abd3db0fff8.camel@huaweicloud.com>
+         <20230530112147.spvyjl7b4ss7re47@quack3>
+         <20230605123604.7juo5siuooy2dip2@quack3>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605110644.151211-1-sgarzare@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwA3muUp2H1kqFsRAw--.4008S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWry7AFWxuw18Zr1UCF15urg_yoW5trWrpr
+        WUGF1YkFs8tr1Utr40qF1DGwnFgrWrtrW7X3yUtr18ua1vqrnrJr4I9r47urWDGr1DCF90
+        yF15Z343Zr1ru37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o6XQAAsJ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +74,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
-> vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
-> don't support packed virtqueue well yet, so let's filter the
-> VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
+On Mon, 2023-06-05 at 14:36 +0200, Jan Kara wrote:
+> On Tue 30-05-23 13:21:47, Jan Kara wrote:
+> > On Fri 26-05-23 11:45:57, Roberto Sassu wrote:
+> > > On Wed, 2023-05-24 at 17:57 -0400, Paul Moore wrote:
+> > > > On Wed, May 24, 2023 at 11:50 AM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
+> > > > > > On Wed, May 24, 2023 at 5:59 AM syzbot
+> > > > > > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
+> > > > > > > syzbot has bisected this issue to:
+> > > > > > > 
+> > > > > > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> > > > > > > Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > Date:   Fri Mar 31 12:32:18 2023 +0000
+> > > > > > > 
+> > > > > > >     reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+> > > > > > > 
+> > > > > > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c39639280000
+> > > > > > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux-..
+> > > > > > > git tree:       upstream
+> > > > > > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c39639280000
+> > > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=15c39639280000
+> > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
+> > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0a684c061589dcc30e51
+> > > > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14312791280000
+> > > > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da8605280000
+> > > > > > > 
+> > > > > > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
+> > > > > > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
+> > > > > > > 
+> > > > > > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> > > > > > 
+> > > > > > Roberto, I think we need to resolve this somehow.  As I mentioned
+> > > > > > earlier, I don't believe this to be a fault in your patch, rather that
+> > > > > > patch simply triggered a situation that had not been present before,
+> > > > > > likely because the reiserfs code always failed when writing LSM
+> > > > > > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
+> > > > > > has been reporting.
+> > > > > 
+> > > > > Hi Paul
+> > > > > 
+> > > > > ok, I will try.
+> > > > 
+> > > > Thanks Roberto.  If it gets to be too challenging, let us know and we
+> > > > can look into safely disabling the LSM xattrs for reiserfs, I'll be
+> > > > shocked if anyone is successfully using LSM xattrs on reiserfs.
+> > > 
+> > > Ok, at least I know what happens...
+> > > 
+> > > + Jan, Jeff
+> > > 
+> > > I'm focusing on this reproducer, which works 100% of the times:
+> > > 
+> > > https://syzkaller.appspot.com/text?tag=ReproSyz&x=163079f9280000
+> > 
+> > Well, the commit d82dcd9e21b ("reiserfs: Add security prefix to xattr name
+> > in reiserfs_security_write()") looks obviously broken to me. It does:
+> > 
+> > char xattr_name[XATTR_NAME_MAX + 1] = XATTR_SECURITY_PREFIX;
+> > 
+> > Which is not how we can initialize strings in C... ;)
 > 
-> This way, even if the device supports it, we don't risk it being
-> negotiated, then the VMM is unable to set the vring state properly.
-> 
-> Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
-> 
-> Notes:
->     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
->     better PACKED support" series [1] and backported in stable branches.
->     
->     We can revert it when we are sure that everything is working with
->     packed virtqueues.
->     
->     Thanks,
->     Stefano
->     
->     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> I'm growing old or what but indeed string assignment in initializers in C
+> works fine. It is only the assignment in code that would be problematic.
+> I'm sorry for the noise.
 
-I'm a bit lost here. So why am I merging "better PACKED support" then?
-Does this patch make them a NOP?
+Cool, thanks!
 
->  drivers/vhost/vdpa.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 8c1aefc865f0..ac2152135b23 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -397,6 +397,12 @@ static long vhost_vdpa_get_features(struct vhost_vdpa *v, u64 __user *featurep)
->  
->  	features = ops->get_device_features(vdpa);
->  
-> +	/*
-> +	 * IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE) don't support
-> +	 * packed virtqueue well yet, so let's filter the feature for now.
-> +	 */
-> +	features &= ~BIT_ULL(VIRTIO_F_RING_PACKED);
-> +
->  	if (copy_to_user(featurep, &features, sizeof(features)))
->  		return -EFAULT;
->  
-> 
-> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-> -- 
-> 2.40.1
+It seems the difference with just doing memcpy() is that the compiler
+fully initializes the array (256 bytes), instead of copying the
+required amount.
+
+Roberto
 
