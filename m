@@ -2,138 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF6C722C6E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B38722C7A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjFEQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S231928AbjFEQ3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjFEQZU (ORCPT
+        with ESMTP id S230326AbjFEQ3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:25:20 -0400
-Received: from sasl.smtp.pobox.com (pb-sasl2.pobox.com [64.147.108.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C92EA;
-        Mon,  5 Jun 2023 09:25:19 -0700 (PDT)
-Received: from sasl.smtp.pobox.com (unknown [127.0.0.1])
-        by pb-sasl2.pobox.com (Postfix) with ESMTP id F3A6D919A1;
-        Mon,  5 Jun 2023 12:25:16 -0400 (EDT)
-        (envelope-from mlord@pobox.com)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=subject:to
-        :cc:references:from:message-id:date:mime-version:in-reply-to
-        :content-type:content-transfer-encoding; s=sasl; bh=Kkit9hxeaRzj
-        sC+jEwyCGJmNshi/SBvv1rGprkktDfg=; b=WcF8hI+G3hD4gxX55dXQE6G/SLoe
-        jEKA6SadjiZH2sPbl2flhQQOZ9xE7+Fqg3KMePstywt3afxeJd1WMBfhZs423vTx
-        W8ayQQYGJRluvaUEPVK6YZdGgrPHoi3uOL4w1duEw/pUuXz0oL2y/H8HTtayDN2v
-        anj81MLK88IdkJA=
-Received: from pb-sasl2.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-sasl2.pobox.com (Postfix) with ESMTP id D6DFB9199F;
-        Mon,  5 Jun 2023 12:25:16 -0400 (EDT)
-        (envelope-from mlord@pobox.com)
-Received: from [10.0.0.9] (unknown [24.156.181.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by pb-sasl2.pobox.com (Postfix) with ESMTPSA id B46879199E;
-        Mon,  5 Jun 2023 12:25:15 -0400 (EDT)
-        (envelope-from mlord@pobox.com)
-Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Jiri Kosina <jikos@kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-References: <20230531082428.21763-1-hadess@hadess.net>
- <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
- <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm>
- <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
- <7ko33em3pqdaeghkt6wumzks6fz2lzztmqyhyzvv3kisjovmvr@mojlmkmrqlml>
-From:   Mark Lord <mlord@pobox.com>
-Message-ID: <2c10eb8f-8804-d47f-7b15-5da56ffb5414@pobox.com>
-Date:   Mon, 5 Jun 2023 12:25:13 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.7.0
+        Mon, 5 Jun 2023 12:29:31 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58332CD;
+        Mon,  5 Jun 2023 09:29:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 8A6FB60246;
+        Mon,  5 Jun 2023 18:29:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1685982567; bh=WOFBObb7fNZ6dNK1wt7KbaxyzDpH4Lj4Oddwsx60Ejk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FLpxxZB53bNHq4SmNCdFWGEkxdJX1NQ50mpTZRKeWauPZ6pswEiGn0p/6bAdqPqiU
+         t2nwo4qNbc4LcdUEKIqir53/lNH3u3XrrqXSwUzYnvoMt4WC4nK1XYUm1iHVoL2Gfy
+         mofUB9PRRYLSi66v7bJBJjCzkQQ/8ynzEx0MpN+R8IZ6SIS0sioOlLT6uYGHuR9aj2
+         hpBsP6aEnG7D1KpOMGwmxGCgbfobhQXXlohRRWQeN9DZ8x8owcTfVHtN9zoJzFdJo+
+         TmO9XUBy3cTiq8REPKh+/dl+pW30bAGreoBIZCQxqUIJjtHz6bfi3j2urR0Mmn/YW3
+         ZEXD5pGaCoKAw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kdB2rX-AJi90; Mon,  5 Jun 2023 18:29:25 +0200 (CEST)
+Received: from defiant.. (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 5603A6023F;
+        Mon,  5 Jun 2023 18:29:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1685982565; bh=WOFBObb7fNZ6dNK1wt7KbaxyzDpH4Lj4Oddwsx60Ejk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h9RrNejkayeLnip/IpcM2zC44UDnsI6CHA7owAxW79J1v7lS5ycQW4jiC4M06mlX9
+         xJjJGURGqcQ5UQo+DWKvkZSNoegmzlPuIIx1C4yR24vWzec382gyz7osHS7EhVJhG4
+         tOuOeN5Aa6DXavZAMXWzMoLT4QJGe0BkYaceN/QDFPVpQWgNU8MAejQkQO14M0rx26
+         pdHvFK/4JN24nPiqsWpfja+sYJ2K3XHMEEGtqTG7z9i1GTdGje8qKDDoDb5rCwXzQe
+         KSAQgZ5A6TP6/cFQzT4ZMb9wTy6KCtYAMVLnhS6paXmHs4xtNlJu1qGVrTZ9EEdZUD
+         LDXiX5Y49M0uQ==
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>,
+        Kees Cook <keescook@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH v1 1/1] test_firmware: return ENOMEM instead of ENOSPC on failed allocation
+Date:   Mon,  5 Jun 2023 18:27:47 +0200
+Message-Id: <20230605162746.614423-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <7ko33em3pqdaeghkt6wumzks6fz2lzztmqyhyzvv3kisjovmvr@mojlmkmrqlml>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Pobox-Relay-ID: 8E120F22-03BD-11EE-A498-77FD3825B25C-82205200!pb-sasl2.pobox.com
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FILL_THIS_FORM,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-05 10:27 AM, Benjamin Tissoires wrote:
-> 
-> On Jun 05 2023, Linux regression tracking (Thorsten Leemhuis) wrote:
->>
->> On 03.06.23 14:41, Jiri Kosina wrote:
->>> On Wed, 31 May 2023, Jiri Kosina wrote:
->>>
->>>>> If an attempt at contacting a receiver or a device fails because the
->>>>> receiver or device never responds, don't restart the communication, only
->>>>> restart it if the receiver or device answers that it's busy, as originally
->>>>> intended.
->>>>>
->>>>> This was the behaviour on communication timeout before commit 586e8fede795
->>>>> ("HID: logitech-hidpp: Retry commands when device is busy").
->>>>>
->>>>> This fixes some overly long waits in a critical path on boot, when
->>>>> checking whether the device is connected by getting its HID++ version.
->>>>>
->>>>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
->>>>> Suggested-by: Mark Lord <mlord@pobox.com>
->>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
->>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217412
->>> [...]  
->>>>
->>>> I have applied this even before getting confirmation from the reporters in 
->>>> bugzilla, as it's the right thing to do anyway.
->>>
->>> Unfortunately it doesn't seem to cure the reported issue (while reverting 
->>> 586e8fede79 does):
->>
->> BTW, remind me again: was fixing this by reverting 586e8fede79 for now a
->> option? I guess it's not, but if I'm wrong I wonder if that might at
->> this point be the best way forward.
-> 
-> Could be. I don't think we thought at simply reverting it because it is
-> required for some new supoprted devices because they might differ
-> slightly from what we currently supported.
-> 
-> That being said, Bastien will be unavailable for at least a week AFAIU,
-> so maybe we should revert that patch.
-> 
->>
->>> https://bugzilla.kernel.org/show_bug.cgi?id=217523#c2
+In a couple of situations like:
 
-Pardon me, but I don't understand what that "retry" loop
-is even attempting to do inside function hidpp_send_message_sync().
+	name = kstrndup(buf, count, GFP_KERNEL);
+	if (!name)
+		return -ENOSPC;
 
-It appears to unconditionally loop until:
-   (1) the __hidpp_send_report() fails,
-or (2) it gets a HIDPP_ERROR,
-or (3) it gets a HIDPP20_ERROR other than HIDPP20_ERROR_BUSY,
-or (4) until it has looped 3 times, which appears to be the normal exit.
+the error is not actually "No space left on device", but "Out of memory".
 
-It doesn't seem to have any provision to exit the loop earlier on "success"
-(whatever that is).
+So, it is semantically correct to return -ENOMEM in all failed kstrndup()
+and kzalloc() cases in this driver, as it is not a problem with disk
+space, but with kernel memory allocator.
 
-And so when it finally does exit after the 3 iterations,
-it then returns the last value of "ret",
-which will be zero from the __hidpp_send_report() call,
-or sometimes the most recent non-BUSY HIDPP20_ERROR seen.
+The semantically correct should be:
 
-Obviously I'm missing something, as otherwise this code would never have
-passed review and made it into the Linux kernel in the first place.  Right?
+        name = kstrndup(buf, count, GFP_KERNEL);
+        if (!name)
+                return -ENOMEM;
 
-What is this code trying to do?  And what am I not seeing?
+Cc: Dan Carpenter <error27@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+ lib/test_firmware.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 1d7d480b8eeb..add4699fc6cd 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -214,7 +214,7 @@ static int __kstrncpy(char **dst, const char *name, size_t count, gfp_t gfp)
+ {
+ 	*dst = kstrndup(name, count, gfp);
+ 	if (!*dst)
+-		return -ENOSPC;
++		return -ENOMEM;
+ 	return count;
+ }
+ 
+@@ -671,7 +671,7 @@ static ssize_t trigger_request_store(struct device *dev,
+ 
+ 	name = kstrndup(buf, count, GFP_KERNEL);
+ 	if (!name)
+-		return -ENOSPC;
++		return -ENOMEM;
+ 
+ 	pr_info("loading '%s'\n", name);
+ 
+@@ -719,7 +719,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 
+ 	name = kstrndup(buf, count, GFP_KERNEL);
+ 	if (!name)
+-		return -ENOSPC;
++		return -ENOMEM;
+ 
+ 	pr_info("inserting test platform fw '%s'\n", name);
+ 	efi_embedded_fw.name = name;
+@@ -772,7 +772,7 @@ static ssize_t trigger_async_request_store(struct device *dev,
+ 
+ 	name = kstrndup(buf, count, GFP_KERNEL);
+ 	if (!name)
+-		return -ENOSPC;
++		return -ENOMEM;
+ 
+ 	pr_info("loading '%s'\n", name);
+ 
+@@ -817,7 +817,7 @@ static ssize_t trigger_custom_fallback_store(struct device *dev,
+ 
+ 	name = kstrndup(buf, count, GFP_KERNEL);
+ 	if (!name)
+-		return -ENOSPC;
++		return -ENOMEM;
+ 
+ 	pr_info("loading '%s' using custom fallback mechanism\n", name);
+ 
+@@ -868,7 +868,7 @@ static int test_fw_run_batch_request(void *data)
+ 
+ 		test_buf = kzalloc(TEST_FIRMWARE_BUF_SIZE, GFP_KERNEL);
+ 		if (!test_buf)
+-			return -ENOSPC;
++			return -ENOMEM;
+ 
+ 		if (test_fw_config->partial)
+ 			req->rc = request_partial_firmware_into_buf
 -- 
-Mark Lord
+2.34.1
+
