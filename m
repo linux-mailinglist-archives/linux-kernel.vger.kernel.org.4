@@ -2,290 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432937225E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEE97225ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbjFEMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S233572AbjFEMdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjFEMcj (ORCPT
+        with ESMTP id S233516AbjFEMdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:32:39 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F79910C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:31:12 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25692ff86cdso3856691a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:31:12 -0700 (PDT)
+        Mon, 5 Jun 2023 08:33:21 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2122.outbound.protection.outlook.com [40.107.93.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38137E54;
+        Mon,  5 Jun 2023 05:32:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Au9wAX5I+m7OsgPEQ0e+H2q4cZhXb7jI0/c7Q6a0CvFL5wT3DnvcGp5Dd3r+fEPBa8XxWN+/mXHARpsYyzvU298uq/leqi4o70KYwLH8nA9P0tIqCT6QczMpVkV0PDt1qSNCE9iZJ50OykUjOUyoKxZkBfyBxMaADYD1+pD5UidR3sgLkdENJ1L1vEdDDouQCwrrnsutUXZXg2Ew+JaQUtpixHJrlEEmYUV6OrTZPwBkYySmoGXK0OVJ/QievQXaJeJ5Gx0rS7aRl2x14TplKqs0Wb2r78OT+oSmfvhWWiApZCaDXmCJBNBSgAthKAR/yLO/Es62//mFDnwzF8Qvlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U3rJmQT2uF6sKRJDtWw461Yw1/3fF+neaCR9O/RzZ8s=;
+ b=dzGCMO7mEO0bo2ipeTh0+fPbR8mYc2zASKDWUBpkTEbWHKy60FeJZ6LedRY6g8TY3uB0EUnhEkCKDL6yF6hrUN3Cz1RsG3G759Hj1OE3x4pu7b19CHE0lEHlzTngIC9EkqLIaRJdQOWgDay+b4tMVZIrEKbc4/8jG2kxT4DSW6GlBNABi1Hd/5EvI5OqJ2r5XV8gc58xb9WKEs4v21vEiar7AK9JrdJFWZ6P8with7/ZfCD8SnAyJVN/9iPe58FiZmM4eFRPKT8oXB46Oiyd4DDx2QB/d+IJwufRrhzPGsCkY4xnV+e5sK+WW08KUMKPCXPmP1eHXr1LQhCq5SuaAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685968268; x=1688560268;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANUQE/AuwRv+E8ELKEgxuaAA7tbymIAyDT7R69s9a4s=;
-        b=OTV1NO3o7gQ3KwsEq93R2rLeQQaPUpjGA3z6GAaygX/GCqjAOXHWmqvOqV9qfFkFf3
-         T5aQLZg+GnlSTeyj6Frk0fqtyxoi12StQaS8UCB2UK2jvAphn7GQGYEDo+0DL5K7dzZC
-         592qQgKsDrbc+ALMKhzRXEAkaIzSVSKRRWg7bK2cfZ7VMOQh7sNCxmODMIBoJGkjwHDH
-         +7IpO6+HHlFPmh1f8NKRS/4NS4SCqekAQ0uNlvabHPzyh6D+2JWqLrk9lNoNCiUZJTbS
-         s6Ou96pfZ1+zWDxBhhwBCneL8sb4FPEEOMV31whrviC9Qy2i0svWAuAxYj95jmqXe/Yt
-         YCXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685968268; x=1688560268;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ANUQE/AuwRv+E8ELKEgxuaAA7tbymIAyDT7R69s9a4s=;
-        b=fVuc7zw48Fofo7yduTgmMXeiVsrhA9ikgFHFGP+6RhWktXpVdnFJCamd1AjWaHAO3h
-         dIYOp8LQMTLDfkBvkQQTd/c5vysxrgYqxAXzZWTnSxunWx5drH/WqkTwjjamohO3Ub1S
-         AxEOXzyicsUmxQB44A9j7zxTWqdXwlQ5Itv6nlgq47kr1dZUAEwJDfQd6dX4lND1TLkQ
-         /WqeWRZjydETWWN5IcGcwfXOsZ2ZrKWXo+2omzn8tHZXvh6j+BhrQk6ICgePLSdI2WBf
-         2XOfCMI5R8eRSkG0Ma/OvwTCAEYXqa51IJVcVx8IAX9kwUikmfUzhDrTumuYv8nreA0y
-         tjAg==
-X-Gm-Message-State: AC+VfDy7jC4Smf3QRVmAEpoJSi37yPBI3FpJatAWIuCfBtwaAaWjBbUX
-        x+uWHD1LUjvLSq/pP2B0wwwrHDtkXVh4J2HrCmhLLJTnlHGocrGT
-X-Google-Smtp-Source: ACHHUZ5TOz5pQFiunRomxNoDDaufHp2d5mzsk7OwVKqveOGRAj0JW5fqn6UV3n9Th8ZjKyqNitF8RTLrIO9nIQeXMt0=
-X-Received: by 2002:a17:90a:b390:b0:256:2cb7:406e with SMTP id
- e16-20020a17090ab39000b002562cb7406emr7343214pjr.45.1685968268333; Mon, 05
- Jun 2023 05:31:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230515115735.296329-1-dietmar.eggemann@arm.com> <20230515115735.296329-2-dietmar.eggemann@arm.com>
-In-Reply-To: <20230515115735.296329-2-dietmar.eggemann@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 5 Jun 2023 14:30:57 +0200
-Message-ID: <CAKfTPtBw3tc35FMYvrq8KgocJddUD-_54zhM8dZ4hAC09w1qWw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] sched/fair: Refactor CPU utilization functions
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U3rJmQT2uF6sKRJDtWw461Yw1/3fF+neaCR9O/RzZ8s=;
+ b=cGRcRMKaSmtMlSTBYKEU1vyI+YwudtYctt7VQa6cOVPFO/jnVXY7/AjVAGy+OqUupJPL3eT3nVqADR7UjZn3I1Yv6qac7xzP9gcqZyZ3F4f1sLkvCV3KmhwDq+zGWl3kZhGlK+fNGuyzlw8fZ15drR35B0wsKEYYpVKwvUig9QY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY3PR13MB4994.namprd13.prod.outlook.com (2603:10b6:a03:357::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 12:31:17 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 12:31:17 +0000
+Date:   Mon, 5 Jun 2023 14:31:10 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net: sched: fix possible refcount leak in
+ tc_chain_tmplt_add()
+Message-ID: <ZH3Vju3D3KCKAkCO@corigine.com>
+References: <20230605070158.48403-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605070158.48403-1-hbh25y@gmail.com>
+X-ClientProxiedBy: AM3PR03CA0058.eurprd03.prod.outlook.com
+ (2603:10a6:207:5::16) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB4994:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6935f668-0e19-4874-84e3-08db65c0c230
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C4lGDlYppWH2pN19/RtwlVfLpgYce3bnHVOX4Uoi4322rdaSqjldzw9KydgfREU9zsVKkjL6n4oufsGW0r+ZPDKAJUXvJiF6kaILqEK34VtRODvOhj97kVJfvliUbqpwWoIfTX70tlqDoI9c9O2HlkQslyxRk2DY1viSc1qkOoVPRca1xqKtXdNLGExKwgXbPb7YzenNo+O00cKBxU2k9o8QkoEmqKkHd+NtrMDa9E74rvkSdB7c8pH63gWxbhKsmZxoidtozw5q+FFbbnb+QtmX80RSH+xKRK/Mha/mpLWg8HVPNJkmYF854Oosa4SDk9aZ5HEfy0rJ7EBKWfAFInbImK8r5MW7Ip2VXADXrsrVy88YcRCxb8yK8u3goDnC7lEEnOZhsYyTIaKbF++dPfW5bz2xCnO2POH5pTggWDuH/wR0jXw8v2u2wghIhZQxWfHCgVoTtQejyquc31zV6oxcOi9WU4mgYEdairTBNTHIPM8oyfXIefq4nzag/2NFXbpZnGUrd5OUuYSgaRVYA9Jky/YB8jT3t8r8O7AJZciyB1GQilUcNwwbMW+Wo+fj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39840400004)(396003)(376002)(346002)(451199021)(6512007)(6506007)(36756003)(86362001)(38100700002)(186003)(2616005)(41300700001)(44832011)(2906002)(478600001)(66946007)(66476007)(6916009)(4326008)(8936002)(8676002)(316002)(66556008)(5660300002)(7416002)(6486002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ftx7E8j6wPNRXQubYYf2d0ZrYRGfE0vwQnsuXV7bI5sLxOh9k8xUdKt8p+Jc?=
+ =?us-ascii?Q?sNzHb5mJFPRGG/wKF0qmvq3duGf/0/s4T05lw+ihsMp0cnSoMeXXzyy52z7F?=
+ =?us-ascii?Q?k2JpwkZx6m7QVyT0EIJWnxnEdWfJ5U4HgbEXY7/8h+FrP+WaUL364holPCFS?=
+ =?us-ascii?Q?Ob4/1NnlvwE8EsF8YIfSnajakpP3QUk28LHzE1QGMo8ewgx/XPStSFkIetk6?=
+ =?us-ascii?Q?V2IHgLWsPSlwFCdlpDUNgbVauaGy+9iK/AWMCfTDfJPaW2kJta4ZY6cM3aek?=
+ =?us-ascii?Q?7QncwGlKP2jnw31MYUBesDlFPwmRR7tI/uS0jY3QrxwhaVnIGD3ahgCyLcH3?=
+ =?us-ascii?Q?mDhUcmSYhRsRd81LwrcrE09dTVuxb1zUVZo1dH324vq9FUf4NNzfYpn9oVz0?=
+ =?us-ascii?Q?0TP4jaQvFmPfEdqDhsqu4+an5xSfnqShSU1RPBJX52NZPeQz7g/q7A3WzGlO?=
+ =?us-ascii?Q?6tj6xgF4YothDPAGiiS+JuHnptUqibcAOmHdnOgiIKGgF3AatQ1FeJrNg2NO?=
+ =?us-ascii?Q?W2DPj3+CkRnId4S9e+mm8ZnGV7lJ8EtOvhofuv7rYXppB7Fs/Ad44NZIvqj6?=
+ =?us-ascii?Q?O6xh52hNcw+FqYvawLFV5oBZbP/d2fKo3nxyZv0wkc+XVPvTOp0A+7cQ9f8y?=
+ =?us-ascii?Q?qi4TXnmEm+6gmGZ8uHk5D3z1TcuuB2KvZLgQnGXV+vMim82e5nBEgklccLJA?=
+ =?us-ascii?Q?wZDA+Dk9TImOFuTCVqIDNv6Z6hf5LlA69YjeVj2x579LyeBdXx/0nU6spwoQ?=
+ =?us-ascii?Q?nKwMbvpN5G8T2RdHO6Ggn+k86xLvv7Xb4HKlksBJ7eBTtalfiyOUreGShN74?=
+ =?us-ascii?Q?8G/RakAze4965Lm5EQ7XtjSuwZGqIlYW5nH8zwRx/m7nsZW4P9huzkehCvXN?=
+ =?us-ascii?Q?5ngh8wY1ZaKAZnAf+0Br0zBr6i3GYje/SHh3Xb35IXFeKOYWPl+H6e4BrjlG?=
+ =?us-ascii?Q?S1uvj39PsN0lHGgPnABtdc1Y1JNHuVgsbYfpcMuxhl7RQ2WYfG+efU1gyIMz?=
+ =?us-ascii?Q?342ge+beusTJsiLEQkutptbyKi5EiM1Kj25qmnXWE+kIxJS4+pMQXRYwmz98?=
+ =?us-ascii?Q?Z6FDaXrZX25yBcm2Vn1gG9BsN0d5LJ/94F6A1WXgtEjJevnwgApK4gbDHB55?=
+ =?us-ascii?Q?k6BauE2meZBwrqf/R3jtLkhTPOPxCFmLh8IoJIiTkYEgplT0loenjMC88Fne?=
+ =?us-ascii?Q?Vp39ETHOk/Tde1wUTy18Zo3ne/DvPXlymfVEbnUo8saXw9vmZNQIbBafGsjx?=
+ =?us-ascii?Q?OmOGHeKIpIDIg9shb/DROO7YVfz5BM/FM89yv764RHe2Uhfz+u5jdeSKRVWf?=
+ =?us-ascii?Q?TphZd4XELNjqMiMCRhMgLoA6qq1b3dKDkvHDX7fp4L0GWS7WMOUKm9r8GIBu?=
+ =?us-ascii?Q?0PWq+XUqia1UmUwm0j7kGeUB1rUReLhDK6nlym3zmIXyb3z/KVpw8uDwZBRs?=
+ =?us-ascii?Q?5nscUS1hXQ36REniv3AmmJ3mPjI2juMpODeaNdNpZR3ONLQcbBxT3ii7+cYa?=
+ =?us-ascii?Q?5GnTPSTb1uGo8vDqByDP90sAWfCn9ZipriZ0ls91YeRTbG4hwtB6hUrGdQr2?=
+ =?us-ascii?Q?tsyHF14li5fL+F766CHqsTVVd8npeJB66VxZW/2lV+5B9SuT1pIZxzq3y/7N?=
+ =?us-ascii?Q?8dVmy1Jy+sSsaRkShFgqs4l/jWdYpk9a9irbagRZTT9v/zLXgAxsy6+30Lje?=
+ =?us-ascii?Q?N0WfdA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6935f668-0e19-4874-84e3-08db65c0c230
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 12:31:17.1282
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A7Ukbg8pV9xGlP0Rpo3rVvzBMj1y/Op2HLYMKyxpmGU0Ntsw9e9H8mEHNTMiJDDFL8KFp/gdKnjBWO7qjf9W9UZmIU5LF29dElzQqc04RkI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4994
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 13:57, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> There is a lot of code duplication in cpu_util_next() & cpu_util_cfs().
->
-> Remove this by allowing cpu_util_next() to be called with p = NULL.
-> Rename cpu_util_next() to cpu_util() since the '_next' suffix is no
-> longer necessary to distinct cpu utilization related functions.
-> Implement cpu_util_cfs(cpu) as cpu_util(cpu, p = NULL, -1).
->
-> This will allow to code future related cpu util changes only in one
-> place, namely in cpu_util().
->
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+On Mon, Jun 05, 2023 at 03:01:58PM +0800, Hangyu Hua wrote:
+> try_module_get can be called in tcf_proto_lookup_ops. So if ops don't
+> implement the corresponding function we should call module_put to drop
+> the refcount.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Hi Hangyu Hua,
 
+Is this correct even if try_module_get() is
+not called via tcf_proto_lookup_ops() ?
+
+> Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 > ---
->  kernel/sched/fair.c  | 63 ++++++++++++++++++++++++++++++++++----------
->  kernel/sched/sched.h | 47 +--------------------------------
->  2 files changed, 50 insertions(+), 60 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 3f8135d7c89d..9874e28d5e38 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7145,11 +7145,41 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->         return target;
->  }
->
-> -/*
-> - * Predicts what cpu_util(@cpu) would return if @p was removed from @cpu
-> - * (@dst_cpu = -1) or migrated to @dst_cpu.
-> - */
-> -static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
-> +/**
-> + * cpu_util() - Estimates the amount of CPU capacity used by CFS tasks.
-> + * @cpu: the CPU to get the utilization for
-> + * @p: task for which the CPU utilization should be predicted or NULL
-> + * @dst_cpu: CPU @p migrates to, -1 if @p moves from @cpu or @p == NULL
-> + *
-> + * The unit of the return value must be the same as the one of CPU capacity
-> + * so that CPU utilization can be compared with CPU capacity.
-> + *
-> + * CPU utilization is the sum of running time of runnable tasks plus the
-> + * recent utilization of currently non-runnable tasks on that CPU.
-> + * It represents the amount of CPU capacity currently used by CFS tasks in
-> + * the range [0..max CPU capacity] with max CPU capacity being the CPU
-> + * capacity at f_max.
-> + *
-> + * The estimated CPU utilization is defined as the maximum between CPU
-> + * utilization and sum of the estimated utilization of the currently
-> + * runnable tasks on that CPU. It preserves a utilization "snapshot" of
-> + * previously-executed tasks, which helps better deduce how busy a CPU will
-> + * be when a long-sleeping task wakes up. The contribution to CPU utilization
-> + * of such a task would be significantly decayed at this point of time.
-> + *
-> + * CPU utilization can be higher than the current CPU capacity
-> + * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
-> + * of rounding errors as well as task migrations or wakeups of new tasks.
-> + * CPU utilization has to be capped to fit into the [0..max CPU capacity]
-> + * range. Otherwise a group of CPUs (CPU0 util = 121% + CPU1 util = 80%)
-> + * could be seen as over-utilized even though CPU1 has 20% of spare CPU
-> + * capacity. CPU utilization is allowed to overshoot current CPU capacity
-> + * though since this is useful for predicting the CPU capacity required
-> + * after task migrations (scheduler-driven DVFS).
-> + *
-> + * Return: (Estimated) utilization for the specified CPU.
-> + */
-> +static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
->  {
->         struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
->         unsigned long util = READ_ONCE(cfs_rq->avg.util_avg);
-> @@ -7160,9 +7190,9 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
->          * contribution. In all the other cases @cpu is not impacted by the
->          * migration so its util_avg is already correct.
->          */
-> -       if (task_cpu(p) == cpu && dst_cpu != cpu)
-> +       if (p && task_cpu(p) == cpu && dst_cpu != cpu)
->                 lsub_positive(&util, task_util(p));
-> -       else if (task_cpu(p) != cpu && dst_cpu == cpu)
-> +       else if (p && task_cpu(p) != cpu && dst_cpu == cpu)
->                 util += task_util(p);
->
->         if (sched_feat(UTIL_EST)) {
-> @@ -7198,7 +7228,7 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
->                  */
->                 if (dst_cpu == cpu)
->                         util_est += _task_util_est(p);
-> -               else if (unlikely(task_on_rq_queued(p) || current == p))
-> +               else if (p && unlikely(task_on_rq_queued(p) || current == p))
->                         lsub_positive(&util_est, _task_util_est(p));
->
->                 util = max(util, util_est);
-> @@ -7207,6 +7237,11 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
->         return min(util, capacity_orig_of(cpu));
->  }
->
-> +unsigned long cpu_util_cfs(int cpu)
-> +{
-> +       return cpu_util(cpu, NULL, -1);
-> +}
-> +
->  /*
->   * cpu_util_without: compute cpu utilization without any contributions from *p
->   * @cpu: the CPU which utilization is requested
-> @@ -7224,9 +7259,9 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
->  {
->         /* Task has no contribution or is new */
->         if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
-> -               return cpu_util_cfs(cpu);
-> +               p = NULL;
->
-> -       return cpu_util_next(cpu, p, -1);
-> +       return cpu_util(cpu, p, -1);
->  }
->
->  /*
-> @@ -7273,7 +7308,7 @@ static inline void eenv_task_busy_time(struct energy_env *eenv,
->   * cpu_capacity.
->   *
->   * The contribution of the task @p for which we want to estimate the
-> - * energy cost is removed (by cpu_util_next()) and must be calculated
-> + * energy cost is removed (by cpu_util()) and must be calculated
->   * separately (see eenv_task_busy_time). This ensures:
->   *
->   *   - A stable PD utilization, no matter which CPU of that PD we want to place
-> @@ -7294,7 +7329,7 @@ static inline void eenv_pd_busy_time(struct energy_env *eenv,
->         int cpu;
->
->         for_each_cpu(cpu, pd_cpus) {
-> -               unsigned long util = cpu_util_next(cpu, p, -1);
-> +               unsigned long util = cpu_util(cpu, p, -1);
->
->                 busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
->         }
-> @@ -7318,7 +7353,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
->
->         for_each_cpu(cpu, pd_cpus) {
->                 struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
-> -               unsigned long util = cpu_util_next(cpu, p, dst_cpu);
-> +               unsigned long util = cpu_util(cpu, p, dst_cpu);
->                 unsigned long cpu_util;
->
->                 /*
-> @@ -7464,7 +7499,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                         if (!cpumask_test_cpu(cpu, p->cpus_ptr))
->                                 continue;
->
-> -                       util = cpu_util_next(cpu, p, cpu);
-> +                       util = cpu_util(cpu, p, cpu);
->                         cpu_cap = capacity_of(cpu);
->
->                         /*
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index ec7b3e0a2b20..f78c0f85cc76 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2946,53 +2946,8 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
->         return READ_ONCE(rq->avg_dl.util_avg);
->  }
->
-> -/**
-> - * cpu_util_cfs() - Estimates the amount of CPU capacity used by CFS tasks.
-> - * @cpu: the CPU to get the utilization for.
-> - *
-> - * The unit of the return value must be the same as the one of CPU capacity
-> - * so that CPU utilization can be compared with CPU capacity.
-> - *
-> - * CPU utilization is the sum of running time of runnable tasks plus the
-> - * recent utilization of currently non-runnable tasks on that CPU.
-> - * It represents the amount of CPU capacity currently used by CFS tasks in
-> - * the range [0..max CPU capacity] with max CPU capacity being the CPU
-> - * capacity at f_max.
-> - *
-> - * The estimated CPU utilization is defined as the maximum between CPU
-> - * utilization and sum of the estimated utilization of the currently
-> - * runnable tasks on that CPU. It preserves a utilization "snapshot" of
-> - * previously-executed tasks, which helps better deduce how busy a CPU will
-> - * be when a long-sleeping task wakes up. The contribution to CPU utilization
-> - * of such a task would be significantly decayed at this point of time.
-> - *
-> - * CPU utilization can be higher than the current CPU capacity
-> - * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
-> - * of rounding errors as well as task migrations or wakeups of new tasks.
-> - * CPU utilization has to be capped to fit into the [0..max CPU capacity]
-> - * range. Otherwise a group of CPUs (CPU0 util = 121% + CPU1 util = 80%)
-> - * could be seen as over-utilized even though CPU1 has 20% of spare CPU
-> - * capacity. CPU utilization is allowed to overshoot current CPU capacity
-> - * though since this is useful for predicting the CPU capacity required
-> - * after task migrations (scheduler-driven DVFS).
-> - *
-> - * Return: (Estimated) utilization for the specified CPU.
-> - */
-> -static inline unsigned long cpu_util_cfs(int cpu)
-> -{
-> -       struct cfs_rq *cfs_rq;
-> -       unsigned long util;
-> -
-> -       cfs_rq = &cpu_rq(cpu)->cfs;
-> -       util = READ_ONCE(cfs_rq->avg.util_avg);
->
-> -       if (sched_feat(UTIL_EST)) {
-> -               util = max_t(unsigned long, util,
-> -                            READ_ONCE(cfs_rq->avg.util_est.enqueued));
-> -       }
-> -
-> -       return min(util, capacity_orig_of(cpu));
-> -}
-> +extern unsigned long cpu_util_cfs(int cpu);
->
->  static inline unsigned long cpu_util_rt(struct rq *rq)
->  {
-> --
-> 2.25.1
->
+>  net/sched/cls_api.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+> index 2621550bfddc..92bfb892e638 100644
+> --- a/net/sched/cls_api.c
+> +++ b/net/sched/cls_api.c
+> @@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
+>  		return PTR_ERR(ops);
+>  	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
+>  		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
+> +		module_put(ops->owner);
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> -- 
+> 2.34.1
+> 
+> 
