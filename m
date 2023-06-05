@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C67722509
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD3E722506
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbjFEL6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S233113AbjFEL54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbjFEL6D (ORCPT
+        with ESMTP id S233106AbjFEL5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:58:03 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15EDF;
-        Mon,  5 Jun 2023 04:58:02 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QZWyp36jXz9yLnk;
-        Mon,  5 Jun 2023 19:46:10 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDHeUC0zX1kx38JAw--.3850S2;
-        Mon, 05 Jun 2023 12:57:48 +0100 (CET)
-Message-ID: <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
-Subject: Re: [PATCH] evm: Complete description of evm_inode_setattr()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 05 Jun 2023 13:57:37 +0200
-In-Reply-To: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
-References: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 5 Jun 2023 07:57:54 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4F1E6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:57:52 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b025d26f4fso40765945ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685966272; x=1688558272;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gouN0vd5luN8i9wXHezxl1lZ6vDwVZF4YFz6F585j8Y=;
+        b=sT46klF8oPWNCSa4tYk8NZg2AHnz7f5S6Qrc+YUQyeCMf4+wrktgvPVZn98ZfSxjzD
+         eODX6w96HN8Gbh/o5SQb528EcyO1nFLywQPOvBviBw03Q5vL11+SG50At4MQpeflGSVf
+         gWO3d3xj20zKPTjzX4MqiMKx+09WONcrPqJuwgAx1CRd48p/QYTK+36fWHTYhnesSesc
+         erQ93d9oM6wAtcHhDZE+wASrbFRHMxQAWo4PP3+QjQBX7rgP5u1XYSE77UgVg7pUYzFU
+         vJ0LDZbvN/T4BGpBbPz5ixl1IwG/x7Fz1Gz6NxIrwPzIVBJBsURER6y1HjXQ/y5Op0FZ
+         lW5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685966272; x=1688558272;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gouN0vd5luN8i9wXHezxl1lZ6vDwVZF4YFz6F585j8Y=;
+        b=Au6OZg6QRdzOQoEdBh2yZIoq2YEvLS+KQtVaCrNz6c+dEsWHJ8GtqWcNFI6UJ+qQEV
+         VQ/iYbRiK5k+AZWEumZ3a4DlNndvued6Bw70PZ/l7ulHJ3BoYs5EgrSX0/YmvKYBzAx4
+         ZpFnvNyTrn+3hMR0mtOpZkEfHoeg3yGQulYIc5dcOnvRQG3fOxuscgnECdL+nwKjZNlJ
+         DBiJYEe6ZGuBeotYw+U2VyRm9KajGbpbsUSWJctLtdb+JnqHWtoStTlbR17hfwcdh1Sq
+         zA8lloivVGHOGQWdCH2dIDXGbk9rGURwttVwxwdL4o1sfXRcpiX+9JkZVDFJ52+Gzj3/
+         P9FQ==
+X-Gm-Message-State: AC+VfDyKs0bW8kJzlxCFEmhC2/2c2f8l7ZK+r26rlqHOjGkEIaO3zlrY
+        +KB17ZWr2ZESIZGSLwPKXQscQs3SN8s1ph//Mw==
+X-Google-Smtp-Source: ACHHUZ5W0Z8gQGBJ0iFzTR48CtwbHP4eM7wjSQDBRc0my5cbJYSwmnyjts94N8DkAgx5RE5bvqaMpA==
+X-Received: by 2002:a17:902:788c:b0:1af:babd:7b84 with SMTP id q12-20020a170902788c00b001afbabd7b84mr6300792pll.41.1685966271931;
+        Mon, 05 Jun 2023 04:57:51 -0700 (PDT)
+Received: from thinkpad ([120.138.12.115])
+        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b001a6cd1e4205sm6404072plb.279.2023.06.05.04.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 04:57:51 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 17:27:46 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     kw@linux.com, kishon@kernel.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dlemoal@kernel.org
+Subject: Re: [PATCH v6 2/9] PCI: endpoint: Pass EPF device ID to the probe
+ function
+Message-ID: <20230605115746.GD5536@thinkpad>
+References: <20230602114756.36586-1-manivannan.sadhasivam@linaro.org>
+ <20230602114756.36586-3-manivannan.sadhasivam@linaro.org>
+ <ZH2qbS1I25lIMOPi@lpieralisi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDHeUC0zX1kx38JAw--.3850S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWDJr4xKryrtr1kCw1kuFg_yoW8GF4kpa
-        yrta48Jr1rtryI9F98Ga1xZFyFgrWUWr1j9ws8Aw40vFn8Gr4q9ryxK34fWr98Gr18Gr1f
-        ta4av3W5Zw45ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUglb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-        xhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4o5ewADsv
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZH2qbS1I25lIMOPi@lpieralisi>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,44 +77,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-06 at 11:40 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, Jun 05, 2023 at 11:27:09AM +0200, Lorenzo Pieralisi wrote:
+> On Fri, Jun 02, 2023 at 05:17:49PM +0530, Manivannan Sadhasivam wrote:
+> > Currently, the EPF probe function doesn't get the device ID argument needed
+> > to correctly identify the device table ID of the EPF device.
+> > 
+> > When multiple entries are added to the "struct pci_epf_device_id" table,
+> > the probe function needs to identify the correct one. This is achieved by
+> > modifying the pci_epf_match_id() function to return the match ID pointer
+> > and passing it to the driver's probe function.
+> > 
+> > pci_epf_device_match() function can return bool based on the return value
+> > of pci_epf_match_id().
+> > 
+> > Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/pci/endpoint/functions/pci-epf-ntb.c  |  3 ++-
+> >  drivers/pci/endpoint/functions/pci-epf-test.c |  2 +-
+> >  drivers/pci/endpoint/functions/pci-epf-vntb.c |  2 +-
+> >  drivers/pci/endpoint/pci-epf-core.c           | 18 +++++++++++-------
+> >  include/linux/pci-epf.h                       |  4 +++-
+> >  5 files changed, 18 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > index 9a00448c7e61..980b4ecf19a2 100644
+> > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+> > @@ -2075,11 +2075,12 @@ static struct config_group *epf_ntb_add_cfs(struct pci_epf *epf,
+> >  /**
+> >   * epf_ntb_probe() - Probe NTB function driver
+> >   * @epf: NTB endpoint function device
+> > + * @id: NTB endpoint function device ID
+> >   *
+> >   * Probe NTB function driver when endpoint function bus detects a NTB
+> >   * endpoint function.
+> >   */
+> > -static int epf_ntb_probe(struct pci_epf *epf)
+> > +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
+> >  {
+> >  	struct epf_ntb *ntb;
+> >  	struct device *dev;
+> > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+> > index 0f9d2ec822ac..d5fcc78a5b73 100644
+> > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
+> > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+> > @@ -980,7 +980,7 @@ static const struct pci_epf_device_id pci_epf_test_ids[] = {
+> >  	{},
+> >  };
+> >  
+> > -static int pci_epf_test_probe(struct pci_epf *epf)
+> > +static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
+> >  {
+> >  	struct pci_epf_test *epf_test;
+> >  	struct device *dev = &epf->dev;
+> > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > index b7c7a8af99f4..122eb7a12028 100644
+> > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > @@ -1401,7 +1401,7 @@ static struct pci_epf_ops epf_ntb_ops = {
+> >   *
+> >   * Returns: Zero for success, or an error code in case of failure
+> >   */
+> > -static int epf_ntb_probe(struct pci_epf *epf)
+> > +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
+> >  {
+> >  	struct epf_ntb *ntb;
+> >  	struct device *dev;
+> > diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
+> > index 2036e38be093..ea6e0aef0bb3 100644
+> > --- a/drivers/pci/endpoint/pci-epf-core.c
+> > +++ b/drivers/pci/endpoint/pci-epf-core.c
+> > @@ -493,16 +493,16 @@ static const struct device_type pci_epf_type = {
+> >  	.release	= pci_epf_dev_release,
+> >  };
+> >  
+> > -static int
+> > -pci_epf_match_id(const struct pci_epf_device_id *id, const struct pci_epf *epf)
+> > +static const struct pci_epf_device_id
+> > +*pci_epf_match_id(const struct pci_epf_device_id *id, const struct pci_epf *epf)
+> >  {
+> >  	while (id->name[0]) {
+> >  		if (strcmp(epf->name, id->name) == 0)
+> > -			return true;
+> > +			return id;
+> >  		id++;
+> >  	}
+> >  
+> > -	return false;
+> > +	return NULL;
+> >  }
+> >  
+> >  static int pci_epf_device_match(struct device *dev, struct device_driver *drv)
+> > @@ -510,8 +510,12 @@ static int pci_epf_device_match(struct device *dev, struct device_driver *drv)
+> >  	struct pci_epf *epf = to_pci_epf(dev);
+> >  	struct pci_epf_driver *driver = to_pci_epf_driver(drv);
+> >  
+> > -	if (driver->id_table)
+> > -		return pci_epf_match_id(driver->id_table, epf);
+> > +	if (driver->id_table) {
+> > +		if (pci_epf_match_id(driver->id_table, epf))
+> > +			return true;
+> > +		else
+> > +			return false;
+> > +	}
+> >  
+> >  	return !strcmp(epf->name, drv->name);
+> >  }
+> > @@ -526,7 +530,7 @@ static int pci_epf_device_probe(struct device *dev)
+> >  
+> >  	epf->driver = driver;
+> >  
+> > -	return driver->probe(epf);
+> > +	return driver->probe(epf, pci_epf_match_id(driver->id_table, epf));
 > 
-> Add the description for missing parameters of evm_inode_setattr() to
-> avoid the warning arising with W=n compile option.
+> I don't think we should do it this way. If we are probing a driver that
+> means that we have got a driver that matches a device id. The device id
+> is a property of the device, there is no reason why we should pass it
+> to the probe function, it has got to be stored somewhere at device
+> creation stage (well, not in the match function - since that's what
+> we changed), probe() should retrieve it from the device structure.
 > 
-> Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
-> Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Hi Mimi
+Device id defined by the drivers will only be known during the match() stage as
+that's when the drivers are queried for match of the device. During device
+creation stage, there is no way for the EPF core to fetch the ids.
 
-this probably got lost. It was also reviewed by Stefan:
+And, passing id during probe() is not new. For most of the non-platform devices,
+the bus driver will pass the id. The PCI core itself is doing the same for the
+client drivers as well and I'd like to keep it same for EPF also:
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/pci.h#n921
 
-Could you please take it?
+- Mani
 
-Thanks
-
-Roberto
-
-> ---
->  security/integrity/evm/evm_main.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Thanks,
+> Lorenzo
 > 
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> index cf24c525558..b1c2197473a 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -795,7 +795,9 @@ static int evm_attr_change(struct mnt_idmap *idmap,
->  
->  /**
->   * evm_inode_setattr - prevent updating an invalid EVM extended attribute
-> + * @idmap: idmap of the mount
->   * @dentry: pointer to the affected dentry
-> + * @attr: iattr structure containing the new file attributes
->   *
->   * Permit update of file attributes when files have a valid EVM signature,
->   * except in the case of them having an immutable portable signature.
+> >  }
+> >  
+> >  static void pci_epf_device_remove(struct device *dev)
+> > diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
+> > index a215dc8ce693..bc613f0df7e3 100644
+> > --- a/include/linux/pci-epf.h
+> > +++ b/include/linux/pci-epf.h
+> > @@ -89,7 +89,7 @@ struct pci_epc_event_ops {
+> >   * @id_table: identifies EPF devices for probing
+> >   */
+> >  struct pci_epf_driver {
+> > -	int	(*probe)(struct pci_epf *epf);
+> > +	int	(*probe)(struct pci_epf *epf, const struct pci_epf_device_id *id);
+> >  	void	(*remove)(struct pci_epf *epf);
+> >  
+> >  	struct device_driver	driver;
+> > @@ -131,6 +131,7 @@ struct pci_epf_bar {
+> >   * @epc: the EPC device to which this EPF device is bound
+> >   * @epf_pf: the physical EPF device to which this virtual EPF device is bound
+> >   * @driver: the EPF driver to which this EPF device is bound
+> > + * @id: Pointer to the EPF device ID
+> >   * @list: to add pci_epf as a list of PCI endpoint functions to pci_epc
+> >   * @lock: mutex to protect pci_epf_ops
+> >   * @sec_epc: the secondary EPC device to which this EPF device is bound
+> > @@ -158,6 +159,7 @@ struct pci_epf {
+> >  	struct pci_epc		*epc;
+> >  	struct pci_epf		*epf_pf;
+> >  	struct pci_epf_driver	*driver;
+> > +	const struct pci_epf_device_id *id;
+> >  	struct list_head	list;
+> >  	/* mutex to protect against concurrent access of pci_epf_ops */
+> >  	struct mutex		lock;
+> > -- 
+> > 2.25.1
+> > 
 
+-- 
+மணிவண்ணன் சதாசிவம்
