@@ -2,222 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EA57224E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F128D7224E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbjFELum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S232114AbjFELvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbjFELuj (ORCPT
+        with ESMTP id S231294AbjFELvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:50:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8150CEE;
-        Mon,  5 Jun 2023 04:50:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Jun 2023 07:51:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F1FA4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:51:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EDE062265;
-        Mon,  5 Jun 2023 11:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD033C433D2;
-        Mon,  5 Jun 2023 11:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685965836;
-        bh=1URBqhyo/+LhuBy1Ia8JA249Fp0j/DA0iuKWYbDeaXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ICOlloAlAorQJ5z4uRZ5R7hqkpsimzIs8vOtUPJAnsvl9TY1FvhaEUjDisUnGXABi
-         YfJczsf3tk06KobNcPAk+FbjjWeQOwCgVTPEh8+VPs5A2oBwwpOLzirZ6MRA0qv5yp
-         QFZmhVHCyDMz8616KX+pv773whVdW8z620Zn+U0sp4qLXUoZii/rzJDPbUoO+AU5tk
-         zyss8s+XgKo+N43tV+JltB8M0vE5AksuXBJkFzjMEZ+2IXC2dMjvUK1ixOSWoEw+Kg
-         7lEx9xPyVfqsRZxLsPU3nkPIkgfeNkFSWkwTgblMT3gkQdpKlfOuDEyIM/pVgE4C1H
-         VTM8fmkRaWTWA==
-Date:   Mon, 5 Jun 2023 13:50:29 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Qi Zheng <qi.zheng@linux.dev>, Dave Chinner <david@fromorbit.com>,
-        akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, hughd@google.com,
-        paulmck@kernel.org, muchun.song@linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 6/8] xfs: introduce xfs_fs_destroy_super()
-Message-ID: <20230605-halbtags-gesplittet-c482c62cb2c9@brauner>
-References: <20230531095742.2480623-1-qi.zheng@linux.dev>
- <20230531095742.2480623-7-qi.zheng@linux.dev>
- <ZHfc3V4KKmW8QTR2@dread.disaster.area>
- <b85c0d63-f6a5-73c4-e574-163b0b07d80a@linux.dev>
- <ZHkkWjt0R1ptV7RZ@dread.disaster.area>
- <2f34a702-1a57-06a5-1bd9-de54a67a839e@linux.dev>
- <20230602151532.GP16865@frogsfrogsfrogs>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 444A921B39;
+        Mon,  5 Jun 2023 11:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685965904; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mWXI6wt2+qrPxokyP3MIOhyYU83+GbflH+z5Ur+r09w=;
+        b=C/x8MXiGoGdezEmbhVM5AWo590QdfJNC5rTKr+zfYsF9rfvPLXtE6K0Fwe7fuA6FDqOH88
+        wEeK8VdNj0w96RJNBl9kS/LQp4CkoHZbHhnFFp2c77m7X12lrvd1xfyHHBvaaSNRpKTedA
+        Z0R5Il8RK59dy7h82UV0kLIpyfnUPNo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685965904;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mWXI6wt2+qrPxokyP3MIOhyYU83+GbflH+z5Ur+r09w=;
+        b=2REczRNi2OWX+1b576rp1is0Me8n12Y9vz+gzjxxrOTn3wr9Bk6yE0Ap+imxk3rc5xu78u
+        0EALgkNZAi95Y6Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 37DA8139C7;
+        Mon,  5 Jun 2023 11:51:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wfySDVDMfWTWegAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 05 Jun 2023 11:51:44 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C5F4CA0754; Mon,  5 Jun 2023 13:51:43 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 13:51:43 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "yebin (H)" <yebin10@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, jack@suse.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/2] quota: fix null-ptr-deref in ext4_acquire_dquot()
+Message-ID: <20230605115143.i3squdbqmqebu5ue@quack3>
+References: <20230527014018.47396-1-yebin10@huawei.com>
+ <20230527014018.47396-2-yebin10@huawei.com>
+ <20230530095726.t2grmww5rzofx5gp@quack3>
+ <647ADA33.5010508@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/mixed; boundary="m5qv73rr3afoouf3"
 Content-Disposition: inline
-In-Reply-To: <20230602151532.GP16865@frogsfrogsfrogs>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <647ADA33.5010508@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 08:15:32AM -0700, Darrick J. Wong wrote:
-> On Fri, Jun 02, 2023 at 11:13:09AM +0800, Qi Zheng wrote:
-> > Hi Dave,
-> > 
-> > On 2023/6/2 07:06, Dave Chinner wrote:
-> > > On Thu, Jun 01, 2023 at 04:43:32PM +0800, Qi Zheng wrote:
-> > > > Hi Dave,
-> > > > On 2023/6/1 07:48, Dave Chinner wrote:
-> > > > > On Wed, May 31, 2023 at 09:57:40AM +0000, Qi Zheng wrote:
-> > > > > > From: Kirill Tkhai <tkhai@ya.ru>
-> > > > > I don't really like this ->destroy_super() callback, especially as
-> > > > > it's completely undocumented as to why it exists. This is purely a
-> > > > > work-around for handling extended filesystem superblock shrinker
-> > > > > functionality, yet there's nothing that tells the reader this.
-> > > > > 
-> > > > > It also seems to imply that the superblock shrinker can continue to
-> > > > > run after the existing unregister_shrinker() call before ->kill_sb()
-> > > > > is called. This violates the assumption made in filesystems that the
-> > > > > superblock shrinkers have been stopped and will never run again
-> > > > > before ->kill_sb() is called. Hence ->kill_sb() implementations
-> > > > > assume there is nothing else accessing filesystem owned structures
-> > > > > and it can tear down internal structures safely.
-> > > > > 
-> > > > > Realistically, the days of XFS using this superblock shrinker
-> > > > > extension are numbered. We've got a lot of the infrastructure we
-> > > > > need in place to get rid of the background inode reclaim
-> > > > > infrastructure that requires this shrinker extension, and it's on my
-> > > > > list of things that need to be addressed in the near future.
-> > > > > 
-> > > > > In fact, now that I look at it, I think the shmem usage of this
-> > > > > superblock shrinker interface is broken - it returns SHRINK_STOP to
-> > > > > ->free_cached_objects(), but the only valid return value is the
-> > > > > number of objects freed (i.e. 0 is nothing freed). These special
-> > > > > superblock extension interfaces do not work like a normal
-> > > > > shrinker....
-> > > > > 
-> > > > > Hence I think the shmem usage should be replaced with an separate
-> > > > > internal shmem shrinker that is managed by the filesystem itself
-> > > > > (similar to how XFS has multiple internal shrinkers).
-> > > > > 
-> > > > > At this point, then the only user of this interface is (again) XFS.
-> > > > > Given this, adding new VFS methods for a single filesystem
-> > > > > for functionality that is planned to be removed is probably not the
-> > > > > best approach to solving the problem.
-> > > > 
-> > > > Thanks for such a detailed analysis. Kirill Tkhai just proposeed a
-> > > > new method[1], I cc'd you on the email.
-> > > 
-> > > I;ve just read through that thread, and I've looked at the original
-> > > patch that caused the regression.
-> > > 
-> > > I'm a bit annoyed right now. Nobody cc'd me on the original patches
-> > > nor were any of the subsystems that use shrinkers were cc'd on the
-> > > patches that changed shrinker behaviour. I only find out about this
-> > 
-> > Sorry about that, my mistake. I followed the results of
-> > scripts/get_maintainer.pl before.
-> 
-> Sometimes I wonder if people who contribute a lot to a subsystem should
-> be more aggressive about listing themselves explicitly in MAINTAINERS
-> but then I look at the ~600 emails that came in while I was on vacation
-> for 6 days over a long weekend and ... shut up. :P
-> 
-> > > because someone tries to fix something they broke by *breaking more
-> > > stuff* and not even realising how broken what they are proposing is.
-> > 
-> > Yes, this slows down the speed of umount. But the benefit is that
-> > slab shrink becomes lockless, the mount operation and slab shrink no
-> > longer affect each other, and the IPC no longer drops significantly,
-> > etc.
-> 
-> The lockless shrink seems like a good thing to have, but ... is it
-> really true that the superblock shrinker can still be running after
-> ->kill_sb?  /That/ is surprising to me.
 
-So what's the plan here? If this causes issues for filesystems that rely
-on specific guarantees that are broken by the patch then either it needs
-a clean fix or a revert.
+--m5qv73rr3afoouf3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Sat 03-06-23 14:14:11, yebin (H) wrote:
 > 
-> --D
 > 
-> > And I used bpftrace to measure the time consumption of
-> > unregister_shrinker():
+> On 2023/5/30 17:57, Jan Kara wrote:
+> > On Sat 27-05-23 09:40:17, Ye Bin wrote:
+> > > Syzbot found the following issue:
+> > > Unable to handle kernel paging request at virtual address dfff800000000005
+> > > KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+> > ...
+> > > CPU: 0 PID: 6080 Comm: syz-executor747 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+> > > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > pc : ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
+> > > lr : dquot_to_inode fs/ext4/super.c:6740 [inline]
+> > > lr : ext4_acquire_dquot+0x1ac/0x398 fs/ext4/super.c:6766
+> > OK, this is bad...
 > > 
-> > ```
-> > And I just tested it on a physical machine (Intel(R) Xeon(R) Platinum
-> > 8260 CPU @ 2.40GHz) and the results are as follows:
-> > 
-> > 1) use synchronize_srcu():
-> > 
-> > @ns[umount]:
-> > [8K, 16K)             83 |@@@@@@@       |
-> > [16K, 32K)           578
-> > |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> > [32K, 64K)            78 |@@@@@@@       |
-> > [64K, 128K)            6 |       |
-> > [128K, 256K)           7 |       |
-> > [256K, 512K)          29 |@@       |
-> > [512K, 1M)            51 |@@@@      |
-> > [1M, 2M)              90 |@@@@@@@@       |
-> > [2M, 4M)              70 |@@@@@@      |
-> > [4M, 8M)               8 |      |
-> > 
-> > 2) use synchronize_srcu_expedited():
-> > 
-> > @ns[umount]:
-> > [8K, 16K)             31 |@@       |
-> > [16K, 32K)           803
-> > |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> > [32K, 64K)           158 |@@@@@@@@@@       |
-> > [64K, 128K)            4 |       |
-> > [128K, 256K)           2 |       |
-> > [256K, 512K)           2 |       |
-> > ```
-> > 
-> > With synchronize_srcu(), most of the time consumption is between 16us and
-> > 32us, the worst case between 4ms and 8ms. Is this totally
-> > unacceptable?
-> > 
-> > This performance regression report comes from a stress test. Will the
-> > umount action be executed so frequently under real workloads?
-> > 
-> > If there are really unacceptable, after applying the newly proposed
-> > method, umount will be as fast as before (or even faster).
-> > 
-> > Thanks,
-> > Qi
-> > 
+> > > Above issue may happens as follows:
+> > > ProcessA              ProcessB                    ProcessC
+> > > sys_fsconfig
+> > >    vfs_fsconfig_locked
+> > >     reconfigure_super
+> > >       ext4_remount
+> > >        dquot_suspend -> suspend all type quota
 > > > 
-> > > The previous code was not broken and it provided specific guarantees
-> > > to subsystems via unregister_shrinker(). From the above discussion,
-> > > it appears that the original authors of these changes either did not
-> > > know about or did not understand them, so that casts doubt in my
-> > > mind about the attempted solution and all the proposed fixes for it.
+> > >                   sys_fsconfig
+> > > 		  vfs_fsconfig_locked
+> > > 		    reconfigure_super
+> > > 		     ext4_remount
+> > > 		      dquot_resume
+> > > 		       ret = dquot_load_quota_sb
+> > >                          add_dquot_ref
+> > > 		                           do_open  -> open file O_RDWR
+> > > 					    vfs_open
+> > > 					     do_dentry_open
+> > > 					      get_write_access
+> > > 					       atomic_inc_unless_negative(&inode->i_writecount)
+> > >                                                ext4_file_open
+> > > 					       dquot_file_open
+> > > 					        dquot_initialize
+> > > 						  __dquot_initialize
+> > > 						   dqget
+> > > 						    if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
 > > > 
-> > > I don't have the time right now unravel this mess and fully
-> > > understand the original problem, changes or the band-aids that are
-> > > being thrown around. We are also getting quite late in the cycle to
-> > > be doing major surgery to critical infrastructure, especially as it
-> > > gives so little time to review regression test whatever new solution
-> > > is proposed.
-> > > 
-> > > Given this appears to be a change introduced in 6.4-rc1, I think the
-> > > right thing to do is to revert the change rather than make things
-> > > worse by trying to shove some "quick fix" into the kernel to address
-> > > it.
-> > > 
-> > > Andrew, could you please sort out a series to revert this shrinker
-> > > infrastructure change and all the dependent hacks that have been
-> > > added to try to fix it so far?
-> > > 
-> > > -Dave.
+> > > 			  __dquot_initialize
+> > > 			   __dquot_initialize
+> > > 			    dqget
+> > > 			     if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
+> > > 	                       ext4_acquire_dquot -> Return error
+> > > 		       if (ret < 0)
+> > > 	                 vfs_cleanup_quota_inode
+> > > 			  dqopt->files[type] = NULL;
+> > But I don't see how this can happen. The code in dquot_load_quota_sb()
+> > looks like:
 > > 
-> > -- 
-> > Thanks,
-> > Qi
+> >          error = add_dquot_ref(sb, type);
+> >          if (error)
+> >                  dquot_disable(sb, type, flags);
+> > 
+> > So if an error happens in add_dquot_ref(), we'll call dquot_disable().
+> > dquot_disable() then does:
+> > 
+> >                  drop_dquot_ref(sb, cnt);
+> >                  invalidate_dquots(sb, cnt);
+> > 
+> > and invalidate_dquots() waits for reference count of all dquots to drop to
+> > 0. Hence if dqget() returned a dquot pointer to ProcessC, then ProcessB
+> > should wait until ProcessC drops the dquot reference (hence
+> > ext4_acquire_dquot() is done).
+> > 
+> > What am I missing?
+> > 
+> > 								Honza
+> My reproduction condition is:
+> mkfs.ext4 -F /dev/sda
+> tune2fs  -Q usrquota /dev/sda
+> 
+> dquot_disable
+> ...
+>          if ((flags & DQUOT_USAGE_ENABLED && !(flags &
+> DQUOT_LIMITS_ENABLED))
+>              || (flags & DQUOT_SUSPENDED && flags & (DQUOT_LIMITS_ENABLED |
+>              DQUOT_USAGE_ENABLED)))
+>                  return -EINVAL;
+> ...
+> If without enable DQUOT_LIMITS_ENABLED dquot_disable() will just return
+> -EINVAL.
+
+Aha, that is the bug! Does attached patch fix your problem?
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
+
+--m5qv73rr3afoouf3
+Content-Type: text/x-patch; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-quota-Properly-disable-quotas-when-add_dquot_ref-fai.patch"
+
+From 2bb758bff7f9c92a25af7156cdeedc1f39201eba Mon Sep 17 00:00:00 2001
+From: Jan Kara <jack@suse.cz>
+Date: Mon, 5 Jun 2023 13:39:28 +0200
+Subject: [PATCH] quota: Properly disable quotas when add_dquot_ref() fails
+
+When add_dquot_ref() fails (usually due to IO error or ENOMEM), we want
+to disable quotas we are trying to enable. However dquot_disable() call
+was passed just the flags we are enabling so in case flags ==
+DQUOT_USAGE_ENABLED dquot_disable() call will just fail with EINVAL
+instead of properly disabling quotas. Fix the problem by always passing
+DQUOT_LIMITS_ENABLED | DQUOT_USAGE_ENABLED to dquot_disable() in this
+case.
+
+Reported-by: Ye Bin <yebin10@huawei.com>
+Reported-by: syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
+Signed-off-by: Jan Kara <jack@suse.cz>
+---
+ fs/quota/dquot.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+index 226eb3cba1fb..e42cf387fa78 100644
+--- a/fs/quota/dquot.c
++++ b/fs/quota/dquot.c
+@@ -2409,7 +2409,8 @@ int dquot_load_quota_sb(struct super_block *sb, int type, int format_id,
+ 
+ 	error = add_dquot_ref(sb, type);
+ 	if (error)
+-		dquot_disable(sb, type, flags);
++		dquot_disable(sb, type,
++			      DQUOT_USAGE_ENABLED | DQUOT_LIMITS_ENABLED);
+ 
+ 	return error;
+ out_fmt:
+-- 
+2.35.3
+
+
+--m5qv73rr3afoouf3--
