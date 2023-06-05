@@ -2,191 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6850722448
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D8272244F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjFELLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S231802AbjFELMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjFELLq (ORCPT
+        with ESMTP id S231341AbjFELMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:11:46 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90C6B8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:11:20 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d44b198baso3338786b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1685963480; x=1688555480;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6ZA9xVvU90GCNIRUDkgV/PBm5ZYz8HGxVKo2ZS+Bcd8=;
-        b=b25Pwf6yLu6Q6JBfAfwR5TQKvn9BVcrrNVTcrUPe4ie4aQob1BX/ZJ5//5Y5zkXJgi
-         JXs8Y22LjOgv2iSJhJDzevCPPPcrPGBDQTqHkwmR61lnMnlE45RdxKOvquZ/Cy7RklN7
-         STfp8FrHMKXgr4mXu0KY1ApzbIwXqabDioUsJspbpaA9syNzacIfFBBfccqyboM2k0X0
-         lS2Al6UH/zLPSuLiOwE9jKZAwVZHi3ANXvcRvrnS/mgXvGQpdc5ryUNZ9Z3/okYOkCQU
-         Hhsj7jF/iX1FJsrpeoQmy18fQXcbCDqEhnddA7wHdaC8y4N5QlOof0a7TdO9f3jyz1Rg
-         0BAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685963480; x=1688555480;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6ZA9xVvU90GCNIRUDkgV/PBm5ZYz8HGxVKo2ZS+Bcd8=;
-        b=eefkPhRM5V6fL3y3RAMyeJNj8jcj+OExU4bdaYLTqXmN2xIa9Y6LsydPy0yLOIi7cm
-         Ti64dGVdjQTX3z47Eh0RRrR4BqaaHjAYfzG6o8Lff3z/wWtbwmZQ51JY54ywF0pqRiOO
-         f7+ihzQt6j2Xw6EVunvnrrCwxqIXsryaAu8E+2zYngB+ZsWikaxJQB6SH8MeBAujK8h8
-         Yl0zyFb5Tes0z8Vv0AYGXiP7S4G8mPHTo3ay9juXOB97Dn2xY92//wi3gv4KBcAmwUNY
-         lJ494zOMiNWgaREjZmzAzLYw5Higc+HKj0qU7CC3ZKOi8JwzUf314udbaxNZetTo9WCT
-         rgMQ==
-X-Gm-Message-State: AC+VfDyUSLE8z8zxe84tIkgE5jGjDnBaxVsEly7Jc6TUpj9RYoIIF3nJ
-        89bGL4yCFRj0V8KR1tVGNqmcfw==
-X-Google-Smtp-Source: ACHHUZ6mXSnZ+lTmPQNBad5AL9+d+d9OVW3za+AXaDp4fePpblzITGZkFv/GSaEXI6ZrppJ/caxbJg==
-X-Received: by 2002:a05:6a00:369b:b0:64d:42b9:6895 with SMTP id dw27-20020a056a00369b00b0064d42b96895mr13464096pfb.5.1685963480222;
-        Mon, 05 Jun 2023 04:11:20 -0700 (PDT)
-Received: from [10.200.9.101] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id n19-20020aa78a53000000b0065017055cb4sm4992656pfa.203.2023.06.05.04.11.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:11:19 -0700 (PDT)
-Message-ID: <39952baf-9bda-5b22-5ba0-1b6b377d238a@bytedance.com>
-Date:   Mon, 5 Jun 2023 19:11:14 +0800
+        Mon, 5 Jun 2023 07:12:38 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3587FF9;
+        Mon,  5 Jun 2023 04:12:32 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1685963542tue2ikmf
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 05 Jun 2023 19:12:20 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: OFQdrTmJ2CTPW1rKDCObcDNnOiZf5G7OS3ydy8gWgcFCDkj+ygtkUgsn400hH
+        XcSUWjIUNzPtaf8xdx7SFAnkqm4qlz8q1TNpP2NF7JMWaqIsoZlribWjxH/w1NEo7SbyC5b
+        F92p0FGK7JG8wnYKGctbxx6aeT4sz7bKph2fDS5AZpiMLMwk24QctEz8nrwFI6Q1E6Pib2U
+        jt5K73G2WlUJGRP5WBbIheVih803jE07C36L5wdUjHC/1cpE/7qTPuGiphDybYWA+244CtI
+        jRzwIlx9YqZfIlDJqF99mh2vl/FSgqnL3nxqsgmq1plH+Gxcjh4nrk1izDcpUc34YW5KdsJ
+        KLxbUW52+5Oc0+lMblXBmrdRMNdM1huR0Axg8p3D0BBu+d+7gxM6YL82yirIg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5716039531870868684
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v3 11/12] selftests/nolibc: add new gettimeofday test cases
+Date:   Mon,  5 Jun 2023 19:12:20 +0800
+Message-Id: <20230605111220.252069-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZHx1OliMqHx9U1Lw@1wt.eu>
+References: <ZHx1OliMqHx9U1Lw@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] maple_tree: add a fast path case in
- mas_wr_slot_store()
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-References: <20230602075353.5917-1-zhangpeng.00@bytedance.com>
- <20230602075353.5917-2-zhangpeng.00@bytedance.com>
- <20230602164134.uw6m7t2pb3zhydkl@revolver>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org
-In-Reply-To: <20230602164134.uw6m7t2pb3zhydkl@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> On Sun, Jun 04, 2023 at 11:24:39AM +0200, Arnd Bergmann wrote:
+> > On Sun, Jun 4, 2023, at 10:29, ??? wrote:
+> > >
+> > > Sorry for missing part of your feedbacks, I will check if -nostdlib 
+> > > stops the linking of libgcc_s or my own separated test script forgot 
+> > > linking the libgcc_s manually.
+> > 
+> > According to the gcc documentation, -nostdlib drops libgcc.a, but
+> > adding -lgcc is the recommended way to bring it back.
+> > 
+> > > And as suggestion from Thomas' reply,
+> > >
+> > >>> Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
+> > >>> ones for the other architectures, or get one from lib/math/div64.c.
+> > >
+> > >>No, these ones come from the compiler via libgcc_s, we must not try to
+> > > reimplement them. And we should do our best to avoid depending on them
+> > > to avoid the error you got above.
+> > >
+> > > So, the explicit conversion is used instead in the patch.
+> > 
+> > I think a cast to a 32-bit type is ideal when converting the
+> > clock_gettime() result into microseconds, since the kernel guarantees
+> > that the timespec value is normalized, with all zeroes in the
+> > upper 34 bits. Going through __aeabi_ldivmod would make the
+> > conversion much slower.
+> > 
 
+Perfectly, this message is really required to be added to the coming
+clock_gettime/time64 patches, I did worry about the (unsigned int)
+conversion may lose the upper bits, thanks Arnd.
 
-在 2023/6/3 00:41, Liam R. Howlett 写道:
-> * Peng Zhang <zhangpeng.00@bytedance.com> [230602 03:54]:
->> When the new range overwrites three ranges and does not touch the
->> boundaries on both sides, the number of entries will not be increased,
->> so we can just update the pivots as a fast path. However, it may
->> introduce potential risks in RCU mode (although it can pass the test),
->> because it updates two pivots. We only enable it in non-RCU mode for now.
+> > For user supplied non-normalized timeval values, it's not obvious
+> > whether we need the full 64-bit division
 > 
-> So what you are saying is that you are expanding one entry to consume
-> portions of the previous and next into a new entry.  We know this is the
-> case because the end of the node is not moving and we are modifying more
-> than one slot (so it must be 2 slots)
+> We don't have to care about these here for the microsecond part,
+> because for decades these were exclusively 32-bit. Also the only
+> one consuming this field would have been settimeofday() and it's
+> already documented as returning EINVAL if tv_usec is not within
+> the expected 0..999999 range.
 > 
-> This scenario is not tested in the testing framework.  We should add
-> testing before we can add this.
-> 
->>
->> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
->> ---
->>   lib/maple_tree.c | 33 +++++++++++++++++++++------------
->>   1 file changed, 21 insertions(+), 12 deletions(-)
->>
->> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->> index cfd9fad308a2..ec82441ca3e8 100644
->> --- a/lib/maple_tree.c
->> +++ b/lib/maple_tree.c
->> @@ -4100,23 +4100,32 @@ static inline bool mas_wr_slot_store(struct ma_wr_state *wr_mas)
->>   {
->>   	struct ma_state *mas = wr_mas->mas;
->>   	unsigned char offset = mas->offset;
->> +	void __rcu **slots = wr_mas->slots;
->>   	bool gap = false;
->>   
->> -	if (wr_mas->offset_end - offset != 1)
->> -		return false;
->> -
->> -	gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
->> -	gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
->> +	gap |= !mt_slot_locked(mas->tree, slots, offset);
->> +	gap |= !mt_slot_locked(mas->tree, slots, offset + 1);
->>   
->> -	if (mas->index == wr_mas->r_min) {
->> -		/* Overwriting the range and over a part of the next range. */
->> -		rcu_assign_pointer(wr_mas->slots[offset], wr_mas->entry);
->> -		wr_mas->pivots[offset] = mas->last;
->> -	} else {
->> -		/* Overwriting a part of the range and over the next range */
->> -		rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
->> +	if (wr_mas->offset_end - offset == 1) {
->> +		if (mas->index == wr_mas->r_min) {
->> +			/* Overwriting the range and a part of the next one */
->> +			rcu_assign_pointer(slots[offset], wr_mas->entry);
->> +			wr_mas->pivots[offset] = mas->last;
->> +		} else {
->> +			/* Overwriting a part of the range and the next one */
->> +			rcu_assign_pointer(slots[offset + 1], wr_mas->entry);
->> +			wr_mas->pivots[offset] = mas->index - 1;
->> +			mas->offset++; /* Keep mas accurate. */
->> +		}
->> +	} else if (!mt_in_rcu(mas->tree)) {
->> +		/* Overwriting three ranges, but don't touch the boundaries */
-> 
-> I find this comment misleading.  You actually touch both boundaries for
-> the entry in this case (start and end).  We are just increasing the
-> space in both directions.  You are also not overwriting two of the three
-> entries or ranges, you are expanding one entry in two directions, so
-> both the previous and next ranges will shrink but they will remain. It's
-> more of a "modify three ranges but don't change the outside limits." The
-> similar statement in the commit message should also be changed.
-Yes, your understanding is correct.
-Sorry my comment is not well written, I mean the left boundary of the
-leftmost range and the right boundary of the rightmost range are not
-touched, I will fix it in v2.
+
+And this one, thanks Willy.
+
+> And when in doubt we should keep in mind that nolibc's purpose is not
+> to become a yet-another full-blown libc alternative but just a small
+> piece of software allowing to produce portable and compact binaries
+> for testing or booting. Being a bit stricter than other libcs for the
+> sake of code compactness is better here. Originally for example it was
+> necessary to always pass the 3 arguments to open(). Over time we managed
+> to make simple code compile with both glibc and nolibc, but when it
+> comes at the cost of adding size and burden for the developers, such
+> as forcing them to add libgcc, I prefer that we slightly limit the
+> domain of application instead.
+
+This explains why it is 'no' libc ;-)
+
+Best regards,
+Zhangjin
 
 > 
-> Right now, I don't see this code executed by the test program.
-> Inserting a BUG_ON() here and it will not be hit.
-Yes, the current test program does not run to this branch, I will add
-the corresponding test cases in v2.
-
-> 
->> +		gap |= !mt_slot_locked(mas->tree, slots, offset + 2);
->> +		rcu_assign_pointer(slots[offset + 1], wr_mas->entry);
->>   		wr_mas->pivots[offset] = mas->index - 1;
->> +		wr_mas->pivots[offset + 1] = mas->last;
->>   		mas->offset++; /* Keep mas accurate. */
->> +	} else {
-> 
-> We are hitting this else in check_locky at maple.c:35780 only, I think.
-> You've identified a lack of testing here by the looks of it.
-> 
-> The VMA code does not do this today, and I don't know of any other users
-> which expand/contract entries like this.  Do you think this will be
-> common enough for the optimisation vs a node store?
-I also thought about this problem, but I still regard it as an
-optimization of the slot store. Although it is useless for VMA
-now, I don't know if it will be used in the future. I think that
-if we enter this function, we will most likely enter the first if
-branch now, which will not cause additional overhead and have no
-negative impact, so try to add this case.
-
-> 
->> +		return false;
->>   	}
->>   
->>   	trace_ma_write(__func__, mas, 0, wr_mas->entry);
->> -- 
->> 2.20.1
->>
->>
+> Thanks!
+> Willy
