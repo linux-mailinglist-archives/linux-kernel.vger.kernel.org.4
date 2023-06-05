@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F2F722A69
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8AD722A5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234630AbjFEPI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S234321AbjFEPIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbjFEPIa (ORCPT
+        with ESMTP id S233869AbjFEPI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:08:30 -0400
+        Mon, 5 Jun 2023 11:08:29 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8798FF2;
-        Mon,  5 Jun 2023 08:08:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBE8F3;
+        Mon,  5 Jun 2023 08:08:28 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 15:08:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685977708;
+        s=2020; t=1685977707;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RoWJhGlkrPutICGc7rmHeduSzyk5VXIUCCAZUGIdmZA=;
-        b=yrqU0qkFFGzc4V6akX08luOHlQqbf/KLaqDtUCSA27p+ZZsRXsjedaFxvz+4kNQnzxdEd9
-        yJ/0acy+CIvXIjwnNMi9mAZdU5bN5fB7ZqPj9Bs0518QOIl5ycJ9m/lNComD1SPM2Bms76
-        F2OHZrR7K+PsihaeP1jWkSMYuox1JtbkEP638Il5Lm4z6TvEOVeRo6GT/kdWa0mqCciH/W
-        eXnTGc3XfxIVBJmSqPZrd08v8+DRQeVN9+k7yvAUFXoG4Mc8Cu+XJTphJ6VhA5sTYlrl53
-        lvJvl8OOjkjTbVLL58sxeNORL+6282WO1XzGmrR1Soh47OEkICvu6NRDEDCJJQ==
+        bh=lPvniRN85F5LDeg7caFtgDnbmQJLdoJbuifWN819z0o=;
+        b=Fnv+cKQBVWfjD5V8wfSeBcaprb7QMhQPldfVYFQAiol5nkmsPrO/ESEcnXgHOv3EdpqFSi
+        3yCRiVUCAJfx5OM+oSju8KDZV6i2V3bw+SX2YM1dyUBDOxprf79EiNTgYp6GSm78YtxHq+
+        cR1oyTYG+ZYBgYsugAe/bEh2fOtg3sDLndctlfrWDN/ciEa3d5mSEJCNtR6JyE9XRZN2UN
+        Gom+opjfIqHT056D4plkAKQDCfFgMxtORPelsAPBnCz/VN8+v5Hl3VwDmM8hMV//vQBZXx
+        sYI93bvh6sVzIdZSHFuzqKP493CXtErMpgOmGLJ/5dqETfcDIYGjgsc9rPNwwA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685977708;
+        s=2020e; t=1685977707;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RoWJhGlkrPutICGc7rmHeduSzyk5VXIUCCAZUGIdmZA=;
-        b=B/QUh7fArb2UmWGkSRWf/MhK1jd8fQpPDmOeNe1kLHyHUBefnTU4l96crT16VgrhHBZjki
-        0f6NzRxpzYqBTiAQ==
+        bh=lPvniRN85F5LDeg7caFtgDnbmQJLdoJbuifWN819z0o=;
+        b=TSJNxF9AN0zM90yvtyNtVDuI1G13g2pKApPk6rhO+YE2UTAmueVEDV2xC6+QjU788GyVI8
+        bbKHwI3pnbvqUjCA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Document nanosleep() details
+Subject: [tip: timers/core] posix-timers: Comment SIGEV_THREAD_ID properly
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.567072835@linutronix.de>
-References: <20230425183313.567072835@linutronix.de>
+In-Reply-To: <20230425183313.672220780@linutronix.de>
+References: <20230425183313.672220780@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168597770779.404.11242027713171629061.tip-bot2@tip-bot2>
+Message-ID: <168597770713.404.3226708313346173978.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,51 +67,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     13da885685d6ae339f2924d3c8a1f4fe16a904cc
-Gitweb:        https://git.kernel.org/tip/13da885685d6ae339f2924d3c8a1f4fe16a904cc
+Commit-ID:     b73b3beb88c26d3d6c644920fa83460ec5f6a559
+Gitweb:        https://git.kernel.org/tip/b73b3beb88c26d3d6c644920fa83460ec5f6a559
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:17 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:20 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Jun 2023 17:03:38 +02:00
 
-posix-timers: Document nanosleep() details
+posix-timers: Comment SIGEV_THREAD_ID properly
 
-The descriptions for common_nsleep() is wrong and common_nsleep_timens()
-lacks any form of comment.
+Replace the word salad.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.567072835@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.672220780@linutronix.de
 
 ---
- kernel/time/posix-timers.c |  9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ kernel/time/posix-timers.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 9d99d4b..9ce13c9 100644
+index 5cfd09c..fb92036 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -1370,7 +1370,7 @@ SYSCALL_DEFINE2(clock_getres_time32, clockid_t, which_clock,
+@@ -53,12 +53,9 @@ static const struct k_clock * const posix_clocks[];
+ static const struct k_clock *clockid_to_kclock(const clockid_t id);
+ static const struct k_clock clock_realtime, clock_monotonic;
+ 
+-/*
+- * we assume that the new SIGEV_THREAD_ID shares no bits with the other
+- * SIGEV values.  Here we put out an error if this assumption fails.
+- */
++/* SIGEV_THREAD_ID cannot share a bit with the other SIGEV values. */
+ #if SIGEV_THREAD_ID != (SIGEV_THREAD_ID & \
+-                       ~(SIGEV_SIGNAL | SIGEV_NONE | SIGEV_THREAD))
++			~(SIGEV_SIGNAL | SIGEV_NONE | SIGEV_THREAD))
+ #error "SIGEV_THREAD_ID must not share bit with other SIGEV values!"
  #endif
- 
- /*
-- * nanosleep for monotonic and realtime clocks
-+ * sys_clock_nanosleep() for CLOCK_REALTIME and CLOCK_TAI
-  */
- static int common_nsleep(const clockid_t which_clock, int flags,
- 			 const struct timespec64 *rqtp)
-@@ -1382,8 +1382,13 @@ static int common_nsleep(const clockid_t which_clock, int flags,
- 				 which_clock);
- }
- 
-+/*
-+ * sys_clock_nanosleep() for CLOCK_MONOTONIC and CLOCK_BOOTTIME
-+ *
-+ * Absolute nanosleeps for these clocks are time-namespace adjusted.
-+ */
- static int common_nsleep_timens(const clockid_t which_clock, int flags,
--			 const struct timespec64 *rqtp)
-+				const struct timespec64 *rqtp)
- {
- 	ktime_t texp = timespec64_to_ktime(*rqtp);
  
