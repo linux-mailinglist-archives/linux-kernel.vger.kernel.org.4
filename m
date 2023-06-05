@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5603722D50
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E41E722D53
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbjFERH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S235363AbjFERIQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 13:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbjFERHT (ORCPT
+        with ESMTP id S235358AbjFERIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:07:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38D812D;
-        Mon,  5 Jun 2023 10:07:12 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685984830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zWSvQuDlI5XP7F5YAdOwhbRwYR+BYLizHf+PTJ4QfcE=;
-        b=IuUo3DZk+lmfLBy2KqpWXOMFmdL7STVaifG6mz7RZxt1vMQdEFZldiH5zBiY4Qwi37h+Vv
-        1j7qhBIeGpQMyjAJ3cdG+6LKiEWKBBz32Zy7t3THGkPmruLMf2u5rrukaCR1A0DUApONdL
-        DswdosBkhJ4N6AS3Ur4r22ylO7xBJ4Z9vDPup7mKpcKJ+H/CnkzdBjgV57qKU05hdzg13D
-        S2Wjuq5codIGdkTM6RtDgktD6cMeO2+VIuY69svfe8RiAeZ7+z+X2o5d0Tgj0Ld/IVT/tg
-        IvriXItQzeANliE9fofyQYTg1HOxfXNunG5UL5zjlAMhsBjh+Cy20/4ynVm/3w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685984830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zWSvQuDlI5XP7F5YAdOwhbRwYR+BYLizHf+PTJ4QfcE=;
-        b=jkQEdQpSQCffjllYTgnVXEW+2YdGttz1iezI+0I4t8wrFAuMq0fMjBCQK9Deud86rzfHq4
-        xr5J+kYvIrsd91Cw==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 01/33] x86/traps: let common_interrupt() handle
- IRQ_MOVE_CLEANUP_VECTOR
-In-Reply-To: <87leh08e1h.ffs@tglx>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-2-xin3.li@intel.com> <87leh08e1h.ffs@tglx>
-Date:   Mon, 05 Jun 2023 19:07:10 +0200
-Message-ID: <87edmp6doh.ffs@tglx>
+        Mon, 5 Jun 2023 13:08:06 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9359118;
+        Mon,  5 Jun 2023 10:07:57 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-977fae250easo12103366b.1;
+        Mon, 05 Jun 2023 10:07:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685984876; x=1688576876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HZGakePAKwplYG/llAo4FkXZmbuykUNqGGuE67aJlhQ=;
+        b=KTpptja4t1+u8XTBddwp9PinJ+O4rVQoO5vWUOVOR1abYPyI4G7uHQ0SVxLKFXB+E2
+         kRoDK9UemuyRf5MMhvlSTeJ/prK51BR7IbaDWmbErgXSl0BKGz1lLqgAlcwIO1hHcVAd
+         gZuKQO+XTGt0M4fOA8WkCgdJhHB9wWX/gms4XyB2NgzPSgwC/fuo02GQOuZ851BPOLwQ
+         ZI2CmPBHkAaCr9A4e7/s8zoSc+Z7ukn0GNSleM6UsuBCqMWYM2m+sZ9qPWzzlTGn/18s
+         WuQtKbhwgWYuUpdCBVvTviTk3eFlwfRmD46Ob/7WHw1iY4sfuLC9le3IZfg3uNiBxuRI
+         VzCg==
+X-Gm-Message-State: AC+VfDx6AQ4dnDDFs5EIfkdCpaU1+GvPDOZiLsoUkFHFhzO9Bts76CqW
+        FhtLK3/BN4cWJXsOiL2VXwYbYg6tsZw3C8i+IxA=
+X-Google-Smtp-Source: ACHHUZ4y6QX2tq8E27by6YkCxR3PmJMiktMABs4n4JVAUpCSd+lhY388IXN+mErboDW/wtCtUakJxEJ57qmSY1TQ/Zc=
+X-Received: by 2002:a17:906:778a:b0:977:ead3:c91 with SMTP id
+ s10-20020a170906778a00b00977ead30c91mr1215071ejm.1.1685984875965; Mon, 05 Jun
+ 2023 10:07:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20230516201415.556858-1-arnd@kernel.org> <780579b5-3900-da14-3acd-a4d24e02e4ba@intel.com>
+In-Reply-To: <780579b5-3900-da14-3acd-a4d24e02e4ba@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Jun 2023 19:07:44 +0200
+Message-ID: <CAJZ5v0hPLnFmWiv2DHh=U0FHkeu0A8yTwz7Mn8=jfenrP6wFGA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] acpi: nfit: add declaration in a local header
+To:     Dave Jiang <dave.jiang@intel.com>, Arnd Bergmann <arnd@kernel.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <lenb@kernel.org>,
+        nvdimm@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,22 +63,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03 2023 at 22:51, Thomas Gleixner wrote:
-> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
->> IRQ_MOVE_CLEANUP_VECTOR is the only one of the system IRQ vectors that
->> is *below* FIRST_SYSTEM_VECTOR. It is a slow path, so just push it
->> into common_interrupt() just before the spurious interrupt handling.
+On Mon, May 22, 2023 at 5:22 PM Dave Jiang <dave.jiang@intel.com> wrote:
 >
-> This is a complete NOOP on not FRED enabled systems as the IDT entry is
-> still separate. So this change makes no sense outside of the FRED
-> universe. Can we pretty please make this consistent?
+>
+>
+> On 5/16/23 1:14 PM, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The nfit_intel_shutdown_status() function has a __weak defintion
+> > in nfit.c and an override in acpi_nfit_test.c for testing
+> > purposes. This works without an extern declaration, but causes
+> > a W=1 build warning:
+> >
+> > drivers/acpi/nfit/core.c:1717:13: error: no previous prototype for 'nfit_intel_shutdown_status' [-Werror=missing-prototypes]
+> >
+> > Add a declaration in a header that gets included from both
+> > sides to shut up the warning and ensure that the prototypes
+> > actually match.
+> >
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
-The right thing to make this consistent is to get rid of this vector
-completely.
+Applied as 6.5 material, thanks!
 
-There is zero reason for this to be an IPI. This can be delegated to a
-worker or whatever delayed mechanism.
-
-Thanks,
-
-        tglx
+> > ---
+> >   drivers/acpi/nfit/nfit.h | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/acpi/nfit/nfit.h b/drivers/acpi/nfit/nfit.h
+> > index 6023ad61831a..573bc0de2990 100644
+> > --- a/drivers/acpi/nfit/nfit.h
+> > +++ b/drivers/acpi/nfit/nfit.h
+> > @@ -347,4 +347,6 @@ int acpi_nfit_ctl(struct nvdimm_bus_descriptor *nd_desc, struct nvdimm *nvdimm,
+> >   void acpi_nfit_desc_init(struct acpi_nfit_desc *acpi_desc, struct device *dev);
+> >   bool intel_fwa_supported(struct nvdimm_bus *nvdimm_bus);
+> >   extern struct device_attribute dev_attr_firmware_activate_noidle;
+> > +void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem);
+> > +
+> >   #endif /* __NFIT_H__ */
