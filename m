@@ -2,246 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C6B722046
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B6B722049
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjFEH4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S231872AbjFEH4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjFEHzp (ORCPT
+        with ESMTP id S231540AbjFEH4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:55:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9A8294;
-        Mon,  5 Jun 2023 00:55:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11B16D75;
-        Mon,  5 Jun 2023 00:56:18 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.24.244])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B0E43F793;
-        Mon,  5 Jun 2023 00:55:30 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 08:55:27 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V11 02/10] arm64/perf: Add BRBE registers and fields
-Message-ID: <ZH2U79ZP7HXNJctA@FVFF77S0Q05N>
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-3-anshuman.khandual@arm.com>
+        Mon, 5 Jun 2023 03:56:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E976D3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:55:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5AC4421B2E;
+        Mon,  5 Jun 2023 07:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685951758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VXaHPB8BNlakUIWezyFQAa9Z7HVGOiJDan/Axrkf5zw=;
+        b=JRpD4ctcwVaV1ctLM7gUmzd8wphoKwPD89Xjc7W0ASoydOMvjV+rP2Ny+ndcvJhV8ChVFD
+        Nakek+HhLzEPUDA7Va7N5PLilODa1xEa7M3RuIr4LuL9a+un+g69hcac86Hr3zIICnP25i
+        BUEvti0BBDtYIAVvQPAhWpBto9p8lp4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 40F1E139C8;
+        Mon,  5 Jun 2023 07:55:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BdQ1Dw6VfWRceQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 05 Jun 2023 07:55:58 +0000
+Date:   Mon, 5 Jun 2023 09:55:57 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 2/3] vmstat: skip periodic vmstat update for nohz full
+ CPUs
+Message-ID: <ZH2VDaF9uODTqAfV@dhcp22.suse.cz>
+References: <20230602185757.110910188@redhat.com>
+ <20230602190115.521067386@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230531040428.501523-3-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230602190115.521067386@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ANshuman,
-
-This looks good to me, with some minor nits on enum value naming and field
-formatting.
-
-On Wed, May 31, 2023 at 09:34:20AM +0530, Anshuman Khandual wrote:
-> This adds BRBE related register definitions and various other related field
-> macros there in. These will be used subsequently in a BRBE driver which is
-> being added later on.
+On Fri 02-06-23 15:57:59, Marcelo Tosatti wrote:
+> The interruption caused by vmstat_update is undesirable 
+> for certain aplications:
 > 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Tested-by: James Clark <james.clark@arm.com>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
+> oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
+> oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
+> kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
+> 
+> The example above shows an additional 7us for the
+> 
+>        	oslat -> kworker -> oslat
+> 
+> switches. In the case of a virtualized CPU, and the vmstat_update  
+> interruption in the host (of a qemu-kvm vcpu), the latency penalty
+> observed in the guest is higher than 50us, violating the acceptable
+> latency threshold.
+
+I personally find the above problem description insufficient. I have
+asked several times and only got piece by piece information each time.
+Maybe there is a reason to be secretive but it would be great to get at
+least some basic expectations described  and what they are based on.
+
+E.g. workloads are running on isolated cpus with nohz full mode to
+shield off any kernel interruption. Yet there are operations that update
+counters (like mlock, but not mlock alone) that update per cpu counters
+that will eventually get flushed and that will cause some interference.
+Now the host/guest transition and intereference. How that happens when
+the guest is running on an isolated and dedicated cpu?
+
+> Skip periodic updates for nohz full CPUs. Any callers who
+> need precise values should use a snapshot of the per-CPU
+> counters, or use the global counters with measures to 
+> handle errors up to thresholds (see calculate_normal_threshold).
+
+I would rephrase this paragraph. 
+In kernel users of vmstat counters either require the precise value and
+they are using zone_page_state_snapshot interface or they can live with
+an imprecision as the regular flushing can happen at arbitrary time and
+cumulative error can grow (see calculate_normal_threshold).
+
+From that POV the regular flushing can be postponed for CPUs that have
+been isolated from the kernel interference withtout critical
+infrastructure ever noticing. Skip regular flushing from vmstat_shepherd
+for all isolated CPUs to avoid interference with the isolated workload.
+
+> Suggested by Michal Hocko.
+> 
+> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+> 
 > ---
->  arch/arm64/include/asm/sysreg.h | 103 +++++++++++++++++++++
->  arch/arm64/tools/sysreg         | 159 ++++++++++++++++++++++++++++++++
->  2 files changed, 262 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-> index e72d9aaab6b1..12419c55d3b7 100644
-> --- a/arch/arm64/include/asm/sysreg.h
-> +++ b/arch/arm64/include/asm/sysreg.h
-> @@ -165,6 +165,109 @@
->  #define SYS_DBGDTRTX_EL0		sys_reg(2, 3, 0, 5, 0)
->  #define SYS_DBGVCR32_EL2		sys_reg(2, 4, 0, 7, 0)
+> v2: use cpu_is_isolated		(Michal Hocko)
+> 
+> Index: linux-vmstat-remote/mm/vmstat.c
+> ===================================================================
+> --- linux-vmstat-remote.orig/mm/vmstat.c
+> +++ linux-vmstat-remote/mm/vmstat.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/mm_inline.h>
+>  #include <linux/page_ext.h>
+>  #include <linux/page_owner.h>
+> +#include <linux/sched/isolation.h>
 >  
-> +#define __SYS_BRBINFO(n)		sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 0))
-> +#define __SYS_BRBSRC(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 1))
-> +#define __SYS_BRBTGT(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 2))
-
-These look correct to me per ARM DDI 0487J.a
-
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index c9a0d1fa3209..44745f42262f 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -947,6 +947,165 @@ UnsignedEnum	3:0	BT
->  EndEnum
->  EndSysreg
+>  #include "internal.h"
 >  
+> @@ -2022,6 +2023,16 @@ static void vmstat_shepherd(struct work_
+>  	for_each_online_cpu(cpu) {
+>  		struct delayed_work *dw = &per_cpu(vmstat_work, cpu);
+>  
+> +		/*
+> +		 * Skip periodic updates for isolated CPUs.
+> +		 * Any callers who need precise values should use
+> +		 * a snapshot of the per-CPU counters, or use the global
+> +		 * counters with measures to handle errors up to
+> +		 * thresholds (see calculate_normal_threshold).
+> +		 */
+> +		if (cpu_is_isolated(cpu))
+> +			continue;
 > +
-> +SysregFields BRBINFx_EL1
-> +Res0	63:47
-> +Field	46	CCU
-> +Field	45:32	CC
-> +Res0	31:18
-> +Field	17	LASTFAILED
-> +Field	16	T
-> +Res0	15:14
-> +Enum	13:8		TYPE
-> +	0b000000	UNCOND_DIR
-> +	0b000001	INDIR
-> +	0b000010	DIR_LINK
-> +	0b000011	INDIR_LINK
+>  		if (!delayed_work_pending(dw) && need_update(cpu))
+>  			queue_delayed_work_on(cpu, mm_percpu_wq, dw, 0);
+>  
+> 
 
-For clarity, I'd prefer that we use "DIRECT" and "INDIRECT" in full for each of
-these, i.e.
-
-	0b000000        UNCOND_DIRECT
-	0b000001	INDIRECT
-	0b000010	DIRECT_LINK
-	0b000011	INDIRECT_LINK
-
-> +	0b000101	RET_SUB
-> +	0b000111	RET_EXCPT
-
-Similarly, I'm not keen on the suffixes here.
-
-I think these would be clearer as "RET" and "ERET", as those are short and
-unambiguous, and I think the alternative of spelling out "RET_SUBROUTINE" and
-"RET_EXCEPTION" is overly verbose.
-
-> +	0b001000	COND_DIR
-
-As with above, I'd prefer "COND_DIRECT" here.
-
-> +	0b100001	DEBUG_HALT
-> +	0b100010	CALL
-> +	0b100011	TRAP
-> +	0b100100	SERROR
-> +	0b100110	INST_DEBUG
-
-We generally use 'insn' rather than 'inst', so I'd prefer s/INST/INSN/ here.
-
-> +	0b100111	DATA_DEBUG
-> +	0b101010	ALGN_FAULT
-
-s/ALGN/ALIGN/
-
-> +	0b101011	INST_FAULT
-
-As above, I'd prefer "INSN_FAULT" here, though I'm confused that the
-architecture doesn't use "abort" naming for this.
-
-> +	0b101100	DATA_FAULT
-> +	0b101110	IRQ
-> +	0b101111	FIQ
-> +	0b111001	DEBUG_EXIT
-> +EndEnum
-
-[...]
-
-+Sysreg	BRBCR_EL1	2	1	9	0	0
-> +Res0	63:24
-> +Field	23 	EXCEPTION
-> +Field	22 	ERTN
-> +Res0	21:9
-> +Field	8 	FZP
-> +Res0	7
-> +Enum	6:5	TS
-> +	0b01	VIRTUAL
-> +	0b10	GST_PHYSICAL
-
-s/GST/GUEST/
-
-> +	0b11	PHYSICAL
-> +EndEnum
-> +Field	4	MPRED
-> +Field	3	CC
-> +Res0	2
-> +Field	1	E1BRE
-> +Field	0	E0BRE
-> +EndSysreg
-
-[...]
-
-> +Sysreg	BRBINFINJ_EL1	2	1	9	1	0
-> +Res0	63:47
-> +Field	46	CCU
-> +Field	45:32	CC
-> +Res0	31:18
-> +Field	17	LASTFAILED
-> +Field	16	T
-> +Res0	15:14
-> +Enum	13:8		TYPE
-> +	0b000000	UNCOND_DIR
-> +	0b000001	INDIR
-> +	0b000010	DIR_LINK
-> +	0b000011	INDIR_LINK
-> +	0b000100	RET_SUB
-> +	0b000100	RET_SUB
-> +	0b000111	RET_EXCPT
-> +	0b001000	COND_DIR
-> +	0b100001	DEBUG_HALT
-> +	0b100010	CALL
-> +	0b100011	TRAP
-> +	0b100100	SERROR
-> +	0b100110	INST_DEBUG
-> +	0b100111	DATA_DEBUG
-> +	0b101010	ALGN_FAULT
-> +	0b101011	INST_FAULT
-> +	0b101100	DATA_FAULT
-> +	0b101110	IRQ
-> +	0b101111	FIQ
-> +	0b111001	DEBUG_EXIT
-> +EndEnum
-
-Same comments as for BRBINFx_EL1.TYPE
-
-> +Enum	7:0		NUMREC
-> +	0b1000		8
-> +	0b10000		16
-> +	0b100000	32
-> +	0b1000000	64
-
-Could we please pad these to the same width, i.e. have
-
-	0b0001000	8
-	0b0010000	16
-	0b0100000	32
-	0b1000000	64
-
-That way it's much easier to see how these compare to one another, and it
-matches the usual style.
-
-Otherwise, I see the ARM ARM lists these in hex, and using that would also be
-fine, e.g.
-
-	0x08		8
-	0x10		16
-	0x20		32
-	0x40		64
-
-> +EndEnum
-> +EndSysreg
-
-Thanks,
-Mark.
+-- 
+Michal Hocko
+SUSE Labs
