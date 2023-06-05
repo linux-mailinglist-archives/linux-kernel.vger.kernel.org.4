@@ -2,321 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C8D721C14
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 04:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77418721C1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 04:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbjFECnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 22:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S232651AbjFECqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 22:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFECnS (ORCPT
+        with ESMTP id S229449AbjFECqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 22:43:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D2B6BC;
-        Sun,  4 Jun 2023 19:43:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 746CBD75;
-        Sun,  4 Jun 2023 19:44:01 -0700 (PDT)
-Received: from [10.162.41.6] (a077893.blr.arm.com [10.162.41.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 44CA63F663;
-        Sun,  4 Jun 2023 19:43:10 -0700 (PDT)
-Message-ID: <58628cba-7ec4-b2b3-b993-14c2af1a67cb@arm.com>
-Date:   Mon, 5 Jun 2023 08:13:08 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Sun, 4 Jun 2023 22:46:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED178BC;
+        Sun,  4 Jun 2023 19:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88CC960C99;
+        Mon,  5 Jun 2023 02:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE32C433EF;
+        Mon,  5 Jun 2023 02:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685933189;
+        bh=ilc4aqBxknc3uTmZk+yPxYdn9Yrp8wkTJa1vkmGXir8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NIR8lP3VuY2FebNisuWu2/TxliZ5uR6mV7mlXQhf8nJ2R770YM//8BJ1P3YrLV2cT
+         pOm37hVU1ajzSoLvzMq2bBd6RbQdblBLMCUqsie3qcXbn+HSokrsxqs1L7PlTTWc2L
+         qz9aj2gDywZoY1Z48FL5MPzfDEFSlWin3g3GTk4Ila7Hc1+cMiOl56SOAciK2DsLe1
+         u6rW2/DR+Pqi6yjejDZQnnUNvKd//j+1xrJOJ/FubaaurJR1g6VdKqIAQntF9Y+cJv
+         Ec9yApinSnbBkXdjkCLh4dfYIYG0dyfnlnsqanEnTvlGLVkQsGyGVbIB7RCSMYiXTn
+         kjhKPrv6yYlug==
+Date:   Sun, 4 Jun 2023 19:46:23 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com, elliott@hpe.com, gmazyland@gmail.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, tglx@linutronix.de,
+        bp@alien8.de, mingo@kernel.org, x86@kernel.org,
+        herbert@gondor.apana.org.au, ardb@kernel.org,
+        dan.j.williams@intel.com, bernie.keany@intel.com,
+        charishma1.gairuboyina@intel.com,
+        lalithambika.krishnakumar@intel.com, nhuck@google.com,
+        "David S. Miller" <davem@davemloft.net>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-6-anshuman.khandual@arm.com>
- <CAM9d7cioDUxzNos5b3ANkG-BkJUcROSGCG0gpLzSXnc-v6o9jw@mail.gmail.com>
-Content-Language: en-US
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAM9d7cioDUxzNos5b3ANkG-BkJUcROSGCG0gpLzSXnc-v6o9jw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v8 10/12] crypto: x86/aesni - Use the proper data type in
+ struct aesni_xts_ctx
+Message-ID: <20230605024623.GA4653@quark.localdomain>
+References: <20230524165717.14062-1-chang.seok.bae@intel.com>
+ <20230603152227.12335-1-chang.seok.bae@intel.com>
+ <20230603152227.12335-11-chang.seok.bae@intel.com>
+ <20230604153434.GA1212@quark.localdomain>
+ <0925dd9e-3588-38da-8dfb-0ac2ff568655@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0925dd9e-3588-38da-8dfb-0ac2ff568655@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Namhyung,
-
-On 6/2/23 08:03, Namhyung Kim wrote:
-> On Tue, May 30, 2023 at 9:27 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->> This enables support for branch stack sampling event in ARMV8 PMU, checking
->> has_branch_stack() on the event inside 'struct arm_pmu' callbacks. Although
->> these branch stack helpers armv8pmu_branch_XXXXX() are just dummy functions
->> for now. While here, this also defines arm_pmu's sched_task() callback with
->> armv8pmu_sched_task(), which resets the branch record buffer on a sched_in.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Tested-by: James Clark <james.clark@arm.com>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  arch/arm64/include/asm/perf_event.h | 33 +++++++++++++
->>  drivers/perf/arm_pmuv3.c            | 76 ++++++++++++++++++++---------
->>  2 files changed, 86 insertions(+), 23 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm/perf_event.h
->> index eb7071c9eb34..7548813783ba 100644
->> --- a/arch/arm64/include/asm/perf_event.h
->> +++ b/arch/arm64/include/asm/perf_event.h
->> @@ -24,4 +24,37 @@ extern unsigned long perf_misc_flags(struct pt_regs *regs);
->>         (regs)->pstate = PSR_MODE_EL1h; \
->>  }
->>
->> +struct pmu_hw_events;
->> +struct arm_pmu;
->> +struct perf_event;
->> +
->> +#ifdef CONFIG_PERF_EVENTS
->> +static inline bool has_branch_stack(struct perf_event *event);
->> +
->> +static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->> +{
->> +       WARN_ON_ONCE(!has_branch_stack(event));
->> +}
->> +
->> +static inline bool armv8pmu_branch_valid(struct perf_event *event)
->> +{
->> +       WARN_ON_ONCE(!has_branch_stack(event));
->> +       return false;
->> +}
->> +
->> +static inline void armv8pmu_branch_enable(struct perf_event *event)
->> +{
->> +       WARN_ON_ONCE(!has_branch_stack(event));
->> +}
->> +
->> +static inline void armv8pmu_branch_disable(struct perf_event *event)
->> +{
->> +       WARN_ON_ONCE(!has_branch_stack(event));
->> +}
->> +
->> +static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
->> +static inline void armv8pmu_branch_reset(void) { }
->> +static inline int armv8pmu_private_alloc(struct arm_pmu *arm_pmu) { return 0; }
->> +static inline void armv8pmu_private_free(struct arm_pmu *arm_pmu) { }
->> +#endif
->>  #endif
->> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
->> index c98e4039386d..86d803ff1ae3 100644
->> --- a/drivers/perf/arm_pmuv3.c
->> +++ b/drivers/perf/arm_pmuv3.c
->> @@ -705,38 +705,21 @@ static void armv8pmu_enable_event(struct perf_event *event)
->>          * Enable counter and interrupt, and set the counter to count
->>          * the event that we're interested in.
->>          */
->> -
->> -       /*
->> -        * Disable counter
->> -        */
->>         armv8pmu_disable_event_counter(event);
->> -
->> -       /*
->> -        * Set event.
->> -        */
->>         armv8pmu_write_event_type(event);
->> -
->> -       /*
->> -        * Enable interrupt for this counter
->> -        */
->>         armv8pmu_enable_event_irq(event);
->> -
->> -       /*
->> -        * Enable counter
->> -        */
->>         armv8pmu_enable_event_counter(event);
->> +
->> +       if (has_branch_stack(event))
->> +               armv8pmu_branch_enable(event);
->>  }
->>
->>  static void armv8pmu_disable_event(struct perf_event *event)
->>  {
->> -       /*
->> -        * Disable counter
->> -        */
->> -       armv8pmu_disable_event_counter(event);
->> +       if (has_branch_stack(event))
->> +               armv8pmu_branch_disable(event);
->>
->> -       /*
->> -        * Disable interrupt for this counter
->> -        */
->> +       armv8pmu_disable_event_counter(event);
->>         armv8pmu_disable_event_irq(event);
->>  }
->>
->> @@ -814,6 +797,11 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
->>                 if (!armpmu_event_set_period(event))
->>                         continue;
->>
->> +               if (has_branch_stack(event) && !WARN_ON(!cpuc->branches)) {
->> +                       armv8pmu_branch_read(cpuc, event);
->> +                       perf_sample_save_brstack(&data, event, &cpuc->branches->branch_stack);
->> +               }
->> +
->>                 /*
->>                  * Perf event overflow will queue the processing of the event as
->>                  * an irq_work which will be taken care of in the handling of
->> @@ -912,6 +900,14 @@ static int armv8pmu_user_event_idx(struct perf_event *event)
->>         return event->hw.idx;
->>  }
->>
->> +static void armv8pmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
->> +{
->> +       struct arm_pmu *armpmu = to_arm_pmu(pmu_ctx->pmu);
->> +
->> +       if (sched_in && arm_pmu_branch_stack_supported(armpmu))
->> +               armv8pmu_branch_reset();
->> +}
->> +
->>  /*
->>   * Add an event filter to a given event.
->>   */
->> @@ -982,6 +978,9 @@ static void armv8pmu_reset(void *info)
->>                 pmcr |= ARMV8_PMU_PMCR_LP;
->>
->>         armv8pmu_pmcr_write(pmcr);
->> +
->> +       if (arm_pmu_branch_stack_supported(cpu_pmu))
->> +               armv8pmu_branch_reset();
->>  }
->>
->>  static int __armv8_pmuv3_map_event_id(struct arm_pmu *armpmu,
->> @@ -1019,6 +1018,9 @@ static int __armv8_pmuv3_map_event(struct perf_event *event,
->>
->>         hw_event_id = __armv8_pmuv3_map_event_id(armpmu, event);
->>
->> +       if (has_branch_stack(event) && !armv8pmu_branch_valid(event))
->> +               return -EOPNOTSUPP;
->> +
->>         /*
->>          * CHAIN events only work when paired with an adjacent counter, and it
->>          * never makes sense for a user to open one in isolation, as they'll be
->> @@ -1135,6 +1137,21 @@ static void __armv8pmu_probe_pmu(void *info)
->>                 cpu_pmu->reg_pmmir = read_pmmir();
->>         else
->>                 cpu_pmu->reg_pmmir = 0;
->> +       armv8pmu_branch_probe(cpu_pmu);
->> +}
->> +
->> +static int branch_records_alloc(struct arm_pmu *armpmu)
->> +{
->> +       struct pmu_hw_events *events;
->> +       int cpu;
->> +
->> +       for_each_possible_cpu(cpu) {
->> +               events = per_cpu_ptr(armpmu->hw_events, cpu);
->> +               events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
->> +               if (!events->branches)
->> +                       return -ENOMEM;
->> +       }
->> +       return 0;
->>  }
->>
->>  static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->> @@ -1145,12 +1162,24 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>         };
->>         int ret;
->>
->> +       ret = armv8pmu_private_alloc(cpu_pmu);
->> +       if (ret)
->> +               return ret;
-> Wouldn't it be better to move it under the if statement below
-> if it's only needed for branch stack?
-
-armv8pmu_private_alloc() allocates arm_pmu's private structure which stores
-the BRBE HW attributes during armv8pmu_branch_probe(), called from this SMP
-callback __armv8pmu_probe_pmu(). Hence without the structure being allocated
-and assigned, following smp_call_function_any() cannot execute successfully.
-
-armv8pmu_private_alloc()
-	{
-		......
-		Allocates arm_pmu->private as single 'struct brbe_hw_attr'
-		Allocates arm_pmu->pmu.task_ctx_cache
-		......
-	}
-
-__armv8pmu_probe_pmu()
-	armv8pmu_branch_probe()
-		brbe_attributes_probe()
-		{
-			......
-			brbe_attr->brbe_version = brbe;
-			brbe_attr->brbe_format = brbe_get_format(brbidr);
-        		brbe_attr->brbe_cc = brbe_get_cc_bits(brbidr);
-        		brbe_attr->brbe_nr = brbe_get_numrec(brbidr);
-			......
-		}
-
-armv8pmu_private_alloc() cannot be moved inside armv8pmu_branch_probe(),
-because there cannot be any allocation while being in a SMP call context.
-
+On Sun, Jun 04, 2023 at 03:02:32PM -0700, Chang S. Bae wrote:
+> On 6/4/2023 8:34 AM, Eric Biggers wrote:
+> > 
+> > To re-iterate what I said on v6, the runtime alignment to a 16-byte boundary
+> > should happen when translating the raw crypto_skcipher_ctx() into the pointer to
+> > the aes_xts_ctx.  It should not happen when accessing each individual field in
+> > the aes_xts_ctx.
+> > 
+> > Yet, this code is still doing runtime alignment when accessing each individual
+> > field, as the second argument to aes_set_key_common() is 'void *raw_ctx' which
+> > aes_set_key_common() runtime-aligns to crypto_aes_ctx.
+> > 
+> > We should keep everything consistent, which means making aes_set_key_common()
+> > take a pointer to crypto_aes_ctx and not do the runtime alignment.
 > 
->> +
->>         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>                                     __armv8pmu_probe_pmu,
->>                                     &probe, 1);
->>         if (ret)
->>                 return ret;
-> Otherwise you might need to free it here.
+> Let me clarify what is the problem this patch tried to solve here. The
+> current struct aesni_xts_ctx is ugly. So, the main story is let's fix it
+> before using the code for AES-KL.
 > 
->> +       if (arm_pmu_branch_stack_supported(cpu_pmu)) {
->> +               ret = branch_records_alloc(cpu_pmu);
->> +               if (ret)
->> +                       return ret;
-> And here too.
+> Then, the rework part may be applicable for code re-usability. That seems to
+> be okay to do here.
+> 
+> Fixing the runtime alignment entirely seems to be touching other code than
+> AES-XTS. Yes, that's ideal cleanup for consistency. But, it seems to be less
+> relevant in this series.  I'd be happy to follow up on that improvement
+> though.
 
-Not freeing the arm_pmu's private data, might not be a problem in cases
-where either pmu does not support BRBE or pmu probe itself fails. But for
-completeness, will change as following.
+IMO the issue is that your patch makes the code (including the XTS code)
+inconsistent because it makes it use a mix of both approaches: it aligns each
+field individually, *and* it aligns the ctx up-front.  I was hoping to switch
+fully from the former approach to the latter approach, instead of switching from
+the former approach to a mix of the two approaches as you are proposing.
 
-diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index 9725a53d6799..fdbe52913cc7 100644
---- a/drivers/perf/arm_pmuv3.c
-+++ b/drivers/perf/arm_pmuv3.c
-@@ -1198,13 +1198,17 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
-        ret = smp_call_function_any(&cpu_pmu->supported_cpus,
-                                    __armv8pmu_probe_pmu,
-                                    &probe, 1);
--       if (ret)
-+       if (ret) {
-+               armv8pmu_private_free(cpu_pmu);
-                return ret;
-+       }
+The following on top of this patch is what I am asking for.  I think it would be
+appropriate to fold into this patch.
+
+diff --git a/arch/x86/crypto/aesni-intel_glue.c b/arch/x86/crypto/aesni-intel_glue.c
+index 589648142c173..ad1ae7a88b59d 100644
+--- a/arch/x86/crypto/aesni-intel_glue.c
++++ b/arch/x86/crypto/aesni-intel_glue.c
+@@ -228,10 +228,10 @@ static inline struct aesni_xts_ctx *aes_xts_ctx(struct crypto_skcipher *tfm)
+ 	return (struct aesni_xts_ctx *)aes_align_addr(crypto_skcipher_ctx(tfm));
+ }
  
-        if (arm_pmu_branch_stack_supported(cpu_pmu)) {
-                ret = branch_records_alloc(cpu_pmu);
--               if (ret)
-+               if (ret) {
-+                       armv8pmu_private_free(cpu_pmu);
-                        return ret;
-+               }
-        } else {
-                armv8pmu_private_free(cpu_pmu);
-        }
+-static int aes_set_key_common(struct crypto_tfm *tfm, void *raw_ctx,
++static int aes_set_key_common(struct crypto_tfm *tfm,
++			      struct crypto_aes_ctx *ctx,
+ 			      const u8 *in_key, unsigned int key_len)
+ {
+-	struct crypto_aes_ctx *ctx = aes_ctx(raw_ctx);
+ 	int err;
+ 
+ 	if (key_len != AES_KEYSIZE_128 && key_len != AES_KEYSIZE_192 &&
+@@ -252,7 +252,8 @@ static int aes_set_key_common(struct crypto_tfm *tfm, void *raw_ctx,
+ static int aes_set_key(struct crypto_tfm *tfm, const u8 *in_key,
+ 		       unsigned int key_len)
+ {
+-	return aes_set_key_common(tfm, crypto_tfm_ctx(tfm), in_key, key_len);
++	return aes_set_key_common(tfm, aes_ctx(crypto_tfm_ctx(tfm)),
++				  in_key, key_len);
+ }
+ 
+ static void aesni_encrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
+@@ -285,7 +286,7 @@ static int aesni_skcipher_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 			         unsigned int len)
+ {
+ 	return aes_set_key_common(crypto_skcipher_tfm(tfm),
+-				  crypto_skcipher_ctx(tfm), key, len);
++				  aes_ctx(crypto_skcipher_ctx(tfm)), key, len);
+ }
+ 
+ static int ecb_encrypt(struct skcipher_request *req)
