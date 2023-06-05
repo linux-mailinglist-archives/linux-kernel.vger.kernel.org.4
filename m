@@ -2,222 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807D3721B50
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841AB721B52
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjFEAu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 20:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S232531AbjFEAwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 20:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFEAux (ORCPT
+        with ESMTP id S229449AbjFEAwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 20:50:53 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 234D5AB
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 17:50:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Dxy+ppMX1kancEAA--.4853S3;
-        Mon, 05 Jun 2023 08:50:49 +0800 (CST)
-Received: from maobibo$loongson.cn ( [10.20.42.170] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Mon, 5 Jun 2023 08:50:48
- +0800 (GMT+08:00)
-X-Originating-IP: [10.20.42.170]
-Date:   Mon, 5 Jun 2023 08:50:48 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5q+b56Kn5rOi?= <maobibo@loongson.cn>
-To:     "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     loongson-kernel@lists.loongnix.cn,
-        "Bjorn Helgaas" <helgaas@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Jianmin Lv" <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] LoongArch: Align pci memory base address with page
- size
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2023 www.mailtech.cn .loongson.cn
-In-Reply-To: <CAAhV-H6Sp7k5RnSOE53BWXjm7d9Y2km0Z2xSCSxQFZkRm29d1w@mail.gmail.com>
-References: <20230602030732.1047696-1-maobibo@loongson.cn>
- <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
- <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
- <CAAhV-H4VHoNQdpDdpcPfDXJxnpoWUtDqmJMhb_r4DS4JtnxvhQ@mail.gmail.com>
- <e483b7bb-4184-758d-2840-11d75659975e@loongson.cn>
- <CAAhV-H4VH2yZ3sMqQYK_KWrv6FT7fqHykuMMFo_B55WJeRQOwA@mail.gmail.com>
- <0fcdb10d-d69f-1f9e-d989-b36193c3fba0@loongson.cn>
- <CAAhV-H6Sp7k5RnSOE53BWXjm7d9Y2km0Z2xSCSxQFZkRm29d1w@mail.gmail.com>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: mPE3+mZvb3Rlcl90eHQ9NzExMzo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        Sun, 4 Jun 2023 20:52:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ADBAD;
+        Sun,  4 Jun 2023 17:52:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZFS84gz7z4x3x;
+        Mon,  5 Jun 2023 10:52:08 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685926328;
+        bh=xvGz6j7RFU1JlFwJcd8cqIaiDnTZSTCz3474Nl8CW+c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FthrXfury67CVvrUMEPqkWYqI9BC+D8Cvkl9xEdxrQVFfs3v7HsM3LxUgbyDtFHFB
+         JZhlha8HbisIN+7RvwGZf9xrPReBxyTPwZSYETTBUEpuuTspWhV0gs5tJzqbMlyn5G
+         UzEvjn0DWlO1VxT12MDlmcwrP7/3f10s66Bpe5G6SDj2haB8k9RmyQfpHEZ/m9NBFE
+         Ff5DByVpjwjgwNpOO6PNgxzLszeyGp+7t2B3Nby4PF5oAW6nasQMm5ArDBwH3NogEa
+         D5D+OFVlzg6sMt199kIKKtZnHwCQ3FjuKqZoe8E8aRwI8mCm1rXFormpubxO+RFfjg
+         HLUPQ7K8gTtng==
+Date:   Mon, 5 Jun 2023 10:52:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the selinux tree with Linus' tree
+Message-ID: <20230605105207.7d02fa3b@canb.auug.org.au>
 MIME-Version: 1.0
-Message-ID: <1457df1b.98e5.1888908feed.Coremail.maobibo@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8AxEuVoMX1k1wSKAA--.13563W
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/1tbiAQANCWR8fwADLgAAsP
-X-Coremail-Antispam: 1Uk129KBjvJXoW3Wry3KFWDWr1xGr48Cw45KFg_yoWxZF13pF
-        W7AFs8Cr4UJr1UAw4qqw1UWF1av34DGr17Xr13Jry7Gryqvry7Xr1UJr15CFyUJr45GF1U
-        Xr4UKry7WF15J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACY4xI67k04243AVAKzVAKj4
-        xxM4xvF2IEb7IF0Fy26I8I3I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-        CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAYjxAx
-        ZFUvcSsGvfC2KfnxnUUI43ZEXa7IU8njjPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/XYoLCRJWQx3Dhmgn9nloFB4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiSHVhY2FpIENoZW4iIDxj
-aGVuaHVhY2FpQGtlcm5lbC5vcmc+Cj4g5Y+R6YCB5pe26Ze0OjIwMjMtMDYtMDQgMjA6MzM6MjAg
-KOaYn+acn+aXpSkKPiDmlLbku7bkuro6ICJiaWJvLCBtYW8iIDxtYW9iaWJvQGxvb25nc29uLmNu
-Pgo+IOaKhOmAgTogbG9vbmdzb24ta2VybmVsQGxpc3RzLmxvb25nbml4LmNuLCAiQmpvcm4gSGVs
-Z2FhcyIgPGhlbGdhYXNAa2VybmVsLm9yZz4sICJXQU5HIFh1ZXJ1aSIgPGtlcm5lbEB4ZW4wbi5u
-YW1lPiwgIkppYW5taW4gTHYiIDxsdmppYW5taW5AbG9vbmdzb24uY24+LCBsb29uZ2FyY2hAbGlz
-dHMubGludXguZGV2LCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4g5Li76aKYOiBSZTog
-W1BBVENIXSBMb29uZ0FyY2g6IEFsaWduIHBjaSBtZW1vcnkgYmFzZSBhZGRyZXNzIHdpdGggcGFn
-ZSBzaXplCj4gCj4gT24gRnJpLCBKdW4gMiwgMjAyMyBhdCA1OjQw4oCvUE0gYmlibywgbWFvIDxt
-YW9iaWJvQGxvb25nc29uLmNuPiB3cm90ZToKPiA+Cj4gPgo+ID4KPiA+IOWcqCAyMDIzLzYvMiAx
-NjowMCwgSHVhY2FpIENoZW4g5YaZ6YGTOgo+ID4gPiBPbiBGcmksIEp1biAyLCAyMDIzIGF0IDM6
-MzXigK9QTSBiaWJvLCBtYW8gPG1hb2JpYm9AbG9vbmdzb24uY24+IHdyb3RlOgo+ID4gPj4KPiA+
-ID4+Cj4gPiA+Pgo+ID4gPj4g5ZyoIDIwMjMvNi8yIDE0OjU1LCBIdWFjYWkgQ2hlbiDlhpnpgZM6
-Cj4gPiA+Pj4gT24gRnJpLCBKdW4gMiwgMjAyMyBhdCAyOjQ44oCvUE0gYmlibywgbWFvIDxtYW9i
-aWJvQGxvb25nc29uLmNuPiB3cm90ZToKPiA+ID4+Pj4KPiA+ID4+Pj4KPiA+ID4+Pj4KPiA+ID4+
-Pj4g5ZyoIDIwMjMvNi8yIDEyOjExLCBIdWFjYWkgQ2hlbiDlhpnpgZM6Cj4gPiA+Pj4+PiArY2Mg
-Qmpvcm4KPiA+ID4+Pj4+Cj4gPiA+Pj4+PiBIaSwgQmlibywKPiA+ID4+Pj4+Cj4gPiA+Pj4+PiBP
-biBGcmksIEp1biAyLCAyMDIzIGF0IDExOjA34oCvQU0gQmlibyBNYW8gPG1hb2JpYm9AbG9vbmdz
-b24uY24+IHdyb3RlOgo+ID4gPj4+Pj4+Cj4gPiA+Pj4+Pj4gTG9vbmdBcmNoIGxpbnV4IGtlcm5l
-bCB1c2VzIDE2SyBwYWdlIHNpemUgYnkgZGVmYXVsdCwgc29tZSBwY2kgZGV2aWNlcyBoYXZlCj4g
-PiA+Pj4+Pj4gb25seSA0SyBtZW1vcnkgc2l6ZSwgaXQgaXMgbm9ybWFsIGluIGdlbmVyYWwgYXJj
-aGl0ZWN0dXJlcy4gSG93ZXZlciBtZW1vcnkKPiA+ID4+Pj4+PiBzcGFjZSBvZiBkaWZmZXJlbnQg
-cGNpIGRldmljZXMgd2lsbCBzaGFyZSBvbmUgcGh5c2ljYWwgcGFnZSBhZGRyZXNzIHNwYWNlLgo+
-ID4gPj4+Pj4+IFRoaXMgaXMgbm90IHNhZmUgZm9yIG1tdSBwcm90ZWN0aW9uLCBhbHNvIFVJTyBh
-bmQgVkZJTyByZXF1aXJlcyBiYXNlCj4gPiA+Pj4+Pj4gYWRkcmVzcyBvZiBwY2kgbWVtb3J5IHNw
-YWNlIHBhZ2UgYWxpZ25lZC4KPiA+ID4+Pj4+Pgo+ID4gPj4+Pj4+IFRoaXMgcGF0Y2ggYWRkcyBj
-aGVjayB3aXRoIGZ1bmN0aW9uIHBjaWJpb3NfYWxpZ25fcmVzb3VyY2UsIGFuZCBzZXQgYmFzZQo+
-ID4gPj4+Pj4+IGFkZHJlc3Mgb2YgcmVzb3VyY2UgcGFnZSBhbGlnbmVkLgo+ID4gPj4+Pj4+Cj4g
-PiA+Pj4+Pj4gU2lnbmVkLW9mZi1ieTogQmlibyBNYW8gPG1hb2JpYm9AbG9vbmdzb24uY24+Cj4g
-PiA+Pj4+Pj4gLS0tCj4gPiA+Pj4+Pj4gIGFyY2gvbG9vbmdhcmNoL3BjaS9wY2kuYyB8IDIzICsr
-KysrKysrKysrKysrKysrKysrKysrCj4gPiA+Pj4+Pj4gIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNl
-cnRpb25zKCspCj4gPiA+Pj4+Pj4KPiA+ID4+Pj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2Fy
-Y2gvcGNpL3BjaS5jIGIvYXJjaC9sb29uZ2FyY2gvcGNpL3BjaS5jCj4gPiA+Pj4+Pj4gaW5kZXgg
-MjcyNjYzOTE1MGJjLi4xMzgwZjM2NzJiYTIgMTAwNjQ0Cj4gPiA+Pj4+Pj4gLS0tIGEvYXJjaC9s
-b29uZ2FyY2gvcGNpL3BjaS5jCj4gPiA+Pj4+Pj4gKysrIGIvYXJjaC9sb29uZ2FyY2gvcGNpL3Bj
-aS5jCj4gPiA+Pj4+Pj4gQEAgLTgzLDYgKzgzLDI5IEBAIGludCBwY2liaW9zX2FsbG9jX2lycShz
-dHJ1Y3QgcGNpX2RldiAqZGV2KQo+ID4gPj4+Pj4+ICAgICAgICAgcmV0dXJuIGFjcGlfcGNpX2ly
-cV9lbmFibGUoZGV2KTsKPiA+ID4+Pj4+PiAgfQo+ID4gPj4+Pj4+Cj4gPiA+Pj4+Pj4gKy8qCj4g
-PiA+Pj4+Pj4gKyAqIG1lbW9yeSBzcGFjZSBzaXplIG9mIHNvbWUgcGNpIGNhcmRzIGlzIDRLLCBp
-dCBpcyBzZXBhcmF0ZWQgd2l0aAo+ID4gPj4+Pj4+ICsgKiBkaWZmZXJlbnQgcGFnZXMgZm9yIGdl
-bmVyaWMgYXJjaGl0ZWN0dXJlcywgc28gdGhhdCBtbXUgcHJvdGVjdGlvbiBjYW4KPiA+ID4+Pj4+
-PiArICogd29yayB3aXRoIGRpZmZlcmVudCBwY2kgY2FyZHMuIEhvd2V2ZXIgcGFnZSBzaXplIGZv
-ciBMb29uZ0FyY2ggc3lzdGVtCj4gPiA+Pj4+Pj4gKyAqIGlzIDE2SywgbWVtb3J5IHNwYWNlIG9m
-IGRpZmZlcmVudCBwY2kgY2FyZHMgbWF5IHNoYXJlIHRoZSBzYW1lIHBhZ2UKPiA+ID4+Pj4+PiAr
-ICogb24gTG9vbmdBcmNoLCBpdCBpcyBub3Qgc2FmZSBoZXJlLgo+ID4gPj4+Pj4+ICsgKiBBbHNv
-IHVpbyBkcml2ZXJzIGFuZCB2ZmlvIGRyaXZlcnMgc3VnZ3Vlc3RzIHRoYXQgYmFzZSBhZGRyZXNz
-IG9mIG1lbW9yeQo+ID4gPj4+Pj4+ICsgKiBzcGFjZSBzaG91bGQgcGFnZSBhbGlnbmVkLiBUaGlz
-IGZ1bmN0aW9uIGFsaWducyBiYXNlIGFkZHJlc3Mgd2l0aCBwYWdlIHNpemUKPiA+ID4+Pj4+PiAr
-ICovCj4gPiA+Pj4+Pj4gK3Jlc291cmNlX3NpemVfdCBwY2liaW9zX2FsaWduX3Jlc291cmNlKHZv
-aWQgKmRhdGEsIGNvbnN0IHN0cnVjdCByZXNvdXJjZSAqcmVzLAo+ID4gPj4+Pj4+ICsgICAgICAg
-ICAgICAgICByZXNvdXJjZV9zaXplX3Qgc2l6ZSwgcmVzb3VyY2Vfc2l6ZV90IGFsaWduKQo+ID4g
-Pj4+Pj4+ICt7Cj4gPiA+Pj4+Pj4gKyAgICAgICByZXNvdXJjZV9zaXplX3Qgc3RhcnQgPSByZXMt
-PnN0YXJ0Owo+ID4gPj4+Pj4+ICsKPiA+ID4+Pj4+PiArICAgICAgIGlmIChyZXMtPmZsYWdzICYg
-SU9SRVNPVVJDRV9NRU0pIHsKPiA+ID4+Pj4+PiArICAgICAgICAgICAgICAgaWYgKGFsaWduICYg
-KFBBR0VfU0laRSAtIDEpKSB7Cj4gPiA+Pj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgYWxp
-Z24gPSBQQUdFX1NJWkU7Cj4gPiA+Pj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgc3RhcnQg
-PSBBTElHTihzdGFydCwgYWxpZ24pOwo+ID4gPj4+Pj4gSSBkb24ndCBrbm93IHdoZXRoZXIgdGhp
-cyBwYXRjaCBpcyByZWFsbHkgbmVlZGVkLCBidXQgdGhlIGxvZ2ljIGhlcmUKPiA+ID4+Pj4+IGhh
-cyBzb21lIHByb2JsZW1zLgo+ID4gPj4+Pj4KPiA+ID4+Pj4+IEZvciBleGFtcGxlLCBpZiBQQUdF
-X1NJWkU9MTZLQiwgYWxpZ249MThLQiwgd2hhdCBzaG91bGQgd2UgZG8/IEFsaWduCj4gPiA+Pj4+
-PiB0byAxNktCIG9yIGFsaWduIHRvIDMyS0I/IElNTyBpdCBzaG91bGQgYWxpZ24gdG8gMzJLQiwg
-YnV0IGluIHlvdXIKPiA+ID4+Pj4+IHBhdGNoIGl0IHdpbGwgYWxpZ24gdG8gMTZLQi4KPiA+ID4+
-Pj4gSW4gZ2VuZXJhbCBwY2kgZGV2aWNlIGlzIGFsaWduZWQgYnkgc2l6ZSwgYW5kIGl0cyB2YWx1
-ZSBpcyBhIHBvd2VyIG9mIDIgaW4gdmFsdWUuCj4gPiA+Pj4+IEkgZG8gbm90IHNlZSBzdWNoIGRl
-dmljZXMgd2l0aCAxOEsgYWxpZ25tZW50IHJlcXVpcmVtZW50cy4KPiA+ID4+PiBJZiBzbywgeW91
-IGNhbiBzaW1wbHkgaWdub3JlICJhbGlnbiIgYW5kIHVzZSAgc3RhcnQgPSBBTElHTihzdGFydCwg
-UEFHRV9TSVpFKTsKPiA+ID4+Pgo+ID4gPj4+Pgo+ID4gPj4+PiBCeSBwY2kgbG9jYWwgYnVzIHNw
-ZWMsIHRoZXJlIGFyZSBzdWNoIGxpbmVzOgo+ID4gPj4+Pgo+ID4gPj4+PiAiRGV2aWNlcyBhcmUg
-ZnJlZSB0byBjb25zdW1lIG1vcmUgYWRkcmVzcyBzcGFjZSB0aGFuIHJlcXVpcmVkLCBidXQgZGVj
-b2RpbmcgZG93bgo+ID4gPj4+PiB0byBhIDQgS0Igc3BhY2UgZm9yIG1lbW9yeSBpcyBzdWdnZXN0
-ZWQgZm9yIGRldmljZXMgdGhhdCBuZWVkIGxlc3MgdGhhbiB0aGF0IGFtb3VudC4gRm9yCj4gPiA+
-Pj4+IGluc3RhbmNlLCBhIGRldmljZSB0aGF0IGhhcyA2NCBieXRlcyBvZiByZWdpc3RlcnMgdG8g
-YmUgbWFwcGVkIGludG8gTWVtb3J5IFNwYWNlIG1heQo+ID4gPj4+PiBjb25zdW1lIHVwIHRvIDQg
-S0Igb2YgYWRkcmVzcyBzcGFjZSBpbiBvcmRlciB0byBtaW5pbWl6ZSB0aGUgbnVtYmVyIG9mIGJp
-dHMgaW4gdGhlIGFkZHJlc3MKPiA+ID4+Pj4gZGVjb2Rlci4iCj4gPiA+Pj4+Cj4gPiA+Pj4+IEkg
-Y2Fubm90ICB0aGluayB3aGV0aGVyIGl0IGlzIG5lY2Vzc2FyeSBzaW1wbHkgZnJvbSBqdWRnaW5n
-IHdoZXRoZXIgb3RoZXIKPiA+ID4+Pj4gYXJjaGl0ZWN0dXJlcyBoYXZlIHNpbWlsYXIgY29kZS4g
-SWYgc28sIExvb25nQXJjaCBzeXN0ZW0ganVzdCAgYWx3YXlzIGZvbGxvd3Mgb3RoZXJzLgo+ID4g
-Pj4+PiBJdCBpcyBhY3R1YWxseSBvbmUgcHJvYmxlbSBzaW5jZSBMb29uZ0FyY2ggdXNlcyAxNksg
-cGFnZSBzaXplLgo+ID4gPj4+IEFzIEkga25vdywgYm90aCBNSVBTIGFuZCBBUk02NCBjYW4gdXNl
-IG5vbi00SyBwYWdlcywgYnV0IHdoZW4gSSBncmVwCj4gPiA+Pj4gcGNpYmlvc19hbGlnbl9yZXNv
-dXJjZSBpbiB0aGUgYXJjaCBkaXJlY3RvcnksIG5vbmUgb2YgdGhlbSBkbwo+ID4gPj4+IFBBR0Vf
-U0laRSBhbGlnbm1lbnQuCj4gPiA+PiBIZXJlIGlzIHBpZWNlIG9mICBjb2RlIGluIGRyaXZlcnMv
-dmZpby9wY2kvdmZpb19wY2lfY29yZS5jCj4gPiA+PiAgICAgICAgICAgICAgICAgLyoKPiA+ID4+
-ICAgICAgICAgICAgICAgICAgKiBIZXJlIHdlIGRvbid0IGhhbmRsZSB0aGUgY2FzZSB3aGVuIHRo
-ZSBCQVIgaXMgbm90IHBhZ2UKPiA+ID4+ICAgICAgICAgICAgICAgICAgKiBhbGlnbmVkIGJlY2F1
-c2Ugd2UgY2FuJ3QgZXhwZWN0IHRoZSBCQVIgd2lsbCBiZQo+ID4gPj4gICAgICAgICAgICAgICAg
-ICAqIGFzc2lnbmVkIGludG8gdGhlIHNhbWUgbG9jYXRpb24gaW4gYSBwYWdlIGluIGd1ZXN0Cj4g
-PiA+PiAgICAgICAgICAgICAgICAgICogd2hlbiB3ZSBwYXNzdGhyb3VnaCB0aGUgQkFSLiBBbmQg
-aXQncyBoYXJkIHRvIGFjY2Vzcwo+ID4gPj4gICAgICAgICAgICAgICAgICAqIHRoaXMgQkFSIGlu
-IHVzZXJzcGFjZSBiZWNhdXNlIHdlIGhhdmUgbm8gd2F5IHRvIGdldAo+ID4gPj4gICAgICAgICAg
-ICAgICAgICAqIHRoZSBCQVIncyBsb2NhdGlvbiBpbiBhIHBhZ2UuCj4gPiA+PiAgICAgICAgICAg
-ICAgICAgICovCj4gPiA+PiBub19tbWFwOgo+ID4gPj4gICAgICAgICAgICAgICAgIHZkZXYtPmJh
-cl9tbWFwX3N1cHBvcnRlZFtiYXJdID0gZmFsc2U7Cj4gPiA+Pgo+ID4gPj4gRG8geW91IHRoaW5r
-IGl0IGlzIGEgaXNzdWUgb3Igbm90Pwo+ID4gPiBNYXkgYmUgb3IgbWF5IG5vdCBiZSwgaWYgaXQg
-c2hvdWxkIGJlIGFsaWduZWQgdG8gUEFHRV9TSVpFLCB0aGVuIE1JUFMKPiA+ID4gYW5kIEFSTTY0
-IGFsc28gbmVlZCB0aGlzLgo+ID4gPgo+ID4gPj4KPiA+ID4+IFlvdSBjYW4gc2VhcmNoIGZ1bmN0
-aW9uIHBudl9wY2lfZGVmYXVsdF9hbGlnbm1lbnQgb3IgcGNpYmlvc19hbGlnbl9yZXNvdXJjZSBh
-Ym91dAo+ID4gPj4gYWxwaGEgYXJjaGl0ZWN0dXJlLgo+ID4gPiBBbHBoYSdzIHBjaWJpb3NfYWxp
-Z25fcmVzb3VyY2UoKSBoYXZlIG5vdGhpbmcgdG8gZG8gd2l0aCBQQUdFX1NJWkUsCj4gPiA+IHBu
-dl9wY2lfZGVmYXVsdF9hbGlnbm1lbnQoKSBzZWVtcyB0byBiZSB0aGUgY2FzZS4gQnV0IGlmIGFs
-aWdubWVudCBpcwo+ID4gPiByZWFsbHkgbmVlZGVkLCBJIHRoaW5rIGl0IGlzIGJldHRlciB0byBw
-cm92aWRlIGEKPiA+ID4gcGNpYmlvc19kZWZhdWx0X2FsaWdubWVudCgpIGFzIHBvd2VycGMuCj4g
-PiBJIHdpbGwgZG91YmxlIGNoZWNrIHdoaWNoIGlzIGJldHRlci4gSnVzdCBiZSBjdXJpb3VzLCBo
-b3cgZG8geW91IHRoaW5rIGl0IGlzIGEgcHJvYmxlbQo+ID4gb3Igbm90LCBqdXN0IGNoZWNraW5n
-IHdoZXRoZXIgb3RoZXIgYXJjaGVzIGhhdmUgc2ltaWxhciBjb2RlPz8KPiBZb3UgYXJlIHByb2Jh
-Ymx5IHJpZ2h0IGJ1dCBJJ20gbm90IHN1cmUsIG1heWJlIHlvdSBjYW4gc3VibWl0IGEgcGF0Y2gK
-PiBmb3IgQVJNNjQgdG8gZ2V0IG1vcmUgcGVvcGxlIGludm9sdmVkLgpHb29kIHN1Z2dlc3Rpb24s
-IHdpbGwgZG8gaXQgaW4gbmV4dCB2ZXJzaW9uLiBJdCB3aWxsIGJlIGJldHRlciB3aXRoIG1vcmUg
-cGVvcGxlCmludm9sdmVkLgoKUmVnYXJkcwpCaWJvLCBNYW8KPiAKPiBIdWFjYWkKPiA+Cj4gPgo+
-ID4gPgo+ID4gPiBIdWFjYWkKPiA+ID4+Cj4gPiA+PiBSZWdhcmRzCj4gPiA+PiBCaWJvLCBtYW8K
-PiA+ID4+Cj4gPiA+Pj4KPiA+ID4+PiBIdWFjYWkKPiA+ID4+Pgo+ID4gPj4+Pgo+ID4gPj4+PiBS
-ZWdhcmRzCj4gPiA+Pj4+IEJpYm8sIE1hbwo+ID4gPj4+Pj4KPiA+ID4+Pj4+IEh1YWNhaQo+ID4g
-Pj4+Pj4+ICsgICAgICAgICAgICAgICB9Cj4gPiA+Pj4+Pj4gKyAgICAgICB9Cj4gPiA+Pj4+Pj4g
-KyAgICAgICByZXR1cm4gc3RhcnQ7Cj4gPiA+Pj4+Pj4gK30KPiA+ID4+Pj4+PiArCj4gPiA+Pj4+
-Pj4gIHN0YXRpYyB2b2lkIHBjaV9maXh1cF92Z2FkZXYoc3RydWN0IHBjaV9kZXYgKnBkZXYpCj4g
-PiA+Pj4+Pj4gIHsKPiA+ID4+Pj4+PiAgICAgICAgIHN0cnVjdCBwY2lfZGV2ICpkZXZwID0gTlVM
-TDsKPiA+ID4+Pj4+PiAtLQo+ID4gPj4+Pj4+IDIuMjcuMAo+ID4gPj4+Pj4+Cj4gPiA+Pj4+PiBf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gPj4+Pj4g
-TG9vbmdzb24ta2VybmVsIG1haWxpbmcgbGlzdCAtLSBsb29uZ3Nvbi1rZXJuZWxAbGlzdHMubG9v
-bmduaXguY24KPiA+ID4+Pj4+IFRvIHVuc3Vic2NyaWJlIHNlbmQgYW4gZW1haWwgdG8gbG9vbmdz
-b24ta2VybmVsLWxlYXZlQGxpc3RzLmxvb25nbml4LmNuCj4gPiA+Pj4+Cj4gPiA+Pj4+Cj4gPiA+
-Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+ID4+
-PiBMb29uZ3Nvbi1rZXJuZWwgbWFpbGluZyBsaXN0IC0tIGxvb25nc29uLWtlcm5lbEBsaXN0cy5s
-b29uZ25peC5jbgo+ID4gPj4+IFRvIHVuc3Vic2NyaWJlIHNlbmQgYW4gZW1haWwgdG8gbG9vbmdz
-b24ta2VybmVsLWxlYXZlQGxpc3RzLmxvb25nbml4LmNuCj4gPiA+Pgo+ID4gPj4KPiA+Cj4gPgoN
-Cg0K5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G
-5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq6
-5oiW576k57uE44CC56aB5q2i5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI
-5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW5pWj
-5Y+R77yJ5pys6YKu5Lu25Y+K5YW26ZmE5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS2
-5pys6YKu5Lu277yM6K+35oKo56uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm2
-5Yig6Zmk5pys6YKu5Lu244CCIA0KVGhpcyBlbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRh
-aW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAsIHdo
-aWNoIGlzIGludGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJl
-c3MgaXMgbGlzdGVkIGFib3ZlLiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQg
-aGVyZWluIGluIGFueSB3YXkgKGluY2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBv
-ciBwYXJ0aWFsIGRpc2Nsb3N1cmUsIHJlcHJvZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBieSBw
-ZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVk
-LiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBz
-ZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g
+--Sig_/XYoLCRJWQx3Dhmgn9nloFB4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+Today's linux-next merge of the selinux tree got a conflict in:
+
+  security/selinux/Makefile
+
+between commit:
+
+  42c4e97e06a8 ("selinux: don't use make's grouped targets feature yet")
+
+from Linus' tree and commits:
+
+  6f933aa7dfd0 ("selinux: more Makefile tweaks")
+  ec4a491d180b ("selinux: fix Makefile for versions of make < v4.3")
+
+from the selinux tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XYoLCRJWQx3Dhmgn9nloFB4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9MbcACgkQAVBC80lX
+0Gyxzwf/W9rk5i/utf4RYMHc0zaTlbzfzcl2LIb2h39bij1Nk27QsqMAyxs7aPua
+5VxrImsXcdHVb5GTgkzx/aaer2Ej4D62bA/sXXluwKbAPxuEVSl7nUCKsrMqpGIx
+e95engSo0okQ87BM0yFwGCAVdLqLgepWRrz0PNfHO9aJNQ2nsqBD3BrnMjV2FPDC
+P6XnkwS7l+JSmubLXpaZ7ztcDLXbQIO2qonE9JQBP6EEc88UvTNKiIhduPcvb+C9
+8XRtSRf0gu7B22Od0doqu6T0FP8Fve2LN6mbcI6geVJ/6tCMOwnGoFMULaUQmwjR
+/JwNgytTOOiFa10Q2/HGGEBP15L5Lw==
+=zFoq
+-----END PGP SIGNATURE-----
+
+--Sig_/XYoLCRJWQx3Dhmgn9nloFB4--
