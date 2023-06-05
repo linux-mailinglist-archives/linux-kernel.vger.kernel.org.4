@@ -2,262 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F06722EA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815EE722EAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbjFESZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S235525AbjFES2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjFESZF (ORCPT
+        with ESMTP id S235448AbjFES2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:25:05 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE76D3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:25:04 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64f74f4578aso4969544b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685989504; x=1688581504;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=58+aVmOVD+wub8Tm+nODowvPJNNI9g1PnmLoCltiP60=;
-        b=CeEPTNwVTbVwJwgAdG6Bf6FDG7hN/p8BzU8W7gM2C/v315wUy4xYI4Lhj+mDqR3P/r
-         peewCLTMj6GezuZsMt5ks+UOJ6IZp6TDrYx8H2RWeYhI1EOHFLmT9QagzK5SWdWrQUcG
-         5nyRgCzdwV/tx/TEceUP80815uvkYrWHmdF0Yi0VMhFo296xpKSLJQBvkSibye6BFZ1M
-         SJWnUKeWNJY6ruvH78SU4qy6N3iNG2BnqsH002h0SPsRdiFvfkwGQWAiAe96kf2amLSE
-         Zz4GiFxKMO80JtKfLmUsvg1i8LLkx/I7LyosD/hpEJsV0bhobcKB1NuAutboove/FOn5
-         qmVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685989504; x=1688581504;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=58+aVmOVD+wub8Tm+nODowvPJNNI9g1PnmLoCltiP60=;
-        b=lhlApbMomHmZxonEjBXugwW7D/jprkEhKou2nAeriTXt6sfA7ZnPlGI6zO8AHA/fDT
-         78zHs7hAojfBNtZ7C5ULt8LBmoxwP0xk6xABZxsS4QmpOgV2l1P3HBvKdefT2mDZlpHH
-         553VnemW8eDG8rvb5DRtimXAmneWJj7ivz8HLMAPsXCIe3V6uG/N265FKJNPCpUX79XG
-         k+2Kzvse2EC6xwgcliXhM2rTZPoD7cZUoWL4XEbEpL+JOX5hUz56zcYC5NQ3FShB0Ysg
-         /YsUgUm6CPY7GwkB5S7hyyHhynOjWdvx6eeaTCkNHxNdZ2gN9y6N5JkWAGW9aQYo10K3
-         6+vA==
-X-Gm-Message-State: AC+VfDy0L0SHarOQQE1/bfFXjYvqPeX1fP0fGNLzvMfubYYzoVl/MfI1
-        rgFGsxYpSZNOfETqHi4fJ6f/RVOiURU=
-X-Google-Smtp-Source: ACHHUZ6uoTMjfi3w+IvrgwnC0J4YTw6TKvAaIIkx4F3LPDbI3tQJiuALd/QitH59lyNjErp8u6hY6tK2J6E=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1a4a:b0:653:9883:40ec with SMTP id
- h10-20020a056a001a4a00b00653988340ecmr221279pfv.5.1685989503836; Mon, 05 Jun
- 2023 11:25:03 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 11:25:02 -0700
-In-Reply-To: <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
- <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
-Message-ID: <ZH4ofuj0qvKNO9Bz@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Mon, 5 Jun 2023 14:28:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB17ED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685989673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4sE7ks4Nk77+zW6Z/ULAJcYENXCoAds6ZiujKCN5Bjc=;
+        b=bUGSxr+EJ6FBL/zUQ4WDnpoZpEh7nvN/UDf9Rr/Ftj8rnS2nkSI2EIQGluhR39OAxwX+FI
+        /GkTl8PvsPVLXafpdntmadI7FoX0HbnyQHHGpvGWqljg8aNJrJyn9hPxLfUmzRkxEs5STN
+        hoLfiKxsxDtjHaLsUINyKeHCLKqvyek=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-85-ZTCs5W3IONK2pud_v5b-6Q-1; Mon, 05 Jun 2023 14:27:48 -0400
+X-MC-Unique: ZTCs5W3IONK2pud_v5b-6Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B78A8811E7F;
+        Mon,  5 Jun 2023 18:27:47 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5343540D1B60;
+        Mon,  5 Jun 2023 18:27:47 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 215E2400F7B4D; Mon,  5 Jun 2023 15:25:19 -0300 (-03)
+Date:   Mon, 5 Jun 2023 15:25:19 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 3/3] mm/vmstat: do not refresh stats for nohz_full CPUs
+Message-ID: <ZH4ojxxNh3bW3+ez@tpad>
+References: <20230602185757.110910188@redhat.com>
+ <20230602190115.545766386@redhat.com>
+ <ZH2V/QxDrq7aq5fY@dhcp22.suse.cz>
+ <ZH4CnJlpBMxEEwPW@tpad>
+ <ZH4JEVGdICubP0Du@dhcp22.suse.cz>
+ <ZH4mAbucXtK1PUON@tpad>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH4mAbucXtK1PUON@tpad>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023, Mingwei Zhang wrote:
-> On Mon, Jun 5, 2023 at 9:55=E2=80=AFAM Jim Mattson <jmattson@google.com> =
-wrote:
-> >
-> > On Sun, Jun 4, 2023 at 5:43=E2=80=AFPM Mingwei Zhang <mizhang@google.co=
-m> wrote:
-> > >
-> > > Remove KVM MMU write lock when accessing indirect_shadow_pages counte=
-r when
-> > > page role is direct because this counter value is used as a coarse-gr=
-ained
-> > > heuristics to check if there is nested guest active. Racing with this
-> > > heuristics without mmu lock will be harmless because the correspondin=
-g
-> > > indirect shadow sptes for the GPA will either be zapped by this threa=
-d or
-> > > some other thread who has previously zapped all indirect shadow pages=
- and
-> > > makes the value to 0.
-> > >
-> > > Because of that, remove the KVM MMU write lock pair to potentially re=
-duce
-> > > the lock contension and improve the performance of nested VM. In addi=
-tion
-> > > opportunistically change the comment of 'direct mmu' to make the
-> > > description consistent with other places.
-> > >
-> > > Reported-by: Jim Mattson <jmattson@google.com>
-> > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+On Mon, Jun 05, 2023 at 03:14:25PM -0300, Marcelo Tosatti wrote:
+> On Mon, Jun 05, 2023 at 06:10:57PM +0200, Michal Hocko wrote:
+> > On Mon 05-06-23 12:43:24, Marcelo Tosatti wrote:
+> > > On Mon, Jun 05, 2023 at 09:59:57AM +0200, Michal Hocko wrote:
+> > > > On Fri 02-06-23 15:58:00, Marcelo Tosatti wrote:
+> > > > > The interruption caused by queueing work on nohz_full CPUs 
+> > > > > is undesirable for certain aplications.
+> > > > 
+> > > > This is not a proper changelog. I am not going to write a changelog for
+> > > > you this time. Please explain why this is really needed and why this
+> > > > approach is desired. 
+> > > > E.g. why don't you prevent userspace from
+> > > > refreshing stats if interference is not desirable.
+> > > 
+> > > Michal,
+> > > 
+> > > Can you please check if the following looks better, as
+> > > a changelog? thanks
+> > > 
 > > > ---
-> > >  arch/x86/kvm/x86.c | 10 ++--------
-> > >  1 file changed, 2 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 5ad55ef71433..97cfa5a00ff2 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm_v=
-cpu *vcpu, gpa_t cr2_or_gpa,
-> > >
-> > >         kvm_release_pfn_clean(pfn);
-> > >
-> > > -       /* The instructions are well-emulated on direct mmu. */
-> > > +       /* The instructions are well-emulated on Direct MMUs. */
-> > >         if (vcpu->arch.mmu->root_role.direct) {
-> > > -               unsigned int indirect_shadow_pages;
-> > > -
-> > > -               write_lock(&vcpu->kvm->mmu_lock);
-> > > -               indirect_shadow_pages =3D vcpu->kvm->arch.indirect_sh=
-adow_pages;
-> > > -               write_unlock(&vcpu->kvm->mmu_lock);
-> > > -
-> > > -               if (indirect_shadow_pages)
-> > > +               if (READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
-> >
-> > I don't understand the need for READ_ONCE() here. That implies that
-> > there is something tricky going on, and I don't think that's the case.
->=20
-> READ_ONCE() is just telling the compiler not to remove the read. Since
-> this is reading a global variable,  the compiler might just read a
-> previous copy if the value has already been read into a local
-> variable. But that is not the case here...
->=20
-> Note I see there is another READ_ONCE for
-> kvm->arch.indirect_shadow_pages, so I am reusing the same thing.
+> > > 
+> > > schedule_work_on API uses the workqueue mechanism to
+> > > queue a work item on a queue. A kernel thread, which
+> > > runs on the target CPU, executes those work items.
+> > > 
+> > > Therefore, when using the schedule_work_on API,
+> > > it is necessary for the kworker kernel thread to
+> > > be scheduled in, for the work function to be executed.
+> > > 
+> > > Time sensitive applications such as SoftPLCs
+> > > (https://tum-esi.github.io/publications-list/PDF/2022-ETFA-How_Real_Time_Are_Virtual_PLCs.pdf),
+> > > have their response times affected by such interruptions.
+> > > 
+> > > The /proc/sys/vm/stat_refresh file was originally introduced by
+> > > 
+> > > commit 52b6f46bc163eef17ecba4cd552beeafe2b24453
+> > > Author: Hugh Dickins <hughd@google.com>
+> > > Date:   Thu May 19 17:12:50 2016 -0700
+> > > 
+> > >     mm: /proc/sys/vm/stat_refresh to force vmstat update
+> > > 
+> > >     Provide /proc/sys/vm/stat_refresh to force an immediate update of
+> > >     per-cpu into global vmstats: useful to avoid a sleep(2) or whatever
+> > >     before checking counts when testing.  Originally added to work around a
+> > >     bug which left counts stranded indefinitely on a cpu going idle (an
+> > >     inaccuracy magnified when small below-batch numbers represent "huge"
+> > >     amounts of memory), but I believe that bug is now fixed: nonetheless,
+> > >     this is still a useful knob.
+> > 
+> > No need to quote the full changelog.
 
-I agree with Jim, using READ_ONCE() doesn't make any sense.  I suspect it m=
-ay have
-been a misguided attempt to force the memory read to be as close to the wri=
-te_lock()
-as possible, e.g. to minimize the chance of a false negative.
+I think its useful to put things in perspective.
 
-> I did check the reordering issue but it should be fine because when
-> 'we' see indirect_shadow_pages as 0, the shadow pages must have
-> already been zapped. Not only because of the locking, but also the
-> program order in __kvm_mmu_prepare_zap_page() shows that it will zap
-> shadow pages first before updating the stats.
+> > > Other than the potential interruption to a time sensitive application,
+> > > if using SCHED_FIFO or SCHED_RR priority on the isolated CPU, then
+> > > system hangs can occur:
+> > > 
+> > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978688
+> > 
+> > Confused... This report says that accessing the file (i.e. to force the
+> > refresh) can get stalled because high priority tasks will not allow
+> > kworkers to run. No?
+> 
+> Yes.
+> 
+> > There is simply no way around that unless those kworkers inherit the
+> > priority.
+> 
+> stalld is an attempt to workaround the situation by allowing the 
+> lower priority processes to execute for a small amount of time
+> (for example 20us every 1s). https://github.com/bristot/stalld:
+> 
+> "The stalld program (which stands for 'stall daemon') is a mechanism to
+> prevent the starvation of operating system threads in a Linux system.
+> The premise is to start up on a housekeeping cpu (one that is not used
+> for real-application purposes) and to periodically monitor the state of
+> each thread in the system, looking for a thread that has been on a run
+> queue (i.e. ready to run) for a specifed length of time without being
+> run. This condition is usually hit when the thread is on the same cpu
+> as a high-priority cpu-intensive task and therefore is being given no
+> opportunity to run.
+> 
+> When a thread is judged to be starving, stalld changes that thread to
+> use the SCHED_DEADLINE policy and gives the thread a small slice of time
+> for that cpu (specified on the command line). The thread then runs and
+> when that timeslice is used, the thread is then returned to its original
+> scheduling policy and stalld then continues to monitor thread states."
+> 
+> Unfortunately, if you allow that, then the latency sensitive
+> application might be interrupted for longer than acceptable
+> (which is the case for a certain class of applications, for example
+> SoftPLC inside a VM).
+> 
+> > It certainly is unfortunate that the call is not killable
+> > but being stuck behind real time busy looping processes is nothing
+> > really uncommong. One has to be really careful when using real time
+> > priorities.
+> 
+> Yes.
+> 
+> > > To avoid the problems above, do not schedule the work to synchronize
+> > > per-CPU mm counters on isolated CPUs. Given the possibility for
+> > > breaking existing userspace applications, avoid changing
+> > > behaviour of access to /proc/sys/vm/stat_refresh, such as
+> > > returning errors to userspace.
+> > 
+> > You are changing the behavior. The preexisting behavior was to flush
+> > everything. This is clearly changing that.
+> 
+> I meant that this patch does not cause read/write to the procfs file 
+> to return errors.
+> 
+> I believe returning errors has a higher potential for regressions
+> than not flushing per-CPU VM counters of isolated CPUs (which are
+> bounded).
+> 
+> > > ---
+> > > 
+> > > > Also would it make some sense to reduce flushing to cpumask 
+> > > > of the calling process? (certainly a daring thought but have
+> > > > you even considered it?)
+> > > 
+> > > Fail to see the point here ?
+> > 
+> > I mean that, if you already want to change the semantic of the call then
+> > it would likely be safer to change it in a more robust way and only
+> > flush pcp vmstat caches that are in the process effective cpu mask. 
+> 
+> That would change behaviour for systems without isolated CPUs.
+> 
+> > This
+> > way one can control which pcp caches to flush (e.g. those that are not
+> > on isolated CPUs or contrary those that are isolated but you can afford 
+> > to flush at the specific moment). See?
+> 
+> Yes, but not sure what to think of this idea. 
+> 
+> > Now I am not saying this is the right way to go because there is still a
+> > slim chance this will break userspace expectations. Therefore I have
+> > asked why you simply do not stop any random application accessing
+> > stat_refresh in the first place.
+> 
+> I think this is what should be done, but not on the current patchset.
+> 
+> https://lkml.iu.edu/hypermail/linux/kernel/2209.1/01263.html
+> 
+> Regarding housekeeping flags, it is usually the case that initialization might
+> require code execution on interference blocked CPUs (for example MTRR
+> initialization, resctrlfs initialization, MSR writes, ...). Therefore
+> tagging the CPUs after system initialization is necessary, which
+> is not possible with current housekeeping flags infrastructure.
+> 
+> >  These highly specialized setups with
+> > isolated resources shouldn't run arbitrary crap, should that?
+> 
+> Problem is that its hard to control what people run on a system.
+> 
+> > What if I just start allocating memory and get the system close to OOM. 
+> 
+> Sure, or "poweroff".
+> 
+> > I am
+> > pretty sure a small latency induced by the vmstat refreshes is the least
+> > problem you will have.
+> 
+> If OOM codepath sends no IPI or queues work on isolated CPUs, then OOM
+> should be fine.
+> 
+> > So please step back and try to think whether this is actually fixing
+> > anything real before trying to change a user visible interface.
+> 
+> It is fixing either a latency violation or a hang on a system where some user or
+> piece of software happens to run "sysctl -a" (or read vmstat_refresh).
+> 
+> If one is using CPU isolation, the latency violation has higher 
+> priority than vmstat_refresh returning proper counters.
 
-I don't think zapping, i.e. the 1=3D>0 transition, is a concern.  KVM is dr=
-opping
-the SPTE, so racing with kvm_mmu_pte_write() is a non-issue because the gue=
-st
-will either see the old value, or will fault after the SPTE is zapped, i.e.=
- KVM
-won't run with a stale even if kvm_mmu_pte_write() sees '0' before TLBs are
-flushed.
+OK, so this patch is not going to include the per-CPU vmstat counters
+(up to the threshold) in the synchronization step of reading/writing to the
+vmstat_refresh file.
 
-I believe the 0=3D>1 transition on the other hand doesn't have a *very* the=
-oretical
-bug.  KVM needs to ensure that either kvm_mmu_pte_write() sees an elevated =
-count,
-or that a page fault task sees the updated guest PTE, i.e. the emulated wri=
-te.
-The READ_ONCE() likely serves this purpose in practice, though technically =
-it's
-insufficient.
-
-So I think this?
-
----
- arch/x86/kvm/mmu.h     | 14 ++++++++++++++
- arch/x86/kvm/mmu/mmu.c | 13 ++++++++++++-
- arch/x86/kvm/x86.c     |  8 +-------
- 3 files changed, 27 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-index 92d5a1924fc1..9cd105ccb1d4 100644
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -264,6 +264,20 @@ static inline bool kvm_memslots_have_rmaps(struct kvm =
-*kvm)
- 	return !tdp_mmu_enabled || kvm_shadow_root_allocated(kvm);
- }
-=20
-+static inline bool kvm_mmu_has_indirect_shadow_pages(struct kvm *kvm)
-+{
-+	/*
-+	 * When emulating guest writes, ensure the written value is visible to
-+	 * any task that is handling page faults before checking whether or not
-+	 * KVM is shadowing a guest PTE.  This ensures either KVM will create
-+	 * the correct SPTE in the page fault handler, or this task will see
-+	 * a non-zero indirect_shadow_pages.  Pairs with the smp_mb() in
-+	 * account_shadowed() and unaccount_shadowed().
-+	 */
-+	smp_mb();
-+	return kvm->arch.indirect_shadow_pages;
-+}
-+
- static inline gfn_t gfn_to_index(gfn_t gfn, gfn_t base_gfn, int level)
- {
- 	/* KVM_HPAGE_GFN_SHIFT(PG_LEVEL_4K) must be 0. */
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index c8961f45e3b1..1735bee3f653 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -830,6 +830,17 @@ static void account_shadowed(struct kvm *kvm, struct k=
-vm_mmu_page *sp)
- 	gfn_t gfn;
-=20
- 	kvm->arch.indirect_shadow_pages++;
-+
-+	/*
-+	 * Ensure indirect_shadow_pages is elevated prior to re-reading guest
-+	 * child PTEs in FNAME(gpte_changed), i.e. guarantee either in-flight
-+	 * emulated writes are visible before re-reading guest PTEs, or that
-+	 * an emulated write will see the elevated count and acquire mmu_lock
-+	 * to update SPTEs.  Pairs with the smp_mb() in
-+	 * kvm_mmu_has_indirect_shadow_pages().
-+	 */
-+	smp_mb();
-+
- 	gfn =3D sp->gfn;
- 	slots =3D kvm_memslots_for_spte_role(kvm, sp->role);
- 	slot =3D __gfn_to_memslot(slots, gfn);
-@@ -5692,7 +5703,7 @@ static void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, =
-gpa_t gpa,
- 	 * If we don't have indirect shadow pages, it means no page is
- 	 * write-protected, so we can exit simply.
- 	 */
--	if (!READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
-+	if (!kvm_mmu_has_indirect_shadow_pages(vcpu->kvm))
- 		return;
-=20
- 	pgprintk("%s: gpa %llx bytes %d\n", __func__, gpa, bytes);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index abfba3cae0ba..22c226f5f4f8 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8588,13 +8588,7 @@ static bool reexecute_instruction(struct kvm_vcpu *v=
-cpu, gpa_t cr2_or_gpa,
-=20
- 	/* The instructions are well-emulated on direct mmu. */
- 	if (vcpu->arch.mmu->root_role.direct) {
--		unsigned int indirect_shadow_pages;
--
--		write_lock(&vcpu->kvm->mmu_lock);
--		indirect_shadow_pages =3D vcpu->kvm->arch.indirect_shadow_pages;
--		write_unlock(&vcpu->kvm->mmu_lock);
--
--		if (indirect_shadow_pages)
-+		if (kvm_mmu_has_indirect_shadow_pages(vcpu->kvm))
- 			kvm_mmu_unprotect_page(vcpu->kvm, gpa_to_gfn(gpa));
-=20
- 		return true;
-
-base-commit: 69b4e5b82fec7195c79c939ce25789b16a133f3a
---=20
+This is a tradeoff: one prefers not to have accurate counters 
+(for a procfs file whose value is going to be interpreted, and which 
+accurate value might or might not be important) than to interrupt
+an isolated CPU.
 
