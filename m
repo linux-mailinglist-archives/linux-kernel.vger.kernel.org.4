@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF72A7226C2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5659A7226C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbjFENCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S232260AbjFENDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbjFENBr (ORCPT
+        with ESMTP id S229514AbjFENDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:01:47 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007CB106
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:01:41 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-7841dc9871dso3325667241.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685970101; x=1688562101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cO38/BvQLHAQ87G9qM9lbTJ3ImPZclrAKat+fZGulg8=;
-        b=Pvm80JLLbw9204UFhZpF1p4N3+QTzv9VaQY6S9dISSHHxWvVTn+6Tp9q8CBQIwHNRJ
-         YARczhIEuxIv1KtQTEa4vcAebIMdGhrwywm8IsdbQ+R9Fmi6ivofNqX/RyPSQzp3VX7Q
-         PMSBt1Jw0hL48gQ1WNI755anzsZDG7z93nhVs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685970101; x=1688562101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cO38/BvQLHAQ87G9qM9lbTJ3ImPZclrAKat+fZGulg8=;
-        b=b2gguR0ACh+7lr23eInpf2q9pCE/4tTZK8BhyMJ+dC1U3D1iIguj8TFjeLIw79+b0w
-         8RFTnxax1DfEVz/N6LNjZJ0BQJzlYUAnBs/OKaucr9f5U/kH9rnRxEEciJYd54kHVNgH
-         Lb+URK5Sxf8GQGgQTy0aJbF2NoH14DlNf9x344nTKGP0AIV2P8jvoHZILFvU5yaiSuib
-         TV4eD0jn43o+D4vwOB0Rps2JIBb3QKlV2/nBmbrm2TAzydDEJ0MIi7NS5NuoTKN/FaQg
-         gt5ySwUiCynkzcvPeubMhGgpf6X9uhgrnq9XBbe0vNTfmNKlPmZ3F9E/LojDCFQhGPIf
-         o2yA==
-X-Gm-Message-State: AC+VfDw/h7DxmzTXp3gIbG2o+n76556iqES2SlQdHrKWO3Z7B+yy/5qj
-        MMZ4g9zhTIvWVqzsw5VhU7+7a01BjgAsGo0fJPds/w==
-X-Google-Smtp-Source: ACHHUZ6YZzW+yZOZuWvTCNoj/dgyh96LyT2DXgLsptRLSpDmYKbQOI/iNYJ3d5WCgu88E0xn8iIVW6pMblwAwmUBM28=
-X-Received: by 2002:a67:bd18:0:b0:43b:2c84:1fca with SMTP id
- y24-20020a67bd18000000b0043b2c841fcamr3134845vsq.5.1685970100956; Mon, 05 Jun
- 2023 06:01:40 -0700 (PDT)
+        Mon, 5 Jun 2023 09:03:16 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8338AC7;
+        Mon,  5 Jun 2023 06:03:13 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8DxufEQ3X1kmBgAAA--.602S3;
+        Mon, 05 Jun 2023 21:03:12 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxhuQP3X1khIAAAA--.2284S3;
+        Mon, 05 Jun 2023 21:03:11 +0800 (CST)
+Message-ID: <d28f48e3-95d2-111f-e938-348d68402a57@loongson.cn>
+Date:   Mon, 5 Jun 2023 21:03:11 +0800
 MIME-Version: 1.0
-References: <20230525113034.46880-1-tony@atomide.com> <20230602083335.GA181647@google.com>
- <87a5xii33r.fsf@jogness.linutronix.de> <20230603054139.GR14287@atomide.com>
- <20230603063533.GS14287@atomide.com> <20230605061511.GW14287@atomide.com>
- <CAGXv+5Fbx7eTxP0ep6DV+jyronAWxYvu2M-g=MjHGRhjSXUc=w@mail.gmail.com> <20230605122447.GY14287@atomide.com>
-In-Reply-To: <20230605122447.GY14287@atomide.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 5 Jun 2023 21:01:29 +0800
-Message-ID: <CAGXv+5HwL+R5QpO3pHGQd9qAxu2pCMDjYvdni1HjiC8eEE38mg@mail.gmail.com>
-Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v12 08/31] LoongArch: KVM: Implement vcpu handle exit
+ interface
+Content-Language: en-US
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-9-zhaotianrui@loongson.cn>
+From:   "bibo, mao" <maobibo@loongson.cn>
+In-Reply-To: <20230530015223.147755-9-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxhuQP3X1khIAAAA--.2284S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFy7ZFyDKw1UtFyfKFW8Zrc_yoW8uFyfpr
+        WkCrn8urWrGry7Gwnxtw4qqrs0qr97Kw1xur9rX3yxArsFyas5Jr1kKrZIyF45G3sYqF1I
+        vF1rGwn09F4qy3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        tVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j19a
+        9UUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,79 +75,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 8:24=E2=80=AFPM Tony Lindgren <tony@atomide.com> wro=
-te:
->
-> * Chen-Yu Tsai <wenst@chromium.org> [230605 11:34]:
-> > On Mon, Jun 5, 2023 at 2:15=E2=80=AFPM Tony Lindgren <tony@atomide.com>=
- wrote:
-> > > diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/=
-8250/8250_mtk.c
-> > > --- a/drivers/tty/serial/8250/8250_mtk.c
-> > > +++ b/drivers/tty/serial/8250/8250_mtk.c
-> > > @@ -425,11 +439,10 @@ mtk8250_set_termios(struct uart_port *port, str=
-uct ktermios *termios,
-> > >  static int __maybe_unused mtk8250_runtime_suspend(struct device *dev=
-)
-> > >  {
-> > >         struct mtk8250_data *data =3D dev_get_drvdata(dev);
-> > > -       struct uart_8250_port *up =3D serial8250_get_port(data->line)=
-;
-> > >
-> > >         /* wait until UART in idle status */
-> > >         while
-> > > -               (serial_in(up, MTK_UART_DEBUG0));
-> > > +               (mtk8250_read(data, MTK_UART_DEBUG0));
-> >
-> > I believe it still gets stuck here sometimes.
->
-> Hmm so maybe you need to mtk8250_write(data, 0, MTK_UART_RATE_FIX) in
-> probe before pm_runtime_resume_and_get() that enables the baud clock?
-> That's something I changed, so maybe it messes up things.
 
-I think it has something to do with the do_pm() function calling
-the callbacks directly, then also calling runtime PM.
 
-> Looking at the 8250_mtk git log, it's runtime PM functions seem to only
-> currently manage the baud clock so register access should be doable
-> without runtime PM resume?
+在 2023/5/30 09:52, Tianrui Zhao 写道:
+> Implement vcpu handle exit interface, getting the exit code by ESTAT
+> register and using kvm exception vector to handle it.
+> 
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>  arch/loongarch/kvm/vcpu.c | 46 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+> index eca8b96a3e6e..ddea480fa5b0 100644
+> --- a/arch/loongarch/kvm/vcpu.c
+> +++ b/arch/loongarch/kvm/vcpu.c
+> @@ -55,6 +55,52 @@ static void kvm_pre_enter_guest(struct kvm_vcpu *vcpu)
+>  	vcpu->arch.aux_inuse &= ~KVM_LARCH_CSR;
+>  }
+>  
+> +/*
+> + * Return 1 for resume guest and "<= 0" for resume host.
+> + */
+> +static int _kvm_handle_exit(struct kvm_run *run, struct kvm_vcpu *vcpu)
+> +{
+> +	unsigned long exst = vcpu->arch.host_estat;
+> +	u32 intr = exst & 0x1fff; /* ignore NMI */
+> +	u32 exccode = (exst & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
+> +	int ret = RESUME_GUEST;
+> +
+> +	vcpu->mode = OUTSIDE_GUEST_MODE;
+> +
+> +	/* Set a default exit reason */
+> +	run->exit_reason = KVM_EXIT_UNKNOWN;
+> +	run->ready_for_interrupt_injection = 1;
+Is ready_for_interrupt_injection used in qemu or kvm for LoongArch?
 
-Actually it only manages the bus clock. The baud clock is simply the system
-XTAL which is not gateble.
+> +
+> +	local_irq_enable();
+> +	guest_state_exit_irqoff();
+> +
+> +	trace_kvm_exit(vcpu, exccode);
+> +	if (exccode) {
+> +		ret = _kvm_handle_fault(vcpu, exccode);
+> +	} else {
+> +		WARN(!intr, "suspicious vm exiting");
+how about comments like this?
+  WARN(!intr, "vm exiting with suspicious irq \n") 
 
-> > With your earlier patch, it could get through registering the port, and
-> > the console would show
-> >
-> >     11002000.serial: ttyS0 at MMIO 0x11002000 (irq =3D 240, base_baud =
-=3D
-> > 1625000) is a ST16650V2
-> >
-> > for the console UART.
->
-> OK
->
-> > Angelo mentioned that we should be using SLEEP_REQ/SLEEP_ACK registers
-> > in the MTK UART hardware.
-> >
-> > I tried reworking it into your patch here, but it causes issues with th=
-e
-> > UART-based Bluetooth on one of my devices. After the UART runtime suspe=
-nds
-> > and resumes, something is off and causes the transfers during Bluetooth
-> > init to become corrupt.
-> >
-> > I'll try some more stuff, but the existing code seems timing dependent.
-> > If I add too many printk statements to the runtime suspend/resume
-> > callbacks, things seem to work. One time I even ended up with broken
-> > UARTs but otherwise booted up the system.
->
-> Well another thing that now changes is that we now runtime suspend the
-> port at the end of the probe. What the 8250_mtk probe was doing earlier
-> it was leaving the port baud clock enabled, but runtime PM disabled
-> until mtk8250_do_pm() I guess.
+Regards
+Bibo, Mao
+> +		++vcpu->stat.int_exits;
+> +	}
+> +
+> +	cond_resched();
+> +	local_irq_disable();
+> +
+> +	if (ret == RESUME_HOST)
+> +		return ret;
+> +
+> +	/* Only check for signals if not already exiting to userspace */
+> +	if (signal_pending(current)) {
+> +		vcpu->run->exit_reason = KVM_EXIT_INTR;
+> +		++vcpu->stat.signal_exits;
+> +		return -EINTR;
+> +	}
+> +
+> +	kvm_pre_enter_guest(vcpu);
+> +	trace_kvm_reenter(vcpu);
+> +	guest_state_enter_irqoff();
+> +	return RESUME_GUEST;
+> +}
+> +
+>  int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  {
+>  	unsigned long timer_hz;
 
-I guess that's the biggest difference? Since the *bus* clock gets disabled,
-any access will hang. Is it enough to just support runtime PM? Or do I have
-to also have UART_CAP_RPM?
-
-ChenYu
