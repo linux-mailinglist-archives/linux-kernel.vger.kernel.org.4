@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB931723146
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132C472315D
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjFEU0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S232598AbjFEU2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjFEU0X (ORCPT
+        with ESMTP id S230271AbjFEU2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:26:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C2A98
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:26:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E9AA121AD7;
-        Mon,  5 Jun 2023 20:26:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685996779; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w0/hRPUBvyYGAAnuHnxG7Lh/Ffn2ioeZiKsBVO4DR9w=;
-        b=ncX5oajq1jRuQtlP6aVCkVbF6nUa22ZCPAfyeeTz9B9EaNakNnCbQRatfLNuxjrSc0XmzX
-        fLh1sHdgBgikbR3stSdVGlsn7OD0ZlkIGyVMTUmoGEWMLD/RYKGTYuHCtpOnu07OXL+7x1
-        0nfiTIewKQQgQdZew1oG9tFI5a1FatM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685996779;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w0/hRPUBvyYGAAnuHnxG7Lh/Ffn2ioeZiKsBVO4DR9w=;
-        b=O1j9Cc9aV/iGS69OzOWz+mty30H3encuxLqafdLKLzsD9UVfFa+PhvNT98wPNcpx5BnAyJ
-        JIV6mgQfJlXvNfDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB1B9139C7;
-        Mon,  5 Jun 2023 20:26:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vQraMOtEfmRDBAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 05 Jun 2023 20:26:19 +0000
-Message-ID: <75b40c68-ccf2-3786-9da1-1fa00c961eaf@suse.cz>
-Date:   Mon, 5 Jun 2023 22:26:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
- vmalloc() fails
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <20230605201107.83298-1-lstoakes@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230605201107.83298-1-lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 16:28:14 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3E898
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:28:13 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53b9eb7bda0so1933520a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 13:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685996893; x=1688588893;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XnxfahBFhDdYZkXlZPUfdWCh0pSs+dY9UekTfoE8XFc=;
+        b=Q9T10dtnVViuYX7PiAM77gTQR0mNL3l97CIumpOUFIVSRAIJxcSd3D2ssFddid/ZER
+         4yvhaKqX+CXtWJOEEHsIF1yDBSZMgW+3U2Dg0QjFQ55IN/igthyx8QVzi7TuPneZdMSo
+         qBwAdbSf3nSWBH6RfewrhomP/I0PC2ahg28AHryNHnChrBkmAhLkUpbUku9HyU3wCGE5
+         ZrrC6SF/Tn+Z0D4LZdyOmwPRCfQS2rkd8UCnKCqnnJLzFS3Q+Tmbf6YTv1J+HigoQAk3
+         w8f7zo+pYQdVXX3jPv76zrwHgJEmr0M4X8TE03/0WaKp1+pSCpmpu4tGo/rWgZjL1i6y
+         DVOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685996893; x=1688588893;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XnxfahBFhDdYZkXlZPUfdWCh0pSs+dY9UekTfoE8XFc=;
+        b=TTkQSl7lOUuaIHVmWeQSdUBuyOoIRDGoudD0Id9L5OeIZOIXFpR5luFUNp0UfF1Iht
+         3r6UivaEYoUNQDfwV9xuxnnwlDWXAFoGcUjyxOAhhHpVjsmAfb34rRz89qAkwQ5dXWfX
+         vlCzikAfVzcGYHiWzn02iF7HKG98bT6d+HhJq8ho3JNILbPhwb8HdlGF+PhjHrnfPwpA
+         swGT9eqbT2dif7W61DZ07R88oKt5iCbJrv3FeWzjA98jL/j1y3UKM8TuDTEFx2OO1fSr
+         rZ18fPLK7q2oXo9rbrxUvNC2Ltp9ze3aNt/T7i4eLwbjFhMIcCQ63DuoXHYaQxIqUUbB
+         5hnw==
+X-Gm-Message-State: AC+VfDwJDsM1woGGLiqgdvPL2xnXmH5tGIdBJUZZ+W6NeD135R1q2yoS
+        hj3LvyFNnLAKGrNA2oAwXz2+kNu99zkL
+X-Google-Smtp-Source: ACHHUZ5bhfZTZzASA6Lnd8k7u3qSQLLP0zYksqWxf+mRuBv7Pszw2pIpT7PC1WG+Mphjo3kJ1B+xcPEnKtB/
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bed9:39b9:3df1:2828])
+ (user=irogers job=sendgmr) by 2002:a63:f14c:0:b0:52c:4227:aa61 with SMTP id
+ o12-20020a63f14c000000b0052c4227aa61mr193290pgk.6.1685996892776; Mon, 05 Jun
+ 2023 13:28:12 -0700 (PDT)
+Date:   Mon,  5 Jun 2023 13:27:08 -0700
+Message-Id: <20230605202712.1690876-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Subject: [PATCH v2 0/4] Bring back vmlinux.h generation
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 22:11, Lorenzo Stoakes wrote:
-> In __vmalloc_area_node() we always warn_alloc() when an allocation
-> performed by vm_area_alloc_pages() fails unless it was due to a pending
-> fatal signal.
-> 
-> However, huge page allocations instigated either by vmalloc_huge() or
-> __vmalloc_node_range() (or a caller that invokes this like kvmalloc() or
-> kvmalloc_node()) always falls back to order-0 allocations if the huge page
-> allocation fails.
-> 
-> This renders the warning useless and noisy, especially as all callers
-> appear to be aware that this may fallback. This has already resulted in at
-> least one bug report from a user who was confused by this (see link).
-> 
-> Therefore, simply update the code to only output this warning for order-0
-> pages when no fatal signal is pending.
-> 
-> Link: https://bugzilla.suse.com/show_bug.cgi?id=1211410
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
+satisfy libbpf 'runqueue' type verification") inadvertently created a
+declaration of 'struct rq' that conflicted with a generated
+vmlinux.h's:
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+```
+util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
+struct rq {};
+       ^
+/tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
+struct rq {
+       ^
+1 error generated.
+```
 
-Thanks!
+Fix the issue by moving the declaration to vmlinux.h. So this can't
+happen again, bring back build support for generating vmlinux.h then
+add build tests.
 
-> ---
->  mm/vmalloc.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ab606a80f475..e563f40ad379 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3149,11 +3149,20 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
->  	 * allocation request, free them via vfree() if any.
->  	 */
->  	if (area->nr_pages != nr_small_pages) {
-> -		/* vm_area_alloc_pages() can also fail due to a fatal signal */
-> -		if (!fatal_signal_pending(current))
-> +		/*
-> +		 * vm_area_alloc_pages() can fail due to insufficient memory but
-> +		 * also:-
-> +		 *
-> +		 * - a pending fatal signal
-> +		 * - insufficient huge page-order pages
-> +		 *
-> +		 * Since we always retry allocations at order-0 in the huge page
-> +		 * case a warning for either is spurious.
-> +		 */
-> +		if (!fatal_signal_pending(current) && page_order == 0)
->  			warn_alloc(gfp_mask, NULL,
-> -				"vmalloc error: size %lu, page order %u, failed to allocate pages",
-> -				area->nr_pages * PAGE_SIZE, page_order);
-> +				"vmalloc error: size %lu, failed to allocate pages",
-> +				area->nr_pages * PAGE_SIZE);
->  		goto fail;
->  	}
->  
+v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
+    filter out kernels that lack a .BTF section and cause the build to
+    break.
+
+Ian Rogers (4):
+  perf build: Add ability to build with a generated vmlinux.h
+  perf bpf: Move the declaration of struct rq
+  perf test: Add build tests for BUILD_BPF_SKEL
+  perf build: Filter out BTF sources without a .BTF section
+
+ tools/perf/Makefile.config                    |  4 +++
+ tools/perf/Makefile.perf                      | 33 ++++++++++++++++++-
+ tools/perf/tests/make                         |  4 +++
+ tools/perf/util/bpf_skel/.gitignore           |  1 +
+ .../perf/util/bpf_skel/lock_contention.bpf.c  |  2 --
+ .../util/bpf_skel/{ => vmlinux}/vmlinux.h     | 10 ++++++
+ 6 files changed, 51 insertions(+), 3 deletions(-)
+ rename tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h (90%)
+
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
