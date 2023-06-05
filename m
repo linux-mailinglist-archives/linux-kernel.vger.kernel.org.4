@@ -2,183 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C537228F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89B8722901
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjFEOiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S234374AbjFEOjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbjFEOiN (ORCPT
+        with ESMTP id S232416AbjFEOj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:38:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D3099;
-        Mon,  5 Jun 2023 07:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685975892; x=1717511892;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Ii0wAsvvPcH2RH0dwkgNRbrd5Rz5fLTuzH3e9FVwJYw=;
-  b=gDLZkunr+Oe3K2eJ3U7xTt7knm5beCmPa4jgfy0Pro742/zs60qLsYOg
-   dQ7UdFWF3Fran9JRsPcAbleT6J7A8egkxHfEXXsZU/FeBudxK0GPcIl1G
-   xmKFQG16Db+WQ3mkI3Tt6W5eKz2eJXbB791wkqlia1xcKG9iGDLe7fpIE
-   b1A8PHqXGPo++3S7L2DQN3QA8kkx+I60LjgLAiTViUMlU3WNUMt+yCLRU
-   byN/f2nuxtuM6lG8hI3TRuletyZdmLIT8zoDOYbsDg3NqouhVrzAEyU+9
-   2vkhEe1DFKLwJ+51UgXP1Vu/fGXcdck0UZZS0SWhrlB+eEKU3/o4FqScl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="359695812"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="359695812"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 07:38:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="741750834"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="741750834"
-Received: from gfittedx-mobl.ger.corp.intel.com ([10.252.47.115])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 07:38:07 -0700
-Date:   Mon, 5 Jun 2023 17:38:04 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-cc:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        kernel@pengutronix.de,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, Nicholas Piggin <npiggin@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liang He <windhl@126.com>
-Subject: Re: [PATCH v3 2/2] serial: 8250: Apply FSL workarounds also without
- SERIAL_8250_CONSOLE
-In-Reply-To: <20230605142225.75l6px3ep5ythkl6@pengutronix.de>
-Message-ID: <9fa2b513-24a5-2e37-9a63-1fd5f53fa92@linux.intel.com>
-References: <20230605130857.85543-1-u.kleine-koenig@pengutronix.de> <20230605130857.85543-3-u.kleine-koenig@pengutronix.de> <2d70e8b-7722-71e7-76f3-d27a2b2caa55@linux.intel.com> <20230605133445.vi762odw2v7pkrog@pengutronix.de> <f01b13f5-34c9-62fc-52fd-33e923e2a2ba@linux.intel.com>
- <20230605142225.75l6px3ep5ythkl6@pengutronix.de>
+        Mon, 5 Jun 2023 10:39:28 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7246FA6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:39:26 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6042d605dso41244015e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 07:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685975965; x=1688567965;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fm6omFP2aCod8XtHm5L9yMfAAfEAX4qQM59CrdBf6A4=;
+        b=RMH5yFvFB0L/bXyqSylorgHfQYaSpe5UFg3pbVvpMOsYNLI+duwnbm4E/mAvX75tff
+         pftEb/5lY+zanSgbOgffu9KDhISS58D8Xzemn47sA6Q2fqNB/zT7GhuayAIJ04hgumfb
+         8hkcYIkG+zOleWLy2rc1b3Gda2R/6i9NZ9VIh66Oir26xsZEdC5BxsaywJ7Ma9YRl5kK
+         vl/J2WNI6h+e4m3szVQJcin+zCaQYog6iyf8jn0GOsw+Nbd7lLfuyRn6YZ5Z8Qh4gOtt
+         qfwpfL/HDDZE7drv2hGb4s5QnTyB1oQelYwLG9VaI2suY8m/wNeNqCM7IbbYsBmNcSAg
+         ppQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685975965; x=1688567965;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fm6omFP2aCod8XtHm5L9yMfAAfEAX4qQM59CrdBf6A4=;
+        b=E3vPoJ9m8kWjsTn9xBRT9IkACXlshNiTyEtNjGkcYRcc+2a5Rw4tF5NOCtuArETuzD
+         JwX2PQORFCtUBq30MIoUPLMGdPGG3Q7tFKUaqx1eBMMqjhco2u2x/Rv1vTRed/nCUV8Z
+         tPcCJvXhwPTc0u86qYxWyYRk0ubyIpUA72/wCShxnvPzlA2mPI6SGxp9QKWHq1FC0f4K
+         E2fvGEoR0uVOLM9awwqEwIILm5h8dVPVog/HSS1woisv6nBCnNnArZZWDsYBY+s9/HuU
+         cAjBZNPojq91yM1EA5zKdSFFV6wu7FoaoOLC+Df8FXRfdXzcdXEClJZ25MFrVaO3Bpwv
+         GtGQ==
+X-Gm-Message-State: AC+VfDzxco7tB0FQwkFJd4o2tZ8E8xxFBSLPBCB8wJobKs+GxUo6JrUk
+        U1D+fdcXPh5ghA5K64f6Y1LcjA==
+X-Google-Smtp-Source: ACHHUZ7Qw6Z8nNf0J0a233uM9vzNDjf3b+Y4VTNAP90U+Djmy4CPnjwmIeGuRE/YDnhaRXFeMoTCcQ==
+X-Received: by 2002:a05:600c:2947:b0:3f7:3074:d2f2 with SMTP id n7-20020a05600c294700b003f73074d2f2mr3626394wmd.34.1685975964911;
+        Mon, 05 Jun 2023 07:39:24 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:2385:9257:ace1:1efc? ([2a05:6e02:1041:c10:2385:9257:ace1:1efc])
+        by smtp.googlemail.com with ESMTPSA id c4-20020a5d4144000000b0030ade1b9400sm9960903wrq.30.2023.06.05.07.39.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 07:39:24 -0700 (PDT)
+Message-ID: <4097223e-5297-1536-18bb-512ef28c8329@linaro.org>
+Date:   Mon, 5 Jun 2023 16:39:23 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1799272671-1685975891=:2703"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/6] thermal/drivers/qcom/tsens-v0_1: Add support for
+ MSM8226
+Content-Language: en-US
+To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230507201225.89694-1-matti.lehtimaki@gmail.com>
+ <20230507201225.89694-4-matti.lehtimaki@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230507201225.89694-4-matti.lehtimaki@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1799272671-1685975891=:2703
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 5 Jun 2023, Uwe Kleine-König wrote:
-
-> Hello Ilpo,
+On 07/05/2023 22:12, Matti LehtimÃ¤ki wrote:
+> The MSM8226 TSENS IP has 6 thermal sensors in a TSENS v0.1 block.
+> The thermal sensors use non-standard slope values.
 > 
-> On Mon, Jun 05, 2023 at 04:44:08PM +0300, Ilpo Järvinen wrote:
-> > On Mon, 5 Jun 2023, Uwe Kleine-König wrote:
-> > > On Mon, Jun 05, 2023 at 04:22:55PM +0300, Ilpo Järvinen wrote:
-> > > > On Mon, 5 Jun 2023, Uwe Kleine-König wrote:
-> > > > 
-> > > > > The need to handle the FSL variant of 8250 in a special way is also
-> > > > > present without console support. So soften the dependency for
-> > > > > SERIAL_8250_FSL accordingly. Note that with the 8250 driver compiled as
-> > > > > a module, some devices still might not make use of the needed
-> > > > > workarounds. That affects the ports instantiated in
-> > > > > arch/powerpc/kernel/legacy_serial.c.
-> > > > > 
-> > > > > This issue was identified by Dominik Andreas Schorpp.
-> > > > > 
-> > > > > To cope for CONFIG_SERIAL_8250=m + CONFIG_SERIAL_8250_FSL=y, 8250_fsl.o
-> > > > > must be put in the same compilation unit as 8250_port.o because the
-> > > > > latter defines some functions needed in the former and so 8250_fsl.o
-> > > > > must not be built-in if 8250_port.o is available in a module.
-> > > > > 
-> > > > > Acked-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > > > Link: https://lore.kernel.org/r/20230531083230.2702181-1-u.kleine-koenig@pengutronix.de
-> > > > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > > > ---
-> > > > >  drivers/tty/serial/8250/Kconfig  | 2 +-
-> > > > >  drivers/tty/serial/8250/Makefile | 2 +-
-> > > > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-> > > > > index 5313aa31930f..10c09b19c871 100644
-> > > > > --- a/drivers/tty/serial/8250/Kconfig
-> > > > > +++ b/drivers/tty/serial/8250/Kconfig
-> > > > > @@ -378,7 +378,7 @@ config SERIAL_8250_BCM2835AUX
-> > > > >  
-> > > > >  config SERIAL_8250_FSL
-> > > > >  	bool "Freescale 16550 UART support" if COMPILE_TEST && !(PPC || ARM || ARM64)
-> > > > > -	depends on SERIAL_8250_CONSOLE
-> > > > > +	depends on SERIAL_8250
-> > > > 
-> > > > Just one additional thought: After the adding the arch side 
-> > > > workaround/hack, SERIAL_8250_FSL could become a tristate?
-> > > 
-> > > I see no benefit for a module separate from 8250_base.ko. There are
-> > > dependencies in both directions between 8250_port.o and 8250_fsl.o[1].
-> > > So in my book a bool SERIAL_8250_FSL that modifies 8250_base.ko (with
-> > > SERIAL_8250=m) is fine.
-> > > 
-> > > Best regards
-> > > Uwe
-> > > 
-> > > [1] 8250_port.o uses fsl8250_handle_irq() from 8250_fsl.o
-> > 
-> > Is that after some fix which isn't in tty-next? I see only these:
-> > 
-> > $ git grep -l fsl8250_handle_irq
-> > arch/powerpc/kernel/legacy_serial.c
-> > drivers/tty/serial/8250/8250_fsl.c
-> > drivers/tty/serial/8250/8250_of.c
-> > include/linux/serial_8250.h
-> > 
-> > No users of fsl8250_handle_irq in 8250_port.c.
-> 
-> Ah right, I was too quick:
-> 
-> 	8250_of.o uses fsl8250_handle_irq() from 8250_fsl.o
-> 	8250_fsl.o uses serial8250_modem_status() from 8250_port.o (which is in 8250_base.o)
-> 
-> 
-> However linking 8250_fsl.o in 8250_of.o isn't a good solution either as
-> 8250_fsl.o should also be available with CONFIG_SERIAL_OF_PLATFORM
-> disabled to provide the ACPI driver. And as 8250_of.o already depends on
-> 8250_port.o (e.g. via serial8250_em485_config()) adding 8250_fsl.o
-> together with 8250_port.o into 8250_base.ko is fine and doesn't add new
-> dependencies.
+> Signed-off-by: Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
+> ---
 
-So we have dependencies one-way only:
-
-8250_port
-
-/\    |\
-        \
-8250_fsl \
-         /
-/\      /
-
-8250_of
-
-There's no loop here, both they be indepedent modules and configured 
-independently (with a correct IS_*() in 8250_of.c).
+Applied, thanks
 
 -- 
- i.
+<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
 
---8323329-1799272671-1685975891=:2703--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
