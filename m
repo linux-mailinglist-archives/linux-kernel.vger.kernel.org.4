@@ -2,54 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C732E723258
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD8A72325C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjFEVgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S232058AbjFEVhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjFEVgL (ORCPT
+        with ESMTP id S229893AbjFEVhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:36:11 -0400
-Received: from out-48.mta1.migadu.com (out-48.mta1.migadu.com [IPv6:2001:41d0:203:375::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79890F2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 14:36:08 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 14:36:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686000966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=F3VFFG2jfkJ+ZSun0OC3Y7zPGm32YzSkJrZqM1qWhVA=;
-        b=AKtHFvLGYetRZ3XpqKzpBdah7sAcjqnBOU9TjP+acvw6U7AEqPZzbNU8j0dzPdjoAOsS4W
-        B5VR1VGKyhepBc014ps58qYlAdvQeKgRmg7rz7j46+XH3+ZRyG02WE1+na6gQc17CfWhL4
-        ScwjexcMx1YV6lOv4klwEW1R+9shFfI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev
-Subject: Re: [PATCH 3/3] KVM: arm64: Skip break phase when we have FEAT_BBM
- level 2
-Message-ID: <ZH5VQMEoiHEITmF4@linux.dev>
-References: <20230602170147.1541355-1-coltonlewis@google.com>
- <20230602170147.1541355-4-coltonlewis@google.com>
- <87sfb7octw.wl-maz@kernel.org>
+        Mon, 5 Jun 2023 17:37:51 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD4EE9;
+        Mon,  5 Jun 2023 14:37:50 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0C8655C0209;
+        Mon,  5 Jun 2023 17:37:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 05 Jun 2023 17:37:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1686001068; x=
+        1686087468; bh=f4bf2dR163Qx2yNartmgMG05SAZML/ESa+Dp7tZQMo8=; b=D
+        YtcLQyFjvkDFHlnn8EqjhcjMdl67btMsHfd8/vnIhC/NRDlcGBzBSQS1z8A72loS
+        LhTnhNK3TiHh8Orm/3GTfFnV52tVqzNw9EiKV/K2FHebC2L5z9wnPvvX942SA/Ox
+        3J+FVUTgqT4gYD8Iw/518FeiruxzrqcEe5I17x1w1jklPJP/NfSgsvlhxPOYFb3q
+        pEWbW6cZf7ajGo1aTOZ7gj8H5hqStiC+AkHi/2lKP2px4WImyMGFPt01jfvGNLHH
+        I+vyG3Aemz8OnvhqxgWH1OToc+HZCVvu5/v0rjMPvgeNvcuMCitOLMZrKtCe/2dY
+        iieT9a/xzoHvwGK+BaBOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686001068; x=1686087468; bh=f4bf2dR163Qx2
+        yNartmgMG05SAZML/ESa+Dp7tZQMo8=; b=UTsU21LOXj30c2WJM/T+sl3eG3vkr
+        BaR49tJGyeIolx2nkFrF19Vsojz9i6Mzw+wNEWSkIxLyohYWgf3TLfwhnhEEeRRd
+        sJhFGfvycjH9pmw9YSS8L69jgo7ajs5bISs9vPvZKU9gY24Bjq7SxcIrLobS/u+D
+        e+PNJKpSRMU1sFEdVd6Aicl/MRS2K940mFXh5CG8QTWwfWD/EK41GIY504rQsZBy
+        ZsXTZQ64ipIAE/JCdbFBM1kojOMF1j31l+k4uCYVcDFCv7+DK76RJspLqONu1ZEG
+        v34Ug8hIT8qhQl7rceW+uA9333qsTyKKOPzzUwu3VMWLQ5LPGT/ef4Otg==
+X-ME-Sender: <xms:qlV-ZAiERHLrYZgthWH5r9e3-G6lvreCiKc0EwIilYOAZkWwRamuEg>
+    <xme:qlV-ZJCDISWTYvoEaw7VKZgn0BuOg8I_djQ9jOAAyVI8j_6c7o94qLzVMrHHh7Ou4
+    ZGctarSyeZ9HEnau4I>
+X-ME-Received: <xmr:qlV-ZIG8mAuo6r0qwhMRHdOleFwxxjEhAmsQBLsfz7F0wdc4L5jo3tkifNMRiLNUPbUJEw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttdcutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhilhhl
+    ucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+    eqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedttdeh
+    jeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:qlV-ZBSVMxNrkMhG79QfZIZkrSgVrMPShD522ouYkFfjf0Yidkpumw>
+    <xmx:qlV-ZNw1mocVgVaKbmPujF12Uf8al4xNcYpEJmF0zoPwdsBLM1PDqg>
+    <xmx:qlV-ZP4ywzi1-DMnwMyQS2xnYUSAAFiLmvWKe1qSlb3g_7VmsKqamg>
+    <xmx:rFV-ZG8-YYDpytdRf9Dusr2YRwb9W523rrNRY_JbCVJTw6y44ZX9xw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Jun 2023 17:37:45 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id C975810A631; Tue,  6 Jun 2023 00:37:42 +0300 (+03)
+Date:   Tue, 6 Jun 2023 00:37:42 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv13 5/9] efi: Add unaccepted memory support
+Message-ID: <20230605213742.chojqyrz5dtyo3mn@box.shutemov.name>
+References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
+ <20230601182543.19036-6-kirill.shutemov@linux.intel.com>
+ <20230605154333.GLZH4CpV3eXCCWCGxi@fat_crate.local>
+ <20230605173303.k5yt535snxyk4ez3@box.shutemov.name>
+ <20230605191225.GCZH4zmbtkWWRG4lzf@fat_crate.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87sfb7octw.wl-maz@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230605191225.GCZH4zmbtkWWRG4lzf@fat_crate.local>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,69 +114,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 09:23:39AM +0100, Marc Zyngier wrote:
-> On Fri, 02 Jun 2023 18:01:47 +0100, Colton Lewis <coltonlewis@google.com> wrote:
-> > +static bool stage2_try_make_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu, kvm_pte_t new)
-> >  {
-> >  	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
-> > 
-> > -	WARN_ON(!stage2_pte_is_locked(*ctx->ptep));
-> > +	if (!stage2_has_bbm_level2())
-> > +		WARN_ON(!stage2_pte_is_locked(*ctx->ptep));
-> > +
-> > +	if (!stage2_try_set_pte(ctx, new))
-> > +		return false;
-> > +
-> > +	if (kvm_pte_table(ctx->old, ctx->level))
-> > +		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
-> > +	else if (kvm_pte_valid(ctx->old) && !stage2_pte_perms_equal(ctx->old, new))
-> > +		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa_nsh, mmu, ctx->addr, ctx->level);
+On Mon, Jun 05, 2023 at 09:12:25PM +0200, Borislav Petkov wrote:
+> On Mon, Jun 05, 2023 at 08:33:03PM +0300, Kirill A. Shutemov wrote:
+> > There's nothing to warn about. The range (or part of it) is not
+> > represented in the bitmap because it is not unaccepted.
 > 
-> Why a non-shareable invalidation? Nothing in this code captures the
-> rationale for it. What if the permission change was a *restriction* of
-> the permission? It should absolutely be global, and not local.
-
-IIRC, Colton was testing largely with permission relaxation, and had
-forward progress issues b.c. the stale TLB entry was never invalidated
-in response to a permission fault.
-
-Nonetheless, I very much agree with your suggestion. Non-Shareable
-invalidations should only be applied after exhausting all other
-invalidation requirements for a particular manipulation to the stage-2
-tables.
-
-> >
-> >  	if (stage2_pte_is_counted(new))
-> >  		mm_ops->get_page(ctx->ptep);
-> > 
-> > -	smp_store_release(ctx->ptep, new);
-> > +	return true;
-> >  }
-> > 
-> >  static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu,
-> > @@ -879,7 +917,8 @@ static int stage2_map_walker_try_leaf(const struct kvm_pgtable_visit_ctx *ctx,
-> >  	    stage2_pte_executable(new))
-> >  		mm_ops->icache_inval_pou(kvm_pte_follow(new, mm_ops), granule);
-> > 
-> > -	stage2_make_pte(ctx, new);
-> > +	if (!stage2_try_make_pte(ctx, data->mmu, new))
-> > +		return -EAGAIN;
+> Sorry but how am I supposed to know that?!
 > 
-> So we don't have forward-progress guarantees anymore? I'm not sure
-> this is a change I'm overly fond of.
+> I've read the whole patchset up until now and all text talks like *all*
+> *memory* needs to be accepted and before that has happeend, it is
+> unaccepted.
+> 
+> So how about you explain that explicitly somewhere, perhaps in a comment
+> above accept_memory(), that the unaccepted range is not the whole memory
+> but only, well, what is unaccepted and the rest is implicitly accepted?
 
-I'll take the blame for the clunky wording here, though I do not believe
-there are any real changes to our forward progress guarantees relative to
-the existing code.
+Okay, will do.
 
-Previously, we did the CAS on the break side of things to have a fault
-handler 'take ownership' of a PTE. The CAS now needs to move onto the
-make end when doing a BBM=2 style manipulation.
+> And I went and looked at the final result - we error() if we fail
+> accepting.
+> 
+> I guess that's the only action we can do anyway...
 
-Would you rather see something explicitly keyed on the BBM capability
-here? Then we could use a helper that implies unconditional success for
-BBM!=2 systems.
+Right, there's no recovery from the error.
 
---
-Thanks,
-Oliver
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
