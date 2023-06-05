@@ -2,270 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56553722237
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4DF722243
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjFEJaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S230102AbjFEJdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjFEJav (ORCPT
+        with ESMTP id S229583AbjFEJdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:30:51 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23D6D3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 02:30:49 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6b160f3f384so797842a34.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 02:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685957449; x=1688549449;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1xYeX0RVc8vO+l58JvAUmFd3/t+1YPaoz3NQ/n0ZWU=;
-        b=YulOkGFkRYmJ/HSHGGboVujcltfcHikpcPDb3JF3Q3bjrt98Tjd/WLIBnUkxWGkF0Z
-         hnNafX0MbK2k6TySgOJ46LCfO9xXM6F0XRn3ErGNEbFR5WiB09vCQTHJ8di0v6OS/e0Z
-         elSTwP833hfzD2TYSwBWdQ5T67DZhjF7ll/C9naKrLve+hk9imwMSkG9eq+yYaKPUgWc
-         6HQYacdre4ImAo7sxbG4NV9XvBJ/1a4iKtusZnBbJ4qzekIy/6ZZGWTiPuo29sGzkAIv
-         uZ6tBh3vU23eFdcyIUwoFQWNHS9BOVau6bqtjdN/cTOS26RfOlnVS1ZZwgPDVWagoFe7
-         xRDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685957449; x=1688549449;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F1xYeX0RVc8vO+l58JvAUmFd3/t+1YPaoz3NQ/n0ZWU=;
-        b=fK/KDKxrJ/t8+JYgeg/r9Vz5DPnp01oGWnU13QQP1n8qg1QFEozzH1zwlASc6uEkp9
-         gX16Rdr6we/PfoR2nn0YZuEGiB2RUi6+aMKDMp0W6kxDv3EcJdk6v4zIx3qu/r2laeaY
-         cJ3m6btXP9O+mS2Qw+vj83C3F0NRY3qu+6EF4OZP6YigJq9akDXwo3eA9q9UzI20Cx4Q
-         R+vDrtZTnSfpDu25g0GxMKKmmPxNCxU2xPJGQn/hGHf5NjUDgD1FlYffM2G7EWAW5M8+
-         dJbavz96f1BZrfN5Md83b9swJoVyBo3ruGsLoqkPP1Sp0qEqe5cdhfc99so6agRZtWd/
-         SrYg==
-X-Gm-Message-State: AC+VfDwYDkUgXzOTsogtSa32Q10iiFCnWFXvFTIDbvd2Jmg95EkA4a23
-        W1+xPx0beQAvORBJgo1wcMaVhmScpbANHxri75WsSDnu0b22cFhaGrc=
-X-Google-Smtp-Source: ACHHUZ6OnLbvwCQqecf6Di5raeE+E5NLuAYPsLLnNXmLIlReOBC6MAdwVOZYqTKthaZn0HDQ5UjjhKvNCevSOT7CmCI=
-X-Received: by 2002:a05:6358:4fa6:b0:129:c0c5:da9d with SMTP id
- cg38-20020a0563584fa600b00129c0c5da9dmr617329rwb.29.1685957448895; Mon, 05
- Jun 2023 02:30:48 -0700 (PDT)
+        Mon, 5 Jun 2023 05:33:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F08E9;
+        Mon,  5 Jun 2023 02:33:39 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1685957608tzz4iygk
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 05 Jun 2023 17:33:26 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: UCO5VR5DCxd++cX5LQirmMNyZLC3eu9zWeL07KEu3eknxQBr52q+q6a7eYVC0
+        dtrJp2eVJi4X6qKEqUYPK4FDIvve+INoQeZVxnYP/+yarKQKMWwzDdSrn58U5/RhFh2cEGl
+        LdDbBTKfHa5Hxalg5LunK2UdNKAseZgqNwU7o14kBKySSWA0Yab58OxXPpWyKYkpofSQCbH
+        ngn7iDU7Mjs4VDb7aSI0lTwlTtW5WRnTEEge6ry6UWZ9z4vuov7QViP2mBteIpkNdsapucN
+        myI3oR5hI49TvTvcdOdQIex+dYfTag+AZhTKw721keQRG54QXdKKFFC8eGDjvRsaS3EpTbm
+        Oysb54CJYT/saCkBole+iCqBt5XlTGDR9amFbG1NXrnKmAFLo9PMJooWrHMNw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6742117217107098079
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH 1/4] tools/nolibc: unistd.h: add __syscall() and __syscall_ret() helpers
+Date:   Mon,  5 Jun 2023 17:33:26 +0800
+Message-Id: <20230605093326.156266-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZH1+hkhiA2+ItSvX@1wt.eu>
+References: <ZH1+hkhiA2+ItSvX@1wt.eu>
 MIME-Version: 1.0
-References: <1685555673-2363-1-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1685555673-2363-1-git-send-email-mikelley@microsoft.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 5 Jun 2023 11:30:37 +0200
-Message-ID: <CAKfTPtAyFqG4W0OAc6pejKdEQ4yTRaoC+qiOZN8sRrwCENmVKA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] sched/fair: Fix SMT balance dependency on CPU numbering
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+> On Mon, Jun 05, 2023 at 01:58:57PM +0800, Zhangjin Wu wrote:
+> > > What about something like this:
+> > > 
+> > > static inline long __ret_as_errno(long ret) /* or some other name */
+> > > {
+> > > 	if (ret < 0) {
+> > > 		SET_ERRNO(-ret);
+> > > 		ret = -1;
+> > > 	}
+> > > 	return ret;
+> > > }
+> > > 
+> > > This avoids another macro by using a normal function.
+> > >
+> > 
+> > It is reasonable, like it very much.
+> > 
+> > > Syscall return values should always fit into long, at least
+> > > extra polating from syscall(2) and the fact that they are returned in
+> > > registers.
+> > 
+> > Yes, I did use 'long' instead of 'int' for unistd.h locally, but since tried to
+> > let it work with 'void *' before (e.g. sys_brk, an older version support pass
+> > the errno value), so, the typeof() is used and the same to unistd.h, but at
+> > last, none of (void *) return type is really used in current patchset, so, we
+> > are able to use this normal function version without the checking of the type.
+> > 
+> > > 
+> > > It would be a bit more verbose:
+> > > 
+> > > int chdir(const char *path)
+> > > {
+> > > 	return __ret_as_errno(sys_chdir(path));
+> > > }
+> > >
+> > > But it's clear what's going on and also just one line.
+> > 
+> > Thanks Thomas, It looks good and I do like the 'embedded' calling of
+> > sys_chrdir(path), but __syscall() looks cleaner and shorter too, let's put them
+> > together:
+> > 
+> > int chdir(const char *path)
+> > {
+> > 	return __ret_as_errno(sys_chdir(path));
+> > }
+> > 
+> > int chdir(const char *path)
+> > {
+> > 	return __syscall(chdir, path);
+> > }
+> > 
+> > And even with:
+> > 
+> > int chdir(const char *path)
+> > {
+> > 	return __sysret(sys_chdir(path));
+> > }
+> > 
+> > __syscall() works likes syscall(), and the definition is similar to syscall(),
+> > but uses the syscall name instead of syscall number, If reserve __syscall(),
+> > the inline function would be renamed back to __syscall_ret() or something like
+> > the shorter __sysret(), to align with our new __syscall(). 
+> > 
+> > for sys.h:
+> > 
+> >     /* Syscall return helper, set errno as ret when ret < 0 */
+> >     static inline long __sysret(long ret)
+> >     {
+> >     	if (ret < 0) {
+> >     		SET_ERRNO(-ret);
+> >     		ret = -1;
+> >     	}
+> >     	return ret;
+> >     }
+> > 
+> >     /* Syscall call helper, use syscall name instead of syscall number */
+> >     #define __syscall(name, ...) __sysret(sys_##name(__VA_ARGS__))
+> > 
+> > for unistd.h:
+> > 
+> >     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+> > 
+> > What about this version?
+> > 
+> > The potential 'issue' may be mixing the use of __syscall(), _syscall() and
+> > syscall(), but the compilers may help to fix up this for us, I don't think it
+> > is a bottleneck.
+> 
+> I think that could work. However, please place __attribute__((always_inline))
+> on these inline functions, as we don't want to turn them to function calls
+> even at -O0.
 
-On Wed, 31 May 2023 at 19:55, Michael Kelley <mikelley@microsoft.com> wrote:
->
-> With some CPU numbering schemes, the function select_idle_cpu() currently
-> has a subtle bias to return the first hyper-thread in a core. As a result
-> work is not evenly balanced across hyper-threads in a core. The difference
-> is often as much as 15 to 20 percentage points -- i.e., the first
-> hyper-thread might run at 45% load while the second hyper-thread runs at
-> only 30% load or less.
->
-> Two likely CPU numbering schemes make sense with today's typical case
-> of two hyper-threads per core:
->
-> A. Enumerate all the first hyper-theads in a core, then all the second
->    hyper-threads in a core.  If a system has 8 cores with 16 hyper-threads,
->    CPUs #0 and #8 are in the same core, as are CPUs #1 and #9, etc.
->
-> B. Enumerate all hyper-threads in a core, then all hyper-threads in the
->    next core, etc.  Again with 8 cores and 16 hyper-threads, CPUs #0 and
->    #1 are in the same core, as are CPUs #2 and #3, etc.
->
-> Scheme A is used in most ACPI bare metal systems and in VMs running on
-> KVM.  The enumeration order is determined by the order of the processor
-> entries in the ACPI MADT, and the ACPI spec *recommends* that the MADT
-> be set up for scheme A.
->
-> However, for reasons that pre-date the ACPI recommendation, Hyper-V
-> guests have an ACPI MADT that is set up for scheme B.  When using scheme B,
-> the subtle bias is evident in select_idle_cpu().  While having Hyper-V
-> conform to the ACPI spec recommendation would solve the Hyper-V problem,
-> it is also desirable for the fair scheduler code to be independent of the
-> CPU numbering scheme.  ACPI is not always the firmware configuration
-> mechanism, and CPU numbering schemes might vary more in architectures
-> other than x86/x64.
->
-> The bias occurs with scheme B when "has_idle_cpu" is true and
+Thanks, done.
 
-I assume that you mean has_idle_core as I can't find has_idle_cpu in the code
+> 
+> I'm traveling today, I'll let you and Thomas debate and decide how you'd
+> like this to evolve.
+> 
 
-> select_idle_core() is called in the for_each_cpu_wrap() loop. Regardless
-> of where the loop starts, it will almost immediately encountered a CPU
-> that is the first hyper-thread in a core. If that core is idle, the CPU
-> number of that first hyper-thread is returned. If that core is not idle,
-> both hyper-threads are removed from the cpus mask, and the loop iterates
-> to choose another CPU that is the first hyper-thread in a core.  As a
-> result, select_idle_core() almost always returns the first hyper-thread
-> in a core.
->
-> The bias does not occur with scheme A because half of the CPU numbering
-> space is a series of CPUs that are the second hyper-thread in all the
-> cores. Assuming that the "target" CPU is evenly distributed throughout
-> the CPU numbering space, there's a 50/50 chance of starting in the portion
-> of the CPU numbering space that is all second hyper-threads.  If
-> select_idle_core() finds a idle core, it will likely return a CPU that
-> is the second hyper-thread in the core.  On average over the time,
-> both the first and second hyper-thread are equally likely to be
-> returned.
->
-> Fix this bias by determining which hyper-thread in a core the "target"
-> CPU is -- i.e., the "smt index" of that CPU.  Then when select_idle_core()
-> finds an idle core, it returns the CPU in the core that has the same
-> smt index. If that CPU is not valid to be chosen, just return the CPU
-> that was passed into select_idle_core() and don't worry about bias.
->
-> With scheme B, this fix solves the bias problem by making the chosen
-> CPU be roughly equally likely to either hyper-thread.  With scheme A
-> there's no real effect as the chosen CPU was already equally likely
-> to be either hyper-thread, and still is.
->
-> The imbalance in hyper-thread loading was originally observed in a
-> customer workload, and then reproduced with a synthetic workload.
-> The change has been tested with the synthetic workload in a Hyper-V VM
-> running the normal scheme B CPU numbering, and then with the MADT
-> replaced with a scheme A version using Linux's ability to override
-> ACPI tables. The testing showed no change hyper-thread loading
-> balance with the scheme A CPU numbering, but the imbalance is
-> corrected if the CPU numbering is scheme B.
+Happy traveling.
 
-You failed to explain why it's important to evenly select 1st or 2nd
-hyper-threads on the system.  I don't see any performance figures.
-What would be the benefit ?
+This revision is basically derived from the 'long' type information and
+__ret_as_errno() from Thomas, I will wait suggestion from Thomas and then send
+v2 later.
 
->
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->
-> I haven't previously worked in Linux scheduler code, so I'm posting this
-> as an RFC to point out the observed problem, and to suggest a solution.
-> There may well be considerations in the design of a solution that I'm not
-> aware of, so please educate me or suggest an alternative.
->
-> It's also not completely clear whether an imbalance in hyper-thread
-> loading is actually a problem. It looks weird, and causes customer
-> concern when it is observed consistently across all cores in some
-> production workload. The fair scheduler strives to balance load evenly, so
-> I'm treating it as a problem that should be fixed, if for no other reason
-> than general goodness. But again, I'm sure reviewers will feel free to
-> tell me otherwise. :-) The fix takes relatively few CPU cycles, but it's
-> still a non-zero cost.
->
-> FWIW, the same imbalance has been observed with kernels as far back as
-> 5.4, and the root cause in the code is essentially the same. So it's not
-> a recently introduced issue. I haven't tried anything earlier than 5.4.
->
->  kernel/sched/fair.c | 36 ++++++++++++++++++++++++++++++------
->  1 file changed, 30 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 373ff5f..8b56e9d 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6832,6 +6832,19 @@ static inline bool test_idle_cores(int cpu)
->         return false;
->  }
->
-> +static inline int get_smt_index(int core)
-> +{
-> +       int cpu, n = 0;
-> +
-> +       for_each_cpu(cpu, cpu_smt_mask(core)) {
-> +               if (cpu == core)
-> +                       return n;
-> +               n++;
-> +       }
-> +       /* If get here, cpu_smt_mask is set up incorrectly */
-> +       return 0;
-> +}
-> +
->  /*
->   * Scans the local SMT mask to see if the entire core is idle, and records this
->   * information in sd_llc_shared->has_idle_cores.
-> @@ -6866,10 +6879,11 @@ void __update_idle_core(struct rq *rq)
->   * there are no idle cores left in the system; tracked through
->   * sd_llc->shared->has_idle_cores and enabled through update_idle_core() above.
->   */
-> -static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpus, int *idle_cpu)
-> +static int select_idle_core(struct task_struct *p, int core, int smt_index,
-> +                           struct cpumask *cpus, int *idle_cpu)
->  {
->         bool idle = true;
-> -       int cpu;
-> +       int cpu, index_cpu, n = 0;
->
->         for_each_cpu(cpu, cpu_smt_mask(core)) {
->                 if (!available_idle_cpu(cpu)) {
-> @@ -6885,10 +6899,13 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
->                 }
->                 if (*idle_cpu == -1 && cpumask_test_cpu(cpu, p->cpus_ptr))
->                         *idle_cpu = cpu;
-> +
-> +               if (n++ == smt_index)
-> +                       index_cpu = cpu;
->         }
->
->         if (idle)
-> -               return core;
-> +               return cpumask_test_cpu(index_cpu, p->cpus_ptr) ? index_cpu : core;
->
->         cpumask_andnot(cpus, cpus, cpu_smt_mask(core));
->         return -1;
-> @@ -6922,7 +6939,13 @@ static inline bool test_idle_cores(int cpu)
->         return false;
->  }
->
-> -static inline int select_idle_core(struct task_struct *p, int core, struct cpumask *cpus, int *idle_cpu)
-> +static inline int get_smt_index(int core)
-> +{
-> +       return 0;
-> +}
-> +
-> +static inline int select_idle_core(struct task_struct *p, int core, int smt_index,
-> +                                  struct cpumask *cpus, int *idle_cpu)
->  {
->         return __select_idle_cpu(core, p);
->  }
-> @@ -6942,7 +6965,7 @@ static inline int select_idle_smt(struct task_struct *p, int target)
->  static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
->  {
->         struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
-> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
-> +       int i, cpu, smt_index, idle_cpu = -1, nr = INT_MAX;
->         struct sched_domain_shared *sd_share;
->         struct rq *this_rq = this_rq();
->         int this = smp_processor_id();
-> @@ -6994,9 +7017,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->                 }
->         }
->
-> +       smt_index = get_smt_index(target);
->         for_each_cpu_wrap(cpu, cpus, target + 1) {
->                 if (has_idle_core) {
-> -                       i = select_idle_core(p, cpu, cpus, &idle_cpu);
-> +                       i = select_idle_core(p, cpu, smt_index, cpus, &idle_cpu);
->                         if ((unsigned int)i < nr_cpumask_bits)
->                                 return i;
->
-> --
-> 1.8.3.1
->
+> Also, please note that Paul is OK with merging for 6.5, but we should
+> absolutely limit last-minute changes to the strict minimum we're able
+> to test now.
+
+Strongly agree, we can delay this and the left time64 syscalls to 6.6, because
+they require more cleanup and discussion.
+
+Best regards,
+Zhangjin
+
+> 
+> Thanks!
+> Willy
