@@ -2,126 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB76721B23
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD29721B2E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjFEAI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 20:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S232347AbjFEARs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 20:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjFEAI1 (ORCPT
+        with ESMTP id S229449AbjFEARr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 20:08:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6CBCA;
-        Sun,  4 Jun 2023 17:08:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 4 Jun 2023 20:17:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9368CC;
+        Sun,  4 Jun 2023 17:17:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZDTZ5MLPz4x3x;
-        Mon,  5 Jun 2023 10:08:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685923699;
-        bh=pOuSQOaAtbYZsqBRiDrrigcw5i1OYkXIadN59Arc/E0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CwEbPaMySvPrNOJMWKcrPQ2k2yRRLUopa4U+AObiivGk8UZY3mxuwRhdvUKEAG68D
-         55ECZO3XcxU3XRa0iqCtNqAGH4FDhwOxuQ8sWov2L8EO8rTusoUNwUjvsyRrOAR7lv
-         PJx6e2mNnG8kWAzQTdR6ancCX3B6ttHoL6TDddGg57hw+jpWqq9XmvBEEzkmHai2e8
-         +XnZ6WarUIzwOcJcggjg3uQGC080HfwPooynDp8txv7NelD9MyERQsdWB5y8Q685JK
-         SPKRTkvOIxyHUUioNHZ2mYtFNG3Arb5ff/XOXhknoMoB9BnZlWdufpHZ2mHifyjtZa
-         Dp21JstSvMDJA==
-Date:   Mon, 5 Jun 2023 10:08:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>,
-        Akihiro Suda <suda.gitsendemail@gmail.com>,
-        David Morley <morleyd@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Neal Cardwell <ncardwell@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yuchung Cheng <ycheng@google.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230605100816.08d41a7b@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 630EA60F1A;
+        Mon,  5 Jun 2023 00:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 681DFC433D2;
+        Mon,  5 Jun 2023 00:17:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685924264;
+        bh=Zs6jqBTfPSCRUeatCIGSWI6VZKKS80cfuK2pqFhs6UY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dHNvpo5UYRn2fUo9z38jlZbp5GYUlT2nx3pspRK1qZpEs5A41l6/cTPER0kmIgD9t
+         jKvwbsiSb+9fKIqOPdL0ycU97IVAw5+bS1ywPmBSql+2OHUKpYLmw25tA3pcbihMWA
+         IFDpaPixdYyV+PSvQaqBQFSxvH5w7ogX++x6XMA3UXaQ/elkr9EedHedXm/Ci5Mfr7
+         UblrolIo7UvA9mp8Rpz8MdqZHkFwiq+00wT4fdahUK9irGzy9XsynCD3DYfseQpnNj
+         whotXa41OcQhf6C8Bs6OEizl+kjL4uZ+vx2+RX2RPGbEJ8gGyqHQakCVGkVYA+KHqf
+         vsvbcKpjl8+MA==
+Date:   Mon, 5 Jun 2023 08:17:30 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: dts: imx8mn-beacon: Add HDMI video with sound
+Message-ID: <20230605001730.GS4199@dragon>
+References: <20230601031527.271232-1-aford173@gmail.com>
+ <20230601031527.271232-2-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u3D+RwDlPWSFsvlRdb6GZfK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601031527.271232-2-aford173@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/u3D+RwDlPWSFsvlRdb6GZfK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 31, 2023 at 10:15:25PM -0500, Adam Ford wrote:
+> The Beacon Embedded imx8mn development kit has a DSI
+> to HDMI bridge chip.  The bridge supports stereo audio
+> and hot-plugging.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts b/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+> index 1392ce02587b..3758c46c7162 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mn-beacon-kit.dts
+> @@ -16,4 +16,138 @@ / {
+>  	chosen {
+>  		stdout-path = &uart2;
+>  	};
+> +
+> +	connector {
+> +		compatible = "hdmi-connector";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_connector_in: endpoint {
+> +				remote-endpoint = <&adv7535_out>;
+> +			};
+> +		};
+> +	};
+> +
+> +	reg_hdmi: regulator-hdmi-dvdd {
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_reg_hdmi>;
+> +		compatible = "regulator-fixed";
 
-Hi all,
+Can we start properties from 'compatible'?
 
-Today's linux-next merge of the net-next tree got a conflict in:
+> +		regulator-name = "hdmi_pwr_en";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpio = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		startup-delay-us = <70000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	sound-hdmi {
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,name = "sound-hdmi";
+> +		simple-audio-card,format = "i2s";
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&sai5 0>;
+> +			system-clock-direction-out;
+> +		};
+> +
+> +		simple-audio-card,codec {
+> +			sound-dai = <&adv_bridge>;
+> +		};
+> +	};
+> +};
+> +
+> +&i2c2 {
+> +	adv_bridge: hdmi@3d {
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_hdmi_bridge>;
+> +		compatible = "adi,adv7535";
 
-  net/ipv4/sysctl_net_ipv4.c
+Same here.
 
-between commit:
+Shawn
 
-  e209fee4118f ("net/ipv4: ping_group_range: allow GID from 2147483648 to 4=
-294967294")
-
-from the net tree and commit:
-
-  ccce324dabfe ("tcp: make the first N SYN RTO backoffs linear")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/ipv4/sysctl_net_ipv4.c
-index 88dfe51e68f3,6ae3345a3bdf..000000000000
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@@ -34,8 -34,9 +34,9 @@@ static int ip_ttl_min =3D 1
-  static int ip_ttl_max =3D 255;
-  static int tcp_syn_retries_min =3D 1;
-  static int tcp_syn_retries_max =3D MAX_TCP_SYNCNT;
-+ static int tcp_syn_linear_timeouts_max =3D MAX_TCP_SYNCNT;
- -static int ip_ping_group_range_min[] =3D { 0, 0 };
- -static int ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
- +static unsigned long ip_ping_group_range_min[] =3D { 0, 0 };
- +static unsigned long ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX=
- };
-  static u32 u32_max_div_HZ =3D UINT_MAX / HZ;
-  static int one_day_secs =3D 24 * 3600;
-  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =3D
-
---Sig_/u3D+RwDlPWSFsvlRdb6GZfK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9J3AACgkQAVBC80lX
-0Gw4KAf/WUlZ1HiMtDpseIqqq8A4ZUoXPy7QxK8guXuvpKEBN7LIV8ZXr7vwVeOQ
-oQBEXwg18mLRT8L5KBVRrcg0GZXSgLkN/ZPcROcMiB9imC56Ag3j9H21zlLEpL29
-LEGDlfneaNTnJdSx3aBKsg6Wne7BTh9EQED/7a0IHAOOIfYLRT8Mf7ic6Y7Dl8p0
-Xl8j9O8bBvP+IB2dw/wOiTlECY+IIlQQyEr+zJKLjjFYV7Sw402J/IFhf+iihHhd
-BSlETxgZZyknOuN6PSUfAgXigaVKDi/LKuAXft37RTPRl6bdAgNpEmhWEMx17aJ3
-l8k0Kl+LEwpObX54frPxvZwuD94oZA==
-=HRyB
------END PGP SIGNATURE-----
-
---Sig_/u3D+RwDlPWSFsvlRdb6GZfK--
+> +		reg = <0x3d>, <0x3b>;
+> +		reg-names = "main", "cec";
+> +		adi,dsi-lanes = <4>;
+> +		adi,fixed-lanes;
+> +		dvdd-supply = <&reg_hdmi>;
+> +		v3p3-supply = <&reg_hdmi>;
+> +		v1p2-supply = <&reg_hdmi>;
+> +		a2vdd-supply = <&reg_hdmi>;
+> +		avdd-supply = <&reg_hdmi>;
+> +		pvdd-supply = <&reg_hdmi>;
+> +		interrupt-parent = <&gpio1>;
+> +		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
+> +		#sound-dai-cells = <0>;
+> +
+> +		ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@0 {
+> +				reg = <0>;
+> +
+> +				adv7535_in: endpoint {
+> +					remote-endpoint = <&dsi_out>;
+> +				};
+> +			};
+> +
+> +			port@1 {
+> +				reg = <1>;
+> +
+> +				adv7535_out: endpoint {
+> +					remote-endpoint = <&hdmi_connector_in>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&lcdif {
+> +	assigned-clocks = <&clk IMX8MN_VIDEO_PLL1>;
+> +	assigned-clock-rates = <594000000>;
+> +	status = "okay";
+> +};
+> +
+> +&mipi_dsi {
+> +	samsung,esc-clock-frequency = <20000000>;
+> +	status = "okay";
+> +
+> +	ports {
+> +		port@1 {
+> +			reg = <1>;
+> +
+> +			dsi_out: endpoint {
+> +				remote-endpoint = <&adv7535_in>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&sai5 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_sai5>;
+> +	assigned-clocks = <&clk IMX8MN_CLK_SAI5>;
+> +	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
+> +	assigned-clock-rates = <24576000>;
+> +	#sound-dai-cells = <0>;
+> +	status = "okay";
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl_hdmi_bridge: hdmibridgegrp {
+> +		fsl,pins = <
+> +			MX8MN_IOMUXC_GPIO1_IO09_GPIO1_IO9		0x19
+> +		>;
+> +	};
+> +
+> +	pinctrl_reg_hdmi: reghdmigrp {
+> +		fsl,pins = <
+> +			MX8MN_IOMUXC_SD1_STROBE_GPIO2_IO11              0x16
+> +		>;
+> +	};
+> +
+> +	pinctrl_sai5: sai5grp {
+> +		fsl,pins = <
+> +			MX8MN_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0	0xd6
+> +			MX8MN_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK	0xd6
+> +			MX8MN_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC	0xd6
+> +		>;
+> +	};
+>  };
+> -- 
+> 2.39.2
+> 
