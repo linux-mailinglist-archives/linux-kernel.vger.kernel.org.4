@@ -2,142 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A17721CBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBAC721CC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjFEEDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 00:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S232658AbjFEEE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 00:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFEEDN (ORCPT
+        with ESMTP id S229743AbjFEEEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 00:03:13 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E54BBC
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 21:03:11 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-774efe8c0cfso242371239f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 21:03:11 -0700 (PDT)
+        Mon, 5 Jun 2023 00:04:53 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007E9A6;
+        Sun,  4 Jun 2023 21:04:50 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id 006d021491bc7-558cf19575dso438021eaf.3;
+        Sun, 04 Jun 2023 21:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685937890; x=1688529890;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BejdeN65cIxZZ5H8/q76yXRvLbBZnUEUFMfNrLcKLjg=;
+        b=kYL6+WZlXbw3DT9neTHAET6dXWiNQL8onDCOQ9SJl9YmG/CRUpCkqb5z+fbPDO5YWv
+         3SrO5oH2K5txcuk0sVefNap9Qo8hVFk0My2R+oi1wO+bY9Nc+xo9u7BXo5aA9DOD1khh
+         U+fSd/xsU9IH4D8jY3VIIdOaYfF64MqUdDLdobLoGsAd8ofHmvsUi2joDiHxy7pZGMri
+         zytRXdtDbgDHZUyncrOB7RG6cGTdT7rSkMkWQu03zE+VXcuTHidvSlI6lVkeGY6Qo+Ve
+         ngmyvs6X63aR7/oDLWetxeSaMVj5H2oHAhdvZekrSN9ljgQH5GXclh3TbhEEjdumCBh0
+         BJNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685937790; x=1688529790;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aVOsvXcBHRQXuC+HaYBG4xPvu1frqP2n2IrhjntNu7o=;
-        b=R5UbkiA55TOp+hAnHOhAkzoGFqvAh99OZZ7Wb0pVs2s+N+x7J9Oeq+8+Wws2IlIW5n
-         8z1XZvy2jGdVGBbHxl4WmUES6pPDh4+DvO6PBv8jKfGBnJX2eOfAHpHsbl1AKrsr/gb1
-         LH2oz3tWuv8YOXLBZCNtycVj7WPbWdAC7iB34vCdjo3X7PalbVcnxuk9JkQcAJfry48T
-         PZjHnNl2/OuZO9C+hbcj1vGzuIaa2c7DoSZM++laH/mY9XZr5vBv/MR91LiDNpElQLOq
-         gZYxfB+QYy+gYl8j1UZ6yuPEBL3lXMA/R0z/kO2DwCHDi5MTFKTPySUMe5pXxeR/RJVt
-         aELA==
-X-Gm-Message-State: AC+VfDyZolfOUCjB080rkVJabKmJIw/LsFNgXlBDLk7S6K/c2RNBImrw
-        tQICrQWEeGb0jLjMWq2OYaDajlAxDK5WY1qJpFiZEKsLDLmH
-X-Google-Smtp-Source: ACHHUZ6WaFnHIdICbA18XwFkw7JwL0glpHuMAjkCCLLM6s53s30InQQmtzga43KpDRW2uAdQgjDnKfouv/7o3Gqa5jaG4Hf2vqg7
+        d=1e100.net; s=20221208; t=1685937890; x=1688529890;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BejdeN65cIxZZ5H8/q76yXRvLbBZnUEUFMfNrLcKLjg=;
+        b=SPnsv/+59NQebjKSzVQ+n/dfwT1+wdyU63FwuCIVpN0zor82lhFPK8ObwUHG81sJT2
+         SyoBtksk5pWq4HLrqIuzTUcFK/rySt25JBaUYOBpQFoAIDE5MkPut0TzJBoOQxkXuGAZ
+         BhPTCe9CzxN5txhJGCdiABWHf/xeQI+U39L4oeDPsILyLQOaX6kJGwtUuaOQY2JKbYEp
+         igSAY7Gf7CI3j7Npk0XoXXr1026daKLEjyFAooecrOAMvFFouUT2F9gSZNNnXh4bLRQB
+         fCY+9IUGjqbrxJjrFBB5OCoRVQ7NwhZbJHdQv8+ZR96L8a/twJJ9FzjCjClSKVl72+BD
+         0gJQ==
+X-Gm-Message-State: AC+VfDyn/nl8+MoS2vRpqcAKhkzRJhuvKLcg1b9J1RPQ3cXvfQh2Sw5D
+        +03qEMKcoLS4duDwD1bWYWc=
+X-Google-Smtp-Source: ACHHUZ7xQ5UHuNXVnYA+wIKMpVoBYfIiAikygCaqkhkFI66OzcXP9cGpWXKdLNFGAY0N/Fea6VtlXQ==
+X-Received: by 2002:a05:6358:8a5:b0:125:8fac:399f with SMTP id m37-20020a05635808a500b001258fac399fmr25174485rwj.17.1685937889921;
+        Sun, 04 Jun 2023 21:04:49 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
+        by smtp.gmail.com with ESMTPSA id n19-20020aa78a53000000b0065017055cb4sm4223079pfa.203.2023.06.04.21.04.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 21:04:49 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id A1EF0106291; Mon,  5 Jun 2023 11:04:46 +0700 (WIB)
+Date:   Mon, 5 Jun 2023 11:04:46 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Hongyu Xie <xiehongyu1@kylinos.cn>, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org, corbet@lwn.net
+Cc:     rdunlap@infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xy521521@gmail.com,
+        oe-kbuild-all@lists.linux.dev, lkp@intel.com,
+        Linux Documentation <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v3 -next] tty: serial: add panic serial helper
+Message-ID: <ZH1e3tuuie3bGhPj@debian.me>
+References: <20230605015957.730085-1-xiehongyu1@kylinos.cn>
 MIME-Version: 1.0
-X-Received: by 2002:a02:2941:0:b0:41c:feba:4e8a with SMTP id
- p62-20020a022941000000b0041cfeba4e8amr7546619jap.5.1685937790339; Sun, 04 Jun
- 2023 21:03:10 -0700 (PDT)
-Date:   Sun, 04 Jun 2023 21:03:10 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001b4f6505fd59fb12@google.com>
-Subject: [syzbot] [ext4?] WARNING: locking bug in __ext4_ioctl
-From:   syzbot <syzbot+a537ff48a9cb940d314c@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BFv1gQA3P/g+VqqO"
+Content-Disposition: inline
+In-Reply-To: <20230605015957.730085-1-xiehongyu1@kylinos.cn>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--BFv1gQA3P/g+VqqO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    6f64a5ebe1dc Merge tag 'irq_urgent_for_v6.4_rc5' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=108c54b3280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3da6c5d3e0a6c932
-dashboard link: https://syzkaller.appspot.com/bug?extid=a537ff48a9cb940d314c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+On Mon, Jun 05, 2023 at 09:59:57AM +0800, Hongyu Xie wrote:
+> Tested on an arm64 device.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Tested on what device?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9c3283ed69ea/disk-6f64a5eb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1aeeba51b60c/vmlinux-6f64a5eb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1962adc07598/bzImage-6f64a5eb.xz
+> diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentat=
+ion/dev-tools/panic_serial_helper.rst
+> new file mode 100644
+> index 000000000000..fc5b6e9103bc
+> --- /dev/null
+> +++ b/Documentation/dev-tools/panic_serial_helper.rst
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a537ff48a9cb940d314c@syzkaller.appspotmail.com
+The file name convention is using hyphens (like
+panic-serial-helper.rst).
 
-------------[ cut here ]------------
-Looking for class "&ei->i_data_sem" with key __key.0, but found a different class "&ei->i_data_sem" with the same key
-WARNING: CPU: 0 PID: 19058 at kernel/locking/lockdep.c:938 look_up_lock_class+0xac/0x130 kernel/locking/lockdep.c:938
-Modules linked in:
-CPU: 0 PID: 19058 Comm: syz-executor.1 Not tainted 6.4.0-rc4-syzkaller-00371-g6f64a5ebe1dc #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:look_up_lock_class+0xac/0x130 kernel/locking/lockdep.c:938
-Code: 39 48 8b 55 00 48 81 fa 20 18 16 90 74 2c 80 3d 99 eb 54 04 00 75 23 48 c7 c7 c0 6c 4c 8a c6 05 89 eb 54 04 01 e8 34 28 3c f7 <0f> 0b eb 0c e8 1b 25 00 fa 85 c0 75 48 45 31 e4 48 83 c4 08 4c 89
-RSP: 0018:ffffc9000dfc7810 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffffffff91f0c721 RCX: ffffc9000b9e4000
-RDX: 0000000000040000 RSI: ffffffff814c03a7 RDI: 0000000000000001
-RBP: ffff888056cc3488 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff915b7720
-R13: 0000000000000001 R14: ffff888056cc3488 R15: 0000000000000001
-FS:  00007fd430ba3700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2c928000 CR3: 000000004fd89000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- register_lock_class+0xbe/0x1120 kernel/locking/lockdep.c:1290
- __lock_acquire+0x10d/0x5f30 kernel/locking/lockdep.c:4965
- lock_acquire kernel/locking/lockdep.c:5705 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
- down_write_nested+0x96/0x200 kernel/locking/rwsem.c:1689
- ext4_double_down_write_data_sem+0x67/0x80 fs/ext4/move_extent.c:58
- swap_inode_boot_loader fs/ext4/ioctl.c:423 [inline]
- __ext4_ioctl+0x2aa1/0x4b00 fs/ext4/ioctl.c:1418
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd42fe8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd430ba3168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fd42ffabf80 RCX: 00007fd42fe8c169
-RDX: 0000000000000000 RSI: 0000000000006611 RDI: 0000000000000004
-RBP: 00007fd42fee7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd8894480f R14: 00007fd430ba3300 R15: 0000000000022000
- </TASK>
+The wording below really confuses me, but I try my best reviewing here.
 
+> @@ -0,0 +1,148 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> +Using panic serial helper to get kernel logs after panic
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> +
+> +:Author: Hongyu Xie <xiehongyu1@kylinos.cn>
+> +
+> +What is this?
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +A debug module inspired by kgdboc that allows you to get all kernel logs
+> +after panic.
+> +
+> +When do you need it and why?
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> +
+> +When
+> +--------------
+> +
+> +Didn't enable debugging tool like Kdump and didn't connect a USB-to-UART
+> +tool to the debug UART port on your PC before panic.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+This section is unnecessary.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> +
+> +Why
+> +--------------
+> +
+> +There are many debugging methods to know what was going on before panic.
+> +
+> +Kdump, for example. If Kdump is enabled, you can get a core image after
+"The first is Kdump. When it is enabled, ... . Then you can use GDB ..."
+> +panic. Then use GDB or Crash to debug that core image to know what happe=
+ned
+> +before panic (see ``Documentation/admin-guide/kdump/kdump.rst`` for more
+> +information about Kdump).
+"(see ``Documentation/admin-guide/kdump/kdump.rst for Kdump
+documentation)."
+> +
+> +Another way is to connect the UART side of a USB-to-UART tool to the
+> +debugging UART port (normally a 3 pin slot on the motherborad or a RS232
+> +port on the back panel of your PC) before panic happens. Then connect the
+> +USB side of a USB-to-UART tool to another PC. You can read all the kernel
+> +logs coming from that UART port through apps like minicom on another PC.
+> +So when panic happens you'll know what was going on.
+> +
+> +What if Kdump hasn't been enabled? And in production environment you don=
+'t
+> +always connect a USB-to-UART tool before panic happens.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+"... And yet the panic happens in production where you don't have access
+to USB-to-UART device?"
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+> +
+> +So if Kdump is not enabled, you can use this module to get all the kernel
+> +logs if this module is loaded prior to the panic.
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+"For both situations, you can use panic_serial_helper module to get all nec=
+cessary kernel logs once it is loaded."
 
-If you want to undo deduplication, reply with:
-#syz undup
+> +
+> +How to use it?
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Prerequisites
+> +--------------
+> +
+> +1. Same as kgdboc, the UART driver must implement two callbacks in the
+> +struct uart_ops. See ``Documentation/dev-tools/kgdb.rst`` section
+> +``kgdboc and uart_ops``
+> +
+> +2. Your PC has an UART port and it's working.
+> +
+> +How
+> +--------------
+> +
+> +First you need to enable ``CONFIG_PANIC_SERIAL_HELPER`` in your
+> +config. To enable ``CONFIG_PANIC_SERIAL_HELPER`` you should look under
+"To enable it, go to ..."
+> +:menuselection:`Device Drivers-->Character devices-->Enable TTY (TTY [=
+=3Dy])-->Serial drivers`
+> +and select :menuselection:`debug through UART after panic`.
+> +
+> +Second, build and update the kernel image. Then wait for panic.
+"Then build and deploy the kernel as usual."
+> +
+> +After panic, you need to do the following,
+"When the panic occurs, you need to do the following:"
+> +1. connect the UART side of an USB-to-UART tool to any UART
+> +port on your device (PC, server, Laptop, etc...).
+> +Connect the USB side of that tool to another PC. Open
+> +minicom (or other app) on that PC, and set "/dev/ttyUSB0"(or
+> +"/dev/ttyUSB1 if there is already another USB-to-UART tool
+> +connected to your device) with "115200 8N1".
+> +
+> +It automatically selects the port where you first press the
+> +"Enter" key (some keyboard labeled this with "Return").
+> +
+> +2. press "Enter" (or "Return") in that
+> +minicom window; you'll get a help menu:
+"Press Enter and the help menu will appear."
+> +help:::
+> +
+> +    -a      show all kernel msg
+> +
+> +    -3      show S3 msg
+> +
+> +    -4      show S4 msg
+> +
+> +    -filter-[string]        show msg containing [string]
+> +
+> +    -q-     quit
+> +
+> +see ``Help menu options`` for details.
+> +
+> +3. finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
+> +"Enter" to get what you want.
+
+Do I have to pass ``-a`` or ``a``? Or is it command-line program or TUI
+interface?
+
+Anyway,
+
+"3. Select one of above options and happy hacking!"
+
+> +
+> +Help menu options
+> +-----------------
+> +Available options:
+> +
+> + - a
+> +
+> +   Show all the messages starting from ``Booting Linux on ...``
+> +
+> + - 3
+> +
+> +   If STR happened before panic, this will show messages starting from
+> +   ``PM: suspend entry...``
+> +
+> + - 4
+> +
+> +   If STD happened before panic, this will show messages starting from
+> +   ``PM: hibernation entry...``
+> +
+> + - filter-[string]
+> +
+> +   Provide case-ignored filter matching. Only show messages that contain=
+ing
+> +   ``string``. For example, if you're only interesting in message lines
+> +   that containing ``CPU`` or ``cpu``, you just input
+> +   ``filter-CPU`` or ``filter-cpu``.
+> +   Here is an output example for filtering ``CPU``::
+"For example, if you'd like to see message lines that contain ``CPU`` or
+``cpu``, you can pass either ``filter-CPU`` or ``filter-cpu``. The
+corresponding output would be like::"
+> +
+> +   <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6=
+633
+> +   <6>[    0.000000] Detected PIPT I-cache on CPU0
+> +   <6>[    0.000000] CPU features: detected: Kernel page table isolation=
+ (K
+> +
+> +   ...
+> +
+> +   <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0=
+000
+> +   <6>[    0.002411] smp: Bringing up secondary CPUs ...
+> +   <6>[    0.039105] Detected PIPT I-cache on CPU1
+> +
+> +   ...
+> +
+> +   <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
+> +   <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
+> +
+> +   ...
+> +
+> +   <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
+> +   <2>[  225.297909] SMP: stopping secondary CPUs
+> +   <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
+> +
+> + - q
+> +
+> +  Return to help menu.
+
+The doc syntax looks messy, so I have to fix it up:
+
+---- >8 ----
+diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentatio=
+n/dev-tools/panic_serial_helper.rst
+index fc5b6e9103bc2d..1ed841d03ab1c2 100644
+--- a/Documentation/dev-tools/panic_serial_helper.rst
++++ b/Documentation/dev-tools/panic_serial_helper.rst
+@@ -28,7 +28,7 @@ There are many debugging methods to know what was going o=
+n before panic.
+=20
+ Kdump, for example. If Kdump is enabled, you can get a core image after
+ panic. Then use GDB or Crash to debug that core image to know what happened
+-before panic (see ``Documentation/admin-guide/kdump/kdump.rst`` for more
++before panic (see Documentation/admin-guide/kdump/kdump.rst for more
+ information about Kdump).
+=20
+ Another way is to connect the UART side of a USB-to-UART tool to the
+@@ -51,8 +51,7 @@ Prerequisites
+ --------------
+=20
+ 1. Same as kgdboc, the UART driver must implement two callbacks in the
+-struct uart_ops. See ``Documentation/dev-tools/kgdb.rst`` section
+-``kgdboc and uart_ops``
++   struct uart_ops. See Documentation/dev-tools/kgdb.rst for details.
+=20
+ 2. Your PC has an UART port and it's working.
+=20
+@@ -66,20 +65,20 @@ and select :menuselection:`debug through UART after pan=
+ic`.
+=20
+ Second, build and update the kernel image. Then wait for panic.
+=20
+-After panic, you need to do the following,
++After panic, you need to do the following:
++
+ 1. connect the UART side of an USB-to-UART tool to any UART
+-port on your device (PC, server, Laptop, etc...).
+-Connect the USB side of that tool to another PC. Open
+-minicom (or other app) on that PC, and set "/dev/ttyUSB0"(or
+-"/dev/ttyUSB1 if there is already another USB-to-UART tool
+-connected to your device) with "115200 8N1".
++   port on your device (PC, server, Laptop, etc...).
++   Connect the USB side of that tool to another PC. Open
++   minicom (or other app) on that PC, and set "/dev/ttyUSB0"(or
++   "/dev/ttyUSB1 if there is already another USB-to-UART tool
++   connected to your device) with "115200 8N1".
+=20
+-It automatically selects the port where you first press the
+-"Enter" key (some keyboard labeled this with "Return").
++   It automatically selects the port where you first press the
++   "Enter" key (some keyboard labeled this with "Return").
+=20
+-2. press "Enter" (or "Return") in that
+-minicom window; you'll get a help menu:
+-help:::
++2. press "Enter" (or "Return") in that minicom window; you'll get a help m=
+enu
++   like::
+=20
+     -a      show all kernel msg
+=20
+@@ -94,7 +93,7 @@ help:::
+ see ``Help menu options`` for details.
+=20
+ 3. finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
+-"Enter" to get what you want.
++   "Enter" to get what you want.
+=20
+ Help menu options
+ -----------------
+@@ -122,27 +121,27 @@ Available options:
+    ``filter-CPU`` or ``filter-cpu``.
+    Here is an output example for filtering ``CPU``::
+=20
+-   <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6633
+-   <6>[    0.000000] Detected PIPT I-cache on CPU0
+-   <6>[    0.000000] CPU features: detected: Kernel page table isolation (K
++     <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6=
+633
++     <6>[    0.000000] Detected PIPT I-cache on CPU0
++     <6>[    0.000000] CPU features: detected: Kernel page table isolation=
+ (K
+=20
+-   ...
++     ...
+=20
+-   <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000
+-   <6>[    0.002411] smp: Bringing up secondary CPUs ...
+-   <6>[    0.039105] Detected PIPT I-cache on CPU1
++     <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0=
+000
++     <6>[    0.002411] smp: Bringing up secondary CPUs ...
++     <6>[    0.039105] Detected PIPT I-cache on CPU1
+=20
+-   ...
++     ...
+=20
+-   <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
+-   <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
++     <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
++     <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
+=20
+-   ...
++     ...
+=20
+-   <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
+-   <2>[  225.297909] SMP: stopping secondary CPUs
+-   <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
++     <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
++     <2>[  225.297909] SMP: stopping secondary CPUs
++     <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
+=20
+  - q
+=20
+-  Return to help menu.
++   Return to help menu.
+
+Then apply my wording improves on top of above diff.
+
+> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> index 3e3fb377d90d..86a2c1884b04 100644
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -198,6 +198,31 @@ config SERIAL_KGDB_NMI
+> =20
+>  	  If unsure, say N.
+> =20
+> +config PANIC_SERIAL_HELPER
+> +	tristate "debug through UART after panic"
+> +	depends on PANIC_TIMEOUT=3D0
+> +	select CONSOLE_POLL
+> +	help
+> +	  This is a debug module that allows you to get all kernel logs
+> +	  after panic.
+> +
+> +	  Normally you need to attach a USB-to-UART tool or enable kdump
+> +	  before panic happens to get log from kernel after panic. If you
+> +	  didn't do that and kdump is not working, you can't get any log to
+> +	  know what happened before panic. If you have a USB-to-UART tool
+> +	  and the UART port on your computer is working, this module helps
+> +	  you to get all kernel log after panic() is called.
+> +
+> +	  This module uses serial port in poll mode, so it's more stable
+> +	  than other debugging methods.
+> +
+> +	  Read <file:Documentation/dev-tools/panic_serial_helper.rst> for
+> +	  usage.
+> +
+> +	  Say Y if you have an UART port that is working. If unsure, say N.
+> +	  Say M if you want add this as a module driver.
+"Say Y if you have a working UART port and you want to gather kernel
+logs. To compile this as module (which will be called panic_serial_helper),
+say M. If unsure, say N."
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--BFv1gQA3P/g+VqqO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH1e1wAKCRD2uYlJVVFO
+o+TpAQCsMnMPIL59p67dbqDE9czzcxu+Q+IgBPvP5Z/OJuNSegD9Hv5a3dQJQGcr
+LXzMdtJCndinoo0f1zIemWztrhuPxww=
+=VzBO
+-----END PGP SIGNATURE-----
+
+--BFv1gQA3P/g+VqqO--
