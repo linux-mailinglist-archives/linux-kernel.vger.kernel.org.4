@@ -2,167 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08667223D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C8C7223D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjFEKtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
+        id S229972AbjFEKtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjFEKs7 (ORCPT
+        with ESMTP id S230450AbjFEKt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:48:59 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02849EA
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:48:58 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-652d76be8c2so3726934b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 03:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685962137; x=1688554137;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybIVKhIMvG4X9VWsC5FMi4iXqxRG06/FeOW8owPbVV4=;
-        b=YGMZoenSFKA3na/YkT8NkgrMs4UVwYex/On9Riu+OXPxpbzEWu1GHbpZ+SwrqurJZc
-         6AqPQG9NIvzqsuWA3zhDkTkDtWoXortJuO/66N6j2soNcFKLC6LX5Shg+41VWMXGR+aQ
-         XYCh+0icZeQjL/qGE1MfArqQ1DTkbINADCwZ/sV7XFeW+ThRNo/hmRyU6z6bh/dZ/Tuj
-         WmjKOt63YS29cXjXOH0p3Fa3SwsYk+Swpt3qA4gHjde2OSs6rJMl1+BAmmZ96+yTuNob
-         3oy4ckPAtZL6TUZ5R/9XpXg42DOzLVkiJ3GdHGBN1e0NjOwGAEMhQjvZXsP4y4R0K1Lb
-         meTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685962137; x=1688554137;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ybIVKhIMvG4X9VWsC5FMi4iXqxRG06/FeOW8owPbVV4=;
-        b=DCDpJSPqcQe/byf2r1IV+epM4rveNSjadS/E3sNjJs0iD7QmGHTDIfUoo4jmgoD0is
-         dw/prMGLemtePrBHpwTIaIDIUxGSKACX6oVk98siK1wVMb2vALeqHBAReoaKWntAjChJ
-         3/2o2H5vhyqIBD/X1hIgS8l5FzpZ2h+JwyHfhfMk69xwHi+iim2DrJdlayYYHb/JZsBd
-         Ac1S9ONwTQNOunoSDUPApNd3+rBO0+HmwiqRWYsg/ZkNLBjSCsjT44iiH+Vf9ogndtQ2
-         DQ7UFkTzeunoEZ3kvYYtx74J+lpKa01bS+wprFxYzTuiPJL7jMhz3mBbnsabpLwGhLNZ
-         VnMA==
-X-Gm-Message-State: AC+VfDzE0pycK30jv9oPzULyqEfTYYnCSzzcET4S/h08E+KTiNkOzXJy
-        TmJeG7CmS8J26nysuXAIA6Q=
-X-Google-Smtp-Source: ACHHUZ76QJyT9zBKdA4WnQVH1bjKpx683fZTw5txI7OE9pG2L8oN8H/kkQIgYM8P9nqP6OIdXTS9nA==
-X-Received: by 2002:a05:6a00:856:b0:64b:f03b:2642 with SMTP id q22-20020a056a00085600b0064bf03b2642mr22950761pfk.23.1685962137469;
-        Mon, 05 Jun 2023 03:48:57 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:2003:b135:89cf:b185:51e1:ed4b])
-        by smtp.gmail.com with ESMTPSA id w7-20020aa78587000000b0064d681c753csm4935442pfn.40.2023.06.05.03.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 03:48:57 -0700 (PDT)
-From:   Raag Jadav <raagjadav@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Raag Jadav <raagjadav@gmail.com>
-Subject: [PATCH 2/2] regulator: act8945a: get rid of redundant structure
-Date:   Mon,  5 Jun 2023 16:18:30 +0530
-Message-Id: <20230605104830.68552-2-raagjadav@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230605104830.68552-1-raagjadav@gmail.com>
-References: <20230605104830.68552-1-raagjadav@gmail.com>
+        Mon, 5 Jun 2023 06:49:27 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293381B4;
+        Mon,  5 Jun 2023 03:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685962157; x=1717498157;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=RDSiOGvuWDvk0klatOSDgEpCizk0Ii4pCFeHhwpwOQU=;
+  b=Lvy0hqht0+3pPCFEKxO+Qrof4fpir7T5n+IEGWqVaJ50VUHNgN4KFTb0
+   3U/Osny/jRf4vGehXBj+74TKoTKRG/8iOTrM2QNAtzTSxxp6n8rZYwQXj
+   rrd7hE6ATmfj546ZzA3H+0wfm3WbnbyEph736LLSInuIfF5hI+FJ7A7Z9
+   On3f7McFuYasKF6XohFG3wAzoEx185vlf+u56KoEALi27B+ConOke/NU6
+   QhRHnKBcYE0q66HOVgUrQy0tYvROdlbb6nFQ5c3PeBpHdhdC1gL7pZ4lm
+   By1rw/OhjcyVulewDqpRTjV5V76re1LISByfUNok1abAQPHiWzVGXL4RD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="422162794"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="422162794"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 03:48:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="708620545"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="708620545"
+Received: from mylly.fi.intel.com (HELO [10.237.72.143]) ([10.237.72.143])
+  by orsmga002.jf.intel.com with ESMTP; 05 Jun 2023 03:48:52 -0700
+Message-ID: <ed2cbf76-1868-9153-81c7-cc17b807421e@linux.intel.com>
+Date:   Mon, 5 Jun 2023 13:48:51 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, David Zheng <david.zheng@intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com
+References: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
+ <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
+ <ZH2yr1sFvjbAiBTq@shikoro>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <ZH2yr1sFvjbAiBTq@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove struct act8945a_pmic, as we no longer need drvdata.
+On 6/5/23 13:02, Wolfram Sang wrote:
+> On Fri, May 26, 2023 at 04:58:26PM +0300, Jarkko Nikula wrote:
+>> On 5/24/23 21:14, David Zheng wrote:
+>>> With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+>>> RX FIFO is empty. When testing with the slave-eeprom, each transaction
+>>> has 2 bytes for address/index and 1 byte for value, the address byte
+>>> can be written as data byte due to dropping STOP condition.
+>>>
+>>> In the test below, the master continuously writes to the slave, first 2
+>>> bytes are index, 3rd byte is value and follow by a STOP condition.
+>>>
+>>>    i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
+>>>    i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
+>>>    i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
+>>>
+>>> Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
+>>> next 2 bytes can be treated as buffer index for upcoming transaction.
+>>> Supposedly the slave eeprom buffer would be written as
+>>>
+>>>    EEPROM[0x00D1] = 0xD1
+>>>    EEPROM[0x00D2] = 0xD2
+>>>    EEPROM[0x00D3] = 0xD3
+>>>
+>>> When CPU load is high the slave irq handler may not read fast enough,
+>>> the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+>>> (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+>>> the transactions below.
+>>>
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>>>    0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+>>>
+>>> After `D1` is received, read loop continues to read `00` which is the
+>>> first bype of next index. Since STOP condition is ignored by the loop,
+>>> eeprom buffer index increased to `D2` and `00` is written as value.
+>>>
+>>> So the slave eeprom buffer becomes
+>>>
+>>>    EEPROM[0x00D1] = 0xD1
+>>>    EEPROM[0x00D2] = 0x00
+>>>    EEPROM[0x00D3] = 0xD3
+>>>
+>>> The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+>>> the transactions. The first index byte in this case would have bit 11
+>>> set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+>>> which will reset `idx_write_cnt` in slave eeprom.
+>>>
+>>> Signed-off-by: David Zheng <david.zheng@intel.com>
+> 
+> Applied to for-current, thanks!
+> 
+> Someone maybe has a Fixes tag for it?
+> 
+In my opinion this patch is more improvement rather than a regression fix.
 
-Signed-off-by: Raag Jadav <raagjadav@gmail.com>
----
- drivers/regulator/act8945a-regulator.c | 29 ++++++++------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/regulator/act8945a-regulator.c b/drivers/regulator/act8945a-regulator.c
-index bd54d76efcbc..73504253acc9 100644
---- a/drivers/regulator/act8945a-regulator.c
-+++ b/drivers/regulator/act8945a-regulator.c
-@@ -67,10 +67,6 @@ enum {
- 	ACT8945A_ID_LDO4,
- };
- 
--struct act8945a_pmic {
--	struct regmap *regmap;
--};
--
- static const struct linear_range act8945a_voltage_ranges[] = {
- 	REGULATOR_LINEAR_RANGE(600000, 0, 23, 25000),
- 	REGULATOR_LINEAR_RANGE(1200000, 24, 47, 50000),
-@@ -301,17 +297,13 @@ static int act8945a_pmic_probe(struct platform_device *pdev)
- {
- 	struct regulator_config config = { };
- 	const struct regulator_desc *regulators;
--	struct act8945a_pmic *act8945a;
- 	struct regulator_dev *rdev;
-+	struct regmap *regmap;
- 	int i, num_regulators;
- 	bool voltage_select;
- 
--	act8945a = devm_kzalloc(&pdev->dev, sizeof(*act8945a), GFP_KERNEL);
--	if (!act8945a)
--		return -ENOMEM;
--
--	act8945a->regmap = dev_get_regmap(pdev->dev.parent, NULL);
--	if (!act8945a->regmap) {
-+	regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!regmap) {
- 		dev_err(&pdev->dev,
- 			"could not retrieve regmap from parent device\n");
- 		return -EINVAL;
-@@ -330,7 +322,6 @@ static int act8945a_pmic_probe(struct platform_device *pdev)
- 
- 	config.dev = &pdev->dev;
- 	config.dev->of_node = pdev->dev.parent->of_node;
--	config.driver_data = act8945a;
- 	for (i = 0; i < num_regulators; i++) {
- 		rdev = devm_regulator_register(&pdev->dev, &regulators[i],
- 					       &config);
-@@ -342,33 +333,31 @@ static int act8945a_pmic_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	platform_set_drvdata(pdev, act8945a);
--
- 	/* Unlock expert registers. */
--	return regmap_write(act8945a->regmap, ACT8945A_SYS_UNLK_REGS, 0xef);
-+	return regmap_write(regmap, ACT8945A_SYS_UNLK_REGS, 0xef);
- }
- 
--static int __maybe_unused act8945a_suspend(struct device *pdev)
-+static int __maybe_unused act8945a_suspend(struct device *dev)
- {
--	struct act8945a_pmic *act8945a = dev_get_drvdata(pdev);
-+	struct regmap *regmap = dev_get_regmap(dev->parent, NULL);
- 
- 	/*
- 	 * Ask the PMIC to enter the suspend mode on the next PWRHLD
- 	 * transition.
- 	 */
--	return regmap_write(act8945a->regmap, ACT8945A_SYS_CTRL, 0x42);
-+	return regmap_write(regmap, ACT8945A_SYS_CTRL, 0x42);
- }
- 
- static SIMPLE_DEV_PM_OPS(act8945a_pm, act8945a_suspend, NULL);
- 
- static void act8945a_pmic_shutdown(struct platform_device *pdev)
- {
--	struct act8945a_pmic *act8945a = platform_get_drvdata(pdev);
-+	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
- 
- 	/*
- 	 * Ask the PMIC to shutdown everything on the next PWRHLD transition.
- 	 */
--	regmap_write(act8945a->regmap, ACT8945A_SYS_CTRL, 0x0);
-+	regmap_write(regmap, ACT8945A_SYS_CTRL, 0x0);
- }
- 
- static struct platform_driver act8945a_pmic_driver = {
--- 
-2.25.1
-
+I see it's continuation to the commits dcf1bf648f94 ("i2c: designware: 
+Empty receive FIFO in slave interrupt handler") and 3b5f7f10ff6e ("i2c: 
+designware: slave should do WRITE_REQUESTED before WRITE_RECEIVED").
