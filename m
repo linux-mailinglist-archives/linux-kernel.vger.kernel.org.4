@@ -2,151 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6027220FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC2772210A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjFEI1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S229677AbjFEIcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjFEI1p (ORCPT
+        with ESMTP id S229484AbjFEIcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:27:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E844B0
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 01:27:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685953619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J8at3jyLYspjW7I0pCXUj/ZCT3YmM7eGZSNtKBL6MtI=;
-        b=bGhOxUg0VJgchxJBdQEul7aVE3Gv5vM0TeFCm5W6cXFtGWvfboLkbx0AEm5HgzOPbtnQHf
-        GNckHUTRQoSmWK3bgHC2AVvGikJc6wqtRiA5qgPIzBajMbU+N9MWMqPf6vYI4JiHEPVopC
-        KkP62djVAYlC7c2LFMo8uyQDiyoH/M8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-399-g0HP4XIfMnOR2TrvUjwBaQ-1; Mon, 05 Jun 2023 04:26:58 -0400
-X-MC-Unique: g0HP4XIfMnOR2TrvUjwBaQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f736116989so6440425e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 01:26:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685953617; x=1688545617;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J8at3jyLYspjW7I0pCXUj/ZCT3YmM7eGZSNtKBL6MtI=;
-        b=BqN0+lHwWlIr8n5yUrEmrcFcMAKIfh6tzOkeamSThOh61StVd3KG8s7+DqNCMF7C33
-         GGrULsrwBs/iX9kIT0Vii96mrB1KnNyc8NvSz7GIksIO7B5yLb2rtt3goYmdGUTc1uUn
-         MLamgFoQke5yEFnNmgd+b6EnNumArzx9BugxzcktL0NbYJGZcxJXO/OAs1OW6JEnG6I5
-         xMWvKXY9EOQgHvwKUL8epHviT5o5LGdSbzZhZr0vy8p0IhJJ85MlEkP10YP2nEddyrc7
-         GXwa2RzJE/PKAK6UiGmvV3J/QM95f1S28HmoeJs/JQlA5dmKmQPnjs4a/LJDtvGftC2Z
-         vpUA==
-X-Gm-Message-State: AC+VfDzi662IcUcch/IkWziHZ2IHywlECSw0nHpn0huwDopvBgP+Frmr
-        +ruLe8LO0Hf3lvnjbwaUIqwfBr1ymSJ5JbsIYsPC0jPWpD1529Wwyspn6pUiIq6uJ4Ou7baL/lc
-        KXlvJ85nQa/iybdKU+Up71XG2
-X-Received: by 2002:a05:600c:1d98:b0:3f7:367a:38cb with SMTP id p24-20020a05600c1d9800b003f7367a38cbmr3232789wms.2.1685953617682;
-        Mon, 05 Jun 2023 01:26:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7VE8iVjNCuqsNoEIKvM2en0FHwV2THTF/MEveUKF9yun03XpX+3wMK7X0sxFjbHVuiakb1jg==
-X-Received: by 2002:a05:600c:1d98:b0:3f7:367a:38cb with SMTP id p24-20020a05600c1d9800b003f7367a38cbmr3232772wms.2.1685953617428;
-        Mon, 05 Jun 2023 01:26:57 -0700 (PDT)
-Received: from sgarzare-redhat ([5.77.94.106])
-        by smtp.gmail.com with ESMTPSA id y5-20020adfd085000000b003095bd71159sm9123063wrh.7.2023.06.05.01.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 01:26:56 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 10:26:54 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>,
-        jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org, stefanha@redhat.com
-Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in
- vhost_work_queue
-Message-ID: <4rqrebfglyif4d7i4ufdnj2uqnubvljkeciqmelvotti5iu5ja@fryxznjicgn6>
-References: <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
- <CAGxU2F7HK5KRggiY7xnKHeXFRXJmqcKbjf3JnXC3mbmn9xqRtw@mail.gmail.com>
- <e4589879-1139-22cc-854f-fed22cc18693@oracle.com>
- <6p7pi6mf3db3gp3xqarap4uzrgwlzqiz7wgg5kn2ep7hvrw5pg@wxowhbw4e7w7>
- <035e3423-c003-3de9-0805-2091b9efb45d@oracle.com>
- <CAGxU2F5oTLY_weLixRKMQVqmjpDG_09yL6tS2rF8mwJ7K+xP0Q@mail.gmail.com>
- <43f67549-fe4d-e3ca-fbb0-33bea6e2b534@oracle.com>
- <bbe697b6-dd9e-5a8d-21c5-315ab59f0456@oracle.com>
- <7vk2uizpmf4fi54tmmopnbwwb7fs2xg6vae6ynrcvs26hjmshb@hpjzu4jfj35i>
- <b5a845e9-1fa0-ea36-98c4-b5da989c44c6@oracle.com>
+        Mon, 5 Jun 2023 04:32:31 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5506BB0;
+        Mon,  5 Jun 2023 01:32:28 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 8C5325FD10;
+        Mon,  5 Jun 2023 11:32:25 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685953945;
+        bh=rcmkcmvXvlTClC6RLl0usufbWZ43nNBCgISC/BBJztQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=DYOvnaOTvkIA2gZzibpKhAau9XOxoMNCzadDny1zRD26CXSlqfcBkzgqXVUYY1Zyz
+         JyioYfKvbfNioCmHoDAVrNUixZb7DLstZuC+7Ss0dcomtk92bVA3i7D0F+FfLDKi1T
+         8baw4Wh/Zm52kP93LmpXXhB7dARA7BoQUq+iamcHl723N9p1Vkh5xQg4ecVqGrk+U9
+         Ak7fb2BLcJw++p6+psFX1WX1s7YcZlVzUB3swNx/tDV7JE5PwEt57AWJPJH8mYquTK
+         debttSRJvqVZT4e7cHpxWdDZVjIK0gbwp9rUhMyChEK2kfGH+UKw4/YIWzKDYXXbfF
+         MDvRfV9gO5ihA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon,  5 Jun 2023 11:32:24 +0300 (MSK)
+Message-ID: <9bea333a-e5fc-af89-29a0-fa01236488a3@sberdevices.ru>
+Date:   Mon, 5 Jun 2023 11:27:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] mtd: rawnand: meson: fix ready/busy command
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <stable@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>
+References: <20230605061048.485622-1-AVKrasnov@sberdevices.ru>
+ <19f809ab-218e-8da5-6d5e-ac47902fa706@sberdevices.ru>
+ <20230605101739.069b98af@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230605101739.069b98af@xps-13>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b5a845e9-1fa0-ea36-98c4-b5da989c44c6@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/05 04:52:00 #21434197
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 11:33:09AM -0500, Mike Christie wrote:
->On 6/1/23 2:47 AM, Stefano Garzarella wrote:
->>>
->>> static void vhost_worker_free(struct vhost_dev *dev)
->>> {
->>> -††† struct vhost_worker *worker = dev->worker;
->>> +††† struct vhost_task *vtsk = READ_ONCE(dev->worker.vtsk);
->>>
->>> -††† if (!worker)
->>> +††† if (!vtsk)
->>> ††††††† return;
->>>
->>> -††† dev->worker = NULL;
->>> -††† WARN_ON(!llist_empty(&worker->work_list));
->>> -††† vhost_task_stop(worker->vtsk);
->>> -††† kfree(worker);
->>> +††† vhost_task_stop(vtsk);
->>> +††† WARN_ON(!llist_empty(&dev->worker.work_list));
->>> +††† WRITE_ONCE(dev->worker.vtsk, NULL);
+
+
+On 05.06.2023 11:17, Miquel Raynal wrote:
+> Hi Arseniy,
+> 
+> avkrasnov@sberdevices.ru wrote on Mon, 5 Jun 2023 09:39:40 +0300:
+> 
+>> Hello Miquel!
 >>
->> The patch LGTM, I just wonder if we should set dev->worker to zero here,
->
->We might want to just set kcov_handle to zero for now.
->
->In 6.3 and older, I think we could do:
->
->1. vhost_dev_set_owner could successfully set dev->worker.
->2. vhost_transport_send_pkt runs vhost_work_queue and sees worker
->is set and adds the vhost_work to the work_list.
->3. vhost_dev_set_owner fails in vhost_attach_cgroups, so we stop
->the worker before the work can be run and set worker to NULL.
->4. We clear kcov_handle and return.
->
->We leave the work on the work_list.
->
->5. Userspace can then retry vhost_dev_set_owner. If that works, then the
->work gets executed ok eventually.
->
->OR
->
->Userspace can just close the device. vhost_vsock_dev_release would
->eventually call vhost_dev_cleanup (vhost_dev_flush won't see a worker
->so will just return), and that will hit the WARN_ON but we would
->proceed ok.
->
->If I do a memset of the worker, then if userspace were to retry
->VHOST_SET_OWNER, we would lose the queued work since the work_list would
->get zero'd. I think it's unlikely this ever happens, but you know best
->so let me know if this a real issue.
->
+>> I exclude this patch from the recent Meson patchset, as it is fix and not related to another patches.
+>> Also I think that I can split Meson patchset (from links below) in the following way:
+>> 1) Patch/patchset for OOB layout
+>> 2) Patchset for "nand-rb" logic (meson_nand.c + DT bindings)
+>> These two can also go independently:
+>> 3) https://lore.kernel.org/linux-mtd/20230601061850.3907800-6-AVKrasnov@sberdevices.ru/
+>> 4) https://lore.kernel.org/linux-mtd/20230601061850.3907800-7-AVKrasnov@sberdevices.ru/
+> 
+> LGTM.
 
-I don't think it's a problem, though, you're right, we could hide the 
-warning and thus future bugs, better as you proposed.
+I think we don't need this patch with new RB_INT value. I dive into conversations with Liang Yang - author of this driver. He said,
+that this define is "special" polling mode. Now I'm a little bit more experienced in NAND area, so IIUC we have two basic waiting modes:
+1) Software, by sending status command, then polling reply from controller, and then finally send READ0 to exit status reading mode (nand_soft_waitrdy()).
+2) By RB pin and interrupt - in this mode we send vendor specific command to the controller and it triggers interrupt on RB pin update.
+   In this case RB pin must be connected to the controller. This mode is already implemented by Liang Yang.
 
-Thanks,
-Stefano
+Now, command with this new define works in the following way: we send status command, by instead of reading reply from it by software,
+controller itself checks RB pin and status ready bit in IO bus. Driver just waits on completion. After waiting we need to send
+READ0 command again to make controller leave status reading mode. I think this is like "intermediate" mode between software polling
+and hardware interrupt - there is no need to spin in loop, waiting for status ready bit, but still need to leave status mode by sending
+READ0 command. I'm not sure that we need this as third mode of waiting for command is done. May be at least not in this work on Meson driver,
+so I guess to drop this patch at  this moment and add 'nand_soft_waitrdy()' support.
 
+Thanks, Arseniy
+
+> 
+>>
+>> What do You think?
+>>
+>> Thanks, Arseniy
+>>
+>> On 05.06.2023 09:10, Arseniy Krasnov wrote:
+>>> Fix the ready/busy command value.
+>>>
+>>> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+>>> Cc: stable@vger.kernel.org
+>>> Suggested-by: Liang Yang <liang.yang@amlogic.com>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>>  drivers/mtd/nand/raw/meson_nand.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>> index 074e14225c06..9dd4a676497b 100644
+>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>> @@ -37,7 +37,7 @@
+>>>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
+>>>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>>>  #define NFC_CMD_SHORTMODE_DISABLE	0
+>>> -#define NFC_CMD_RB_INT		BIT(14)
+>>> +#define NFC_CMD_RB_INT		((0xb << 10) | BIT(18) | BIT(16))
+>>>  
+>>>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+>>>    
+> 
+> 
+> Thanks,
+> Miqu√®l
