@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FEE721D63
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 07:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6923E721D25
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbjFEFMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 01:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S232752AbjFEE3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 00:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjFEFMM (ORCPT
+        with ESMTP id S230386AbjFEE3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 01:12:12 -0400
-X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Jun 2023 22:12:11 PDT
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D196B1;
-        Sun,  4 Jun 2023 22:12:10 -0700 (PDT)
-From:   "Li,Rongqing" <lirongqing@baidu.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yong He <zhuangel570@gmail.com>,
-        Robert Hoo <robert.hoo.linux@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
-Subject: RE: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky
- disabling of nx_huge_pages
-Thread-Topic: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky
- disabling of nx_huge_pages
-Thread-Index: AQHZlO1wB1sqFs11bEiKQhMd1hjPbK97nftQ
-Date:   Mon, 5 Jun 2023 04:26:30 +0000
-Message-ID: <40ee5857d5d04ce1bece3bbb4d74a9de@baidu.com>
-References: <20230602005859.784190-1-seanjc@google.com>
-In-Reply-To: <20230602005859.784190-1-seanjc@google.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.206.10]
-x-baidu-bdmsfe-datecheck: 1_BJHW-Mail-Ex15_2023-06-05 12:26:30:407
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 5 Jun 2023 00:29:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10815BD;
+        Sun,  4 Jun 2023 21:29:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=bI4+f0K/M38ZLx1MlePFnQTc3sx8ulFXm4dSPoSUv0Q=; b=SkyE34zd52CBb3F3H10xeZYosn
+        FFHBePVYJN/WUbjQA2mHBtnU+hHWUruwEKTACsKOlO+jYuPR8w2hUCqcUIfikNczlG/sWz8N/hClB
+        SxXxt1JXuUqqqsMMLkWsoE06WQ/N2HQf9+2AwwS5n0W4moFKcycftLNh4X4xwLWRVl6qZ7+lnx3T6
+        rdhi95/Kwt6HRPqGBWmAJykulkBr7YeZhL4lZ6r5aAhbEdPE916dTbZsTdHL8DNd4vYLHfwixYUdg
+        rFTolF7cF8nXo6WDiKedkndlW7EnsH4pKnzzDiwdJOnu1SBSURuoN/yxd3tsPXFR4g01nEMzRP1HE
+        nFBsAD5w==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q61pv-00E5MP-30;
+        Mon, 05 Jun 2023 04:28:55 +0000
+Message-ID: <16135856-b79e-02ab-2b0b-d98a523dda76@infradead.org>
+Date:   Sun, 4 Jun 2023 21:28:54 -0700
 MIME-Version: 1.0
-X-FEAS-Client-IP: 10.127.64.38
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 -next] tty: serial: add panic serial helper
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Hongyu Xie <xiehongyu1@kylinos.cn>, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org, corbet@lwn.net
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xy521521@gmail.com, oe-kbuild-all@lists.linux.dev, lkp@intel.com,
+        Linux Documentation <linux-doc@vger.kernel.org>
+References: <20230605015957.730085-1-xiehongyu1@kylinos.cn>
+ <ZH1e3tuuie3bGhPj@debian.me>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ZH1e3tuuie3bGhPj@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,27 +58,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU2VhbiBDaHJpc3RvcGhl
-cnNvbiA8c2VhbmpjQGdvb2dsZS5jb20+DQo+IFNlbnQ6IEZyaWRheSwgSnVuZSAyLCAyMDIzIDg6
-NTkgQU0NCj4gVG86IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW5qY0Bnb29nbGUuY29tPjsgUGFv
-bG8gQm9uemluaQ0KPiA8cGJvbnppbmlAcmVkaGF0LmNvbT4NCj4gQ2M6IGt2bUB2Z2VyLmtlcm5l
-bC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IExpLFJvbmdxaW5nDQo+IDxsaXJv
-bmdxaW5nQGJhaWR1LmNvbT47IFlvbmcgSGUgPHpodWFuZ2VsNTcwQGdtYWlsLmNvbT47IFJvYmVy
-dCBIb28NCj4gPHJvYmVydC5ob28ubGludXhAZ21haWwuY29tPjsgS2FpIEh1YW5nIDxrYWkuaHVh
-bmdAaW50ZWwuY29tPg0KPiBTdWJqZWN0OiBbUEFUQ0hdIEtWTTogeDg2L21tdTogQWRkICJuZXZl
-ciIgb3B0aW9uIHRvIGFsbG93IHN0aWNreSBkaXNhYmxpbmcgb2YNCj4gbnhfaHVnZV9wYWdlcw0K
-PiANCj4gQWRkIGEgIm5ldmVyIiBvcHRpb24gdG8gdGhlIG54X2h1Z2VfcGFnZXMgbW9kdWxlIHBh
-cmFtIHRvIGFsbG93IHVzZXJzcGFjZQ0KPiB0byBkbyBhIG9uZS13YXkgaGFyZCBkaXNhYmxpbmcg
-b2YgdGhlIG1pdGlnYXRpb24sIGFuZCBkb24ndCBjcmVhdGUgdGhlIHBlci1WTQ0KPiByZWNvdmVy
-eSB0aHJlYWRzIHdoZW4gdGhlIG1pdGlnYXRpb24gaXMgaGFyZCBkaXNhYmxlZC4gIExldHRpbmcg
-dXNlcnNwYWNlIHBpbmt5DQo+IHN3ZWFyIHRoYXQgdXNlcnNwYWNlIGRvZXNuJ3Qgd2FudCB0byBl
-bmFibGUgTlggbWl0aWdhdGlvbiAod2l0aG91dCByZWxvYWRpbmcNCj4gS1ZNKSBhbGxvd3MgY2Vy
-dGFpbiB1c2UgY2FzZXMgdG8gYXZvaWQgdGhlIGxhdGVuY3kgcHJvYmxlbXMgYXNzb2NpYXRlZCB3
-aXRoDQo+IHNwYXduaW5nIGEga3RocmVhZCBmb3IgZWFjaCBWTS4NCj4gDQo+IEUuZy4gaW4gRmFh
-UyB1c2UgY2FzZXMsIHRoZSBndWVzdCBrZXJuZWwgaXMgdHJ1c3RlZCBhbmQgdGhlIGhvc3QgbWF5
-IGNyZWF0ZSAxMDArDQo+IFZNcyBwZXIgbG9naWNhbCBDUFUsIHdoaWNoIGNhbiByZXN1bHQgaW4g
-MTAwbXMrIGxhdGVuY2llcyB3aGVuIGEgYnVyc3Qgb2YgVk1zDQo+IGlzIGNyZWF0ZWQuDQo+IA0K
-DQoNClJldmlld2VkLWJ5OiBMaSBSb25nUWluZyA8bGlyb25ncWluZ0BiYWlkdS5jb20+DQoNCkFu
-ZCBJIGhvcGUgbnhfaHVnZV9wYWdlcyBpcyBuZXZlciBieSBkZWZhdWx0IGlmIENQVSByZXBvcnRz
-IHRoYXQgaXQgZG9lc24ndCBoYXZlIHN1Y2ggYnVnDQoNClRoYW5rcw0KDQotTGkgUm9uZ1FpbmcN
-Cg0KDQoNCg==
+Hi Bagas--
+
+On 6/4/23 21:04, Bagas Sanjaya wrote:
+>> diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentation/dev-tools/panic_serial_helper.rst
+>> new file mode 100644
+>> index 000000000000..fc5b6e9103bc
+>> --- /dev/null
+>> +++ b/Documentation/dev-tools/panic_serial_helper.rst
+> The file name convention is using hyphens (like
+> panic-serial-helper.rst).
+
+I found over 300 counterexamples, so I don't think that it's a big deal.
+
+-- 
+~Randy
