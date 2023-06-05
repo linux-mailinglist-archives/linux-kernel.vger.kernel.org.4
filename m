@@ -2,136 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D738B723070
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F142723076
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236203AbjFETvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S232520AbjFETxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235933AbjFETvT (ORCPT
+        with ESMTP id S235885AbjFETxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:51:19 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA53171F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:50:56 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-33b6c47898dso26937305ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685994642; x=1688586642;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QyOyM1A+IBGfM0POmQMPv/f9ETbkYMOC7LCngoA0Dg4=;
-        b=ieQzsSYd+X9N5QDsysXMmt82+0/92OAcmD+askv9NjBU2/EOhLE/o/mwCNuw8iIaVs
-         BFpXj6pFxHeb2maZP55p9C5n/WcGbVWe4wJO4lQXHjI7a/9p9Ddk7x9KtDR5YoYm2S9M
-         RYjeLaJh+/JIF4PmYnB8kO7oWAMqaCGngWkTKSNOpQhGUpON7uVEC2NFhH5AU0bePTnm
-         WL1P8ScaQGCUM5XvzEYuLheUA7k7e4BDsCUI6MwJz7ZZhhTQ9cK5HyhX4/HMgf1BlwCE
-         Bp8JO4Qa2WTu1Wem+HdU4BDSbi4E8Wo4qcW/C03mKNKVaX+0nyAl2JdZfO2QcNDGTysu
-         rK/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685994642; x=1688586642;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QyOyM1A+IBGfM0POmQMPv/f9ETbkYMOC7LCngoA0Dg4=;
-        b=Qrs2/mxr2Q7FpIbxWhKj7E8XcCcZwcJmU0taRKc/XXZq8Z4duCCu1B7NDH4dhV2gFx
-         nz37BXglDezf/GFps6Lr9o9VhOhcZKyolH6lQiLoikACzZXPE2T+JRjCVyZOn2vA3d7M
-         LX12Ik8O2Su0m9WogqLcck3TnyFuv7cwTXp1thiheSBUTpdiElcQYGHn1opwoQI9EoIO
-         kqz/ZSavvDJ0Kz8HPC+XvkWlBCHL93h+OEdimvYLbjrIeLplC4DGnFP51DL7KQ6ACGlV
-         uPzapwaPW0dWYDRGw8FSkPhyDWNjOGHvqjaZ+XHWq6hkiIw4vq6/GjkGVijGwGmloA2g
-         /4/Q==
-X-Gm-Message-State: AC+VfDxGkHUq4QpEX5me/Ke8C6ZwNUuzrtxpKOAVT4ETYyhfZ3pmStAk
-        3ja6T7X1g15EA6CfhUfdaUTZqg==
-X-Google-Smtp-Source: ACHHUZ6BhwUtmlaf2lOMd1GHOUuAjaXJN26jGa+2SmSTjPF6DxR8k+irXU6IZkfy55GvLcyjVOHa/w==
-X-Received: by 2002:a05:6e02:78d:b0:33a:ff76:33b8 with SMTP id q13-20020a056e02078d00b0033aff7633b8mr132723ils.9.1685994641903;
-        Mon, 05 Jun 2023 12:50:41 -0700 (PDT)
-Received: from [172.22.22.28] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id h2-20020a0566380f8200b0041653d00c1fsm2316886jal.72.2023.06.05.12.50.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 12:50:41 -0700 (PDT)
-Message-ID: <26a9ba82-4bb6-ef9b-f819-19feb5ddba03@linaro.org>
-Date:   Mon, 5 Jun 2023 14:50:40 -0500
+        Mon, 5 Jun 2023 15:53:08 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062b.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65906114;
+        Mon,  5 Jun 2023 12:52:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M7YLiH/3udsMQ/MZJV8ipuIl+NeQ2KL9OLRwmHhiYLBK+ARncm8KOTLWbX6pzZZG1YDZGXWkp/eTyogW5dMmWThyf9MfkrD2Ye3fa9ojEPRSv51RYS9GXX9GEYtcnl3WAyCgLg8iwoH+y5iebSy0u7UiTQPrG1e87ols5ijD+BgKs3nPW9qF/iM3oy2iIzfPt7iALpeerIBNDafFZjBFoiUPr1lt0KmjUmeZq4Lz73PP8zEKO6DwTYBsgUA+HNUjqkqJgpHuWCwaZ8YjnTziZxXJ4sYX1RgBQNvrNEJa+n8SHtQMF/0nXIbb1vQnGVJfKpnSr4PbRD3x197lu3sBZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PS57z1YDT/rSbRtfU+HyKoF1fFoadofBNRItPhV9kFs=;
+ b=PnetK79GJUQ9IPv5VjEy9kf2B8f1sG7jkRY+y9giHfVycYGFlECjxoqWoofRVTEnWiXyvEtkC5lcWW4ry9G1noUiJX4D4QkISWVHSwFEsaTYZ7p9bdigE/mm9fcIAVktABDN0kyXOxf+Ke1/XomK6gzHUvdEPfXxmFlAQk7bQeZlOJHNY7z3o07zb0f4XFTw/eonqC7eEevyIr+17Gm/jMcGOF6kZkaqRSO7Izn24lp+ZB5VKlq1JhZSKYRDpgu7YRtDMep9MsNjfSX8gpWRyGQZilf7n/c+L8jNrL0eKKShNGs6e4hltp2Qq5XORvSMXPcdoK6M7Kd/mW64UFKNeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PS57z1YDT/rSbRtfU+HyKoF1fFoadofBNRItPhV9kFs=;
+ b=Q7eONPREDUC1iC2y0wCV+aLQjB2Z97WFfoHMYbJtwaFTDEYH5mp4lt42vf9JRX5TGqUDB4IXbOQV/Rvgzw3x8Y3uFDdbZBs98GgCW8I/7O5KCCn+sUrQEjUwDtbfzoyfhvAsOd4Lbreb4uoRvx+r7SU3KmqC20p6eiT+GCWlekY=
+Received: from MW4PR03CA0130.namprd03.prod.outlook.com (2603:10b6:303:8c::15)
+ by CH3PR12MB7668.namprd12.prod.outlook.com (2603:10b6:610:14d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 19:51:29 +0000
+Received: from CO1NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8c:cafe::6f) by MW4PR03CA0130.outlook.office365.com
+ (2603:10b6:303:8c::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 19:51:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT067.mail.protection.outlook.com (10.13.174.212) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 19:51:28 +0000
+Received: from driver-dev1.pensando.io (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
+ 2023 14:51:27 -0500
+From:   Brett Creeley <brett.creeley@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <kuba@kernel.org>, <edumazet@google.com>,
+        <davem@davemloft.net>
+CC:     <brett.creeley@amd.com>, <shannon.nelson@amd.com>
+Subject: [PATCH net] pds_core: Fix FW recovery detection
+Date:   Mon, 5 Jun 2023 12:51:16 -0700
+Message-ID: <20230605195116.49653-1-brett.creeley@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Alex Elder <elder@linaro.org>
-Subject: Re: [PATCH v13 24/24] MAINTAINERS: Add Gunyah hypervisor drivers
- section
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
- <20230509204801.2824351-25-quic_eberman@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20230509204801.2824351-25-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT067:EE_|CH3PR12MB7668:EE_
+X-MS-Office365-Filtering-Correlation-Id: a270227a-a686-4940-0411-08db65fe40fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2ORwlz9qwJSrppxQ5yWbK8uqH2L45QYIfEqM54aag5L4fC4oiSUs602so5VW1RktpxkqjAjRkG/LawPDG0xFfCaj/iYGWdRTvbQfPvJ4wxrDGFjo/F1DuVZsa7C0/u3dN6nA/1QLIS3SEzxCxn7oAg0DkD5Q7oJ+XbA1kMl4jLSJ1AGirJhkvhIDdqVhBWb1BkKBjyN0bEMulx4EFhnuflol+be1vbMd7wA+MNexUKrYTX7ma4kFsMTCw1xDP9cLOGCcnCAJF3T54oH1hjvVVnx6dAkkxPpwSfa7nZopFB5vcbLOTamOAbXAHfajHdTY0q/yVAuUb2mU6Eu1yq6RI1cgoNFcZinUUsscELWM9/5LjY/L4g83p1VKrJjon1T0APS3o27Mzsd4NZ/VoF+tsX+1IyDybk1nXksDOHjjSeJGSc5a8d3yRX/qGQ1m2C58EfayOMAb5GCwVUSjSd830n9n+T/e8PoS810qUYANGE2QyUfJ0k4AkiNBXepgfSLScaKdbiaYpmFBHpdfsWeVZsfSdrFZ4ApUT1qbU8XugFvd/M8VT34tcypNNiLBUVPz8XJ4KjAI5t2xK+qxXkmaPWzk9DRDFaKTNnkcycXswDNF7z3i6KAiG8QadnGRXhKLt+L209xh7OssZtsz6evZOP+jbHpbGlmD0ArXy+bro5CSygtcT5PoQnDYSCwdZn8fry4fJ8b/QdXQ8zf6z/ffDnsYG6nlNwGA9Gel8Y4ySCSKwem1YAQPOtxCUx50olIGkwg0hVQNnEORK8gNRWrBfw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(36840700001)(40470700004)(46966006)(36756003)(2906002)(86362001)(82310400005)(44832011)(5660300002)(40480700001)(40460700003)(47076005)(83380400001)(6666004)(16526019)(336012)(186003)(426003)(36860700001)(1076003)(26005)(356005)(81166007)(478600001)(82740400003)(110136005)(54906003)(70586007)(70206006)(316002)(4326008)(41300700001)(2616005)(8936002)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 19:51:28.8007
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a270227a-a686-4940-0411-08db65fe40fc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7668
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 3:48 PM, Elliot Berman wrote:
-> Add myself and Prakruthi as maintainers of Gunyah hypervisor drivers.
-> 
-> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+Commit 523847df1b37 ("pds_core: add devcmd device interfaces") included
+initial support for FW recovery detection. Unfortunately, the ordering
+in pdsc_is_fw_good() was incorrect, which was causing FW recovery to be
+undetected by the driver. Fix this by making sure to update the cached
+fw_status by calling pdsc_is_fw_running() before setting the local FW
+gen.
 
-Looks good.
+Fixes: 523847df1b37 ("pds_core: add devcmd device interfaces")
+Signed-off-by: Shannon Nelson <shannon.nelson@amd.com>
+Signed-off-by: Brett Creeley <brett.creeley@amd.com>
+---
+ drivers/net/ethernet/amd/pds_core/dev.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Reviewed-by: Alex Elder <elder@linaro.org>
-
-> ---
->   MAINTAINERS | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c754befb94e7..323391320cf1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8970,6 +8970,19 @@ L:	linux-efi@vger.kernel.org
->   S:	Maintained
->   F:	block/partitions/efi.*
->   
-> +GUNYAH HYPERVISOR DRIVER
-> +M:	Elliot Berman <quic_eberman@quicinc.com>
-> +M:	Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> +L:	linux-arm-msm@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
-> +F:	Documentation/virt/gunyah/
-> +F:	arch/arm64/gunyah/
-> +F:	drivers/mailbox/gunyah-msgq.c
-> +F:	drivers/virt/gunyah/
-> +F:	include/linux/gunyah*.h
-> +F:	samples/gunyah/
-> +
->   HABANALABS PCI DRIVER
->   M:	Oded Gabbay <ogabbay@kernel.org>
->   L:	dri-devel@lists.freedesktop.org
+diff --git a/drivers/net/ethernet/amd/pds_core/dev.c b/drivers/net/ethernet/amd/pds_core/dev.c
+index f7c597ea5daf..debe5216fe29 100644
+--- a/drivers/net/ethernet/amd/pds_core/dev.c
++++ b/drivers/net/ethernet/amd/pds_core/dev.c
+@@ -68,9 +68,15 @@ bool pdsc_is_fw_running(struct pdsc *pdsc)
+ 
+ bool pdsc_is_fw_good(struct pdsc *pdsc)
+ {
+-	u8 gen = pdsc->fw_status & PDS_CORE_FW_STS_F_GENERATION;
++	bool fw_running = pdsc_is_fw_running(pdsc);
++	u8 gen;
+ 
+-	return pdsc_is_fw_running(pdsc) && gen == pdsc->fw_generation;
++	/* Make sure to update the cached fw_status by calling
++	 * pdsc_is_fw_running() before getting the generation
++	 */
++	gen = pdsc->fw_status & PDS_CORE_FW_STS_F_GENERATION;
++
++	return fw_running && gen == pdsc->fw_generation;
+ }
+ 
+ static u8 pdsc_devcmd_status(struct pdsc *pdsc)
+-- 
+2.17.1
 
