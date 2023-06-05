@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927F272330D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BA172330F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjFEWRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 18:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S233122AbjFEWRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 18:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjFEWRg (ORCPT
+        with ESMTP id S232890AbjFEWRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 18:17:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2B2AF;
-        Mon,  5 Jun 2023 15:17:35 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 22:17:31 -0000
+        Mon, 5 Jun 2023 18:17:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE088AF;
+        Mon,  5 Jun 2023 15:17:36 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 22:17:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686003453;
+        s=2020; t=1686003454;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YI5W3YjQ1K9oa7fcUmMupvk4A5HHThGVA4WIB5FmNV0=;
-        b=tLf8QJaP52B4ViOiaFyu3uUffM8/9oE2XWtnAXSE6H1rTSyklhBaL42hkjUxD2aH/qcIAi
-        z6KeshfZrxaDPK4Qcxdc/isjIwG2rcI0zq1hZW4iLqb0PHCWlC0cSC3hmwq4eJp7P5GhTI
-        21rI/1na7U4CujdOB1PFOU6YYm+E6gbYix64diFNy1ST5jYfK5xJqDdjGMDMH5Ex1yxQJu
-        r0oUTxOi4k6qaHKvvlhgnozDVVPrbZ6B2ZvxOkejt28fPxWxQr80VLPKWIbPq35ElEx5C0
-        gm/7tqjeW5DPrhxg9XdfYfBBWQlhnTwtwHQbVsFEr+GVGdVlxJauwyaXzlCslQ==
+        bh=PhvvKbd2G49ZnYAqw+g10VV0rqTeiq2fmz9EP367sNg=;
+        b=ZAzkaB7mWKQed2tosJmlf406v5Zb79JZcsf9tubizC80tI9sVrlfkDEzPsqSJ3JVK3whUt
+        BF8MJYP698K9kX39QInOA4+0Nzrr5dOlTc2cwQLJRCO+mYVFZa0LzAmNIOXfzv0xJ51jJ4
+        jzMVSCWwwMJHas1NEWnDNI/mCA0hCNdIgwUgX/pEZa7saDQup4pjltM/pn4fL5jKuLFkdd
+        COwW/BDVXfN/bPqpe8bbgelrYqiv/Qnbs4saPNXkGhRwE6C7pHdNGpfTUj6lYgMh0Hk3L9
+        yasZJ34t1A7iGeA46ieu11ZCAad2Nc/8GFX9bil99NPAxGpB2byTUiocx4K8gg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686003453;
+        s=2020e; t=1686003454;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YI5W3YjQ1K9oa7fcUmMupvk4A5HHThGVA4WIB5FmNV0=;
-        b=Bqb3Q7rwPOQCjzUcAzuyMddvCa6blC0rRLS+4ig6G88GfBcJJaTMGd8LpssNSJsBc9jFCG
-        wkYoPEjWqVyjmdBw==
+        bh=PhvvKbd2G49ZnYAqw+g10VV0rqTeiq2fmz9EP367sNg=;
+        b=2Dl6y8RnPIY9X8dMJyW2BfrY7GAypmlZ+k8dwRYjAHZiucULdpXddxf1rQUHwHIJ7S4eku
+        l2kAIJO0P3804kAw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Polish coding style in a few places
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
+Subject: [tip: timers/core] posix-timers: Clarify posix_timer_fn() comments
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.888493625@linutronix.de>
-References: <20230425183313.888493625@linutronix.de>
+In-Reply-To: <874jnrdmrq.ffs@tglx>
+References: <874jnrdmrq.ffs@tglx>
 MIME-Version: 1.0
-Message-ID: <168600345197.404.4874809035786394442.tip-bot2@tip-bot2>
+Message-ID: <168600345398.404.9203824526879668035.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,87 +66,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     6fbe3a3b4fa1fe5cf05f91193d81d930c6820eda
-Gitweb:        https://git.kernel.org/tip/6fbe3a3b4fa1fe5cf05f91193d81d930c6820eda
+Commit-ID:     c78f261e5dcb415b9e35a13876fbf7d5f134c810
+Gitweb:        https://git.kernel.org/tip/c78f261e5dcb415b9e35a13876fbf7d5f134c810
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:27 +02:00
+AuthorDate:    Thu, 01 Jun 2023 21:07:37 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 06 Jun 2023 00:12:55 +02:00
 
-posix-timers: Polish coding style in a few places
+posix-timers: Clarify posix_timer_fn() comments
 
-Make it consistent with the TIP tree documentation.
+Make the issues vs. SIG_IGN understandable and remove the 15 years old
+promise that a proper solution is already on the horizon.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.888493625@linutronix.de
+Link: https://lore.kernel.org/r/874jnrdmrq.ffs@tglx
 
 ---
- kernel/time/posix-timers.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/time/posix-timers.c | 62 +++++++++++++++++++------------------
+ 1 file changed, 32 insertions(+), 30 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index bdd718c..8bb0dcf 100644
+index f1a7c62..a942020 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -309,10 +309,10 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
+@@ -326,11 +326,11 @@ int posix_timer_event(struct k_itimer *timr, int si_private)
+ }
+ 
+ /*
+- * This function gets called when a POSIX.1b interval timer expires.  It
+- * is used as a callback from the kernel internal timer.  The
+- * run_timer_list code ALWAYS calls with interrupts on.
+-
+- * This code is for CLOCK_REALTIME* and CLOCK_MONOTONIC* timers.
++ * This function gets called when a POSIX.1b interval timer expires from
++ * the HRTIMER interrupt (soft interrupt on RT kernels).
++ *
++ * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
++ * based timers.
   */
  static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
  {
-+	enum hrtimer_restart ret = HRTIMER_NORESTART;
- 	struct k_itimer *timr;
- 	unsigned long flags;
- 	int si_private = 0;
--	enum hrtimer_restart ret = HRTIMER_NORESTART;
+@@ -348,9 +348,10 @@ static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
  
- 	timr = container_of(timer, struct k_itimer, it.real.timer);
- 	spin_lock_irqsave(&timr->it_lock, flags);
-@@ -400,8 +400,8 @@ static struct pid *good_sigevent(sigevent_t * event)
+ 	if (posix_timer_event(timr, si_private)) {
+ 		/*
+-		 * signal was not sent because of sig_ignor
+-		 * we will not get a call back to restart it AND
+-		 * it should be restarted.
++		 * The signal was not queued due to SIG_IGN. As a
++		 * consequence the timer is not going to be rearmed from
++		 * the signal delivery path. But as a real signal handler
++		 * can be installed later the timer must be rearmed here.
+ 		 */
+ 		if (timr->it_interval != 0) {
+ 			ktime_t now = hrtimer_cb_get_time(timer);
+@@ -359,34 +360,35 @@ static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
+ 			 * FIXME: What we really want, is to stop this
+ 			 * timer completely and restart it in case the
+ 			 * SIG_IGN is removed. This is a non trivial
+-			 * change which involves sighand locking
+-			 * (sigh !), which we don't want to do late in
+-			 * the release cycle.
++			 * change to the signal handling code.
++			 *
++			 * For now let timers with an interval less than a
++			 * jiffie expire every jiffie and recheck for a
++			 * valid signal handler.
++			 *
++			 * This avoids interrupt starvation in case of a
++			 * very small interval, which would expire the
++			 * timer immediately again.
+ 			 *
+-			 * For now we just let timers with an interval
+-			 * less than a jiffie expire every jiffie to
+-			 * avoid softirq starvation in case of SIG_IGN
+-			 * and a very small interval, which would put
+-			 * the timer right back on the softirq pending
+-			 * list. By moving now ahead of time we trick
+-			 * hrtimer_forward() to expire the timer
+-			 * later, while we still maintain the overrun
+-			 * accuracy, but have some inconsistency in
+-			 * the timer_gettime() case. This is at least
+-			 * better than a starved softirq. A more
+-			 * complex fix which solves also another related
+-			 * inconsistency is already in the pipeline.
++			 * Moving now ahead of time by one jiffie tricks
++			 * hrtimer_forward() to expire the timer later,
++			 * while it still maintains the overrun accuracy
++			 * for the price of a slight inconsistency in the
++			 * timer_gettime() case. This is at least better
++			 * than a timer storm.
++			 *
++			 * Only required when high resolution timers are
++			 * enabled as the periodic tick based timers are
++			 * automatically aligned to the next tick.
+ 			 */
+-#ifdef CONFIG_HIGH_RES_TIMERS
+-			{
+-				ktime_t kj = NSEC_PER_SEC / HZ;
++			if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
++				ktime_t kj = TICK_NSEC;
  
- static struct k_itimer * alloc_posix_timer(void)
- {
--	struct k_itimer *tmr;
--	tmr = kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
-+	struct k_itimer *tmr = kmem_cache_zalloc(posix_timers_cache, GFP_KERNEL);
+ 				if (timr->it_interval < kj)
+ 					now = ktime_add(now, kj);
+ 			}
+-#endif
+-			timr->it_overrun += hrtimer_forward(timer, now,
+-							    timr->it_interval);
 +
- 	if (!tmr)
- 		return tmr;
- 	if (unlikely(!(tmr->sigq = sigqueue_alloc()))) {
-@@ -695,8 +695,8 @@ void common_timer_get(struct k_itimer *timr, struct itimerspec64 *cur_setting)
- 
- static int do_timer_gettime(timer_t timer_id,  struct itimerspec64 *setting)
- {
--	struct k_itimer *timr;
- 	const struct k_clock *kc;
-+	struct k_itimer *timr;
- 	unsigned long flags;
- 	int ret = 0;
- 
-@@ -767,8 +767,8 @@ SYSCALL_DEFINE2(timer_gettime32, timer_t, timer_id,
- SYSCALL_DEFINE1(timer_getoverrun, timer_t, timer_id)
- {
- 	struct k_itimer *timr;
--	int overrun;
- 	unsigned long flags;
-+	int overrun;
- 
- 	timr = lock_timer(timer_id, &flags);
- 	if (!timr)
-@@ -941,8 +941,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t, timer_id, int, flags,
- 		const struct __kernel_itimerspec __user *, new_setting,
- 		struct __kernel_itimerspec __user *, old_setting)
- {
--	struct itimerspec64 new_spec, old_spec;
--	struct itimerspec64 *rtn = old_setting ? &old_spec : NULL;
-+	struct itimerspec64 new_spec, old_spec, *rtn;
- 	int error = 0;
- 
- 	if (!new_setting)
-@@ -951,6 +950,7 @@ SYSCALL_DEFINE4(timer_settime, timer_t, timer_id, int, flags,
- 	if (get_itimerspec64(&new_spec, new_setting))
- 		return -EFAULT;
- 
-+	rtn = old_setting ? &old_spec : NULL;
- 	error = do_timer_settime(timer_id, flags, &new_spec, rtn);
- 	if (!error && old_setting) {
- 		if (put_itimerspec64(&old_spec, old_setting))
++			timr->it_overrun += hrtimer_forward(timer, now, timr->it_interval);
+ 			ret = HRTIMER_RESTART;
+ 			++timr->it_requeue_pending;
+ 			timr->it_active = 1;
