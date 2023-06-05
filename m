@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29C0721ED0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D1C721ED1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjFEHDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S230312AbjFEHDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjFEHCb (ORCPT
+        with ESMTP id S230294AbjFEHCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:02:31 -0400
+        Mon, 5 Jun 2023 03:02:38 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F6CB10DB;
-        Mon,  5 Jun 2023 00:02:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C41910E5;
+        Mon,  5 Jun 2023 00:02:08 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A47511650;
-        Mon,  5 Jun 2023 00:02:51 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E94E81596;
+        Mon,  5 Jun 2023 00:02:53 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5FFBB3F793;
-        Mon,  5 Jun 2023 00:02:04 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A40EA3F793;
+        Mon,  5 Jun 2023 00:02:06 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
@@ -28,9 +28,9 @@ Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
         linux-doc@vger.kernel.org, mark.rutland@arm.com,
         mchehab@kernel.org, paulmck@kernel.org, peterz@infradead.org,
         rdunlap@infradead.org, sstabellini@kernel.org, will@kernel.org
-Subject: [PATCH v2 13/27] locking/atomic: xtensa: add preprocessor symbols
-Date:   Mon,  5 Jun 2023 08:01:10 +0100
-Message-Id: <20230605070124.3741859-14-mark.rutland@arm.com>
+Subject: [PATCH v2 14/27] locking/atomic: scripts: remove bogus order parameter
+Date:   Mon,  5 Jun 2023 08:01:11 +0100
+Message-Id: <20230605070124.3741859-15-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230605070124.3741859-1-mark.rutland@arm.com>
 References: <20230605070124.3741859-1-mark.rutland@arm.com>
@@ -45,18 +45,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some atomics can be implemented in several different ways, e.g.
-FULL/ACQUIRE/RELEASE ordered atomics can be implemented in terms of
-RELAXED atomics, and ACQUIRE/RELEASE/RELAXED can be implemented in terms
-of FULL ordered atomics. Other atomics are optional, and don't exist in
-some configurations (e.g. not all architectures implement the 128-bit
-cmpxchg ops).
+At the start of gen_proto_order_variants(), the ${order} variable is not
+yet defined, and will be substituted with an empty string.
 
-Subsequent patches will require that architectures define a preprocessor
-symbol for any atomic (or ordering variant) which is optional. This will
-make the fallback ifdeffery more robust, and simplify future changes.
+Replace the current bogus use of ${order} with an empty string instead.
 
-Add the required definitions to arch/xtensa.
+This results in no change to the generated headers.
+
+There should be no functional change as a result of this patch.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
@@ -65,36 +61,22 @@ Cc: Paul E. McKenney <paulmck@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Will Deacon <will@kernel.org>
 ---
- arch/xtensa/include/asm/atomic.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ scripts/atomic/gen-atomic-fallback.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/xtensa/include/asm/atomic.h b/arch/xtensa/include/asm/atomic.h
-index 1d323a864002c..7308b7f777d79 100644
---- a/arch/xtensa/include/asm/atomic.h
-+++ b/arch/xtensa/include/asm/atomic.h
-@@ -245,6 +245,11 @@ static inline int arch_atomic_fetch_##op(int i, atomic_t * v)		\
- ATOMIC_OPS(add)
- ATOMIC_OPS(sub)
+diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
+index a70acd548fcd8..7a6bcea8f565b 100755
+--- a/scripts/atomic/gen-atomic-fallback.sh
++++ b/scripts/atomic/gen-atomic-fallback.sh
+@@ -81,7 +81,7 @@ gen_proto_order_variants()
  
-+#define arch_atomic_add_return			arch_atomic_add_return
-+#define arch_atomic_sub_return			arch_atomic_sub_return
-+#define arch_atomic_fetch_add			arch_atomic_fetch_add
-+#define arch_atomic_fetch_sub			arch_atomic_fetch_sub
-+
- #undef ATOMIC_OPS
- #define ATOMIC_OPS(op) ATOMIC_OP(op) ATOMIC_FETCH_OP(op)
+ 	local basename="arch_${atomic}_${pfx}${name}${sfx}"
  
-@@ -252,6 +257,10 @@ ATOMIC_OPS(and)
- ATOMIC_OPS(or)
- ATOMIC_OPS(xor)
+-	local template="$(find_fallback_template "${pfx}" "${name}" "${sfx}" "${order}")"
++	local template="$(find_fallback_template "${pfx}" "${name}" "${sfx}" "")"
  
-+#define arch_atomic_fetch_and			arch_atomic_fetch_and
-+#define arch_atomic_fetch_or			arch_atomic_fetch_or
-+#define arch_atomic_fetch_xor			arch_atomic_fetch_xor
-+
- #undef ATOMIC_OPS
- #undef ATOMIC_FETCH_OP
- #undef ATOMIC_OP_RETURN
+ 	# If we don't have relaxed atomics, then we don't bother with ordering fallbacks
+ 	# read_acquire and set_release need to be templated, though
 -- 
 2.30.2
 
