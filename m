@@ -2,139 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A021F72256F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C5672257C
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjFEMUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S233339AbjFEMU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjFEMUr (ORCPT
+        with ESMTP id S233053AbjFEMUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:20:47 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF29E9C;
-        Mon,  5 Jun 2023 05:20:44 -0700 (PDT)
-X-GND-Sasl: maxime.chevallier@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685967643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nMy8jOn3QwsSSA0c+m8gW2VcF2TjCe8+rIvNflPEe5k=;
-        b=Bbjt27xU7k12RxSL8+07oLlYoRcikhvnrVDE5aZOhSaz1GdvhkP2zA/wu+rokBrIgtSFaM
-        pYZINe36JMe+jVf40wve8mh1Jly7o1wkPMRg1/RAlFuLa1w7tZHP+o24TYkQoDqom/bFdA
-        DaJ9zp7qgfYrzUaaS1p5CO58HIJxaLSJuKFJhEeJixkN6nKsF2CbF2dO+y2DEPb8RezTgb
-        dXwKsoOz6awL5ovsMiD/JvzRpMosXOKoVYoQp4tDtBNxq240+cggA5uRm2UBxif7zd650x
-        xlA6Oocq5hnD9szrTh5IFatkBkVWDAw/dgbgTn1jq2HePcsaFO7Gss883c9Pmg==
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7079B24000A;
-        Mon,  5 Jun 2023 12:20:40 +0000 (UTC)
-Date:   Mon, 5 Jun 2023 14:20:39 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     patchwork-bot+netdevbpf@kernel.org
-Cc:     broonie@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
-        thomas.petazzoni@bootlin.com, andrew@lunn.ch, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com, f.fainelli@gmail.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        vladimir.oltean@nxp.com, ioana.ciornei@nxp.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, mcoquelin.stm32@gmail.com,
-        joabreu@synopsys.com, alexandre.torgue@foss.st.com,
-        peppe.cavallaro@st.com, simon.horman@corigine.com
-Subject: Re: [PATCH net-next v4 0/4] net: add a regmap-based mdio driver and
- drop TSE PCS
-Message-ID: <20230605142039.3f8d1530@pc-7.home>
-In-Reply-To: <168596102478.26938.1530517069555858195.git-patchwork-notify@kernel.org>
-References: <20230601141454.67858-1-maxime.chevallier@bootlin.com>
-        <168596102478.26938.1530517069555858195.git-patchwork-notify@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 5 Jun 2023 08:20:53 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D49BD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:20:51 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f62d93f38aso720169e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685967649; x=1688559649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lbl7dx8l9YmbHJ5kHWnYk1dJ4k0yBLjSJf/VNttuMvo=;
+        b=qB6t9b1zMODSkPgj93HJ+1qpn/5Njw0ZMJ6QOwhdg0CjkMnqPr8IUMacGbD65Kg9Y/
+         uCeroIcgSr62duk2j0g3uiasj80JsPJbuwjOZIza8U4Zb2Z40YR5Q1LdBrsKznu7kgoc
+         F1nCxbPukgalowULPOiJBrkWam/CbP+8Tci1bq3a3BSytfQSsADn3lFlDlsxBuUhX9iT
+         S1bvRO+BE0gM/jjmhcc1Kx1DfhltgSUEZbniKwpE0aILlGfh7wpX3+ESXJE0drGlF9PS
+         Xckw+2aVAqIUK6ne6TV246giE/MCz7Q5Qm49NdtW2f4NB7XwgJM0OaIWHEhAjVTBd/cf
+         hQhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685967649; x=1688559649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lbl7dx8l9YmbHJ5kHWnYk1dJ4k0yBLjSJf/VNttuMvo=;
+        b=FOj4RNzfcqFlSVt2hBOnMsx/QusYAchDy4DsQ1onHk+twCyiFdzcjAex8i45pnka66
+         Q0WeVefNs91KFXi39xtc+VTUJhWNJu2wDto1CD0bZ05qeRc8Myj8tbpHtG3buruwrX5A
+         4FW9Hr4R1jbAj1jsERZCjPhCS18reHBg6yMdNrNC2BeKCDU4QUF3h4d3Yen26xjmE9cq
+         k5Ls6NZfTKql7MfCTlN927mdznJedoSKWA+JY5GqD9CoIxnDbpb2VJlS4IeVI0qhnSx5
+         DVhO4dxFXrnG40r8tL1x1PzI+y5NlgUrpjMVJTAqTl7zPDPnTydOTa6OoObI9f+FwM4T
+         oqEw==
+X-Gm-Message-State: AC+VfDwHkUwW4b4JUxKgI+Td2c/OqJYvmZgVgef8PVZywe85mAlL1S+3
+        cybTMP3ZrVC55A4aJ/k1NhBCIg==
+X-Google-Smtp-Source: ACHHUZ6N5k0djmx0ZfMuJGMvzQkir9WRvp2pnTg/RcKLeEMaPrnEc5hfzHG/EQg4F38pklY++MaDDQ==
+X-Received: by 2002:ac2:5314:0:b0:4f6:217a:5615 with SMTP id c20-20020ac25314000000b004f6217a5615mr1935202lfh.38.1685967649425;
+        Mon, 05 Jun 2023 05:20:49 -0700 (PDT)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id e8-20020a056512090800b004f20d0ebe50sm1106952lft.94.2023.06.05.05.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 05:20:48 -0700 (PDT)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     gregkh@linuxfoundation.org, stable@vger.kernel.org
+Cc:     kuba@kernel.org, simon.horman@corigine.com, joneslee@google.com,
+        oliver@neukum.org, davem@davemloft.net, bay@hackerdom.ru,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.or,
+        linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH][stable-4.{14,19}.y 0/3] net: cdc_ncm: Backport fixes
+Date:   Mon,  5 Jun 2023 12:20:42 +0000
+Message-ID: <20230605122045.2455888-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Maintainers,
+Backport patches in order to fix the kernel bug reported at:
+Link: https://syzkaller.appspot.com/bug?extid=b982f1059506db48409d
 
-Thanks for applying the patch, however as mentionned (maybe not
-stressed enough in the cover) this series depends on a patch that went
-through the regmap tree :
+Alexander's patches are prerequisites for the last. I made sure there
+are no other fixes in torvalds/master for the prerequisite patches.
+Compile tested. Intended for stable/linux-4.{14,19}.y.
 
+Alexander Bersenev (2):
+  cdc_ncm: Implement the 32-bit version of NCM Transfer Block
+  cdc_ncm: Fix the build warning
 
- https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git/commit/?id=e12ff28764937dd58c8613f16065da60da149048
+Tudor Ambarus (1):
+  net: cdc_ncm: Deal with too low values of dwNtbOutMaxSize
 
-How can we proceed on that matter ?
+ drivers/net/usb/cdc_ncm.c        | 435 ++++++++++++++++++++++++-------
+ drivers/net/usb/huawei_cdc_ncm.c |   8 +-
+ include/linux/usb/cdc_ncm.h      |  15 +-
+ 3 files changed, 355 insertions(+), 103 deletions(-)
 
-Thanks,
-
-Maxime
-
-On Mon, 05 Jun 2023 10:30:24 +0000
-patchwork-bot+netdevbpf@kernel.org wrote:
-
-> Hello:
-> 
-> This series was applied to netdev/net-next.git (main)
-> by David S. Miller <davem@davemloft.net>:
-> 
-> On Thu,  1 Jun 2023 16:14:50 +0200 you wrote:
-> > Hello everyone,
-> > 
-> > This is the V4 of a series that follows-up on the work [1] aiming
-> > to drop the altera TSE PCS driver, as it turns out to be a version
-> > of the Lynx PCS exposed as a memory-mapped block, instead of living
-> > on an MDIO bus.
-> > 
-> > One step of this removal involved creating a regmap-based mdio
-> > driver that translates MDIO accesses into the actual underlying bus
-> > that exposes the register. The register layout must of course match
-> > the standard MDIO layout, but we can now account for differences in
-> > stride with recent work on the regmap subsystem [2].
-> > 
-> > [...]  
-> 
-> Here is the summary with links:
->   - [net-next,v4,1/4] net: mdio: Introduce a regmap-based mdio driver
->     https://git.kernel.org/netdev/net-next/c/642af0f92cbe
->   - [net-next,v4,2/4] net: ethernet: altera-tse: Convert to
-> mdio-regmap and use PCS Lynx
-> https://git.kernel.org/netdev/net-next/c/db48abbaa18e
->   - [net-next,v4,3/4] net: pcs: Drop the TSE PCS driver
->     https://git.kernel.org/netdev/net-next/c/196eec4062b0
->   - [net-next,v4,4/4] net: stmmac: dwmac-sogfpga: use the lynx pcs
-> driver https://git.kernel.org/netdev/net-next/c/5d1f3fe7d2d5
-> 
-> You are awesome, thank you!
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
