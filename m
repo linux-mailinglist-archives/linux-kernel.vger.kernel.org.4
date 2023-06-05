@@ -2,150 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F93F722CD9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B891722CDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbjFEQlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        id S234138AbjFEQmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbjFEQlu (ORCPT
+        with ESMTP id S231432AbjFEQmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:41:50 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1BB94
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:41:48 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1a2ad8f4075so3561500fac.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 09:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685983308; x=1688575308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sUsPK5qT+Od/SIBa5UUhtpAmbErx2EC2+EeGGcYa5rU=;
-        b=J6mjvwgXki3I4xMigCdrzUJtNhQwAFBtz+p5o8skfFXfPZFfgCEimm/AmxMpQJ4P1J
-         6k4+JhydIkYRZuLgFEVXH3fHJBF0eQgDuJGZFmaGeIiSG9nkxqrWEvZiBmWHt7nuwisW
-         G8omI0M6sfveLCICXm/frZh0InwJRKvH0F4J+jozB1+ioi5bCD056Ddx3oFTA3sf0/iL
-         EFj5fFczA6AIdJoqBgVUUWg5cgDInGFJ4uSzdaOXJZW1xrMhBN1739vGobQ/oRgsknBI
-         PgSxh+kjnKiB/Kpzooy8QJp59MUa+rH6nQvW0Tk123hXjp7iTFtUbE8mtPxgfN/Ty0yv
-         RFEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685983308; x=1688575308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sUsPK5qT+Od/SIBa5UUhtpAmbErx2EC2+EeGGcYa5rU=;
-        b=csgB7lql9+YC3wPFSZnYd7ryah584oykQRULhp4YCM5g1Zfwhc4JlYdDPjJvnzYg8l
-         BSPhcRXfSo/FS+8W7S9KG/krJW49A86kOoUWmgByBz8Vhxc1AxPHwUjWJxoVy9e2Dlw8
-         KtMe2j9krlx9x1/ywlMgmTN2yzYxgwan33Oksul3uNTdliZvXuWqmh6rQB43HhnBPGvq
-         pkrvGpitC8GuGQEsD64eAg/8A7jXiUE1g0QV74V+r/xoDQ4jCJVogb4SFS4ixq3pOXBl
-         hxKJX0Xo30Mj3BK6bE+k33YksmWscUi65HvERH4eksL+Kyv9CYAkHaJzCz2ms69Jmw/3
-         XcpA==
-X-Gm-Message-State: AC+VfDz/dA40FbEON6i2ycpt7+P+y/iAndL/SSotZsUv1bu3YniNoZzy
-        GYkXuUgcH1AhEyFcwpcIiMpM9foDWtqGjTuM09wBwEz8woY7/A==
-X-Google-Smtp-Source: ACHHUZ4nWngzkypU3Cg/zTok12gK4tc1J01/ofn+M2gks5evrM0O8c9OmbgYZugTUsYq5SSkq3R/lfhedJOdFeeOlkU=
-X-Received: by 2002:a05:6870:3651:b0:19f:e1ed:4cc7 with SMTP id
- v17-20020a056870365100b0019fe1ed4cc7mr245378oak.0.1685983307836; Mon, 05 Jun
- 2023 09:41:47 -0700 (PDT)
+        Mon, 5 Jun 2023 12:42:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B0EE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:42:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F99D60DBF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 16:42:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D98DC433A1;
+        Mon,  5 Jun 2023 16:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685983353;
+        bh=n5juZxlzx1EtJLsbnquMhCy7aHrstqC/yTfSW67S+qE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UpY/yHckYTINMFEyQt6nBEmx9F7m6ycqDkJdttfmJAbgLcViQH28Y9tMcMWVTFPAy
+         gH89M6JNIONss9O3XXW/RSFvbQ3EsGJ+cF77HVfkiF7EmNBjP3XrA4ayIeGirBVjmo
+         BPEFRlbByKV8KeEYCancTar+bWG9taqG5Wdm0nA2pug6HqHUJrSeg3mF6olPIMez/O
+         OfShD4g2xTNOI59TCkXiMPDYnyRC3QJXSRDQM7yDYL7zozoQWX0CxS9fIqeqfb7dTT
+         UVHE6Tf9RLTvsc43LTJDKAGKVuPdrKlFBbVdDzJSrnL8EuEBeW/G9noZFYPXCfFJgp
+         S7spY20NHOI+g==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2b1b30445cfso42970361fa.1;
+        Mon, 05 Jun 2023 09:42:33 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxci713zmOZ4qT/xN447GNXnIwwwUqiINjWbLfs90U8a0bPXTdB
+        m6ZSgZFM/kgGngCRklH2+oCGIYJHOt9L9vqbeC4=
+X-Google-Smtp-Source: ACHHUZ4+IUD6+wCdoUvmip2g5FCLhoLnY4OOKMh2gI4u81vQapPFI1fPQigx/MPY6XWxpncRJN8+QwMYpOWbxpl1QxM=
+X-Received: by 2002:a2e:a442:0:b0:2ad:dd7e:6651 with SMTP id
+ v2-20020a2ea442000000b002addd7e6651mr4970194ljn.43.1685983351477; Mon, 05 Jun
+ 2023 09:42:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230605105834.702945-1-arnd@kernel.org>
-In-Reply-To: <20230605105834.702945-1-arnd@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 5 Jun 2023 12:41:36 -0400
-Message-ID: <CADnq5_P08Mf1Vzsr_fgWodKWrXZyYB26=zwP8VXzyNvgAX2AYQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdkfd: mark som eclear_address_watch() callback static
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Kim <jonathan.kim@amd.com>,
-        Mukul Joshi <mukul.joshi@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Le Ma <le.ma@amd.com>,
-        Ramesh Errabolu <Ramesh.Errabolu@amd.com>,
-        dri-devel@lists.freedesktop.org, Yifan Zha <Yifan.Zha@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
+References: <20230605074024.1055863-1-puranjay12@gmail.com> <20230605074024.1055863-3-puranjay12@gmail.com>
+In-Reply-To: <20230605074024.1055863-3-puranjay12@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 5 Jun 2023 09:42:19 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5-+eBuNGFes3i5-A4vA_f3woLwL_WbUcg6gNXssyi_Xg@mail.gmail.com>
+Message-ID: <CAPhsuW5-+eBuNGFes3i5-A4vA_f3woLwL_WbUcg6gNXssyi_Xg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] arm64: patching: Add aarch64_insn_copy()
+To:     Puranjay Mohan <puranjay12@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, catalin.marinas@arm.com,
+        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 6:58=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
+On Mon, Jun 5, 2023 at 12:40=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> This will be used by BPF JIT compiler to dump JITed binary to a RX huge
+> page, and thus allow multiple BPF programs sharing the a huge (2MB)
+> page.
 >
-> Some of the newly introduced clear_address_watch callback handlers have
-> no prototype because they are only used in one file, which causes a W=3D1
-> warning:
+> The bpf_prog_pack allocator that implements the above feature allocates
+> a RX/RW buffer pair. The JITed code is written to the RW buffer and then
+> this function will be used to copy the code from RW to RX buffer.
 >
-> drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_aldebaran.c:164:10: error: no pr=
-evious prototype for 'kgd_gfx_aldebaran_clear_address_watch' [-Werror=3Dmis=
-sing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c:782:10: error: no prev=
-ious prototype for 'kgd_gfx_v11_clear_address_watch' [-Werror=3Dmissing-pro=
-totypes]
->
-> Mark these ones static. If another user comes up in the future, that
-> can be reverted along with adding the prototype.
->
-> Fixes: cfd9715f741a1 ("drm/amdkfd: add debug set and clear address watch =
-points operation")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 
-Thanks.  Srinivasan already sent out a fix for this.
+Acked-by: Song Liu <song@kernel.org>
 
-Alex
-
+With a nit below.
 
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_aldebaran.c | 2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  arch/arm64/include/asm/patching.h |  1 +
+>  arch/arm64/kernel/patching.c      | 39 +++++++++++++++++++++++++++++++
+>  2 files changed, 40 insertions(+)
 >
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_aldebaran.c b/drive=
-rs/gpu/drm/amd/amdgpu/amdgpu_amdkfd_aldebaran.c
-> index efd6a72aab4eb..bdda8744398fe 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_aldebaran.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_aldebaran.c
-> @@ -161,7 +161,7 @@ static uint32_t kgd_gfx_aldebaran_set_address_watch(
->         return watch_address_cntl;
+> diff --git a/arch/arm64/include/asm/patching.h b/arch/arm64/include/asm/p=
+atching.h
+> index 68908b82b168..dba9eb392bf1 100644
+> --- a/arch/arm64/include/asm/patching.h
+> +++ b/arch/arm64/include/asm/patching.h
+> @@ -8,6 +8,7 @@ int aarch64_insn_read(void *addr, u32 *insnp);
+>  int aarch64_insn_write(void *addr, u32 insn);
+>
+>  int aarch64_insn_write_literal_u64(void *addr, u64 val);
+> +void *aarch64_insn_copy(void *addr, const void *opcode, size_t len);
+>
+>  int aarch64_insn_patch_text_nosync(void *addr, u32 insn);
+>  int aarch64_insn_patch_text(void *addrs[], u32 insns[], int cnt);
+> diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.c
+> index b4835f6d594b..48c710f6a1ff 100644
+> --- a/arch/arm64/kernel/patching.c
+> +++ b/arch/arm64/kernel/patching.c
+> @@ -105,6 +105,45 @@ noinstr int aarch64_insn_write_literal_u64(void *add=
+r, u64 val)
+>         return ret;
 >  }
 >
-> -uint32_t kgd_gfx_aldebaran_clear_address_watch(struct amdgpu_device *ade=
-v,
-> +static uint32_t kgd_gfx_aldebaran_clear_address_watch(struct amdgpu_devi=
-ce *adev,
->                                         uint32_t watch_id)
+> +/**
+> + * aarch64_insn_copy - Copy instructions into (an unused part of) RX mem=
+ory
+> + * @addr: address to modify
+> + * @opcode: source of the copy
+> + * @len: length to copy
+> + *
+> + * Useful for JITs to dump new code blocks into unused regions of RX mem=
+ory.
+> + */
+
+nit:
+I understand "addr" and "opcode" are used by x86 text_poke_copy(). But mayb=
+e
+we should call them "dst" and "src" or "to" and "from" or something similar=
+?
+
+Thanks,
+Song
+
+> +noinstr void *aarch64_insn_copy(void *addr, const void *opcode, size_t l=
+en)
+> +{
+> +       unsigned long flags;
+> +       size_t patched =3D 0;
+> +       size_t size;
+> +       void *waddr;
+> +       void *dst;
+> +       int ret;
+> +
+> +       raw_spin_lock_irqsave(&patch_lock, flags);
+> +
+> +       while (patched < len) {
+> +               dst =3D addr + patched;
+> +               size =3D min_t(size_t, PAGE_SIZE - offset_in_page(dst),
+> +                            len - patched);
+> +
+> +               waddr =3D patch_map(dst, FIX_TEXT_POKE0);
+> +               ret =3D copy_to_kernel_nofault(waddr, opcode + patched, s=
+ize);
+> +               patch_unmap(FIX_TEXT_POKE0);
+> +
+> +               if (ret < 0) {
+> +                       raw_spin_unlock_irqrestore(&patch_lock, flags);
+> +                       return NULL;
+> +               }
+> +               patched +=3D size;
+> +       }
+> +       raw_spin_unlock_irqrestore(&patch_lock, flags);
+> +
+> +       return addr;
+> +}
+> +
+>  int __kprobes aarch64_insn_patch_text_nosync(void *addr, u32 insn)
 >  {
->         return 0;
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c b/drivers=
-/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c
-> index 52efa690a3c21..131859ce3e7e9 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c
-> @@ -779,7 +779,7 @@ static uint32_t kgd_gfx_v11_set_address_watch(struct =
-amdgpu_device *adev,
->         return watch_address_cntl;
->  }
->
-> -uint32_t kgd_gfx_v11_clear_address_watch(struct amdgpu_device *adev,
-> +static uint32_t kgd_gfx_v11_clear_address_watch(struct amdgpu_device *ad=
-ev,
->                                         uint32_t watch_id)
->  {
->         return 0;
+>         u32 *tp =3D addr;
 > --
 > 2.39.2
 >
