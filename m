@@ -2,168 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9AA7229FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16399722A04
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbjFEO42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S229967AbjFEO5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbjFEO40 (ORCPT
+        with ESMTP id S232367AbjFEO5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:56:26 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DC4A7;
-        Mon,  5 Jun 2023 07:56:25 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-653bed78635so1874972b3a.0;
-        Mon, 05 Jun 2023 07:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685976985; x=1688568985;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T6MJIwP6Qz41YN9JsUH44j/uT7BYaMY9w+C9sGj/uYc=;
-        b=n0R6S5Pz/FUIVP6ytcw6xK8yCjSt5iCNR2Hy+2f+yMaV/QywwTJ94CYe9YVXvashMS
-         Gurmudikv/rGA1FvM1U1yl6z4Y7GWJ+CCY2jUJ6Xt3oh1fu46XGh8gZgMNDV7U8ulA0v
-         q8nDnfnBWwqzCa6BEEvG07v9R8Pott2fFPvO6YYVZA0r/6Ob72ymvh0y9hBH4HN3FYns
-         AtPHWbIZr3QluXo274sl3KBvFjUb25OJQ2wkg7BXV31pN/wbiDVX+qIJDd192c2gAWxj
-         kG5aL2equYVmpaGk4/vy1+yk+0yaADn+LjnMqvrJ30NiAAL188rXvIa5kuFtF/bQ7RWT
-         n2JA==
+        Mon, 5 Jun 2023 10:57:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9CBF2
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685977002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iM7FqUtZoblM2J1vfVR4GtdyLSINqEtLQvkMkp8oaNA=;
+        b=HmLcKQwlB/y3tWxgbZXxkssRTQOgsBaf5TpixlHGtpWkw9Yg2mqA1r1AHxNyzIeBMzFfAf
+        Aox+HV59/Ow7QDFfBFSqY7XjExdMoaZGMiQWzZMGgT4q7GbzKXLgN3QpkEBxLoab4k9Fye
+        KZCfBRIMaVIC7xUNVIzHJCsMxrDUDAQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-hZRKoMogMj-UuuyTLhB8Uw-1; Mon, 05 Jun 2023 10:56:42 -0400
+X-MC-Unique: hZRKoMogMj-UuuyTLhB8Uw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f77211540aso5865205e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 07:56:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685976985; x=1688568985;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T6MJIwP6Qz41YN9JsUH44j/uT7BYaMY9w+C9sGj/uYc=;
-        b=HZvsnBC/GRO5iVrWu2U+WsG+fzh4kOJQtJp+tzBf/6sS5qXBTDVswMazd4sQ/iewvI
-         mOWV1Eplp/8g7Uo0g0hm0kZl3FG0FGpeY8iIns3Q+glvVQ4aa2/bbOGjMT0qG+GCtwiz
-         QPRhUYHpAeFjzRZFC4NLDPBDoc3gfs+PeK3yTy68ZdEF/9bfcRI15jtc+sQWbhgRLRn5
-         kBGstHxVgJPmYv7Y9mEuUMYd66su1Vsghnd66Pnhc/R2u9GhPR+t4WSIU8WKz6aKXKZr
-         xJazMUeRbkhgiwSXaU5FAMi/YvilkQBcehX3d7YpiPXkgdxAACsrVtqq+RRgimngpFKP
-         zEXA==
-X-Gm-Message-State: AC+VfDwdCtK7YD02OfEP7rKHToobyN9YMWTjeSpkb0AMXkaPuch3LqtK
-        tbc9fCVXbXjeNF6jKOxcNSgTyh4VgxjNwqNQu1kcnZr6crK2EBmU
-X-Google-Smtp-Source: ACHHUZ6ELOU/gnEBfytvNDunlQ/WFvt5DfZeMzBsW5V77h1qMFRnFTZVm+SvCKe9kvX5TcXwkThMMzJd9XOK5y64DfU=
-X-Received: by 2002:a17:902:da81:b0:1ae:35b8:d5ae with SMTP id
- j1-20020a170902da8100b001ae35b8d5aemr9400904plx.19.1685976984850; Mon, 05 Jun
- 2023 07:56:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685977000; x=1688569000;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iM7FqUtZoblM2J1vfVR4GtdyLSINqEtLQvkMkp8oaNA=;
+        b=SFH/vOi49xFStwU42MfabvtNN7PbHmWi6B8aiZM+zXTEc2XdEwZ7VRMNf8M/Ssnvx4
+         /RU8+hU7wMy9OEBezPh1kSg2kUaPQ22uP4rQuyqc4WQ90MKazB1r0zljuZIOiqV8CPtk
+         RjEa9CqbSKn9EeZ4RVR0aKhxqqx/iEqHl8YoPaQoij2fKG+9bnsc8BrBf14hL3mPsT2+
+         5e83Rf1yhqFDY2+G+g0XrFuCJlvAVCYzSPBF18yJKyhaQR+kYZGziQNn3UapF1PQFp6B
+         W5t609dcXaTaiKWy2NFj7AgztdgkMCBAN9Q1ZurxuwuqsH2fR/Dc9QG/4uw6WdxhQ+1n
+         UiJQ==
+X-Gm-Message-State: AC+VfDy9RiHfkEumKmW3z3cGkSpbK33Bhzo+i6S1Ia+PGLGy6Qc+cFtU
+        mzYzOxNIHRp5dFb5qXFuOI5duE68mxPJWV2DeMO+CVnyLEWV4KLb2AV7n2p5Aw7LLpmK63S0Zr3
+        vaoSf4g+NFoQ3aMWr2wtWIfjr
+X-Received: by 2002:a7b:c3d0:0:b0:3f6:1a3:4cee with SMTP id t16-20020a7bc3d0000000b003f601a34ceemr7047079wmj.14.1685977000615;
+        Mon, 05 Jun 2023 07:56:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7l4TdvDr6o9XW/L55yGS61L3quL2CQtXB9IsLkpcz4S8Wf/T1gUnxE76eS3+xlCYUvLcEtYw==
+X-Received: by 2002:a7b:c3d0:0:b0:3f6:1a3:4cee with SMTP id t16-20020a7bc3d0000000b003f601a34ceemr7047062wmj.14.1685977000262;
+        Mon, 05 Jun 2023 07:56:40 -0700 (PDT)
+Received: from sgarzare-redhat ([5.77.94.106])
+        by smtp.gmail.com with ESMTPSA id o7-20020a05600c4fc700b003f71ad792f2sm20247339wmq.1.2023.06.05.07.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 07:56:39 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 16:56:37 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
+References: <20230605110644.151211-1-sgarzare@redhat.com>
+ <20230605084104-mutt-send-email-mst@kernel.org>
+ <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
+ <20230605085840-mutt-send-email-mst@kernel.org>
+ <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
+ <20230605095404-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-References: <20230519142456.2588145-1-pavacic.p@gmail.com> <20230519142456.2588145-2-pavacic.p@gmail.com>
- <20230519-emerald-void-066fad80950a@spud> <CAO9szn2sYRezCUQKFZ_qsVfne0gpWoirZoE-HpWTPS4G1U5fNQ@mail.gmail.com>
- <20230605-handyman-rebound-0c10df9dfaf2@spud>
-In-Reply-To: <20230605-handyman-rebound-0c10df9dfaf2@spud>
-From:   Paulo Pavacic <pavacic.p@gmail.com>
-Date:   Mon, 5 Jun 2023 16:56:13 +0200
-Message-ID: <CAO9szn0crQzy0L2Y-NZGKEVbpspxZMkO0oPpYr1WMS081ZxKRw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: display: panel: add fannal,c3004
-To:     Conor Dooley <conor@kernel.org>
-Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230605095404-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Conor,
-
-pon, 5. lip 2023. u 16:43 Conor Dooley <conor@kernel.org> napisao je:
+On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
+>On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
+>> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
+>> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
+>> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
+>> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
+>> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
+>> > > > > don't support packed virtqueue well yet, so let's filter the
+>> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
+>> > > > >
+>> > > > > This way, even if the device supports it, we don't risk it being
+>> > > > > negotiated, then the VMM is unable to set the vring state properly.
+>> > > > >
+>> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+>> > > > > Cc: stable@vger.kernel.org
+>> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> > > > > ---
+>> > > > >
+>> > > > > Notes:
+>> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
+>> > > > >     better PACKED support" series [1] and backported in stable branches.
+>> > > > >
+>> > > > >     We can revert it when we are sure that everything is working with
+>> > > > >     packed virtqueues.
+>> > > > >
+>> > > > >     Thanks,
+>> > > > >     Stefano
+>> > > > >
+>> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+>> > > >
+>> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
+>> > >
+>> > > To really support packed virtqueue with vhost-vdpa, at that point we would
+>> > > also have to revert this patch.
+>> > >
+>> > > I wasn't sure if you wanted to queue the series for this merge window.
+>> > > In that case do you think it is better to send this patch only for stable
+>> > > branches?
+>> > > > Does this patch make them a NOP?
+>> > >
+>> > > Yep, after applying the "better PACKED support" series and being
+>> > > sure that
+>> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
+>> > > patch.
+>> > >
+>> > > Let me know if you prefer a different approach.
+>> > >
+>> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
+>> > > interprets them the right way, when it does not.
+>> > >
+>> > > Thanks,
+>> > > Stefano
+>> > >
+>> >
+>> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
+>> > to merge in this window. Probably easier than the elaborate
+>> > mask/unmask dance.
+>>
+>> CCing Shannon (the original author of the "better PACKED support"
+>> series).
+>>
+>> IIUC Shannon is going to send a v3 of that series to fix the
+>> documentation, so Shannon can you also add the Fixes tags?
+>>
+>> Thanks,
+>> Stefano
 >
-> On Mon, Jun 05, 2023 at 04:33:15PM +0200, Paulo Pavacic wrote:
-> > Hello Conor,
-> >
-> > pet, 19. svi 2023. u 18:41 Conor Dooley <conor@kernel.org> napisao je:
-> > >
-> > > Hey Paulo,
-> > >
-> > > On Fri, May 19, 2023 at 04:24:55PM +0200, Paulo Pavacic wrote:
-> > > >
-> > > > Added fannal to vendor-prefixes and dt bindings for Fannal C3004.
-> > > > Fannal C3004 is a 480x800 MIPI DSI Panel which requires
-> > > > DCS initialization sequences with certain delays between certain
-> > > > commands.
-> > > >
-> > > > Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
-> > > > ---
-> > > > v3 changelog:
-> > > >   - renamed yml file
-> > > >   - refactored yml file to describe fannal,c3004
-> > > >   - added matrix URI to MAINTAINERS
-> > > > v2 changelog:
-> > > >   - revised driver title, now describes purpose
-> > > >   - revised description, now describes hw
-> > > >   - revised maintainers, now has only 1 mail
-> > > >   - removed diacritics from commit/commit author
-> > > >   - properties/compatible is now enum
-> > > >   - compatible using only lowercase
-> > > >   - revised dts example
-> > > >   - modified MAINTAINERS in this commit (instead of driver commit)
-> > > >   - dt_bindings_check checked yml
-> > > >   - checkpatch warning fixed
-> > > > ---
-> > > >  .../bindings/display/panel/fannal,c3004.yaml  | 75 +++++++++++++++++++
-> > > >  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
-> > > >  MAINTAINERS                                   |  6 ++
-> > > >  3 files changed, 83 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml b/Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..a86b5ce02aa2
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-> > > > @@ -0,0 +1,75 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/display/panel/fannal,c3004.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Fannal C3004 MIPI-DSI
-> > > > +
-> > > > +maintainers:
-> > > > +  - Paulo Pavacic <pavacic.p@gmail.com>
-> > > > +
-> > > > +description: |
-> > > > +  Fannal C3004 is a 480x800 panel which requires DSI DCS
-> > > > +  initialization sequences.
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: panel-common.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    items:
-> > > > +      - const: fannal,c3004
-> > > > +
-> > > > +  reg: true
-> > >
-> > > Are there no restrictions on the number of reg entries?
-> >
-> > What do you mean by this? May I have some example if possible?
->
-> I was commenting on the lack of minItems and/or maxItems.
+>Well this is in my tree already. Just reply with
+>Fixes: <>
+>to each and I will add these tags.
 
-Sorry this is my first patch, I still don't understand, why should I
-add `maxItems: 1` to the 'reg:' ?
-Isn't  part of the code:
-> required:
->  - compatible
->  - reg
->  - reset-gpios
+I tried, but it is not easy since we added the support for packed 
+virtqueue in vdpa and vhost incrementally.
 
-making `minItems: 1` redundant for reg properties?
+Initially I was thinking of adding the same tag used here:
 
->
-> Cheers,
-> Conor.
+Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+
+Then I discovered that vq_state wasn't there, so I was thinking of
+
+Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
+
+So we would have to backport quite a few patches into the stable branches.
+I don't know if it's worth it...
+
+I still think it is better to disable packed in the stable branches,
+otherwise I have to make a list of all the patches we need.
+
+Any other ideas?
 
 Thanks,
-Paulo
+Stefano
+
