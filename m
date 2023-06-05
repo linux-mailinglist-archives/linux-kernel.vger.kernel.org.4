@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74869721EF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CAF721F25
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjFEHJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S229821AbjFEHLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjFEHIs (ORCPT
+        with ESMTP id S231740AbjFEHKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:08:48 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95797E51
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:08:22 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685948897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LxKZJB11fucc8eEXUnpEucsBbBt1WAs5b1tL7WQ4njU=;
-        b=bZJIQ6GqDyE+/lFoGLwhdH4n0Xj5mzbU9R3SnXiISv/R9oaQnBC0b+0I+TdKMaRpe/TjwO
-        3bAUBUS6mZWhejmBm+aOUJv6FUCB4M9tUNB1RgkxPcktaLdth0Euf9YcJ7HAiQ7QDmFWzD
-        GCyNr+HegKX0U6aGKo8rkJS5L47phwGgOLsNkUh8PvE4xnQEyt54p1Rxyo/EJrxVE37d6r
-        UYzoh0jRmMMzcHeQRH9JyLbrjedeCGiYC22fAhdbhtvdiqaJgxNth/8Q23SB04RX6seEWc
-        fMBvxF7eSJHrYR4P9lUicc1VDzXUXU3ua8+TTfG3racxHrq31Zkdc1qhqaS4zQ==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5621A1BF203;
-        Mon,  5 Jun 2023 07:08:16 +0000 (UTC)
-Date:   Mon, 5 Jun 2023 09:08:15 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 1/6] mtd: rawnand: meson: fix ready/busy command
-Message-ID: <20230605090815.48bc2074@xps-13>
-In-Reply-To: <1ede0f53-8513-e346-b5a8-fc8a804cfa8d@sberdevices.ru>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
-        <20230601061850.3907800-2-AVKrasnov@sberdevices.ru>
-        <20230601095142.3a611b5a@xps-13>
-        <1ede0f53-8513-e346-b5a8-fc8a804cfa8d@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 5 Jun 2023 03:10:20 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5349CE44;
+        Mon,  5 Jun 2023 00:09:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685948952; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Ds03rjV6L/KUIbJVzZE7Et2ppDS6H8wuSRxoK+oNodpqehWOWIgHR486H2PT/Y0LZ+
+    egR8u58m0m2XId0tGiiuFUxoQ/Lmrymq5weSX9dqE73CHk51XYBa7+Jm1F8HEsNu5l/X
+    lUWv2Ye+G2C01z2oikAuWrATJGmrMh+kG11kIXqtag/8jT76o5yrZAeM/alnABJ815MF
+    ty83DPXGJZwYradkFO+oVoTLIvtA8+RyA6qH827O/GMgYl9tPoFl1GPB0XYefLGAds0n
+    apnvkH+g126ARsFf0nUnGrVdQHbchSoyUNYXTkqhoIvpkpodm7L/qzwwEjFEzuJnXy2j
+    dWfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685948952;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=tDXvQyb9TQPL8CACuByqs5ZpebJ2G7D0n7f+VTZmq0c=;
+    b=io1O51LPqSWDMVtTWZSWW39+xLcVUoX5H1sE/1UWMV4ag/wbj3NJC01YQfKJlVjhqP
+    iwoSOMhkOLNXOUEoPL76iFG/SdZSGsvM1Hni5kXHwoeLDnUw9Obp4HpBqi04Vz3y/rWG
+    YWx6ThwqsiNgWF5AyshoslY2MR7066DRcqmXObrfFFIkZ1cgy68MpVul3+mk/R5ePKTX
+    W/7Ze9cztd+MiZYMYO6FilcdFv6dFWjy6vOK9HEx5W0jHtJxFk+P2GX6ogl3CsY/7Ebx
+    6uJuPq3+WV4j+gr7auZVgoHCQq/9pHzeOdYNrPQpSAV3Y8ukbjmgVYgyZhtAfgGXst58
+    j38g==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685948952;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=tDXvQyb9TQPL8CACuByqs5ZpebJ2G7D0n7f+VTZmq0c=;
+    b=lIDu3s9pNBzuwt23zQerZtAxwimNIctDaOiO43KimHgQRnsusWVkK1n4VuJ576NX8J
+    hMolD5bER7Lng4bCURA6DbqhzATp4+PgcxOAR+SY7n0JjgKiWM9SCo6jjh4HNl116lN7
+    QWjq9yQoY5LvEkGkRB9PckkS8F7Ytfvaj/2naOC/59zTQjGVwTexr3uS0GFIxMUMoOzY
+    5eANVpmC3OryIsRENprkXlNxnImVzBGQZ4LdNIU9x0VPbSZPYpEvydc70XlszNXSVr1u
+    4TV9DXyplI1HIJ2U5tNrQZfAZQ6pjDjvV0y+AgiW+vR3oGjyHjlHWzq8AlBGOMaeTkzD
+    LzKg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685948951;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=tDXvQyb9TQPL8CACuByqs5ZpebJ2G7D0n7f+VTZmq0c=;
+    b=nse4l3nSLDuEdniyfJ7hh1KGvUPLA3FAHwMvdFVBRVMK32m4fJfuZAb7JTUiAvg4J0
+    svoj2NGEgnRARZg3ZKCQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn9VOL5nz0="
+Received: from [192.168.244.3]
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5579B8Zy
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 5 Jun 2023 09:09:11 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH 00/14] Add dedicated device tree node for RPM
+ processor/subsystem
+Date:   Mon, 05 Jun 2023 09:08:16 +0200
+Message-Id: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOCJfWQC/x2NSwqAMAxEryJZW1Dr/yriorZRA1olRRGKdze4m
+ MUb3jARAjJhgD6JwHhToMML5GkCdjV+QUVOGIqs0Fmlc8XnLuHDqqZqdV22urPOgfiTCagmNt6
+ usvDXtkl5Ms70/AfD+L4f1PcCn3AAAAA=
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,54 +92,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+The Resource Power Manager (RPM) currently does not have a dedicated 
+device tree node that represents the remoteproc/subsystem. The 
+functionality exposed through the SMD/GLINK channels is described in 
+top-level nodes of the device tree. This makes it hard to group other 
+functionality provided by the RPM together in the device tree. This 
+series adds a single top-level remoteproc-rpm/rpm-proc device tree node 
+that groups all RPM functionality together.
 
-avkrasnov@sberdevices.ru wrote on Fri, 2 Jun 2023 01:44:01 +0300:
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+Stephan Gerhold (14):
+      dt-bindings  soc: qcom: smd-rpm: Fix sort order
+      dt-bindings: soc: qcom: smd-rpm: Add MSM8909 to qcom,smd-channels
+      dt-bindings: soc: qcom: smd-rpm: Add some more compatibles
+      soc: qcom: smd-rpm: Match rpmsg channel instead of compatible
+      dt-bindings: remoteproc: Add Qualcomm RPM processor/subsystem
+      dt-bindings: soc: qcom: smd-rpm: Use qcom,rpm-proc in example
+      dt-bindings: qcom: smd: Mark as deprecated
+      soc: qcom: smem: Add qcom_smem_is_available()
+      rpmsg: qcom_smd: Use qcom_smem_is_available()
+      soc: qcom: Add RPM processor/subsystem driver
+      arm64: dts: qcom: Add rpm-proc node for SMD platforms
+      arm64: dts: qcom: Add rpm-proc node for GLINK gplatforms
+      ARM: dts: qcom: Add rpm-proc node for SMD platforms
+      ARM: dts: qcom: apq8064: Drop redundant /smd node
 
-> Hello Miquel!
->=20
-> May be I can exclude this patch from this patchset and send it as a singl=
-e patch
-> as it is fix and not related with other patches?
+ .../bindings/remoteproc/qcom,rpm-proc.yaml         | 125 +++++++++++++++++
+ .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |  23 +++-
+ .../devicetree/bindings/soc/qcom/qcom,smd.yaml     |   7 +
+ arch/arm/boot/dts/qcom-apq8064.dtsi                |  40 ------
+ arch/arm/boot/dts/qcom-apq8084.dtsi                |   6 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi                |  38 +++---
+ arch/arm/boot/dts/qcom-msm8974.dtsi                |  44 +++---
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi              |  48 ++++---
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  28 ++--
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   6 +-
+ arch/arm64/boot/dts/qcom/msm8939.dtsi              | 112 +++++++--------
+ arch/arm64/boot/dts/qcom/msm8953.dtsi              | 136 +++++++++---------
+ arch/arm64/boot/dts/qcom/msm8976.dtsi              | 152 ++++++++++-----------
+ arch/arm64/boot/dts/qcom/msm8994.dtsi              |  99 +++++++-------
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              | 113 +++++++--------
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |  98 ++++++-------
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi              | 126 ++++++++---------
+ arch/arm64/boot/dts/qcom/qcs404.dtsi               | 152 +++++++++++----------
+ arch/arm64/boot/dts/qcom/sdm630.dtsi               | 132 +++++++++---------
+ arch/arm64/boot/dts/qcom/sm6115.dtsi               | 128 ++++++++---------
+ arch/arm64/boot/dts/qcom/sm6125.dtsi               | 140 ++++++++++---------
+ arch/arm64/boot/dts/qcom/sm6375.dtsi               | 126 ++++++++---------
+ drivers/rpmsg/qcom_smd.c                           |  10 +-
+ drivers/soc/qcom/Makefile                          |   2 +-
+ drivers/soc/qcom/rpm-proc.c                        |  76 +++++++++++
+ drivers/soc/qcom/smd-rpm.c                         |  35 ++---
+ drivers/soc/qcom/smem.c                            |   9 ++
+ include/linux/soc/qcom/smem.h                      |   1 +
+ 28 files changed, 1111 insertions(+), 901 deletions(-)
+---
+base-commit: 8d5a57ea6a0b1722725170e32e511701ca7c454c
+change-id: 20230531-rpm-rproc-758364839cdd
 
-Yes absolutely.
+Best regards,
+-- 
+Stephan Gerhold <stephan@gerhold.net>
 
->=20
-> Thanks, Arseniy
->=20
-> On 01.06.2023 10:51, Miquel Raynal wrote:
-> > Hi Arseniy,
-> >=20
-> > AVKrasnov@sberdevices.ru wrote on Thu, 1 Jun 2023 09:18:44 +0300:
-> >  =20
-> >> This fixes ready/busy command value. =20
-> >=20
-> > nit: "Fix the ready/busy command value." =20
-> >>
-> >> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> >> ---
-> >>  drivers/mtd/nand/raw/meson_nand.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/=
-meson_nand.c
-> >> index 074e14225c06..9dd4a676497b 100644
-> >> --- a/drivers/mtd/nand/raw/meson_nand.c
-> >> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> >> @@ -37,7 +37,7 @@
-> >>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
-> >>  #define NFC_CMD_SCRAMBLER_DISABLE	0
-> >>  #define NFC_CMD_SHORTMODE_DISABLE	0
-> >> -#define NFC_CMD_RB_INT		BIT(14)
-> >> +#define NFC_CMD_RB_INT		((0xb << 10) | BIT(18) | BIT(16))
-> >> =20
-> >>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
-> >>   =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
-
-
-Thanks,
-Miqu=C3=A8l
