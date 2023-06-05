@@ -2,136 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931477226D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F137226D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbjFENFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S233809AbjFENFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbjFENEs (ORCPT
+        with ESMTP id S233877AbjFENEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:04:48 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A186CD;
-        Mon,  5 Jun 2023 06:04:38 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685970277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Opg2+jWVs0W7tfe9P4gJ/SIM6FCQK0Ho4WgIqLLU0Ow=;
-        b=LukbBwm6elO0tpONiMDeHF4pYr6U4PvbsvMdHp99wOb9TcTReyrNlKhydcfUM7+RONNq9X
-        hal4PyWx2JCo2lJaFzWfjJxEaKKs9bR4MGIQ2YoAsJr1F21iBnhhNXeUWPDCNumnBOmTr+
-        /jc9uZO5dupdqRCFk/ekCyMFYENttt5pr4pEUxVo3qYdv8a3nPhMWai4Z3exnC1vhri/mq
-        aaFn4mJqPTmSsDkp6+2wgs6vhfT39yuwexBnWA7Q+0bEegaQHbE2eF/RjtMmjbQ6Qm735l
-        q5xbLg1GmgRcOA/a4k9jhfcCkFzKKeL8QA8OLZWoY3QoMOPKguyFuuwtyBJTgw==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 513104000C;
-        Mon,  5 Jun 2023 13:04:35 +0000 (UTC)
-Date:   Mon, 5 Jun 2023 15:04:35 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: Re: [PATCH v6 00/11] Add Renesas PMIC RAA215300 and built-in RTC
- support
-Message-ID: <202306051304351d588a1a@mail.local>
-References: <20230602142426.438375-1-biju.das.jz@bp.renesas.com>
+        Mon, 5 Jun 2023 09:04:51 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD2BEC7;
+        Mon,  5 Jun 2023 06:04:43 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8CxaPFq3X1k7BgAAA--.513S3;
+        Mon, 05 Jun 2023 21:04:42 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauVp3X1kI4EAAA--.2345S3;
+        Mon, 05 Jun 2023 21:04:42 +0800 (CST)
+Message-ID: <0f4a5125-5028-2070-76a6-a901a7ddaddb@loongson.cn>
+Date:   Mon, 5 Jun 2023 21:04:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230602142426.438375-1-biju.das.jz@bp.renesas.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v12 15/31] LoongArch: KVM: Implement vcpu status
+ description
+Content-Language: en-US
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-16-zhaotianrui@loongson.cn>
+From:   "bibo, mao" <maobibo@loongson.cn>
+In-Reply-To: <20230530015223.147755-16-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxauVp3X1kI4EAAA--.2345S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFyxuF17tFykKw4rZF17CFX_yoW8Xr47pF
+        nrC3WjgrWrWwnIgw1fJr9xXw4aqrZ3G3WS9F9FqryYkFn8Krn5XFWrKrWDGFWvy34Fyr4I
+        vaySk3ZI9a90y3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
+        XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUI0
+        eHUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
 
-On 02/06/2023 15:24:15+0100, Biju Das wrote:
-> Logs:
-> [   15.447305] rtc-isl1208 3-006f: registered as rtc0
-> [   15.479493] rtc-isl1208 3-006f: setting system clock to 2023-04-27T19:31:02 UTC (1682623862)
+在 2023/5/30 09:52, Tianrui Zhao 写道:
+> Implement LoongArch vcpu status description such as idle exits counter,
+> signal exits counter, cpucfg exits counter, etc.
 > 
-> root@smarc-rzv2l:~# hwclock -r
-> 2023-04-27 19:33:05.499001+00:00
-> root@smarc-rzv2l:~# hwclock -r
-> 2023-04-27 19:33:06.936688+00:00
-> root@smarc-rzv2l:~#
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>  arch/loongarch/kvm/vcpu.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+> index c41de76d0a79..79599e69b2c9 100644
+> --- a/arch/loongarch/kvm/vcpu.c
+> +++ b/arch/loongarch/kvm/vcpu.c
+> @@ -12,6 +12,23 @@
+>  #define CREATE_TRACE_POINTS
+>  #include "trace.h"
+>  
+> +const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
+> +	KVM_GENERIC_VCPU_STATS(),
+> +	STATS_DESC_COUNTER(VCPU, idle_exits),
+> +	STATS_DESC_COUNTER(VCPU, signal_exits),
+> +	STATS_DESC_COUNTER(VCPU, int_exits),
+> +	STATS_DESC_COUNTER(VCPU, cpucfg_exits),
+> +};
+> +
+> +const struct kvm_stats_header kvm_vcpu_stats_header = {
+> +	.name_size = KVM_STATS_NAME_SIZE,
+> +	.num_desc = ARRAY_SIZE(kvm_vcpu_stats_desc),
+> +	.id_offset = sizeof(struct kvm_stats_header),
+> +	.desc_offset = sizeof(struct kvm_stats_header) + KVM_STATS_NAME_SIZE,
+> +	.data_offset = sizeof(struct kvm_stats_header) + KVM_STATS_NAME_SIZE +
+> +		       sizeof(kvm_vcpu_stats_desc),
+> +};
+> +
+>  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu)
+>  {
+>  	return !!(vcpu->arch.irq_pending) &&
 
-You should probably run rtc-test if you want to ensure it is working
-properly.
-
-What is the expectation, can I apply the rtc patches once they are ready
-or are there dependencies?
-
-> 
-> Biju Das (11):
->   i2c: Enhance i2c_new_ancillary_device API
->   regulator: dt-bindings: Add Renesas RAA215300 PMIC bindings
->   regulator: Add Renesas PMIC RAA215300 driver
->   arm64: dts: renesas: rzg2l-smarc-som: Enable PMIC and built-in RTC
->   dt-bindings: rtc: isl1208: Convert to json-schema
->   dt-bindings: rtc: isil,isl1208: Document clock and clock-names
->     properties
->   rtc: isl1208: Drop name variable
->   rtc: isl1208: Make similar I2C and DT-based matching table
->   rtc: isl1208: Drop enum isl1208_id and split isl1208_configs[]
->   rtc: isl1208: Add isl1208_set_xtoscb()
->   rtc: isl1208: Add support for the built-in RTC on the PMIC RAA215300
-> 
->  .../bindings/regulator/renesas,raa215300.yaml |  85 ++++++++++
->  .../devicetree/bindings/rtc/isil,isl1208.txt  |  38 -----
->  .../devicetree/bindings/rtc/isil,isl1208.yaml | 100 ++++++++++++
->  .../boot/dts/renesas/rzg2l-smarc-som.dtsi     |  18 +++
->  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c  |   6 +-
->  drivers/i2c/i2c-core-base.c                   |  91 +++++++----
->  drivers/media/i2c/adv748x/adv748x-core.c      |   2 +-
->  drivers/media/i2c/adv7604.c                   |   3 +-
->  drivers/regulator/Kconfig                     |   7 +
->  drivers/regulator/Makefile                    |   1 +
->  drivers/regulator/raa215300.c                 |  92 +++++++++++
->  drivers/rtc/rtc-isl1208.c                     | 150 ++++++++++++++----
->  include/linux/i2c.h                           |   3 +-
->  13 files changed, 490 insertions(+), 106 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/regulator/renesas,raa215300.yaml
->  delete mode 100644 Documentation/devicetree/bindings/rtc/isil,isl1208.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->  create mode 100644 drivers/regulator/raa215300.c
-> 
-> -- 
-> 2.25.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
