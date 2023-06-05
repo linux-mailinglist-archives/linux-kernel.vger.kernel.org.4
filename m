@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B5A722D7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D91722D81
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbjFERTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S235373AbjFERTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbjFERTE (ORCPT
+        with ESMTP id S229791AbjFERTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:19:04 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29958D3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:19:03 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so8205ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 10:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685985542; x=1688577542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hxEXC71EvIBIyrKJkGLhD82I8t0W90h4l0Ayz0o/Zuk=;
-        b=E4z+OtE2bX/yCcT11XrY69kLEAdDfz8lyFnka1MGrcDLwOe8Zc/Nb0mpY4WBcxg85n
-         scSbvoLxQn9L72GYXgySm/QNrAqXk2QF++Hzl8IMDcMsi9h4DrltRmmdRv+ia8hvyhKR
-         F/hxReUxd60B94T1dYjNmaJONz8f5UuJJM9++Nwoyh5NuRJYSnOxs8Xmsjif6ticCaLa
-         VuZ7ZvT6VVhJrVEUV12OdRiVx3R89skZso8eBtU7BQNOmRx30UzNbx61LCMDS11zg36G
-         CWhgIKdMtWHe7jHfWhMxyi7KMzqs6SDQkeAlQK2Xsq4uVgh13dLRzLhRuUS27sdWn8ep
-         oaCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685985542; x=1688577542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hxEXC71EvIBIyrKJkGLhD82I8t0W90h4l0Ayz0o/Zuk=;
-        b=UBA8GxyypWQ/VSe05wCupC9IIk+ixmDGPBoLZYl5nyU4Jzqg3nyQ20Wk46KSn50Nmf
-         Pn1jEUO0JUYQt5Q9u1V1ilqyVdamb2fYVInkpWHDAaNyDyTxhPz3ZuRH3BcHuOEmqJ/w
-         yygXCwzGZrCa8Ohtt36abX/UhDMNaj/0/9XzgFSns+AddZChDq+fljyC3MyLtXaUo1iY
-         urFIfA/fI4TSWzNJGtQFFLwB5SjvXGroVkdlsU6J+xm3OiTIOa3cp/8Zmq8iFTRmagM/
-         ZW5IgUJ+dNihXCWf9hF3F/wtmGOdM35QCGQvozYF7pCg/Gqdo1SJNH3xNRgKo8SVvT9x
-         Jmtw==
-X-Gm-Message-State: AC+VfDyfAH4+h9oAAFq4zgqh3OybACISxP1fFN1agLV4dFmCjO1UnNcR
-        9ivaWsNWWk7AV3ot0GZ64RoQMdWi8i3cD/+HozRoJA==
-X-Google-Smtp-Source: ACHHUZ5yCtTMWiv5JDmds12pvo/vlZ5+DYKz0ecdht2+KB6rBnQ5vhTqoa7+N3iMfOBk8KooPf3yokzgPcfpb92Abos=
-X-Received: by 2002:a05:6e02:1e07:b0:33d:c057:f811 with SMTP id
- g7-20020a056e021e0700b0033dc057f811mr10502ila.1.1685985542393; Mon, 05 Jun
- 2023 10:19:02 -0700 (PDT)
+        Mon, 5 Jun 2023 13:19:37 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC7A99;
+        Mon,  5 Jun 2023 10:19:36 -0700 (PDT)
+Received: from [172.27.2.41] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 355HJARO3951140
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 5 Jun 2023 10:19:15 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 355HJARO3951140
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023051001; t=1685985564;
+        bh=DULmQU2C3VCyHfZq5bD6jIOzzpqFGhvQ9Ua2jRpb2tk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nlINNk/ynFaHdaUzCL80NlOOCuMjwkyNdgiYalu1HkgfGu5y3SP5upzPuAHO+seG3
+         coBQ1gPPdy0N35pRebJAkp6EfAzYcS8fFZ5ln1MNr9PtceeLB40bVZbXBCg9BdgY1R
+         PAme39FSg5OqOpr8DEL3Iv+8u3W1O6usO7c8fnwDDzK/29auiWmVKyzHmGtNE96NgP
+         9It7gkaYzgc7Fiy3gNywjgqc8FIhv69LBq0K5lurjgDa8qX1j+9AHfTEARx1CYRVYu
+         RiJjmFSjOwc06PhkEVG/7AB2lppfJZqTZkN7XQ4aw0I+ykBF3JhMdYeOBpFoFcodW3
+         JPJ0SNwgRhKZw==
+Message-ID: <01d50e80-7d58-6dc8-73d4-bd8ad1d1bec0@zytor.com>
+Date:   Mon, 5 Jun 2023 10:19:10 -0700
 MIME-Version: 1.0
-References: <20230522204047.800543-1-irogers@google.com> <CAEf4BzZ28xz=bUuFoaWRzKjxOEpv2SRJ08rOycDiX0OchGSQEA@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ28xz=bUuFoaWRzKjxOEpv2SRJ08rOycDiX0OchGSQEA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 5 Jun 2023 10:18:51 -0700
-Message-ID: <CAP-5=fUj9eTGLDxEpc=Xp082O-mQ_4ALp=2VPFHCvAVq8gO-JQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Bring back vmlinux.h generation
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 09/33] x86/cpu: add X86_CR4_FRED macro
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, Xin Li <xin3.li@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
+        pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-10-xin3.li@intel.com> <87r0qq6rtm.ffs@tglx>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <87r0qq6rtm.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 4:35=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, May 22, 2023 at 1:41=E2=80=AFPM Ian Rogers <irogers@google.com> w=
-rote:
-> >
-> > Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
-> > satisfy libbpf 'runqueue' type verification") inadvertently created a
-> > declaration of 'struct rq' that conflicted with a generated
-> > vmlinux.h's:
-> >
-> > ```
-> > util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
-> > struct rq {};
-> >        ^
-> > /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous defin=
-ition is here
-> > struct rq {
-> >        ^
-> > 1 error generated.
-> > ```
-> >
-> > Fix the issue by moving the declaration to vmlinux.h. So this can't
-> > happen again, bring back build support for generating vmlinux.h then
-> > add build tests.
-> >
-> > Ian Rogers (3):
-> >   perf build: Add ability to build with a generated vmlinux.h
-> >   perf bpf: Move the declaration of struct rq
-> >   perf test: Add build tests for BUILD_BPF_SKEL
-> >
-> >  tools/perf/Makefile.config                       |  4 ++++
-> >  tools/perf/Makefile.perf                         | 16 +++++++++++++++-
-> >  tools/perf/tests/make                            |  4 ++++
-> >  tools/perf/util/bpf_skel/.gitignore              |  1 +
-> >  tools/perf/util/bpf_skel/lock_contention.bpf.c   |  2 --
-> >  tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h | 10 ++++++++++
-> >  6 files changed, 34 insertions(+), 3 deletions(-)
-> >  rename tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h (90%)
-> >
-> > --
-> > 2.40.1.698.g37aff9b760-goog
-> >
-> >
->
-> LGTM, for the series:
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+On 6/5/23 05:01, Thomas Gleixner wrote:
+> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+> 
+>> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
+>>
+>> Add X86_CR4_FRED macro for the FRED bit in %cr4. This bit should be a
+> 
+> s/should/must/ no?
+> 
+>> +/*
+>> + * These bits should not change their value after CPU init is finished.
+>> + * The explicit cast to unsigned long suppresses a warning on i386 for
+>> + * x86-64 only feature bits >= 32.
+>> + */
+>>   static const unsigned long cr4_pinned_mask =
+>> -	X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP |
+>> -	X86_CR4_FSGSBASE | X86_CR4_CET;
+>> +	(unsigned long)
+> 
+> That type cast is required because:
+> 
+> +#define X86_CR4_FRED		_BITULL(X86_CR4_FRED_BIT)
+> 
+> Bah. Fred is 64 bit only. So why defining this as 1ULL << 32
+> unconditionally and stripping the bit off on 32bit via the type cast?
+> 
+> #ifdef CONFIG_X86_64
+> #define X86_CR4_FRED		_BITUL(X86_CR4_FRED_BIT)
+> #else
+> #define X86_CR4_FRED		0
+> #endif
+> 
+> would be too obvious, right?
+> 
 
-Arnaldo, could we take this set?
+It also adds an #ifdef mess to avoid a simple typecast. Is that the 
+right tradeoff?
 
-Thanks,
-Ian
+I'm not saying it is or it isn't, it is an open question.
+
+	-hpa
+
+
