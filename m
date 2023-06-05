@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180F8723366
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F065723369
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbjFEW4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 18:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S232963AbjFEW5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 18:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjFEW4g (ORCPT
+        with ESMTP id S232989AbjFEW5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 18:56:36 -0400
+        Mon, 5 Jun 2023 18:57:00 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721C2DC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:56:35 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id CEC9D5C06DD;
-        Mon,  5 Jun 2023 18:56:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 05 Jun 2023 18:56:34 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89A7DC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:56:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 302335C06DD;
+        Mon,  5 Jun 2023 18:56:59 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 05 Jun 2023 18:56:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
          h=cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686005794; x=1686092194; bh=a7
-        KMYicZEUIE6uw7owk+wAQbBZMSOwnOCGbW7LMEHdQ=; b=ZRckXazygVE2iBj1KT
-        C43WeNABbbX96WzodVN7/uF2MN9F+dl7AUHe52F5I2Z6wcxZhfGtenmkJdsGzmRs
-        gUfs4cDXQhxljZUnS57fg6KvxKCRKrwiC2+MJdgC1bhXaVlbZfr+aCBGIex4mDnN
-        g35pvDoN+LQcwNaGpdUv0agon1xNpExoah1SQSwxyviuaGyXY00vFKPitR6kWDaV
-        gPT9IXpeJDDgp7HTefb3Q85U0gRYCIjqFy+k8df44zcS3efmMxEieNTuBE3niawi
-        r0t+lbjQf39EzRb71ak+hrIp+7ETQ64pSYSLIzlG/gWJLL9AenugiPDBNn/RTIL8
-        w4Ew==
+        :subject:subject:to:to; s=fm1; t=1686005819; x=1686092219; bh=j2
+        rOiLTkAGr2XEigSY9BTteaFVuwIDk0LFOAYVeml4E=; b=X/ZB7uUcooiHky0lza
+        KVWH4o4S4qMyi6/qQyFdg+bNSvxNWA6b9dbhkQtqwPL54cnxKcQLNI4klpAsQZWS
+        oJI9zeXunIweCn4sRZneRFjR/O/QLTuFZmELAp3oj/zPnUDRMqAf/u7UO3ErLHF1
+        YfGHm5KzASTN6oQufEmo+drVQrGJWUg4MpZLg/1zZ0veKaQGZIG7lOQStWo7uo6c
+        fvm4Pqfj2qw/GZnmBoomQ5DOQgoBRX+qKa9CUqKeMUgUqkW91BDyjark+oHsR47h
+        pSsQnfWjLwWtzMscbQoHhucM5GU7y3lsjdYdz1ppgXVh4Z4vTL9s5w8N6++snqo7
+        qgzw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686005794; x=1686092194; bh=a7KMYicZEUIE6
-        uw7owk+wAQbBZMSOwnOCGbW7LMEHdQ=; b=QFIi8G/idAhkoxhnvL5yqUFlhtIe3
-        y/LzMNRdN2nvMlVTYBbTW1SsSRmVP84klSrYVzXEIOoOvSWYF2zCQlsts6HTpLhK
-        77nLsHBuAi0SNJsq0fcYnHKFlY08oAmQCq79L55tgYerA/NvGcM3QTOm4ZSe5Kjf
-        L7RGtv49HNH3bda3aYipQVuvFiBk6miK4iz4KkgHkh30V1MgFHTpCoHkIDRaujLu
-        VfiR6Bqw2Y6kyrsnRvMy8JrzW/AZq/oGYr+zHY+jM059PpEqnbcfmtgn6Ds+e9ZT
-        vCQHW7f+0MerTCBlib1iQgP/7Tz15wXt7jTEBfiFdT5ccEkQR/3QTsquA==
-X-ME-Sender: <xms:Imh-ZM8k44EA8AL2ltq2KV76wMIkO3Ug1CdB3kgmPIBkgdDJP5NhUg>
-    <xme:Imh-ZEvCkhk6lxc2s2JaB0BZzTA4hnRuyijui0k4w-WWxA-ADbtqeOIdYb_NYTRwp
-    F2dnDEjnz00QBKIQcI>
-X-ME-Received: <xmr:Imh-ZCB0kNyYXzl958VMp2bxVi0hl2IFAErYR_WRyKN1AZRqF-bi8fGKyml_zGT6e1LdUZhjx3jhBMssztzmlYU_WmzPBfbh>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddgudehucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm1; t=1686005819; x=1686092219; bh=j2rOiLTkAGr2X
+        EigSY9BTteaFVuwIDk0LFOAYVeml4E=; b=KQ/jf5jEU7pnPjg7EEnRMxkEXiyTj
+        bnnBLhH812RqaOjnrDovO6V3xkwt6TGGpMRd2frsfQEb2DF6/gPl5VfAsS/i8lu4
+        KAMdmfCrdJBvo7/ZSuJeOKHDh/XPeXYakh3m0DkLGWSchyEn79iP4Lkt7xivjRwT
+        fAS3XVdcjQ60WqT8q7/PRWErpiOBN8j/RpALhh+q5PcvT8gOa9vYQI69Mw7Y1UUW
+        SALWT2rAypOu75SHo+i8Gt4WTYKPWHRWQrQVw1bS3ZZuslWXOo9jQtgHa5+ZTYNr
+        oS+pa5aSfSXPgDNsWCzb2Rs/bUkGH7uPfxt8PdaWQhjKXAOpP1P3uC+GQ==
+X-ME-Sender: <xms:O2h-ZGesdtYurqroN9jkec1KuOYpgUkWBS8O0LSfsTprIe5dRCmF9A>
+    <xme:O2h-ZAMOVniAInQRugDRs3z1jsBk3FejJPnXmq5-pmf3w_l04wuOcIKfJUxFq98Ga
+    kqclZvTqjSxb7kijGE>
+X-ME-Received: <xmr:O2h-ZHgBXwkfAkdAin5FzIdaMF0ynLDuQQX1jl5NaZMHAMWAwzJf5jC1rQ3kgfrC9ThNUQZuGBnbc9A0b3PVsocg8tANz5no>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddgudeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
     dttddtvdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
@@ -55,25 +55,26 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddgudehucetufdoteggod
     ejgfejgfdukeefudetvddtuddtueeivedttdegteejkedvfeegfefhnecuvehluhhsthgv
     rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihessh
     grkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:Imh-ZMedOcTYIjjW2IKL19v1hyc5rlJSkcgDNJEHDYK6Yh38MYoZJQ>
-    <xmx:Imh-ZBO8AJIszCjvq1idlBuMSyBtn_DX1ixK9UTQddZt8NyO8_lVwg>
-    <xmx:Imh-ZGnCsy_Cep0rsUs29hAj2BGJXprxfFdFbfk0gOXkRDC0tudxZQ>
-    <xmx:Imh-ZDX1q_eh9HGx7eYL5Mi_CI65jEE45cclaa1JJU09QWf__-P-Bw>
+X-ME-Proxy: <xmx:O2h-ZD_cSAjmWlo02_hqanJYtya-2B7LCLym_myOfec1Wpr-zqg4wg>
+    <xmx:O2h-ZCslPuUFB10_HnNg1BkymqLSpakHp6_FkMEC_y9ybiFtSYxckQ>
+    <xmx:O2h-ZKERZX-grjMkM_ckEP7R9Ggs4nkSpn7D6_PJfpAbmf0wKVzk3g>
+    <xmx:O2h-ZI3VzR0RQx2R08IqpPJ05Mk4V8iYkB-O0Xtas716JUV2Iy9HUg>
 Feedback-ID: ie8e14432:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Jun 2023 18:56:33 -0400 (EDT)
-Date:   Tue, 6 Jun 2023 07:56:31 +0900
+ 5 Jun 2023 18:56:58 -0400 (EDT)
+Date:   Tue, 6 Jun 2023 07:56:55 +0900
 From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
 To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/9] firewire: ohci: adoption of device managed resource
-Message-ID: <20230605225631.GB178739@workstation.local>
+Subject: Re: [PATCH] firewire: core: obsolete usage of GFP_ATOMIC at building
+ node tree
+Message-ID: <20230605225655.GC178739@workstation.local>
 Mail-Followup-To: linux1394-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-References: <20230604054451.161076-1-o-takashi@sakamocchi.jp>
+References: <20230604070255.172700-1-o-takashi@sakamocchi.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230604054451.161076-1-o-takashi@sakamocchi.jp>
+In-Reply-To: <20230604070255.172700-1-o-takashi@sakamocchi.jp>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -84,41 +85,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 02:44:42PM +0900, Takashi Sakamoto wrote:
-> Hi,
+On Sun, Jun 04, 2023 at 04:02:55PM +0900, Takashi Sakamoto wrote:
+> The flag of GFP_ATOMIC is given to the call of kmalloc when building node
+> tree, but the call is not atomic context. The call of
+> fw_core_handle_bus_reset() and fw_core_remove_card() builds the tree,
+> while they are done in specific workqueue or pci remove callback.
 > 
-> Linux FireWire subsystem includes a driver (firewire-ohci) for 1394 OHCI
-> controller. The code of driver is mostly written at the time when device
-> managed resource (devres) was not widely used. Nowadays the usage of
-> devres is standard when writing drivers. The series is an adoption of
-> devres for firewire-ohci.
+> This commit obsolete the usage of GFP_ATOMIC.
 > 
-> I note that MSI-related operation is left as is. The hardware vendors
-> forms their products of extension card with 1394 OHCI controller
-> connected to PCIe bus by several ways. If chip of 1394 OHCI controller has
-> PCIe interface (e.g. VIA VT6315, LSI FW643), it is just connected to PCIe
-> bus. If the chip has PCI interface only, it is connected to PCIe bus via
-> PCI/PCIe bridge chip (e.g. VIA VT6307 + asmedia ASM1083). There is some
-> chip of 1394 OHCI controller integrated with the bus bridge (e.g. TI
-> XIO2213, XIO2221). The MSI-related operation should cover the above
-> forms as well as module option, while it is still unclear that the
-> operation from pci device driver to the bus bridge.
-> 
-> Takashi Sakamoto (9):
->   firewire: ohci: use devres for memory object of ohci structure
->   firewire: ohci: use devres for PCI-related resources
->   firewire: ohci: use devres for MMIO region mapping
->   firewire: ohci: use devres for misc DMA buffer
->   firewire: ohci: use devres for requested IRQ
->   firewire: ohci: use devres for list of isochronous contexts
->   firewire: ohci: use devres for IT, IR, AT/receive, and AT/request
->     contexts
->   firewire: ohci: use devres for content of configuration ROM
->   firewire: ohci: release buffer for AR req/resp contexts when managed
->     resource is released
-> 
->  drivers/firewire/ohci.c | 174 +++++++++++++++-------------------------
->  1 file changed, 63 insertions(+), 111 deletions(-)
+> Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> ---
+>  drivers/firewire/core-device.c   | 2 +-
+>  drivers/firewire/core-topology.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to for-next branch.
 
