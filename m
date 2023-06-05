@@ -2,233 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8080722543
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55695722547
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjFEMK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S233280AbjFEMKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjFEMK1 (ORCPT
+        with ESMTP id S230296AbjFEMKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:10:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885E9C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685966988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OyNLMEK/qC7w8l/0lvyjssmn4HLKuyG6LWu23/AEjzQ=;
-        b=V/KJskOdrL0VlBfNQpI0WDJbVtIcFmH5Zilk0YUBqiKoq3Pbw0sFMIhH8QlqwYwcPFU9SG
-        cwC7XiXrwCDSxtMkAz4vfdH64crtzbKiqURxHENBV0vW0RMRtsTdknysty88R1EWIb0jmU
-        prjwz3vnirgj6vi+q4EuTy5vsXwJQWM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-479-yc-297aSNMW10UypqLwzSQ-1; Mon, 05 Jun 2023 08:09:47 -0400
-X-MC-Unique: yc-297aSNMW10UypqLwzSQ-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f9a53add26so5041731cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:09:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685966987; x=1688558987;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyNLMEK/qC7w8l/0lvyjssmn4HLKuyG6LWu23/AEjzQ=;
-        b=VEKEDH6IgtvoUSbQAFkl0wSlAQaOjJiamDWV2ECeTsiUcJZWlKwvryvu1LZr0lrfgq
-         F+BDnEDZNkvmzvCANr5cuiXo2LOa7oeeN44QD+7As0QWgsxH8VLIMg5Y1bIChCXb76Zk
-         GjCziWIbtmIgG1IBa4X5NqLs8YJFfP4HO8c0utJWP/0X36rxh6S266y8iRyYxznBC/05
-         IKv+HyuHtHxJfvlcT5Mfq3hZZQ+1m+WOB4XWuT4LX3yiaxFh/5t/BFe+89fAWg0s3fC1
-         g9S5OpQ9LzP9fLZwpbh4f5XAFUdCncV2iDi0Vh4+lYV3Dn3aiyvPvBoK+La+YX+SHE30
-         55jA==
-X-Gm-Message-State: AC+VfDw3v3cRKO+qG0N4pbziDsUydd2Et5Wb0F7EgRYesPzvCFq9G9hP
-        rTY17ztsVd87jXHhBZnjCoXJuTz5IhAsLJdndzPrNSyhJagmCef+Zq0D+LviQukO4w3Wp9rKQdm
-        +mF29rJmbp9B6Xfk4wKIrWbrk
-X-Received: by 2002:a05:622a:1713:b0:3ea:16fe:5c9e with SMTP id h19-20020a05622a171300b003ea16fe5c9emr7465070qtk.31.1685966986765;
-        Mon, 05 Jun 2023 05:09:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ49GM1/r+VTRTRpsBvLDvQDvXz0N1Hz49WDrKdNHVMD16MG+7ibYjXYcnEolCvYegWF+nQHPg==
-X-Received: by 2002:a05:622a:1713:b0:3ea:16fe:5c9e with SMTP id h19-20020a05622a171300b003ea16fe5c9emr7465039qtk.31.1685966986501;
-        Mon, 05 Jun 2023 05:09:46 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id z23-20020ac87cb7000000b003e4c6b2cc35sm4648287qtv.24.2023.06.05.05.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 05:09:45 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com
-Subject: Re: [PATCH 1/9] x86/hyperv: Add sev-snp enlightened guest static key
-In-Reply-To: <20230601151624.1757616-2-ltykernel@gmail.com>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-2-ltykernel@gmail.com>
-Date:   Mon, 05 Jun 2023 14:09:42 +0200
-Message-ID: <874jnmkt4p.fsf@redhat.com>
+        Mon, 5 Jun 2023 08:10:32 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABA392;
+        Mon,  5 Jun 2023 05:10:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 355CAKPo022936;
+        Mon, 5 Jun 2023 07:10:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685967020;
+        bh=Bna0OJEO37zY8GKg8ty2AAFUPBuJk2joFarkAdMMNVo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=i7S3K7PWMO3QWBxvtxbJZgfCEcjiQRna9Ggr3+WTjQre3WcvAZxNuF9bim6w0ttJ+
+         HaUKYhUOY8b56dar5WEWdWDHgihMYan3DYGUc02Ce1IWid0gB82pQhuZfAtGJ1w4no
+         Q30f1OnB9/vl1v5ZWYdlyz+5EFI+2fwvt+CzTLjg=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 355CAK5h095221
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 5 Jun 2023 07:10:20 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
+ Jun 2023 07:10:20 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 5 Jun 2023 07:10:20 -0500
+Received: from [172.24.145.152] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 355CAH5N021196;
+        Mon, 5 Jun 2023 07:10:17 -0500
+Message-ID: <e420c3dd-033b-b0db-ecfa-7165b9990270@ti.com>
+Date:   Mon, 5 Jun 2023 17:40:16 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: Change CPTS clock parent
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vigneshr@ti.com>, <kristo@kernel.org>
+References: <20230605110443.84568-1-n-francis@ti.com>
+ <20230605114924.56ccpd6rvddnr463@undying>
+From:   Neha Malcom Francis <n-francis@ti.com>
+In-Reply-To: <20230605114924.56ccpd6rvddnr463@undying>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tianyu Lan <ltykernel@gmail.com> writes:
+Hi Nishanth
 
-> From: Tianyu Lan <tiala@microsoft.com>
->
-> Introduce static key isolation_type_en_snp for enlightened
-> sev-snp guest check.
->
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  arch/x86/hyperv/ivm.c           | 11 +++++++++++
->  arch/x86/include/asm/mshyperv.h |  3 +++
->  arch/x86/kernel/cpu/mshyperv.c  |  8 ++++++--
->  drivers/hv/hv_common.c          |  6 ++++++
->  include/asm-generic/mshyperv.h  | 12 +++++++++---
->  5 files changed, 35 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index cc92388b7a99..5d3ee3124e00 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -409,3 +409,14 @@ bool hv_isolation_type_snp(void)
->  {
->  	return static_branch_unlikely(&isolation_type_snp);
->  }
-> +
-> +DEFINE_STATIC_KEY_FALSE(isolation_type_en_snp);
-> +/*
-> + * hv_isolation_type_en_snp - Check system runs in the AMD SEV-SNP based
-> + * isolation enlightened VM.
-> + */
-> +bool hv_isolation_type_en_snp(void)
-> +{
-> +	return static_branch_unlikely(&isolation_type_en_snp);
-> +}
-> +
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 49bb4f2bd300..31c476f4e656 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -26,6 +26,7 @@
->  union hv_ghcb;
->  
->  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-> +DECLARE_STATIC_KEY_FALSE(isolation_type_en_snp);
->  
->  typedef int (*hyperv_fill_flush_list_func)(
->  		struct hv_guest_mapping_flush_list *flush,
-> @@ -45,6 +46,8 @@ extern void *hv_hypercall_pg;
->  
->  extern u64 hv_current_partition_id;
->  
-> +extern bool hv_isolation_type_en_snp(void);
-> +
->  extern union hv_ghcb * __percpu *hv_ghcb_pg;
->  
->  int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index c7969e806c64..9186453251f7 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -402,8 +402,12 @@ static void __init ms_hyperv_init_platform(void)
->  		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
->  			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
->  
-> -		if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP)
-> +
-> +		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-> +			static_branch_enable(&isolation_type_en_snp);
-> +		} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP) {
->  			static_branch_enable(&isolation_type_snp);
+On 05/06/23 17:19, Nishanth Menon wrote:
+> On 16:34-20230605, Neha Malcom Francis wrote:
+>> MAIN_PLL0 has a flag set in DM (Device Manager) that removes it's
+>> capability to re-initialise clock frequencies. CPTS and RGMII has
+>> MAIN_PLL3 as their parent which does not have this flag. While RGMII
+>> needs this reinitialisation to default frequency to be able to get
+>> 250MHz with its divider, CPTS can not get its required 200MHz with its
+>> divider. Thus, move CPTS clock parent on J721S2 from MAIN_PLL3_HSDIV1 to
+>> MAIN_PLL0_HSDIV6.
+>>
+>> (Note: even GTC will be moved from MAIN_PLL3 to MAIN_PLL0 in U-Boot side
+>> for the same reason)
+>>
+>> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
+>> ---
+>>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi       | 2 ++
+>>   arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi | 2 ++
+> 
+> 
+> Is this the only device with this change? or are we doing that across
+> the board? if so, could you please do this in a single series so that we
+> don't have a mix?
+> 
 
-Nitpick: In case 'isolation_type_snp' and 'isolation_type_en_snp' are
-mutually exclusive, I'd suggest we rename the former: it is quite
-un-intuitive that for an enlightened SNP guest '&isolation_type_snp' is
-NOT enabled. E.g. we can use
+Currently, this is the only device that has moved this flag in DM side. 
+None of the other devices (except for J784S4 which also made a similar 
+change both in DM and U-BOOT) have this change in flag for the upcoming 
+firmware release.
 
-'isol_type_snp_paravisor'
-and
-'isol_type_snp_enlightened'
-
-(I also don't like 'isolation_type_en_snp' name as 'en' normally stands
-for 'enabled')
-
-> +		}
->  	}
->  
->  	if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
-> @@ -473,7 +477,7 @@ static void __init ms_hyperv_init_platform(void)
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
->  	if ((hv_get_isolation_type() == HV_ISOLATION_TYPE_VBS) ||
-> -	    (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP))
-> +	    ms_hyperv.paravisor_present)
->  		hv_vtom_init();
->  	/*
->  	 * Setup the hook to get control post apic initialization.
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index 64f9ceca887b..179bc5f5bf52 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -502,6 +502,12 @@ bool __weak hv_isolation_type_snp(void)
->  }
->  EXPORT_SYMBOL_GPL(hv_isolation_type_snp);
->  
-> +bool __weak hv_isolation_type_en_snp(void)
-> +{
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(hv_isolation_type_en_snp);
-> +
->  void __weak hv_setup_vmbus_handler(void (*handler)(void))
->  {
->  }
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-> index 402a8c1c202d..d444f831d633 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -36,15 +36,21 @@ struct ms_hyperv_info {
->  	u32 nested_features;
->  	u32 max_vp_index;
->  	u32 max_lp_index;
-> -	u32 isolation_config_a;
-> +	union {
-> +		u32 isolation_config_a;
-> +		struct {
-> +			u32 paravisor_present : 1;
-> +			u32 reserved1 : 31;
-> +		};
-> +	};
->  	union {
->  		u32 isolation_config_b;
->  		struct {
->  			u32 cvm_type : 4;
-> -			u32 reserved1 : 1;
-> +			u32 reserved2 : 1;
->  			u32 shared_gpa_boundary_active : 1;
->  			u32 shared_gpa_boundary_bits : 6;
-> -			u32 reserved2 : 20;
-> +			u32 reserved3 : 20;
-
-Maybe use 'reserved_a1', 'reserved_b1', 'reserved_b2',... to avoid the
-need to rename in the future when more bits from isolation_config_a get
-used?
-
->  		};
->  	};
->  	u64 shared_gpa_boundary;
+>>   2 files changed, 4 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> index 2dd7865f7654..331e0c9b4db8 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> @@ -738,6 +738,8 @@ cpts@310d0000 {
+>>   			reg-names = "cpts";
+>>   			clocks = <&k3_clks 226 5>;
+>>   			clock-names = "cpts";
+>> +			assigned-clocks = <&k3_clks 226 5>; /* NAVSS0_CPTS_0_RCLK */
+>> +			assigned-clock-parents = <&k3_clks 226 7>; /* MAIN_0_HSDIVOUT6_CLK */
+>>   			interrupts-extended = <&main_navss_intr 391>;
+>>   			interrupt-names = "cpts";
+>>   			ti,cpts-periodic-outputs = <6>;
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> index a353705a7463..b55a3e9daf85 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> @@ -333,6 +333,8 @@ cpts@3d000 {
+>>   			reg = <0x0 0x3d000 0x0 0x400>;
+>>   			clocks = <&k3_clks 29 3>;
+>>   			clock-names = "cpts";
+>> +			assigned-clocks = <&k3_clks 29 3>; /* CPTS_RFT_CLK */
+>> +			assigned-clock-parents = <&k3_clks 29 5>; /* MAIN_0_HSDIVOUT6_CLK */
+>>   			interrupts-extended = <&gic500 GIC_SPI 858 IRQ_TYPE_LEVEL_HIGH>;
+>>   			interrupt-names = "cpts";
+>>   			ti,cpts-ext-ts-inputs = <4>;
+>> -- 
+>> 2.34.1
+>>
+> 
 
 -- 
-Vitaly
-
+Thanking You
+Neha Malcom Francis
