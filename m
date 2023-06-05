@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B40723161
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7FC723163
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjFEU22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S233231AbjFEU2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbjFEU2T (ORCPT
+        with ESMTP id S232972AbjFEU2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:28:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7697DF7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:28:18 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565a66a5d84so74349147b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 13:28:18 -0700 (PDT)
+        Mon, 5 Jun 2023 16:28:24 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB37B10D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:28:20 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5618857518dso64994407b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 13:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685996897; x=1688588897;
+        d=google.com; s=20221208; t=1685996900; x=1688588900;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yhF3LUAjC5vv5lFpyo9KAPX59o4Esq1dpIkjb48etw=;
-        b=Cwb9qmQoXri1hiWhnNQpPPy/l2PGyCe56sNTUhcoGcqlVn9Cj4V/od2CHKPQrkR3or
-         aB5S8nzckVosZKUNJHDV9Uef0JeCzJPvR9SiBaVOL/elx6AA913AwbHLMC9XXqDTFuZE
-         kjPdr00K3LrnoSQ80mmAZe/3ehN66LKKDJ8UrzqoevmbY2VTYY8fFXX61n7BQRUUZqOo
-         HSObiLwsQZq075I2N5yr2NRoS9yRUZrRUQaotTkeorQp2G/ro/nWouz09cgWbAhUhMyO
-         qDNJzHdv1IzP9/+eNJ4qa8BTbHpHFpRCTakTbaCGLrAFuPD8wN8GFNTxq9LPusvpXomX
-         tSIw==
+        bh=UB6gpBiBcnU1jnjPiiDD9uKRun1xokaVYhpMqOiKGIk=;
+        b=YUoH34gluOcnMLglRERlvpfebD23yZUoPErPS/I1cj+IF71agxYfnW69JOXkdO3EsV
+         o/pfQ8mxsGVjwmVDoU2v8PV3XSPhfWAAdeMI6H7xLKhZgRwz1yjYGmPt4NPn1VlUbP3K
+         pFQsJsvCGnU1imCD1kANm012jDtFB81Q1sgGDlCggxYu0NrlLb/P6tquBY1BearYf/Lm
+         eqHDSdTLYLZzBnQALPShfMgjweFGm2D7SpazBT/hIG98+9Lp6VSbv4i3577Ku+whecrm
+         AzsgWRq44ntdwAHpIisf049UP73S8UyElEQ2DiCcoCqseACVXTcxxlxgpRxfwpziyPlL
+         Gr8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685996897; x=1688588897;
+        d=1e100.net; s=20221208; t=1685996900; x=1688588900;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yhF3LUAjC5vv5lFpyo9KAPX59o4Esq1dpIkjb48etw=;
-        b=MLnpYMsPxdPcMDmzlCRfwRElJEQCbpXwX7iynpi1fEohzU+5NkfC4PZCYLHaVt6e24
-         cy75YggWbDefmmGh4da8ynL1pTO3MSxv6nRKn0JKbNTa3x5Br6GXFnV11Rlug3c/MVqC
-         D5T7kV0+YyrVVJmhLd+Tmsd1X/Lm1zw7XsU5UZK1xQCvArbsDVKFGE7dDEi7kzJD54BT
-         F2n8zvJji8l0+LV/OU2R0Vi89MaR5HOFKkVtj3FSc/igLnkP9lBHoVTwumQBV7s/2UMR
-         2GAeK4Og8pptuL/Ax8ZM3EC3/Fi2uB8GQFaT/0iOiT779N89kU4aiy0oUolCy+Sa7J13
-         NNrg==
-X-Gm-Message-State: AC+VfDxgHBgxvnlxItCWK7vec8KLdLK5xj9Rt/73aaV7p5fZJ7+X/cg9
-        n8JSt5eWTINJsy179Ud7j/3dShncmeKS
-X-Google-Smtp-Source: ACHHUZ4u6C4UhYkOI2bUkxhmrLOQ3XfOKZb5cb6MpfESQvWxRLl1tDTyvOQVOTjul74lpbI4NWKkjLcVyhyA
+        bh=UB6gpBiBcnU1jnjPiiDD9uKRun1xokaVYhpMqOiKGIk=;
+        b=jbLvKimqawnIH74MKEszaAiRm0E2qqs8YC0aqpASzlIt70ZMIR4rucHkqnNYa+VxWT
+         plO8ZPHn7CrVer7035RoJFVom3HwzKnihJgCgmicrn6PILGkfaaUV0JRMioQTYOeu/iL
+         bAPeX6cCG8Ku1KFGd/m6qHb5B+C9cxDau7JBzChFfBKdRTk/HWC+QPmsbIth2DgiCIlT
+         HTQgl9k9j9dmFObWCoR5BHD/BkNuDV+D3YhNZRGmSYzM7Qr6XB85djoFoPTunwK6ObfC
+         ppu2Q7K+xNeLuit5wcG6P9k8saf+3I4Q/A3cua5NoDYTmMxIw6PjukUE+Rsr7bSXfy3s
+         iTsQ==
+X-Gm-Message-State: AC+VfDxDkfFGmcZjshv5cL9QA3RolBAdiQWMf6T5UcjXjjUp/jQSDBo9
+        bkWyr0Hu+VkXodqj7GTJPkkfgTr2L594
+X-Google-Smtp-Source: ACHHUZ4Z96ssNiqfTAzkaosiR+Pm5gOogVdYbFM7wBcCqqZ5osHLe80aD+5fi03vIM1WvuTtzxh+zYefiZeu
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:bed9:39b9:3df1:2828])
- (user=irogers job=sendgmr) by 2002:a81:b504:0:b0:565:cfdf:7a70 with SMTP id
- t4-20020a81b504000000b00565cfdf7a70mr4712056ywh.2.1685996897710; Mon, 05 Jun
- 2023 13:28:17 -0700 (PDT)
-Date:   Mon,  5 Jun 2023 13:27:10 -0700
+ (user=irogers job=sendgmr) by 2002:a81:4043:0:b0:568:c4ea:ce66 with SMTP id
+ m3-20020a814043000000b00568c4eace66mr4723849ywn.5.1685996900158; Mon, 05 Jun
+ 2023 13:28:20 -0700 (PDT)
+Date:   Mon,  5 Jun 2023 13:27:11 -0700
 In-Reply-To: <20230605202712.1690876-1-irogers@google.com>
-Message-Id: <20230605202712.1690876-3-irogers@google.com>
+Message-Id: <20230605202712.1690876-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230605202712.1690876-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 2/4] perf bpf: Move the declaration of struct rq
+Subject: [PATCH v2 3/4] perf test: Add build tests for BUILD_BPF_SKEL
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -73,58 +73,43 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct rq is defined in vmlinux.h when the vmlinux.h is generated,
-this causes a redefinition failure if it is declared in
-lock_contention.bpf.c. Move the definition to vmlinux.h for
-consistency with the generated version.
+Add tests with and without generating vmlinux.h.
 
-Fixes: 760ebc45746b ("perf lock contention: Add empty 'struct rq' to satisfy libbpf 'runqueue' type verification")
 Signed-off-by: Ian Rogers <irogers@google.com>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/perf/util/bpf_skel/lock_contention.bpf.c |  2 --
- tools/perf/util/bpf_skel/vmlinux/vmlinux.h     | 10 ++++++++++
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ tools/perf/tests/make | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-index 1d48226ae75d..8d3cfbb3cc65 100644
---- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-+++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-@@ -416,8 +416,6 @@ int contention_end(u64 *ctx)
- 	return 0;
- }
- 
--struct rq {};
--
- extern struct rq runqueues __ksym;
- 
- struct rq___old {
-diff --git a/tools/perf/util/bpf_skel/vmlinux/vmlinux.h b/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
-index c7ed51b0c1ef..ab84a6e1da5e 100644
---- a/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
-+++ b/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
-@@ -171,4 +171,14 @@ struct bpf_perf_event_data_kern {
- 	struct perf_sample_data *data;
- 	struct perf_event	*event;
- } __attribute__((preserve_access_index));
-+
-+/*
-+ * If 'struct rq' isn't defined for lock_contention.bpf.c, for the sake of
-+ * rq___old and rq___new, then the type for the 'runqueue' variable ends up
-+ * being a forward declaration (BTF_KIND_FWD) while the kernel has it defined
-+ * (BTF_KIND_STRUCT). The definition appears in vmlinux.h rather than
-+ * lock_contention.bpf.c for consistency with a generated vmlinux.h.
-+ */
-+struct rq {};
-+
- #endif // __VMLINUX_H
+diff --git a/tools/perf/tests/make b/tools/perf/tests/make
+index 8dd3f8090352..775f374d9345 100644
+--- a/tools/perf/tests/make
++++ b/tools/perf/tests/make
+@@ -69,6 +69,8 @@ make_clean_all      := clean all
+ make_python_perf_so := $(python_perf_so)
+ make_debug          := DEBUG=1
+ make_nondistro      := BUILD_NONDISTRO=1
++make_bpf_skel       := BUILD_BPF_SKEL=1
++make_gen_vmlinux_h  := BUILD_BPF_SKEL=1 GEN_VMLINUX_H=1
+ make_no_libperl     := NO_LIBPERL=1
+ make_no_libpython   := NO_LIBPYTHON=1
+ make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
+@@ -136,6 +138,8 @@ endif
+ run += make_python_perf_so
+ run += make_debug
+ run += make_nondistro
++run += make_build_bpf_skel
++run += make_gen_vmlinux_h
+ run += make_no_libperl
+ run += make_no_libpython
+ run += make_no_scripts
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
