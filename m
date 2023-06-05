@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123F6721FB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1154D721FB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjFEHgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S230196AbjFEHgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjFEHgq (ORCPT
+        with ESMTP id S229982AbjFEHgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:36:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAAB83;
-        Mon,  5 Jun 2023 00:36:45 -0700 (PDT)
+        Mon, 5 Jun 2023 03:36:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F08483;
+        Mon,  5 Jun 2023 00:36:47 -0700 (PDT)
 Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CEA0A66056AA;
-        Mon,  5 Jun 2023 08:36:42 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E77F966056AC;
+        Mon,  5 Jun 2023 08:36:44 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685950603;
-        bh=Vjm3ihthJvkZLq+tjlrnOh0IMA05G6NIKzps6uAqPq4=;
+        s=mail; t=1685950605;
+        bh=J26N876qhqy+oXA3TrC9yeaPT4WUXxr7qA4zM4FsXpI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D66lucLU60+oysiEO+49sOUc+ebQrmsgjhrN5JHtLefKmhNh8EhiilKzGFZBKl+YF
-         ADZbnI9PEeGpHmNHyoQNuJjeVQLnOZR1ikTSW8FOD/5+kar0zhnIZXbcY/0sTpa1cZ
-         gKj0lZ7vodDLmBNmGPorXC62hvzrSfFcwuZLJJ7MJTK8EtDCTc8VvgXiu2Sl2i06SM
-         reLN219D71BIdCLGqlQjEIUPrJzV1fqQhKX0KkWg5SewHB4/r7HJC8+0TIK/QzkHZr
-         v1+q8et83WMBojnOs3/jzayTvNAb8K5KbphnXvxwYQSlI7sc3YcMlCN4ZiFxktJTeW
-         46o6fh5/WNHeQ==
-Message-ID: <0144a00a-aa87-58f0-9d49-6ce35e41c945@collabora.com>
-Date:   Mon, 5 Jun 2023 09:36:40 +0200
+        b=C2Z8ZECKZYSjFeJAZIJBBJWYXBQyp6GA2qaWGaPe31T4lfmm0heMZlDDhQTMFRAqV
+         fu/4W/fDYFbfetIQ75qFnNS6pzkVkFQUPpuh91Bd2j63ZgjDEzIZP8UYRGawdFJha8
+         YVhsahztRL0lLB+2bM4mVPJXZrVAhMfauyYJyuo2KVPAa0+BdwmCDsyZjpGJx2og/m
+         d/Az85yPA0enqsBsyOYxaw393x3T4khEPuDBAfbGTSD7hmp5M/SpGf7CP8ZmTSzBdo
+         ZguGSRDoVXKOZhO1cy14G9mbJY1eg/ePsVdfgxiZ3HDCQ+ZLe5vkG7YajM6YIaCEaC
+         ighBEFtWA7KgA==
+Message-ID: <1423b370-6212-7f19-3db4-a70102bf615f@collabora.com>
+Date:   Mon, 5 Jun 2023 09:36:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: thermal: mediatek: Move auxdac
- binding to yaml
+Subject: Re: [PATCH v2 2/2] arm64: dts: mt8173: Update thermal node
+Content-Language: en-US
 To:     matthias.bgg@kernel.org, rafael@kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -51,10 +51,10 @@ Cc:     devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         Matthias Brugger <matthias.bgg@gmail.com>
 References: <20230601134425.29499-1-matthias.bgg@kernel.org>
-Content-Language: en-US
+ <20230601134425.29499-2-matthias.bgg@kernel.org>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230601134425.29499-1-matthias.bgg@kernel.org>
+In-Reply-To: <20230601134425.29499-2-matthias.bgg@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,13 +70,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Il 01/06/23 15:44, matthias.bgg@kernel.org ha scritto:
 > From: Matthias Brugger <matthias.bgg@gmail.com>
 > 
-> Convert the older binding to yaml syntax.
-> The thermal IP has several sensors, to reflect that
-> thermal-sensors-cells is set to '1'. Apart optional regulator
-> for bank supply wasn't part of the old binding description,
-> this patch adds them.
+> Following the binding description, update to use
+> thermal-sensor-cells = 1
+> While at it also fix the node name of the CPU critical trip point.
 > 
 > Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
