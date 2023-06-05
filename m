@@ -2,174 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD27B7223A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECAD7223A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbjFEKf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S232242AbjFEKfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbjFEKe7 (ORCPT
+        with ESMTP id S231967AbjFEKfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:34:59 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9C6109
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:34:43 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b0236ee816so33414645ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 03:34:43 -0700 (PDT)
+        Mon, 5 Jun 2023 06:35:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECFA12D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:34:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso6937628a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 03:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1685961277; x=1688553277;
+        d=linaro.org; s=google; t=1685961298; x=1688553298;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=twZVSE//NTdMHxapCUhykCDCTFCBz5HADUjUvygv/yU=;
-        b=oN0BL/JbkoIWQ9mQV8zPC/GggtMQ57NBig283buITfU0v7Uuvyp/2LV4Vu46znAtI2
-         OTwLbvuPu1cTQq5i87IObsrZrkx1K95jEPcT0nz96WUMctiGTEPRFGaBjgJBf1QCjvaW
-         h/eP2lCQLPPiM2tfNUKlzYSF9EyzPCqghQBhQFjUfDshUQLaIISeWStHZWkpYGyGEzad
-         yTnsjaRl3TI6WJQtc/HqL5aLRFWh9YlL8cZUf+nz9jp72yUp80KaAj1FXBY26SbKZdHY
-         940Ez6YE/nohuKf2SWoG0rgY/7y09m9xEtR+ACtgrRyR/YX4SJ6+bFbpRDl3L23pTLMB
-         ATrA==
+        bh=uFq5oGkqVQ3sub4JCKqcWdAZJhLFL2YkYQs99Cty04o=;
+        b=eZ9V+gIQetiODGpzOE/DVwsx5nXiBXaMfrU86OFR0YpPaivq3MAh5SkrE6C2GjhgNL
+         /lOeKCSVH0Y0VbG+T3zyaTPzGd9pdjSwBTyuBw20kIgFSTBrFcfBilo6V84kwfKCQe/1
+         7lr//Ay0N4QwKwdIN2CKcrC3hbQwaJeyn9tiT0EjWbTcp5nbIMYC5NFp+eLSI9ynjNAd
+         6k1sfoZj/qzgtcny0Jq3tjOoQHe/mPmd+YAee1GrUpYui2TM0f7NAoaKO7DkdDsJlTjt
+         sTzmBj9ZcxGJUdDNVJPNiGnyqBKTizHPc8iChG1HbXPpsblGrzb8hIqmOSeFAM2lvSVQ
+         Tp5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685961277; x=1688553277;
+        d=1e100.net; s=20221208; t=1685961298; x=1688553298;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=twZVSE//NTdMHxapCUhykCDCTFCBz5HADUjUvygv/yU=;
-        b=hmS/NlWyPXh56d12JH66QtJBMg5754rhe70rdAp6voL+a9cBihjwXxtLrpIBKL1vaC
-         r/tS2pymXU543k8oUXzK7sv6JskR7VaSeTBVp9GQ5drLZVYbDvidqesqqISmeD2A3WOQ
-         FnIQOs4uwooB++Es+zN6JJBG+7RMtYAOhZ8Z50IREZnxMQKEb7F+FHprEjzYZvAuZwn3
-         V8YW1h5WZ77dm/LH6ZfwV87d9aXiQQyWPalOvmAZDLcdavmhBjHnMKuBmfn02GqDR0aa
-         31PIODJIk6Iu0Gq2LiOf4T4DzK+frr/uqmPaTlKWUg0hfSjfWT4NiPrjN4KHV4+kuFJj
-         JlhQ==
-X-Gm-Message-State: AC+VfDzZQjpttw19NxW6C9qFUEKnMQrgEzMQlcK5cSDuKKaht09IK6rJ
-        7jv8dWOhjaSmc8IAcXjWZjSQRw==
-X-Google-Smtp-Source: ACHHUZ4Gv5MlNsnbuVQtmzTUOeDktQslPUV0FFMvpWWAzywqSh58OeNmGs44nUbn1+HHsCyYDSnTMg==
-X-Received: by 2002:a17:902:d481:b0:1ad:ea13:1916 with SMTP id c1-20020a170902d48100b001adea131916mr7643199plg.21.1685961277162;
-        Mon, 05 Jun 2023 03:34:37 -0700 (PDT)
-Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id f23-20020a170902ab9700b001b1a2bf5274sm6242056plr.22.2023.06.05.03.34.33
+        bh=uFq5oGkqVQ3sub4JCKqcWdAZJhLFL2YkYQs99Cty04o=;
+        b=aDTzL0xOBxZI1zjhwHrvsk7SAoWpGv5k9tDLrVEnEO5bZ7kU291BzG1RuhIhoOKuuB
+         80c8RQ9F6iwwZ6mQWg4UzW5JblRPiQMhGyzLMlrMf87V8i0d7EEcHF81J+L6GnR1IsPG
+         eulaWIMdYiQeufyWy339te5UbSdrWd5lDnkO1xsx2SYd4/KU5YTzuBRtIvQr5K3ayN0+
+         ASvxs3xkLWWOMpk5v3s7S5uuF13AoihIMyZB3DShTE1gGFcpxNNWri6QPYOQplA3q0lA
+         /NTAPf/mvtbYzXAPT+5ZX3x5mA8/TWLHin24lnri5lxXp8MyfYpf7LTxjgJ+rrBivpDe
+         mw3A==
+X-Gm-Message-State: AC+VfDz09CaSjTmc0vuxMNIsGqGzTa9YPSuNf7R7CmsTS4RB8JnHTw9q
+        qFlseTlBFkv5bzyGY1HQ+KBY1Q==
+X-Google-Smtp-Source: ACHHUZ5+XtjfkEfVdH+SHr9LWWN02kLyYG3gz7kWxBFVXGEK6U0G8WHiam5TJMMbVl0NoG1DZ9XjbQ==
+X-Received: by 2002:a05:6402:6d4:b0:514:9528:6e6f with SMTP id n20-20020a05640206d400b0051495286e6fmr8643302edy.7.1685961297889;
+        Mon, 05 Jun 2023 03:34:57 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id s18-20020a056402165200b00510b5051f95sm3680533edx.90.2023.06.05.03.34.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 03:34:36 -0700 (PDT)
-Message-ID: <8d74de55-5f89-f887-95bb-db2e8f77cfc0@igel.co.jp>
-Date:   Mon, 5 Jun 2023 19:34:32 +0900
+        Mon, 05 Jun 2023 03:34:57 -0700 (PDT)
+Message-ID: <6818f4b0-4222-c3bb-c55f-bc0d26d7a681@linaro.org>
+Date:   Mon, 5 Jun 2023 12:34:54 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [RFC PATCH 1/3] PCI: endpoint: support an alignment aware
- map/unmaping
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/2] dt-bindings: input: touchscreen: Add ilitek 9882T
+ touchscreen chip
 Content-Language: en-US
-To:     Damien Le Moal <dlemoal@kernel.org>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        Jingoo Han <jingoohan1@gmail.com>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Frank Li <Frank.Li@nxp.com>, Li Chen <lchen@ambarella.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230113090350.1103494-1-mie@igel.co.jp>
- <20230113090350.1103494-2-mie@igel.co.jp>
- <e417f2c9-1fcb-cf57-3524-1408c9aae5fa@amd.com>
- <978b63ac-90b5-b909-d259-0668b77f1cc8@kernel.org>
- <8bc9affb-7b72-0495-16de-c0867a141f9f@igel.co.jp>
- <7a4f4f8a-8edf-0ac4-2e9f-a341fd589e8e@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <7a4f4f8a-8edf-0ac4-2e9f-a341fd589e8e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, dianders@chromium.org,
+        hsinyi@google.com
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230605060524.1178164-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230605060524.1178164-2-yangcong5@huaqin.corp-partner.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605060524.1178164-2-yangcong5@huaqin.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/06/2023 08:05, Cong Yang wrote:
+> Add an ilitek touch screen chip ili9882t.
+> 
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> ---
+>  .../bindings/input/elan,ekth6915.yaml         | 23 ++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+> index 05e6f2df604c..f0e7ffdce605 100644
+> --- a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+> +++ b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+> @@ -15,11 +15,14 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    items:
+> -      - const: elan,ekth6915
+> +    enum:
+> +      - elan,ekth6915
+> +      - ilitek,ili9882t
+>  
+>    reg:
+> -    const: 0x10
+> +    enum:
+> +      - 0x10
+> +      - 0x41
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -29,11 +32,13 @@ properties:
+>  
+>    vcc33-supply:
+>      description: The 3.3V supply to the touchscreen.
+> +                 If using ili9882t then this supply will not be needed.
 
-On 2023/06/02 21:21, Damien Le Moal wrote:
-> On 6/2/23 18:42, Shunsuke Mie wrote:
->> Hi Damien,
->>
->> On 2023/06/02 8:43, Damien Le Moal wrote:
->>> On 6/2/23 00:06, Kishon Vijay Abraham I wrote:
->>>> Hi Shunsuke,
->>>>
->>>> On 1/13/2023 2:33 PM, Shunsuke Mie wrote:
->>>>> Add an align_mem operation to the EPC ops, which function is used to
->>>>> pci_epc_map/unmap_addr(). These change to enable mapping for any alignment
->>>>> restriction of EPC. The map function maps an aligned memory to include a
->>>>> requested memory region.
->>>> I'd prefer all the PCIe address alignment restriction be handled in the
->>>> endpoint function drivers and not inside the core layer (esp in map and
->>>> unmap calls).
->>> That is a really *bad* idea ! Most function drivers should be able to work with
->>> any EP controller hardware. Asking these drivers to support all the alignment
->>> peculiarities of every possible EP controller is impossible.
->>>
->>>> IMO, get the pci address alignment restriction using pci_epc_features.
->>>> And use a bigger size (based on alignment restriction) in
->>>> pci_epc_mem_alloc_addr() and access the allocated window using an offset
->>>> (based on alignment value). You can add separate helpers if required.
->>> That is too simplistic and not enough. Example: Rick and I working on an nvme
->>> function driver are facing a lot of issues with the EPC API for mem & mapping
->>> management because we have 0 control over the PCI address that the host will
->>> use. Alignment is all over the place, and the current EPC memory API
->>> restrictions (window size limitations) make it impossible to transparently
->>> handle all cases. We endup with NVMe command failures simply because of the API
->>> limitations.
->> I think so to.
->>
->> I'm also proposing virtio-console function driver[1]. I suppose the
->> virtio function
->> driver and your nvme function driver are the same in that the spec is
->> defined and
->> host side driver must work as is.
->>
->> [1]
->> https://lore.kernel.org/linux-pci/20230427104428.862643-4-mie@igel.co.jp/
->>
->>> And sure, we can modify that driver to better support the EP controller we are
->>> using (rockchip). But we need to support other EP controllers as well. So API
->>> changes are definitely needed. Working on that. That is not easy as the mapping
->>> API and its semantic impacts data transfers (memcpy_from|toio and DMA).
->>>
->>> I do have a patch that does something similar as this one, but at a much higher
->>> level with a helper function that gives the function driver the offset into the
->>> allocated memory region to use for mapping a particular PCI address. And then
->>> this helper is then in turn used into a new pci_epc_map() function which does
->>> mem alloc + mapping in one go based on the EPC constraints. That hides all
->>> alignment details to the function drivers, which greatlyu simplyfies the code.
->>> But that is not enough as alignment also implies that we have to deal with
->>> boundaries (due to limited window size) and so sometimes endpu failing a mapping
->>> that is too large because the host used a PCI address close to the boundary.
->>> More work is needed to have pci_epc_map() also hide that with tricks like
->>> allowing the allocation and mapping of multiple contiguous windows. So EPC ops
->>> API changes are also needed.
->> Could you submit the your changes if you can?
->>
->> I'd like to solve the current EPC limitation for the mapping in a better
->> way and avoid doing similar work.
-> Will try to cleanup my patches and send an RFC next week. Need to rebase,
-> cleanup etc. Not sure I can make it soon as I am busy with other things for 6.5
-> right now.
->
-> You can have a look at the work in progress here:
->
-> https://github.com/damien-lemoal/linux/tree/rockpro64_ep_v21
->
-> There are a bunch of epf and epc core patches as well as some rockchip driver
-> patches. The first half of the patches on top of Linus 6.3 tag patch are already
-> in pci-next.
+What does it mean "will not be needed"? Describe the hardware, not your
+drivers.
 
-I'd like to see the repo. Thank you for your cooperation.
+I don't think you tested your DTS. Submit DTS users, because I do not
+believe you are testing your patches. You already got such comment and I
+don't see much of improvements here.
 
-Best,
+>  
+>    vccio-supply:
+>      description:
+>        The IO supply to the touchscreen. Need not be specified if this is the
+>        same as the 3.3V supply.
+> +      If using ili9882t, the IO supply is required.
 
-Shunsuke
+Don't repeat constraints in free form text.
+>  
+>  required:
+>    - compatible
+> @@ -41,6 +46,18 @@ required:
+>    - interrupts
+>    - vcc33-supply
+>  
+> +if:
+
+Keep it in allOf. Will save you one indentation later.
+
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: ilitek,ili9882t
+> +then:
+> +  required:
+> +    - compatible
+> +    - reg
+> +    - interrupts
+
+Don't duplicate.
+
+> +    - vccio-supply
+
+
+Best regards,
+Krzysztof
 
