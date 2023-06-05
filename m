@@ -2,94 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3622722458
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CED72245A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjFELPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S231504AbjFELPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjFELPP (ORCPT
+        with ESMTP id S230440AbjFELPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:15:15 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6839AF2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:15:13 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QZWF5477wzLmfx;
-        Mon,  5 Jun 2023 19:13:29 +0800 (CST)
-Received: from [10.174.179.160] (10.174.179.160) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 5 Jun 2023 19:15:09 +0800
-Message-ID: <0e567e11-e735-d092-afac-b2a3106d3f9b@huawei.com>
-Date:   Mon, 5 Jun 2023 19:15:08 +0800
+        Mon, 5 Jun 2023 07:15:50 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF68115
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:15:40 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f7353993cbso11915455e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1685963738; x=1688555738;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K1Xmo+yIXF4XYtaFhiebO0O3iBPHuUdmWJY6R6Wg63M=;
+        b=36aRIHtwGAtdIBHGvPOMNSCdN1EmVXpaJ1spfHORJ6IBKq6DTqJwuMuIre+qg2Ll1o
+         ZaBFWOD70CZMnw7nog5wKXSub+NfSOEgZLODn2ezyv20EfDXryAqDLtgPPpf7VbfUMCE
+         NWRGoqm/3oupdqoN1H3KQPtdy5gEAaDQe12RQCi3Fw94GDlukxdJYKa2aAbCP4kT1sBq
+         eR3Q+1bRxVT6iePh26QrJpQoqwSL/abx/BMYEpEnCOOa2x21YtLwEfx++Ff0jt8cCZoq
+         p4krVxjy/wMvj+BcH/pE6I2P9VtOiU4K+xKrF2Xg/cIV14CIRIP4q22B+LISwq/tU9+5
+         a26g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685963738; x=1688555738;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K1Xmo+yIXF4XYtaFhiebO0O3iBPHuUdmWJY6R6Wg63M=;
+        b=KOpwCHA1k88JqhwcYmQHtRbBgtuyyCSHFY3dusdeUA/PCIBR/H8LniSk5HjkVOQH5K
+         a8NxIszKKubwbNbAVtwqW1U3wdJEZ3qKLDWb7yTXt9H+7dv6pi5/+Z/GCxSU9KM7F+ak
+         tOPitu2GdTBd1p6C5mGLR6FAqCIL3LVW/2kYHOdaHphq0GfqH3TsyKsir/7CC11j5JuI
+         nLRvQ+xNnO57l7JAIJCLI+ekH33z1Fg5MiDAb9TPAxtzfA5+IKldU0iejioqGx7SMm+n
+         Dg12Ly1ZBM7XwXJoV6/Y02EvoI5ICICG254HZHgBFIpukfs59vfCf852hoLsGLyTWvaZ
+         NsiA==
+X-Gm-Message-State: AC+VfDw8wip3v4eM+RsYaqC63yDW0MGHBorlNSd0aQ9BrpTMAu1e7QT9
+        efk5NZJhSuapLwUb072Oji8TUD+b7ieLgD4qQpdzig==
+X-Google-Smtp-Source: ACHHUZ6ZqSdenPheYGWF90dnTCbhBYRfgLnGcB9T26Gmq49I5qPyz6uPlVTCoIK5oCxZbwo7G2tKkA==
+X-Received: by 2002:a05:600c:2114:b0:3f7:367a:bd28 with SMTP id u20-20020a05600c211400b003f7367abd28mr3288295wml.4.1685963738635;
+        Mon, 05 Jun 2023 04:15:38 -0700 (PDT)
+Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056000110d00b003047dc162f7sm9477645wrw.67.2023.06.05.04.15.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:15:37 -0700 (PDT)
+Message-ID: <29a7c14d-cf30-b6f5-7131-4ee6c42d1039@monstr.eu>
+Date:   Mon, 5 Jun 2023 13:15:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] mm/hugetlb: Use a folio in hugetlb_wp()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/6] arm64: zynqmp: Describe TI phy as ethernet-phy-id
 Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>, <muchun.song@linux.dev>,
-        <sidhartha.kumar@oracle.com>, <vishal.moola@gmail.com>,
-        <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>
-References: <20230602015408.376149-1-zhangpeng362@huawei.com>
- <20230602015408.376149-3-zhangpeng362@huawei.com>
- <ZHpORDg3JltVUwNb@casper.infradead.org> <20230602205239.GB3941@monkey>
-From:   "zhangpeng (AS)" <zhangpeng362@huawei.com>
-In-Reply-To: <20230602205239.GB3941@monkey>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Ashok Reddy Soma <ashok.reddy.soma@xilinx.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1684767562.git.michal.simek@amd.com>
+ <b49904649a363f40dc9c4d3fa275e42129562082.1684767562.git.michal.simek@amd.com>
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <b49904649a363f40dc9c4d3fa275e42129562082.1684767562.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.160]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/3 4:52, Mike Kravetz wrote:
 
-> On 06/02/23 21:17, Matthew Wilcox wrote:
->> On Fri, Jun 02, 2023 at 09:54:08AM +0800, Peng Zhang wrote:
->>> From: ZhangPeng <zhangpeng362@huawei.com>
->>>
->>> We can replace nine implict calls to compound_head() with one by using
->>> old_folio. However, we still need to keep old_page because we need to
->>> know which page in the folio we are copying.
->> Do we?  It's my understanding (and I am far from an expert here ...)
->> that the 'pte_t *' we are passed *inside hugetlbfs* is not in fact a pte
->> pointer at all but actually a pmd or pud pointer.
-> That may not be technically true in some arch specific cases such as
-> arm64 with CONT_PTES and CONT_PMDS.
->
->>                                                     See how we do this:
->>
->>          pte_t pte = huge_ptep_get(ptep);
->>
->> and so the page we get back is always a head page, and we can go
->> directly to a folio.  ie this is different from the THP cases.
-> However, it is true that ptep will always be associated with the head
-> page.  This is because the associated virtual address is hugetlb page
-> aligned.
->
-> So, I agree with Matthew that there is no need to keep old_page.
-> Note that if old_page was NOT the head page, then
->
-> 	copy_user_huge_page(&new_folio->page, old_page, address, vma,
-> 		pages_per_huge_page(h));
->
-> would write beyond the end of range as it assumes old_page is head.
 
-Agreed. I'll send a v2 soon. Thanks.
+On 5/22/23 16:59, Michal Simek wrote:
+> TI DP83867 is using strapping based on MIO pins. Tristate setup can
+> influence PHY address. That's why switch description with ethernet-phy-id
+> compatible string which enable calling reset. PHY itself setups phy address
+> after power up or reset. Phy reset is done via gpio.
+> 
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+> Changes in v2:
+> - fix typo in commit message
+> 
+> Checkpatch is reporting issue
+> warning: DT compatible string "ethernet-phy-id2000.a231" appears un-documented
+> but it should be fully aligned with
+> Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> 
+> c&p more details from v1 version:
+> Phy has some pins which is using for strapping for phy address after phy
+> reset or power on. Pretty much it is resistor array which based on
+> datasheet is decoded to certain phy address.
+> And because some phy pins are also used as data pin for RGMII they are
+> connected via MIO pins on a silicon. That's why IO block output setting
+> really matter here because it changes resistor array and it moves phy
+> address.
+> That's why there is a need to do proper IO pin setup and after it call phy
+> reset to get it to address which was decided by PCB designer.
+> 
+> ---
+>   .../boot/dts/xilinx/zynqmp-zcu102-revA.dts    | 23 +++++++++++------
+>   .../boot/dts/xilinx/zynqmp-zcu102-revB.dts    | 25 +++++++++++--------
+>   .../boot/dts/xilinx/zynqmp-zcu104-revA.dts    | 22 ++++++++++------
+>   .../boot/dts/xilinx/zynqmp-zcu104-revC.dts    | 22 ++++++++++------
+>   .../boot/dts/xilinx/zynqmp-zcu106-revA.dts    | 22 ++++++++++------
+>   .../boot/dts/xilinx/zynqmp-zcu111-revA.dts    | 22 ++++++++++------
+>   6 files changed, 90 insertions(+), 46 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> index 230ef94d5dcb..f36353a51863 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
+> @@ -2,7 +2,8 @@
+>   /*
+>    * dts file for Xilinx ZynqMP ZCU102 RevA
+>    *
+> - * (C) Copyright 2015 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2015 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>    *
+>    * Michal Simek <michal.simek@amd.com>
+>    */
+> @@ -200,13 +201,19 @@ &gem3 {
+>   	phy-mode = "rgmii-id";
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&pinctrl_gem3_default>;
+> -	phy0: ethernet-phy@21 {
+> -		reg = <21>;
+> -		ti,rx-internal-delay = <0x8>;
+> -		ti,tx-internal-delay = <0xa>;
+> -		ti,fifo-depth = <0x1>;
+> -		ti,dp83867-rxctrl-strap-quirk;
+> -		/* reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>; */
+> +	mdio: mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		phy0: ethernet-phy@21 {
+> +			#phy-cells = <1>;
+> +			compatible = "ethernet-phy-id2000.a231";
+> +			reg = <21>;
+> +			ti,rx-internal-delay = <0x8>;
+> +			ti,tx-internal-delay = <0xa>;
+> +			ti,fifo-depth = <0x1>;
+> +			ti,dp83867-rxctrl-strap-quirk;
+> +			reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>;
+> +		};
+>   	};
+>   };
+>   
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts
+> index 63419deb5b33..3c28130909bc 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts
+> @@ -2,7 +2,8 @@
+>   /*
+>    * dts file for Xilinx ZynqMP ZCU102 RevB
+>    *
+> - * (C) Copyright 2016 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2016 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>    *
+>    * Michal Simek <michal.simek@amd.com>
+>    */
+> @@ -16,16 +17,20 @@ / {
+>   
+>   &gem3 {
+>   	phy-handle = <&phyc>;
+> -	phyc: ethernet-phy@c {
+> -		reg = <0xc>;
+> -		ti,rx-internal-delay = <0x8>;
+> -		ti,tx-internal-delay = <0xa>;
+> -		ti,fifo-depth = <0x1>;
+> -		ti,dp83867-rxctrl-strap-quirk;
+> -		/* reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>; */
+> +	mdio: mdio {
+> +		phyc: ethernet-phy@c {
+> +			#phy-cells = <0x1>;
+> +			compatible = "ethernet-phy-id2000.a231";
+> +			reg = <0xc>;
+> +			ti,rx-internal-delay = <0x8>;
+> +			ti,tx-internal-delay = <0xa>;
+> +			ti,fifo-depth = <0x1>;
+> +			ti,dp83867-rxctrl-strap-quirk;
+> +			reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>;
+> +		};
+> +		/* Cleanup from RevA */
+> +		/delete-node/ ethernet-phy@21;
+>   	};
+> -	/* Cleanup from RevA */
+> -	/delete-node/ ethernet-phy@21;
+>   };
+>   
+>   /* Fix collision with u61 */
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> index d178a4f898c9..3fd47725c2c8 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
+> @@ -2,7 +2,8 @@
+>   /*
+>    * dts file for Xilinx ZynqMP ZCU104
+>    *
+> - * (C) Copyright 2017 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2017 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>    *
+>    * Michal Simek <michal.simek@amd.com>
+>    */
+> @@ -109,12 +110,19 @@ &gem3 {
+>   	phy-mode = "rgmii-id";
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&pinctrl_gem3_default>;
+> -	phy0: ethernet-phy@c {
+> -		reg = <0xc>;
+> -		ti,rx-internal-delay = <0x8>;
+> -		ti,tx-internal-delay = <0xa>;
+> -		ti,fifo-depth = <0x1>;
+> -		ti,dp83867-rxctrl-strap-quirk;
+> +	mdio: mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		phy0: ethernet-phy@c {
+> +			#phy-cells = <1>;
+> +			compatible = "ethernet-phy-id2000.a231";
+> +			reg = <0xc>;
+> +			ti,rx-internal-delay = <0x8>;
+> +			ti,tx-internal-delay = <0xa>;
+> +			ti,fifo-depth = <0x1>;
+> +			ti,dp83867-rxctrl-strap-quirk;
+> +			reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>;
+> +		};
+>   	};
+>   };
+>   
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> index 38b11594c074..4f6429caecff 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
+> @@ -2,7 +2,8 @@
+>   /*
+>    * dts file for Xilinx ZynqMP ZCU104
+>    *
+> - * (C) Copyright 2017 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2017 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>    *
+>    * Michal Simek <michal.simek@amd.com>
+>    */
+> @@ -114,12 +115,19 @@ &gem3 {
+>   	phy-mode = "rgmii-id";
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&pinctrl_gem3_default>;
+> -	phy0: ethernet-phy@c {
+> -		reg = <0xc>;
+> -		ti,rx-internal-delay = <0x8>;
+> -		ti,tx-internal-delay = <0xa>;
+> -		ti,fifo-depth = <0x1>;
+> -		ti,dp83867-rxctrl-strap-quirk;
+> +	mdio: mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		phy0: ethernet-phy@c {
+> +			#phy-cells = <1>;
+> +			compatible = "ethernet-phy-id2000.a231";
+> +			reg = <0xc>;
+> +			ti,rx-internal-delay = <0x8>;
+> +			ti,tx-internal-delay = <0xa>;
+> +			ti,fifo-depth = <0x1>;
+> +			ti,dp83867-rxctrl-strap-quirk;
+> +			reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>;
+> +		};
+>   	};
+>   };
+>   
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> index 8af0879806cf..8c3fa3fe28d5 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
+> @@ -2,7 +2,8 @@
+>   /*
+>    * dts file for Xilinx ZynqMP ZCU106
+>    *
+> - * (C) Copyright 2016 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2016 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>    *
+>    * Michal Simek <michal.simek@amd.com>
+>    */
+> @@ -212,12 +213,19 @@ &gem3 {
+>   	phy-mode = "rgmii-id";
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&pinctrl_gem3_default>;
+> -	phy0: ethernet-phy@c {
+> -		reg = <0xc>;
+> -		ti,rx-internal-delay = <0x8>;
+> -		ti,tx-internal-delay = <0xa>;
+> -		ti,fifo-depth = <0x1>;
+> -		ti,dp83867-rxctrl-strap-quirk;
+> +	mdio: mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		phy0: ethernet-phy@c {
+> +			#phy-cells = <1>;
+> +			reg = <0xc>;
+> +			compatible = "ethernet-phy-id2000.a231";
+> +			ti,rx-internal-delay = <0x8>;
+> +			ti,tx-internal-delay = <0xa>;
+> +			ti,fifo-depth = <0x1>;
+> +			ti,dp83867-rxctrl-strap-quirk;
+> +			reset-gpios = <&tca6416_u97 6 GPIO_ACTIVE_LOW>;
+> +		};
+>   	};
+>   };
+>   
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> index f76687914e30..0d9b6081dff6 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
+> @@ -2,7 +2,8 @@
+>   /*
+>    * dts file for Xilinx ZynqMP ZCU111
+>    *
+> - * (C) Copyright 2017 - 2021, Xilinx, Inc.
+> + * (C) Copyright 2017 - 2022, Xilinx, Inc.
+> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>    *
+>    * Michal Simek <michal.simek@amd.com>
+>    */
+> @@ -172,12 +173,19 @@ &gem3 {
+>   	phy-mode = "rgmii-id";
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&pinctrl_gem3_default>;
+> -	phy0: ethernet-phy@c {
+> -		reg = <0xc>;
+> -		ti,rx-internal-delay = <0x8>;
+> -		ti,tx-internal-delay = <0xa>;
+> -		ti,fifo-depth = <0x1>;
+> -		ti,dp83867-rxctrl-strap-quirk;
+> +	mdio: mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		phy0: ethernet-phy@c {
+> +			#phy-cells = <1>;
+> +			compatible = "ethernet-phy-id2000.a231";
+> +			reg = <0xc>;
+> +			ti,rx-internal-delay = <0x8>;
+> +			ti,tx-internal-delay = <0xa>;
+> +			ti,fifo-depth = <0x1>;
+> +			ti,dp83867-rxctrl-strap-quirk;
+> +			reset-gpios = <&tca6416_u22 6 GPIO_ACTIVE_LOW>;
+> +		};
+>   	};
+>   };
+>   
 
-Best Regards,
-Peng
-
+Applied.
+M
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
+TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
