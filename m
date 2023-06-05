@@ -2,199 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E632272309D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB3672309A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236286AbjFEUBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S236210AbjFEUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236092AbjFEUBb (ORCPT
+        with ESMTP id S229878AbjFEUBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:01:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6407ED3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685995244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0I6F66ZIa/tgx7QAKJtZG0czi9R4RbNmqFbBvhdUYFM=;
-        b=Q7H4cAOqHBgqVJkSeWSsAeUGLzH3P9w+OR4f5X+THOxiassLywXNqCxwZYb5uHHM41e7jt
-        PFOdknHlbNVA9E7NUn6rIkpgCSU6Nd56BpiZ1TV2KnWtsDUEPAeo4u7kcwE4J+Z/ahaQJn
-        l+SE/MUYoGGSxggfXOGGQyM+kXaoQME=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-122-_QZEDCkuNTaN2rwTYIO-fA-1; Mon, 05 Jun 2023 16:00:41 -0400
-X-MC-Unique: _QZEDCkuNTaN2rwTYIO-fA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 5 Jun 2023 16:01:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B57F4;
+        Mon,  5 Jun 2023 13:01:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B713B8015D8;
-        Mon,  5 Jun 2023 20:00:40 +0000 (UTC)
-Received: from [10.22.10.186] (unknown [10.22.10.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C8847C1603B;
-        Mon,  5 Jun 2023 20:00:39 +0000 (UTC)
-Message-ID: <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
-Date:   Mon, 5 Jun 2023 16:00:39 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E66E862A36;
+        Mon,  5 Jun 2023 20:01:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD78AC4339B;
+        Mon,  5 Jun 2023 20:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685995282;
+        bh=Rop4hq74GRwWhsXb0QXS+k7/UPpghpcfqR8C8dfnc6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I99t1p6D0VYx+REdn09N1xV+RxvI0o0rKvobOgl7DE2JomrnYcMoh24rgvFFv1bVs
+         jElDBjnECkFCkjwTN6aHm+tsF5kBQxzMAAWZRTzBQHFVUIYrxrKsBfDUXcx99Jr2Yt
+         eFH8+5Ih+TYVZCr9Ygs6vERKIm2nfha67Fyl5CYtBSLeAJXvSvaGGgVxxyfwUvALLY
+         fztWaP2/3hTmkccbWqLT3qMG5f/ltCoqpwc88uiHEX6AgdBgcL9MO5iTWToWCxZlFw
+         5tS7uc8s6XN7TEJiR36zlRfmdfsLudGF1p+lD1lQGgOX0/tBYy4oqORdGbMtRD+PJj
+         7aMjBSE7V25xw==
+Date:   Mon, 5 Jun 2023 13:01:19 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jon Kohler <jon@nutanix.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: VMX: remove LFENCE in vmx_spec_ctrl_restore_host()
+Message-ID: <20230605200119.pepmnpvoej4tfdky@treble>
+References: <F4BEBCAF-CBFC-4C3E-8B01-2ED84CF2E13A@nutanix.com>
+ <20230601004202.63yulqs73kuh3ep6@treble>
+ <846dd0c5-d431-e20e-fdb3-a4a26b6a22ca@citrix.com>
+ <20230601012323.36te7hfv366danpf@desk>
+ <20230601042345.52s5337uz62p6aow@treble>
+ <21D1D290-7DE9-4864-A05B-A36779D9DC26@nutanix.com>
+ <20230605163552.hi5kvh5wijegmus6@treble>
+ <E704D6D6-3B03-40FA-8CDB-5FB58871BABC@nutanix.com>
+ <20230605173101.iflfly3bt6ydvvyk@desk>
+ <ZH4qBjLi0egsuC1D@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-References: <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
- <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
- <ZFGOTHQj3k5rzmyR@blackbook>
- <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
- <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
- <ZH4jfmypOXGJPu0D@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZH4jfmypOXGJPu0D@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZH4qBjLi0egsuC1D@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 14:03, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Sun, May 28, 2023 at 05:18:50PM -0400, Waiman Long wrote:
->> On 5/22/23 15:49, Tejun Heo wrote:
->> Sorry for the late reply as I had been off for almost 2 weeks due to PTO.
-> And me too. Just moved.
->
->>> Why is the syntax different from .cpus? Wouldn't it be better to keep them
->>> the same?
->> Unlike cpuset.cpus, cpuset.cpus.reserve is supposed to contains CPUs that
->> are used in multiple partitions. Also automatic reservation of adjacent
->> partitions can happen in parallel. That is why I think it will be safer if
-> Ah, I see, this is because cpu.reserve is only in the root cgroup, so you
-> can't say that the knob is owned by the parent cgroup and thus access is
-> controlled that way.
->
-> ...
->>>>       There are two types of partitions - adjacent and remote.  The
->>>>       parent of an adjacent partition must be a valid partition root.
->>>>       Partition roots of adjacent partitions are all clustered around
->>>>       the root cgroup.  Creation of adjacent partition is done by
->>>>       writing the desired partition type into "cpuset.cpus.partition".
->>>>
->>>>       A remote partition does not require a partition root parent.
->>>>       So a remote partition can be formed far from the root cgroup.
->>>>       However, its creation is a 2-step process.  The CPUs needed
->>>>       by a remote partition ("cpuset.cpus" of the partition root)
->>>>       has to be written into "cpuset.cpus.reserve" of the root
->>>>       cgroup first.  After that, "isolated" can be written into
->>>>       "cpuset.cpus.partition" of the partition root to form a remote
->>>>       isolated partition which is the only supported remote partition
->>>>       type for now.
->>>>
->>>>       All remote partitions are terminal as adjacent partition cannot
->>>>       be created underneath it.
->>> Can you elaborate this extra restriction a bit further?
->> Are you referring to the fact that only remote isolated partitions are
->> supported? I do not preclude the support of load balancing remote
->> partitions. I keep it to isolated partitions for now for ease of
->> implementation and I am not currently aware of a use case where such a
->> remote partition type is needed.
->>
->> If you are talking about remote partition being terminal. It is mainly
->> because it can be more tricky to support hierarchical adjacent partitions
->> underneath it especially if it is not isolated. We can certainly support it
->> if a use case arises. I just don't want to implement code that nobody is
->> really going to use.
->>
->> BTW, with the current way the remote partition is created, it is not
->> possible to have another remote partition underneath it.
-> The fact that the control is spread across a root-only file and per-cgroup
-> file seems hacky to me. e.g. How would it interact with namespacing? Are
-> there reasons why this can't be properly hierarchical other than the amount
-> of work needed? For example:
->
->    cpuset.cpus.exclusive is a per-cgroup file and represents the mask of CPUs
->    that the cgroup holds exclusively. The mask is always a subset of
->    cpuset.cpus. The parent loses access to a CPU when the CPU is given to a
->    child by setting the CPU in the child's cpus.exclusive and the CPU can't
->    be given to more than one child. IOW, exclusive CPUs are available only to
->    the leaf cgroups that have them set in their .exclusive file.
->
->    When a cgroup is turned into a partition, its cpuset.cpus and
->    cpuset.cpus.exclusive should be the same. For backward compatibility, if
->    the cgroup's parent is already a partition, cpuset will automatically
->    attempt to add all cpus in cpuset.cpus into cpuset.cpus.exclusive.
->
-> I could well be missing something important but I'd really like to see
-> something like the above where the reservation feature blends in with the
-> rest of cpuset.
+On Mon, Jun 05, 2023 at 11:31:34AM -0700, Sean Christopherson wrote:
+> Is there an actual bug here, or are we just micro-optimizing something that may or
+> may not need additional optimization?  Unless there's a bug to be fixed, moving
+> code into ASM and increasing complexity doesn't seem worthwhile.
 
-It can certainly be made hierarchical as you suggest. It does increase 
-complexity from both user and kernel point of view.
+I can't really argue with that.  FWIW, here's the (completely untested)
+patch.
 
- From the user point of view, there is one more knob to manage 
-hierarchically which is not used that often.
+---8<---
 
- From the kernel point of view, we may need to have one more cpumask per 
-cpuset as the current subparts_cpus is used to track automatic 
-reservation. We need another cpumask to contain extra exclusive CPUs not 
-allocated through automatic reservation. The fact that you mention this 
-new control file as a list of exclusively owned CPUs for this cgroup. 
-Creating a partition is in fact allocating exclusive CPUs to a cgroup. 
-So it kind of overlaps with the cpuset.cpus.partititon file. Can we fail 
-a write to cpuset.cpus.exclusive if those exclusive CPUs cannot be 
-granted or will this exclusive list is only valid if a valid partition 
-can be formed. So we need to properly manage the dependency between 
-these 2 control files.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH] KVM: VMX: Convert vmx_spec_ctrl_restore_host() to assembly
 
-Alternatively, I have no problem exposing cpuset.cpus.exclusive as a 
-read-only file. It is a bit problematic if we need to make it writable.
+Convert vmx_spec_ctrl_restore_host() to assembly.  This allows the
+removal of a redundant LFENCE.  It also "feels" safer as it doesn't
+allow the compiler to insert any surprises.  And it's more symmetrical
+with the pre-vmentry SPEC_CTRL handling, which is also done in assembly.
 
-As for namespacing, you do raise a good point. I was thinking mostly 
-from a whole system point of view as the use case that I am aware of 
-does not needs that. To allow delegation of exclusive CPUs to a child 
-cgroup, that cgroup has to be a partition root itself. One compromise 
-that I can think of is to only allow automatic reservation only in such 
-a scenario. In that case, I need to support a remote load balanced 
-partition as well and hierarchical sub-partitions underneath it. That 
-can be done with some extra code to the existing v2 patchset without 
-introducing too much complexity.
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/x86/kvm/vmx/vmenter.S | 71 ++++++++++++++++++++++++++++++++------
+ arch/x86/kvm/vmx/vmx.c     | 25 --------------
+ arch/x86/kvm/vmx/vmx.h     |  1 -
+ 3 files changed, 61 insertions(+), 36 deletions(-)
 
-IOW, the use of remote partition is only allowed on the whole system 
-level where one has access to the cgroup root. Exclusive CPUs 
-distribution within a container can only be done via the use of adjacent 
-partitions with automatic reservation. Will that be a good enough 
-compromise from your point of view?
-
-Cheers,
-Longman
+diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+index 631fd7da2bc3..977f3487469c 100644
+--- a/arch/x86/kvm/vmx/vmenter.S
++++ b/arch/x86/kvm/vmx/vmenter.S
+@@ -108,7 +108,7 @@ SYM_FUNC_START(__vmx_vcpu_run)
+ 	lea (%_ASM_SP), %_ASM_ARG2
+ 	call vmx_update_host_rsp
+ 
+-	ALTERNATIVE "jmp .Lspec_ctrl_done", "", X86_FEATURE_MSR_SPEC_CTRL
++	ALTERNATIVE "jmp .Lguest_spec_ctrl_done", "", X86_FEATURE_MSR_SPEC_CTRL
+ 
+ 	/*
+ 	 * SPEC_CTRL handling: if the guest's SPEC_CTRL value differs from the
+@@ -122,13 +122,13 @@ SYM_FUNC_START(__vmx_vcpu_run)
+ 	movl VMX_spec_ctrl(%_ASM_DI), %edi
+ 	movl PER_CPU_VAR(x86_spec_ctrl_current), %esi
+ 	cmp %edi, %esi
+-	je .Lspec_ctrl_done
++	je .Lguest_spec_ctrl_done
+ 	mov $MSR_IA32_SPEC_CTRL, %ecx
+ 	xor %edx, %edx
+ 	mov %edi, %eax
+ 	wrmsr
+ 
+-.Lspec_ctrl_done:
++.Lguest_spec_ctrl_done:
+ 
+ 	/*
+ 	 * Since vmentry is serializing on affected CPUs, there's no need for
+@@ -253,9 +253,65 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+ #endif
+ 
+ 	/*
+-	 * IMPORTANT: RSB filling and SPEC_CTRL handling must be done before
+-	 * the first unbalanced RET after vmexit!
++	 * IMPORTANT: The below SPEC_CTRL handling and RSB filling must be done
++	 * before the first RET after vmexit!
++	 */
++
++	ALTERNATIVE "jmp .Lhost_spec_ctrl_done", "", X86_FEATURE_MSR_SPEC_CTRL
++
++	pop %_ASM_SI	/* @flags */
++	pop %_ASM_DI	/* @vmx */
++
++	/*
++	 * if (flags & VMX_RUN_SAVE_SPEC_CTRL)
++	 *	vmx->spec_ctrl = __rdmsr(MSR_IA32_SPEC_CTRL);
++	 */
++	test $VMX_RUN_SAVE_SPEC_CTRL, %_ASM_SI
++	jz .Lhost_spec_ctrl_check
++
++	mov $MSR_IA32_SPEC_CTRL, %ecx
++	rdmsr
++	mov %eax, VMX_spec_ctrl(%_ASM_DI)
++
++.Lhost_spec_ctrl_check:
++	/*
++	 * If the guest/host SPEC_CTRL values differ, restore the host value.
+ 	 *
++	 * For legacy IBRS, the IBRS bit always needs to be written after
++	 * transitioning from a less privileged predictor mode, regardless of
++	 * whether the guest/host values differ.
++	 *
++	 * if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
++	 *     vmx->spec_ctrl != this_cpu_read(x86_spec_ctrl_current))
++	 *	native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
++	 */
++	ALTERNATIVE "", "jmp .Lhost_spec_ctrl_write", X86_FEATURE_KERNEL_IBRS
++	movl VMX_spec_ctrl(%_ASM_DI), %edi
++	movl PER_CPU_VAR(x86_spec_ctrl_current), %esi
++	cmp %edi, %esi
++	je .Lhost_spec_ctrl_done_lfence
++
++.Lhost_spec_ctrl_write:
++	mov $MSR_IA32_SPEC_CTRL, %ecx
++	xor %edx, %edx
++	mov %esi, %eax
++	wrmsr
++
++.Lhost_spec_ctrl_done_lfence:
++	/*
++	 * This ensures that speculative execution doesn't incorrectly bypass
++	 * the above SPEC_CTRL wrmsr by mispredicting the 'je'.
++	 *
++	 * It's only needed if the below FILL_RETURN_BUFFER doesn't do an
++	 * LFENCE.  Thus the X86_FEATURE_RSB_VMEXIT{_LITE} alternatives.
++	 */
++	ALTERNATIVE_2 "lfence", \
++		      "", X86_FEATURE_RSB_VMEXIT, \
++		      "", X86_FEATURE_RSB_VMEXIT_LITE
++
++.Lhost_spec_ctrl_done:
++
++	/*
+ 	 * For retpoline or IBRS, RSB filling is needed to prevent poisoned RSB
+ 	 * entries and (in some cases) RSB underflow.
+ 	 *
+@@ -267,11 +323,6 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+ 	FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
+ 			   X86_FEATURE_RSB_VMEXIT_LITE
+ 
+-	pop %_ASM_ARG2	/* @flags */
+-	pop %_ASM_ARG1	/* @vmx */
+-
+-	call vmx_spec_ctrl_restore_host
+-
+ 	/* Put return value in AX */
+ 	mov %_ASM_BX, %_ASM_AX
+ 
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 44fb619803b8..d353b0e23918 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7109,31 +7109,6 @@ void noinstr vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp)
+ 	}
+ }
+ 
+-void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
+-					unsigned int flags)
+-{
+-	u64 hostval = this_cpu_read(x86_spec_ctrl_current);
+-
+-	if (!cpu_feature_enabled(X86_FEATURE_MSR_SPEC_CTRL))
+-		return;
+-
+-	if (flags & VMX_RUN_SAVE_SPEC_CTRL)
+-		vmx->spec_ctrl = __rdmsr(MSR_IA32_SPEC_CTRL);
+-
+-	/*
+-	 * If the guest/host SPEC_CTRL values differ, restore the host value.
+-	 *
+-	 * For legacy IBRS, the IBRS bit always needs to be written after
+-	 * transitioning from a less privileged predictor mode, regardless of
+-	 * whether the guest/host values differ.
+-	 */
+-	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
+-	    vmx->spec_ctrl != hostval)
+-		native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
+-
+-	barrier_nospec();
+-}
+-
+ static fastpath_t vmx_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+ {
+ 	switch (to_vmx(vcpu)->exit_reason.basic) {
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index 9e66531861cf..f9fab33f4d76 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -420,7 +420,6 @@ void vmx_set_virtual_apic_mode(struct kvm_vcpu *vcpu);
+ struct vmx_uret_msr *vmx_find_uret_msr(struct vcpu_vmx *vmx, u32 msr);
+ void pt_update_intercept_for_msr(struct kvm_vcpu *vcpu);
+ void vmx_update_host_rsp(struct vcpu_vmx *vmx, unsigned long host_rsp);
+-void vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx, unsigned int flags);
+ unsigned int __vmx_vcpu_run_flags(struct vcpu_vmx *vmx);
+ bool __vmx_vcpu_run(struct vcpu_vmx *vmx, unsigned long *regs,
+ 		    unsigned int flags);
+-- 
+2.40.1
 
