@@ -2,98 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBCB722BB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59112722BD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbjFEPoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        id S235055AbjFEPrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbjFEPnl (ORCPT
+        with ESMTP id S235020AbjFEPrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:43:41 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4953AF7;
-        Mon,  5 Jun 2023 08:43:24 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b02497f4cfso25043885ad.3;
-        Mon, 05 Jun 2023 08:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685979769; x=1688571769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WB+xuJyQnP5i0NrdzK2CEEmW6xZAV3J9cIB2MRW7p7E=;
-        b=LQotv4TKMp036ZubcNkWawVs3OX2PM8Qb7M2/RbGv7X0HRTJU+imNFb1nv4f/gS/OO
-         FTZOqMiy1WYFkvc3l1Ot5aCMQQ1yrXw9gnOvakjWrOSTlgbUJFdXrghiiy2yH4RWNwp4
-         gtqK9nXFhUE8lFOTyX8Jqd+NSplHnCO0ZxCUJ4HIY+6c+yUSII60rtGWuTsXx7cm7hDZ
-         JlagPaaKIyoB8pZ2zRHDjkoQaEf55v2vfSC+ir6CGoeb2r5utI8O39HIz5/pMo7BJd/8
-         iDm8hEhJSa4oKOdXinGNXHy8p4e2yGmhhXe4QxWIKq19mIy1v3TdaA+gVVXtiA47dfx9
-         0ZCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685979769; x=1688571769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WB+xuJyQnP5i0NrdzK2CEEmW6xZAV3J9cIB2MRW7p7E=;
-        b=a4ERch/P4v4sDQ04CXzoNtX2aRSdq4J2x9u+va6R7xSgeenue2KHTCmvWthiPqYgQn
-         nw+D68e97SKiqJFtKPfkHsrIAkuCfOKImDrb9NwsKEBDM4NHqez/EiF8YRmk4tndjTxD
-         vaHaE+6AsWBXORFA9zrQAIN2K0gtThsuXyIB3Ck8g2jDEuCFNGHDuXkowZK5KihNBt0I
-         fr6QZjDiBjKJrs/gZgH8UdchxuxJ3gZHZra2cTXpoD/5atIQjtqbNKzzQUmjIrs+nIBA
-         Eg5J5JMk3Vo1RzJAYICaENyW/ypkYlrIAPkYCrPgo3X51oA7n4R5x/ieoaaJj6MQDNc8
-         K2ug==
-X-Gm-Message-State: AC+VfDxlO71o8Dy0LLcSRYWXmnwaFjmJVw0vDDdHvionsjJTJF0N9Fxs
-        NdgI5nlZyyxK5Rda5/2s/tmtI536hWMIag==
-X-Google-Smtp-Source: ACHHUZ5bbf2vRchTShIwA5VETN6NLk4Hm+kzHeya+hrBi7tAnmDqu4/23bl5bXzA3e4+uxp4T5UvjA==
-X-Received: by 2002:a17:902:c215:b0:1b1:9b59:fc68 with SMTP id 21-20020a170902c21500b001b19b59fc68mr3290280pll.13.1685979769611;
-        Mon, 05 Jun 2023 08:42:49 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g16-20020a170902869000b001ab13f1fa82sm6755143plo.85.2023.06.05.08.42.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 08:42:49 -0700 (PDT)
-Message-ID: <38797003-c236-d92b-02dd-5a18d959e727@gmail.com>
-Date:   Mon, 5 Jun 2023 08:42:28 -0700
+        Mon, 5 Jun 2023 11:47:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAEB10F0
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685979938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fz6CKIUO/zInL0kXiLp1OqxboZ4F1Hx1Dqes19h0t8M=;
+        b=dmUQdWnPnstxl5trZ5sR06K82v2cDHRadXCt2r8v090jjmJ+TpsG9uwJj+C6bcQ2aaNkOm
+        T6iu9q87gHVQR4DCaPWqvmg2uMw/Mn2xTPYgSpmeRT+KRk6Dd9Do2vDYkb6PkoY3mWqYMI
+        LjjY+AE2j29Cps7sh04T8nhwdNiYBkg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-Exj74wdqPj6lwC7-q16Ohg-1; Mon, 05 Jun 2023 11:45:35 -0400
+X-MC-Unique: Exj74wdqPj6lwC7-q16Ohg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64A0E101A53B;
+        Mon,  5 Jun 2023 15:45:34 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2B27AC154D1;
+        Mon,  5 Jun 2023 15:45:34 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 884C140178ACF; Mon,  5 Jun 2023 12:43:24 -0300 (-03)
+Date:   Mon, 5 Jun 2023 12:43:24 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 3/3] mm/vmstat: do not refresh stats for nohz_full CPUs
+Message-ID: <ZH4CnJlpBMxEEwPW@tpad>
+References: <20230602185757.110910188@redhat.com>
+ <20230602190115.545766386@redhat.com>
+ <ZH2V/QxDrq7aq5fY@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v2 2/2] net: dsa: microchip: remove KSZ9477 PHY
- errata handling
-Content-Language: en-US
-To:     Robert Hancock <robert.hancock@calian.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230605153943.1060444-1-robert.hancock@calian.com>
- <20230605153943.1060444-3-robert.hancock@calian.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230605153943.1060444-3-robert.hancock@calian.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH2V/QxDrq7aq5fY@dhcp22.suse.cz>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 08:39, Robert Hancock wrote:
-> The KSZ9477 PHY errata handling code has now been moved into the Micrel
-> PHY driver, so it is no longer needed inside the DSA switch driver.
-> Remove it.
+On Mon, Jun 05, 2023 at 09:59:57AM +0200, Michal Hocko wrote:
+> On Fri 02-06-23 15:58:00, Marcelo Tosatti wrote:
+> > The interruption caused by queueing work on nohz_full CPUs 
+> > is undesirable for certain aplications.
 > 
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> This is not a proper changelog. I am not going to write a changelog for
+> you this time. Please explain why this is really needed and why this
+> approach is desired. 
+> E.g. why don't you prevent userspace from
+> refreshing stats if interference is not desirable.
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+Michal,
+
+Can you please check if the following looks better, as
+a changelog? thanks
+
+---
+
+schedule_work_on API uses the workqueue mechanism to
+queue a work item on a queue. A kernel thread, which
+runs on the target CPU, executes those work items.
+
+Therefore, when using the schedule_work_on API,
+it is necessary for the kworker kernel thread to
+be scheduled in, for the work function to be executed.
+
+Time sensitive applications such as SoftPLCs
+(https://tum-esi.github.io/publications-list/PDF/2022-ETFA-How_Real_Time_Are_Virtual_PLCs.pdf),
+have their response times affected by such interruptions.
+
+The /proc/sys/vm/stat_refresh file was originally introduced by
+
+commit 52b6f46bc163eef17ecba4cd552beeafe2b24453
+Author: Hugh Dickins <hughd@google.com>
+Date:   Thu May 19 17:12:50 2016 -0700
+
+    mm: /proc/sys/vm/stat_refresh to force vmstat update
+
+    Provide /proc/sys/vm/stat_refresh to force an immediate update of
+    per-cpu into global vmstats: useful to avoid a sleep(2) or whatever
+    before checking counts when testing.  Originally added to work around a
+    bug which left counts stranded indefinitely on a cpu going idle (an
+    inaccuracy magnified when small below-batch numbers represent "huge"
+    amounts of memory), but I believe that bug is now fixed: nonetheless,
+    this is still a useful knob.
+
+Other than the potential interruption to a time sensitive application,
+if using SCHED_FIFO or SCHED_RR priority on the isolated CPU, then
+system hangs can occur:
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978688
+
+To avoid the problems above, do not schedule the work to synchronize
+per-CPU mm counters on isolated CPUs. Given the possibility for
+breaking existing userspace applications, avoid changing
+behaviour of access to /proc/sys/vm/stat_refresh, such as
+returning errors to userspace.
+
+---
+
+> Also would it make some sense to reduce flushing to cpumask 
+> of the calling process? (certainly a daring thought but have
+> you even considered it?)
+
+Fail to see the point here ?
+
 
