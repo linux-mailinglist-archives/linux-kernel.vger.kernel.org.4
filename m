@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1674722125
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B98F72212A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjFEIgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S229721AbjFEIic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFEIf5 (ORCPT
+        with ESMTP id S229469AbjFEIia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:35:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB4FF0;
-        Mon,  5 Jun 2023 01:35:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B79F60D30;
-        Mon,  5 Jun 2023 08:35:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4E5C433D2;
-        Mon,  5 Jun 2023 08:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685954155;
-        bh=MDyj7xKXBRli7gBfGmpPDEsL7ak8wYtgiHhNz3PDRFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iv5Mu2jxJoiRhp7rkw5u/6hCYceEWJlu7GzeIWqJlVOoa1qeehMr9kprCCtDB951b
-         YPYN2jwszr1sijTetbO9SDWhjdTBEou5aueGfkxy2ydngK9y3C/dPgNU89VkLiqmVN
-         9O/qeeOUpoaDk9TYd3/Kbu/NF/vR3yWFksFXJAZRNB+o+DfzgKa7E8dUm2EIAmnhgb
-         NWgMNAZCLGzBWxV1y9/8zC9Fi7mw08EHVFVQKBK9nbfQqj8TtRPFnjTcw2NCeDjdIe
-         5LHTo8m24G68eaQoxLVrDTHzoBPhzsVWcNLmZVQqONTCvSnhqRHlCVbb7y6S7P8NfO
-         7704rVvelxlAg==
-Date:   Mon, 5 Jun 2023 10:35:52 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] i2c: tegra: allow VI support to be compiled out
-Message-ID: <ZH2eaMlCq4EhL7jL@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1683407699.git.mirq-linux@rere.qmqm.pl>
- <0248c0737ace5db7be4e04f97985f3e7874ff1ab.1683407699.git.mirq-linux@rere.qmqm.pl>
+        Mon, 5 Jun 2023 04:38:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B654B0;
+        Mon,  5 Jun 2023 01:38:28 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685954307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K6vr5fb0CXEJhD03e4srj5+jUXBNJXWKeJF05xRhs7g=;
+        b=zHMBd0Wf44emQIGIDsifyM5TkRgpKtJBEmvNOUUSHdyqxhoyx0hNk6F9Gd8RnnHoVzwyBq
+        xo8qFBJzyuPI0DxrlpXftircixE9kORcjNl4tOEVUB2eZg3MaFw9pnydQD6oV+a3gio/vB
+        mjNqRPlqVnFCSfeJ6I/Ecoue7o5nop5BgoSyLyklKqYiQbL31SElm3v7YgJv4QvMD5YPJA
+        m3nsC4Bh1tq/uDzeimF/VMOS4IC4ureazi8CNz/2RJD1RgM9IL0oR/e7Xcr0JsdmPv2tvQ
+        LIWj+enU6jPpMtwXGc2Ta00ZtD5fv1CpJghke6kypSQULsOw18DNFRWpJZUZHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685954307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K6vr5fb0CXEJhD03e4srj5+jUXBNJXWKeJF05xRhs7g=;
+        b=impXIJLmTYJ2dUd0vlUvSmRQ58bfsTXLS0aux4Y3EvFIas2xIo5Ux5DHKWUJ7fjPrd1Ulr
+        lNT7cIlANr6wlrDg==
+To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 03/33] x86/traps: add a system interrupt table for
+ system interrupt dispatch
+In-Reply-To: <20230410081438.1750-4-xin3.li@intel.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-4-xin3.li@intel.com>
+Date:   Mon, 05 Jun 2023 10:38:26 +0200
+Message-ID: <874jnm8fst.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ab8d/9CSzKu7KjpS"
-Content-Disposition: inline
-In-Reply-To: <0248c0737ace5db7be4e04f97985f3e7874ff1ab.1683407699.git.mirq-linux@rere.qmqm.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+>  #ifdef CONFIG_SMP
+> -DECLARE_IDTENTRY(RESCHEDULE_VECTOR,			sysvec_reschedule_ipi);
+> +DECLARE_IDTENTRY_SYSVEC(RESCHEDULE_VECTOR,		sysvec_reschedule_ipi);
 
---Ab8d/9CSzKu7KjpS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please do not hide unrelated semantical changes in a big pile of
+supposed to be mechanical changes. Split it out and provide a proper
+explanation why this is correct and required.
 
-On Sat, May 06, 2023 at 11:19:02PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
-> Save a bit of code for older Tegra platforms by compiling out
-> VI's I2C mode support that's used only for Tegra210.
->=20
-> $ size i2c-tegra.o
->    text    data     bss     dec     hex filename
->   11381     292       8   11681    2da1 i2c-tegra.o (full)
->   10193     292       8   10493    28fd i2c-tegra.o (no-dvc)
->    9145     292       8    9445    24e5 i2c-tegra.o (no-vi,no-dvc)
->=20
-> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> Reviewed-by: Wolfram Sang <wsa@kernel.org>
->=20
+> +/*
+> + * How system interrupt handlers are called.
+> + */
+> +#define DECLARE_SYSTEM_INTERRUPT_HANDLER(f)	\
+> +	void f (struct pt_regs *regs)
+> +typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
 
-Applied to for-next, thanks!
+How is this related to the other changes and why is it required. Please
+make this reviewable.
 
+Thanks,
 
---Ab8d/9CSzKu7KjpS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9nmgACgkQFA3kzBSg
-KbYLLBAAoi+cpEGpCS2VMwq07xiTInazK7eHCg1hY7HcYrcEfqCs6UV5Jmk5V86I
-hBxg/JGc1g3PbEVW1GMcbcdYn7PmbrMqjkxmg8QOUF6UBnfHKgifUgadpq58j062
-gSD2vtXdaJSrCw5/XEWcgEZZhTDWRI1l15dxOQ2OzhqG3W0Tkru1EHbAGDHHoig2
-JZMhqFBZUbuou12gIMw5JY35mEQprzsYymgqH3APfENHZeQ3AOJG+H53SKOfqACP
-r/83cU9Lm9QRXOfV8DbNm0NYtN6zhPwrIpPTo8+OnT1PvN/rH2OlUFkNVASO/fif
-zDZ1M9GTvJ3vmuNlPLABfIJf5paQWMFKIdYzSG+iftJ2WD8h6igX736SP7V24dtY
-g7uCgmQENSGmuBayMUqemtZaBzWDlMVHwDvza8eIKUIGMaFKGHdIvnZpDIst4YxM
-f0XB7wWT3jt9c3N7iV3sgpgrQPUUO5SngL5vhiR35yPCgi3kJBA2anPTa9Y4DDvY
-6JVwsyXF6NmaFuMwJBuRU4MF7q9EcHrFqRdDiP5QvL/x6fXBU5+SeztCIw1ID6ms
-Fzj5Xpj66Hq6ZD5mrbdVP1RvVtjhE/FSXztqpvzJaQsxuEzmQA+wC9l5o4ck4DUt
-0+z/SGQ5MJM/6SRqMnSeV/j00ktNdgBn8LJlljCjvL1nmvykXvI=
-=3Gn2
------END PGP SIGNATURE-----
-
---Ab8d/9CSzKu7KjpS--
+        tglx
