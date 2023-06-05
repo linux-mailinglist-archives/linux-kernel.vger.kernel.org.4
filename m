@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01647226D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D692F7226DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbjFENF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S233907AbjFENG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjFENE5 (ORCPT
+        with ESMTP id S232609AbjFENG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:04:57 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52D1CD;
-        Mon,  5 Jun 2023 06:04:56 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-655d1fc8ad8so827507b3a.1;
-        Mon, 05 Jun 2023 06:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685970296; x=1688562296;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PwnioUR0ZjoyRGzrp5k5mjXo7WPIskiZGVP9H/Ozl1w=;
-        b=ikWXlcNmcjTchboSGAIljatHvSG1Z4LVpxBFkZ9O1es07NKSLDjhDfsLYrkfj8J8re
-         JLiOzSxDdNlnBMcKLYmB/eFroD/t8DpaSJZLaNskfnHACkfLND8sljVzpqiA3FtKk8Hf
-         bl3rK/ew+hxR6lwA9ZX/w9ulk67kwP7kJZ0katk94Gpvw76pFfAoi7r6QuYK/3QqFFbD
-         +TQ5MtVRhCOp47VRQeNhtXolsiEpyYmSczhBNeDAZh5T7LjPM1S21GZa9GtZRTVMjgeP
-         5WdqyznmnMtecDf/2/bMpuU9NUZKDFS1F1MIqN/S9qCaEkUnd/7tViMEV3qLUiR6vk4R
-         49KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685970296; x=1688562296;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PwnioUR0ZjoyRGzrp5k5mjXo7WPIskiZGVP9H/Ozl1w=;
-        b=dQ2XCtinI+BmghI4xuYbqxXoa9naxvG7fvHyGG9A1dy9wM1Rx6Q8t/pxmdPWYGqPMH
-         L0GYwjSBlxewz9kMSZ+CF2bbhWTfWKhGQSU5WdtpppHlT9PVj5vOwVPmPpjBW29Wq7Y8
-         vXRQv+P0rrHUFm2o/kA7/qIGJ9mlKAeGEjqTOUg6T5939JQR9HYnEhHYfKrQ4D/8D0nR
-         fs3wimI5XO0GAfN0Ak7We36ugnWYI05w35KlTz2br7Tz7xvc4SDoMU8QAQjnXkGn3MtL
-         eLySoN2Znt9h13TWLGiyhZtyhSErsj0AZZr3xKNgZNoOP48O8YOcnEAXQEhZvkJvLepN
-         HWQw==
-X-Gm-Message-State: AC+VfDy3PQXncpcpxmaH5kaXut3IfGw6NPa8SRsoZxPXur3udoE5WtiO
-        El+AZdjgKw8aEnfKy8zl6Gh1rfkZVhiepA==
-X-Google-Smtp-Source: ACHHUZ7miuHK34uaTVj6DOG0mrTSKpA9i8bxkHFhaSRxgIqRpgqzRZ/Rou6isPLiTMK58927DUHTOQ==
-X-Received: by 2002:a05:6a20:1587:b0:115:e834:7bc1 with SMTP id h7-20020a056a20158700b00115e8347bc1mr1427573pzj.30.1685970295850;
-        Mon, 05 Jun 2023 06:04:55 -0700 (PDT)
-Received: from localhost.localdomain ([162.219.34.248])
-        by smtp.gmail.com with ESMTPSA id j2-20020aa78d02000000b0065ebeb9bb23sm302300pfe.149.2023.06.05.06.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 06:04:54 -0700 (PDT)
-From:   Zou Cao <zoucaox@gmail.com>
-X-Google-Original-From: Zou Cao <zoucao@kuaishou.com>
-To:     linux-kernel@vger.kernel.org, tj@kernel.org
-Cc:     cgroups@vger.kernel.org, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, brauner@kernel.org,
-        Zou Cao <zoucao@kuaishou.com>
-Subject: [PATCH] cgroup: fixed the cset refcnt leak when fork() failed
-Date:   Mon,  5 Jun 2023 21:04:44 +0800
-Message-Id: <20230605130444.1421-1-zoucao@kuaishou.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 5 Jun 2023 09:06:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A31A1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:06:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74825623FF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:06:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA45C433D2;
+        Mon,  5 Jun 2023 13:06:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685970379;
+        bh=EGNBHcb8bMaX7EnPk8wnvORybQqzdd6cyxGABhUCLFg=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=CmAN0YwISMOzeOVJijaEgbWY/JMfyepDthL3+4a+LfuhNPLBiqEXgePlTr3WBde0C
+         SG3DF9mVjc+ZzjS7toNqoqsBgxYJl7d45auDHXeStx4G/X+x0i8VVk1VFohHRSX8AO
+         NORAg8Xxbp4sDhg2fpjfjwCqDBrAFAwbYn9DNNKDUAEVoE3lpY+lPkC2fNOLjOW4Xv
+         B8fEBbSsRtFlfIyPfyYAEYhcUB7PPNgJbUZPgsuZOjJpRHJopcBbyn2JDZkCAwY9Po
+         4rFKISrIrrH9uLXu2Sz2Al+4FQYx3PCZQzDkYLhG5UOPHhi1XfaRyYxg0PDy9TpKxY
+         ojd6Gt3qhigiQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     "Arnd Bergmann" <arnd@kernel.org>
+Cc:     Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] wireless: ath: work around false-positive stringop-overread warning
+References: <20230417205447.1800912-1-arnd@kernel.org>
+        <87ttwnnrer.fsf@kernel.org>
+        <504c5a7d-0bfd-4b1e-a7f0-65d072657e0a@app.fastmail.com>
+        <87mt2eoopo.fsf@kernel.org>
+        <c7f88295-2e22-4100-b9c8-feb380b64359@app.fastmail.com>
+        <e9601db2-ff7d-4490-abd5-8d3c5946e108@app.fastmail.com>
+Date:   Mon, 05 Jun 2023 16:06:13 +0300
+In-Reply-To: <e9601db2-ff7d-4490-abd5-8d3c5946e108@app.fastmail.com> (Arnd
+        Bergmann's message of "Sat, 03 Jun 2023 09:43:35 +0200")
+Message-ID: <87zg5ehxdm.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TeamID: B1486294
+"Arnd Bergmann" <arnd@kernel.org> writes:
 
-when fork, cset will be increased by commit "ef2c41cf38a7", the refcnt will
-be decrease by child exit, but when failed in fork(), this refcnt will
-be lost decrease in cgroup_cancel_fork as follow:
+> On Mon, May 8, 2023, at 17:07, Arnd Bergmann wrote:
+>
+>> On Mon, May 8, 2023, at 16:57, Kalle Valo wrote:
+>>> With older GCC versions from your page I don't have this problem. I'm
+>>> using Debian 10 still so so is my libc too old?
+>>
+>> (dropping most Cc)
+>>
+>> Indeed, thanks for the report, I forgot about that issue. I used
+>> to build the cross toolchains in an old Ubuntu 16.04 chroot to avoid
+>> that issue, and I linked all other dependencies statically.
+>>
+>> The gcc-13.1.0 builds are the first ones I did on an arm64 machine,
+>> so I had to create a new build environment and started out with
+>> just my normal Debian testing rootfs, which caused me enough issues
+>> to figure out first.
+>>
+>> I had previously experimented with linking statically against
+>> musl to avoid all other dependencies, but that ended up with
+>> slower binaries because the default memory allocator in musl
+>> doesn't work that well for gcc, and I never quite figured out
+>> how to pick a different memory allocator, or which one to use.
+>>
+>> I should probably just pick an older Debian release that is new
+>> enough to contain cross compilers for arm64 and x86 and then
+>> set up the same kind of chroot I had in before.
+>
+> It took me a while, but now I have a working build setup
+> in a Debian Buster schroot with gcc-13 as the main compiler,
+> and I updated the gcc-13.1 binaries with those, as well as
+> uploading gcc-11.4 and gcc-12.3 build the same way.
+>
+> I have only tested the binaries on arm64 Debian testing,
+> could you see if the new x86 builds work for you?
 
-copy_process
-     |
-cgroup_can_fork    //  increase the css refcount
-  ......
-  spin_lock_irq(&css_set_lock);
-  cset = task_css_setcurrent);
-  get_css_set(cset);
-  spin_unlock_irq&css_set_lock);
-  ......
-     |
-goto cgroup_cancel_fork    // if failed in  copy_process
-     |
-cgroup_cancel_fork  // lost the decrease refcount if flag not CLONE_INTO_CGROUP
+I tested GCC 12.3 and 13.1 on x86 Debian 10, they both worked perfectly.
+Thank you!
 
-Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
-Signed-off-by: Zou Cao <zoucao@kuaishou.com>
----
- kernel/cgroup/cgroup.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index d18c2ef..5ecd706 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6284,6 +6284,11 @@ void cgroup_cancel_fork(struct task_struct *child,
- 		if (ss->cancel_fork)
- 			ss->cancel_fork(child, kargs->cset);
- 
-+	if (!(kargs->flags & CLONE_INTO_CGROUP) &&
-+			kargs->cset) {
-+		put_css_set(kargs->cset);
-+	}
-+
- 	cgroup_css_set_put_fork(kargs);
- }
- 
 -- 
-1.8.3.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
