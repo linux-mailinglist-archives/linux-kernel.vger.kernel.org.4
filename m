@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025C6722742
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D72C722744
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbjFENWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S233464AbjFENWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbjFENWD (ORCPT
+        with ESMTP id S234040AbjFENWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:22:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF0DA6;
-        Mon,  5 Jun 2023 06:22:00 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685971319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W7i9GT2S5V5kPFQ9ynmoaH2oh68oVG88GxgQhO0L2r0=;
-        b=FC2fz5Hw2DawTfhyAgMP7CIHQylN+gXXrfD4fYeAD8Vs6bcXX5W8G/FDLDF9Y9CwXjQoBl
-        toMeLyHwHgz+ob+RHTUotbhJCq/g2OSbIUVWepD+Uqq+IW9YbPyXlwgdoGeWgCjfdlXFa8
-        02bHeq9BqWlYrzeZ3P9+ErwmPbQFpLrTQWzcWxEQvl0+wBSwbS5WW/auR2NKwnrd3HazBy
-        7mH4o5scHMUtm4BK6nw0RYhu4IU45Izkxet57Xz1FaptV3BlJUkk8gdMHF/t4O+sJTXP1y
-        8SQdZvjjU9Vyk/lVsKetze2YggMKolV1c532dT5tHcciQjiqxivRVv24guue9Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685971319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W7i9GT2S5V5kPFQ9ynmoaH2oh68oVG88GxgQhO0L2r0=;
-        b=/fITta9sPx5iuy0knJVvC8GsJHywX+CKmnOx8iJk8BgKAJ+upOYhm9WyyCGPPOSJT1MKYP
-        Jd5CklRgFPZ/YHAw==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 20/33] x86/fred: FRED entry/exit and dispatch code
-In-Reply-To: <20230410081438.1750-21-xin3.li@intel.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-21-xin3.li@intel.com>
-Date:   Mon, 05 Jun 2023 15:21:58 +0200
-Message-ID: <87fs766o3t.ffs@tglx>
+        Mon, 5 Jun 2023 09:22:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DA092;
+        Mon,  5 Jun 2023 06:22:26 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19AD96600873;
+        Mon,  5 Jun 2023 14:22:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685971344;
+        bh=RG2Kt3+4ozztoOhFlOmXapSwh5NhAbY+1RJEl2K4ozQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OLA2OivJ25y09pO+roLeddFRMu6LSd1Q0PEIDu/YaOtKkWMXj/njES/CulZwRSwHI
+         7u+WQO2fJhhMEUKC81vvztQV9L66KTH8o8c3SZAnImqnEhC3rPwQOKiqMJmx0XrrXt
+         kRkVGrAcD5R6eJef2Q6uh20WDD7IdWBawBAcD6/nBM4+Ijsrf+msjsntus73NId2Az
+         fhF2ydFVx/6JIkjzjGQIMtBsCfyTil0xk5RAf+ay3eqA2U72ZaW6i3OaCK3bDcJbMb
+         fGPn+4ncia+2b84m71876OcGpByXHDPjzpAjuoxo29GIDMHf5mbTNhT9Lc2qt+bJBh
+         x3MSkF7CjDPxg==
+Message-ID: <2ef5a7e5-3772-f7ed-9aad-f51c53a7a24b@collabora.com>
+Date:   Mon, 5 Jun 2023 15:22:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4] mmc: mtk-sd: reduce CIT for better performance
+To:     Wenbin Mei <wenbin.mei@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ritesh Harjani <riteshh@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230605121442.23622-1-wenbin.mei@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230605121442.23622-1-wenbin.mei@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,266 +65,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * arch/x86/entry/entry_fred.c
+Il 05/06/23 14:14, Wenbin Mei ha scritto:
+> CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
+> SEND_QUEUE_STATUS(CMD13) polling.
+> Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+> frequency to get the actual time.
+> The default value 0x1000 that corresponds to 150us for MediaTek SoCs, let's
+> decrease it to 0x40 that corresponds to 2.35us, which can improve the
+> performance of some eMMC devices.
+> 
+> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
 
-Please do not add these completely pointless file names. They are
-useless _and_ never get updated when a file is moved.
+You haven't addressed all my comments. Is there any reason for that?
 
-> + *
-> + * This contains the dispatch functions called from the entry point
-> + * assembly.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/kdebug.h>		/* oops_begin/end, ... */
+Regards,
+Angelo
 
-Please remove this useless tail comment. We really do not have to list
-which particular things are pulled in from which header file.
-
-> +#include <linux/nospec.h>
-
-New line between linux and asm includes please.
-
-> +#include <asm/event-type.h>
-> +#include <asm/fred.h>
-> +#include <asm/idtentry.h>
-> +#include <asm/syscall.h>
-> +#include <asm/trapnr.h>
-> +#include <asm/traps.h>
-> +#include <asm/kdebug.h>
-> +
-> +/*
-> + * Badness...
-
-Really useful comment. Not.
-
-> +
-> +noinstr void fred_exc_double_fault(struct pt_regs *regs)
-
-Has to be global because the only user is the table below, right?
-
+> ---
+>   drivers/mmc/host/cqhci.h  |  1 +
+>   drivers/mmc/host/mtk-sd.c | 45 +++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+> index ba9387ed90eb..292b89ebd978 100644
+> --- a/drivers/mmc/host/cqhci.h
+> +++ b/drivers/mmc/host/cqhci.h
+> @@ -23,6 +23,7 @@
+>   /* capabilities */
+>   #define CQHCI_CAP			0x04
+>   #define CQHCI_CAP_CS			0x10000000 /* Crypto Support */
+> +#define CQHCI_CAP_ITCFMUL(x)		(((x) & GENMASK(15, 12)) >> 12)
+>   
+>   /* configuration */
+>   #define CQHCI_CFG			0x08
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index edade0e54a0c..9f540973caff 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -473,6 +473,7 @@ struct msdc_host {
+>   	struct msdc_tune_para def_tune_para; /* default tune setting */
+>   	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+>   	struct cqhci_host *cq_host;
+> +	u32 cq_ssc1_time;
+>   };
+>   
+>   static const struct mtk_mmc_compatible mt2701_compat = {
+> @@ -2450,9 +2451,48 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
+>   	}
+>   }
+>   
+> +static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
 > +{
-> +	exc_double_fault(regs, regs->orig_ax);
-> +}
-
-Also why is this here and not next to the double fault implementation?
-
-> +/*
-> + * Exception entry
-> + */
-> +static DEFINE_FRED_HANDLER(fred_exception)
-
-Lacks noinstr as most of the functions here.
-
-> +{
-> +	/*
-> +	 * Exceptions that cannot happen on FRED h/w are set to fred_bad_event().
+> +	struct mmc_host *mmc = mmc_from_priv(host);
+> +	struct cqhci_host *cq_host = mmc->cqe_private;
+> +	u8 itcfmul;
+> +	u64 hclk_freq;
+> +	u64 value;
+> +
+> +	/* Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+> +	 * frequency to get the actual time for CIT.
 > +	 */
-> +	static const fred_handler exception_handlers[NUM_EXCEPTION_VECTORS] = {
-> +		[X86_TRAP_DE] = exc_divide_error,
-> +		[X86_TRAP_DB] = fred_exc_debug,
-> +		[X86_TRAP_NMI] = fred_bad_event, /* A separate event type, not handled here */
-
-Please make this tabular aligned and get rid of these horrible tail
-comments.
-
-> +		[X86_TRAP_BP] = exc_int3,
-> +		[X86_TRAP_OF] = exc_overflow,
-> +		[X86_TRAP_BR] = exc_bounds,
-> +		[X86_TRAP_UD] = exc_invalid_op,
-> +		[X86_TRAP_NM] = exc_device_not_available,
-> +		[X86_TRAP_DF] = fred_exc_double_fault,
-> +		[X86_TRAP_OLD_MF] = fred_bad_event, /* 387 only! */
-> +		[X86_TRAP_TS] = fred_exc_invalid_tss,
-> +		[X86_TRAP_NP] = fred_exc_segment_not_present,
-> +		[X86_TRAP_SS] = fred_exc_stack_segment,
-> +		[X86_TRAP_GP] = fred_exc_general_protection,
-> +		[X86_TRAP_PF] = fred_exc_page_fault,
-> +		[X86_TRAP_SPURIOUS] = fred_bad_event, /* Interrupts are their own event type */
-> +		[X86_TRAP_MF] = exc_coprocessor_error,
-> +		[X86_TRAP_AC] = fred_exc_alignment_check,
-> +		[X86_TRAP_MC] = fred_exc_machine_check,
-> +		[X86_TRAP_XF] = exc_simd_coprocessor_error,
-
-> +		[X86_TRAP_VE...NUM_EXCEPTION_VECTORS-1] = fred_bad_event
-
-Can we please have something which makes it entirely clear that anything
-from #VE on are exceptions which are installed during boot?
-
-> +	};
-> +	u8 vector = array_index_nospec((u8)regs->vector, NUM_EXCEPTION_VECTORS);
-
-This only "works" when NUM_EXCEPTION_VECTORS is power of two. Also what
-catches an out of bounds vector? I.e. vector 0x20 will end up as vector
-0x0 due to array_index_nospec(). I know, FRED hardware is going to be
-perfect...
-
-> +	exception_handlers[vector](regs);
-> +}
-> +
-> +static __always_inline void fred_emulate_trap(struct pt_regs *regs)
-> +{
-> +	regs->type = EVENT_TYPE_SWFAULT;
-
-This type information is used where?
-
-> +	regs->orig_ax = 0;
-> +	fred_exception(regs);
-> +}
-> +
-> +static __always_inline void fred_emulate_fault(struct pt_regs *regs)
-> +{
-> +	regs->ip -= regs->instr_len;
-> +	fred_emulate_trap(regs);
-> +}
-> +
-> +/*
-> + * Emulate SYSENTER if applicable. This is not the preferred system
-> + * call in 32-bit mode under FRED, rather int $0x80 is preferred and
-> + * exported in the vdso. SYSCALL proper has a hard-coded early out in
-> + * fred_entry_from_user().
-
-So we have it nicely distributed all over the code....
-
-> + */
-> +static DEFINE_FRED_HANDLER(fred_syscall_slow)
-> +{
-> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) &&
-> +	    likely(regs->vector == FRED_SYSENTER)) {
-> +		/* Convert frame to a syscall frame */
-> +		regs->orig_ax = regs->ax;
-> +		regs->ax = -ENOSYS;
-> +		do_fast_syscall_32(regs);
-> +	} else {
-> +		regs->vector = X86_TRAP_UD;
-> +		fred_emulate_fault(regs);
-> +	}
-> +}
-> +
-> +/*
-> + * Some software exceptions can also be triggered as int instructions,
-> + * for historical reasons. Implement those here. The performance-critical
-> + * int $0x80 (32-bit system call) has a hard-coded early out.
-
-This comment starts to annoy me. Can you put comments next to the code
-where they actually make sense?
-
-> + */
-> +static DEFINE_FRED_HANDLER(fred_sw_interrupt_user)
-> +{
-
-i.e.
-
-        /*
-         * In compat mode INT $0x80 (32bit system call) is
-         * performance-critical. Handle it first.
-         */
-
-> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) &&
-> +	    likely(regs->vector == IA32_SYSCALL_VECTOR)) {
-> +		/* Convert frame to a syscall frame */
-> +		regs->orig_ax = regs->ax;
-> +		regs->ax = -ENOSYS;
-> +		return do_int80_syscall_32(regs);
-
-> +	}
-> +
-> +	switch (regs->vector) {
-> +	case X86_TRAP_BP:
-> +	case X86_TRAP_OF:
-> +		fred_emulate_trap(regs);
+> +	hclk_freq = clk_get_rate(host->h_clk);
+> +	itcfmul = CQHCI_CAP_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
+> +	switch (itcfmul) {
+> +	case 0x0:
+> +		do_div(hclk_freq, 1000);
+> +		break;
+> +	case 0x1:
+> +		do_div(hclk_freq, 100);
+> +		break;
+> +	case 0x2:
+> +		do_div(hclk_freq, 10);
+> +		break;
+> +	case 0x3:
+> +		break;
+> +	case 0x4:
+> +		hclk_freq = hclk_freq * 10;
 > +		break;
 > +	default:
-> +		regs->vector = X86_TRAP_GP;
-> +		fred_emulate_fault(regs);
-> +		break;
+> +		host->cq_ssc1_time = 0x40;
+> +		return;
 > +	}
+> +
+> +	value = hclk_freq * timer_ns;
+> +	do_div(value, 1000000000);
+> +	host->cq_ssc1_time = value;
 > +}
 > +
-> +static DEFINE_FRED_HANDLER(fred_hw_interrupt)
-> +{
-> +	irqentry_state_t state = irqentry_enter(regs);
+>   static void msdc_cqe_enable(struct mmc_host *mmc)
+>   {
+>   	struct msdc_host *host = mmc_priv(mmc);
+> +	struct cqhci_host *cq_host = mmc->cqe_private;
+>   
+>   	/* enable cmdq irq */
+>   	writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+> @@ -2462,6 +2502,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
+>   	msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+>   	/* default read data timeout 1s */
+>   	msdc_set_timeout(host, 1000000000ULL, 0);
 > +
-> +	instrumentation_begin();
-> +	external_interrupt(regs);
-> +	instrumentation_end();
-> +	irqentry_exit(regs, state);
-> +}
-> +
-> +__visible noinstr void fred_entry_from_user(struct pt_regs *regs)
-> +{
-> +	static const fred_handler user_handlers[FRED_EVENT_TYPE_COUNT] =
-> +	{
-> +		[EVENT_TYPE_HWINT]	= fred_hw_interrupt,
-> +		[EVENT_TYPE_RESERVED]	= fred_bad_event,
-> +		[EVENT_TYPE_NMI]	= fred_exc_nmi,
-> +		[EVENT_TYPE_SWINT]	= fred_sw_interrupt_user,
-> +		[EVENT_TYPE_HWFAULT]	= fred_exception,
-> +		[EVENT_TYPE_SWFAULT]	= fred_exception,
-> +		[EVENT_TYPE_PRIVSW]	= fred_exception,
-> +		[EVENT_TYPE_OTHER]	= fred_syscall_slow
-> +	};
-> +
-> +	/*
-> +	 * FRED employs a two-level event dispatch mechanism, with
-> +	 * the first-level on the type of an event and the second-level
-> +	 * on its vector. Thus a dispatch typically induces 2 calls.
-> +	 * We optimize it by using early outs for the most frequent
-> +	 * events, and syscalls are the first. We may also need early
-> +	 * outs for page faults.
+> +	/* Set the send status command idle timer */
+> +	cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+>   }
+>   
+>   static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+> @@ -2803,6 +2846,8 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>   		/* cqhci 16bit length */
+>   		/* 0 size, means 65536 so we don't have to -1 here */
+>   		mmc->max_seg_size = 64 * 1024;
+> +		/* Reduce CIT to 0x40 that corresponds to 2.35us */
+> +		msdc_cqe_cit_cal(host, 2350);
+>   	}
+>   
+>   	ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
 
-I'm not really convinced that adding more special cases and conditionals
-is a win. This should be a true two-level dispatch first for _all_ event
-types and then in a separate step optimizations with proper performance
-numbers and justifications. Premature optimization is the enemy of
-correctness. Don't do it.
-
-> +	 */
-> +	if (likely(regs->type == EVENT_TYPE_OTHER &&
-> +		   regs->vector == FRED_SYSCALL)) {
-> +		/* Convert frame to a syscall frame */
-> +		regs->orig_ax = regs->ax;
-> +		regs->ax = -ENOSYS;
-> +		do_syscall_64(regs, regs->orig_ax);
-> +	} else {
-> +		/* Not a system call */
-> +		u8 type = array_index_nospec((u8)regs->type, FRED_EVENT_TYPE_COUNT);
-
-What's the u8 buying here and in all the other places? This has the same
-table issue as all other table handling in this file.
-
-> +		user_handlers[type](regs);
-> +	}
-> +}
-
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index 2876ddae02bc..bd43866f9c3e 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -82,6 +82,7 @@ static __always_inline void __##func(struct pt_regs *regs)
->  #define DECLARE_IDTENTRY_ERRORCODE(vector, func)			\
->  	asmlinkage void asm_##func(void);				\
->  	asmlinkage void xen_asm_##func(void);				\
-> +	__visible void fred_##func(struct pt_regs *regs);		\
-
-Wants to be a separate change.
-
->  	__visible void func(struct pt_regs *regs, unsigned long error_code)
->  
->  /**
-> @@ -106,6 +107,11 @@ __visible noinstr void func(struct pt_regs *regs,			\
->  	irqentry_exit(regs, state);					\
->  }									\
->  									\
-> +__visible noinstr void fred_##func(struct pt_regs *regs)		\
-> +{									\
-> +	func (regs, regs->orig_ax);					\
-
-  func() ....
-
-Thanks,
-
-        tglx
