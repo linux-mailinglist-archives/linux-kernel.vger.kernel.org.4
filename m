@@ -2,76 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DAA7232ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3ED17232F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjFEWHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 18:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S232179AbjFEWLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 18:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjFEWHf (ORCPT
+        with ESMTP id S231929AbjFEWLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 18:07:35 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2599EC;
-        Mon,  5 Jun 2023 15:07:34 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1af9ef7a9so47447821fa.1;
-        Mon, 05 Jun 2023 15:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686002853; x=1688594853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVq54lH3E2ODLnxs1hYNz0RLN2+8uJFJjH0uysXpNaE=;
-        b=SVFhye3wWzm9siCPJAPvhmdYPJHXs984VZI3RhfJKGXLNHQXWFj8QiLUgcnmHACMjN
-         ovtw27BBo0HlbmNBo30Mzy7FP2Qe7+ft5RCnmx+w7TmCB4kVCZcRIhjdPvq+4W2Xhhv3
-         Iu626Cy4UPw6hg4mx9JIRa5LdeAUtZCoztGGpG7KUX4EYbdgGEC5/01k/yxltardorxe
-         u6ds1wDIpaMZJyQx7m4IsJK+PVwe8LLI/ZqmJB+X6EthP2LKi0w0VAmduv2vJozgwpwi
-         AznaFke/N0u4NfvisJfPpoOnRXaoyXEsZcRu+MLkdPtn6PK74hLn7r5EzCEES/Rk78gX
-         YUGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686002853; x=1688594853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OVq54lH3E2ODLnxs1hYNz0RLN2+8uJFJjH0uysXpNaE=;
-        b=dVH1+Mu1Hj3c9P+/0yJwzF0er+x8RGceevoiEUoNSpuq2VUKIfdIwyldSDu4HBrKx9
-         JMnPiqzmOHPmi1qIZj8q/Jv650YY/v3V8lqUNm+wNzmQk3dDfp2iMAQz01cLTYwivCFA
-         man9Se84EFQ3JDoKhOizWzfrsUPksASNnX+TBauLm6Vn2neC1toan2MSw6xusVaEgVGP
-         VvXLjrIC8zpnlZlOu+S9xXxyVzY4Xn9RajJKwOuxzwIX9irTgGcVN3NE0MDIavN3t4Ff
-         5UpbHe+EYUR+1HPw0W+L7hMHYRanTSX/eEfa6H8/mgObJfw6E46wBGUkiCOEMi0izvx0
-         GZLQ==
-X-Gm-Message-State: AC+VfDwfJ1w6E+G6VGO81Qb6LXGfy99UXiUSnwCR+qkiZ15kyouYM/tE
-        Xu828RfD+gBayS4M6Qg6p5+cBmnAI3xLuhRDTh0=
-X-Google-Smtp-Source: ACHHUZ59AXy2Fss5gsVw6c3+SVAkH1T0wfIiLNNBfO5iUP/nORAbNklHb2QBGc4sDSw2qq4U/dMLpKeb3+Qpy7XbChQ=
-X-Received: by 2002:a2e:a406:0:b0:2b1:e6eb:1ba2 with SMTP id
- p6-20020a2ea406000000b002b1e6eb1ba2mr364843ljn.22.1686002852835; Mon, 05 Jun
- 2023 15:07:32 -0700 (PDT)
+        Mon, 5 Jun 2023 18:11:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D696EC;
+        Mon,  5 Jun 2023 15:11:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2EA95C14;
+        Mon,  5 Jun 2023 15:12:15 -0700 (PDT)
+Received: from [10.57.25.141] (unknown [10.57.25.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 139703F663;
+        Mon,  5 Jun 2023 15:11:26 -0700 (PDT)
+Message-ID: <362032af-382e-d367-a655-1c25407309a0@arm.com>
+Date:   Mon, 5 Jun 2023 23:11:25 +0100
 MIME-Version: 1.0
-References: <20230605200508.1888874-1-void@manifault.com> <20230605200508.1888874-2-void@manifault.com>
-In-Reply-To: <20230605200508.1888874-2-void@manifault.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 5 Jun 2023 15:07:21 -0700
-Message-ID: <CAADnVQLZkUFtCwZEaRKMrdnDJzj-9_7fMYY9P55MndiNTrSnkA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_for_each_map_elem on BPF_MAP_TYPE_HASH_OF_MAPS
-To:     David Vernet <void@manifault.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        Dave Marchevsky <davemarchevsky@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH 1/4] perf cs-etm: Only track threads instead of PID and
+ TIDs
+To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+        denik@chromium.org
+Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-2-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230524131958.2139331-2-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +59,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 1:05=E2=80=AFPM David Vernet <void@manifault.com> wr=
-ote:
->
-> +
-> +static __u64 set_invoked(struct bpf_map *map, __u64 *key, __u64 *val, st=
-ruct callback_ctx *ctx)
-> +{
-> +       struct bpf_map *inner_map;
-> +
-> +       ctx->invoked =3D true;
-> +       inner_map =3D bpf_map_lookup_elem(map, key);
-> +       if (!inner_map) {
-> +               ctx->failed =3D true;
-> +               return 1;
-> +       }
+On 24/05/2023 14:19, James Clark wrote:
+> PIDs and TIDs are already contained within the thread struct, so to
+> avoid inconsistencies drop the extra members on the etm queue and only
+> use the thread struct.
+> 
+> At the same time stop using the 'unknown' thread. In a later commit
+> we will be making samples from multiple machines so it will be better
+> to use the idle thread of each machine rather than overlapping unknown
+> threads. Using the idle thread is also better because kernel addresses
+> with a previously unknown thread will now be assigned to a real kernel
+> thread.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-This doesn't look right. 'val' is not 'u64 *'.
-It probably should be 'struct bpf_map *',
-so lookup shouldn't be necessary.
 
-map_set_for_each_callback_args() just sets it to PTR_TO_MAP_VALUE.
-It probably should be CONST_PTR_TO_MAP.
-Also for normal hash map for_each_elem 'val' is writeable.
-It shouldn't be in this case.
-So to cleanly support iterating hash_of_maps patch 1 needs more work.
+Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+
+
