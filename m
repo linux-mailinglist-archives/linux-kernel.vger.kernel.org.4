@@ -2,272 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A10722683
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E0C72268B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbjFEMzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S233752AbjFEMzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbjFEMzZ (ORCPT
+        with ESMTP id S233809AbjFEMzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 08:55:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00800F3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685969673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DHxUennmoRcWdeQEiDSCkjFBqLhpEtT5XDwGS+LOflw=;
-        b=H9hfBxiS08hl8BXWNUFF7kf+kItYzQ4XJpOMMn2pXRToVbz3n+wNdPmV6jtnVu2NWt2g9H
-        ymhu+Z+hcgXBInVU/Rdo7VjaSbIw2XJ0Imn9ga8NWHO49PfgGwIJI1KmAztSYBZZcgvP+A
-        7y+4PWsNNT1pHKLUXhPnJiTAt1K7Dyc=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-549-BOwuST0FPzaCm_nHRZj_Dw-1; Mon, 05 Jun 2023 08:54:32 -0400
-X-MC-Unique: BOwuST0FPzaCm_nHRZj_Dw-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75d461f9457so282999085a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 05:54:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685969672; x=1688561672;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DHxUennmoRcWdeQEiDSCkjFBqLhpEtT5XDwGS+LOflw=;
-        b=cwiUliisuuQpdk3Y7QGr+kKx1/SvDhYsV9iThAL4t8iitg6aDQXJmhc7kg6i/hi5hl
-         i6y0UE8onxfDheDWkeg0ejrC2nmvC9Xd61eGlUR+QFLi0FRI/G15QMV6T2or7f3JIzar
-         EF26Ca1WsHiJhAVA/6pqOjRfr20wizlkOQgeB/QE1sWcMIoQbrG9QO78EtHq07c2SzgP
-         WS7lp7zs4Qu3sAqYwMumnsuyQdklw3dVg0SNijgSQY3N4m3HeG90aiwPC6AXSdP5RKPK
-         B9dUQjG2iglDp7Xr3P1TqA5uuUyGPck55yplkkC7gcB6UJG88h/caWE2vyOB97ke1fRS
-         kYnQ==
-X-Gm-Message-State: AC+VfDxQaU48OoMRf8Nc/AciuQZYZ+qUm10R6ifiA3iP1x9vHET8yfYe
-        nctIB1u1a5gBG4R0ad2AODA3Z6UVSXOEoKiR9RvuLXbM3qrs57Nb6/TptP+djP+KTh48Tncr9iE
-        0Rb2qDqdcw2v7Gui3yNiFIRITYtKpj2rNSsHmMHy69KuD7XKu1lFi30Ry7xrS48CQu7twYEaKh0
-        a3zcg6sYcV
-X-Received: by 2002:a05:620a:4382:b0:75e:ac60:620d with SMTP id a2-20020a05620a438200b0075eac60620dmr2852368qkp.9.1685969671766;
-        Mon, 05 Jun 2023 05:54:31 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6RaoDQmdKCPPrluZRGbo5LN4qXWw/NY69RzD/tKyXIn6rr/+pMbUtVBbme2QzahttCsnRfiA==
-X-Received: by 2002:a05:620a:4382:b0:75e:ac60:620d with SMTP id a2-20020a05620a438200b0075eac60620dmr2852335qkp.9.1685969671439;
-        Mon, 05 Jun 2023 05:54:31 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05620a10b100b0075cec860842sm4192880qkk.27.2023.06.05.05.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 05:54:30 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/9] drivers: hv: Mark shared pages unencrypted in
- SEV-SNP enlightened guest
-In-Reply-To: <20230601151624.1757616-5-ltykernel@gmail.com>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-5-ltykernel@gmail.com>
-Date:   Mon, 05 Jun 2023 14:54:26 +0200
-Message-ID: <87zg5ejchp.fsf@redhat.com>
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6CADB;
+        Mon,  5 Jun 2023 05:55:23 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355CoAMo020912;
+        Mon, 5 Jun 2023 07:55:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=ovavvxguYhP7lE3de7Dx9uUiv68d/9lD/PPJEy5POXo=;
+ b=oB75JlX26RfNhCVfpoz5QSdaeaplfrbTuIk9VvvbQ5t/dL7wXZnUl6eb6qBQE2clLfyv
+ T3u1vnQouJb2Rfr7TW9xOCD/mtAXnRs0C1312FDCmpGlnG6bERCfwpapfRA/zzR4NIDv
+ srsSopMsPegSS5ahoV4mnHrgWKnIJXvtcWQZEAAnlBgcg+gHuPApszyNDpnD36AkGqFn
+ zPMGhU3KGfRSpF003/oWSJ/JWfro5OzRx8hQ3BRl5qDFhxnYhU/ZofY4z21fHQbYXMFc
+ Dq4cVH2QDwfKXoeb49uHdm4xAgWwJYErjc+I7WLK7TX6jcQn6ssMHLJA52MjJpECfRSI Ww== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r02x19tf1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 07:55:06 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 5 Jun
+ 2023 13:55:04 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 5 Jun 2023 13:55:04 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 95354458;
+        Mon,  5 Jun 2023 12:55:04 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>
+CC:     <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/6] Add cs42l43 PC focused SoundWire CODEC
+Date:   Mon, 5 Jun 2023 13:54:58 +0100
+Message-ID: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: 1l0hYwqJH1-DijCrh4sIhysib1-pdjZT
+X-Proofpoint-GUID: 1l0hYwqJH1-DijCrh4sIhysib1-pdjZT
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tianyu Lan <ltykernel@gmail.com> writes:
+This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+branch.
 
-> From: Tianyu Lan <tiala@microsoft.com>
->
-> Hypervisor needs to access iput arg, VMBus synic event and
-> message pages. Mask these pages unencrypted in the sev-snp
-> guest and free them only if they have been marked encrypted
-> successfully.
->
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  drivers/hv/hv.c        | 57 +++++++++++++++++++++++++++++++++++++++---
->  drivers/hv/hv_common.c | 24 +++++++++++++++++-
->  2 files changed, 77 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index de6708dbe0df..94406dbe0df0 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -20,6 +20,7 @@
->  #include <linux/interrupt.h>
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/mshyperv.h>
-> +#include <linux/set_memory.h>
->  #include "hyperv_vmbus.h"
->  
->  /* The one and only */
-> @@ -78,7 +79,7 @@ int hv_post_message(union hv_connection_id connection_id,
->  
->  int hv_synic_alloc(void)
->  {
-> -	int cpu;
-> +	int cpu, ret = -ENOMEM;
->  	struct hv_per_cpu_context *hv_cpu;
->  
->  	/*
-> @@ -123,26 +124,76 @@ int hv_synic_alloc(void)
->  				goto err;
->  			}
->  		}
-> +
-> +		if (hv_isolation_type_en_snp()) {
-> +			ret = set_memory_decrypted((unsigned long)
-> +				hv_cpu->synic_message_page, 1);
-> +			if (ret) {
-> +				pr_err("Failed to decrypt SYNIC msg page: %d\n", ret);
-> +				hv_cpu->synic_message_page = NULL;
-> +
-> +				/*
-> +				 * Free the event page here and not encrypt
-> +				 * the page in hv_synic_free().
-> +				 */
-> +				free_page((unsigned long)hv_cpu->synic_event_page);
-> +				hv_cpu->synic_event_page = NULL;
-> +				goto err;
-> +			}
-> +
-> +			ret = set_memory_decrypted((unsigned long)
-> +				hv_cpu->synic_event_page, 1);
-> +			if (ret) {
-> +				pr_err("Failed to decrypt SYNIC event page: %d\n", ret);
-> +				hv_cpu->synic_event_page = NULL;
-> +				goto err;
-> +			}
-> +
-> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
-> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
-> +		}
->  	}
->  
->  	return 0;
-> +
->  err:
->  	/*
->  	 * Any memory allocations that succeeded will be freed when
->  	 * the caller cleans up by calling hv_synic_free()
->  	 */
-> -	return -ENOMEM;
-> +	return ret;
->  }
->  
->  
->  void hv_synic_free(void)
->  {
-> -	int cpu;
-> +	int cpu, ret;
->  
->  	for_each_present_cpu(cpu) {
->  		struct hv_per_cpu_context *hv_cpu
->  			= per_cpu_ptr(hv_context.cpu_context, cpu);
->  
-> +		/* It's better to leak the page if the encryption fails. */
-> +		if (hv_isolation_type_en_snp()) {
-> +			if (hv_cpu->synic_message_page) {
-> +				ret = set_memory_encrypted((unsigned long)
-> +					hv_cpu->synic_message_page, 1);
-> +				if (ret) {
-> +					pr_err("Failed to encrypt SYNIC msg page: %d\n", ret);
-> +					hv_cpu->synic_message_page = NULL;
-> +				}
-> +			}
-> +
-> +			if (hv_cpu->synic_event_page) {
-> +				ret = set_memory_encrypted((unsigned long)
-> +					hv_cpu->synic_event_page, 1);
-> +				if (ret) {
-> +					pr_err("Failed to encrypt SYNIC event page: %d\n", ret);
-> +					hv_cpu->synic_event_page = NULL;
-> +				}
-> +			}
-> +		}
-> +
->  		free_page((unsigned long)hv_cpu->synic_event_page);
->  		free_page((unsigned long)hv_cpu->synic_message_page);
->  	}
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index 179bc5f5bf52..bed9aa6ac19a 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -24,6 +24,7 @@
->  #include <linux/kmsg_dump.h>
->  #include <linux/slab.h>
->  #include <linux/dma-map-ops.h>
-> +#include <linux/set_memory.h>
->  #include <asm/hyperv-tlfs.h>
->  #include <asm/mshyperv.h>
->  
-> @@ -359,6 +360,7 @@ int hv_common_cpu_init(unsigned int cpu)
->  	u64 msr_vp_index;
->  	gfp_t flags;
->  	int pgcount = hv_root_partition ? 2 : 1;
-> +	int ret;
->  
->  	/* hv_cpu_init() can be called with IRQs disabled from hv_resume() */
->  	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
-> @@ -368,6 +370,17 @@ int hv_common_cpu_init(unsigned int cpu)
->  	if (!(*inputarg))
->  		return -ENOMEM;
->  
-> +	if (hv_isolation_type_en_snp()) {
-> +		ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
-> +		if (ret) {
-> +			kfree(*inputarg);
-> +			*inputarg = NULL;
-> +			return ret;
-> +		}
-> +
-> +		memset(*inputarg, 0x00, pgcount * PAGE_SIZE);
-> +	}
-> +
->  	if (hv_root_partition) {
->  		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
->  		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
-> @@ -387,7 +400,9 @@ int hv_common_cpu_die(unsigned int cpu)
->  {
->  	unsigned long flags;
->  	void **inputarg, **outputarg;
-> +	int pgcount = hv_root_partition ? 2 : 1;
->  	void *mem;
-> +	int ret;
->  
->  	local_irq_save(flags);
->  
-> @@ -402,7 +417,14 @@ int hv_common_cpu_die(unsigned int cpu)
->  
->  	local_irq_restore(flags);
->  
-> -	kfree(mem);
-> +	if (hv_isolation_type_en_snp()) {
-> +		ret = set_memory_encrypted((unsigned long)mem, pgcount);
-> +		if (ret)
-> +			pr_warn("Hyper-V: Failed to encrypt input arg on cpu%d: %d\n",
-> +				cpu, ret);
-> +		/* It's unsafe to free 'mem'. */
-> +		return 0;
+Thanks,
+Charles
 
-Why is it unsafe to free 'mem' if ret == 0? Also, why don't we want to
-proparate non-zero 'ret' from here to fail CPU offlining?
+Charles Keepax (4):
+  dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+  mfd: cs42l43: Add support for cs42l43 core driver
+  pinctrl: cs42l43: Add support for the cs42l43
+  ASoC: cs42l43: Add support for the cs42l43
 
+Lucas Tanure (2):
+  soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+  spi: cs42l43: Add SPI controller support
 
-> +	}
->  
->  	return 0;
->  }
+ .../bindings/sound/cirrus,cs42l43.yaml        |  313 +++
+ MAINTAINERS                                   |    4 +
+ drivers/mfd/Kconfig                           |   23 +
+ drivers/mfd/Makefile                          |    3 +
+ drivers/mfd/cs42l43-i2c.c                     |   86 +
+ drivers/mfd/cs42l43-sdw.c                     |  213 ++
+ drivers/mfd/cs42l43.c                         | 1141 +++++++++
+ drivers/mfd/cs42l43.h                         |   23 +
+ drivers/pinctrl/cirrus/Kconfig                |   11 +
+ drivers/pinctrl/cirrus/Makefile               |    2 +
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c      |  609 +++++
+ drivers/soundwire/bus.c                       |   31 +
+ drivers/soundwire/bus_type.c                  |   12 +
+ drivers/spi/Kconfig                           |    7 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-cs42l43.c                     |  281 ++
+ include/linux/mfd/cs42l43-regs.h              | 1172 +++++++++
+ include/linux/mfd/cs42l43.h                   |  102 +
+ include/linux/soundwire/sdw.h                 |    9 +
+ include/sound/cs42l43.h                       |   17 +
+ sound/soc/codecs/Kconfig                      |   16 +
+ sound/soc/codecs/Makefile                     |    4 +
+ sound/soc/codecs/cs42l43-jack.c               |  967 +++++++
+ sound/soc/codecs/cs42l43-sdw.c                |   74 +
+ sound/soc/codecs/cs42l43.c                    | 2278 +++++++++++++++++
+ sound/soc/codecs/cs42l43.h                    |  131 +
+ 26 files changed, 7530 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
+ create mode 100644 drivers/mfd/cs42l43-i2c.c
+ create mode 100644 drivers/mfd/cs42l43-sdw.c
+ create mode 100644 drivers/mfd/cs42l43.c
+ create mode 100644 drivers/mfd/cs42l43.h
+ create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
+ create mode 100644 drivers/spi/spi-cs42l43.c
+ create mode 100644 include/linux/mfd/cs42l43-regs.h
+ create mode 100644 include/linux/mfd/cs42l43.h
+ create mode 100644 include/sound/cs42l43.h
+ create mode 100644 sound/soc/codecs/cs42l43-jack.c
+ create mode 100644 sound/soc/codecs/cs42l43-sdw.c
+ create mode 100644 sound/soc/codecs/cs42l43.c
+ create mode 100644 sound/soc/codecs/cs42l43.h
 
 -- 
-Vitaly
+2.30.2
 
