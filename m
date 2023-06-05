@@ -2,220 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F128D7224E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D047224EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbjFELvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S231694AbjFELwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjFELvr (ORCPT
+        with ESMTP id S230263AbjFELwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:51:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F1FA4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:51:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 444A921B39;
-        Mon,  5 Jun 2023 11:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685965904; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mWXI6wt2+qrPxokyP3MIOhyYU83+GbflH+z5Ur+r09w=;
-        b=C/x8MXiGoGdezEmbhVM5AWo590QdfJNC5rTKr+zfYsF9rfvPLXtE6K0Fwe7fuA6FDqOH88
-        wEeK8VdNj0w96RJNBl9kS/LQp4CkoHZbHhnFFp2c77m7X12lrvd1xfyHHBvaaSNRpKTedA
-        Z0R5Il8RK59dy7h82UV0kLIpyfnUPNo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685965904;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mWXI6wt2+qrPxokyP3MIOhyYU83+GbflH+z5Ur+r09w=;
-        b=2REczRNi2OWX+1b576rp1is0Me8n12Y9vz+gzjxxrOTn3wr9Bk6yE0Ap+imxk3rc5xu78u
-        0EALgkNZAi95Y6Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 37DA8139C7;
-        Mon,  5 Jun 2023 11:51:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wfySDVDMfWTWegAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 05 Jun 2023 11:51:44 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C5F4CA0754; Mon,  5 Jun 2023 13:51:43 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 13:51:43 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "yebin (H)" <yebin10@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, jack@suse.com,
-        linux-kernel@vger.kernel.org,
-        syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/2] quota: fix null-ptr-deref in ext4_acquire_dquot()
-Message-ID: <20230605115143.i3squdbqmqebu5ue@quack3>
-References: <20230527014018.47396-1-yebin10@huawei.com>
- <20230527014018.47396-2-yebin10@huawei.com>
- <20230530095726.t2grmww5rzofx5gp@quack3>
- <647ADA33.5010508@huawei.com>
+        Mon, 5 Jun 2023 07:52:19 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B685DA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:52:18 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2568fc3d8a9so1621207a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1685965938; x=1688557938;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JyOkEllK607lv9MCxWlko/8/h878DjdboSx2KDG6rPU=;
+        b=eabMDt3oXuyeHqL6H95VDxv5qnDlp7C/hXkIKi9mE5RBAoY3t66MibAVJ1OyJOW3RI
+         LESpN9wTXsuJaXmyQk+hrcImYockzT2vENkn0uB59YWGFQT7hU0htS22r94rGoWZJ1YS
+         eoMFe+spUeV1gW22xOKgrGgYhj/hXExeWe7dvKuanyNNdN57KqW3msbApkAjrVNHxOtH
+         2EV24MAFpyA7wBZbT8EjHQGq6521MTjFuENHeMbCjF6EV2PW0DHne8ZVihA3/f7CW1fQ
+         8Bv+F4Ee4r1/xl5PFWZJhZqmG6IGRtjbIuE4DZGEOct1kfALIIWaFsW2cZWi2tbimrFI
+         H4JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685965938; x=1688557938;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JyOkEllK607lv9MCxWlko/8/h878DjdboSx2KDG6rPU=;
+        b=ZRCzgToleWHFib70ACZ2SEmUxP05PynKh6TRv5vHaSCGZu7iAVXmwDr9Tstfv8jZvl
+         fbZ5GIc/2KpfkXqwS9+bJcd/HvVJ+IANwpJpUGtXAgpeKfyyNiMnC8a9a1QUWAytNkRw
+         EHhWMSBYfHXCvxeVT+vQOhmxW5ZEyTRdeqnMXJGGcAhK+bF1x8LfF2PdtKrbqYOZulhg
+         of8dHq3kumMxO5iKgw6l9hQ4a3pEA7EP9zDrZ0dOqbHNINNAo1fj2MKYKODHWefLyWcv
+         zOEtT1Q6Lne/KaJ+41ixYWffqV9otv4M8UAVe4pItT6iLqSwgxR5l9bNk3RKRQzkWAdf
+         sOvA==
+X-Gm-Message-State: AC+VfDzdTGbja7h9cpHzeQVocRqJvOopYx9YlUUpAP/zqQ+EfQoVGWMu
+        HXkYZUVyIGvby45Oa2rT185UVw==
+X-Google-Smtp-Source: ACHHUZ7Fn8Dm7pVHQjYxiahDIQS4qNAmj5o8qKZRySqarCR1X7QLuv0XMXLIlT9L0JsS4a61YdP0fA==
+X-Received: by 2002:a17:90a:be10:b0:256:c324:7ae4 with SMTP id a16-20020a17090abe1000b00256c3247ae4mr2478790pjs.16.1685965937953;
+        Mon, 05 Jun 2023 04:52:17 -0700 (PDT)
+Received: from [10.254.80.225] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id p6-20020a17090a284600b00247735d1463sm6089046pjf.39.2023.06.05.04.52.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:52:17 -0700 (PDT)
+Message-ID: <2a45da69-b164-0a4f-eb45-fe57f301bc4b@bytedance.com>
+Date:   Mon, 5 Jun 2023 19:52:10 +0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="m5qv73rr3afoouf3"
-Content-Disposition: inline
-In-Reply-To: <647ADA33.5010508@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: Re: [PATCH net-next v5 1/3] net-memcg: Fold dependency into memcg
+ pressure cond
+Content-Language: en-US
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230602081135.75424-1-wuyun.abel@bytedance.com>
+ <20230602081135.75424-2-wuyun.abel@bytedance.com>
+ <20230602202549.7nvrv4bx4cu7qxdn@google.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <20230602202549.7nvrv4bx4cu7qxdn@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---m5qv73rr3afoouf3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Sat 03-06-23 14:14:11, yebin (H) wrote:
+On 6/3/23 4:25 AM, Shakeel Butt wrote:
+> On Fri, Jun 02, 2023 at 04:11:33PM +0800, Abel Wu wrote:
+>> The callers of mem_cgroup_under_socket_pressure() should always make
+>> sure that (mem_cgroup_sockets_enabled && sk->sk_memcg) is true. So
+>> instead of coding around all the callsites, put the dependencies into
+>> mem_cgroup_under_socket_pressure() to avoid redundancy and possibly
+>> bugs.
+>>
+>> This change might also introduce slight function call overhead *iff*
+>> the function gets expanded in the future. But for now this change
+>> doesn't make binaries different (checked by vimdiff) except the one
+>> net/ipv4/tcp_input.o (by scripts/bloat-o-meter), which is probably
+>> negligible to performance:
+>>
+>> add/remove: 0/0 grow/shrink: 1/2 up/down: 5/-5 (0)
+>> Function                                     old     new   delta
+>> tcp_grow_window                              573     578      +5
+>> tcp_try_rmem_schedule                       1083    1081      -2
+>> tcp_check_space                              324     321      -3
+>> Total: Before=44647, After=44647, chg +0.00%
+>>
+>> So folding the dependencies into mem_cgroup_under_socket_pressure()
+>> is generally a good thing and provides better readablility.
+>>
 > 
-> 
-> On 2023/5/30 17:57, Jan Kara wrote:
-> > On Sat 27-05-23 09:40:17, Ye Bin wrote:
-> > > Syzbot found the following issue:
-> > > Unable to handle kernel paging request at virtual address dfff800000000005
-> > > KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-> > ...
-> > > CPU: 0 PID: 6080 Comm: syz-executor747 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-> > > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > pc : ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
-> > > lr : dquot_to_inode fs/ext4/super.c:6740 [inline]
-> > > lr : ext4_acquire_dquot+0x1ac/0x398 fs/ext4/super.c:6766
-> > OK, this is bad...
-> > 
-> > > Above issue may happens as follows:
-> > > ProcessA              ProcessB                    ProcessC
-> > > sys_fsconfig
-> > >    vfs_fsconfig_locked
-> > >     reconfigure_super
-> > >       ext4_remount
-> > >        dquot_suspend -> suspend all type quota
-> > > 
-> > >                   sys_fsconfig
-> > > 		  vfs_fsconfig_locked
-> > > 		    reconfigure_super
-> > > 		     ext4_remount
-> > > 		      dquot_resume
-> > > 		       ret = dquot_load_quota_sb
-> > >                          add_dquot_ref
-> > > 		                           do_open  -> open file O_RDWR
-> > > 					    vfs_open
-> > > 					     do_dentry_open
-> > > 					      get_write_access
-> > > 					       atomic_inc_unless_negative(&inode->i_writecount)
-> > >                                                ext4_file_open
-> > > 					       dquot_file_open
-> > > 					        dquot_initialize
-> > > 						  __dquot_initialize
-> > > 						   dqget
-> > > 						    if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
-> > > 
-> > > 			  __dquot_initialize
-> > > 			   __dquot_initialize
-> > > 			    dqget
-> > > 			     if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
-> > > 	                       ext4_acquire_dquot -> Return error
-> > > 		       if (ret < 0)
-> > > 	                 vfs_cleanup_quota_inode
-> > > 			  dqopt->files[type] = NULL;
-> > But I don't see how this can happen. The code in dquot_load_quota_sb()
-> > looks like:
-> > 
-> >          error = add_dquot_ref(sb, type);
-> >          if (error)
-> >                  dquot_disable(sb, type, flags);
-> > 
-> > So if an error happens in add_dquot_ref(), we'll call dquot_disable().
-> > dquot_disable() then does:
-> > 
-> >                  drop_dquot_ref(sb, cnt);
-> >                  invalidate_dquots(sb, cnt);
-> > 
-> > and invalidate_dquots() waits for reference count of all dquots to drop to
-> > 0. Hence if dqget() returned a dquot pointer to ProcessC, then ProcessB
-> > should wait until ProcessC drops the dquot reference (hence
-> > ext4_acquire_dquot() is done).
-> > 
-> > What am I missing?
-> > 
-> > 								Honza
-> My reproduction condition is:
-> mkfs.ext4 -F /dev/sda
-> tune2fs  -Q usrquota /dev/sda
-> 
-> dquot_disable
-> ...
->          if ((flags & DQUOT_USAGE_ENABLED && !(flags &
-> DQUOT_LIMITS_ENABLED))
->              || (flags & DQUOT_SUSPENDED && flags & (DQUOT_LIMITS_ENABLED |
->              DQUOT_USAGE_ENABLED)))
->                  return -EINVAL;
-> ...
-> If without enable DQUOT_LIMITS_ENABLED dquot_disable() will just return
-> -EINVAL.
+> I don't see how it is improving readability. If you have removed the use
+> of mem_cgroup_sockets_enabled completely from the networking then I can
+> understand but this change IMHO will actually decrease the readability
+> because the later readers will have to reason why we are doing this
+> check at some places but not other.
 
-Aha, that is the bug! Does attached patch fix your problem?
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
-
---m5qv73rr3afoouf3
-Content-Type: text/x-patch; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-quota-Properly-disable-quotas-when-add_dquot_ref-fai.patch"
-
-From 2bb758bff7f9c92a25af7156cdeedc1f39201eba Mon Sep 17 00:00:00 2001
-From: Jan Kara <jack@suse.cz>
-Date: Mon, 5 Jun 2023 13:39:28 +0200
-Subject: [PATCH] quota: Properly disable quotas when add_dquot_ref() fails
-
-When add_dquot_ref() fails (usually due to IO error or ENOMEM), we want
-to disable quotas we are trying to enable. However dquot_disable() call
-was passed just the flags we are enabling so in case flags ==
-DQUOT_USAGE_ENABLED dquot_disable() call will just fail with EINVAL
-instead of properly disabling quotas. Fix the problem by always passing
-DQUOT_LIMITS_ENABLED | DQUOT_USAGE_ENABLED to dquot_disable() in this
-case.
-
-Reported-by: Ye Bin <yebin10@huawei.com>
-Reported-by: syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
-Signed-off-by: Jan Kara <jack@suse.cz>
----
- fs/quota/dquot.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-index 226eb3cba1fb..e42cf387fa78 100644
---- a/fs/quota/dquot.c
-+++ b/fs/quota/dquot.c
-@@ -2409,7 +2409,8 @@ int dquot_load_quota_sb(struct super_block *sb, int type, int format_id,
- 
- 	error = add_dquot_ref(sb, type);
- 	if (error)
--		dquot_disable(sb, type, flags);
-+		dquot_disable(sb, type,
-+			      DQUOT_USAGE_ENABLED | DQUOT_LIMITS_ENABLED);
- 
- 	return error;
- out_fmt:
--- 
-2.35.3
-
-
---m5qv73rr3afoouf3--
+Yes, I agree. I am trying to let networking get rid of this macro
+entirely, but get stuck on inet_csk_accept().. :(
