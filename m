@@ -2,85 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AC87224C2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E5B7224BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjFELiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S232614AbjFELhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbjFELiC (ORCPT
+        with ESMTP id S232554AbjFELh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:38:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25382F7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685965028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fAIQEofIMC7v8RzKIvVCVe2spFdmLoNCeLo4DX8oh/0=;
-        b=WVZtc8+wZQgfAEElvxZ5NMYHBHnUMwUIiOl3hrgiaOJvO9mvxVVvsDrVx32Qd1AnfJH3YW
-        5pYIcY53c42JR5wbMcStZkXjJtciabapKX/XF6cH1kDvqz9FEWba7fPBwnNq43CVAzmW9S
-        sb7rnC2GVJRTOO78Gm+iigC+BZIsJFw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-287-_vGzmP2NNl-hpfweRr2Ppw-1; Mon, 05 Jun 2023 07:37:07 -0400
-X-MC-Unique: _vGzmP2NNl-hpfweRr2Ppw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so22780685e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:37:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685965026; x=1688557026;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fAIQEofIMC7v8RzKIvVCVe2spFdmLoNCeLo4DX8oh/0=;
-        b=YBbM9pW27yMxWXesTxAAOvI4GGa+LEOPKNbFCiEfx5JGIqxo89d0UOYAqKc4jnbhLV
-         SLUwMYwCUZIvHTnbEF4WXO3sbEb9h8YSAgiqdHIMXkQwpdopOlFGSCQvy/6QGE1ZizAr
-         WcSks2B8u3+2p9dPRJa9eUTfV0wlxMhszN/dV4b34IfTBwPn1JkJCXcnMLNV8f3qc7Xo
-         x39zEEVJtdAWz8KomhuyZ4OJbU7tp1WSI1LDYzVeOtVbuAt4REpJS2dg0IMh6eOpDNf/
-         ne3j8FMHKmOcbt72wlt5kxUqbMg3l6vt1KuyNFvd5+31PAuiWovD0Ko5Xo7AUiN1jUIg
-         fgKw==
-X-Gm-Message-State: AC+VfDxLcby79cSE+z5Zwc9ptjWJziPPulqSQvEXVNm6pR9PjpB3Ef/i
-        LM1TvaRfdMIgY/2lINVHlZNnc1sGeZlxDiUZtBDwaAVyuNVQB3D8n2nbRZPnChf3Y7xRuM5Pv3t
-        o+uBN1kV9uawxSuk81s4ZW/0Y
-X-Received: by 2002:a7b:ce89:0:b0:3f6:552:8722 with SMTP id q9-20020a7bce89000000b003f605528722mr6649061wmj.18.1685965026172;
-        Mon, 05 Jun 2023 04:37:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5VGDnaIen5lKCJ5CKH0EbB5zYnqK07QWbo8gZv5KqwMjzuCPkiSLwEQ2p/qW8E3PH5x2JDyg==
-X-Received: by 2002:a7b:ce89:0:b0:3f6:552:8722 with SMTP id q9-20020a7bce89000000b003f605528722mr6649046wmj.18.1685965025766;
-        Mon, 05 Jun 2023 04:37:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
-        by smtp.gmail.com with ESMTPSA id u4-20020a7bc044000000b003f70a7b4537sm14074087wmc.36.2023.06.05.04.37.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:37:05 -0700 (PDT)
-Message-ID: <a3a3b21e-df1c-08bc-2860-8a53134ec172@redhat.com>
-Date:   Mon, 5 Jun 2023 13:37:04 +0200
+        Mon, 5 Jun 2023 07:37:28 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89192135;
+        Mon,  5 Jun 2023 04:37:22 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q68WU-00039q-Q1; Mon, 05 Jun 2023 13:37:18 +0200
+Message-ID: <929ca032-9988-39b7-3a00-eb402996f7f0@leemhuis.info>
+Date:   Mon, 5 Jun 2023 13:37:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 06/11] selftests/mm: fix two -Wformat-security warnings
- in uffd builds
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
- <20230603021558.95299-7-jhubbard@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230603021558.95299-7-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Subject: Re: kernel error at led trigger "phy0tpt"
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tobias Dahms <dahms.tobias@web.de>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     stable@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-leds@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+References: <91feceb2-0df4-19b9-5ffa-d37e3d344fdf@web.de>
+ <3fcc707b-f757-e74b-2800-3b6314217868@leemhuis.info>
+ <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
+ <d14fb08c-70e3-4cc7-caf9-87e73eab9194@gmail.com>
+ <8b07ead5-f105-da86-e7da-ee49616f7c1d@collabora.com>
+ <69602f1b-4afa-d864-b6d3-d8237f81a51d@leemhuis.info>
+ <d78088d6-7989-7538-c4e1-7976a21cf680@leemhuis.info>
+In-Reply-To: <d78088d6-7989-7538-c4e1-7976a21cf680@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685965042;50d05423;
+X-HE-SMSGID: 1q68WU-00039q-Q1
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,74 +59,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.06.23 04:15, John Hubbard wrote:
-> The uffd tests generate two compile time warnings from clang's
-> -Wformat-security setting. These trigger at the call sites for
-> uffd_test_start() and uffd_test_skip().
+On 22.05.23 10:17, Thorsten Leemhuis wrote:
+> On 17.04.23 13:25, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> [adding Matthias to the list of recipients, who back then applied to
+>> culprit]
+>>
+>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+>> for once, to make this easily accessible to everyone.
+>>
+>> AngeloGioacchino, Has any progress been made to fix below regression? It
+>> doesn't look like it from here, hence I wondered if it fall through the
+>> cracks.
 > 
-> 1) Fix the uffd_test_start() issue by removing the intermediate
-> test_name variable (thanks to David Hildenbrand for showing how to do
-> this).
+> Hmmm, nobody replied. Does nobody (including the reporters!) care
+> anymore for valid reasons? Then I'd drop this from the tracking.
+
+#regzbot inconclusive: it seems nobody (including the reporters) does
+care anymore
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+> Or was progress made and I just missed it?
 > 
-> 2) Fix the uffd_test_skip() issue by observing that there is no need for
-> a macro and a variable args approach, because all callers of
-> uffd_test_skip() pass in a simple char* string, without any format
-> specifiers. So just change uffd_test_skip() into a regular C function.
-> 
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/mm/uffd-unit-tests.c | 16 ++++++----------
->   1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index 269c86768a02..04d91f144d1c 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -109,12 +109,11 @@ static void uffd_test_pass(void)
->   		ksft_inc_fail_cnt();		\
->   	} while (0)
->   
-> -#define  uffd_test_skip(...)  do {		\
-> -		printf("skipped [reason: ");	\
-> -		printf(__VA_ARGS__);		\
-> -		printf("]\n");			\
-> -		ksft_inc_xskip_cnt();		\
-> -	} while (0)
-> +static void uffd_test_skip(const char *message)
-> +{
-> +	printf("skipped [reason: %s]\n", message);
-> +	ksft_inc_xskip_cnt();
-> +}
->   
->   /*
->    * Returns 1 if specific userfaultfd supported, 0 otherwise.  Note, we'll
-> @@ -1149,7 +1148,6 @@ int main(int argc, char *argv[])
->   	uffd_test_case_t *test;
->   	mem_type_t *mem_type;
->   	uffd_test_args_t args;
-> -	char test_name[128];
->   	const char *errmsg;
->   	int has_uffd, opt;
->   	int i, j;
-> @@ -1192,10 +1190,8 @@ int main(int argc, char *argv[])
->   			mem_type = &mem_types[j];
->   			if (!(test->mem_targets & mem_type->mem_flag))
->   				continue;
-> -			snprintf(test_name, sizeof(test_name),
-> -				 "%s on %s", test->name, mem_type->name);
->   
-> -			uffd_test_start(test_name);
-> +			uffd_test_start("%s on %s", test->name, mem_type->name);
->   			if (!uffd_feature_supported(test)) {
->   				uffd_test_skip("feature missing");
->   				continue;
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Cheers,
-
-David / dhildenb
-
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>
+>> On 27.03.23 10:23, AngeloGioacchino Del Regno wrote:
+>>> Il 26/03/23 15:23, Bagas Sanjaya ha scritto:
+>>>> On 3/26/23 02:20, Tobias Dahms wrote:
+>>>>> Hello,
+>>>>>
+>>>>> the bisection gives following result:
+>>>>> --------------------------------------------------------------------
+>>>>> 18c7deca2b812537aa4d928900e208710f1300aa is the first bad commit
+>>>>> commit 18c7deca2b812537aa4d928900e208710f1300aa
+>>>>> Author: AngeloGioacchino Del Regno
+>>>>> <angelogioacchino.delregno@collabora.com>
+>>>>> Date:   Tue May 17 12:47:08 2022 +0200
+>>>>>
+>>>>>      soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
+>>>>> function
+>>>>>
+>>>>>      Function pwrap_wait_for_state() is a function that polls an address
+>>>>>      through a helper function, but this is the very same operation that
+>>>>>      the readx_poll_timeout macro means to do.
+>>>>>      Convert all instances of calling pwrap_wait_for_state() to instead
+>>>>>      use the read_poll_timeout macro.
+>>>>>
+>>>>>      Signed-off-by: AngeloGioacchino Del Regno
+>>>>> <angelogioacchino.delregno@collabora.com>
+>>>>>      Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>>>      Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>>>>      Link:
+>>>>> https://lore.kernel.org/r/20220517104712.24579-2-angelogioacchino.delregno@collabora.com
+>>>>>      Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+>>>>>
+>>>>>   drivers/soc/mediatek/mtk-pmic-wrap.c | 60
+>>>>> ++++++++++++++++++++----------------
+>>>>>   1 file changed, 33 insertions(+), 27 deletions(-)
+>>>>> --------------------------------------------------------------------
+>>>>>
+>>>>
+>>>> OK, I'm updating the regression status:
+>>>>
+>>>> #regzbot introduced: 18c7deca2b8125
+>>>>
+>>>> And for replying, don't top-post, but rather reply inline with
+>>>> appropriate context instead; hence I cut the replied context.
+>>>>
+>>>
+>>> There are two possible solutions to that, specifically, either:
+>>>  1. Change readx_poll_timeout() to readx_poll_timeout_atomic(); or
+>>>  2. Fix the mt6323-led driver so that this operation gets done
+>>>     out of atomic context, which is IMO the option to prefer.
+>>>
+>>> Ideas?
+>>>
+>>> Regards,
+>>> Angelo
+>>>
+>>>
