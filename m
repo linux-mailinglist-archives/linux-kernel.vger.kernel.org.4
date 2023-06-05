@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052727230B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A02D7230B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjFEUG4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 16:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S231411AbjFEUHe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 16:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjFEUGu (ORCPT
+        with ESMTP id S231268AbjFEUHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:06:50 -0400
+        Mon, 5 Jun 2023 16:07:33 -0400
 Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5198491;
-        Mon,  5 Jun 2023 13:06:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED619E;
+        Mon,  5 Jun 2023 13:07:32 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 6DD4363CC12F;
-        Mon,  5 Jun 2023 22:06:44 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id 10B7363CC10C;
+        Mon,  5 Jun 2023 22:07:31 +0200 (CEST)
 Received: from lithops.sigma-star.at ([127.0.0.1])
         by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id yjEGPY6tiAgF; Mon,  5 Jun 2023 22:06:44 +0200 (CEST)
+        with ESMTP id X6roPuzR374K; Mon,  5 Jun 2023 22:07:30 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id F1ECA6081100;
-        Mon,  5 Jun 2023 22:06:43 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id BF45E6081100;
+        Mon,  5 Jun 2023 22:07:30 +0200 (CEST)
 Received: from lithops.sigma-star.at ([127.0.0.1])
         by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zWWbem8M-Ve5; Mon,  5 Jun 2023 22:06:43 +0200 (CEST)
+        with ESMTP id xJjb7zySq9_X; Mon,  5 Jun 2023 22:07:30 +0200 (CEST)
 Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id BFF0663CC12F;
-        Mon,  5 Jun 2023 22:06:43 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 22:06:43 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id 9FE3863CC10C;
+        Mon,  5 Jun 2023 22:07:30 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 22:07:30 +0200 (CEST)
 From:   Richard Weinberger <richard@nod.at>
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>,
-        kuba <kuba@kernel.org>, James Morris <jmorris@namei.org>,
-        Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <kees@kernel.org>, kernel test robot <lkp@intel.com>,
+        Maxim Krasnyansky <maxk@qti.qualcomm.com>,
+        oe-kbuild-all <oe-kbuild-all@lists.linux.dev>,
+        linux-hardening <linux-hardening@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Message-ID: <1324905118.3685909.1685995603629.JavaMail.zimbra@nod.at>
-In-Reply-To: <a0c3e6d4-2827-d9b4-8f4e-aef25997fa8a@digikod.net>
-References: <20230309165455.175131-1-mic@digikod.net> <20230309165455.175131-2-mic@digikod.net> <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at> <8249dd59-ce08-2253-1697-301ad082d905@digikod.net> <a0c3e6d4-2827-d9b4-8f4e-aef25997fa8a@digikod.net>
-Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um <linux-um@lists.infradead.org>
+Message-ID: <458187791.3685910.1685995650602.JavaMail.zimbra@nod.at>
+In-Reply-To: <CADmuW3WXDg-5SFXkMDE6BmvSwLNHmXpTzBonaOL8eErc4+d3qQ@mail.gmail.com>
+References: <20230530164004.986750-1-azeemshaikh38@gmail.com> <202305311135.zGMT1gYR-lkp@intel.com> <09A0C6FA-669F-4B73-9620-43AEA17E5D0C@kernel.org> <103925562.158061.1685514200368.JavaMail.zimbra@nod.at> <CAMuHMdU70uRxnMNb8KCJe8M3BRPPxowRXtj+POcrh+KLkfQyAA@mail.gmail.com> <CADmuW3WXDg-5SFXkMDE6BmvSwLNHmXpTzBonaOL8eErc4+d3qQ@mail.gmail.com>
+Subject: Re: [PATCH] uml: Replace all non-returning strlcpy with strscpy
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8BIT
 X-Originating-IP: [195.201.40.130]
 X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: hostfs: Fix ephemeral inodes
-Thread-Index: XBAxT/JtpH3OjQ/qxi7IxqxKKdqxXg==
+Thread-Topic: Replace all non-returning strlcpy with strscpy
+Thread-Index: F0kvDMRUOo3WCvHaQMtuD24L4U1LkA==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
@@ -72,16 +63,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 ----- Ursprüngliche Mail -----
->> Good, I'll send a new series with your suggestions.
-> 
-> Can I add your Signed-off-by to this patch (without touching
-> ARCH_EPHEMERAL_INODES changes, but removing the Cc stable)?
-> 
-> Are you OK for me to push this patch (with the whole series) in the
-> Landlock and next tree?
+> Von: "Azeem Shaikh" <azeemshaikh38@gmail.com>
+> Planning to send out v2 with the fixup from Richard applied. Let me
+> know if that's ok.
 
-Yes. Feel free to add:
-Acked-by: Richard Weinberger <richard@nod.at>
+Fine by me. :-)
 
 Thanks,
 //richard
