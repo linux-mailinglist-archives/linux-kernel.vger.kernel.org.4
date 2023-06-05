@@ -2,72 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67210722A17
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8D9722A19
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbjFEO73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S233362AbjFEPBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjFEO71 (ORCPT
+        with ESMTP id S231213AbjFEPBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:59:27 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8078F;
-        Mon,  5 Jun 2023 07:59:25 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3347149a12.0;
-        Mon, 05 Jun 2023 07:59:25 -0700 (PDT)
+        Mon, 5 Jun 2023 11:01:04 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0209A7;
+        Mon,  5 Jun 2023 08:00:59 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f6c0d651adso54364971cf.2;
+        Mon, 05 Jun 2023 08:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685977165; x=1688569165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685977259; x=1688569259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YPVoFPQaGIK7J+doIKsWB8yKXS2zKs4QnModq673ow0=;
-        b=NzDq5oWgIw7ic7DFHJQdaBf+HI70tjjJ+EY/KqFAFt1hj5Bl2yOCacl4L1Ua3KxhDI
-         Ukf52cjdK/GHzT6+FADj/HM7kVIflGYeirVpxa2OFBq0IdytPqqx5jUF30/PLscyc0I8
-         WwvZOYt9YffRA/UL6qPULX6OQaNT8Rf9v1A8p/tCiTqkDniPS7IEA2DLl6nfNqDn1H6J
-         5cyY16Q+3pgAvC3nh7Np3XUFqss3PBuzgSFd/NXrHR4A6xnW+WDlcC4mRyNr6V7p/aHK
-         5jdqqfaoPzps7nvUJ6Wp62kRUx9IFSOe4abJx7ejH65QqquWGg/FrybSnZKfq8SjmkYF
-         xMdw==
+        bh=l6J/yjWn5Jx7TWYuGywXaTRRE0NrX4LCzm3f27TL3Zk=;
+        b=k9LRbkp6+BF+kTf2BYBGdaGjvnI0KFHGdoKBkA4b6tU4VkdpdcyvO+R93ysEEZbqPo
+         +WlVRkqjW9/xo4cX2nh7pQgy+A1B7wNOZhxVCE2UeNg2HkFolFUKRZtdLTKa/kE8pidO
+         +BCHx9nhHkL2sRoLy68U/60+S9DhGxIH0cCl94WNEkJxgLko3n+gp6EQcQ9kCTGQKBU2
+         RY2Y3oPht0CwQkm/gqa3hN+3HO+6pWjfZR8wLdEGKv2GK7vhPPux2v/5cV5cEW2efHwY
+         YyE7oNWc+AEbaMxF/hE8yK7LBTCw+KLmcFc3DH969L6zOG6C6Vx4nGEKjqVLJUoIC+5A
+         0NLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685977165; x=1688569165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685977259; x=1688569259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YPVoFPQaGIK7J+doIKsWB8yKXS2zKs4QnModq673ow0=;
-        b=PT6xAgYxexMqVqwd3TAeXRVfslGXrdXthTP35sKoUpJ4AjGXISZJARNK7HvS3c2kij
-         ttZKsf7NdxN5SYEbz2s256QXeQw5tns1K8V4LVCzp0FxbrHqISApsjocKKTdzwfRQCej
-         QSLiaSIWK/sLKWaYvjZXTqsqkGjnRtmkCL/BVR88nibVVNsW8yO6xNMyd4drzulDqfJ2
-         AXOjsNG3sd+fzl0Mq3x2sz86gZeV9RJFT4nBUZlDc785YBIPLMFxsjLSnZbp2GcBN+1p
-         bSV9Kqn6l3QUahndiRZTW8z4uUX+YixwyAKsdJ8CQmMXoIi7VQPCIdsXs0rF/iNdvH90
-         WR+A==
-X-Gm-Message-State: AC+VfDwosX2+D7GeHG1+d2ftFzv86OD36cXTHRCjYk6ANJgFO8X20URB
-        TNWLc5zDOhawZzda5HHBm1cSXLhoXexDm4IXz6o=
-X-Google-Smtp-Source: ACHHUZ5gRMw/PWzA8jpMbIK3JVfYemw7m73U71b/Jab+zSPFcssD3WQ+YnphkegpOup7e+OzjaGFIY/Q9pA6oy9Tjvs=
-X-Received: by 2002:a17:90a:357:b0:252:7372:460c with SMTP id
- 23-20020a17090a035700b002527372460cmr8383980pjf.4.1685977164401; Mon, 05 Jun
- 2023 07:59:24 -0700 (PDT)
+        bh=l6J/yjWn5Jx7TWYuGywXaTRRE0NrX4LCzm3f27TL3Zk=;
+        b=Ypzx5r3OLcB2ZzH9+X+Ndr5p44OqcCs5WkS9AdGOWu8y5JBzvThcUiRI49HlkZTHGJ
+         F4PeZOyWsn425SOebueWPY4mQl0S/qGJL3ki/9b62eF7sXy/YRTMqAzWwJ22MBDCybAA
+         K2lCwnQqqKXcXpwHq4XqFT+4llKUYNkNmDjiC+8PT0L5xJUQUUq121+GtnwjSiiU/iZR
+         SjXbzxSXHks/6SPzA1Og4ux5KlrKIrsZ6npkpkm1H1mwcS8hMa90GFy8D7jrBhqdxut8
+         U1Ltmhn01dDpcA5jqJBs2yrbqII8WNxB5itGivwsTV37vlI4P80EaeIMPL6q1EDJkYLS
+         E7QA==
+X-Gm-Message-State: AC+VfDxGfayrKlucl2TVQiONK6uXhmw99GNtG2luLS3lv2kp3ssBL3g7
+        K0eurLgMxkUBrBvrTZVK3fM=
+X-Google-Smtp-Source: ACHHUZ5UEPAT+5gQuE+gaNtKOYBAdlulwwrIwlKs7O8jKJwH7qhfcwgiBgRNKivV4l8NZEDRMdjWaw==
+X-Received: by 2002:ac8:584d:0:b0:3ef:2649:44ae with SMTP id h13-20020ac8584d000000b003ef264944aemr8384459qth.13.1685977258711;
+        Mon, 05 Jun 2023 08:00:58 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id gd9-20020a05622a5c0900b003f9aacedb6csm373210qtb.76.2023.06.05.08.00.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 08:00:58 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 86AB827C005A;
+        Mon,  5 Jun 2023 11:00:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 05 Jun 2023 11:00:57 -0400
+X-ME-Sender: <xms:qPh9ZPKEa7U9LoGlLrYUF5PI1sgM_BbDaDJb3XJ8wMFxw0bys0T6xQ>
+    <xme:qPh9ZDIjR4sVh4kj_RB3GZ2DXWbr1fb3p7MkX3_LkdR2Ayhdna24Tkc5o5Sk7764E
+    RkXBenovEi1zoM25g>
+X-ME-Received: <xmr:qPh9ZHtAYfx9ZMbb6FPqRTPVJPHM9zXb80WyyhHL5MA_o5iTDhdjr14Csm7S6hrACoW22sQAMhyYWQG2xOfV0ObcE6amUEggMDs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelledgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpedtlefgveduteeuveekhfejffeutdffleegleeugffgueevhffhfffgtdeh
+    fefhfeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhpthhrrdgrshdprhhushhtqd
+    hlrghnghdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeile
+    dvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgt
+    ohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:qPh9ZIZinjVPx3w-4U38Opq-uLaz74KMkk-oP0J4BqwJ8GZ-fNEpYw>
+    <xmx:qPh9ZGYbwGTDfR3HnqVcQsj17pQHFqK5vtGJR0c5KLpODEYRJu9wlw>
+    <xmx:qPh9ZMDqV7Vt_qQpx44_JXZNyfkKfVzihq_dgw1JvCos_vVvA5X72Q>
+    <xmx:qfh9ZMx1ZJ-3vlcStN8yy2SEh8W41IrlNotYe36WmafBpMSuzhRKlw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Jun 2023 11:00:56 -0400 (EDT)
+Date:   Mon, 5 Jun 2023 08:00:54 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Gary Guo <gary@garyguo.net>
+Cc:     "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>,
+        Alice Ryhl <aliceryhl@google.com>,
+        rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: Re: [PATCH v2 3/8] rust: sync: add `Arc::{from_raw, into_raw}`
+Message-ID: <ZH34psABEaq1bHtg@Boquns-Mac-mini.local>
+References: <20230601134946.3887870-1-aliceryhl@google.com>
+ <20230601134946.3887870-4-aliceryhl@google.com>
+ <87v8g61119.fsf@metaspace.dk>
+ <20230605153142.28a4093c.gary@garyguo.net>
 MIME-Version: 1.0
-References: <20230529092840.40413-1-linyunsheng@huawei.com>
- <20230529092840.40413-2-linyunsheng@huawei.com> <e8db47e3fe99349a998ded1ce4f8da88ea9cc660.camel@gmail.com>
- <5d728f88-2bd0-7e78-90d5-499e85dc6fdf@huawei.com> <160fea176559526b38a4080cc0f52666634a7a4f.camel@gmail.com>
- <21f2fe04-8674-cc73-7a6c-cb0765c84dba@gmail.com>
-In-Reply-To: <21f2fe04-8674-cc73-7a6c-cb0765c84dba@gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Mon, 5 Jun 2023 07:58:47 -0700
-Message-ID: <CAKgT0Ueoq9WgSPz1anWdCH1mkRt9cKmRz+wNJSZfdo-YwLjXCQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/3] page_pool: unify frag page and non-frag
- page handling
-To:     Yunsheng Lin <yunshenglin0825@gmail.com>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605153142.28a4093c.gary@garyguo.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,287 +112,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 3, 2023 at 5:59=E2=80=AFAM Yunsheng Lin <yunshenglin0825@gmail.=
-com> wrote:
->
-> On 2023/6/3 0:37, Alexander H Duyck wrote:
-> ...
->
-> >>
-> >> Please let me know if the above makes sense, or if misunderstood your
-> >> concern here.
-> >
-> > So my main concern is that what this is doing is masking things so that
-> > the veth and virtio_net drivers can essentially lie about the truesize
-> > of the memory they are using in order to improve their performance by
-> > misleading the socket layer about how much memory it is actually
-> > holding onto.
-> >
-> > We have historically had an issue with reporting the truesize of
-> > fragments, but generally the underestimation was kept to something less
-> > than 100% because pages were generally split by at least half. Where it
-> > would get messy is if a misbehaviing socket held onto packets for an
-> > exceedingly long time.
-> >
-> > What this patch set is doing is enabling explicit lying about the
-> > truesize, and it compounds that by allowing for mixing small
-> > allocations w/ large ones.
-> >
-> >>>
-> >>> The problem is there are some architectures where we just cannot
-> >>> support having pp_frag_count due to the DMA size. So it makes sense t=
-o
-> >>> leave those with just basic page pool instead of trying to fake that =
-it
-> >>> is a fragmented page.
-> >>
-> >> It kind of depend on how you veiw it, this patch view it as only suppo=
-rting
-> >> one frag when we can't support having pp_frag_count, so I would not ca=
-ll it
-> >> faking.
-> >
-> > So the big thing that make it "faking" is the truesize underestimation
-> > that will occur with these frames.
->
-> Let's discuss truesize issue in patch 2 instead of here.
-> Personally, I still believe that if the driver can compute the
-> truesize correctly by manipulating the page->pp_frag_count and
-> frag offset directly, the page pool can do that too.
->
-> >
-> >>
-> >>>
-> >>>> ---
->
-> ...
->
-> >>>
-> >>> What is the point of this line? It doesn't make much sense to me. Are
-> >>> you just trying to force an optiimization? You would be better off ju=
-st
-> >>> taking the BUILD_BUG_ON contents and feeding them into an if statemen=
-t
-> >>> below since the statement will compile out anyway.
-> >>
-> >> if the "if statement" you said refers to the below, then yes.
-> >>
-> >>>> +          if (!__builtin_constant_p(nr))
-> >>>> +                  atomic_long_set(&page->pp_frag_count, 1);
-> >>
-> >> But it is a *BUILD*_BUG_ON(), isn't it compiled out anywhere we put it=
-?
-> >>
-> >> Will move it down anyway to avoid confusion.
-> >
-> > Actually now that I look at this more it is even more confusing. The
-> > whole point of this function was that we were supposed to be getting
-> > pp_frag_count to 0. However you are setting it to 1.
-> >
-> > This is seriously flawed. If we are going to treat non-fragmented pages
-> > as mono-frags then that is what we should do. We should be pulling this
-> > acounting into all of the page pool freeing paths, not trying to force
-> > the value up to 1 for the non-fragmented case.
->
-> I am not sure I understand what do you mean by 'non-fragmented ',
-> 'mono-frags', 'page pool freeing paths' and 'non-fragmented case'
-> here. maybe describe it more detailed with something like the
-> pseudocode?
+On Mon, Jun 05, 2023 at 03:31:42PM +0100, Gary Guo wrote:
+> On Fri, 02 Jun 2023 12:51:08 +0200
+> "Andreas Hindborg (Samsung)" <nmi@metaspace.dk> wrote:
+> 
+> > Alice Ryhl <aliceryhl@google.com> writes:
+> > 
+> > > From: Wedson Almeida Filho <walmeida@microsoft.com>
+> > >
+> > > These methods can be used to turn an `Arc` into a raw pointer and back,
+> > > in a way that preserves the metadata for fat pointers.
+> > >
+> > > This is done using the unstable ptr_metadata feature [1]. However, it
+> > > could also be done using the unstable pointer_byte_offsets feature [2],
+> > > which is likely to have a shorter path to stabilization than
+> > > ptr_metadata.
+> > >
+> > > Link: https://github.com/rust-lang/rust/issues/81513 [1]
+> > > Link: https://github.com/rust-lang/rust/issues/96283 [2]
+> > > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> > > Co-developed-by: Alice Ryhl <aliceryhl@google.com>
+> > > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> > > Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> > > ---
+> > >  rust/kernel/lib.rs      |  1 +
+> > >  rust/kernel/sync/arc.rs | 42 ++++++++++++++++++++++++++++++++++++++++-
+> > >  2 files changed, 42 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> > > index 7ea777b731e6..ad9142928fb1 100644
+> > > --- a/rust/kernel/lib.rs
+> > > +++ b/rust/kernel/lib.rs
+> > > @@ -17,6 +17,7 @@
+> > >  #![feature(const_refs_to_cell)]
+> > >  #![feature(dispatch_from_dyn)]
+> > >  #![feature(new_uninit)]
+> > > +#![feature(ptr_metadata)]
+> > >  #![feature(receiver_trait)]
+> > >  #![feature(unsize)]
+> > >  
+> > > diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> > > index a89843cacaad..684be9f73aca 100644
+> > > --- a/rust/kernel/sync/arc.rs
+> > > +++ b/rust/kernel/sync/arc.rs
+> > > @@ -24,7 +24,7 @@
+> > >  };
+> > >  use alloc::boxed::Box;
+> > >  use core::{
+> > > -    alloc::AllocError,
+> > > +    alloc::{AllocError, Layout},
+> > >      fmt,
+> > >      marker::{PhantomData, Unsize},
+> > >      mem::{ManuallyDrop, MaybeUninit},
+> > > @@ -212,6 +212,46 @@ unsafe fn from_inner(inner: NonNull<ArcInner<T>>) -> Self {
+> > >          }
+> > >      }
+> > >  
+> > > +    /// Convert the [`Arc`] into a raw pointer.
+> > > +    ///
+> > > +    /// The raw pointer has ownership of the refcount that this Arc object owned.
+> > > +    pub fn into_raw(self) -> *const T {
+> > > +        let ptr = self.ptr.as_ptr();
+> > > +        core::mem::forget(self);
+> > > +        // SAFETY: The pointer is valid.
+> > > +        unsafe { core::ptr::addr_of!((*ptr).data) }
+> > > +    }
+> > > +
+> > > +    /// Recreates an [`Arc`] instance previously deconstructed via [`Arc::into_raw`].
+> > > +    ///
+> > > +    /// This code relies on the `repr(C)` layout of structs as described in
+> > > +    /// <https://doc.rust-lang.org/reference/type-layout.html#reprc-structs>.
+> > > +    ///
+> > > +    /// # Safety
+> > > +    ///
+> > > +    /// `ptr` must have been returned by a previous call to [`Arc::into_raw`]. Additionally, it
+> > > +    /// can only be called once for each previous call to [`Arc::into_raw`].
+> > > +    pub unsafe fn from_raw(ptr: *const T) -> Self {
+> > > +        let refcount_layout = Layout::new::<bindings::refcount_t>();
+> > > +        // SAFETY: The caller guarantees that the pointer is valid.
+> > > +        let val_layout = unsafe { Layout::for_value(&*ptr) };
+> > > +        // SAFETY: We're computing the layout of a real struct that existed when compiling this
+> > > +        // binary, so its layout is not so large that it can trigger arithmetic overflow.
+> > > +        let val_offset = unsafe { refcount_layout.extend(val_layout).unwrap_unchecked().1 };
+> > > +
+> > > +        // This preserves the metadata in the pointer, if any.
+> > > +        //
+> > > +        // Note that `*const T` and `*const ArcInner<T>` have the same metadata as documented at
+> > > +        // <https://doc.rust-lang.org/std/ptr/trait.Pointee.html>.
+> > > +        let metadata = core::ptr::metadata(ptr as *const ArcInner<T>);  
+> > 
+> > Thanks for updating the comment with the link. I looked into this and I
+> > find that what we are doing here, even though it works, does not feel
+> > right at all. We should be able to do this:
+> > 
+> >         let metadata = core::ptr::metadata(ptr);
+> >         let ptr = (ptr as *mut u8).wrapping_sub(val_offset) as *mut ();
+> >         let ptr = core::ptr::from_raw_parts_mut(ptr, metadata);
+> > 
+> > but the way `Pointee::Metadata` is defined will not allow this, even
+> > though we know it is valid. I would suggest the following instead:
+> > 
+> >         let metadata = core::ptr::metadata(ptr);
+> >         // Convert <T as Pointee>::Metadata to <ArcInner<T> as
+> >         // Pointee>::Metadata. We know they have identical representation and thus this is OK.
+> >         let metadata: <ArcInner<T> as Pointee>::Metadata = *unsafe {
+> >             &*((&metadata as *const <T as Pointee>::Metadata as *const ())
+> >                 as *const <ArcInner<T> as Pointee>::Metadata)
+> >         };
+> 
+> This could just be a `transmute_copy`.
+> 
 
-What you are attempting to generate are "mono-frags" where a page pool
-page has a frag count of 1. I refer to "non-fragmented pages" as the
-legacy page pool page without pp_frags set.
+Or just `transmute`:
 
-The "page-pool freeing paths" are the ones outside of the fragmented
-bits here. Basically __page_pool_put_page and the like. What you
-should be doing is pushing the reference counting code down deeper
-into the page pool logic. Currently it is more of a surface setup.
+	let metadata = unsafe {
+		core::mem::transmute<_, <ArcInner<T> as
+		Pointee>>::Metadata>(metadata)
+	};
 
-The whole point I am getting at with this is that we should see the
-number of layers reduced for the fragmented pages, and by converting
-the non-fragmented pages to mono-frags we should see that maintain its
-current performance and total number of layers instead of having more
-layers added to it.
+? Since `Pointee::Metadata` is `Copy`.
 
-> >
-> >>>
-> >>> It seems like what you would want here is:
-> >>>     BUG_ON(!PAGE_POOL_DMA_USE_PP_FRAG_COUNT);
-> >>>
-> >>> Otherwise you are potentially writing to a variable that shouldn't
-> >>> exist.
-> >>
-> >> Not if the driver use the page_pool_alloc_frag() API instead of manipu=
-lating
-> >> the page->pp_frag_count directly using the page_pool_defrag_page() lik=
-e mlx5.
-> >> The mlx5 call the page_pool_create() with with PP_FLAG_PAGE_FRAG set, =
-and
-> >> it does not seems to have a failback for PAGE_POOL_DMA_USE_PP_FRAG_COU=
-NT
-> >> case, and we may need to keep PP_FLAG_PAGE_FRAG for it. That's why we =
-need
-> >> to keep the driver from implementation detail(pp_frag_count handling s=
-pecifically)
-> >> of the frag support unless we have a very good reason.
-> >>
-> >
-> > Getting the truesize is that "very good reason". The fact is the
-> > drivers were doing this long before page pool came around. Trying to
-> > pull that away from them is the wrong way to go in my opinion.
->
-> If the truesize is really the concern here, I think it make more
-> sense to enforce it in the page pool instead of each driver doing
-> their trick, so I also think we can do better here to handle
-> pp_frag_count in the page pool instead of driver handling it, so
-> let's continue the truesize disscussion in patch 2 to see if we
-> can come up with something better there.
+Regards,
+Boqun
 
-The problem is we don't free the page until the next allocation so the
-truesize will be false as the remainder of the page should be added to
-the truesize. The drivers tend to know what they are doing with the
-page and when they are freeing it. We don't have that sort of
-knowledge when we are doing the allocation.
+> >         let ptr = (ptr as *mut u8).wrapping_sub(val_offset) as *mut ();
+> >         let ptr = core::ptr::from_raw_parts_mut(ptr, metadata);
+> > 
+> > Even though it is a bit more complex, it captures what we are trying to
+> > do better.
+> 
+> I agree this captures the semantics better.
+> 
 
-> >
-> >>>>    /* If nr =3D=3D pp_frag_count then we have cleared all remaining
-> >>>>     * references to the page. No need to actually overwrite it, inst=
-ead
-> >>>>     * we can leave this to be overwritten by the calling function.
-> >>>> @@ -311,19 +321,36 @@ static inline long page_pool_defrag_page(struc=
-t page *page, long nr)
-> >>>>     * especially when dealing with a page that may be partitioned
-> >>>>     * into only 2 or 3 pieces.
-> >>>>     */
-> >>>> -  if (atomic_long_read(&page->pp_frag_count) =3D=3D nr)
-> >>>> +  if (atomic_long_read(&page->pp_frag_count) =3D=3D nr) {
-> >>>> +          /* As we have ensured nr is always one for constant case
-> >>>> +           * using the BUILD_BUG_ON() as above, only need to handle
-> >>>> +           * the non-constant case here for frag count draining.
-> >>>> +           */
-> >>>> +          if (!__builtin_constant_p(nr))
-> >>>> +                  atomic_long_set(&page->pp_frag_count, 1);
-> >>>> +
-> >>>>            return 0;
-> >>>> +  }
-> >>>>
-> >
-> > The optimization here was already the comparison since we didn't have
-> > to do anything if pp_frag_count =3D=3D nr. The whole point of pp_frag_c=
-ount
-> > going to 0 is that is considered non-fragmented in that case and ready
-> > to be freed. By resetting it to 1 you are implying that there is still
-> > one *other* user that is holding a fragment so the page cannot be
-> > freed.
-> >
-> > We weren't bothering with writing the value since the page is in the
-> > free path and this value is going to be unused until the page is
-> > reallocated anyway.
->
-> I am not sure what you meant above.
-> But I will describe what is this patch trying to do again:
-> When PP_FLAG_PAGE_FRAG is set and that flag is per page pool, not per
-> page, so page_pool_alloc_pages() is not allowed to be called as the
-> page->pp_frag_count is not setup correctly for the case.
->
-> So in order to allow calling page_pool_alloc_pages(), as best as I
-> can think of, either we need a per page flag/bit to decide whether
-> to do something like dec_and_test for page->pp_frag_count in
-> page_pool_is_last_frag(), or we unify the page->pp_frag_count handling
-> in page_pool_is_last_frag() so that we don't need a per page flag/bit.
->
-> This patch utilizes the optimization you mentioned above to unify the
-> page->pp_frag_count handling.
+I actually wish that we could use `wrapping_byte_offset`[1], and just
 
-Basically what should be happening if all page-pool pages are to be
-considered "fragmented" is that we should be folding this into the
-freeing logic. What we now have a 2 stage setup where we are dropping
-the count to 0, then rebounding it and setting it back to 1. If we are
-going to have all page pool pages fragmented then the freeing path for
-page pool pages should just be handling frag count directly instead of
-hacking on it here and ignoring it in the actual freeing paths.
+	// `*const T` and `*const ArcInner<T>` should have the same
+	// metdata, so convert the pointer type first.
+	let ptr = ptr as *const ArcInner<T>;
 
-> >
-> >>>>    ret =3D atomic_long_sub_return(nr, &page->pp_frag_count);
-> >>>>    WARN_ON(ret < 0);
-> >>>> +
-> >>>> +  /* Reset frag count back to 1, this should be the rare case when
-> >>>> +   * two users call page_pool_defrag_page() currently.
-> >>>> +   */
-> >>>> +  if (!ret)
-> >>>> +          atomic_long_set(&page->pp_frag_count, 1);
-> >>>> +
-> >>>>    return ret;
-> >>>>  }
-> >>>>
->
-> ...
->
-> >> As above, it is about unifying handling for frag and non-frag page in
-> >> page_pool_is_last_frag(). please let me know if there is any better wa=
-y
-> >> to do it without adding statements here.
-> >
-> > I get what you are trying to get at but I feel like the implementation
-> > is going to cause more problems than it helps. The problem is it is
-> > going to hurt base page pool performance and it just makes the
-> > fragmented pages that much more confusing to deal with.
->
-> For base page pool performance, as I mentioned before:
-> It remove PP_FLAG_PAGE_FRAG checking and only add the cost of
-> page_pool_fragment_page() in page_pool_set_pp_info(), which I
-> think it is negligible as we are already dirtying the same cache
-> line in page_pool_set_pp_info().
+	// .. and then adjust the byte offset.
+	let ptr = ptr.wrapping_byte_offset(-val_offset);
 
-I have no problem with getting rid of the flag.
+This may be the opposite direction as Andreas proposed ;-), but the
+result is less code.
 
-> For the confusing, sometimes it is about personal taste, so I am
-> not going to argue with it:) But it would be good to provide a
-> non-confusing way to do that with minimal overhead. I feel like
-> you have provided it in the begin, but I am not able to understand
-> it yet.
+Regards,
+Boqun
 
-The problem here is that instead of treating all page pool pages as
-fragmented, what the patch set has done is added a shim layer so that
-you are layering fragmentation on top of page pool pages which was
-already the case.
-
-That is why I have suggested make page pool pages a "mono-frag" as
-your first patch. Basically it is going to force you to have to set
-the pp_frag value for these pages, and verify it is 1 when you are
-freeing it.
-
-Then you are going to have to modify the fragmented cases to make use
-of lower level calls because now instead of us defragging a fragmented
-page, and then freeing it the two operations essentially have to be
-combined into one operation.
-
-> >
-> > My advice as a first step would be to look at first solving how to
-> > enable the PP_FLAG_PAGE_FRAG mode when you have
-> > PAGE_POOL_DMA_USE_PP_FRAG_COUNT as true. That should be creating mono-
-> > frags as we are calling them, and we should have a way to get the
-> > truesize for those so we know when we are consuming significant amount
-> > of memory.
->
-> Does the way to get the truesize in the below RFC make sense to you?
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230516124801.2465-=
-4-linyunsheng@huawei.com/
-
-It doesn't add any value. All you are doing is passing the "size"
-value as "truesize". The whole point of the "truesize" would be to
-report the actual size. So a step in that direction would be to bump
-truesize to include the remainder that isn't used when you decide it
-is time to allocate a new page. The problem is that it requires some
-fore-knowledge of what the next requested size is going to be. That is
-why it is better to just have the drivers manage this since they know
-what size they typically request and when they are going to close
-pages.
-
-Like I said, if you are wanting to go down this path you are better
-off starting with page pool and making all regular page pool pages
-into mono-frags. Then from there we can start building things out.
-
-With that you could then let drivers like the Mellanox one handle its
-own fragmenting knowing it has to return things to a mono-frag in
-order for it to be working correctly.
+> Best,
+> Gary
