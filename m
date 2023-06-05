@@ -2,236 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFB3721DBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 07:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5B9721DC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjFEF7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 01:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S229497AbjFEGB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 02:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFEF7W (ORCPT
+        with ESMTP id S229441AbjFEGBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 01:59:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57B4CA;
-        Sun,  4 Jun 2023 22:59:18 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1685944744ts84doh5
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 05 Jun 2023 13:59:03 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: G46xFj+wOV/L074q2AKnBZa3XbP/lNWUqet1CdpG27NI5H5INZ6/Krhugq1JO
-        QLYPBnd57JQbS+98+fGyQroOc35/Jjh5ECnHpvSasBdXYNWyPnVemwaRxIc8Fd5c68Yt2YK
-        d7fGFnpiM4OnM9bY09b8+2sCWUlorx7svBydPvj0rJhkGqmacLFY3oRn12czE7CoMAxOkOz
-        ziEpKFTZhibRSI96N4blVM35wXg66xojJ5FkSS6Xpa+ZsH8mLF5vWcsBegm7BIyzPqLZxE9
-        fKV5JdkCWG+sbDPeUYml4aV/Kyhisn6lAo+uK6GMsfSHTSYcJ3GTc85EXg9HyLUrawiItqJ
-        QkCgPowOsmxqbwCtBLnardKRpee0rJGOdvuD1RYfpvwv3N6wbZ5T3VKYAEWgRO/Q7VI2el0
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1147498527477827847
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        w@1wt.eu
-Subject: Re: [PATCH 1/4] tools/nolibc: unistd.h: add __syscall() and __syscall_ret() helpers
-Date:   Mon,  5 Jun 2023 13:58:57 +0800
-Message-Id: <20230605055857.135286-1-falcon@tinylab.org>
+        Mon, 5 Jun 2023 02:01:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728B0CA;
+        Sun,  4 Jun 2023 23:01:17 -0700 (PDT)
+X-UUID: 5ed2b33a036611ee9cb5633481061a41-20230605
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ZWZFr/18qkTzkN+m8S3/zs4o4uIe3CpN4mxCWBr/BzU=;
+        b=m5vbC2+6McGRKKDyuFPfCEZjrnb2f1UOrdguzXEg7USZrci+Hb2e+GPfugBbnfZ8wIQF2s9JpawIMrwmjxgVWa7KNP8YPf4+bPPwniiOvVUtHGQ6B7y0orM/424H39WiSETNrxkhvbRnMDz+ZlxzTrovf8bBuEjG7QXvpq/9+yk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:acdd7724-f194-42a4-824a-04e700831a06,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.25,REQID:acdd7724-f194-42a4-824a-04e700831a06,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:9f5e066e-2f20-4998-991c-3b78627e4938,B
+        ulkID:230605140111FP2VMDKM,BulkQuantity:1,Recheck:0,SF:29|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
+        :0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 5ed2b33a036611ee9cb5633481061a41-20230605
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <wenbin.mei@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 507589308; Mon, 05 Jun 2023 14:01:10 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 5 Jun 2023 14:01:09 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 5 Jun 2023 14:01:08 +0800
+From:   Wenbin Mei <wenbin.mei@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ritesh Harjani <riteshh@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>
+Subject: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
+Date:   Mon, 5 Jun 2023 14:01:07 +0800
+Message-ID: <20230605060107.22044-1-wenbin.mei@mediatek.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de>
-References: <ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 2023-06-04 14:59:13+0200, Willy Tarreau wrote:
-> > Hi Zhangjin,
-> > 
-> > On Sun, Jun 04, 2023 at 01:34:29PM +0800, Zhangjin Wu wrote:
-> > > most of the library routines share the same code model, let's add some
-> > > macros to simplify the coding and shrink the code lines too.
-> > > 
-> > > One added for syscall return, one added for syscall call, both of them
-> > > can get the typeof 'return value' automatically.
-> > > 
-> > > To get the return type of syscalls, __auto_type is better than typeof(),
-> > > but it is not supported by the old compilers (before 2013, see [1]), so,
-> > > use typeof() here.
-> > > 
-> > > [1]: https://gcc.gnu.org/legacy-ml/gcc-patches/2013-11/msg01378.html
-> > > 
-> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > > ---
-> > >  tools/include/nolibc/sys.h | 15 +++++++++++++++
-> > >  1 file changed, 15 insertions(+)
-> > > 
-> > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > > index 1d6f33f58629..937a8578e3d4 100644
-> > > --- a/tools/include/nolibc/sys.h
-> > > +++ b/tools/include/nolibc/sys.h
-> > > @@ -28,6 +28,21 @@
-> > >  #include "errno.h"
-> > >  #include "types.h"
-> > >  
-> > > +/* Syscall call and return helpers */
-> > > +#define __syscall_ret(ret)						\
-> > > +({									\
-> > > +	if (ret < 0) {							\
-> > > +		SET_ERRNO(-ret);					\
-> > > +		ret = (typeof(ret))-1;					\
-> > > +	}								\
-> > > +	ret;								\
-> > > +})
-> > > +
-> > > +#define __syscall(name, ...)						\
-> > > +({									\
-> > > +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
-> > > +	__syscall_ret(ret);						\
-> > > +})
-> > 
-> > Well, I personally don't find that it increases legibility, on the
-> > opposite. At first when reading the series, I thought you had dropped
-> > errno setting on return. I think the reason is that when reading that
-> > last macro,
+CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
+SEND_QUEUE_STATUS(CMD13) polling.
+Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+frequency to get the actual time.
+The default value 0x1000 that corresponds to 150us for MediaTek SoCs, let's
+decrease it to 0x40 that corresponds to 2.35us, which can improve the
+performance of some eMMC devices.
 
-Hi, Willy, I did add something like this in my local copy to pass the
-errno and retval arguments too:
+Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+---
+ drivers/mmc/host/cqhci.h  |  1 +
+ drivers/mmc/host/mtk-sd.c | 47 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-    #define __syscall_ret3(ret, errno, retval)				\
-    ({									\
-    	if (ret < 0) {							\
-    		SET_ERRNO(errno);					\
-    		ret = (typeof(ret)retval;				\
-    	}								\
-    	ret;								\
-    })
+diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+index ba9387ed90eb..292b89ebd978 100644
+--- a/drivers/mmc/host/cqhci.h
++++ b/drivers/mmc/host/cqhci.h
+@@ -23,6 +23,7 @@
+ /* capabilities */
+ #define CQHCI_CAP			0x04
+ #define CQHCI_CAP_CS			0x10000000 /* Crypto Support */
++#define CQHCI_CAP_ITCFMUL(x)		(((x) & GENMASK(15, 12)) >> 12)
+ 
+ /* configuration */
+ #define CQHCI_CFG			0x08
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index edade0e54a0c..c221ef8a6992 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -473,6 +473,7 @@ struct msdc_host {
+ 	struct msdc_tune_para def_tune_para; /* default tune setting */
+ 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+ 	struct cqhci_host *cq_host;
++	u32 cq_ssc1_time;
+ };
+ 
+ static const struct mtk_mmc_compatible mt2701_compat = {
+@@ -2450,9 +2451,50 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
+ 	}
+ }
+ 
++static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
++{
++	struct mmc_host *mmc = mmc_from_priv(host);
++	struct cqhci_host *cq_host = mmc->cqe_private;
++	u8 itcfmul;
++	u32 hclk_freq;
++	u64 value;
++
++	/* Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
++	 * frequency to get the actual time for CIT.
++	 */
++	if (host->h_clk) {
++		hclk_freq = clk_get_rate(host->h_clk);
++		itcfmul = CQHCI_CAP_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
++		switch (itcfmul) {
++		case 0x0:
++			do_div(hclk_freq, 1000);
++			break;
++		case 0x1:
++			do_div(hclk_freq, 100);
++			break;
++		case 0x2:
++			do_div(hclk_freq, 10);
++			break;
++		case 0x3:
++			break;
++		case 0x4:
++			hclk_freq = hclk_freq * 10;
++			break;
++		default:
++			host->cq_ssc1_time = 0x40;
++			return;
++		value = hclk_freq * timer_ns;
++		do_div(value, 1000000000ULL);
++		host->cq_ssc1_time = value;
++	} else {
++		host->cq_ssc1_time = 0x40;
++	}
++}
++
+ static void msdc_cqe_enable(struct mmc_host *mmc)
+ {
+ 	struct msdc_host *host = mmc_priv(mmc);
++	struct cqhci_host *cq_host = mmc->cqe_private;
+ 
+ 	/* enable cmdq irq */
+ 	writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+@@ -2462,6 +2504,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
+ 	msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+ 	/* default read data timeout 1s */
+ 	msdc_set_timeout(host, 1000000000ULL, 0);
++
++	/* Set the send status command idle timer */
++	cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+ }
+ 
+ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+@@ -2803,6 +2848,8 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 		/* cqhci 16bit length */
+ 		/* 0 size, means 65536 so we don't have to -1 here */
+ 		mmc->max_seg_size = 64 * 1024;
++		/* Reduce CIT to 0x40 that corresponds to 2.35us */
++		msdc_cqe_cit_cal(host, 2350);
+ 	}
+ 
+ 	ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
+-- 
+2.25.1
 
-    #define __syscall_ret(ret) __syscall_ret3(ret, -ret, -1)
-
-But when really using them, I found we could be able to set the ret as errno at
-first (and the reval is always -1 currently), then used the only simpler
-__syscall_ret() at last.
-
-> > it's not at all obvious that __syscall_ret() is actually
-> > modifying this ret value *and* returning it as the macro's result.
-> > 
-> > If we'd want to go down that route, I suspect that something like this
-> > would at least hint about what is being returned:
-> > 
-> > +#define __syscall(name, ...)						\
-> > +({									\
-> > +	typeof(sys_##name(__VA_ARGS__)) ret = sys_##name(__VA_ARGS__);	\
-> > +	ret = __syscall_ret(ret);					\
-> > +})
-> >
-
-It is clearer.
-
-> > But I'm interested in others' opinion on this, particularly Thomas and
-> > Arnd who review a significant number of patches. For now I prefer not
-> > to take it before we've settled on a choice.
-> 
-> While I see the value in factoring out this pattern I'm also not really
-> happy with the implementation.
-> Especially the magic delegation to "sys_##name".
-> 
-> What about something like this:
-> 
-> static inline long __ret_as_errno(long ret) /* or some other name */
-> {
-> 	if (ret < 0) {
-> 		SET_ERRNO(-ret);
-> 		ret = -1;
-> 	}
-> 	return ret;
-> }
-> 
-> This avoids another macro by using a normal function.
->
-
-It is reasonable, like it very much.
-
-> Syscall return values should always fit into long, at least
-> extra polating from syscall(2) and the fact that they are returned in
-> registers.
-
-Yes, I did use 'long' instead of 'int' for unistd.h locally, but since tried to
-let it work with 'void *' before (e.g. sys_brk, an older version support pass
-the errno value), so, the typeof() is used and the same to unistd.h, but at
-last, none of (void *) return type is really used in current patchset, so, we
-are able to use this normal function version without the checking of the type.
-
-> 
-> It would be a bit more verbose:
-> 
-> int chdir(const char *path)
-> {
-> 	return __ret_as_errno(sys_chdir(path));
-> }
->
-> But it's clear what's going on and also just one line.
-
-Thanks Thomas, It looks good and I do like the 'embedded' calling of
-sys_chrdir(path), but __syscall() looks cleaner and shorter too, let's put them
-together:
-
-int chdir(const char *path)
-{
-	return __ret_as_errno(sys_chdir(path));
-}
-
-int chdir(const char *path)
-{
-	return __syscall(chdir, path);
-}
-
-And even with:
-
-int chdir(const char *path)
-{
-	return __sysret(sys_chdir(path));
-}
-
-__syscall() works likes syscall(), and the definition is similar to syscall(),
-but uses the syscall name instead of syscall number, If reserve __syscall(),
-the inline function would be renamed back to __syscall_ret() or something like
-the shorter __sysret(), to align with our new __syscall(). 
-
-for sys.h:
-
-    /* Syscall return helper, set errno as ret when ret < 0 */
-    static inline long __sysret(long ret)
-    {
-    	if (ret < 0) {
-    		SET_ERRNO(-ret);
-    		ret = -1;
-    	}
-    	return ret;
-    }
-
-    /* Syscall call helper, use syscall name instead of syscall number */
-    #define __syscall(name, ...) __sysret(sys_##name(__VA_ARGS__))
-
-for unistd.h:
-
-    #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
-
-What about this version?
-
-The potential 'issue' may be mixing the use of __syscall(), _syscall() and
-syscall(), but the compilers may help to fix up this for us, I don't think it
-is a bottleneck.
-
-Best regards,
-Zhangjin
-
-> 
-> Thomas
