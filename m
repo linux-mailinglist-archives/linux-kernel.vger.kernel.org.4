@@ -2,141 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CDE722ACF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3889B722AC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjFEPUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S234326AbjFEPUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234746AbjFEPUe (ORCPT
+        with ESMTP id S230471AbjFEPUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:20:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897AA94;
-        Mon,  5 Jun 2023 08:20:24 -0700 (PDT)
-Received: from arisu.mtl.collabora.ca (mtl.collabora.ca [66.171.169.34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: detlev)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E42276600368;
-        Mon,  5 Jun 2023 16:20:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685978423;
-        bh=xpeq38cfgQQIS99Dt7IROQJs9BvsNDk2k4YOmuCa7/0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RAncdZhz14XT4YtegG7wiTpZWl/MO5695rm6EHGELS7WFTfsNcBNMJd0lbkDbuIgq
-         528JnaSeu1KrSDoxL191xi6mho6MuWqh1/pl7NcHn0DL2Hnztb0fjfOdD3194R4A2W
-         N//4KG2XO+mtim0AK08WrT+1Q5ugg8lI86b9q4Rju7L9sGH1mT0SGOZU1FskVBXfWd
-         PMkUHyZrMcUGHyQaF3TU2EwYMLoQVaQpmOQvCjuKd8fjzAoOTq/HNdHvyQ1DbTGZ9v
-         L35dbzM7uwnbpogz4/tgs+sUrY8p7nyJU5VFpFrjp4RhJ0Jvu1WFWLOTczly/UQzd1
-         9wKOVXVNl4qbQ==
-From:   Detlev Casanova <detlev.casanova@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        Detlev Casanova <detlev.casanova@collabora.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: [PATCH v3 3/3] net: phy: realtek: Disable clock on suspend
-Date:   Mon,  5 Jun 2023 11:19:53 -0400
-Message-Id: <20230605151953.48539-4-detlev.casanova@collabora.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230605151953.48539-1-detlev.casanova@collabora.com>
-References: <20230605151953.48539-1-detlev.casanova@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 11:20:03 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631A594
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:20:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561eb6c66f6so61779817b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 08:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685978401; x=1688570401;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VgAoBub925PQs+W8W1S1u5/9d+hbDfd5RqOZn7H81DE=;
+        b=BGYi6qZ7fG2OqVAPYXl6ZSVKWqCJ4GFB1EGwxC0ddGJ2dT1C1AqvIq7kxit1PqwvgU
+         +9LtIA55dhL7hz9Y4PlpoyyUqhn2sN+8jPqjBNrkqKQvN2wM/sIbcHzlJlUPpWqm9Shd
+         U8dT3g3vP8rJga+gXf/p4P77CIckqJwYSukgm0tvu5/vuPn6Aom2SDgI1HfPfpe0Sems
+         /NihwNPpYka2LzXXed4dKQhAyDuWse1BF01ZgOSRfiZY5HhR94NjVRtxJ1SjDxADgzF2
+         AYM5Afk+VE7/Cr+R2g0lNtmYE71Du+lKr7Hy4QmK/OQZwxb6K9c/sXUt9tzHnvpKjFAP
+         W91A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685978401; x=1688570401;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VgAoBub925PQs+W8W1S1u5/9d+hbDfd5RqOZn7H81DE=;
+        b=WQXRqmcsfdvKIK5uvp/IYVio1k43crp6cPcKsdVSHiynWWS+fK8E1YPePwveMQX2UX
+         NQGShzdFJAkj2AsVZVaiIsp7TBsRjwUo2E2pmXAVsVz8lJ3vJaL353z3wRpT1c/5qPpc
+         /q31/oSzP9waN7jWkhE0s49hIcfGsgjcQcI+LYhZ8Byj05PSFSkmjy7F15SwfftnTQ0x
+         DCeSgPhpUPwNWizFbgpoLluA36otTVnNSEz/8fo1+AiS4Q4mvcdxoiBzolAORVojJjE7
+         GYNAJOc4jv1oB25egLnkepiJv1QdXewYhgCP6sJesKDq79BAhberAxbC4fBdqUehxeSF
+         +I3A==
+X-Gm-Message-State: AC+VfDw8Qowy0c0TQO8UrqNfqHyyJhbk/1wZikUIWGaHgMFYXoWGWCrb
+        WzG5J/Zj0VKkPgpTyG0TiKpOwbIlnXs=
+X-Google-Smtp-Source: ACHHUZ72gg1pApyrGSUlvNbArFcxy2zBY5kqeONDepuQHB0kRCJMegOJY8llKHOBsCS6qvmVMMOTGA+V9p4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ae53:0:b0:55d:d5b1:c2bd with SMTP id
+ g19-20020a81ae53000000b0055dd5b1c2bdmr4357308ywk.8.1685978401353; Mon, 05 Jun
+ 2023 08:20:01 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 08:19:59 -0700
+In-Reply-To: <7a4a503d-9fc4-d366-02b4-bc145943bd45@rbox.co>
+Mime-Version: 1.0
+References: <20230307135233.54684-1-wei.w.wang@intel.com> <168565180722.660019.15543226381784798973.b4-ty@google.com>
+ <8f319a1e-a869-b666-b606-c0b4764ef7b1@rbox.co> <ZHofVKJxjaUxIDUN@google.com> <7a4a503d-9fc4-d366-02b4-bc145943bd45@rbox.co>
+Message-ID: <ZH39H0gpNX4ak6yM@google.com>
+Subject: Re: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michal Luczaj <mhal@rbox.co>
+Cc:     dmatlack@google.com, mizhang@google.com, isaku.yamahata@gmail.com,
+        pbonzini@redhat.com, Wei Wang <wei.w.wang@intel.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For PHYs that call rtl821x_probe() where an external clock can be
-configured, make sure that the clock is disabled
-when ->suspend() is called and enabled on resume.
+On Mon, Jun 05, 2023, Michal Luczaj wrote:
+> On 6/2/23 18:56, Sean Christopherson wrote:
+> > On Fri, Jun 02, 2023, Michal Luczaj wrote:
+> >> I guess this makes the !! in kvm_vm_ioctl_create_vcpu() unnecessary:
+> >>
+> >> KVM_BUG_ON(!!xa_store(&kvm->vcpu_array, vcpu->vcpu_idx, vcpu, 0)...
+> > 
+> > Ya, I saw that, which in addition to Wei's ping, is what reminded me that the
+> > KVM_BUG_ON() fix hadn't been merged.
+> > 
+> >> Is it worth a patch (perhaps along with chopping off !! in
+> >> kvm_msr_allowed() and few other places)?
+> > 
+> > Yes, I think so.
+> 
+> OK, so xa_store() aside[*], I see some bool-to-bools:
+> 
+> arch/x86/kvm/x86.c:
+> 	kvm_msr_allowed():allowed = !!test_bit(index - start, bitmap);
+> arch/x86/kvm/hyperv.c:
+> 	kvm_hv_hypercall():hc.rep = !!(hc.rep_cnt || hc.rep_idx);
+> arch/x86/kvm/mmu/mmu.c:
+> 	update_pkru_bitmask():
+> 		pkey_bits = !!check_pkey;
+> 		pkey_bits |= (!!check_write) << 1;
+> arch/x86/kvm/svm/svm.c:
+> 	msr_write_intercepted():return !!test_bit(bit_write,  &tmp);
+> 	svm_vcpu_after_set_cpuid():
+> 		2x set_msr_interception...
+> tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c:
+> 	set_or_clear_invalid_guest_state():sregs.tr.unusable = !!set;
+> 
+> But perhaps this is a matter of style and those were meant to be this kind-of
+> explicit?
 
-The PHY_ALWAYS_CALL_SUSPEND is added to ensure that the suspend function
-is actually always called.
+I doubt it, I'm guessing most cases are due to the author being overzealous for
+one reason or another, e.g. I suspect the test_bit() ones are due to the original
+author incorrectly assuming test_bit() returned an unsigned long, i.e. the bit,
+as opposed to the bool.
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
----
- drivers/net/phy/realtek.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+If you want to clean these up, I'd say "fix" the test_bit() cases, but leave the
+others alone.  The test_bit() ones are clearly redundant, and IMO can be actively
+due to implying test_bit() returns something other than a bool.
 
-diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-index b13dd0b3c99e..62eac4835def 100644
---- a/drivers/net/phy/realtek.c
-+++ b/drivers/net/phy/realtek.c
-@@ -426,10 +426,28 @@ static int rtl8211f_config_init(struct phy_device *phydev)
- 	return genphy_soft_reset(phydev);
- }
- 
-+static int rtl821x_suspend(struct phy_device *phydev)
-+{
-+	struct rtl821x_priv *priv = phydev->priv;
-+	int ret = genphy_suspend(phydev);
-+
-+	if (ret)
-+		return ret;
-+
-+	if (!phydev->wol_enabled)
-+		clk_disable_unprepare(priv->clk);
-+
-+	return ret;
-+}
-+
- static int rtl821x_resume(struct phy_device *phydev)
- {
-+	struct rtl821x_priv *priv = phydev->priv;
- 	int ret;
- 
-+	if (!phydev->wol_enabled)
-+		clk_prepare_enable(priv->clk);
-+
- 	ret = genphy_resume(phydev);
- 	if (ret < 0)
- 		return ret;
-@@ -934,10 +952,11 @@ static struct phy_driver realtek_drvs[] = {
- 		.read_status	= rtlgen_read_status,
- 		.config_intr	= &rtl8211f_config_intr,
- 		.handle_interrupt = rtl8211f_handle_interrupt,
--		.suspend	= genphy_suspend,
-+		.suspend	= rtl821x_suspend,
- 		.resume		= rtl821x_resume,
- 		.read_page	= rtl821x_read_page,
- 		.write_page	= rtl821x_write_page,
-+		.flags		= PHY_ALWAYS_CALL_SUSPEND,
- 	}, {
- 		PHY_ID_MATCH_EXACT(RTL_8211FVD_PHYID),
- 		.name		= "RTL8211F-VD Gigabit Ethernet",
-@@ -946,10 +965,11 @@ static struct phy_driver realtek_drvs[] = {
- 		.read_status	= rtlgen_read_status,
- 		.config_intr	= &rtl8211f_config_intr,
- 		.handle_interrupt = rtl8211f_handle_interrupt,
--		.suspend	= genphy_suspend,
-+		.suspend	= rtl821x_suspend,
- 		.resume		= rtl821x_resume,
- 		.read_page	= rtl821x_read_page,
- 		.write_page	= rtl821x_write_page,
-+		.flags		= PHY_ALWAYS_CALL_SUSPEND,
- 	}, {
- 		.name		= "Generic FE-GE Realtek PHY",
- 		.match_phy_device = rtlgen_match_phy_device,
--- 
-2.39.3
-
+> [*] https://lore.kernel.org/kvm/20230605114852.288964-1-mhal@rbox.co/
