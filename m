@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32A6721EC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE99F721EC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjFEHCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S230332AbjFEHCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjFEHCL (ORCPT
+        with ESMTP id S230325AbjFEHCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:02:11 -0400
+        Mon, 5 Jun 2023 03:02:14 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64B5CE51;
-        Mon,  5 Jun 2023 00:01:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2429FE69;
+        Mon,  5 Jun 2023 00:01:59 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78D111596;
-        Mon,  5 Jun 2023 00:02:41 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F5DBD75;
+        Mon,  5 Jun 2023 00:02:44 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 33D4B3F793;
-        Mon,  5 Jun 2023 00:01:54 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CD5963F793;
+        Mon,  5 Jun 2023 00:01:56 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
@@ -28,9 +28,9 @@ Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
         linux-doc@vger.kernel.org, mark.rutland@arm.com,
         mchehab@kernel.org, paulmck@kernel.org, peterz@infradead.org,
         rdunlap@infradead.org, sstabellini@kernel.org, will@kernel.org
-Subject: [PATCH v2 09/27] locking/atomic: parisc: add preprocessor symbols
-Date:   Mon,  5 Jun 2023 08:01:06 +0100
-Message-Id: <20230605070124.3741859-10-mark.rutland@arm.com>
+Subject: [PATCH v2 10/27] locking/atomic: sh: add preprocessor symbols
+Date:   Mon,  5 Jun 2023 08:01:07 +0100
+Message-Id: <20230605070124.3741859-11-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230605070124.3741859-1-mark.rutland@arm.com>
 References: <20230605070124.3741859-1-mark.rutland@arm.com>
@@ -56,7 +56,7 @@ Subsequent patches will require that architectures define a preprocessor
 symbol for any atomic (or ordering variant) which is optional. This will
 make the fallback ifdeffery more robust, and simplify future changes.
 
-Add the required definitions to arch/parisc.
+Add the required definitions to arch/sh.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
@@ -65,14 +65,43 @@ Cc: Paul E. McKenney <paulmck@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Will Deacon <will@kernel.org>
 ---
- arch/parisc/include/asm/atomic.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/sh/include/asm/atomic-grb.h  | 9 +++++++++
+ arch/sh/include/asm/atomic-irq.h  | 9 +++++++++
+ arch/sh/include/asm/atomic-llsc.h | 9 +++++++++
+ 3 files changed, 27 insertions(+)
 
-diff --git a/arch/parisc/include/asm/atomic.h b/arch/parisc/include/asm/atomic.h
-index 0b3f64c92e3c0..d4f023887ff87 100644
---- a/arch/parisc/include/asm/atomic.h
-+++ b/arch/parisc/include/asm/atomic.h
-@@ -118,6 +118,11 @@ static __inline__ int arch_atomic_fetch_##op(int i, atomic_t *v)	\
+diff --git a/arch/sh/include/asm/atomic-grb.h b/arch/sh/include/asm/atomic-grb.h
+index 059791fd394fc..cf1c10f15528b 100644
+--- a/arch/sh/include/asm/atomic-grb.h
++++ b/arch/sh/include/asm/atomic-grb.h
+@@ -71,6 +71,11 @@ static inline int arch_atomic_fetch_##op(int i, atomic_t *v)		\
+ ATOMIC_OPS(add)
+ ATOMIC_OPS(sub)
+ 
++#define arch_atomic_add_return	arch_atomic_add_return
++#define arch_atomic_sub_return	arch_atomic_sub_return
++#define arch_atomic_fetch_add	arch_atomic_fetch_add
++#define arch_atomic_fetch_sub	arch_atomic_fetch_sub
++
+ #undef ATOMIC_OPS
+ #define ATOMIC_OPS(op) ATOMIC_OP(op) ATOMIC_FETCH_OP(op)
+ 
+@@ -78,6 +83,10 @@ ATOMIC_OPS(and)
+ ATOMIC_OPS(or)
+ ATOMIC_OPS(xor)
+ 
++#define arch_atomic_fetch_and	arch_atomic_fetch_and
++#define arch_atomic_fetch_or	arch_atomic_fetch_or
++#define arch_atomic_fetch_xor	arch_atomic_fetch_xor
++
+ #undef ATOMIC_OPS
+ #undef ATOMIC_FETCH_OP
+ #undef ATOMIC_OP_RETURN
+diff --git a/arch/sh/include/asm/atomic-irq.h b/arch/sh/include/asm/atomic-irq.h
+index 7665de9d00d0d..b4090cc354935 100644
+--- a/arch/sh/include/asm/atomic-irq.h
++++ b/arch/sh/include/asm/atomic-irq.h
+@@ -55,6 +55,11 @@ static inline int arch_atomic_fetch_##op(int i, atomic_t *v)		\
  ATOMIC_OPS(add, +=)
  ATOMIC_OPS(sub, -=)
  
@@ -84,7 +113,7 @@ index 0b3f64c92e3c0..d4f023887ff87 100644
  #undef ATOMIC_OPS
  #define ATOMIC_OPS(op, c_op)						\
  	ATOMIC_OP(op, c_op)						\
-@@ -127,6 +132,10 @@ ATOMIC_OPS(and, &=)
+@@ -64,6 +69,10 @@ ATOMIC_OPS(and, &=)
  ATOMIC_OPS(or, |=)
  ATOMIC_OPS(xor, ^=)
  
@@ -95,29 +124,33 @@ index 0b3f64c92e3c0..d4f023887ff87 100644
  #undef ATOMIC_OPS
  #undef ATOMIC_FETCH_OP
  #undef ATOMIC_OP_RETURN
-@@ -181,6 +190,11 @@ static __inline__ s64 arch_atomic64_fetch_##op(s64 i, atomic64_t *v)	\
- ATOMIC64_OPS(add, +=)
- ATOMIC64_OPS(sub, -=)
+diff --git a/arch/sh/include/asm/atomic-llsc.h b/arch/sh/include/asm/atomic-llsc.h
+index b63dcfbfa14ef..9ef1fb1dd12ee 100644
+--- a/arch/sh/include/asm/atomic-llsc.h
++++ b/arch/sh/include/asm/atomic-llsc.h
+@@ -73,6 +73,11 @@ static inline int arch_atomic_fetch_##op(int i, atomic_t *v)		\
+ ATOMIC_OPS(add)
+ ATOMIC_OPS(sub)
  
-+#define arch_atomic64_add_return	arch_atomic64_add_return
-+#define arch_atomic64_sub_return	arch_atomic64_sub_return
-+#define arch_atomic64_fetch_add		arch_atomic64_fetch_add
-+#define arch_atomic64_fetch_sub		arch_atomic64_fetch_sub
++#define arch_atomic_add_return	arch_atomic_add_return
++#define arch_atomic_sub_return	arch_atomic_sub_return
++#define arch_atomic_fetch_add	arch_atomic_fetch_add
++#define arch_atomic_fetch_sub	arch_atomic_fetch_sub
 +
- #undef ATOMIC64_OPS
- #define ATOMIC64_OPS(op, c_op)						\
- 	ATOMIC64_OP(op, c_op)						\
-@@ -190,6 +204,10 @@ ATOMIC64_OPS(and, &=)
- ATOMIC64_OPS(or, |=)
- ATOMIC64_OPS(xor, ^=)
+ #undef ATOMIC_OPS
+ #define ATOMIC_OPS(op) ATOMIC_OP(op) ATOMIC_FETCH_OP(op)
  
-+#define arch_atomic64_fetch_and		arch_atomic64_fetch_and
-+#define arch_atomic64_fetch_or		arch_atomic64_fetch_or
-+#define arch_atomic64_fetch_xor		arch_atomic64_fetch_xor
+@@ -80,6 +85,10 @@ ATOMIC_OPS(and)
+ ATOMIC_OPS(or)
+ ATOMIC_OPS(xor)
+ 
++#define arch_atomic_fetch_and	arch_atomic_fetch_and
++#define arch_atomic_fetch_or	arch_atomic_fetch_or
++#define arch_atomic_fetch_xor	arch_atomic_fetch_xor
 +
- #undef ATOMIC64_OPS
- #undef ATOMIC64_FETCH_OP
- #undef ATOMIC64_OP_RETURN
+ #undef ATOMIC_OPS
+ #undef ATOMIC_FETCH_OP
+ #undef ATOMIC_OP_RETURN
 -- 
 2.30.2
 
