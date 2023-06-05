@@ -2,189 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768CD722FBE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AEF722FC0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbjFETXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S235688AbjFETYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbjFETXw (ORCPT
+        with ESMTP id S235611AbjFETYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:23:52 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD46A7;
-        Mon,  5 Jun 2023 12:23:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h3an4SVSFFVeY2tz9GHbOHj7QpEtKwVKblum4nmvW3S8MOKuIaHvgsoROxmjEhIGmLLqroi35lC9FCQXz94gfJdKpJiYIB8R3jusaRHMTyRfVN7Sh9qOyBdFOjPMG3g7r/rkxpi6Hfyorj0NJz98yBDDApBnKtHF0QZxpHCWrPfmSmN+2aiv1KVysZng0uPJdsrO6c5e7sx4TqESxy6IxtneZHBLyqlfinMJ49X47zmHHSm14Ul7TCm7L+Ckj7K5P78xM/al98omF/76r+ZplaIYjC0sEciDnxCTtrzqAqF0JtPgiBKbDE8XNyJsERyMCpNGxPVCarvbJYmA3Y8Avg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rdVO2oaAnbLIxhy1/LPFA4+3rUipzUg+xGKns6U7YJ4=;
- b=mZJKzZMIbS76zgeTM/3q5SlrEH8Bgkd5gizYwaeAcMg7rg4ETHDqLA+CjLucLHiYVZiMx5OxxrCdg6ovmMtV8TcZZ8BGED3lwCOB9raR243Zuljebf1E4OoZkTYqjMpkB4d3Do9tBGNATaQMhqlPjo853XhHGbIB6Uk36HKgokROED2IRA0O7T9Hoxk9tP3CLel5wGmSO41la+1eWE7tmk7LFwJHCpPwlZRbJ2awF8vIH85mYvAPJm5u9CpTV+MXhL7lGuzL3o6crQ/QGdxY0l0LbnnP1hp8ECcM917IO7UKs0yUVC0+9Skx3U+PzmQg47rHCLAzHHA8HaM5bsSUjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rdVO2oaAnbLIxhy1/LPFA4+3rUipzUg+xGKns6U7YJ4=;
- b=TT4w9RPXe0xwhf9oMu7S0m1KX8WgwyFUdoTIf0SQvlYCZmwvmr8XSfcUxB8TrYTDXu0c97pGtX5XV3cjN1geAnQuRjjIQdRC7mHOEQFUWppAST3sA4d5ggVTG6XujsST5EL+PMZNWY3YksrMIRlpBkECfsTuEsNPfemnosGcskXlo/4WbKaGDvZxhoKN0+lp4mNcNOTgGpkRjV0wEnsr4JJ0gvndWCaphtnAHjAUtgMz3fCBz80EgwK+VCNhi/cnya6MQL3tW0SjMe0qEIbjyeLyMcFrHhQimJ9wdKZhkVjE6dciT1YXYGrlfPEMhMBt2XlHwAHE7SRDK4Q0XZDS1A==
-Received: from BN0PR02CA0024.namprd02.prod.outlook.com (2603:10b6:408:e4::29)
- by PH7PR12MB7818.namprd12.prod.outlook.com (2603:10b6:510:269::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Mon, 5 Jun
- 2023 19:23:47 +0000
-Received: from BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e4:cafe::4c) by BN0PR02CA0024.outlook.office365.com
- (2603:10b6:408:e4::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 19:23:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT065.mail.protection.outlook.com (10.13.177.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 19:23:47 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 5 Jun 2023
- 12:23:37 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 5 Jun 2023
- 12:23:37 -0700
-Message-ID: <f036d110-f43e-0787-fe77-86fa5d062b17@nvidia.com>
-Date:   Mon, 5 Jun 2023 12:23:36 -0700
+        Mon, 5 Jun 2023 15:24:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4724F100;
+        Mon,  5 Jun 2023 12:24:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C944B629BD;
+        Mon,  5 Jun 2023 19:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C59C433EF;
+        Mon,  5 Jun 2023 19:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685993056;
+        bh=/WDyoVWJW0+RL4lZqzCjYAg8N+jMy841frN5yAjoCpo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HgvB8F5Jfmf1m1qTLHtMR8qLMlu+GpubdEHohI8KocZdLlLe457V20z7hB+p/vYKW
+         KSNlUncQT1N3JrQDj4KDFhp/tly6TbWsgT8IdbGZ8VzNpFX6pcBWy5x4hRs6zjOmJl
+         vuGtUV7+RSHQLhXzM8KT6oPkZu/D2Z67GOYMnzma0F0nW39ZrUPe32NZZHKtNWFoak
+         2gEf8416j90jGKQgWz9epB+rFSNKlulLr9aeQgx+RilAKjp2Ogkz3Qa8SPsLAQ38Wv
+         vyz+pnMMt0/Vk2ZI1YrVZ+DFdxzdZELtl/dx8xbyEB6qdkiWNsLEoh8tO2NUUN0s7L
+         YFPkcjE4GZevg==
+Date:   Mon, 5 Jun 2023 20:24:13 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Kim Seer Paller <kimseer.paller@analog.com>
+Cc:     <lars@metafoo.de>, <krzysztof.kozlowski@linaro.org>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
+Message-ID: <20230605202413.5eb0c0f3@jic23-huawei>
+In-Reply-To: <20230605130755.92642-3-kimseer.paller@analog.com>
+References: <20230605130755.92642-1-kimseer.paller@analog.com>
+        <20230605130755.92642-3-kimseer.paller@analog.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 03/11] selftests/mm: fix "warning: expression which
- evaluates to zero..." in mlock2-tests.c
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
- <20230603021558.95299-4-jhubbard@nvidia.com> <ZH4CvMFgu7IFFMwk@x1n>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <ZH4CvMFgu7IFFMwk@x1n>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT065:EE_|PH7PR12MB7818:EE_
-X-MS-Office365-Filtering-Correlation-Id: c5a59ca0-2df3-4e6f-dcbf-08db65fa62bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S2gz3Lf5ewge2SRWBQVMk9zRLoIs8Cbt61EvVRSbf3WCMyjAfomTga6VBKKp5j5Y0V42zJoiSFurLm6d2djekLRaofifWnTFu6nfZCrIijMHgJtKk1u3Pf13yyjEtU/BL73KoawjBj31MVZqzejff9dvTgfUdgSrMdeIfKYx16GRgi1/hmneBqxZOfWxSLOa7LmhWR333n+ETq4sWIYtUBVgO+zzRIrLjLIXsZ0IPfq9hn7Zst2imAMf1bhA6vp0v4hl3KQFCG7p4XvD8/+pr3OcqDrKZwq7vMfs9Kep9ZC/Xu4wvjCHG7HW7OhuO2oS6Gz9IPysbsjLuwGJl8QJFXa6oGQu2iaN/fidrETa9UoAALr4aQknXYGR6TEK5/x4iHTM/8F8niR+rM0ioRf7mPeTaRGM840I+oNwPwoqZFBx/GySGqJ+kup5Uia4ZcXGl+7BWJRAMD9MP66KIVlZEoh1l26eLuBxDNYY6cwLxVOnSwI83madBc3z4ZpduxSXZV5HwxNmTNxq7jOek2HVwWLeSoZzH2gagZu29sQrrxv218yy/8K4z9KnI3dhGnjmdU/kmYJnOkPh/b3JyZayl6UeBA+9ZtOThjesL1BSDitfudy8O99/5ouQmoMh7YwSmexDtxcA6fFCzk7pia1j+GGwDszfmjvtyBfqdfHwcnzCTqH6Q2p6sjda2ayUdvDW3hLoeyqJwpsNVo+vzoNCxD//B/EySbS4X44/tZXhlRYKyYij9+J/27w5FG8yfhIENeqkRKm/vbsc/0wwLNB4sQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(41300700001)(316002)(54906003)(82740400003)(356005)(7636003)(5660300002)(16576012)(478600001)(2906002)(31686004)(70586007)(6916009)(70206006)(4326008)(8936002)(8676002)(82310400005)(40460700003)(31696002)(86362001)(186003)(2616005)(36756003)(16526019)(26005)(36860700001)(336012)(53546011)(426003)(40480700001)(47076005)(83380400001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 19:23:47.3799
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5a59ca0-2df3-4e6f-dcbf-08db65fa62bc
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7818
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 08:43, Peter Xu wrote:
-> On Fri, Jun 02, 2023 at 07:15:50PM -0700, John Hubbard wrote:
->> The stop variable is a char*, and the code was assigning a char value to
->> it. This was generating a warning when compiling with clang.
->>
->> However, as both David and Peter pointed out, stop is not even used
->> after the problematic assignment to a char type. So just delete that
->> line entirely.
->>
->> Cc: David Hildenbrand <david@redhat.com>
->> Cc: Peter Xu <peterx@redhat.com>
->> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
->> ---
->>   tools/testing/selftests/mm/mlock2-tests.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
->> index 11b2301f3aa3..80cddc0de206 100644
->> --- a/tools/testing/selftests/mm/mlock2-tests.c
->> +++ b/tools/testing/selftests/mm/mlock2-tests.c
->> @@ -50,7 +50,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
->>   			printf("cannot parse /proc/self/maps\n");
->>   			goto out;
->>   		}
->> -		stop = '\0';
->>   
->>   		sscanf(line, "%lx", &start);
->>   		sscanf(end_addr, "%lx", &end);
+On Mon, 5 Jun 2023 21:07:55 +0800
+Kim Seer Paller <kimseer.paller@analog.com> wrote:
+
+> The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
+> binary inputs.
 > 
-> I'd rather simply make it "*stop = '\0'", or as David suggested dropping
-> stop completely when we're it (assumes that scanf() will always work with
-> number ending with space ' ').
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+> ---
+...
 
-Actually it does not assume that. Rather, it follows the documented behavior
-of strchr(3), which is:
+Hi Kim,
 
-     The strchr() and strrchr() functions return a pointer to the matched
-     character or NULL if the character is not found. The terminating
-     null byte is considered part of the string, so that if c is
-     specified as '\0', these functions return a pointer to the
-     terminator.
+A few comments inline.
 
-And we have this code now:
+> diff --git a/drivers/iio/adc/max14001.c b/drivers/iio/adc/max14001.c
+> new file mode 100644
+> index 000000000..7c5272756
+> --- /dev/null
+> +++ b/drivers/iio/adc/max14001.c
+> @@ -0,0 +1,333 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+> +/*
+> + * Analog Devices MAX14001 ADC driver
+> + *
+> + * Copyright 2023 Analog Devices Inc.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/bitrev.h>
+> +#include <linux/device.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+> +
+> +#include <asm/unaligned.h>
+> +
+> +/* MAX14001 Registers Address */
+> +#define MAX14001_ADC			0x00
+> +#define MAX14001_FADC			0x01
+> +#define MAX14001_FLAGS			0x02
+> +#define MAX14001_FLTEN			0x03
+> +#define MAX14001_THL			0x04
+> +#define MAX14001_THU			0x05
+> +#define MAX14001_INRR			0x06
+> +#define MAX14001_INRT			0x07
+> +#define MAX14001_INRP			0x08
+> +#define MAX14001_CFG			0x09
+> +#define MAX14001_ENBL			0x0A
+> +#define MAX14001_ACT			0x0B
+> +#define MAX14001_WEN			0x0C
+> +
+> +#define MAX14001_VERIFICATION_REG(x)	((x) + 0x10)
+> +
+> +#define MAX14001_CFG_EXRF		BIT(5)
+> +
+> +#define MAX14001_ADDR_MASK		GENMASK(15, 11)
+> +#define MAX14001_DATA_MASK		GENMASK(9, 0)
+> +#define MAX14001_FILTER_MASK		GENMASK(3, 2)
+> +
+> +#define MAX14001_SET_WRITE_BIT		BIT(10)
+> +#define MAX14001_WRITE_WEN		0x294
+> +
+> +struct max14001_state {
+> +	struct spi_device	*spi;
+> +	/* lock protect agains multiple concurrent accesses */
 
-	stop = strchr(end_addr, ' ');
-	if (!stop) {
-		printf("cannot parse /proc/self/maps\n");
-		goto out;
-	}
+To what?  Here I suspect it's RMW sequence on device and perhaps
+more importantly the buffers below.
 
-So, either stop has a valid char* in it, or we goto out. There are no
-fragile assumptions in there, as far as I can see anyway.
+> +	struct mutex		lock;
+> +	struct regmap		*regmap;
+> +	int			vref_mv;
+> +	/*
+> +	 * DMA (thus cache coherency maintenance) requires the
+> +	 * transfer buffers to live in their own cache lines.
 
-> 
-> No strong opinion here, though.
-> 
+You are looking at an old kernel I guess - we fixed all of these - and
+introduced IIO_DMA_MINALIGN for __aligned(IIO_DMA_MINALIGN) to make
+it easier to fix any such problems in future.
 
-OK, I think it's kind of a flip of the coin whether to write this:
+Upshot is that ___cacheline_aligned aligns to the l1 cacheline length.
+Some fun systems (such as the big servers I use in my dayjob) have higher
+cacheline sizes for their larger / further from CPU caches.
+One group of SoCs out there is known to both do non coherent DMA and have
+a larger line size for the bit relevant to that than ___cacheline_aligned
+gives you. So on that rare platform this is currently broken.
+ 
+> +	 */
+> +	__be16			spi_tx_buffer ____cacheline_aligned;
+> +	__be16			spi_rx_buffer;
+> +};
+> +
+> +static int max14001_read(void *context, unsigned int reg_addr,
+> +					unsigned int *data)
+> +{
+> +	struct max14001_state *st = context;
+> +	u16 tx = 0;
+> +	int ret;
+> +
+> +	struct spi_transfer xfers[] = {
+> +		{
+> +			.tx_buf = &st->spi_tx_buffer,
+> +			.len = 2,
+> +			.cs_change = 1,
+> +		}, {
+> +			.rx_buf = &st->spi_rx_buffer,
+> +			.len = 2,
+> +		},
+> +	};
+> +
+> +	tx = FIELD_PREP(MAX14001_ADDR_MASK, reg_addr);
+> +	st->spi_tx_buffer = bitrev16(cpu_to_be16(tx));
+> +
+> +	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
+> +	if (ret)
+> +		return ret;
+> +
+> +	*data = bitrev16(be16_to_cpu(st->spi_rx_buffer)) & MAX14001_DATA_MASK;
+> +
+> +	return 0;
+> +}
+> +
+> +static int max14001_write(void *context, unsigned int reg_addr,
+> +					unsigned int data)
+> +{
+> +	struct max14001_state *st = context;
+> +	u16 tx = 0;
+> +
+> +	tx = FIELD_PREP(MAX14001_ADDR_MASK, reg_addr);
+> +	tx |= FIELD_PREP(MAX14001_SET_WRITE_BIT, 1);
+> +	tx |= FIELD_PREP(MAX14001_DATA_MASK, data);
+> +
+> +	st->spi_tx_buffer = bitrev16(cpu_to_be16(tx));
+> +
+> +	return spi_write(st->spi, &st->spi_tx_buffer, 2);
+> +}
+> +
+> +static int max14001_write_verification_reg(struct max14001_state *st,
+> +				     unsigned int reg_addr)
+> +{
+> +	unsigned int reg_data;
+> +	int ret;
+> +
+> +	ret = max14001_read(st, reg_addr, &reg_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return max14001_write(st, MAX14001_VERIFICATION_REG(reg_addr),
+> +				reg_data);
 
-	stop = strchr(end_addr, ' ');
-	if (!stop) {
+Even though this is a bit unusual, I'd still expect this to use
+the regmap_read / regmap_write interfaces not directly use the callbacks.
 
-or this:
+> +}
+> +
+> +static int max14001_reg_update(struct max14001_state *st,
+> +				unsigned int reg_addr,
+> +				unsigned int mask,
+> +				unsigned int val)
+> +{
+> +	int ret;
+> +
+> +	/* Enable SPI Registers Write */
+> +	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
 
-	if (!strchr(end_addr, ' ')) {
+Mixing regmap and non regmap rather defeats the point of
+having a standard interface.  Use regmap_read and regmap_write
+throughout or not at all.
 
-So I'll just leave it as the first one, which (depending on the
-day of the week) might read slightly clearer. :)
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(st->regmap, reg_addr, mask, val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = max14001_write_verification_reg(st, reg_addr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Disable SPI Registers Write */
+> +	return max14001_write(st, MAX14001_WEN, 0);
+> +}
+> +
+> +static int max14001_read_raw(struct iio_dev *indio_dev,
+> +			     struct iio_chan_spec const *chan,
+> +			     int *val, int *val2, long mask)
+> +{
+> +	struct max14001_state *st = iio_priv(indio_dev);
+> +	unsigned int data;
+> +	int ret;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_RAW:
+> +		mutex_lock(&st->lock);
+> +		ret = max14001_read(st, MAX14001_ADC, &data);
+> +		mutex_unlock(&st->lock);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		*val = data;
+> +
+> +		return IIO_VAL_INT;
+> +
+> +	case IIO_CHAN_INFO_SCALE:
+> +		*val = st->vref_mv;
+> +		*val2 = 10;
+> +
+> +		return IIO_VAL_FRACTIONAL_LOG2;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct regmap_config max14001_regmap_config = {
+> +	.reg_read = max14001_read,
+> +	.reg_write = max14001_write,
 
+I'd keep this up by the callbacks, so all the regmap setup stuff
+is in one place.
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+> +};
+> +
+> +static const struct iio_info max14001_info = {
+> +	.read_raw = max14001_read_raw,
+> +};
+> +
+
+...
+
+> +static int max14001_probe(struct spi_device *spi)
+> +{
+
+...
+
+> +
+> +	vref = devm_regulator_get_optional(&spi->dev, "vref");
+> +	if (IS_ERR(vref)) {
+> +		if (PTR_ERR(vref) != -ENODEV)
+> +			return dev_err_probe(&spi->dev, PTR_ERR(vref),
+> +					     "Failed to get vref regulator");
+> +
+> +		/* internal reference */
+> +		st->vref_mv = 1250;
+> +	} else {
+> +		ret = regulator_enable(vref);
+> +		if (ret)
+> +			return dev_err_probe(&spi->dev, ret,
+> +					"Failed to enable vref regulators\n");
+> +
+> +		ret = devm_add_action_or_reset(&spi->dev,
+> +					       max14001_regulator_disable,
+> +					       vref);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* enable external voltage reference */
+
+use external voltage reference?
+
+It's enabled by the regulator_enable() above, not this line.
+
+> +		ret = max14001_reg_update(st, MAX14001_CFG,
+> +					  MAX14001_CFG_EXRF, 1);
+> +
+> +		ret = regulator_get_voltage(vref);
+> +		if (ret < 0)
+> +			return dev_err_probe(&spi->dev, ret,
+> +					     "Failed to get vref\n");
+> +
+> +		st->vref_mv = ret / 1000;
+> +	}
+> +
+> +	mutex_init(&st->lock);
+> +
+> +	return devm_iio_device_register(&spi->dev, indio_dev);
+> +}
 
