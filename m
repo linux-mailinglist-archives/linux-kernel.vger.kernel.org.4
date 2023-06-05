@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30A5721E41
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B571721E43
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjFEGh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 02:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S229910AbjFEGjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 02:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjFEGh6 (ORCPT
+        with ESMTP id S229639AbjFEGjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:37:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6F5A6
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:37:57 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q63qF-00043K-DJ; Mon, 05 Jun 2023 08:37:23 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5E1B51D2073;
-        Mon,  5 Jun 2023 06:37:17 +0000 (UTC)
-Date:   Mon, 5 Jun 2023 08:37:16 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH 0/2] can: j1939: avoid possible use-after-free when
- j1939_can_rx_register fails
-Message-ID: <20230605-extras-liftoff-ccf0e4c92335-mkl@pengutronix.de>
-References: <20230526171910.227615-1-pchelkin@ispras.ru>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qfzt5qhgkbk447j7"
-Content-Disposition: inline
-In-Reply-To: <20230526171910.227615-1-pchelkin@ispras.ru>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 02:39:18 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13945E9
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:39:14 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxcPAPg31k7wUAAA--.234S3;
+        Mon, 05 Jun 2023 14:39:11 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axa9YPg31kHQcAAA--.72S2;
+        Mon, 05 Jun 2023 14:39:11 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v5 0/6] Add uprobes support for LoongArch
+Date:   Mon,  5 Jun 2023 14:39:04 +0800
+Message-Id: <1685947150-4949-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Axa9YPg31kHQcAAA--.72S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KrW8XF48Gr1kKr18CF4Dtrc_yoW8ZF18pF
+        srurnxGr45GryfXrZxta43ur1Fyr48GrW2qFnxC34rAw4jqF15Xr18KrZ8CF98t3y5Kry0
+        qF1rG3yYga15A3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+        xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v5:
+  -- Rebased on 6.4rc5
+  -- Like arm64, add user_enable_single_step() in arch_uprobe_pre_xol(),
+     add user_disable_single_step() in arch_uprobe_{post,abort}_xol(),
+     suggested by Jeff and Huacai offline
 
---qfzt5qhgkbk447j7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v4:
+  -- Rebased on 6.4rc1
+  -- Fix problem about "perf probe -x /lib64/libc.so.6 malloc"
 
-On 26.05.2023 20:19:08, Fedor Pchelkin wrote:
-> The patch series fixes a possible racy use-after-free scenario described
-> in 2/2: if j1939_can_rx_register() fails then the concurrent thread may
-> have already read the invalid priv structure.
->
-> The 1/2 makes j1939_netdev_lock a mutex so that access to
-> j1939_can_rx_register() can be serialized without changing GFP_KERNEL to
-> GFP_ATOMIC inside can_rx_register(). This seems to be safe.
->
-> Note that the patch series has been tested only via Syzkaller and not with
-> a real device.
+v3:
+  -- Check atomic instructions in insns_not_supported()
+  -- Remove five DIE_* definitions in kdebug.h
 
-Applied to linux-can + adding stable on Cc.
+v2:
+  -- Move the functions to inst.c in patch #1
+  -- Pass around union for insns_not_supported(),
+     insns_need_simulation() and arch_simulate_insn()
 
-Thanks,
-Marc
+v1:
+  -- Split the RFC patch #2 into two patches
+  -- Use larch_insn_gen_break() to generate break insns
+     for kprobes and uprobes
+  -- Pass around instruction word instead of union for
+     insns_not_supported(), insns_need_simulation() and
+     arch_simulate_insn() to avoid type conversion for callers
+  -- Add a simple test case for uprobes in the commit message
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Tiezhu Yang (6):
+  LoongArch: Move three functions from kprobes.c to inst.c
+  LoongArch: Add larch_insn_gen_break() to generate break insns
+  LoongArch: Use larch_insn_gen_break() for kprobes
+  LoongArch: Add uprobes support
+  LoongArch: Check atomic instructions in insns_not_supported()
+  LoongArch: Remove five DIE_* definitions in kdebug.h
 
---qfzt5qhgkbk447j7
-Content-Type: application/pgp-signature; name="signature.asc"
+ arch/loongarch/Kconfig               |   3 +
+ arch/loongarch/include/asm/inst.h    |  42 ++++++++++
+ arch/loongarch/include/asm/kdebug.h  |   5 --
+ arch/loongarch/include/asm/kprobes.h |   2 +-
+ arch/loongarch/include/asm/uprobes.h |  35 ++++++++
+ arch/loongarch/kernel/Makefile       |   1 +
+ arch/loongarch/kernel/inst.c         |  54 +++++++++++++
+ arch/loongarch/kernel/kprobes.c      |  75 ++++-------------
+ arch/loongarch/kernel/traps.c        |   9 +--
+ arch/loongarch/kernel/uprobes.c      | 152 +++++++++++++++++++++++++++++++++++
+ 10 files changed, 306 insertions(+), 72 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/uprobes.h
+ create mode 100644 arch/loongarch/kernel/uprobes.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.1.0
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmR9gpoACgkQvlAcSiqK
-BOia1QgAhIj1/4OuiSj/sZFfiYVe2ixv9bFwMNCr3gEDO3xzjgoj1Q3xK9QwSes4
-+5+qz5R7RzaKXxYbcnhqtFKy5oAH7ioZIzgLpYkiR3OMBa4Bboqg1iB4mWq4eQ6M
-BoxHqr2PFUt7fZNKp+k0ucu3KDvPX2js6aoMeQhZ6XpRYB59lEK9HHMdsPBNNGoC
-dlOvEWfZH75Cd6AS3ClUX+aaocETje1wx5xBcmGY/Jj79w3QBXDlakPXp24yNmhz
-Q/iJR8mAd0jvNNZeu5s9MOsbolKAh2U4ffRvGNfyTWV/O72C8xhQnoyR32iY3Xiv
-zuvJFYNNhFYpc8xmaelwUt31yF7HQw==
-=vpgs
------END PGP SIGNATURE-----
-
---qfzt5qhgkbk447j7--
