@@ -2,82 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E69722333
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4259072232E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjFEKQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S231265AbjFEKPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjFEKQV (ORCPT
+        with ESMTP id S229584AbjFEKPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:16:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234CAEC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685960136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w//PXxvTZrP/Pd4OMnUnywaLbQPL0Fl6oKrPT/BNYWY=;
-        b=PTtp4cXnSFRJwog1CvSKqlGWiR4L3lyCkku6G8bo+p5SGFWA8F79jOXEIoDSHdLMwpvcKI
-        nXtKYQAnCNTBiO60hv4h7LuSQbUg6gWGSI37TIguqDJygZJ4gaCvC5abjwtnBt/AAGiZc2
-        Wmz+jfHkhU5tcZ/GWZaXBPxR7z1dve4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-94-OX4Q--WsM5OvS5sr3Ek1qA-1; Mon, 05 Jun 2023 06:15:35 -0400
-X-MC-Unique: OX4Q--WsM5OvS5sr3Ek1qA-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f60911a417so21930625e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 03:15:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685960134; x=1688552134;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w//PXxvTZrP/Pd4OMnUnywaLbQPL0Fl6oKrPT/BNYWY=;
-        b=huXNEEkM0vVtxUyQxjdXgp/oXNwPLBAJ6qFHQlqHLrJfhbQDc5fQ4HboLWw4GsN74A
-         VLIylSA9E60G46t69HAgXVjhnG9UNO6v6jL2yaBcN7JwcaD/VEKg96+PV0koDxMYP67Q
-         dzxIMO5Sytq9qs0GEMbvUiD3mQfNsLJiUebBwdJLaShhVZgtElJFQdL3qZGrDMxbOZs9
-         Ywl9MwiyvvJet2F57ne7lGyq3FQqTOLNI/Yxrf31rL5NOjI8Od7XI+I4i0KemCAkk/w+
-         vnhegIlfFP5qbwug2/Md0WN8uFnaYXlsRp2paJxvPZm1TcmiK0eDO55b9PQXAMIPFoh9
-         PLBA==
-X-Gm-Message-State: AC+VfDyJLB/5kCztbZ/7lwoJocB6nhighwhVwZK4AG/hku98Kxla7pZs
-        7finIsDNYhWzqHiRF75lrwtaRmVmzLeiIlz0NCfp4A3xAP8psD76tYIumBDhAzCZ34sS4j8XxQa
-        YnsbDypcmTO6Oz6B8AjSFE85Ap1stLqlB
-X-Received: by 2002:a7b:ce0a:0:b0:3f4:fc5e:fbf2 with SMTP id m10-20020a7bce0a000000b003f4fc5efbf2mr6422024wmc.8.1685960133990;
-        Mon, 05 Jun 2023 03:15:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ774aF+F8xAb+CL5DwQDB+hwugLWEVdNbOkjDsp7YxMoQiVfuXw+ifNZEj/0nkXNmGxevlGLQ==
-X-Received: by 2002:a7b:ce0a:0:b0:3f4:fc5e:fbf2 with SMTP id m10-20020a7bce0a000000b003f4fc5efbf2mr6422013wmc.8.1685960133687;
-        Mon, 05 Jun 2023 03:15:33 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m25-20020a7bca59000000b003f7e62d38d4sm1353196wml.25.2023.06.05.03.15.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 03:15:33 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/5] dt-bindings: display: ssd1307fb: Remove default
- width and height values
-In-Reply-To: <3bluztz3pcyoyjk4ett673ksnvtkl4xrjqjt43mhmd76dugg7t@kkp7rkx3vjjs>
-References: <20230605074753.562332-1-javierm@redhat.com>
- <20230605074753.562332-3-javierm@redhat.com>
- <3bluztz3pcyoyjk4ett673ksnvtkl4xrjqjt43mhmd76dugg7t@kkp7rkx3vjjs>
-Date:   Mon, 05 Jun 2023 12:15:32 +0200
-Message-ID: <87v8g2gqpn.fsf@minerva.mail-host-address-is-not-set>
+        Mon, 5 Jun 2023 06:15:41 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A95E9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:15:39 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:f07e:6d89:4e02:be9])
+        by albert.telenet-ops.be with bizsmtp
+        id 5NFc2A00N40Pbp606NFcML; Mon, 05 Jun 2023 12:15:36 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1q67F5-00BZ6H-Lp
+        for linux-kernel@vger.kernel.org;
+        Mon, 05 Jun 2023 12:15:36 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1q67FQ-007ovC-Eo
+        for linux-kernel@vger.kernel.org;
+        Mon, 05 Jun 2023 12:15:36 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.4-rc5
+Date:   Mon,  5 Jun 2023 12:15:36 +0200
+Message-Id: <20230605101536.1864030-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHk-=wifuPqAFXQQTTLkp_+FMzxGFHpSG-hEtZazG-46s=noAw@mail.gmail.com>
+References: <CAHk-=wifuPqAFXQQTTLkp_+FMzxGFHpSG-hEtZazG-46s=noAw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,37 +48,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime Ripard <mripard@kernel.org> writes:
+Below is the list of build error/warning regressions/improvements in
+v6.4-rc5[1] compared to v6.3[2].
 
-Hello Maxime,
+Summarized:
+  - build errors: +1/-6
+  - build warnings: +29/-12
 
-Thanks for your feedback.
+JFYI, when comparing v6.4-rc5[1] to v6.4-rc4[3], the summaries are:
+  - build errors: +2/-4
+  - build warnings: +0/-1
 
-> Hi,
->
-> On Mon, Jun 05, 2023 at 09:47:50AM +0200, Javier Martinez Canillas wrote:
+Note that there may be false regressions, as some logs are incomplete.
+Still, they're build errors/warnings.
 
-[...]
+Happy fixing! ;-)
 
->>    solomon,width:
->>      $ref: /schemas/types.yaml#/definitions/uint32
->> -    default: 96
->>      description:
->> -      Width in pixel of the screen driven by the controller
->> +      Width in pixel of the screen driven by the controller.
->> +      The default value is controller-dependent.
->
-> I think we should document it still, either in the comment itself, or
-> through a conditional and different default values based on the
-> compatible.
->
+Thanks to the linux-next team for providing the build service.
 
-Makes sense. I'll add that in v2.
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9561de3a55bed6bdd44a12820ba81ec416e705a7/ (151 out of 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/457391b0380335d5e9a5babdec90ac53928b23b4/ (all 152 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7877cb91f1081754a1487c144d85dc0d2e2e7fc4/ (151 out of 152 configs)
 
--- 
-Best regards,
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+*** ERRORS ***
 
+1 error regressions:
+  + /kisskb/src/fs/xfs/scrub/scrub.h: error: initializer element is not constant:  => 111:28
+
+6 error improvements:
+  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: 'struct cpuinfo_um' has no member named 'apicid': 2157:48, 2157:41 => 
+  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]: 2161:1 => 
+  - /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant: 296:2, 300:2, 299:2 => 
+  - /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]: 641:28 => 
+  - /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]: 641:28 => 
+  - /kisskb/src/fs/btrfs/send.c: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]: 1902:23, 1909:13 => 
+
+
+*** WARNINGS ***
+
+29 warning regressions:
+  + /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1128 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 400:1
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/input/joystick/sidewinder.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/xilinx/xilinx_emac.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/virtio_net.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [fs/hfsplus/hfsplus.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [net/mac80211/mac80211.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashrdi3" [drivers/usb/gadget/function/usb_f_mass_storage.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashrdi3" [fs/xfs/xfs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-writecache.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/hpsa.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/mpt3sas/mpt3sas.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [fs/ext2/ext2.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [fs/ext4/ext4.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [fs/gfs2/gfs2.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [fs/ntfs3/ntfs3.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [net/mac80211/mac80211.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [net/sched/act_police.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/hwmon/sfctemp.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/media/platform/nxp/imx8-isi/imx8-isi.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-cadence.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_dfl_tod.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-davinci.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/thermal/mediatek/auxadc_thermal.ko] has no CRC!:  => N/A
+
+12 warning improvements:
+  - /kisskb/src/fs/btrfs/send.c: warning: 'right_gen' may be used uninitialized in this function [-Wmaybe-uninitialized]: 1902:23, 1909:27, 1909:13 => 
+  - /kisskb/src/fs/btrfs/volumes.c: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]: 2524:9, 2524:2 => 
+  - /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 404:1 => 
+  - /kisskb/src/include/linux/list.h: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]: 74:19, 74:12 => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/cm4000_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/synclink_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/noon010pc30.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/vs6624.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ixgb/ixgb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-thunderbay-emmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/u132-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/misc/ftdi-elan.ko] has no CRC!: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
