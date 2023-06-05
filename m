@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3335F72288E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67FC7228AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbjFEOPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S233633AbjFEOUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234908AbjFEOPJ (ORCPT
+        with ESMTP id S234909AbjFEOPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 10:15:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5349710FC;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3046C10FB;
         Mon,  5 Jun 2023 07:14:44 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 14:14:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,33 +23,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QY+lB4deJeNs+5LMljDCM92McOB3G+R8psZsInJgy3M=;
-        b=b8iO4zLSH2ChyHWOvlcws68+n3SmqOF36W1Z2lTfJckeyoCXEkkE0GDEkeAdrp2a/0PCcF
-        OWJJTURbHR40gitdjJM+EOQq2r/Qb75J6JKA+0lp8OVwDVZNDUpyt7sLrIPKXWGoq/yMCs
-        xcUNptNjCVIZuOW2s1MKyXgLopEXI0xEvXHZQHsTUfKVG0Hh1I6nksJwDO2ciJI3ltfbDF
-        Wgore1tvWDFLIUHdN9mQq3m9rA9gcwlZxk1EZgTGDxCueIO9HLfhiqi/SkmUeslxhbqFHv
-        Ba+D+N9doC/xUQiJWFnPLXkS7XUEEgRerqWHDy1Fwy9sdvLNAOOgq5yrPk+eTw==
+        bh=VVgxaiIKvFP0oHomVY1t2np/+ULxBfnbtlCnIwdpbWU=;
+        b=FGmH2R7cPw5zRKQMa6NHEmPvtC5TtxPpukqwbV4Cb1ja7l+OvC52Hqz9PH+HRuUVuytA/T
+        kDXJVNZsNYn/3S0L9zBSnqtkSlWSg9T+FLflLB/MGaNPTBq8q5/nTd+POlzGMUFCD6ST6Y
+        Tuf3dBoiwRWbiUMI46Pt9TPjGpfmfb4yGL7emT+mk8T0vPGHLi8v+zW2D73fDOexR31L1r
+        I+ru1MVWCtBNodFDqHMj6/q1ciON6sYmG/3uIus3FGEru3QUCNO5MK6utO/3RFcJ0MOq4V
+        yuPFoWjzGAJ7JW2YnfeTPeL5qNAbKUgjkt6SAJpKAZo0fZhs4rgTpfrvWHFkGA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685974483;
+        s=2020e; t=1685974482;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QY+lB4deJeNs+5LMljDCM92McOB3G+R8psZsInJgy3M=;
-        b=1yLL548NyiRbbwUdmBKKzB0F+LbDC5U39ABeTTdOjmy6IpUril2K8AXb/FjJfyCF4QfRyl
-        WouzzjeWikL78ACg==
-From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+        bh=VVgxaiIKvFP0oHomVY1t2np/+ULxBfnbtlCnIwdpbWU=;
+        b=TlyNvPAZgDfstRqPBtmT0Kt2rQbiGO3YS4ENC3cjSwxCZjsSYJNDVA9IhIap9Ilx/LHnIU
+        GVej7GEK+QUcsDDQ==
+From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/amd_nb: Re-sort and re-indent PCI defines
-Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+Subject: [tip: ras/core] x86/MCE/AMD, EDAC/mce_amd: Decode UMC_V2 ECC errors
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Muralidhara M K <muralidhara.mk@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230531094212.GHZHcWdMDkCpAp4daj@fat_crate.local>
-References: <20230531094212.GHZHcWdMDkCpAp4daj@fat_crate.local>
+In-Reply-To: <20230515113537.1052146-3-muralimk@amd.com>
+References: <20230515113537.1052146-3-muralimk@amd.com>
 MIME-Version: 1.0
-Message-ID: <168597448250.404.11782473771242053949.tip-bot2@tip-bot2>
+Message-ID: <168597448218.404.15334027157988488803.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,83 +68,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the ras/core branch of tip:
 
-Commit-ID:     f5e87cd5114e9c6d15a12922f26bdd6e24e508ee
-Gitweb:        https://git.kernel.org/tip/f5e87cd5114e9c6d15a12922f26bdd6e24e508ee
-Author:        Borislav Petkov (AMD) <bp@alien8.de>
-AuthorDate:    Wed, 31 May 2023 11:39:57 +02:00
+Commit-ID:     c35977b00fa76ce5f3fe9afdb9cffda970c943d5
+Gitweb:        https://git.kernel.org/tip/c35977b00fa76ce5f3fe9afdb9cffda970c943d5
+Author:        Yazen Ghannam <yazen.ghannam@amd.com>
+AuthorDate:    Mon, 15 May 2023 11:35:34 
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 05 Jun 2023 12:26:54 +02:00
+CommitterDate: Mon, 05 Jun 2023 12:27:11 +02:00
 
-x86/amd_nb: Re-sort and re-indent PCI defines
+x86/MCE/AMD, EDAC/mce_amd: Decode UMC_V2 ECC errors
 
-Sort them by family, model and type and align them vertically for better
-readability.
+The MI200 (Aldebaran) series of devices introduced a new SMCA bank type
+for Unified Memory Controllers. The MCE subsystem already has support
+for this new type. The MCE decoder module will decode the common MCA
+error information for the new bank type, but it will not pass the
+information to the AMD64 EDAC module for detailed memory error decoding.
 
-No functional changes.
+Have the MCE decoder module recognize the new bank type as an SMCA UMC
+memory error and pass the MCA information to AMD64 EDAC.
 
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Co-developed-by: Muralidhara M K <muralidhara.mk@amd.com>
+Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230531094212.GHZHcWdMDkCpAp4daj@fat_crate.local
+Link: https://lore.kernel.org/r/20230515113537.1052146-3-muralimk@amd.com
 ---
- arch/x86/kernel/amd_nb.c | 49 +++++++++++++++++++--------------------
- 1 file changed, 25 insertions(+), 24 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c | 6 ++++--
+ drivers/edac/mce_amd.c        | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 8fd9554..035a3db 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -15,30 +15,31 @@
- #include <linux/pci_ids.h>
- #include <asm/amd_nb.h>
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 0b971f9..5e74610 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -715,11 +715,13 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
  
--#define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
--#define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
--#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
--#define PCI_DEVICE_ID_AMD_17H_M60H_ROOT	0x1630
--#define PCI_DEVICE_ID_AMD_17H_MA0H_ROOT	0x14b5
--#define PCI_DEVICE_ID_AMD_19H_M10H_ROOT	0x14a4
--#define PCI_DEVICE_ID_AMD_19H_M60H_ROOT	0x14d8
--#define PCI_DEVICE_ID_AMD_19H_M70H_ROOT	0x14e8
--#define PCI_DEVICE_ID_AMD_MI200_ROOT	0x14bb
--#define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
--#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
--#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
--#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
--#define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
--#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F4 0x1728
--#define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
--#define PCI_DEVICE_ID_AMD_19H_M10H_DF_F4 0x14b1
--#define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
--#define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
--#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
--#define PCI_DEVICE_ID_AMD_19H_M60H_DF_F4 0x14e4
--#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F4 0x14f4
--#define PCI_DEVICE_ID_AMD_19H_M78H_DF_F4 0x12fc
--#define PCI_DEVICE_ID_AMD_MI200_DF_F4	0x14d4
-+#define PCI_DEVICE_ID_AMD_17H_ROOT		0x1450
-+#define PCI_DEVICE_ID_AMD_17H_M10H_ROOT		0x15d0
-+#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT		0x1480
-+#define PCI_DEVICE_ID_AMD_17H_M60H_ROOT		0x1630
-+#define PCI_DEVICE_ID_AMD_17H_MA0H_ROOT		0x14b5
-+#define PCI_DEVICE_ID_AMD_19H_M10H_ROOT		0x14a4
-+#define PCI_DEVICE_ID_AMD_19H_M40H_ROOT		0x14b5
-+#define PCI_DEVICE_ID_AMD_19H_M60H_ROOT		0x14d8
-+#define PCI_DEVICE_ID_AMD_19H_M70H_ROOT		0x14e8
-+#define PCI_DEVICE_ID_AMD_MI200_ROOT		0x14bb
-+
-+#define PCI_DEVICE_ID_AMD_17H_DF_F4		0x1464
-+#define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4	0x15ec
-+#define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4	0x1494
-+#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4	0x144c
-+#define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4	0x1444
-+#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F4	0x1728
-+#define PCI_DEVICE_ID_AMD_19H_DF_F4		0x1654
-+#define PCI_DEVICE_ID_AMD_19H_M10H_DF_F4	0x14b1
-+#define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4	0x167d
-+#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4	0x166e
-+#define PCI_DEVICE_ID_AMD_19H_M60H_DF_F4	0x14e4
-+#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F4	0x14f4
-+#define PCI_DEVICE_ID_AMD_19H_M78H_DF_F4	0x12fc
-+#define PCI_DEVICE_ID_AMD_MI200_DF_F4		0x14d4
+ bool amd_mce_is_memory_error(struct mce *m)
+ {
++	enum smca_bank_types bank_type;
+ 	/* ErrCodeExt[20:16] */
+ 	u8 xec = (m->status >> 16) & 0x1f;
  
- /* Protect the PCI config register pairs used for SMN. */
- static DEFINE_MUTEX(smn_mutex);
++	bank_type = smca_get_bank_type(m->extcpu, m->bank);
+ 	if (mce_flags.smca)
+-		return smca_get_bank_type(m->extcpu, m->bank) == SMCA_UMC && xec == 0x0;
++		return (bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2) && xec == 0x0;
+ 
+ 	return m->bank == 4 && xec == 0x8;
+ }
+@@ -1050,7 +1052,7 @@ static const char *get_name(unsigned int cpu, unsigned int bank, struct threshol
+ 	if (bank_type >= N_SMCA_BANK_TYPES)
+ 		return NULL;
+ 
+-	if (b && bank_type == SMCA_UMC) {
++	if (b && (bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2)) {
+ 		if (b->block < ARRAY_SIZE(smca_umc_block_names))
+ 			return smca_umc_block_names[b->block];
+ 		return NULL;
+diff --git a/drivers/edac/mce_amd.c b/drivers/edac/mce_amd.c
+index cc5c63f..9215c06 100644
+--- a/drivers/edac/mce_amd.c
++++ b/drivers/edac/mce_amd.c
+@@ -1186,7 +1186,8 @@ static void decode_smca_error(struct mce *m)
+ 	if (xec < smca_mce_descs[bank_type].num_descs)
+ 		pr_cont(", %s.\n", smca_mce_descs[bank_type].descs[xec]);
+ 
+-	if (bank_type == SMCA_UMC && xec == 0 && decode_dram_ecc)
++	if ((bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2) &&
++	    xec == 0 && decode_dram_ecc)
+ 		decode_dram_ecc(topology_die_id(m->extcpu), m);
+ }
+ 
