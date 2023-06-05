@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD9F7232FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52817232FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 00:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbjFEWMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 18:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S231934AbjFEWP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 18:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjFEWMl (ORCPT
+        with ESMTP id S229790AbjFEWP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 18:12:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A902DAF
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:12:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A6AB62B48
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 22:12:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF7EC433D2;
-        Mon,  5 Jun 2023 22:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686003159;
-        bh=8D6dKhwDM7qry1wqP8+wGLdVPUuxlLg1wYJTAvnn3Ks=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TehbIDvZ8XnjrJ2PvtfLRcrjGdDGhBX//s9xdPWN3gZd4o/FZc6ZM8Yodu79Grlzx
-         r2m3qYS/e85FaAE0Xt0psTynwNi3RFrG+zKFHTf8JB2BrWFwoVNYDu2VIQFu1sWQg9
-         we6X3Sot0rwwsVK5dBdDO6t2j1qC/t/tRX5VnNpMIVL5hcK/D0rcQj4E7RjNPKFOCK
-         9JeiBjPkGA9Nh2QnoH0sKwIvLGOC+C7zYlommRaBoE62rUT1kkoMjT+BYcLLXmtDAp
-         kjuQcXuZeBMPy7CrwwFwVBRb1bo17uFKuhdbS9+oZrIYL9YUo4D9vKdfvnIiwv5M0D
-         LcYPvKzM10ttw==
-Date:   Tue, 6 Jun 2023 00:12:36 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v6 09/21] timer: add_timer_on(): Make sure TIMER_PINNED
- flag is set
-Message-ID: <ZH5d1D_ci42zujmi@localhost.localdomain>
-References: <20230510072817.116056-1-anna-maria@linutronix.de>
- <20230510072817.116056-10-anna-maria@linutronix.de>
+        Mon, 5 Jun 2023 18:15:56 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC74BAF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 15:15:55 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65c6881df05so280435b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 15:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686003355; x=1688595355;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jMXtmKfbmokYLB7uQ5WSAk4+F8MAIPB5154UaLInYwo=;
+        b=vei6ExKysQ7iDwD6QEZv3q1BJOraZZbXS7bWyFKfXKTEJyQtnx+0vEvTGw1ZiK6AY1
+         6U9nvYngrLgVK7yZTOwk/g426NNAzZK50mh13tss5VFpfWgM29HcogMwhRrAlPaIPDvE
+         g4b1PLcezAipJxKae1nfnVVV6bq5AG/XuydPg7PapwT32xiJ1mu0boaqkQ5UTZc0WK5S
+         9IQ/On5lGqZIXJs4Dhr0iwRIAxkG/H9CicAXHj/ssv3lY14UXiL2y5DpIbAafB73gFnL
+         6Geb/6tAg/+mVL913Xu4NpErQajq4JO+A3mRMoY3WUBjnBWz7jIWyx/ucmI9LoQ8p9B9
+         xY1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686003355; x=1688595355;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jMXtmKfbmokYLB7uQ5WSAk4+F8MAIPB5154UaLInYwo=;
+        b=HuxR0xeibq7DopQfQL5x821/+y65B6sgvaGXqR3vEqxcaYOKF4yFEn/Kcc9EoVuZVJ
+         UfTbYHpPAtq4HvWwnRFsiCPW6THijfS0IaAm7NQHxz7cS1K4xh8Bc1plqzbmoXqJe3+h
+         SG/pMy0lkRH7CMDppcQIBNem8KPt0ffh8uumI8dHwMCEZODTv5kYurmFtJKf3plZRwnf
+         40Z5mkxIul4AVGIGjvKg8zUeVmwBBT9mR6GZ5FUQ/9rwSlWxCo1gb0RHc2peD6ECuX5g
+         Txtam6pt1D1LADDLrXG5FZiJdVC5WboyljplHcC7RMOW9d9IoVLkxbekhGToJLD/TRns
+         vkzg==
+X-Gm-Message-State: AC+VfDyGIYkZtJ6gKKOYASSsMyigtZg8iIuTsQOHAgBaDIUmtHD5mQpI
+        9aEAA87qY2HqtvzSKeL2gRDIbg==
+X-Google-Smtp-Source: ACHHUZ67jn+VdenMIEOVfi+mg7Ss98shsK/fQiwlJI+PQXlvvUsREifLADhk/fPRpTResEnTuVRfkA==
+X-Received: by 2002:a05:6a00:2490:b0:656:7b53:fed4 with SMTP id c16-20020a056a00249000b006567b53fed4mr6852360pfv.1.1686003355126;
+        Mon, 05 Jun 2023 15:15:55 -0700 (PDT)
+Received: from [127.0.0.1] ([2600:380:c017:83c2:f698:1aad:6875:3e53])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056a00271100b0064f39c6474fsm2804545pfv.56.2023.06.05.15.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 15:15:54 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     gost.dev@samsung.com, Anuj Gupta <anuj20.g@samsung.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230605062354.24785-1-nj.shetty@samsung.com>
+References: <CGME20230605062713epcas5p15f43412fdef92c01567dd9c59a931d9b@epcas5p1.samsung.com>
+ <20230605062354.24785-1-nj.shetty@samsung.com>
+Subject: Re: [PATCH] null_blk: Fix: memory release when memory_backed=1
+Message-Id: <168600335395.173234.7376041996345283408.b4-ty@kernel.dk>
+Date:   Mon, 05 Jun 2023 16:15:53 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230510072817.116056-10-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, May 10, 2023 at 09:28:05AM +0200, Anna-Maria Behnsen a écrit :
-> When adding a timer to the timer wheel using add_timer_on(), it is an
-> implicitly pinned timer. With the timer pull at expiry time model in place,
-> TIMER_PINNED flag is required to make sure timers end up in proper base.
-> 
-> Add TIMER_PINNED flag unconditionally when add_timer_on() is executed.
-> 
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 
-The current users of add_timer_on() don't seem to play nasty
-games. Those who use mixes of add_timer_on() and mod_timer()
-at least have set TIMER_PINNED on setup time, so looks good.
+On Mon, 05 Jun 2023 11:53:53 +0530, Nitesh Shetty wrote:
+> Memory/pages are not freed, when unloading nullblk driver.
+> 
+> Steps to reproduce issue
+>   1.free -h
+>         total        used        free      shared  buff/cache   available
+> Mem:    7.8Gi       260Mi       7.1Gi       3.0Mi       395Mi       7.3Gi
+> Swap:      0B          0B          0B
+>   2.modprobe null_blk memory_backed=1
+>   3.dd if=/dev/urandom of=/dev/nullb0 oflag=direct bs=1M count=1000
+>   4.modprobe -r null_blk
+>   5.free -h
+>         total        used        free      shared  buff/cache   available
+> Mem:    7.8Gi       1.2Gi       6.1Gi       3.0Mi       398Mi       6.3Gi
+> Swap:      0B          0B          0B
+> 
+> [...]
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Applied, thanks!
+
+[1/1] null_blk: Fix: memory release when memory_backed=1
+      commit: 8cfb98196cceec35416041c6b91212d2b99392e4
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
