@@ -2,171 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4DF722243
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39029722245
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjFEJdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S230192AbjFEJe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjFEJdq (ORCPT
+        with ESMTP id S229583AbjFEJeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:33:46 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F08E9;
-        Mon,  5 Jun 2023 02:33:39 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1685957608tzz4iygk
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 05 Jun 2023 17:33:26 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: UCO5VR5DCxd++cX5LQirmMNyZLC3eu9zWeL07KEu3eknxQBr52q+q6a7eYVC0
-        dtrJp2eVJi4X6qKEqUYPK4FDIvve+INoQeZVxnYP/+yarKQKMWwzDdSrn58U5/RhFh2cEGl
-        LdDbBTKfHa5Hxalg5LunK2UdNKAseZgqNwU7o14kBKySSWA0Yab58OxXPpWyKYkpofSQCbH
-        ngn7iDU7Mjs4VDb7aSI0lTwlTtW5WRnTEEge6ry6UWZ9z4vuov7QViP2mBteIpkNdsapucN
-        myI3oR5hI49TvTvcdOdQIex+dYfTag+AZhTKw721keQRG54QXdKKFFC8eGDjvRsaS3EpTbm
-        Oysb54CJYT/saCkBole+iCqBt5XlTGDR9amFbG1NXrnKmAFLo9PMJooWrHMNw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6742117217107098079
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH 1/4] tools/nolibc: unistd.h: add __syscall() and __syscall_ret() helpers
-Date:   Mon,  5 Jun 2023 17:33:26 +0800
-Message-Id: <20230605093326.156266-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZH1+hkhiA2+ItSvX@1wt.eu>
-References: <ZH1+hkhiA2+ItSvX@1wt.eu>
+        Mon, 5 Jun 2023 05:34:25 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DED3BD;
+        Mon,  5 Jun 2023 02:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U6Rs8a1yqf5xr+ElMRlsYvavjPCQLMdxxIEBLNZIQtY=; b=bNe5Cm5J5NgNKQ+iPXJml2TpTZ
+        1DZrkOF/s1GlcWpc01qwugGA7J1GHRnHXb6eqisktBUsHsrU9BbpluPUo95gp5NVuAfM4rg5sqaYQ
+        ksEsrwiF1NZ+txiRRx+a7yHCFvWUztsmI2LnFuSUg8notAi45jWw9SwGDmgFpQPl50Bn7SIRtFyM8
+        4YUj/RwEb5kCv4+JvIA+x9JgsFUb1uymk/cceGqa07t9v6vuJcGhS6o4DbX3Z0SJomVrCGSWEjxVN
+        afaRCpZMMuil9ar5pVal2G1NAU6XvJK5abq0wj4Wyk7eu+UsdIBhZ1MZZsPyOBsuyIXh0408B0j8p
+        P2mUf5Wg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q66bC-003KDV-1Q;
+        Mon, 05 Jun 2023 09:34:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 11AE0300274;
+        Mon,  5 Jun 2023 11:34:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EDCD620AC06F5; Mon,  5 Jun 2023 11:34:00 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 11:34:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, jolsa@kernel.org,
+        irogers@google.com, bp@alien8.de, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Re: [REGRESSION][BISECT] perf/core: Remove pmu linear searching code
+Message-ID: <20230605093400.GK38236@hirez.programming.kicks-ass.net>
+References: <3abd3693-ad87-9abf-a762-337076638fcc@linaro.org>
+ <ZH2KVyyC5oMr+Vk2@FVFF77S0Q05N>
+ <20230605092731.GZ4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605092731.GZ4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, Jun 05, 2023 at 01:58:57PM +0800, Zhangjin Wu wrote:
-> > > What about something like this:
-> > > 
-> > > static inline long __ret_as_errno(long ret) /* or some other name */
-> > > {
-> > > 	if (ret < 0) {
-> > > 		SET_ERRNO(-ret);
-> > > 		ret = -1;
-> > > 	}
-> > > 	return ret;
-> > > }
-> > > 
-> > > This avoids another macro by using a normal function.
-> > >
-> > 
-> > It is reasonable, like it very much.
-> > 
-> > > Syscall return values should always fit into long, at least
-> > > extra polating from syscall(2) and the fact that they are returned in
-> > > registers.
-> > 
-> > Yes, I did use 'long' instead of 'int' for unistd.h locally, but since tried to
-> > let it work with 'void *' before (e.g. sys_brk, an older version support pass
-> > the errno value), so, the typeof() is used and the same to unistd.h, but at
-> > last, none of (void *) return type is really used in current patchset, so, we
-> > are able to use this normal function version without the checking of the type.
-> > 
-> > > 
-> > > It would be a bit more verbose:
-> > > 
-> > > int chdir(const char *path)
-> > > {
-> > > 	return __ret_as_errno(sys_chdir(path));
-> > > }
-> > >
-> > > But it's clear what's going on and also just one line.
-> > 
-> > Thanks Thomas, It looks good and I do like the 'embedded' calling of
-> > sys_chrdir(path), but __syscall() looks cleaner and shorter too, let's put them
-> > together:
-> > 
-> > int chdir(const char *path)
-> > {
-> > 	return __ret_as_errno(sys_chdir(path));
-> > }
-> > 
-> > int chdir(const char *path)
-> > {
-> > 	return __syscall(chdir, path);
-> > }
-> > 
-> > And even with:
-> > 
-> > int chdir(const char *path)
-> > {
-> > 	return __sysret(sys_chdir(path));
-> > }
-> > 
-> > __syscall() works likes syscall(), and the definition is similar to syscall(),
-> > but uses the syscall name instead of syscall number, If reserve __syscall(),
-> > the inline function would be renamed back to __syscall_ret() or something like
-> > the shorter __sysret(), to align with our new __syscall(). 
-> > 
-> > for sys.h:
-> > 
-> >     /* Syscall return helper, set errno as ret when ret < 0 */
-> >     static inline long __sysret(long ret)
-> >     {
-> >     	if (ret < 0) {
-> >     		SET_ERRNO(-ret);
-> >     		ret = -1;
-> >     	}
-> >     	return ret;
-> >     }
-> > 
-> >     /* Syscall call helper, use syscall name instead of syscall number */
-> >     #define __syscall(name, ...) __sysret(sys_##name(__VA_ARGS__))
-> > 
-> > for unistd.h:
-> > 
-> >     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
-> > 
-> > What about this version?
-> > 
-> > The potential 'issue' may be mixing the use of __syscall(), _syscall() and
-> > syscall(), but the compilers may help to fix up this for us, I don't think it
-> > is a bottleneck.
+On Mon, Jun 05, 2023 at 11:27:31AM +0200, Peter Zijlstra wrote:
+> On Mon, Jun 05, 2023 at 08:10:15AM +0100, Mark Rutland wrote:
 > 
-> I think that could work. However, please place __attribute__((always_inline))
-> on these inline functions, as we don't want to turn them to function calls
-> even at -O0.
-
-Thanks, done.
-
+> > How does this work on x86? Do you have pseudo-PMUs for PERF_TYPE_HARDWARE and
+> > PERF_TYPE_RAW ?
 > 
-> I'm traveling today, I'll let you and Thomas debate and decide how you'd
-> like this to evolve.
+> Generic code maps TYPE_HARDWARE and TYPE_HW_CACHE to TYPE_RAW for a
+> first go, only if that fails it will try the actual type.
 > 
+> And x86 has the (first) CPU PMU has TYPE_RAW, on hybrid, it will
+> transparently pick the right actual PMU.
 
-Happy traveling.
-
-This revision is basically derived from the 'long' type information and
-__ret_as_errno() from Thomas, I will wait suggestion from Thomas and then send
-v2 later.
-
-> Also, please note that Paul is OK with merging for 6.5, but we should
-> absolutely limit last-minute changes to the strict minimum we're able
-> to test now.
-
-Strongly agree, we can delay this and the left time64 syscalls to 6.6, because
-they require more cleanup and discussion.
-
-Best regards,
-Zhangjin
-
-> 
-> Thanks!
-> Willy
+Oh, I might've misread that last bit.. TYPE_RAW is always the big core,
+it will not magic the thing. If you want little events you gotta
+manually find the little pmu.
