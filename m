@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59112722BD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C64722BB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235055AbjFEPrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:47:47 -0400
+        id S234361AbjFEPpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:45:55 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbjFEPrR (ORCPT
+        with ESMTP id S235235AbjFEPpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:47:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAEB10F0
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685979938;
+        Mon, 5 Jun 2023 11:45:05 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532E1E58;
+        Mon,  5 Jun 2023 08:44:46 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9FE381EC0103;
+        Mon,  5 Jun 2023 17:43:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685979818;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fz6CKIUO/zInL0kXiLp1OqxboZ4F1Hx1Dqes19h0t8M=;
-        b=dmUQdWnPnstxl5trZ5sR06K82v2cDHRadXCt2r8v090jjmJ+TpsG9uwJj+C6bcQ2aaNkOm
-        T6iu9q87gHVQR4DCaPWqvmg2uMw/Mn2xTPYgSpmeRT+KRk6Dd9Do2vDYkb6PkoY3mWqYMI
-        LjjY+AE2j29Cps7sh04T8nhwdNiYBkg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-Exj74wdqPj6lwC7-q16Ohg-1; Mon, 05 Jun 2023 11:45:35 -0400
-X-MC-Unique: Exj74wdqPj6lwC7-q16Ohg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64A0E101A53B;
-        Mon,  5 Jun 2023 15:45:34 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2B27AC154D1;
-        Mon,  5 Jun 2023 15:45:34 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 884C140178ACF; Mon,  5 Jun 2023 12:43:24 -0300 (-03)
-Date:   Mon, 5 Jun 2023 12:43:24 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=VXFJI2jhPS1vK8LdTu13gIhdU4o5Lt+D6h7V+L8AsL4=;
+        b=h+bi6/zJ861dFjCf7S6mRtP53hEuyO0LnJGFpZ+YBPzyhlfvMXubo48LQk+Y8D61euoz/r
+        6Z5Dwd/akE0e4JsvnLKg5+a0/5Z4DSASRlaKYCbC6T1JXst5xQp1moZpIyJ9siuiVuB4kX
+        DYLnhefxCYqtjojEIfVuROirktuBt1c=
+Date:   Mon, 5 Jun 2023 17:43:33 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2 3/3] mm/vmstat: do not refresh stats for nohz_full CPUs
-Message-ID: <ZH4CnJlpBMxEEwPW@tpad>
-References: <20230602185757.110910188@redhat.com>
- <20230602190115.545766386@redhat.com>
- <ZH2V/QxDrq7aq5fY@dhcp22.suse.cz>
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv13 5/9] efi: Add unaccepted memory support
+Message-ID: <20230605154333.GLZH4CpV3eXCCWCGxi@fat_crate.local>
+References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
+ <20230601182543.19036-6-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZH2V/QxDrq7aq5fY@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230601182543.19036-6-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,70 +74,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 09:59:57AM +0200, Michal Hocko wrote:
-> On Fri 02-06-23 15:58:00, Marcelo Tosatti wrote:
-> > The interruption caused by queueing work on nohz_full CPUs 
-> > is undesirable for certain aplications.
-> 
-> This is not a proper changelog. I am not going to write a changelog for
-> you this time. Please explain why this is really needed and why this
-> approach is desired. 
-> E.g. why don't you prevent userspace from
-> refreshing stats if interference is not desirable.
+On Thu, Jun 01, 2023 at 09:25:39PM +0300, Kirill A. Shutemov wrote:
+> +void accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	struct efi_unaccepted_memory *unaccepted;
+> +	unsigned long range_start, range_end;
+> +	unsigned long flags;
+> +	u64 unit_size;
+> +
+> +	if (efi.unaccepted == EFI_INVALID_TABLE_ADDR)
+> +		return;
 
-Michal,
+efi_get_unaccepted_table() already does this test.
 
-Can you please check if the following looks better, as
-a changelog? thanks
+> +	unaccepted = efi_get_unaccepted_table();
+> +	if (!unaccepted)
+> +		return;
 
----
+So this looks weird: callers can call accept_memory() and that function
+can fail. But they can't know whether it failed or not because it
+returns void.
 
-schedule_work_on API uses the workqueue mechanism to
-queue a work item on a queue. A kernel thread, which
-runs on the target CPU, executes those work items.
+> +	unit_size = unaccepted->unit_size;
+> +
+> +	/*
+> +	 * Only care for the part of the range that is represented
+> +	 * in the bitmap.
+> +	 */
+> +	if (start < unaccepted->phys_base)
+> +		start = unaccepted->phys_base;
 
-Therefore, when using the schedule_work_on API,
-it is necessary for the kworker kernel thread to
-be scheduled in, for the work function to be executed.
+So this silently trims start...
 
-Time sensitive applications such as SoftPLCs
-(https://tum-esi.github.io/publications-list/PDF/2022-ETFA-How_Real_Time_Are_Virtual_PLCs.pdf),
-have their response times affected by such interruptions.
+> +	if (end < unaccepted->phys_base)
+> +		return;
 
-The /proc/sys/vm/stat_refresh file was originally introduced by
+But fails only when end is outside of range.
 
-commit 52b6f46bc163eef17ecba4cd552beeafe2b24453
-Author: Hugh Dickins <hughd@google.com>
-Date:   Thu May 19 17:12:50 2016 -0700
+I'd warn here at least. And return an error so that the callers know.
 
-    mm: /proc/sys/vm/stat_refresh to force vmstat update
+> +	/* Translate to offsets from the beginning of the bitmap */
+> +	start -= unaccepted->phys_base;
+> +	end -= unaccepted->phys_base;
+> +
+> +	/* Make sure not to overrun the bitmap */
+> +	if (end > unaccepted->size * unit_size * BITS_PER_BYTE)
+> +		end = unaccepted->size * unit_size * BITS_PER_BYTE;
 
-    Provide /proc/sys/vm/stat_refresh to force an immediate update of
-    per-cpu into global vmstats: useful to avoid a sleep(2) or whatever
-    before checking counts when testing.  Originally added to work around a
-    bug which left counts stranded indefinitely on a cpu going idle (an
-    inaccuracy magnified when small below-batch numbers represent "huge"
-    amounts of memory), but I believe that bug is now fixed: nonetheless,
-    this is still a useful knob.
+How is all that trimming not important to the caller?
 
-Other than the potential interruption to a time sensitive application,
-if using SCHED_FIFO or SCHED_RR priority on the isolated CPU, then
-system hangs can occur:
+It would assume that its memory got accepted but not really.
 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978688
+> +	range_start = start / unit_size;
+> +
+> +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+> +	for_each_set_bitrange_from(range_start, range_end, unaccepted->bitmap,
+> +				   DIV_ROUND_UP(end, unit_size)) {
+> +		unsigned long phys_start, phys_end;
+> +		unsigned long len = range_end - range_start;
+> +
+> +		phys_start = range_start * unit_size + unaccepted->phys_base;
+> +		phys_end = range_end * unit_size + unaccepted->phys_base;
+> +
+> +		arch_accept_memory(phys_start, phys_end);
+> +		bitmap_clear(unaccepted->bitmap, range_start, len);
+> +	}
+> +	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
+> +}
+> +
+> +bool range_contains_unaccepted_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	struct efi_unaccepted_memory *unaccepted;
+> +	unsigned long flags;
+> +	bool ret = false;
+> +	u64 unit_size;
+> +
+> +	unaccepted = efi_get_unaccepted_table();
+> +	if (!unaccepted)
+> +		return false;
+> +
+> +	unit_size = unaccepted->unit_size;
+> +
+> +	/*
+> +	 * Only care for the part of the range that is represented
+> +	 * in the bitmap.
+> +	 */
+> +	if (start < unaccepted->phys_base)
+> +		start = unaccepted->phys_base;
 
-To avoid the problems above, do not schedule the work to synchronize
-per-CPU mm counters on isolated CPUs. Given the possibility for
-breaking existing userspace applications, avoid changing
-behaviour of access to /proc/sys/vm/stat_refresh, such as
-returning errors to userspace.
+Same comment as above. Trimming start is fine?
 
----
+> +	if (end < unaccepted->phys_base)
+> +		return false;
+> +
+> +	/* Translate to offsets from the beginning of the bitmap */
+> +	start -= unaccepted->phys_base;
+> +	end -= unaccepted->phys_base;
 
-> Also would it make some sense to reduce flushing to cpumask 
-> of the calling process? (certainly a daring thought but have
-> you even considered it?)
+Ditto as above.
 
-Fail to see the point here ?
+> +
+> +	/* Make sure not to overrun the bitmap */
+> +	if (end > unaccepted->size * unit_size * BITS_PER_BYTE)
+> +		end = unaccepted->size * unit_size * BITS_PER_BYTE;
 
+Ditto.
 
+> +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
+> +	while (start < end) {
+> +		if (test_bit(start / unit_size, unaccepted->bitmap)) {
+> +			ret = true;
+> +			break;
+
+I have a faint memory we've had this before but you need to check
+*every* bit in the unaccepted bitmap before returning true. Doh.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
