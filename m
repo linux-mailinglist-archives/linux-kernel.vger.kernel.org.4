@@ -2,116 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C3B721F7E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCB4721F83
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjFEH0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S230185AbjFEH2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjFEH0S (ORCPT
+        with ESMTP id S230159AbjFEH1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:26:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5F30DA;
-        Mon,  5 Jun 2023 00:26:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E98D6D75;
-        Mon,  5 Jun 2023 00:27:00 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.24.244])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3454D3F793;
-        Mon,  5 Jun 2023 00:26:13 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 08:26:10 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V11 01/10] drivers: perf: arm_pmu: Add new sched_task()
- callback
-Message-ID: <ZH2OErgGP+ettegI@FVFF77S0Q05N>
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-2-anshuman.khandual@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531040428.501523-2-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 03:27:50 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B3098;
+        Mon,  5 Jun 2023 00:27:48 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b1a46ad09fso51084121fa.2;
+        Mon, 05 Jun 2023 00:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685950067; x=1688542067;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TsP0n5juNyauxV4ZzGiEHcjUixvHobJ7dhZs4yRrqJI=;
+        b=h/7XCXusn51Z8gchWhBGbEfoI1f8wXzjmCmwyAV+YdrxWmws2wUFCK+9WUMNXmxLM3
+         A5lDIMH5vr7hiosRq4hrPBbLukoEG1FWYPzLBBG41IPfIvt/ESeOWkL6QliA+x7rrhI/
+         Vn7oGdOSfbgaP4hcSAxiwAtoHGA1PGC5mvOuMbH9oAcXDlJwSwUtGYSX6AcqbNrNMiNi
+         E4V7csdznjg3FFvDMQv8UuATgEC07xMSCkb56wkAVhyDXbecGj+5y3LcPvfCwIGUQTWL
+         fq+QB8K2iI5d2AFTy1avYEcBAX6OzrdeZDiB2FhvUcPbI0HEGOy36kLuRYehMhzZvA5w
+         ZG1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685950067; x=1688542067;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TsP0n5juNyauxV4ZzGiEHcjUixvHobJ7dhZs4yRrqJI=;
+        b=doeI1FvRhi2PJT59GBt5LLKl4c5B5E7nnnUx/yi6Z0OlBvCHpO+g2gwHTBe+OIsVmd
+         qwT7K1jM+uVAcMYK46xD2+FpR/0709TC9/e0bFbU6muqlFOXZC+iDuIaY//1fQcmSeQh
+         eQNisn0jyt2zGrNnxsNlTGSoJXe7/6nJv7eiV8DP7tmoKrR+OCAULoLVkjmVh7pIKsFL
+         QPt9OkDrgUk0wEQDWsPR8fYYc4TFpVqtYIKMEf0I844DnphKIWThu+sRQTsidCsaSaiI
+         /GYGKom/tcQahqcr9l/4TmIU5kqq41ULac1Aktj91QC1ipTiZ6pbPNoQvxn8yVfHMTh+
+         evdQ==
+X-Gm-Message-State: AC+VfDz+nB3szubGDdjtgZIcfhT7zepN0O8Jaq4emQe6+w+j2QJgTR7F
+        QGRdbprw2pEXC3uwlCbOvw0=
+X-Google-Smtp-Source: ACHHUZ4Wz4q+jZu5kAv6QOPm74HoKeM8yyFcMAonyqnL8xCKX2S2QjaBAoS+jo+0EcG7yzxfafXP/Q==
+X-Received: by 2002:a2e:9d18:0:b0:2b0:3343:1c0a with SMTP id t24-20020a2e9d18000000b002b033431c0amr3192634lji.31.1685950066428;
+        Mon, 05 Jun 2023 00:27:46 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:91ce:1f9c:f9d4:7837])
+        by smtp.gmail.com with ESMTPSA id kj24-20020a170907765800b00965f5d778e3sm3911553ejc.120.2023.06.05.00.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 00:27:45 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Jaco Kroon <jaco@uls.co.za>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] net/pppoe: fix a typo for the PPPOE_HASH_BITS_1 definition
+Date:   Mon,  5 Jun 2023 09:27:43 +0200
+Message-Id: <20230605072743.11247-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:34:19AM +0530, Anshuman Khandual wrote:
-> This adds armpmu_sched_task(), as generic pmu's sched_task() override which
-> in turn can utilize a new arm_pmu.sched_task() callback when available from
-> the arm_pmu instance. This new callback will be used while enabling BRBE in
-> ARMV8 PMU.
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Tested-by: James Clark <james.clark@arm.com>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Instead of its intention to define PPPOE_HASH_BITS_1, commit 96ba44c637b0
+("net/pppoe: make number of hash bits configurable") actually defined
+config PPPOE_HASH_BITS_2 twice in the ppp's Kconfig file due to a quick
+typo with the numbers.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Fix the typo and define PPPOE_HASH_BITS_1.
 
-> ---
->  drivers/perf/arm_pmu.c       | 9 +++++++++
->  include/linux/perf/arm_pmu.h | 1 +
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-> index 15bd1e34a88e..aada47e3b126 100644
-> --- a/drivers/perf/arm_pmu.c
-> +++ b/drivers/perf/arm_pmu.c
-> @@ -517,6 +517,14 @@ static int armpmu_event_init(struct perf_event *event)
->  	return __hw_perf_event_init(event);
->  }
->  
-> +static void armpmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
-> +{
-> +	struct arm_pmu *armpmu = to_arm_pmu(pmu_ctx->pmu);
-> +
-> +	if (armpmu->sched_task)
-> +		armpmu->sched_task(pmu_ctx, sched_in);
-> +}
-> +
->  static void armpmu_enable(struct pmu *pmu)
->  {
->  	struct arm_pmu *armpmu = to_arm_pmu(pmu);
-> @@ -858,6 +866,7 @@ struct arm_pmu *armpmu_alloc(void)
->  	}
->  
->  	pmu->pmu = (struct pmu) {
-> +		.sched_task	= armpmu_sched_task,
->  		.pmu_enable	= armpmu_enable,
->  		.pmu_disable	= armpmu_disable,
->  		.event_init	= armpmu_event_init,
-> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-> index 525b5d64e394..f7fbd162ca4c 100644
-> --- a/include/linux/perf/arm_pmu.h
-> +++ b/include/linux/perf/arm_pmu.h
-> @@ -100,6 +100,7 @@ struct arm_pmu {
->  	void		(*stop)(struct arm_pmu *);
->  	void		(*reset)(void *);
->  	int		(*map_event)(struct perf_event *event);
-> +	void		(*sched_task)(struct perf_event_pmu_context *pmu_ctx, bool sched_in);
->  	int		num_events;
->  	bool		secure_access; /* 32-bit ARM only */
->  #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
-> -- 
-> 2.25.1
-> 
+Fixes: 96ba44c637b0 ("net/pppoe: make number of hash bits configurable")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ drivers/net/ppp/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ppp/Kconfig b/drivers/net/ppp/Kconfig
+index 2fbcae31fc02..8c9ed1889d1a 100644
+--- a/drivers/net/ppp/Kconfig
++++ b/drivers/net/ppp/Kconfig
+@@ -141,7 +141,7 @@ choice
+ 
+ 		This hash table is on a per outer ethernet interface.
+ 
+-config PPPOE_HASH_BITS_2
++config PPPOE_HASH_BITS_1
+ 	bool "1 bit (2 buckets)"
+ 
+ config PPPOE_HASH_BITS_2
+-- 
+2.17.1
+
