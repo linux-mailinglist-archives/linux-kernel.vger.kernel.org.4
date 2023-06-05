@@ -2,202 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5591E722A7F
+	by mail.lfdr.de (Postfix) with ESMTP id A14BD722A80
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbjFEPJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S234775AbjFEPJt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 11:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbjFEPIm (ORCPT
+        with ESMTP id S234356AbjFEPIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:08:42 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20494D2;
-        Mon,  5 Jun 2023 08:08:41 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-256931ec244so4199110a91.3;
-        Mon, 05 Jun 2023 08:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685977720; x=1688569720;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qfcSNUYUmDUgquuvvHEXrBXWzd6JH10uE8W/bdq1wnA=;
-        b=ICpze0AqwuFmYOgDUEmRa3QpzXBKVAHqOA7og3EWW3qA/8JQgi/DpJHQJzGLnLn2cy
-         CVxWwhuD1ZnTc7OGnm5sUi+LGYm7mI+dQ2pc6TPOs0jbi4z49sMsvaLE17Xjo7HV4IWj
-         ZOe+uk+zE+90pmq1dFz3xoD6/ogL27QXJF9FsZ7at25pr0ITI88jLCxdG78Urz3c7keo
-         Pblf9c5JVMVfpDjyKCOFjUPQXsP2wOsyF69EvXM5nkDOaWrOYtkvgDj2FTk/J21nyobB
-         01iohAuw4Ld9viaX8DP1q1gMOLIDMR6zlMrbMTPOv8nDhhw6QEJQ91jiNNjr49V4gqQJ
-         ksgA==
+        Mon, 5 Jun 2023 11:08:48 -0400
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FC7E8;
+        Mon,  5 Jun 2023 08:08:47 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-652d76be8c2so4031464b3a.3;
+        Mon, 05 Jun 2023 08:08:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685977720; x=1688569720;
+        d=1e100.net; s=20221208; t=1685977727; x=1688569727;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qfcSNUYUmDUgquuvvHEXrBXWzd6JH10uE8W/bdq1wnA=;
-        b=MF9SKHXZLUuvCCDckNASH+ct0C2zM7EkRCGUlKY9o864rgQ714NlGRplMhf9+VuDtL
-         t7GGQo7xglOGiVqW2CdK8+UXM8CEpr914hBv5djRiqO+S1Nkc9Rem14gPYywhTSr6xcv
-         bme4nn/2ebRA0aqJDnnRoSZd2D0UFJtAatnyo+LofT3H5BQRLVICTKe39fS8s8v8nKl8
-         QUxjMjnG2J3q4udgZbyCLJvISAjd7ogCDxyacxaIN8zzHqUeI0WuSuHqRlqdGy6P3b5B
-         inejNFxpkIYEDj1BVGRitLRo4Y2NOUTOXEl3F5GH++pKeta+NdFVEvzXsNicH9CW9Jej
-         G5pA==
-X-Gm-Message-State: AC+VfDySGEfxV2VHQhDBnrltcF0BXv/2wJtSZYG2RcJ1gZXNl7/dnaR6
-        QmNNoGysiT5cOy/e+RttfkmDQ0WrmehdCciD3F0=
-X-Google-Smtp-Source: ACHHUZ6pXV8q1rJ5RRvcqIO8cB26hqFAIJ997bObF4oXwe9sUn8cQs/9VJj/X0hq8+T7qn8Sl7uchaEnqD/6IhCswr8=
-X-Received: by 2002:a17:90a:9201:b0:255:cddf:a0c8 with SMTP id
- m1-20020a17090a920100b00255cddfa0c8mr7152108pjo.41.1685977720251; Mon, 05 Jun
- 2023 08:08:40 -0700 (PDT)
+        bh=Aiwp/bDLmwSr5erFDhpBQgGpKXSsi00J2xGn70rauW0=;
+        b=i/t6YyMlsjxqkrnXcHZz40E0tIOs/MX1dkTUnkQFq3Whz5BuqPrf8MmlMlfTUTIeq5
+         GzgzH6ufZFkL8dUCo86PsKTMhdtrki3W8CWh6JmdrFxKh+Tmve4A9RrKYgXkelwFFRPV
+         05JQHomJITaILvFidLUhVK7fLCbtTe0jCbQn2D18vcqrn9LtD3qnMFy7xQnj/SGQESIT
+         G8ckZm8GVVpLogGt1Nf65lCfZQiUVroc/Muf6Stka0dTMEltCgABJ2/1eVehkOT406W0
+         t0sg41pWIQcd3sQMALvLyygMJUHjP2jtild2HauQlIty+Af4Q5VWE1v92N/a+TYQj82E
+         O9UQ==
+X-Gm-Message-State: AC+VfDz7JqZcupCyyg8bHRmkBkhgsw/iX7sW9c87/IEUK9eqWbOm2jvp
+        OCani0oj7Wb0BoANli1zgm5Jlxu5fkuFlQ==
+X-Google-Smtp-Source: ACHHUZ4MY6YnuUEHDcUmTbFEAZ6SSspWqZ1lBBkbZm3P116kLzJ54SkD8Rf/7C8YgiKfKUsZ330efg==
+X-Received: by 2002:a05:6a20:7490:b0:109:c161:a679 with SMTP id p16-20020a056a20749000b00109c161a679mr9141445pzd.19.1685977726567;
+        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com. [209.85.210.173])
+        by smtp.gmail.com with ESMTPSA id q16-20020a62e110000000b0063d29df1589sm5302851pfh.136.2023.06.05.08.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6532671ccc7so3740863b3a.2;
+        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
+X-Received: by 2002:a05:6870:3e4:b0:19e:86e4:55b0 with SMTP id
+ h36-20020a05687003e400b0019e86e455b0mr54853oaf.1.1685977705560; Mon, 05 Jun
+ 2023 08:08:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230529092840.40413-1-linyunsheng@huawei.com>
- <20230529092840.40413-3-linyunsheng@huawei.com> <977d55210bfcb4f454b9d740fcbe6c451079a086.camel@gmail.com>
- <2e4f0359-151a-5cff-6d31-0ea0f014ef9a@huawei.com> <CAKgT0UcGYXstFP_H8VQtUooYEaYgDpG_crkodYOEyX4q0D58LQ@mail.gmail.com>
- <8c9d5dd8-b654-2d50-039d-9b7732e7746f@huawei.com> <CAKgT0UchHBO+kyPZMYJR7JHfqYsk+qSeuvXzA-H9w3VH-9Tfrg@mail.gmail.com>
- <f5e372ca-e637-4873-0bea-b1b19c623124@gmail.com>
-In-Reply-To: <f5e372ca-e637-4873-0bea-b1b19c623124@gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Mon, 5 Jun 2023 08:08:04 -0700
-Message-ID: <CAKgT0UfsKzaQT3NffKTcuWXGup595Z-sXiqX5vtvjypXJ4QHkA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 2/3] page_pool: support non-frag page for page_pool_alloc_frag()
-To:     Yunsheng Lin <yunshenglin0825@gmail.com>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
+References: <cover.1685692810.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1685692810.git.geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 5 Jun 2023 17:08:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXrgyWT=RtS6cuUP6sT-Ta9Oa4cU2kHP10ah-U50DOSsg@mail.gmail.com>
+Message-ID: <CAMuHMdXrgyWT=RtS6cuUP6sT-Ta9Oa4cU2kHP10ah-U50DOSsg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] iopoll: Busy loop and timeout improvements + conversions
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 9:20=E2=80=AFPM Yunsheng Lin <yunshenglin0825@gmail.=
-com> wrote:
+On Fri, Jun 2, 2023 at 10:51 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> When implementing a polling loop, a common review comment is to use one
+> of the read*_poll_timeout*() helpers.  Unfortunately this is not always
+> possible, or might introduce subtle bugs.  This patch series aims to
+> improve these helpers, so they can gain wider use.
 >
-> On 2023/6/2 23:57, Alexander Duyck wrote:
-> > On Fri, Jun 2, 2023 at 5:23=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:
+>   1. The first patch improves busy-looping behavior of both the atomic
+>      and non-atomic read*_poll_timeout*() helpers.
+>      The issue addressed by this patch was discussed before[1-2], but I
+>      am not aware of any patches moving forward.
 >
-> ...
+>   2. The second patch fixes timeout handling of the atomic variants.
+>      Some of the issues addressed by this patch were mitigated in
+>      various places[3-5], and some of these findings may be of interest
+>      to the authors of [6-8].
 >
-> >>
-> >> According to my defination in this patchset:
-> >> frag page: page alloced from page_pool_alloc_frag() with page->pp_frag=
-_count
-> >>            being greater than one.
-> >> non-frag page:page alloced return from both page_pool_alloc_frag() and
-> >>               page_pool_alloc_pages() with page->pp_frag_count being o=
-ne.
-> >>
-> >> I assume the above 'non-page pool pages' refer to what I call as 'non-=
-frag
-> >> page' alloced return from both page_pool_alloc_frag(), right? And it i=
-s
-> >> still about doing the (size << 1 > max_size)' checking at the begin in=
-stead
-> >> of at the middle right now to avoid extra steps for 'non-frag page' ca=
-se?
-> >
-> > Yeah, the non-page I was referring to were you mono-frag pages.
->
-> I was using 'frag page' and 'non-frag page' per the defination above,
-> and you were using 'mono-frag' mostly and 'non-page' sometimes.
-> I am really confused by them as I felt like I got what they meant and
-> then I was lost when you used them in the next comment. I really hope
-> that you could describe what do you mean in more detailed by using
-> 'mono-frag pages' and 'non-page', so that we can choose the right
-> naming to continue the discussion without further misunderstanding
-> and confusion.
+> The first two patches were sent before, and already received some acks
+> and reviews.  I plan to queue these in an immutable and tagged branch
+> after the weekend, for consumption by myself, and by other interested
+> parties.
 
-I will try to be consistent about this going forward:
-non-fragmented - legacy page pool w/o page frags
-mono-frag - after this page page pool w/o frags
-fragmented - before/after this patch w/ frags
+FTR...
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-> >
-> >>>
-> >>>>>
-> >>>>>> -    if (page && *offset + size > max_size) {
-> >>>>>> +    if (page) {
-> >>>>>> +            *offset =3D pool->frag_offset;
-> >>>>>> +
-> >>>>>> +            if (*offset + size <=3D max_size) {
-> >>>>>> +                    pool->frag_users++;
-> >>>>>> +                    pool->frag_offset =3D *offset + size;
-> >>>>>> +                    alloc_stat_inc(pool, fast);
-> >>>>>> +                    return page;
-> >>>>
-> >>>> Note that we still allow frag page here when '(size << 1 > max_size)=
-'.
-> >>
-> >> This is the optimization I was taking about: suppose we start
-> >> from a clean state with 64K page size, if page_pool_alloc_frag()
-> >> is called with size being 2K and then 34K, we only need one page
-> >> to satisfy caller's need as we do the '*offset + size > max_size'
-> >> checking before the '(size << 1 > max_size)' checking.
-> >
-> > The issue is the unaccounted for waste. We are supposed to know the
-> > general size of the frags being used so we can compute truesize. If
->
-> Note, for case of veth and virtio_net, the driver may only know the
-> current frag size when calling page_pool_alloc_frag(), it does not
-> konw what is the size of the frags will be used next time, how exactly
-> are we going to compute the truesize for cases with different frag
-> size?  As far as I can tell, we may only do something like virtio_net
-> is doing with 'page_frag' for the last frag as below, for other frags,
-> the truesize may need to take accounting to the aligning requirement:
-> https://elixir.bootlin.com/linux/v6.3.5/source/drivers/net/virtio_net.c#L=
-1638
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Yeah, that is more-or-less what I am getting at. This is why drivers
-will tend to want to allocate a mono-frag themselves and then take
-care of adding additional fragmentation as needed. If you are
-abstracting that away from the driver then it makes it much harder to
-track that truesize.
+are available in the Git repository at:
 
-> > for example you are using an order 3 page and you are splitting it
-> > between a 2K and a 17K fragment the 2K fragments will have a massive
-> > truesize underestimate that can lead to memory issues if those smaller
-> > fragments end up holding onto the pages.
-> >
-> > As such we should try to keep the small fragments away from anything
-> > larger than half of the page.
->
-> IMHO, doing the above only alleviate the problem. How is above splitting
-> different from splitting it evently with 16 2K fragments, and when 15 fra=
-g
-> is released, we still have the last 2K fragment holding onto 32K memory,
-> doesn't that also cause massive truesize underestimate? Not to mention th=
-at
-> for system with 64K page size.
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+tags/iopoll-busy-loop-timeout-tag
 
-Yes, that is a known issue. That is why I am not wanting us to further
-exacerbate the issue.
+for you to fetch changes up to 7349a69cf3125e92d48e442d9f400ba446fa314f:
 
-> In RFC patch below, 'page_pool_frag' is used to report the truesize, but
-> I was thinking both 'page_frag' and 'page_frag_cache' both have a similia=
-r
-> problem, so I dropped it in V1 and left that as a future improvement.
->
-> I can pick it up again if 'truesize' is really the concern, but we have t=
-o
-> align on how to compute the truesize here first.
->
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230516124801.2465-=
-4-linyunsheng@huawei.com/
+  iopoll: Do not use timekeeping in read_poll_timeout_atomic()
+(2023-06-05 15:35:27 +0200)
 
-I am assuming this is the same one you mentioned in the other patch.
-As I said the problem is the remainder is being ignored. The logic
-should be pushed to the drivers to handle the truesize and is one of
-the reasons why the expectation is that either the driver will use
-something like a fixed constant size if it is using the raw page pool
-fragments, or if it is going to do random sized chunks then it will
-track the size of the chunks of the page is it using and assign the
-remainders to the last fragment used in a given page.
+----------------------------------------------------------------
+iopoll: Busy loop and timeout improvements
+
+----------------------------------------------------------------
+Geert Uytterhoeven (2):
+      iopoll: Call cpu_relax() in busy loops
+      iopoll: Do not use timekeeping in read_poll_timeout_atomic()
+
+ include/linux/iopoll.h | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
