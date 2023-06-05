@@ -2,150 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3FB7233D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1837233D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjFEX6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 19:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S232654AbjFEX7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 19:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjFEX6k (ORCPT
+        with ESMTP id S230212AbjFEX7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 19:58:40 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3A0F2;
-        Mon,  5 Jun 2023 16:58:38 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355NDL40000971;
-        Mon, 5 Jun 2023 23:58:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=EmTZWvjU+MwHPnG0fraAqfkIBhPrmyWTxxAMokOM/V0=;
- b=SDOTy8fAY0+jh9wUMWFFmskPSHmxm6cgPFbIKLDF53f/MOV1wm/fDqjF17IVzzSbebMg
- 7tZq7tqZZ4ihKkwCnkrBDjf3wnE07SAod5rI7135UxvrRwmRRfA/im3G65TSLRDYA2TV
- GQw/+PpbVzaLbB3v1T8bPxjjAjtNVW0KZ6dGA3NtHcICg9Deb1YpngX564qwD1XSHPlv
- QUioagJXb8IRSIPvQOcffM4dWyxSGeNWsUzf/ITNuxVJ6WJNc+8x3FCn3Y9aEpbMLZpz
- BoSCT0hj9/Lyi/9UzZTKr9KHZmTA8YCxu+GOesKRaE5Zb51d92vPPG6IS/ai2MboFMtw BQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyw46cx58-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 23:58:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 355NwP59012923
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Jun 2023 23:58:25 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 5 Jun 2023 16:58:24 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <marijn.suijten@somainline.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v15] drm/msm/dpu: add DSC blocks to the catalog of MSM8998 and SC8180X
-Date:   Mon, 5 Jun 2023 16:58:14 -0700
-Message-ID: <1686009494-25127-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 5 Jun 2023 19:59:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283D1F2;
+        Mon,  5 Jun 2023 16:59:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B99EE62B5F;
+        Mon,  5 Jun 2023 23:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D73BC4339E;
+        Mon,  5 Jun 2023 23:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686009583;
+        bh=mogscCAE2TctMMQSNnZNjtKIjPq2PKyh7iz0utP3Kjo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RhE55cPP66jNDiifSDCnp320/osWVV85yAW9VCFxmw19JxJbiYHaMZfD+AcUM0p5Y
+         l0CMZQByNHRKQi62J34h9ndDf//hF/AvicpSIsr+qdBZp6xoxNd6IL2QmrAikHyIUQ
+         /w521l5xgzFeaQpGhq09pn33VK3ioAZ5l8jAaRMNRaow52k2xS2QxvsEEQJWvMDmYk
+         iBQjKZ6yZGGhpH5eUNH+DeITQ3lXfBFB8Ono6ZNPi14xXwc02mOSepKoPDwxrYriHS
+         5k7hWlRhAY2WbunH2ZXc9eLJkVNtpYKTaKDmhyxmiZV/hxJI00d8Db+PN41xlZhiN4
+         Wo6DyXlnMbZ0w==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f4bdcde899so6839601e87.0;
+        Mon, 05 Jun 2023 16:59:43 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyChXgPECMdjj922nOazJ2CD6Oo4ibRl7wyFJF68LzxHIkaJmzu
+        0AJVohNt5lWypeEEt1swOYpaJSZ3FJyPex8ha2A=
+X-Google-Smtp-Source: ACHHUZ42u8NSQekejY3oU/vj6DrkcCZt8qA4yrh0rHaOdWJ0WwM5PbLfRAfLkhkYmlULFUmnUfhXgAzRdRLgSBsW+g8=
+X-Received: by 2002:a05:6512:1023:b0:4ef:eb50:4d3d with SMTP id
+ r3-20020a056512102300b004efeb504d3dmr238192lfr.18.1686009581096; Mon, 05 Jun
+ 2023 16:59:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: sFwY9Kjx5GGkJe58of6QRZ8D283hX7U1
-X-Proofpoint-GUID: sFwY9Kjx5GGkJe58of6QRZ8D283hX7U1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_34,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306050207
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230529133410.2125914-1-yukuai1@huaweicloud.com>
+ <b9fd7105-eadc-29cb-fa2e-24109f4a99b7@linux.dev> <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
+ <e2c936ce-5832-9d69-919a-c98af673bb3a@linux.dev> <98f285ff-5afb-1d12-f087-cf04a5208e21@huaweicloud.com>
+ <3f6fdbfc-9c35-2bc0-2b44-0e312f89455b@linux.dev>
+In-Reply-To: <3f6fdbfc-9c35-2bc0-2b44-0e312f89455b@linux.dev>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 5 Jun 2023 16:59:29 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7PDw_SxVrRLcWfKUGEoSd2QF8H-5P+To4BdzfNusj7hQ@mail.gmail.com>
+Message-ID: <CAPhsuW7PDw_SxVrRLcWfKUGEoSd2QF8H-5P+To4BdzfNusj7hQ@mail.gmail.com>
+Subject: Re: [PATCH v2] md/raid5: don't allow concurrent reshape with recovery
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, pmenzel@molgen.mpg.de,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+On Wed, May 31, 2023 at 12:34=E2=80=AFAM Guoqing Jiang <guoqing.jiang@linux=
+.dev> wrote:
+>
+>
+>
+> On 5/31/23 11:20, Yu Kuai wrote:
+> > Hi,
+> >
+> > =E5=9C=A8 2023/05/31 9:49, Guoqing Jiang =E5=86=99=E9=81=93:
+> >>
+> >>
+> >> On 5/31/23 09:22, Yu Kuai wrote:
+> >>> Hi,
+> >>>
+> >>> =E5=9C=A8 2023/05/31 9:06, Guoqing Jiang =E5=86=99=E9=81=93:
+> >>>>
+> >>>>
+> >>>> On 5/29/23 21:34, Yu Kuai wrote:
+> >>>>> From: Yu Kuai <yukuai3@huawei.com>
+> >>>>>
+> >>>>> Commit 0aecb06e2249 ("md/raid5: don't allow replacement while resha=
+pe
+> >>>>> is in progress") fixes that replacement can be set if reshape is
+> >>>>> interrupted, which will cause that array can't be assembled.
+> >>
+> >> I just pulled md tree, but can't find the commit id either in md-next
+> >> or md-fixes .
+> >> gjiang@pc:~/storage/md> git branch
+> >>   master
+> >>   md-fixes
+> >> * md-next
+> >> gjiang@pc:~/storage/md> git branch --contain 0aecb06e2249
+> >> error: malformed object name 0aecb06e2249
+> >>
+> >>>>> There is a similar problem on the other side, if recovery is
+> >>>>> interrupted, then reshape can start, which will cause the same
+> >>>>> problem.
+> >>>>>
+> >>>>> Fix the problem by not starting to reshape while recovery is still =
+in
+> >>>>> progress.
+> >>>>>
+> >>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> >>>>> ---
+> >>>>> Changes in v2:
+> >>>>>   - fix some typo in commit message.
+> >>>>>
+> >>>>>   drivers/md/raid5.c | 8 ++++++++
+> >>>>>   1 file changed, 8 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> >>>>> index 8686d629e3f2..6615abf54d3f 100644
+> >>>>> --- a/drivers/md/raid5.c
+> >>>>> +++ b/drivers/md/raid5.c
+> >>>>> @@ -8525,6 +8525,7 @@ static int raid5_start_reshape(struct mddev
+> >>>>> *mddev)
+> >>>>>       struct r5conf *conf =3D mddev->private;
+> >>>>>       struct md_rdev *rdev;
+> >>>>>       int spares =3D 0;
+> >>>>> +    int i;
+> >>>>>       unsigned long flags;
+> >>>>>       if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
+> >>>>> @@ -8536,6 +8537,13 @@ static int raid5_start_reshape(struct mddev
+> >>>>> *mddev)
+> >>>>>       if (has_failed(conf))
+> >>>>>           return -EINVAL;
+> >>>>> +    /* raid5 can't handle concurrent reshape and recovery */
+> >>>>> +    if (mddev->recovery_cp < MaxSector)
+> >>>>> +        return -EBUSY;
+> >>>>> +    for (i =3D 0; i < conf->raid_disks; i++)
+> >>>>> +        if (rdev_mdlock_deref(mddev, conf->disks[i].replacement))
+> >>>>> +            return -EBUSY;
+> >>>>> +
+> >>>>
+> >>>> Does it mean reshape and recovery  can happen in parallel without
+> >>>> the change?
+> >>>> I really doubt about it given any kind of internal io (resync,
+> >>>> reshape and recovery)
+> >>>> is handled by resync thread. And IIUC either md_do_sync or
+> >>>> md_check_recovery
+> >>>> should avoid it, no need to do it in personality layer.
+> >>>>
+> >>>
+> >>> They can't, in this case recovery is interrupted, then recovery can't
+> >>> make progress, and md_check_recovery() will start reshape, and after
+> >>> reshape is done, recovery will continue, and data will be corrupted
+> >>> because raid456 reshape doesn't handle replacement.
+> >>
+> >> So, do reshape first then recovery, right? I don't see concurrent
+> >> reshape and recovery
+> >> happen based on your description, if concurrent reshape and recovery
+> >> is possible
+> >> then I believe we really have big trouble.
+> >
+> > Yes, reshape first, and yes they can't concurrent.
+>
+> Then the subject, commit message and above comment are confusing given
+> they can't happen
+> even without your change.
+>
 
-Some platforms have DSC blocks which have not been declared in the catalog.
-Complete DSC 1.1 support for all platforms by adding the missing blocks to
-MSM8998 and SC8180X.
+I updated the commit message as:
 
-Changes in v9:
--- add MSM8998 and SC8180x to commit title
+    md/raid5: don't start reshape when recovery or replace is in progress
 
-Changes in v10:
--- fix grammar at commit text
+    When recovery is interrupted (reboot, etc.) check for MD_RECOVERY_RUNNI=
+NG
+    is not enough to tell recovery is in progress. Also check recovery_cp
+   before starting reshape.
 
-Changes in v12:
--- fix "titil" with "title" at changes in v9
+Please let me know if this doesn't make sense.
 
-Changes in v14:
--- "dsc" tp "DSC" at commit title
-
-Changes in v15:
--- fix merge conflicts at dpu_5_1_sc8180x.h
-
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
- drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 2 ++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-index 3c732a0..7d0d0e7 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-@@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
- 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
- };
- 
-+static const struct dpu_dsc_cfg msm8998_dsc[] = {
-+	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
-+	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
-+};
-+
- static const struct dpu_dspp_cfg msm8998_dspp[] = {
- 	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
- 		 &msm8998_dspp_sblk),
-@@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
- 	.dspp = msm8998_dspp,
- 	.pingpong_count = ARRAY_SIZE(msm8998_pp),
- 	.pingpong = msm8998_pp,
-+	.dsc_count = ARRAY_SIZE(msm8998_dsc),
-+	.dsc = msm8998_dsc,
- 	.intf_count = ARRAY_SIZE(msm8998_intf),
- 	.intf = msm8998_intf,
- 	.vbif_count = ARRAY_SIZE(msm8998_vbif),
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-index 8ed2b263..b5c575c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-@@ -230,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
- 	.dsc = sc8180x_dsc,
- 	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
- 	.pingpong = sc8180x_pp,
-+	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
-+	.dsc = sc8180x_dsc,
- 	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
- 	.merge_3d = sc8180x_merge_3d,
- 	.intf_count = ARRAY_SIZE(sc8180x_intf),
--- 
-2.7.4
-
+Thanks,
+Song
