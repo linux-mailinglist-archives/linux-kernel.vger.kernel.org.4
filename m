@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF290722C19
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A31722C22
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbjFEQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
+        id S232935AbjFEQFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbjFEQBA (ORCPT
+        with ESMTP id S229659AbjFEQFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:01:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D36CD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:01:00 -0700 (PDT)
+        Mon, 5 Jun 2023 12:05:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46432B0
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:05:10 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D5B9821B7F;
-        Mon,  5 Jun 2023 16:00:58 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EC7C621B6A;
+        Mon,  5 Jun 2023 16:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1685980858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1685981108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kz6sLOsH45BCwrRvdZKj8xXLLyH+JJthA2WE7AVjTTs=;
-        b=BKmWgUcvERsKiBEtTcA+niVWA6C1J3EXGrQUJySrRBq//5X8R+3dB8VZ99/ndLJ1QT4cc+
-        7GxfC6rMlpuLJorIRG+3tQuZ0pz/CgMy2BDxM+Rm1lmj2WgkcagJystSjr1wMt/zEtxtV5
-        VSMP1lkg663hsd85L9lwXp8ZBBxFBc4=
+        bh=3g5R1DY+izNo6mKdqQOc7RpxzYKMT4hZ4ymaRkJ7JDQ=;
+        b=qZhi3a+zaxLaYS5bIzwwImIF91ZJ3vZYg983yRXq/baOCC8AEaiHysxz0dbKXtAbl1Ymoa
+        0bRi5enyY31fNvk5yJ2DVUIPxcqH06bbarBBz5HsimXniJQG5/dT3oYlyVOaEVGy8CB8JD
+        fLGk71jm18j69qBH4XdTUnsU4GfU/pY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1685980858;
+        s=susede2_ed25519; t=1685981108;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kz6sLOsH45BCwrRvdZKj8xXLLyH+JJthA2WE7AVjTTs=;
-        b=8VuC1kdTGAAfxgLAZdavOpiTYTW+i4pHmz79O0KJBSciMEhFURRi459WgxK7xjVlFeUeXZ
-        e4iqzULbmkp4o3Cw==
+        bh=3g5R1DY+izNo6mKdqQOc7RpxzYKMT4hZ4ymaRkJ7JDQ=;
+        b=inPWmJ/ow5T42GsJOZB5bFP1OCUmtoF/uqgbBPVW6exWIWfNpd95hjgjIuegqJ9aMRJHHj
+        QBfu/GqLXpEKkBAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6910139C7;
-        Mon,  5 Jun 2023 16:00:58 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BAEF4139C7;
+        Mon,  5 Jun 2023 16:05:08 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id JL65J7oGfmQXCAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 16:00:58 +0000
-Date:   Mon, 05 Jun 2023 18:00:58 +0200
-Message-ID: <87pm69hpad.wl-tiwai@suse.de>
+        id Y3vRLLQHfmQ+CgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 16:05:08 +0000
+Date:   Mon, 05 Jun 2023 18:05:08 +0200
+Message-ID: <87o7lthp3f.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Stefan Binding <sbinding@opensource.cirrus.com>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v2 3/3] ALSA: hda/realtek: Delete cs35l41 component master during free
-In-Reply-To: <20230605152855.448115-4-sbinding@opensource.cirrus.com>
-References: <20230605152855.448115-1-sbinding@opensource.cirrus.com>
-        <20230605152855.448115-4-sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v2] ALSA: hda/realtek: Add quirks for Asus ROG 2024 laptops using CS35L41
+In-Reply-To: <20230605153308.448550-1-sbinding@opensource.cirrus.com>
+References: <20230605153308.448550-1-sbinding@opensource.cirrus.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -71,31 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Jun 2023 17:28:55 +0200,
+On Mon, 05 Jun 2023 17:33:08 +0200,
 Stefan Binding wrote:
 > 
-> This ensures that the driver is properly cleaned up when freed.
+> Add support for Asus ROG 2024 models using CS35L41 SPI with Internal
+> Boost.
 > 
 > Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> ---
->  sound/pci/hda/patch_realtek.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-> index 7b5f194513c7b..e3774903918fe 100644
-> --- a/sound/pci/hda/patch_realtek.c
-> +++ b/sound/pci/hda/patch_realtek.c
-> @@ -6757,6 +6757,8 @@ static void cs35l41_generic_fixup(struct hda_codec *cdc, int action, const char
->  		else
->  			spec->gen.pcm_playback_hook = comp_generic_playback_hook;
->  		break;
-> +	case HDA_FIXUP_ACT_FREE:
-> +		component_master_del(dev, &comp_master_ops);
->  	}
 
-Don't forget to add break here.
+Applied now.  Thanks.
 
-
-thanks,
 
 Takashi
