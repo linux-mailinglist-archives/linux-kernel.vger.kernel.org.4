@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8406722F96
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987E9722F97
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjFETRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S235081AbjFETRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbjFETQZ (ORCPT
+        with ESMTP id S235452AbjFETQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:16:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EE5102;
-        Mon,  5 Jun 2023 12:16:22 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 19:16:20 -0000
+        Mon, 5 Jun 2023 15:16:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D7C10A;
+        Mon,  5 Jun 2023 12:16:23 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 19:16:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685992580;
+        s=2020; t=1685992582;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=fEWMzxMynrAbFiAuaLcnjQ/qJYv2G9iaD4QrsdirL5w=;
-        b=lf7hxeExGKv1jRXj3FFN9mmIl777NwNCqVIvyxMTp+HIY4ANJNG5mRt20wNEoaNQlLaZXU
-        H+e6SMgYXcAAkyDax0B1lr8asoD0j9fHScp+q7yvQQntT8B9T8qydPsWzaESLkJ7mNxsxO
-        U+4UCLo6XLGGD+xSdH/OWQF+Y+QR6/qfdz2KHk3/gN7QoRT1q1Iwb0rvTTFM84sWa4AkIy
-        yj4JHt/ALqRF6biTvpAfjWxOpisXfxLg/WfBug4eu+vJAsBeqljoz6kxv9apB5d1Ho6kwX
-        EVIMWDZumidhpqQ3mdxW7cAUoimTkDkp6MH2msTAR2vYk/4RFSlSa2z6eCOqBw==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/dp1jLmsaN1DY1rvwMzQoKHr01XU+rlLrdjw7ZKItgw=;
+        b=BOC/uDUP3MNvvEz0Sl9zKSUioAT0ODK7mrPEh0q2Y3KTC42rwYRu0Onj5ubXEd65+d2F/d
+        rpzP4RtzfNl1yY8lDt+L0/YcW7pjkFsaRuJY1TGP6gePoKOLbAhytMp35NP8+5YhJJPCbB
+        /+rhjfrS4Z/2i83NxOxDsn5ecjw8tlXUUvnjB5flBg1b/LATLSHf6CaZ67hHzIz34H3IVk
+        nEKxTY5xEUUVrigdTx89cDUQd8QecFU90pGbXbaWyUVeqGaRdUor2sChBfXChVPGJKttYY
+        qwXMjzagxNoTF6tZJJ0tvZYMMYrvQkMuM26Rh7BFpSVE2PEl14JJ9g7uIjrVag==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685992580;
+        s=2020e; t=1685992582;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=fEWMzxMynrAbFiAuaLcnjQ/qJYv2G9iaD4QrsdirL5w=;
-        b=WHBKDGg0JPbv89jsk8ZH0S2T5uLQWzHEZZF0twkmKuIa6g4EMkG9eeo8SlRT22oecjFJaN
-        1+vparJUO+5UWBDw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/dp1jLmsaN1DY1rvwMzQoKHr01XU+rlLrdjw7ZKItgw=;
+        b=OuqBxhkebCvk1yZWb2hw+adWolmUE7pwbvBrXXQtGNRqVTmPpncF5QZRYGXnUrVpEhdEge
+        doxE0rZx7wk39ZBA==
+From:   "tip-bot2 for Yicong Yang" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] x86/sched: Rewrite topology setup
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/fair: Don't balance task to its current running CPU
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20230530082507.10444-1-yangyicong@huawei.com>
+References: <20230530082507.10444-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-Message-ID: <168599258020.404.9381359145432578623.tip-bot2@tip-bot2>
+Message-ID: <168599258148.404.1918167188216154536.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,150 +68,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     8f2d6c41e5a649fe217724364cbb1a7d2e6ff205
-Gitweb:        https://git.kernel.org/tip/8f2d6c41e5a649fe217724364cbb1a7d2e6ff205
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 01 Jun 2023 18:00:25 +02:00
+Commit-ID:     0dd37d6dd33a9c23351e6115ae8cdac7863bc7de
+Gitweb:        https://git.kernel.org/tip/0dd37d6dd33a9c23351e6115ae8cdac7863bc7de
+Author:        Yicong Yang <yangyicong@hisilicon.com>
+AuthorDate:    Tue, 30 May 2023 16:25:07 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 05 Jun 2023 21:11:03 +02:00
+CommitterDate: Mon, 05 Jun 2023 21:08:24 +02:00
 
-x86/sched: Rewrite topology setup
+sched/fair: Don't balance task to its current running CPU
 
-Instead of having a number of fixed topologies to pick from; build one
-on the fly. This is both simpler now and simpler to extend in the
-future.
+We've run into the case that the balancer tries to balance a migration
+disabled task and trigger the warning in set_task_cpu() like below:
 
+ ------------[ cut here ]------------
+ WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
+ Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
+ CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
+ Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
+ pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : set_task_cpu+0x188/0x240
+ lr : load_balance+0x5d0/0xc60
+ sp : ffff80000803bc70
+ x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
+ x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
+ x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
+ x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
+ x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
+ x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
+ x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
+ x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
+ x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
+ x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
+ Call trace:
+  set_task_cpu+0x188/0x240
+  load_balance+0x5d0/0xc60
+  rebalance_domains+0x26c/0x380
+  _nohz_idle_balance.isra.0+0x1e0/0x370
+  run_rebalance_domains+0x6c/0x80
+  __do_softirq+0x128/0x3d8
+  ____do_softirq+0x18/0x24
+  call_on_irq_stack+0x2c/0x38
+  do_softirq_own_stack+0x24/0x3c
+  __irq_exit_rcu+0xcc/0xf4
+  irq_exit_rcu+0x18/0x24
+  el1_interrupt+0x4c/0xe4
+  el1h_64_irq_handler+0x18/0x2c
+  el1h_64_irq+0x74/0x78
+  arch_cpu_idle+0x18/0x4c
+  default_idle_call+0x58/0x194
+  do_idle+0x244/0x2b0
+  cpu_startup_entry+0x30/0x3c
+  secondary_start_kernel+0x14c/0x190
+  __secondary_switched+0xb0/0xb4
+ ---[ end trace 0000000000000000 ]---
+
+Further investigation shows that the warning is superfluous, the migration
+disabled task is just going to be migrated to its current running CPU.
+This is because that on load balance if the dst_cpu is not allowed by the
+task, we'll re-select a new_dst_cpu as a candidate. If no task can be
+balanced to dst_cpu we'll try to balance the task to the new_dst_cpu
+instead. In this case when the migration disabled task is not on CPU it
+only allows to run on its current CPU, load balance will select its
+current CPU as new_dst_cpu and later triggers the warning above.
+
+The new_dst_cpu is chosen from the env->dst_grpmask. Currently it
+contains CPUs in sched_group_span() and if we have overlapped groups it's
+possible to run into this case. This patch makes env->dst_grpmask of
+group_balance_mask() which exclude any CPUs from the busiest group and
+solve the issue. For balancing in a domain with no overlapped groups
+the behaviour keeps same as before.
+
+Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230601153522.GB559993%40hirez.programming.kicks-ass.net
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/r/20230530082507.10444-1-yangyicong@huawei.com
 ---
- arch/x86/kernel/smpboot.c | 94 +++++++++++++++++---------------------
- 1 file changed, 43 insertions(+), 51 deletions(-)
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 34066f6..28fcd29 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -563,50 +563,57 @@ static int x86_cluster_flags(void)
- #endif
- #endif
- 
--static struct sched_domain_topology_level x86_numa_in_package_topology[] = {
--#ifdef CONFIG_SCHED_SMT
--	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
--#endif
--#ifdef CONFIG_SCHED_CLUSTER
--	{ cpu_clustergroup_mask, x86_cluster_flags, SD_INIT_NAME(CLS) },
--#endif
--#ifdef CONFIG_SCHED_MC
--	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
--#endif
--	{ NULL, },
--};
-+/*
-+ * Set if a package/die has multiple NUMA nodes inside.
-+ * AMD Magny-Cours, Intel Cluster-on-Die, and Intel
-+ * Sub-NUMA Clustering have this.
-+ */
-+static bool x86_has_numa_in_package;
- 
--static struct sched_domain_topology_level x86_hybrid_topology[] = {
--#ifdef CONFIG_SCHED_SMT
--	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
--#endif
--#ifdef CONFIG_SCHED_MC
--	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
--#endif
--	{ cpu_cpu_mask, x86_sched_itmt_flags, SD_INIT_NAME(DIE) },
--	{ NULL, },
--};
-+static struct sched_domain_topology_level x86_topology[6];
-+
-+static void __init build_sched_topology(void)
-+{
-+	int i = 0;
- 
--static struct sched_domain_topology_level x86_topology[] = {
- #ifdef CONFIG_SCHED_SMT
--	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
-+	x86_topology[i++] = (struct sched_domain_topology_level){
-+		cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT)
-+	};
- #endif
- #ifdef CONFIG_SCHED_CLUSTER
--	{ cpu_clustergroup_mask, x86_cluster_flags, SD_INIT_NAME(CLS) },
-+	/*
-+	 * For now, skip the cluster domain on Hybrid.
-+	 */
-+	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) {
-+		x86_topology[i++] = (struct sched_domain_topology_level){
-+			cpu_clustergroup_mask, x86_cluster_flags, SD_INIT_NAME(CLS)
-+		};
-+	}
- #endif
- #ifdef CONFIG_SCHED_MC
--	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
-+	x86_topology[i++] = (struct sched_domain_topology_level){
-+		cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC)
-+	};
- #endif
--	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
--	{ NULL, },
--};
-+	/*
-+	 * When there is NUMA topology inside the package skip the DIE domain
-+	 * since the NUMA domains will auto-magically create the right spanning
-+	 * domains based on the SLIT.
-+	 */
-+	if (!x86_has_numa_in_package) {
-+		x86_topology[i++] = (struct sched_domain_topology_level){
-+			cpu_cpu_mask, SD_INIT_NAME(DIE)
-+		};
-+	}
- 
--/*
-- * Set if a package/die has multiple NUMA nodes inside.
-- * AMD Magny-Cours, Intel Cluster-on-Die, and Intel
-- * Sub-NUMA Clustering have this.
-- */
--static bool x86_has_numa_in_package;
-+	/*
-+	 * There must be one trailing NULL entry left.
-+	 */
-+	BUG_ON(i >= ARRAY_SIZE(x86_topology)-1);
-+
-+	set_sched_topology(x86_topology);
-+}
- 
- void set_cpu_sibling_map(int cpu)
- {
-@@ -1390,15 +1397,6 @@ void __init smp_prepare_cpus_common(void)
- 		zalloc_cpumask_var(&per_cpu(cpu_l2c_shared_map, i), GFP_KERNEL);
- 	}
- 
--	/*
--	 * Set 'default' x86 topology, this matches default_topology() in that
--	 * it has NUMA nodes as a topology level. See also
--	 * native_smp_cpus_done().
--	 *
--	 * Must be done before set_cpus_sibling_map() is ran.
--	 */
--	set_sched_topology(x86_topology);
--
- 	set_cpu_sibling_map(0);
- }
- 
-@@ -1490,13 +1488,7 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- 	pr_debug("Boot done\n");
- 
- 	calculate_max_logical_packages();
--
--	/* XXX for now assume numa-in-package and hybrid don't overlap */
--	if (x86_has_numa_in_package)
--		set_sched_topology(x86_numa_in_package_topology);
--	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
--		set_sched_topology(x86_hybrid_topology);
--
-+	build_sched_topology();
- 	nmi_selftest();
- 	impress_friends();
- 	cache_aps_init();
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 48b6f0c..df0ff90 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10742,7 +10742,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+ 		.sd		= sd,
+ 		.dst_cpu	= this_cpu,
+ 		.dst_rq		= this_rq,
+-		.dst_grpmask    = sched_group_span(sd->groups),
++		.dst_grpmask    = group_balance_mask(sd->groups),
+ 		.idle		= idle,
+ 		.loop_break	= SCHED_NR_MIGRATE_BREAK,
+ 		.cpus		= cpus,
