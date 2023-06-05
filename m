@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861F2722FB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899BB722F9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbjFETVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S235676AbjFETTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235689AbjFETVW (ORCPT
+        with ESMTP id S235672AbjFETTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:21:22 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00468127;
-        Mon,  5 Jun 2023 12:21:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685992688; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=KpZaH3G5VeHecBV0b5jJ1EmTd13VdsdZXsmN7ErZB/x5W7EPOTKyinFfB2nk3LQuSV
-    xrmcC0GgEOe+wW54iqW3Ty4Yf1uVdya1nvW//Ds6latbCyf7wZ+p8O68OdlATr5EcpI5
-    AgD4LruF0xIxI3TRMnYbTVc+nAeamm0HO57v2s+KAMYBudhRLIHni2TA5CLXoBeG1JB0
-    gzITxTiD5Ie3y/B8rk2fLQO9qb2FBQ0wk1jL6L3r6qZytEZqvp0SFT22/0oZ3fP3pOyK
-    K7Nx8kdQW9kanwhUbeXSKFl3oPG/TwLlSqmPWDsWGihFv2LCeWGLqwJI4oBaQyK/MWi0
-    cvdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685992688;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=nwUZOE4ivaFUd1EhPNuWsSDQJ499AupgZ2LyVSZEuns=;
-    b=bs3u2o29hMxiKPrUGh7vRtYDzkDkCllvLgcL0Ky6doepstCFzIwv2kzfCYxa4fyeRe
-    GVhvXX0X0Ze4dT3krFi73SO1a958aFzxEWHP6WkHaDFSpjx/GFE0TAzv8NAQjnGzAfrv
-    FD5ntoAb9TioUrk44ngVDalqP4fs5DTJzJ8YTmv8Qju7Msxh0Wd1cJWlUPibiQaZmcCe
-    GF7ry0043toGiQ+LHJ6YXW7QNlLdOLb+1W0MShQPtoDNa+B4p1+z5zxA5cE37y8MrAFZ
-    ES+l+2SlLMWxZoku3Hh5yVioZ+7qpVrnBJRAMuOdaO3uJgf4EPWnQr4s7hQmVWQKS92c
-    9EYQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685992688;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=nwUZOE4ivaFUd1EhPNuWsSDQJ499AupgZ2LyVSZEuns=;
-    b=DZHWisTGOO/EEJwVBCMmJ3hkE4vFQiujPVoWol2njjfGa5W69V1DJdl4qYzgDWaiaG
-    I4P+TxYpfzKIvo4NbJ9dTPeewGSBUnoe9Hlj/tde7TjQmVnM+LNQs1KZ7sRZSIA5Rnvv
-    t3JLXUO2NrPPfgPOX0u8EraTYrkRkp+dNwXK2PncLQwC1zDZyJK9AePvUgSraITRigd/
-    gEcyJcFdgtaWdlMPf8uPcnOrQDENhML6FgQ7pK0HzQW+8eilxAk8ZifKBgY7v40a0FiE
-    JZDPZuaNksONMVJIcRsm0lImP+xQqvT0L8/7yMuv0jUqU8WtbqHTkTlXCXHcvfiX6suW
-    OdXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685992688;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=nwUZOE4ivaFUd1EhPNuWsSDQJ499AupgZ2LyVSZEuns=;
-    b=3tI4pC3TpPXOUDplXAjCFodcAxe0byBa5z+OaNnNT34CGLZIHtR/KRNzePoJewJ7Wm
-    Xjl6jbPfYpOu6j+2WEBQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z+J1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z55JI8Bgj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 5 Jun 2023 21:18:08 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 21:18:07 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH 09/14] rpmsg: qcom_smd: Use qcom_smem_is_available()
-Message-ID: <ZH407yP8RQmTlQtf@gerhold.net>
-References: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
- <20230531-rpm-rproc-v1-9-e0a3b6de1f14@gerhold.net>
- <0f48649e-27d6-97f7-98b8-fe10b99d0236@linaro.org>
+        Mon, 5 Jun 2023 15:19:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A411AD;
+        Mon,  5 Jun 2023 12:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685992723; x=1717528723;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Kt8UwcbAWIHbjuRkCIkoTQ1Kj/ybAb+bYpOZY2j+aQA=;
+  b=Sr9XK2l6EeD6MuNr2ZQRiR151Rg0jugohDppNKl3CQ65CBHdzpiwgjgG
+   n5K7WiJ/ERg5p1Ug0oZKT3mlSOubjloTa5/puepjXHSDy+odxltzroH5z
+   PyZ1lkE6LCQAWHKmdTWBSVybk/aKk1hbpslSRrYcIBX4j31AuMhtGZYkB
+   KBZIPe6qU+W9+yOjXk0hX+Q9VFD7Vn5gW7hGDmn9113qK+nkRNm+YmCQ/
+   yKmIrrSdYEe0CSkZ95Dz9solGqTkhFnPp3VCeEi6OtDeizNEAYQjMNsl2
+   afk+vHUHTAZ3SyhQUVKnJXMTmtnDvn7d09xRQPQyNn8744dho2smsKq+u
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422284836"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="422284836"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 12:18:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="711919843"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="711919843"
+Received: from pmudgal-mobl1.amr.corp.intel.com (HELO [10.209.41.254]) ([10.209.41.254])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 12:18:22 -0700
+Message-ID: <5bce4a75-d4bb-74c2-1feb-e988841d5465@intel.com>
+Date:   Mon, 5 Jun 2023 12:18:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f48649e-27d6-97f7-98b8-fe10b99d0236@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCHv13 9/9] x86/tdx: Add unaccepted memory support
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
+ <20230601182543.19036-10-kirill.shutemov@linux.intel.com>
+ <4d8d6fc4-99b5-29ba-7f81-12e7d57907ea@amd.com>
+ <1d24355c-3922-d5c7-4c05-f5ef0adaf5d2@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1d24355c-3922-d5c7-4c05-f5ef0adaf5d2@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 08:56:44PM +0200, Konrad Dybcio wrote:
+On 6/2/23 07:26, Tom Lendacky wrote:
+>> So this is a change in this version. If tdx_accept_memory() fails,
+>> you'll report unknown platform. Wouldn't it be better to have an error
+>> message that indicates a failure in the accept path?
+>>
 > 
+> Maybe you can keep it similar to the v12 version with just a new error
+> message, something like:
 > 
-> On 5.06.2023 09:08, Stephan Gerhold wrote:
-> > Rather than looking up a dummy item from SMEM, use the new
-> > qcom_smem_is_available() function to make the code more clear
-> > (and reduce the overhead slightly).
-> > 
-> > Add the same check to qcom_smd_register_edge() as well to ensure that
-> > it only succeeds if SMEM is already available - if a driver calls the
-> > function and SMEM is not available yet then the initial state will be
-> > read incorrectly and the RPMSG devices might never become available.
-> > 
-> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> > ---
-> >  drivers/rpmsg/qcom_smd.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-> > index 7b9c298aa491..43f601c84b4f 100644
-> > --- a/drivers/rpmsg/qcom_smd.c
-> > +++ b/drivers/rpmsg/qcom_smd.c
-> > @@ -1479,6 +1479,9 @@ struct qcom_smd_edge *qcom_smd_register_edge(struct device *parent,
-> >  	struct qcom_smd_edge *edge;
-> >  	int ret;
-> >  
-> > +	if (!qcom_smem_is_available())
-> > +		return ERR_PTR(-EPROBE_DEFER);
-> > +
-> >  	edge = kzalloc(sizeof(*edge), GFP_KERNEL);
-> >  	if (!edge)
-> >  		return ERR_PTR(-ENOMEM);
-> > @@ -1553,12 +1556,9 @@ EXPORT_SYMBOL(qcom_smd_unregister_edge);
-> >  static int qcom_smd_probe(struct platform_device *pdev)
-> >  {
-> >  	struct device_node *node;
-> > -	void *p;
-> >  
-> > -	/* Wait for smem */
-> > -	p = qcom_smem_get(QCOM_SMEM_HOST_ANY, smem_items[0].alloc_tbl_id, NULL);
-> > -	if (PTR_ERR(p) == -EPROBE_DEFER)
-> > -		return PTR_ERR(p);
-> > +	if (!qcom_smem_is_available())
-> > +		return -EPROBE_DEFER;
-> >  
-> >  	for_each_available_child_of_node(pdev->dev.of_node, node)
-> >  		qcom_smd_register_edge(&pdev->dev, node);
-> Hm.. we're not checking the return value here, at all.. Perhaps that
-> could be improved and we could only check for smem presence inside
-> qcom_smd_register_edge()?
-> 
+>     if (early_is_tdx_guest()) {
+>         if (!tdx_accept_memory(start, end))
+>             error("TDX error accepting memory\n");
+>     } else {
+>         error("Cannot accept memory: unknown platform\n");
+>     }
 
-I think the goal here it to register as many of the edges as possible,
-so we wouldn't necessarily want to abort if one of them fails. That's
-why it's enough to check for only for a possible -EPROBE_DEFER first.
-
-But more importantly after this series this is legacy code that exists
-only for backwards compatibility with older DTBs. The probe function
-won't be called for DTBs in mainline anymore. So I think it's not worth
-to improve it much anymore. ;)
-
-Thanks,
-Stephan
+In the end, these errors aren't plumbed out to the page allocator.  They
+*need* to succeed or we are dead anyway.  Should we just send a fatal
+error up to the TDX module when we fail to accept memory?  It's
+_slightly_ less opaque than plowing into an unaccepted page.
