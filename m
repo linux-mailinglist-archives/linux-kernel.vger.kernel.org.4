@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DAD721D6D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 07:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E088721D7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 07:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjFEFTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 01:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S232749AbjFEFaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 01:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjFEFTo (ORCPT
+        with ESMTP id S232715AbjFEFaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 01:19:44 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A9DD3
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 22:19:43 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-772d796bbe5so290001739f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 22:19:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685942382; x=1688534382;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fBk0s2MF2AI/AMlwY2L7ayq4gYk55uu/iFfSdgZ9gkY=;
-        b=GuAkmy2rpegeGJCP1JI2sJb3gK/R0uM/GMWcih5O1QskTZsEHqKm0FUKHtj4KCVcl0
-         XW/oR5KjkCGAQGS1dXkeqdEVFvy0AoFunLFH0Dk8JK3Ik9xOlNnlgU0r6+S+++k832IV
-         LRwNzdjNH44Q02SzZFH2TxNHUw9IrooftM4qfp0Fz8I2dtXYdm+25qM5vxUvh2OrMz7Q
-         Lelw8Lnx2JeXQoKOKgKGpqNaP8xfDnhFLijQ7FrrMOi61arVGYvTYbrAfX3kPxv5+VFK
-         NAZASHi6Bdo/3QLihT2XxZAjwuk0jt54Yy6TI2B4s8bymm+P+zVf30hWldEnM84NBvhw
-         BrUg==
-X-Gm-Message-State: AC+VfDwuStbtrS4yz+GzfH03a5HUTI4PRPArNu7gz90jU3s3jgvjCDxS
-        0nw+PvUQg5/iUY6qtr5/a8JXWQbDbPUXa/jA34YUA5hHi0m8
-X-Google-Smtp-Source: ACHHUZ4FD19vOYTxGNEgXx1+rGQfK1WNRUTMJDekFG+qt+qr8iiNO8ns43o7HvjZmV5fuCLf9ZvbdrqAPCiriqTKsckgkKBXpKfq
+        Mon, 5 Jun 2023 01:30:01 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB3DDA;
+        Sun,  4 Jun 2023 22:30:00 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35558Csn009125;
+        Mon, 5 Jun 2023 05:29:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=GYvKC/BuUbwvCcEPHzu8xJOy0DyY1lXU4C20wmC9xq8=;
+ b=JkV5y7Rr65msB6BBrOWo0chqtw1J7U11T0JxS7MOXkoVjcDh2dkZVm6FjLR7JqebwY9c
+ u3btluWPlaKAnHwKLN4QUf6dmGxqm4RPuHGhbPGC67IY5nJxAqkUn+cB3zRvYIH1yqDb
+ I0xFrFDvjmxR02wNeeSKxfhi0Kqh3HG6KjuXG8H2TO8W8jaXQtwUjnim5Pii5KZwISww
+ PJjBp55f7SMGWA5qgr9yQDCmVApUoAxTlP2o+BL1FHddIp5l/E6JQ8sQ2JbxZZxatCGU
+ noyh7DcxrjtCnbGV5z4zzqeTb0M2sAjdaAi1EeRo+NDH9NRtp6fji52SFMvbVmAOGwMA cA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyvfxjqqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 05:29:58 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3555TvJ6003315
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 5 Jun 2023 05:29:57 GMT
+Received: from sridsn-linux.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 4 Jun 2023 22:29:53 -0700
+From:   Sridharan S N <quic_sridsn@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Sridharan S N <quic_sridsn@quicinc.com>
+Subject: [PATCH V2 0/2] Add support for GPIO based leds and buttons
+Date:   Mon, 5 Jun 2023 10:59:05 +0530
+Message-ID: <20230605052907.18837-1-quic_sridsn@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:7a07:0:b0:41f:6290:10c6 with SMTP id
- a7-20020a027a07000000b0041f629010c6mr427412jac.0.1685942382431; Sun, 04 Jun
- 2023 22:19:42 -0700 (PDT)
-Date:   Sun, 04 Jun 2023 22:19:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d1149605fd5b0c0d@google.com>
-Subject: [syzbot] [ext4?] WARNING: locking bug in ext4_ioctl
-From:   syzbot <syzbot+a3c8e9ac9f9d77240afd@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lYLKkNv9v6hfWyshcvFSoiHoHc_e6lTN
+X-Proofpoint-ORIG-GUID: lYLKkNv9v6hfWyshcvFSoiHoHc_e6lTN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=561
+ malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306050048
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add support for wlan-2g led and wps button available on IPQ5332 and
+IPQ9574
 
-syzbot found the following issue on:
+Sridharan S N (2):
+  arm64: dts: qcom: ipq5332: enable GPIO based LEDs and Buttons
+  arm64: dts: qcom: ipq9574: enable GPIO based LEDs
 
-HEAD commit:    9561de3a55be Linux 6.4-rc5
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11671443280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
-dashboard link: https://syzkaller.appspot.com/bug?extid=a3c8e9ac9f9d77240afd
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+ arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts | 42 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts | 42 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts | 42 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts | 20 ++++++++++
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 20 ++++++++++
+ arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts | 20 ++++++++++
+ arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts | 20 ++++++++++
+ 7 files changed, 206 insertions(+)
 
-Unfortunately, I don't have any reproducer for this issue yet.
+-- 
+2.17.1
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7890258233e8/disk-9561de3a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/693d68681275/vmlinux-9561de3a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0f62a882fdf3/bzImage-9561de3a.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a3c8e9ac9f9d77240afd@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-Looking for class "&ei->i_data_sem" with key init_once.__key.780, but found a different class "&ei->i_data_sem" with the same key
-WARNING: CPU: 1 PID: 25888 at kernel/locking/lockdep.c:941 look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
-Modules linked in:
-CPU: 1 PID: 25888 Comm: syz-executor.5 Not tainted 6.4.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
-Code: 8b 16 48 c7 c0 60 91 1e 90 48 39 c2 74 46 f6 05 5d 02 92 03 01 75 3d c6 05 54 02 92 03 01 48 c7 c7 a0 ae ea 8a e8 de 8a a3 f6 <0f> 0b eb 26 e8 f5 d0 80 f9 48 c7 c7 e0 ad ea 8a 89 de e8 37 ca fd
-RSP: 0018:ffffc9000346f590 EFLAGS: 00010046
-RAX: d34f506bfef30000 RBX: ffffffff9009d5e0 RCX: 0000000000040000
-RDX: ffffc9000c4e2000 RSI: 000000000000683a RDI: 000000000000683b
-RBP: ffffc9000346f698 R08: ffffffff81530142 R09: ffffed1017325163
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 1ffff9200068dec0 R14: ffff8880894f7088 R15: ffffffff91cac681
-FS:  00007fefb6c7f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2b481895e0 CR3: 0000000019b2c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- register_lock_class+0x104/0x990 kernel/locking/lockdep.c:1290
- __lock_acquire+0xd3/0x2070 kernel/locking/lockdep.c:4965
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
- down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
- swap_inode_boot_loader fs/ext4/ioctl.c:423 [inline]
- __ext4_ioctl fs/ext4/ioctl.c:1418 [inline]
- ext4_ioctl+0x453c/0x5b60 fs/ext4/ioctl.c:1608
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fefb5e8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fefb6c7f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fefb5fac050 RCX: 00007fefb5e8c169
-RDX: 0000000000000000 RSI: 0000000000006611 RDI: 000000000000000a
-RBP: 00007fefb5ee7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff62162a1f R14: 00007fefb6c7f300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
