@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F6D722FD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B073B722FDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbjFETce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S232433AbjFETg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235738AbjFETcb (ORCPT
+        with ESMTP id S230077AbjFETg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:32:31 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15F5100
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:32:27 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-33bcc8f0d21so2424475ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1685993547; x=1688585547;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vhr2lAV911N9w6qOC4Bl8VDt3wGt4nmSLltxDhRWdPM=;
-        b=ZV+nugYv6uGpnZqVmkYA7FKCRurQ5jAol+M6MWCUFCjQGidv5JPTur0hGB2/7mZ9lP
-         2UoLnsvHenY916/PTUJ6qlEyMzoA1RbXPx5DHixWJr13J/0nD2JdkP4J/bgWM/dTdk3U
-         uriedVLS9HD28WubInvxOdLH+bKP4L93iWe5g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685993547; x=1688585547;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhr2lAV911N9w6qOC4Bl8VDt3wGt4nmSLltxDhRWdPM=;
-        b=HrNlZ6nWu6ydTr3U1tUqaMDQ5+/2mUNReTonw0fqOW393eBu9+HF98YoZk4Mnp8qvl
-         z61Egw2LMsaKi51ytAJlGpc5/ptEl6dRijidQN2dQ0qOOnDsiupuS0W2GrHDLOFnlI+h
-         60DPxlzNiGNT0ikmmDjx8gGoqpPiEzwDYmKem/cQMuVDmcbmAio3HooaM4gHHdamCR44
-         jt/oYQl+x3d/ciqhgPXmmXOKjj/JbkMlPvNyKejq9aUSTl9jWqUBt/jJufssfjm4UxB4
-         PjDeDkFn+zrI2VBL8487R+Zxi4MYQOtsOVFaD06qF+RksNOJ+jNLGc6dz+xVNVmrIcjC
-         W/nQ==
-X-Gm-Message-State: AC+VfDxnIeBZ/3sqpvFQUlV0yNsrU6oQfsQjsbkpv17tvETVAJ55msM0
-        lteHYaiWEBINJDN24V5g4+JrtmTL6UmxWhWXQqc=
-X-Google-Smtp-Source: ACHHUZ6KHh1oVsrNW2D/ZW3X6D326obvjwPX9XVKIX4IeLt0y2mOCL7Bvt0P2Wf6po1/yAhWO20VFQ==
-X-Received: by 2002:a05:6602:3999:b0:777:b6a9:64ba with SMTP id bw25-20020a056602399900b00777b6a964bamr118881iob.2.1685993547357;
-        Mon, 05 Jun 2023 12:32:27 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z18-20020a029f12000000b0041a9c4e0f1csm2330096jal.109.2023.06.05.12.32.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 12:32:26 -0700 (PDT)
-Message-ID: <9f726045-e9fa-5c8c-fd1c-ace5cf967617@linuxfoundation.org>
-Date:   Mon, 5 Jun 2023 13:32:26 -0600
+        Mon, 5 Jun 2023 15:36:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D8AF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:36:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3394621F8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 19:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E25F6C433D2;
+        Mon,  5 Jun 2023 19:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685993785;
+        bh=+giQO/41KfxmdSnorRAH0Il/f9FFoxZF4d9pD94EDJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dFvpg46EjKT6rlArh7FE5yHdzcwCoiL7dygFJIOy94thjJU54tsBaqO+IWf8fwnRJ
+         brfN7KFimR08CQoqNhKSuK54kqIT4MYFEoB1fRYs5AqP+0nZHN9vpBVD4yIdn6hXnp
+         5J2vS1+bNNQQdeoibSfhPWOsZfjvTIbkVtMd4/5NHYGHKXeHgAL2WaHX0SaozHnrO2
+         Xp6+52t6mrXEwruD18ZlFMz4qFJZXE09lQ1IKwGWvFwNeFS4MUt86x1gt/U7iVI2Ze
+         jG3u5yF5whPRTAANvDpp7S2Es0GLnMF3zC+4V/GvFe6q8lWpu+LQPE0gYczwE1OG/v
+         lZZdhuK6o5k+A==
+Date:   Mon, 5 Jun 2023 12:36:23 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Hans Holmberg <Hans.Holmberg@wdc.com>
+Cc:     "hch@infradead.org" <hch@infradead.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "hans@owltronix.com" <hans@owltronix.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] f2fs: preserve direct write semantics when buffering
+ is forced
+Message-ID: <ZH45N4nsqxCnhnoU@google.com>
+References: <20230220122004.26555-1-hans.holmberg@wdc.com>
+ <ZBhisCo7gTitmKeO@infradead.org>
+ <ZBzPYwcoLXkFngz8@google.com>
+ <402cc90ce5defa81c937c3fcd09de1f6497459ee.camel@wdc.com>
+ <ZBzkzg+lr+TOXZcW@google.com>
+ <8207efb81cd1e9322ad608d313eb4b4bd5740e80.camel@wdc.com>
+ <ZBzy7RHlCqmApxUe@google.com>
+ <ZCDXnuV7oZwcYvRP@infradead.org>
+ <20230605115638.GA23662@gsv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] tracing/selftests: Update synthetic event selftest to use
- common_stacktrace
-Content-Language: en-US
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230523225402.55951f2f@rorschach.local.home>
- <20230525102408.4b2750621cb1deeb05e58980@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230525102408.4b2750621cb1deeb05e58980@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605115638.GA23662@gsv>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 20:24, Masami Hiramatsu (Google) wrote:
-> On Tue, 23 May 2023 22:54:29 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On 06/05, Hans Holmberg wrote:
 > 
->> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->>
->> With the rename of the stacktrace field to common_stacktrace, update the
->> selftests to reflect this change. Copy the current selftest to test the
->> backward compatibility "stacktrace" keyword. Also the "requires" of that
->> test was incorrect, so it would never actually ran before. That is fixed
->> now.
->>
->> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> On Sun, Mar 26, 2023 at 04:39:10PM -0700, hch@infradead.org wrote:
+> > On Thu, Mar 23, 2023 at 05:46:37PM -0700, Jaegeuk Kim wrote:
+> > > > Yes, and that was exactly my point: with LFS mode, O_DIRECT write
+> > > > should never overwrite anything. So I do not see why direct writes
+> > > > should be handled as buffered writes with zoned devices. Am I missing
+> > > > something here ?
+> > > 
+> > > That's an easiest way to serialize block allocation and submit_bio when users
+> > > are calling buffered writes and direct writes in parallel. :)
+> > > I just felt that if we can manage both of them in direct write path along with
+> > > buffered write path, we may be able to avoid memcpy.
+> > 
+> > Yes.  Note that right now f2fs doesn't really support proper O_DIRECT
+> > for buffered I/O either, as non-overwrites require a feature similar
+> > to unwritten extents, or a split of the allocation phase and the record
+> > metdata phase.  If we'd go for the second choice for f2fs, which is the
+> > more elegant thing to do, you'll get the zoned direct I/O write support
+> > almost for free.
 > 
-> Looks good to me.
+> So, Jaegeuk, do you think suporting direct io proper is the way to do to fix this
+> issue? That looks like a better solution to me (at least long term).
 > 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
+> Until that would be put into place, do you want my fix (with your code
+> style fixes) rebased and resent?
 
-Applied to linux-kselftest next for Linux 6.5-rc1
+Yes, it's already landed in 6.4-rc1 of Linus tree, and surely I have the topic
+in my long term plan.
 
-thanks,
--- Shuah
+Thanks,
 
+> 
+> Cheers,
+> Hans
