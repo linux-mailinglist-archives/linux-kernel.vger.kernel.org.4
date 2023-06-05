@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED5B7228C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CD87228C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbjFEO0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S233664AbjFEO17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjFEO0i (ORCPT
+        with ESMTP id S233550AbjFEO1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:26:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB97699
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:26:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Jun 2023 10:27:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEA09B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685975229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VqvDjKPajBQJ0jhTbAvNmVVCOt81m2LxIym/sZ9cqd8=;
+        b=Hd+vkI3+KLRTGdmsqfnoa+kNkXasHXHn4xsCV0+QxKEeR9a8yR4Hv7wk/fkWefhoM3bDMP
+        fjc8KWtewJsE3jaIPB4yKSUKSehzcH/Hx7gL2N0SN343RWFp+Nkc8doxXs5lM0oVaWqdtg
+        oRbp9FqXTiyuMoMQt0DbEBoeH46OxXk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-O_8wkhTTOjSn0hsnxZkI9w-1; Mon, 05 Jun 2023 10:27:08 -0400
+X-MC-Unique: O_8wkhTTOjSn0hsnxZkI9w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86E3261361
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 14:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EE3C433EF;
-        Mon,  5 Jun 2023 14:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685975196;
-        bh=riZ6RIajBfnKWVAP+l75FazrFPYYacaLdTA1K64PwTw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dxpZCjJazPbm1NIgKyTkwvU9CBKuNrVNf4HiIqR5xGw5UF1X5C94bRkfPeEZv+ETz
-         3Fe5s8f9W+uPBfi1b9JZbIrj4e8iRuqtI5Obkbz09PEhpNk2XySzqrDCgS46gnvSbI
-         2TdpJU/SFccNTubNuUKokuu8KTebkorQ5y45+7VTc/AbFlNGUegPJn3MxyUFmCW0Sr
-         MrsfLXkZvvY4srPhBPgfRP6CUAmVqeCN7CZoCx5cphq5Ov9z806ZefScT9IRYjZ7Q/
-         ZWdNhWKeBHaBArp6a7Npp6nH88dCZJ+2FwBKflL1AOmXu4ZQ9e2TJ1EsVbNegzYmyD
-         FwlsM41c73hgQ==
-Date:   Mon, 5 Jun 2023 16:26:33 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [patch 18/20] posix-timers: Clarify posix_timer_fn() comments
-Message-ID: <ZH3wmQLHyJuEH2yw@2a01cb0980759691cfef005a85b365eb.ipv6.abo.wanadoo.fr>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183313.777610259@linutronix.de>
- <ZHibcwrDgegKwQeQ@lothringen>
- <874jnrdmrq.ffs@tglx>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC0D48030CD;
+        Mon,  5 Jun 2023 14:27:05 +0000 (UTC)
+Received: from mail.corp.redhat.com (unknown [10.45.225.227])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 04BE84A927E;
+        Mon,  5 Jun 2023 14:27:03 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 16:27:01 +0200
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Jiri Kosina <jikos@kernel.org>, Bastien Nocera <hadess@hadess.net>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        Filipe =?utf-8?B?TGHDrW5z?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>,
+        Mark Lord <mlord@pobox.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
+Message-ID: <7ko33em3pqdaeghkt6wumzks6fz2lzztmqyhyzvv3kisjovmvr@mojlmkmrqlml>
+References: <20230531082428.21763-1-hadess@hadess.net>
+ <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm>
+ <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <874jnrdmrq.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,46 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, Jun 01, 2023 at 09:07:37PM +0200, Thomas Gleixner a écrit :
-> @@ -359,34 +360,35 @@ static enum hrtimer_restart posix_timer_
->  			 * FIXME: What we really want, is to stop this
->  			 * timer completely and restart it in case the
->  			 * SIG_IGN is removed. This is a non trivial
-> -			 * change which involves sighand locking
-> -			 * (sigh !), which we don't want to do late in
-> -			 * the release cycle.
-> +			 * change to the signal handling code.
-> +			 *
-> +			 * For now let timers with an interval less than a
-> +			 * jiffie expire every jiffie and recheck for a
-> +			 * valid signal handler.
-> +			 *
-> +			 * This avoids interrupt starvation in case of a
-> +			 * very small interval, which would expire the
-> +			 * timer immediately again.
->  			 *
-> -			 * For now we just let timers with an interval
-> -			 * less than a jiffie expire every jiffie to
-> -			 * avoid softirq starvation in case of SIG_IGN
-> -			 * and a very small interval, which would put
-> -			 * the timer right back on the softirq pending
-> -			 * list. By moving now ahead of time we trick
-> -			 * hrtimer_forward() to expire the timer
-> -			 * later, while we still maintain the overrun
-> -			 * accuracy, but have some inconsistency in
-> -			 * the timer_gettime() case. This is at least
-> -			 * better than a starved softirq. A more
-> -			 * complex fix which solves also another related
-> -			 * inconsistency is already in the pipeline.
-> +			 * Moving now ahead of time by one jiffie tricks
-> +			 * hrtimer_forward() to expire the timer later,
-> +			 * while it still maintains the overrun accuracy
-> +			 * for the price of a slight inconsistency in the
-> +			 * timer_gettime() case. This is at least better
-> +			 * than a starved softirq.
 
-Could be hardirq. How about:
+On Jun 05 2023, Linux regression tracking (Thorsten Leemhuis) wrote:
+> 
+> On 03.06.23 14:41, Jiri Kosina wrote:
+> > On Wed, 31 May 2023, Jiri Kosina wrote:
+> > 
+> >>> If an attempt at contacting a receiver or a device fails because the
+> >>> receiver or device never responds, don't restart the communication, only
+> >>> restart it if the receiver or device answers that it's busy, as originally
+> >>> intended.
+> >>>
+> >>> This was the behaviour on communication timeout before commit 586e8fede795
+> >>> ("HID: logitech-hidpp: Retry commands when device is busy").
+> >>>
+> >>> This fixes some overly long waits in a critical path on boot, when
+> >>> checking whether the device is connected by getting its HID++ version.
+> >>>
+> >>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> >>> Suggested-by: Mark Lord <mlord@pobox.com>
+> >>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
+> >>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217412
+> > [...]  
+> >>
+> >> I have applied this even before getting confirmation from the reporters in 
+> >> bugzilla, as it's the right thing to do anyway.
+> > 
+> > Unfortunately it doesn't seem to cure the reported issue (while reverting 
+> > 586e8fede79 does):
+> 
+> BTW, remind me again: was fixing this by reverting 586e8fede79 for now a
+> option? I guess it's not, but if I'm wrong I wonder if that might at
+> this point be the best way forward.
 
-"This is at least better than a timer storm."
+Could be. I don't think we thought at simply reverting it because it is
+required for some new supoprted devices because they might differ
+slightly from what we currently supported.
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+That being said, Bastien will be unavailable for at least a week AFAIU,
+so maybe we should revert that patch.
+
+> 
+> > https://bugzilla.kernel.org/show_bug.cgi?id=217523#c2
+> 
+> FWIW, another comment showed up there:
+> 
+> ```
+> > --- Comment #6 from vova7890 ---
+> > Same problem. I researched this some time ago. I noticed that if I add a small
+> > delay between commands to the dongle - everything goes fine. Repeated
+> > request(586e8fede7953b1695b5ccc6112eff9b052e79ac) made the situation more
+> > visible
+
+I don't think I ever had to add any delays between commands. The USB
+stack should be capable of forwarding the commands just fine. So unless
+the receiver is of a different hardware (but same VID/PID) that might
+expose a problem elsewhere (in the USB controller maybe???). Just a long
+shot, but maybe getting the config of the impacted users and what are
+the USB controllers/drivers they are using might gives us a better
+understanding.
+
+Cheers,
+Benjamin
+
