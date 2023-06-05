@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706C4721F4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361B7721F59
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjFEHQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S231132AbjFEHQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjFEHQI (ORCPT
+        with ESMTP id S231287AbjFEHQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:16:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555021BD;
-        Mon,  5 Jun 2023 00:15:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Jun 2023 03:16:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01987E9;
+        Mon,  5 Jun 2023 00:16:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 211BA60F19;
-        Mon,  5 Jun 2023 07:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC8CC433EF;
-        Mon,  5 Jun 2023 07:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685949312;
-        bh=RV1uSWYECRF6po/E+w6yWpCHTfpG9zLcmT+80L61Dp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HtOtJiV5bbausUrO3yqE5B5ePbLaipOSV60pQ7DMAmGts71BW2BZnaNt2GDJZ3vMg
-         JqD39VkYSSH5Qypp/+nEjZxdf9IfW2aTFp/4L89ESCYjz0gw34ydjp6nSoZpNukv+s
-         Kx1gx1dqWbHW24bYOjS0t8JF/9eCcwbNUQpC0PP8DGp90nH9J6AaDnBIppPeM6H30C
-         koIYRScxM9U+YmgAFTMLfGpXGvij9UG0WZLohVN+612rV5TeM2IWGhgmj+krM52YDX
-         8Kt9rrZSrzqA30kmd08ZN97pobyijFWBHHfzBgzsm3RdLdYGd1zemVjV77+aKtzQwL
-         542Nw1ZqwNkkQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q64R6-00077O-OC; Mon, 05 Jun 2023 09:15:29 +0200
-Date:   Mon, 5 Jun 2023 09:15:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     Craig Shelley <craig@microtron.org.uk>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Break doesn't work on a CP2105
-Message-ID: <ZH2LkKE83kHrIRWH@hovoldconsulting.com>
-References: <ZEmDs0ASdnEAnpsL@minyard.net>
- <ZGtZKCvo71woGf9T@hovoldconsulting.com>
- <ZGtlnWGSc31Wdhxa@mail.minyard.net>
- <ZHnmSwGyOaSMbPBB@hovoldconsulting.com>
- <ZHodALMLTWk72Vvm@mail.minyard.net>
- <ZHyAzHVAu3DVgJG_@hovoldconsulting.com>
- <ZHzv/wbwtaLVpfaP@mail.minyard.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHzv/wbwtaLVpfaP@mail.minyard.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ADBEC21B1F;
+        Mon,  5 Jun 2023 07:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685949364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VvobikAyYLd5tNbqhgR0HiS99+mLLI7sqkpLdjdt9Xg=;
+        b=hbrZ7RHtTFh3lFSwfJewIoVWFCNd9Px6YYoyfhk7e/uh9RWcNA/giRTxp9+hQPPd75w85v
+        1DPwh8BysAYVNAay9JCa0zpKgcM443KdZ6Ok/xg8jqV4a1Pn8+srPcKITlOGnMatARggA1
+        9anQs9brs8F5xPY83o5oIRM3YboqzXw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685949364;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VvobikAyYLd5tNbqhgR0HiS99+mLLI7sqkpLdjdt9Xg=;
+        b=Pw4S27pJNwrpqHa1bM5XY4yVGTEztYBGKUXEq/wFpQjP9Sjzr+7hb0QVLaTIe330wmNr0Y
+        zUSYVvThQZsLx6CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7CABD139C7;
+        Mon,  5 Jun 2023 07:16:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GzdUHbSLfWRcZgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 07:16:04 +0000
+Date:   Mon, 05 Jun 2023 09:16:04 +0200
+Message-ID: <871qiqjs5n.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 1/1] selftests: alsa: pcm-test: Fix compiler warnings about the format
+In-Reply-To: <20230524191528.13203-1-mirsad.todorovac@alu.unizg.hr>
+References: <20230524191528.13203-1-mirsad.todorovac@alu.unizg.hr>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-7
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 03:11:43PM -0500, Corey Minyard wrote:
-> On Sun, Jun 04, 2023 at 02:17:16PM +0200, Johan Hovold wrote:
+On Wed, 24 May 2023 21:15:29 +0200,
+Mirsad Goran Todorovac wrote:
+> 
+> GCC 11.3.0 issues warnings in this module about wrong sizes of format
+> specifiers:
+> 
+> pcm-test.c: In function ¡test_pcm_time¢:
+> pcm-test.c:384:68: warning: format ¡%ld¢ expects argument of type ¡long int¢, but argument 5 \
+> 				has type ¡unsigned int¢ [-Wformat=]
+>   384 |                 snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
+> pcm-test.c:455:53: warning: format ¡%d¢ expects argument of type ¡int¢, but argument 4 has \
+> 				type ¡long int¢ [-Wformat=]
+>   455 |                                          "expected %d, wrote %li", rate, frames);
+> pcm-test.c:462:53: warning: format ¡%d¢ expects argument of type ¡int¢, but argument 4 has \
+> 				type ¡long int¢ [-Wformat=]
+>   462 |                                          "expected %d, wrote %li", rate, frames);
+> pcm-test.c:467:53: warning: format ¡%d¢ expects argument of type ¡int¢, but argument 4 has \
+> 				type ¡long int¢ [-Wformat=]
+>   467 |                                          "expected %d, wrote %li", rate, frames);
+> 
+> Simple fix according to compiler's suggestion removed the warnings.
+> 
+> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-> > I just verified break signalling on the first port of my CP2105 using a
-> > logic analyser and everything seems to work as expected.
-> > 
-> > There's also no mention of any issue with break in the errata.
-> > 
-> > Could you check which firmware revision you have by enabling debugging
-> > and reconnecting the device?
+Applied now.  Thanks.
 
-> [    4.253869] usb 2-1.2: new full-speed USB device number 3 using ehci-pci
-> [    4.342570] usb 2-1.2: New USB device found, idVendor=10c4, idProduct=ea70, bcdDevice= 1.00
-> [    4.350939] usb 2-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=5
-> [    4.358259] usb 2-1.2: Product: CP2105 Dual USB to UART Bridge Controller
-> [    4.365052] usb 2-1.2: Manufacturer: Silicon Labs
-> [    4.369765] usb 2-1.2: SerialNumber: 01070456
-> [    4.374925] cp210x 2-1.2:1.0: cp210x converter detected
-> [    4.381086] cp210x 2-1.2:1.0: cp210x_get_fw_version - 1.18.1
-> [    4.386915] usb 2-1.2: cp210x converter now attached to ttyUSB0
-> [    4.393529] cp210x 2-1.2:1.1: cp210x converter detected
-> [    4.399835] cp210x 2-1.2:1.1: cp210x_get_fw_version - 1.18.1
-> [    4.405657] usb 2-1.2: cp210x converter now attached to ttyUSB1
 
-So we have the same firmware revision.
- 
-> This is an embedded reference board, I guess there is some probability
-> that this is just broken on this board, though I'm not quite sure how.
-
-Is the port accessible somehow so that you could hook up a scope or
-logic analyser? Or is that what you did already when you mentioned
-seeing garbage sent after 2.5 seconds?
-
-That last bit seems to match the behaviour I see with the second, SCI
-port, where the last character sent is resent when trying to signal a
-break.
-
-Johan
+Takashi
