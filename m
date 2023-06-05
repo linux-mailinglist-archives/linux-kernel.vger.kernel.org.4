@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2833721B56
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D03B721B59
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjFEA4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 20:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S230141AbjFEA73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 20:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFEA4C (ORCPT
+        with ESMTP id S229449AbjFEA70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 20:56:02 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B05BAD;
-        Sun,  4 Jun 2023 17:56:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZFXZ2lGdz4x4B;
-        Mon,  5 Jun 2023 10:55:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685926558;
-        bh=q+7/zKp2K5V3a9BmmBm9h3eMtBVj2tHqR/Q+6bQxfcs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pfqQ+Do9bSLCMLeEpEz+BT2STQUFEqZJi9/gfz4hmQ/SBgmXeMRTE2+b3TGIRl7SX
-         9VT5xgdcjINK1rSKgTvU5TKXzRAIHVaPXlY9gGtgist7A9c4jW6xbxpE1A4N86WmRt
-         V4CeKV5S/2+MtQD7Pfc0bZtSzMi9CacReOBj/PXWFA/2UJdkJuGT4v03fY27NDjoGL
-         r5/lA7waW+hdLxqhZ9aDAySm2gC3yCMSzIDgYXs4nCfnpoXtrfKiPmmFfMD2nJpwGq
-         ss2ErL0JbvJVq9fnNC/zbEkIbs4QHyXuLCSUIygyl7XUuQjNgkix+DBunPOXG5gjH9
-         yXErYEwI0Li4g==
-Date:   Mon, 5 Jun 2023 10:55:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tpmdd tree with Linus' tree
-Message-ID: <20230605105557.4c3ca468@canb.auug.org.au>
+        Sun, 4 Jun 2023 20:59:26 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC620B8;
+        Sun,  4 Jun 2023 17:59:24 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.116])
+        by gateway (Coremail) with SMTP id _____8AxhPBrM31kzHcEAA--.9081S3;
+        Mon, 05 Jun 2023 08:59:23 +0800 (CST)
+Received: from [10.20.42.116] (unknown [10.20.42.116])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxWdJrM31kxQeKAA--.24862S3;
+        Mon, 05 Jun 2023 08:59:23 +0800 (CST)
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Liu Peibao <liupeibao@loongson.cn>,
+        Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <20230601163335.6zw4ojbqxz2ws6vx@skbuf>
+ <ZHjaq+TDW/RFcoxW@bhelgaas> <20230601221532.2rfcda4sg5nl7pzp@skbuf>
+ <dc430271-8511-e6e4-041b-ede197e7665d@loongson.cn>
+ <7a7f78ae-7fd8-b68d-691c-609a38ab3161@loongson.cn>
+ <20230602101628.jkgq3cmwccgsfb4c@skbuf>
+ <87f2b231-2e16-e7b8-963b-fc86c407bc96@loongson.cn>
+ <20230604085500.ioaos3ydehvqq24i@skbuf>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <ad969019-e763-b06f-d557-be4e672c68db@loongson.cn>
+Date:   Mon, 5 Jun 2023 08:59:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zm4HV=r9zIV2tnS88pU1V6a";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230604085500.ioaos3ydehvqq24i@skbuf>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxWdJrM31kxQeKAA--.24862S3
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tr4rWFyUuF1kAFW7XFyxZrb_yoW8CF43pa
+        y3AFWFkF4kKr4Ik3sxZw4rGF1ft39Fy395Jr4kJr90kws8Z34ftr1I9r45Xay7uw4xZay2
+        vFy0qrs5Ca4kA3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zm4HV=r9zIV2tnS88pU1V6a
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the tpmdd tree got a conflict in:
+On 2023/6/4 下午4:55, Vladimir Oltean wrote:
+> On Sat, Jun 03, 2023 at 10:35:50AM +0800, Jianmin Lv wrote:
+>>> How about 3. handle of_device_is_available() in the probe function of
+>>> the "loongson, pci-gmac" driver? Would that not work?
+>>>
+>> This way does work only for the specified device. There are other devices,
+>> such as HDA, I2S, etc, which have shared pins. Then we have to add
+>> of_device_is_available() checking to those drivers one by one. And we are
+>> not sure if there are other devices in new generation chips in future. So
+>> I'm afraid that the way you mentioned is not suitable for us.
+> 
+> Got it, so you have more on-chip PCIe devices than the ones listed in
+> loongson64-2k1000.dtsi, and you don't want to describe them in the
+> device tree just to put status = "disabled" for those devices/functions
+> that you don't want Linux to use - although you could, and it wouldn't
+> be that hard or have unintended side effects.
+> 
+> Though you need to admit, in case you had an on-chip multi-function PCIe
+> device like the NXP ENETC, and you wanted Linux to not use function 0,
+> the strategy you're suggesting here that is acceptable for Loongson
+> would not have worked.
+> 
+> I believe we need a bit of coordination from PCIe and device tree
+> maintainers, to suggest what would be the encouraged best practices and
+> ways to solve this regression for the ENETC.
+> 
 
-  Makefile
+For a multi-function device, if func 0 is not allowed to be scanned, as 
+I said in way of 2, the other funcs of the device will be described as 
+platform devices instead of pci and be not scanned either, which is 
+acceptable for Loongson. The main goal by any way for us is to resolve 
+the problem that shared pins can not be used simultaneously by devices 
+sharing them. IMO, configure them in DT one by one may be reasonable, 
+but adapting each driver will be bothered.
 
-between commits:
+Any way, let's listen to opinions from Bjorn and Rob.
 
-  7877cb91f108 ("Linux 6.4-rc4")
-  9561de3a55be ("Linux 6.4-rc5")
-
-from Linus' tree and commit:
-
-  b2b20594528e ("Linux 6.4-rc4")
-
-from the tpmdd tree.
-
-This is caused by the bad rebase and duplicate commits I reported
-last week.  Please fix that up.
-
-I fixed it up (I just used the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zm4HV=r9zIV2tnS88pU1V6a
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9Mp0ACgkQAVBC80lX
-0GwBqAf+OhgH5kUXidFWnLosuczOZ5K+ccgES2tnbKq1ZPJ0HWIcYo5W6I7QytTJ
-xX8D5mcwL/eZujz0NHSug5AHVJLw5noJV1JNdLEWeVWuV+swXK9fA28oRLWm5LhO
-cMB1TbHkuXDqkADKPkoHizlPaB2qNCjoDFVnQry6XhUkjZJbzxZpSDlVUKnVlBw4
-dgfnjQWE8uilXU9VL1nLmhTs8QPJTCqYpm3cfrp4WUunnJdQHi0LgymsNX7DCJCS
-xZUJ2Oiz0R/oABiYoXuZexPbjRC3SYSx8ZaT+Ejn2V/paitYJ4nmk2/fbMSwpRD2
-v8/nI4PItTNeEB0yLvvjZMJ7l+VybA==
-=N2wB
------END PGP SIGNATURE-----
-
---Sig_/zm4HV=r9zIV2tnS88pU1V6a--
