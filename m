@@ -2,45 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8959F721D3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D392721D3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjFEEs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 00:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S232346AbjFEEye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 00:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbjFEEsV (ORCPT
+        with ESMTP id S231280AbjFEEya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 00:48:21 -0400
+        Mon, 5 Jun 2023 00:54:30 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7C73E3;
-        Sun,  4 Jun 2023 21:48:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BEBEB1;
+        Sun,  4 Jun 2023 21:54:29 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id E2A4F80C1;
-        Mon,  5 Jun 2023 04:48:17 +0000 (UTC)
-Date:   Mon, 5 Jun 2023 07:48:16 +0300
+        by muru.com (Postfix) with ESMTPS id 5CED280C1;
+        Mon,  5 Jun 2023 04:54:28 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 07:54:27 +0300
 From:   Tony Lindgren <tony@atomide.com>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+To:     Udit Kumar <u-kumar1@ti.com>
+Cc:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: arm: ti: add toradex,verdin-am62 et
- al.
-Message-ID: <20230605044816.GU14287@atomide.com>
-References: <20230601131332.26877-1-francesco@dolcini.it>
- <20230601131332.26877-2-francesco@dolcini.it>
- <20230602072045.GO14287@atomide.com>
- <ZHml0ZEC9ZvxHXr9@francesco-nb.int.toradex.com>
+        linux-kernel@vger.kernel.org, conor+dt@kernel.org,
+        m-chawdhry@ti.com, n-francis@ti.com
+Subject: Re: [PATCH v3 1/5] arm64: dts: ti: k3-j7200: Add general purpose
+ timers
+Message-ID: <20230605045427.GV14287@atomide.com>
+References: <20230604045525.1889083-1-u-kumar1@ti.com>
+ <20230604045525.1889083-2-u-kumar1@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHml0ZEC9ZvxHXr9@francesco-nb.int.toradex.com>
+In-Reply-To: <20230604045525.1889083-2-u-kumar1@ti.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -50,32 +44,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Francesco Dolcini <francesco@dolcini.it> [230602 08:18]:
-> On Fri, Jun 02, 2023 at 10:20:45AM +0300, Tony Lindgren wrote:
-> > Hi,
-> > 
-> > * Francesco Dolcini <francesco@dolcini.it> [230601 13:15]:
-> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > 
-> > > Add toradex,verdin-am62 for Toradex Verdin AM62 SoM, its
-> > > nonwifi and wifi variants and the carrier boards (Dahlia,
-> > > Verdin Development Board and Yavia) they may be mated in.
-> > 
-> > Looks like you have wifi on sdio, there should be no need for separate
-> > compatible properties. The sdio wifi will try to probe and will just bail
-> > out if no wifi is populated.
-> > 
-> > If however the non-wifi variants are recycling the sdio pins for something
-> > else, then it's it's a different story. In that case you want either
-> > seprate compatible properties, or want to use dts fragments possibly.
+* Udit Kumar <u-kumar1@ti.com> [230604 04:57]:
+> There are 20 general purpose timers on j721e that can be used for
+> things like PWM using pwm-omap-dmtimer driver. There are also
+> additional ten timers in the MCU domain which are meant for MCU
+> firmware usage and hence marked reserved by default.
 > 
-> This is exactly the case, the wifi/non-wifi variant are re-using pins.
-> 
-> I provided a more verbose explanation on that on a previous discussion
-> https://lore.kernel.org/all/ZG5jYV%2FNfGJvYkma@francesco-nb.int.toradex.com/
+> The odd numbered timers have the option of being cascaded to even
+> timers to create a 64 bit non-atomic counter which is racy in simple
+> usage, hence the clock muxes are explicitly setup to individual 32 bit
+> counters driven off system crystal (HFOSC) as default.
 
-Ok thanks for the information.
-
-Regards,
-
-Tony
+Reviewed-by: Tony Lindgren <tony@atomide.com>
