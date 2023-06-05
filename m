@@ -2,236 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE5F721D92
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 07:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE3A721D97
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 07:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbjFEFih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 01:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S232719AbjFEFkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 01:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFEFif (ORCPT
+        with ESMTP id S229449AbjFEFkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 01:38:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492C4A9;
-        Sun,  4 Jun 2023 22:38:34 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3555DYUu025288;
-        Mon, 5 Jun 2023 05:38:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LGOId8j20XVFeHLR9Y38zWr7CHf3zpKBIMLddm7ddvI=;
- b=fJcpG+FWHcSPYBdC3B530Iu1czRfK5XwNca6iUbjkk4FVcbJ0GvVYUqyN7ivzCjHrW4U
- +MfLAl9Wm2Ebsa8a+QCTDBTCOjuKIgemsZgDQkUtftFaCFb958bGbOjuQNngOvPeMoN5
- fpV/6JlMMnU8Ne3Xg01TD6Hb5IPl0rzEgzFC2aJsu2OmxjEDwMV9wIEaQNNuIjjs84fl
- VTCRJZyAZQ2H3Z1N+pAQzuIM2RxG5dTV1EEXe09rtSe8d8HXKaRGB5t24I94aw6Vpn4N
- YayN/71MiU5lHlD86iIZuyb8ZJNQxKMWxp+aPuzmpMktx6jSd/CT8SkTu5O6iHY0vXVF YA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyxq02jq9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 05:38:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3555cT5u027285
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 5 Jun 2023 05:38:29 GMT
-Received: from [10.201.206.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 4 Jun 2023
- 22:38:20 -0700
-Message-ID: <24803a8c-098d-dfae-bb99-0feb9204e188@quicinc.com>
-Date:   Mon, 5 Jun 2023 11:08:17 +0530
+        Mon, 5 Jun 2023 01:40:02 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DDBA9;
+        Sun,  4 Jun 2023 22:40:00 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-19f31d6b661so5096712fac.0;
+        Sun, 04 Jun 2023 22:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685943599; x=1688535599;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hcDHb3otHZKZPSZ9/RvK/O8QwVbU81EhbliZYL0NPkw=;
+        b=VPM/BXLGlEDJFZWtZzHA9AyA+AWECn9ORWX87ESiadzudMovZJ4TxOXbq3OiHBZ6k9
+         /qnpQDkDETmsevI+Rin4e8jSBoKnTuYx1S1jhOEpR1bk937Fn6p2Xn4Q7kjgWfI99JWW
+         E7jun7sRtg2M5R2C6uZYhQ9JhYp8p8v6Ou2tWaJxbNIjz+ezNh7sbJep586MB1MLVDtJ
+         a8vxzculTBcOZqYhnHuTq6uY8+WP+kJmf23+VdzWNnQMG00cShQt1WlQYFfsSMWb9XwF
+         dNhGj6G2pFcRCTly665LqkWnAbY/Hl04D04NFY/76kKHuIR78pWmo25O1RDfNAX4tLtx
+         EDeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685943599; x=1688535599;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hcDHb3otHZKZPSZ9/RvK/O8QwVbU81EhbliZYL0NPkw=;
+        b=Z6SIGko6QQ2iTfJdb6NnclywZPdahsU5TKLTux69dkKI4+S4nP6t3is5GJPZVR+2TU
+         jNUwMAJChEEwhhfrktGlXSKNvTsrqInPJSPBv8Anz9i8IFtgjLSZXEKhXNrjHVHha/qP
+         4CqfBaJCUzOgP2WCJzwDmbwQLsEQwITufz+eOJKaKCTGiNLpAkkvSjEDVZlku7iQeM4P
+         0NGICRXV7nZX/zi0Bts5kNpaq4dzgmBQggA9T6mVGSwocruoDpIBDaB/fLqWo1ckFi5E
+         qgffnAPDlVNKd4+nPA8G75pHzhh1wp5zDXNsmAhWBMn2O6r9e+NaRZ56O+42fgvMckq5
+         X4+g==
+X-Gm-Message-State: AC+VfDzBih550REV83kCuTXj5JptrxHw6kHarq6kUjAWzg+VXecnYlaw
+        JhmmJ/d2u83X64A32phwYp4=
+X-Google-Smtp-Source: ACHHUZ7nwScN4/QpnlQXcDIoAa1VMEla09SP1nuo4C58NKf58t6Vzxs5LbbOctcoIfQ/6eoTKZ1w1A==
+X-Received: by 2002:a05:6358:9316:b0:121:4f03:1ef0 with SMTP id x22-20020a056358931600b001214f031ef0mr20962182rwa.19.1685943598629;
+        Sun, 04 Jun 2023 22:39:58 -0700 (PDT)
+Received: from babbage.. (162-227-164-7.lightspeed.sntcca.sbcglobal.net. [162.227.164.7])
+        by smtp.gmail.com with ESMTPSA id c13-20020a17090a674d00b0024dee5cbe29sm4994822pjm.27.2023.06.04.22.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 22:39:58 -0700 (PDT)
+From:   msmulski2@gmail.com
+To:     andrew@lunn.ch
+Cc:     f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
+        kabel@kernel.org, ioana.ciornei@nxp.com,
+        Michal Smulski <michal.smulski@ooma.com>
+Subject: [PATCH net-next v7 0/1] net: dsa: mv88e6xxx: implement USXGMII mode for mv88e6393x
+Date:   Sun,  4 Jun 2023 22:39:53 -0700
+Message-Id: <20230605053954.4051-1-msmulski2@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V2 11/13] arm64: dtsi: qcom: ipq5018: enable nodes
- required for multipd
-Content-Language: en-US
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
-        <kvalo@kernel.org>, <loic.poulain@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-12-quic_mmanikan@quicinc.com>
- <a33363d2-a0a8-f8c1-fbc0-f7a5422d07a9@linaro.org>
- <adb4716f-9fa8-9b37-0a06-5c5e19307925@quicinc.com>
-In-Reply-To: <adb4716f-9fa8-9b37-0a06-5c5e19307925@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 37Zi98f2dl_h_vtkOflL3UfcbSTRF6C6
-X-Proofpoint-GUID: 37Zi98f2dl_h_vtkOflL3UfcbSTRF6C6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 phishscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=778
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306050049
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Michal Smulski <michal.smulski@ooma.com>
 
+Changelist:
+* do not enable USXGMII for 6361 chips
+* track state->an_complete with state->link 
 
-On 6/5/2023 11:05 AM, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 5/30/2023 4:35 PM, Krzysztof Kozlowski wrote:
->> On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
->>> Enable nodes required for multipd remoteproc bring up
->>
->> Please use subject prefixes matching the subsystem. You can get them for
->> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
->> your patch is touching.
->>
->> It is "dts". Not "dtsi".
->>
-> Sure, I will update to 'dtsi'.
-> 
-Sorry please discard my previous reply.
-I will update to dts.
+*** BLURB HERE ***
 
->>>
->>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->>> ---
->>> Changes in V2:
->>>     - Corrected syntax like alignmnet and kept nodes in sorted order.
->>>     - Covered entire TCSR region.
->>>     - Added 'firmware-name' property.
->>>
->>>   arch/arm64/boot/dts/qcom/ipq5018.dtsi | 140 ++++++++++++++++++++++++++
->>>   1 file changed, 140 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi 
->>> b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->>> index 9f13d2dcdfd5..3772d54d89e4 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->>> @@ -85,6 +85,18 @@
->>>               reg = <0x0 0x4ac00000 0x0 0x200000>;
->>>               no-map;
->>>           };
->>> +
->>> +        q6_region: wcnss@4b000000 {
->>> +            reg = <0x0 0x4b000000 0x0 0x1700000>;
->>> +            no-map;
->>> +        };
->>> +
->>> +        smem@4ab00000 {
->>> +            compatible = "qcom,smem";
->>> +            reg = <0x0 0x4ab00000 0x0 0x100000>;
->>> +            hwlocks = <&tcsr_mutex 0>;
->>> +            no-map;
->>> +        };
->>>       };
->>>
->>>       soc: soc@0 {
->>> @@ -128,6 +140,12 @@
->>>               #power-domain-cells = <1>;
->>>           };
->>>
->>> +        tcsr_mutex: hwlock@1905000 {
->>> +            compatible = "qcom,tcsr-mutex";
->>> +            reg = <0x01905000 0x20000>;
->>> +            #hwlock-cells = <1>;
->>> +        };
->>> +
->>>           sdhc_1: mmc@7804000 {
->>>               compatible = "qcom,ipq5018-sdhci", "qcom,sdhci-msm-v5";
->>>               reg = <0x7804000 0x1000>;
->>> @@ -181,6 +199,14 @@
->>>               };
->>>           };
->>>
->>> +        apcs_glb: mailbox@b111000 {
->>> +            compatible = "qcom,ipq5018-apcs-apps-global",
->>> +                     "qcom,ipq6018-apcs-apps-global";
->>> +            reg = <0x0b111000 0x1000>;
->>> +            #clock-cells = <1>;
->>> +            #mbox-cells = <1>;
->>> +        };
->>> +
->>>           timer@b120000 {
->>>               compatible = "arm,armv7-timer-mem";
->>>               reg = <0x0b120000 0x1000>;
->>> @@ -238,6 +264,96 @@
->>>                   status = "disabled";
->>>               };
->>>           };
->>> +
->>> +        q6v5_wcss: remoteproc@cd00000 {
->>> +            compatible = "qcom,ipq5018-q6-mpd";
->>> +            reg = <0x0cd00000 0x4040>;
->>> +            firmware-name = "IPQ5018/q6_fw.mdt",
->>> +                    "IPQ5018/m3_fw.mdt",
->>> +                    "qcn6122/m3_fw.mdt";
->>> +            interrupts-extended = <&intc GIC_SPI 291 
->>> IRQ_TYPE_EDGE_RISING>,
->>> +                          <&wcss_smp2p_in 0 0>,
->>> +                          <&wcss_smp2p_in 1 0>,
->>> +                          <&wcss_smp2p_in 2 0>,
->>> +                          <&wcss_smp2p_in 3 0>;
->>> +            interrupt-names = "wdog",
->>> +                      "fatal",
->>> +                      "ready",
->>> +                      "handover",
->>> +                      "stop-ack";
->>> +
->>> +            qcom,smem-states = <&wcss_smp2p_out 0>,
->>> +                       <&wcss_smp2p_out 1>;
->>> +            qcom,smem-state-names = "shutdown",
->>> +                        "stop";
->>> +            memory-region = <&q6_region>;
->>> +
->>> +            glink-edge {
->>> +                interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
->>> +                label = "rtr";
->>> +                qcom,remote-pid = <1>;
->>> +                mboxes = <&apcs_glb 8>;
->>> +            };
->>> +
->>> +            pd-1 {
->>> +                compatible = "qcom,ipq5018-wcss-ahb-mpd";
->>> +                firmware-name = "IPQ5018/q6_fw.mdt";
->>> +                interrupts-extended = <&wcss_smp2p_in 8 0>,
->>> +                              <&wcss_smp2p_in 9 0>,
->>> +                              <&wcss_smp2p_in 12 0>,
->>> +                              <&wcss_smp2p_in 11 0>;
->>
->> What "0" stands for?
->>
-> 0 means IRQ_NONE. These are software interrupts (register write),
-> so we have configured to 0. I will replace 0 with IRQ_NONE.
-> 
-> Thanks & Regards,
-> Manikanta.
-> 
->>> +                interrupt-names = "fatal",
->>> +                          "ready",
->> Best regards,
->> Krzysztof
->>
+Michal Smulski (1):
+  net: dsa: mv88e6xxx: implement USXGMII mode for mv88e6393x
+
+ drivers/net/dsa/mv88e6xxx/chip.c   |  3 +-
+ drivers/net/dsa/mv88e6xxx/port.c   |  3 ++
+ drivers/net/dsa/mv88e6xxx/serdes.c | 47 ++++++++++++++++++++++++++++--
+ drivers/net/dsa/mv88e6xxx/serdes.h |  4 +++
+ 4 files changed, 53 insertions(+), 4 deletions(-)
+
+-- 
+2.34.1
+
