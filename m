@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99A9722BE4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38F2722BC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjFEPtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S235191AbjFEPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbjFEPtR (ORCPT
+        with ESMTP id S234400AbjFEPrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:49:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FC11733;
-        Mon,  5 Jun 2023 08:48:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B0A627A6;
-        Mon,  5 Jun 2023 15:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EFBC4339E;
-        Mon,  5 Jun 2023 15:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685979826;
-        bh=LzpzvXyyXQzwkwbSAIUoLeJNTmxmMIl7hNCUv+YezGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FEXeNhlnAbRnfis4uneWkVDGIAApQq24LkbdjlApCcdmF2u9UZ9gPwEtoKRSBYn3P
-         W42S45nu69RxPfio4wZnLsJlnoa3RqgWdMcfywTnVQ99Khx03M1+SW58TTW+CUFod6
-         9JIz23UQwgAHP/223iyqdDNwykJqS2SRu1LHhy0UnWOAxPSu4Yauw8coJq+XoJX7/Y
-         Q1NJynk5OgSV+DCHUg0Kqy00N+WSOKhDtBmJnVKIz27Vua4pfPyJmCmNkjj9YJs3mo
-         GQ2JJJqWCSZsHobX+7U8YxIAiROvLyS0ASnpHuBq0nq4338R27NZaAJa6L/lGcDwAw
-         1si4ag9Xvy8DA==
-Date:   Mon, 5 Jun 2023 16:43:39 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Rob Herring <robh@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Subject: Re: [PATCH v5 00/12] SM63(50|75) DPU support
-Message-ID: <20230605154338.GC21796@willie-the-truck>
-References: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
- <0fbe5ddb-c3de-0724-fb69-a99e4980b26c@linaro.org>
+        Mon, 5 Jun 2023 11:47:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931721B8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685979840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Uqr8cXAKFqCk2YnqjL4KjwaNLI7luK4gqpzwm6zg+eU=;
+        b=gAvC/TLk+Umfo3ZIbhLEYnb5nYIBosvOgJP5GHus/yelkLjltfx7mKXRghDy7S6wZnEKCU
+        uzyyopM69T8DeAN4Zsb1KJSAUH4illvEvluvYDnihXRr/NLtWWwglZ+L9fF7JrsiqOu4kq
+        Vgd+uWkU5y7dHZW3ppfgES+tOYFr3fs=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-357-Ryi_AbQ1Mwq9settJCbrrA-1; Mon, 05 Jun 2023 11:43:59 -0400
+X-MC-Unique: Ryi_AbQ1Mwq9settJCbrrA-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f9aa9aee8cso1362121cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 08:43:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685979838; x=1688571838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uqr8cXAKFqCk2YnqjL4KjwaNLI7luK4gqpzwm6zg+eU=;
+        b=f2wSv8gGPhmcANvCcpP0fW9V4bb5untmBHy6fPN7ms5i/LzXaikVGdaOkUgLR+mk3W
+         VBT2QotfBT56JNiNn8dlD6z55ed8uZWubNlD0Bmv+DIwB7i85VZYoOKpLdszI0uBLDGM
+         xNKsqlyLsnlB2YO2vh7dedT1IRuAVF3EcbMUY/f99spFrhAWtzID5z1lTQRpaOW3uQxG
+         p1mCxwEqBQFDpJ9UD9IIpLAUeICo9tToEP4SyepUKCNqXhHa6SmKQf1jPjIptQyk0aET
+         TMZJKkNTkYYAra3QcTQeMrYwz2hfv1Ana12JpwIbPvh2hA4D5KSfiwIq90mnj/VN+O1r
+         IKwQ==
+X-Gm-Message-State: AC+VfDzumZ2S9Eiu3QP72CWXjzaGeK4nc3Ez9BaRjnQnW3z9IngeYVTL
+        1QSiEah/tJ5V/Em6jejEfg4q1qAKPlX9NsGn2OzRCL0wc68+/eeYmI8ZAiXtCqvxqcJ7Sfx+80d
+        8f9uRqLwIp79liQanOJiHghPj
+X-Received: by 2002:ac8:5bcf:0:b0:3f6:b330:4bfb with SMTP id b15-20020ac85bcf000000b003f6b3304bfbmr22480312qtb.0.1685979838649;
+        Mon, 05 Jun 2023 08:43:58 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5jznbCgExyaLNQztYMzHdFKbqFXFxr8ajJUyuToLJ3v/+o3EtdG/wbnhNA/zQiIpX8t+oH7Q==
+X-Received: by 2002:ac8:5bcf:0:b0:3f6:b330:4bfb with SMTP id b15-20020ac85bcf000000b003f6b3304bfbmr22480298qtb.0.1685979838422;
+        Mon, 05 Jun 2023 08:43:58 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id ey5-20020a05622a4c0500b003f6bbd7863csm3196694qtb.86.2023.06.05.08.43.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 08:43:57 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 11:43:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 03/11] selftests/mm: fix "warning: expression which
+ evaluates to zero..." in mlock2-tests.c
+Message-ID: <ZH4CvMFgu7IFFMwk@x1n>
+References: <20230603021558.95299-1-jhubbard@nvidia.com>
+ <20230603021558.95299-4-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0fbe5ddb-c3de-0724-fb69-a99e4980b26c@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230603021558.95299-4-jhubbard@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,32 +83,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 03:16:52AM +0300, Dmitry Baryshkov wrote:
-> On 23/05/2023 10:46, Konrad Dybcio wrote:
+On Fri, Jun 02, 2023 at 07:15:50PM -0700, John Hubbard wrote:
+> The stop variable is a char*, and the code was assigning a char value to
+> it. This was generating a warning when compiling with clang.
 > 
-> [skipped the changelog]
+> However, as both David and Peter pointed out, stop is not even used
+> after the problematic assignment to a char type. So just delete that
+> line entirely.
 > 
-> > ---
-> > Konrad Dybcio (12):
-> >        dt-bindings: display/msm: dsi-controller-main: Add SM6350
-> >        dt-bindings: display/msm: dsi-controller-main: Add SM6375
-> >        dt-bindings: display/msm: sc7180-dpu: Describe SM6350 and SM6375
-> >        dt-bindings: display/msm: Add SM6350 MDSS
-> >        dt-bindings: display/msm: Add SM6375 MDSS
-> >        drm/msm/dpu: Add SM6350 support
-> >        drm/msm: mdss: Add SM6350 support
-> >        drm/msm/dpu: Add SM6375 support
-> >        drm/msm: mdss: Add SM6375 support
-> >        iommu/arm-smmu-qcom: Sort the compatible list alphabetically
-> >        iommu/arm-smmu-qcom: Add SM6375 DPU compatible
-> >        iommu/arm-smmu-qcom: Add SM6350 DPU compatible
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  tools/testing/selftests/mm/mlock2-tests.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> As we are now nearly ready to merge this series, Will, Robin, what should be
-> the merge strategy for these three patches? Would you take them through the
-> arm-smmu/iommu tree?
+> diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+> index 11b2301f3aa3..80cddc0de206 100644
+> --- a/tools/testing/selftests/mm/mlock2-tests.c
+> +++ b/tools/testing/selftests/mm/mlock2-tests.c
+> @@ -50,7 +50,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
+>  			printf("cannot parse /proc/self/maps\n");
+>  			goto out;
+>  		}
+> -		stop = '\0';
+>  
+>  		sscanf(line, "%lx", &start);
+>  		sscanf(end_addr, "%lx", &end);
 
-I'm happy to take the three IOMMU changes, but the bulk of this series is
-replated to display and GPU so I don't think it makes sense for me to take
-those.
+I'd rather simply make it "*stop = '\0'", or as David suggested dropping
+stop completely when we're it (assumes that scanf() will always work with
+number ending with space ' ').
 
-Will
+No strong opinion here, though.
+
+-- 
+Peter Xu
+
