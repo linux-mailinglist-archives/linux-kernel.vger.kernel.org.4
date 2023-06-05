@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225A672262F
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669DC722637
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbjFEMoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S231684AbjFEMqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjFEMoo (ORCPT
+        with ESMTP id S229772AbjFEMqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:44:44 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F02A598;
-        Mon,  5 Jun 2023 05:44:41 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Cx5vC42H1k0BYAAA--.229S3;
-        Mon, 05 Jun 2023 20:44:40 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+OS42H1kd3oAAA--.2298S3;
-        Mon, 05 Jun 2023 20:44:40 +0800 (CST)
-Message-ID: <4d4d7453-356d-9eec-c183-e8211a40e5e9@loongson.cn>
-Date:   Mon, 5 Jun 2023 20:44:39 +0800
+        Mon, 5 Jun 2023 08:46:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D078DB
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685969169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3oNyiHHcuQenXH0USNfKt5/XNQyrParESad6JGCD/rQ=;
+        b=doCYBj4ng2wyjsmh964byLEkQmsRbNE6bfRk99hGYGoo8Ffy463cnotEyhPzl3kkOMu9rD
+        CxoHnB7wtEoFMSMzsiOhTOpGxPkBcLKYfUn7yRp6zND6prPow5QzHiLF1oVn3BbEgoKZv1
+        K7FW0ZH6Zn+ACZcFkpgym3n8gn9fc5w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-417-b6RIPDzwNMy32mVe6queRw-1; Mon, 05 Jun 2023 08:46:06 -0400
+X-MC-Unique: b6RIPDzwNMy32mVe6queRw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACBDE8030D3;
+        Mon,  5 Jun 2023 12:46:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A748DC1603B;
+        Mon,  5 Jun 2023 12:46:03 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 00/11] splice, net: Rewrite splice-to-socket, fix SPLICE_F_MORE and handle MSG_SPLICE_PAGES in AF_TLS
+Date:   Mon,  5 Jun 2023 13:45:49 +0100
+Message-ID: <20230605124600.1722160-1-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 06/31] LoongArch: KVM: Implement vcpu create and
- destroy interface
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-7-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-7-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx+OS42H1kd3oAAA--.2298S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxur1xZr4rZr4rJF18XFWDAwc_yoW5Zw4fpF
-        W0kw13Wr48Jr17GwnxXwn0vFn0qrW8Gr17Wa47XrySyrnFqrnYyF4vkrWDAFWfJrZ3ZFyI
-        qF1rGr4Uuw4qy3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_
-        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8KNt3
-        UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,112 +69,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
+Here are patches to do the following:
 
-在 2023/5/30 09:51, Tianrui Zhao 写道:
-> Implement vcpu create and destroy interface, saving some info
-> into vcpu arch structure such as vcpu exception entrance, vcpu
-> enter guest pointer, etc. Init vcpu timer and set address
-> translation mode when vcpu create.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/kvm/vcpu.c | 88 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 arch/loongarch/kvm/vcpu.c
-> 
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> new file mode 100644
-> index 000000000000..24b5b00266a1
-> --- /dev/null
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/kvm_host.h>
-> +#include <asm/fpu.h>
-> +#include <asm/loongarch.h>
-> +#include <asm/setup.h>
-> +#include <asm/time.h>
-> +
-> +#define CREATE_TRACE_POINTS
-> +#include "trace.h"
-> +
-> +int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
-> +{
-> +	return 0;
-> +}
-> +
-> +int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
-> +{
-> +	unsigned long timer_hz;
-> +	struct loongarch_csrs *csr;
-> +
-> +	vcpu->arch.vpid = 0;
-> +
-> +	hrtimer_init(&vcpu->arch.swtimer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
-> +	vcpu->arch.swtimer.function = kvm_swtimer_wakeup;
-> +	vcpu->kvm->arch.online_vcpus = vcpu->vcpu_id + 1;
-> +
-> +	vcpu->arch.guest_eentry = (unsigned long)kvm_loongarch_ops->guest_eentry;
-> +	vcpu->arch.handle_exit = _kvm_handle_exit;
-> +	vcpu->arch.csr = kzalloc(sizeof(struct loongarch_csrs), GFP_KERNEL);
-> +	if (!vcpu->arch.csr)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * kvm all exceptions share one exception entry, and host <-> guest switch
-> +	 * also switch excfg.VS field, keep host excfg.VS info here
-> +	 */
-> +	vcpu->arch.host_ecfg = (read_csr_ecfg() & CSR_ECFG_VS);
-> +
-> +	/* Init */
-> +	vcpu->arch.last_sched_cpu = -1;
-> +	vcpu->arch.last_exec_cpu = -1;
-> +
-> +	/*
-> +	 * Initialize guest register state to valid architectural reset state.
-> +	 */
-> +	timer_hz = calc_const_freq();
-> +	kvm_init_timer(vcpu, timer_hz);
-> +
-> +	/* Set Initialize mode for GUEST */
-> +	csr = vcpu->arch.csr;
-> +	kvm_write_sw_gcsr(csr, LOONGARCH_CSR_CRMD, CSR_CRMD_DA);
-> +
-> +	/* Set cpuid */
-> +	kvm_write_sw_gcsr(csr, LOONGARCH_CSR_TMID, vcpu->vcpu_id);
-> +
-> +	/* start with no pending virtual guest interrupts */
-> +	csr->csrs[LOONGARCH_CSR_GINTC] = 0;
-> +
-> +	return 0;
-> +}
-> +
-> +void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
-> +{
-> +}
-> +
-> +void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
-> +{
-> +	int cpu;
-> +	struct kvm_context *context;
-> +
-> +	hrtimer_cancel(&vcpu->arch.swtimer);
-> +	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
-> +	kfree(vcpu->arch.csr);
-> +
-> +	/*
-> +	 * If the vCPU is freed and reused as another vCPU, we don't want the
-> +	 * matching pointer wrongly hanging around in last_vcpu.
-> +	 */
-> +	for_each_possible_cpu(cpu) {
-> +		context = per_cpu_ptr(vcpu->kvm->arch.vmcs, cpu);
-> +		if (context->last_vcpu == vcpu)
-> +			context->last_vcpu = NULL;
-> +	}
-> +}
+ (1) Block MSG_SENDPAGE_* flags from leaking into ->sendmsg() from
+     userspace, whilst allowing splice_to_socket() to pass them in.
+
+ (2) Allow MSG_SPLICE_PAGES to be passed into tls_*_sendmsg().  Until
+     support is added, it will be ignored and a splice-driven sendmsg()
+     will be treated like a normal sendmsg().  TCP, UDP, AF_UNIX and
+     Chelsio-TLS already handle the flag in net-next.
+
+ (3) Replace a chain of functions to splice-to-sendpage with a single
+     function to splice via sendmsg() with MSG_SPLICE_PAGES.  This allows a
+     bunch of pages to be spliced from a pipe in a single call using a
+     bio_vec[] and pushes the main processing loop down into the bowels of
+     the protocol driver rather than repeatedly calling in with a page at a
+     time.
+
+ (4) Provide a ->splice_eof() op[2] that allows splice to signal to its
+     output that the input observed a premature EOF and that the caller
+     didn't flag SPLICE_F_MORE, thereby allowing a corked socket to be
+     flushed.  This attempts to maintain the current behaviour.  It is also
+     not called if we didn't manage to read any data and so didn't called
+     the actor function.
+
+     This needs routing though several layers to get it down to the network
+     protocol.
+
+     [!] Note that I chose not to pass in any flags - I'm not sure it's
+     	 particularly useful to pass in the splice flags; I also elected
+     	 not to return any error code - though we might actually want to do
+     	 that.
+
+ (5) Provide tls_{device,sw}_splice_eof() to flush a pending TLS record if
+     there is one.
+
+ (6) Alter the behaviour of sendfile() and fix SPLICE_F_MORE/MSG_MORE
+     signalling[1] such SPLICE_F_MORE is always signalled until we have
+     read sufficient data to finish the request.  If we get a zero-length
+     before we've managed to splice sufficient data, we now leave the
+     socket expecting more data and leave it to userspace to deal with it.
+
+ (7) Make AF_TLS handle the MSG_SPLICE_PAGES internal sendmsg flag.
+     MSG_SPLICE_PAGES is an internal hint that tells the protocol that it
+     should splice the pages supplied if it can.  Its sendpage
+     implementations are then turned into wrappers around that.
+
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=sendpage-2-tls
+
+David
+
+Changes
+=======
+ver #4)
+ - Switch to using ->splice_eof() to signal premature EOF to the splice
+   output[2].
+
+ver #3)
+ - Include the splice-to-socket rewrite patch.
+ - Fix SPLICE_F_MORE/MSG_MORE signalling.
+ - Allow AF_TLS to accept sendmsg() with MSG_SPLICE_PAGES before it is
+   handled.
+ - Allow a zero-length send() to a TLS socket to flush an outstanding
+   record.
+ - Address TLS kselftest failure.
+
+ver #2)
+ - Dropped the slab data copying.
+ - "rls_" should be "tls_".
+ - Attempted to fix splice_direct_to_actor().
+ - Blocked MSG_SENDPAGE_* from being set by userspace.
+
+Link: https://lore.kernel.org/r/499791.1685485603@warthog.procyon.org.uk/ [1]
+Link: https://lore.kernel.org/r/CAHk-=wh=V579PDYvkpnTobCLGczbgxpMgGmmhqiTyE34Cpi5Gg@mail.gmail.com/ [2]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=51c78a4d532efe9543a4df019ff405f05c6157f6 # part 1
+Link: https://lore.kernel.org/r/20230524153311.3625329-1-dhowells@redhat.com/ # v1
+
+David Howells (11):
+  net: Block MSG_SENDPAGE_* from being passed to sendmsg() by userspace
+  tls: Allow MSG_SPLICE_PAGES but treat it as normal sendmsg
+  splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+  splice, net: Add a splice_eof op to file-ops and socket-ops
+  tls/sw: Use splice_eof() to flush
+  tls/device: Use splice_eof() to flush
+  splice, net: Fix SPLICE_F_MORE signalling in splice_direct_to_actor()
+  tls/sw: Support MSG_SPLICE_PAGES
+  tls/sw: Convert tls_sw_sendpage() to use MSG_SPLICE_PAGES
+  tls/device: Support MSG_SPLICE_PAGES
+  tls/device: Convert tls_device_sendpage() to use MSG_SPLICE_PAGES
+
+ fs/splice.c            | 207 ++++++++++++++++++++++++++-------
+ include/linux/fs.h     |   3 +-
+ include/linux/net.h    |   1 +
+ include/linux/socket.h |   4 +-
+ include/linux/splice.h |   3 +
+ include/net/sock.h     |   1 +
+ net/socket.c           |  36 ++----
+ net/tls/tls.h          |   2 +
+ net/tls/tls_device.c   | 110 +++++++++---------
+ net/tls/tls_main.c     |   4 +
+ net/tls/tls_sw.c       | 253 ++++++++++++++++++++++-------------------
+ 11 files changed, 385 insertions(+), 239 deletions(-)
 
