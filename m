@@ -2,141 +2,520 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CD37233B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C330C7233B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbjFEXfi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 19:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S233407AbjFEXiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 19:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjFEXfg (ORCPT
+        with ESMTP id S231521AbjFEXh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 19:35:36 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70B8BE;
-        Mon,  5 Jun 2023 16:35:35 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bad041bf313so6222427276.0;
-        Mon, 05 Jun 2023 16:35:35 -0700 (PDT)
+        Mon, 5 Jun 2023 19:37:59 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CB9CD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 16:37:58 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-62621035d15so58029446d6.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 16:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686008277; x=1688600277;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6l4Dbaoq0+FxbeZAvtVlgmM5iMd5/ypPNYqnfG05ZJQ=;
+        b=lPQzTnXp9lUqDLGPVNs/KrGmUVUkpxFV86CVc2UMNK0Z6ITdxX+7a9UrXGOpOW8PiI
+         UDwXk3IvO1/y2oly8clmR6OfeWk4xcln1SRDMuGH6cXG1YF1Y6H5QhwAe22rvtglm/ay
+         RlqtCdRsrQEaZwOeiBPyjtloA0MvYjQzTX2Y4DQ49B4xPWh9gfLTYco5Q5nFvBqIeaTl
+         PvVt1nZkwqTolJoyfLAYEBw/8saZr7EHwRijkKE3mVDY67nGjJWwW17k1QYRvMIsdJDU
+         LVNAH1JmtTb/KY0Rb3P4vM19BNYWrwb87cQ00jonFdF6fYyLVriBrCa8LQaAxbvPn8RM
+         8Lcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686008135; x=1688600135;
+        d=1e100.net; s=20221208; t=1686008277; x=1688600277;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LXBa1OF9wyqrqgINd5V2c4ioF1ab+8rAgw8Ep/U3yMA=;
-        b=AL+Ge5/YlThoGO4H0zx1pmdE97/tOYhDJ2vX7H6QDbTeus04DgAaicAH1fUh/Mq002
-         lLm3Jd1XUmY+Cyipyaq75s3Ms9HOzKwtSNWG46kp9w2GZMxwNMmODDegt/+mji2iTHTR
-         iJl6U30grYE2U/s+2OBfR5zKKLG2fNr2wpkxxy3GLS9eFEnTKVYr+kc9YKjgzhYh4Acs
-         ImjbIfjg7SkE3TvCZsRK8+9l/1h+t+JoZS+79Ilv8j+gM/h8dlZyM3sMfsQx+4omm6tT
-         zQLmrelULh2bd5Y8/COGAOLhSyyWuQjtBQpxRxTW7lnSNzKPmSMT5FYgPtS2T8YRGRma
-         NM/Q==
-X-Gm-Message-State: AC+VfDxflv9Uri7HfOiD1F94d6uqwGX8mguLcaghiTXMGiwo8GYQ2TdS
-        yKPdzymOp5SrZd2ZjXf1QB9oHRRNWLkZ6bhUFZc=
-X-Google-Smtp-Source: ACHHUZ5X6EzdLPTNeS7VtKN76AV0N+udS+M5tYINfocpG79PtXLUVvQfElmb+pYat4Fa92Nis/2t+Y5FGWVMQYK58E4=
-X-Received: by 2002:a25:ab8a:0:b0:ba8:841f:dd9a with SMTP id
- v10-20020a25ab8a000000b00ba8841fdd9amr12368151ybi.64.1686008135002; Mon, 05
- Jun 2023 16:35:35 -0700 (PDT)
+        bh=6l4Dbaoq0+FxbeZAvtVlgmM5iMd5/ypPNYqnfG05ZJQ=;
+        b=UOogQF4hjXgWrX6pBgsBODNvneuPlWzsZWFb6hm4y2pdvkzVTVBoe+3fQwxi//X3Av
+         SRRzJLXWu5vOVCZcygbe4gzWhG8rjSRn3R3+beO48dG8cIrEzZfWfOu+awhRisr8WYQx
+         7rw/pNxoxSkHfDlaNWtpJDLgtViEWfKSfjJzEcYxj92xF6jWNjRv10XNTLx+kBYtNk1N
+         DYqX57J+bdo9GFJ78hlgcCv6uAa+7tQU3SbfbX16vDlizCC8DWOTA8FPQkjZvW6qj3Id
+         ERevIXLZUlcn13N0D11tMCIbynafHI5M6C6HOQLd7p0eekdHz4ZmM6pM5mpaTqpRnwgJ
+         eshw==
+X-Gm-Message-State: AC+VfDzJpTpBSb7VJTz/EjysgVpyZoj2kYZPDKwpN6kJFrbAfQqxwMgs
+        E4WZPCkhZS2wlTyPvAsmBFiPOdihBLq6qsvmGg/g4bMtENbNuy7F
+X-Google-Smtp-Source: ACHHUZ7s/js0uLXPFRYqqFCaARtg/GW/t3HqKIqa/LwxCo3LjXgiCYV6olDY93y7pTWjWxAZf3CIyBKkYXvcBb/xiPk=
+X-Received: by 2002:a05:6214:f26:b0:62b:53b0:70b0 with SMTP id
+ iw6-20020a0562140f2600b0062b53b070b0mr499418qvb.31.1686008276974; Mon, 05 Jun
+ 2023 16:37:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230605202712.1690876-1-irogers@google.com> <20230605202712.1690876-5-irogers@google.com>
-In-Reply-To: <20230605202712.1690876-5-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 5 Jun 2023 16:35:23 -0700
-Message-ID: <CAM9d7cj9k_FYxmAymHG5Nn6-dhjPT95wrqbHZ_YZSx=oZX7YXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] perf build: Filter out BTF sources without a .BTF section
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
+References: <20230605085419.44383-1-cerasuolodomenico@gmail.com> <20230605085419.44383-5-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230605085419.44383-5-cerasuolodomenico@gmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Mon, 5 Jun 2023 16:37:46 -0700
+Message-ID: <CAKEwX=OsG5YNEeAVgOeNfiWewahUrUP6ftvwdMo1eENxBi0qCg@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/7] mm: zswap: remove page reclaim logic from zsmalloc
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
-
-On Mon, Jun 5, 2023 at 1:28 PM Ian Rogers <irogers@google.com> wrote:
+On Mon, Jun 5, 2023 at 1:54=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
 >
-> If generating vmlinux.h, make the code to generate it more tolerant by
-> filtering out paths to kernels that lack a .BTF section.
+> With the recent enhancement to zswap enabling direct page writeback, the
+> need for the shrink code in zsmalloc has become obsolete. As a result,
+> this commit removes the page reclaim logic from zsmalloc entirely.
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 > ---
->  tools/perf/Makefile.perf | 23 ++++++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
+>  mm/zsmalloc.c | 291 +-------------------------------------------------
+>  1 file changed, 2 insertions(+), 289 deletions(-)
 >
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index f1840af195c0..c3bb27a912b0 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -193,6 +193,7 @@ FLEX    ?= flex
->  BISON   ?= bison
->  STRIP   = strip
->  AWK     = awk
-> +READELF ?= readelf
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 02f7f414aade..c87a60514f21 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -250,13 +250,6 @@ struct zs_pool {
+>         /* Compact classes */
+>         struct shrinker shrinker;
 >
->  # include Makefile.config by default and rule out
->  # non-config cases
-> @@ -1080,12 +1081,28 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
->         $(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool \
->                 OUTPUT=$(SKEL_TMP_OUT)/ bootstrap
+> -#ifdef CONFIG_ZPOOL
+> -       /* List tracking the zspages in LRU order by most recently added =
+object */
+> -       struct list_head lru;
+> -       struct zpool *zpool;
+> -       const struct zpool_ops *zpool_ops;
+> -#endif
+> -
+>  #ifdef CONFIG_ZSMALLOC_STAT
+>         struct dentry *stat_dentry;
+>  #endif
+> @@ -279,13 +272,6 @@ struct zspage {
+>         unsigned int freeobj;
+>         struct page *first_page;
+>         struct list_head list; /* fullness list */
+> -
+> -#ifdef CONFIG_ZPOOL
+> -       /* links the zspage to the lru list in the pool */
+> -       struct list_head lru;
+> -       bool under_reclaim;
+> -#endif
+> -
+>         struct zs_pool *pool;
+>         rwlock_t lock;
+>  };
+> @@ -393,14 +379,7 @@ static void *zs_zpool_create(const char *name, gfp_t=
+ gfp,
+>          * different contexts and its caller must provide a valid
+>          * gfp mask.
+>          */
+> -       struct zs_pool *pool =3D zs_create_pool(name);
+> -
+> -       if (pool) {
+> -               pool->zpool =3D zpool;
+> -               pool->zpool_ops =3D zpool_ops;
+> -       }
+> -
+> -       return pool;
+> +       return zs_create_pool(name);
+>  }
 >
-> -VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)                           \
-> +# Paths to search for a kernel to generate vmlinux.h from.
-> +VMLINUX_BTF_ELF_PATHS ?= $(if $(O),$(O)/vmlinux)                       \
->                      $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
->                      ../../vmlinux                                      \
-> -                    /sys/kernel/btf/vmlinux                            \
->                      /boot/vmlinux-$(shell uname -r)
-> -VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-> +
-> +# Paths to BTF information.
-> +VMLINUX_BTF_BTF_PATHS ?= /sys/kernel/btf/vmlinux
-> +
-> +# Filter out kernels that don't exist or without a BTF section.
-> +VMLINUX_BTF_ELF_ABSPATHS ?= $(abspath $(wildcard $(VMLINUX_BTF_ELF_PATHS)))
-> +VMLINUX_BTF_PATHS ?= $(shell for file in $(VMLINUX_BTF_ELF_ABSPATHS); \
-> +                       do \
-> +                               if [ -f $$file ] && ($(READELF) -t "$$file" | grep .BTF); \
-
-Wouldn't it be `readelf -S` instead?  Also I think grep needs -q to
-suppress output.
-
-
-> +                               then \
-> +                                       echo "$$file"; \
-> +                               fi; \
-> +                       done) \
-> +                       $(wildcard $(VMLINUX_BTF_BTF_PATHS))
-
-This changes the order of processing the sysfs file.
-But I'm not sure it matters much as both /boot/vmlinux and sysfs
-should refer to the running kernel.
-
-Thanks,
-Namhyung
-
-
-> +
-> +# Select the first as the source of vmlinux.h.
-> +VMLINUX_BTF ?= $(firstword $(VMLINUX_BTF_PATHS))
+>  static void zs_zpool_destroy(void *pool)
+> @@ -422,27 +401,6 @@ static void zs_zpool_free(void *pool, unsigned long =
+handle)
+>         zs_free(pool, handle);
+>  }
 >
->  $(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
->  ifeq ($(VMLINUX_H),)
+> -static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries);
+> -
+> -static int zs_zpool_shrink(void *pool, unsigned int pages,
+> -                       unsigned int *reclaimed)
+> -{
+> -       unsigned int total =3D 0;
+> -       int ret =3D -EINVAL;
+> -
+> -       while (total < pages) {
+> -               ret =3D zs_reclaim_page(pool, 8);
+> -               if (ret < 0)
+> -                       break;
+> -               total++;
+> -       }
+> -
+> -       if (reclaimed)
+> -               *reclaimed =3D total;
+> -
+> -       return ret;
+> -}
+> -
+>  static void *zs_zpool_map(void *pool, unsigned long handle,
+>                         enum zpool_mapmode mm)
+>  {
+> @@ -481,7 +439,7 @@ static struct zpool_driver zs_zpool_driver =3D {
+>         .malloc_support_movable =3D true,
+>         .malloc =3D                 zs_zpool_malloc,
+>         .free =3D                   zs_zpool_free,
+> -       .shrink =3D                 zs_zpool_shrink,
+> +       .shrink =3D                 NULL,
+>         .map =3D                    zs_zpool_map,
+>         .unmap =3D                  zs_zpool_unmap,
+>         .total_size =3D             zs_zpool_total_size,
+> @@ -884,14 +842,6 @@ static inline bool obj_allocated(struct page *page, =
+void *obj, unsigned long *ph
+>         return obj_tagged(page, obj, phandle, OBJ_ALLOCATED_TAG);
+>  }
+>
+> -#ifdef CONFIG_ZPOOL
+> -static bool obj_stores_deferred_handle(struct page *page, void *obj,
+> -               unsigned long *phandle)
+> -{
+> -       return obj_tagged(page, obj, phandle, OBJ_DEFERRED_HANDLE_TAG);
+> -}
+> -#endif
+> -
+>  static void reset_page(struct page *page)
+>  {
+>         __ClearPageMovable(page);
+> @@ -1006,9 +956,6 @@ static void free_zspage(struct zs_pool *pool, struct=
+ size_class *class,
+>         }
+>
+>         remove_zspage(class, zspage, ZS_INUSE_RATIO_0);
+> -#ifdef CONFIG_ZPOOL
+> -       list_del(&zspage->lru);
+> -#endif
+>         __free_zspage(pool, class, zspage);
+>  }
+>
+> @@ -1054,11 +1001,6 @@ static void init_zspage(struct size_class *class, =
+struct zspage *zspage)
+>                 off %=3D PAGE_SIZE;
+>         }
+>
+> -#ifdef CONFIG_ZPOOL
+> -       INIT_LIST_HEAD(&zspage->lru);
+> -       zspage->under_reclaim =3D false;
+> -#endif
+> -
+>         set_freeobj(zspage, 0);
+>  }
+>
+> @@ -1525,13 +1467,6 @@ unsigned long zs_malloc(struct zs_pool *pool, size=
+_t size, gfp_t gfp)
+>         /* We completely set up zspage so mark them as movable */
+>         SetZsPageMovable(pool, zspage);
+>  out:
+> -#ifdef CONFIG_ZPOOL
+> -       /* Add/move zspage to beginning of LRU */
+> -       if (!list_empty(&zspage->lru))
+> -               list_del(&zspage->lru);
+> -       list_add(&zspage->lru, &pool->lru);
+> -#endif
+> -
+>         spin_unlock(&pool->lock);
+>
+>         return handle;
+> @@ -1600,20 +1535,6 @@ void zs_free(struct zs_pool *pool, unsigned long h=
+andle)
+>         class =3D zspage_class(pool, zspage);
+>
+>         class_stat_dec(class, ZS_OBJS_INUSE, 1);
+> -
+> -#ifdef CONFIG_ZPOOL
+> -       if (zspage->under_reclaim) {
+> -               /*
+> -                * Reclaim needs the handles during writeback. It'll free
+> -                * them along with the zspage when it's done with them.
+> -                *
+> -                * Record current deferred handle in the object's header.
+> -                */
+> -               obj_free(class->size, obj, &handle);
+> -               spin_unlock(&pool->lock);
+> -               return;
+> -       }
+> -#endif
+>         obj_free(class->size, obj, NULL);
+>
+>         fullness =3D fix_fullness_group(class, zspage);
+> @@ -1890,23 +1811,6 @@ static void lock_zspage(struct zspage *zspage)
+>  }
+>  #endif /* defined(CONFIG_ZPOOL) || defined(CONFIG_COMPACTION) */
+
+If I recall correctly, the defined(CONFIG_ZPOOL) condition is
+only needed for the lock_zspage() call in zs_reclaim_page().
+
+You might be able to get away with just
+#ifdef CONFIG_COMPACTION if you're removing writeback.
+
+Do fact-check me of course - try to build with these CONFIGs turned
+off and see. I'm surprised kernel test robot has not complained about
+unused static function lock_zspage() in the case
+CONFIG_ZPOOL && !CONFIG_COMPACTION
+
+>
+> -#ifdef CONFIG_ZPOOL
+> -/*
+> - * Unlocks all the pages of the zspage.
+> - *
+> - * pool->lock must be held before this function is called
+> - * to prevent the underlying pages from migrating.
+> - */
+> -static void unlock_zspage(struct zspage *zspage)
+> -{
+> -       struct page *page =3D get_first_page(zspage);
+> -
+> -       do {
+> -               unlock_page(page);
+> -       } while ((page =3D get_next_page(page)) !=3D NULL);
+> -}
+> -#endif /* CONFIG_ZPOOL */
+> -
+>  static void migrate_lock_init(struct zspage *zspage)
+>  {
+>         rwlock_init(&zspage->lock);
+> @@ -2126,9 +2030,6 @@ static void async_free_zspage(struct work_struct *w=
+ork)
+>                 VM_BUG_ON(fullness !=3D ZS_INUSE_RATIO_0);
+>                 class =3D pool->size_class[class_idx];
+>                 spin_lock(&pool->lock);
+> -#ifdef CONFIG_ZPOOL
+> -               list_del(&zspage->lru);
+> -#endif
+>                 __free_zspage(pool, class, zspage);
+>                 spin_unlock(&pool->lock);
+>         }
+> @@ -2474,10 +2375,6 @@ struct zs_pool *zs_create_pool(const char *name)
+>          */
+>         zs_register_shrinker(pool);
+>
+> -#ifdef CONFIG_ZPOOL
+> -       INIT_LIST_HEAD(&pool->lru);
+> -#endif
+> -
+>         return pool;
+>
+>  err:
+> @@ -2520,190 +2417,6 @@ void zs_destroy_pool(struct zs_pool *pool)
+>  }
+>  EXPORT_SYMBOL_GPL(zs_destroy_pool);
+>
+> -#ifdef CONFIG_ZPOOL
+> -static void restore_freelist(struct zs_pool *pool, struct size_class *cl=
+ass,
+> -               struct zspage *zspage)
+> -{
+> -       unsigned int obj_idx =3D 0;
+> -       unsigned long handle, off =3D 0; /* off is within-page offset */
+> -       struct page *page =3D get_first_page(zspage);
+> -       struct link_free *prev_free =3D NULL;
+> -       void *prev_page_vaddr =3D NULL;
+> -
+> -       /* in case no free object found */
+> -       set_freeobj(zspage, (unsigned int)(-1UL));
+> -
+> -       while (page) {
+> -               void *vaddr =3D kmap_atomic(page);
+> -               struct page *next_page;
+> -
+> -               while (off < PAGE_SIZE) {
+> -                       void *obj_addr =3D vaddr + off;
+> -
+> -                       /* skip allocated object */
+> -                       if (obj_allocated(page, obj_addr, &handle)) {
+> -                               obj_idx++;
+> -                               off +=3D class->size;
+> -                               continue;
+> -                       }
+> -
+> -                       /* free deferred handle from reclaim attempt */
+> -                       if (obj_stores_deferred_handle(page, obj_addr, &h=
+andle))
+> -                               cache_free_handle(pool, handle);
+> -
+> -                       if (prev_free)
+> -                               prev_free->next =3D obj_idx << OBJ_TAG_BI=
+TS;
+> -                       else /* first free object found */
+> -                               set_freeobj(zspage, obj_idx);
+> -
+> -                       prev_free =3D (struct link_free *)vaddr + off / s=
+izeof(*prev_free);
+> -                       /* if last free object in a previous page, need t=
+o unmap */
+> -                       if (prev_page_vaddr) {
+> -                               kunmap_atomic(prev_page_vaddr);
+> -                               prev_page_vaddr =3D NULL;
+> -                       }
+> -
+> -                       obj_idx++;
+> -                       off +=3D class->size;
+> -               }
+> -
+> -               /*
+> -                * Handle the last (full or partial) object on this page.
+> -                */
+> -               next_page =3D get_next_page(page);
+> -               if (next_page) {
+> -                       if (!prev_free || prev_page_vaddr) {
+> -                               /*
+> -                                * There is no free object in this page, =
+so we can safely
+> -                                * unmap it.
+> -                                */
+> -                               kunmap_atomic(vaddr);
+> -                       } else {
+> -                               /* update prev_page_vaddr since prev_free=
+ is on this page */
+> -                               prev_page_vaddr =3D vaddr;
+> -                       }
+> -               } else { /* this is the last page */
+> -                       if (prev_free) {
+> -                               /*
+> -                                * Reset OBJ_TAG_BITS bit to last link to=
+ tell
+> -                                * whether it's allocated object or not.
+> -                                */
+> -                               prev_free->next =3D -1UL << OBJ_TAG_BITS;
+> -                       }
+> -
+> -                       /* unmap previous page (if not done yet) */
+> -                       if (prev_page_vaddr) {
+> -                               kunmap_atomic(prev_page_vaddr);
+> -                               prev_page_vaddr =3D NULL;
+> -                       }
+> -
+> -                       kunmap_atomic(vaddr);
+> -               }
+> -
+> -               page =3D next_page;
+> -               off %=3D PAGE_SIZE;
+> -       }
+> -}
+> -
+> -static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
+> -{
+> -       int i, obj_idx, ret =3D 0;
+> -       unsigned long handle;
+> -       struct zspage *zspage;
+> -       struct page *page;
+> -       int fullness;
+> -
+> -       /* Lock LRU and fullness list */
+> -       spin_lock(&pool->lock);
+> -       if (list_empty(&pool->lru)) {
+> -               spin_unlock(&pool->lock);
+> -               return -EINVAL;
+> -       }
+> -
+> -       for (i =3D 0; i < retries; i++) {
+> -               struct size_class *class;
+> -
+> -               zspage =3D list_last_entry(&pool->lru, struct zspage, lru=
+);
+> -               list_del(&zspage->lru);
+> -
+> -               /* zs_free may free objects, but not the zspage and handl=
+es */
+> -               zspage->under_reclaim =3D true;
+> -
+> -               class =3D zspage_class(pool, zspage);
+> -               fullness =3D get_fullness_group(class, zspage);
+> -
+> -               /* Lock out object allocations and object compaction */
+> -               remove_zspage(class, zspage, fullness);
+> -
+> -               spin_unlock(&pool->lock);
+> -               cond_resched();
+> -
+> -               /* Lock backing pages into place */
+> -               lock_zspage(zspage);
+> -
+> -               obj_idx =3D 0;
+> -               page =3D get_first_page(zspage);
+> -               while (1) {
+> -                       handle =3D find_alloced_obj(class, page, &obj_idx=
+);
+> -                       if (!handle) {
+> -                               page =3D get_next_page(page);
+> -                               if (!page)
+> -                                       break;
+> -                               obj_idx =3D 0;
+> -                               continue;
+> -                       }
+> -
+> -                       /*
+> -                        * This will write the object and call zs_free.
+> -                        *
+> -                        * zs_free will free the object, but the
+> -                        * under_reclaim flag prevents it from freeing
+> -                        * the zspage altogether. This is necessary so
+> -                        * that we can continue working with the
+> -                        * zspage potentially after the last object
+> -                        * has been freed.
+> -                        */
+> -                       ret =3D pool->zpool_ops->evict(pool->zpool, handl=
+e);
+> -                       if (ret)
+> -                               goto next;
+> -
+> -                       obj_idx++;
+> -               }
+> -
+> -next:
+> -               /* For freeing the zspage, or putting it back in the pool=
+ and LRU list. */
+> -               spin_lock(&pool->lock);
+> -               zspage->under_reclaim =3D false;
+> -
+> -               if (!get_zspage_inuse(zspage)) {
+> -                       /*
+> -                        * Fullness went stale as zs_free() won't touch i=
+t
+> -                        * while the page is removed from the pool. Fix i=
+t
+> -                        * up for the check in __free_zspage().
+> -                        */
+> -                       zspage->fullness =3D ZS_INUSE_RATIO_0;
+> -
+> -                       __free_zspage(pool, class, zspage);
+> -                       spin_unlock(&pool->lock);
+> -                       return 0;
+> -               }
+> -
+> -               /*
+> -                * Eviction fails on one of the handles, so we need to re=
+store zspage.
+> -                * We need to rebuild its freelist (and free stored defer=
+red handles),
+> -                * put it back to the correct size class, and add it to t=
+he LRU list.
+> -                */
+> -               restore_freelist(pool, class, zspage);
+> -               putback_zspage(class, zspage);
+> -               list_add(&zspage->lru, &pool->lru);
+> -               unlock_zspage(zspage);
+> -       }
+> -
+> -       spin_unlock(&pool->lock);
+> -       return -EAGAIN;
+> -}
+> -#endif /* CONFIG_ZPOOL */
+> -
+>  static int __init zs_init(void)
+>  {
+>         int ret;
 > --
-> 2.41.0.rc0.172.g3f132b7071-goog
+> 2.34.1
 >
