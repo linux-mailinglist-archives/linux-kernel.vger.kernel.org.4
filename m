@@ -2,183 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67FB722CA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F40722CAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbjFEQaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S234803AbjFEQba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbjFEQ34 (ORCPT
+        with ESMTP id S233018AbjFEQbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:29:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D16E9;
-        Mon,  5 Jun 2023 09:29:54 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355Cg6Y9008662;
-        Mon, 5 Jun 2023 16:29:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=6xUxlmfWo1XCW7QF3JIN02Aeg3QcbpmcklUfU5FyWWc=;
- b=JDqCcqwTdIbhsPChdWAr6BjrMvHbPKHmbuzColmWSUWBHj1T6JlkALV49aX8bnrCjBLz
- TYy+7dBllK9LmgrqHNEKMc4CB49oapLNN7jjbgQT9pz9l5bJY1Tyl+7f+fm75CI398nU
- 8tylJveuEcJWarJIg/wlXMmbGuUc/hJ4fZfP/0A7+fDgmaN5GAH2Z80+aiv2zKN9O8m3
- jcUb5NPtKXsaw48093Co06uITJ87zzoIp0nF0MXo124gfJHmsX5JcOiAZfHaOsjeXAIU
- SQausj1ZGjeK4FTwypbOlLKfVwMW1f6jJv8GflYbWCk7rkbgjz6tNBFxgKAebj7Ds9jb Hg== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1e9brrg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 16:29:24 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 355GTLBN030422;
-        Mon, 5 Jun 2023 16:29:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3qyxkkq42s-1;
-        Mon, 05 Jun 2023 16:29:21 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 355GTJSN030342;
-        Mon, 5 Jun 2023 16:29:21 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 355GTJDi030326;
-        Mon, 05 Jun 2023 16:29:21 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id E59A95F20; Mon,  5 Jun 2023 21:59:20 +0530 (+0530)
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        tglx@linutronix.de, maz@kernel.org, will@kernel.org,
-        robin.murphy@arm.com, joro@8bytes.org, mani@kernel.org,
-        robimarko@gmail.com
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH v2 10/10] arm64: dts: qcom: Add the support of cpufreq on SDX75
-Date:   Mon,  5 Jun 2023 21:59:17 +0530
-Message-Id: <1685982557-28326-11-git-send-email-quic_rohiagar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: plyLN7QVquspxC1Fh7bhhIFI4jJWxdZD
-X-Proofpoint-ORIG-GUID: plyLN7QVquspxC1Fh7bhhIFI4jJWxdZD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_31,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 impostorscore=0 priorityscore=1501 mlxlogscore=746
- adultscore=0 clxscore=1015 spamscore=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306050141
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 5 Jun 2023 12:31:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAE8170B
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:30:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB0ED62825
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 16:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A5CC433A8;
+        Mon,  5 Jun 2023 16:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685982625;
+        bh=t4IRdJhZSZ4fmGSJrKCIhBfZnp3squLwB/GdU/2Wlc8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IC/Jnt4VvgM03de+BlFN47sxt0oMyUm4kXzMUuoEOp8ouwIFtlSuRxpSRYZsKvnXL
+         BOpw6izY+O42TAuK6Ip8xrMzjMhOn2DHYCE4NjySokLp8KzgDQ7G/YF7XfCPT9jU3R
+         8+IprYxH0GTIWGwmuquswkiTXeifhWq5WiP81qFeMM98BemWqX+2N9Rubbc1CWP09j
+         RhCVwKgswa3L3ng9ypTHmMrV0+VY/FcFNuPe4PWjoYkChLiOwyi8uhBw8D6Z5h3exL
+         jQTWAmNqqfI+dRvS+YWBNf3W7ZJinUMLFLgSXOEo0Fchb7Bocsh0JlbK0zNCl2RaFa
+         rWIklBdqpgUTQ==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b1a6a8e851so56789131fa.2;
+        Mon, 05 Jun 2023 09:30:25 -0700 (PDT)
+X-Gm-Message-State: AC+VfDymu1eaYYPjuPmIdjIIb7pguijKeYB6wWUzD333ajSfrAQlJ41v
+        CBzAtik8CouGdcJwz2YK6XsJacg/WC6xq+C8hw4=
+X-Google-Smtp-Source: ACHHUZ6HXtb+me/VrGrWZPVbdaHJhrqHvnOuMvAl6Vnsp8Y3eZX9EhOYAyzeze1NgDnLhg//KTnUG6qnbezjBA/07EM=
+X-Received: by 2002:a2e:9989:0:b0:2b1:bd11:a71a with SMTP id
+ w9-20020a2e9989000000b002b1bd11a71amr3583654lji.17.1685982622939; Mon, 05 Jun
+ 2023 09:30:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230605074024.1055863-1-puranjay12@gmail.com> <20230605074024.1055863-2-puranjay12@gmail.com>
+In-Reply-To: <20230605074024.1055863-2-puranjay12@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 5 Jun 2023 09:30:10 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5+ija4umxAhOMk5mVGGCGV=iPBNm-QbhkVz99WHzrmsQ@mail.gmail.com>
+Message-ID: <CAPhsuW5+ija4umxAhOMk5mVGGCGV=iPBNm-QbhkVz99WHzrmsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] bpf: make bpf_prog_pack allocator portable
+To:     Puranjay Mohan <puranjay12@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, catalin.marinas@arm.com,
+        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the support of cpufreq to enable the cpufreq scaling
-on SDX75 SoC. Also add CPU specific information to build
-energy model for EAS.
+On Mon, Jun 5, 2023 at 12:40=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
+>
+> The bpf_prog_pack allocator currently uses module_alloc() and
+> module_memfree() to allocate and free memory. This is not portable
+> because different architectures use different methods for allocating
+> memory for BPF programs. Like ARM64 uses vmalloc()/vfree().
+>
+> Use bpf_jit_alloc_exec() and bpf_jit_free_exec() for memory management
+> in bpf_prog_pack allocator. Other architectures can override these with
+> their implementation and will be able to use bpf_prog_pack directly.
+>
+> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 
-Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdx75.dtsi | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+Acked-by: Song Liu <song@kernel.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-index 47170ae..e1887a4 100644
---- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-@@ -47,10 +47,14 @@
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
- 			reg = <0x0 0x0>;
-+			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			power-domains = <&CPU_PD0>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_0>;
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <100>;
- 			L2_0: l2-cache {
- 				compatible = "cache";
- 				next-level-cache = <&L3_0>;
-@@ -64,10 +68,14 @@
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
- 			reg = <0x0 0x100>;
-+			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			power-domains = <&CPU_PD1>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_100>;
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <100>;
- 			L2_100: l2-cache {
- 				compatible = "cache";
- 				next-level-cache = <&L3_0>;
-@@ -78,10 +86,14 @@
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
- 			reg = <0x0 0x200>;
-+			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			power-domains = <&CPU_PD2>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_200>;
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <100>;
- 			L2_200: l2-cache {
- 				compatible = "cache";
- 				next-level-cache = <&L3_0>;
-@@ -92,10 +104,14 @@
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a55";
- 			reg = <0x0 0x300>;
-+			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			power-domains = <&CPU_PD3>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_300>;
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			capacity-dmips-mhz = <1024>;
-+			dynamic-power-coefficient = <100>;
- 			L2_300: l2-cache {
- 				compatible = "cache";
- 				next-level-cache = <&L3_0>;
-@@ -605,6 +621,20 @@
- 			};
- 
- 		};
-+
-+		cpufreq_hw: cpufreq@17d91000 {
-+			compatible = "qcom,sdx75-cpufreq-epss", "qcom,cpufreq-epss";
-+			reg = <0 0x17d91000 0 0x1000>;
-+			reg-names = "freq-domain0";
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GPLL0>;
-+			clock-names = "xo",
-+				      "alternate";
-+			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "dcvsh-irq-0";
-+			#freq-domain-cells = <1>;
-+			#clock-cells = <1>;
-+		};
- 	};
- 
- 	timer {
--- 
-2.7.4
-
+> ---
+>  kernel/bpf/core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 7421487422d4..2bc9092bf9be 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -860,7 +860,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_f=
+ill_hole_t bpf_fill_ill_ins
+>                        GFP_KERNEL);
+>         if (!pack)
+>                 return NULL;
+> -       pack->ptr =3D module_alloc(BPF_PROG_PACK_SIZE);
+> +       pack->ptr =3D bpf_jit_alloc_exec(BPF_PROG_PACK_SIZE);
+>         if (!pack->ptr) {
+>                 kfree(pack);
+>                 return NULL;
+> @@ -884,7 +884,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
+_t bpf_fill_ill_insns)
+>         mutex_lock(&pack_mutex);
+>         if (size > BPF_PROG_PACK_SIZE) {
+>                 size =3D round_up(size, PAGE_SIZE);
+> -               ptr =3D module_alloc(size);
+> +               ptr =3D bpf_jit_alloc_exec(size);
+>                 if (ptr) {
+>                         bpf_fill_ill_insns(ptr, size);
+>                         set_vm_flush_reset_perms(ptr);
+> @@ -922,7 +922,7 @@ void bpf_prog_pack_free(struct bpf_binary_header *hdr=
+)
+>
+>         mutex_lock(&pack_mutex);
+>         if (hdr->size > BPF_PROG_PACK_SIZE) {
+> -               module_memfree(hdr);
+> +               bpf_jit_free_exec(hdr);
+>                 goto out;
+>         }
+>
+> @@ -946,7 +946,7 @@ void bpf_prog_pack_free(struct bpf_binary_header *hdr=
+)
+>         if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT=
+, 0,
+>                                        BPF_PROG_CHUNK_COUNT, 0) =3D=3D 0)=
+ {
+>                 list_del(&pack->list);
+> -               module_memfree(pack->ptr);
+> +               bpf_jit_free_exec(pack->ptr);
+>                 kfree(pack);
+>         }
+>  out:
+> --
+> 2.39.2
+>
