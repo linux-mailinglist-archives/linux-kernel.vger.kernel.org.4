@@ -2,39 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7900C721D18
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 06:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EBB721CAF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjFEEWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 00:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S232815AbjFEDxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 23:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFEEWf (ORCPT
+        with ESMTP id S232813AbjFEDxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 00:22:35 -0400
-X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Jun 2023 21:22:33 PDT
-Received: from baidu.com (mx21.baidu.com [220.181.3.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857929F;
-        Sun,  4 Jun 2023 21:22:33 -0700 (PDT)
-From:   Duan Muquan <duanmuquan@baidu.com>
-To:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Duan Muquan <duanmuquan@baidu.com>
-Subject: [PATCH v1] tcp: fix connection reset due to tw hashdance race.
-Date:   Mon, 5 Jun 2023 11:51:40 +0800
-Message-ID: <20230605035140.89106-1-duanmuquan@baidu.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 4 Jun 2023 23:53:04 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AA8A6
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 20:53:03 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-760c58747cdso326050139f.0
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 20:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685937183; x=1688529183;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=heg9naicJ0m/vz+NA9tT+yaLHLKfezTG0elobdW9XM0=;
+        b=X8yG3j63HFtmlfMWAIOysMHMgQ53lnLEPhzlReUSNhG9ll1t2icS49DjzCtePd9RK5
+         uaJwdKqRfD+OLnQ8I4ndCPqw8vQAO8xD9RpnkX0JISqtjtXeW9zvjpvKW8cF3EpfpDC+
+         qQvcGk6XnfcMuChynAMGr5YNWH0POMsldZiwh30pfD4mg96JTFSnaQvAW3tpBNFytpfw
+         NbaElrN+ENzfOH9US0rPUuc9cpUpDWRXCVF7tm4nON4FXtfZGz2h3v6QJDITZKa5Pd4h
+         3bGnW63E+N9sfaBv1JOOOpGz/I4bS20F9GS/HB80V1XPl9+MyBlFSrGSHJO4TXjuJjpp
+         KTxw==
+X-Gm-Message-State: AC+VfDxOptMRPuGts5ZAm7egIxZTSc5nsaqWfvq17KL5Ad/2wBZM9K2O
+        2TjWRMzyt7DqJXvfpf2Ow260HmaqJaHf2EDEtPDuGaRGs1Em
+X-Google-Smtp-Source: ACHHUZ4Ox28z1NEMvzQNGurRUJ8MDdpqTw8eQrpe/ttMA9Ivul/hlnY1FklybLmLQeRfl08ByWruVk6XFjNmaQ/Sn6lvR7uaBXsE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.31.62.19]
-X-ClientProxiedBy: BJHW-Mail-Ex15.internal.baidu.com (10.127.64.38) To
- BJHW-MAIL-EX26.internal.baidu.com (10.127.64.41)
-X-FEAS-Client-IP: 172.31.51.57
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:c0c7:0:b0:331:3c0d:5a20 with SMTP id
+ t7-20020a92c0c7000000b003313c0d5a20mr6797723ilf.0.1685937182823; Sun, 04 Jun
+ 2023 20:53:02 -0700 (PDT)
+Date:   Sun, 04 Jun 2023 20:53:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e55d2005fd59d6c9@google.com>
+Subject: [syzbot] [ext4?] WARNING: locking bug in ext4_move_extents
+From:   syzbot <syzbot+7f4a6f7f7051474e40ad@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,192 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the FIN from passive closer and the ACK for active closer's FIN are
-processed on different CPUs concurrently, tw hashdance race may occur.
-On loopback interface, transmit function queues a skb to current CPU's
-softnet's input queue by default. Suppose active closer runs on CPU 0,
-and passive closer runs on CPU 1. If the ACK for the active closer's
-FIN is sent with no delay, it will be processed and tw hashdance will
-be done on CPU 0; The passive closer's FIN will be sent in another
-segment and processed on CPU 1, it may fail to find tw sock in the
-ehash table due to tw hashdance on CPU 0, then get a RESET.
-If application reconnects immediately with the same source port, it
-will get reset because tw sock's tw_substate is still TCP_FIN_WAIT2.
+Hello,
 
-The dmesg to trace down this issue:
+syzbot found the following issue on:
 
-.333516] tcp_send_fin: sk 0000000092105ad2 cookie 9 cpu 3
-.333524] rcv_state_process:FIN_WAIT2 sk 0000000092105ad2 cookie 9 cpu 3
-.333534] tcp_close: tcp_time_wait: sk 0000000092105ad2 cookie 9 cpu 3
-.333538] hashdance: tw 00000000690fdb7a added to ehash cookie 9 cpu 3
-.333541] hashdance: sk 0000000092105ad2 removed cookie 9 cpu 3
-.333544] !refcount_inc_not_zero 00000000690fdb7a ref 0 cookie 9 cpu 0
-.333549] hashdance: tw 00000000690fdb7a before add ref 0 cookie 9 cpu 3
-.333552] rcv_state: RST for FIN listen 000000003c50afa6 cookie 0 cpu 0
-.333574] tcp_send_fin: sk 0000000066757bf8 ref 2 cookie 0 cpu 0
-.333611] timewait_state: TCP_TW_RST tw 00000000690fdb7a cookie 9 cpu 0
-.333626] tcp_connect: sk 0000000066757bf8 cpu 0 cookie 0
+HEAD commit:    9561de3a55be Linux 6.4-rc5
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14df9d7d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f4a6f7f7051474e40ad
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Here is the call trace map:
+Unfortunately, I don't have any reproducer for this issue yet.
 
-CPU 0                                    CPU 1
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/661f38eebc53/disk-9561de3a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d6c5afef083c/vmlinux-9561de3a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7506eac4fc9d/bzImage-9561de3a.xz
 
---------                                 --------
-tcp_close()
-tcp_send_fin()
-loopback_xmit()
-netif_rx()
-tcp_v4_rcv()
-tcp_ack_snd_check()
-loopback_xmit
-netif_rx()                              tcp_close()
-...                                     tcp_send_fin()
-										loopback_xmit()
-										netif_rx()
-										tcp_v4_rcv()
-										...
-tcp_time_wait()
-inet_twsk_hashdance() {
-...
-                                    <-__inet_lookup_established()
-									(find sk, may fail tw_refcnt check)
-inet_twsk_add_node_tail_rcu(tw, ...)
-                                    <-__inet_lookup_established()
-									(find sk, may fail tw_refcnt check)
-__sk_nulls_del_node_init_rcu(sk)
-                                    <-__inet_lookup_established()
-								    (find tw, may fail tw_refcnt check)
-refcount_set(&tw->tw_refcnt, 3)
-                                    <-__inet_lookup_established()
-									(find tw, tw_refcnt is ok)
-...
-}
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7f4a6f7f7051474e40ad@syzkaller.appspotmail.com
 
-This issue occurs with a small probability on our application working
-on loopback interface, client gets a connection refused error when it
-reconnects. In a reproducing environment, modifying tcp_ack_snd_check()
-to disable delay ack all the time, and let the client bind the same
-source port everytime, it can be reproduced in about 20 minutes.
+------------[ cut here ]------------
+Looking for class "&ei->i_data_sem" with key init_once.__key.780, but found a different class "&ei->i_data_sem" with the same key
+WARNING: CPU: 0 PID: 15140 at kernel/locking/lockdep.c:941 look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
+Modules linked in:
+CPU: 0 PID: 15140 Comm: syz-executor.2 Not tainted 6.4.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
+Code: 8b 16 48 c7 c0 60 91 1e 90 48 39 c2 74 46 f6 05 5d 02 92 03 01 75 3d c6 05 54 02 92 03 01 48 c7 c7 a0 ae ea 8a e8 de 8a a3 f6 <0f> 0b eb 26 e8 f5 d0 80 f9 48 c7 c7 e0 ad ea 8a 89 de e8 37 ca fd
+RSP: 0018:ffffc9000356f410 EFLAGS: 00010046
+RAX: 9c96f62a5d44cf00 RBX: ffffffff9009a460 RCX: 0000000000040000
+RDX: ffffc9000cf9f000 RSI: 0000000000004e87 RDI: 0000000000004e88
+RBP: ffffc9000356f518 R08: ffffffff81530142 R09: ffffed1017305163
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
+R13: 1ffff920006ade90 R14: ffff888074763488 R15: ffffffff91cac681
+FS:  00007fe07ba3e700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2d523000 CR3: 0000000021c7c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ register_lock_class+0x104/0x990 kernel/locking/lockdep.c:1290
+ __lock_acquire+0xd3/0x2070 kernel/locking/lockdep.c:4965
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+ down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
+ ext4_move_extents+0x37d/0xe40 fs/ext4/move_extent.c:621
+ __ext4_ioctl fs/ext4/ioctl.c:1352 [inline]
+ ext4_ioctl+0x3870/0x5b60 fs/ext4/ioctl.c:1608
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe07ac8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe07ba3e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fe07adac120 RCX: 00007fe07ac8c169
+RDX: 0000000020000280 RSI: 00000000c028660f RDI: 0000000000000007
+RBP: 00007fe07ace7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe5c49953f R14: 00007fe07ba3e300 R15: 0000000000022000
+ </TASK>
 
-Brief of the scenario:
 
-1. Server runs on CPU 0 and Client runs on CPU 1. Server closes
-connection actively and sends a FIN to client. The lookback's driver
-enqueues the FIN segment to backlog queue of CPU 0 via
-loopback_xmit()->netif_rx(), one of the conditions for non-delay ack
-meets in __tcp_ack_snd_check(), and the ACK is sent immediately.
-
-2. On loopback interface, the ACK is received and processed on CPU 0,
-the 'dance' from original sock to tw sock will perfrom, tw sock will
-be inserted to ehash table, then the original sock will be removed.
-
-3. On CPU 1, client closes the connection, a FIN segment is sent and
-processed on CPU 1. When it is looking up sock in ehash table (with no
-lock), tw hashdance race may occur, it fails to find the tw sock and
-get a listener sock in the flowing 3 cases:
-
-  (1) Original sock is found, but it has been destroyed and sk_refcnt
-	  has become 0 when validating it.
-  (2) tw sock is found, but its tw_refcnt has not been set to 3, it is
-	  still 0, validating for sk_refcnt will fail.
-  (3) For versions that tw sock is added to the head of the list.
-	  It will be missed if the list is traversed before tw sock added.
-	  And the original sock is removed before it is found. No
-	  established will be found.
-
-The listener sock will reset the FIN segment which has ack bit set.
-
-4. If client reconnects immediately and is assigned with the same
-source port as previous connection, the tw sock with tw_substate
-TCP_FIN_WAIT2 will reset client's SYN and destroy itself in
-inet_twsk_deschedule_put(). Application gets a connection refused
-error.
-
-5. If client reconnects again, it will succeed.
-
-Introduce the flowing 2 modifications to solve the above 3 bad cases:
-
-For case (1):
-Set tw_refcnt to 3 before adding it into list.
-
-For case (2) and (3):
-In function tcp_v4_rcv(), if __inet_lookup_skb() returns a listener sock,
-and this segment has FIN bit set, then retry the lookup process one time.
-
-There may be another bad case, if the original sock is found and passes
-validation, but during further process for the passive closer's FIN on
-CPU 1, the sock has been destroyed on CPU 0, then the FIN segment will
-be dropped and retransmitted. This case does not hurt application as
-much as resetting reconnection, and this case has less possibility than
-the other bad cases, it does not occur in on our product or
-experimental environment, so it is not considered in this patch.
-
-Could you please check whether this fix is OK, or any suggestions?
-Looking forward for your precious comments!
-
-Signed-off-by: Duan Muquan <duanmuquan@baidu.com>
 ---
- net/ipv4/inet_timewait_sock.c | 15 +++++++--------
- net/ipv4/tcp_ipv4.c           | 13 +++++++++++++
- 2 files changed, 20 insertions(+), 8 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-index 40052414c7c7..ed1f255c9aa8 100644
---- a/net/ipv4/inet_timewait_sock.c
-+++ b/net/ipv4/inet_timewait_sock.c
-@@ -144,14 +144,6 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
- 
- 	spin_lock(lock);
- 
--	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
--
--	/* Step 3: Remove SK from hash chain */
--	if (__sk_nulls_del_node_init_rcu(sk))
--		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
--
--	spin_unlock(lock);
--
- 	/* tw_refcnt is set to 3 because we have :
- 	 * - one reference for bhash chain.
- 	 * - one reference for ehash chain.
-@@ -162,6 +154,13 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
- 	 * so we are not allowed to use tw anymore.
- 	 */
- 	refcount_set(&tw->tw_refcnt, 3);
-+	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
-+
-+	/* Step 3: Remove SK from hash chain */
-+	if (__sk_nulls_del_node_init_rcu(sk))
-+		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
-+
-+	spin_unlock(lock);
- }
- EXPORT_SYMBOL_GPL(inet_twsk_hashdance);
- 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 06d2573685ca..3e3cef202f76 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2018,6 +2018,19 @@ int tcp_v4_rcv(struct sk_buff *skb)
- 	sk = __inet_lookup_skb(net->ipv4.tcp_death_row.hashinfo,
- 			       skb, __tcp_hdrlen(th), th->source,
- 			       th->dest, sdif, &refcounted);
-+
-+	/* If tw "dance" is performed on another CPU, the lookup process may find
-+	 * no tw sock for the passive closer's FIN segment, but a listener sock,
-+	 * which will reset the FIN segment. If application reconnects immediately
-+	 * with the same source port, it will get reset because the tw sock's
-+	 * tw_substate is still TCP_FIN_WAIT2. Try to get the tw sock in another try.
-+	 */
-+	if (unlikely(th->fin && sk && sk->sk_state == TCP_LISTEN)) {
-+		sk = __inet_lookup_skb(net->ipv4.tcp_death_row.hashinfo,
-+				       skb, __tcp_hdrlen(th), th->source,
-+				       th->dest, sdif, &refcounted);
-+	}
-+
- 	if (!sk)
- 		goto no_tcp_socket;
- 
--- 
-2.32.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
