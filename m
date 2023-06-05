@@ -2,239 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045A97231D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4357231D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjFEVBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S233584AbjFEVBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjFEVBT (ORCPT
+        with ESMTP id S233308AbjFEVB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:01:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD7DED;
-        Mon,  5 Jun 2023 14:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685998878; x=1717534878;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=pllprPRXgvKu0sh2Nvr+CLsb6a6MBDECEAZsZeI+9WE=;
-  b=V4e0MxoV+dTiUzG9DD/l82hPDZCT2nTTwQ+H3l6/hxkvRUnoMetMElgG
-   gt7wEmCTeQdyEnkiQl9csbk9LwsXa1lrU9SAVpg74Ifeab9LCfeAi2GYc
-   tfKm/DfKmZlyHhRKPW4gQQbrTmYF+JRUlKSYxrf9govWL3iPu5VQtuvHc
-   iyLvRH43TuFnXHQtArXyFARdx21liaZ/Zzezq8u7nRyPL6qjnFCuxkQtC
-   FC9ZPJMHSwijZWKJ5TpjnvYyKQ8kfIYxeFUEuFMYwhjJhp9NC1eKA0F9I
-   HLoCLN4mV1af3/0mreNzQb3z/b1Fan7EOeqQPqW3Ch+YBpIgRD/LmjeB/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="336839008"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="336839008"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 14:01:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="708809077"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="708809077"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jun 2023 14:01:17 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 5 Jun 2023 14:01:16 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 5 Jun 2023 14:01:16 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 5 Jun 2023 14:01:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HvtTA3XQG/b5PnLyZsFAO9hlwcE1wUDGe7A2mo+LGGyCBex526g5L6e0joaQfVgKCfX3AoeFH3Zz2xsHiW8LFe8WuYkhB2v6aUKn+X0U+dExwYWMLke99XfPlir942nthq9/wwek5pt7M4I6Nc5g4GPUZCMqwiVqfdHMO86QUaFqcubhTqJs6oVgS0TdvZqdrTB3UCvaWhjvJ7CLGarPSldbkChNx70ZFbk0W5BulPvbo/mTDabQhGG9SicSEG0K5psX266J3vq6+eW2YiZvawfcGvzZ5oBfvAftRPG8wF2PPRoJgyVoBvcYLDjrrHt2D3tSb/Mzrpb24W79KvpUpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pllprPRXgvKu0sh2Nvr+CLsb6a6MBDECEAZsZeI+9WE=;
- b=Ox1bwX3lnk5ij63jcjmSCdUJlcldXePFWage0yiMMV1zZmirJ95TkkcPqBALNwEs5TeJvm/4fuYZOfUasU5tWvabhMWPxOxo28MBSOrNqrEG6xZWB4rXFREaAKf5mGbB7A/O1Roa3dqVwlShvUb497OnknS19Jd1DJGRmiFHmPIyacSz0PYntirUE2GEt9uS4pTSiWc0IFdB15OZ+e+3nbMDQDnHXDHBDiker668rJJzm8/Ba3GLIjbG6Dwhp65gk2y78QhTXnBvIPqpElj/T7QcyxADOTk+cMwtYjAG45oE70KpIGHUtoQsryZCAPpgaLaoNKy3gzemynIEWLxqTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by MN2PR11MB4568.namprd11.prod.outlook.com (2603:10b6:208:266::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
- 2023 21:01:14 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::6984:19a5:fe1c:dfec]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::6984:19a5:fe1c:dfec%7]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 21:01:14 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "rppt@kernel.org" <rppt@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
- memory as ROX
-Thread-Topic: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
- memory as ROX
-Thread-Index: AQHZlKm5cQf5rjPFXEabUnQGbxJicq92PIKAgAADw4CAAAbOAIAAJQoAgAAzZgCABOjDAIAAWSCAgACFuQCAAEwqAIAABRyA
-Date:   Mon, 5 Jun 2023 21:01:14 +0000
-Message-ID: <fc80e5bcec4f1fd06d9d81a2ccae3f489166d503.camel@intel.com>
-References: <20230601101257.530867-13-rppt@kernel.org>
-         <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
-         <ZHjcr26YskTm+0EF@moria.home.lan>
-         <a51c041b61e2916d2b91c990349aabc6cb9836aa.camel@intel.com>
-         <ZHjljJfQjhVV/jNS@moria.home.lan>
-         <68b8160454518387c53508717ba5ed5545ff0283.camel@intel.com>
-         <50D768D7-15BF-43B8-A5FD-220B25595336@gmail.com>
-         <20230604225244.65be9103@rorschach.local.home>
-         <20230605081143.GA3460@kernel.org>
-         <88a62f834688ed77d08c778e1e427014cf7d3c1b.camel@intel.com>
-         <20230605204256.GA52412@kernel.org>
-In-Reply-To: <20230605204256.GA52412@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|MN2PR11MB4568:EE_
-x-ms-office365-filtering-correlation-id: 3acc26cb-d230-4031-b839-08db6607ffb5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9jGREqZFuZCFi6EgVT/gYfE+20NE0t5hQG/ADzmQaJNyoKILM4dUtv5pL8ouOXwaFra2xTPRS54ozbGt0mjBdrT64h4T3Gu08i4hfBS1GTQRSTkR7URqi7S8/+xDGIxFEX4LmcXaUbxM/eGqH1CBrQogk6ka0m0UV3WeZu0EGZ5d4H103ul7HptRhUf4npVNEDMxvBokVBBLAc0oz49wV1YsTFdHFOWTZVcUtRuA3NofKWYf8wNsiaFxie0Aq7fFMZLFiGLtj4OXXAphPAfz3MzGh26yWw6hh/jnXmZBiWietvOB63unRi9TLNiEFTH8/u2Mv1cPq7LYz0b1843vkJyKfp8ks/9aUHF1+1sSHvNfJZCF8O50HY7aRxVwBXVZSDZuKrW409MuVxgboG1kDQCC7xecGw2b5Mwoot8XlQhnsMG5CjzFi9pvQU9rkMxkHyvq9uYG1BB+sEHYzflMPo/6P4xcnPdL1OzNZjroAeI8jPsXtm8PWLENe1xY5C2sLSnnh4/4m3ldemrRDsYruZQ1W2FP9VMRiAVbxv56wciqAeBxSef5xObWrnFZbvVdV56AVGKvEtX0zusJqrLtn7072TjcywqyTSlvQelrRm4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(366004)(396003)(346002)(136003)(451199021)(2616005)(6512007)(26005)(66446008)(6506007)(316002)(83380400001)(6916009)(66556008)(4326008)(76116006)(64756008)(66476007)(91956017)(66946007)(122000001)(966005)(6486002)(186003)(38070700005)(478600001)(71200400001)(54906003)(36756003)(66899021)(2906002)(5660300002)(8936002)(8676002)(82960400001)(86362001)(7416002)(7406005)(41300700001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S29FUkRuOS8xWCsxSUt6VWloRHlYNkhraHg3eStucEx0NWE0L2pwRWlVWUlK?=
- =?utf-8?B?VzlWbGljbGdSVWRiamFMZERVSXo3eUs3RzdTd0RjQjQ2WFZRRWRpS1dMeDIz?=
- =?utf-8?B?aFhrU2lPYUw3UU1sY3dxTWluVXUrSk1qWlJxWElNUmZ4RW5ybzcxRCtGREE1?=
- =?utf-8?B?blBmN2N5VG05bmFnNHRMUUcxR3B4L0FIMzRVeDlsTU1haU9uNGdHc29GVytT?=
- =?utf-8?B?cGpBM28xSUdSbTVOdHhLaGgrQlIrUU83Q1dzUXZhTCtoeDNBUmxoZmdQdGd3?=
- =?utf-8?B?Vm5EVEpSWk5qSGtyeW13c2ppekpxYzhlc0picDd3NWd3T2plZzNueVZyUlhw?=
- =?utf-8?B?dTErTk1kSGxFVm5hWllSYjlldCsxNW5yNlEyeHlpZjRoZE5PN0pIeDBMaGZ0?=
- =?utf-8?B?WFBjSU5JTW9CUkVjUWd3NllMNmx0SG5jamk4U3Vsbll2UXdFaGVRcmUxeWE4?=
- =?utf-8?B?Q1c0dEVqN0JValMxMnU4VDlVK2lWTjdNSkx6bHo5QmwvQUhsZ0RYeXNmMlI2?=
- =?utf-8?B?TmozaFhkbW5LSXVEK1JtL01BSGVIY2NINWp0NnlpMUxkeis2NVlHczB5VzJQ?=
- =?utf-8?B?eWJYUzFITXMwYnVMWnJqbktYYXJIQ1NOSkFubEdHM01xaUhLNFl6dEU0YjI3?=
- =?utf-8?B?QVR1UDZHazlkT1VaZXhHN3J4SThORkFqd0tWSzI2bUpFVjhlb3dmbUkwbXB0?=
- =?utf-8?B?WTgxNnJwSDZWYXZ1ZDR2SWNETTdtYTdYVU43VlErc2dqbTZRVTk2R1YxbmpN?=
- =?utf-8?B?UEV5b3llc3VVc29RajgxeFhVdmcvZjErUytsT3dRVGtqWTcyZzBoeTJjWUhj?=
- =?utf-8?B?N1hKbkpSRFJ3dDJ0eFFVbFJEQXphajdUdC85cFUybmZ3T2Z2bHB3bVV1eFU4?=
- =?utf-8?B?WmlmbUZ4WUFUSEdSQXRpa3ZNZlk4WTN4bEI1TDZ0UFhpQk00K1ErSzRSd1ZP?=
- =?utf-8?B?QVV0b0VuL1ozVGZUcnJFT1Q3TFJROG83dFc4MlJtcTUyVUZzZzd6SnNROE5Z?=
- =?utf-8?B?M1puY0tCVUZoVS9oamhvUkVMREZWQ1o2R2ViUWRCT3hKdVFraVF5eE41RlI3?=
- =?utf-8?B?ajZqdDdWMldSMmJWSllvc1YwQnhTQ0hNQ2FyWVhCRlNTcmxBQzRPczk4dnhQ?=
- =?utf-8?B?aTRpb1dzQXQrTnI4QVM4NlVBWU5JT21seG5LTXJIZ2xzMG12VGxqdllvVDdT?=
- =?utf-8?B?c1VSZW1xRmN0UzFIdW81alJocnBYaHpmVVNSQ2NueXR5RVBxeXhqOHBPVnlO?=
- =?utf-8?B?ODZ0VFpvUW5FcDN4eUh6L002S3R3N3JBZ05yeHlPRzB4NmZpL3ZyRnl6bXhD?=
- =?utf-8?B?d3dmdVkwTkNCL1k4d2lMUkxqM3d1L2NBVG9iM1FHd1RabTdTV3I0U21vK1V4?=
- =?utf-8?B?eDlUbHhWSmhHempGYVRMcHROSng4UFZRRGhGY2R1dE1WT21FOGhTVU5rMFB3?=
- =?utf-8?B?M3ZzOEVOSHVrNm55dFcwTzd5eUpGMmpYR3FIanZUcFJCUHNVUkhtVy9zQjE1?=
- =?utf-8?B?VHliY2I1NnNTMXlUYXNleG9Ua1ErRDVhZGgyMkNyTlp3d3dkYWw0VHlHaERG?=
- =?utf-8?B?Wm0vRVI1RmlGTTFseFhla011YU1xTmZPb2RWTnJxeTZmbVRoUkgwek5hK3R5?=
- =?utf-8?B?WTNhcng5eFA1bHVUQkFidmhPNHZMWUJ5UnliL3lva3lqbjhicUMxNlhxRFRB?=
- =?utf-8?B?dlRjVy83RDdLTkMwbnN0SWJVTkg2WXk5ZjVCL2ZTS0V5RkFHRGkycXIrSHBG?=
- =?utf-8?B?cTVJb253VDJzVlJhaEtwdit0RnRjbzdNeXdwVkJtVjVLUVhxZWVuN3RtRE5l?=
- =?utf-8?B?eU9lWnFyNWxTdXF3VlIrVE9jbk0rN25FcGtkMW5IQjBZSVI1Mm90RTdSWDAz?=
- =?utf-8?B?UmYwa2tJK214YjBTdy9pNXcwdjRnU2JwbzBudks4SHlJSmFZODJReVVqanBx?=
- =?utf-8?B?SUJ4eWlLaVFXcElYa1ZYKzViT3RoZHBQbFROTDdUUTRPWWtJREljVDNNM3R1?=
- =?utf-8?B?UjVBeXlpRTRhRXJLcTQ4ZlFjbnk0R0RjZkp1NDMvTVhleHBuT2g1dE5KeFRj?=
- =?utf-8?B?WTcvZFRsZytSWGhCajNIMm1qY3Vzc2pMemtOYXFxRkk4bFRoNEIrcDF2MlpJ?=
- =?utf-8?B?SzdtWXZ6MWZxaDVoOUtJdXFEV3JMc0Zsc3h0TmlNK1RKRUhiK3FMZUc5MTYz?=
- =?utf-8?B?aEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C0A76E7569A3A14895AFBA66A81A63FA@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 5 Jun 2023 17:01:29 -0400
+Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D27F7F7;
+        Mon,  5 Jun 2023 14:01:27 -0700 (PDT)
+Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
+        by smtp.dudau.co.uk (Postfix) with SMTP id 1DC6041D13A6;
+        Mon,  5 Jun 2023 22:01:26 +0100 (BST)
+Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Mon, 05 Jun 2023 22:01:26 +0100
+Date:   Mon, 5 Jun 2023 22:01:26 +0100
+From:   Liviu Dudau <liviu@dudau.co.uk>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] mips: dts: ralink: Add support for TP-Link HC220
+ G5 v1 board
+Message-ID: <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
+References: <20230605150114.601102-1-liviu@dudau.co.uk>
+ <20230605150114.601102-2-liviu@dudau.co.uk>
+ <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3acc26cb-d230-4031-b839-08db6607ffb5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2023 21:01:14.3578
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: or92ZRUxLP4WnJBNqSmtCfjoi0excGLmnB8XHduaF6RQEGkRuJk63kIOc4btGOFpWNVSqkZ7gyQSdx/ue6LOBXkMwmpjBsTanMQXBFpPwxo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4568
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTA2LTA1IGF0IDIzOjQyICswMzAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
-PiA+IEkgdHJpZWQgdGhpcyB0ZWNobmlxdWUgcHJldmlvdXNseSBbMF0sIGFuZCBJIHRob3VnaHQg
-aXQgd2FzIG5vdCB0b28NCj4gPiBiYWQuIEluIG1vc3Qgb2YgdGhlIGNhbGxlcnMgaXQgbG9va3Mg
-c2ltaWxhciB0byB3aGF0IHlvdSBoYXZlIGluDQo+ID4gZG9fdGV4dF9wb2tlKCkuIFNvbWV0aW1l
-cyBsZXNzLCBzb21ldGltZXMgbW9yZS4gSXQgbWlnaHQgbmVlZA0KPiA+IGVubGlnaHRlbmluZyBv
-ZiBzb21lIG9mIHRoZSBzdHVmZiBjdXJyZW50bHkgdXNpbmcgdGV4dF9wb2tlKCkNCj4gPiBkdXJp
-bmcNCj4gPiBtb2R1bGUgbG9hZGluZywgbGlrZSBqdW1wIGxhYmVscy4gU28gdGhhdCBiaXQgaXMg
-bW9yZSBpbnRydXNpdmUsDQo+ID4geWVhLg0KPiA+IEJ1dCBpdCBzb3VuZHMgc28gbXVjaCBjbGVh
-bmVyIGFuZCB3ZWxsIGNvbnRyb2xsZWQuIERpZCB5b3UgaGF2ZSBhDQo+ID4gcGFydGljdWxhciB0
-cm91YmxlIHNwb3QgaW4gbWluZD8NCj4gDQo+IE5vdGhpbmcgaW4gcGFydGljdWxhciwgZXhjZXB0
-IHRoZSBpbnRydXNpdmUgcGFydC4gRXhjZXB0IHRoZSBjaGFuZ2VzDQo+IGluDQo+IG1vZHVsZXMu
-YyB3ZSdkIG5lZWQgdG8gdGVhY2ggYWx0ZXJuYXRpdmVzIHRvIGRlYWwgd2l0aCBhIHdyaXRhYmxl
-DQo+IGNvcHkuDQoNCkkgZGlkbid0IHRoaW5rIGFsdGVybmF0aXZlcyBwaWVjZSBsb29rZWQgdG9v
-IGJhZCBvbiB0aGUgY2FsbGVyIHNpZGUgKGlmDQp0aGF0J3Mgd2hhdCB5b3UgbWVhbnQpOg0KaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIwMTEyMDIwMjQyNi4xODAwOS03LXJpY2sucC5l
-ZGdlY29tYmVAaW50ZWwuY29tLw0KDQpUaGUgdWdseSBwYXJ0IHdhcyBpbiB0aGUgKHBvb3JseSBu
-YW1lZCkgbW9kdWxlX2FkanVzdF93cml0YWJsZV9hZGRyKCk6DQoNCitzdGF0aWMgaW5saW5lIHZv
-aWQgKm1vZHVsZV9hZGp1c3Rfd3JpdGFibGVfYWRkcih2b2lkICphZGRyKQ0KK3sNCisJdW5zaWdu
-ZWQgbG9uZyBsYWRkciA9ICh1bnNpZ25lZCBsb25nKWFkZHI7DQorCXN0cnVjdCBtb2R1bGUgKm1v
-ZDsNCisNCisJbXV0ZXhfbG9jaygmbW9kdWxlX211dGV4KTsNCisJbW9kID0gX19tb2R1bGVfYWRk
-cmVzcyhsYWRkcik7DQorCWlmICghbW9kKSB7DQorCQltdXRleF91bmxvY2soJm1vZHVsZV9tdXRl
-eCk7DQorCQlyZXR1cm4gYWRkcjsNCisJfQ0KKwltdXRleF91bmxvY2soJm1vZHVsZV9tdXRleCk7
-DQorCS8qIFRoZSBtb2R1bGUgc2hvdWxkbid0IGJlIGdvaW5nIGF3YXkgaWYgc29tZW9uZSBpcyB0
-cnlpbmcgdG8NCndyaXRlIHRvIGl0ICovDQorDQorCXJldHVybiAodm9pZCAqKXBlcm1fd3JpdGFi
-bGVfYWRkcihtb2R1bGVfZ2V0X2FsbG9jYXRpb24obW9kLA0KbGFkZHIpLCBsYWRkcik7DQorfQ0K
-Kw0KDQpJdCB0b29rIG1vZHVsZV9tdXRleCBhbmQgbG9va2VkIHVwIHRoZSBtb2R1bGUgaW4gb3Jk
-ZXIgdG8gZmluZCB0aGUNCndyaXRhYmxlIGJ1ZmZlciBmcm9tIGp1c3QgdGhlIGV4ZWN1dGFibGUg
-YWRkcmVzcy4gQmFzaWNhbGx5IGFsbCB0aGUNCmxvYWRpbmcgY29kZSBleHRlcm5hbCB0byBtb2R1
-bGVzIGhhZCB0byBnbyB0aHJvdWdoIHRoYXQgaW50ZXJmYWNlLiBCdXQNCm5vdyBJJ20gd29uZGVy
-aW5nIHdoYXQgSSB3YXMgdGhpbmtpbmcsIGl0IHNlZW1zIHRoaXMgY291bGQganVzdCBiZSBhbg0K
-UkNVIHJlYWQgbG9jay4gVGhhdCBkb2Vzbid0IHNlZW0gdG8gYmFkLi4uDQo=
+On Mon, Jun 05, 2023 at 07:35:44PM +0300, Arınç ÜNAL wrote:
+> On 5.06.2023 18:01, Liviu Dudau wrote:
+> > This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+> > a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
+> > connected to the main SoC over PCIe.
+> > 
+> > The device uses NMBM over NAND, which is not currently supported in the
+> > mainline, so NAND node is skipped in this revision.
+> > 
+> > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+> > ---
+> >   arch/mips/boot/dts/ralink/Makefile            |  3 +-
+> >   .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 92 +++++++++++++++++++
+> >   2 files changed, 94 insertions(+), 1 deletion(-)
+> >   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+> > 
+> > diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+> > index 11732b8c8163a..d27d7e8c700fe 100644
+> > --- a/arch/mips/boot/dts/ralink/Makefile
+> > +++ b/arch/mips/boot/dts/ralink/Makefile
+> > @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
+> >   dtb-$(CONFIG_SOC_MT7621) += \
+> >   	mt7621-gnubee-gb-pc1.dtb \
+> > -	mt7621-gnubee-gb-pc2.dtb
+> > +	mt7621-gnubee-gb-pc2.dtb \
+> > +	mt7621-tplink-hc220-g5-v1.dtb
+> >   obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+> > diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+> > new file mode 100644
+> > index 0000000000000..859aaa1c1bc2b
+> > --- /dev/null
+> > +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+> > @@ -0,0 +1,92 @@
+> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +/dts-v1/;
+> > +
+> > +#include "mt7621.dtsi"
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/input/input.h>
+> > +#include <dt-bindings/leds/common.h>
+> > +
+> > +/ {
+> > +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
+> > +	model = "TP-Link HC220 G5 v1";
+> > +
+> > +	memory@0 {
+> > +		device_type = "memory";
+> > +		reg = <0x00000000 0x8000000>;
+> 
+> Please use 8 digit addressing for the memory start and size offsets:
+> 
+> 0x00000000 0x08000000
+
+Will do.
+
+> 
+> > +	};
+> > +
+> > +	chosen {
+> > +		bootargs = "earlycon console=ttyS0,115200";
+> > +	};
+> > +
+> > +	gpio-keys {
+> > +		compatible = "gpio-keys";
+> > +
+> > +		key-reset {
+> > +			label = "reset";
+> > +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+> > +			linux,code = <KEY_RESTART>;
+> > +		};
+> > +
+> > +		key-wps {
+> > +			label = "wps";
+> > +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
+> > +			linux,code = <KEY_WPS_BUTTON>;
+> > +		};
+> > +	};
+> > +
+> > +	leds {
+> > +		compatible = "gpio-leds";
+> > +
+> > +		red {
+> 
+> Usually the led name would point to the component the LED is used for.
+
+These are "generic" LEDs controlled from the userspace. The original firmware
+uses GREEN for normal operations, RED for faults and BLUE for when WPS is
+enabled. I'm not sure if there are any standard bindings that I can use here.
+
+> 
+> > +			color = <LED_COLOR_ID_RED>;
+> > +			function = LED_FUNCTION_FAULT;
+> 
+> Is there a specific reason you're using leds/common.h,
+> color & function instead of 'label = "red:ledname"'?
+
+I actually can't remember why I've created them this way. I might've been
+under the impression that giving them standard colour names will make it
+easier for userspace to identify and use them, but as I haven't yet
+investigated into how I'm going to use the device I'm unaware of any
+userspace requirements. It's possible OpenWRT or LEDE have some strong
+definitions, but I'm not aware of them as I don't use any of the distros.
+
+
+> 
+> > +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
+> > +		};
+> > +
+> > +		green {
+> > +			color = <LED_COLOR_ID_GREEN>;
+> > +			function = LED_FUNCTION_POWER;
+> > +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+> > +			linux,default-trigger = "default-on";
+> > +		};
+> > +
+> > +		blue {
+> > +			color = <LED_COLOR_ID_BLUE>;
+> > +			function = LED_FUNCTION_WPS;
+> > +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
+> > +		};
+> 
+> Every led node needs the "led-" prefix to satisfy the leds-gpio.yaml
+> schema. You can check for dt-schema warnings using this command:
+> 
+> ARCH=mips make clean dtbs_check
+> 
+> Ignore the warning for mediatek,mt7621-eth.
+
+Sure, will run the checks before submitting v4.
+
+> 
+> > +	};
+> > +};
+> > +
+> > +&pcie {
+> > +	status = "okay";
+> > +
+> > +	pcie@0,0 {
+> > +		compatible = "mediatek,mt76";
+> > +	};
+> > +
+> > +	pcie@1,0 {
+> > +		compatible = "mediatek,mt76";
+> > +	};
+> 
+> Both radios work with this then?
+
+Yes, they work with and without the compatible property.
+
+> 
+> Also, I see a bunch of warnings now that the mediatek,mt76 compatible
+> string is added. The warning from schemas/pci/pci-bus.yaml is concerning.
+> 
+> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0:compatible: ['mediatek,mt76'] does not contain items matching the given schema
+> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
+> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0: Unevaluated properties are not allowed ('compatible' was unexpected)
+> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
+> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'reset-gpios' were unexpected)
+> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
+> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@1e140000: pcie@0,0:compatible: ['mediatek,mt76'] does not contain items matching the given schema
+> 	From schema: /usr/lib/python3/dist-packages/dtschema/schemas/pci/pci-bus.yaml
+> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@0,0: clocks: [[2, 23]] is too short
+> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> /mnt/Documents/for-netnext/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dtb: pcie@0,0: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'clocks', 'device_type', 'interrupt-map', 'interrupt-map-mask', 'phy-names', 'phys', 'ranges' were unexpected)
+> 	From schema: /mnt/Documents/for-netnext/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> 
+> Rob, Krzysztof any ideas what to do? The PCI child node is supposed to
+> be the properties of the wireless device. But the compatible string
+> doesn't match the schema on schemas/pci/pci-bus.yaml.
+
+TBH, I've always found the attempts to add device tree nodes for PCI(e) devices
+amusing. The bus is supposed to be queried and one can learn from device ID
+what hardware they're talking to. But then you need device tree (or ACPI for x86_64)
+to layer on top of that information about where EEPROM data might be, and other
+metadata that blurs the "DT describes the hardware" line (you could technically
+reformat the NAND and place the EEPROM data somewhere else on this platform).
+
+> 
+>       compatible:
+>         contains:
+>           pattern: "^(pci[0-9a-f]{3,4},[0-9a-f]{1,4}|pciclass,[0-9a-f]{4,6})$"
+> 
+> Liviu, in the meantime, you should submit this patch without this
+> compatible string. I will handle this issue.
+
+OK, I will drop the compatible strings from v4.
+
+Thanks for the quick review!
+
+Best regards,
+Liviu
+
+> 
+> Arınç
+
+-- 
+Everyone who uses computers frequently has had, from time to time,
+a mad desire to attack the precocious abacus with an axe.
+       	   	      	     	  -- John D. Clark, Ignition!
