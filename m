@@ -2,98 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C01722D71
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEBF722D74
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234785AbjFERQz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 13:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S234959AbjFERRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbjFERQy (ORCPT
+        with ESMTP id S234541AbjFERRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:16:54 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862CDF2;
-        Mon,  5 Jun 2023 10:16:52 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-94ea38c90ccso99621366b.1;
-        Mon, 05 Jun 2023 10:16:52 -0700 (PDT)
+        Mon, 5 Jun 2023 13:17:41 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB10A6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:17:39 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f98276f89cso7511cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 10:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685985459; x=1688577459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PW3P1vIM2WDTsRDVeenwIcNSQa/MZz4KHGZSoIx2p84=;
+        b=1klBAYVVSmnvd11O+TpDJXrRcQnLLHSmd9MixU4CSWvozFm9aWcwlRRSCgOVtUXY5E
+         1i8h/a8gA0km1btECjApb90WEM1GeISM5/eRt/OMBwg+seF+TDmzaZ+MPRj57G8ihvTP
+         TYlPgB+ZKcywuhQdwZJnuGcozC6tnAUvHlK0LwPijfDV7wWxeIkfM5CDyKDxFxbFhJ1O
+         tgNTxPnl0CIN2mfWySwjXh5azIs4zL8CWDArg1MHlY1djlec5894mdHKhFq/nFFEnl/u
+         YQ6xIew+ANpcjREwWueUOLpU2XpMboZNLXeIOSw0ISr6f1ZMh9hImY1IxbedySxbmbPV
+         JHzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685985411; x=1688577411;
+        d=1e100.net; s=20221208; t=1685985459; x=1688577459;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uIbP3FT06Bqfrrnf4uXT+R2nnTjQ/h9BisXJxhTGbb4=;
-        b=T2RemKIhb957Cf+M930edgAZ8DOcKpSOFXIh00hvVWjIHbRrnMBJ8RMJNA4jrx7uKr
-         GLFGHySolIn5lOBJjVsLCJEdjRts+LLYIvBZx/TNIHnQYKEspGeE4yoxLytsQN8sE4EZ
-         0b5V/pIaKdgqdhz2Bzj24RLX+4i3Sf5jppdEz0c6oOrsoSywai6nQTny+kf4NoeXX6Pr
-         j0cBGjPYRjm3bIzWCG986cQpmOoCasGdsNt+UWbVH0IQgHTBvkY18r2VavLWY6IOAWPv
-         mUYhz/Id7mKD+qQ68XTUbxVLDOPLPRkLY5Al5zT3/+MysYY96TtvszAVfVCmy1L25WsQ
-         c/cg==
-X-Gm-Message-State: AC+VfDzvt2+xwPzoe7SGd1rFsxjr5g3DomljFH8S86cKplBMiDuJ2ENi
-        nYEqtpGAEhbJXiDpbn8qEsH9fQDhHuhFg44gmeQ=
-X-Google-Smtp-Source: ACHHUZ5ATJMAgTFQRLZaSki3/or39XJvk7wjX5ejaDkoA8irtuJEsa6KEt3JSSP/xpbRH8puvn/A7k+6d8IMesvJDYg=
-X-Received: by 2002:a17:906:1d9:b0:974:ae1d:ad0b with SMTP id
- 25-20020a17090601d900b00974ae1dad0bmr8058822ejj.3.1685985410685; Mon, 05 Jun
- 2023 10:16:50 -0700 (PDT)
+        bh=PW3P1vIM2WDTsRDVeenwIcNSQa/MZz4KHGZSoIx2p84=;
+        b=L6msueswQuIJHY1Juov3/UTTiKh0uX4m7K/J7Yl6iUBIMRGaMbKSV+3RbubC5qwF9w
+         kEmpkwUz9OvhpfAZem1VoRBJpJGrcshqmhkVUxIAwEKUJROc1t0wh2w0y1eDuEw1GrjT
+         DxcbqnunHkST6QCqsakEHsN1ANtfGXwHcgHsiw08BoVWTT48zou50tX2qtyYgwHd7/M6
+         JAS0CP7EyVZrXvKuKCQbkD/zMIxAgw5FKUWtgrpjnD38rtONvqyCChiZ77JsEn40s2VP
+         BuW8l7I8/F7CWhKu24MBqA+z1QtTypcuefAfyPw9rqGbWbiZkwYFoCNpekYbH9gT4gSK
+         7wog==
+X-Gm-Message-State: AC+VfDzOYYGzNMXalwvU/qSnT4nAIoAiOqxkm2ZQJ684hS0DLktRSZBb
+        +/Oeeae8si7VJsxD0gEMyeRMGGBTXaBOkFBImTLvxQ==
+X-Google-Smtp-Source: ACHHUZ4WzS+Kzr3p8Yhnpffe3+jO9D1YWqR3ee9JQUrOyisbjpiwcFlcjWQ3tEfzP22YSKPHzXOd7umwDPQR57u6qms=
+X-Received: by 2002:ac8:58cf:0:b0:3f8:5b2:aeee with SMTP id
+ u15-20020ac858cf000000b003f805b2aeeemr721497qta.22.1685985458926; Mon, 05 Jun
+ 2023 10:17:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601213319.3304080-1-arnd@kernel.org>
-In-Reply-To: <20230601213319.3304080-1-arnd@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Jun 2023 19:16:39 +0200
-Message-ID: <CAJZ5v0gvs=3GVE_1GpP1mKsQAkc0+gC6AQYoWP7r+60kUtjfAw@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: s2idle: fix section mismatch warning
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <lenb@kernel.org>,
-        Manyi Li <limanyi@uniontech.com>,
-        Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Simon Gaiser <simon@invisiblethingslab.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+In-Reply-To: <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 5 Jun 2023 10:17:27 -0700
+Message-ID: <CANgfPd9kKxq1146F3mX_u7KCC0HrWfgYrxZd6c9Dh7s19E4Eog@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Mingwei Zhang <mizhang@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 11:33 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, Jun 5, 2023 at 9:55=E2=80=AFAM Jim Mattson <jmattson@google.com> wr=
+ote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The acpi_sleep_suspend_setup() function is missing an __init annotation,
-> which causes a warning in rare configurations that end up not inlining
-> it into its caller:
->
-> WARNING: modpost: vmlinux.o: section mismatch in reference: acpi_sleep_suspend_setup (section: .text) -> acpi_s2idle_setup (section: .init.text)
->
-> It's only called from an __init function, so adding the annotation is
-> correct here.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/acpi/sleep.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-> index 72470b9f16c45..552adc04743b5 100644
-> --- a/drivers/acpi/sleep.c
-> +++ b/drivers/acpi/sleep.c
-> @@ -840,7 +840,7 @@ void __weak acpi_s2idle_setup(void)
->         s2idle_set_ops(&acpi_s2idle_ops);
->  }
->
-> -static void acpi_sleep_suspend_setup(void)
-> +static void __init acpi_sleep_suspend_setup(void)
->  {
->         bool suspend_ops_needed = false;
->         int i;
-> --
+> On Sun, Jun 4, 2023 at 5:43=E2=80=AFPM Mingwei Zhang <mizhang@google.com>=
+ wrote:
+> >
+> > Remove KVM MMU write lock when accessing indirect_shadow_pages counter =
+when
+> > page role is direct because this counter value is used as a coarse-grai=
+ned
+> > heuristics to check if there is nested guest active. Racing with this
+> > heuristics without mmu lock will be harmless because the corresponding
+> > indirect shadow sptes for the GPA will either be zapped by this thread =
+or
+> > some other thread who has previously zapped all indirect shadow pages a=
+nd
+> > makes the value to 0.
+> >
+> > Because of that, remove the KVM MMU write lock pair to potentially redu=
+ce
+> > the lock contension and improve the performance of nested VM. In additi=
+on
+> > opportunistically change the comment of 'direct mmu' to make the
+> > description consistent with other places.
+> >
+> > Reported-by: Jim Mattson <jmattson@google.com>
+> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 10 ++--------
+> >  1 file changed, 2 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 5ad55ef71433..97cfa5a00ff2 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm_vcp=
+u *vcpu, gpa_t cr2_or_gpa,
+> >
+> >         kvm_release_pfn_clean(pfn);
+> >
+> > -       /* The instructions are well-emulated on direct mmu. */
+> > +       /* The instructions are well-emulated on Direct MMUs. */
 
-Applied as 6.5 material, thanks!
+Nit: Internally within Google, on older kernels, we have the "Direct
+MMU" which was the precursor to the TDP MMU we all know and love. This
+comment however does not refer to the Direct MMU. Direct here just
+refers to the direct role bit being set. Since it's just descriptive,
+direct should not be capitalized in this comment, so no reason to
+change this line.
+
+> >         if (vcpu->arch.mmu->root_role.direct) {
+> > -               unsigned int indirect_shadow_pages;
+> > -
+> > -               write_lock(&vcpu->kvm->mmu_lock);
+> > -               indirect_shadow_pages =3D vcpu->kvm->arch.indirect_shad=
+ow_pages;
+> > -               write_unlock(&vcpu->kvm->mmu_lock);
+> > -
+> > -               if (indirect_shadow_pages)
+> > +               if (READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
+>
+> I don't understand the need for READ_ONCE() here. That implies that
+> there is something tricky going on, and I don't think that's the case.
+
+Agree this doesn't need a READ_ONCE. Just a read is fine.
+kvm_mmu_unprotect_page starts by acquiring the MMU lock, so there's
+not much room to reorder anything anyway.
+
+Thanks for sending a patch to fix this. The critical section of the
+MMU lock here is small, but any lock acquisition in write mode can
+mess up performance of otherwise happy read-mode uses.
+
+>
+> >                         kvm_mmu_unprotect_page(vcpu->kvm, gpa_to_gfn(gp=
+a));
+> >
+> >                 return true;
+> >
+> > base-commit: 31b4fc3bc64aadd660c5bfa5178c86a7ba61e0f7
+> > --
+> > 2.41.0.rc0.172.g3f132b7071-goog
+> >
