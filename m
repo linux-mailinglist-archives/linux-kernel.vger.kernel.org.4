@@ -2,95 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53409723187
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8337231B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbjFEUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S232029AbjFEUrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjFEUkS (ORCPT
+        with ESMTP id S231877AbjFEUrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:40:18 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9780EC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:40:17 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25690e009c8so2277018a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 13:40:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685997617; x=1688589617;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s61dUGW3dRqRsf0EIIajPOoZu748hERq4U0K4FORw/U=;
-        b=G4Ago2bnhIX81aaUyZz4fBCbPl9Q1pccJhwJICFCury9DiakrUUN44NERJZsZewjMa
-         OAFqxyu6FwSkX3p1lRWU8V9XcHtr8+OHFmJlTxQP6YHIUJXCtHT3uWaZIYUM6ovh/TN2
-         ZOxKqIn9/XIGsOM4bklvCKjzHDedPmFr/BmLQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685997617; x=1688589617;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s61dUGW3dRqRsf0EIIajPOoZu748hERq4U0K4FORw/U=;
-        b=ZFsxNUzJKGwR7X82cSVEDB/GFhzCey0TBCc2+i7P0XZU4KyIafDa53xb2f7VAy1dm1
-         QHLwGzkk2fMIbqgVf80sYBWd2ltPM9zrm3eeG1GIVAk+9l7/HS0NKd/r/vngvsSq1biS
-         ddZaIlY0foGkGazZUq1n0D93Ltv2apzwHVtLfhH9v8E95Zp1vAt1wc6DH+wDoVmZ8Pbb
-         gKWFvkKbz920SLsqrzd2KlQFqiCXORc6dpMEpQ6aSpbi5hnuF2sZmmAwsZHwXLg6TquG
-         cLDZQ2nxO9f+ZqLZWj/M2Weiy8J1QMvIUUoMFgsTXf2zU8j0aRxHUKkDdEsnXZFASMR6
-         LLJA==
-X-Gm-Message-State: AC+VfDwJ6+xQAxigvAB5qjt5HxMbHDHTm9xzQN2EqzbYRJxnDSmGtCno
-        g4v4LqckKOSV0LuKmMCotTMfGA==
-X-Google-Smtp-Source: ACHHUZ5FfG8eKcJfoeYh3r6VvQ+sgGN2Lb2+zgbXYJK68C+sAQwd4e8sFyQMq5MQJFB+DojAqJPTaA==
-X-Received: by 2002:a17:90a:db12:b0:258:89d3:d950 with SMTP id g18-20020a17090adb1200b0025889d3d950mr3774065pjv.46.1685997617434;
-        Mon, 05 Jun 2023 13:40:17 -0700 (PDT)
-Received: from localhost (139.11.82.34.bc.googleusercontent.com. [34.82.11.139])
-        by smtp.gmail.com with UTF8SMTPSA id q14-20020a65494e000000b00530914c3bc1sm5521574pgs.21.2023.06.05.13.40.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 13:40:16 -0700 (PDT)
-From:   Pavan Holla <pholla@chromium.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     bleung@chromium.org, pmalani@chromium.org,
-        Pavan Holla <pholla@chromium.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: Fix fast_role_swap_current show function
-Date:   Mon,  5 Jun 2023 20:40:09 +0000
-Message-ID: <20230605204010.2239676-1-pholla@chromium.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        Mon, 5 Jun 2023 16:47:08 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569FDFD;
+        Mon,  5 Jun 2023 13:47:05 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 335C65FD21;
+        Mon,  5 Jun 2023 23:47:02 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685998022;
+        bh=9ATC+GxW8KMEIiHiF6ecJMk0sOenmSubs/SZ/yQ2/y0=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=K9EnAk+J1wH+cYPUXAMNufinG+iVezeNRNWTqHdXbSzRlA6+zhToK67+XSsWRyesN
+         K6nuQFG2JC6hnCSryQInquMb02IFsXO41w/tLq7Gv6QmBEBBOYpic4xPL+nOl6HfLV
+         0ljgDI6MBVPlBQCTgHCz18HWMhVBdz8eUbwA9OZiWa9GZJsQ/pr2tVknUq7VdAq2bZ
+         3jGtUwiQKnBogUUuAFQMbk2H4GM6D0vH2c21u5/50TmWB0QitQHkm61Zn1cl7cuugC
+         PQzUMc1A0HIZDRmMQg/1AW8SOB/y0VBBFCYOpBUWFeyS1xFViBcl9cn/wxXNxM5+QG
+         KzNrDwusABegQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon,  5 Jun 2023 23:46:58 +0300 (MSK)
+Message-ID: <2830ac58-fd77-7e5f-5565-eb47dd027d81@sberdevices.ru>
+Date:   Mon, 5 Jun 2023 23:42:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+In-Reply-To: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hyperv@vger.kernel.org>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: Re: [PATCH RFC net-next v3 0/8] virtio/vsock: support datagrams
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/05 17:23:00 #21436105
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation mistakenly performs a & operation on
-the output of sysfs_emit. This patch performs the & operation before
-calling sysfs_emit.
+Hello Bobby!
 
-Series-to: LKML <linux-kernel@vger.kernel.org>
-Signed-off-by: Pavan Holla <pholla@chromium.org>
----
- drivers/usb/typec/pd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for this patchset, really interesting!
 
-diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-index 0bcde1ff4d39..8cc66e4467c4 100644
---- a/drivers/usb/typec/pd.c
-+++ b/drivers/usb/typec/pd.c
-@@ -95,7 +95,7 @@ peak_current_show(struct device *dev, struct device_attribute *attr, char *buf)
- static ssize_t
- fast_role_swap_current_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	return sysfs_emit(buf, "%u\n", to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3;
-+	return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3);
- }
- static DEVICE_ATTR_RO(fast_role_swap_current);
- 
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+I applied it on head:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=d20dd0ea14072e8a90ff864b2c1603bd68920b4b
+
+And tried to run ./vsock_test (client in the guest, server in the host), I had the following crash:
+
+Control socket connected to 192.168.1.1:12345.                          
+0 - SOCK_STREAM connection reset...                                     
+[    8.050215] BUG: kernel NULL pointer derefer                         
+[    8.050960] #PF: supervisor read access in kernel mode               
+[    8.050960] #PF: error_code(0x0000) - not-present page               
+[    8.050960] PGD 0 P4D 0                                              
+[    8.050960] Oops: 0000 [#1] PREEMPT SMP PTI                          
+[    8.050960] CPU: 0 PID: 109 Comm: vsock_test Not tainted 6.4.0-rc3-gd707c220a700
+[    8.050960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14
+[    8.050960] RIP: 0010:static_key_count+0x0/0x20                      
+[    8.050960] Code: 04 4c 8b 46 08 49 29 c0 4c 01 c8 4c 89 47 08 89 0e 89 56 04 4f
+[    8.050960] RSP: 0018:ffffa9a1c021bdc0 EFLAGS: 00010202              
+[    8.050960] RAX: ffffffffac309880 RBX: ffffffffc02fc140 RCX: 0000000000000000
+[    8.050960] RDX: ffff9a5eff944600 RSI: 0000000000000000 RDI: 0000000000000000
+[    8.050960] RBP: ffff9a5ec2371900 R08: ffffa9a1c021bd30 R09: ffff9a5eff98e0c0
+[    8.050960] R10: 0000000000001000 R11: 0000000000000000 R12: ffffa9a1c021be80
+[    8.050960] R13: 0000000000000000 R14: 0000000000000002 R15: ffff9a5ec1cfca80
+[    8.050960] FS:  00007fa9bf88c5c0(0000) GS:ffff9a5efe400000(0000) knlGS:00000000
+[    8.050960] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033        
+[    8.050960] CR2: 0000000000000000 CR3: 00000000023e0000 CR4: 00000000000006f0
+[    8.050960] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    8.050960] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    8.050960] Call Trace:                                              
+[    8.050960]  <TASK>                                                  
+[    8.050960]  once_deferred+0xd/0x30                                  
+[    8.050960]  vsock_assign_transport+0xa2/0x1b0 [vsock]               
+[    8.050960]  vsock_connect+0xb4/0x3a0 [vsock]                        
+[    8.050960]  ? var_wake_function+0x60/0x60                           
+[    8.050960]  __sys_connect+0x9e/0xd0                                 
+[    8.050960]  ? _raw_spin_unlock_irq+0xe/0x30                         
+[    8.050960]  ? do_setitimer+0x128/0x1f0                              
+[    8.050960]  ? alarm_setitimer+0x4c/0x90                             
+[    8.050960]  ? fpregs_assert_state_consistent+0x1d/0x50              
+[    8.050960]  ? exit_to_user_mode_prepare+0x36/0x130                  
+[    8.050960]  __x64_sys_connect+0x11/0x20                             
+[    8.050960]  do_syscall_64+0x3b/0xc0                                 
+[    8.050960]  entry_SYSCALL_64_after_hwframe+0x4b/0xb5                
+[    8.050960] RIP: 0033:0x7fa9bf7c4d13                                 
+[    8.050960] Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 48
+[    8.050960] RSP: 002b:00007ffdf2d96cc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000a
+[    8.050960] RAX: ffffffffffffffda RBX: 0000560c305d0020 RCX: 00007fa9bf7c4d13
+[    8.050960] RDX: 0000000000000010 RSI: 00007ffdf2d96ce0 RDI: 0000000000000004
+[    8.050960] RBP: 0000000000000004 R08: 0000560c317dc018 R09: 0000000000000000
+[    8.050960] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[    8.050960] R13: 0000560c305ccc2d R14: 00007ffdf2d96ce0 R15: 00007ffdf2d96d70
+[    8.050960]  </TASK>  
+
+
+I guess crash is somewhere near:
+
+old_info->transport->release(vsk); in vsock_assign_transport(). May be my config is wrong...
+
+Thanks, Arseniy
