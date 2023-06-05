@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8008C722FF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537E9723001
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbjFEToB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S235781AbjFETp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjFETn6 (ORCPT
+        with ESMTP id S235042AbjFETp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:43:58 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD06F3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:43:54 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so6681060e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 12:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685994233; x=1688586233;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jirhBMad9whqGW3PMuvmJXaHpQEXSJLMb7YJoRTkwsA=;
-        b=fa1Md4hFBbtpYqCsOom3BncWGXVLvSGyvj6LW6YJy3YRenA0pTi74LdSDXdg8lhZn+
-         st79Hna3ISxK8rgyYFqTXoxuFypxmWkfA9PGHiJcN9WmsZr8Mp3P/0hojv7PQ5437eQt
-         wZcQJ5vYQTaovDrBP+iEjKQORWltUVK1n3N8yzlsjcyUbDCvSx0w+usBjf3DbE8M/uB5
-         ucbUkvOavB9WEmCFPwhbatR1Y/mMQ1JcSi2Cbxr9NiFagPnnt9TwwNABrmTfyuDOqsOq
-         LN5V8OmBSe4hSj0O3eKjWyxaftHwwbQqlGxRxateSwLeRUm8KfyjlkSNASmdetA4SkT9
-         IMcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685994233; x=1688586233;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jirhBMad9whqGW3PMuvmJXaHpQEXSJLMb7YJoRTkwsA=;
-        b=EpQjPG2gxparg7qhbgAY+P7lt1ugreqXVssWXwTj6yllXTLGhfQ8S/G/OxhatEhMoo
-         UcF3lh9qHDa7AhG3CfoONNcEc7+DfEyikz+kqkce5CeImU0wGQEUSzQnw0ACTVR9SDGe
-         0ipzg+kF1oFx2vv/Fr+jCrG4P6UF9fJrtYe2lRCzR/rg8xjo329vtHhO4w7LH//g6sLT
-         2idNnxtfCiApfBMq2pxZBNeY+SHN0D4ap2q83oShLBgvlKRFKxIqHT6474ruKWhTsdDr
-         6tGxULO06ti6jwp4e8DgRHAYOY/5VvE2bp9foYsB1WPxmwvaeKQYxGOUaixLiNDMqNGt
-         HpNQ==
-X-Gm-Message-State: AC+VfDydrK4JrqUCgO4PakgKCNx6Hmh+x6v9P0OfkDoK2BHKNYPR1B3c
-        w5PtmXxhejSq5c+g19ogbUkDww==
-X-Google-Smtp-Source: ACHHUZ6qr8MSkiREqgZtI8DYcDkQPVRFFwElqGaUBTODwIQ5AWCJdWVAi4708nHiTmDpDvIg7oOnLw==
-X-Received: by 2002:a05:6512:508:b0:4f3:a3e0:850e with SMTP id o8-20020a056512050800b004f3a3e0850emr6615006lfb.35.1685994232797;
-        Mon, 05 Jun 2023 12:43:52 -0700 (PDT)
-Received: from [192.168.1.101] (abyj96.neoplus.adsl.tpnet.pl. [83.9.29.96])
-        by smtp.gmail.com with ESMTPSA id q4-20020ac24a64000000b004f60d26e1d2sm1211906lfp.80.2023.06.05.12.43.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 12:43:52 -0700 (PDT)
-Message-ID: <9b6d4356-300b-176f-84ef-8a073e8cfe9b@linaro.org>
-Date:   Mon, 5 Jun 2023 21:43:50 +0200
+        Mon, 5 Jun 2023 15:45:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05DC113
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 12:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685994305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DjZASK4THEoJah63UAyHaSZR2Zss7Nl3xaufKyQMunY=;
+        b=EVoqYk/Xwp/Nbe/UqLH7n6ixXxt7VtBgv7iFtUfL062f4rHuOQnCCt44Dq2I6jLOhTmL3N
+        nuV3rctGGOr5QpqJGteSL/JMWRkI6vlQ/nP50eZWfZ2urEYS4AkT/y0bLdNDa/u2XMnQJ3
+        U9hhPrbULxiBgbNAiiJ/Ycj+qm0aKrA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-RApbw2rGN22gCkNu8vwuFw-1; Mon, 05 Jun 2023 15:44:59 -0400
+X-MC-Unique: RApbw2rGN22gCkNu8vwuFw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA762185A78B;
+        Mon,  5 Jun 2023 19:44:58 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19E917AE4;
+        Mon,  5 Jun 2023 19:44:58 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 38A48400E71AD; Mon,  5 Jun 2023 16:44:40 -0300 (-03)
+Date:   Mon, 5 Jun 2023 16:44:40 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2 3/3] mm/vmstat: do not refresh stats for nohz_full CPUs
+Message-ID: <ZH47KAtLi2DB4Y5/@tpad>
+References: <20230602185757.110910188@redhat.com>
+ <20230602190115.545766386@redhat.com>
+ <ZH2V/QxDrq7aq5fY@dhcp22.suse.cz>
+ <ZH4CnJlpBMxEEwPW@tpad>
+ <ZH4JEVGdICubP0Du@dhcp22.suse.cz>
+ <ZH4mAbucXtK1PUON@tpad>
+ <ZH4zgZZ8CS+rx+MV@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 12/14] arm64: dts: qcom: Add rpm-proc node for GLINK
- gplatforms
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
- <20230531-rpm-rproc-v1-12-e0a3b6de1f14@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230531-rpm-rproc-v1-12-e0a3b6de1f14@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH4zgZZ8CS+rx+MV@dhcp22.suse.cz>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,1306 +72,276 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 05, 2023 at 09:12:01PM +0200, Michal Hocko wrote:
+> On Mon 05-06-23 15:14:25, Marcelo Tosatti wrote:
+> > On Mon, Jun 05, 2023 at 06:10:57PM +0200, Michal Hocko wrote:
+> > > On Mon 05-06-23 12:43:24, Marcelo Tosatti wrote:
+> > > > On Mon, Jun 05, 2023 at 09:59:57AM +0200, Michal Hocko wrote:
+> > > > > On Fri 02-06-23 15:58:00, Marcelo Tosatti wrote:
+> > > > > > The interruption caused by queueing work on nohz_full CPUs 
+> > > > > > is undesirable for certain aplications.
+> > > > > 
+> > > > > This is not a proper changelog. I am not going to write a changelog for
+> > > > > you this time. Please explain why this is really needed and why this
+> > > > > approach is desired. 
+> > > > > E.g. why don't you prevent userspace from
+> > > > > refreshing stats if interference is not desirable.
+> > > > 
+> > > > Michal,
+> > > > 
+> > > > Can you please check if the following looks better, as
+> > > > a changelog? thanks
+> > > > 
+> > > > ---
+> > > > 
+> > > > schedule_work_on API uses the workqueue mechanism to
+> > > > queue a work item on a queue. A kernel thread, which
+> > > > runs on the target CPU, executes those work items.
+> > > > 
+> > > > Therefore, when using the schedule_work_on API,
+> > > > it is necessary for the kworker kernel thread to
+> > > > be scheduled in, for the work function to be executed.
+> > > > 
+> > > > Time sensitive applications such as SoftPLCs
+> > > > (https://tum-esi.github.io/publications-list/PDF/2022-ETFA-How_Real_Time_Are_Virtual_PLCs.pdf),
+> > > > have their response times affected by such interruptions.
+> > > > 
+> > > > The /proc/sys/vm/stat_refresh file was originally introduced by
+> > > > 
+> > > > commit 52b6f46bc163eef17ecba4cd552beeafe2b24453
+> > > > Author: Hugh Dickins <hughd@google.com>
+> > > > Date:   Thu May 19 17:12:50 2016 -0700
+> > > > 
+> > > >     mm: /proc/sys/vm/stat_refresh to force vmstat update
+> > > > 
+> > > >     Provide /proc/sys/vm/stat_refresh to force an immediate update of
+> > > >     per-cpu into global vmstats: useful to avoid a sleep(2) or whatever
+> > > >     before checking counts when testing.  Originally added to work around a
+> > > >     bug which left counts stranded indefinitely on a cpu going idle (an
+> > > >     inaccuracy magnified when small below-batch numbers represent "huge"
+> > > >     amounts of memory), but I believe that bug is now fixed: nonetheless,
+> > > >     this is still a useful knob.
+> > > 
+> > > No need to quote the full changelog.
+> > >  
+> > > > Other than the potential interruption to a time sensitive application,
+> > > > if using SCHED_FIFO or SCHED_RR priority on the isolated CPU, then
+> > > > system hangs can occur:
+> > > > 
+> > > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=978688
+> > > 
+> > > Confused... This report says that accessing the file (i.e. to force the
+> > > refresh) can get stalled because high priority tasks will not allow
+> > > kworkers to run. No?
+> > 
+> > Yes.
+> > 
+> > > There is simply no way around that unless those kworkers inherit the
+> > > priority.
+> > 
+> > stalld is an attempt to workaround the situation by allowing the 
+> > lower priority processes to execute for a small amount of time
+> > (for example 20us every 1s). https://github.com/bristot/stalld:
+> > 
+> > "The stalld program (which stands for 'stall daemon') is a mechanism to
+> > prevent the starvation of operating system threads in a Linux system.
+> > The premise is to start up on a housekeeping cpu (one that is not used
+> > for real-application purposes) and to periodically monitor the state of
+> > each thread in the system, looking for a thread that has been on a run
+> > queue (i.e. ready to run) for a specifed length of time without being
+> > run. This condition is usually hit when the thread is on the same cpu
+> > as a high-priority cpu-intensive task and therefore is being given no
+> > opportunity to run.
+> >
+> > When a thread is judged to be starving, stalld changes that thread to
+> > use the SCHED_DEADLINE policy and gives the thread a small slice of time
+> > for that cpu (specified on the command line). The thread then runs and
+> > when that timeslice is used, the thread is then returned to its original
+> > scheduling policy and stalld then continues to monitor thread states."
+> 
+> But your task is not on rq. It is sleeping and waiting for completion so
+> I fail to see how this all is related. The problem is that the userspace
+> depends on kernel WQ to complete. There quite some operations that will
+> behave like that.
+
+Yes. In more detail, two cases, with current kernel code:
+
+Case-1) no stalld daemon running. SCHED_FIFO task on isolated CPU that does:
+
+	do {
+		pkt = read_network_packet();
+		if (pkt) {
+			process_pkt(pkt);
+		}
+	} while (!stop_request);
+
+Someone else runs "echo 1 > /proc/sys/vm/stat_refresh" or
+"sysctl -a".
+
+flush_work hangs, because SCHED_FIFO task never yields the processor
+for kwork to finish execution of vmstat_refresh work.
+
+Case-2) stalld daemon running. SCHED_FIFO has on isolated CPU with same 
+condition as above. stalld daemon detects kworker "starving" (not being
+able to execute) and changes it priority to SCHED_DEADLINE, for 20us,
+then changes it back to SCHED_OTHER. 
+
+This causes the packet processing thread to be interrupted for 20us, 
+which is not what is expected from the system.
+
+---
+
+Now with this patch integrated:
+
+Case-1B) 
+
+"echo 1 > /proc/sys/vm/stat_refresh" or "sysctl -a" returns, no system
+hang.
+
+Case-2B) 
+
+No work is scheduled to run on the isolated CPU, packet processing 
+is not interrupted for 20us, everyone is happy.
+
+---
+
+In both B cases, kernel statistics were not fully synchronized from per-CPU 
+counters to global counters (but hopefully nobody cares).
+
+> > Unfortunately, if you allow that, then the latency sensitive
+> > application might be interrupted for longer than acceptable
+> > (which is the case for a certain class of applications, for example
+> > SoftPLC inside a VM).
+> 
+> I am losing you again. You can either have top priority processes
+> running uninterrupted or or latency sensitive running with your SLAs.
+> Even if you apply this patch you cannot protect your sensitive
+> application from CPU top prio hogs. You either have your process
+> priorities configured properly or not. I really fail to follow your line
+> of arguments here.
+
+Hopefully what is written above helps.
+
+> > > It certainly is unfortunate that the call is not killable
+> > > but being stuck behind real time busy looping processes is nothing
+> > > really uncommong. One has to be really careful when using real time
+> > > priorities.
+> > 
+> > Yes.
+> > 
+> > > > To avoid the problems above, do not schedule the work to synchronize
+> > > > per-CPU mm counters on isolated CPUs. Given the possibility for
+> > > > breaking existing userspace applications, avoid changing
+> > > > behaviour of access to /proc/sys/vm/stat_refresh, such as
+> > > > returning errors to userspace.
+> > > 
+> > > You are changing the behavior. The preexisting behavior was to flush
+> > > everything. This is clearly changing that.
+> > 
+> > I meant that this patch does not cause read/write to the procfs file 
+> > to return errors.
+> > 
+> > I believe returning errors has a higher potential for regressions
+> > than not flushing per-CPU VM counters of isolated CPUs (which are
+> > bounded).
+> 
+> Silent change of behavior is even worse because you cannot really tell a
+> difference.
+
+What do you suggest ?
+
+> > > > > Also would it make some sense to reduce flushing to cpumask 
+> > > > > of the calling process? (certainly a daring thought but have
+> > > > > you even considered it?)
+> > > > 
+> > > > Fail to see the point here ?
+> > > 
+> > > I mean that, if you already want to change the semantic of the call then
+>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > it would likely be safer to change it in a more robust way and only
+> > > flush pcp vmstat caches that are in the process effective cpu mask. 
+> > 
+> > That would change behaviour for systems without isolated CPUs.
+> 
+> yes, see above.
+> 
+> > > This
+> > > way one can control which pcp caches to flush (e.g. those that are not
+> > > on isolated CPUs or contrary those that are isolated but you can afford 
+> > > to flush at the specific moment). See?
+> > 
+> > Yes, but not sure what to think of this idea. 
+> 
+> If you want to break something, at least make the change kinda more
+> generic than, magically single purpose (isolcpu/nohz in this case) oriented.
+
+I hope nobody cares about stat_refresh being off by reclaim threshold
+(which is a small percentage).
+
+The alternative was to synchronize per-CPU counters remotely, but it was 
+decided as too complex.
+
+> > > Now I am not saying this is the right way to go because there is still a
+> > > slim chance this will break userspace expectations. Therefore I have
+> > > asked why you simply do not stop any random application accessing
+> > > stat_refresh in the first place.
+> > 
+> > I think this is what should be done, but not on the current patchset.
+> > 
+> > https://lkml.iu.edu/hypermail/linux/kernel/2209.1/01263.html
+> > 
+> > Regarding housekeeping flags, it is usually the case that initialization might
+> > require code execution on interference blocked CPUs (for example MTRR
+> > initialization, resctrlfs initialization, MSR writes, ...). Therefore
+> > tagging the CPUs after system initialization is necessary, which
+> > is not possible with current housekeeping flags infrastructure.
+> > 
+> > >  These highly specialized setups with
+> > > isolated resources shouldn't run arbitrary crap, should that?
+> > 
+> > Problem is that its hard to control what people run on a system.
+> > 
+> > > What if I just start allocating memory and get the system close to OOM. 
+> > 
+> > Sure, or "poweroff".
+> > 
+> > > I am
+> > > pretty sure a small latency induced by the vmstat refreshes is the least
+> > > problem you will have.
+> > 
+> > If OOM codepath sends no IPI or queues work on isolated CPUs, then OOM
+> > should be fine.
+> 
+> You are missing a big picture I am afraid. IPIs is the least of a
+> problem in that case (just imagine all the indirect dependencies through
+> locking - get a lock, held by somebody requesting a memory).
+> 
+> > > So please step back and try to think whether this is actually fixing
+> > > anything real before trying to change a user visible interface.
+> > 
+> > It is fixing either a latency violation or a hang on a system where some user or
+> > piece of software happens to run "sysctl -a" (or read vmstat_refresh).
+> 
+> I believe we have established the "hang problem" as described above is
+> not fixable by this patch. And I still argue that you should simply not
+> allow abuse of the interface if you want to have any latency guarantees.
+> Same as with any other kernel activity where you can compete for
+> resources (directly or indirectly).
+>  
+> > If one is using CPU isolation, the latency violation has higher 
+> > priority than vmstat_refresh returning proper counters.
+> 
+> This is a strong claim without any actual argument other than you would
+> like to have it this way.
+
+Well its the least worse option that i can see.
+
+Do you think returning error from procfs file handler, if isolated cpu
+is encountered, is not a potential source of regressions ?
+
+Again, it seemed to me that returning an error only if a different 
+flag is enabled (flag which is disabled by default), similar to what
+is suggested in the "block interference" patchset, would be more
+resilient against regressions. But don't have a strong preference.
 
 
-On 5.06.2023 09:08, Stephan Gerhold wrote:
-> Rather than having the RPM GLINK channels as the only child of a dummy
-> top-level rpm-glink node, switch to representing the RPM as remoteproc
-> like all the other remoteprocs (modem DSP, ...).
-> 
-> This allows assigning additional subdevices to it like the MPM
-> interrupt-controller or rpm-master-stats.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
->  arch/arm64/boot/dts/qcom/ipq6018.dtsi |  48 ++++++-----
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi |  28 ++++---
->  arch/arm64/boot/dts/qcom/msm8996.dtsi | 113 ++++++++++++-------------
->  arch/arm64/boot/dts/qcom/msm8998.dtsi |  98 +++++++++++-----------
->  arch/arm64/boot/dts/qcom/qcm2290.dtsi | 126 ++++++++++++++--------------
->  arch/arm64/boot/dts/qcom/qcs404.dtsi  | 152 +++++++++++++++++-----------------
->  arch/arm64/boot/dts/qcom/sdm630.dtsi  | 132 +++++++++++++++--------------
->  arch/arm64/boot/dts/qcom/sm6115.dtsi  | 128 ++++++++++++++--------------
->  arch/arm64/boot/dts/qcom/sm6125.dtsi  | 140 ++++++++++++++++---------------
->  arch/arm64/boot/dts/qcom/sm6375.dtsi  | 126 ++++++++++++++--------------
->  10 files changed, 564 insertions(+), 527 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> index 7355f266742a..fff4a4014bd8 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> @@ -146,6 +146,32 @@ psci: psci {
->  		method = "smc";
->  	};
->  
-> +	rpm: remoteproc-rpm {
-Krzysztof, is this fine or should this be just `remoteproc {`?
-
-in any case:
-Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org> # SM6375
-
-Konrad
-> +		compatible = "qcom,ipq6018-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-ipq6018";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				regulators {
-> +					compatible = "qcom,rpm-mp5496-regulators";
-> +
-> +					ipq6018_s2: s2 {
-> +						regulator-min-microvolt = <725000>;
-> +						regulator-max-microvolt = <1062500>;
-> +						regulator-always-on;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -182,28 +208,6 @@ q6_region: memory@4ab00000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-ipq6018";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			regulators {
-> -				compatible = "qcom,rpm-mp5496-regulators";
-> -
-> -				ipq6018_s2: s2 {
-> -					regulator-min-microvolt = <725000>;
-> -					regulator-max-microvolt = <1062500>;
-> -					regulator-always-on;
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smem {
->  		compatible = "qcom,smem";
->  		memory-region = <&smem_region>;
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 0baeb10bbdae..3222568ac4cf 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -151,6 +151,22 @@ psci {
->  		method = "smc";
->  	};
->  
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,ipq9574-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-ipq9574";
-> +				qcom,glink-channels = "rpm_requests";
-> +			};
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -169,18 +185,6 @@ smem@4aa00000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-ipq9574";
-> -			qcom,glink-channels = "rpm_requests";
-> -		};
-> -	};
-> -
->  	soc: soc@0 {
->  		compatible = "simple-bus";
->  		#address-cells = <1>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> index f75932cc2a30..50ede09d6368 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> @@ -398,6 +398,63 @@ psci {
->  		method = "smc";
->  	};
->  
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,msm8996-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-msm8996";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-msm8996", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +					clocks = <&xo_board>;
-> +					clock-names = "xo";
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,msm8996-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp1: opp1 {
-> +							opp-level = <1>;
-> +						};
-> +
-> +						rpmpd_opp2: opp2 {
-> +							opp-level = <2>;
-> +						};
-> +
-> +						rpmpd_opp3: opp3 {
-> +							opp-level = <3>;
-> +						};
-> +
-> +						rpmpd_opp4: opp4 {
-> +							opp-level = <4>;
-> +						};
-> +
-> +						rpmpd_opp5: opp5 {
-> +							opp-level = <5>;
-> +						};
-> +
-> +						rpmpd_opp6: opp6 {
-> +							opp-level = <6>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -472,62 +529,6 @@ mdata_mem: mpss-metadata {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -
-> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-msm8996";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-msm8996", "qcom,rpmcc";
-> -				#clock-cells = <1>;
-> -				clocks = <&xo_board>;
-> -				clock-names = "xo";
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,msm8996-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp1: opp1 {
-> -						opp-level = <1>;
-> -					};
-> -
-> -					rpmpd_opp2: opp2 {
-> -						opp-level = <2>;
-> -					};
-> -
-> -					rpmpd_opp3: opp3 {
-> -						opp-level = <3>;
-> -					};
-> -
-> -					rpmpd_opp4: opp4 {
-> -						opp-level = <4>;
-> -					};
-> -
-> -					rpmpd_opp5: opp5 {
-> -						opp-level = <5>;
-> -					};
-> -
-> -					rpmpd_opp6: opp6 {
-> -						opp-level = <6>;
-> -					};
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smem {
->  		compatible = "qcom,smem";
->  		memory-region = <&smem_mem>;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index f0e943ff0046..bc51fa6a18aa 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -321,68 +321,72 @@ psci {
->  		method = "smc";
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,msm8998-rpm-proc", "qcom,rpm-proc";
->  
-> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
->  
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-msm8998";
-> -			qcom,glink-channels = "rpm_requests";
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
->  
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-msm8998", "qcom,rpmcc";
-> -				#clock-cells = <1>;
-> -			};
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-msm8998";
-> +				qcom,glink-channels = "rpm_requests";
->  
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,msm8998-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-msm8998", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +				};
->  
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,msm8998-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
->  
-> -					rpmpd_opp_ret: opp1 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> -					};
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
->  
-> -					rpmpd_opp_ret_plus: opp2 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
-> -					};
-> +						rpmpd_opp_ret: opp1 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> +						};
->  
-> -					rpmpd_opp_min_svs: opp3 {
-> -						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> -					};
-> +						rpmpd_opp_ret_plus: opp2 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
-> +						};
->  
-> -					rpmpd_opp_low_svs: opp4 {
-> -						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> -					};
-> +						rpmpd_opp_min_svs: opp3 {
-> +							opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> +						};
->  
-> -					rpmpd_opp_svs: opp5 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS>;
-> -					};
-> +						rpmpd_opp_low_svs: opp4 {
-> +							opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> +						};
->  
-> -					rpmpd_opp_svs_plus: opp6 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> -					};
-> +						rpmpd_opp_svs: opp5 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS>;
-> +						};
->  
-> -					rpmpd_opp_nom: opp7 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM>;
-> -					};
-> +						rpmpd_opp_svs_plus: opp6 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> +						};
->  
-> -					rpmpd_opp_nom_plus: opp8 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> -					};
-> +						rpmpd_opp_nom: opp7 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM>;
-> +						};
->  
-> -					rpmpd_opp_turbo: opp9 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO>;
-> -					};
-> +						rpmpd_opp_nom_plus: opp8 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp9 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO>;
-> +						};
->  
-> -					rpmpd_opp_turbo_plus: opp10 {
-> -						opp-level = <RPM_SMD_LEVEL_BINNING>;
-> +						rpmpd_opp_turbo_plus: opp10 {
-> +							opp-level = <RPM_SMD_LEVEL_BINNING>;
-> +						};
->  					};
->  				};
->  			};
-> diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-> index b29bc4e4b837..ad1b721d1e1e 100644
-> --- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-> @@ -137,6 +137,71 @@ psci {
->  		method = "smc";
->  	};
->  
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,qcm2290-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +			interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-qcm2290";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-qcm2290", "qcom,rpmcc";
-> +					clocks = <&xo_board>;
-> +					clock-names = "xo";
-> +					#clock-cells = <1>;
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,qcm2290-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_min_svs: opp1 {
-> +							opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_low_svs: opp2 {
-> +							opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs: opp3 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs_plus: opp4 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp5 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM>;
-> +						};
-> +
-> +						rpmpd_opp_nom_plus: opp6 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp7 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO>;
-> +						};
-> +
-> +						rpmpd_opp_turbo_plus: opp8 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved_memory: reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -227,67 +292,6 @@ rmtfs_mem: memory@89b01000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -		interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-qcm2290";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-qcm2290", "qcom,rpmcc";
-> -				clocks = <&xo_board>;
-> -				clock-names = "xo";
-> -				#clock-cells = <1>;
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,qcm2290-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp_min_svs: opp1 {
-> -						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_low_svs: opp2 {
-> -						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs: opp3 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs_plus: opp4 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_nom: opp5 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM>;
-> -					};
-> -
-> -					rpmpd_opp_nom_plus: opp6 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_turbo: opp7 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO>;
-> -					};
-> -
-> -					rpmpd_opp_turbo_plus: opp8 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> -					};
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smp2p-adsp {
->  		compatible = "qcom,smp2p";
->  		qcom,smem = <443>, <429>;
-> diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> index 972f753847e1..329363cace5a 100644
-> --- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> @@ -166,6 +166,84 @@ psci {
->  		method = "smc";
->  	};
->  
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,qcs404-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-qcs404";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-qcs404", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +					clocks = <&xo_board>;
-> +					clock-names = "xo";
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,qcs404-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_ret: opp1 {
-> +							opp-level = <16>;
-> +						};
-> +
-> +						rpmpd_opp_ret_plus: opp2 {
-> +							opp-level = <32>;
-> +						};
-> +
-> +						rpmpd_opp_min_svs: opp3 {
-> +							opp-level = <48>;
-> +						};
-> +
-> +						rpmpd_opp_low_svs: opp4 {
-> +							opp-level = <64>;
-> +						};
-> +
-> +						rpmpd_opp_svs: opp5 {
-> +							opp-level = <128>;
-> +						};
-> +
-> +						rpmpd_opp_svs_plus: opp6 {
-> +							opp-level = <192>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp7 {
-> +							opp-level = <256>;
-> +						};
-> +
-> +						rpmpd_opp_nom_plus: opp8 {
-> +							opp-level = <320>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp9 {
-> +							opp-level = <384>;
-> +						};
-> +
-> +						rpmpd_opp_turbo_no_cpr: opp10 {
-> +							opp-level = <416>;
-> +						};
-> +
-> +						rpmpd_opp_turbo_plus: opp11 {
-> +							opp-level = <512>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -217,80 +295,6 @@ uefi_mem: memory@9f800000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -
-> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-qcs404";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-qcs404", "qcom,rpmcc";
-> -				#clock-cells = <1>;
-> -				clocks = <&xo_board>;
-> -				clock-names = "xo";
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,qcs404-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp_ret: opp1 {
-> -						opp-level = <16>;
-> -					};
-> -
-> -					rpmpd_opp_ret_plus: opp2 {
-> -						opp-level = <32>;
-> -					};
-> -
-> -					rpmpd_opp_min_svs: opp3 {
-> -						opp-level = <48>;
-> -					};
-> -
-> -					rpmpd_opp_low_svs: opp4 {
-> -						opp-level = <64>;
-> -					};
-> -
-> -					rpmpd_opp_svs: opp5 {
-> -						opp-level = <128>;
-> -					};
-> -
-> -					rpmpd_opp_svs_plus: opp6 {
-> -						opp-level = <192>;
-> -					};
-> -
-> -					rpmpd_opp_nom: opp7 {
-> -						opp-level = <256>;
-> -					};
-> -
-> -					rpmpd_opp_nom_plus: opp8 {
-> -						opp-level = <320>;
-> -					};
-> -
-> -					rpmpd_opp_turbo: opp9 {
-> -						opp-level = <384>;
-> -					};
-> -
-> -					rpmpd_opp_turbo_no_cpr: opp10 {
-> -						opp-level = <416>;
-> -					};
-> -
-> -					rpmpd_opp_turbo_plus: opp11 {
-> -						opp-level = <512>;
-> -					};
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smem {
->  		compatible = "qcom,smem";
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> index 897f2440c9c8..2dfaec074c24 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> @@ -359,6 +359,74 @@ psci {
->  		method = "smc";
->  	};
->  
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,sdm660-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-sdm660";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-sdm660", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,sdm660-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_ret: opp1 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> +						};
-> +
-> +						rpmpd_opp_ret_plus: opp2 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_min_svs: opp3 {
-> +							opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_low_svs: opp4 {
-> +							opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs: opp5 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs_plus: opp6 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp7 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM>;
-> +						};
-> +
-> +						rpmpd_opp_nom_plus: opp8 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp9 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -440,70 +508,6 @@ zap_shader_region: gpu@fed00000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -
-> -		interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-sdm660";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-sdm660", "qcom,rpmcc";
-> -				#clock-cells = <1>;
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,sdm660-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp_ret: opp1 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> -					};
-> -
-> -					rpmpd_opp_ret_plus: opp2 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_min_svs: opp3 {
-> -						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_low_svs: opp4 {
-> -						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs: opp5 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs_plus: opp6 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_nom: opp7 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM>;
-> -					};
-> -
-> -					rpmpd_opp_nom_plus: opp8 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_turbo: opp9 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO>;
-> -					};
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smem: smem {
->  		compatible = "qcom,smem";
->  		memory-region = <&smem_region>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 55118577bf92..d3ea67f7563d 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -341,6 +341,72 @@ CLUSTER_1_PD: power-domain-cpu-cluster1 {
->  		};
->  	};
->  
-> +	rpm: remoteproc-rpm {
-> +		compatible = "qcom,sm6115-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +
-> +			interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-sm6115";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-sm6115", "qcom,rpmcc";
-> +					clocks = <&xo_board>;
-> +					clock-names = "xo";
-> +					#clock-cells = <1>;
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,sm6115-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_min_svs: opp1 {
-> +							opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_low_svs: opp2 {
-> +							opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs: opp3 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs_plus: opp4 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp5 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM>;
-> +						};
-> +
-> +						rpmpd_opp_nom_plus: opp6 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp7 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO>;
-> +						};
-> +
-> +						rpmpd_opp_turbo_plus: opp8 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved_memory: reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -440,68 +506,6 @@ rmtfs_mem: memory@89b01000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -
-> -		interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-sm6115";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-sm6115", "qcom,rpmcc";
-> -				clocks = <&xo_board>;
-> -				clock-names = "xo";
-> -				#clock-cells = <1>;
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,sm6115-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp_min_svs: opp1 {
-> -						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_low_svs: opp2 {
-> -						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs: opp3 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs_plus: opp4 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_nom: opp5 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM>;
-> -					};
-> -
-> -					rpmpd_opp_nom_plus: opp6 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_turbo: opp7 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO>;
-> -					};
-> -
-> -					rpmpd_opp_turbo_plus: opp8 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> -					};
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smp2p-adsp {
->  		compatible = "qcom,smp2p";
->  		qcom,smem = <443>, <429>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index a596baa6ce3e..1d05ddf35e35 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -181,6 +181,78 @@ psci {
->  		method = "smc";
->  	};
->  
-> +	remoteproc-rpm {
-> +		compatible = "qcom,sm6125-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +
-> +			interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&apcs_glb 0>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-sm6125";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-sm6125", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,sm6125-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_ret: opp1 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> +						};
-> +
-> +						rpmpd_opp_ret_plus: opp2 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_min_svs: opp3 {
-> +							opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_low_svs: opp4 {
-> +							opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs: opp5 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs_plus: opp6 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp7 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM>;
-> +						};
-> +
-> +						rpmpd_opp_nom_plus: opp8 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp9 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO>;
-> +						};
-> +
-> +						rpmpd_opp_turbo_no_cpr: opp10 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved_memory: reserved-memory {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -292,74 +364,6 @@ qseecom_ta_mem: memory@13fc00000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -
-> -		interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&apcs_glb 0>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-sm6125";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-sm6125", "qcom,rpmcc";
-> -				#clock-cells = <1>;
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,sm6125-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp_ret: opp1 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> -					};
-> -
-> -					rpmpd_opp_ret_plus: opp2 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_min_svs: opp3 {
-> -						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_low_svs: opp4 {
-> -						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs: opp5 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs_plus: opp6 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_nom: opp7 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM>;
-> -					};
-> -
-> -					rpmpd_opp_nom_plus: opp8 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_turbo: opp9 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO>;
-> -					};
-> -
-> -					rpmpd_opp_turbo_no_cpr: opp10 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> -					};
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	smem: smem {
->  		compatible = "qcom,smem";
->  		memory-region = <&smem_mem>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-> index f8d9c34d3b2f..9834c5089fe8 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-> @@ -493,67 +493,71 @@ cmdline_region: cmdline@ffd00000 {
->  		};
->  	};
->  
-> -	rpm-glink {
-> -		compatible = "qcom,glink-rpm";
-> -		interrupts-extended = <&ipcc IPCC_CLIENT_AOP
-> -					     IPCC_MPROC_SIGNAL_GLINK_QMP
-> -					     IRQ_TYPE_EDGE_RISING>;
-> -		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> -		mboxes = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_GLINK_QMP>;
-> -
-> -		rpm_requests: rpm-requests {
-> -			compatible = "qcom,rpm-sm6375";
-> -			qcom,glink-channels = "rpm_requests";
-> -
-> -			rpmcc: clock-controller {
-> -				compatible = "qcom,rpmcc-sm6375", "qcom,rpmcc";
-> -				clocks = <&xo_board_clk>;
-> -				clock-names = "xo";
-> -				#clock-cells = <1>;
-> -			};
-> -
-> -			rpmpd: power-controller {
-> -				compatible = "qcom,sm6375-rpmpd";
-> -				#power-domain-cells = <1>;
-> -				operating-points-v2 = <&rpmpd_opp_table>;
-> -
-> -				rpmpd_opp_table: opp-table {
-> -					compatible = "operating-points-v2";
-> -
-> -					rpmpd_opp_ret: opp1 {
-> -						opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> -					};
-> -
-> -					rpmpd_opp_min_svs: opp2 {
-> -						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_low_svs: opp3 {
-> -						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs: opp4 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS>;
-> -					};
-> -
-> -					rpmpd_opp_svs_plus: opp5 {
-> -						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_nom: opp6 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM>;
-> -					};
-> -
-> -					rpmpd_opp_nom_plus: opp7 {
-> -						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> -					};
-> -
-> -					rpmpd_opp_turbo: opp8 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO>;
-> -					};
-> -
-> -					rpmpd_opp_turbo_no_cpr: opp9 {
-> -						opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> +	remoteproc-rpm {
-> +		compatible = "qcom,sm6375-rpm-proc", "qcom,rpm-proc";
-> +
-> +		glink-rpm {
-> +			compatible = "qcom,glink-rpm";
-> +			interrupts-extended = <&ipcc IPCC_CLIENT_AOP
-> +						     IPCC_MPROC_SIGNAL_GLINK_QMP
-> +						     IRQ_TYPE_EDGE_RISING>;
-> +			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-> +			mboxes = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_GLINK_QMP>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-sm6375";
-> +				qcom,glink-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-sm6375", "qcom,rpmcc";
-> +					clocks = <&xo_board_clk>;
-> +					clock-names = "xo";
-> +					#clock-cells = <1>;
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,sm6375-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_ret: opp1 {
-> +							opp-level = <RPM_SMD_LEVEL_RETENTION>;
-> +						};
-> +
-> +						rpmpd_opp_min_svs: opp2 {
-> +							opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_low_svs: opp3 {
-> +							opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs: opp4 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS>;
-> +						};
-> +
-> +						rpmpd_opp_svs_plus: opp5 {
-> +							opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp6 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM>;
-> +						};
-> +
-> +						rpmpd_opp_nom_plus: opp7 {
-> +							opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp8 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO>;
-> +						};
-> +
-> +						rpmpd_opp_turbo_no_cpr: opp9 {
-> +							opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-> +						};
->  					};
->  				};
->  			};
-> 
