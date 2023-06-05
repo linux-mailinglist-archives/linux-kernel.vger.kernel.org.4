@@ -2,87 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFA4722E5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FFF722DD4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbjFESKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S234244AbjFERqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjFESJu (ORCPT
+        with ESMTP id S232648AbjFERqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:09:50 -0400
-X-Greylist: delayed 1651 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Jun 2023 11:09:49 PDT
-Received: from egress-ip4b.ess.de.barracuda.com (egress-ip4b.ess.de.barracuda.com [18.185.115.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE57BE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:09:48 -0700 (PDT)
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198]) by mx-outbound16-136.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 05 Jun 2023 18:09:46 +0000
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-53f84f75bf4so1841011a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google; t=1685988585; x=1688580585;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ka0dLgOU3SOSpHh8q74Sw3feQDmjVZ2vWBXiiwU0uuo=;
-        b=e9FDF+t6FH/WKaDKzwT/sm4Amq1ktP9XYOtHu3gybOJgQ4MZmNFfHo7PF/DXeh/Qj4
-         8VCvJoqvWNXKgeeRjg6OSWCxQJphkANTWfukDtLJCPqJloh4iY/rys6scNV9WsArqhZH
-         58ThoUudgsk4PTvmYFxec2Ra8sULDC89jDZRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685988585; x=1688580585;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ka0dLgOU3SOSpHh8q74Sw3feQDmjVZ2vWBXiiwU0uuo=;
-        b=GUoe3izXX9mXQmdfyIe9VlDnZ/EK8CNRIGqa6xUBcgDDMyKvK46aPB1pIa8xbOQyig
-         zL0fCsQCthloTEdxMeRQBpZZStmfcFz4em3W347LRzV4jiJoE+pfR9/FKLHKMJ/QB921
-         z3SbV2U/ByPz7zt51RJv6nKftnQjJXZxDDSCYH65hi0udDrrqh3V9d2+y98P6QrxBplF
-         YB4zPYbsHrk5IRS/IbyrfWo9Xu49m7/rueS8xy0a3wt1Bl3zWPM1yHNM45p5eK3wtFud
-         h2xuQTpSH9/0D4LCzHnyODMONPALh4valXSgshLJ79NXVCyRtsNUkBWXrre9YC9KNQF5
-         918Q==
-X-Gm-Message-State: AC+VfDyKwpI1RBmK9ZEMsea7Aj82aJ9GAKZrQOLP+01QIA1FHnlp7pAk
-        24IwMOpa7dz0nZ9WvdU4CiGZzbpe6YM3qdePtAh2MKZNpZqYNa1Uxcq4fut4UNzAylAdX35Rmoy
-        GbWGcut/HD1UO1yPbG3CQ763R4yYuTiO3KvP0ACW+gTrguF6RoWsc/6sbT27w
-X-Received: by 2002:a17:903:2305:b0:1b0:61dd:e523 with SMTP id d5-20020a170903230500b001b061dde523mr5054987plh.41.1685987159013;
-        Mon, 05 Jun 2023 10:45:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5dFGH5RUHSCIKrPt8pUW9EBcAJtw6hTNlCcT2vaMXJ2vPnVhOOyVumgmm7oF8ujFweztfoAw==
-X-Received: by 2002:a17:903:2305:b0:1b0:61dd:e523 with SMTP id d5-20020a170903230500b001b061dde523mr5054968plh.41.1685987158744;
-        Mon, 05 Jun 2023 10:45:58 -0700 (PDT)
-Received: from LAP789U.mistral.in ([106.51.227.150])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170902860a00b001aaecc0b6ffsm6816616plo.160.2023.06.05.10.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 10:45:58 -0700 (PDT)
-From:   sabiya.d@mistralsolutions.com
-X-Google-Original-From: sabiya.d@ti.com
-To:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, afd@ti.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, sabiya.d@mistralsolutions.com,
-        Dasnavis Sabiya <sabiya.d@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-am69-sk: Add eMMC mmc0 support
-Date:   Mon,  5 Jun 2023 23:15:51 +0530
-Message-Id: <20230605174551.160262-1-sabiya.d@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 5 Jun 2023 13:46:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE6CEA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:46:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29A4D628D3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 17:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C15BC433EF;
+        Mon,  5 Jun 2023 17:46:04 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Kristina Martsenko <kristina.martsenko@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/11] arm64: Support for Armv8.8 memcpy instructions in userspace
+Date:   Mon,  5 Jun 2023 18:46:02 +0100
+Message-Id: <168598715797.875812.8370226994264203453.b4-ty@arm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230509142235.3284028-1-kristina.martsenko@arm.com>
+References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1685988585-304232-5457-29635-1
-X-BESS-VER: 2019.1_20230525.1947
-X-BESS-Apparent-Source-IP: 209.85.215.198
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUirNy1bSUcovVrKyMDYGMjKAYoapKZZpRmmmyR
-        ZGqQZmZmkG5sbmSSaGJomW5uaGaYbmSrWxABee2KFAAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.248613 [from 
-        cloudscan18-126.eu-central-1b.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.00 NO_REAL_NAME           HEADER: From: does not include a real name 
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, NO_REAL_NAME, BSF_SC0_MISMATCH_TO
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,42 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dasnavis Sabiya <sabiya.d@ti.com>
+On Tue, 09 May 2023 15:22:24 +0100, Kristina Martsenko wrote:
+> The Armv8.8 extension adds new instructions to perform memcpy(), memset() and
+> memmove() operations in hardware (FEAT_MOPS). This series adds support for
+> using the new instructions in userspace. More information can be found in the
+> cover letter for v1:
+>   https://lore.kernel.org/linux-arm-kernel/20230216160012.272345-1-kristina.martsenko@arm.com/
+> 
+> Changes in v2:
+>  - Removed booting.rst requirement for HCRX_EL2.MCE2
+>  - Changed HCRX_EL2 cpucap to be STRICT_BOOT type
+>  - Changed HCRX_EL2.SMPME to be set for the guest and unset for the host
+>  - Moved HCRX_EL2 initialization into init_el2_state(), dropped ISB
+>  - Simplified conditional checks in mops exception handler with XOR
+>  - Added comments from Arm ARM into mops exception handler
+>  - Converted cpucaps to use the new ARM64_CPUID_FIELDS() helper
+>  - Added MOPS to hwcaps kselftest
+>  - Improved commit messages
+>  - Rebased onto v6.4-rc1
+>  - v1: https://lore.kernel.org/linux-arm-kernel/20230216160012.272345-1-kristina.martsenko@arm.com/
+> 
+> [...]
 
-Add support for eMMC card connected to main sdhci0 instance.
+Applied to arm64 (for-next/feat_mops), thanks!
 
-Signed-off-by: Dasnavis Sabiya <sabiya.d@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am69-sk.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
+[01/11] KVM: arm64: initialize HCRX_EL2
+        https://git.kernel.org/arm64/c/af94aad4c915
+[02/11] arm64: cpufeature: detect FEAT_HCX
+        https://git.kernel.org/arm64/c/b0c756fe996a
+[03/11] KVM: arm64: switch HCRX_EL2 between host and guest
+        https://git.kernel.org/arm64/c/306b4c9f7120
+[04/11] arm64: mops: document boot requirements for MOPS
+        https://git.kernel.org/arm64/c/f32c053b9806
+[05/11] arm64: mops: don't disable host MOPS instructions from EL2
+        https://git.kernel.org/arm64/c/b1319c0e9559
+[06/11] KVM: arm64: hide MOPS from guests
+        https://git.kernel.org/arm64/c/3172613fbcbb
+[07/11] arm64: mops: handle MOPS exceptions
+        https://git.kernel.org/arm64/c/8536ceaa7471
+[08/11] arm64: mops: handle single stepping after MOPS exception
+        https://git.kernel.org/arm64/c/8cd076a67dc8
+[09/11] arm64: mops: detect and enable FEAT_MOPS
+        https://git.kernel.org/arm64/c/b7564127ffcb
+[10/11] arm64: mops: allow disabling MOPS from the kernel command line
+        https://git.kernel.org/arm64/c/3e1dedb29d0f
+[11/11] kselftest/arm64: add MOPS to hwcap test
+        https://git.kernel.org/arm64/c/d8a324f102cc
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am69-sk.dts b/arch/arm64/boot/dts/ti/k3-am69-sk.dts
-index 4b7d9280d76f..ab8ec2cb396e 100644
---- a/arch/arm64/boot/dts/ti/k3-am69-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am69-sk.dts
-@@ -22,6 +22,7 @@ chosen {
- 
- 	aliases {
- 		serial2 = &main_uart8;
-+		mmc0 = &main_sdhci0;
- 		mmc1 = &main_sdhci1;
- 		i2c0 = &main_i2c0;
- 	};
-@@ -191,6 +192,14 @@ exp1: gpio@21 {
- 	};
- };
- 
-+&main_sdhci0 {
-+	/* eMMC */
-+	status = "okay";
-+	non-removable;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
- &main_sdhci1 {
- 	/* SD card */
- 	status = "okay";
 -- 
-2.25.1
+Catalin
 
