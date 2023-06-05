@@ -2,56 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E5B7224BC
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789767224C6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbjFELhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S231322AbjFELi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjFELh2 (ORCPT
+        with ESMTP id S232673AbjFELi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:37:28 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89192135;
-        Mon,  5 Jun 2023 04:37:22 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q68WU-00039q-Q1; Mon, 05 Jun 2023 13:37:18 +0200
-Message-ID: <929ca032-9988-39b7-3a00-eb402996f7f0@leemhuis.info>
-Date:   Mon, 5 Jun 2023 13:37:18 +0200
+        Mon, 5 Jun 2023 07:38:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ADCED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685965097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UW0puxYxX8lA/j29JZ44zu7J+ZrscXZgmo7qgszTgi8=;
+        b=GiHhPpZhRj75Ray6pwLD56ZnpWNbKL1kPMcIDck8W6gCGTxqkY+rhvNAtRuk3PkbTvwP2Q
+        vFFradOkZi/SakHuYOzNTf9IN7ESSIoQiuzfC+3bStEsTNEOFQu7OHHBhEtxNCgaCYNP3L
+        MmLw/Vz5hbWyWzTk3ZO4zQMv5hjDVcs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-211-rO0oLnWcPZ2HEL9GXmIMvA-1; Mon, 05 Jun 2023 07:38:16 -0400
+X-MC-Unique: rO0oLnWcPZ2HEL9GXmIMvA-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f7e7a6981cso916865e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:38:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685965095; x=1688557095;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UW0puxYxX8lA/j29JZ44zu7J+ZrscXZgmo7qgszTgi8=;
+        b=KJzuBdNpVdfxNAN7xDytBWmcE3ZUZmw9btCRnSpFTjROvMIb0mvR0hX4HLkWqQpgnz
+         dOtqbeQZPSfpVhGoiTC6s5X6SReyoSPk21SHI4CRFCRaDMdU/ywSnBVh2iTs5aJUxXNJ
+         aroQpC1y6CzD0K+c1V4YWK94OIOUYom7/lNhaPEUrYbLd2jrC8W8ekCcTAJoN4GUwxmY
+         c/eb++3EWo8bOX9kip+Sk/DwbRmpBNT+fBx91PGSXhNxDsqAlBRY9gNh9ZlBpdXGbBs1
+         Bn23Z1FeLKbMVLM5IohqY070cCl0CRPzmQqfnbVMBnxDtMuCEGKYOj/WO4KQr5WMOvmm
+         ORww==
+X-Gm-Message-State: AC+VfDxjOTIHoTA2JEiotbtfgOZj2GIGBiM3U7kDIh00aLHFkgvPvqEm
+        qGmAVX/1p7vFhAeTAd5dUpsmyjcy6jZJswcKV4SLOn8z5unmCyN4YQ9MJaxEw4IVl3rM0jVCWm7
+        YDGRISAq0mpGM05+e/gcYYfJg
+X-Received: by 2002:a5d:46c4:0:b0:309:1532:8287 with SMTP id g4-20020a5d46c4000000b0030915328287mr4217238wrs.19.1685965095112;
+        Mon, 05 Jun 2023 04:38:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4M44tZLcoGU14krnj+H/IKRXh8vHDtScQRiy+9d63g0QVyhDndxPwSt5oICqN1Qh74CeeJYA==
+X-Received: by 2002:a5d:46c4:0:b0:309:1532:8287 with SMTP id g4-20020a5d46c4000000b0030915328287mr4217226wrs.19.1685965094788;
+        Mon, 05 Jun 2023 04:38:14 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
+        by smtp.gmail.com with ESMTPSA id j14-20020adff54e000000b0030aec5e020fsm9540701wrp.86.2023.06.05.04.38.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:38:14 -0700 (PDT)
+Message-ID: <61c6f512-28cf-451b-b356-1a53493db634@redhat.com>
+Date:   Mon, 5 Jun 2023 13:38:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: kernel error at led trigger "phy0tpt"
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Tobias Dahms <dahms.tobias@web.de>,
-        Sean Wang <sean.wang@mediatek.com>
-Cc:     stable@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-leds@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-References: <91feceb2-0df4-19b9-5ffa-d37e3d344fdf@web.de>
- <3fcc707b-f757-e74b-2800-3b6314217868@leemhuis.info>
- <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
- <d14fb08c-70e3-4cc7-caf9-87e73eab9194@gmail.com>
- <8b07ead5-f105-da86-e7da-ee49616f7c1d@collabora.com>
- <69602f1b-4afa-d864-b6d3-d8237f81a51d@leemhuis.info>
- <d78088d6-7989-7538-c4e1-7976a21cf680@leemhuis.info>
-In-Reply-To: <d78088d6-7989-7538-c4e1-7976a21cf680@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685965042;50d05423;
-X-HE-SMSGID: 1q68WU-00039q-Q1
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Subject: Re: [PATCH v2 10/11] selftests/mm: move uffd* routines from vm_util.c
+ to uffd-common.c
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230603021558.95299-1-jhubbard@nvidia.com>
+ <20230603021558.95299-11-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230603021558.95299-11-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,87 +88,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.05.23 10:17, Thorsten Leemhuis wrote:
-> On 17.04.23 13:25, Linux regression tracking (Thorsten Leemhuis) wrote:
->> [adding Matthias to the list of recipients, who back then applied to
->> culprit]
->>
->> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
->> for once, to make this easily accessible to everyone.
->>
->> AngeloGioacchino, Has any progress been made to fix below regression? It
->> doesn't look like it from here, hence I wondered if it fall through the
->> cracks.
+On 03.06.23 04:15, John Hubbard wrote:
+> Move the uffd*() routines to their natural home. Note that
+> ksm_functional_tests.c also depend, intentionally (due to a recent
+> commit [1]), upon uffd-common.[ch].
 > 
-> Hmmm, nobody replied. Does nobody (including the reporters!) care
-> anymore for valid reasons? Then I'd drop this from the tracking.
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-#regzbot inconclusive: it seems nobody (including the reporters) does
-care anymore
-#regzbot ignore-activity
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+-- 
+Cheers,
 
-> Or was progress made and I just missed it?
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->
->> On 27.03.23 10:23, AngeloGioacchino Del Regno wrote:
->>> Il 26/03/23 15:23, Bagas Sanjaya ha scritto:
->>>> On 3/26/23 02:20, Tobias Dahms wrote:
->>>>> Hello,
->>>>>
->>>>> the bisection gives following result:
->>>>> --------------------------------------------------------------------
->>>>> 18c7deca2b812537aa4d928900e208710f1300aa is the first bad commit
->>>>> commit 18c7deca2b812537aa4d928900e208710f1300aa
->>>>> Author: AngeloGioacchino Del Regno
->>>>> <angelogioacchino.delregno@collabora.com>
->>>>> Date:   Tue May 17 12:47:08 2022 +0200
->>>>>
->>>>>      soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
->>>>> function
->>>>>
->>>>>      Function pwrap_wait_for_state() is a function that polls an address
->>>>>      through a helper function, but this is the very same operation that
->>>>>      the readx_poll_timeout macro means to do.
->>>>>      Convert all instances of calling pwrap_wait_for_state() to instead
->>>>>      use the read_poll_timeout macro.
->>>>>
->>>>>      Signed-off-by: AngeloGioacchino Del Regno
->>>>> <angelogioacchino.delregno@collabora.com>
->>>>>      Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>>>>      Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>>>>      Link:
->>>>> https://lore.kernel.org/r/20220517104712.24579-2-angelogioacchino.delregno@collabora.com
->>>>>      Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
->>>>>
->>>>>   drivers/soc/mediatek/mtk-pmic-wrap.c | 60
->>>>> ++++++++++++++++++++----------------
->>>>>   1 file changed, 33 insertions(+), 27 deletions(-)
->>>>> --------------------------------------------------------------------
->>>>>
->>>>
->>>> OK, I'm updating the regression status:
->>>>
->>>> #regzbot introduced: 18c7deca2b8125
->>>>
->>>> And for replying, don't top-post, but rather reply inline with
->>>> appropriate context instead; hence I cut the replied context.
->>>>
->>>
->>> There are two possible solutions to that, specifically, either:
->>>  1. Change readx_poll_timeout() to readx_poll_timeout_atomic(); or
->>>  2. Fix the mt6323-led driver so that this operation gets done
->>>     out of atomic context, which is IMO the option to prefer.
->>>
->>> Ideas?
->>>
->>> Regards,
->>> Angelo
->>>
->>>
+David / dhildenb
+
