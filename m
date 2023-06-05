@@ -2,99 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A533872251D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F16872251F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbjFEMBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S233186AbjFEMCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFEMBo (ORCPT
+        with ESMTP id S232694AbjFEMCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:01:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66ACE6;
-        Mon,  5 Jun 2023 05:01:43 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685966501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h4OZ3iLYHxReFPvztjUlD1+oBk6ePtunu/TercMZOm8=;
-        b=MHdXCxiCz42WshZ/iM+tn8F3EezcXTGkuT1+RpiAiAWpdJi3sAmZzjPZQEgxb6ooriwwSB
-        oXsU0nNFHTp6fXxDrkDFnZ00k8fUJMErszOgqwiyElc3zhrGdwxNZswvUGMnc97DElpG7J
-        Qg2wpeaSik7lmRTLKxgxIJ8/GdXD9GIor9wGAXJmCqBudArYB0VyaUbnqN5zKGZMpzMOpF
-        Scw1+JUpcd1jcDkoMQYmgWSzKIkmfFSNp6VpINBo4y9V9KaURHJ5+VGAxxJVI8uEwVJvxl
-        ajwCx9jy5O98NxIneLfn0j+u4H2hRiUPqs7RNXLkq3nQ9bKz0YL+HrOSDbdkgA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685966501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h4OZ3iLYHxReFPvztjUlD1+oBk6ePtunu/TercMZOm8=;
-        b=SEGwxgOB/DBnjUJ6azNKXdLqel8ICX32HyriNqwhZj2ZV/1EiZZajNXlGLtG00EumznZJq
-        5fDczQnlOvjBXtAw==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 09/33] x86/cpu: add X86_CR4_FRED macro
-In-Reply-To: <20230410081438.1750-10-xin3.li@intel.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-10-xin3.li@intel.com>
-Date:   Mon, 05 Jun 2023 14:01:41 +0200
-Message-ID: <87r0qq6rtm.ffs@tglx>
+        Mon, 5 Jun 2023 08:02:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125D0DA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 05:02:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q68uP-0000Yl-Je; Mon, 05 Jun 2023 14:02:01 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q68uN-005GF8-Fp; Mon, 05 Jun 2023 14:01:59 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q68uM-00BNcb-R6; Mon, 05 Jun 2023 14:01:58 +0200
+Date:   Mon, 5 Jun 2023 14:01:51 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 11/41] i2c: add HAS_IOPORT dependencies
+Message-ID: <20230605120151.qpoe5ordzdvxmqv7@pengutronix.de>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-12-schnelle@linux.ibm.com>
+ <ZH21E3Obp+YPJHkl@shikoro>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rrjpp6upncpe45z2"
+Content-Disposition: inline
+In-Reply-To: <ZH21E3Obp+YPJHkl@shikoro>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
 
-> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
->
-> Add X86_CR4_FRED macro for the FRED bit in %cr4. This bit should be a
+--rrjpp6upncpe45z2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-s/should/must/ no?
+Hello Wolfram,
 
-> +/*
-> + * These bits should not change their value after CPU init is finished.
-> + * The explicit cast to unsigned long suppresses a warning on i386 for
-> + * x86-64 only feature bits >= 32.
-> + */
->  static const unsigned long cr4_pinned_mask =
-> -	X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP |
-> -	X86_CR4_FSGSBASE | X86_CR4_CET;
-> +	(unsigned long)
+On Mon, Jun 05, 2023 at 12:12:35PM +0200, Wolfram Sang wrote:
+> On Tue, May 16, 2023 at 01:00:07PM +0200, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them.
+> >=20
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>=20
+> What has changed since V3? I didn't get the coverletter...
 
-That type cast is required because:
+lore has it:
+https://lore.kernel.org/all/20230516110038.2413224-1-schnelle@linux.ibm.com/
 
-+#define X86_CR4_FRED		_BITULL(X86_CR4_FRED_BIT)
+(Found via: https://lore.kernel.org/all/ZH21E3Obp+YPJHkl@shikoro where
+the last part of the URL is the Message-Id of your mail.)
 
-Bah. Fred is 64 bit only. So why defining this as 1ULL << 32
-unconditionally and stripping the bit off on 32bit via the type cast?
+Best regards
+Uwe
 
-#ifdef CONFIG_X86_64
-#define X86_CR4_FRED		_BITUL(X86_CR4_FRED_BIT)
-#else
-#define X86_CR4_FRED		0
-#endif
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-would be too obvious, right?
+--rrjpp6upncpe45z2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +	(X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP |
-> +	 X86_CR4_FSGSBASE | X86_CR4_CET | X86_CR4_FRED);
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR9zqkACgkQj4D7WH0S
+/k6J+wf8DmGrLkbb+yVGL7PepId5isI8DouAOsHiBL2947XH+XFzSbVniR3Ydjfa
+V+XHlHuatOVGSKP23q6pXNFWDhwxVbCZkMWlumoPKslLqIjU+Qgt+SCznZQDiDnZ
+QqOgKD2M1CLufMBb0W/dNcm/pVxDO0T8FeyiJZO9mttJQ8yQ4nzCHCDDKXH5NDXl
+Y2PMdDlLeba0kwleogS5j5JR/jxMLmnoDqCBWjb2v8ZJQMrIg3/6YmZRJ1/hXoHO
+QAdzEIxNOl/2Tj9Cc84+9oyk7J19OsvBhXNpR8g+kB7bS39dCIrE9di96BTDzfaW
+uxKsqfUGQ7aqF/xjpAM+0Bb6NkvhKQ==
+=pscJ
+-----END PGP SIGNATURE-----
 
-        tglx
+--rrjpp6upncpe45z2--
