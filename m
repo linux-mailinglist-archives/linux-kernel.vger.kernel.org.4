@@ -2,89 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA8C721C69
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0306E721C6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 05:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbjFEDKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 23:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S232707AbjFEDPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 23:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjFEDKk (ORCPT
+        with ESMTP id S232600AbjFEDO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 23:10:40 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F098A9;
-        Sun,  4 Jun 2023 20:10:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZJWw3bhPz4x1N;
-        Mon,  5 Jun 2023 13:10:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685934636;
-        bh=oT3+kjfYuvGhpdaIOKpvo9YtYmWSFs9yFo3UMgXcQH4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m+2ds1jW8FMrNxWxCiXwZZgpdUW1GNiJrzqG2KpXP82CpDkFzwT9iJtAyVOotkilN
-         a+CgVkROxiH7bRo/nWoulH0qo7r29hsfKdeHndKoA8JPpimmopOoDPOK0ZIn5JHERW
-         wdmW+rupt2kjPc3Hp2skwokU8qMjosZGQ/OeRESqZWVBZsxWXRHZSwq1wP0DGNlv9q
-         MSultBNAkpgtobWbFCB1CLgYD//sJD2YKjja6i6QrgKPrLFldrQQ/ahVbYVQJck6So
-         +Q5O2RFRgs2X5fmu2h0oOKxuv//kpDHQ9Wp4RQSAe6w+z4254G68d45QivjC9yHy9C
-         lKm3EvZ4mcncw==
-Date:   Mon, 5 Jun 2023 13:10:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20230605131034.3e795180@canb.auug.org.au>
+        Sun, 4 Jun 2023 23:14:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 115FFA9;
+        Sun,  4 Jun 2023 20:14:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 504A1D75;
+        Sun,  4 Jun 2023 20:15:43 -0700 (PDT)
+Received: from [10.162.41.6] (a077893.blr.arm.com [10.162.41.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45FE03F663;
+        Sun,  4 Jun 2023 20:14:52 -0700 (PDT)
+Message-ID: <a11beb49-7b4f-08f0-b1e2-782a0ba973ea@arm.com>
+Date:   Mon, 5 Jun 2023 08:44:50 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uKTEPknx4lUkbJF81CqF8Lw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V11 08/10] arm64/perf: Add struct brbe_regset helper
+ functions
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-9-anshuman.khandual@arm.com>
+ <CAM9d7cihqiUULBR7JoizDGySVYdOx3TH_CJV=QDpeck3p8z5wg@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <CAM9d7cihqiUULBR7JoizDGySVYdOx3TH_CJV=QDpeck3p8z5wg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/uKTEPknx4lUkbJF81CqF8Lw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
+On 6/2/23 08:10, Namhyung Kim wrote:
+> On Tue, May 30, 2023 at 9:15 PM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>>
+>> The primary abstraction level for fetching branch records from BRBE HW has
+>> been changed as 'struct brbe_regset', which contains storage for all three
+>> BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
+>> happens in the task sched out path, or in the PMU IRQ handling path, these
+>> registers need to be extracted from the HW. Afterwards both live and stored
+>> sets need to be stitched together to create final branch records set. This
+>> adds required helper functions for such operations.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Tested-by: James Clark <james.clark@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+> 
+> [SNIP]
+>> +
+>> +static inline void copy_brbe_regset(struct brbe_regset *src, int src_idx,
+>> +                                   struct brbe_regset *dst, int dst_idx)
+>> +{
+>> +       dst[dst_idx].brbinf = src[src_idx].brbinf;
+>> +       dst[dst_idx].brbsrc = src[src_idx].brbsrc;
+>> +       dst[dst_idx].brbtgt = src[src_idx].brbtgt;
+>> +}
+>> +
+>> +/*
+>> + * This function concatenates branch records from stored and live buffer
+>> + * up to maximum nr_max records and the stored buffer holds the resultant
+>> + * buffer. The concatenated buffer contains all the branch records from
+>> + * the live buffer but might contain some from stored buffer considering
+>> + * the maximum combined length does not exceed 'nr_max'.
+>> + *
+>> + *     Stored records  Live records
+>> + *     ------------------------------------------------^
+>> + *     |       S0      |       L0      |       Newest  |
+>> + *     ---------------------------------               |
+>> + *     |       S1      |       L1      |               |
+>> + *     ---------------------------------               |
+>> + *     |       S2      |       L2      |               |
+>> + *     ---------------------------------               |
+>> + *     |       S3      |       L3      |               |
+>> + *     ---------------------------------               |
+>> + *     |       S4      |       L4      |               nr_max
+>> + *     ---------------------------------               |
+>> + *     |               |       L5      |               |
+>> + *     ---------------------------------               |
+>> + *     |               |       L6      |               |
+>> + *     ---------------------------------               |
+>> + *     |               |       L7      |               |
+>> + *     ---------------------------------               |
+>> + *     |               |               |               |
+>> + *     ---------------------------------               |
+>> + *     |               |               |       Oldest  |
+>> + *     ------------------------------------------------V
+>> + *
+>> + *
+>> + * S0 is the newest in the stored records, where as L7 is the oldest in
+>> + * the live reocords. Unless the live buffer is detetcted as being full
+>> + * thus potentially dropping off some older records, L7 and S0 records
+>> + * are contiguous in time for a user task context. The stitched buffer
+>> + * here represents maximum possible branch records, contiguous in time.
+>> + *
+>> + *     Stored records  Live records
+>> + *     ------------------------------------------------^
+>> + *     |       L0      |       L0      |       Newest  |
+>> + *     ---------------------------------               |
+>> + *     |       L0      |       L1      |               |
+>> + *     ---------------------------------               |
+>> + *     |       L2      |       L2      |               |
+>> + *     ---------------------------------               |
+>> + *     |       L3      |       L3      |               |
+>> + *     ---------------------------------               |
+>> + *     |       L4      |       L4      |             nr_max
+>> + *     ---------------------------------               |
+>> + *     |       L5      |       L5      |               |
+>> + *     ---------------------------------               |
+>> + *     |       L6      |       L6      |               |
+>> + *     ---------------------------------               |
+>> + *     |       L7      |       L7      |               |
+>> + *     ---------------------------------               |
+>> + *     |       S0      |               |               |
+>> + *     ---------------------------------               |
+>> + *     |       S1      |               |    Oldest     |
+>> + *     ------------------------------------------------V
+>> + *     |       S2      | <----|
+>> + *     -----------------      |
+>> + *     |       S3      | <----| Dropped off after nr_max
+>> + *     -----------------      |
+>> + *     |       S4      | <----|
+>> + *     -----------------
+>> + */
+>> +static int stitch_stored_live_entries(struct brbe_regset *stored,
+>> +                                     struct brbe_regset *live,
+>> +                                     int nr_stored, int nr_live,
+>> +                                     int nr_max)
+>> +{
+>> +       int nr_total, nr_excess, nr_last, i;
+>> +
+>> +       nr_total = nr_stored + nr_live;
+>> +       nr_excess = nr_total - nr_max;
+>> +
+>> +       /* Stored branch records in stitched buffer */
+>> +       if (nr_live == nr_max)
+>> +               nr_stored = 0;
+>> +       else if (nr_excess > 0)
+>> +               nr_stored -= nr_excess;
+>> +
+>> +       /* Stitched buffer branch records length */
+>> +       if (nr_total > nr_max)
+>> +               nr_last = nr_max;
+>> +       else
+>> +               nr_last = nr_total;
+>> +
+>> +       /* Move stored branch records */
+>> +       for (i = 0; i < nr_stored; i++)
+>> +               copy_brbe_regset(stored, i, stored, nr_last - nr_stored - 1 + i);
+> 
+> I'm afraid it can overwrite some entries if nr_live is small
+> and nr_stored is big.  Why not use memmove()?
 
-mm/memory.c:1705: warning: Excess function parameter 'mt' description in 'u=
-nmap_vmas'
+nr_stored is first adjusted with nr_excess if both live and stored entries combined
+exceed the maximum branch records in the HW. I am wondering how it can override ?
 
-Introduced by commit
+> 
+> Also I think it'd be simpler if you copy store to live.
+> It'll save copying live in the IRQ but it will copy the
+> whole content to store again for the sched switch.
 
-  c57d0b88196f ("mm: change do_vmi_align_munmap() side tree index")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/uKTEPknx4lUkbJF81CqF8Lw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR9UioACgkQAVBC80lX
-0GyphQf/VmkgqdeCfXlHx5MzxV14H0yJi/CIpDPqdC1m3JkE4XKD/8W3vn0heYpS
-p3ZbuEQKIkXG6uS2nSoQr8vfp/ghLIH4znfQGoEPtfL0UOqezXTsFLluulFb2nHq
-OW/7nngaOG1LRLFzeheQSX4refaXYQWY9ig5wPKuI3bQG1NTZm5oVm52BZRF/oJX
-DQ2RaUbyk8lhslEAbF7sR+A8xGXBQFRdR31cjrcWUsV7POS43Mld0ELe7Pm4wPUP
-+Q0Tr0w5shhUmmnqvDGSVW/4xv8zREXS9lAYKwLGmcN+D3tkK9rTKccLwdIU9CWg
-Y/GjsY/DaDxQ4vFklGeEqJDzKtPRGQ==
-=9hZJ
------END PGP SIGNATURE-----
-
---Sig_/uKTEPknx4lUkbJF81CqF8Lw--
+But how that is better than the current scheme ?
