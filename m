@@ -2,88 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D892D721E37
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30A5721E41
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjFEGgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 02:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S229884AbjFEGh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 02:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjFEGgd (ORCPT
+        with ESMTP id S229640AbjFEGh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:36:33 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F68DF
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:36:31 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96fdc081cb3so656662266b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 23:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685946989; x=1688538989;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2DzCC5nNj9v724sBHpzIo/I7iRoYP7iyXhmHfz9Pk7Y=;
-        b=EfGxmQgBDHTK3j0dd8RNyLsGK1duhmTxBU8B3HBUvpPxlCuH5uWRWAxz7HvXZCq524
-         jwQ2hCHnyKGWaP+VcXdHo8XVXue7aJTSH7pKErryvBtVqaVmXOgsjmA61C+/XMBvyXuI
-         XpazGattWkNXMdKUK31h68OPYWLUhgNRVtpCNO6l8nTJzLZp/4Hz9cQdGYhRySi5fCh+
-         iHwasAxQMWf4whFDhyfjmRyufJ+tObicaoV78hGCqWie2UEBKUngjNKqNycneMm2GZ+a
-         esgYE7DDocfsBeYkJ/Ydl4NmbHxvGf0d08XzDVNqqdsVrXIxa4vi9P++2Uuryl2FP/lE
-         2TmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685946989; x=1688538989;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2DzCC5nNj9v724sBHpzIo/I7iRoYP7iyXhmHfz9Pk7Y=;
-        b=lbtql8ljrLa6hB1YH0EiANtvUi6GbKaUro5szbuYlFrtZprF+U/fNYAW7IWbzATN1o
-         nHw9+AkDVYbwKRbItyw2P2rVAeeP0dvFs11pAx6UGy6GVaqrz0ynT9XM288izKZ6/4gy
-         VMjYewcykAfkZ+smdqIyNf/S8+Vt1zI2exug7q/HG/LNpVBoalQzFchkAMS34Rk8b/CG
-         V+Vc5EEs2VrDwMqis9knidpO7EuI3PAFqyPuPjsCieB/RF8HMZNhdJwhkLpj19KhezAq
-         50JAs/6LBzKjRPzc1PNaxnAb8u0X8TYD3kpczw40TzGk92kzIl8vbdw67o+XgObqdZL/
-         7Psg==
-X-Gm-Message-State: AC+VfDzJ/zx3uX1W/X4GnpCOTTtS2WqiTYgOd8r/N8Qfd5+5P+HNNdCq
-        QQmnlYLDGxyh5IqMGrdhwrLjnCJyjzVWlE6cq5k=
-X-Google-Smtp-Source: ACHHUZ6d00GdMTR6aAxeVElkl0mxPzjdle9Lbahv1I4pFtz6RO6KSMrZET+M4yBitY9jdcpIUHeAuA==
-X-Received: by 2002:a17:906:5d09:b0:974:1c91:a752 with SMTP id g9-20020a1709065d0900b009741c91a752mr6371767ejt.5.1685946989561;
-        Sun, 04 Jun 2023 23:36:29 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090668cb00b00977eb9957e9sm145894ejr.128.2023.06.04.23.36.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 23:36:29 -0700 (PDT)
-Message-ID: <3b776a90-add5-f870-b20d-0b1bf9b05bc8@linaro.org>
-Date:   Mon, 5 Jun 2023 08:36:25 +0200
+        Mon, 5 Jun 2023 02:37:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6F5A6
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:37:57 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q63qF-00043K-DJ; Mon, 05 Jun 2023 08:37:23 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5E1B51D2073;
+        Mon,  5 Jun 2023 06:37:17 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 08:37:16 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 0/2] can: j1939: avoid possible use-after-free when
+ j1939_can_rx_register fails
+Message-ID: <20230605-extras-liftoff-ccf0e4c92335-mkl@pengutronix.de>
+References: <20230526171910.227615-1-pchelkin@ispras.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 03/21] dt-bindings: usb: generic-ehci: Document
- clock-names property
-Content-Language: en-US
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        gregkh@linuxfoundation.org, linux@armlinux.org.uk,
-        mturquette@baylibre.com, sboyd@kernel.org, sre@kernel.org,
-        broonie@kernel.org, arnd@arndb.de, gregory.clement@bootlin.com,
-        sudeep.holla@arm.com, balamanikandan.gunasundar@microchip.com,
-        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-4-varshini.rajendran@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230603200243.243878-4-varshini.rajendran@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qfzt5qhgkbk447j7"
+Content-Disposition: inline
+In-Reply-To: <20230526171910.227615-1-pchelkin@ispras.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,37 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2023 22:02, Varshini Rajendran wrote:
-> Document the property clock-names in the schema.
-> 
-> It fixes the dtbs_warning,
-> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
 
-You cut too much from the warning. Which target/board?
+--qfzt5qhgkbk447j7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> index 7e486cc6cfb8..542ac26960fc 100644
-> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> @@ -102,6 +102,10 @@ properties:
->          - if a USB DRD channel: first clock should be host and second
->            one should be peripheral
->  
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 4
+On 26.05.2023 20:19:08, Fedor Pchelkin wrote:
+> The patch series fixes a possible racy use-after-free scenario described
+> in 2/2: if j1939_can_rx_register() fails then the concurrent thread may
+> have already read the invalid priv structure.
+>
+> The 1/2 makes j1939_netdev_lock a mutex so that access to
+> j1939_can_rx_register() can be serialized without changing GFP_KERNEL to
+> GFP_ATOMIC inside can_rx_register(). This seems to be safe.
+>
+> Note that the patch series has been tested only via Syzkaller and not with
+> a real device.
 
-Not really, because we want them to be fixed, so you need to list the
-items. But it seems this is not needed at all... which boards and
-drivers use names?
+Applied to linux-can + adding stable on Cc.
 
+Thanks,
+Marc
 
-Best regards,
-Krzysztof
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--qfzt5qhgkbk447j7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmR9gpoACgkQvlAcSiqK
+BOia1QgAhIj1/4OuiSj/sZFfiYVe2ixv9bFwMNCr3gEDO3xzjgoj1Q3xK9QwSes4
++5+qz5R7RzaKXxYbcnhqtFKy5oAH7ioZIzgLpYkiR3OMBa4Bboqg1iB4mWq4eQ6M
+BoxHqr2PFUt7fZNKp+k0ucu3KDvPX2js6aoMeQhZ6XpRYB59lEK9HHMdsPBNNGoC
+dlOvEWfZH75Cd6AS3ClUX+aaocETje1wx5xBcmGY/Jj79w3QBXDlakPXp24yNmhz
+Q/iJR8mAd0jvNNZeu5s9MOsbolKAh2U4ffRvGNfyTWV/O72C8xhQnoyR32iY3Xiv
+zuvJFYNNhFYpc8xmaelwUt31yF7HQw==
+=vpgs
+-----END PGP SIGNATURE-----
+
+--qfzt5qhgkbk447j7--
