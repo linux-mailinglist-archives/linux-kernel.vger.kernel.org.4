@@ -2,90 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC4172225A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58565722261
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjFEJg5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 05:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S231321AbjFEJiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjFEJg4 (ORCPT
+        with ESMTP id S231290AbjFEJix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:36:56 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DC6B7;
-        Mon,  5 Jun 2023 02:36:54 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2E89C80C4;
-        Mon,  5 Jun 2023 17:36:52 +0800 (CST)
-Received: from EXMBX064.cuchost.com (172.16.6.64) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 5 Jun
- 2023 17:36:52 +0800
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX064.cuchost.com
- (172.16.6.64) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 5 Jun
- 2023 17:36:52 +0800
-Received: from EXMBX067.cuchost.com ([fe80::a825:bd30:18ff:b2f8]) by
- EXMBX067.cuchost.com ([fe80::a825:bd30:18ff:b2f8%16]) with mapi id
- 15.00.1497.044; Mon, 5 Jun 2023 17:36:51 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 0/3] Add JH7110 cpufreq support
-Thread-Topic: [PATCH v3 0/3] Add JH7110 cpufreq support
-Thread-Index: AdmXkDPLZg25EWWrSjqYc22BpOYTbg==
-Date:   Mon, 5 Jun 2023 09:36:51 +0000
-Message-ID: <c5bde0d92d514250a21120ed33e0f6b2@EXMBX067.cuchost.com>
-References: <20230421031431.23010-1-mason.huo@starfivetech.com>
- <457c35b5-aec4-1147-673f-947052b5f944@starfivetech.com>
- <20230505-gusty-corset-e451d947c10d@wendy>
-In-Reply-To: <20230505-gusty-corset-e451d947c10d@wendy>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [183.27.98.75]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 5 Jun 2023 05:38:53 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84349BD;
+        Mon,  5 Jun 2023 02:38:51 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q66fq-0003YR-1m; Mon, 05 Jun 2023 11:38:50 +0200
+Message-ID: <439d143b-1de7-6365-cf64-f1b44fd6d1cf@leemhuis.info>
+Date:   Mon, 5 Jun 2023 11:38:49 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: Sometimes DVB broken with commit 6769a0b7ee0c3b
+Content-Language: en-US, de-DE
+To:     Hyunwoo Kim <imv4bel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        Thomas Voegtle <tv@lio96.de>, linux-kernel@vger.kernel.org
+In-Reply-To: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685957931;59343b37;
+X-HE-SMSGID: 1q66fq-0003YR-1m
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi, Thorsten here, the Linux kernel's regression tracker.
 
-> On Fri, May 05, 2023 at 09:38:38AM +0800, Mason Huo wrote:
->> Hi Conor & Shengyu,
->> 
->> Thanks for your review, and is there any comments about these v3 patches?
-
-> Firstly there appears to have been some mess-up with the driver/bindings for 1/3, so I am waiting to see if the binding gets reverted before doing anything and secondly it's the merge window so I can't do anything about 3/3 until next week.
+On 30.05.23 13:12, Thomas Voegtle wrote:
 > 
-> Cheers,
-> Conor.
+> I have the problem that sometimes my DVB card does not initialize
+> properly booting Linux 6.4-rc4.
+> This is not always, maybe in 3 out of 4 attempts.
+> When this happens somehow you don't see anything special in dmesg, but
+> the card just doesn't work.
+> 
+> Reverting this helps:
+> commit 6769a0b7ee0c3b31e1b22c3fadff2bfb642de23f
+> Author: Hyunwoo Kim <imv4bel@gmail.com>
+> Date:   Thu Nov 17 04:59:22 2022 +0000
+> 
+>     media: dvb-core: Fix use-after-free on race condition at dvb_frontend
+> 
+> 
+> I have:
+> 03:00.0 Multimedia video controller [0400]: Conexant Systems, Inc.
+> CX23887/8
+> PCIe Broadcast Audio and Video Decoder with 3D Comb [14f1:8880] (rev 04)
+>         Subsystem: Hauppauge computer works Inc. Device [0070:c138]
+>         Kernel driver in use: cx23885
 
-Could you help to check if this patch can be moved on?
+Hmmm, that was posted last Tuesday and received not a single reply. :-/
 
-Thanks
-Mason
+Hyunwoo Kim: could you please look at it, as it's a regression caused by
+a commit of yours (one that would be good to solve before 6.4 is
+finalized!)? And in case you are unable to do so let us know?
+
+But FWIW:
+
+Mauro: I wonder if this is something you or someone else has to look
+into, as Hyunwoo Kim posted a few times per months to Linux lists, but
+according  to a quick search on lore hasn't posted anything since ~two
+months now. :-/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+> zcat /proc/config.gz | grep ^CONFIG_DVB
+> CONFIG_DVB_CORE=y
+> CONFIG_DVB_MMAP=y
+> CONFIG_DVB_NET=y
+> CONFIG_DVB_MAX_ADAPTERS=8
+> CONFIG_DVB_DYNAMIC_MINORS=y
+> CONFIG_DVB_USB=y
+> CONFIG_DVB_USB_TTUSB2=y
+> CONFIG_DVB_M88DS3103=y
+> CONFIG_DVB_STB0899=y
+> CONFIG_DVB_STB6100=y
+> CONFIG_DVB_STV090x=y
+> CONFIG_DVB_DRXK=y
+> CONFIG_DVB_SI2165=y
+> CONFIG_DVB_CX24116=y
+> CONFIG_DVB_CX24117=y
+> CONFIG_DVB_DS3000=y
+> CONFIG_DVB_STV0299=y
+> CONFIG_DVB_STV0900=y
+> CONFIG_DVB_STV6110=y
+> CONFIG_DVB_TDA10071=y
+> CONFIG_DVB_TDA10086=y
+> CONFIG_DVB_TDA8261=y
+> CONFIG_DVB_TDA826X=y
+> CONFIG_DVB_TS2020=y
+> CONFIG_DVB_TUA6100=y
+> CONFIG_DVB_DIB7000P=y
+> CONFIG_DVB_SI2168=y
+> CONFIG_DVB_STV0367=y
+> CONFIG_DVB_TDA10048=y
+> CONFIG_DVB_TDA1004X=y
+> CONFIG_DVB_ZL10353=y
+> CONFIG_DVB_TDA10021=y
+> CONFIG_DVB_TDA10023=y
+> CONFIG_DVB_LGDT330X=y
+> CONFIG_DVB_S5H1409=y
+> CONFIG_DVB_S5H1411=y
+> CONFIG_DVB_MB86A20S=y
+> CONFIG_DVB_PLL=y
+> CONFIG_DVB_TUNER_DIB0070=y
+> CONFIG_DVB_A8293=y
+> CONFIG_DVB_LNBP21=y
+> 
+> 
