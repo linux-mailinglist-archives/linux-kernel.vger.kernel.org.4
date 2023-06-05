@@ -2,160 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AFF721B46
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EE3721B48
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjFEAhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 20:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S232482AbjFEAnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 20:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjFEAhJ (ORCPT
+        with ESMTP id S229449AbjFEAni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 20:37:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EA1CD;
-        Sun,  4 Jun 2023 17:37:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75B3D61CB8;
-        Mon,  5 Jun 2023 00:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA34AC433EF;
-        Mon,  5 Jun 2023 00:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685925427;
-        bh=8ViOZ/67sFC1dwMBsTpVWnyzKQ+Cxx+t5f/lBwak1P0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VuknoifnPM3Ny8uuPvhWMe3iKC6lE+/ud3dTUXPfJKlxcw4v2UEumVfUd9jW7w/bS
-         XNPBYMbEOkU8x57jN72rmSTW15i++Wte5y5W6MiCp9E/1/QlPTEHx/H9anIn0o7UCL
-         NICepO4JqRrXVkRPvIu3Fba39mWJMpsHNdP+UxNeiL8xmxa/6z5S/U6sX7Qg6AY0gt
-         MYITBJLuL6GjitrIYz6L6ADIkD81sI3GoL5VKvtKsbuFORWmFnh9Cf64ViBvhwsVxy
-         SOVU87WTtXLV0n5wt5LnOlq0HBNwEcF8hnTuUH2rDyn4ER/ruYlKdVOJz7bNJoWPnT
-         JEt5j/czJTwIg==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-558c8a109bdso372805eaf.1;
-        Sun, 04 Jun 2023 17:37:07 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyZgiIrfLbjztRSAGL+SwgtnzCBFoILhCuqdZyES/7UWP9oshu1
-        wq3Jo0u4bszernGO2oHsnMK+JRn/ZBm/x7jFBg4=
-X-Google-Smtp-Source: ACHHUZ7Jm7elrU5npuF1QxqdtBRteBO0IRNznr6jV6ddUwArpX9BkikZ+hfd26MESp8Llek/+jq5zcQT/c7HnabSCGQ=
-X-Received: by 2002:a4a:b3cb:0:b0:54f:4e01:7fc9 with SMTP id
- q11-20020a4ab3cb000000b0054f4e017fc9mr5073688ooo.3.1685925427055; Sun, 04 Jun
- 2023 17:37:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602230014.a435aab03cee.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
-In-Reply-To: <20230602230014.a435aab03cee.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 5 Jun 2023 09:36:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ87U202fgqkd5T9G82h4F6sNOMW2=vH1HmgAoVA48CMw@mail.gmail.com>
-Message-ID: <CAK7LNAQ87U202fgqkd5T9G82h4F6sNOMW2=vH1HmgAoVA48CMw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernel-doc: don't let V=1 change outcome
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>
+        Sun, 4 Jun 2023 20:43:38 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC44FD2
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 17:43:37 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-650cb5a6b0cso3540276b3a.1
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 17:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685925817; x=1688517817;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BYxU3tDQaD0OtzoBTGZivwsSzNx0WWibXW+uDpPnJvU=;
+        b=oAgqtfKXKNUrueRjish0M8AHkqAawHUKAJ+c4CZWvHBzzQrhldagmTBUj+xNuhrnIh
+         6dewdVNCfLHvWt8cNP67wp5N3KZEkztShDNowKlbfWluw0icCU5hpvk7BSOsBEbavKo3
+         gHWEvALztvaN3xUitH4aSGZ7pmlJRqE9uGY0ZrTkHmK4w7M9RqNQTJvx0+4HbrJaSXkq
+         9fTHEyzXXQOisQvJJ+aPNza0nHJmbDZpRJR1KHw+cZka55S1aTQf7yJ1GghVcmnzj9sC
+         m1tre3ObKgwLQKwqGu2MrneFQHDw1nIjdcL1hrp0uThybKKCk2629Uqw3HcJ1FgB+4ma
+         eP9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685925817; x=1688517817;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BYxU3tDQaD0OtzoBTGZivwsSzNx0WWibXW+uDpPnJvU=;
+        b=Q9YUv+1rlcsRYOSEroGOgLSeCnD86jV88hlH3fiRC2OxY+WCHTbQRI5WFgzD+jXWo4
+         QLC4RzSrgFx5lyZLiKgzgMBW79feUMxdif/zYUHP97bnaIrSSRHTkxoXyQPhtNwaLNWb
+         UfQPsPfH/UByx8UiYJFU1SP+xdHObqfJ+PIMGYK9voMnE+d/cBcw6iUFYJ8sQpBFvpO/
+         fhfA1VYAsA47FrMfjD+xoV94/KNRg3Mn2hFAXuiacxbi/qUPsIJPGyESWWmQtpnSMjpc
+         Ntj2Ebj6tTIOAWasg5hbcWPM45yod0xtsi0GVz0cNTEX/N6bx7HYk+KrYcRaTIi0MILq
+         kEQg==
+X-Gm-Message-State: AC+VfDyLEC00fN+OARcU1ysrkf1b2oucYYyN1PcQR7mnP7WRNRqsreQ+
+        jNWnLrPaNPwIqKoBj0mOUoBRstIqBH8i
+X-Google-Smtp-Source: ACHHUZ6Pp77PwRvD+ww5r5W4ydPS6arG1XU7Ru5u/11ZqhIE/dTdcJwxMCXjGAFXiW8Swi71BSHsK13pK08o
+X-Received: from mizhang-super.c.googlers.com ([34.105.13.176]) (user=mizhang
+ job=sendgmr) by 2002:a05:6a00:2d24:b0:63d:2cff:bfbc with SMTP id
+ fa36-20020a056a002d2400b0063d2cffbfbcmr6805016pfb.3.1685925817423; Sun, 04
+ Jun 2023 17:43:37 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Mon,  5 Jun 2023 00:43:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230605004334.1930091-1-mizhang@google.com>
+Subject: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 3, 2023 at 6:00=E2=80=AFAM Johannes Berg <johannes@sipsolutions=
-.net> wrote:
->
-> From: Johannes Berg <johannes.berg@intel.com>
->
-> The kernel-doc script currently reports a number of issues
-> only in "verbose" mode, but that's initialized from V=3D1
-> (via KBUILD_VERBOSE), so if you use KDOC_WERROR=3D1 then
-> adding V=3D1 might actually break the build. This is rather
-> unexpected.
+Remove KVM MMU write lock when accessing indirect_shadow_pages counter when
+page role is direct because this counter value is used as a coarse-grained
+heuristics to check if there is nested guest active. Racing with this
+heuristics without mmu lock will be harmless because the corresponding
+indirect shadow sptes for the GPA will either be zapped by this thread or
+some other thread who has previously zapped all indirect shadow pages and
+makes the value to 0.
 
-Agree.
+Because of that, remove the KVM MMU write lock pair to potentially reduce
+the lock contension and improve the performance of nested VM. In addition
+opportunistically change the comment of 'direct mmu' to make the
+description consistent with other places.
 
+Reported-by: Jim Mattson <jmattson@google.com>
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ arch/x86/kvm/x86.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
->
-> Change kernel-doc to not change its behaviour wrt. errors
-> (or warnings) when verbose mode is enabled, but rather add
-> separate warning flags (and -Wall) for it.
->
-> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-> ---
->  scripts/kernel-doc | 41 ++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 36 insertions(+), 5 deletions(-)
->
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index 2486689ffc7b..1eb1819fbe13 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -23,7 +23,7 @@ kernel-doc - Print formatted kernel documentation to st=
-dout
->
->  =3Dhead1 SYNOPSIS
->
-> - kernel-doc [-h] [-v] [-Werror]
-> + kernel-doc [-h] [-v] [-Werror] [-Wreturn] [-Wshort-description] [-Wcont=
-ents-before-sections] [-Wall]
->     [ -man |
->       -rst [-sphinx-version VERSION] [-enable-lineno] |
->       -none
-> @@ -133,6 +133,9 @@ my $dohighlight =3D "";
->
->  my $verbose =3D 0;
->  my $Werror =3D 0;
-> +my $Wreturn =3D 0;
-> +my $Wshort_desc =3D 0;
-> +my $Wcontents_before_sections =3D 0;
->  my $output_mode =3D "rst";
->  my $output_preformatted =3D 0;
->  my $no_doc_sections =3D 0;
-> @@ -191,6 +194,24 @@ if (defined($ENV{'KDOC_WERROR'})) {
->         $Werror =3D "$ENV{'KDOC_WERROR'}";
->  }
->
-> +if (defined($ENV{'KDOC_WRETURN'})) {
-> +       $Wreturn =3D "$ENV{'KDOC_WRETURN'}";
-> +}
-> +
-> +if (defined($ENV{'KDOC_WSHORT_DESC'})) {
-> +       $Wshort_desc =3D "$ENV{'KDOC_WSHORT_DESC'}";
-> +}
-> +
-> +if (defined($ENV{'KDOC_WCONTENTS_BEFORE_SECTION'})) {
-> +       $Wcontents_before_sections =3D "$ENV{'KDOC_WCONTENTS_BEFORE_SECTI=
-ON'}";
-> +}
-> +
-> +if (defined($ENV{'KDOC_WALL'})) {
-> +       $Wreturn =3D "$ENV{'KDOC_WALL'}";
-> +       $Wshort_desc =3D "$ENV{'KDOC_WALL'}";
-> +       $Wcontents_before_sections =3D "$ENV{'KDOC_WALL'}";
-> +}
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 5ad55ef71433..97cfa5a00ff2 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 
+ 	kvm_release_pfn_clean(pfn);
+ 
+-	/* The instructions are well-emulated on direct mmu. */
++	/* The instructions are well-emulated on Direct MMUs. */
+ 	if (vcpu->arch.mmu->root_role.direct) {
+-		unsigned int indirect_shadow_pages;
+-
+-		write_lock(&vcpu->kvm->mmu_lock);
+-		indirect_shadow_pages = vcpu->kvm->arch.indirect_shadow_pages;
+-		write_unlock(&vcpu->kvm->mmu_lock);
+-
+-		if (indirect_shadow_pages)
++		if (READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
+ 			kvm_mmu_unprotect_page(vcpu->kvm, gpa_to_gfn(gpa));
+ 
+ 		return true;
 
+base-commit: 31b4fc3bc64aadd660c5bfa5178c86a7ba61e0f7
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
-
-Adding an environment variable to each of them is tedious.
-
-
-If you enable -Wall via the command line option,
-these lines are unneeded?
-
-For example,
-
-ifneq ($(KBUILD_EXTRA_WARN),)
-  cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
-         $(if $(findstring 2, $(KBUILD_EXTRA_WARN)), -Wall) $<
-endif
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
