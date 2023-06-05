@@ -2,108 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4129722740
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025C6722742
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjFENWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S233952AbjFENWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbjFENV7 (ORCPT
+        with ESMTP id S234049AbjFENWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:21:59 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A2AA6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:21:57 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so5535696e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685971315; x=1688563315;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AAVo5XJBmcZ1CILHNv8SMdAaagpninriUMxTg11Co/E=;
-        b=3l13dOF1IYsdmxWjy4gVBxm9mP0dSRgkbeDydZj89p6KSERrNBrlgUF9ZiLQsu8ZMO
-         98veLuKCuihN2OluBxFYHCZOrQHvFcmSWlsu4AI2agA1zTprkYPIrXNNbnXtSsaWkLxH
-         O3/l2/5D6iYmYs0L4o5wHlW3ohDgh9t+BqY3w1Hh1fKtmmPh9L791z7SKtOZ74tKd40P
-         zxDFG+1ww5fWag616iq03kZ+TIre346llSOCOoHDNPjqa0HsCL1EzkpiszzgoLcIpuiB
-         nCJvRpf26t/XE2dsdWozdG/uHYPfL1zXYJbUvG1qNMH2BmuOdX6D5spT+3/m81kMlgoX
-         ys7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685971315; x=1688563315;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AAVo5XJBmcZ1CILHNv8SMdAaagpninriUMxTg11Co/E=;
-        b=aEeUeBGlCEfzjdzhVuZCjpDwwy9/YOVIy3hKgCLkUc3JaqHnJPL+Q7XhWCqvQdxZgb
-         wSU7jFSCYvC8e4AW32zbhVNkDAWN62H9wLUApUAKujJFEhje0gAZYO2qgiPECOYqUxjf
-         lBKH6gydu0GEm3ZKOBsEroISvCA3Uh4HUAgNuHoNEd+2OqnEQVBs4sXDzS2L3n9HNzaW
-         HXMj3qabla3QXZ7oqZyAW+02ldkn4L+P8tS90zX+EXYm5b4ibknvsZDp7PKU1kZHoOUE
-         bquFyx1J9rfaQ7LgoyLlSQwDg+PGv1MI+U6+N1Hhgoq5yjs3kUE10/XZnL+aB4tCck9Y
-         TGVA==
-X-Gm-Message-State: AC+VfDzSXooVBQV8VOggJLpyG2M9Ks2hjGzXUqKuJZ6yD+aSXB79FeLy
-        Oe/o+Bock1SeRJFk2lVXIYu/6oI5tmpMoBg4/Vk=
-X-Google-Smtp-Source: ACHHUZ7Cp/Uhp6/Wpl9DeYjd1vvYra/v50oGeZW7mP1XrLzgq01OEH+9/gZgXDUd67xf7/rarGL7pw==
-X-Received: by 2002:a19:7609:0:b0:4f4:ca61:82ba with SMTP id c9-20020a197609000000b004f4ca6182bamr5030485lff.67.1685971315388;
-        Mon, 05 Jun 2023 06:21:55 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1ced11000000b003f4266965fbsm14439285wmh.5.2023.06.05.06.21.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 06:21:54 -0700 (PDT)
-Message-ID: <d94b5f07-aa37-f4ec-252b-ff1a96b89326@baylibre.com>
-Date:   Mon, 5 Jun 2023 15:21:53 +0200
+        Mon, 5 Jun 2023 09:22:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF0DA6;
+        Mon,  5 Jun 2023 06:22:00 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685971319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W7i9GT2S5V5kPFQ9ynmoaH2oh68oVG88GxgQhO0L2r0=;
+        b=FC2fz5Hw2DawTfhyAgMP7CIHQylN+gXXrfD4fYeAD8Vs6bcXX5W8G/FDLDF9Y9CwXjQoBl
+        toMeLyHwHgz+ob+RHTUotbhJCq/g2OSbIUVWepD+Uqq+IW9YbPyXlwgdoGeWgCjfdlXFa8
+        02bHeq9BqWlYrzeZ3P9+ErwmPbQFpLrTQWzcWxEQvl0+wBSwbS5WW/auR2NKwnrd3HazBy
+        7mH4o5scHMUtm4BK6nw0RYhu4IU45Izkxet57Xz1FaptV3BlJUkk8gdMHF/t4O+sJTXP1y
+        8SQdZvjjU9Vyk/lVsKetze2YggMKolV1c532dT5tHcciQjiqxivRVv24guue9Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685971319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W7i9GT2S5V5kPFQ9ynmoaH2oh68oVG88GxgQhO0L2r0=;
+        b=/fITta9sPx5iuy0knJVvC8GsJHywX+CKmnOx8iJk8BgKAJ+upOYhm9WyyCGPPOSJT1MKYP
+        Jd5CklRgFPZ/YHAw==
+To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 20/33] x86/fred: FRED entry/exit and dispatch code
+In-Reply-To: <20230410081438.1750-21-xin3.li@intel.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-21-xin3.li@intel.com>
+Date:   Mon, 05 Jun 2023 15:21:58 +0200
+Message-ID: <87fs766o3t.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] ASoC: mediatek: mt8188: fix use-after-free in
- driver remove path
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
-Cc:     dianders@chromium.org, alsa-devel@alsa-project.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230601033318.10408-1-trevor.wu@mediatek.com>
- <20230601033318.10408-2-trevor.wu@mediatek.com>
-Content-Language: en-US
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230601033318.10408-2-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 05:33, Trevor Wu wrote:
-> During mt8188_afe_init_clock(), mt8188_audsys_clk_register() was called
-> followed by several other devm functions. The caller of
-> mt8188_afe_init_clock() utilized devm_add_action_or_reset() to call
-> mt8188_afe_deinit_clock(). However, the order was incorrect, causing a
-> use-after-free issue during remove time.
-> 
-> At probe time, the order of calls was:
-> 1. mt8188_audsys_clk_register
-> 2. afe_priv->clk = devm_kcalloc
-> 3. afe_priv->clk[i] = devm_clk_get
-> 
-> At remove time, the order of calls was:
-> 1. mt8188_audsys_clk_unregister
-> 3. free afe_priv->clk[i]
-> 2. free afe_priv->clk
-> 
-> To resolve the problem, it's necessary to move devm_add_action_or_reset()
-> to the appropriate position so that the remove order can be 3->2->1.
+On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * arch/x86/entry/entry_fred.c
 
-Sounds good
+Please do not add these completely pointless file names. They are
+useless _and_ never get updated when a file is moved.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+> + *
+> + * This contains the dispatch functions called from the entry point
+> + * assembly.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/kdebug.h>		/* oops_begin/end, ... */
 
--- 
-Regards,
-Alexandre
+Please remove this useless tail comment. We really do not have to list
+which particular things are pulled in from which header file.
 
+> +#include <linux/nospec.h>
+
+New line between linux and asm includes please.
+
+> +#include <asm/event-type.h>
+> +#include <asm/fred.h>
+> +#include <asm/idtentry.h>
+> +#include <asm/syscall.h>
+> +#include <asm/trapnr.h>
+> +#include <asm/traps.h>
+> +#include <asm/kdebug.h>
+> +
+> +/*
+> + * Badness...
+
+Really useful comment. Not.
+
+> +
+> +noinstr void fred_exc_double_fault(struct pt_regs *regs)
+
+Has to be global because the only user is the table below, right?
+
+> +{
+> +	exc_double_fault(regs, regs->orig_ax);
+> +}
+
+Also why is this here and not next to the double fault implementation?
+
+> +/*
+> + * Exception entry
+> + */
+> +static DEFINE_FRED_HANDLER(fred_exception)
+
+Lacks noinstr as most of the functions here.
+
+> +{
+> +	/*
+> +	 * Exceptions that cannot happen on FRED h/w are set to fred_bad_event().
+> +	 */
+> +	static const fred_handler exception_handlers[NUM_EXCEPTION_VECTORS] = {
+> +		[X86_TRAP_DE] = exc_divide_error,
+> +		[X86_TRAP_DB] = fred_exc_debug,
+> +		[X86_TRAP_NMI] = fred_bad_event, /* A separate event type, not handled here */
+
+Please make this tabular aligned and get rid of these horrible tail
+comments.
+
+> +		[X86_TRAP_BP] = exc_int3,
+> +		[X86_TRAP_OF] = exc_overflow,
+> +		[X86_TRAP_BR] = exc_bounds,
+> +		[X86_TRAP_UD] = exc_invalid_op,
+> +		[X86_TRAP_NM] = exc_device_not_available,
+> +		[X86_TRAP_DF] = fred_exc_double_fault,
+> +		[X86_TRAP_OLD_MF] = fred_bad_event, /* 387 only! */
+> +		[X86_TRAP_TS] = fred_exc_invalid_tss,
+> +		[X86_TRAP_NP] = fred_exc_segment_not_present,
+> +		[X86_TRAP_SS] = fred_exc_stack_segment,
+> +		[X86_TRAP_GP] = fred_exc_general_protection,
+> +		[X86_TRAP_PF] = fred_exc_page_fault,
+> +		[X86_TRAP_SPURIOUS] = fred_bad_event, /* Interrupts are their own event type */
+> +		[X86_TRAP_MF] = exc_coprocessor_error,
+> +		[X86_TRAP_AC] = fred_exc_alignment_check,
+> +		[X86_TRAP_MC] = fred_exc_machine_check,
+> +		[X86_TRAP_XF] = exc_simd_coprocessor_error,
+
+> +		[X86_TRAP_VE...NUM_EXCEPTION_VECTORS-1] = fred_bad_event
+
+Can we please have something which makes it entirely clear that anything
+from #VE on are exceptions which are installed during boot?
+
+> +	};
+> +	u8 vector = array_index_nospec((u8)regs->vector, NUM_EXCEPTION_VECTORS);
+
+This only "works" when NUM_EXCEPTION_VECTORS is power of two. Also what
+catches an out of bounds vector? I.e. vector 0x20 will end up as vector
+0x0 due to array_index_nospec(). I know, FRED hardware is going to be
+perfect...
+
+> +	exception_handlers[vector](regs);
+> +}
+> +
+> +static __always_inline void fred_emulate_trap(struct pt_regs *regs)
+> +{
+> +	regs->type = EVENT_TYPE_SWFAULT;
+
+This type information is used where?
+
+> +	regs->orig_ax = 0;
+> +	fred_exception(regs);
+> +}
+> +
+> +static __always_inline void fred_emulate_fault(struct pt_regs *regs)
+> +{
+> +	regs->ip -= regs->instr_len;
+> +	fred_emulate_trap(regs);
+> +}
+> +
+> +/*
+> + * Emulate SYSENTER if applicable. This is not the preferred system
+> + * call in 32-bit mode under FRED, rather int $0x80 is preferred and
+> + * exported in the vdso. SYSCALL proper has a hard-coded early out in
+> + * fred_entry_from_user().
+
+So we have it nicely distributed all over the code....
+
+> + */
+> +static DEFINE_FRED_HANDLER(fred_syscall_slow)
+> +{
+> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) &&
+> +	    likely(regs->vector == FRED_SYSENTER)) {
+> +		/* Convert frame to a syscall frame */
+> +		regs->orig_ax = regs->ax;
+> +		regs->ax = -ENOSYS;
+> +		do_fast_syscall_32(regs);
+> +	} else {
+> +		regs->vector = X86_TRAP_UD;
+> +		fred_emulate_fault(regs);
+> +	}
+> +}
+> +
+> +/*
+> + * Some software exceptions can also be triggered as int instructions,
+> + * for historical reasons. Implement those here. The performance-critical
+> + * int $0x80 (32-bit system call) has a hard-coded early out.
+
+This comment starts to annoy me. Can you put comments next to the code
+where they actually make sense?
+
+> + */
+> +static DEFINE_FRED_HANDLER(fred_sw_interrupt_user)
+> +{
+
+i.e.
+
+        /*
+         * In compat mode INT $0x80 (32bit system call) is
+         * performance-critical. Handle it first.
+         */
+
+> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) &&
+> +	    likely(regs->vector == IA32_SYSCALL_VECTOR)) {
+> +		/* Convert frame to a syscall frame */
+> +		regs->orig_ax = regs->ax;
+> +		regs->ax = -ENOSYS;
+> +		return do_int80_syscall_32(regs);
+
+> +	}
+> +
+> +	switch (regs->vector) {
+> +	case X86_TRAP_BP:
+> +	case X86_TRAP_OF:
+> +		fred_emulate_trap(regs);
+> +		break;
+> +	default:
+> +		regs->vector = X86_TRAP_GP;
+> +		fred_emulate_fault(regs);
+> +		break;
+> +	}
+> +}
+> +
+> +static DEFINE_FRED_HANDLER(fred_hw_interrupt)
+> +{
+> +	irqentry_state_t state = irqentry_enter(regs);
+> +
+> +	instrumentation_begin();
+> +	external_interrupt(regs);
+> +	instrumentation_end();
+> +	irqentry_exit(regs, state);
+> +}
+> +
+> +__visible noinstr void fred_entry_from_user(struct pt_regs *regs)
+> +{
+> +	static const fred_handler user_handlers[FRED_EVENT_TYPE_COUNT] =
+> +	{
+> +		[EVENT_TYPE_HWINT]	= fred_hw_interrupt,
+> +		[EVENT_TYPE_RESERVED]	= fred_bad_event,
+> +		[EVENT_TYPE_NMI]	= fred_exc_nmi,
+> +		[EVENT_TYPE_SWINT]	= fred_sw_interrupt_user,
+> +		[EVENT_TYPE_HWFAULT]	= fred_exception,
+> +		[EVENT_TYPE_SWFAULT]	= fred_exception,
+> +		[EVENT_TYPE_PRIVSW]	= fred_exception,
+> +		[EVENT_TYPE_OTHER]	= fred_syscall_slow
+> +	};
+> +
+> +	/*
+> +	 * FRED employs a two-level event dispatch mechanism, with
+> +	 * the first-level on the type of an event and the second-level
+> +	 * on its vector. Thus a dispatch typically induces 2 calls.
+> +	 * We optimize it by using early outs for the most frequent
+> +	 * events, and syscalls are the first. We may also need early
+> +	 * outs for page faults.
+
+I'm not really convinced that adding more special cases and conditionals
+is a win. This should be a true two-level dispatch first for _all_ event
+types and then in a separate step optimizations with proper performance
+numbers and justifications. Premature optimization is the enemy of
+correctness. Don't do it.
+
+> +	 */
+> +	if (likely(regs->type == EVENT_TYPE_OTHER &&
+> +		   regs->vector == FRED_SYSCALL)) {
+> +		/* Convert frame to a syscall frame */
+> +		regs->orig_ax = regs->ax;
+> +		regs->ax = -ENOSYS;
+> +		do_syscall_64(regs, regs->orig_ax);
+> +	} else {
+> +		/* Not a system call */
+> +		u8 type = array_index_nospec((u8)regs->type, FRED_EVENT_TYPE_COUNT);
+
+What's the u8 buying here and in all the other places? This has the same
+table issue as all other table handling in this file.
+
+> +		user_handlers[type](regs);
+> +	}
+> +}
+
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index 2876ddae02bc..bd43866f9c3e 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -82,6 +82,7 @@ static __always_inline void __##func(struct pt_regs *regs)
+>  #define DECLARE_IDTENTRY_ERRORCODE(vector, func)			\
+>  	asmlinkage void asm_##func(void);				\
+>  	asmlinkage void xen_asm_##func(void);				\
+> +	__visible void fred_##func(struct pt_regs *regs);		\
+
+Wants to be a separate change.
+
+>  	__visible void func(struct pt_regs *regs, unsigned long error_code)
+>  
+>  /**
+> @@ -106,6 +107,11 @@ __visible noinstr void func(struct pt_regs *regs,			\
+>  	irqentry_exit(regs, state);					\
+>  }									\
+>  									\
+> +__visible noinstr void fred_##func(struct pt_regs *regs)		\
+> +{									\
+> +	func (regs, regs->orig_ax);					\
+
+  func() ....
+
+Thanks,
+
+        tglx
