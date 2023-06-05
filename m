@@ -2,141 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C94722FCE
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E691722FD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbjFET2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S235686AbjFETa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjFET2u (ORCPT
+        with ESMTP id S229878AbjFETa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:28:50 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D79EEA;
-        Mon,  5 Jun 2023 12:28:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2IO5qKUwNIv6KmUOtIiXi/RUK1/aSGw5+Q8IRhCiKKVXVW4jeCkgDIKkKzS7ZKxicSnZQFzEXs5cVK7HBXX/pKbGX14Xtepvg/iqX5rK3d/iHn52Xe9KCBIDfcNldrfcCUXnVr3RgjCCa6k4Irc/ME+yklERZTntbZ7MnIbdX4lpES+3M6h0teWxKURB7p2Ce+ZMug1mK8LEC8bQ9MtFoxo/QkK2H2aexqTeWXt7tBEuEonSz5SzmayWGKE1wSPWPFUzjfSNOrIPPk9dtx5yYRy8cAhKd8huVIxxdyGOHTTEk4YnoXSsaREqpwGUD4wjVBhfwSg2KJn/SJ4OWrPYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PwPLbsqr3KMQG4NVweX7qy1c034czk6DpFYWKXM+RNo=;
- b=euxH3oHyucTtKibJfcq9ll8rACHqYbMtsXbDyp+dEqTXPLy7THE+32meycdbyZ+3TMqGNXcPR2Z6DKgt67gxXxIi7t7ZR8q2NsxdH2qUObyFY/gmboLlcsrs/hrt7juAiCCpR7VJDZ719ekJTuVSKOmN0pdncmiNyfOJ99QFV/ScUx39ovIZJgaE5/WrMBY80MrzdRn7t2tmWtS7NYOOn1AzJarYRLmzXbhL9GX4DB7bRMjHbwfg+K/wh3xCBClc9g+k9DjCYHdc2qibh/3vkNG/D/0tjVg9j93pt2Ga9n1hhGf/0t3gUQZJ9BBcj9SP2+ieVt8QblLsjzRoesg4Mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PwPLbsqr3KMQG4NVweX7qy1c034czk6DpFYWKXM+RNo=;
- b=JfPGMRJWyWue1PTY+J9+v+Gul2IEUIr3Zo0KiYwdiYHvY0g7PGiNWEy6L+lR1Wt5pS1n/Zp0zsObF4r8AtrIA0CTQKkJV9pSfWYmS6aw3d8BC4St+gZ1coAuL6XOlT0yqtJaeAhQ0MtP11a75yUUnL1QVO+WybNByRD0edzYgy2YBgl9Vbw0V6D5xHTCOMb6nTUYHtejHOHsqnOi/yyLyzpJUOX8438k0/CtWYo9j1b1hap4GBO2CxH0ItYYnAGxQHBN6nla9g9vGH4svzYmkg2gZ6ulDkMpPKvfnxPpjYLQCv4xwqWNcQ5skow33xMF5f8GzbGs0vYnt4aO8UsPlw==
-Received: from DS7PR03CA0053.namprd03.prod.outlook.com (2603:10b6:5:3b5::28)
- by SJ1PR12MB6196.namprd12.prod.outlook.com (2603:10b6:a03:456::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 19:28:44 +0000
-Received: from DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b5:cafe::ca) by DS7PR03CA0053.outlook.office365.com
- (2603:10b6:5:3b5::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 19:28:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT015.mail.protection.outlook.com (10.13.172.133) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 19:28:43 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 5 Jun 2023
- 12:28:31 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 5 Jun 2023
- 12:28:31 -0700
-Message-ID: <9d69977d-c384-aa4b-c09a-43ffd1f8ec76@nvidia.com>
-Date:   Mon, 5 Jun 2023 12:28:31 -0700
+        Mon, 5 Jun 2023 15:30:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888CFA7;
+        Mon,  5 Jun 2023 12:30:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26F52629D3;
+        Mon,  5 Jun 2023 19:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCB3C433EF;
+        Mon,  5 Jun 2023 19:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685993454;
+        bh=ia8nqDQQ/+r4DW/QQfhhUBMTrcoQybz/65wIiSzsdBw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ET4WMAHUI4k0x6ZeST+XLtDoSQP+SrwSSLsgq2Pp8m9iNqLSghsxvIFs/fYXjBgOl
+         LAnrhKGPTVischSvRIUysHA22EN0m4fG+aDYYQJ5ni/nKqOnr0JippJOzLXzm/redM
+         PF+IC4pd7DXI0UZPH3uPZnyBxNARPHAYYEYP5i/0rHKVt2N7/0B9rUcYyZroVGd8uC
+         l2xrMTZ2TsNG8EINf6aMEpMxvNCLkrNMSm/ct8GPfyVQiGFQjS2U9DLjy006yCiBd/
+         sYf1sx8nXZcn5soiviSfQlcLEPeIZh1H9NShCVFfeDV5KtGePDp6asNkZVPqRitug5
+         Al3/b/nk0pj2w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3635240692; Mon,  5 Jun 2023 16:30:51 -0300 (-03)
+Date:   Mon, 5 Jun 2023 16:30:51 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        "Liang, Kan" <kan.liang@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] perf expr: Make the evaluation of & and | logical
+ and lazy
+Message-ID: <ZH436w4Sesq57iu9@kernel.org>
+References: <20230504195803.3331775-1-irogers@google.com>
+ <2abe618d-a2c4-3b22-ac9d-37bc91d05d41@linux.intel.com>
+ <CAP-5=fX_j-iwuHBekCDFzQUGaOqigTXtyUa6npNCuR7ktF-3_A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 10/11] selftests/mm: move uffd* routines from vm_util.c
- to uffd-common.c
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
- <20230603021558.95299-11-jhubbard@nvidia.com> <ZH4GUODwj9L9paey@x1n>
- <64e21a2c-1bbe-4ab6-e67a-29b2d1d1978e@nvidia.com> <ZH42gkoHIsgMbvHn@x1n>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <ZH42gkoHIsgMbvHn@x1n>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT015:EE_|SJ1PR12MB6196:EE_
-X-MS-Office365-Filtering-Correlation-Id: 352db347-2c8c-4bc6-3f35-08db65fb1356
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jLmP/uw1jGPVwhO8wM8WHCmrIdzcIMIRC1LhakvpsNztQyBauSsU2C7gjPj12UK9aQomAf+b2ZFpHypxQpJKtC2Ft8OBNtWyIzSiCDsAMOAbs7fyAoQgCoR5LC3HE+LlHlO3CJolmugjDwQTqVnzcD+WxPQQw3XlRwzryxvIo2kcMlQzor/easY+hv/RJ2lxTGOSNc3JnvJ1Vo1Kxscaf9eLNCBV6Ct35lcKAqYhxse+WXSb5gBB6s3MZu7wQmvPfCEe4HqIu2Q3oEAr6284ZBTBzCrv8H371PWYW+yuWWWEOW7UB7zIYoxbIfzd64qLh6gnZsV6xRSLqnKxa2MEB28fm1LJw8LGnaLrApW14Puax0I68e51xsPlHkdgx0DHUvW9LHpqc6qP0iyUjqdYiQnOGT3exGBuYuf7Nu3c+zt0uupzwJLyH4f+qQvcvL9fdpdXWkyszoQiRRSSn8u/YVlyAJ/0sk/UwtA0fXVG7DkyJGZNY5vIM6ZsDiZJjaa9k8tFKF/gdFfb44CXvAbQW38s9CmKLrl2cufr4Z7oiocuFZ1wiO2oKeCHI8PxsBgOnKqXTYfg3rLjrNMKdsPv5TYYnncQQvONrDo7iSQzdQNJsxM1SlcAf8ONSsGnMHt+3PrN0qj2ynxfOQ+YqDTZqL+Ajz44ndEJ6EWlL9g6ETJeq8+7+4uXMiaWgogp2C4AtMNRKaULF2VPQl/WkwvzYOvj8XGN2UAlGeK+KpNwtfj1a+C3eHdt4OzjIxBx25MfLk6RV9br6yL2Cj9WEEIBQg==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199021)(36840700001)(40470700004)(46966006)(47076005)(426003)(336012)(82740400003)(54906003)(40480700001)(478600001)(8676002)(8936002)(41300700001)(316002)(40460700003)(70586007)(70206006)(356005)(7636003)(31696002)(4326008)(6916009)(5660300002)(86362001)(16576012)(36756003)(2906002)(4744005)(36860700001)(82310400005)(31686004)(26005)(53546011)(16526019)(186003)(2616005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 19:28:43.7267
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 352db347-2c8c-4bc6-3f35-08db65fb1356
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6196
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fX_j-iwuHBekCDFzQUGaOqigTXtyUa6npNCuR7ktF-3_A@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 12:24, Peter Xu wrote:
-...
->> It sounds like you are suggesting this:
->>
->> $(OUTPUT)/uffd-stress:          uffd-common.c uffd-test-common.c
->> $(OUTPUT)/uffd-unit-tests:      uffd-common.c uffd-test-common.c
->> $(OUTPUT)/hugepage-mremap:      uffd-test-common.c
->> $(OUTPUT)/write_to_hugetlbfs:   uffd-test-common.c
->> $(OUTPUT)/ksm_functional_tests: uffd-test-common.c
->>
->> ...approximately. Do I have that correct? I can arrange it that way
->> if you feel it's a better end result. (And it's better than leaving
->> uffd*() helpers in vm_utils, imho.)
+Em Mon, Jun 05, 2023 at 10:32:18AM -0700, Ian Rogers escreveu:
+> On Thu, May 18, 2023 at 12:47 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> >
+> >
+> >
+> > On 2023-05-04 3:58 p.m., Ian Rogers wrote:
+> > > Currently the & and | operators are only used in metric thresholds
+> > > like (from the tma_retiring metric):
+> > > tma_retiring > 0.7 | tma_heavy_operations > 0.1
+> > >
+> > > Thresholds are always computed when present, but a lack events may
+> > > mean the threshold can't be computed. This happens with the option
+> > > --metric-no-threshold for say the metric tma_retiring on Tigerlake
+> > > model CPUs. To fully compute the threshold tma_heavy_operations is
+> > > needed and it needs the extra events of IDQ.MS_UOPS,
+> > > UOPS_DECODED.DEC0, cpu/UOPS_DECODED.DEC0,cmask=1/ and
+> > > IDQ.MITE_UOPS. So --metric-no-threshold is a useful option to reduce
+> > > the number of events needed and potentially multiplexing of events.
+> > >
+> > > Rather than just fail threshold computations like this, we may know a
+> > > result from just the left or right-hand side. So, for tma_retiring if
+> > > its value is "> 0.7" we know it is over the threshold. This allows the
+> > > metric to have the threshold coloring, when possible, without all the
+> > > counters being programmed.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> >
+> > The patch works well on my machine.
+> >
+> > Tested-by: Kan Liang <kan.liang@linux.intel.com>
+> >
+> > Thanks,
+> > Kan
 > 
-> Yes, as long as we don't link (especially) the uffd test specific globals
-> into non-uffd test programs I'll have no issue.  Thanks.
+> Arnaldo, could we take this set?
+
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Thanks,
+> Ian
 > 
+> > >  tools/perf/tests/expr.c | 40 +++++++++++++++++++
+> > >  tools/perf/util/expr.y  | 86 +++++++++++++++++++++++++++++++++--------
+> > >  2 files changed, 109 insertions(+), 17 deletions(-)
+> > >
+> > > diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+> > > index cbf0e0c74906..45c7fedb797a 100644
+> > > --- a/tools/perf/tests/expr.c
+> > > +++ b/tools/perf/tests/expr.c
+> > > @@ -184,6 +184,46 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+> > >                       NULL, ctx) == 0);
+> > >       TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> > >
+> > > +     /* The expression is a constant 0.0 without needing to evaluate EVENT1. */
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("0 & EVENT1 > 0", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("EVENT1 > 0 & 0", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("1 & EVENT1 > 0", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("EVENT1 > 0 & 1", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> > > +
+> > > +     /* The expression is a constant 1.0 without needing to evaluate EVENT1. */
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("1 | EVENT1 > 0", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("EVENT1 > 0 | 1", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("0 | EVENT1 > 0", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> > > +     expr__ctx_clear(ctx);
+> > > +     TEST_ASSERT_VAL("find ids",
+> > > +                     expr__find_ids("EVENT1 > 0 | 0", NULL, ctx) == 0);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> > > +     TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> > > +
+> > >       /* Test toplogy constants appear well ordered. */
+> > >       expr__ctx_clear(ctx);
+> > >       TEST_ASSERT_VAL("#num_cpus", expr__parse(&num_cpus, ctx, "#num_cpus") == 0);
+> > > diff --git a/tools/perf/util/expr.y b/tools/perf/util/expr.y
+> > > index 250e444bf032..6b110f9f95c9 100644
+> > > --- a/tools/perf/util/expr.y
+> > > +++ b/tools/perf/util/expr.y
+> > > @@ -123,20 +123,6 @@ static struct ids handle_id(struct expr_parse_ctx *ctx, char *id,
+> > >   * constant value using OP. Its invariant that there are no ids.  If computing
+> > >   * ids for non-constants union the set of IDs that must be computed.
+> > >   */
+> > > -#define BINARY_LONG_OP(RESULT, OP, LHS, RHS)                         \
+> > > -     if (!compute_ids || (is_const(LHS.val) && is_const(RHS.val))) { \
+> > > -             assert(LHS.ids == NULL);                                \
+> > > -             assert(RHS.ids == NULL);                                \
+> > > -             if (isnan(LHS.val) || isnan(RHS.val)) {                 \
+> > > -                     RESULT.val = NAN;                               \
+> > > -             } else {                                                \
+> > > -                     RESULT.val = (long)LHS.val OP (long)RHS.val;    \
+> > > -             }                                                       \
+> > > -             RESULT.ids = NULL;                                      \
+> > > -     } else {                                                        \
+> > > -             RESULT = union_expr(LHS, RHS);                          \
+> > > -     }
+> > > -
+> > >  #define BINARY_OP(RESULT, OP, LHS, RHS)                                      \
+> > >       if (!compute_ids || (is_const(LHS.val) && is_const(RHS.val))) { \
+> > >               assert(LHS.ids == NULL);                                \
+> > > @@ -213,9 +199,75 @@ expr: NUMBER
+> > >  }
+> > >  | ID                         { $$ = handle_id(ctx, $1, compute_ids, /*source_count=*/false); }
+> > >  | SOURCE_COUNT '(' ID ')'    { $$ = handle_id(ctx, $3, compute_ids, /*source_count=*/true); }
+> > > -| expr '|' expr { BINARY_LONG_OP($$, |, $1, $3); }
+> > > -| expr '&' expr { BINARY_LONG_OP($$, &, $1, $3); }
+> > > -| expr '^' expr { BINARY_LONG_OP($$, ^, $1, $3); }
+> > > +| expr '|' expr
+> > > +{
+> > > +     if (is_const($1.val) && is_const($3.val)) {
+> > > +             assert($1.ids == NULL);
+> > > +             assert($3.ids == NULL);
+> > > +             $$.ids = NULL;
+> > > +             $$.val = (fpclassify($1.val) == FP_ZERO && fpclassify($3.val) == FP_ZERO) ? 0 : 1;
+> > > +     } else if (is_const($1.val)) {
+> > > +             assert($1.ids == NULL);
+> > > +             if (fpclassify($1.val) == FP_ZERO) {
+> > > +                     $$ = $3;
+> > > +             } else {
+> > > +                     $$.val = 1;
+> > > +                     $$.ids = NULL;
+> > > +                     ids__free($3.ids);
+> > > +             }
+> > > +     } else if (is_const($3.val)) {
+> > > +             assert($3.ids == NULL);
+> > > +             if (fpclassify($3.val) == FP_ZERO) {
+> > > +                     $$ = $1;
+> > > +             } else {
+> > > +                     $$.val = 1;
+> > > +                     $$.ids = NULL;
+> > > +                     ids__free($1.ids);
+> > > +             }
+> > > +     } else {
+> > > +             $$ = union_expr($1, $3);
+> > > +     }
+> > > +}
+> > > +| expr '&' expr
+> > > +{
+> > > +     if (is_const($1.val) && is_const($3.val)) {
+> > > +             assert($1.ids == NULL);
+> > > +             assert($3.ids == NULL);
+> > > +             $$.val = (fpclassify($1.val) != FP_ZERO && fpclassify($3.val) != FP_ZERO) ? 1 : 0;
+> > > +             $$.ids = NULL;
+> > > +     } else if (is_const($1.val)) {
+> > > +             assert($1.ids == NULL);
+> > > +             if (fpclassify($1.val) != FP_ZERO) {
+> > > +                     $$ = $3;
+> > > +             } else {
+> > > +                     $$.val = 0;
+> > > +                     $$.ids = NULL;
+> > > +                     ids__free($3.ids);
+> > > +             }
+> > > +     } else if (is_const($3.val)) {
+> > > +             assert($3.ids == NULL);
+> > > +             if (fpclassify($3.val) != FP_ZERO) {
+> > > +                     $$ = $1;
+> > > +             } else {
+> > > +                     $$.val = 0;
+> > > +                     $$.ids = NULL;
+> > > +                     ids__free($1.ids);
+> > > +             }
+> > > +     } else {
+> > > +             $$ = union_expr($1, $3);
+> > > +     }
+> > > +}
+> > > +| expr '^' expr
+> > > +{
+> > > +     if (is_const($1.val) && is_const($3.val)) {
+> > > +             assert($1.ids == NULL);
+> > > +             assert($3.ids == NULL);
+> > > +             $$.val = (fpclassify($1.val) == FP_ZERO) != (fpclassify($3.val) == FP_ZERO) ? 1 : 0;
+> > > +             $$.ids = NULL;
+> > > +     } else {
+> > > +             $$ = union_expr($1, $3);
+> > > +     }
+> > > +}
+> > >  | expr '<' expr { BINARY_OP($$, <, $1, $3); }
+> > >  | expr '>' expr { BINARY_OP($$, >, $1, $3); }
+> > >  | expr '+' expr { BINARY_OP($$, +, $1, $3); }
 
-OK very good. I'll put that together.
-
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
 
+- Arnaldo
