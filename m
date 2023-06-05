@@ -2,83 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA417227DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019877227DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjFENwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S233774AbjFENxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbjFENwG (ORCPT
+        with ESMTP id S231308AbjFENxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:52:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64B9EE;
-        Mon,  5 Jun 2023 06:52:03 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685973122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uUOQseh5ydTYez7B9hZObsjFUYK1akvdtGONm9fjmIs=;
-        b=mbNws8bz4std+L0u9Lf4aoWUTjvU2jIPojtqquY0d3WuwiPvHrZn7v72Y65DI+hjDtA1u9
-        d6ibnkPXRtwGMDquSWuGVT3TgIxrKmOs7mzQtZfdWHxKeJRg31xoGy1wO4rvgMU6iuWrlN
-        u+PLzsZji8C10UQTkYPxqk+gk+2tzsM257e5cSr1Xcfc+Fg51FTarTDTyNHN61lJjtSlOG
-        rhWo9Q1cQMJzYqfFjccniJAPw4Jd83KSQKuoamVtsbz/Ns92GjAYCxWjumWrOtMenIRZnc
-        KrWkaIlWJBVbRSrND3iGKmX2gmuG5ZTIDlEHI/l08SQe2oKFbkrL/3jgaxMcpQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685973122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uUOQseh5ydTYez7B9hZObsjFUYK1akvdtGONm9fjmIs=;
-        b=BNUdCmLWcHQfE4V/dctZz8skLLVebFyHPvaS9VJ/LM+GbyQuO/7QciA8XWv8PdmFh+SWL5
-        VvGLhnCWuFVD38Dg==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
-        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 26/33] x86/fred: allow single-step trap and NMI when
- starting a new thread
-In-Reply-To: <877csi6mrk.ffs@tglx>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-27-xin3.li@intel.com> <877csi6mrk.ffs@tglx>
-Date:   Mon, 05 Jun 2023 15:52:02 +0200
-Message-ID: <874jnm6mpp.ffs@tglx>
+        Mon, 5 Jun 2023 09:53:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF0790;
+        Mon,  5 Jun 2023 06:53:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C851B614B3;
+        Mon,  5 Jun 2023 13:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C72C433EF;
+        Mon,  5 Jun 2023 13:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685973185;
+        bh=XdrGiF2qW4zmcHGmdQX26U4gcVnu9woLBBCYvTe20L8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YsAnhrKeP7mcDyfrMOxRvXQBemX7xUB1g1rRK2jgNZsndveJS9hJUynDiXNjUIKkR
+         Ha/x8D0DWnSrBHvl/uvLIdnSO3lxvizmkptQrdgaLJhkfTVwsaKyezIb0P9Y/oigwG
+         qLiqDqbAmXmqQjxv+ovgPaZfJsJiwh6eXcFdXjByx1Ejivb3J/oMPYK4kQLLE0NZNo
+         wCJI3+cjJX1xbJQgStIHdJCyOy7N6ydcmcalzLmuEQhqTXDTjEhYegD42ITnxBfXD+
+         6ZlAUgVWncT9CVAZ5lSYIasGwr0iTbPDz0tt+D9Q3heK361ptCC4TqtUCl5MnneXsP
+         EWvumtp2diZdA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6821C40692; Mon,  5 Jun 2023 10:53:02 -0300 (-03)
+Date:   Mon, 5 Jun 2023 10:53:02 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 10/10] perf: tests: Adapt mmap-basic.c for riscv
+Message-ID: <ZH3ovt4WnTJuTinF@kernel.org>
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+ <20230512085321.13259-11-alexghiti@rivosinc.com>
+ <20230531-31bd9ddeaca8cb338f81ed14@orel>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531-31bd9ddeaca8cb338f81ed14@orel>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05 2023 at 15:50, Thomas Gleixner wrote:
+Em Wed, May 31, 2023 at 05:15:15PM +0200, Andrew Jones escreveu:
+> On Fri, May 12, 2023 at 10:53:21AM +0200, Alexandre Ghiti wrote:
+> > riscv now supports mmaping hardware counters to userspace so adapt the test
+> > to run on this architecture.
+> > 
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > ---
+> >  tools/perf/tests/mmap-basic.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
+> > index e68ca6229756..f5075ca774f8 100644
+> > --- a/tools/perf/tests/mmap-basic.c
+> > +++ b/tools/perf/tests/mmap-basic.c
+> > @@ -284,7 +284,7 @@ static struct test_case tests__basic_mmap[] = {
+> >  			 "permissions"),
+> >  	TEST_CASE_REASON("User space counter reading of instructions",
+> >  			 mmap_user_read_instr,
+> > -#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
+> > +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || __riscv_xlen == 64
+> >  			 "permissions"
+> >  #else
+> >  			 "unsupported"
+> > @@ -292,7 +292,7 @@ static struct test_case tests__basic_mmap[] = {
+> >  		),
+> >  	TEST_CASE_REASON("User space counter reading of cycles",
+> >  			 mmap_user_read_cycles,
+> > -#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
+> > +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__) || __riscv_xlen == 64
+> >  			 "permissions"
+> >  #else
+> >  			 "unsupported"
+> > -- 
+> > 2.37.2
+> >
+> 
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
->> Allow single-step trap and NMI when starting a new thread, thus once
->> the new thread returns to ring3, single-step trap and NMI are both
->> enabled immediately.
->>
->> High-order 48 bits above the lowest 16 bit CS are discarded by the
->> legacy IRET instruction, thus can be set unconditionally, even when
->> FRED is not enabled.
->
-> I assume this has been validated to be true on _all_ CPU incarnations of
-> _all_ x86 vendors.
+Was the kernel part merged upstream?
 
-It's also ensured that VMMs do not get confused by this, right?
-
-> If so, then please document it. If not, then go back to the drawing
-> board.
->
-> Thanks,
->
->         tglx
+- Arnaldo
