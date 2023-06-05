@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB1E7228C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5067228C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbjFEO1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S233665AbjFEO2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbjFEO1r (ORCPT
+        with ESMTP id S233668AbjFEO2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:27:47 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB9A9E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:27:23 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b04706c85fso45298745ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 07:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1685975242; x=1688567242;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=shyRAkFHSl3nzVFhW7KMsifc/iY67ydnpjq/S8SR6sA=;
-        b=UT1c6vnlywnQk3wnFWyoHbWnh7UFxR5bYubKXmcAXnu/d0OI2m7Wh0KI0Zp7gxZTMR
-         fDdmyiXRxXfYRWja1yY1sUtqRS6LSsoeJjJFdUP/f0nXY17hyYaiJe6i0/oj1xubQlpJ
-         o1CXa11IZZ2LPy8LtHusyzLy3DRSNoRCipaMymTdMGE0Je2HVjwIN0KYCYeUTtoCDgMS
-         kdk/f2ix7MTIHWd0pgcA3LmOUUVRRBpBVCms1rZDeeKxJzX1DaWM2w4ksBoNcbnXTGUw
-         7kfdZ4d8CcVDYtJbR8f0B04nji+WhIe5R0iSnAPnamgwy19spytE6toz07SOPj/mVtJk
-         9xAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685975242; x=1688567242;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=shyRAkFHSl3nzVFhW7KMsifc/iY67ydnpjq/S8SR6sA=;
-        b=KZdXZKb79bStzfU5n9JDgmozysjhxcFMu4OhgeMBHK+rhETfssjRbVFqIyxcuzU2yv
-         M+s/MYB9bua7LR3bxrq6cXvYXKSlk+6UPVJc/Ki23zMtYx/Q2ViCFO264KkQarRzTdjY
-         ai6licNEmvyfXxm6RHr8qUM2aDd7mKEFhUsVtzvxmwOmCnXmyQl2Y1PEZ3gzsujuBynV
-         gzJAC8WaoQDnmv3HO/XvMndh12zai20RnxTwxF2aHHjzw9ajwEdYTP95AXX7b76cHJKa
-         bTRwG2vp6NbWVS/ilMv3APlBEVs65lF3VNRBMMvpDErPL9+CITePwUvDIth3Gnm3im0U
-         z4Vg==
-X-Gm-Message-State: AC+VfDxkh8x2Gu6geN16aCHuaT/Lh+kjKkyAMOHkXgmSxkNKrxYaQD7q
-        BFp8B8jxSzpFjclpuk6ZuJ0g8A==
-X-Google-Smtp-Source: ACHHUZ5q+9/hpDpNbEmPfexN/w3sozUseCO7rivhq2qNv2iFF/63a4CBNm+XPPyg0HQv5kneUTEA8Q==
-X-Received: by 2002:a17:902:d506:b0:1ad:eb62:f617 with SMTP id b6-20020a170902d50600b001adeb62f617mr9378720plg.45.1685975242621;
-        Mon, 05 Jun 2023 07:27:22 -0700 (PDT)
-Received: from [10.200.9.101] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b001b00dae8771sm6663218plh.201.2023.06.05.07.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 07:27:22 -0700 (PDT)
-Message-ID: <8f9ed046-529f-073f-5c1a-4c69328b2519@bytedance.com>
-Date:   Mon, 5 Jun 2023 22:27:17 +0800
+        Mon, 5 Jun 2023 10:28:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBF9E6;
+        Mon,  5 Jun 2023 07:28:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5464612FF;
+        Mon,  5 Jun 2023 14:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260EBC433EF;
+        Mon,  5 Jun 2023 14:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685975280;
+        bh=sAHQ5mF26HJdsfS/vx6CqVHxcZ7iU5btoMnHgF4+vMc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RrGK/P10Rp6wTL0cQRYFCqMiylE0bizhJ5uU9xRcPVzXWbM7aOBL/shjMpyFVTfhQ
+         vDfrch+9U+i6xjviKtQ57OR9g0Z7JCHspEuSUKpHNm8eENcxIvJEIpA5VKtomF04P6
+         dJe+XBc2HA21rqfWIeIRGqPT+5lOcpjFJ0dObYpUKDAyQP40cQgJx4chFWnP70ticj
+         Ouql7b7fju6VGGmuwU1hFsmOLbd0KdXkyI+IAiEaHAJ4086NWrgaFP/JBQQQBGVjln
+         67ugTTotJTSxIjSBiTxoBhPDALAYmPVbzMw/IA+vbj+xtn7R70CinoDjeVgtmxOjl+
+         Fmj+8mqa0UDqw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4503640692; Mon,  5 Jun 2023 11:27:57 -0300 (-03)
+Date:   Mon, 5 Jun 2023 11:27:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     irogers@google.com, suzuki.poulose@arm.com, mike.leach@linaro.org,
+        leo.yan@linaro.org, john.g.garry@oracle.com, will@kernel.org,
+        james.clark@arm.com, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, adrian.hunter@intel.com, kjain@linux.ibm.com,
+        renyu.zj@linux.alibaba.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, wangming01@loongson.cn,
+        chenhuacai@kernel.org, sandipan.das@amd.com, 9erthalion6@gmail.com,
+        seanjc@google.com, robh@kernel.org, tmricht@linux.ibm.com,
+        tegongkang@gmail.com, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2] perf test amd: Fix build failure with
+ amd-ibs-via-core-pmu.c
+Message-ID: <ZH3w7TWRQZsPqhB2@kernel.org>
+References: <CAP-5=fUPZ7+nAcxBp5sFBfxzkOH8kzWkLV0uziHqxYC0cDbbDw@mail.gmail.com>
+ <20230603044650.286-1-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH 00/14] Reduce preallocations for maple tree
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-References: <20230601021605.2823123-1-Liam.Howlett@oracle.com>
- <7a5dc9ce-b58f-e1b3-db1a-d00a8a556ae5@intel.com>
- <fad3c833-1ab3-2d34-aa85-dcc7c40c3587@bytedance.com>
- <a9d2ab1b-23a5-8c06-9f7a-6872c726db03@intel.com>
- <b5f2d527-8887-eb0b-d3f2-4e7cd8f3c022@intel.com>
- <4fb5f66d-c8c2-f857-7461-b974154dbc2b@bytedance.com>
- <20230605140344.66pwpdg5zgb6rfa7@revolver>
-Cc:     Peng Zhang <zhangpeng.00@bytedance.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, "Liu, Yujie" <yujie.liu@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230605140344.66pwpdg5zgb6rfa7@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230603044650.286-1-ravi.bangoria@amd.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,201 +73,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Sat, Jun 03, 2023 at 10:16:50AM +0530, Ravi Bangoria escreveu:
+> Since amd-ibs-via-core-pmu.c was applied via Peter's tree, some of
+> the changes came via Arnaldo's tree did not reflect in this file,
+> which is causing build failures.
+> 
+>   arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: ‘pmus’ undeclared
+>   (first use in this function)
+>      47 |         if (list_empty(&pmus))
+>         |                         ^~~~
+>   arch/x86/tests/amd-ibs-via-core-pmu.c:48:17: error: implicit declaration
+>   of function ‘perf_pmu__scan’; did you mean
+>   perf_pmus__scan’? [-Werror=implicit-function-declaration]
+>      48 |                 perf_pmu__scan(NULL);
+>         |                 ^~~~~~~~~~~~~~
+>         |                 perf_pmus__scan
+>   arch/x86/tests/amd-ibs-via-core-pmu.c:50:19: error: implicit declaration
+>   of function ‘perf_pmu__find’; did you mean
+>   perf_pmus__find’? [-Werror=implicit-function-declaration]
+>      50 |         ibs_pmu = perf_pmu__find("ibs_op");
+>         |                   ^~~~~~~~~~~~~~
+>         |                   perf_pmus__find
+> 
+> Fix those.
+> 
+> Fixes: 1eaf496ed386 ("perf pmu: Separate pmu and pmus")
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 
+I wonder how to solve the various merge issues here:
 
-在 2023/6/5 22:03, Liam R. Howlett 写道:
-> * Peng Zhang <zhangpeng.00@bytedance.com> [230605 03:59]:
->>
->>
->> 在 2023/6/5 14:18, Yin, Fengwei 写道:
->>>
->>>
->>> On 6/5/2023 12:41 PM, Yin Fengwei wrote:
->>>> Hi Peng,
->>>>
->>>> On 6/5/23 11:28, Peng Zhang wrote:
->>>>>
->>>>>
->>>>> 在 2023/6/2 16:10, Yin, Fengwei 写道:
->>>>>> Hi Liam,
->>>>>>
->>>>>> On 6/1/2023 10:15 AM, Liam R. Howlett wrote:
->>>>>>> Initial work on preallocations showed no regression in performance
->>>>>>> during testing, but recently some users (both on [1] and off [android]
->>>>>>> list) have reported that preallocating the worst-case number of nodes
->>>>>>> has caused some slow down.  This patch set addresses the number of
->>>>>>> allocations in a few ways.
->>>>>>>
->>>>>>> During munmap() most munmap() operations will remove a single VMA, so
->>>>>>> leverage the fact that the maple tree can place a single pointer at
->>>>>>> range 0 - 0 without allocating.  This is done by changing the index in
->>>>>>> the 'sidetree'.
->>>>>>>
->>>>>>> Re-introduce the entry argument to mas_preallocate() so that a more
->>>>>>> intelligent guess of the node count can be made.
->>>>>>>
->>>>>>> Patches are in the following order:
->>>>>>> 0001-0002: Testing framework for benchmarking some operations
->>>>>>> 0003-0004: Reduction of maple node allocation in sidetree
->>>>>>> 0005:      Small cleanup of do_vmi_align_munmap()
->>>>>>> 0006-0013: mas_preallocate() calculation change
->>>>>>> 0014:      Change the vma iterator order
->>>>>> I did run The AIM:page_test on an IceLake 48C/96T + 192G RAM platform with
->>>>>> this patchset.
->>>>>>
->>>>>> The result has a little bit improvement:
->>>>>> Base (next-20230602):
->>>>>>      503880
->>>>>> Base with this patchset:
->>>>>>      519501
->>>>>>
->>>>>> But they are far from the none-regression result (commit 7be1c1a3c7b1):
->>>>>>      718080
->>>>>>
->>>>>>
->>>>>> Some other information I collected:
->>>>>> With Base, the mas_alloc_nodes are always hit with request: 7.
->>>>>> With this patchset, the request are 1 or 5.
->>>>>>
->>>>>> I suppose this is the reason for improvement from 503880 to 519501.
->>>>>>
->>>>>> With commit 7be1c1a3c7b1, mas_store_gfp() in do_brk_flags never triggered
->>>>>> mas_alloc_nodes() call. Thanks.
->>>>> Hi Fengwei,
->>>>>
->>>>> I think it may be related to the inaccurate number of nodes allocated
->>>>> in the pre-allocation. I slightly modified the pre-allocation in this
->>>>> patchset, but I don't know if it works. It would be great if you could
->>>>> help test it, and help pinpoint the cause. Below is the diff, which can
->>>>> be applied based on this pachset.
->>>> I tried the patch, it could eliminate the call of mas_alloc_nodes() during
->>>> the test. But the result of benchmark got a little bit improvement:
->>>>     529040
->>>>
->>>> But it's still much less than none-regression result. I will also double
->>>> confirm the none-regression result.
->>> Just noticed that the commit f5715584af95 make validate_mm() two implementation
->>> based on CONFIG_DEBUG_VM instead of CONFIG_DEBUG_VM_MAPPLE_TREE). I have
->>> CONFIG_DEBUG_VM but not CONFIG_DEBUG_VM_MAPPLE_TREE defined. So it's not an
->>> apple to apple.
+1. this clashes with:
+
+commit ae4aa00a1a9358e0007f6edc71b018a0b0d21190
+Author: Ian Rogers <irogers@google.com>
+Date:   Tue May 2 15:38:27 2023 -0700
+
+    perf test: Move x86 hybrid tests to arch/x86
+
+--------------
+
+I tried cherry-picking the cset that introduces amd-ibs-via-core-pmu.c,
+moved the test__hybrid lines a bit and then tried test merging the
+result with tip/master, it works.
+
+But then I tried applying this fix as a follow up cset, perf-tools-next
+would have bisection history broken, but nah, but then I hit:
+
+⬢[acme@toolbox perf-tools-next]$ git merge tip/master
+Auto-merging tools/perf/arch/x86/include/arch-tests.h
+Auto-merging tools/perf/arch/x86/tests/Build
+Auto-merging tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+CONFLICT (add/add): Merge conflict in tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+Auto-merging tools/perf/arch/x86/tests/arch-tests.c
+Automatic merge failed; fix conflicts and then commit the result.
+⬢[acme@toolbox perf-tools-next]$ git diff
+diff --cc tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+index 78b1902f6f59d8ce,2902798ca5c1ed1c..0000000000000000
+--- a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
++++ b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+@@@ -44,7 -44,10 +44,14 @@@ int test__amd_ibs_via_core_pmu(struct t
+        int ret = TEST_OK;
+        int fd, i;
+  
+++<<<<<<< HEAD
+ +      ibs_pmu = perf_pmus__find("ibs_op");
+++=======
++       if (list_empty(&pmus))
++               perf_pmu__scan(NULL);
++ 
++       ibs_pmu = perf_pmu__find("ibs_op");
+++>>>>>>> tip/master
+        if (!ibs_pmu)
+                return TEST_SKIP;
+  
+
+How are things like this resolved in linux-next?
+
+Removing this test from tip/master and I carry a fixed up
+tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c introduction patch?
+
+Cheers,
+
+- Arnaldo
+
+> ---
+> v1->v2:
+>   - Remove unnecessary perf_pmus__scan(NULL) as suggested by Ian.
 > 
-> You mean "mm: update validate_mm() to use vma iterator" here I guess.  I
-> have it as a different commit id in my branch.
+>  tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> I 'restored' some of the checking because I was able to work around not
-> having the mt_dump() definition with the vma iterator.  I'm now
-> wondering how wide spread CONFIG_DEBUG_VM is used and if I should not
-> have added these extra checks.
+> diff --git a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+> index 2902798ca5c1..78b1902f6f59 100644
+> --- a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+> +++ b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+> @@ -44,10 +44,7 @@ int test__amd_ibs_via_core_pmu(struct test_suite *test __maybe_unused,
+>  	int ret = TEST_OK;
+>  	int fd, i;
+>  
+> -	if (list_empty(&pmus))
+> -		perf_pmu__scan(NULL);
+> -
+> -	ibs_pmu = perf_pmu__find("ibs_op");
+> +	ibs_pmu = perf_pmus__find("ibs_op");
+>  	if (!ibs_pmu)
+>  		return TEST_SKIP;
+>  
+> -- 
+> 2.40.1
 > 
->>>
->>>
->>> I disable CONFIG_DEBUG_VM and re-run the test and got:
->>> Before preallocation change (7be1c1a3c7b1):
->>>       770100
->>> After preallocation change (28c5609fb236):
->>>       680000
->>> With liam's fix:
->>>       702100
->>> plus Peng's fix:
->>>       725900
->> Thank you for your test, now it seems that the performance
->> regression is not so much.
-> 
-> We are also too strict on the reset during mas_store_prealloc() checking
-> for a spanning write.  I have a fix for this for v2 of the patch set,
-> although I suspect it will not make a huge difference.
-> 
->>>
->>>
->>> Regards
->>> Yin, Fengwei
->>>
->>>>
->>>>
->>>> Regards
->>>> Yin, Fengwei
->>>>
->>>>>
->>>>> Thanks,
->>>>> Peng
->>>>>
->>>>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->>>>> index 5ea211c3f186..e67bf2744384 100644
->>>>> --- a/lib/maple_tree.c
->>>>> +++ b/lib/maple_tree.c
->>>>> @@ -5575,9 +5575,11 @@ int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->>>>>            goto ask_now;
->>>>>        }
->>>>>
->>>>> -    /* New root needs a singe node */
->>>>> -    if (unlikely(mte_is_root(mas->node)))
->>>>> -        goto ask_now;
-> 
-> Why did you drop this?  If we are creating a new root we will only need
-> one node.
-The code below handles the root case perfectly,
-we don't need additional checks.
-	if (node_size  - 1 <= mt_min_slots[wr_mas.type])
-		request = mas_mt_height(mas) * 2 - 1;
-> 
->>>>> +    if ((node_size == wr_mas.node_end + 1 &&
->>>>> +         mas->offset == wr_mas.node_end) ||
->>>>> +        (node_size == wr_mas.node_end &&
->>>>> +         wr_mas.offset_end - mas->offset == 1))
->>>>> +        return 0;
-> 
-> I will add this to v2 as well, or something similar.
-> 
->>>>>
->>>>>        /* Potential spanning rebalance collapsing a node, use worst-case */
->>>>>        if (node_size  - 1 <= mt_min_slots[wr_mas.type])
->>>>> @@ -5590,7 +5592,6 @@ int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->>>>>        if (likely(!mas_is_err(mas)))
->>>>>            return 0;
->>>>>
->>>>> -    mas_set_alloc_req(mas, 0);
-> 
-> Why did you drop this?  It seems like a worth while cleanup on failure.
-Because we will clear it in mas_node_count_gfp()->mas_alloc_nodes().
-> 
->>>>>        ret = xa_err(mas->node);
->>>>>        mas_reset(mas);
->>>>>        mas_destroy(mas);
->>>>>
->>>>>
->>>>>>
->>>>>>
->>>>>> Regards
->>>>>> Yin, Fengwei
->>>>>>
->>>>>>>
->>>>>>> [1] https://lore.kernel.org/linux-mm/202305061457.ac15990c-yujie.liu@intel.com/
->>>>>>>
->>>>>>> Liam R. Howlett (14):
->>>>>>>      maple_tree: Add benchmarking for mas_for_each
->>>>>>>      maple_tree: Add benchmarking for mas_prev()
->>>>>>>      mm: Move unmap_vmas() declaration to internal header
->>>>>>>      mm: Change do_vmi_align_munmap() side tree index
->>>>>>>      mm: Remove prev check from do_vmi_align_munmap()
->>>>>>>      maple_tree: Introduce __mas_set_range()
->>>>>>>      mm: Remove re-walk from mmap_region()
->>>>>>>      maple_tree: Re-introduce entry to mas_preallocate() arguments
->>>>>>>      mm: Use vma_iter_clear_gfp() in nommu
->>>>>>>      mm: Set up vma iterator for vma_iter_prealloc() calls
->>>>>>>      maple_tree: Move mas_wr_end_piv() below mas_wr_extend_null()
->>>>>>>      maple_tree: Update mas_preallocate() testing
->>>>>>>      maple_tree: Refine mas_preallocate() node calculations
->>>>>>>      mm/mmap: Change vma iteration order in do_vmi_align_munmap()
->>>>>>>
->>>>>>>     fs/exec.c                        |   1 +
->>>>>>>     include/linux/maple_tree.h       |  23 ++++-
->>>>>>>     include/linux/mm.h               |   4 -
->>>>>>>     lib/maple_tree.c                 |  78 ++++++++++----
->>>>>>>     lib/test_maple_tree.c            |  74 +++++++++++++
->>>>>>>     mm/internal.h                    |  40 ++++++--
->>>>>>>     mm/memory.c                      |  16 ++-
->>>>>>>     mm/mmap.c                        | 171 ++++++++++++++++---------------
->>>>>>>     mm/nommu.c                       |  45 ++++----
->>>>>>>     tools/testing/radix-tree/maple.c |  59 ++++++-----
->>>>>>>     10 files changed, 331 insertions(+), 180 deletions(-)
->>>>>>>
+
+-- 
+
+- Arnaldo
