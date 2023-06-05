@@ -2,62 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6BE722354
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51188722358
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbjFEKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S231949AbjFEKYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjFEKX1 (ORCPT
+        with ESMTP id S230223AbjFEKYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:23:27 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89E0A1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:23:26 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:f07e:6d89:4e02:be9])
-        by laurent.telenet-ops.be with bizsmtp
-        id 5NPP2A00940Pbp601NPPs3; Mon, 05 Jun 2023 12:23:24 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q67Mx-00BeIq-Qr;
-        Mon, 05 Jun 2023 12:23:23 +0200
-Date:   Mon, 5 Jun 2023 12:23:23 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: Build regressions/improvements in v6.4-rc5
-In-Reply-To: <20230605101536.1864030-1-geert@linux-m68k.org>
-Message-ID: <ef69a925-966e-7c8c-394-5a1d17f87036@linux-m68k.org>
-References: <CAHk-=wifuPqAFXQQTTLkp_+FMzxGFHpSG-hEtZazG-46s=noAw@mail.gmail.com> <20230605101536.1864030-1-geert@linux-m68k.org>
+        Mon, 5 Jun 2023 06:24:06 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D04694;
+        Mon,  5 Jun 2023 03:24:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685960642; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=JJ0i9Q4bHW4MKttszRWIs71hBZbIkHnupdhYsy7UPPfp1tfqzjQmdeU3R59eyOJyaT
+    KfoaKG6CMYOcLR8OaZ3hDZ4apf1N/Xhgs9dNv9v35k+GSnZ7r8kemB3UBS7FWyx1gXHe
+    /GZ4jV0Qh4ysG2ct/oz6DILxPKp0AEf1BVIna/cImvDMxF6BxNMP5m+mKOYhZ0qqexxa
+    zte08va4GwqxxzdoD8PAMprTZCv4dkSpvqkThgaKDhDtUXauFXhmO3pNf0j8dNRgjsP5
+    Dec5ZClGYnA6lnFdlWQjvkbpIzjrs4+7F2oqyfFuWmrrvb7RNpA/mTih7hRkhfNI4IAL
+    L4Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685960642;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=/G5YxFuVt/PQPjjBymERubZJ/AgaMXPPNH/lbNDTfJI=;
+    b=IuQemZpnMqqd8b/RRSLUwAmpoVCr9Zihgpc7VkhhusO8XSv0WaSALCbSI9/PWRWJa0
+    qi3kDHbPPe+t1y1vc4qF0T9vLnc3z2Ie8N5d5sCCzN47WCtzKsS/IqYliDvzGZQpyV94
+    sGOhYuesCZXIBWrJFgM6doDqdCV54jMCwYpsoSqpe63z/G1DHyCh5/3Fj1cG26fKQUhS
+    8LfP7BVnXEQc+4BGlxMR5gU2VFvQKoBWK8CUpoKOv0w97jSRXS0hc17YrI6sUyXOb+Lo
+    29rvh1Vs/1mKiI8s/u+CqSEvKvddCGjZcTNQLU9pZeH17yK9sL+x+Q8fTseIiF9Ya790
+    SxXg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685960642;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=/G5YxFuVt/PQPjjBymERubZJ/AgaMXPPNH/lbNDTfJI=;
+    b=TPTgY3CfrGKfRSgbf/vJcGQTQJKll6bOhze+H6WgcWpkDeOkUKtCTlnbmfBo9OHxYs
+    lkuvm6dnMhsyo8R7bXgKKy/wl8oAWG1+eUuun7ecMy4FPc9XrfRHSWTc0Kic4A4V/JmN
+    9isBBa1eUWCcZg2+2bYgRTKAC7uihZQMrLKQTAl7W9/kCGFiRbp22WL/Qg1Ffas3d4bP
+    yFQinbIy0Ai5ABlAEIwU056qarGpMkiFs0WLfC2Y2mO5HdukB0sGHEGzSdKhI1yLSi7t
+    QBPMXSJhubCoXq2gBONEZyb7jKbvMBe/QY77AJRnCKODoKMlJ4/tyhZk3V8CO9UFeJ+p
+    psYw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685960642;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=/G5YxFuVt/PQPjjBymERubZJ/AgaMXPPNH/lbNDTfJI=;
+    b=vF30bbWnrD5f3Z/pFsbTS2d9I9wDOqfDnWF7BScBldfycDFUzeeYfcOBCNBBlgSIK6
+    uHgMe0MWdDrD7YH2H/AQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z+J1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z55AO29r5
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 5 Jun 2023 12:24:02 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 12:23:53 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: Split sdm845-db845c to add headless
+ support
+Message-ID: <ZH23uaMD2I249E8I@gerhold.net>
+References: <20230605094710.2037879-1-amit.pundir@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605094710.2037879-1-amit.pundir@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Jun 2023, Geert Uytterhoeven wrote:
-> JFYI, when comparing v6.4-rc5[1] to v6.4-rc4[3], the summaries are:
->  - build errors: +2/-4
+On Mon, Jun 05, 2023 at 03:17:10PM +0530, Amit Pundir wrote:
+> This is a follow-up of the upstream discussion,
+> https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u,
+> around adding a reserved memory region in sdm845-db845c
+> for the framebuffer memory (the splash region set up by
+> the bootloader) but the general opinion was to avoid
+> adding that reserved memory for the headless DB845c
+> usecase.
+> 
+> So this patch splits the sdm845-db845c into a common dtsi,
+> a new sdm845-db845-headless DT, which disables the mdss
+> display subsystem, and a new sdm845-db845c DT with an
+> additional reserved-memory region for the framebuffer.
+> 
+> The default sdm845-db845c.dtb remains pretty much the same
+> (with an exception of additional reserved-memory region),
+> while others can use sdm845-db845c-headless.dtb for their
+> headless systems.
+> 
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
 
-arm64-gcc5/arm64-allmodconfig (seen before)
+AFAIU the DB845c doesn't have a locked ABL. Wouldn't it be cleaner to
+add a simple check in the bootloader to see if there is a framebuffer
+set up or not and then disable/remove the reserved framebuffer memory
+from there? This should be just a couple lines of additional C code in ABL.
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9561de3a55bed6bdd44a12820ba81ec416e705a7/ (151 out of 152 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/7877cb91f1081754a1487c144d85dc0d2e2e7fc4/ (151 out of 152 configs)
+It would also prevent that one accidentally uses the headless DTB with
+a bootloader splash and gets the UFS crashes you observed.
 
-Gr{oetje,eeting}s,
+Out of curiosity, can someone explain what's so special about the
+framebuffer memory on newer platforms? Is it protected by the firmware
+to disallow other devices like UFS to access it? On older platforms like
+MSM8916 the bootloader framebuffer memory isn't really special. Without
+reservation there can be temporary garbage displayed on the screen, but
+it's gone as soon as the MDP driver is loaded.
 
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Thanks,
+Stephan
