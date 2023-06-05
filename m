@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167467226BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF72A7226C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbjFENBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S233004AbjFENCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbjFENBV (ORCPT
+        with ESMTP id S233744AbjFENBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:01:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8607DA
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685970038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6aGjYzdJUv3mCKaWHOXQQVhBXGYUPAjudrmb3GbAYcs=;
-        b=h9eUdP+sRAY7iqIILqaydT51jdfQxxpnu4GoJxVZfFWNJTXGdExssZYF+ez8bB2fXGKBmz
-        auSRvnMydrBs4xLfe4RJ0CM7gJSXJyeRs+mbbGSInlY8tZibIazJwHvQ5rK/a2P1xlH734
-        ufBLW+FJ7V8sgK7ffRepkBppT+rHLPQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-610-nIEksND5NJiXTAcmkDIVXA-1; Mon, 05 Jun 2023 09:00:36 -0400
-X-MC-Unique: nIEksND5NJiXTAcmkDIVXA-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f772115352so5113015e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:00:36 -0700 (PDT)
+        Mon, 5 Jun 2023 09:01:47 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007CB106
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:01:41 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-7841dc9871dso3325667241.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685970101; x=1688562101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cO38/BvQLHAQ87G9qM9lbTJ3ImPZclrAKat+fZGulg8=;
+        b=Pvm80JLLbw9204UFhZpF1p4N3+QTzv9VaQY6S9dISSHHxWvVTn+6Tp9q8CBQIwHNRJ
+         YARczhIEuxIv1KtQTEa4vcAebIMdGhrwywm8IsdbQ+R9Fmi6ivofNqX/RyPSQzp3VX7Q
+         PMSBt1Jw0hL48gQ1WNI755anzsZDG7z93nhVs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685970035; x=1688562035;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6aGjYzdJUv3mCKaWHOXQQVhBXGYUPAjudrmb3GbAYcs=;
-        b=ZmKNzuGf5VV95/WRZO8Op/ZouNOAxphiFx0VyxG4IyGRThef7czh0Tzfcs0Hzzts+x
-         tYhmYdJH/SmAHJSMyhr5xCD3+hWWvfXuuvxeB0Dp60s0QwhDh9ZGnF1Qpwwg4/wLUd+S
-         sAQu+vdZ2g0qJ22JiK5ux5ze5ZfVtL7t3ZY2e7V/2vkQ5e8OX8vvO3+lnMdjnccLyPqX
-         sP7l1gWGd2mCwdWshVZ8K1Rf8OI3tIjowl78us+zeq+W2Y/BeQ52jQLg057USCS6YJr7
-         rtLH8GsO22T/CBH60ht3dSnOk/0UWjLq0aOXozwYTDdERes5K4c2Lzgax4aMuRdEWI/K
-         tLFQ==
-X-Gm-Message-State: AC+VfDxrX9iSrKbEhCvZi79NbK6Ct+X2nOMY6XJ6D6ae6g1CaKFMbS97
-        DjEX5Kl8j5WESHXDdMvRvfBxjKQjq2mHQc1BqvcJJhEELpnY33rQxMR48y+e7xM4K2XbhTOq4e7
-        vZmmr/M95hf2qOibZPrX5EgTkGChALkDgUhQzVtbBr4sEuFJICikMfV0ZD71LIshO0FmNN/rysM
-        tCgh7rzfEd
-X-Received: by 2002:a05:600c:1d98:b0:3f7:367a:38cb with SMTP id p24-20020a05600c1d9800b003f7367a38cbmr3872785wms.2.1685970035436;
-        Mon, 05 Jun 2023 06:00:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7BYasbXF+HwlwoTO7ru5Jn/GlxOkdZNhWdPXcR60/ODZuYlz9paQmxJ0VSP+eJVhTa5e/f5Q==
-X-Received: by 2002:a05:600c:1d98:b0:3f7:367a:38cb with SMTP id p24-20020a05600c1d9800b003f7367a38cbmr3872737wms.2.1685970035044;
-        Mon, 05 Jun 2023 06:00:35 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id w11-20020a1cf60b000000b003f423f5b659sm10737802wmc.10.2023.06.05.06.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 06:00:34 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] x86/hyperv: Use vmmcall to implement Hyper-V
- hypercall in sev-snp enlightened guest
-In-Reply-To: <20230601151624.1757616-6-ltykernel@gmail.com>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-6-ltykernel@gmail.com>
-Date:   Mon, 05 Jun 2023 15:00:33 +0200
-Message-ID: <87wn0ijc7i.fsf@redhat.com>
+        d=1e100.net; s=20221208; t=1685970101; x=1688562101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cO38/BvQLHAQ87G9qM9lbTJ3ImPZclrAKat+fZGulg8=;
+        b=b2gguR0ACh+7lr23eInpf2q9pCE/4tTZK8BhyMJ+dC1U3D1iIguj8TFjeLIw79+b0w
+         8RFTnxax1DfEVz/N6LNjZJ0BQJzlYUAnBs/OKaucr9f5U/kH9rnRxEEciJYd54kHVNgH
+         Lb+URK5Sxf8GQGgQTy0aJbF2NoH14DlNf9x344nTKGP0AIV2P8jvoHZILFvU5yaiSuib
+         TV4eD0jn43o+D4vwOB0Rps2JIBb3QKlV2/nBmbrm2TAzydDEJ0MIi7NS5NuoTKN/FaQg
+         gt5ySwUiCynkzcvPeubMhGgpf6X9uhgrnq9XBbe0vNTfmNKlPmZ3F9E/LojDCFQhGPIf
+         o2yA==
+X-Gm-Message-State: AC+VfDw/h7DxmzTXp3gIbG2o+n76556iqES2SlQdHrKWO3Z7B+yy/5qj
+        MMZ4g9zhTIvWVqzsw5VhU7+7a01BjgAsGo0fJPds/w==
+X-Google-Smtp-Source: ACHHUZ6YZzW+yZOZuWvTCNoj/dgyh96LyT2DXgLsptRLSpDmYKbQOI/iNYJ3d5WCgu88E0xn8iIVW6pMblwAwmUBM28=
+X-Received: by 2002:a67:bd18:0:b0:43b:2c84:1fca with SMTP id
+ y24-20020a67bd18000000b0043b2c841fcamr3134845vsq.5.1685970100956; Mon, 05 Jun
+ 2023 06:01:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20230525113034.46880-1-tony@atomide.com> <20230602083335.GA181647@google.com>
+ <87a5xii33r.fsf@jogness.linutronix.de> <20230603054139.GR14287@atomide.com>
+ <20230603063533.GS14287@atomide.com> <20230605061511.GW14287@atomide.com>
+ <CAGXv+5Fbx7eTxP0ep6DV+jyronAWxYvu2M-g=MjHGRhjSXUc=w@mail.gmail.com> <20230605122447.GY14287@atomide.com>
+In-Reply-To: <20230605122447.GY14287@atomide.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 5 Jun 2023 21:01:29 +0800
+Message-ID: <CAGXv+5HwL+R5QpO3pHGQd9qAxu2pCMDjYvdni1HjiC8eEE38mg@mail.gmail.com>
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,101 +85,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tianyu Lan <ltykernel@gmail.com> writes:
-
-> From: Tianyu Lan <tiala@microsoft.com>
+On Mon, Jun 5, 2023 at 8:24=E2=80=AFPM Tony Lindgren <tony@atomide.com> wro=
+te:
 >
-> In sev-snp enlightened guest, Hyper-V hypercall needs
-> to use vmmcall to trigger vmexit and notify hypervisor
-> to handle hypercall request.
+> * Chen-Yu Tsai <wenst@chromium.org> [230605 11:34]:
+> > On Mon, Jun 5, 2023 at 2:15=E2=80=AFPM Tony Lindgren <tony@atomide.com>=
+ wrote:
+> > > diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/=
+8250/8250_mtk.c
+> > > --- a/drivers/tty/serial/8250/8250_mtk.c
+> > > +++ b/drivers/tty/serial/8250/8250_mtk.c
+> > > @@ -425,11 +439,10 @@ mtk8250_set_termios(struct uart_port *port, str=
+uct ktermios *termios,
+> > >  static int __maybe_unused mtk8250_runtime_suspend(struct device *dev=
+)
+> > >  {
+> > >         struct mtk8250_data *data =3D dev_get_drvdata(dev);
+> > > -       struct uart_8250_port *up =3D serial8250_get_port(data->line)=
+;
+> > >
+> > >         /* wait until UART in idle status */
+> > >         while
+> > > -               (serial_in(up, MTK_UART_DEBUG0));
+> > > +               (mtk8250_read(data, MTK_UART_DEBUG0));
+> >
+> > I believe it still gets stuck here sometimes.
 >
-> There is no x86 SEV SNP feature flag support so far and
-> hardware provides MSR_AMD64_SEV register to check SEV-SNP
-> capability with MSR_AMD64_SEV_ENABLED bit. ALTERNATIVE can't
-> work without SEV-SNP x86 feature flag. May add later when
-> the associated flag is introduced. 
+> Hmm so maybe you need to mtk8250_write(data, 0, MTK_UART_RATE_FIX) in
+> probe before pm_runtime_resume_and_get() that enables the baud clock?
+> That's something I changed, so maybe it messes up things.
+
+I think it has something to do with the do_pm() function calling
+the callbacks directly, then also calling runtime PM.
+
+> Looking at the 8250_mtk git log, it's runtime PM functions seem to only
+> currently manage the baud clock so register access should be doable
+> without runtime PM resume?
+
+Actually it only manages the bus clock. The baud clock is simply the system
+XTAL which is not gateble.
+
+> > With your earlier patch, it could get through registering the port, and
+> > the console would show
+> >
+> >     11002000.serial: ttyS0 at MMIO 0x11002000 (irq =3D 240, base_baud =
+=3D
+> > 1625000) is a ST16650V2
+> >
+> > for the console UART.
 >
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
->  1 file changed, 33 insertions(+), 11 deletions(-)
+> OK
 >
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 31c476f4e656..d859d7c5f5e8 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
->  	u64 hv_status;
->  
->  #ifdef CONFIG_X86_64
-> -	if (!hv_hypercall_pg)
-> -		return U64_MAX;
-> +	if (hv_isolation_type_en_snp()) {
+> > Angelo mentioned that we should be using SLEEP_REQ/SLEEP_ACK registers
+> > in the MTK UART hardware.
+> >
+> > I tried reworking it into your patch here, but it causes issues with th=
+e
+> > UART-based Bluetooth on one of my devices. After the UART runtime suspe=
+nds
+> > and resumes, something is off and causes the transfers during Bluetooth
+> > init to become corrupt.
+> >
+> > I'll try some more stuff, but the existing code seems timing dependent.
+> > If I add too many printk statements to the runtime suspend/resume
+> > callbacks, things seem to work. One time I even ended up with broken
+> > UARTs but otherwise booted up the system.
+>
+> Well another thing that now changes is that we now runtime suspend the
+> port at the end of the probe. What the 8250_mtk probe was doing earlier
+> it was leaving the port baud clock enabled, but runtime PM disabled
+> until mtk8250_do_pm() I guess.
 
-Would it be possible to redo 'hv_isolation_type_en_snp()' into a static
-inline doing static_branch_unlikely() so we avoid function call penalty
-here?
+I guess that's the biggest difference? Since the *bus* clock gets disabled,
+any access will hang. Is it enough to just support runtime PM? Or do I have
+to also have UART_CAP_RPM?
 
-> +		__asm__ __volatile__("mov %4, %%r8\n"
-> +				     "vmmcall"
-> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-> +				       "+c" (control), "+d" (input_address)
-> +				     :  "r" (output_address)
-> +				     : "cc", "memory", "r8", "r9", "r10", "r11");
-> +	} else {
-> +		if (!hv_hypercall_pg)
-> +			return U64_MAX;
->  
-> -	__asm__ __volatile__("mov %4, %%r8\n"
-> -			     CALL_NOSPEC
-> -			     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-> -			       "+c" (control), "+d" (input_address)
-> -			     :  "r" (output_address),
-> -				THUNK_TARGET(hv_hypercall_pg)
-> -			     : "cc", "memory", "r8", "r9", "r10", "r11");
-> +		__asm__ __volatile__("mov %4, %%r8\n"
-> +				     CALL_NOSPEC
-> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-> +				       "+c" (control), "+d" (input_address)
-> +				     :  "r" (output_address),
-> +					THUNK_TARGET(hv_hypercall_pg)
-> +				     : "cc", "memory", "r8", "r9", "r10", "r11");
-> +	}
->  #else
->  	u32 input_address_hi = upper_32_bits(input_address);
->  	u32 input_address_lo = lower_32_bits(input_address);
-> @@ -104,7 +113,13 @@ static inline u64 _hv_do_fast_hypercall8(u64 control, u64 input1)
->  	u64 hv_status;
->  
->  #ifdef CONFIG_X86_64
-> -	{
-> +	if (hv_isolation_type_en_snp()) {
-> +		__asm__ __volatile__(
-> +				"vmmcall"
-> +				: "=a" (hv_status), ASM_CALL_CONSTRAINT,
-> +				"+c" (control), "+d" (input1)
-> +				:: "cc", "r8", "r9", "r10", "r11");
-> +	} else {
->  		__asm__ __volatile__(CALL_NOSPEC
->  				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->  				       "+c" (control), "+d" (input1)
-> @@ -149,7 +164,14 @@ static inline u64 _hv_do_fast_hypercall16(u64 control, u64 input1, u64 input2)
->  	u64 hv_status;
->  
->  #ifdef CONFIG_X86_64
-> -	{
-> +	if (hv_isolation_type_en_snp()) {
-> +		__asm__ __volatile__("mov %4, %%r8\n"
-> +				     "vmmcall"
-> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-> +				       "+c" (control), "+d" (input1)
-> +				     : "r" (input2)
-> +				     : "cc", "r8", "r9", "r10", "r11");
-> +	} else {
->  		__asm__ __volatile__("mov %4, %%r8\n"
->  				     CALL_NOSPEC
->  				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
-
--- 
-Vitaly
-
+ChenYu
