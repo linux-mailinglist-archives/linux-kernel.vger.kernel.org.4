@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF690721FC1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8894F721FC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjFEHig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S230291AbjFEHjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjFEHic (ORCPT
+        with ESMTP id S229905AbjFEHjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:38:32 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF0CBD;
-        Mon,  5 Jun 2023 00:38:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YkSWEK5pWTb+O1Y8UarAMxLSPuYdPncpBomjI/Qcl4s7pAytEfQNCLqkdVFNuv7rWvKQqDTrmoHL9zxMXQREmL5XO+mTXBh20NjUleWgG5BmxvIocUDLV6vllBcBB7IYU+1a/N/Ggo22ci37457jXKF74na9zl09RQZLVjgZLK1cNZ0JrSoqCCpj2V4o1EVGuytFzp5Ly1YpmXIK1D9W51+fxD5padthG3CRp6M8lXwWS+2IHZCaZf3KQxTtHiYGFUa7UJkCagTayyozY8BYwDQT9MqLgXB+Z9RpYCpbSA5JKnzo+TZ3fO7CgrdF/7fu7sX+3d6XWgrUNAKpxdlC6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3bEqJH+KOLwGoBO2BzSwDUe9I4SXFv5QJHB8b1G3LP0=;
- b=b2ziI/l0x0+mnwU8xYfYhzko7MbKmCHJcVflxOIuy/wSKCQBA5wC9zXenSk6mxDKLEJBtvH7+GIPbj0f39uq0jBN+Fb4WaGbKKGJ6VZtKxIC4O0E1ninNC/JR62X+GwDsLhqG3qeYejXDsrqpxOIw+8S7iLVdtQsJTHVMSW3zIw1pGC09eaRnpTaKQqUC7w6uvZ6MAm9mtji8b7pMvWwNCBFt6JWKQ0ecNYrMsunaV8EWn5YXxvCK8Io84dnV6AImEXEp9Sy9STtHWGyKbJjQcJg7v/+BDOeuz5P6tSGjP3IqAW2Jh314q1ReQVPAD3dJO4oL460J3l26IRhr1/+7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3bEqJH+KOLwGoBO2BzSwDUe9I4SXFv5QJHB8b1G3LP0=;
- b=whQjG4BqHawmcWsnYwF7r/xL+goErQg4RkSaP83rWFUX6EgXpTr3EOk4cVWJ2u1+v6H8KrRJIp/+pfhopCWzevSioF7olfJOlODXtU86qOMjP2Fi7KcKsxckscPCYlY41Z1Vw0daaghsEW8zfnU+RZ60iXTn+UEiIJKdp0m/ntA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by LV8PR13MB6445.namprd13.prod.outlook.com (2603:10b6:408:185::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Mon, 5 Jun
- 2023 07:38:27 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 07:38:27 +0000
-Date:   Mon, 5 Jun 2023 09:38:19 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Subject: Re: [PATCH net-next v4 4/4] net: stmmac: dwmac-sogfpga: use the lynx
- pcs driver
-Message-ID: <ZH2Q6//BSUKl8QbA@corigine.com>
-References: <20230601141454.67858-1-maxime.chevallier@bootlin.com>
- <20230601141454.67858-5-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601141454.67858-5-maxime.chevallier@bootlin.com>
-X-ClientProxiedBy: AM0PR02CA0110.eurprd02.prod.outlook.com
- (2603:10a6:20b:28c::7) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV8PR13MB6445:EE_
-X-MS-Office365-Filtering-Correlation-Id: f304ee26-6de0-4e90-c9d6-08db6597d9ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QXs4Sp79oj4aG+0TDHqckOEBqSfflhngkwLH75zrpjGvaM6iuv12bjAiZIpApoEHyuaOI+18L9M2RRe6hCOyAyxSlEuXsYvk5j59LZYfP1VCgqAy/Hz4RXdGT8MbkmtbqDG16MItcnEa1/Hz8acZG8El1D1X9G6nu1F6gq8pA5tPu//L0tRSpmG7pccDv0zYs+vj+BUOBZodJ2IK1x4lJ5Wi0WiWjoQYMvvOA0pBbEaI00FRud15dkrKrHQYhsAV1ywztI+RJwV9AcorMn3R6sO+pJk+E8BoJcEqojbluat8EHgNTdR2T2iVoQ/mz2NLwNsHi7KjOSY6NmSh4n213DpdKsBxVN4JZelFRUQvIkJDABKmVtNVkvxUtCkvSrLtGTszRdbeT+RC6nYzNnpgwQffKwxVC5ugwF5gbDI/40ZKiVr6N/aRVsErfDV7cCSp62buQvJV55oZTbZef+Mdx2YyXqcyjeki9yjyshVECIRCJRU4BaQt+WluomG2W4vLfc+KNnDbo6UZ23NSDIjTikdIKnbzOhhaaWOXwn+W8KwQeDX5N8EZnZJqEztbgDFB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(346002)(376002)(39840400004)(451199021)(6512007)(6506007)(36756003)(83380400001)(86362001)(38100700002)(186003)(2616005)(41300700001)(44832011)(54906003)(2906002)(4744005)(478600001)(66946007)(66476007)(66556008)(6916009)(4326008)(8936002)(8676002)(316002)(5660300002)(7416002)(6486002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ltdSXf4DfZnAM64g0/lWDG0W2AzsYX+4u0Z+N3KvBchtWt6uJAFLpv7t9355?=
- =?us-ascii?Q?KGXmH8kDdKjrN22H4HkAddnWG7ltqZDEvFNdKgkJOo6RJxID4t2FpbF5Q6fT?=
- =?us-ascii?Q?qHgI9C4qc7Oi/DhNIx6yNvcNiWIaNAPokPdgiDLurRl69nN0T8xw5ZnDJo0I?=
- =?us-ascii?Q?9YEBpUHMXtLEV6JDekt/g1H8b+zg25+PB6orJ7g3dY5B0ab5PNxbSuR/Qphb?=
- =?us-ascii?Q?7fQ5u73Mfy6J5NuwRGg74etwqD0l9K8peD23YXGK9sRS3rx7aXEj+AuGzNCA?=
- =?us-ascii?Q?KVrP0fx2D1IJkQosdRQHhxRtSh7UkAdXNiOCWZMglFHeJBLG5jREDZBCX5PV?=
- =?us-ascii?Q?enXhlV5P+TfYvG0MiDgqTmU1KIHIWLsJCf5ams4Edc6K+2m6rK+EAUh015L5?=
- =?us-ascii?Q?6jUa5iXySik/ffrpkGIyJZk7MNgz2r5PqVCOSiaweKVRGkUZAqfBOjN0Ioj7?=
- =?us-ascii?Q?Z/cCv/fBTelw/+Ah4otC/m6Jlw+AhffetXjLD4LYSJZPP7afpjC1feN3nnLz?=
- =?us-ascii?Q?rB2zPzcPrqv/FN2akr7n6ZrBLkcmIuOR/2ogOme1ExZeARJkVq3Qc0AbwfGh?=
- =?us-ascii?Q?wexcqu69qrRCgyn3Tb2F69cNqzcGbjhzi4X2Kco3DmFq9jX9yBdNx8KwBH5C?=
- =?us-ascii?Q?rLO/LGBY0urVHkTEEbg5Y60P1o98Xg5wIAMgFpa+Z1bPtC1jeWOd7lD9FSVK?=
- =?us-ascii?Q?RpprUjHQuTiHXL8r/+bxsNmbW1MYkLvz65o66QmEt4HAIQDGPYjbRy+3cZ4e?=
- =?us-ascii?Q?JKA6OcpGbqleUNEACF99qBRYH2p03lfl3BETytTHrDeg3Vj3lb2dJOXkgU2w?=
- =?us-ascii?Q?dAbY4kMCrJbIV640leny8Pxy407bmqnz5M7jJO12QH0dqJn+6tel1lhcpVa2?=
- =?us-ascii?Q?N63NZjtfF4F0lhdJPNrvMzG+TcBjETll+pAKPBfYW+8NmNQsHrncV6xqCNKp?=
- =?us-ascii?Q?mCKh85U/RqLTdzl1HlStTBQ/wK52yBF1c3anM3HdgYfgwnMkR6DAgsm2Xgxn?=
- =?us-ascii?Q?DKRmExqgw+7Yq3MivK9cXuIMGKvXeMs/SuY46qingtvNK9mzl1HAecRr7erq?=
- =?us-ascii?Q?qwfUuRvg0ayk+v+X3kRQuupB/G9jYxfVtFfU0PVdK1NdciMQckqDnWzL1HFr?=
- =?us-ascii?Q?d7tgTJmR4bEk8LYB550SP5b7Gkwba9/1uNK2fICyHAyD4Ded+3AUjj6YdNbW?=
- =?us-ascii?Q?5lo59P0VWgJgcd3dnrN0P1siz0za5p10itauPuGH2Dks/lVculh1k1nljc+8?=
- =?us-ascii?Q?HFMDC/qiMw47xkbMR8lxLUMR22Wv1JcoJ7OcaU1h+9xx+twuaQv0cyzpA4iO?=
- =?us-ascii?Q?MLpczCWenQIVT9/Eioqedyts/Fuy6SvHP4Y342H2Fa4Bv1edLEGUjxI2czfI?=
- =?us-ascii?Q?lNlb4OIcvHwg6o+5rj/PMa09XRtXF+EWabbDSmyhZ/v7L27wemowQ9tamR/9?=
- =?us-ascii?Q?N7D74zdnAGebXahCM96AERscSj/xbhQPQGXHe93cbkMnDhQrV4rn710L/kIV?=
- =?us-ascii?Q?AkgRXd6cb7tY6j6t9Oq0Tq2tvG/ZmCotvmECxgNFMSk0LiZdOWJSiND5pFtj?=
- =?us-ascii?Q?bNpfF+feMljKe9iBytVOJT42dEQQKACTEq4DW66f4YwGn0HdjFMKNLpzOJac?=
- =?us-ascii?Q?lBEWehfFaNkae7UzQD7b7r+OVTocKZWswaavmzlLy4MjP3wIjKY88lQ0zl6K?=
- =?us-ascii?Q?f6tnxg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f304ee26-6de0-4e90-c9d6-08db6597d9ed
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 07:38:27.6277
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8CNKLePl40oP3iqBibp8CIXcceHkz4077+jOUpYitdyL1o/9ceyVpIdA/4FXb6EWpF3uk6ei2PNLj3LEo2ThNQZrqBHrLA26uyVIeUmj0xw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR13MB6445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 03:39:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22286AD;
+        Mon,  5 Jun 2023 00:39:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D2DC121AF9;
+        Mon,  5 Jun 2023 07:39:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685950752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jo1q+EVjn19uDq4zjiSV84GIoMoRkmgfMQr5y8Y0sh4=;
+        b=Ljr/3IJfvzKGbcl04cpIA/S5nywdRuAjIc/pvUU0xLFFw2jLIHkleajo3IbzBWKOzh/+5p
+        SXnF7bnTtn2EoxxNu9BNaJ6FVCa5hPpHEWfYHtfrnq/m6Y7SogBURuKw1TiqmMIs77eX7u
+        9jPjGrKjtpoBBZ+k95zypyxYTxEnyj8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685950752;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jo1q+EVjn19uDq4zjiSV84GIoMoRkmgfMQr5y8Y0sh4=;
+        b=LIduBt30SdkWJwxcgODlfTdahkIDG7jqbF+O1BH3nWgma9i/L46CLyjujoL+WcVUitJ8Wk
+        hFDcca92QFuM1bCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A11B3139C7;
+        Mon,  5 Jun 2023 07:39:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id egd0JiCRfWT7cAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 07:39:12 +0000
+Date:   Mon, 05 Jun 2023 09:39:12 +0200
+Message-ID: <87pm6aicin.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "michael@ralston.id.au" <michael@ralston.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: usb-audio: Fix "cannot set freq 48000 to ep 0x3" msgs
+In-Reply-To: <202bbbc0f51522e8545783c4c5577d12a8e2d56d.camel@infinera.com>
+References: <20230601131116.1014250-1-joakim.tjernlund@infinera.com>
+        <202bbbc0f51522e8545783c4c5577d12a8e2d56d.camel@infinera.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 04:14:54PM +0200, Maxime Chevallier wrote:
-> dwmac_socfpga re-implements support for the TSE PCS, which is identical
-> to the already existing TSE PCS, which in turn is the same as the Lynx
-> PCS. Drop the existing TSE re-implemenation and use the Lynx PCS
-> instead, relying on the regmap-mdio driver to translate MDIO accesses
-> into mmio accesses.
+On Thu, 01 Jun 2023 16:28:05 +0200,
+Joakim Tjernlund wrote:
 > 
-> Add a lynx_pcs reference in the stmmac's internal structure, and use
-> .mac_select_pcs() to return the relevant PCS to be used.
+> Adding Michael Ralston <michael@ralston.id.au>
 > 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> He did have problems with his behringer UMC404HD device when this whole seq. was removed.
+> Ralston, can you try if the below change affects your device?
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Sorry for the late reaction, as I've been off in the last weeks.
 
+The code sequence there seems pretty sensitive, and swapping or
+dropping the call might break things easily on certain devices,
+unfortunately.  So, I guess we can't take the patch as is.  If any, we
+need to fiddle the call order depending on the device quirk or such.
+I guess we may try to fit with the existing quirk flag.  Let me check
+it later.
+
+
+thanks,
+
+Takashi
+
+
+>  Jocke
+> 
+> On Thu, 2023-06-01 at 15:11 +0200, Joakim Tjernlund wrote:
+> > On some USB speaker devices(Jabra/Logitech) we see above error
+> > msg when connecting device to computer and kernel is probing the device.
+> > 
+> > Moving the snd_usb_init_sample_rate() to after usb_set_interface() makes
+> > the error go away.
+> > 
+> > Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  sound/usb/stream.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/sound/usb/stream.c b/sound/usb/stream.c
+> > index f10f4e6d3fb8..d9ac8663a48b 100644
+> > --- a/sound/usb/stream.c
+> > +++ b/sound/usb/stream.c
+> > @@ -1226,8 +1226,8 @@ static int __snd_usb_parse_audio_interface(struct snd_usb_audio *chip,
+> >  		/* try to set the interface... */
+> >  		usb_set_interface(chip->dev, iface_no, 0);
+> >  		snd_usb_init_pitch(chip, fp);
+> > -		snd_usb_init_sample_rate(chip, fp, fp->rate_max);
+> >  		usb_set_interface(chip->dev, iface_no, altno);
+> > +		snd_usb_init_sample_rate(chip, fp, fp->rate_max);
+> >  	}
+> >  	return 0;
+> >  }
+> 
