@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA733722D4C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AB3722D4E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbjFERHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S235238AbjFERHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjFERG7 (ORCPT
+        with ESMTP id S235308AbjFERHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:06:59 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE41CE47;
-        Mon,  5 Jun 2023 10:06:38 -0700 (PDT)
-Received: from [172.27.2.41] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 355H6G5H3948784
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 5 Jun 2023 10:06:16 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 355H6G5H3948784
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023051001; t=1685984777;
-        bh=vGhVxD5zoDwQ5tRTjjgYq0ku41yGbDZA/+RRBNh+ffM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ypvr/F6YHfGHPoI0eDs0jXHWLjqZroJ+qx8YcOpCij/ZFphzx6rG0GKg10naaN6dO
-         Gtg0iVoC7VbeNwuBviYqrklg8/snNhOzQ4YWPIPq4qNiUda344ImQ6AXoBcZa/oRUe
-         jGtMa/k8zEXhCqzTyL6T6f0NxKSrR4tYpGAmx4s4EXwntG5DOjkxgVqda0DOxT3awK
-         6KUvPjUqVIdSau5ejdPqLFpcEaaB2MWIXpveGMqGk+F2NwH3qZjsro/s4YNqq1Av6l
-         qiuiDrR5p5olSy3mB5012Yy95T3j9PtgXTZrcpTVfMXXwGZWJVtyoBrXtZbWnWTCBz
-         qcfTsn6+6B+Bw==
-Message-ID: <e45b8bac-8df8-acf3-aa48-f8a51594ca13@zytor.com>
-Date:   Mon, 5 Jun 2023 10:06:16 -0700
+        Mon, 5 Jun 2023 13:07:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED1B11B;
+        Mon,  5 Jun 2023 10:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685984827; x=1717520827;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=orhtIbFdFJ/vZtw5mqPX0sVVvIYZvmqrT7bkUFf8ebI=;
+  b=Byp+CeMnFA9VY7bdcF3ROuq0ZLbt1vltCHqgBsTnzk/ESGhmZWwGwozX
+   n2G9hVk/nLWhv3XP4Y/v2pNST6wSwoELjXfcjjjyF3CQFUiYCCRCVbtjC
+   zj2oZKEUIcPlVFUF/mINJC2YNCSePUZiJeZFCL1WAa8tl4qsxbmMLBonN
+   HHQILWFdZFoLfir+85URn+oe9sY48FR8QU9YufR2sU127kXjKkCDN39uE
+   WejodDTQTZexCUQm5T1hSZoTi3WGly/utuSrlEf7/MlTuXj3NRugLnp7j
+   1BvUEbB9nEgL2TBKrdLuAgNTU9U+CctdIV8acXTrp4vVpsOGkpPdv8vzc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355275870"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="355275870"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 10:07:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="741785902"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="741785902"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 05 Jun 2023 10:06:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q6Df2-001QZ0-2M;
+        Mon, 05 Jun 2023 20:06:28 +0300
+Date:   Mon, 5 Jun 2023 20:06:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 0/3] lib/string_helpers et al.: Change return value of
+ strreplace()
+Message-ID: <ZH4WFCgq7kUwHLgl@smile.fi.intel.com>
+References: <20230323123704.37983-1-andriy.shevchenko@linux.intel.com>
+ <ZC1454AwRUNFTbIW@smile.fi.intel.com>
+ <2023040523-unworthy-uncured-1eab@gregkh>
+ <ZC2H8ODMwoO5hzZG@smile.fi.intel.com>
+ <47D8878A-1108-4AC3-BF7F-507F90F6970A@kernel.org>
+ <ZH3rezDApUro84HB@smile.fi.intel.com>
+ <2023060537-espionage-comfort-3e56@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v8 09/33] x86/cpu: add X86_CR4_FRED macro
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, Xin Li <xin3.li@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
-        pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-10-xin3.li@intel.com> <87r0qq6rtm.ffs@tglx>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <87r0qq6rtm.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023060537-espionage-comfort-3e56@gregkh>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,21 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/23 05:01, Thomas Gleixner wrote:
-> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+On Mon, Jun 05, 2023 at 06:57:48PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Jun 05, 2023 at 05:04:43PM +0300, Andy Shevchenko wrote:
+> > On Wed, Apr 05, 2023 at 07:58:40PM -0700, Kees Cook wrote:
+> > > On April 5, 2023 7:38:40 AM PDT, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > >On Wed, Apr 05, 2023 at 04:24:42PM +0200, Greg Kroah-Hartman wrote:
+> > > >> On Wed, Apr 05, 2023 at 04:34:31PM +0300, Andy Shevchenko wrote:
+> > > >> > On Thu, Mar 23, 2023 at 02:37:01PM +0200, Andy Shevchenko wrote:
+> > > >> > > It's more convenient to have strreplace() to return the pointer to
+> > > >> > >  the string itself. This will help users to make their code better.
+> > > >> > > 
+> > > >> > > The patch 1 kills the only user of the returned value of strreplace(),
+> > > >> > > Patch 2 converts the return value of strreplace(). And patch 3 shows
+> > > >> > > how it may be useful. That said, the series can be routed via fs tree,
+> > > >> > > with or without the last patch.
+> > > >> > 
+> > > >> > Since there are no comments, who can apply this (patches 1 and 2)?
+> > > >> > Greg, are you fine with the kobject change?
+> > > >> 
+> > > >> Sure, want me to take them all through my driver-core tree?
+> > > >
+> > > >Fine by me! Dunno about others. Kees?
+> > > 
+> > > Yeah, that's cool by me. :)
+> > 
+> > Greg, does this slip through the cracks?
 > 
->> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
->>
->> Add X86_CR4_FRED macro for the FRED bit in %cr4. This bit should be a
-> 
-> s/should/must/ no?
-> 
+> It did.  Can someone resend this?
 
-Technically no bit "must" be set in the fixed bit variable, but it would 
-obviously be insane not to. But it makes it a "should", both in 
-dictionary and RFC 2119 definitions.
+Done as v3.
+20230605170553.7835-1-andriy.shevchenko@linux.intel.com
 
-Incidentally, I strongly advice everyone to use the RFC 2119 definitions 
-of technical requirement terms when possible.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-	-hpa
+
