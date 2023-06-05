@@ -2,173 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03B77222D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C147222D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbjFEKBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S231631AbjFEKCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFEKBt (ORCPT
+        with ESMTP id S229791AbjFEKCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:01:49 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2048.outbound.protection.outlook.com [40.107.20.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967EED3;
-        Mon,  5 Jun 2023 03:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pbcqn1K9SkzXE4jgb6WG17EyM/TsnH6TD1w3HWfUg5o=;
- b=D+7J+Sx7hhYj3mZv4nEaMQIZaR5Z7MZElQWb6ibp1pkyl2lZRZE8gqwVAOrpmqHm3bxIeplEmE8jOepiKySQ6aJnmiNiNAHYusPScyldquDtXxQXz8Owbt/1yAWqrN4pDv2xRwUbdtsLDbzVodYmWUIxZ0MHmyGNW9z23EtRyFlTWFkEaEzlX+zt1GUtsPp3J6+l5CGWB3qkb9ST2QXYfVUevSd+h2U22w2dYi7IPODC54usWw4oeJY7eRQNUW5KkxDRZWDcny52xxZHwqePr6ckPYzP3hgMSwXQI+ndt8x+dNj5Ffp52piF8XGkMl62JqP8vzJ7XwLuq3aQvGXFXQ==
-Received: from ZR0P278CA0184.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:44::19)
- by DBBPR04MB7660.eurprd04.prod.outlook.com (2603:10a6:10:20f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 10:01:41 +0000
-Received: from VE1EUR01FT023.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:910:44:cafe::50) by ZR0P278CA0184.outlook.office365.com
- (2603:10a6:910:44::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Mon, 5 Jun 2023 10:01:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
- smtp.mailfrom=topicproducts.com; dkim=fail (signature did not verify)
- header.d=topic.nl;dmarc=none action=none header.from=topic.nl;
-Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
- designates 13.93.42.39 as permitted sender) receiver=protection.outlook.com;
- client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
-Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
- VE1EUR01FT023.mail.protection.outlook.com (10.152.2.218) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.18 via Frontend Transport; Mon, 5 Jun 2023 10:01:40 +0000
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (104.47.11.49) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 05 Jun 2023 10:01:39 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TrwTUfLGJNEQKzvTSv+LAbo5BDv/eHsbuyv6nKVX64SpZ9a6fis1Y9/HoNeol/E7Thognx8PVQ/QlG6taIDCzF8XH1CdMzBMDHdIEDG2MyzhfEMAwm6bVZIiRSsivK4qSRpNAPXnOQz7Sxd5EboDlP+FBvA/DNRzIRLr95+QDuyxPEjttZ01SO6ITZZYpdaMfFQM8dSrrvqfJD+Gpv0iJQ9gtiX35LgDXSoCuodoxYcHZpVhlGCThUVB45JdtmUFdOAsp+K0se0hNCz9Lfj0FAvTnVHpK5w1/zLnhpHp6tVQBvgpRzEfEOuZiDmw2oRxpPvIVPSt4uPRRb4cREMbaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V9u43TFUx+rCyt4zwj8CGK4Hio2R9CL3d6dzWzFRoK4=;
- b=LXtmTg+vhJsYwdi2WQMMxBwzgMrFyKGq+D4IcJMsPQJR9JSLCyi8DUkRt5jU9BMrsFCjyqc3YyHhtnvu0WLRhv+8rf8EdE+AbIIA0q4E6pfkp8QkWSXYdTrlXAHJARukeeqWZP41wCXZy24AlAm9LqIuPOUha9z7td1ebZcLTyJCLZyQKh+24wOW9Xkvivw/ibqo4WSSmh+oo7EaQTwsKEOmVq7pJ8eLvIgjVqMp2mWNFq9mCy0O148F0Dd54PuHdM+ZA1dBHpQEHaBZbn5zxtYLyLgxAfsXZlbnkoK5dn1fkfahmAyjm6Pt/MynhhMfn/855CaEMTrzKCtGDVqSCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
- dkim=pass header.d=topic.nl; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V9u43TFUx+rCyt4zwj8CGK4Hio2R9CL3d6dzWzFRoK4=;
- b=pbNUGbXbFxwEyKe2CNgP9G2iPebeFZMYD4CtGpox8cN4HHshr40l2hfO5jdpwGKJv9DE3jY7a+rsn8DWQRTveBdBA18FsX30YojaFl5ON5HMGXyfz7+WGxVNj5SYIgFmbscktWNMML3xnFMbLAYJeyoce/mt8LYfyMVLA8856DBmo2xjmJ+BYh+N/oMxSLcISoT37sq2P32pkkxvrozoEGuiyMu/fl0fqVoWRXMHlBQDRwnT0O94hxZsegMQBe93UZYW2XGfKu8STJOlXleE2SsfxyvMvpAJmFfQ4zZSNMCWuCY1jwqJWFuBxLRpA8q9MlH6mgpgNdhY8rJxLXghXw==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=topic.nl;
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
- by AS1PR04MB9683.eurprd04.prod.outlook.com (2603:10a6:20b:473::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 10:01:36 +0000
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::4cd1:3e90:54e5:9696]) by DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::4cd1:3e90:54e5:9696%5]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 10:01:36 +0000
-Message-ID: <ae4e2041-9fd7-30e7-8c0a-22a423c5871e@topic.nl>
-Date:   Mon, 5 Jun 2023 12:01:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Mike Looijmans <mike.looijmans@topic.nl>
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add nvmem-clock
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-CC:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.2167d5ad-7e99-4eb9-a313-030fc7a7d546@emailsignatures365.codetwo.com>
- <20230526143807.10164-1-mike.looijmans@topic.nl>
- <c6d886d9-8f74-7af3-5478-030f5d6e4b1c@linaro.org>
-Organization: Topic
-In-Reply-To: <c6d886d9-8f74-7af3-5478-030f5d6e4b1c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM0PR02CA0219.eurprd02.prod.outlook.com
- (2603:10a6:20b:28f::26) To DB8PR04MB6523.eurprd04.prod.outlook.com
- (2603:10a6:10:10f::26)
+        Mon, 5 Jun 2023 06:02:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB84F3;
+        Mon,  5 Jun 2023 03:02:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35193614C5;
+        Mon,  5 Jun 2023 10:02:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6E2C433EF;
+        Mon,  5 Jun 2023 10:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685959346;
+        bh=wDMQp3EM29n8nZ/eyrN3WtLu2XgP5S4OYlBxnPAvpV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hjwm58tFsNCa0MsNu2i76c25X16oi4OE3JGR95I3FoWfi+nj65agpOVa4H/8kFH0S
+         jzWsYGrabVmc+DCzT8o9uSx6Muz+ia13IneVTIb+V0+DrliQVxRQ6ClYvZ0wMjQXHD
+         9387CF1rXJOt9sDBFVmNRV6Spx45ubnYKPwMcX77YlMkBzu/JOnkdEtUZke8gXvjzb
+         QUaffNJ3L9/H/cc6MUzQDVxmxV1ZtYrbilCr5LVxQB4suX/54i3Q050iXvCvV2l4th
+         IsHNOmBZgKV6yi3V5g+Vc5e6iBwnXLg7ulAg8e7SOAAjwaLd0aBaQgP3npucHrzUnA
+         QKR0Gx2bk/z8w==
+Date:   Mon, 5 Jun 2023 12:02:23 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     David Zheng <david.zheng@intel.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com
+Subject: Re: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
+Message-ID: <ZH2yr1sFvjbAiBTq@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        David Zheng <david.zheng@intel.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com
+References: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
+ <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|AS1PR04MB9683:EE_|VE1EUR01FT023:EE_|DBBPR04MB7660:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30ec630e-0f1a-4abc-7b34-08db65abdc12
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: anrrKJCc2URoe/g3BRyIt6qSnW5MzMz4feqPO0nmGFOtZstwPc9oXDw9JLVuTCy/35bxhdaR58pZQaYqcTYOn883OA3sMevoZNrj8+yIB3aa+Oi8JEK8dM0hIdb3IpBB7g33+Z+dziNO1yjUKt62/hQzPh47w+u0oHVoIZ1+46nXnTW479xCgCjYyyTwUtmQjxIWk8+98Hp19DvN7Hi/IZJ6yLlhH3JIV+1fZuz2J4Vbn1lyttDvX69EGbmJem+s8OdD+UainMARjMEz2i5pZnEF9glvs4K4u+96h2dam4oVWur5g5lbfzBsngd5NnbQ3U7p2DnysWM+GEWDdbuQGd8/F8TMZJhFySIVilTtmtEShNMj7/CH204MuTjgz6hRrtt0q0VhddXAgM/Ii/7+RhQnGpAyIy9fAQxlRS6/PYkLXnbVekOJbXGSaMjnZCfxwK9HZdisxquqUdUTin8CCz9Mr7e1LanY9S2AJ8pErYhUXReUKYC00Yw9/XaSygCwqrn/GMa4FKzDWGNWEslmVeei2pKlzCYhyMVYx0yujTQMy6q1Ogv0mQSMisd/Tu9PWMXxmkvaGL4A3L10J4UE5lS9hY7B2V11roF47afgA5hU3z3ETyGvNjAGdQVD87KVhkcnjO5D/GjGDdMv9LF0cquzzAf7QDvFqzYvhItRazU=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(346002)(136003)(39840400004)(451199021)(53546011)(6512007)(6506007)(38100700002)(2616005)(41300700001)(38350700002)(31686004)(36916002)(6486002)(52116002)(186003)(26005)(42882007)(83380400001)(83170400001)(478600001)(54906003)(4326008)(66476007)(66556008)(316002)(66946007)(8936002)(8676002)(5660300002)(44832011)(2906002)(31696002)(15974865002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9683
-X-CodeTwo-MessageID: 0245adc9-b7a5-483c-ace2-196be3da7e17.20230605100139@westeu12-emailsignatures-cloud.codetwo.com
-X-CodeTwoProcessed: true
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR01FT023.eop-EUR01.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 0afd62b1-0ba8-456e-5b6c-08db65abd948
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 69klB3EXCWIf61HqPkCPNdkbaADWlMw3KJnsGM1CfI5JRXyr2mFiHhZyO9meB2rNJkM0CSMHT0qVuPlJkQV7M3AsIG21TVIqa18/JufT7HwFDEKx2IT64fgVU8yoHXDbSsghIyFpfu2Hj+6PliewH7AB+oTSFwYqY3iGRDt7hXZl+B8oLgJwqsAGxCu94EbzpcpIPPTVd7r8pS+m8Zmd7kWBq9nfwHD2+pK2h+J3FCy1hJq8/VgM0/SeCdvliyCFPeuN8EKzd7ebgGS20xC4FKVwVnPb1HvNlxzRYkfK7r71FZma4O+RXAPWFalhm55DeeX3mKjbjPp4nqqqYorRM3WrhPfjpKOPm/Mbd4OIw6jvV0h7IndZylcMbo/pOMygZpLfuPYuFiTejJNgkiXmZOpP1/g9ZrQAFIfxvmRQGxnLBQZrarKMjPaKT3ijwULaAwsROu8L20wY93n9E3fogNC5Amufj/+4GXV0Ku9yAcrKZDmZ9Z9BHzIRRk0t14dKGS56MIfB5hH6oBZl9badZ2N9nC7cnksDOMc/9JyTHqriMTfp2GPLKKZ0ye4jorqZl0flM7CW7jSKPw0CBJ7aFLZ/ULBsh/EVrLl+i+PIN/Nc0pWl9wcDrUhnsasvKP/t9NxpdvY723Nu2wivTA3sdY/vNTh+mg4O1FX9wZ1fa3OjoS9MDB6q6+uWrmORKt3AF+UyHqjoNDFcZkEFh03mFxVmPc30Z+2BsybjDyUAoJTlWsUy+aoTot29o9WP07n3YkOeYpGmdT9nQRxggGFYmQ==
-X-Forefront-Antispam-Report: CIP:13.93.42.39;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39840400004)(396003)(451199021)(46966006)(36840700001)(47076005)(2616005)(26005)(6512007)(53546011)(6506007)(83380400001)(31686004)(41300700001)(36860700001)(36916002)(6486002)(186003)(42882007)(336012)(478600001)(83170400001)(54906003)(4326008)(82310400005)(40480700001)(7636003)(7596003)(356005)(70206006)(70586007)(316002)(8936002)(8676002)(5660300002)(44832011)(2906002)(31696002)(15974865002)(36756003)(43740500002)(18886075002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: topic.nl
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 10:01:40.6725
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30ec630e-0f1a-4abc-7b34-08db65abdc12
-X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[13.93.42.39];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT023.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7660
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kGhRtULe50q054Gw"
+Content-Disposition: inline
+In-Reply-To: <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31-05-2023 21:27, Krzysztof Kozlowski wrote:
-> On 26/05/2023 16:38, Mike Looijmans wrote:
->> Add bindings for a fixed-rate clock that retrieves its rate from an
->> NVMEM provider. This allows to store clock settings in EEPROM or EFUSE
->> or similar device.
->>
->> Component shortages lead to boards being shipped with different clock
->> crystals, based on what was available at the time. The clock frequency
->> was written to EEPROM at production time. Systems can adapt to a wide
->> range of input frequencies using the clock framework, but this required
->> us to patch the devicetree at runtime or use some custom driver. This
->> provides a more generic solution.
-> This does not look like real hardware. I mean, the clock does not fetch
-> its rate from nvmem, right? It's the Linux which does it, so basically
-> you described here driver, not hardware.
-Right, this just reads a setting from an NVMEM provider.
-> Extend existing fixed-clock bindings to allow reading frequency via
-> nvmem cells.
 
-I just tried and implemented this, but it does not work. The reason is=20
-that the fixed-clock implementation returns "void" in its=20
-of_fixed_clk_setup() init function. The nvmem provider returns=20
-EPROBE_DEFER because it isn't ready at this early stage, and this error=20
-will not be propagated up because of the "void" signature. Thus, it's=20
-never retried and the clock just disappears.
+--kGhRtULe50q054Gw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, May 26, 2023 at 04:58:26PM +0300, Jarkko Nikula wrote:
+> On 5/24/23 21:14, David Zheng wrote:
+> > With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+> > RX FIFO is empty. When testing with the slave-eeprom, each transaction
+> > has 2 bytes for address/index and 1 byte for value, the address byte
+> > can be written as data byte due to dropping STOP condition.
+> >=20
+> > In the test below, the master continuously writes to the slave, first 2
+> > bytes are index, 3rd byte is value and follow by a STOP condition.
+> >=20
+> >   i2c_write: i2c-3 #0 a=3D04b f=3D0000 l=3D3 [00-D1-D1]
+> >   i2c_write: i2c-3 #0 a=3D04b f=3D0000 l=3D3 [00-D2-D2]
+> >   i2c_write: i2c-3 #0 a=3D04b f=3D0000 l=3D3 [00-D3-D3]
+> >=20
+> > Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` =
+so
+> > next 2 bytes can be treated as buffer index for upcoming transaction.
+> > Supposedly the slave eeprom buffer would be written as
+> >=20
+> >   EEPROM[0x00D1] =3D 0xD1
+> >   EEPROM[0x00D2] =3D 0xD2
+> >   EEPROM[0x00D3] =3D 0xD3
+> >=20
+> > When CPU load is high the slave irq handler may not read fast enough,
+> > the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+> > (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+> > the transactions below.
+> >=20
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
+=3D0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
+=3D0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
+=3D0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1794 : INTR_STAT=
+=3D0x204
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x0 : RAW_INTR_STAT=3D0x1790 : INTR_STAT=
+=3D0x200
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
+=3D0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
+=3D0x4
+> >   0x1 STATUS SLAVE_ACTIVITY=3D0x1 : RAW_INTR_STAT=3D0x1594 : INTR_STAT=
+=3D0x4
+> >=20
+> > After `D1` is received, read loop continues to read `00` which is the
+> > first bype of next index. Since STOP condition is ignored by the loop,
+> > eeprom buffer index increased to `D2` and `00` is written as value.
+> >=20
+> > So the slave eeprom buffer becomes
+> >=20
+> >   EEPROM[0x00D1] =3D 0xD1
+> >   EEPROM[0x00D2] =3D 0x00
+> >   EEPROM[0x00D3] =3D 0xD3
+> >=20
+> > The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+> > the transactions. The first index byte in this case would have bit 11
+> > set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+> > which will reset `idx_write_cnt` in slave eeprom.
+> >=20
+> > Signed-off-by: David Zheng <david.zheng@intel.com>
+
+Applied to for-current, thanks!
+
+Someone maybe has a Fixes tag for it?
 
 
-> Best regards,
-> Krzysztof
->
+--kGhRtULe50q054Gw
+Content-Type: application/pgp-signature; name="signature.asc"
 
---=20
-Mike Looijmans
-System Expert
+-----BEGIN PGP SIGNATURE-----
 
-TOPIC Embedded Products B.V.
-Materiaalweg 4, 5681 RJ Best
-The Netherlands
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9sq8ACgkQFA3kzBSg
+Kbbc9Q//TCUXaQovPdQLkXwhp3QMwJf54s87beL/9vOqI/8zhPg25Y0UTtsQ/n36
+Rd5u61DEXqxYIXlKQXdIak8CUWgcuMpESPcY1M86roMBv/T+SjI7ROo7tQLBdFoD
+uLIQRjlQr4JSh3h4QJiK2SkrXmS/1FgsppH+lro9TsRm9WaFZkAU5M8FBZd06WpX
+1CES6MVSqLeQSO5TW5eDRBei2oKm+TJYjhGAovZhrgMxZ0SVzm6W0dY5x2t9kNpZ
+JoUx8oj81QR0JPNHLJIybmJ2C+Ea9yL3fmKfviLkbkBgz22jmHvG+gbDsx21vfyx
+oQUa9yHykwiAmAZXLCsGww9SW9uwCoLAvKy5Axj49iodocAMMUp7zwBzr3qciJpY
+B0LMA/oki2hVMQaywj9YY/rT9mkCw2wzDH185ltcvAMxXvy/AGWc7GLWDzabj+q9
+AryohX6UNs/3FIR7sbLcNPw/G8gwLsLI1ZPWnujqNSPsZBTeX0gX2kAmpouyd+co
+aTJ2TeCpCDUMoP8LS7vOFuPS7sJJvV1c4OAtDtpjr6QOCxRT9MapRcRp0yodcQx6
+a/Ze7/vNmYljDRpSLQF6oAkfar5nVTs9nlty5May/x7N22OrX8K/yXyZuv+2HX/0
+uxrdGwAUzf0M2/01YS6JaMkOig9hDnDkf6LU52Ey9sjcnO7TYs8=
+=SooM
+-----END PGP SIGNATURE-----
 
-T: +31 (0) 499 33 69 69
-E: mike.looijmans@topic.nl
-W: www.topic.nl
-
-
-
+--kGhRtULe50q054Gw--
