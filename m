@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802FE722145
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEA4722147
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjFEIoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S230258AbjFEIoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjFEIn7 (ORCPT
+        with ESMTP id S230204AbjFEIoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:43:59 -0400
+        Mon, 5 Jun 2023 04:44:01 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDAAC7;
-        Mon,  5 Jun 2023 01:43:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22B8CD;
+        Mon,  5 Jun 2023 01:43:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685954638; x=1717490638;
+  t=1685954639; x=1717490639;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9MY3WW6CqLpJTMPf39zMocMMeYKlKyXJGNQjClqE0hA=;
-  b=VxDpYgC3/+iFw++CxM8R8TYtTnBXZAR49flPH6bCMf0oPuW9cITIAyoh
-   4utrBXnZWH1jygb1ADtNlJBpJOqWeQJMYZA+TpUc0vIbGQRaMi6hfJFqL
-   MrK//CjtoqTb1Umeq2Of956cttKrRh9u00jY+r/Hz9H4ERDy6PtVlAoD/
-   o9m1gWPhZxGGG3/HlwQKiRdWBhdWCSeRc55b2o6ba51rIRh6yKqvgVXPX
-   S+YirKenOGJN1m112I8PcdHbGWC4/aS8CrpqGYnUISahSQtbm5IODaAwb
-   IhYRyHxMNyrcs2wQi3InweE4eyysuNgK1jm2KgMTBCWlQ1+oe6MXn1+eZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="356327456"
+  bh=ZKd1hojcEofK8WgGk5N5pRnS4q4s9sbyMNImCRd9UFk=;
+  b=No7eyxf1TBfHbNvYBLrWeXeFa7NGZMCPqMnYhcZhieyb9xnjGVEZ3Ai9
+   lEKYD8qBoRV1reOjfh7E0byobdHwfuxrTx0FCPmVhY+yyemoF+Rjv2ZL+
+   aMBwDSzjj6FGnTD4mY5dmBMR26spboF9UB7g6WAr+7KZtk7evwjkdGB1g
+   zq+dsDFkK/iHmNI8mzK7eT/ZhHY+v/x5qsdQL5u/HlmYp46NaKp2W63GW
+   2yMBTSn+QXTWkI3wvh18a0PPdaXD+/sViufmXCo0xz5sSgx1obwBSn2Uh
+   Ldqejq3OC0QTDk1S14g76lJ2TCE9/svMar7A3tUBnQL2LBL/oHyBII98j
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="356327448"
 X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="356327456"
+   d="scan'208";a="356327448"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 01:43:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="798340339"
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="798340337"
 X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="798340339"
+   d="scan'208";a="798340337"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
   by FMSMGA003.fm.intel.com with ESMTP; 05 Jun 2023 01:43:54 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q65of-00042D-2E;
+        id 1q65of-00042B-25;
         Mon, 05 Jun 2023 08:43:53 +0000
-Date:   Mon, 5 Jun 2023 16:43:05 +0800
+Date:   Mon, 5 Jun 2023 16:43:07 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Wenbin Mei <wenbin.mei@mediatek.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Chaotian Jing <chaotian.jing@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
@@ -60,7 +60,7 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         linux-mediatek@lists.infradead.org,
         Wenbin Mei <wenbin.mei@mediatek.com>
 Subject: Re: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
-Message-ID: <202306051648.vkycL2Do-lkp@intel.com>
+Message-ID: <202306051634.orHLaQ9t-lkp@intel.com>
 References: <20230605060107.22044-1-wenbin.mei@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -90,8 +90,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Wenbin-Mei/mmc-mtk-sd-red
 base:   linus/master
 patch link:    https://lore.kernel.org/r/20230605060107.22044-1-wenbin.mei%40mediatek.com
 patch subject: [PATCH v3] mmc: mtk-sd: reduce CIT for better performance
-config: powerpc-buildonly-randconfig-r006-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051648.vkycL2Do-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
+config: x86_64-randconfig-a004-20230605 (https://download.01.org/0day-ci/archive/20230605/202306051634.orHLaQ9t-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -102,109 +102,78 @@ reproduce (this is a W=1 build):
         git checkout 225e46f420d48f7ad73253636a0553bd5f986435
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/mmc/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mmc/host/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306051648.vkycL2Do-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306051634.orHLaQ9t-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from ./arch/powerpc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:6,
-                    from include/linux/math64.h:6,
-                    from include/linux/time.h:6,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from drivers/mmc/host/mtk-sd.c:7:
-   drivers/mmc/host/mtk-sd.c: In function 'msdc_cqe_cit_cal':
-   include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                                   ^~
-   drivers/mmc/host/mtk-sd.c:2470:25: note: in expansion of macro 'do_div'
-    2470 |                         do_div(hclk_freq, 1000);
-         |                         ^~~~~~
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/module.h:12:
-   include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^~
-   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   drivers/mmc/host/mtk-sd.c:2470:25: note: in expansion of macro 'do_div'
-    2470 |                         do_div(hclk_freq, 1000);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-         |                                    |
-         |                                    u32 * {aka unsigned int *}
-   drivers/mmc/host/mtk-sd.c:2470:25: note: in expansion of macro 'do_div'
-    2470 |                         do_div(hclk_freq, 1000);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:213:38: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'u32 *' {aka 'unsigned int *'}
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                            ~~~~~~~~~~^~~~~~~~
-   include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                                   ^~
-   drivers/mmc/host/mtk-sd.c:2473:25: note: in expansion of macro 'do_div'
-    2473 |                         do_div(hclk_freq, 100);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^~
-   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   drivers/mmc/host/mtk-sd.c:2473:25: note: in expansion of macro 'do_div'
-    2473 |                         do_div(hclk_freq, 100);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-         |                                    |
-         |                                    u32 * {aka unsigned int *}
-   drivers/mmc/host/mtk-sd.c:2473:25: note: in expansion of macro 'do_div'
-    2473 |                         do_div(hclk_freq, 100);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:213:38: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'u32 *' {aka 'unsigned int *'}
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                            ~~~~~~~~~~^~~~~~~~
-   include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                                   ^~
-   drivers/mmc/host/mtk-sd.c:2476:25: note: in expansion of macro 'do_div'
-    2476 |                         do_div(hclk_freq, 10);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^~
-   include/linux/compiler.h:76:45: note: in definition of macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   drivers/mmc/host/mtk-sd.c:2476:25: note: in expansion of macro 'do_div'
-    2476 |                         do_div(hclk_freq, 10);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-         |                                    |
-         |                                    u32 * {aka unsigned int *}
-   drivers/mmc/host/mtk-sd.c:2476:25: note: in expansion of macro 'do_div'
-    2476 |                         do_div(hclk_freq, 10);
-         |                         ^~~~~~
-   include/asm-generic/div64.h:213:38: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'u32 *' {aka 'unsigned int *'}
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                            ~~~~~~~~~~^~~~~~~~
->> drivers/mmc/host/mtk-sd.c:2489:11: error: expected '}' before 'else'
-    2489 |         } else {
-         |           ^~~~
-   cc1: some warnings being treated as errors
+>> drivers/mmc/host/mtk-sd.c:2489:4: error: expected expression
+           } else {
+             ^
+>> drivers/mmc/host/mtk-sd.c:2495:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2513:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2539:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2549:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/mmc/host/mtk-sd.c:2577:20: error: use of undeclared identifier 'msdc_cqe_enable'
+           .enable         = msdc_cqe_enable,
+                             ^
+>> drivers/mmc/host/mtk-sd.c:2578:20: error: use of undeclared identifier 'msdc_cqe_disable'
+           .disable        = msdc_cqe_disable,
+                             ^
+>> drivers/mmc/host/mtk-sd.c:2579:16: error: use of undeclared identifier 'msdc_cqe_pre_enable'; did you mean 'msdc_cqe_cit_cal'?
+           .pre_enable = msdc_cqe_pre_enable,
+                         ^~~~~~~~~~~~~~~~~~~
+                         msdc_cqe_cit_cal
+   drivers/mmc/host/mtk-sd.c:2454:13: note: 'msdc_cqe_cit_cal' declared here
+   static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
+               ^
+>> drivers/mmc/host/mtk-sd.c:2580:18: error: use of undeclared identifier 'msdc_cqe_post_disable'
+           .post_disable = msdc_cqe_post_disable,
+                           ^
+   drivers/mmc/host/mtk-sd.c:2585:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2616:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2668:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2892:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2920:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2947:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2978:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:2997:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:3016:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/mmc/host/mtk-sd.c:3041:1: error: function definition is not allowed here
+   {
+   ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
 vim +2489 drivers/mmc/host/mtk-sd.c
@@ -250,6 +219,95 @@ vim +2489 drivers/mmc/host/mtk-sd.c
   2491		}
   2492	}
   2493	
+  2494	static void msdc_cqe_enable(struct mmc_host *mmc)
+> 2495	{
+  2496		struct msdc_host *host = mmc_priv(mmc);
+  2497		struct cqhci_host *cq_host = mmc->cqe_private;
+  2498	
+  2499		/* enable cmdq irq */
+  2500		writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+  2501		/* enable busy check */
+  2502		sdr_set_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
+  2503		/* default write data / busy timeout 20s */
+  2504		msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+  2505		/* default read data timeout 1s */
+  2506		msdc_set_timeout(host, 1000000000ULL, 0);
+  2507	
+  2508		/* Set the send status command idle timer */
+  2509		cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+  2510	}
+  2511	
+  2512	static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+  2513	{
+  2514		struct msdc_host *host = mmc_priv(mmc);
+  2515		unsigned int val = 0;
+  2516	
+  2517		/* disable cmdq irq */
+  2518		sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INT_CMDQ);
+  2519		/* disable busy check */
+  2520		sdr_clr_bits(host->base + MSDC_PATCH_BIT1, MSDC_PB1_BUSY_CHECK_SEL);
+  2521	
+  2522		val = readl(host->base + MSDC_INT);
+  2523		writel(val, host->base + MSDC_INT);
+  2524	
+  2525		if (recovery) {
+  2526			sdr_set_field(host->base + MSDC_DMA_CTRL,
+  2527				      MSDC_DMA_CTRL_STOP, 1);
+  2528			if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
+  2529				!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
+  2530				return;
+  2531			if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
+  2532				!(val & MSDC_DMA_CFG_STS), 1, 3000)))
+  2533				return;
+  2534			msdc_reset_hw(host);
+  2535		}
+  2536	}
+  2537	
+  2538	static void msdc_cqe_pre_enable(struct mmc_host *mmc)
+  2539	{
+  2540		struct cqhci_host *cq_host = mmc->cqe_private;
+  2541		u32 reg;
+  2542	
+  2543		reg = cqhci_readl(cq_host, CQHCI_CFG);
+  2544		reg |= CQHCI_ENABLE;
+  2545		cqhci_writel(cq_host, reg, CQHCI_CFG);
+  2546	}
+  2547	
+  2548	static void msdc_cqe_post_disable(struct mmc_host *mmc)
+  2549	{
+  2550		struct cqhci_host *cq_host = mmc->cqe_private;
+  2551		u32 reg;
+  2552	
+  2553		reg = cqhci_readl(cq_host, CQHCI_CFG);
+  2554		reg &= ~CQHCI_ENABLE;
+  2555		cqhci_writel(cq_host, reg, CQHCI_CFG);
+  2556	}
+  2557	
+  2558	static const struct mmc_host_ops mt_msdc_ops = {
+  2559		.post_req = msdc_post_req,
+  2560		.pre_req = msdc_pre_req,
+  2561		.request = msdc_ops_request,
+  2562		.set_ios = msdc_ops_set_ios,
+  2563		.get_ro = mmc_gpio_get_ro,
+  2564		.get_cd = msdc_get_cd,
+  2565		.hs400_enhanced_strobe = msdc_hs400_enhanced_strobe,
+  2566		.enable_sdio_irq = msdc_enable_sdio_irq,
+  2567		.ack_sdio_irq = msdc_ack_sdio_irq,
+  2568		.start_signal_voltage_switch = msdc_ops_switch_volt,
+  2569		.card_busy = msdc_card_busy,
+  2570		.execute_tuning = msdc_execute_tuning,
+  2571		.prepare_hs400_tuning = msdc_prepare_hs400_tuning,
+  2572		.execute_hs400_tuning = msdc_execute_hs400_tuning,
+  2573		.card_hw_reset = msdc_hw_reset,
+  2574	};
+  2575	
+  2576	static const struct cqhci_host_ops msdc_cmdq_ops = {
+> 2577		.enable         = msdc_cqe_enable,
+> 2578		.disable        = msdc_cqe_disable,
+> 2579		.pre_enable = msdc_cqe_pre_enable,
+> 2580		.post_disable = msdc_cqe_post_disable,
+  2581	};
+  2582	
 
 -- 
 0-DAY CI Kernel Test Service
