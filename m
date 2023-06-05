@@ -2,138 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD67722717
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E32572271A
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjFENN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S233939AbjFENNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbjFENNU (ORCPT
+        with ESMTP id S233953AbjFENNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:13:20 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1123BF7;
-        Mon,  5 Jun 2023 06:12:51 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8AxxvBR331kkBkAAA--.293S3;
-        Mon, 05 Jun 2023 21:12:49 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6ORR331knoMAAA--.2478S3;
-        Mon, 05 Jun 2023 21:12:49 +0800 (CST)
-Message-ID: <3f352d6f-2d4f-0b41-f015-991ba8421007@loongson.cn>
-Date:   Mon, 5 Jun 2023 21:12:49 +0800
+        Mon, 5 Jun 2023 09:13:43 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE6E197
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:13:37 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b1806264e9so24381395ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685970817; x=1688562817;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qRPb6J5NRktKRP7+z02Eos3uAz1yeGFclnQmG0HZ++4=;
+        b=Dj0QqjOK7DmyQir8kYZnVV2n7Ftt7Oq7pfIhlAq0C5Rxki0R4ORhm02hwQ/TnzJGut
+         9gJFU4Ghkwe0wdmIInf0wMqXJ2UrOSM1kRcKwGGtkE9dgTIbfhSrHPIlVFXDZrjFkZJy
+         8cZ9KS6Oi3nSnQkCFRfxcw2x3zuUZeyhvvWDUGH2uuVFZNz90AKd/Hg2BNe641Pz2Qxh
+         Jj/3jimsAa4fnn5qoxClncvorp1s9UwQi1i0Ny+0NWjAXTqKzWfrf49YKuyTL8zr31up
+         T2jFa1vS4U1mi+wEKtOZYuXKwHJUwtMBImUGglUvk5wTtHHmSYH5FwXrws5t8PdJVyk7
+         L4Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685970817; x=1688562817;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qRPb6J5NRktKRP7+z02Eos3uAz1yeGFclnQmG0HZ++4=;
+        b=fBZfGJhCwiXQruJtH61ZbQZmqRnRaW7UfT4hTkaO+QP9zaedPMc4YgVb0eW7o6iUeT
+         RryTeEyb3IMdm5SxBEWQ3R8Ispw/VD/NiYu+aD/zCeLwVjjx08NsvLsXln+rP6wYvmp1
+         NgLDJFgc7fdkxYT3lLAIoL/FOeJrk6kuYDL5aH1ZNEj2zIN4K2WEyLiaKqrIAPc0nt0X
+         jEimRpZtSDiZFu8zW0IfwNmOSDuEIEVqchEOKFIaB4jR5ourfxX34BNaZoptb9hQA+uc
+         rnxsN/6lH3VV9s1n/Ovr7uiztTql4FXuKgdAswTp3soOE/W2wX8VFxFJb8A9gasSQIdW
+         Wgxw==
+X-Gm-Message-State: AC+VfDzY7JateVxBXs4riiK23zB12Qy6tnB45D/mmam9RXcU1y5NbGRo
+        B031OHksHRoQud8eY1rBKYIsm9oRPSaoZASL
+X-Google-Smtp-Source: ACHHUZ50vSqgKN7a+742lmqTxtfeZnsppZ7tegySwK4rHmn+i5pthr9Fhq94NvbpLUXcnluAYsiJig==
+X-Received: by 2002:a17:902:e5c2:b0:1b1:e863:9e77 with SMTP id u2-20020a170902e5c200b001b1e8639e77mr3265400plf.18.1685970817152;
+        Mon, 05 Jun 2023 06:13:37 -0700 (PDT)
+Received: from ubuntu.. ([103.165.115.136])
+        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b001a6cd1e4205sm6537642plb.279.2023.06.05.06.13.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 06:13:36 -0700 (PDT)
+From:   Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+To:     abbotti@mev.co.uk
+Cc:     hsweeten@visionengravers.com, linux-kernel@vger.kernel.org,
+        Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+Subject: [PATCH] drivers: comedi: drivers: s526: fixed a commented out if else coding style issue
+Date:   Mon,  5 Jun 2023 18:43:06 +0530
+Message-Id: <20230605131306.427682-1-neelchakrabortykernelwork@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 10/31] LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl
- interface
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-11-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-11-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6ORR331knoMAAA--.2478S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFy7JFyDZFWrXF43AF43urX_yoW8Wr45pF
-        4kCr15W3yrG3yIg3sxtwsrur1aqrWkKr4xXasrJ34rJFsFkry5KFWFkrZrAFW5Awn5WF1x
-        Z3WFq3Wj9F90y3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
-        XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
-        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUI0
-        eHUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fixed a coding style issue.
 
+Signed-off-by: Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+---
+ drivers/comedi/drivers/s526.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-在 2023/5/30 09:52, Tianrui Zhao 写道:
-> Implement LoongArch vcpu KVM_ENABLE_CAP ioctl interface.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/kvm/vcpu.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> index 278fbafc59b4..5a88f815c412 100644
-> --- a/arch/loongarch/kvm/vcpu.c
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -186,6 +186,23 @@ int kvm_arch_vcpu_ioctl_set_regs(struct kvm_vcpu *vcpu, struct kvm_regs *regs)
->  	return 0;
->  }
->  
-> +static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
-> +				     struct kvm_enable_cap *cap)
-> +{
-> +	int r = 0;
-> +
-> +	if (!kvm_vm_ioctl_check_extension(vcpu->kvm, cap->cap))
-> +		return -EINVAL;
-It is a little strange to check extension of the whole vm in enable vcap capability.
-can we change to usage like  general architectures?
-
-> +	if (cap->flags)
-> +		return -EINVAL;
-> +	if (cap->args[0])
-> +		return -EINVAL;
-> +	if (cap->cap)
-> +		return -EINVAL;
-Do we need check args[0] and cap here ?
-
-Regards
-Bibo, Mao
-> +
-> +	return r;
-> +}
-> +
->  long kvm_arch_vcpu_ioctl(struct file *filp,
->  			 unsigned int ioctl, unsigned long arg)
->  {
-> @@ -209,6 +226,15 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->  			r = _kvm_get_reg(vcpu, &reg);
->  		break;
->  	}
-> +	case KVM_ENABLE_CAP: {
-> +		struct kvm_enable_cap cap;
-> +
-> +		r = -EFAULT;
-> +		if (copy_from_user(&cap, argp, sizeof(cap)))
-> +			break;
-> +		r = kvm_vcpu_ioctl_enable_cap(vcpu, &cap);
-> +		break;
-> +	}
->  	default:
->  		r = -ENOIOCTLCMD;
->  		break;
+diff --git a/drivers/comedi/drivers/s526.c b/drivers/comedi/drivers/s526.c
+index 9245c679a3c4..12aa40920575 100644
+--- a/drivers/comedi/drivers/s526.c
++++ b/drivers/comedi/drivers/s526.c
+@@ -229,7 +229,6 @@ static int s526_gpct_insn_config(struct comedi_device *dev,
+ 		 */
+ 		devpriv->gpct_config[chan] = data[0];
+ 
+-#if 1
+ 		/*  Set Counter Mode Register */
+ 		val = data[1] & 0xffff;
+ 		outw(val, dev->iobase + S526_GPCT_MODE_REG(chan));
+@@ -246,7 +245,6 @@ static int s526_gpct_insn_config(struct comedi_device *dev,
+ 			 *      dev->iobase + S526_GPCT_CTRL_REG(chan));
+ 			 */
+ 		}
+-#else
+ 		val = S526_GPCT_MODE_CTDIR_CTRL_QUAD;
+ 
+ 		/*  data[1] contains GPCT_X1, GPCT_X2 or GPCT_X4 */
+-- 
+2.40.1
 
