@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB99E721E6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC62721E74
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjFEGnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 02:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        id S230115AbjFEGnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 02:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjFEGnT (ORCPT
+        with ESMTP id S230088AbjFEGnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:43:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE351E5F
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:42:57 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977c8423dccso328417966b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 23:42:57 -0700 (PDT)
+        Mon, 5 Jun 2023 02:43:50 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE2CE66
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:43:28 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-97000a039b2so712166566b.2
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 23:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685947375; x=1688539375;
+        d=linaro.org; s=google; t=1685947405; x=1688539405;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=J8/neVu5etF2OWMNQ2EIJRqVF5AKOphn5GqsmS4dQ1g=;
-        b=DWkwAPUf8wkMA3Zy4TjBBj8Y2W6BRIrkS/j/0Ix+QGMGAFOty9OE0ZD6DZUvTLDcCw
-         461HxBz2c6i0WYuxWsKTxi0l+X1389ijffpL+2TsWLUckuNnne8xgdobhpbiSBK8HFuZ
-         Lj7yvDHNajZALicV+AnvmGYgaANzmOvA0Pfws0fsc95/fcBIvbL8y7C6vrpIzPzTkOdv
-         M38staejTomw2yAa0JC/GJHLtyO7Loqa3TyUaO0UXUTtYSo+T5Ewwu7zYDbhnsXSYPzr
-         e2zYGnKifiGb3H18+ZG1EkegtOiG3tfRVZ8wS/zC+ge4ZYhRmguu2hFSOwkKTqwS7M1y
-         Ipug==
+        bh=uw934CvNepJzyaQQUV31TxbXFbtnqLugvutH4AccEcs=;
+        b=C7MPx2JRwVd1TLHaSaegjE/x0aHabVAcj4AfLdl1uPogVTjWmjrm5JgVDsmb8Jv6+G
+         lD4mgcLc9zSYKqw7y3QUkQOkeID0pomCw5pteniMt5ltImNIhbxfuK/jPDopO3jDPodr
+         4dIF4ysieJewoJkSMHGN++J4sRbE33hRvCsoQra/lezrXaovAdbix1NMwkodXTb95OV2
+         8WtdelzV0uZxVHChiPRNirjygvHToX1LRNHtj2yIhAJhSY7BllYpYb7ssOo9jhMachYN
+         Fk5lCTgbWvzlPCEJjhVkRBscV7Gds8MwE/NG6S6F8VU7J8o+ToleRn2Ae56GkZEy/oqR
+         Yanw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685947375; x=1688539375;
+        d=1e100.net; s=20221208; t=1685947405; x=1688539405;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J8/neVu5etF2OWMNQ2EIJRqVF5AKOphn5GqsmS4dQ1g=;
-        b=a9XGINAN647yoZS8IkaiLDRd89nl+tysOz7Ip433UYwanweBe/Re+JYbsrHaG2tqeO
-         qOlsG0ku0pX11X/lPygj1IUqmd5jimMe09mJG9kjy4CN++FTrNZJ81FaRSGq6WtcPAaa
-         qyOaqPGHW9kVsDc84SbnIgTqGkci2zFSZ2uWXficq4EofSHwZwvmwwLbc3ePvXtxIXjB
-         isqF10s34kqquRLAd0Va+fycaZvpM3kkAVZ1Kt7Z2R0jjozelQNeBuuA+ksvaaQKPT8R
-         G/fJpC2NmyWKwuvhb8DrwfcW8hfQv0Rtc9jbWc4jSkOaDEW3dMs2ckK2i7217XLzE3W0
-         LhzA==
-X-Gm-Message-State: AC+VfDzdQYrmRZHJSeYTiqAssq21rdvSOtl34ZI9MZYc6MGeoSKkAX6l
-        O6dC1B4ibckWrZUJmbntevnPdg==
-X-Google-Smtp-Source: ACHHUZ7kks+zPvl0Do19pc6zr+YUiMBMU7U9Uq1FIBwnETbGWqXG0wu1J9EL9cAEcfRyLIMo7N070Q==
-X-Received: by 2002:a17:907:3da3:b0:977:d660:c5aa with SMTP id he35-20020a1709073da300b00977d660c5aamr2266649ejc.31.1685947375726;
-        Sun, 04 Jun 2023 23:42:55 -0700 (PDT)
+        bh=uw934CvNepJzyaQQUV31TxbXFbtnqLugvutH4AccEcs=;
+        b=Egl4S8uvOnCUDzyQ7bwDgtNf/tPI9u/qKSD5MCFKMi6dQcITzTqV3H4r8pH3Iv6IkX
+         Zw2HiIvPNz7ovOd3EOBYKtAxrOjADAe2mDvrj7hXcDraomrv3GSH6YkWtcqJoB6ZeBy8
+         Tj2yXTambKN/ov5E03ImVzbur/mYQtzmr09UtRKOVPBWcvSASNTn3S++8Equx8sZdPld
+         le3ShtrZKBwzMBwz8LYn2Nav/71Cc3egraGlhkbBX3P+OiTRArGmTBKKbiMRRhbwxq7P
+         /ZrjwYHpGrJDYgIj/4wgeKa4UeB2fll81VHkJK8niC44+LFY4wOL61V/MHNn6Bcr68Ay
+         w1hw==
+X-Gm-Message-State: AC+VfDyzv9HSs/LLJjKKfe0ADX47xlBgaLLhziNXbBMunOOO5IZostjv
+        Qdz0JQKQI9kET2JXHGK6bq7a0w==
+X-Google-Smtp-Source: ACHHUZ6uVGxy9xFnG9Y9A3SHNYvD3NcLQFCgeDBBJmRjdb3lXsh4QvFCpVy68MhjoZMM0vV+dWuDgg==
+X-Received: by 2002:a17:906:9b88:b0:973:91f7:5092 with SMTP id dd8-20020a1709069b8800b0097391f75092mr7422310ejc.2.1685947405338;
+        Sun, 04 Jun 2023 23:43:25 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id la24-20020a170906ad9800b009745482c5b7sm3866650ejb.94.2023.06.04.23.42.52
+        by smtp.gmail.com with ESMTPSA id o22-20020a1709061b1600b00977c50476f7sm2602597ejg.44.2023.06.04.23.43.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 23:42:55 -0700 (PDT)
-Message-ID: <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
-Date:   Mon, 5 Jun 2023 08:42:52 +0200
+        Sun, 04 Jun 2023 23:43:24 -0700 (PDT)
+Message-ID: <2a538004-351f-487a-361c-df723d186c27@linaro.org>
+Date:   Mon, 5 Jun 2023 08:43:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
+Subject: Re: [PATCH 17/21] power: reset: at91-poweroff: lookup for proper pmc
+ dt node for sam9x7
 Content-Language: en-US
 To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
@@ -76,9 +77,9 @@ Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
         dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
         balakrishnan.s@microchip.com
 References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-22-varshini.rajendran@microchip.com>
+ <20230603200243.243878-18-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230603200243.243878-22-varshini.rajendran@microchip.com>
+In-Reply-To: <20230603200243.243878-18-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,27 +93,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 03/06/2023 22:02, Varshini Rajendran wrote:
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
-> 
-> Add support for GMAC in sam9x7 SoC family
+> Use sam9x7 pmc's compatible to lookup for in the SHDWC driver
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 > ---
->  drivers/net/ethernet/cadence/macb_main.c | 1 +
+>  drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 29a1199dad14..609c8e9305ba 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
->  	{ .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
->  	{ .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
->  	{ .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
-> +	{ .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
+> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+> index d8ecffe72f16..d0f29b99f25e 100644
+> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
+> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+> @@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] = {
+>  	{ .compatible = "atmel,sama5d2-pmc" },
+>  	{ .compatible = "microchip,sam9x60-pmc" },
+>  	{ .compatible = "microchip,sama7g5-pmc" },
+> +	{ .compatible = "microchip,sam9x7-pmc" },
 
-These are compatible, aren't they? Why do you need new entry?
+Why do you need new entry if these are compatible?
 
 Best regards,
 Krzysztof
