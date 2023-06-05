@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE46722DF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB47722DED
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjFERxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S230489AbjFERxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbjFERx3 (ORCPT
+        with ESMTP id S231991AbjFERxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:53:29 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A500109;
-        Mon,  5 Jun 2023 10:53:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1685987607; x=1717523607;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HwC2Jb0kxHE1+xykN93sfn2LkkNfwVz71nFqYVx0hjc=;
-  b=IDUj6MFS+rV/RwJtp60MY5vu3xEqHXJOxNr62341PwmWWGV9DsVIlloV
-   uf0Mpd3RiP3q88JJHKTwX+jLdsAxntM7j86ERJlj4ujh/zCKy1NbjIkcI
-   3mFfGE/UxvdS9YmOgWpJ62z+XNtij+rObisrGcnRUxfBEu/LTKEbESrMf
-   I=;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="17446198"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681164000"; 
-   d="scan'208";a="17446198"
-Received: from unknown (HELO MUCSE803.infineon.com) ([172.23.29.29])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 19:53:25 +0200
-Received: from KLUSE818.infineon.com (172.28.156.171) by MUCSE803.infineon.com
- (172.23.29.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 5 Jun 2023
- 19:53:25 +0200
-Received: from ISCNPC0VBFBX.infineon.com (10.161.6.196) by
- KLUSE818.infineon.com (172.28.156.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 5 Jun 2023 19:53:24 +0200
-From:   Alexander Steffen <Alexander.Steffen@infineon.com>
-To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: [PATCH 4/4] tpm_tis: Resend command to recover from data transfer errors
-Date:   Mon, 5 Jun 2023 19:52:50 +0200
-Message-ID: <20230605175250.2055-5-Alexander.Steffen@infineon.com>
-X-Mailer: git-send-email 2.28.0.windows.1
-In-Reply-To: <20230605175250.2055-1-Alexander.Steffen@infineon.com>
-References: <20230605175250.2055-1-Alexander.Steffen@infineon.com>
-MIME-Version: 1.0
+        Mon, 5 Jun 2023 13:53:19 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C36CD3;
+        Mon,  5 Jun 2023 10:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=5wQ79+3ie9B5Wrf6oahpgoNv8SQzC2LUU6mondumang=; b=bXDrMcbEpmir14t0N38XT0dSXa
+        ZS/kN+n+usAnHqQbCP7yZ799X4vnucRbXKhw5Dv/J8oaB5mLRqrvxeqU7st7Sh6AOdehTEwz6QFaz
+        Yj355uOAGg1LjUCYJ5twy3gf8jTLvUtxEXZePBJ1RQvY4gc86ckTL1q8Ow9RjIMvabRQ=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41322 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q6EOA-0001lv-Ku; Mon, 05 Jun 2023 13:53:07 -0400
+Date:   Mon, 5 Jun 2023 13:53:05 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org
+Message-Id: <20230605135305.918dd2b2a88912fbb28e8fbb@hugovil.com>
+In-Reply-To: <CAHp75VeWFPBmsD8zsSAaQGNNXtfgLtQuM9AMGfLPk-6p0VW=Pg@mail.gmail.com>
+References: <20230602152626.284324-1-hugo@hugovil.com>
+        <20230602152626.284324-6-hugo@hugovil.com>
+        <2023060454-cotton-paramount-e33e@gregkh>
+        <CAHp75Ve6W-hcB4YAeKukgv-uOEzBY7Tx5Sdf3doTRYKzNPcVGw@mail.gmail.com>
+        <20230604134459.3c3844012e9714fa2a61e642@hugovil.com>
+        <CAHp75VeWFPBmsD8zsSAaQGNNXtfgLtQuM9AMGfLPk-6p0VW=Pg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.161.6.196]
-X-ClientProxiedBy: MUCSE817.infineon.com (172.23.29.43) To
- KLUSE818.infineon.com (172.28.156.171)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the transmission of TPM responses, also the transmission of TPM
-commands may become corrupted. Instead of aborting when detecting such
-issues, try resending the command again.
+On Sun, 4 Jun 2023 22:31:04 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Change-Id: Ifad9cccff94b59242d36fba9c1e92c7a6bb57804
-Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
----
- drivers/char/tpm/tpm_tis_core.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+> On Sun, Jun 4, 2023 at 8:45 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+> >
+> > On Sun, 4 Jun 2023 14:57:31 +0300
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> >
+> > > On Sun, Jun 4, 2023 at 10:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > On Fri, Jun 02, 2023 at 11:26:21AM -0400, Hugo Villeneuve wrote:
+> > >
+> > > ...
+> > >
+> > > > > +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
+> > > >
+> > > > This returns what, mctrl?  If so, please document that, it doesn't look
+> > > > obvious.
+> > >
+> > > Good suggestion. Because I also stumbled over the returned type.
+> > >
+> > > >  And as the kernel test robot reported, you do nothing with the
+> > > > return value so why compute it?
+> > >
+> > > It seems that the entire function and respective call has to be moved
+> > > under #ifdef CONFIG_GPIOLIB.
+> >
+> > Hi,
+> > it cannot. See my explanations in response to Greg's comments.
+> 
+> Then as Greg suggested, store in the structure and make this function
+> to return an error code (with int), with this amendment you don't need
+> to add a comment about the returned variable anymore.
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index a08768e55803..47073cc79b51 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -535,10 +535,18 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
- 	int rc;
- 	u32 ordinal;
- 	unsigned long dur;
-+	unsigned int try;
- 
--	rc = tpm_tis_send_data(chip, buf, len);
--	if (rc < 0)
--		return rc;
-+	for (try = 0; try < TPM_RETRY; try++) {
-+		rc = tpm_tis_send_data(chip, buf, len);
-+		if (rc >= 0) {
-+			/* Data transfer done successfully */
-+			break;
-+		} else if (rc != -EIO) {
-+			/* Data transfer failed, not recoverable */
-+			return rc;
-+		}
-+	}
- 
- 	/* go and do it */
- 	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
--- 
-2.34.1
+Hi,
+Yes, that is what I have done for V8. Simplifies/clean things a lot.
 
+Hugo.
