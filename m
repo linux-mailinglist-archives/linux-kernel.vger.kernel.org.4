@@ -2,246 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326DB721B4B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807D3721B50
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 02:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjFEAog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 20:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S232525AbjFEAu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 20:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFEAoe (ORCPT
+        with ESMTP id S229449AbjFEAux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 20:44:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DFCDA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 17:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685925828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p5PcVi1O+mt/Dqx54l2QxJ5MaS+ZM6zQx9FV0Ue0QeY=;
-        b=VwtA1HylatFoI/zcu5tDbwhqJtzpQs8GeIPzZKsF3nM8ZI82E9+RyjGUadxGTHZFwVE6Jl
-        U9V+7K3pBIrD5HsdT79INlccd4ZoWRBXSIJ/ZiCbndVaQ/6UyAg6JenJ7v61/P3mt1MV0d
-        dTFpYOAcUdbjySQR0+C4CN4BGuKaw8E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-70-ucdAXdoJNP-MeEkZQctfZw-1; Sun, 04 Jun 2023 20:43:45 -0400
-X-MC-Unique: ucdAXdoJNP-MeEkZQctfZw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62F4C85A5BB;
-        Mon,  5 Jun 2023 00:43:44 +0000 (UTC)
-Received: from localhost (ovpn-12-83.pek2.redhat.com [10.72.12.83])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8C18040CFD16;
-        Mon,  5 Jun 2023 00:43:43 +0000 (UTC)
-Date:   Mon, 5 Jun 2023 08:43:39 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 8/9] mm: vmalloc: Offload free_vmap_area_lock global lock
-Message-ID: <ZH0vuwaSddREy9dz@MiWiFi-R3L-srv>
-References: <20230522110849.2921-1-urezki@gmail.com>
- <20230522110849.2921-9-urezki@gmail.com>
+        Sun, 4 Jun 2023 20:50:53 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 234D5AB
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 17:50:50 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Dxy+ppMX1kancEAA--.4853S3;
+        Mon, 05 Jun 2023 08:50:49 +0800 (CST)
+Received: from maobibo$loongson.cn ( [10.20.42.170] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Mon, 5 Jun 2023 08:50:48
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.20.42.170]
+Date:   Mon, 5 Jun 2023 08:50:48 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5q+b56Kn5rOi?= <maobibo@loongson.cn>
+To:     "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     loongson-kernel@lists.loongnix.cn,
+        "Bjorn Helgaas" <helgaas@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Jianmin Lv" <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] LoongArch: Align pci memory base address with page
+ size
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
+ Copyright (c) 2002-2023 www.mailtech.cn .loongson.cn
+In-Reply-To: <CAAhV-H6Sp7k5RnSOE53BWXjm7d9Y2km0Z2xSCSxQFZkRm29d1w@mail.gmail.com>
+References: <20230602030732.1047696-1-maobibo@loongson.cn>
+ <CAAhV-H58dR4JWtCdqCR553H1-pbppKyi114BMhsrV74Zb_c58Q@mail.gmail.com>
+ <17a2ba54-2b85-9cc9-2a43-16eb20d6ce84@loongson.cn>
+ <CAAhV-H4VHoNQdpDdpcPfDXJxnpoWUtDqmJMhb_r4DS4JtnxvhQ@mail.gmail.com>
+ <e483b7bb-4184-758d-2840-11d75659975e@loongson.cn>
+ <CAAhV-H4VH2yZ3sMqQYK_KWrv6FT7fqHykuMMFo_B55WJeRQOwA@mail.gmail.com>
+ <0fcdb10d-d69f-1f9e-d989-b36193c3fba0@loongson.cn>
+ <CAAhV-H6Sp7k5RnSOE53BWXjm7d9Y2km0Z2xSCSxQFZkRm29d1w@mail.gmail.com>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: mPE3+mZvb3Rlcl90eHQ9NzExMzo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522110849.2921-9-urezki@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <1457df1b.98e5.1888908feed.Coremail.maobibo@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf8AxEuVoMX1k1wSKAA--.13563W
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/1tbiAQANCWR8fwADLgAAsP
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Wry3KFWDWr1xGr48Cw45KFg_yoWxZF13pF
+        W7AFs8Cr4UJr1UAw4qqw1UWF1av34DGr17Xr13Jry7Gryqvry7Xr1UJr15CFyUJr45GF1U
+        Xr4UKry7WF15J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACY4xI67k04243AVAKzVAKj4
+        xxM4xvF2IEb7IF0Fy26I8I3I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UMVCEFcxC0VAYjxAx
+        ZFUvcSsGvfC2KfnxnUUI43ZEXa7IU8njjPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/22/23 at 01:08pm, Uladzislau Rezki (Sony) wrote:
-......  
-> +static unsigned long
-> +this_cpu_zone_alloc_fill(struct cpu_vmap_zone *z,
-> +	unsigned long size, unsigned long align,
-> +	gfp_t gfp_mask, int node)
-> +{
-> +	unsigned long addr = VMALLOC_END;
-> +	struct vmap_area *va;
-> +
-> +	/*
-> +	 * It still can race. One task sets a progress to
-> +	 * 1 a second one gets preempted on entry, the first
-> +	 * zeroed the progress flag and second proceed with
-> +	 * an extra prefetch.
-> +	 */
-> +	if (atomic_xchg(&z->fill_in_progress, 1))
-> +		return addr;
-> +
-> +	va = kmem_cache_alloc_node(vmap_area_cachep, gfp_mask, node);
-> +	if (unlikely(!va))
-> +		goto out;
-> +
-> +	spin_lock(&free_vmap_area_lock);
-> +	addr = __alloc_vmap_area(&free_vmap_area_root, &free_vmap_area_list,
-> +		cvz_size, 1, VMALLOC_START, VMALLOC_END);
-> +	spin_unlock(&free_vmap_area_lock);
-
-The 'z' is passed in from this_cpu_zone_alloc(), and it's got with
-raw_cpu_ptr(&cpu_vmap_zone). Here when we try to get chunk of cvz_size
-from free_vmap_area_root/free_vmap_area_list, how can we guarantee it
-must belong to the 'z' zone? With my understanding, __alloc_vmap_area()
-will get efficient address range sequentially bottom up from
-free_vmap_area_root. Please correct me if I am wrong.
-
-static unsigned long
-this_cpu_zone_alloc(unsigned long size, unsigned long align, gfp_t gfp_mask, int node)
-{
-        struct cpu_vmap_zone *z = raw_cpu_ptr(&cpu_vmap_zone);
-	......
-	if (addr == VMALLOC_END && left < 4 * PAGE_SIZE)
-                addr = this_cpu_zone_alloc_fill(z, size, align, gfp_mask, node);
-}
-
-> +
-> +	if (addr == VMALLOC_END) {
-> +		kmem_cache_free(vmap_area_cachep, va);
-> +		goto out;
-> +	}
-> +
-> +	va->va_start = addr;
-> +	va->va_end = addr + cvz_size;
-> +
-> +	fbl_lock(z, FREE);
-> +	va = merge_or_add_vmap_area_augment(va,
-> +		&fbl_root(z, FREE), &fbl_head(z, FREE));
-> +	addr = va_alloc(va, &fbl_root(z, FREE), &fbl_head(z, FREE),
-> +		size, align, VMALLOC_START, VMALLOC_END);
-> +	fbl_unlock(z, FREE);
-> +
-> +out:
-> +	atomic_set(&z->fill_in_progress, 0);
-> +	return addr;
-> +}
-> +
-> +static unsigned long
-> +this_cpu_zone_alloc(unsigned long size, unsigned long align, gfp_t gfp_mask, int node)
-> +{
-> +	struct cpu_vmap_zone *z = raw_cpu_ptr(&cpu_vmap_zone);
-> +	unsigned long extra = align > PAGE_SIZE ? align : 0;
-> +	unsigned long addr = VMALLOC_END, left = 0;
-> +
-> +	/*
-> +	 * It is disabled, fallback to a global heap.
-> +	 */
-> +	if (cvz_size == ULONG_MAX)
-> +		return addr;
-> +
-> +	/*
-> +	 * Any allocation bigger/equal than one half of
-                          ~~~~~~typo~~~~~~  bigger than/equal to
-> +	 * a zone-size will fallback to a global heap.
-> +	 */
-> +	if (cvz_size / (size + extra) < 3)
-> +		return addr;
-> +
-> +	if (RB_EMPTY_ROOT(&fbl_root(z, FREE)))
-> +		goto fill;
-> +
-> +	fbl_lock(z, FREE);
-> +	addr = __alloc_vmap_area(&fbl_root(z, FREE), &fbl_head(z, FREE),
-> +		size, align, VMALLOC_START, VMALLOC_END);
-> +
-> +	if (addr == VMALLOC_END)
-> +		left = get_subtree_max_size(fbl_root(z, FREE).rb_node);
-> +	fbl_unlock(z, FREE);
-> +
-> +fill:
-> +	/*
-> +	 * A low watermark is 3 pages.
-> +	 */
-> +	if (addr == VMALLOC_END && left < 4 * PAGE_SIZE)
-> +		addr = this_cpu_zone_alloc_fill(z, size, align, gfp_mask, node);
-> +
-> +	return addr;
-> +}
-> +
->  /*
->   * Allocate a region of KVA of the specified size and alignment, within the
->   * vstart and vend.
-> @@ -1678,11 +1765,21 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
->  	 */
->  	kmemleak_scan_area(&va->rb_node, SIZE_MAX, gfp_mask);
->  
-> +	/*
-> +	 * Fast path allocation, start with it.
-> +	 */
-> +	if (vstart == VMALLOC_START && vend == VMALLOC_END)
-> +		addr = this_cpu_zone_alloc(size, align, gfp_mask, node);
-> +	else
-> +		addr = vend;
-> +
->  retry:
-> -	preload_this_cpu_lock(&free_vmap_area_lock, gfp_mask, node);
-> -	addr = __alloc_vmap_area(&free_vmap_area_root, &free_vmap_area_list,
-> -		size, align, vstart, vend);
-> -	spin_unlock(&free_vmap_area_lock);
-> +	if (addr == vend) {
-> +		preload_this_cpu_lock(&free_vmap_area_lock, gfp_mask, node);
-> +		addr = __alloc_vmap_area(&free_vmap_area_root, &free_vmap_area_list,
-> +			size, align, vstart, vend);
-> +		spin_unlock(&free_vmap_area_lock);
-> +	}
->  
->  	trace_alloc_vmap_area(addr, size, align, vstart, vend, addr == vend);
->  
-> @@ -1827,6 +1924,27 @@ purge_cpu_vmap_zone(struct cpu_vmap_zone *z)
->  	return num_purged_areas;
->  }
->  
-> +static void
-> +drop_cpu_vmap_cache(struct cpu_vmap_zone *z)
-> +{
-> +	struct vmap_area *va, *n_va;
-> +	LIST_HEAD(free_head);
-> +
-> +	if (RB_EMPTY_ROOT(&fbl_root(z, FREE)))
-> +		return;
-> +
-> +	fbl_lock(z, FREE);
-> +	WRITE_ONCE(fbl(z, FREE, root.rb_node), NULL);
-> +	list_replace_init(&fbl_head(z, FREE), &free_head);
-> +	fbl_unlock(z, FREE);
-> +
-> +	spin_lock(&free_vmap_area_lock);
-> +	list_for_each_entry_safe(va, n_va, &free_head, list)
-> +		merge_or_add_vmap_area_augment(va,
-> +			&free_vmap_area_root, &free_vmap_area_list);
-> +	spin_unlock(&free_vmap_area_lock);
-> +}
-> +
->  /*
->   * Purges all lazily-freed vmap areas.
->   */
-> @@ -1868,6 +1986,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
->  		for_each_possible_cpu(i) {
->  			z = per_cpu_ptr(&cpu_vmap_zone, i);
->  			num_purged_areas += purge_cpu_vmap_zone(z);
-> +			drop_cpu_vmap_cache(z);
->  		}
->  	}
->  
-> -- 
-> 2.30.2
-> 
+CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiSHVhY2FpIENoZW4iIDxj
+aGVuaHVhY2FpQGtlcm5lbC5vcmc+Cj4g5Y+R6YCB5pe26Ze0OjIwMjMtMDYtMDQgMjA6MzM6MjAg
+KOaYn+acn+aXpSkKPiDmlLbku7bkuro6ICJiaWJvLCBtYW8iIDxtYW9iaWJvQGxvb25nc29uLmNu
+Pgo+IOaKhOmAgTogbG9vbmdzb24ta2VybmVsQGxpc3RzLmxvb25nbml4LmNuLCAiQmpvcm4gSGVs
+Z2FhcyIgPGhlbGdhYXNAa2VybmVsLm9yZz4sICJXQU5HIFh1ZXJ1aSIgPGtlcm5lbEB4ZW4wbi5u
+YW1lPiwgIkppYW5taW4gTHYiIDxsdmppYW5taW5AbG9vbmdzb24uY24+LCBsb29uZ2FyY2hAbGlz
+dHMubGludXguZGV2LCBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnCj4g5Li76aKYOiBSZTog
+W1BBVENIXSBMb29uZ0FyY2g6IEFsaWduIHBjaSBtZW1vcnkgYmFzZSBhZGRyZXNzIHdpdGggcGFn
+ZSBzaXplCj4gCj4gT24gRnJpLCBKdW4gMiwgMjAyMyBhdCA1OjQw4oCvUE0gYmlibywgbWFvIDxt
+YW9iaWJvQGxvb25nc29uLmNuPiB3cm90ZToKPiA+Cj4gPgo+ID4KPiA+IOWcqCAyMDIzLzYvMiAx
+NjowMCwgSHVhY2FpIENoZW4g5YaZ6YGTOgo+ID4gPiBPbiBGcmksIEp1biAyLCAyMDIzIGF0IDM6
+MzXigK9QTSBiaWJvLCBtYW8gPG1hb2JpYm9AbG9vbmdzb24uY24+IHdyb3RlOgo+ID4gPj4KPiA+
+ID4+Cj4gPiA+Pgo+ID4gPj4g5ZyoIDIwMjMvNi8yIDE0OjU1LCBIdWFjYWkgQ2hlbiDlhpnpgZM6
+Cj4gPiA+Pj4gT24gRnJpLCBKdW4gMiwgMjAyMyBhdCAyOjQ44oCvUE0gYmlibywgbWFvIDxtYW9i
+aWJvQGxvb25nc29uLmNuPiB3cm90ZToKPiA+ID4+Pj4KPiA+ID4+Pj4KPiA+ID4+Pj4KPiA+ID4+
+Pj4g5ZyoIDIwMjMvNi8yIDEyOjExLCBIdWFjYWkgQ2hlbiDlhpnpgZM6Cj4gPiA+Pj4+PiArY2Mg
+Qmpvcm4KPiA+ID4+Pj4+Cj4gPiA+Pj4+PiBIaSwgQmlibywKPiA+ID4+Pj4+Cj4gPiA+Pj4+PiBP
+biBGcmksIEp1biAyLCAyMDIzIGF0IDExOjA34oCvQU0gQmlibyBNYW8gPG1hb2JpYm9AbG9vbmdz
+b24uY24+IHdyb3RlOgo+ID4gPj4+Pj4+Cj4gPiA+Pj4+Pj4gTG9vbmdBcmNoIGxpbnV4IGtlcm5l
+bCB1c2VzIDE2SyBwYWdlIHNpemUgYnkgZGVmYXVsdCwgc29tZSBwY2kgZGV2aWNlcyBoYXZlCj4g
+PiA+Pj4+Pj4gb25seSA0SyBtZW1vcnkgc2l6ZSwgaXQgaXMgbm9ybWFsIGluIGdlbmVyYWwgYXJj
+aGl0ZWN0dXJlcy4gSG93ZXZlciBtZW1vcnkKPiA+ID4+Pj4+PiBzcGFjZSBvZiBkaWZmZXJlbnQg
+cGNpIGRldmljZXMgd2lsbCBzaGFyZSBvbmUgcGh5c2ljYWwgcGFnZSBhZGRyZXNzIHNwYWNlLgo+
+ID4gPj4+Pj4+IFRoaXMgaXMgbm90IHNhZmUgZm9yIG1tdSBwcm90ZWN0aW9uLCBhbHNvIFVJTyBh
+bmQgVkZJTyByZXF1aXJlcyBiYXNlCj4gPiA+Pj4+Pj4gYWRkcmVzcyBvZiBwY2kgbWVtb3J5IHNw
+YWNlIHBhZ2UgYWxpZ25lZC4KPiA+ID4+Pj4+Pgo+ID4gPj4+Pj4+IFRoaXMgcGF0Y2ggYWRkcyBj
+aGVjayB3aXRoIGZ1bmN0aW9uIHBjaWJpb3NfYWxpZ25fcmVzb3VyY2UsIGFuZCBzZXQgYmFzZQo+
+ID4gPj4+Pj4+IGFkZHJlc3Mgb2YgcmVzb3VyY2UgcGFnZSBhbGlnbmVkLgo+ID4gPj4+Pj4+Cj4g
+PiA+Pj4+Pj4gU2lnbmVkLW9mZi1ieTogQmlibyBNYW8gPG1hb2JpYm9AbG9vbmdzb24uY24+Cj4g
+PiA+Pj4+Pj4gLS0tCj4gPiA+Pj4+Pj4gIGFyY2gvbG9vbmdhcmNoL3BjaS9wY2kuYyB8IDIzICsr
+KysrKysrKysrKysrKysrKysrKysrCj4gPiA+Pj4+Pj4gIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNl
+cnRpb25zKCspCj4gPiA+Pj4+Pj4KPiA+ID4+Pj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC9sb29uZ2Fy
+Y2gvcGNpL3BjaS5jIGIvYXJjaC9sb29uZ2FyY2gvcGNpL3BjaS5jCj4gPiA+Pj4+Pj4gaW5kZXgg
+MjcyNjYzOTE1MGJjLi4xMzgwZjM2NzJiYTIgMTAwNjQ0Cj4gPiA+Pj4+Pj4gLS0tIGEvYXJjaC9s
+b29uZ2FyY2gvcGNpL3BjaS5jCj4gPiA+Pj4+Pj4gKysrIGIvYXJjaC9sb29uZ2FyY2gvcGNpL3Bj
+aS5jCj4gPiA+Pj4+Pj4gQEAgLTgzLDYgKzgzLDI5IEBAIGludCBwY2liaW9zX2FsbG9jX2lycShz
+dHJ1Y3QgcGNpX2RldiAqZGV2KQo+ID4gPj4+Pj4+ICAgICAgICAgcmV0dXJuIGFjcGlfcGNpX2ly
+cV9lbmFibGUoZGV2KTsKPiA+ID4+Pj4+PiAgfQo+ID4gPj4+Pj4+Cj4gPiA+Pj4+Pj4gKy8qCj4g
+PiA+Pj4+Pj4gKyAqIG1lbW9yeSBzcGFjZSBzaXplIG9mIHNvbWUgcGNpIGNhcmRzIGlzIDRLLCBp
+dCBpcyBzZXBhcmF0ZWQgd2l0aAo+ID4gPj4+Pj4+ICsgKiBkaWZmZXJlbnQgcGFnZXMgZm9yIGdl
+bmVyaWMgYXJjaGl0ZWN0dXJlcywgc28gdGhhdCBtbXUgcHJvdGVjdGlvbiBjYW4KPiA+ID4+Pj4+
+PiArICogd29yayB3aXRoIGRpZmZlcmVudCBwY2kgY2FyZHMuIEhvd2V2ZXIgcGFnZSBzaXplIGZv
+ciBMb29uZ0FyY2ggc3lzdGVtCj4gPiA+Pj4+Pj4gKyAqIGlzIDE2SywgbWVtb3J5IHNwYWNlIG9m
+IGRpZmZlcmVudCBwY2kgY2FyZHMgbWF5IHNoYXJlIHRoZSBzYW1lIHBhZ2UKPiA+ID4+Pj4+PiAr
+ICogb24gTG9vbmdBcmNoLCBpdCBpcyBub3Qgc2FmZSBoZXJlLgo+ID4gPj4+Pj4+ICsgKiBBbHNv
+IHVpbyBkcml2ZXJzIGFuZCB2ZmlvIGRyaXZlcnMgc3VnZ3Vlc3RzIHRoYXQgYmFzZSBhZGRyZXNz
+IG9mIG1lbW9yeQo+ID4gPj4+Pj4+ICsgKiBzcGFjZSBzaG91bGQgcGFnZSBhbGlnbmVkLiBUaGlz
+IGZ1bmN0aW9uIGFsaWducyBiYXNlIGFkZHJlc3Mgd2l0aCBwYWdlIHNpemUKPiA+ID4+Pj4+PiAr
+ICovCj4gPiA+Pj4+Pj4gK3Jlc291cmNlX3NpemVfdCBwY2liaW9zX2FsaWduX3Jlc291cmNlKHZv
+aWQgKmRhdGEsIGNvbnN0IHN0cnVjdCByZXNvdXJjZSAqcmVzLAo+ID4gPj4+Pj4+ICsgICAgICAg
+ICAgICAgICByZXNvdXJjZV9zaXplX3Qgc2l6ZSwgcmVzb3VyY2Vfc2l6ZV90IGFsaWduKQo+ID4g
+Pj4+Pj4+ICt7Cj4gPiA+Pj4+Pj4gKyAgICAgICByZXNvdXJjZV9zaXplX3Qgc3RhcnQgPSByZXMt
+PnN0YXJ0Owo+ID4gPj4+Pj4+ICsKPiA+ID4+Pj4+PiArICAgICAgIGlmIChyZXMtPmZsYWdzICYg
+SU9SRVNPVVJDRV9NRU0pIHsKPiA+ID4+Pj4+PiArICAgICAgICAgICAgICAgaWYgKGFsaWduICYg
+KFBBR0VfU0laRSAtIDEpKSB7Cj4gPiA+Pj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgYWxp
+Z24gPSBQQUdFX1NJWkU7Cj4gPiA+Pj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgc3RhcnQg
+PSBBTElHTihzdGFydCwgYWxpZ24pOwo+ID4gPj4+Pj4gSSBkb24ndCBrbm93IHdoZXRoZXIgdGhp
+cyBwYXRjaCBpcyByZWFsbHkgbmVlZGVkLCBidXQgdGhlIGxvZ2ljIGhlcmUKPiA+ID4+Pj4+IGhh
+cyBzb21lIHByb2JsZW1zLgo+ID4gPj4+Pj4KPiA+ID4+Pj4+IEZvciBleGFtcGxlLCBpZiBQQUdF
+X1NJWkU9MTZLQiwgYWxpZ249MThLQiwgd2hhdCBzaG91bGQgd2UgZG8/IEFsaWduCj4gPiA+Pj4+
+PiB0byAxNktCIG9yIGFsaWduIHRvIDMyS0I/IElNTyBpdCBzaG91bGQgYWxpZ24gdG8gMzJLQiwg
+YnV0IGluIHlvdXIKPiA+ID4+Pj4+IHBhdGNoIGl0IHdpbGwgYWxpZ24gdG8gMTZLQi4KPiA+ID4+
+Pj4gSW4gZ2VuZXJhbCBwY2kgZGV2aWNlIGlzIGFsaWduZWQgYnkgc2l6ZSwgYW5kIGl0cyB2YWx1
+ZSBpcyBhIHBvd2VyIG9mIDIgaW4gdmFsdWUuCj4gPiA+Pj4+IEkgZG8gbm90IHNlZSBzdWNoIGRl
+dmljZXMgd2l0aCAxOEsgYWxpZ25tZW50IHJlcXVpcmVtZW50cy4KPiA+ID4+PiBJZiBzbywgeW91
+IGNhbiBzaW1wbHkgaWdub3JlICJhbGlnbiIgYW5kIHVzZSAgc3RhcnQgPSBBTElHTihzdGFydCwg
+UEFHRV9TSVpFKTsKPiA+ID4+Pgo+ID4gPj4+Pgo+ID4gPj4+PiBCeSBwY2kgbG9jYWwgYnVzIHNw
+ZWMsIHRoZXJlIGFyZSBzdWNoIGxpbmVzOgo+ID4gPj4+Pgo+ID4gPj4+PiAiRGV2aWNlcyBhcmUg
+ZnJlZSB0byBjb25zdW1lIG1vcmUgYWRkcmVzcyBzcGFjZSB0aGFuIHJlcXVpcmVkLCBidXQgZGVj
+b2RpbmcgZG93bgo+ID4gPj4+PiB0byBhIDQgS0Igc3BhY2UgZm9yIG1lbW9yeSBpcyBzdWdnZXN0
+ZWQgZm9yIGRldmljZXMgdGhhdCBuZWVkIGxlc3MgdGhhbiB0aGF0IGFtb3VudC4gRm9yCj4gPiA+
+Pj4+IGluc3RhbmNlLCBhIGRldmljZSB0aGF0IGhhcyA2NCBieXRlcyBvZiByZWdpc3RlcnMgdG8g
+YmUgbWFwcGVkIGludG8gTWVtb3J5IFNwYWNlIG1heQo+ID4gPj4+PiBjb25zdW1lIHVwIHRvIDQg
+S0Igb2YgYWRkcmVzcyBzcGFjZSBpbiBvcmRlciB0byBtaW5pbWl6ZSB0aGUgbnVtYmVyIG9mIGJp
+dHMgaW4gdGhlIGFkZHJlc3MKPiA+ID4+Pj4gZGVjb2Rlci4iCj4gPiA+Pj4+Cj4gPiA+Pj4+IEkg
+Y2Fubm90ICB0aGluayB3aGV0aGVyIGl0IGlzIG5lY2Vzc2FyeSBzaW1wbHkgZnJvbSBqdWRnaW5n
+IHdoZXRoZXIgb3RoZXIKPiA+ID4+Pj4gYXJjaGl0ZWN0dXJlcyBoYXZlIHNpbWlsYXIgY29kZS4g
+SWYgc28sIExvb25nQXJjaCBzeXN0ZW0ganVzdCAgYWx3YXlzIGZvbGxvd3Mgb3RoZXJzLgo+ID4g
+Pj4+PiBJdCBpcyBhY3R1YWxseSBvbmUgcHJvYmxlbSBzaW5jZSBMb29uZ0FyY2ggdXNlcyAxNksg
+cGFnZSBzaXplLgo+ID4gPj4+IEFzIEkga25vdywgYm90aCBNSVBTIGFuZCBBUk02NCBjYW4gdXNl
+IG5vbi00SyBwYWdlcywgYnV0IHdoZW4gSSBncmVwCj4gPiA+Pj4gcGNpYmlvc19hbGlnbl9yZXNv
+dXJjZSBpbiB0aGUgYXJjaCBkaXJlY3RvcnksIG5vbmUgb2YgdGhlbSBkbwo+ID4gPj4+IFBBR0Vf
+U0laRSBhbGlnbm1lbnQuCj4gPiA+PiBIZXJlIGlzIHBpZWNlIG9mICBjb2RlIGluIGRyaXZlcnMv
+dmZpby9wY2kvdmZpb19wY2lfY29yZS5jCj4gPiA+PiAgICAgICAgICAgICAgICAgLyoKPiA+ID4+
+ICAgICAgICAgICAgICAgICAgKiBIZXJlIHdlIGRvbid0IGhhbmRsZSB0aGUgY2FzZSB3aGVuIHRo
+ZSBCQVIgaXMgbm90IHBhZ2UKPiA+ID4+ICAgICAgICAgICAgICAgICAgKiBhbGlnbmVkIGJlY2F1
+c2Ugd2UgY2FuJ3QgZXhwZWN0IHRoZSBCQVIgd2lsbCBiZQo+ID4gPj4gICAgICAgICAgICAgICAg
+ICAqIGFzc2lnbmVkIGludG8gdGhlIHNhbWUgbG9jYXRpb24gaW4gYSBwYWdlIGluIGd1ZXN0Cj4g
+PiA+PiAgICAgICAgICAgICAgICAgICogd2hlbiB3ZSBwYXNzdGhyb3VnaCB0aGUgQkFSLiBBbmQg
+aXQncyBoYXJkIHRvIGFjY2Vzcwo+ID4gPj4gICAgICAgICAgICAgICAgICAqIHRoaXMgQkFSIGlu
+IHVzZXJzcGFjZSBiZWNhdXNlIHdlIGhhdmUgbm8gd2F5IHRvIGdldAo+ID4gPj4gICAgICAgICAg
+ICAgICAgICAqIHRoZSBCQVIncyBsb2NhdGlvbiBpbiBhIHBhZ2UuCj4gPiA+PiAgICAgICAgICAg
+ICAgICAgICovCj4gPiA+PiBub19tbWFwOgo+ID4gPj4gICAgICAgICAgICAgICAgIHZkZXYtPmJh
+cl9tbWFwX3N1cHBvcnRlZFtiYXJdID0gZmFsc2U7Cj4gPiA+Pgo+ID4gPj4gRG8geW91IHRoaW5r
+IGl0IGlzIGEgaXNzdWUgb3Igbm90Pwo+ID4gPiBNYXkgYmUgb3IgbWF5IG5vdCBiZSwgaWYgaXQg
+c2hvdWxkIGJlIGFsaWduZWQgdG8gUEFHRV9TSVpFLCB0aGVuIE1JUFMKPiA+ID4gYW5kIEFSTTY0
+IGFsc28gbmVlZCB0aGlzLgo+ID4gPgo+ID4gPj4KPiA+ID4+IFlvdSBjYW4gc2VhcmNoIGZ1bmN0
+aW9uIHBudl9wY2lfZGVmYXVsdF9hbGlnbm1lbnQgb3IgcGNpYmlvc19hbGlnbl9yZXNvdXJjZSBh
+Ym91dAo+ID4gPj4gYWxwaGEgYXJjaGl0ZWN0dXJlLgo+ID4gPiBBbHBoYSdzIHBjaWJpb3NfYWxp
+Z25fcmVzb3VyY2UoKSBoYXZlIG5vdGhpbmcgdG8gZG8gd2l0aCBQQUdFX1NJWkUsCj4gPiA+IHBu
+dl9wY2lfZGVmYXVsdF9hbGlnbm1lbnQoKSBzZWVtcyB0byBiZSB0aGUgY2FzZS4gQnV0IGlmIGFs
+aWdubWVudCBpcwo+ID4gPiByZWFsbHkgbmVlZGVkLCBJIHRoaW5rIGl0IGlzIGJldHRlciB0byBw
+cm92aWRlIGEKPiA+ID4gcGNpYmlvc19kZWZhdWx0X2FsaWdubWVudCgpIGFzIHBvd2VycGMuCj4g
+PiBJIHdpbGwgZG91YmxlIGNoZWNrIHdoaWNoIGlzIGJldHRlci4gSnVzdCBiZSBjdXJpb3VzLCBo
+b3cgZG8geW91IHRoaW5rIGl0IGlzIGEgcHJvYmxlbQo+ID4gb3Igbm90LCBqdXN0IGNoZWNraW5n
+IHdoZXRoZXIgb3RoZXIgYXJjaGVzIGhhdmUgc2ltaWxhciBjb2RlPz8KPiBZb3UgYXJlIHByb2Jh
+Ymx5IHJpZ2h0IGJ1dCBJJ20gbm90IHN1cmUsIG1heWJlIHlvdSBjYW4gc3VibWl0IGEgcGF0Y2gK
+PiBmb3IgQVJNNjQgdG8gZ2V0IG1vcmUgcGVvcGxlIGludm9sdmVkLgpHb29kIHN1Z2dlc3Rpb24s
+IHdpbGwgZG8gaXQgaW4gbmV4dCB2ZXJzaW9uLiBJdCB3aWxsIGJlIGJldHRlciB3aXRoIG1vcmUg
+cGVvcGxlCmludm9sdmVkLgoKUmVnYXJkcwpCaWJvLCBNYW8KPiAKPiBIdWFjYWkKPiA+Cj4gPgo+
+ID4gPgo+ID4gPiBIdWFjYWkKPiA+ID4+Cj4gPiA+PiBSZWdhcmRzCj4gPiA+PiBCaWJvLCBtYW8K
+PiA+ID4+Cj4gPiA+Pj4KPiA+ID4+PiBIdWFjYWkKPiA+ID4+Pgo+ID4gPj4+Pgo+ID4gPj4+PiBS
+ZWdhcmRzCj4gPiA+Pj4+IEJpYm8sIE1hbwo+ID4gPj4+Pj4KPiA+ID4+Pj4+IEh1YWNhaQo+ID4g
+Pj4+Pj4+ICsgICAgICAgICAgICAgICB9Cj4gPiA+Pj4+Pj4gKyAgICAgICB9Cj4gPiA+Pj4+Pj4g
+KyAgICAgICByZXR1cm4gc3RhcnQ7Cj4gPiA+Pj4+Pj4gK30KPiA+ID4+Pj4+PiArCj4gPiA+Pj4+
+Pj4gIHN0YXRpYyB2b2lkIHBjaV9maXh1cF92Z2FkZXYoc3RydWN0IHBjaV9kZXYgKnBkZXYpCj4g
+PiA+Pj4+Pj4gIHsKPiA+ID4+Pj4+PiAgICAgICAgIHN0cnVjdCBwY2lfZGV2ICpkZXZwID0gTlVM
+TDsKPiA+ID4+Pj4+PiAtLQo+ID4gPj4+Pj4+IDIuMjcuMAo+ID4gPj4+Pj4+Cj4gPiA+Pj4+PiBf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gPj4+Pj4g
+TG9vbmdzb24ta2VybmVsIG1haWxpbmcgbGlzdCAtLSBsb29uZ3Nvbi1rZXJuZWxAbGlzdHMubG9v
+bmduaXguY24KPiA+ID4+Pj4+IFRvIHVuc3Vic2NyaWJlIHNlbmQgYW4gZW1haWwgdG8gbG9vbmdz
+b24ta2VybmVsLWxlYXZlQGxpc3RzLmxvb25nbml4LmNuCj4gPiA+Pj4+Cj4gPiA+Pj4+Cj4gPiA+
+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiA+ID4+
+PiBMb29uZ3Nvbi1rZXJuZWwgbWFpbGluZyBsaXN0IC0tIGxvb25nc29uLWtlcm5lbEBsaXN0cy5s
+b29uZ25peC5jbgo+ID4gPj4+IFRvIHVuc3Vic2NyaWJlIHNlbmQgYW4gZW1haWwgdG8gbG9vbmdz
+b24ta2VybmVsLWxlYXZlQGxpc3RzLmxvb25nbml4LmNuCj4gPiA+Pgo+ID4gPj4KPiA+Cj4gPgoN
+Cg0K5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G
+5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq6
+5oiW576k57uE44CC56aB5q2i5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI
+5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW5pWj
+5Y+R77yJ5pys6YKu5Lu25Y+K5YW26ZmE5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS2
+5pys6YKu5Lu277yM6K+35oKo56uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm2
+5Yig6Zmk5pys6YKu5Lu244CCIA0KVGhpcyBlbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRh
+aW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAsIHdo
+aWNoIGlzIGludGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJl
+c3MgaXMgbGlzdGVkIGFib3ZlLiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQg
+aGVyZWluIGluIGFueSB3YXkgKGluY2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBv
+ciBwYXJ0aWFsIGRpc2Nsb3N1cmUsIHJlcHJvZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBieSBw
+ZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVk
+LiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBz
+ZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g
 
