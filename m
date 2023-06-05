@@ -2,109 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CE17224B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0E07224B6
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbjFELhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
+        id S232494AbjFELhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbjFELhN (ORCPT
+        with ESMTP id S232484AbjFELhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:37:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9869E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685964988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1OkG9olqH5PYoud9/38E7Kg0uccFHuOTuI1AZcy25Yc=;
-        b=Gv4x9QvuSo5rg2xaIbwhpeRpIwOHMV4aU8W/PdrTitlp3VecfPUXNP4fG4vdrgf2aV5w8j
-        Wm1GjW3YdYL7l+2ite/D469LxNBA04qXgh7d1Rn5AKOuleSUWZb+ICe3GLRrcmW/0A7PgB
-        EFL4OISj1uVFVU6rSf1NyMTqbnEQPNU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-5OEXP8lyO7y8d030Vizxlw-1; Mon, 05 Jun 2023 07:36:25 -0400
-X-MC-Unique: 5OEXP8lyO7y8d030Vizxlw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f70f9995aeso22982395e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:36:24 -0700 (PDT)
+        Mon, 5 Jun 2023 07:37:03 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828A8E9;
+        Mon,  5 Jun 2023 04:37:00 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so5335270276.3;
+        Mon, 05 Jun 2023 04:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685965019; x=1688557019;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DTbdt8ORnl1B8sC3y3KbFpUIsRJM7YqW2sLcDSkmXLA=;
+        b=RSRSthOlt6PQelpdb653+u9BcwAhAKhp0/+nPIUgfOkN1q9MGczP2bAid7XFUwr0bI
+         qqKEExl1+wDF6xDqJ9D6mM6sPJF0wdyCgz9s5utLTl4RCivebhiN3reZKzqXImJYN5zk
+         qWXTu4+gx4924dXVeZLS7gbEo+1EkJORAthSacDKR3SIq2RbPr6JJqsR6L3MEm4oxWed
+         iHYVTTuBWrRo3TUUZ6Svt5lI5Im8UVAEFO/xgyUymvWkS9kzbbv7auZnFUwLRXCfFMsg
+         2EA4g6tPmfgGds0wCDXATm/GXXN6Rx/28Ddk7UVpiDvTGlYSWObFwd+dQ3xfoZy4cJ4D
+         DyHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685964984; x=1688556984;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1OkG9olqH5PYoud9/38E7Kg0uccFHuOTuI1AZcy25Yc=;
-        b=JJQWq4gJdJhtvb3VhtXCPIGQC0LDF5eoFOORoNm07mGiTJ6Ku+AgLPWGHTZ68V2xEU
-         JEcUeBcS+E3M1U2Zv3jKtEDaeyE2BDfTNIHrnIyT2UihsipyLeRw4Tv5GsvpgxcQykwN
-         dqtvi82Y9zHxSMHuUvRW7FuTYRnu78mPjkUEKbrEGhOlrXqn861z76Gkb0nmt+bdfxix
-         f4b00XC9NBa8djFaa+rQqRvIxevw533etzB49MAfHgyymsab9ykzYfquhfpcdgpLV740
-         zZxcigZ8Tb/rkGBDlrcMPy36kcaM9IeMPmzzOSILSC/2gYZaiboZH37Xswh3iptBB6qG
-         0uwQ==
-X-Gm-Message-State: AC+VfDwkjAMuQ9NMnDjQy6ZOIbpdh9pqRcRLkUEWsquYH4wUmPsn815b
-        +L3LwltTmsHrk56ioN1X1IiWTm4CcGEo4iqZDKOGbuW4DmPaEaJXlszpW1elnJNOQQL5KHx9+v3
-        /qV0y6jVaqcThe0M/80wPJtP8
-X-Received: by 2002:a05:600c:22d4:b0:3f4:28db:f5ff with SMTP id 20-20020a05600c22d400b003f428dbf5ffmr6047802wmg.35.1685964983938;
-        Mon, 05 Jun 2023 04:36:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ730wx1qPM41cxYciesFUjVPXLwung5A2wk66PQ+XPHH3tXLqc84LkCheTb8+lJicuJyZ239Q==
-X-Received: by 2002:a05:600c:22d4:b0:3f4:28db:f5ff with SMTP id 20-20020a05600c22d400b003f428dbf5ffmr6047791wmg.35.1685964983736;
-        Mon, 05 Jun 2023 04:36:23 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c220a00b003f42a75ac2asm10536563wml.23.2023.06.05.04.36.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:36:23 -0700 (PDT)
-Message-ID: <4a47fbdd-c8dd-d20f-bc13-08a56dc05647@redhat.com>
-Date:   Mon, 5 Jun 2023 13:36:21 +0200
+        d=1e100.net; s=20221208; t=1685965019; x=1688557019;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DTbdt8ORnl1B8sC3y3KbFpUIsRJM7YqW2sLcDSkmXLA=;
+        b=f+k1yCt3A/DvSQ+FbahbMWM22y6sfFqJJREf5BB1wL84kRJntkCe5bvtvnegDdvgwH
+         RTLk/yIgCxd16uSLpd7UqHU6fqhCu2OnVzcszDcPRfbNe+sOJt+pJJnQi4pDkF43ezGs
+         IVFwoosg6tAFnXhhZdIi3LAm2dV3nWAcQZTnPk1yRlvmSdqGppDrD4uE53KXEgZ8C8Uy
+         6JsX8W5jkxy+idbIvhLnEiassNyfIFrY8/reGgaa9zbDIjYp6lvDjiYSbZ/j5FGsoOGf
+         6txNZyK8zeKRRC3xASO5Idl4XGBCLGPiBgKsJ63pVPVagGONPX4IJZde4pOYsp1Ua1rJ
+         2mAw==
+X-Gm-Message-State: AC+VfDyRYC77JAdAdV9QCfLY7BhJbRS6G6xcSkYbhiwNLb6OJTEmYzr4
+        96sAF7wrTWPmBjfeclZjrrX97PR7VJ1WP+BJk4g=
+X-Google-Smtp-Source: ACHHUZ5xPibmrkFS0SemXYrWTmceoht+d1JqfD+FxvGUN4R5p2/Q5Yc++3M4FkQsmc72rtjo2TvPFiIs7bXWUC0Y1As=
+X-Received: by 2002:a25:74c2:0:b0:ba1:dfba:1d12 with SMTP id
+ p185-20020a2574c2000000b00ba1dfba1d12mr13577515ybc.29.1685965019650; Mon, 05
+ Jun 2023 04:36:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 03/11] selftests/mm: fix "warning: expression which
- evaluates to zero..." in mlock2-tests.c
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
- <20230603021558.95299-4-jhubbard@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230603021558.95299-4-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230602101819.2134194-1-changxian.cqs@antgroup.com>
+ <20230602101819.2134194-2-changxian.cqs@antgroup.com> <5cbf5dcc-50e2-f6f6-262b-96ac1a8ebc52@gmail.com>
+In-Reply-To: <5cbf5dcc-50e2-f6f6-262b-96ac1a8ebc52@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 5 Jun 2023 13:36:48 +0200
+Message-ID: <CANiq72namC6dtnDfY-AQXU-UNwsRU1K3sS6HWY-jU9myLR3SoA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] rust: kernel: add ScatterList abstraction
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Qingsong Chen <changxian.cqs@antgroup.com>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Asahi Lina <lina@asahilina.net>, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.06.23 04:15, John Hubbard wrote:
-> The stop variable is a char*, and the code was assigning a char value to
-> it. This was generating a warning when compiling with clang.
-> 
-> However, as both David and Peter pointed out, stop is not even used
-> after the problematic assignment to a char type. So just delete that
-> line entirely.
-> 
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
+On Fri, Jun 2, 2023 at 10:47=E2=80=AFPM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> This comment has some typos, but luckily there's the `typos` tool [1]
+> out there to help us.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+`scripts/checkpatch.pl` has `--codespell`, but the main dictionary
+does not have it, so I sent:
 
--- 
+    https://github.com/codespell-project/codespell/pull/2869
+    https://github.com/codespell-project/codespell/pull/2870
+
+Since `typos` appears to import `codespell` main dictionary, I guess
+that will eventually help both tools.
+
 Cheers,
-
-David / dhildenb
-
+Miguel
