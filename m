@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841B472279D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB827227A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjFENiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S232390AbjFENjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjFENiS (ORCPT
+        with ESMTP id S230127AbjFENjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:38:18 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E67992
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:38:17 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-974638ed5c5so665128966b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685972296; x=1688564296;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YLyoEValMocGeR7hgOgzE/kheQnkrpszWV0a0C9TVl4=;
-        b=fkvn2QYrPsJfos5zBtbo/hdXMcMJOBJROMI85p4dwCpA++lAv4Uz8+tbjB6Hugq67x
-         RFGVo5QcaeR85lG7f76G5FxJ+NynJxG/QHomah2/n+pD8nibSMVWdFNmtp8HonJ76i3h
-         T4cXpYhYCcAFQWP8fWfPUZKQK2okCLiyizAutElK/0AhdEyl9FTH0P99aBEdq+cZPbrB
-         ekJA2v5jy//BUJDjyi6WwUEDytl+vZfymqwyXe7XGgxD0Cu3vx6OyC0nB7BBZg3+WvVK
-         8jfkSIBxWm+hEvO3XHhmLLUz2cZtrpcxz6UQ/D1DHYAmXB2I79xzsFQpemovzTZp8gTc
-         GBJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685972296; x=1688564296;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YLyoEValMocGeR7hgOgzE/kheQnkrpszWV0a0C9TVl4=;
-        b=QdOPWhvMEq5Y+iCxjJE/aUH2nCNp1dhg/lzgjLoMhj5Z/BLFipvX8dJTty97yg4EMj
-         oJK3qdx97+Q589BY10rUfUQYClX0GmI1y4lLK0AoDP57VPBkjmb0f2N3uZGyl+uuFWSj
-         XfBahYnqAoH3Q5GyIGuAB3EFxbQSmOePlUtwA3skH6TqJlo7g9b0TtDNbLdmx985bfjd
-         6OgLcVxI66hSlYIfYv8ujasUJdn2r6QGsIRca/H07jI78AUfWardRFpksGjwJgx/FpPo
-         pOpmKeDwJREG7VJ37SwjHP7RaQV3tjy9mLqyaTRv27SzI1xwlODrE0jT9UKn4WIy611a
-         0/+Q==
-X-Gm-Message-State: AC+VfDzmHBtL+yTALEdmjcbKmFtl3O8DJAjCgksdNh1e2+PAbo1qmQ2P
-        56WkpdwwK7BB9CyeiUXqyDH8Jw==
-X-Google-Smtp-Source: ACHHUZ7XI9buLjboedG2CXZeO60+HVdfffsOtvJfrjVcif+HXPZhSTUxG2pyGFmoNV5clXR1o54RsQ==
-X-Received: by 2002:a17:907:7b88:b0:973:8edc:5a57 with SMTP id ne8-20020a1709077b8800b009738edc5a57mr6594638ejc.4.1685972295769;
-        Mon, 05 Jun 2023 06:38:15 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id y10-20020a170906914a00b00965ac8f8a3dsm4364101ejw.173.2023.06.05.06.38.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 06:38:15 -0700 (PDT)
-Message-ID: <5d1f08f1-792b-255b-89f0-dd5fa2f0baa4@linaro.org>
-Date:   Mon, 5 Jun 2023 15:38:13 +0200
+        Mon, 5 Jun 2023 09:39:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA2C92;
+        Mon,  5 Jun 2023 06:39:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E87C622B8;
+        Mon,  5 Jun 2023 13:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77418C433D2;
+        Mon,  5 Jun 2023 13:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685972340;
+        bh=zmExzYudMwfGNEba20Z9ljtkQ0F7F9zZROAPpR26D08=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hLtoQOW0x/ny+YqsSNDz9uHGIatddat8GP9vRUK7Y+Zzjv8DiYo/OLSXI37rttcfB
+         wuHXW47vwDMMjAiwQJiX/IZCI/NN8E2JE+dftiZd+cUFCd6ZDCuNplc5l5fSGmhoVS
+         OGbp4h37qRWTwXxYFn6uwF2ITXKstg9GB6vok4gTDh6lcPqcdg2+owbrmW4kDeZ2RF
+         EIBASZBuNYItgUGrYaPYASp3M3m7IK/trTc/DPVFd8WKT2oHFAciLPUNGPRZMB+uPi
+         TQh4fbH3OxgmOWbZFA1ldhap6qH/RPM3Es0HTB7PcJq8fXlSrmLdNYKFuOZnKbMwPS
+         JKDvfMFJFYCYA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F22EA40692; Mon,  5 Jun 2023 10:38:57 -0300 (-03)
+Date:   Mon, 5 Jun 2023 10:38:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Davidlohr Bueso <dave@stgolabs.net>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andre Fredette <anfredet@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Dave Tucker <datucker@redhat.com>,
+        Derek Barbosa <debarbos@redhat.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [FYI PATCH 1/1] perf bench: Add missing setlocale() call to allow
+ usage of %'d style formatting
+Message-ID: <ZH3lcepZ4tBYr1jv@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 1/2] dt-bindings: clock: fixed-clock: Add nvmem support
-Content-Language: en-US
-To:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.1d0217a8-661f-4359-b77b-02222c761b01@emailsignatures365.codetwo.com>
- <20230605133410.15076-1-mike.looijmans@topic.nl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605133410.15076-1-mike.looijmans@topic.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,84 +63,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 15:34, Mike Looijmans wrote:
-> Add bindings for a fixed-rate clock that retrieves its rate from an
-> NVMEM provider. This allows to store clock settings in EEPROM or EFUSE
-> or similar device.
-> 
-> Component shortages lead to boards being shipped with different clock
-> crystals, based on what was available at the time. The clock frequency
-> was written to EEPROM at production time. Systems can adapt to a wide
-> range of input frequencies using the clock framework, but this required
-> us to patch the devicetree at runtime or use some custom driver. This
-> provides a more generic solution.
-> 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> 
-> ---
-> 
-> Changes in v3:
-> Modify fixed-clock instead of introducing nvmem-clock
-> 
-> Changes in v2:
-> Changed "fixed-clock" into "nvmem-clock" in dts example
-> Add minItems:1 to nvmem-cell-names
-> 
->  .../bindings/clock/fixed-clock.yaml           | 25 ++++++++++++++++++-
->  1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/fixed-clock.yaml b/Documentation/devicetree/bindings/clock/fixed-clock.yaml
-> index b0a4fb8256e2..23e4df96d3b0 100644
-> --- a/Documentation/devicetree/bindings/clock/fixed-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/fixed-clock.yaml
-> @@ -12,7 +12,9 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: fixed-clock
-> +    enum:
-> +      - fixed-clock
-> +      - fixed-clock-nvmem
+FYI: I'm carrying this in the perf-tools-next branch,
 
-Do you even need new compatible? Isn't this the same clock from the
-hardware point of view?
+Thanks,
 
->  
->    "#clock-cells":
->      const: 0
-> @@ -33,6 +35,27 @@ required:
->  
->  additionalProperties: false
->  
+- Arnaldo
 
-Put it under allOf. Entire block should be before additionalProperties
-(just like in example-schema).
+---
 
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: fixed-clock-nvmem
-> +
-> +then:
-> +  properties:
-> +    nvmem-cells:
-> +      maxItems: 2
+Without this we were not getting the thousands separator for big
+numbers.
 
-Anyway, I don't think you tested it. Provide a DTS user of this. I don't
-think it works and such user would point to mistakes.
+Noticed while developing 'perf bench uprobe', but the use of %' predates
+that, for instance 'perf bench syscall' uses it.
 
-Properties should be defined in top-level properties:, not in
-allOf:if:then. In allOf:if:then you only narrow them.
+Before:
 
+  # perf bench uprobe all
+  # Running uprobe/baseline benchmark...
+  # Executed 1000 usleep(1000) calls
+       Total time: 1054082243ns
 
-> +      description:
-> +        Reads clock-frequency and/or clock-accuracy from an NVMEM provider in
-> +        binary native integer format. The size of the NVMEM cell can be 1, 2, 4
-> +        or 8 bytes. If the contents of the nvmem are all zeroes or all 0xff, the
-> +        value reverts to the one given in the property.
-> +
+   1054082.243000 nsecs/op
 
-Best regards,
-Krzysztof
+  #
+
+After:
+
+  # perf bench uprobe all
+  # Running uprobe/baseline benchmark...
+  # Executed 1,000 usleep(1000) calls
+       Total time: 1,053,715,144ns
+
+   1,053,715.144000 nsecs/op
+
+  #
+
+Fixes: c2a08203052f8975 ("perf bench: Add basic syscall benchmark")
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Andre Fredette <anfredet@redhat.com>
+Cc: Clark Williams <williams@redhat.com>
+Cc: Dave Tucker <datucker@redhat.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Derek Barbosa <debarbos@redhat.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/perf/builtin-bench.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
+index 58f1cfe1eb34b329..db435b791a09b69b 100644
+--- a/tools/perf/builtin-bench.c
++++ b/tools/perf/builtin-bench.c
+@@ -21,6 +21,7 @@
+ #include "builtin.h"
+ #include "bench/bench.h"
+ 
++#include <locale.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -260,6 +261,7 @@ int cmd_bench(int argc, const char **argv)
+ 
+ 	/* Unbuffered output */
+ 	setvbuf(stdout, NULL, _IONBF, 0);
++	setlocale(LC_ALL, "");
+ 
+ 	if (argc < 2) {
+ 		/* No collection specified. */
+-- 
+2.37.1
 
