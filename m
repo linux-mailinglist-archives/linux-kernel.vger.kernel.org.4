@@ -2,131 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E468E7228E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FA47228EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbjFEOf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S234189AbjFEOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbjFEOf0 (ORCPT
+        with ESMTP id S234127AbjFEOgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:35:26 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35D483
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:35:25 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-256712e2be3so4164100a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 07:35:25 -0700 (PDT)
+        Mon, 5 Jun 2023 10:36:08 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346EBED;
+        Mon,  5 Jun 2023 07:36:06 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50d897af77bso684379a12.1;
+        Mon, 05 Jun 2023 07:36:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1685975725; x=1688567725;
+        d=gmail.com; s=20221208; t=1685975764; x=1688567764;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2WhshXKr1H1IgI6UHBSQIBmTcD1tz7rfuPsSZ0ruzz8=;
-        b=H7ntuHScdWoPUzoKwZRiZvqfG0awHlrUSSK1pAs+lyeqFTCIxUqklYXFE6dAzkkCBZ
-         uCgLf76q03S709XNLv5k7Aow/J45iEBVaUcEhIKIkrhFaZkQaarHrSejsZFr8ZzJLbfD
-         YSD1qJIncAISnp2zKZsfw7oNLb2W867w3mU3+2RBoJkzxD6PadpJqptPo4tMnaYlBD55
-         6DZiEZ80LPwMv88d+hydYcCdPZKMzpbuaqK7MfRVO4nuu3nv9V+dEfqx9Or2N2mU/rYt
-         DA0f6kwF8yS4K5wJWWbFpm67k5WE+l/oAKu3FnPizmpf4ENTAi1b28sbxMsVTCdhpNmE
-         bl6Q==
+        bh=/nEIx2pKx8MANmuUD53PuQCkyn4NP8umHBPTpshdhtE=;
+        b=X4pOGtiEGzl58GIFHbyV096t93IrJzELqcypLc4QMyHeBwAan/aALSMopAZ+lqPIs/
+         PZNtR1f+KboWQSY8gUKV8bP6VLPOPyLj9X+PcDBik6Rb1GkoW1dQzGRxs/VB+cefUAHk
+         oqOoq9ZzN1ix9J54M/O922WWDlAgpQE5AKeuQY1UWV5aftGRdFXROUT/wO25J2bq7tvJ
+         ntDFTIewi2nWrpz4P99jP9etHFIKzZEQQ2s93Ttnro2HDYWUBGQU+f9mpHNbRQ5IlJbB
+         1OEzF7yvggyK3Clsj7G1B3wcFoRHXo6xJ+JId++mQ9eGPjlFHkVYB7SLL19lfxy+iJ6r
+         HQbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685975725; x=1688567725;
+        d=1e100.net; s=20221208; t=1685975764; x=1688567764;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2WhshXKr1H1IgI6UHBSQIBmTcD1tz7rfuPsSZ0ruzz8=;
-        b=dIlga4aEN60ywXlLSA8FDXmVhMhXBFpOAsJYxqmr9uM+vgKikDvtVJhfGn0UujVD68
-         T8S7Gk8aRFepvIAknJmPlG/DywobvMb53WKHJtVRb+u2R/ttfrpFqZN+VdRlpNAdDX2z
-         6jcd/w85dQjo/6/BiEcg7FE1BlCNqVEdhq9kkPqkpnFd8WG6Gy4xhLsTP+KTEntu08jW
-         LOamLnIFsNh+yTp8lerF4t+lwHJB2F+isx+7R6byHvrua+hb/MCHb+0VjIdpoDy+G8E3
-         OiwaKngRl4TsxLpP7m51X53DaqQb3Paz2xfyuiZh8EdeR3BTd0Z14NQ1oSzQfBwJvfN+
-         LdXA==
-X-Gm-Message-State: AC+VfDyAm01r0C/xWXJRn/KQNDQimdC4bUsl4UN04ZW21RII+otT8hOA
-        PuCglaFkjisaZjSI8UwqEsp7ow==
-X-Google-Smtp-Source: ACHHUZ4Ov2HL9q+WOUyTJWRvS+NleXOMHYl+52PubaZZyMSGeiU54ocyAhUOLpl4Mv27fCWN3q8bdw==
-X-Received: by 2002:a17:90a:9201:b0:255:cddf:a0c8 with SMTP id m1-20020a17090a920100b00255cddfa0c8mr7068618pjo.41.1685975725413;
-        Mon, 05 Jun 2023 07:35:25 -0700 (PDT)
-Received: from kerodi.Dlink ([106.51.186.3])
-        by smtp.gmail.com with ESMTPSA id z14-20020a17090a1fce00b00250334d97dasm8297069pjz.31.2023.06.05.07.35.22
+        bh=/nEIx2pKx8MANmuUD53PuQCkyn4NP8umHBPTpshdhtE=;
+        b=SdyEPM1jdpO9UOjc0wb88OGty/2k7gzfz84pMrlR/hf04x2sNQsdH1kLGenOSnkhxC
+         Xed8E54J/t3ug3QhcTKKK9S6FyI+GU2Nfdy8cGyACpdQSsAJJ5OFZ1LEYjBQIb0EkKQI
+         tJJXJxCHPvOLDAw4vDc4XhESB+5cK7+73Rb3lgOuasUOzGUJK37tQ2cXI1+WCiuxAInz
+         o181SDEEJ3+Vhd+oKmOzYltAwTl6rm6kl+wGo0zJEQpEs6aEkoZ59zeV0cjGMG3vAhlx
+         alKcLY3f9/woPFYXzZHbAJgs4sRWY+Oz0rP4+K7vORK2mCY8PoBfWMRqewxfYcGb40WL
+         mClg==
+X-Gm-Message-State: AC+VfDwVqPXhfqSKpU9vMuVKLCbgVychtSfjpQQQ9MfKX1HXgt/fCgeD
+        EPuFSTDv/gyQV+PxqlAhg+c=
+X-Google-Smtp-Source: ACHHUZ64cK7Y08p9XC1fThPd/qyz85iOAi9xrRj76BmDStiQbKH5iM+XYS3Sd25RTQiQg9fupo3QbA==
+X-Received: by 2002:a17:906:7a17:b0:974:56cb:9dfc with SMTP id d23-20020a1709067a1700b0097456cb9dfcmr9788715ejo.1.1685975764343;
+        Mon, 05 Jun 2023 07:36:04 -0700 (PDT)
+Received: from localhost ([134.191.220.83])
+        by smtp.gmail.com with ESMTPSA id i21-20020a170906851500b00965e9a23f2bsm4364473ejx.134.2023.06.05.07.35.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 07:35:25 -0700 (PDT)
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sunil V L <sunilvl@ventanamicro.com>
-Subject: [PATCH v1 -next 2/2] RISC-V/perf: Use standard interface to get INTC domain
-Date:   Mon,  5 Jun 2023 20:05:12 +0530
-Message-Id: <20230605143512.707533-3-sunilvl@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230605143512.707533-1-sunilvl@ventanamicro.com>
-References: <20230605143512.707533-1-sunilvl@ventanamicro.com>
+        Mon, 05 Jun 2023 07:36:04 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 22:35:20 +0800
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/16] KVM: arm64: Document the page table walker
+ actions based on the callback's return value
+Message-ID: <20230605223520.00007fbd.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230602160914.4011728-10-vipinsh@google.com>
+References: <20230602160914.4011728-1-vipinsh@google.com>
+        <20230602160914.4011728-10-vipinsh@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the PMU driver is using DT based lookup to
-find the INTC node for sscofpmf extension. This will not work
-for ACPI based systems causing the driver to fail to register
-the PMU overflow interrupt handler.
+On Fri,  2 Jun 2023 09:09:07 -0700
+Vipin Sharma <vipinsh@google.com> wrote:
 
-Hence, change the code to use the standard interface to find
-the INTC node which works irrespective of DT or ACPI.
+> Document what the page table walker do when walker callback function returns
+> a value.
+> 
+> Current documentation is not correct as negative error of -EAGAIN on a
+> non-shared page table walker doesn't terminate the walker and continues
+> to the next step.
+> 
+> There might be a better place to keep this information, for now this
+> documentation will work as a reference guide until a better way is
+> found.
+>
 
-Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
----
- drivers/perf/riscv_pmu_sbi.c | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+After reading the whole patch series, I was thinking it might be a good
+time to improve the way how the visitor function and page table walker
+talk to each other. The error code is good enough before, but its meaning
+seems limited and vague when the visitor function wants to express more about
+what exactly happens inside. I am not sure if it is a good idea to continue
+that way: 1. found a new situation. 2. choosing a error code for visitor
+function. 3. walker translates the error code into the situation to
+handle. 4. document the error code and its actual meaning.
 
-diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 4f3ac296b3e2..0bc491252a44 100644
---- a/drivers/perf/riscv_pmu_sbi.c
-+++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -739,7 +739,6 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
- {
- 	int ret;
- 	struct cpu_hw_events __percpu *hw_events = pmu->hw_events;
--	struct device_node *cpu, *child;
- 	struct irq_domain *domain = NULL;
- 
- 	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
-@@ -756,20 +755,8 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
- 	if (!riscv_pmu_use_irq)
- 		return -EOPNOTSUPP;
- 
--	for_each_of_cpu_node(cpu) {
--		child = of_get_compatible_child(cpu, "riscv,cpu-intc");
--		if (!child) {
--			pr_err("Failed to find INTC node\n");
--			of_node_put(cpu);
--			return -ENODEV;
--		}
--		domain = irq_find_host(child);
--		of_node_put(child);
--		if (domain) {
--			of_node_put(cpu);
--			break;
--		}
--	}
-+	domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-+					  DOMAIN_BUS_ANY);
- 	if (!domain) {
- 		pr_err("Failed to find INTC IRQ root domain\n");
- 		return -ENODEV;
--- 
-2.34.1
+Eventually I am afraid that we are going to abuse the error code.
+
+What about introducing a set of flags for the visitor function to express
+what happened and simplify the existing error code?
+
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_pgtable.h | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index 8ef7e8f3f054..957bc20dab00 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -711,8 +711,19 @@ int kvm_pgtable_stage2_split(struct kvm_pgtable *pgt, u64 addr, u64 size,
+>   * after invoking the walker callback, allowing the walker to descend into
+>   * a newly installed table.
+>   *
+> - * Returning a negative error code from the walker callback function will
+> - * terminate the walk immediately with the same error code.
+> + * Depending on the return value from the walker callback function, the page
+> + * table walk will continue or exit the walk. This is also dependent on the
+> + * type of the walker, i.e. shared walker (vCPU fault handlers) or non-shared
+> + * walker.
+> + *
+> + * Walker Type  | Callback         | Walker action
+> + * -------------|------------------|--------------
+> + * Non-Shared   | 0                | Continue
+> + * Non-Shared   | -EAGAIN          | Continue
+> + * Non-Shared   | Any other        | Exit
+> + * -------------|------------------|--------------
+> + * Shared       | 0                | Continue
+> + * Shared       | Any other        | Exit
+>   *
+>   * Return: 0 on success, negative error code on failure.
+>   */
 
