@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24B4721FED
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EA8721FF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjFEHnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S229936AbjFEHnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjFEHm4 (ORCPT
+        with ESMTP id S231128AbjFEHm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:42:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B0CD;
-        Mon,  5 Jun 2023 00:42:54 -0700 (PDT)
+        Mon, 5 Jun 2023 03:42:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4795CBD;
+        Mon,  5 Jun 2023 00:42:55 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 07:42:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685950971;
+        s=2020; t=1685950972;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VxriJXHIxry6ntRuqEWpiCoIiRQEOs8YhaZDm44n/6o=;
-        b=j+GaaRFcl8rBLM73KS90aa00DzS82P77DEXHZuPAh9xpugWsohD7GW2uYMZm6BLYyPfKGg
-        ZUvfETS4lPllBGVESYgfyM3TvbEqq1DG84B4laISwMl/dhOkb2yjoQWRcVyAH+oWsXOUF8
-        vtV/imOuJKZwyunBw9LPwDW37rQYTs/KmBvbREL8LDrdwDqqcHKQ/GIBLLlDkPHxzZbqUM
-        3QwkyHr6WzsF6phiLAR+tO+MfWdt7t15x7+x3wXrenoJn78sOUhaqX9Qm5vBAeG3uO837u
-        gGCdodFTm/GADzaONj6EJEgU4W1EebLZ+kJLGye60pPawLxgsy6tkFmAB5Z++A==
+        bh=vNw8y4+bHVw5S9uclWlcnuzZMSegrDsVT91TeI1dziY=;
+        b=4NDI6VTKbg728I+BPDHvo4zxZQMyK0E3yh9pSiKmraxQp4Mr3Lz6bOZpA+eSLrKqqCXoaf
+        z6dK7lILzgS1PlEBaIjD1ZPd9wRflQZHihnVmB0o0ZHl7eVmqM/x4nw79GTKCB8O6Af2d2
+        VZqOXpiuWLK1/v40VsxmHwRw42SIb4VITqknvpwVEcTKgiyOVpMCBbJZZM8ZZ7uj9nVXno
+        jish1rYky9F/HOcF1c8y10IN+aRMzzvVnbEBcg+f9qo9O0AIkEG65Z+CJIvNrjlRGhTk5g
+        S8RYizGoz9fbaGYYzdgFEUU4Wxsk8+m1plQG0VUpHBiyx13m5OTzjSdIJJZ9Iw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685950971;
+        s=2020e; t=1685950972;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VxriJXHIxry6ntRuqEWpiCoIiRQEOs8YhaZDm44n/6o=;
-        b=TqElpIbnAPVSp88LWVY6t0mWVO8g12xDjpjPKCNJn0fDIvwUsCb8sE1EqADNxvBQF6aOye
-        dqmOREhUcZ3Ao8Bw==
+        bh=vNw8y4+bHVw5S9uclWlcnuzZMSegrDsVT91TeI1dziY=;
+        b=8nFfORP6PeDmyxvI8t9xTlr3qmtKTgEU3Gr9k7hxurE7xtfxRiy27XSPtPjeNAmaj/cwXl
+        8eIjP7ZkoIGC8WBQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] percpu: Add {raw,this}_cpu_try_cmpxchg()
+Subject: [tip: locking/core] arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230531132323.587480729@infradead.org>
-References: <20230531132323.587480729@infradead.org>
+In-Reply-To: <20230531132323.452120708@infradead.org>
+References: <20230531132323.452120708@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168595097138.404.12287049788720492697.tip-bot2@tip-bot2>
+Message-ID: <168595097198.404.7071635060895699267.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,218 +69,278 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     c5c0ba953b8c969c5d51bf1c57f239866a97c47c
-Gitweb:        https://git.kernel.org/tip/c5c0ba953b8c969c5d51bf1c57f239866a97c47c
+Commit-ID:     b23e139d0b66c0216e7e9361a5021290395f504c
+Gitweb:        https://git.kernel.org/tip/b23e139d0b66c0216e7e9361a5021290395f504c
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 31 May 2023 15:08:38 +02:00
+AuthorDate:    Wed, 31 May 2023 15:08:36 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 05 Jun 2023 09:36:36 +02:00
+CommitterDate: Mon, 05 Jun 2023 09:36:35 +02:00
 
-percpu: Add {raw,this}_cpu_try_cmpxchg()
+arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
 
-Add the try_cmpxchg() form to the per-cpu ops.
+For all architectures that currently support cmpxchg_double()
+implement the cmpxchg128() family of functions that is basically the
+same but with a saner interface.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 Tested-by: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/r/20230531132323.587480729@infradead.org
+Link: https://lore.kernel.org/r/20230531132323.452120708@infradead.org
 ---
- include/asm-generic/percpu.h | 113 ++++++++++++++++++++++++++++++++--
- include/linux/percpu-defs.h  |  19 ++++++-
- 2 files changed, 128 insertions(+), 4 deletions(-)
+ arch/arm64/include/asm/atomic_ll_sc.h | 41 +++++++++++++++++-
+ arch/arm64/include/asm/atomic_lse.h   | 31 +++++++++++++-
+ arch/arm64/include/asm/cmpxchg.h      | 26 +++++++++++-
+ arch/s390/include/asm/cmpxchg.h       | 14 ++++++-
+ arch/x86/include/asm/cmpxchg_32.h     |  3 +-
+ arch/x86/include/asm/cmpxchg_64.h     | 64 +++++++++++++++++++++++++-
+ 6 files changed, 177 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index 6432a7f..96af32c 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -89,16 +89,37 @@ do {									\
- 	__ret;								\
+diff --git a/arch/arm64/include/asm/atomic_ll_sc.h b/arch/arm64/include/asm/atomic_ll_sc.h
+index cbb3d96..b100a49 100644
+--- a/arch/arm64/include/asm/atomic_ll_sc.h
++++ b/arch/arm64/include/asm/atomic_ll_sc.h
+@@ -326,6 +326,47 @@ __CMPXCHG_DBL(   ,        ,  ,         )
+ __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
+ 
+ #undef __CMPXCHG_DBL
++
++union __u128_halves {
++	u128 full;
++	struct {
++		u64 low, high;
++	};
++};
++
++#define __CMPXCHG128(name, mb, rel, cl...)                             \
++static __always_inline u128						\
++__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
++{									\
++	union __u128_halves r, o = { .full = (old) },			\
++			       n = { .full = (new) };			\
++       unsigned int tmp;                                               \
++									\
++	asm volatile("// __cmpxchg128" #name "\n"			\
++       "       prfm    pstl1strm, %[v]\n"                              \
++       "1:     ldxp    %[rl], %[rh], %[v]\n"                           \
++       "       cmp     %[rl], %[ol]\n"                                 \
++       "       ccmp    %[rh], %[oh], 0, eq\n"                          \
++       "       b.ne    2f\n"                                           \
++       "       st" #rel "xp    %w[tmp], %[nl], %[nh], %[v]\n"          \
++       "       cbnz    %w[tmp], 1b\n"                                  \
++	"	" #mb "\n"						\
++	"2:"								\
++       : [v] "+Q" (*(u128 *)ptr),                                      \
++         [rl] "=&r" (r.low), [rh] "=&r" (r.high),                      \
++         [tmp] "=&r" (tmp)                                             \
++       : [ol] "r" (o.low), [oh] "r" (o.high),                          \
++         [nl] "r" (n.low), [nh] "r" (n.high)                           \
++       : "cc", ##cl);                                                  \
++									\
++	return r.full;							\
++}
++
++__CMPXCHG128(   ,        ,  )
++__CMPXCHG128(_mb, dmb ish, l, "memory")
++
++#undef __CMPXCHG128
++
+ #undef K
+ 
+ #endif	/* __ASM_ATOMIC_LL_SC_H */
+diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
+index 319958b..c781281 100644
+--- a/arch/arm64/include/asm/atomic_lse.h
++++ b/arch/arm64/include/asm/atomic_lse.h
+@@ -317,4 +317,35 @@ __CMPXCHG_DBL(_mb, al, "memory")
+ 
+ #undef __CMPXCHG_DBL
+ 
++#define __CMPXCHG128(name, mb, cl...)					\
++static __always_inline u128						\
++__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
++{									\
++	union __u128_halves r, o = { .full = (old) },			\
++			       n = { .full = (new) };			\
++	register unsigned long x0 asm ("x0") = o.low;			\
++	register unsigned long x1 asm ("x1") = o.high;			\
++	register unsigned long x2 asm ("x2") = n.low;			\
++	register unsigned long x3 asm ("x3") = n.high;			\
++	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
++									\
++	asm volatile(							\
++	__LSE_PREAMBLE							\
++	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
++	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
++	  [v] "+Q" (*(u128 *)ptr)					\
++	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
++	  [oldval1] "r" (o.low), [oldval2] "r" (o.high)			\
++	: cl);								\
++									\
++	r.low = x0; r.high = x1;					\
++									\
++	return r.full;							\
++}
++
++__CMPXCHG128(   ,   )
++__CMPXCHG128(_mb, al, "memory")
++
++#undef __CMPXCHG128
++
+ #endif	/* __ASM_ATOMIC_LSE_H */
+diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
+index c6bc5d8..097b832 100644
+--- a/arch/arm64/include/asm/cmpxchg.h
++++ b/arch/arm64/include/asm/cmpxchg.h
+@@ -146,6 +146,19 @@ __CMPXCHG_DBL(_mb)
+ 
+ #undef __CMPXCHG_DBL
+ 
++#define __CMPXCHG128(name)						\
++static inline u128 __cmpxchg128##name(volatile u128 *ptr,		\
++				      u128 old, u128 new)		\
++{									\
++	return __lse_ll_sc_body(_cmpxchg128##name,			\
++				ptr, old, new);				\
++}
++
++__CMPXCHG128(   )
++__CMPXCHG128(_mb)
++
++#undef __CMPXCHG128
++
+ #define __CMPXCHG_GEN(sfx)						\
+ static __always_inline unsigned long __cmpxchg##sfx(volatile void *ptr,	\
+ 					   unsigned long old,		\
+@@ -228,6 +241,19 @@ __CMPXCHG_GEN(_mb)
+ 	__ret;									\
  })
  
--#define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
-+#define __cpu_fallback_try_cmpxchg(pcp, ovalp, nval, _cmpxchg)		\
-+({									\
-+	typeof(pcp) __val, __old = *(ovalp);				\
-+	__val = _cmpxchg(pcp, __old, nval);				\
-+	if (__val != __old)						\
-+		*(ovalp) = __val;					\
-+	__val == __old;							\
++/* cmpxchg128 */
++#define system_has_cmpxchg128()		1
++
++#define arch_cmpxchg128(ptr, o, n)						\
++({										\
++	__cmpxchg128_mb((ptr), (o), (n));					\
 +})
 +
-+#define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
- ({									\
- 	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
--	typeof(pcp) __ret;						\
--	__ret = *__p;							\
--	if (__ret == (oval))						\
-+	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-+	bool __ret;							\
-+	if (__val == __old) {						\
- 		*__p = nval;						\
-+		__ret = true;						\
-+	} else {							\
-+		*(ovalp) = __val;					\
-+		__ret = false;						\
-+	}								\
- 	__ret;								\
++#define arch_cmpxchg128_local(ptr, o, n)					\
++({										\
++	__cmpxchg128((ptr), (o), (n));						\
++})
++
+ #define __CMPWAIT_CASE(w, sfx, sz)					\
+ static inline void __cmpwait_case_##sz(volatile void *ptr,		\
+ 				       unsigned long val)		\
+diff --git a/arch/s390/include/asm/cmpxchg.h b/arch/s390/include/asm/cmpxchg.h
+index 06e0e42..7517376 100644
+--- a/arch/s390/include/asm/cmpxchg.h
++++ b/arch/s390/include/asm/cmpxchg.h
+@@ -224,4 +224,18 @@ static __always_inline int __cmpxchg_double(unsigned long p1, unsigned long p2,
+ 			 (unsigned long)(n1), (unsigned long)(n2));	\
  })
  
-+#define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
-+({									\
-+	typeof(pcp) __old = (oval);					\
-+	raw_cpu_generic_try_cmpxchg(pcp, &__old, nval);			\
-+	__old;								\
-+})
++#define system_has_cmpxchg128()		1
 +
- #define raw_cpu_generic_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
- ({									\
- 	typeof(pcp1) *__p1 = raw_cpu_ptr(&(pcp1));			\
-@@ -170,6 +191,16 @@ do {									\
- 	__ret;								\
- })
++static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
++{
++	asm volatile(
++		"	cdsg	%[old],%[new],%[ptr]\n"
++		: [old] "+d" (old), [ptr] "+QS" (*ptr)
++		: [new] "d" (new)
++		: "memory", "cc");
++	return old;
++}
++
++#define arch_cmpxchg128		arch_cmpxchg128
++
+ #endif /* __ASM_CMPXCHG_H */
+diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
+index 6ba80ce..d12f9ed 100644
+--- a/arch/x86/include/asm/cmpxchg_32.h
++++ b/arch/x86/include/asm/cmpxchg_32.h
+@@ -103,6 +103,7 @@ static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
  
-+#define this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
-+({									\
-+	bool __ret;							\
-+	unsigned long __flags;						\
-+	raw_local_irq_save(__flags);					\
-+	__ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);		\
-+	raw_local_irq_restore(__flags);					\
-+	__ret;								\
-+})
-+
- #define this_cpu_generic_cmpxchg(pcp, oval, nval)			\
- ({									\
- 	typeof(pcp) __ret;						\
-@@ -282,6 +313,43 @@ do {									\
- #define raw_cpu_xchg_8(pcp, nval)	raw_cpu_generic_xchg(pcp, nval)
  #endif
  
-+#ifndef raw_cpu_try_cmpxchg_1
-+#ifdef raw_cpu_cmpxchg_1
-+#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_1)
-+#else
-+#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-+	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+#ifndef raw_cpu_try_cmpxchg_2
-+#ifdef raw_cpu_cmpxchg_2
-+#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_2)
-+#else
-+#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-+	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+#ifndef raw_cpu_try_cmpxchg_4
-+#ifdef raw_cpu_cmpxchg_4
-+#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_4)
-+#else
-+#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-+	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+#ifndef raw_cpu_try_cmpxchg_8
-+#ifdef raw_cpu_cmpxchg_8
-+#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_8)
-+#else
-+#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-+	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+
- #ifndef raw_cpu_cmpxchg_1
- #define raw_cpu_cmpxchg_1(pcp, oval, nval) \
- 	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-@@ -407,6 +475,43 @@ do {									\
- #define this_cpu_xchg_8(pcp, nval)	this_cpu_generic_xchg(pcp, nval)
- #endif
+-#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX8)
++#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX8)
++#define system_has_cmpxchg64()		boot_cpu_has(X86_FEATURE_CX8)
  
-+#ifndef this_cpu_try_cmpxchg_1
-+#ifdef this_cpu_cmpxchg_1
-+#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_1)
-+#else
-+#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-+	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+#ifndef this_cpu_try_cmpxchg_2
-+#ifdef this_cpu_cmpxchg_2
-+#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_2)
-+#else
-+#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-+	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+#ifndef this_cpu_try_cmpxchg_4
-+#ifdef this_cpu_cmpxchg_4
-+#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_4)
-+#else
-+#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-+	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+#ifndef this_cpu_try_cmpxchg_8
-+#ifdef this_cpu_cmpxchg_8
-+#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-+	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_8)
-+#else
-+#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-+	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-+#endif
-+#endif
-+
- #ifndef this_cpu_cmpxchg_1
- #define this_cpu_cmpxchg_1(pcp, oval, nval) \
- 	this_cpu_generic_cmpxchg(pcp, oval, nval)
-diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
-index e60727b..cbbf6d1 100644
---- a/include/linux/percpu-defs.h
-+++ b/include/linux/percpu-defs.h
-@@ -343,6 +343,21 @@ static __always_inline void __this_cpu_preempt_check(const char *op) { }
- 	pscr2_ret__;							\
+ #endif /* _ASM_X86_CMPXCHG_32_H */
+diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
+index 0d3beb2..fe29107 100644
+--- a/arch/x86/include/asm/cmpxchg_64.h
++++ b/arch/x86/include/asm/cmpxchg_64.h
+@@ -20,6 +20,68 @@
+ 	arch_try_cmpxchg((ptr), (po), (n));				\
  })
  
-+#define __pcpu_size_call_return2bool(stem, variable, ...)		\
+-#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
++union __u128_halves {
++	u128 full;
++	struct {
++		u64 low, high;
++	};
++};
++
++#define __arch_cmpxchg128(_ptr, _old, _new, _lock)			\
 +({									\
-+	bool pscr2_ret__;						\
-+	__verify_pcpu_ptr(&(variable));					\
-+	switch(sizeof(variable)) {					\
-+	case 1: pscr2_ret__ = stem##1(variable, __VA_ARGS__); break;	\
-+	case 2: pscr2_ret__ = stem##2(variable, __VA_ARGS__); break;	\
-+	case 4: pscr2_ret__ = stem##4(variable, __VA_ARGS__); break;	\
-+	case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;	\
-+	default:							\
-+		__bad_size_call_parameter(); break;			\
-+	}								\
-+	pscr2_ret__;							\
++	union __u128_halves o = { .full = (_old), },			\
++			    n = { .full = (_new), };			\
++									\
++	asm volatile(_lock "cmpxchg16b %[ptr]"				\
++		     : [ptr] "+m" (*(_ptr)),				\
++		       "+a" (o.low), "+d" (o.high)			\
++		     : "b" (n.low), "c" (n.high)			\
++		     : "memory");					\
++									\
++	o.full;								\
 +})
 +
- /*
-  * Special handling for cmpxchg_double.  cmpxchg_double is passed two
-  * percpu variables.  The first has to be aligned to a double word
-@@ -426,6 +441,8 @@ do {									\
- #define raw_cpu_xchg(pcp, nval)		__pcpu_size_call_return2(raw_cpu_xchg_, pcp, nval)
- #define raw_cpu_cmpxchg(pcp, oval, nval) \
- 	__pcpu_size_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
-+#define raw_cpu_try_cmpxchg(pcp, ovalp, nval) \
-+	__pcpu_size_call_return2bool(raw_cpu_try_cmpxchg_, pcp, ovalp, nval)
- #define raw_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
- 	__pcpu_double_call_return_bool(raw_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
++static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
++{
++	return __arch_cmpxchg128(ptr, old, new, LOCK_PREFIX);
++}
++
++static __always_inline u128 arch_cmpxchg128_local(volatile u128 *ptr, u128 old, u128 new)
++{
++	return __arch_cmpxchg128(ptr, old, new,);
++}
++
++#define __arch_try_cmpxchg128(_ptr, _oldp, _new, _lock)			\
++({									\
++	union __u128_halves o = { .full = *(_oldp), },			\
++			    n = { .full = (_new), };			\
++	bool ret;							\
++									\
++	asm volatile(_lock "cmpxchg16b %[ptr]"				\
++		     CC_SET(e)						\
++		     : CC_OUT(e) (ret),					\
++		       [ptr] "+m" (*ptr),				\
++		       "+a" (o.low), "+d" (o.high)			\
++		     : "b" (n.low), "c" (n.high)			\
++		     : "memory");					\
++									\
++	if (unlikely(!ret))						\
++		*(_oldp) = o.full;					\
++									\
++	likely(ret);							\
++})
++
++static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *oldp, u128 new)
++{
++	return __arch_try_cmpxchg128(ptr, oldp, new, LOCK_PREFIX);
++}
++
++static __always_inline bool arch_try_cmpxchg128_local(volatile u128 *ptr, u128 *oldp, u128 new)
++{
++	return __arch_try_cmpxchg128(ptr, oldp, new,);
++}
++
++#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX16)
++#define system_has_cmpxchg128()		boot_cpu_has(X86_FEATURE_CX16)
  
-@@ -513,6 +530,8 @@ do {									\
- #define this_cpu_xchg(pcp, nval)	__pcpu_size_call_return2(this_cpu_xchg_, pcp, nval)
- #define this_cpu_cmpxchg(pcp, oval, nval) \
- 	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-+#define this_cpu_try_cmpxchg(pcp, ovalp, nval) \
-+	__pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
- #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
- 	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
- 
+ #endif /* _ASM_X86_CMPXCHG_64_H */
