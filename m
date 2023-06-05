@@ -2,130 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6111A7224AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFB37224AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjFELei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S231140AbjFELeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjFELeg (ORCPT
+        with ESMTP id S230300AbjFELeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:34:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5219FF9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685964825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XWZsawEmNjsKMnfR+1l0oUcAwfNqWG5eEd+XBf5YquQ=;
-        b=KlCRPFLLzlh/Llu0nPfffWrM1DfU2N8pbGGU2hoh0rnfMX0hUqsz76Qfja7TDjC8B90ulp
-        6/67El5Swgh61pdcutOAr/RtkQfRL1QSUOqJJ0pYVTgC7ZPM+A0Q7GfVPKg16K7J4fP78G
-        bl6G0k0iifKHK19chyHeir06aNWy5KA=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-281-XAMZDxFUNS2H_R06VouwNw-1; Mon, 05 Jun 2023 07:33:26 -0400
-X-MC-Unique: XAMZDxFUNS2H_R06VouwNw-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30af779d6e6so2206098f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:33:26 -0700 (PDT)
+        Mon, 5 Jun 2023 07:34:23 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A02B9C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:34:22 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-786d74c317eso1026344241.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685964861; x=1688556861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LJdL4VkR29ugHjJ0HNgiBAKMzVnr+Rqw/yJUI27DCh8=;
+        b=ihefJeawzq1ba5J+Z+/a7Y64U3S0NsqLGOcE7NThRkDvJdvEYDj4FPxzesJ0tmifc8
+         HJdYDm5j0huFTYjBXUmyav0pA0qUGlrQ+T4iV/imFQCkaOm3sxgVSuEngjweANjzErP0
+         OHjjxg8O8cu3leRnxQ1749QLe72mwhyycBLuA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685964805; x=1688556805;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XWZsawEmNjsKMnfR+1l0oUcAwfNqWG5eEd+XBf5YquQ=;
-        b=cklocWdeEvn9phwZN24cS7I1/FpcJ+r709SGfeRaWEtJpy5SAWbPChTft8RUMz9Qfn
-         yhtfbWchKYbWAksE0EceNV4t0f66sVEftvLQZkSbZXTHJQQrzXuLAoAD1UXEbwhApoEQ
-         ATwveehbJOBDW4DEw2BsuDbBxls9uQzTzCsWpcM5apjc/c1lg6zpArsBG3XupAp5y7Ad
-         0r0P+FXMNXhu64/j/I6crn0LsqI429SLDv8b7i8kXpZgMbquls/XuYtXlK2WyVpfMIzm
-         rWDEdXJ8xF+s6NS9kFGLxtWszxF8a64zcx+kVt//dE3SyTDkvW/gUPtgVpa0x9eSFiUu
-         l+wg==
-X-Gm-Message-State: AC+VfDz/sEb9DMkaSr6eVlWA8h+WZblNGrdCzS/DJoexY3k1EaQ8YUFf
-        qMXtiIaXQM1WZKKWD+MWQHsva+V0XgMhT9J2neXIYMBaA29vRGgLUk780TeXzmmySK6GXVZrArc
-        gvN0gEG0FDeAwASxW4R/r1ryr
-X-Received: by 2002:a5d:61d0:0:b0:309:4f23:e52d with SMTP id q16-20020a5d61d0000000b003094f23e52dmr4260850wrv.43.1685964805212;
-        Mon, 05 Jun 2023 04:33:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6RQ3AlCqjOV82nqoNru2DfVOGvG/WnLvkOAZxPivnxiDb0Dn3L3EHv5MhHI1/VKuS8RsBUQw==
-X-Received: by 2002:a5d:61d0:0:b0:309:4f23:e52d with SMTP id q16-20020a5d61d0000000b003094f23e52dmr4260835wrv.43.1685964804884;
-        Mon, 05 Jun 2023 04:33:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
-        by smtp.gmail.com with ESMTPSA id x14-20020adfec0e000000b003062d815fa6sm9585755wrn.85.2023.06.05.04.33.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:33:24 -0700 (PDT)
-Message-ID: <4ad9df00-fd3e-56f7-d2b8-240d24045a48@redhat.com>
-Date:   Mon, 5 Jun 2023 13:33:23 +0200
+        d=1e100.net; s=20221208; t=1685964861; x=1688556861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LJdL4VkR29ugHjJ0HNgiBAKMzVnr+Rqw/yJUI27DCh8=;
+        b=jvbbhbK9m9lSwIPL3kQl9CSKVr3NmtH9UgCWy0uHHD8vDzqijdMgN6FCnzamJuVQy2
+         Rk46PoDLLSB3+j9ZUj50u0WFwN2uSbdEnsGEGyTQyS8rJPCqbua1InF/v1o5QB+ev8cx
+         Ploye5PuV3Ywvh5sFmZidBD3I4v/uUbA1Qn5erfeXiB6ldEJsWamfCN4wCE+PxBoij9o
+         o8yFB2eK39IdpgnnqDe3PXGsLyQYEBcy2K+J2wH+NPRAuxCZf2VYdrRkbLb8ZzT7Y4qK
+         xruFf4g+ZGq6XlEVqEVaE5iqHp8b78A7NPW4SnN/+gj38EN1H2ATMw2Maww9RqeOUrUd
+         rtYA==
+X-Gm-Message-State: AC+VfDxC9s5fypNvhPA62VWva8ISFmLMIgOfFsz/KVnvdSp4VwGuXrJy
+        ciFz0GoOoLuLynIli3KyYjPWtGb0MdfzZFxiz9enKg==
+X-Google-Smtp-Source: ACHHUZ49/IwlrFEfmpxaOyF8JC+0bPRmojnDSDJVaGgnrnvtesB7m1brUpWGPmailAmLhyP097J0bYC1CjDJkP3zHAY=
+X-Received: by 2002:a1f:60d4:0:b0:463:c9b3:9e12 with SMTP id
+ u203-20020a1f60d4000000b00463c9b39e12mr1025388vkb.6.1685964861559; Mon, 05
+ Jun 2023 04:34:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] mm: page_alloc: remove unneeded header files
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230603112558.213694-1-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230603112558.213694-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230525113034.46880-1-tony@atomide.com> <20230602083335.GA181647@google.com>
+ <87a5xii33r.fsf@jogness.linutronix.de> <20230603054139.GR14287@atomide.com>
+ <20230603063533.GS14287@atomide.com> <20230605061511.GW14287@atomide.com>
+In-Reply-To: <20230605061511.GW14287@atomide.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 5 Jun 2023 19:34:10 +0800
+Message-ID: <CAGXv+5Fbx7eTxP0ep6DV+jyronAWxYvu2M-g=MjHGRhjSXUc=w@mail.gmail.com>
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.06.23 13:25, Miaohe Lin wrote:
-> Remove some unneeded header files. No functional change intended.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->   mm/page_alloc.c | 4 ----
->   1 file changed, 4 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 19d97dde4558..e991c6b4d252 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -26,7 +26,6 @@
->   #include <linux/kmsan.h>
->   #include <linux/module.h>
->   #include <linux/suspend.h>
-> -#include <linux/pagevec.h>
->   #include <linux/ratelimit.h>
->   #include <linux/oom.h>
->   #include <linux/topology.h>
-> @@ -36,8 +35,6 @@
->   #include <linux/memory_hotplug.h>
->   #include <linux/nodemask.h>
->   #include <linux/vmstat.h>
-> -#include <linux/sort.h>
-> -#include <linux/pfn.h>
->   #include <linux/fault-inject.h>
->   #include <linux/compaction.h>
->   #include <trace/events/kmem.h>
-> @@ -52,7 +49,6 @@
->   #include <linux/memcontrol.h>
->   #include <linux/ftrace.h>
->   #include <linux/lockdep.h>
-> -#include <linux/nmi.h>
->   #include <linux/psi.h>
->   #include <linux/khugepaged.h>
->   #include <linux/delayacct.h>
+Hi,
 
-On mm-unstable, I assume
+On Mon, Jun 5, 2023 at 2:15=E2=80=AFPM Tony Lindgren <tony@atomide.com> wro=
+te:
+>
+> * Tony Lindgren <tony@atomide.com> [230603 06:35]:
+> > * Tony Lindgren <tony@atomide.com> [230603 05:41]:
+> > > I don't think 8250_mtk needs to do register access before and after t=
+he
+> > > serial port registration, but if it does, then adding custom read/wri=
+te
+> > > functions can be done that do not rely on initialized port like
+> > > serial_out().
+> >
+> > Oh but mtk8250_runtime_suspend() calls serial_in(up, MTK_UART_DEBUG0), =
+so
+> > yeah if that gets called before registration is complete it causes a NU=
+LL
+> > pointer exception. If the serial_ctrl and serial_port devices do runtim=
+e
+> > suspend before port registration completes, things will fail.
+> >
+> > Sounds like doing pm_runtime_resume_and_get() in mtk8250_probe() might
+> > fix the issue. Still seems that adding a custom read function for
+> > mtk8250_runtime_suspend() to use instead of calling serial_in() should
+> > not be needed.
+>
+> Looking at this again, if serial8250_register_8250_port() fails, then
+> mtk8250_runtime_suspend() would again try to access uninitialized port.
+>
+> Here's a better untested version of the patch to try.
+>
+> Regards,
+>
+> Tony
+>
+> 8< ---------------------------
+> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250=
+/8250_mtk.c
+> --- a/drivers/tty/serial/8250/8250_mtk.c
+> +++ b/drivers/tty/serial/8250/8250_mtk.c
+> @@ -57,6 +57,8 @@
+>  #define MTK_UART_XON1          40      /* I/O: Xon character 1 */
+>  #define MTK_UART_XOFF1         42      /* I/O: Xoff character 1 */
+>
+> +#define MTK_UART_REGSHIFT      2
+> +
+>  #ifdef CONFIG_SERIAL_8250_DMA
+>  enum dma_rx_status {
+>         DMA_RX_START =3D 0,
+> @@ -69,6 +71,7 @@ struct mtk8250_data {
+>         int                     line;
+>         unsigned int            rx_pos;
+>         unsigned int            clk_count;
+> +       void __iomem            *membase;
+>         struct clk              *uart_clk;
+>         struct clk              *bus_clk;
+>         struct uart_8250_dma    *dma;
+> @@ -187,6 +190,17 @@ static void mtk8250_dma_enable(struct uart_8250_port=
+ *up)
+>  }
+>  #endif
+>
+> +/* Read and write for register access before and after port registration=
+ */
+> +static u32 __maybe_unused mtk8250_read(struct mtk8250_data *data, u32 re=
+g)
+> +{
+> +       return readl(data->membase + (reg << MTK_UART_REGSHIFT));
+> +}
+> +
+> +static void mtk8250_write(struct mtk8250_data *data, u32 reg, u32 val)
+> +{
+> +       writel(val, data->membase + (reg << MTK_UART_REGSHIFT));
+> +}
+> +
+>  static int mtk8250_startup(struct uart_port *port)
+>  {
+>  #ifdef CONFIG_SERIAL_8250_DMA
+> @@ -425,11 +439,10 @@ mtk8250_set_termios(struct uart_port *port, struct =
+ktermios *termios,
+>  static int __maybe_unused mtk8250_runtime_suspend(struct device *dev)
+>  {
+>         struct mtk8250_data *data =3D dev_get_drvdata(dev);
+> -       struct uart_8250_port *up =3D serial8250_get_port(data->line);
+>
+>         /* wait until UART in idle status */
+>         while
+> -               (serial_in(up, MTK_UART_DEBUG0));
+> +               (mtk8250_read(data, MTK_UART_DEBUG0));
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+I believe it still gets stuck here sometimes.
 
--- 
-Cheers,
+With your earlier patch, it could get through registering the port, and
+the console would show
 
-David / dhildenb
+    11002000.serial: ttyS0 at MMIO 0x11002000 (irq =3D 240, base_baud =3D
+1625000) is a ST16650V2
 
+for the console UART.
+
+Angelo mentioned that we should be using SLEEP_REQ/SLEEP_ACK registers
+in the MTK UART hardware.
+
+I tried reworking it into your patch here, but it causes issues with the
+UART-based Bluetooth on one of my devices. After the UART runtime suspends
+and resumes, something is off and causes the transfers during Bluetooth
+init to become corrupt.
+
+I'll try some more stuff, but the existing code seems timing dependent.
+If I add too many printk statements to the runtime suspend/resume
+callbacks, things seem to work. One time I even ended up with broken
+UARTs but otherwise booted up the system.
+
+ChenYu
+
+>
+>         if (data->clk_count =3D=3D 0U) {
+>                 dev_dbg(dev, "%s clock count is 0\n", __func__);
+> @@ -553,6 +566,7 @@ static int mtk8250_probe(struct platform_device *pdev=
+)
+>         if (!data)
+>                 return -ENOMEM;
+>
+> +       data->membase =3D uart.port.membase;
+>         data->clk_count =3D 0;
+>
+>         if (pdev->dev.of_node) {
+> @@ -570,7 +584,7 @@ static int mtk8250_probe(struct platform_device *pdev=
+)
+>         uart.port.flags =3D UPF_BOOT_AUTOCONF | UPF_FIXED_PORT;
+>         uart.port.dev =3D &pdev->dev;
+>         uart.port.iotype =3D UPIO_MEM32;
+> -       uart.port.regshift =3D 2;
+> +       uart.port.regshift =3D MTK_UART_REGSHIFT;
+>         uart.port.private_data =3D data;
+>         uart.port.shutdown =3D mtk8250_shutdown;
+>         uart.port.startup =3D mtk8250_startup;
+> @@ -581,27 +595,30 @@ static int mtk8250_probe(struct platform_device *pd=
+ev)
+>                 uart.dma =3D data->dma;
+>  #endif
+>
+> -       /* Disable Rate Fix function */
+> -       writel(0x0, uart.port.membase +
+> -                       (MTK_UART_RATE_FIX << uart.port.regshift));
+> -
+>         platform_set_drvdata(pdev, data);
+>
+>         pm_runtime_enable(&pdev->dev);
+> -       err =3D mtk8250_runtime_resume(&pdev->dev);
+> +       err =3D pm_runtime_resume_and_get(&pdev->dev);
+>         if (err)
+>                 goto err_pm_disable;
+>
+> +       /* Disable Rate Fix function */
+> +       mtk8250_write(data, 0, MTK_UART_RATE_FIX);
+> +
+>         data->line =3D serial8250_register_8250_port(&uart);
+>         if (data->line < 0) {
+>                 err =3D data->line;
+> -               goto err_pm_disable;
+> +               goto err_pm_put;
+>         }
+>
+>         data->rx_wakeup_irq =3D platform_get_irq_optional(pdev, 1);
+>
+> +       pm_runtime_put_sync(&pdev->dev);
+> +
+>         return 0;
+>
+> +err_pm_put:
+> +       pm_runtime_put_sync(&pdev->dev);
+>  err_pm_disable:
+>         pm_runtime_disable(&pdev->dev);
+>
+> @@ -694,7 +711,7 @@ static int __init early_mtk8250_setup(struct earlycon=
+_device *device,
+>                 return -ENODEV;
+>
+>         device->port.iotype =3D UPIO_MEM32;
+> -       device->port.regshift =3D 2;
+> +       device->port.regshift =3D MTK_UART_REGSHIFT;
+>
+>         return early_serial8250_setup(device, NULL);
+>  }
