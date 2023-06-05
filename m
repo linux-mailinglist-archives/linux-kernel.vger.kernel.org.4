@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7157223B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04D57223BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjFEKkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S231335AbjFEKoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjFEKkX (ORCPT
+        with ESMTP id S229659AbjFEKoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:40:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79668A6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:40:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1316C6227D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63101C4339B;
-        Mon,  5 Jun 2023 10:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685961620;
-        bh=J9L9ZgxC2Kly/z+obdv2lAt35t36sXkamU/X8cpUyCI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=t+5Ho53un0fNOIbSg7XaYfL51mL3yUz/msTZuvobC84aH8eUw//S05cXB+WF4UjDt
-         M4rw6Rtil0b5kYXs6jRFjLRJX7zsslKkK0Hfaan4o/e7s+zHczWTtM/7KMz5H9/rpY
-         bQCOVHy9kqAc9iXPV9W5mot9Rt5tyYP3TnhAoDCXfp/lvp9XNqozOhaLKol4D2E9n3
-         CTsd48WeKP+zbYOHllTf+In//gcztCmykq3TUy4fWPeFe/5qI/VZINPAK8pMcD9eXo
-         /UsBOTMYsjKtl3fTZ3TwipKExJldDdA5phMRlF+Evhz/+yVio9gbrcw/QkxNBrAPo7
-         M9k0lBLxOD6gA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C6A0E8723C;
-        Mon,  5 Jun 2023 10:40:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 5 Jun 2023 06:44:16 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D9FDB;
+        Mon,  5 Jun 2023 03:44:05 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 12:44:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685961843; bh=QVXyqBCquC6KdHJ2hKV41XXOd2PcXVnhiGJ6lkZSGh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OFoLM42HarKpIpgmpD0JvmgFXbHhALDzJteiBvE43G4AM8jHPZSHw2XiCkwSZznMO
+         P+3A6rextkavC9qqPSIqlJC0tc40q5JXwtRxCce+UWa6B8DWTHzUDC4pw7de2H6KF3
+         kSr2ok55U33JsNJrUcfSWUUsiJ1K5/y9pKwzPSlY=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <1fc53bcf-f7ec-4d74-a984-da4ee38e938f@t-8ch.de>
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: stmmac: dwmac-qcom-ethqos: fix a regression on EMAC
- < 3
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168596162030.847.18206193816609441964.git-patchwork-notify@kernel.org>
-Date:   Mon, 05 Jun 2023 10:40:20 +0000
-References: <20230602190455.3123018-1-brgl@bgdev.pl>
-In-Reply-To: <20230602190455.3123018-1-brgl@bgdev.pl>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     vkoul@kernel.org, bhupesh.sharma@linaro.org,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        ahalaney@redhat.com, jesse.brandeburg@intel.com,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bartosz.golaszewski@linaro.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHyPi29q3MKiNAQZ@1wt.eu>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NO_DNS_FOR_FROM,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri,  2 Jun 2023 21:04:55 +0200 you wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 2023-06-04 15:20:11+0200, Willy Tarreau wrote:
+> Hello Paul,
 > 
-> We must not assign plat_dat->dwmac4_addrs unconditionally as for
-> structures which don't set them, this will result in the core driver
-> using zeroes everywhere and breaking the driver for older HW. On EMAC < 2
-> the address should remain NULL.
+> Thomas and Zhangjin have provided significant nolibc cleanups, and
+> fixes, as well as preparation work to later support riscv32.
 > 
-> [...]
+> These consist in the following main series:
+>   - generalization of stackprotector to other archs that were not
+>     previously supported (riscv, mips, loongarch, arm, arm64)
+> 
+>   - general cleanups of the makefile, test report output, deduplication
+>     of certain tests
+> 
+>   - slightly better compliance of some tests performed on certain syscalls
+>     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
+> 
+>   - add support for nanoseconds in stat() and statx()
+> 
+>   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
+> 
+>   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
+> 
+> I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
+> and it works fine for all archs.
+> 
+> I don't know if you're still planning on merging new stuff in this area
+> for 6.5 or not (since I know that it involves new series of tests on your
+> side as well), but given that Zhangjin will engage into deeper changes
+> later for riscv32 that will likely imply to update more syscalls to use
+> the time64 ones, I would prefer to split the cleanups from the hard stuff,
+> but I'll let you judge based on the current state of what's pending for
+> 6.5.
+> 
+> In any case I'm putting all this here for now (not for merge yet):
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
+> 
+> I'd like Thomas and Zhangjin to perform a last check to confirm they're
+> OK with this final integration.
 
-Here is the summary with links:
-  - [net] net: stmmac: dwmac-qcom-ethqos: fix a regression on EMAC < 3
-    https://git.kernel.org/netdev/net/c/9bc009734774
+(Talking about 20230605-nolibc-rv32+stkp7,
+but the same issue is in stkp6)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I noticed that the commit introducing prctl() comes *after* the one
+making use of it.
 
+8389cb4b55ae ("selftests/nolibc: prevent coredumps during test execution")
+033c01b5a8f4 ("tools/nolibc: add support for prctl()")
 
+This can lead to compiler errors and break bisectability.
+
+They just need to be swapped.
+
+Thomas
