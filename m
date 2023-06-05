@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6FD72253D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DE8722537
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbjFEMIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
+        id S233254AbjFEMHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjFEMIW (ORCPT
+        with ESMTP id S229815AbjFEMHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:08:22 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E6B92;
-        Mon,  5 Jun 2023 05:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685966901; x=1717502901;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dQT6oVcoi6OibIBbA3hTG2i3vMqElgYwkRHP4oreT70=;
-  b=Jy9z2fXDE2qtQ1lqdFjdSSv3OFFyUsvnrDAtls8Lz7O+vre+hby6wRkb
-   2eg8yY1nJdM3WDrNHMwdbYK7oxxIMCYD4ihvxIyOHM2tS441oGoXrHVcu
-   SS4dQs2a3WOapQ+NrPC61tcGW9gNEHhnvA20BLNl3fqcjBe9U6rTJUPKS
-   lHQu1lNA2pkYLeXve66pfzLyGvUxaurrkQDe6HUL9nDb5SsTa8bxx6wli
-   0bAALD/ykGl0iENyxunBdInRUkaZr7Oti9OIQ1MESnCMTUEmcsbPquKaL
-   hKFt/9c7QZZXEyBPYPWhX+sMJm/HASBa3v7x8mMl9K0V211OR5bow1g/a
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="214645686"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jun 2023 05:08:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 5 Jun 2023 05:07:46 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 5 Jun 2023 05:07:39 -0700
-Message-ID: <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
-Date:   Mon, 5 Jun 2023 14:07:32 +0200
+        Mon, 5 Jun 2023 08:07:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5702292;
+        Mon,  5 Jun 2023 05:07:50 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685966868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KXCmDfvj9l+154x1gPShTvQOI2Ax76Udy+UmUVwfA9A=;
+        b=EHRctzJyGTaUBHd5gaBmROCxEN4c1Oe/9jBSeNe9frLeCG4bn61BHCqeXrmHqPsPkqAKFa
+        11LI8UGe1726OEEwo/Gh7jxQa+HR5GExjqMk0Y6p8IqDHCG4AMSdqllsX5d6vJZ+nT03iV
+        2zSweQ483LCOJpnJAF23v8Qkj7ouqeyEpPpBNPEp5cmO1TlvPYkfxMkzDNiSGTo92yNvhQ
+        4qTeY7N4s9zcB4t+wdrWFKD73D7/UYFy5KfGGziV70E3UzdmhUhe/00m4fy+GH0A93xEAz
+        ibNw80DhnPCcHdAKj7eieCgYBVxHQZzDyN+FLaLloX9SvRsL1HvWtwqMTtfGmA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685966868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KXCmDfvj9l+154x1gPShTvQOI2Ax76Udy+UmUVwfA9A=;
+        b=bi7gJKNK43gslB/6sAajAZsqNLxl8cIkdUxehfFmm6TB9ooPuOegaNSD/p7HKhgJg4OLIn
+        bKTx4VcD0SWKG+CA==
+To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 02/33] x86/fred: make unions for the cs and ss fields
+ in struct pt_regs
+In-Reply-To: <20230410081438.1750-3-xin3.li@intel.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-3-xin3.li@intel.com>
+Date:   Mon, 05 Jun 2023 14:07:48 +0200
+Message-ID: <87o7lu6rjf.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>,
-        <linux@armlinux.org.uk>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <sre@kernel.org>, <broonie@kernel.org>,
-        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
-        <sudeep.holla@arm.com>, <balamanikandan.gunasundar@microchip.com>,
-        <mihai.sain@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
-        <durai.manickamkr@microchip.com>, <manikandan.m@microchip.com>,
-        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
-        <balakrishnan.s@microchip.com>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-22-varshini.rajendran@microchip.com>
- <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 at 08:42, Krzysztof Kozlowski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On 03/06/2023 22:02, Varshini Rajendran wrote:
->> From: Nicolas Ferre <nicolas.ferre@microchip.com>
->>
->> Add support for GMAC in sam9x7 SoC family
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->> ---
->>   drivers/net/ethernet/cadence/macb_main.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
->> index 29a1199dad14..609c8e9305ba 100644
->> --- a/drivers/net/ethernet/cadence/macb_main.c
->> +++ b/drivers/net/ethernet/cadence/macb_main.c
->> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
->>        { .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
->>        { .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
->>        { .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
->> +     { .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
-> 
-> These are compatible, aren't they? Why do you need new entry?
+On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+> +	union {
+> +		unsigned long  csx;	/* cs extended: CS + any fields above it */
+> +		struct __attribute__((__packed__)) {
+> +			unsigned short cs;	/* CS selector proper */
+> +			unsigned int current_stack_level: 2;
+> +			unsigned int __csx_resv1	: 6;
+> +			unsigned int interrupt_shadowed	: 1;
+> +			unsigned int software_initiated	: 1;
+> +			unsigned int __csx_resv2	: 2;
+> +			unsigned int nmi		: 1;
+> +			unsigned int __csx_resv3	: 3;
+> +			unsigned int __csx_resv4	: 32;
+> +		};
+> +	};
+>  	unsigned long flags;
+>  	unsigned long sp;
+> -	unsigned long ss;
+> +	union {
+> +		unsigned long  ssx;	/* ss extended: SS + any fields above it */
+> +		struct __attribute__((__packed__)) {
+> +			unsigned short ss;	/* SS selector proper */
+> +			unsigned int __ssx_resv1	: 16;
+> +			unsigned int vector		: 8;
+> +			unsigned int __ssx_resv2	: 8;
+> +			unsigned int type		: 4;
+> +			unsigned int __ssx_resv3	: 4;
+> +			unsigned int enclv		: 1;
+> +			unsigned int long_mode		: 1;
+> +			unsigned int nested		: 1;
+> +			unsigned int __ssx_resv4	: 1;
+> +			unsigned int instr_len		: 4;
+> +		};
+> +	};
 
-The hardware itself is different, even if the new features are not 
-supported yet in the macb driver.
-The macb driver will certainly evolve in order to add these features so 
-we decided to match a new compatible string all the way to the driver.
+This does not match section
 
-Best regards,
-   Nicolas
+    5.2.1 Saving Information on the Regular Stack?
 
+of version 4 and later of the specification.
 
--- 
-Nicolas Ferre
+Thanks,
 
+        tglx
