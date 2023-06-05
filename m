@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B1E7228A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2817228B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbjFEOTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
+        id S233074AbjFEOVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233400AbjFEOS5 (ORCPT
+        with ESMTP id S233054AbjFEOVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:18:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AAB10C;
-        Mon,  5 Jun 2023 07:18:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 5 Jun 2023 10:21:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD399C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:20:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685974839;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gqpkXp8U+cKSUgRdK1ANg0TMjc87TbEFrUC0Wy67524=;
+        b=KgPRFx9EdRK2XOdlYbjrfmU4kt6XxDm1kmGseNd/GVEaQEiYqX/P3B4dCeQZ9vL6uCgfaO
+        sOMjGKg1EbVmeqAFGpV/lg98p8SpQqAPbnwXDQYDveNIFclHg8WvgHllIcsrfjoIDoyqqv
+        gZ84+iQuc159/eMjJSMsXaapzCPvD4U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-6RP4HyK-PuiLqhXNeBlvBQ-1; Mon, 05 Jun 2023 10:20:36 -0400
+X-MC-Unique: 6RP4HyK-PuiLqhXNeBlvBQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 347D66241A;
-        Mon,  5 Jun 2023 14:18:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632DBC433EF;
-        Mon,  5 Jun 2023 14:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685974727;
-        bh=zq25hJ0fHK6GtehEcofkCZeAy8jNCWwt6NKJQEwBpSM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FvbA7sETZUW5ZcfTxbhvBaQKfBV28xcoqYaInME55BvENaD8mTZnOhJJubLqBfwas
-         S2+KfwHil+AQh6U5BY7kxfxfsXzIRbc9Fm1jsuCYqwhPzADC3AiOKBuPyMSCT0XqyT
-         cedzg8Vp/4wtQVT4K8gDNrunucZWVy+D0nvntkUiCe89JGFnvfxB/ML5apb7lEPBog
-         eBDa4Md6P6ZWalE+1acYuyw8GgqeNvLOy8glnwIMA+6yqLP4YDQl+3oF6ZExl56ExD
-         mffuTaNBhr+08U3L0Mdi2mJLHbRxkINhvTP/Ijb/8ECezrov4sJ5PhAhCoLumjP55S
-         unYQlpAMd6HmQ==
-Date:   Mon, 5 Jun 2023 15:18:39 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, qperret@google.com
-Subject: Re: [PATCH v13 10/24] gunyah: vm_mgr: Add/remove user memory regions
-Message-ID: <20230605141839.GD21212@willie-the-truck>
-References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
- <20230509204801.2824351-11-quic_eberman@quicinc.com>
- <20230519115948.GB2637@willie-the-truck>
- <e22c31bd-10ed-f242-3e72-debf40e01e3c@quicinc.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 832E838025FE;
+        Mon,  5 Jun 2023 14:20:35 +0000 (UTC)
+Received: from mail.corp.redhat.com (unknown [10.45.225.227])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 739E01121315;
+        Mon,  5 Jun 2023 14:20:33 +0000 (UTC)
+Date:   Mon, 5 Jun 2023 16:20:30 +0200
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Mark Lord <mlord@pobox.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, Bastien Nocera <hadess@hadess.net>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        Filipe =?utf-8?B?TGHDrW5z?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
+Message-ID: <jafrw2wirzegnf7v2pcm52sao5yc4futa7ok4ccmywigj3y2c4@pep4b3ebus7s>
+References: <20230531082428.21763-1-hadess@hadess.net>
+ <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm>
+ <ccae168a-4be0-f085-8d8e-03bfbd71ac8f@pobox.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e22c31bd-10ed-f242-3e72-debf40e01e3c@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <ccae168a-4be0-f085-8d8e-03bfbd71ac8f@pobox.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,79 +66,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Elliot,
 
-[+Quentin since he's looked at the MMU notifiers]
-
-Sorry for the slow response, I got buried in email during a week away.
-
-On Fri, May 19, 2023 at 10:02:29AM -0700, Elliot Berman wrote:
-> On 5/19/2023 4:59 AM, Will Deacon wrote:
-> > On Tue, May 09, 2023 at 01:47:47PM -0700, Elliot Berman wrote:
-> > > +	ret = account_locked_vm(ghvm->mm, mapping->npages, true);
-> > > +	if (ret)
-> > > +		goto free_mapping;
-> > > +
-> > > +	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL_ACCOUNT);
-> > > +	if (!mapping->pages) {
-> > > +		ret = -ENOMEM;
-> > > +		mapping->npages = 0; /* update npages for reclaim */
-> > > +		goto unlock_pages;
-> > > +	}
-> > > +
-> > > +	gup_flags = FOLL_LONGTERM;
-> > > +	if (region->flags & GH_MEM_ALLOW_WRITE)
-> > > +		gup_flags |= FOLL_WRITE;
-> > > +
-> > > +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
-> > > +					gup_flags, mapping->pages);
-> > > +	if (pinned < 0) {
-> > > +		ret = pinned;
-> > > +		goto free_pages;
-> > > +	} else if (pinned != mapping->npages) {
-> > > +		ret = -EFAULT;
-> > > +		mapping->npages = pinned; /* update npages for reclaim */
-> > > +		goto unpin_pages;
-> > > +	}
-> > 
-> > Sorry if I missed it, but I still don't see where you reject file mappings
-> > here.
-> > 
+On Jun 03 2023, Mark Lord wrote:
 > 
-> Sure, I can reject file mappings. I didn't catch that was the ask previously
-> and thought it was only a comment about behavior of file mappings.
-
-I thought the mention of filesystem corruption was clear enough! It's
-definitely something we shouldn't allow.
-
-> > This is also the wrong interface for upstream. Please get involved with
-> > the fd-based guest memory discussions [1] and port your series to that.
+> On 2023-06-03 08:41 AM, Jiri Kosina wrote:
+> > On Wed, 31 May 2023, Jiri Kosina wrote:
 > > 
+> >>> If an attempt at contacting a receiver or a device fails because the
+> >>> receiver or device never responds, don't restart the communication, only
+> >>> restart it if the receiver or device answers that it's busy, as originally
+> >>> intended.
+> >>>
+> >>> This was the behaviour on communication timeout before commit 586e8fede795
+> >>> ("HID: logitech-hidpp: Retry commands when device is busy").
+> >>>
+> >>> This fixes some overly long waits in a critical path on boot, when
+> >>> checking whether the device is connected by getting its HID++ version.
+> >>>
+> >>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> >>> Suggested-by: Mark Lord <mlord@pobox.com>
+> >>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
+> >>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217412
+> >>> ---
+> >>>  drivers/hid/hid-logitech-hidpp.c | 1 +
+> >>>  1 file changed, 1 insertion(+)
+> >>>
+> >>> diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+> >>> index 0fcfd85fea0f..2246044b1639 100644
+> >>> --- a/drivers/hid/hid-logitech-hidpp.c
+> >>> +++ b/drivers/hid/hid-logitech-hidpp.c
+> >>> @@ -314,6 +314,7 @@ static int hidpp_send_message_sync(struct hidpp_device *hidpp,
+> >>>  			dbg_hid("%s:timeout waiting for response\n", __func__);
+> >>>  			memset(response, 0, sizeof(struct hidpp_report));
+> >>>  			ret = -ETIMEDOUT;
+> >>> +			goto exit;
+> >>>  		}
+> >>>  
+> >>
+> >> I have applied this even before getting confirmation from the reporters in 
+> >> bugzilla, as it's the right thing to do anyway.
+> > 
+> > Unfortunately it doesn't seem to cure the reported issue (while reverting 
+> > 586e8fede79 does): https://bugzilla.kernel.org/show_bug.cgi?id=217523#c2
 > 
-> The user interface design for *shared* memory aligns with
-> KVM_SET_USER_MEMORY_REGION.
+> I wonder if this code could be re-worked to not even do this (waiting)
+> from the _probe() function?  It ought to be able to throw it on a workqueue
+> or something, rather than stalling system boot for a minimum of 5-seconds
+> (or much longer as as-is).
 
-I don't think it does. For example, file mappings don't work (as above),
-you're placing additional rlimit requirements on the caller, read-only
-memslots are not functional, the memory cannot be swapped or migrated,
-dirty logging doesn't work etc. pKVM is in the same boat, but that's why
-we're not upstreaming this part in its current form.
+That's an option, but the fact that I can not replicate locally with the
+exact same hardware seems to indicate that we would just be papering
+over the issue.
 
-> I understood we want to use restricted memfd for giving guest-private memory
-> (Gunyah calls this "lending memory"). When I went through the changes, I
-> gathered KVM is using restricted memfd only for guest-private memory and not
-> for shared memory. Thus, I dropped support for lending memory to the guest
-> VM and only retained the shared memory support in this series. I'd like to
-> merge what we can today and introduce the guest-private memory support in
-> tandem with the restricted memfd; I don't see much reason to delay the
-> series.
+Here, I admittely have the USB receiver running through USB-C ports, and
+the communication never fails and I get immediate bring ups of the
+devices. Which means I am not hitting that path.
 
-Right, protected guests will use the new restricted memfd ("guest mem"
-now, I think?), but non-protected guests should implement the existing
-interface *without* the need for the GUP pin on guest memory pages. Yes,
-that means full support for MMU notifiers so that these pages can be
-managed properly by the host kernel. We're working on that for pKVM, but
-it requires a more flexible form of memory sharing over what we currently
-have so that e.g. the zero page can be shared between multiple entities.
+The hidpp driver should have everything ready to delay the init in a
+workqueue, but the impacted users would still get a delay when they plug
+in the device (which is better than stalling the boot, I agree).
 
-Will
+Cheers,
+Benjamin
+
