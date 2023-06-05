@@ -2,99 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F94722E5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2618B722E64
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 20:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjFESJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 14:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S235125AbjFESMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 14:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjFESJE (ORCPT
+        with ESMTP id S234348AbjFESMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:09:04 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA90ED2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:09:02 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25945de43c3so323961a91.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:09:02 -0700 (PDT)
+        Mon, 5 Jun 2023 14:12:05 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061A4D9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 11:12:04 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so20765ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 11:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685988542; x=1688580542;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685988723; x=1688580723;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SbhZgeRfrMzo8RZUjiv5Kr8KvV2/iK/o9SdLtbvSVL4=;
-        b=M12TBi/qdCVHqFYGFxUaq8Xsf9tqgm2Saa+5o3o1AI1a3KbqNFyMgmbcVKqIov05Ci
-         uMu1xJio3U6fVN1G/jl2PUsd6FfTM2VoZDOwX7lR25xQYp21IAoM8ZUY/ZFgfbyD0/sV
-         1KfXLD/Y35e9+smYan7Kr0Rem30tgZYv9c1pkZmEhNS3G64FQ4tbzn+Z96fOlAH7oCKE
-         70Mug7V/5btfozq7bpQdOHu/l9UdwCtFocNQzW7AxzrKfoRhhwBlyuGyqmjY35AoVCsP
-         1bBlhI363MBzD9H2yKJRzFRGAoewe0XkRBxhBpjKASyBecCg93NxosUIBRL4RHua0PUg
-         e6fQ==
+        bh=1v9H+aU/5MHg3n8/buk5HlYHhoHgA0ZUnQMJqGpMQJA=;
+        b=gw03rkY2VpY+Vru936UGtYoAX16IZyS5hd3OHHog78K7Dvpq4TBluKU7gtif/3w5rp
+         ye0RfevEZZ6jTOGi5G7VLdTevL4ZMODtlV8xlZGLD9DJz+i37yh6rv/JH5y5X6agRpXe
+         fV8TWvMcjLK3PNCeAQrS93sWoYofkauour4Aazx5Z0IxnN1XUt8Eeq1eBDJmUXtGpZjG
+         kDu9knKK33Ge2wQag5BQycHWxOa3SvPfV5AZ/UEbzSRQVa1QOSQlGefOlY4T2eGbLv5E
+         QWDOaDjXT5rvKzZOFKi4fgTveJ7ov5u2N4YabOK16pcVDAc96eejtpjhCCZ++4+mIJVz
+         Pjbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685988542; x=1688580542;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685988723; x=1688580723;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SbhZgeRfrMzo8RZUjiv5Kr8KvV2/iK/o9SdLtbvSVL4=;
-        b=La7zioeqeDvHs5P1+v+pGnES8m7oaxQD/+dYVK9UplexF4g325h8J9gRwtnkW9xbeb
-         1Dl7JwL/MVJn3reIHopi9GjzW5B/Oy5qCTUP3qP5EWdCPuJGnm+39hnallRNm5He1pt+
-         X/rxP4xIxnwdaYhOUN8JCVBcvpm4MoKc6Khgo3E5N87iCu8TCNg0tkvt0qmURZUadfIH
-         n4ty7Of8nJ2Zp4lqN9oLRIgA/yO/M5Jw3PGJ0svl2IAOfFjyvf65kwYIuEtoLL3y+JSD
-         T2a90tENQnq6J9YMJtFCPRWCbI6DZg49AlEcRrfDhe2hu5r4fDZgP8NQeDvYNYqVhbCn
-         93iw==
-X-Gm-Message-State: AC+VfDxXdSxaAlosrpBD7CSnceUE1O8uZ+0RSawfiF4S0Q9qzABwvmHn
-        AB/me2LzqYaOxaFO2sxP8ud5Gw==
-X-Google-Smtp-Source: ACHHUZ5x1VhEu0cbk+F9o60l7ZlBAYq207KYwhSkbPgBXjs/jRHW4y+9It3zndPrTP6WOfYfW5+i8g==
-X-Received: by 2002:a17:90a:e7d0:b0:256:4bc:6bc8 with SMTP id kb16-20020a17090ae7d000b0025604bc6bc8mr23198257pjb.2.1685988542338;
-        Mon, 05 Jun 2023 11:09:02 -0700 (PDT)
-Received: from [127.0.0.1] ([2620:10d:c090:400::5:a83f])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090a2ac900b0025645d118adsm6656422pjg.14.2023.06.05.11.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 11:09:01 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, josef@toxicpanda.com, linan666@huaweicloud.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-In-Reply-To: <20230527091904.3001833-1-linan666@huaweicloud.com>
-References: <20230527091904.3001833-1-linan666@huaweicloud.com>
-Subject: Re: [PATCH] blk-iocost: use spin_lock_irqsave in
- adjust_inuse_and_calc_cost
-Message-Id: <168598854044.127564.8532399641861277056.b4-ty@kernel.dk>
-Date:   Mon, 05 Jun 2023 12:09:00 -0600
+        bh=1v9H+aU/5MHg3n8/buk5HlYHhoHgA0ZUnQMJqGpMQJA=;
+        b=Z8U3VrpUZdyV5183iVchi96KFmkf5c4lQA+QvOHN/npSG+Q3Fw79hVd5NdHyhcwvEy
+         +34Ir4KoCiYNDhVwvydBd4M1bOqvulFGC/vL6mwVoAiH/hRjgU/NAqM1uXZ3Vpockjdc
+         Kl06w6oUhLUJbHdOApq7e01957otZtifEUEd1Anc7ulTZ7KEVH35IgEV+D5cik+m/wbN
+         +aSsU1CGrUnmAHC/Y/8Rovtdi7qzt/nouMy3LmIn7YDipT1iIakzf9VLFC3JRcvAfXuE
+         0x1/YvAdyIIfquP8Pmi0tkyj3ww6Qu32JzPIkhEDeQYtkhoR6ZlZPZwrVl6QVJn8TWgo
+         0U7A==
+X-Gm-Message-State: AC+VfDyJS+Q9ClKYGd1BAl6h1zw4c+3JgvDOpPzdmY1sJFztJ9Q7oe7i
+        PW3c0gcSgkUjsGALZRM5mCxV7gxyAx6rAGcWbjRuGw==
+X-Google-Smtp-Source: ACHHUZ672rcdLzlt2TMtoZbpzHauyvyUWezDXI8ZRdcdXNwd9xa7Gpvfgbo3dXGDPFoIev1sMhSHkIoArtW1/9/Ol1s=
+X-Received: by 2002:a92:c24b:0:b0:33d:b6ed:8bf3 with SMTP id
+ k11-20020a92c24b000000b0033db6ed8bf3mr17037ilo.27.1685988723232; Mon, 05 Jun
+ 2023 11:12:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+ <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
+In-Reply-To: <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 5 Jun 2023 11:11:51 -0700
+Message-ID: <CALMp9eRRzQKoFVHvgY8VfpS-8=RY6HYOanBuGYLRbRQ+9V8zng@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 5, 2023 at 10:42=E2=80=AFAM Mingwei Zhang <mizhang@google.com> =
+wrote:
+>
+> On Mon, Jun 5, 2023 at 9:55=E2=80=AFAM Jim Mattson <jmattson@google.com> =
+wrote:
+> >
+> > On Sun, Jun 4, 2023 at 5:43=E2=80=AFPM Mingwei Zhang <mizhang@google.co=
+m> wrote:
+> > >
+> > > Remove KVM MMU write lock when accessing indirect_shadow_pages counte=
+r when
+> > > page role is direct because this counter value is used as a coarse-gr=
+ained
+> > > heuristics to check if there is nested guest active. Racing with this
+> > > heuristics without mmu lock will be harmless because the correspondin=
+g
+> > > indirect shadow sptes for the GPA will either be zapped by this threa=
+d or
+> > > some other thread who has previously zapped all indirect shadow pages=
+ and
+> > > makes the value to 0.
+> > >
+> > > Because of that, remove the KVM MMU write lock pair to potentially re=
+duce
+> > > the lock contension and improve the performance of nested VM. In addi=
+tion
+> > > opportunistically change the comment of 'direct mmu' to make the
+> > > description consistent with other places.
+> > >
+> > > Reported-by: Jim Mattson <jmattson@google.com>
+> > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > > ---
+> > >  arch/x86/kvm/x86.c | 10 ++--------
+> > >  1 file changed, 2 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index 5ad55ef71433..97cfa5a00ff2 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm_v=
+cpu *vcpu, gpa_t cr2_or_gpa,
+> > >
+> > >         kvm_release_pfn_clean(pfn);
+> > >
+> > > -       /* The instructions are well-emulated on direct mmu. */
+> > > +       /* The instructions are well-emulated on Direct MMUs. */
+> > >         if (vcpu->arch.mmu->root_role.direct) {
+> > > -               unsigned int indirect_shadow_pages;
+> > > -
+> > > -               write_lock(&vcpu->kvm->mmu_lock);
+> > > -               indirect_shadow_pages =3D vcpu->kvm->arch.indirect_sh=
+adow_pages;
+> > > -               write_unlock(&vcpu->kvm->mmu_lock);
+> > > -
+> > > -               if (indirect_shadow_pages)
+> > > +               if (READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
+> >
+> > I don't understand the need for READ_ONCE() here. That implies that
+> > there is something tricky going on, and I don't think that's the case.
+>
+> READ_ONCE() is just telling the compiler not to remove the read. Since
+> this is reading a global variable,  the compiler might just read a
+> previous copy if the value has already been read into a local
+> variable. But that is not the case here...
 
-On Sat, 27 May 2023 17:19:04 +0800, linan666@huaweicloud.com wrote:
-> adjust_inuse_and_calc_cost() use spin_lock_irq() and IRQ will be enabled
-> when unlock. DEADLOCK might happen if we have held other locks and disabled
-> IRQ before invoking it.
-> 
-> Fix it by using spin_lock_irqsave() instead, which can keep IRQ state
-> consistent with before when unlock.
-> 
-> [...]
+Not a global variable, actually, but that's not relevant. What would
+be wrong with using a previously read copy?
 
-Applied, thanks!
+We don't always wrap reads in READ_ONCE(). It's actually pretty rare.
+So, there should be an explicit and meaningful reason.
 
-[1/1] blk-iocost: use spin_lock_irqsave in adjust_inuse_and_calc_cost
-      commit: 8d211554679d0b23702bd32ba04aeac0c1c4f660
+> Note I see there is another READ_ONCE for
+> kvm->arch.indirect_shadow_pages, so I am reusing the same thing.
 
-Best regards,
--- 
-Jens Axboe
+That's not a good reason. "If all of your friends jumped off a cliff,
+would you?"
 
-
-
+> I did check the reordering issue but it should be fine because when
+> 'we' see indirect_shadow_pages as 0, the shadow pages must have
+> already been zapped. Not only because of the locking, but also the
+> program order in __kvm_mmu_prepare_zap_page() shows that it will zap
+> shadow pages first before updating the stats.
