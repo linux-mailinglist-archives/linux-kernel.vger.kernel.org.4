@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259857226BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167467226BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbjFENBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S233727AbjFENBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjFENBO (ORCPT
+        with ESMTP id S233139AbjFENBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:01:14 -0400
+        Mon, 5 Jun 2023 09:01:21 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2776A98
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:00:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8607DA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:00:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685970032;
+        s=mimecast20190719; t=1685970038;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bbubscZftjyRYYL2p4m/teVFWDkt0vBAkgkuXdu/w1E=;
-        b=J4sQP/z8nLmme8fO85UU7kMFZ6fPQEZnP4Vuv3Z8NGq5n4Mh+kWPZ44S+hBhi1ve8DAAW2
-        vY87pfeDTISgRAfkc3xMlzmmUeZaVXM1DuRI3nH1qZrEEQd6TODxWda+0hLLAT9wny5eJz
-        FVCXSEm10oK14PuueKrilZbimPpkcuY=
+        bh=6aGjYzdJUv3mCKaWHOXQQVhBXGYUPAjudrmb3GbAYcs=;
+        b=h9eUdP+sRAY7iqIILqaydT51jdfQxxpnu4GoJxVZfFWNJTXGdExssZYF+ez8bB2fXGKBmz
+        auSRvnMydrBs4xLfe4RJ0CM7gJSXJyeRs+mbbGSInlY8tZibIazJwHvQ5rK/a2P1xlH734
+        ufBLW+FJ7V8sgK7ffRepkBppT+rHLPQ=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-18-0vkZADEtP-e3u8WYhMGeGg-1; Mon, 05 Jun 2023 09:00:31 -0400
-X-MC-Unique: 0vkZADEtP-e3u8WYhMGeGg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f604687a23so22951555e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:00:30 -0700 (PDT)
+ us-mta-610-nIEksND5NJiXTAcmkDIVXA-1; Mon, 05 Jun 2023 09:00:36 -0400
+X-MC-Unique: nIEksND5NJiXTAcmkDIVXA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f772115352so5113015e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:00:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685970030; x=1688562030;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bbubscZftjyRYYL2p4m/teVFWDkt0vBAkgkuXdu/w1E=;
-        b=Z6+k0S+pIBHTlwqE7qHQliNFP4hz82HnvlCyQ/KY7ApEv/8bCyLll0SodnADXul6GO
-         JD8WBD+ZiaKV3vH1HmgBfO1Q1QVt5kvOHmJ4VTlEWtSoiBqNSmmkA+WOmhbjX7SFBBC9
-         RYAv1DwWF4FsRBnClENrGFqQyvd/HjJDi4gV77gTUaH5hJ4GQ8u3CGf8hjxbzjBR5eUs
-         C5UXh2jxxQUn9JjyDPhQLGH166CWjzrVPvW52nDyxPwdRGJj8uTwFVlY559yN3o5j03i
-         WQTrUN8/Xuc1z0zzrPAjrz+hQLycE+vxSOfLBWll0ScJ9ZkAfwIFjdkI21iSb9ubw9ol
-         Ti0g==
-X-Gm-Message-State: AC+VfDywaTLkzZpV4Tutn6RTSPVIJ0cQX6+tIw+5GX2QdQzF4+YMhCEY
-        F6WyN2sjaSBl4rbm2/PgP4P9f4/ERzDtN/HumWee66U0VtJ3QTlaofmgdIMgtSgWot1zU9jN5j5
-        UKV3ZzXTj5DUwt/nGXI8yvr8D
-X-Received: by 2002:a5d:4d4a:0:b0:30a:f1dd:dc55 with SMTP id a10-20020a5d4d4a000000b0030af1dddc55mr3686144wru.53.1685970029833;
-        Mon, 05 Jun 2023 06:00:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6DD3cwjpmZBvtInHDuWJuM4v9sDwnhYfReDafcIwBsT4j0UbFV+PmO399VIFuafC8KUQM2Tg==
-X-Received: by 2002:a5d:4d4a:0:b0:30a:f1dd:dc55 with SMTP id a10-20020a5d4d4a000000b0030af1dddc55mr3686125wru.53.1685970029458;
-        Mon, 05 Jun 2023 06:00:29 -0700 (PDT)
-Received: from redhat.com ([2.55.4.169])
-        by smtp.gmail.com with ESMTPSA id p6-20020a056000018600b0030aefd11892sm9708331wrx.41.2023.06.05.06.00.27
+        d=1e100.net; s=20221208; t=1685970035; x=1688562035;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6aGjYzdJUv3mCKaWHOXQQVhBXGYUPAjudrmb3GbAYcs=;
+        b=ZmKNzuGf5VV95/WRZO8Op/ZouNOAxphiFx0VyxG4IyGRThef7czh0Tzfcs0Hzzts+x
+         tYhmYdJH/SmAHJSMyhr5xCD3+hWWvfXuuvxeB0Dp60s0QwhDh9ZGnF1Qpwwg4/wLUd+S
+         sAQu+vdZ2g0qJ22JiK5ux5ze5ZfVtL7t3ZY2e7V/2vkQ5e8OX8vvO3+lnMdjnccLyPqX
+         sP7l1gWGd2mCwdWshVZ8K1Rf8OI3tIjowl78us+zeq+W2Y/BeQ52jQLg057USCS6YJr7
+         rtLH8GsO22T/CBH60ht3dSnOk/0UWjLq0aOXozwYTDdERes5K4c2Lzgax4aMuRdEWI/K
+         tLFQ==
+X-Gm-Message-State: AC+VfDxrX9iSrKbEhCvZi79NbK6Ct+X2nOMY6XJ6D6ae6g1CaKFMbS97
+        DjEX5Kl8j5WESHXDdMvRvfBxjKQjq2mHQc1BqvcJJhEELpnY33rQxMR48y+e7xM4K2XbhTOq4e7
+        vZmmr/M95hf2qOibZPrX5EgTkGChALkDgUhQzVtbBr4sEuFJICikMfV0ZD71LIshO0FmNN/rysM
+        tCgh7rzfEd
+X-Received: by 2002:a05:600c:1d98:b0:3f7:367a:38cb with SMTP id p24-20020a05600c1d9800b003f7367a38cbmr3872785wms.2.1685970035436;
+        Mon, 05 Jun 2023 06:00:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7BYasbXF+HwlwoTO7ru5Jn/GlxOkdZNhWdPXcR60/ODZuYlz9paQmxJ0VSP+eJVhTa5e/f5Q==
+X-Received: by 2002:a05:600c:1d98:b0:3f7:367a:38cb with SMTP id p24-20020a05600c1d9800b003f7367a38cbmr3872737wms.2.1685970035044;
+        Mon, 05 Jun 2023 06:00:35 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id w11-20020a1cf60b000000b003f423f5b659sm10737802wmc.10.2023.06.05.06.00.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 06:00:28 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 09:00:25 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <20230605085840-mutt-send-email-mst@kernel.org>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
- <20230605084104-mutt-send-email-mst@kernel.org>
- <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
+        Mon, 05 Jun 2023 06:00:34 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/9] x86/hyperv: Use vmmcall to implement Hyper-V
+ hypercall in sev-snp enlightened guest
+In-Reply-To: <20230601151624.1757616-6-ltykernel@gmail.com>
+References: <20230601151624.1757616-1-ltykernel@gmail.com>
+ <20230601151624.1757616-6-ltykernel@gmail.com>
+Date:   Mon, 05 Jun 2023 15:00:33 +0200
+Message-ID: <87wn0ijc7i.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,84 +83,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
-> On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
-> > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
-> > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
-> > > don't support packed virtqueue well yet, so let's filter the
-> > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
-> > > 
-> > > This way, even if the device supports it, we don't risk it being
-> > > negotiated, then the VMM is unable to set the vring state properly.
-> > > 
-> > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > ---
-> > > 
-> > > Notes:
-> > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
-> > >     better PACKED support" series [1] and backported in stable branches.
-> > > 
-> > >     We can revert it when we are sure that everything is working with
-> > >     packed virtqueues.
-> > > 
-> > >     Thanks,
-> > >     Stefano
-> > > 
-> > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
-> > 
-> > I'm a bit lost here. So why am I merging "better PACKED support" then?
-> 
-> To really support packed virtqueue with vhost-vdpa, at that point we would
-> also have to revert this patch.
-> 
-> I wasn't sure if you wanted to queue the series for this merge window.
-> In that case do you think it is better to send this patch only for stable
-> branches?
-> > Does this patch make them a NOP?
-> 
-> Yep, after applying the "better PACKED support" series and being sure that
-> the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
-> patch.
-> 
-> Let me know if you prefer a different approach.
-> 
-> I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
-> interprets them the right way, when it does not.
-> 
-> Thanks,
-> Stefano
-> 
+Tianyu Lan <ltykernel@gmail.com> writes:
 
-If this fixes a bug can you add Fixes tags to each of them? Then it's ok
-to merge in this window. Probably easier than the elaborate
-mask/unmask dance.
+> From: Tianyu Lan <tiala@microsoft.com>
+>
+> In sev-snp enlightened guest, Hyper-V hypercall needs
+> to use vmmcall to trigger vmexit and notify hypervisor
+> to handle hypercall request.
+>
+> There is no x86 SEV SNP feature flag support so far and
+> hardware provides MSR_AMD64_SEV register to check SEV-SNP
+> capability with MSR_AMD64_SEV_ENABLED bit. ALTERNATIVE can't
+> work without SEV-SNP x86 feature flag. May add later when
+> the associated flag is introduced. 
+>
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+>  arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
+>  1 file changed, 33 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 31c476f4e656..d859d7c5f5e8 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+>  	u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+> -	if (!hv_hypercall_pg)
+> -		return U64_MAX;
+> +	if (hv_isolation_type_en_snp()) {
 
-> > 
-> > >  drivers/vhost/vdpa.c | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > > 
-> > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > > index 8c1aefc865f0..ac2152135b23 100644
-> > > --- a/drivers/vhost/vdpa.c
-> > > +++ b/drivers/vhost/vdpa.c
-> > > @@ -397,6 +397,12 @@ static long vhost_vdpa_get_features(struct vhost_vdpa *v, u64 __user *featurep)
-> > > 
-> > >  	features = ops->get_device_features(vdpa);
-> > > 
-> > > +	/*
-> > > +	 * IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE) don't support
-> > > +	 * packed virtqueue well yet, so let's filter the feature for now.
-> > > +	 */
-> > > +	features &= ~BIT_ULL(VIRTIO_F_RING_PACKED);
-> > > +
-> > >  	if (copy_to_user(featurep, &features, sizeof(features)))
-> > >  		return -EFAULT;
-> > > 
-> > > 
-> > > base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-> > > --
-> > > 2.40.1
-> > 
+Would it be possible to redo 'hv_isolation_type_en_snp()' into a static
+inline doing static_branch_unlikely() so we avoid function call penalty
+here?
+
+> +		__asm__ __volatile__("mov %4, %%r8\n"
+> +				     "vmmcall"
+> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+> +				       "+c" (control), "+d" (input_address)
+> +				     :  "r" (output_address)
+> +				     : "cc", "memory", "r8", "r9", "r10", "r11");
+> +	} else {
+> +		if (!hv_hypercall_pg)
+> +			return U64_MAX;
+>  
+> -	__asm__ __volatile__("mov %4, %%r8\n"
+> -			     CALL_NOSPEC
+> -			     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+> -			       "+c" (control), "+d" (input_address)
+> -			     :  "r" (output_address),
+> -				THUNK_TARGET(hv_hypercall_pg)
+> -			     : "cc", "memory", "r8", "r9", "r10", "r11");
+> +		__asm__ __volatile__("mov %4, %%r8\n"
+> +				     CALL_NOSPEC
+> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+> +				       "+c" (control), "+d" (input_address)
+> +				     :  "r" (output_address),
+> +					THUNK_TARGET(hv_hypercall_pg)
+> +				     : "cc", "memory", "r8", "r9", "r10", "r11");
+> +	}
+>  #else
+>  	u32 input_address_hi = upper_32_bits(input_address);
+>  	u32 input_address_lo = lower_32_bits(input_address);
+> @@ -104,7 +113,13 @@ static inline u64 _hv_do_fast_hypercall8(u64 control, u64 input1)
+>  	u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+> -	{
+> +	if (hv_isolation_type_en_snp()) {
+> +		__asm__ __volatile__(
+> +				"vmmcall"
+> +				: "=a" (hv_status), ASM_CALL_CONSTRAINT,
+> +				"+c" (control), "+d" (input1)
+> +				:: "cc", "r8", "r9", "r10", "r11");
+> +	} else {
+>  		__asm__ __volatile__(CALL_NOSPEC
+>  				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+>  				       "+c" (control), "+d" (input1)
+> @@ -149,7 +164,14 @@ static inline u64 _hv_do_fast_hypercall16(u64 control, u64 input1, u64 input2)
+>  	u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+> -	{
+> +	if (hv_isolation_type_en_snp()) {
+> +		__asm__ __volatile__("mov %4, %%r8\n"
+> +				     "vmmcall"
+> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+> +				       "+c" (control), "+d" (input1)
+> +				     : "r" (input2)
+> +				     : "cc", "r8", "r9", "r10", "r11");
+> +	} else {
+>  		__asm__ __volatile__("mov %4, %%r8\n"
+>  				     CALL_NOSPEC
+>  				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+
+-- 
+Vitaly
 
