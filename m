@@ -2,278 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0106772266A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E6E72266F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbjFEMyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S233660AbjFEMyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbjFEMyE (ORCPT
+        with ESMTP id S233640AbjFEMyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:54:04 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5863EA1;
-        Mon,  5 Jun 2023 05:54:01 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977fae250easo5889666b.1;
-        Mon, 05 Jun 2023 05:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685969640; x=1688561640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KzPCNkAV8qDQrMk6ufehDtxGAXb1czA1SgsO+wfzRYA=;
-        b=rSGZWxgYqmvS0d6q2X2AJVbs0La7jVbFc+2magSPiCOum8/XkVU5BI9dWKu1SFacA+
-         2xjYcYXBbUZqaIB5ZsxO+T98LbIKIne8Ld4Zz538Xe7HGzvjJEWlmcTN6FW0hHkv9ezM
-         id0A3q4XYZnmTIpRRcIBTvIYuXKOk59iY/k9SsMCledx6qxmO5021CvUx1BFPFmM6duV
-         dxvB3yigQPIo1CG/1E5FxbNfI2fyddFyPGn1WQJjpQpOeTV4KDMVbRneFD/cTFaBL3Bh
-         uaDziYeFyfX78dDCEyVGkassr5+9hWKnkCn7WBGmzM94JyZJlThi/dhi/eEmA8IxYAcM
-         +jmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685969640; x=1688561640;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KzPCNkAV8qDQrMk6ufehDtxGAXb1czA1SgsO+wfzRYA=;
-        b=F6mjC2GFfSdStX8wnQ0O1RmIbZfMXS43wRXOU9NXUInFHYkeLW/QbsP2jssClZ6bCP
-         YYxgX6Cd4bbo4uoyiY7DQnnr+bmXVkkaejM/j0bU3egx1P2cI5TtS1CVgCRNYvjkzbiH
-         ziLHz3e83MC/2xt2KPXzTtJxn29a/paIzdbVYSEVzB6OCNDMhs10FSWhBUmBuM/NIeQ7
-         AD25fNwHKfQPPAI0YKzh4D7VCFCjYJY8h7GkV7+Hku+85XUrnY3kLveuGtcn0+HBNWr2
-         TM0nfBdz0iy4+4LO1iBTB6TuMU+pHClJYWskiir1fUlJ9Qe/jW/IjVsuQc9HPesNkZT4
-         NAhg==
-X-Gm-Message-State: AC+VfDzq/0AmTYsMtbLqqEChLDELKAyC1+0M57Q7MgzK7/cfxiAd8X5G
-        Bb2f/5OLMwDgR+E6BSBh0Z8=
-X-Google-Smtp-Source: ACHHUZ4iMK9BL7Lq5y+VTWox45b7vTaIX3GKK3b8zGp/TKvuXUTREPIIxlScgTSj5arEwJiPi10Wvw==
-X-Received: by 2002:a17:906:74d4:b0:977:c867:489b with SMTP id z20-20020a17090674d400b00977c867489bmr4883952ejl.0.1685969639496;
-        Mon, 05 Jun 2023 05:53:59 -0700 (PDT)
-Received: from localhost ([134.191.220.83])
-        by smtp.gmail.com with ESMTPSA id u22-20020a170906069600b009767c4235absm3384566ejb.219.2023.06.05.05.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 05:53:59 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 20:53:42 +0800
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
- violation check
-Message-ID: <20230605205342.00000e41.zhi.wang.linux@gmail.com>
-In-Reply-To: <3b3d9106-9e4f-8a76-30ee-29540b06022a@linux.intel.com>
-References: <20230601142309.6307-1-guang.zeng@intel.com>
-        <20230601142309.6307-4-guang.zeng@intel.com>
-        <3b3d9106-9e4f-8a76-30ee-29540b06022a@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 5 Jun 2023 08:54:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71698A1;
+        Mon,  5 Jun 2023 05:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685969652; x=1717505652;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eyiiu2NGIlMKr/bvnrnFxZhwYLUvQ3Dg9QM/a+w5bMU=;
+  b=IJSSg5Y4G+AjLsM+Rb0zHzc2FddLjU/ucM+wpGmfYSGrw3d2kVY1Bs+y
+   xIsMcATiA69j5bDCM1bBBqHfIkzqwvqDyxNdVhxr1z46mzQQBk634kL3r
+   wM9ciSS+/RMj+pS7hmVjDof+v62ae7QOfy9kqkOyIaeBrFB/I73RHT5I4
+   keeCYhehfL1Lt39DWiM0F5+f/BbyULsUHBMAfOjpYWai+BNbGLhzkk8lw
+   Pvc+s08v9quG4euD8nEOgcFupAV9ldwbUXxTaK17TBz/JOezVcBsFwfBU
+   8PYLHvk/R5pLlCC/I1aAX2kt3SQPCCBYLzMkStrqRSiPZhjE9FJKjii6e
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="384662412"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="384662412"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 05:54:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="686101791"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="686101791"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jun 2023 05:54:07 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 281A52A6; Mon,  5 Jun 2023 15:54:13 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH v2 1/1] gpiolib: Remove unused gpio_cansleep()
+Date:   Mon,  5 Jun 2023 15:54:11 +0300
+Message-Id: <20230605125411.60378-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Jun 2023 11:31:48 +0800
-Binbin Wu <binbin.wu@linux.intel.com> wrote:
+There is not a single user in the entire kernel of this deprecated API,
+kill it for good.
 
->=20
->=20
-> On 6/1/2023 10:23 PM, Zeng Guang wrote:
-> > Intel introduces LASS (Linear Address Separation) feature providing
->  =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0 ^
->  =A0missing "Space" here
-> > an independent mechanism to achieve the mode-based protection.
-> >
-> > LASS partitions 64-bit linear address space into two halves, user-mode
-> > address (LA[bit 63]=3D0) and supervisor-mode address (LA[bit 63]=3D1). =
-It
-> > stops any code execution or conditional data access[1]
-> >      1. from user mode to supervisor-mode address space
-> >      2. from supervisor mode to user-mode address space
-> > and generates LASS violation fault accordingly.
-> >
-> > [1]A supervisor mode data access causes a LASS violation only if superv=
-isor
-> > mode access protection is enabled (CR4.SMAP =3D 1) and either RFLAGS.AC=
- =3D 0
-> > or the access implicitly accesses a system data structure.
-> >
-> > Following are the rules of LASS violation check on the linear address(L=
-A).
-> > User access to supervisor-mode address space:
-> >      LA[bit 63] && (CPL =3D=3D 3)
-> > Supervisor access to user-mode address space:
-> >      Instruction fetch: !LA[bit 63] && (CPL < 3)
-> >      Data access: !LA[bit 63] && (CR4.SMAP=3D=3D1) && ((RFLAGS.AC =3D=
-=3D 0 &&
-> >                   CPL < 3) || Implicit supervisor access)
-> >
-> > Add new ops in kvm_x86_ops to do LASS violation check.
-> >
-> > Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> > Tested-by: Xuelian Guo <xuelian.guo@intel.com>
-> > ---
-> >   arch/x86/include/asm/kvm-x86-ops.h |  3 +-
-> >   arch/x86/include/asm/kvm_host.h    |  2 ++
-> >   arch/x86/kvm/kvm_emulate.h         |  1 +
-> >   arch/x86/kvm/vmx/vmx.c             | 47 ++++++++++++++++++++++++++++++
-> >   arch/x86/kvm/vmx/vmx.h             |  2 ++
-> >   5 files changed, 54 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/=
-kvm-x86-ops.h
-> > index 13bc212cd4bc..8980a3bfa687 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -132,7 +132,8 @@ KVM_X86_OP_OPTIONAL(migrate_timers)
-> >   KVM_X86_OP(msr_filter_changed)
-> >   KVM_X86_OP(complete_emulated_msr)
-> >   KVM_X86_OP(vcpu_deliver_sipi_vector)
-> > -KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
-> > +KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons)
-> > +KVM_X86_OP_OPTIONAL_RET0(check_lass)
-> >  =20
-> >   #undef KVM_X86_OP
-> >   #undef KVM_X86_OP_OPTIONAL
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index 92d8e65fe88c..98666d1e7727 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1731,6 +1731,8 @@ struct kvm_x86_ops {
-> >   	 * Returns vCPU specific APICv inhibit reasons
-> >   	 */
-> >   	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcp=
-u);
-> > +
-> > +	bool (*check_lass)(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 fla=
-gs);
-> >   };
-> >  =20
-> >   struct kvm_x86_nested_ops {
-> > diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-> > index 5b9ec610b2cb..f1439ab7c14b 100644
-> > --- a/arch/x86/kvm/kvm_emulate.h
-> > +++ b/arch/x86/kvm/kvm_emulate.h
-> > @@ -91,6 +91,7 @@ struct x86_instruction_info {
-> >   /* x86-specific emulation flags */
-> >   #define X86EMUL_F_FETCH			BIT(0)
-> >   #define X86EMUL_F_WRITE			BIT(1)
-> > +#define X86EMUL_F_SKIPLASS		BIT(2)
-> >  =20
-> >   struct x86_emulate_ops {
-> >   	void (*vm_bugged)(struct x86_emulate_ctxt *ctxt);
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index a33205ded85c..876997e8448e 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -8130,6 +8130,51 @@ static void vmx_vm_destroy(struct kvm *kvm)
-> >   	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_orde=
-r(kvm));
-> >   }
-> >  =20
-> > +/*
-> > + * Determine whether an access to the linear address causes a LASS vio=
-lation.
-> > + * LASS protection is only effective in long mode. As a prerequisite, =
-caller
-> > + * should make sure vCPU running in long mode and invoke this api to d=
-o LASS
-> > + * violation check.
-> > + */
-> > +bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 fla=
-gs)
-> > +{
-> > +	bool user_mode, user_as, rflags_ac;
-> > +
-> > +	if (!!(flags & X86EMUL_F_SKIPLASS) ||
-> > +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
-> > +		return false;
-> > +
-> > +	WARN_ON_ONCE(!is_long_mode(vcpu));
-> IMHO, it's better to skip the following checks and return false if it is=
-=20
-> out of long mode.
->
-The check of long mode is in the caller implemented in in the next patch. :)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: amended Chinese translation (thanks to Yanteng Si)
+ Documentation/driver-api/gpio/legacy.rst           | 12 +-----------
+ .../translations/zh_CN/driver-api/gpio/legacy.rst  | 14 +++-----------
+ Documentation/translations/zh_TW/gpio.txt          | 14 +++-----------
+ arch/m68k/include/asm/mcfgpio.h                    |  8 --------
+ arch/mips/include/asm/mach-au1x00/gpio-au1000.h    |  5 -----
+ arch/mips/include/asm/mach-au1x00/gpio-au1300.h    |  5 -----
+ include/linux/gpio.h                               | 12 ------------
+ 7 files changed, 7 insertions(+), 63 deletions(-)
 
-+	if (!is_long_mode(vcpu))
-+		return false;
-
-> > +
-> > +	user_as =3D !(la >> 63);
-> It's better to describe how LASS treat linear address in compatibility=20
-> mode in changelog or/and in comment,
-> i.e. for a linear address with only 32 bits (or 16 bits), the processor=20
-> treats bit 63 as if it were 0.
->
->=20
-> > +
-> > +	/*
-> > +	 * An access is a supervisor-mode access if CPL < 3 or if it implicit=
-ly
-> > +	 * accesses a system data structure. For implicit accesses to system
-> > +	 * data structure, the processor acts as if RFLAGS.AC is clear.
-> > +	 */
-> > +	if (access & PFERR_IMPLICIT_ACCESS) {
-> > +		user_mode =3D false;
-> > +		rflags_ac =3D false;
-> > +	} else {
-> > +		user_mode =3D vmx_get_cpl(vcpu) =3D=3D 3;
-> > +		if (!user_mode)
-> > +			rflags_ac =3D !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
-> > +	}
-> > +
-> > +	if (user_mode =3D=3D user_as)
-> > +		return false;
-> > +
-> > +	/*
-> > +	 * Supervisor-mode _data_ accesses to user address space
-> > +	 * cause LASS violations only if SMAP is enabled.
-> > +	 */
-> > +	if (!user_mode && !(access & PFERR_FETCH_MASK))
-> > +		return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) && !rflags_ac;
-> > +
-> > +	return true;
-> > +}
-> > +
-> >   static struct kvm_x86_ops vmx_x86_ops __initdata =3D {
-> >   	.name =3D KBUILD_MODNAME,
-> >  =20
-> > @@ -8269,6 +8314,8 @@ static struct kvm_x86_ops vmx_x86_ops __initdata =
-=3D {
-> >   	.complete_emulated_msr =3D kvm_complete_insn_gp,
-> >  =20
-> >   	.vcpu_deliver_sipi_vector =3D kvm_vcpu_deliver_sipi_vector,
-> > +
-> > +	.check_lass =3D vmx_check_lass,
-> >   };
-> >  =20
-> >   static unsigned int vmx_handle_intel_pt_intr(void)
-> > diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> > index 9e66531861cf..f2e775b9849b 100644
-> > --- a/arch/x86/kvm/vmx/vmx.h
-> > +++ b/arch/x86/kvm/vmx/vmx.h
-> > @@ -433,6 +433,8 @@ void vmx_enable_intercept_for_msr(struct kvm_vcpu *=
-vcpu, u32 msr, int type);
-> >   u64 vmx_get_l2_tsc_offset(struct kvm_vcpu *vcpu);
-> >   u64 vmx_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
-> >  =20
-> > +bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 fla=
-gs);
-> > +
-> >   static inline void vmx_set_intercept_for_msr(struct kvm_vcpu *vcpu, u=
-32 msr,
-> >   					     int type, bool value)
-> >   {
->=20
+diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+index 9eda54811faa..b6505914791c 100644
+--- a/Documentation/driver-api/gpio/legacy.rst
++++ b/Documentation/driver-api/gpio/legacy.rst
+@@ -165,8 +165,7 @@ Most GPIO controllers can be accessed with memory read/write instructions.
+ Those don't need to sleep, and can safely be done from inside hard
+ (nonthreaded) IRQ handlers and similar contexts.
+ 
+-Use the following calls to access such GPIOs,
+-for which gpio_cansleep() will always return false (see below)::
++Use the following calls to access such GPIOs::
+ 
+ 	/* GPIO INPUT:  return zero or nonzero */
+ 	int gpio_get_value(unsigned gpio);
+@@ -200,13 +199,6 @@ Some GPIO controllers must be accessed using message based busses like I2C
+ or SPI.  Commands to read or write those GPIO values require waiting to
+ get to the head of a queue to transmit a command and get its response.
+ This requires sleeping, which can't be done from inside IRQ handlers.
+-
+-Platforms that support this type of GPIO distinguish them from other GPIOs
+-by returning nonzero from this call (which requires a valid GPIO number,
+-which should have been previously allocated with gpio_request)::
+-
+-	int gpio_cansleep(unsigned gpio);
+-
+ To access such GPIOs, a different set of accessors is defined::
+ 
+ 	/* GPIO INPUT:  return zero or nonzero, might sleep */
+@@ -215,7 +207,6 @@ To access such GPIOs, a different set of accessors is defined::
+ 	/* GPIO OUTPUT, might sleep */
+ 	void gpio_set_value_cansleep(unsigned gpio, int value);
+ 
+-
+ Accessing such GPIOs requires a context which may sleep,  for example
+ a threaded IRQ handler, and those accessors must be used instead of
+ spinlock-safe accessors without the cansleep() name suffix.
+@@ -537,7 +528,6 @@ code, which always dispatches through the gpio_chip::
+ 
+   #define gpio_get_value	__gpio_get_value
+   #define gpio_set_value	__gpio_set_value
+-  #define gpio_cansleep		__gpio_cansleep
+ 
+ Fancier implementations could instead define those as inline functions with
+ logic optimizing access to specific SOC-based GPIOs.  For example, if the
+diff --git a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+index 1bddecf73670..aeccff777170 100644
+--- a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
++++ b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+@@ -153,8 +153,7 @@ get/set(获取/设置)函数调用没法返回错误,且有可能是配置错误
+ 大多数 GPIO 控制器可以通过内存读/写指令来访问。这些指令不会休眠,可以
+ 安全地在硬(非线程)中断例程和类似的上下文中完成。
+ 
+-对于那些用 gpio_cansleep()测试总是返回失败的 GPIO(见下文)，使用
+-以下的函数访问::
++对于那些 GPIO，使用以下的函数访问::
+ 
+ 	/* GPIO 输入:返回零或非零 */
+ 	int gpio_get_value(unsigned gpio);
+@@ -186,11 +185,6 @@ GPIO值是布尔值，零表示低电平，非零表示高电平。当读取一
+ GPIO 值的命令需要等待其信息排到队首才发送命令，再获得其反馈。期间需要
+ 休眠，这不能在 IRQ 例程(中断上下文)中执行。
+ 
+-支持此类 GPIO 的平台通过以下函数返回非零值来区分出这种 GPIO。(此函数需要
+-一个之前通过 gpio_request 分配到的有效 GPIO 编号)::
+-
+-	int gpio_cansleep(unsigned gpio);
+-
+ 为了访问这种 GPIO,内核定义了一套不同的函数::
+ 
+ 	/* GPIO 输入:返回零或非零 ,可能会休眠 */
+@@ -199,7 +193,6 @@ GPIO 值的命令需要等待其信息排到队首才发送命令，再获得其
+ 	/* GPIO 输出,可能会休眠 */
+ 	void gpio_set_value_cansleep(unsigned gpio, int value);
+ 
+-
+ 访问这样的 GPIO 需要一个允许休眠的上下文，例如线程 IRQ 处理例程，并用以上的
+ 访问函数替换那些没有 cansleep()后缀的自旋锁安全访问函数。
+ 
+@@ -483,8 +476,8 @@ GPIO 实现者的框架（可选）
+ 
+ 为了支持这个框架，一个平台的 Kconfig 文件将会 "select"(选择)
+ ARCH_REQUIRE_GPIOLIB 或 ARCH_WANT_OPTIONAL_GPIOLIB，并让它的
+-<asm/gpio.h> 包含 <asm-generic/gpio.h>，同时定义三个方法:
+-gpio_get_value()、gpio_set_value()和 gpio_cansleep()。
++<asm/gpio.h> 包含 <asm-generic/gpio.h>，同时定义两个方法:
++gpio_get_value()、gpio_set_value()。
+ 
+ 它也应提供一个 ARCH_NR_GPIOS 的定义值，这样可以更好地反映该平台 GPIO
+ 的实际数量,节省静态表的空间。(这个定义值应该包含片上系统内建 GPIO 和
+@@ -502,7 +495,6 @@ ARCH_WANT_OPTIONAL_GPIOLIB 意味着 gpiolib 核心默认关闭,且用户可以
+ 
+   #define gpio_get_value	__gpio_get_value
+   #define gpio_set_value	__gpio_set_value
+-  #define gpio_cansleep		__gpio_cansleep
+ 
+ 这些定义可以用更理想的实现方法替代，那就是使用经过逻辑优化的内联函数来访问
+ 基于特定片上系统的 GPIO。例如,若引用的 GPIO (寄存器位偏移)是常量“12”，
+diff --git a/Documentation/translations/zh_TW/gpio.txt b/Documentation/translations/zh_TW/gpio.txt
+index 66bc7f2bbe53..b93788a2628b 100644
+--- a/Documentation/translations/zh_TW/gpio.txt
++++ b/Documentation/translations/zh_TW/gpio.txt
+@@ -161,8 +161,7 @@ get/set(獲取/設置)函數調用沒法返回錯誤,且有可能是配置錯誤
+ 大多數 GPIO 控制器可以通過內存讀/寫指令來訪問。這些指令不會休眠,可以
+ 安全地在硬(非線程)中斷例程和類似的上下文中完成。
+ 
+-對於那些用 gpio_cansleep()測試總是返回失敗的 GPIO(見下文)，使用
+-以下的函數訪問:
++對於那些 GPIO，使用以下的函數訪問:
+ 
+ 	/* GPIO 輸入:返回零或非零 */
+ 	int gpio_get_value(unsigned gpio);
+@@ -193,11 +192,6 @@ GPIO值是布爾值，零表示低電平，非零表示高電平。當讀取一
+ GPIO 值的命令需要等待其信息排到隊首才發送命令，再獲得其反饋。期間需要
+ 休眠，這不能在 IRQ 例程(中斷上下文)中執行。
+ 
+-支持此類 GPIO 的平台通過以下函數返回非零值來區分出這種 GPIO。(此函數需要
+-一個之前通過 gpio_request 分配到的有效 GPIO 編號):
+-
+-	int gpio_cansleep(unsigned gpio);
+-
+ 爲了訪問這種 GPIO,內核定義了一套不同的函數:
+ 
+ 	/* GPIO 輸入:返回零或非零 ,可能會休眠 */
+@@ -206,7 +200,6 @@ GPIO 值的命令需要等待其信息排到隊首才發送命令，再獲得其
+ 	/* GPIO 輸出,可能會休眠 */
+ 	void gpio_set_value_cansleep(unsigned gpio, int value);
+ 
+-
+ 訪問這樣的 GPIO 需要一個允許休眠的上下文，例如線程 IRQ 處理例程，並用以上的
+ 訪問函數替換那些沒有 cansleep()後綴的自旋鎖安全訪問函數。
+ 
+@@ -449,8 +442,8 @@ GPIO 實現者的框架 (可選)
+ -------
+ 爲了支持這個框架，一個平台的 Kconfig 文件將會 "select"(選擇)
+ ARCH_REQUIRE_GPIOLIB 或 ARCH_WANT_OPTIONAL_GPIOLIB，並讓它的
+-<asm/gpio.h> 包含 <asm-generic/gpio.h>，同時定義三個方法:
+-gpio_get_value()、gpio_set_value()和 gpio_cansleep()。
++<asm/gpio.h> 包含 <asm-generic/gpio.h>，同時定義二個方法:
++gpio_get_value()、gpio_set_value()。
+ 
+ 它也應提供一個 ARCH_NR_GPIOS 的定義值，這樣可以更好地反映該平台 GPIO
+ 的實際數量,節省靜態表的空間。(這個定義值應該包含片上系統內建 GPIO 和
+@@ -468,7 +461,6 @@ ARCH_WANT_OPTIONAL_GPIOLIB 意味著 gpiolib 核心默認關閉,且用戶可以
+ 
+   #define gpio_get_value	__gpio_get_value
+   #define gpio_set_value	__gpio_set_value
+-  #define gpio_cansleep		__gpio_cansleep
+ 
+ 這些定義可以用更理想的實現方法替代，那就是使用經過邏輯優化的內聯函數來訪問
+ 基於特定片上系統的 GPIO。例如,若引用的 GPIO (寄存器位偏移)是常量「12」，
+diff --git a/arch/m68k/include/asm/mcfgpio.h b/arch/m68k/include/asm/mcfgpio.h
+index 2cefe8445980..7abd322c019f 100644
+--- a/arch/m68k/include/asm/mcfgpio.h
++++ b/arch/m68k/include/asm/mcfgpio.h
+@@ -34,14 +34,6 @@ static inline void __gpio_set_value(unsigned gpio, int value)
+ 		__mcfgpio_set_value(gpio, value);
+ }
+ 
+-static inline int __gpio_cansleep(unsigned gpio)
+-{
+-	if (gpio < MCFGPIO_PIN_MAX)
+-		return 0;
+-	else
+-		return -EINVAL;
+-}
+-
+ static inline int __gpio_to_irq(unsigned gpio)
+ {
+ 	return -EINVAL;
+diff --git a/arch/mips/include/asm/mach-au1x00/gpio-au1000.h b/arch/mips/include/asm/mach-au1x00/gpio-au1000.h
+index adde1fa5097e..82bc2766e2ec 100644
+--- a/arch/mips/include/asm/mach-au1x00/gpio-au1000.h
++++ b/arch/mips/include/asm/mach-au1x00/gpio-au1000.h
+@@ -500,11 +500,6 @@ static inline int alchemy_gpio_is_valid(int gpio)
+ 		alchemy_gpio1_is_valid(gpio);
+ }
+ 
+-static inline int alchemy_gpio_cansleep(int gpio)
+-{
+-	return 0;	/* Alchemy never gets tired */
+-}
+-
+ static inline int alchemy_gpio_to_irq(int gpio)
+ {
+ 	return (gpio >= ALCHEMY_GPIO2_BASE) ?
+diff --git a/arch/mips/include/asm/mach-au1x00/gpio-au1300.h b/arch/mips/include/asm/mach-au1x00/gpio-au1300.h
+index d16add7ba49d..43d44f384f97 100644
+--- a/arch/mips/include/asm/mach-au1x00/gpio-au1300.h
++++ b/arch/mips/include/asm/mach-au1x00/gpio-au1300.h
+@@ -98,11 +98,6 @@ static inline int au1300_gpio_is_valid(unsigned int gpio)
+ 	return ret;
+ }
+ 
+-static inline int au1300_gpio_cansleep(unsigned int gpio)
+-{
+-	return 0;
+-}
+-
+ /* hardware remembers gpio 0-63 levels on powerup */
+ static inline int au1300_gpio_getinitlvl(unsigned int gpio)
+ {
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+index 88efac969754..7ecc25c543ce 100644
+--- a/include/linux/gpio.h
++++ b/include/linux/gpio.h
+@@ -108,11 +108,6 @@ static inline void gpio_set_value(unsigned gpio, int value)
+ 	return gpiod_set_raw_value(gpio_to_desc(gpio), value);
+ }
+ 
+-static inline int gpio_cansleep(unsigned gpio)
+-{
+-	return gpiod_cansleep(gpio_to_desc(gpio));
+-}
+-
+ static inline int gpio_to_irq(unsigned gpio)
+ {
+ 	return gpiod_to_irq(gpio_to_desc(gpio));
+@@ -195,13 +190,6 @@ static inline void gpio_set_value(unsigned gpio, int value)
+ 	WARN_ON(1);
+ }
+ 
+-static inline int gpio_cansleep(unsigned gpio)
+-{
+-	/* GPIO can never have been requested or set as {in,out}put */
+-	WARN_ON(1);
+-	return 0;
+-}
+-
+ static inline int gpio_get_value_cansleep(unsigned gpio)
+ {
+ 	/* GPIO can never have been requested or set as {in,out}put */
+-- 
+2.40.0.1.gaa8946217a0b
 
