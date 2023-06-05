@@ -2,117 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB5D721FC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA07A721FCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjFEHjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S230346AbjFEHkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjFEHjd (ORCPT
+        with ESMTP id S230017AbjFEHk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:39:33 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0317ECD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:39:31 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso6859598a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 00:39:30 -0700 (PDT)
+        Mon, 5 Jun 2023 03:40:29 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81080AD;
+        Mon,  5 Jun 2023 00:40:27 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f6e68cc738so38472095e9.1;
+        Mon, 05 Jun 2023 00:40:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685950769; x=1688542769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ubs62QRWNI2vAlv+m7Vhuuq+/9gfWiWllr779JaDU0A=;
-        b=jnGXVTMC0Zkjc/HL/jGD7myZeCu5nP5sXPdyMpkuYVGFzO9dUazTrH1PtnK/RrjAUz
-         cJr6sBsYGNKfwayGO1e0Ydyp2QcPnx1guOoz92WwKLClJUTa/b4OkLtruMDCzAJSCk3X
-         gzbXwnk2oQnbQ7191taZSYul3+HmOnDecgIXXNNmVNzZ1GtTwNBb3VzHriHilszMHrOU
-         +qdSi33yR5QA9ct2qutgwcRe3MiOiSUHj6IgzQ5ecnh2Y4cIrNct/cVZyS+Mj54HDrJE
-         9uBV7H1QRpbCFof5wB81smV5z/aEBIybB6lERbeVlcm3mxSucUEPrmleZfyRm0hlJnaJ
-         j91Q==
+        d=gmail.com; s=20221208; t=1685950826; x=1688542826;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TUyEfMhLLTzApUSuVw0hL9LIb5HjNC0r0IZHse6dF0M=;
+        b=p5lUl0sH3PapCIVuk0Rj1akMOgctzNNB3D3OJofCBHt+j/2cWSwcFpv5bHyH8MMYC1
+         ntXW0x58YUQL0NOPL7ConfVn3v3V7phyZUHpB7ueU0hbyWBBFKp6nTr+MVxW6QbSAgJI
+         E0PJRKzdXQDw6Rc7XEIMljMq6+ABvQ7GomvdqcO8wtUjeVLdJHA5NYWlTsEMujlo+ziH
+         PYfyfTWOor8W8OgFd8lSvST0SAHmh0s06HGOBYOY0hEqJcsIiRIcsq7j27IkZDM1wuFo
+         zQCTJYA+e1UtX/gH/pdq4FPlwpXy6m+VUmy331UI7WFW58SolGXyvoLabDH2Hq3lhrdW
+         8sYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685950769; x=1688542769;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ubs62QRWNI2vAlv+m7Vhuuq+/9gfWiWllr779JaDU0A=;
-        b=jJRrmKGFBdOWQjT10J2qm6YZHLqMlREJsNfzE3Y7Tq6/xzOOH7rJJSCZUQSa5ivDWK
-         mAfIxgdFvikJsA8RTr2q6ulXNB8l2vPsJBtyHqKkkWfF0p5XNfUZjd2NRDYR84fqRqzI
-         74aZE6SVW3vQu6uSPtsFTIr62lccsDicTyGF+pvf1HNBZ4HMOenYYjNkz4uzNtuuOcm/
-         PCs2z2CVTyj56YIOKvzMYPfLbRgrwNgOX1v5RGbqUhGdEm6CoBimsjEzWffvPBczNvb/
-         SMYZs0nTOh8CgQiM9s6kgxs87gzab1JspIovapTg/z+sTVJPV5k8MQ5KsGWH18Zdiwuj
-         u8ng==
-X-Gm-Message-State: AC+VfDx1c2w0RvBWg8YbiH1HyCSq4xTKZIVV23ogkhBMm6vNZ+2PgDpB
-        uuPpTkktBm6O2LvwsD2EGipFZQ==
-X-Google-Smtp-Source: ACHHUZ5Xcj/ZZfvN09R1XxWQ75z1e19Mx1wuq95BLvG60AU/XhmetaV8ngLrlLpQ+pox/hbhJ2Irag==
-X-Received: by 2002:a17:907:7fa4:b0:974:9aa9:be3 with SMTP id qk36-20020a1709077fa400b009749aa90be3mr6456954ejc.28.1685950769545;
-        Mon, 05 Jun 2023 00:39:29 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170906070b00b00974c32c9a75sm3679564ejb.216.2023.06.05.00.39.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 00:39:29 -0700 (PDT)
-Message-ID: <a2086bb1-160e-1dee-a686-ffdaf3422595@linaro.org>
-Date:   Mon, 5 Jun 2023 09:39:27 +0200
+        d=1e100.net; s=20221208; t=1685950826; x=1688542826;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TUyEfMhLLTzApUSuVw0hL9LIb5HjNC0r0IZHse6dF0M=;
+        b=FSZgRA0yaTCe6aKe2w4ygxi+vrWaQkGAQNfnEZZ16cwcFR0xtqLddr7ZgbwJzOd+i/
+         QfaDBkU43VRfI0i6OopwoQ/3Y8tLOtpCpwSyy1w2FFhRLL2L7XS3Hjr+tnIWRq4hxRDv
+         HkLeeQ2Y1Nb/y6qhfDwVxKvOi1UXxAuoWfiMaSJLWr+LisKt4TAb/LW5ACX1qoqmTNS5
+         S+04KAqg2mOhri0oHKh+4G0N1OSkw0IhZ0rrTdoOkJM5SmmNenHZHN9pj65cPbLs/ZJT
+         1a0WpnT8KyuCmVnyOEUFbztxX+vlN5I644NJSSASv7pkSe5G0vOvTDtqom8EVsI38jY7
+         niMA==
+X-Gm-Message-State: AC+VfDzUFn3DmSVptJWSPTUrCbTf6mOsHhseiZb0MBrL2KpPyrFemabk
+        TRQti8fae5ZpZX2qO1USMtQ=
+X-Google-Smtp-Source: ACHHUZ4rKLOskEiQUMEpvzpZ4WN2cJueLSFc8NlgKFn172q/HDPS6iyaPQQE0rxPJwIMCQFpWhcaHA==
+X-Received: by 2002:a05:600c:a395:b0:3f7:38e1:5e53 with SMTP id hn21-20020a05600ca39500b003f738e15e53mr1775155wmb.4.1685950825718;
+        Mon, 05 Jun 2023 00:40:25 -0700 (PDT)
+Received: from ip-172-31-22-112.eu-west-1.compute.internal (ec2-34-244-49-215.eu-west-1.compute.amazonaws.com. [34.244.49.215])
+        by smtp.gmail.com with ESMTPSA id c18-20020adfed92000000b0030ae499da59sm8882103wro.111.2023.06.05.00.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 00:40:25 -0700 (PDT)
+From:   Puranjay Mohan <puranjay12@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, catalin.marinas@arm.com,
+        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     puranjay12@gmail.com
+Subject: [PATCH bpf-next 0/3] bpf, arm64: use BPF prog pack allocator in BPF JIT
+Date:   Mon,  5 Jun 2023 07:40:21 +0000
+Message-Id: <20230605074024.1055863-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 2/3] dt-bindings: PCI: xilinx-xdma: Add YAML schemas
- for Xilinx XDMA PCIe Root Port Bridge
-Content-Language: en-US
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
-        bhelgaas@google.com, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org
-Cc:     lorenzo.pieralisi@arm.com, linux-arm-kernel@lists.infradead.org,
-        bharat.kumar.gogada@amd.com, michals@amd.com,
-        nagaradhesh.yeleswarapu@amd.com
-References: <20230531083825.985584-1-thippeswamy.havalige@amd.com>
- <20230531083825.985584-3-thippeswamy.havalige@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230531083825.985584-3-thippeswamy.havalige@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 10:38, Thippeswamy Havalige wrote:
-> Add YAML dtschemas of Xilinx XDMA Soft IP PCIe Root Port Bridge
-> dt binding.
-> 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
-> ---
-> change in v4:
+BPF programs currently consume a page each on ARM64. For systems with many BPF
+programs, this adds significant pressure to instruction TLB. High iTLB pressure
+usually causes slow down for the whole system.
 
+Song Liu introduced the BPF prog pack allocator[1] to mitigate the above issue.
+It packs multiple BPF programs into a single huge page. It is currently only
+enabled for the x86_64 BPF JIT.
 
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        pcie@a0000000 {
-> +            compatible = "xlnx,xdma-host-3.00";
-> +            reg = <0x0 0xa0000000 0x0 0x10000000>;
-> +            ranges = <0x2000000 0x0 0xB0000000 0x0 0xB0000000 0x0 0x1000000>,
+This patch series enables the BPF prog pack allocator for the ARM64 BPF JIT.
 
-If there is going to be resend, use lower-case hex everywhere.
+====================================================
+Performance Analysis of prog pack allocator on ARM64
+====================================================
 
-Otherwise, it's fine:
+To test the performance of the BPF prog pack allocator on ARM64, a stresser
+tool[2] was built. This tool loads 8 BPF programs on the system and triggers
+5 of them in an infinite loop by doing system calls.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The runner script starts 20 instances of the above which loads 8*20=160 BPF
+programs on the system, 5*20=100 of which are being constantly triggered.
 
-Best regards,
-Krzysztof
+In the above environment we try to build Python-3.8.4 and try to find different
+iTLB metrics for the compilation done by gcc-12.2.0.
+
+The source code[3] is  configured with the following command:
+./configure --enable-optimizations --with-ensurepip=install
+
+Then the runner script is executed with the following command:
+./run.sh "perf stat -e ITLB_WALK,L1I_TLB,INST_RETIRED,iTLB-load-misses -a make -j32"
+
+This builds Python while 160 BPF programs are loaded and 100 are being constantly
+triggered and measures iTLB related metrics.
+
+The output of the above command is discussed below before and after enabling the
+BPF prog pack allocator.
+
+The tests were run on qemu-system-aarch64 with 32 cpus, 4G memory, -machine virt,
+-cpu host, and -enable-kvm.
+
+Results
+-------
+
+Before enabling prog pack allocator:
+------------------------------------
+
+Performance counter stats for 'system wide':
+
+         333278635      ITLB_WALK
+     6762692976558      L1I_TLB
+    25359571423901      INST_RETIRED
+       15824054789      iTLB-load-misses
+
+     189.029769053 seconds time elapsed
+
+After enabling prog pack allocator:
+-----------------------------------
+
+Performance counter stats for 'system wide':
+
+         190333544      ITLB_WALK
+     6712712386528      L1I_TLB
+    25278233304411      INST_RETIRED
+        5716757866      iTLB-load-misses
+
+     185.392650561 seconds time elapsed
+
+Improvements in metrics
+-----------------------
+
+Compilation time                             ---> 1.92% faster
+iTLB-load-misses/Sec (Less is better)        ---> 63.16% decrease
+ITLB_WALK/1000 INST_RETIRED (Less is better) ---> 42.71% decrease
+ITLB_Walk/L1I_TLB (Less is better)           ---> 42.47% decrease
+
+[1] https://lore.kernel.org/bpf/20220204185742.271030-1-song@kernel.org/
+[2] https://github.com/puranjaymohan/BPF-Allocator-Bench
+[3] https://www.python.org/ftp/python/3.8.4/Python-3.8.4.tgz 
+
+Puranjay Mohan (3):
+  bpf: make bpf_prog_pack allocator portable
+  arm64: patching: Add aarch64_insn_copy()
+  bpf, arm64: use bpf_jit_binary_pack_alloc
+
+ arch/arm64/include/asm/patching.h |   1 +
+ arch/arm64/kernel/patching.c      |  39 ++++++++++
+ arch/arm64/net/bpf_jit_comp.c     | 119 +++++++++++++++++++++++++-----
+ kernel/bpf/core.c                 |   8 +-
+ 4 files changed, 146 insertions(+), 21 deletions(-)
+
+-- 
+2.39.2
 
