@@ -2,200 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412F2722205
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0865A722207
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjFEJWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        id S231138AbjFEJWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbjFEJVv (ORCPT
+        with ESMTP id S231157AbjFEJVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 05:21:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8511A8;
-        Mon,  5 Jun 2023 02:21:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD97C611C5;
-        Mon,  5 Jun 2023 09:21:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FBDC433EF;
-        Mon,  5 Jun 2023 09:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685956870;
-        bh=VAQ7yfzQtWyNohR4wxaMprdeMTDlqPdyTw6okH1kHrg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jK253SR7yhSPqefNFos3ffgdScPlfxLEgS1so3b12kxeFrCMZRgawvFm8WayBcEJg
-         gsJRpMEGttvUT3HVy8GIHc65y0zhLLrBx4d+jkyhsnS/hQIbQr5LWBz2vZgDkJqevO
-         +UIxJzVenJUyw/Uip8ZNP03sQq+Yr8qA1I9bh08IcIOmhh2JIjbopJQQXYTqJDA+gf
-         Ib8fD2IpqNgfgglvW2/JWPvjCy1i6XCYLFHWvOg0HPpz5vZx6UOnmL3FtqiwyAdfsz
-         iIun2EVvr5UICgLU5k5gsCEhuKWjokIA4YcB5nFxBvbjMNYU78+Z9LTAA6e8yLvHwk
-         VVxBZGJqVTgtA==
-Date:   Mon, 5 Jun 2023 12:20:40 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <20230605092040.GB3460@kernel.org>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan>
- <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B66E44;
+        Mon,  5 Jun 2023 02:21:32 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-75ca95c4272so410197885a.0;
+        Mon, 05 Jun 2023 02:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685956892; x=1688548892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A+IJZ8YoQCXr6cLHC0VkJnXD5EBJfWNAYm1Nc1zlsBI=;
+        b=BTAYJMXUpakeg2wqR2PbJdrM4ec6OtJ5U/1HJr19o0pEUWQEIP4Tv9L7fzJ5J2Sudb
+         9bwDPc3+2BUEiGIPhTG9l4ryfz25gJzpN6I2JMcki+0bbIlCk0S7oKheXY4islm/qE+O
+         QBAOWXiLmNGgnSj+I65n1hkHspWeIm45BF4jnuud6bV5lnELybaYnAKFEc8NdPxy6p+c
+         nofG8DkpV4DD1k6nt1VEkrDO1qARjqFGkelf+K+rcoQlUn54rqnVhaeoYXJdLy/hcxL+
+         3izKcS1Ze8rlZs4xiVDKhvXCwLhS2bsGc6Sco54x1HD6qlrHlzkSTXXhanJbk7zAPhsW
+         x+hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685956892; x=1688548892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A+IJZ8YoQCXr6cLHC0VkJnXD5EBJfWNAYm1Nc1zlsBI=;
+        b=XAoKEljqSW/G46SCdNXXW4NH99EcBTuowi64KVGL2XVt9vcOhSRPqRGRseaUFHK2Zb
+         W9ju/IXAfnwYNvomaqjuoxfjkG3f2fOLtV1nQA9H5pk1CMSzTzqlrdgP3lQj6boUZmyI
+         lA6yTg6Jks00LMT9Fl2t6Vm1JSE/A6SdaJ+uBCYbgbsqZI+BmfqleDKwgtn8mhcCSfHD
+         jxq3boEWFQu5cfTd2booLHGrLQW+1sotIndbBFLes5DZuT/G+5Yu9cH0EBkHZiMAou+X
+         Mcd1xa0KB4quqjDUMWb8C0GBLuXbsyQPuQMOVugchh/5S2rz73CRHA5DVAlNjGnxoYEz
+         qHlQ==
+X-Gm-Message-State: AC+VfDxtgwYMxf5EluwtTKadi24DOcKItQFFmQVxSGCJ8pX0X+8rHiyF
+        wznDT4GoXa/hDsQvSxfWPX4UtM9/RYBBkJ8NG08=
+X-Google-Smtp-Source: ACHHUZ5XhYNabc7t/Kamr9I4cIi8AJZ+CaRkBphgjejYHYhW/hMp4t/5rc+FdwjyETN6kk9ZiCkTConA+aceidP6icY=
+X-Received: by 2002:a05:620a:46ac:b0:75b:23a1:8e64 with SMTP id
+ bq44-20020a05620a46ac00b0075b23a18e64mr22218316qkb.53.1685956891974; Mon, 05
+ Jun 2023 02:21:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230605015345.12801-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20230605015345.12801-1-jiasheng@iscas.ac.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 5 Jun 2023 12:20:56 +0300
+Message-ID: <CAHp75VcCMf9B6Cf6PTKSxbhv7_eYVNrG7CFNXi2nN-tJ2AjdNQ@mail.gmail.com>
+Subject: Re: [PATCH v3] gpio: ath79: Add missing check for platform_get_irq
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, linus.walleij@linaro.org,
+        brgl@bgdev.pl, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
-> On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
-> > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
-> > > For a while I have wanted to give kprobes its own allocator so that it can work
-> > > even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
-> > > the modules area.
-> > > 
-> > > Given that, I think these should have their own allocator functions that can be
-> > > provided independently, even if those happen to use common infrastructure.
-> > 
-> > How much memory can kprobes conceivably use? I think we also want to try
-> > to push back on combinatorial new allocators, if we can.
-> 
-> That depends on who's using it, and how (e.g. via BPF).
-> 
-> To be clear, I'm not necessarily asking for entirely different allocators, but
-> I do thinkg that we want wrappers that can at least pass distinct start+end
-> parameters to a common allocator, and for arm64's modules code I'd expect that
-> we'd keep the range falblack logic out of the common allcoator, and just call
-> it twice.
-> 
-> > > > Several architectures override module_alloc() because of various
-> > > > constraints where the executable memory can be located and this causes
-> > > > additional obstacles for improvements of code allocation.
-> > > > 
-> > > > This set splits code allocation from modules by introducing
-> > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-> > > > sites of module_alloc() and module_memfree() with the new APIs and
-> > > > implements core text and related allocation in a central place.
-> > > > 
-> > > > Instead of architecture specific overrides for module_alloc(), the
-> > > > architectures that require non-default behaviour for text allocation must
-> > > > fill jit_alloc_params structure and implement jit_alloc_arch_params() that
-> > > > returns a pointer to that structure. If an architecture does not implement
-> > > > jit_alloc_arch_params(), the defaults compatible with the current
-> > > > modules::module_alloc() are used.
-> > > 
-> > > As above, I suspect that each of the callsites should probably be using common
-> > > infrastructure, but I don't think that a single jit_alloc_arch_params() makes
-> > > sense, since the parameters for each case may need to be distinct.
-> > 
-> > I don't see how that follows. The whole point of function parameters is
-> > that they may be different :)
-> 
-> What I mean is that jit_alloc_arch_params() tries to aggregate common
-> parameters, but they aren't actually common (e.g. the actual start+end range
-> for allocation).
+On Mon, Jun 5, 2023 at 4:53=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.cn=
+> wrote:
+>
+> Add the missing check for platform_get_irq() and return error
+> if it fails.
 
-jit_alloc_arch_params() tries to aggregate architecture constraints and
-requirements for allocations of executable memory and this exactly what
-the first 6 patches of this set do.
+Here it seems better, but still needs an explanation why returning an
+error is not a problem (assuming DT might have a wrong number). I.o.w.
+you need to prove that with current code this fails in that case
+further. Otherwise you will need to prove that there may not be DT
+with a wrong number.
 
-A while ago Thomas suggested to use a structure that parametrizes
-architecture constraints by the memory type used in modules [1] and Song
-implemented the infrastructure for it and x86 part [2].
-
-I liked the idea of defining parameters in a single structure, but I
-thought that approaching the problem from the arch side rather than from
-modules perspective will be better starting point, hence these patches.
-
-I don't see a fundamental reason why a single structure cannot describe
-what is needed for different code allocation cases, be it modules, kprobes
-or bpf. There is of course an assumption that the core allocations will be
-the same for all the users, and it seems to me that something like 
-
-* allocate physical memory if allocator caches are empty
-* map it in vmalloc or modules address space
-* return memory from the allocator cache to the caller
-
-will work for all usecases.
-
-We might need separate caches for different cases on different
-architectures, and a way to specify what cache should be used in the
-allocator API, but that does not contradict a single structure for arch
-specific parameters, but only makes it more elaborate, e.g. something like
-
-enum jit_type {
-	JIT_MODULES_TEXT,
-	JIT_MODULES_DATA,
-	JIT_KPROBES,
-	JIT_FTRACE,
-	JIT_BPF,
-	JIT_TYPE_MAX,
-};
-
-struct jit_alloc_params {
-	struct jit_range	ranges[JIT_TYPE_MAX];
-	/* ... */
-};
-
-> > Can you give more detail on what parameters you need? If the only extra
-> > parameter is just "does this allocation need to live close to kernel
-> > text", that's not that big of a deal.
-> 
-> My thinking was that we at least need the start + end for each caller. That
-> might be it, tbh.
-
-Do you mean that modules will have something like
-
-	jit_text_alloc(size, MODULES_START, MODULES_END);
-
-and kprobes will have
-
-	jit_text_alloc(size, KPROBES_START, KPROBES_END);
-?
-
-It sill can be achieved with a single jit_alloc_arch_params(), just by
-adding enum jit_type parameter to jit_text_alloc().
-
-[1] https://lore.kernel.org/linux-mm/87v8mndy3y.ffs@tglx/ 
-[2] https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org
-
-> Thanks,
-> Mark.
-
--- 
-Sincerely yours,
-Mike.
+--=20
+With Best Regards,
+Andy Shevchenko
