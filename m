@@ -2,67 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4904A722C08
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF290722C19
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbjFEP7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
+        id S233662AbjFEQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjFEP7n (ORCPT
+        with ESMTP id S233183AbjFEQBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:59:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19A18B0
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:59:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68BD2D75;
-        Mon,  5 Jun 2023 09:00:28 -0700 (PDT)
-Received: from [10.57.25.141] (unknown [10.57.25.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE343F663;
-        Mon,  5 Jun 2023 08:59:41 -0700 (PDT)
-Message-ID: <ebb09b1b-26ab-48dc-d69f-c7fcbd5d48e8@arm.com>
-Date:   Mon, 5 Jun 2023 16:59:40 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Coresight ML <coresight@lists.linaro.org>
-References: <20230509094942.396150-1-james.clark@arm.com>
- <20230509094942.396150-2-james.clark@arm.com>
- <2023051340-sinuous-darkroom-2497@gregkh>
- <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
- <2023051530-immunize-pony-49ef@gregkh>
- <46bb773c-31a8-c57a-0cde-39c27d0a6e36@arm.com>
- <2023060104-removal-map-b194@gregkh>
- <f52a1dee-70f2-e3b4-4aa2-f591d7d8063e@arm.com>
- <6cbdce5c-d470-9717-774d-2d25c9fc24c1@arm.com>
- <2023060546-deputy-geriatric-2706@gregkh>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <2023060546-deputy-geriatric-2706@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 12:01:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D36CD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:01:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D5B9821B7F;
+        Mon,  5 Jun 2023 16:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685980858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kz6sLOsH45BCwrRvdZKj8xXLLyH+JJthA2WE7AVjTTs=;
+        b=BKmWgUcvERsKiBEtTcA+niVWA6C1J3EXGrQUJySrRBq//5X8R+3dB8VZ99/ndLJ1QT4cc+
+        7GxfC6rMlpuLJorIRG+3tQuZ0pz/CgMy2BDxM+Rm1lmj2WgkcagJystSjr1wMt/zEtxtV5
+        VSMP1lkg663hsd85L9lwXp8ZBBxFBc4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685980858;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kz6sLOsH45BCwrRvdZKj8xXLLyH+JJthA2WE7AVjTTs=;
+        b=8VuC1kdTGAAfxgLAZdavOpiTYTW+i4pHmz79O0KJBSciMEhFURRi459WgxK7xjVlFeUeXZ
+        e4iqzULbmkp4o3Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6910139C7;
+        Mon,  5 Jun 2023 16:00:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JL65J7oGfmQXCAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 16:00:58 +0000
+Date:   Mon, 05 Jun 2023 18:00:58 +0200
+Message-ID: <87pm69hpad.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v2 3/3] ALSA: hda/realtek: Delete cs35l41 component master during free
+In-Reply-To: <20230605152855.448115-4-sbinding@opensource.cirrus.com>
+References: <20230605152855.448115-1-sbinding@opensource.cirrus.com>
+        <20230605152855.448115-4-sbinding@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 16:20, Greg KH wrote:
-> On Mon, Jun 05, 2023 at 02:39:44PM +0100, Suzuki K Poulose wrote:
-
->> Does this look fine with you ?
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git/log/?h=tmp/devm_krealloc_array
+On Mon, 05 Jun 2023 17:28:55 +0200,
+Stefan Binding wrote:
 > 
-> Looks good to me!
+> This ensures that the driver is properly cleaned up when freed.
+> 
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> ---
+>  sound/pci/hda/patch_realtek.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+> index 7b5f194513c7b..e3774903918fe 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> @@ -6757,6 +6757,8 @@ static void cs35l41_generic_fixup(struct hda_codec *cdc, int action, const char
+>  		else
+>  			spec->gen.pcm_playback_hook = comp_generic_playback_hook;
+>  		break;
+> +	case HDA_FIXUP_ACT_FREE:
+> +		component_master_del(dev, &comp_master_ops);
+>  	}
 
-Thank you so much for checking ! I will push this to coresight/next.
+Don't forget to add break here.
 
-Suzuki
+
+thanks,
+
+Takashi
