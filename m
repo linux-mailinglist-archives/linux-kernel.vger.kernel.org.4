@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254D57221CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0227221E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjFEJOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
+        id S230419AbjFEJRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjFEJOf (ORCPT
+        with ESMTP id S229952AbjFEJRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:14:35 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DE7D2;
-        Mon,  5 Jun 2023 02:14:34 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75d461fde66so171900285a.1;
-        Mon, 05 Jun 2023 02:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685956473; x=1688548473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rE0xssBXcK9nZ+e8wfDpCxReNmG+e30YEh+xZMobuHQ=;
-        b=PIAoC/LhkYM27nDo4SJJQNhcXu9rNI7W+He0InIiRvpP6PNh+TDH0z4fD881+7/isH
-         KAAjqxuWkn3poO5jCFCS3L5KEZwcXXjiRoXVJ23LmiX2Yf1UljB1Eg5MmjqDHEbTwKRX
-         bOhUFeBDWeIqMYjlM18TqumVEaAqWmgh3m1cYt0J3gnVtvDxw0z8LJF0Nhq7+eufHVWv
-         B5i7i6eHHyzO5lsRKE1+ILa2n5IaCJW/Sk8vBAdk9v6hcljHeOrHSG7eLoPjelaFNmfb
-         YQhfC6xgY/BZaoQKSGTR9bPxSwQqlHbE3hE9zpyX49DjOLUg3O9o+LbxJCCRqs+J96sD
-         GUIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685956473; x=1688548473;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rE0xssBXcK9nZ+e8wfDpCxReNmG+e30YEh+xZMobuHQ=;
-        b=RItnRttZ+xrPvXRRzySsx9DFA1IfZ7r+0wrTGETj+v47+BXQ08Fm20ukMHueFCveZX
-         M1YJh4rRlzZSbYJp90cGvbHkW6C1PygbCXHuMUHLsF7dtfe7Ewe1sEvaaChCeRWQemo4
-         ZkFVnim13zJQ+mAnxr69/UPrwXBPqobcaGE6ceeGxtlI1PedLHOR5zKQTh9pB29j/1Nt
-         neh7qBNgeITkhz6zX+lD3W+hid/wuHu85XyLjlhlKbYS9xcoXORmvFdbPMjsevstIBrf
-         /4K8DcYxqNl1+1uXWC88gm49vfK7eevdDeWLHHqUacuFpIVOA1spwBipLTvRDrNm0KV8
-         V7MQ==
-X-Gm-Message-State: AC+VfDwYdu15ycBmLMQYyNhiNauZX2z/h4a5Vm3Glwu139FkT/8rs4aV
-        Cs1IsLQtHzVj4lTISEO+3Xa2YeMaRIutRAzoZhWwWclavU8=
-X-Google-Smtp-Source: ACHHUZ44ZC3HtizNbif0Pd3vZlP2LsWIeHXWBfYc4IZjIR0M7aQKnZ0bfR9VTq7NXsjtd03zjdTQCpOVOBIRqPK97Yw=
-X-Received: by 2002:a05:620a:8b87:b0:75b:23a0:e7a0 with SMTP id
- qx7-20020a05620a8b8700b0075b23a0e7a0mr18512831qkn.1.1685956473319; Mon, 05
- Jun 2023 02:14:33 -0700 (PDT)
+        Mon, 5 Jun 2023 05:17:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAB9FA;
+        Mon,  5 Jun 2023 02:16:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685956615; x=1717492615;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cgrTKus95w+HymJbLJprRL1OTrYUDbn4V9Ftlx5lOjU=;
+  b=HyIiFsMiD4vCVQUNItKh4fb1cgVIkU/WxdQOabpw0sWVbdTEP9PVRooF
+   4UbEXVPvE2AYsgvHhgXvzLG677TbRO/IvpfoRSVwb1yiCH/3wimJ50Pj0
+   pwq8bakVD7srpJJmxCZDOxFzlrYRWCpjmySweeWB48o7fPOMsgaUQ3zB+
+   OR0IeG57TBy5XwuwSGcdcCFri5ePyb7itiV4CiWu8vaHpRakkK8qpwRaK
+   HHtYSAPZlBrUdsZL8tte2yNLYAA+inw/qz68EPnvVHEPx1E2S6JEdMUft
+   GrgLjSnyr2hHkFP0XQO7k0Micng25gYJbZqMBLRNmpcwo6PCAdkppsyOU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="335938664"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="335938664"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 02:15:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="778475633"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="778475633"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 02:14:57 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q66Ii-00043z-0l;
+        Mon, 05 Jun 2023 09:14:56 +0000
+Date:   Mon, 5 Jun 2023 17:14:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v5] hv_netvsc: Allocate rx indirection table size
+ dynamically
+Message-ID: <202306051754.7zMgBFMX-lkp@intel.com>
+References: <1685949196-16175-1-git-send-email-shradhagupta@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230605014850.9591-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230605014850.9591-1-jiasheng@iscas.ac.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Jun 2023 12:13:57 +0300
-Message-ID: <CAHp75VdZct58EiLDL0ebCvcQBVMzuZxJZ8z=bs8D2UDaCsuo9A@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: sifive: Add missing check for platform_get_irq
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linus.walleij@linaro.org,
-        brgl@bgdev.pl, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1685949196-16175-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 4:49=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.cn=
-> wrote:
->
-> Add the missing check for platform_get_irq() and return error code
-> if it fails.
+Hi Shradha,
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+kernel test robot noticed the following build warnings:
 
-> Fixes: f52d6d8b43e5 ("gpio: sifive: To get gpio irq offset from device tr=
-ee data")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
->
-> v2 -> v3:
->
-> 1. Check before assigning values.
->
-> v1 -> v2:
->
-> 1. Return "girq->parents[0]" instead of "-ENODEV".
-> ---
->  drivers/gpio/gpio-sifive.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-sifive.c b/drivers/gpio/gpio-sifive.c
-> index 98939cd4a71e..745e5f67254e 100644
-> --- a/drivers/gpio/gpio-sifive.c
-> +++ b/drivers/gpio/gpio-sifive.c
-> @@ -221,8 +221,12 @@ static int sifive_gpio_probe(struct platform_device =
-*pdev)
->                 return -ENODEV;
->         }
->
-> -       for (i =3D 0; i < ngpio; i++)
-> -               chip->irq_number[i] =3D platform_get_irq(pdev, i);
-> +       for (i =3D 0; i < ngpio; i++) {
-> +               ret =3D platform_get_irq(pdev, i);
-> +               if (ret < 0)
-> +                       return ret;
-> +               chip->irq_number[i] =3D ret;
-> +       }
->
->         ret =3D bgpio_init(&chip->gc, dev, 4,
->                          chip->base + SIFIVE_GPIO_INPUT_VAL,
-> --
-> 2.25.1
->
+[auto build test WARNING on linus/master]
+[also build test WARNING on horms-ipvs/master v6.4-rc5 next-20230605]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shradha-Gupta/hv_netvsc-Allocate-rx-indirection-table-size-dynamically/20230605-151438
+base:   linus/master
+patch link:    https://lore.kernel.org/r/1685949196-16175-1-git-send-email-shradhagupta%40linux.microsoft.com
+patch subject: [PATCH v5] hv_netvsc: Allocate rx indirection table size dynamically
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20230605/202306051754.7zMgBFMX-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/cd4dda15951edad50a4ffd51e084863ef2f50bd3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shradha-Gupta/hv_netvsc-Allocate-rx-indirection-table-size-dynamically/20230605-151438
+        git checkout cd4dda15951edad50a4ffd51e084863ef2f50bd3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/hyperv/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306051754.7zMgBFMX-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/hyperv/rndis_filter.c: In function 'rndis_filter_device_remove':
+   drivers/net/hyperv/rndis_filter.c:1612:54: error: 'net' undeclared (first use in this function)
+    1612 |         struct net_device_context *ndc = netdev_priv(net);
+         |                                                      ^~~
+   drivers/net/hyperv/rndis_filter.c:1612:54: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/net/hyperv/rndis_filter.c:1613:28: warning: unused variable 'net' [-Wunused-variable]
+    1613 |         struct net_device *net = hv_get_drvdata(dev);
+         |                            ^~~
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+vim +/net +1613 drivers/net/hyperv/rndis_filter.c
+
+  1607	
+  1608	void rndis_filter_device_remove(struct hv_device *dev,
+  1609					struct netvsc_device *net_dev)
+  1610	{
+  1611		struct rndis_device *rndis_dev = net_dev->extension;
+  1612		struct net_device_context *ndc = netdev_priv(net);
+> 1613		struct net_device *net = hv_get_drvdata(dev);
+  1614	
+  1615		/* Halt and release the rndis device */
+  1616		rndis_filter_halt_device(net_dev, rndis_dev);
+  1617	
+  1618		netvsc_device_remove(dev);
+  1619	
+  1620		ndc->rx_table_sz = 0;
+  1621		kfree(ndc->rx_table);
+  1622		ndc->rx_table = NULL;
+  1623	}
+  1624	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
