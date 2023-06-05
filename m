@@ -2,85 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B129F72218A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FF172218F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 10:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjFEI4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 04:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S229746AbjFEI5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 04:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjFEI4v (ORCPT
+        with ESMTP id S229584AbjFEI5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 04:56:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EA4E53;
-        Mon,  5 Jun 2023 01:56:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06AFA61D40;
-        Mon,  5 Jun 2023 08:56:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98999C433EF;
-        Mon,  5 Jun 2023 08:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685955378;
-        bh=EvMjOmcR0DzI75LU8ZbEStkGi2bPjEetDmC8ubTy+uM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E9VuCJscetyT57f7B0/jJSX2mOJWUOdJS0+bTsmp2kqSZkS+82WSr1SFDU5eiRxwO
-         00RwJC9XiAKtDmwsfbfgnm5tAQ7s7PSOFGKMuI77sLXN1tcyzXz637jok9ttKRhgwv
-         ihMX4JsLXDpX+U54g3TI30LT6F2JfppkEqkYPC5irp3cdpOkjb0tGnBPGhpaHH/roT
-         umfryHZN3rL2zvfQMGkO6atQn7qXQYydl99YEFUBPDznOjrSqvRWoMf+tNVeP+UqX0
-         LqTofFKTQIb1L8ArbkZdXoG4WDJ/6MPuKrsnTJs/4FKno4h0LyBJRSngnLwstwE5Uo
-         y58vKf9BKp58w==
-From:   Christian Brauner <brauner@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-cachefs@redhat.com
-Subject: Re: [PATCH] cachefiles: Allow the cache to be non-root
-Date:   Mon,  5 Jun 2023 10:56:07 +0200
-Message-Id: <20230605-baumhaus-niemals-e54f42ee6697@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <1853230.1684516880@warthog.procyon.org.uk>
-References: <1853230.1684516880@warthog.procyon.org.uk>
+        Mon, 5 Jun 2023 04:57:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F383;
+        Mon,  5 Jun 2023 01:57:39 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685955458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tuEkjNVEJ3j/43zY6b+9s7oKjaQbFi38GVw4aDtO4j8=;
+        b=VdAJFx/sFaXO/52StCccf9+2cWQeeCijqidyPyKgTSGB6zopsc3qMlsfLU2vhce/6LCCtt
+        iBoAGJhluF/ZwykTFyBeORSwWItVLzUQfB4HHgC+5SEuxhByHPbd99ph4rhOEiPU9Qkc02
+        2GbrJwNzB9SsIDLtuji2es44QJNFDA+fnmfOlUK35zNY9Xah9I9qezFDE2nkEkKXVgK6OD
+        J+R08effDEDw/Drb3kOdhe6TUdJyADGWyIGVyEeutli4nzrElizfzVR5pWg2zf6et6hTna
+        e8GXtFvcv/+NpVenLeRW4sTsgP8TQoOuetoS0AxfG+dyQ9EJ7NeFMN6L5MU5KQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685955458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tuEkjNVEJ3j/43zY6b+9s7oKjaQbFi38GVw4aDtO4j8=;
+        b=ydXyr9/G94Bk+OvplT7yjR3ywDeQ+2M3eMtRE8y8FRjT2W1ITGnm/qDdSRFMLWtAAcGsbt
+        zZ4pu7lOGt+2D/BA==
+To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, andrew.cooper3@citrix.com,
+        seanjc@google.com, pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 04/33] x86/traps: add install_system_interrupt_handler()
+In-Reply-To: <20230410081438.1750-5-xin3.li@intel.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-5-xin3.li@intel.com>
+Date:   Mon, 05 Jun 2023 10:57:37 +0200
+Message-ID: <87y1ky70ce.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=993; i=brauner@kernel.org; h=from:subject:message-id; bh=EvMjOmcR0DzI75LU8ZbEStkGi2bPjEetDmC8ubTy+uM=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTULlbM+6vXPafMzOrp0XPGZ58pzNSOPTG1mDs8LHBV9Rbj D4lJHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABP5/Inhf4Cse+Oh38YBL09NOcATlJ 0ZzuxlkmOZcTDpw5KjewykzjD84c+OfJS6ZYfoj/QlC5cffj2Je6bXqnKFC3PzytRbWJ/X8wIA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 18:21:20 +0100, David Howells wrote:
-> 
-> Set mode 0600 on files in the cache so that cachefilesd can run as an
-> unprivileged user rather than leaving the files all with 0.  Directories
-> are already set to 0700.
-> 
-> Userspace then needs to set the uid and gid before issuing the "bind"
-> command and the cache must've been chown'd to those IDs.
-> 
-> [...]
+On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
+> Some kernel components install system interrupt handlers into the IDT,
+> and we need to do the same for system_interrupt_handlers.
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+We need to the same? This sentence does not make any sense at all.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+> +void install_system_interrupt_handler(unsigned int n, const void *asm_addr, const void *addr);
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
+Why is this void *?
 
-[1/1] cachefiles: Allow the cache to be non-root
-      https://git.kernel.org/vfs/vfs/c/a64498ff493f
+>  
+> +void __init install_system_interrupt_handler(unsigned int n, const void *asm_addr, const void *addr)
+> +{
+> +	BUG_ON(n < FIRST_SYSTEM_VECTOR);
+> +
+> +#ifdef CONFIG_X86_64
+> +	system_interrupt_handlers[n - FIRST_SYSTEM_VECTOR] = (system_interrupt_handler)addr;
+
+Just that you can add a silly typecast here, right?
+
+Oh well.
+
+> -	alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR, asm_sysvec_xen_hvm_callback);
+> +	install_system_interrupt_handler(HYPERVISOR_CALLBACK_VECTOR,
+> +					 asm_sysvec_xen_hvm_callback,
+> +					 sysvec_xen_hvm_callback);
+
+Can we please make this less convoluted?
+
+#ifdef CONFIG_X86_64
+static inline void sysvec_setup_fred(unsigned int vector, void (*func)(struct pt_regs*))
+{
+        ...
+}
+#else
+static inline void sysvec_setup_fred(unsigned int vector, void (*func)(struct pt_regs*))
+{
+}
+#endif
+
+#define sysvec_install(vector, func) {                                  \
+        sysvec_setup_fred(vector, func);                                \
+        alloc_intr_gate(vector, asm_##func);                            \
+}
+
+-	alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR, asm_sysvec_xen_hvm_callback);
++	sysvec_install(HYPERVISOR_CALLBACK_VECTOR, sysvec_xen_hvm_callback);
+
+No?
+
+Thanks,
+
+        tglx
