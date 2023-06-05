@@ -2,93 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C153722716
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD67722717
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbjFENNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S229579AbjFENN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbjFENNU (ORCPT
+        with ESMTP id S233609AbjFENNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 09:13:20 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC91F4;
-        Mon,  5 Jun 2023 06:12:50 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355CqWgt010725;
-        Mon, 5 Jun 2023 13:12:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=SismmB2jOXNY3RE+Pa8blteeHkwywh0TE1sSJloiJdM=;
- b=K/XjRhAFltU2zziBgfEFYGGbt/R6Hp1E+KhNpwolANOpXwuonWJNgtVLe4Hm78eS1kqs
- lxlvEvqV7RIQ2XP3P7JY2jdMLDFGM1qrzzL4jklVXV01rZe8mDtzhTYFuc3ceEpDyM3M
- +jj5dNGo8C4fI6gp04xlzSO6TyX75+faKKeXPrUdTdCPvz3tniuY2K51/kYIWEUxwDR2
- wRk9ALWyvLNx+Okk3bsyhyMrtIBTBle9FXqYWOJDjcADpPYx5Nw73jwnMh/iXMBZxYu1
- Tib1X2jiGjB4O0bFeZk1Kre7hwItLbHVdVIqjA6b4QF3oWktmwvWNr9yWHNFffBgUCzW qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1g3jrf8e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 13:12:30 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 355D8Ldw009129;
-        Mon, 5 Jun 2023 13:12:29 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1g3jrf82-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 13:12:29 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 355BWUIV026046;
-        Mon, 5 Jun 2023 13:12:28 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3qyxnvfef3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Jun 2023 13:12:28 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 355DCRaL33030404
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Jun 2023 13:12:27 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4950E58067;
-        Mon,  5 Jun 2023 13:12:27 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D65758054;
-        Mon,  5 Jun 2023 13:12:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.0.86])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  5 Jun 2023 13:12:26 +0000 (GMT)
-Message-ID: <5560351701e78a0dfb9b7d2eef703395a0d531b0.camel@linux.ibm.com>
-Subject: Re: [PATCH] evm: Complete description of evm_inode_setattr()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 05 Jun 2023 09:12:25 -0400
-In-Reply-To: <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
-References: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
-         <c2b7b5531660befc66a25477abc0cc069d08926c.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VIQZkp-PoCUhq85t2yv6xvEiSp27Ic5H
-X-Proofpoint-GUID: SwlhmSYs_Y2IHt1jUEoZTjYCpTQbKKrL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- suspectscore=0 priorityscore=1501 phishscore=0 impostorscore=0 mlxscore=0
- mlxlogscore=712 bulkscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306050114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1123BF7;
+        Mon,  5 Jun 2023 06:12:51 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8AxxvBR331kkBkAAA--.293S3;
+        Mon, 05 Jun 2023 21:12:49 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6ORR331knoMAAA--.2478S3;
+        Mon, 05 Jun 2023 21:12:49 +0800 (CST)
+Message-ID: <3f352d6f-2d4f-0b41-f015-991ba8421007@loongson.cn>
+Date:   Mon, 5 Jun 2023 21:12:49 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v12 10/31] LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl
+ interface
+Content-Language: en-US
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-11-zhaotianrui@loongson.cn>
+From:   "bibo, mao" <maobibo@loongson.cn>
+In-Reply-To: <20230530015223.147755-11-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Ax6ORR331knoMAAA--.2478S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFy7JFyDZFWrXF43AF43urX_yoW8Wr45pF
+        4kCr15W3yrG3yIg3sxtwsrur1aqrWkKr4xXasrJ34rJFsFkry5KFWFkrZrAFW5Awn5WF1x
+        Z3WFq3Wj9F90y3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWr
+        XVW3AwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUI0
+        eHUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,35 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-06-05 at 13:57 +0200, Roberto Sassu wrote:
-> On Mon, 2023-03-06 at 11:40 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Add the description for missing parameters of evm_inode_setattr() to
-> > avoid the warning arising with W=n compile option.
-> > 
-> > Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
-> > Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+
+在 2023/5/30 09:52, Tianrui Zhao 写道:
+> Implement LoongArch vcpu KVM_ENABLE_CAP ioctl interface.
 > 
-> Hi Mimi
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>  arch/loongarch/kvm/vcpu.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
-> this probably got lost. It was also reviewed by Stefan:
-> 
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> Could you please take it?
+> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+> index 278fbafc59b4..5a88f815c412 100644
+> --- a/arch/loongarch/kvm/vcpu.c
+> +++ b/arch/loongarch/kvm/vcpu.c
+> @@ -186,6 +186,23 @@ int kvm_arch_vcpu_ioctl_set_regs(struct kvm_vcpu *vcpu, struct kvm_regs *regs)
+>  	return 0;
+>  }
+>  
+> +static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
+> +				     struct kvm_enable_cap *cap)
+> +{
+> +	int r = 0;
+> +
+> +	if (!kvm_vm_ioctl_check_extension(vcpu->kvm, cap->cap))
+> +		return -EINVAL;
+It is a little strange to check extension of the whole vm in enable vcap capability.
+can we change to usage like  general architectures?
 
-Thanks for the reminder.  In case kernel-doc changes are backported to
-stable, I've added # v3.2+ and # v6.3+ respectively to the Fixes lines.
+> +	if (cap->flags)
+> +		return -EINVAL;
+> +	if (cap->args[0])
+> +		return -EINVAL;
+> +	if (cap->cap)
+> +		return -EINVAL;
+Do we need check args[0] and cap here ?
 
-There are two other warnings in EVM.  Any chance you're planning on
-fixing them as well?
-
--- 
-thanks,
-
-Mimi
-
-
+Regards
+Bibo, Mao
+> +
+> +	return r;
+> +}
+> +
+>  long kvm_arch_vcpu_ioctl(struct file *filp,
+>  			 unsigned int ioctl, unsigned long arg)
+>  {
+> @@ -209,6 +226,15 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>  			r = _kvm_get_reg(vcpu, &reg);
+>  		break;
+>  	}
+> +	case KVM_ENABLE_CAP: {
+> +		struct kvm_enable_cap cap;
+> +
+> +		r = -EFAULT;
+> +		if (copy_from_user(&cap, argp, sizeof(cap)))
+> +			break;
+> +		r = kvm_vcpu_ioctl_enable_cap(vcpu, &cap);
+> +		break;
+> +	}
+>  	default:
+>  		r = -ENOIOCTLCMD;
+>  		break;
 
