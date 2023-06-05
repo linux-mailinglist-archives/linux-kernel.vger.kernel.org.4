@@ -2,138 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEE97224D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C112A7224D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbjFELmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S232796AbjFELo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbjFELmu (ORCPT
+        with ESMTP id S231307AbjFELoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:42:50 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2139.outbound.protection.outlook.com [40.107.104.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19449C;
-        Mon,  5 Jun 2023 04:42:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BIhpxwslfDMeIaGUciiHDFB4QSxRPYJaMoIcuKARpKC3ecAFohn0hFfdsA+8dnsvdt0ueFjf6znmZMMIpAQ8c+qYnfBG3adG16PRmiD4VVeSEgvQyW88gdg/pfPVv6aQLQCca94NcGPQ58YbRpJaa2WZOAvoKmdWu5u8FzUb4DbXihgJ4W+784eEh1xlc0hBnF8dKxj7xO7geZoOduYZoF9maxA6irj5CjAjyxssn3KXASzAw2eSFd527EzyoDiBWPXzkCG9wVbKekuxUoqWl3LWx07RofKtp4GR7PHvNJTlK+S8v0LSoBHFKiVOpR6VSaZ3ubgJtnDVJyxBX0hFIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PW/7TuyGczVznWIf05w+hmMxYtm4F7K9onGBVc8t6LE=;
- b=Nof8WijzpHI5r6CiCGa9Je6qQH7WyqkZIseG4odK+7g1mzIoK+hKGo42HBaR1Ydhum+aLBriu86xWy6Eb7ULBOixyJrSa2p9CvqXATnzrVXCpFN3PE9Hxpb6lV7IplP/cSWDTZAAnR0rXHsuE6EfxnChdz2SoIjdmVogqwdAOf/ZMCSjzeoUFd3Viob+x66La/T8P0ulekQYz8IWSCWVv40u+BSGIxhydraXuQfFn9RtfdFpiFm1gds0vswD1yZ2kbNVu3FIZ09jPt09X5MpKWdwE54zwTzMD4MWX3pPl7ZPYIXoqqkPYaPU33CJMBZnXSGLNSixvUMj57t/ZqFWUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bang-olufsen.dk; dmarc=pass action=none
- header.from=bang-olufsen.dk; dkim=pass header.d=bang-olufsen.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bang-olufsen.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PW/7TuyGczVznWIf05w+hmMxYtm4F7K9onGBVc8t6LE=;
- b=Irv+8CaE/DsZj39OfkbBR9eFDdLCzOf1Y6c1KBln0izpC+qmUtZrKwBSlXe85djeMcUPH0CLfuxJOxulVB5lMyusIYXkexBtV3ucq9bLIGdq4VuOkmh9/Z6r6mQhQ3wAsrwHMgSIIFfZkOcZHFvu7iuviAMgGcsErIp404tamWk=
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com (2603:10a6:20b:26::24)
- by AS4PR03MB8183.eurprd03.prod.outlook.com (2603:10a6:20b:4f4::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Mon, 5 Jun
- 2023 11:42:44 +0000
-Received: from AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::b8e6:a92f:367e:801f]) by AM6PR03MB3943.eurprd03.prod.outlook.com
- ([fe80::b8e6:a92f:367e:801f%7]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 11:42:44 +0000
-From:   =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <ALSI@bang-olufsen.dk>
-To:     Mark Brown <broonie@kernel.org>
-CC:     =?utf-8?B?QWx2aW4gxaBpcHJhZ2E=?= <alvin@pqrs.dk>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] ASoC: dt-bindings: document new symmetric-clock-role
- flag
-Thread-Topic: [PATCH 1/4] ASoC: dt-bindings: document new symmetric-clock-role
- flag
-Thread-Index: AQHZlTEkbjROoMVD8k+Rhl00q7eUT693ZJ6AgAAIGwCAAAHAAIAErNKA
-Date:   Mon, 5 Jun 2023 11:42:44 +0000
-Message-ID: <epx43xeghpqcourix74uyjdm6kpovlqocx7l34z3bvumk7ehfb@sfvjvladp2oh>
-References: <20230602090322.1876359-1-alvin@pqrs.dk>
- <20230602090322.1876359-2-alvin@pqrs.dk>
- <3fe93662-82b0-4834-b6c3-473669c66210@sirena.org.uk>
- <7csvw25vhyal2jsznb3jykuijxqpk7bzyguxvl7cyitosgga2w@pxmkce22cm3d>
- <91b6d02a-25d5-4835-942e-3f8072bd8897@sirena.org.uk>
-In-Reply-To: <91b6d02a-25d5-4835-942e-3f8072bd8897@sirena.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bang-olufsen.dk;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR03MB3943:EE_|AS4PR03MB8183:EE_
-x-ms-office365-filtering-correlation-id: 65fa999f-6aab-4803-712a-08db65b9f9ff
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fplj57rCnE0UCXNRM/vZF8xxFuIRImvbe12p1+qObwLsIYOGE28qo6eKFYybuRM5+5eZdVK/hoo3wnx/7iiwvnOD+Dk9KwkgfwUEvG9NJqo5X9ZoXm+w8ekroTthYkLhsKMCcRaXOLDgyJWrUrCZmmDdhcVxUYeKUy0uOqH/dbA9TdMRDXcUdLm+tD0MdIkgSANFTdwioAORgw6xOwmYP+xbjAsqFG3y5Za94JOcxsot+UaCIFBvHJrgzWP6ZLfuPcaacoCcZ6U73w+Ck4Gx1E+nvpU/xYSO4kQIY8sUDkHCtjiKqkB7NoxqECg8O5kgk1IB7MVdiSHh+jnFosDV8SkD/QZz+wUqDDV77R9f550vXqzvJ9qOmw/9GDbETrl5DzECkdHViE5h3MqokrD5HxzmbHvMCZ9UZz+pCLJE3Rnsm8tDXfwbPlR+b+8n0NOX9aHbZ7VRgqSgDSQ1cZ8iGa9OriGrbNrIZnwZFsac0BVjdOIc7BbeqIU2fBvThr62fDOqVK2WF4Pp+YT0Pv9fwG/Uz/f6uIFE2CtRO/nzCkHSiY7tZ88hlGu666e5z8U2zrXryJXGsd+l57Ic0wm0Tab4HEvhS4sM0W2iW7pxCvOuOQk5+SVG9LLpE1a64OdP
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR03MB3943.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(396003)(136003)(39850400004)(366004)(376002)(451199021)(71200400001)(478600001)(6486002)(86362001)(66574015)(83380400001)(33716001)(85182001)(9686003)(186003)(38070700005)(26005)(85202003)(38100700002)(122000001)(6512007)(6506007)(4326008)(7416002)(6916009)(66556008)(64756008)(76116006)(66946007)(66476007)(91956017)(66446008)(2906002)(5660300002)(8676002)(316002)(41300700001)(54906003)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TExXWXJGNElVY1RJcmhuMHNpVnBQUHBRWFZ1Rng2TVBENUhLMG5MMFBXR3Nq?=
- =?utf-8?B?YXRWQnRVbVlXMllkU245Q2JpdjlPdi90eXZDbW5oa0NDN0pzNzNyY05kUk5R?=
- =?utf-8?B?T0JzRG4xY3Y0U2YyN1hhc1RlTDREbGZsUEEzU3g3WnV0Z3NYUitub2F6UGM2?=
- =?utf-8?B?TWNwSjUyZWdiTW1EMThEK2FNY0pndmY1WFExSWxCM2t3Z3lYWnFNTDFYK2tq?=
- =?utf-8?B?cHQ4T2h2ZTM5YVk2b09icmk2VFREZkhISmsvd3l5NHdmbDRaemlYcjRkMmxh?=
- =?utf-8?B?UGhOQi92K2RjbHY4ZGVjUTZtRElWN21XQU14ZHVRUFdBM1F5aEVDUUIzQi90?=
- =?utf-8?B?bndZM2gxWGsyM0UvSzRkN1Frc29oRWxjVHhLd1hxVDJ6UW92SXJzcFZ2WXp1?=
- =?utf-8?B?dUZxdlFON0hYTmVabi9IVURidW5scms0M05odmRzZXJaVnFOS3FvNzd1Qnly?=
- =?utf-8?B?V2t3dzc1Rk4ydnI3dk56UmE5aFhzTEZ1WU1oemwwMGdUUU5Jdm9PM3FIbUZl?=
- =?utf-8?B?Q1R1eHBvcjRnWXdqbU5lMElYZVg1SFZvdGJUYjhGWU96a1I4Z2pINHhDdlMv?=
- =?utf-8?B?Y3VUR3lvKzVRQjhRWjFkSTVGNGVlNW5pZG5kWjRka1d1T1Q1a1Z0WWZFdHR0?=
- =?utf-8?B?c0k0ejhKelo3cHlNN2JSc3ZCNXMwbTZhT2xLck1JcjREbGY5elArN3ExNktO?=
- =?utf-8?B?NzlETm5lNGw3MXp2c3Z0Qm5rUzhheSs0Z1pzVElzTHFyWUsyR0ZMaHE2ZzhP?=
- =?utf-8?B?U3F0ZC9yQlFkZjRkeHd5RzJEY2RmbjZVWlR4OVIyYTVCTnBTK3hLaTZDWDc3?=
- =?utf-8?B?blJ2Z2xwMjB3bTIzcXp1UnE1RlVTdUFEbG5rRmMrRElRa3VNUC9CdDcxSEhU?=
- =?utf-8?B?Zk83UjNzamkzU2FhRTJqZk96YmI4VXRud1ZFL21WUWgrTlNsOUp0aDdMcGdl?=
- =?utf-8?B?WXpVckFwUWQxM2loeE1jZWNhVUJkTTJhbGgrcloyTVc4VXowSElUbnBudzJJ?=
- =?utf-8?B?VE1NY3JWOWJ2cVFwNFNwendZQ3BVSFQ4UVBQWmxoUXRlZWRCa0N5d0pXeXdo?=
- =?utf-8?B?bWJ4RndTd0hlRzJSUGw1dXRNWllMYlA0aFoyTldBVG1iS1RWRzVjZ05icHBm?=
- =?utf-8?B?Q3RiTm5tV2h2L0VqMEJUTkM0elVKTGZCcGkxWCtBVjdMUXJ5V01oeStNOHFk?=
- =?utf-8?B?YnEzYTRlVWlEb1ZTcjR3RnJBRHVCRUxtVXJiVW1BbkdjNzg3eEFBT3g0cHBM?=
- =?utf-8?B?Z3E5Q3VROU90WXk0a0dqVStEK25ySHVleDdsRmJ6OVkxdU44c2RQY1hlK1R1?=
- =?utf-8?B?K2Jyc2F4d3gvT2FmbUFvVVpMaFR1VWE0a3oxZmloenFSaExPYXlDUk1QR0cr?=
- =?utf-8?B?Ky9NMnhmMSszV2wrWDB2eUloU2haUFgyYk1PdisxNHdJME5mM0xGd1gyM2k0?=
- =?utf-8?B?dGpER3FLRXlZOC9zcXY1UDlJTFd2NVZzQTRpR25WVXozaEFTd010SmNYSTd1?=
- =?utf-8?B?RjVHdzlVVHdJM3dSYU1XaVU4V1VZcEhmTkxWZVdvam8xWXNLalU4aVg3eWRm?=
- =?utf-8?B?RUlTN3VJbG5Bd2N2SDJRNitoQkx2eUxCTjA2eXNXN2lrdnlpdzYwYmp5N0lw?=
- =?utf-8?B?cmlOT2F6cVBzRHZsSGM1ZEJUc0hFekhDb25ITVJzU3A1cjNqK2pGUFF5Q0VZ?=
- =?utf-8?B?OGFEdXdpWHJHcnp0YmR4YmVyRHN2WUxYRHhUYVR1THBqdGMwSkpRNTFMRGhj?=
- =?utf-8?B?SGpVVXVHUHB1WTNSZUdiSGxwUmhXeHhCbzJWNnd2RW1HUUhNNG5WdDA2VGpG?=
- =?utf-8?B?VmJHS3dYQXE0THd0TW1pK0JIMUZqZjl1TUJabENmbFlqVmdKdGtRUHREMlNK?=
- =?utf-8?B?Q1lPdVFjeEV4citJSURma1NQY3YwS1BhTDJkMG9hUzBhRkllaWNPYW5KbDZK?=
- =?utf-8?B?MWdjSC94S3MrZmlzQTM4aWtmR2FkZ2JIV09TamVPdDRYVEIwaVArcWhlNXZn?=
- =?utf-8?B?aGJSbzYzSjV2WHFxelJ4WmtJelZBWXRHN1lPYWxnWjhUTU4ybGpyUm5tWSt1?=
- =?utf-8?B?ejdUeFRmRWVyZW5qKzFNQmFEY3F5ZjFGQXlUU3VuZTdpeW8yNFNzTDhrQ0Ji?=
- =?utf-8?Q?Wh2ADpE8vG/JNzItZ/goxwQ1H?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <48648B97CCF33B45937F9EF3A440A99F@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 5 Jun 2023 07:44:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6251BDF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685965416;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MQUlV/DSEwcUdtFGZI4Rkk19WX9clmv+BXCW6uCxtEg=;
+        b=cedoSN5XzFdNpugUjM+Fjaik9uhpA29NmtycD6ZNSiQHbpLuli/nGsE0Z9Zq8eUSHtBSWi
+        pwNOEaa2Fd2e090Zm9WWXAF56wdsM0u9w5rRmm8afNh3OfSMDqCPub034GLxd7SrW2om9x
+        eC36Lr5E53MkERQOjD0+38xJ0cnq0mI=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-507-UUrP3njROBObyQGNWetihw-1; Mon, 05 Jun 2023 07:43:35 -0400
+X-MC-Unique: UUrP3njROBObyQGNWetihw-1
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-656dbbbda20so433255b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:43:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685965414; x=1688557414;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MQUlV/DSEwcUdtFGZI4Rkk19WX9clmv+BXCW6uCxtEg=;
+        b=TJ1MZkG7yPlmXs7Ghw9qPInY6d/QD+zD1gJoXhWwyXMG4Yn44Q8zrSy9WBNVb+yfEz
+         8Jl/h7NxItnZGcJSdG9G8b6e3ynr6Gc+d9j6Qnr87+kc6wJkEe25avzTYPvoqBfC/wdX
+         ljF3k1x+preA2lwkSB5HlF147WZbMOQDHGHHRWQlykVmO1kHVEfj2XMzXVNnQHvhDvDK
+         Og393fqSzeu3+HlOmQzMXEflllemK8hAa1+PhIIdMx9zIIDkgRqXoX4p1uTOiM8ZKCK/
+         q48tuIzhq6SpCgdKlOGbHRe0/W/ki0oZKhCdzEwdg+xv/mVQuBOGeXkvwCaRNpDaBqMt
+         rH1g==
+X-Gm-Message-State: AC+VfDw8LA6H/rtt9WChaWQCpvrlRKaWz8wYFjekiPyGvyE8+2OOjJrk
+        fufSUBvwpqSsz3niHqFc25C6YG8AnbCQfR5dHHdzXvVsijwkB9ho9+Qlj+58omz/88QjZorRXt9
+        Y/cv91Gzfd5Mx+0oCCgHvndav
+X-Received: by 2002:a05:6a20:a10c:b0:100:eb1e:3939 with SMTP id q12-20020a056a20a10c00b00100eb1e3939mr20924498pzk.1.1685965414392;
+        Mon, 05 Jun 2023 04:43:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5dqHZQ4Wl6XSs6177GtD88PQJeClTkwW71QGxM9iz9W/aRL6Zv7+agwq/J/oKzkPK4dh1IqQ==
+X-Received: by 2002:a05:6a20:a10c:b0:100:eb1e:3939 with SMTP id q12-20020a056a20a10c00b00100eb1e3939mr20924486pzk.1.1685965414073;
+        Mon, 05 Jun 2023 04:43:34 -0700 (PDT)
+Received: from [10.66.61.39] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id q14-20020a65494e000000b00530914c3bc1sm5042185pgs.21.2023.06.05.04.43.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:43:33 -0700 (PDT)
+Message-ID: <628463d5-b9df-51bd-8e1f-b0a41a928d85@redhat.com>
+Date:   Mon, 5 Jun 2023 19:43:27 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: bang-olufsen.dk
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB3943.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65fa999f-6aab-4803-712a-08db65b9f9ff
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2023 11:42:44.0409
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 210d08b8-83f7-470a-bc96-381193ca14a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gJxmoetPZHBjiuY0Z+y6E1msU7p7j3f+BS7hahjQSKv4Hr25t5Pc0CYNfSXtwbNuZB9q7uZE3W/7in5bS7w90Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR03MB8183
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 07/11] arm64: mops: handle MOPS exceptions
+To:     Kristina Martsenko <kristina.martsenko@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-kernel@vger.kernel.org
+References: <20230509142235.3284028-1-kristina.martsenko@arm.com>
+ <20230509142235.3284028-8-kristina.martsenko@arm.com>
+Content-Language: en-US
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <20230509142235.3284028-8-kristina.martsenko@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,35 +92,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCBKdW4gMDIsIDIwMjMgYXQgMDE6MTk6MDhQTSArMDEwMCwgTWFyayBCcm93biB3cm90
-ZToNCj4gT24gRnJpLCBKdW4gMDIsIDIwMjMgYXQgMTI6MTI6NTJQTSArMDAwMCwgQWx2aW4gxaBp
-cHJhZ2Egd3JvdGU6DQo+ID4gT24gRnJpLCBKdW4gMDIsIDIwMjMgYXQgMTI6NDM6NTFQTSArMDEw
-MCwgTWFyayBCcm93biB3cm90ZToNCj4gDQo+ID4gPiBXaHkgd291bGQgd2UgaGF2ZSBhIHByb3Bl
-cnR5IGZvciB0aGlzIGFuZCBub3QganVzdCBkZXNjcmliZSB3aGF0ZXZlciB0aGUNCj4gPiA+IGFj
-dHVhbCBjbG9ja2luZyBhcnJhbmdlbWVudCBpcz8NCj4gDQo+ID4gU3VyZSAtIGxldCBtZSBqdXN0
-IGVsYWJvcmF0ZSBvbiBteSB0aGlua2luZyBhbmQgbWF5YmUgeW91IGNhbiBoZWxwIG1lIHdpdGgg
-YQ0KPiA+IGJldHRlciBhcHByb2FjaDoNCj4gDQo+ID4gVGhlIGNsb2NraW5nIGFycmFuZ2VtZW50
-IGlzIGVuY29kZWQgaW4gdGhlIGRhaV9mbXQgZmllbGQgb2Ygc25kX3NvY19kYWlfbGluaywNCj4g
-PiBidXQgdGhpcyBpcyBhIHNpbmdsZSB2YWx1ZSB0aGF0IGRlc2NyaWJlcyB0aGUgZm9ybWF0IG9u
-IGJvdGggZW5kcy4gVGhlIGN1cnJlbnQNCj4gPiBiZWhhdmlvdXIgb2YgQVNvQyBpcyB0byBmbGlw
-IHRoZSBjbG9jayByb2xlcyBlbmNvZGVkIGluIGRhaV9mbXQgd2hlbiBhcHBseWluZyBpdA0KPiA+
-IHRvIHRoZSBDUFUgc2lkZSBvZiB0aGUgbGluay4NCj4gDQo+ID4gTG9va2luZyBmcm9tIGEgRFQg
-cGVyc3BlY3RpdmUsIGlmIEkgZG8gbm90IHNwZWNpZnkgZS5nLiBiaXRjbG9jay1tYXN0ZXIgb24N
-Cj4gPiBlaXRoZXIgc2lkZSBvZiB0aGUgbGluaywgdGhlbiB0aGUgZGFpX2ZtdCB3aWxsIGRlc2Ny
-aWJlIHRoZSBjb2RlYyBhcyBhIGJpdGNsb2NrDQo+ID4gY29uc3VtZXIgYW5kIChhZnRlciBmbGlw
-cGluZykgdGhlIENQVSBhcyBhIHByb3ZpZGVyLiBUaGF0J3MgdGhlIGRlZmF1bHQNCj4gPiBpbXBs
-aWNhdGlvbiBvZiB0aGUgRFQgYmluZGluZ3MgYW5kIEkgY2FuJ3QgYnJlYWsgY29tcGF0aWJpbGl0
-eSB0aGVyZS4NCj4gDQo+IE5vbmUgb2YgdGhpcyBhZGRyZXNzZXMgbXkgcXVlc3Rpb24uICBUbyBy
-ZXBlYXQgd2h5IHdvdWxkIHdlIG5vdCBqdXN0DQo+IGRlc2NyaWJlIHRoZSBhY3R1YWwgY2xvY2tp
-bmcgYXJyYW5nZW1lbnQgaGVyZSAtIHRoaXMgcHJvcGVydHkgZG9lcyBub3QNCj4gc3BlY2lmeSB3
-aGVyZSB0aGUgY2xvY2sgYWN0dWFsbHkgY29tZXMgZnJvbSBhdCBhbGwsIHdlJ3JlIHN0aWxsIGdv
-aW5nIHRvDQo+IG5lZWQgYWRkaXRpb25hbCBpbmZvcm1hdGlvbiBmb3IgdGhhdCBhbmQgaWYgd2Un
-dmUgZGVzY3JpYmVkIHRoYXQgY2xvY2sNCj4gdGhlbiB3ZSBhbHJlYWR5IGtub3cgaXQncyB0aGVy
-ZSB3aXRob3V0IGhhdmluZyB0byBzcGVjaWZ5IGFueSBtb3JlDQo+IHByb3BlcnRpZXMuDQoNCk1h
-eWJlIEkgb3ZlcmNvbXBsaWNhdGVkIHlvdXIgcG9pbnQgd2l0aCBteSBwcmV2aW91cyByZXBseS4g
-U29tZSBxdWVzdGlvbnMgdG8NCmNsYXJpZnk6DQoNCjEuIFlvdSBkb24ndCBsaWtlIHRoZSBEVCBw
-cm9wZXJ0eSBiZWNhdXNlIGl0IHNob3VsZCBiZSBpbmZlcnJhYmxlIGJ5IG90aGVyDQptZWFucy4g
-Q29ycmVjdD8NCg0KMi4gQXMgZm9yIHRoZSBmbGFnIGFkZGVkIHRvIHNuZF9zb2NfZGFpX2xpbmss
-IGRvIHlvdSB0aGluayB0aGF0IGlzIGFuIE9LDQphcHByb2FjaD8NCg0KSnVzdCB3YW50IHRvIHVu
-ZGVyc3RhbmQgd2hpY2ggZGlyZWN0aW9uIHlvdSB3b3VsZCBsaWtlIG1lIHRvIGZvY3VzIHRoZQ0K
-ZWZmb3J0Lg0KDQpLaW5kIHJlZ2FyZHMsDQpBbHZpbg==
+Hi Kristina,
+
+On 5/9/23 22:22, Kristina Martsenko wrote:
+> The memory copy/set instructions added as part of FEAT_MOPS can take an
+> exception (e.g. page fault) part-way through their execution and resume
+> execution afterwards.
+> 
+> If however the task is re-scheduled and execution resumes on a different
+> CPU, then the CPU may take a new type of exception to indicate this.
+> This is because the architecture allows two options (Option A and Option
+> B) to implement the instructions and a heterogeneous system can have
+> different implementations between CPUs.
+> 
+> In this case the OS has to reset the registers and restart execution
+> from the prologue instruction. The algorithm for doing this is provided
+> as part of the Arm ARM.
+What is the Arm ARM? I'm not quite understand it.
+> 
+> Add an exception handler for the new exception and wire it up for
+> userspace tasks.
+> 
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
+> ---
+>   arch/arm64/include/asm/esr.h       | 11 ++++++-
+>   arch/arm64/include/asm/exception.h |  1 +
+>   arch/arm64/kernel/entry-common.c   | 11 +++++++
+>   arch/arm64/kernel/traps.c          | 52 ++++++++++++++++++++++++++++++
+>   4 files changed, 74 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+> index 8487aec9b658..ca954f566861 100644
+> --- a/arch/arm64/include/asm/esr.h
+> +++ b/arch/arm64/include/asm/esr.h
+> @@ -47,7 +47,7 @@
+>   #define ESR_ELx_EC_DABT_LOW	(0x24)
+>   #define ESR_ELx_EC_DABT_CUR	(0x25)
+>   #define ESR_ELx_EC_SP_ALIGN	(0x26)
+> -/* Unallocated EC: 0x27 */
+> +#define ESR_ELx_EC_MOPS		(0x27)
+>   #define ESR_ELx_EC_FP_EXC32	(0x28)
+>   /* Unallocated EC: 0x29 - 0x2B */
+>   #define ESR_ELx_EC_FP_EXC64	(0x2C)
+> @@ -356,6 +356,15 @@
+>   #define ESR_ELx_SME_ISS_ZA_DISABLED	3
+>   #define ESR_ELx_SME_ISS_ZT_DISABLED	4
+>   
+> +/* ISS field definitions for MOPS exceptions */
+> +#define ESR_ELx_MOPS_ISS_MEM_INST	(UL(1) << 24)
+> +#define ESR_ELx_MOPS_ISS_FROM_EPILOGUE	(UL(1) << 18)
+> +#define ESR_ELx_MOPS_ISS_WRONG_OPTION	(UL(1) << 17)
+> +#define ESR_ELx_MOPS_ISS_OPTION_A	(UL(1) << 16)
+> +#define ESR_ELx_MOPS_ISS_DESTREG(esr)	(((esr) & (UL(0x1f) << 10)) >> 10)
+> +#define ESR_ELx_MOPS_ISS_SRCREG(esr)	(((esr) & (UL(0x1f) << 5)) >> 5)
+> +#define ESR_ELx_MOPS_ISS_SIZEREG(esr)	(((esr) & (UL(0x1f) << 0)) >> 0)
+> +
+>   #ifndef __ASSEMBLY__
+>   #include <asm/types.h>
+>   
+> diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
+> index e73af709cb7a..72e83af0135f 100644
+> --- a/arch/arm64/include/asm/exception.h
+> +++ b/arch/arm64/include/asm/exception.h
+> @@ -77,6 +77,7 @@ void do_el0_svc(struct pt_regs *regs);
+>   void do_el0_svc_compat(struct pt_regs *regs);
+>   void do_el0_fpac(struct pt_regs *regs, unsigned long esr);
+>   void do_el1_fpac(struct pt_regs *regs, unsigned long esr);
+> +void do_el0_mops(struct pt_regs *regs, unsigned long esr);
+>   void do_serror(struct pt_regs *regs, unsigned long esr);
+>   void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags);
+>   
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index 3af3c01c93a6..a8ec174e5b0e 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -611,6 +611,14 @@ static void noinstr el0_bti(struct pt_regs *regs)
+>   	exit_to_user_mode(regs);
+>   }
+>   
+> +static void noinstr el0_mops(struct pt_regs *regs, unsigned long esr)
+> +{
+> +	enter_from_user_mode(regs);
+> +	local_daif_restore(DAIF_PROCCTX);
+> +	do_el0_mops(regs, esr);
+> +	exit_to_user_mode(regs);
+> +}
+> +
+>   static void noinstr el0_inv(struct pt_regs *regs, unsigned long esr)
+>   {
+>   	enter_from_user_mode(regs);
+> @@ -688,6 +696,9 @@ asmlinkage void noinstr el0t_64_sync_handler(struct pt_regs *regs)
+>   	case ESR_ELx_EC_BTI:
+>   		el0_bti(regs);
+>   		break;
+> +	case ESR_ELx_EC_MOPS:
+> +		el0_mops(regs, esr);
+> +		break;
+>   	case ESR_ELx_EC_BREAKPT_LOW:
+>   	case ESR_ELx_EC_SOFTSTP_LOW:
+>   	case ESR_ELx_EC_WATCHPT_LOW:
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 4bb1b8f47298..32dc692bffd3 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -514,6 +514,57 @@ void do_el1_fpac(struct pt_regs *regs, unsigned long esr)
+>   	die("Oops - FPAC", regs, esr);
+>   }
+>   
+> +void do_el0_mops(struct pt_regs *regs, unsigned long esr)
+> +{
+> +	bool wrong_option = esr & ESR_ELx_MOPS_ISS_WRONG_OPTION;
+> +	bool option_a = esr & ESR_ELx_MOPS_ISS_OPTION_A;
+> +	int dstreg = ESR_ELx_MOPS_ISS_DESTREG(esr);
+> +	int srcreg = ESR_ELx_MOPS_ISS_SRCREG(esr);
+> +	int sizereg = ESR_ELx_MOPS_ISS_SIZEREG(esr);
+> +	unsigned long dst, src, size;
+> +
+> +	dst = pt_regs_read_reg(regs, dstreg);
+> +	src = pt_regs_read_reg(regs, srcreg);
+> +	size = pt_regs_read_reg(regs, sizereg);
+> +
+> +	/*
+> +	 * Put the registers back in the original format suitable for a
+> +	 * prologue instruction, using the generic return routine from the
+> +	 * Arm ARM (DDI 0487I.a) rules CNTMJ and MWFQH.
+> +	 */
+> +	if (esr & ESR_ELx_MOPS_ISS_MEM_INST) {
+> +		/* SET* instruction */
+> +		if (option_a ^ wrong_option) {
+> +			/* Format is from Option A; forward set */
+> +			pt_regs_write_reg(regs, dstreg, dst + size);
+> +			pt_regs_write_reg(regs, sizereg, -size);
+> +		}
+> +	} else {
+> +		/* CPY* instruction */
+> +		if (!(option_a ^ wrong_option)) {
+> +			/* Format is from Option B */
+> +			if (regs->pstate & PSR_N_BIT) {
+> +				/* Backward copy */
+> +				pt_regs_write_reg(regs, dstreg, dst - size);
+> +				pt_regs_write_reg(regs, srcreg, src - size);
+> +			}
+> +		} else {
+> +			/* Format is from Option A */
+> +			if (size & BIT(63)) {
+> +				/* Forward copy */
+> +				pt_regs_write_reg(regs, dstreg, dst + size);
+> +				pt_regs_write_reg(regs, srcreg, src + size);
+> +				pt_regs_write_reg(regs, sizereg, -size);
+> +			}
+> +		}
+> +	}
+> +
+> +	if (esr & ESR_ELx_MOPS_ISS_FROM_EPILOGUE)
+> +		regs->pc -= 8;
+> +	else
+> +		regs->pc -= 4;
+> +}
+> +
+>   #define __user_cache_maint(insn, address, res)			\
+>   	if (address >= TASK_SIZE_MAX) {				\
+>   		res = -EFAULT;					\
+> @@ -824,6 +875,7 @@ static const char *esr_class_str[] = {
+>   	[ESR_ELx_EC_DABT_LOW]		= "DABT (lower EL)",
+>   	[ESR_ELx_EC_DABT_CUR]		= "DABT (current EL)",
+>   	[ESR_ELx_EC_SP_ALIGN]		= "SP Alignment",
+> +	[ESR_ELx_EC_MOPS]		= "MOPS",
+>   	[ESR_ELx_EC_FP_EXC32]		= "FP (AArch32)",
+>   	[ESR_ELx_EC_FP_EXC64]		= "FP (AArch64)",
+>   	[ESR_ELx_EC_SERROR]		= "SError",
+
+-- 
+Shaoqin
+
