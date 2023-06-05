@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEAA7226B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455D97226B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbjFEM7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S232730AbjFEM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjFEM7K (ORCPT
+        with ESMTP id S233766AbjFEM7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:59:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED33FE;
-        Mon,  5 Jun 2023 05:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685969924; x=1717505924;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MEgj/vZSUbGWWbHpadQGpjjG8bL7wedFUW38lNf/E18=;
-  b=CfrTuHpJSvspT0vkEl95OEKv7UvgfrTaJRt1W64IXIGVDfLGM3shrGFb
-   56v460ZRJ7xhFUJTSLl8hMzLSBR0r++GHyeQnS4VsH0f420Aex0HlgN/F
-   Mp3r7K68OPTrmd4crs9+PoJnPpStZYtF41VY1G4+Qh/ZU4scYDcDNFo8R
-   FDtygqxn/0Dz7iWE4wJYSjEsZPDqEW8ZzjlKSoAb4p50RnEO5hcVSNCHN
-   +E9HaVlmgyaiAMsqvCKgWNVlT0+plSttJp6VVB/lWdRxMbB0agMpd+RzJ
-   OcUPM9qft1hYC5rnOKUrtxJm/s7Qevsi734N85HKSTv21BBFuwMUTkjW5
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="356369588"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="356369588"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 05:58:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="832798144"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="832798144"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jun 2023 05:58:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0A75C2A6; Mon,  5 Jun 2023 15:58:11 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v2 1/1] gpiolib: Do not unexport GPIO on freeing
-Date:   Mon,  5 Jun 2023 15:58:10 +0300
-Message-Id: <20230605125810.61456-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Mon, 5 Jun 2023 08:59:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB0EDF;
+        Mon,  5 Jun 2023 05:58:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86FA56125F;
+        Mon,  5 Jun 2023 12:58:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F661C433D2;
+        Mon,  5 Jun 2023 12:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685969935;
+        bh=e+/NPwB2cmtfwaz0YKxkffDVpHR8DXa9brk/DDgZvRQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lLOLWISW9hmy6QVf/WV8uFCGPjEHUSxX7Dby9AT4hfQfErjCD1+Z8WZhnwv4psKZq
+         IwbDC23gEG/gqTdtrwPq0KgbOiX6htT2AVEB3SkVn4/zN04hb15t2UUwEdokTTErb2
+         Li/aPO4PRr8l2Fl4xV9ZgycB3jlFbaNYBTt3/K/26Uoocg+Lm/JT/ljNjw5qjRYhaI
+         OJXOKZX3XQfk6VIRYKjH0LrlqO+UpIdtmU7ALI14iLw9k7qviVETjWpQv975hATTQ3
+         fyPeaH4GevsPryYk3pVbp2ksBbq+C9pUo9FQKbyagVJL8cXrXa6I4O1gWkeUyWDuj1
+         sFMexLUjGo81A==
+From:   Christian Brauner <brauner@kernel.org>
+To:     chenzhiyin <zhiyin.chen@intel.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nanhai.zou@intel.com, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
+Date:   Mon,  5 Jun 2023 14:58:39 +0200
+Message-Id: <20230605-polterabend-weggehen-44570d4b7429@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230601092400.27162-1-zhiyin.chen@intel.com>
+References: <20230531-wahlkabine-unantastbar-9f73a13262c0@brauner> <20230601092400.27162-1-zhiyin.chen@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1529; i=brauner@kernel.org; h=from:subject:message-id; bh=e+/NPwB2cmtfwaz0YKxkffDVpHR8DXa9brk/DDgZvRQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTU3v4gHbP/yZsVZ5cXLPg5K9VgLacEQ9icXqH9iyY0Ba98 MD3FpKOUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAi73oZ/md+P3p58bYp9ofefFHmWP v4Fsst3kVaf8IUl+3Ws5WzWTSNkeFAx/8+XR3Px+YdStMlpQKDZx25417y4f5d58+BQc18LFwA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the legacy exporting is gone with 2f804aca4832 ("gpiolib:
-Kill unused GPIOF_EXPORT and Co") there is no need to unexport
-GPIO on freeing. Remove that call.
+On Thu, 01 Jun 2023 05:24:00 -0400, chenzhiyin wrote:
+> In the syscall test of UnixBench, performance regression occurred due
+> to false sharing.
+> 
+> The lock and atomic members, including file::f_lock, file::f_count and
+> file::f_pos_lock are highly contended and frequently updated in the
+> high-concurrency test scenarios. perf c2c indentified one affected
+> read access, file::f_op.
+> To prevent false sharing, the layout of file struct is changed as
+> following
+> (A) f_lock, f_count and f_pos_lock are put together to share the same
+> cache line.
+> (B) The read mostly members, including f_path, f_inode, f_op are put
+> into a separate cache line.
+> (C) f_mode is put together with f_count, since they are used frequently
+>  at the same time.
+> Due to '__randomize_layout' attribute of file struct, the updated layout
+> only can be effective when CONFIG_RANDSTRUCT_NONE is 'y'.
+> 
+> [...]
 
-Note, the other users of this functionality do that explicitly,
-except one SH and one OMAP boardfile which don't free GPIO anyways,
-so it is safe to drop the call.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: mentioned OMAP boardfile as well
- drivers/gpio/gpiolib.c | 2 --
- 1 file changed, 2 deletions(-)
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index a8da38ee721a..7a9c9934365a 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -2117,8 +2117,6 @@ static bool gpiod_free_commit(struct gpio_desc *desc)
- 
- 	might_sleep();
- 
--	gpiod_unexport(desc);
--
- 	spin_lock_irqsave(&gpio_lock, flags);
- 
- 	gc = desc->gdev->chip;
--- 
-2.40.0.1.gaa8946217a0b
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
+
+[1/1] fs.h: Optimize file struct to prevent false sharing
+      https://git.kernel.org/vfs/vfs/c/b63bfcf3c65d
