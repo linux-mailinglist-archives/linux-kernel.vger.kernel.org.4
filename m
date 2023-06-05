@@ -2,104 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1E9722DFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFB7722E07
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjFER4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S232695AbjFER5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjFER4s (ORCPT
+        with ESMTP id S231747AbjFER5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:56:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C572ED3;
-        Mon,  5 Jun 2023 10:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qtXPOVUwv/0vffgfXDo1OC5mmgba+WXT0tEe3GMrRTI=; b=vWHXAWSWQaOKQtVQyiIM8w32o5
-        S9d50NCVYfTYOM1+rN+OUZPNKvAOhitkDF7uPC+JV2D/KIzK2ptB2xAOnCRmGIwXPOeI/c+6inMet
-        UruFZyQtCN6T1+D1P8+CA7QJzvEsUTM9c5PtOS7p6qAkEUeh77oUwDkxfK8d4cmxm8IEJrQNJpI1c
-        GhYkpetIQgRvubjdY9OYWxSErJpGZGrt1skMwaeqQmEPQcy4Er6NtzijDXgm6msfu8qHI0hP+xrro
-        WUA4QuxIRDdYCO0s9Nge+slA6vofeU1XlKMBOfdrB1np7SJk1B3GiBNiL5iFl0Re+SsDjvG9t+u7i
-        JxOqPVKg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q6ERa-00CFr5-En; Mon, 05 Jun 2023 17:56:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2265A30031B;
-        Mon,  5 Jun 2023 19:56:37 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F0D25244F9E2F; Mon,  5 Jun 2023 19:56:36 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 19:56:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, x86@kernel.org,
-        kprateek.nayak@amd.com
-Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
-Message-ID: <20230605175636.GA4253@hirez.programming.kicks-ass.net>
-References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
- <CGME20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca@eucas1p2.samsung.com>
- <3051ad44-0ac3-e77b-3178-fac7cac3b3f2@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3051ad44-0ac3-e77b-3178-fac7cac3b3f2@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Jun 2023 13:57:44 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CF7C7;
+        Mon,  5 Jun 2023 10:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=cVsuCfqC328oMH5P7QiDL9VIp18ZMkyI/Asduj73yQk=; b=NI+cWrOZPRfjHDb5xVaM2Nknyv
+        hYDPhBnh/UnnvcHlfe0cLuKWDGGbRpbOSva/wC7PuIf4av1CXrxHq6QkOSPi2zIxRKYw2Jof36FO9
+        N8BB/DUqoECfE1ka07zWf+hW4NZXODnJ9YUrZydN/MjV1tpBWhzm8iaXj1HJ/2kYz1mc=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:50380 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q6ESV-0001nl-3e; Mon, 05 Jun 2023 13:57:36 -0400
+Date:   Mon, 5 Jun 2023 13:57:34 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
+Message-Id: <20230605135734.1b66d32f39e7e4d32d5978a8@hugovil.com>
+In-Reply-To: <20230604191613.ea95fa9a1bc508525fe3bbd5@hugovil.com>
+References: <20230602152626.284324-1-hugo@hugovil.com>
+        <20230602152626.284324-6-hugo@hugovil.com>
+        <2023060454-cotton-paramount-e33e@gregkh>
+        <20230604134344.73dc3cbb57d335d4a0b4b33a@hugovil.com>
+        <2023060406-scarcity-clear-cc56@gregkh>
+        <20230604191613.ea95fa9a1bc508525fe3bbd5@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 05:25:30PM +0200, Marek Szyprowski wrote:
-> On 31.05.2023 14:04, tip-bot2 for Peter Zijlstra wrote:
-> > The following commit has been merged into the sched/core branch of tip:
-> >
-> > Commit-ID:     c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
-> > Gitweb:        https://git.kernel.org/tip/c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
-> > Author:        Peter Zijlstra <peterz@infradead.org>
-> > AuthorDate:    Tue, 30 May 2023 13:20:46 +02:00
-> > Committer:     Peter Zijlstra <peterz@infradead.org>
-> > CommitterDate: Tue, 30 May 2023 22:46:27 +02:00
-> >
-> > sched/fair: Multi-LLC select_idle_sibling()
-> >
-> > Tejun reported that when he targets workqueues towards a specific LLC
-> > on his Zen2 machine with 3 cores / LLC and 4 LLCs in total, he gets
-> > significant idle time.
-> >
-> > This is, of course, because of how select_idle_sibling() will not
-> > consider anything outside of the local LLC, and since all these tasks
-> > are short running the periodic idle load balancer is ineffective.
-> >
-> > And while it is good to keep work cache local, it is better to not
-> > have significant idle time. Therefore, have select_idle_sibling() try
-> > other LLCs inside the same node when the local one comes up empty.
-> >
-> > Reported-by: Tejun Heo <tj@kernel.org>
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Sun, 4 Jun 2023 19:16:13 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+> On Sun, 4 Jun 2023 20:29:58 +0200
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 > 
-> This patch landed in today's linux next-20230605 as commit c5214e13ad60 
-> ("sched/fair: Multi-LLC select_idle_sibling()"). Unfortunately it causes 
-> regression on my ARM 64bit Exynos5433-based TM2e test board during the 
-> CPU hotplug tests. From time to time I get the NULL pointer dereference. 
-> Reverting $subject on top of linux-next fixes the issue. Let me know if 
-> I can help somehow debugging this issue. Here is a complete log (I've 
-> intentionally kept all the stack dumps, although they don't look very 
-> relevant...):
+> > On Sun, Jun 04, 2023 at 01:43:44PM -0400, Hugo Villeneuve wrote:
+> > > Here is what I suggest to silence the warning:
+> > > 
+> > > 	mctrl_mask = sc16is7xx_setup_mctrl_ports(dev);
+> > > 
+> > > #ifdef CONFIG_GPIOLIB
+> > > 	ret = sc16is7xx_setup_gpio_chip(dev, mctrl_mask);
+> > > 	if (ret)
+> > > 		goto out_thread;
+> > > #else
+> > > 	(void) mctrl_mask;
+> > > #endif
+> > 
+> > Eeek,  no, please no...
+> > 
+> > First off, please don't put #ifdef in .c files if at all possible.
+> 
+> Hi Greg,
+> Andy also made a similar comment, but couldn't suggest a valid
+> alternative when I asked him what to do about that.
+> 
+> Just as a sidenote, I didn't add those #ifdef, they were already
+> present in the driver in multiple places.
+> 
+> What would be your suggestion to get rid of those #ifdef, simply delete
+> them all?
+> 
+> If you suggest me what to do, I will be happy to submit a
+> future patch after this series is finalized to clean that aspect.
+> 
+> 
+> > Secondly, that (void) craziness is just that.  Rework this to not be an
+> > issue some other way please.
+> > 
+> > > I could also store (define new variable) mctrl_mask directly inside struct sc16is7xx_port...
+> > 
+> > Sure, that sounds best.
+> 
+> Ok, I will do that.
+> 
+> 
+> > > > And you have a real port here, no need to pass in a "raw" struct device,
+> > > > right?
+> > > 
+> > > The function operates globally on both ports (or nr_uart), not just a single port. That is why I pass the "raw" struct device, in order to extract the 
+> > > struct sc16is7xx_port from it:
+> > > 
+> > >     struct sc16is7xx_port *s = dev_get_drvdata(dev);
+> > > 
+> > > Inside the function, I also need the "raw" struc device. If we pass a struct sc16is7xx_port to the function, then I can get the "raw" struc device with this:
+> > > 
+> > > static u8 sc16is7xx_setup_mctrl_ports(struct sc16is7xx_port *s)
+> > > {
+> > > 	struct device *dev = &s->p[0].port.dev;
+> > > 
+> > > But I find this more obfuscated and hard to understand than to simply pass a "raw" struct device...
+> > 
+> > You should never need a "raw" struct device for stuff (if so, something
+> > is really odd).  Except for error messages, but that's not really a big
+> > deal, right?
+> 
+> > Don't pass around struct device in a driver, use the real types as you
+> > know you have it and it saves odd casting around and it just doesn't
+> > look safe at all to do so.
+> 
+> If you look at the patch, you will see that I need "struct device *dev"
+> at two places in the sc16is7xx_setup_mctrl_ports() function to read the
+> device properties:
+> 
+> ...
+> +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
+> ...
+> +	count = device_property_count_u32(dev,...
+> ...
+> +	ret = device_property_read_u32_array(dev,
+> ...
+> 
+> I do not understand why this is odd?
 
-Moo... OK, since our friends from AMD need some tuning on this anyway,
-i'm going to pull the patch entirely. And we'll try again once they've
-sorted out the best way to do this.
+Hi Greg,
+I finally added a "struct device" member inside "struct sc16is7xx_port"
+and now I simply pass "struct sc16is7xx_port *s as the sole argument to
+sc16is7xx_setup_mctrl_ports().
+
+That should take care of your concern I hope, and I will submit a V8
+soon with all these changes.
+
+Hugo.
 
 
+> > And if you have that crazy s->p.... stuff in multiple places, the
+> > perhaps you might want to rethink the structure somehow?  Or at the very
+> > least, write an inline function to get it when needed.
+> 
+> I am not sure what you mean by that, since again that "crazy" stuff is
+> already used everywhere in this driver?
+> 
+> 
+> > Also, meta comment, you might want to use some \n characters in your
+> > emails, your lines are really long :)
+> 
+> Strange, I use sylpheed as a mail client, and the option "Wrap lines at
+> 72 characters" is enabled by default, but somehow you must also check
+> the box "Wrap on input" for it to work, not very intuitive :) Thanks for
+> pointing that to me.
+> 
+> Hugo.
