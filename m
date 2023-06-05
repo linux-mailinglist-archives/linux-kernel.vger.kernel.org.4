@@ -2,340 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC3A72316D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DF47231E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjFEUaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S232608AbjFEVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjFEUaB (ORCPT
+        with ESMTP id S229740AbjFEVGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:30:01 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2098.outbound.protection.outlook.com [40.107.237.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4D98
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 13:29:59 -0700 (PDT)
+        Mon, 5 Jun 2023 17:06:53 -0400
+X-Greylist: delayed 2069 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Jun 2023 14:06:52 PDT
+Received: from mx0b-00010702.pphosted.com (mx0b-00010702.pphosted.com [148.163.158.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C8EED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 14:06:52 -0700 (PDT)
+Received: from pps.filterd (m0098779.ppops.net [127.0.0.1])
+        by mx0b-00010702.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355EsYuY004989;
+        Mon, 5 Jun 2023 15:32:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ni.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS11062020;
+ bh=DOwu1+gZ8vxDq2j/wAavKJawBvXDny5D/yRgn1j4qfo=;
+ b=LQQLKNEhIFiBYcxqEp9W8UL/cqVqb9Nvej49V6qGXakgW93alRcrdXrH9PFsNyPszZLn
+ nVBi02UuNnbpCO/zwFEteVufxiROlWNBHeJ+6jZgSbcDJ4naUYUCUG65oDsuYh935lvf
+ RnnURsh9Klsm9XSSKKhKujshrp1SDgfG3m/UPdHxTmUMUCxPLV1JDoqVrY/PJG86rnab
+ 7VVHnC3od1E6GBC4DdWLeVdRx2HBzG3A2PcYf/Cch4z/MrUJ91fmdx29NJYGHQWOH03u
+ fPsgxNb/KsACBqTVyfKY/5l2maqWLPf0pDygaEJiEJ3FP1A4pGdHLXzLn9A3u6jIi8Mb Xw== 
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2043.outbound.protection.outlook.com [104.47.56.43])
+        by mx0b-00010702.pphosted.com (PPS) with ESMTPS id 3r03b5uhpq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 15:32:20 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aULAd32Dpe2Y03zbr9zaMUZfQyqsar7Nnn5nSCNQRJJFYG4Y+rXAz2f9XgcdAyW5zWXiyqsGFX4CGmLS/QL44Y1tk5kJ3fUYvE3pgFfFch63diz3T2Q27PtdLU3FovL5PtdUuSmLy3Sa0WqHbyi61nfyDhBPGmVmLbAsPQNbRAcnwpSVGieKFP4Qcj/QOWDiPw5Tf/t7UhMtQAKvAqZY8ub//5shD/IHoCp+dlh9BtCCULBTtyAcZmKnURjAhxOW1clm2vPK3Xrj8P27gPIUvwdcvcaYOAga9eZBGSpXZM+wg3EkK0DhJr82qXIAP+dq6k/QE5wcTkGjEYUAVdDWuQ==
+ b=DdjN/wIBwW2Fjcek3olhOP8DmepdwJNPfk+wMq/34F17qKS+EGPFBnXpcxaXlX6N+2+m+iWCWFykTI1FButStbbN4gn/VoO0F9w7IecIvN4pNLi+HqiwdE+OkLzNRORGYEgzS+TlDdIx/N38I6Zdxa6tcTTqvjW70DUexQW2Tdar8OZWPOHXVhUIChu9NQl9WwsC/EPTFSJE8hvOZ7CemyBcQ6uaqvWmUTZFnm+/s00frchrxs31MrgD7PuhdvVyf73d4F1mb9hTQw0lvdE2cicOJlXocREliEJaktPK99shlax/exA8D+2u8ijzlh1jYgvIzpOiB2z3CBdZrcqgew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5mNTzm6kQQDirapgHT1wtPPTGxnKkmmv5k1aY91pU/4=;
- b=WcmZ1Yy2eI1NJ1c9iLWkl6c6nl+AZqPVGby5Eyad6lSdbsfsd8K+wQtJx10poENvf9rkZqo4ronMIpIH6Jqrx6jvrlvIPYSXjcDQsvXZJOMJcCfIZwJcQ26KLfrDmw0oE2RyDLxqrG7W45WgIL1IH62Q7GGTldW3b+Cp8IAkt0GDH4fLsw8fCa40mS8UlQwvrkSX0MeW5nHAe24tGe4Qt1v7g9zl7mFVSpD63yB9zBdLZmuFTFFVaPMgkQoyP0qe8gtBPLLVRSeHGeaz2oqwe5Or73ZSAQ0g2GWrH4yHk4WjReQBmFTxjaExR4djd09y6puTxYsgUCahdftRkl067w==
+ bh=DOwu1+gZ8vxDq2j/wAavKJawBvXDny5D/yRgn1j4qfo=;
+ b=gVtj/zpfXN4vXc42kbBiFN14roE293/2EZkLUdiYY21G4+jlsbKFGFmH0A3XBtgmBfNo4GM7EtpKlbBRPgk07XRueLi0wb/0092sjQvJvfMh0N1JKG11nPmBa3REI+nObSE7wAF6/PjWRBrM/vT5bf5r/5Fpaa4+Aq5XPG2562Hm268/O5eXfi/Nn3qFnH3OKcprO/oOzLhXLXMz5h7GwEQvvK81RBpPwam8yMOBOfRrWDX/KeBKXGFK2EPZCMPZNZU7G1uQRht44tlpW64qWpdI4kmtWzd4asp088jxCi1h9CmEO3/7plfDObC75+L3nmns6D+nw7/FeTJSc7gvEQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+ smtp.mailfrom=ni.com; dmarc=pass action=none header.from=ni.com; dkim=pass
+ header.d=ni.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ d=nio365.onmicrosoft.com; s=selector2-nio365-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5mNTzm6kQQDirapgHT1wtPPTGxnKkmmv5k1aY91pU/4=;
- b=kxkNrrtBii3AE+gFa8DpvPnEomAdMIP5PitlSoS9zWy0021z/ZmJKv3WkRUo7hLCGc9IF42N863BW8o0vjr0QyLvM+rOe785jJoMBpAcRxxICFHTeSWZ0LYQqapplK2TAgUJiGcbweaYO3nNHbedcfZP+7CugI70jBMUPamaWYk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- SN4PR01MB7440.prod.exchangelabs.com (2603:10b6:806:1eb::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.32; Mon, 5 Jun 2023 20:29:55 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::5aae:2a5e:15f5:8196]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::5aae:2a5e:15f5:8196%2]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 20:29:55 +0000
-Date:   Mon, 5 Jun 2023 13:29:40 -0700 (PDT)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-cc:     will@kernel.org, mark.rutland@arm.com, suzuki.poulose@arm.com,
-        bwicaksono@nvidia.com, ilkka@os.amperecomputing.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] perf/arm_cspmu: Decouple APMT dependency
-In-Reply-To: <88f97268603e1aa6016d178982a1dc2861f6770d.1685983270.git.robin.murphy@arm.com>
-Message-ID: <f245332e-44d7-255a-4758-a12c21eb7917@os.amperecomputing.com>
-References: <cover.1685983270.git.robin.murphy@arm.com> <88f97268603e1aa6016d178982a1dc2861f6770d.1685983270.git.robin.murphy@arm.com>
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-ClientProxiedBy: CH0PR13CA0048.namprd13.prod.outlook.com
- (2603:10b6:610:b2::23) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+ bh=DOwu1+gZ8vxDq2j/wAavKJawBvXDny5D/yRgn1j4qfo=;
+ b=YPQnICyPywUEkzgES8E2m+IIfR8Px6ery7g5VhQryZxnk05Oyt8l3EmxpbZDpXBvEMULs2DxDh/cb7T/mFzbyiqbgkbLzr6tzrv/Jn3zG2MMD86TeJmBbdEC/EmSSB3BWDAj8V/ttncVpcP3bRwiukZlrqSTrt3tkKuT1EsWw+4=
+Received: from SN6PR04MB4879.namprd04.prod.outlook.com (2603:10b6:805:9b::29)
+ by BY5PR04MB6326.namprd04.prod.outlook.com (2603:10b6:a03:1ed::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
+ 2023 20:32:17 +0000
+Received: from SN6PR04MB4879.namprd04.prod.outlook.com
+ ([fe80::f64d:f407:7c9c:4af0]) by SN6PR04MB4879.namprd04.prod.outlook.com
+ ([fe80::f64d:f407:7c9c:4af0%5]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 20:32:17 +0000
+From:   Charlie Johnston <charlie.johnston@ni.com>
+To:     giometti@enneenne.com
+Cc:     linux-kernel@vger.kernel.org, brenda.streiff@ni.com,
+        Charlie Johnston <charlie.johnston@ni.com>
+Subject: [RFC PATCH] pps: Increase PPS_MAX_SOURCES value.
+Date:   Mon,  5 Jun 2023 15:31:47 -0500
+Message-Id: <20230605203147.694716-1-charlie.johnston@ni.com>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SN6PR2101CA0009.namprd21.prod.outlook.com
+ (2603:10b6:805:106::19) To SN6PR04MB4879.namprd04.prod.outlook.com
+ (2603:10b6:805:9b::29)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR0102MB3590:EE_|SN4PR01MB7440:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45df2764-103d-4ac0-3f2e-08db66039f82
+X-MS-TrafficTypeDiagnostic: SN6PR04MB4879:EE_|BY5PR04MB6326:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9ba1744-f25d-4b6a-6a61-08db6603f463
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U5R43Gjk/xeaAtp7EAs9rvnv1bvgOFEZwv0HIvdJL+edynLCcNHAVI8T4GbXxPZFl5uS2lR+lwatQ6W9F3f2dX9JcgC+zHJ1Cw491UJQxvYlC1buu6cM9ZFqlWyc8cGPQa5eC0nDcDDQJowC2JwQLP4orvrY9p5oPRRcPGf0+yvHNmG6amtyBVyhWIhmisR6oall7XE4xhLSaA5ZwPVkz9h2SgHOfOUuYM2uTBWWBYZDtgPXBsTxCQmL4UgbLu+YevUkwfiDiW8J5d6kFaxrWOohN42euAS2nT179WWkIO7nKYAzNtsnEK0gCW08Sl1uQLiEBARqBeK32QPQwGjb2tHCH4b45wwJaPXx/Iz1neiTY6tWw9IbqM9e6oe8xYH9Rl2gqGbS9neaBNAYV+UP6ZYR9g61T6blMChpScujRtRivjwVGAAV4xC+gxiiH14GtLXSwovuzfxhNwZhovr2qUVnZHemqmwGbxOOvilau08axyTOtcxBP1ANz0xRCTLoTaHVybYP6Zd2gKP33eyOZZaPS0awAadk+n2rYgym64I0G9orR76GPEZj/qdQPpwLyBcRlDO+lnoh1zNOPxDqjk7RKykv0lXrynJy5KQLv+Dvv9VfdBl9HeJsq5m1dmEI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(366004)(376002)(346002)(451199021)(66899021)(478600001)(8936002)(8676002)(5660300002)(86362001)(2906002)(31696002)(4326008)(6916009)(66476007)(66556008)(316002)(66946007)(38100700002)(38350700002)(41300700001)(2616005)(6512007)(6506007)(26005)(186003)(83380400001)(6486002)(52116002)(31686004)(6666004);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: PiAS9JbTJHzQNj84WZuSTW+QeNQRbj3X0yU3gUNRsBZ6jaTo/0zjOhfBXDZMtj3H05MSoFzzbwFK5kFCbybZLzDAV7s1Sd/vMi5jYkTI/Kuu+4hKprIss+H0Gqrk0gUawp/5FHwXVeyBY1n33ur+PzssXzpzpB9puFpczTf/wl7Prt5l72JKlmevohnWZ3t3t0yL8o1ii8y/Du8N4/SL/5azZpraV3tkbRksKJ6pBG3y+HG9ljb0BILk3m75mNSE0O4ZFZhKfRIffH2xqacg4zDeYsU+fNZd4946bgsvpwWaS/ddpN6xXaPyXU1RiZyAFF01l7PZdzQVvJn7j95aRuf9DDgJQvYjpjKo31nKR/v/U2ejXf/ZUqsZMKYlF2mYcqGpuGeJT3U5BvvD/urfDeI9qINbFrNbzSjgFqAxqrKgwFkYO2yv+K/0D7a+ECfwAdU8tBHdU6/N+ztBjiJdSrBTlw5MXWsCygRK8JsgfII73g6KbAWxT38euykSUkYTtOHMKBuN4H14eVY8Fsqgvs8K35BIz6cPnrIKQ6/gRCxCnAS0LDxU4dtTS60VZnOu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR04MB4879.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39850400004)(376002)(346002)(136003)(451199021)(83380400001)(44832011)(478600001)(8676002)(8936002)(41300700001)(316002)(66556008)(66476007)(66946007)(5660300002)(6916009)(4326008)(38100700002)(86362001)(6486002)(36756003)(6666004)(4744005)(2906002)(26005)(6512007)(186003)(6506007)(1076003)(2616005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3QE+n+GP53xGnbu6/zu0w195dkXtFoioRACK5Atea/OFnaDurvYGB9U4Vt60?=
- =?us-ascii?Q?W1hENuVqyLVPRytAT/nTnQmO9qhusBmkWqntPyuwPWY8NKIF6BCI/L1YArYb?=
- =?us-ascii?Q?ccYvqEwRUuCwI/GBKrnnhYWeMcUf1Kw987oNeVC7VL085KvFvDncqsDf4VfZ?=
- =?us-ascii?Q?seVDZeFmk17XbEr602KipRx9G7teRnaSTeZ3YT3qQXgsMCT7kHW4sBSxpBBR?=
- =?us-ascii?Q?3lyOZ7WHCSTUqJJA5OCiuuSy4Td23oU++uZisVOs93ECJh/s75yLKbhNr48U?=
- =?us-ascii?Q?Lp/TpEuRh7eDlfV76XMhDyn2wbbN/pmdpJpO5Pu5anMCVingrb1FXDGPJOv5?=
- =?us-ascii?Q?l6zgbNzZQ8Yjd5TWvl7Nhs750sjZwCnaC3erXVx7DYsFVGJOE846bfF73Ur/?=
- =?us-ascii?Q?HkY9fMShcuYMURx4bGY9/ISqFI0RsKigIQWc5LAXCNaniZmx11qpOmAY6L6h?=
- =?us-ascii?Q?rd4jYD3Var5XfZdTHnp5keO/xHdcsFZOAeZbzFkvG1LUhWOZ9Is1RVlkh3X/?=
- =?us-ascii?Q?KuQedUQdyxfsDvJfUEDJf+GunUwEwlmOQaDUHXV3q9k76jfhvRKwXiv3LB5K?=
- =?us-ascii?Q?yZf6w9z4KE/2k/wjwt7SdXtX7uvwTE5qkH1LtM9C0WmZZcvFhtrNUWPMbpXl?=
- =?us-ascii?Q?JUuX3L0EZSKAOSrHXW09zzZDjEmjxutQgLq9eqsmB7PfjJzNUPuhwDwxiuaO?=
- =?us-ascii?Q?qJ+VOAtK6g469biQGxEZWz6IWqzJT8XdH2jRCp0SCob4JcXu2wvH3bOiAAC5?=
- =?us-ascii?Q?tb7sJCeFg9gFUUUuT/CI84acdov2DXXZ/7LhwpERPIp6+jBYN/i0t86A4YwP?=
- =?us-ascii?Q?a0GggTMXknvMT0tVPr7IpPlHWHTca5bRo8VuUSpbiL7kzFLv+9Smf5VNRo3N?=
- =?us-ascii?Q?jwEv6lPcZfIyHoy8MRSm6YfCl+MkII2yLocZrB4JIWAWGyywipZF4FFHfbLL?=
- =?us-ascii?Q?mkBR3RSwPAkuqWp+VWZlcICXf1w1q5x6tZjAgfaErMw9gS/Cq1+l7Yv/ZKSX?=
- =?us-ascii?Q?Wgj8ORvGt+WhhHTYHZ7DsCaO+k3SSDGcnHnxwuQDpkSgg8AZ51F7vI54LB4Q?=
- =?us-ascii?Q?cHUH2BpzSSXb/xHUouDPniApVLNWrcFmNms+hqSXf80XiBcLRFR3FOnDRwVj?=
- =?us-ascii?Q?w3ZrmPee8vMiMYd5w5Z0lFfIlfgIiNY1ovHZnpmWKm+VZt0P9VkMMEt86QoY?=
- =?us-ascii?Q?hVFHlIxWKE37OGuIPyTZdM0trhWfgLq4ZZ9i8SKOGLK9Dlh1w5olcu8BxIYZ?=
- =?us-ascii?Q?1dXrO4/Q0wJeJb9knlRYX0KfEsRw9ETgiTP8jOiI2q4hi6DycXc7ekyYKTn6?=
- =?us-ascii?Q?yD+GFstZzWNnNvy2p+XIwvd+oAJskDr3F5PMDWBIc5LU+8wSJczalKwYJIRI?=
- =?us-ascii?Q?y+aJULefJOI+B4p7UeG9ApJ05/dWlO3eGP05NMBdSvzyLppDbJydDG1Zij3M?=
- =?us-ascii?Q?rQFT2GUp+Z7yfGL5/7Lgv2Ny3/2XlQ1nq2/+pjA1CnCRZf3NWpUdZvwYiXex?=
- =?us-ascii?Q?y60afdRRCIyqeHWYzwB55iMY8Z4j9RZqwRqzy/FGwrFQ5LTlKegCjGgjTwXa?=
- =?us-ascii?Q?oCpIiyNokgD8jLhKRRjC4yqbtebbjIy8muvxq49LkAp6YJIYdtu8IVizegk5?=
- =?us-ascii?Q?/mxgAEuYDxw4p1YiDuMnwyE=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45df2764-103d-4ac0-3f2e-08db66039f82
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?onEVan/EYb1ODsMfag8C4eiMW/LzEU8PTT/hsXh0RcBfZLT83VB41aQF1Pf4?=
+ =?us-ascii?Q?gdOhBL+JkbmYwAcWiV1aUS0VQShsnIuDK1ahUnE3S1RcXh0iAkMnwVDpO1AA?=
+ =?us-ascii?Q?5+oNp578cwdBziTXe43jDa2DRRQTVNZEP4kpJkuDcgEpJNBcqSFIdNar/q9m?=
+ =?us-ascii?Q?O13onJ/GaaRNhBUFB1kAc4XKBvTNaZ2cCaFeLn6rRkYJ10G6hHv8je0HJ543?=
+ =?us-ascii?Q?yDYMDJCQqi9u/YwyCMlfQSfCoItdVhfHz8LQgQ1HbvTLixBwEelx2YaXP+Mt?=
+ =?us-ascii?Q?qJU2e72YQmBcHxFjaCQkzLMhddH4wp6u88otqEjfBvlVj/5qvyKoAd9+ImBj?=
+ =?us-ascii?Q?EKVuI6v04M4kY8fAca1FDJYh2cY5cG7s5BJuEFn3PiEbkoja12ZGo1iXFeux?=
+ =?us-ascii?Q?FhWiTlyFqvE1QmHHabTU/7pBhZ2wl9ftNovSJsEjuicUxs34HhUfLgyfDXhz?=
+ =?us-ascii?Q?TFgG/XB9iQzw19TrEz6NaA4KgaRpkT3eXnXQbybZb1wGedrhkWuhH/RZh1mS?=
+ =?us-ascii?Q?h15FrKqmHKKlO5INiKANYLuMJlOAPwhGWtFNCpggA8Og0TtIFO6XIEdJg7Ra?=
+ =?us-ascii?Q?mNLJQkUvt2ClLd8am0SGDWB84MSl2+cvxGh2TPypkSVAed1FJgNR0olUJva7?=
+ =?us-ascii?Q?NCPKkAt8Hy/GggOwevDBtr5FvyQC/aduy4nBSkJR9XYt7x8CwNE5XMrnlbZu?=
+ =?us-ascii?Q?hae3Y/M5YI5+HitKL4kL6iBstYDXzF8yRKbMaoA5cBDlx0wcUvsAfl8tCoQA?=
+ =?us-ascii?Q?fysFWtK+tvBEMPi03wouKy/eSEf1iOgo6qTzmNyIiiXwrn6cLgVIVdCCeKyl?=
+ =?us-ascii?Q?lJLZCVyGaA3enQUzHI63i7P1aPj0GQSy9bemufG8eBM8x1Sq9EmOyrUNuNF9?=
+ =?us-ascii?Q?raZ7c+o4ibsb6mW8UqGGaCeI3O4t4Lo2f9MFhc3C+C/1DoIbvFvZB2zZGTK5?=
+ =?us-ascii?Q?E3IbQhnu1GEPcI+4+a5PlcSHZ83QNlLXqNZONgMAU4Y9pfQRjw5hW/zInRUj?=
+ =?us-ascii?Q?U2k4DMxwONkkjEuW8iDdAx8QUXiShbdqca+Kp0Eg2x2KATkEMuVEawI49FhA?=
+ =?us-ascii?Q?VupeHBnh1JYuEgDHvDjNDtsTYS1D1OR4eRCfmBwe+0rTdFQ0kXUQ4Ll7ODsi?=
+ =?us-ascii?Q?/uKsCo5Kkk9Mw5RV4VoTq7sOy1A8jAQUtJpm+aUmASejyt0vqTAbU4fBUCdB?=
+ =?us-ascii?Q?KlZ+e9zi7PImafMI9sbATsVmQvRTVlQMjExDvLaHoMdVu1VXkB9v+jzWd5x+?=
+ =?us-ascii?Q?8t+1HV2r+VFMGGB5YffbQqokQLTjfaGVzGIUNpgJaT6ZLRfjOlOhShQMCDtj?=
+ =?us-ascii?Q?c8rMIuXMqijug1ZgBQ0dKAtW/O+4QTKyaH2r2c5pdY5cYbFmPbkBmQFz6FyL?=
+ =?us-ascii?Q?DnfAupG0bshKxxPaFuUnIlUv/Taw/xKVQk4RjvJIbBCm0NFs4HPzwYT3iIji?=
+ =?us-ascii?Q?2FsRffvr5IN60MsjE/esgr7Ng69zKGaA41FI+kf0p53qJMRBEPav9vtAK+aJ?=
+ =?us-ascii?Q?Cd3oCZRDE47TDmV5XWGVU7DTWe/QWEV4F9mxJy8gDrqSDB6bfrsVShFtiL59?=
+ =?us-ascii?Q?QUx/57/sFj8zWu+MkAwzRAyZVBeTqfdP/SiQARez2fg94ifEyORR+nqBHMMk?=
+ =?us-ascii?Q?Hg=3D=3D?=
+X-OriginatorOrg: ni.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9ba1744-f25d-4b6a-6a61-08db6603f463
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR04MB4879.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 20:29:55.2077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 20:32:17.5138
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-Id: 87ba1f9a-44cd-43a6-b008-6fdb45a5204e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KvEILuOEMFMJrqpWeY6GX9HcLSddsqOLi1sGPkQox0xV5P4fyXW4mpZDWrNsKPkLUpGe4+wuPw/lpKa9EjlV8kuobnCf7o5c0ANxcgWMBvdvUWxoUKgxsIUjkSpz/anc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR01MB7440
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3YNR7FoI1CtiNlbWehrwf1iCdbp6jEv8GBwqymLc6fZq7Qq7tI63uVNkwkEFgiQcRibNRjqoN7FLOXTKawl3zQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6326
+X-Proofpoint-GUID: -pfKLAO1mLekgMNh1U4Yuw3TUU1S93FU
+X-Proofpoint-ORIG-GUID: -pfKLAO1mLekgMNh1U4Yuw3TUU1S93FU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-05_32,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_policy_notspam policy=outbound_policy score=31 phishscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 lowpriorityscore=0
+ clxscore=1011 impostorscore=0 malwarescore=0 bulkscore=0 mlxlogscore=220
+ spamscore=1 mlxscore=1 classifier=spam adjust=30 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306050176
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For consistency with what ptp uses for minors, this
+change sets PPS_MAX_SOURCES to MINORMASK + 1.
 
-On Mon, 5 Jun 2023, Robin Murphy wrote:
-> The functional paths of the driver need not care about ACPI, so abstract
-> the property of atomic doubleword access as its own flag (repacking the
-> structure for a better fit). We also do not need to go poking directly
-> at the APMT for standard resources which the ACPI layer has already
-> dealt with, so deal with the optional MMIO page and interrupt in the
-> normal firmware-agnostic manner. The few remaining portions of probing
-> that *are* APMT-specific can still easily retrieve the APMT pointer as
-> needed without us having to carry a duplicate copy around everywhere.
->
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+The PPS_MAX_SOURCES value is currently set to 16. In
+some cases this was not sufficient for a system. For
+example, a system with multiple (4+) PCIe cards each
+with 4 PTP-capable ethernet interfaces could run out
+of the available PPS major:minors if each interface
+registers a PPS source.
 
-Reviewed-and-tested-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Signed-off-by: Charlie Johnston <charlie.johnston@ni.com>
+---
+ include/uapi/linux/pps.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers, Ilkka
+diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
+index 009ebcd8ced5..85f472330da8 100644
+--- a/include/uapi/linux/pps.h
++++ b/include/uapi/linux/pps.h
+@@ -26,7 +26,7 @@
+ #include <linux/types.h>
+ 
+ #define PPS_VERSION		"5.3.6"
+-#define PPS_MAX_SOURCES		16		/* should be enough... */
++#define PPS_MAX_SOURCES		(MINORMASK + 1)
+ 
+ /* Implementation note: the logical states ``assert'' and ``clear''
+  * are implemented in terms of the chip register, i.e. ``assert''
+-- 
+2.30.2
 
->
-> ---
-> v2: Fix platdata dereferences, clean up now-unused acpi.h include too.
-> ---
-> drivers/perf/arm_cspmu/arm_cspmu.c | 54 ++++++++++--------------------
-> drivers/perf/arm_cspmu/arm_cspmu.h |  5 ++-
-> 2 files changed, 19 insertions(+), 40 deletions(-)
->
-> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-> index 3b91115c376d..38e1170af347 100644
-> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
-> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-> @@ -100,10 +100,6 @@
-> #define ARM_CSPMU_ACTIVE_CPU_MASK		0x0
-> #define ARM_CSPMU_ASSOCIATED_CPU_MASK		0x1
->
-> -/* Check if field f in flags is set with value v */
-> -#define CHECK_APMT_FLAG(flags, f, v) \
-> -	((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
-> -
-> /* Check and use default if implementer doesn't provide attribute callback */
-> #define CHECK_DEFAULT_IMPL_OPS(ops, callback)			\
-> 	do {							\
-> @@ -121,6 +117,11 @@
->
-> static unsigned long arm_cspmu_cpuhp_state;
->
-> +static struct acpi_apmt_node *arm_cspmu_apmt_node(struct device *dev)
-> +{
-> +	return *(struct acpi_apmt_node **)dev_get_platdata(dev);
-> +}
-> +
-> /*
->  * In CoreSight PMU architecture, all of the MMIO registers are 32-bit except
->  * counter register. The counter register can be implemented as 32-bit or 64-bit
-> @@ -155,12 +156,6 @@ static u64 read_reg64_hilohi(const void __iomem *addr, u32 max_poll_count)
-> 	return val;
-> }
->
-> -/* Check if PMU supports 64-bit single copy atomic. */
-> -static inline bool supports_64bit_atomics(const struct arm_cspmu *cspmu)
-> -{
-> -	return CHECK_APMT_FLAG(cspmu->apmt_node->flags, ATOMIC, SUPP);
-> -}
-> -
-> /* Check if cycle counter is supported. */
-> static inline bool supports_cycle_counter(const struct arm_cspmu *cspmu)
-> {
-> @@ -319,7 +314,7 @@ static const char *arm_cspmu_get_name(const struct arm_cspmu *cspmu)
-> 	static atomic_t pmu_idx[ACPI_APMT_NODE_TYPE_COUNT] = { 0 };
->
-> 	dev = cspmu->dev;
-> -	apmt_node = cspmu->apmt_node;
-> +	apmt_node = arm_cspmu_apmt_node(dev);
-> 	pmu_type = apmt_node->type;
->
-> 	if (pmu_type >= ACPI_APMT_NODE_TYPE_COUNT) {
-> @@ -396,8 +391,8 @@ static const struct impl_match impl_match[] = {
-> static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
-> {
-> 	int ret;
-> -	struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
-> 	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
-> +	struct acpi_apmt_node *apmt_node = arm_cspmu_apmt_node(cspmu->dev);
-> 	const struct impl_match *match = impl_match;
->
-> 	/*
-> @@ -719,7 +714,7 @@ static u64 arm_cspmu_read_counter(struct perf_event *event)
-> 		offset = counter_offset(sizeof(u64), event->hw.idx);
-> 		counter_addr = cspmu->base1 + offset;
->
-> -		return supports_64bit_atomics(cspmu) ?
-> +		return cspmu->has_atomic_dword ?
-> 			       readq(counter_addr) :
-> 			       read_reg64_hilohi(counter_addr, HILOHI_MAX_POLL);
-> 	}
-> @@ -910,24 +905,18 @@ static struct arm_cspmu *arm_cspmu_alloc(struct platform_device *pdev)
-> {
-> 	struct acpi_apmt_node *apmt_node;
-> 	struct arm_cspmu *cspmu;
-> -	struct device *dev;
-> -
-> -	dev = &pdev->dev;
-> -	apmt_node = *(struct acpi_apmt_node **)dev_get_platdata(dev);
-> -	if (!apmt_node) {
-> -		dev_err(dev, "failed to get APMT node\n");
-> -		return NULL;
-> -	}
-> +	struct device *dev = &pdev->dev;
->
-> 	cspmu = devm_kzalloc(dev, sizeof(*cspmu), GFP_KERNEL);
-> 	if (!cspmu)
-> 		return NULL;
->
-> 	cspmu->dev = dev;
-> -	cspmu->apmt_node = apmt_node;
-> -
-> 	platform_set_drvdata(pdev, cspmu);
->
-> +	apmt_node = arm_cspmu_apmt_node(dev);
-> +	cspmu->has_atomic_dword = apmt_node->flags & ACPI_APMT_FLAGS_ATOMIC;
-> +
-> 	return cspmu;
-> }
->
-> @@ -935,11 +924,9 @@ static int arm_cspmu_init_mmio(struct arm_cspmu *cspmu)
-> {
-> 	struct device *dev;
-> 	struct platform_device *pdev;
-> -	struct acpi_apmt_node *apmt_node;
->
-> 	dev = cspmu->dev;
-> 	pdev = to_platform_device(dev);
-> -	apmt_node = cspmu->apmt_node;
->
-> 	/* Base address for page 0. */
-> 	cspmu->base0 = devm_platform_ioremap_resource(pdev, 0);
-> @@ -950,7 +937,7 @@ static int arm_cspmu_init_mmio(struct arm_cspmu *cspmu)
->
-> 	/* Base address for page 1 if supported. Otherwise point to page 0. */
-> 	cspmu->base1 = cspmu->base0;
-> -	if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
-> +	if (platform_get_resource(pdev, IORESOURCE_MEM, 1)) {
-> 		cspmu->base1 = devm_platform_ioremap_resource(pdev, 1);
-> 		if (IS_ERR(cspmu->base1)) {
-> 			dev_err(dev, "ioremap failed for page-1 resource\n");
-> @@ -1047,19 +1034,14 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
-> 	int irq, ret;
-> 	struct device *dev;
-> 	struct platform_device *pdev;
-> -	struct acpi_apmt_node *apmt_node;
->
-> 	dev = cspmu->dev;
-> 	pdev = to_platform_device(dev);
-> -	apmt_node = cspmu->apmt_node;
->
-> 	/* Skip IRQ request if the PMU does not support overflow interrupt. */
-> -	if (apmt_node->ovflw_irq == 0)
-> -		return 0;
-> -
-> -	irq = platform_get_irq(pdev, 0);
-> +	irq = platform_get_irq_optional(pdev, 0);
-> 	if (irq < 0)
-> -		return irq;
-> +		return irq == -ENXIO ? 0 : irq;
->
-> 	ret = devm_request_irq(dev, irq, arm_cspmu_handle_irq,
-> 			       IRQF_NOBALANCING | IRQF_NO_THREAD, dev_name(dev),
-> @@ -1103,13 +1085,11 @@ static inline int arm_cspmu_find_cpu_container(int cpu, u32 container_uid)
->
-> static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
-> {
-> -	struct device *dev;
-> 	struct acpi_apmt_node *apmt_node;
-> 	int affinity_flag;
-> 	int cpu;
->
-> -	dev = cspmu->pmu.dev;
-> -	apmt_node = cspmu->apmt_node;
-> +	apmt_node = arm_cspmu_apmt_node(cspmu->dev);
-> 	affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
->
-> 	if (affinity_flag == ACPI_APMT_FLAGS_AFFINITY_PROC) {
-> @@ -1131,7 +1111,7 @@ static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
-> 	}
->
-> 	if (cpumask_empty(&cspmu->associated_cpus)) {
-> -		dev_dbg(dev, "No cpu associated with the PMU\n");
-> +		dev_dbg(cspmu->dev, "No cpu associated with the PMU\n");
-> 		return -ENODEV;
-> 	}
->
-> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
-> index 51323b175a4a..83df53d1c132 100644
-> --- a/drivers/perf/arm_cspmu/arm_cspmu.h
-> +++ b/drivers/perf/arm_cspmu/arm_cspmu.h
-> @@ -8,7 +8,6 @@
-> #ifndef __ARM_CSPMU_H__
-> #define __ARM_CSPMU_H__
->
-> -#include <linux/acpi.h>
-> #include <linux/bitfield.h>
-> #include <linux/cpumask.h>
-> #include <linux/device.h>
-> @@ -118,16 +117,16 @@ struct arm_cspmu_impl {
-> struct arm_cspmu {
-> 	struct pmu pmu;
-> 	struct device *dev;
-> -	struct acpi_apmt_node *apmt_node;
-> 	const char *name;
-> 	const char *identifier;
-> 	void __iomem *base0;
-> 	void __iomem *base1;
-> -	int irq;
-> 	cpumask_t associated_cpus;
-> 	cpumask_t active_cpu;
-> 	struct hlist_node cpuhp_node;
-> +	int irq;
->
-> +	bool has_atomic_dword;
-> 	u32 pmcfgr;
-> 	u32 num_logical_ctrs;
-> 	u32 num_set_clr_reg;
-> -- 
-> 2.39.2.101.g768bb238c484.dirty
->
->
