@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0E07224B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AC87224C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjFELhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S232624AbjFELiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbjFELhD (ORCPT
+        with ESMTP id S232630AbjFELiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:37:03 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828A8E9;
-        Mon,  5 Jun 2023 04:37:00 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so5335270276.3;
-        Mon, 05 Jun 2023 04:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685965019; x=1688557019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DTbdt8ORnl1B8sC3y3KbFpUIsRJM7YqW2sLcDSkmXLA=;
-        b=RSRSthOlt6PQelpdb653+u9BcwAhAKhp0/+nPIUgfOkN1q9MGczP2bAid7XFUwr0bI
-         qqKEExl1+wDF6xDqJ9D6mM6sPJF0wdyCgz9s5utLTl4RCivebhiN3reZKzqXImJYN5zk
-         qWXTu4+gx4924dXVeZLS7gbEo+1EkJORAthSacDKR3SIq2RbPr6JJqsR6L3MEm4oxWed
-         iHYVTTuBWrRo3TUUZ6Svt5lI5Im8UVAEFO/xgyUymvWkS9kzbbv7auZnFUwLRXCfFMsg
-         2EA4g6tPmfgGds0wCDXATm/GXXN6Rx/28Ddk7UVpiDvTGlYSWObFwd+dQ3xfoZy4cJ4D
-         DyHQ==
+        Mon, 5 Jun 2023 07:38:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25382F7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685965028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fAIQEofIMC7v8RzKIvVCVe2spFdmLoNCeLo4DX8oh/0=;
+        b=WVZtc8+wZQgfAEElvxZ5NMYHBHnUMwUIiOl3hrgiaOJvO9mvxVVvsDrVx32Qd1AnfJH3YW
+        5pYIcY53c42JR5wbMcStZkXjJtciabapKX/XF6cH1kDvqz9FEWba7fPBwnNq43CVAzmW9S
+        sb7rnC2GVJRTOO78Gm+iigC+BZIsJFw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-287-_vGzmP2NNl-hpfweRr2Ppw-1; Mon, 05 Jun 2023 07:37:07 -0400
+X-MC-Unique: _vGzmP2NNl-hpfweRr2Ppw-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so22780685e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 04:37:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685965019; x=1688557019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DTbdt8ORnl1B8sC3y3KbFpUIsRJM7YqW2sLcDSkmXLA=;
-        b=f+k1yCt3A/DvSQ+FbahbMWM22y6sfFqJJREf5BB1wL84kRJntkCe5bvtvnegDdvgwH
-         RTLk/yIgCxd16uSLpd7UqHU6fqhCu2OnVzcszDcPRfbNe+sOJt+pJJnQi4pDkF43ezGs
-         IVFwoosg6tAFnXhhZdIi3LAm2dV3nWAcQZTnPk1yRlvmSdqGppDrD4uE53KXEgZ8C8Uy
-         6JsX8W5jkxy+idbIvhLnEiassNyfIFrY8/reGgaa9zbDIjYp6lvDjiYSbZ/j5FGsoOGf
-         6txNZyK8zeKRRC3xASO5Idl4XGBCLGPiBgKsJ63pVPVagGONPX4IJZde4pOYsp1Ua1rJ
-         2mAw==
-X-Gm-Message-State: AC+VfDyRYC77JAdAdV9QCfLY7BhJbRS6G6xcSkYbhiwNLb6OJTEmYzr4
-        96sAF7wrTWPmBjfeclZjrrX97PR7VJ1WP+BJk4g=
-X-Google-Smtp-Source: ACHHUZ5xPibmrkFS0SemXYrWTmceoht+d1JqfD+FxvGUN4R5p2/Q5Yc++3M4FkQsmc72rtjo2TvPFiIs7bXWUC0Y1As=
-X-Received: by 2002:a25:74c2:0:b0:ba1:dfba:1d12 with SMTP id
- p185-20020a2574c2000000b00ba1dfba1d12mr13577515ybc.29.1685965019650; Mon, 05
- Jun 2023 04:36:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685965026; x=1688557026;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fAIQEofIMC7v8RzKIvVCVe2spFdmLoNCeLo4DX8oh/0=;
+        b=YBbM9pW27yMxWXesTxAAOvI4GGa+LEOPKNbFCiEfx5JGIqxo89d0UOYAqKc4jnbhLV
+         SLUwMYwCUZIvHTnbEF4WXO3sbEb9h8YSAgiqdHIMXkQwpdopOlFGSCQvy/6QGE1ZizAr
+         WcSks2B8u3+2p9dPRJa9eUTfV0wlxMhszN/dV4b34IfTBwPn1JkJCXcnMLNV8f3qc7Xo
+         x39zEEVJtdAWz8KomhuyZ4OJbU7tp1WSI1LDYzVeOtVbuAt4REpJS2dg0IMh6eOpDNf/
+         ne3j8FMHKmOcbt72wlt5kxUqbMg3l6vt1KuyNFvd5+31PAuiWovD0Ko5Xo7AUiN1jUIg
+         fgKw==
+X-Gm-Message-State: AC+VfDxLcby79cSE+z5Zwc9ptjWJziPPulqSQvEXVNm6pR9PjpB3Ef/i
+        LM1TvaRfdMIgY/2lINVHlZNnc1sGeZlxDiUZtBDwaAVyuNVQB3D8n2nbRZPnChf3Y7xRuM5Pv3t
+        o+uBN1kV9uawxSuk81s4ZW/0Y
+X-Received: by 2002:a7b:ce89:0:b0:3f6:552:8722 with SMTP id q9-20020a7bce89000000b003f605528722mr6649061wmj.18.1685965026172;
+        Mon, 05 Jun 2023 04:37:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5VGDnaIen5lKCJ5CKH0EbB5zYnqK07QWbo8gZv5KqwMjzuCPkiSLwEQ2p/qW8E3PH5x2JDyg==
+X-Received: by 2002:a7b:ce89:0:b0:3f6:552:8722 with SMTP id q9-20020a7bce89000000b003f605528722mr6649046wmj.18.1685965025766;
+        Mon, 05 Jun 2023 04:37:05 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c737:8f00:ed9:16b8:4e22:5820? (p200300cbc7378f000ed916b84e225820.dip0.t-ipconnect.de. [2003:cb:c737:8f00:ed9:16b8:4e22:5820])
+        by smtp.gmail.com with ESMTPSA id u4-20020a7bc044000000b003f70a7b4537sm14074087wmc.36.2023.06.05.04.37.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:37:05 -0700 (PDT)
+Message-ID: <a3a3b21e-df1c-08bc-2860-8a53134ec172@redhat.com>
+Date:   Mon, 5 Jun 2023 13:37:04 +0200
 MIME-Version: 1.0
-References: <20230602101819.2134194-1-changxian.cqs@antgroup.com>
- <20230602101819.2134194-2-changxian.cqs@antgroup.com> <5cbf5dcc-50e2-f6f6-262b-96ac1a8ebc52@gmail.com>
-In-Reply-To: <5cbf5dcc-50e2-f6f6-262b-96ac1a8ebc52@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 5 Jun 2023 13:36:48 +0200
-Message-ID: <CANiq72namC6dtnDfY-AQXU-UNwsRU1K3sS6HWY-jU9myLR3SoA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] rust: kernel: add ScatterList abstraction
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     Qingsong Chen <changxian.cqs@antgroup.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Asahi Lina <lina@asahilina.net>, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 06/11] selftests/mm: fix two -Wformat-security warnings
+ in uffd builds
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230603021558.95299-1-jhubbard@nvidia.com>
+ <20230603021558.95299-7-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230603021558.95299-7-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,20 +88,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:47=E2=80=AFPM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
->
-> This comment has some typos, but luckily there's the `typos` tool [1]
-> out there to help us.
+On 03.06.23 04:15, John Hubbard wrote:
+> The uffd tests generate two compile time warnings from clang's
+> -Wformat-security setting. These trigger at the call sites for
+> uffd_test_start() and uffd_test_skip().
+> 
+> 1) Fix the uffd_test_start() issue by removing the intermediate
+> test_name variable (thanks to David Hildenbrand for showing how to do
+> this).
+> 
+> 2) Fix the uffd_test_skip() issue by observing that there is no need for
+> a macro and a variable args approach, because all callers of
+> uffd_test_skip() pass in a simple char* string, without any format
+> specifiers. So just change uffd_test_skip() into a regular C function.
+> 
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>   tools/testing/selftests/mm/uffd-unit-tests.c | 16 ++++++----------
+>   1 file changed, 6 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index 269c86768a02..04d91f144d1c 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -109,12 +109,11 @@ static void uffd_test_pass(void)
+>   		ksft_inc_fail_cnt();		\
+>   	} while (0)
+>   
+> -#define  uffd_test_skip(...)  do {		\
+> -		printf("skipped [reason: ");	\
+> -		printf(__VA_ARGS__);		\
+> -		printf("]\n");			\
+> -		ksft_inc_xskip_cnt();		\
+> -	} while (0)
+> +static void uffd_test_skip(const char *message)
+> +{
+> +	printf("skipped [reason: %s]\n", message);
+> +	ksft_inc_xskip_cnt();
+> +}
+>   
+>   /*
+>    * Returns 1 if specific userfaultfd supported, 0 otherwise.  Note, we'll
+> @@ -1149,7 +1148,6 @@ int main(int argc, char *argv[])
+>   	uffd_test_case_t *test;
+>   	mem_type_t *mem_type;
+>   	uffd_test_args_t args;
+> -	char test_name[128];
+>   	const char *errmsg;
+>   	int has_uffd, opt;
+>   	int i, j;
+> @@ -1192,10 +1190,8 @@ int main(int argc, char *argv[])
+>   			mem_type = &mem_types[j];
+>   			if (!(test->mem_targets & mem_type->mem_flag))
+>   				continue;
+> -			snprintf(test_name, sizeof(test_name),
+> -				 "%s on %s", test->name, mem_type->name);
+>   
+> -			uffd_test_start(test_name);
+> +			uffd_test_start("%s on %s", test->name, mem_type->name);
+>   			if (!uffd_feature_supported(test)) {
+>   				uffd_test_skip("feature missing");
+>   				continue;
 
-`scripts/checkpatch.pl` has `--codespell`, but the main dictionary
-does not have it, so I sent:
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-    https://github.com/codespell-project/codespell/pull/2869
-    https://github.com/codespell-project/codespell/pull/2870
-
-Since `typos` appears to import `codespell` main dictionary, I guess
-that will eventually help both tools.
-
+-- 
 Cheers,
-Miguel
+
+David / dhildenb
+
