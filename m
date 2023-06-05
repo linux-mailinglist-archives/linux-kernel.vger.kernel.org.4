@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A97722DFB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1E9722DFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjFERyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
+        id S231254AbjFER4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjFERyp (ORCPT
+        with ESMTP id S229974AbjFER4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:54:45 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25D1113
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:54:28 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-970056276acso762407366b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 10:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685987667; x=1688579667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I0rxC/AXZcDVD2p/332O86/6MCSD5wZD13+g0GaeIO8=;
-        b=KHNZv6ltj0ezKfmsQaupIYuKlJIvLTAfNfpsI5wcLa+/yHxK/k4k870asv3XmhoqYa
-         sNQb9ZBniophZjwPKlrN2LTO1viassQOLNrE0KJ7qen10QMZQ57Onr7zMuqTPhwQGuUc
-         TAfMMfzNxMvHkDpCxRFwefg63hbvFo52LOxNLCGJKfL4RYQY1+amKeYbRjXsaWi7l3IX
-         2HyyuBiguCGIobVNozDBEngq4kslCdAAJNNOHL7KfAzGzGwJ2avrUEL8GKCba+i3ig3j
-         MfUw6xZbETNbVkj0zmg6m0QglxcBrrYpi5u11UvD1kFKsrrX0ECvn/59XiUQjqZwH/Xu
-         3vDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685987667; x=1688579667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I0rxC/AXZcDVD2p/332O86/6MCSD5wZD13+g0GaeIO8=;
-        b=L+cWU+18mJ7Ea6OxA8YFjC2hybtL4MppIbmi3togdsaLDJVAmPvihZwxM1w3dY/Evd
-         v50C0izdjRafhtW/6h2rJRKl7eAuHswpQOA7gyxY0I6CiIJej9jbvge8YixxpMVzSGdh
-         dKUhJyFnioR96RQErcjXZwCQ8RbrMSVHiYOeAt/PRT4DvcJ8Q6eZ0eTDjGBtjBIOGJhW
-         wTLrSC04qqimnwfuEwypdf6nQN6nKOn0fqEuJbCKIQuaocwyC2N9eS4lexFrgwkqpGGM
-         hzXRh6AA3YIm19OVkz3I9J4/YItWoTRu4ATtZ+wgC1bJazqLxetkji147nN3hs1PoffN
-         Vxdg==
-X-Gm-Message-State: AC+VfDw7jKqYBPD+YrZ0FZ4tbatDcBU4Ob7W4/8SjSgg+vs/M0OI7+La
-        UDGvAZfIh2GMxBjm6RuUnkAX04CgqDdDRRuBQy8G0Q==
-X-Google-Smtp-Source: ACHHUZ7XfC1DgJ1vxU9jd4Il/BLV6t7V1cC3bN5yBhKGVQrT58fFZ8dnfxHNlnoNvgBcdPQ6N4l+ZCFTha5QEtAzHsQ=
-X-Received: by 2002:a17:907:97cf:b0:96a:8412:a44d with SMTP id
- js15-20020a17090797cf00b0096a8412a44dmr7560270ejc.36.1685987666868; Mon, 05
- Jun 2023 10:54:26 -0700 (PDT)
+        Mon, 5 Jun 2023 13:56:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C572ED3;
+        Mon,  5 Jun 2023 10:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qtXPOVUwv/0vffgfXDo1OC5mmgba+WXT0tEe3GMrRTI=; b=vWHXAWSWQaOKQtVQyiIM8w32o5
+        S9d50NCVYfTYOM1+rN+OUZPNKvAOhitkDF7uPC+JV2D/KIzK2ptB2xAOnCRmGIwXPOeI/c+6inMet
+        UruFZyQtCN6T1+D1P8+CA7QJzvEsUTM9c5PtOS7p6qAkEUeh77oUwDkxfK8d4cmxm8IEJrQNJpI1c
+        GhYkpetIQgRvubjdY9OYWxSErJpGZGrt1skMwaeqQmEPQcy4Er6NtzijDXgm6msfu8qHI0hP+xrro
+        WUA4QuxIRDdYCO0s9Nge+slA6vofeU1XlKMBOfdrB1np7SJk1B3GiBNiL5iFl0Re+SsDjvG9t+u7i
+        JxOqPVKg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q6ERa-00CFr5-En; Mon, 05 Jun 2023 17:56:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2265A30031B;
+        Mon,  5 Jun 2023 19:56:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F0D25244F9E2F; Mon,  5 Jun 2023 19:56:36 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 19:56:36 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, x86@kernel.org,
+        kprateek.nayak@amd.com
+Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
+Message-ID: <20230605175636.GA4253@hirez.programming.kicks-ass.net>
+References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
+ <CGME20230605152531eucas1p2a10401ec2180696cc9a5f2e94a67adca@eucas1p2.samsung.com>
+ <3051ad44-0ac3-e77b-3178-fac7cac3b3f2@samsung.com>
 MIME-Version: 1.0
-References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
- <CANgfPd9kKxq1146F3mX_u7KCC0HrWfgYrxZd6c9Dh7s19E4Eog@mail.gmail.com>
-In-Reply-To: <CANgfPd9kKxq1146F3mX_u7KCC0HrWfgYrxZd6c9Dh7s19E4Eog@mail.gmail.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 5 Jun 2023 10:53:50 -0700
-Message-ID: <CAL715WLyuQDg7LBmj=xqUbqZC_x2ZGUb4N6qZ_tvPhAAzggYng@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3051ad44-0ac3-e77b-3178-fac7cac3b3f2@samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 10:17=E2=80=AFAM Ben Gardon <bgardon@google.com> wro=
-te:
->
-> On Mon, Jun 5, 2023 at 9:55=E2=80=AFAM Jim Mattson <jmattson@google.com> =
-wrote:
+On Mon, Jun 05, 2023 at 05:25:30PM +0200, Marek Szyprowski wrote:
+> On 31.05.2023 14:04, tip-bot2 for Peter Zijlstra wrote:
+> > The following commit has been merged into the sched/core branch of tip:
 > >
-> > On Sun, Jun 4, 2023 at 5:43=E2=80=AFPM Mingwei Zhang <mizhang@google.co=
-m> wrote:
-> > >
-> > > Remove KVM MMU write lock when accessing indirect_shadow_pages counte=
-r when
-> > > page role is direct because this counter value is used as a coarse-gr=
-ained
-> > > heuristics to check if there is nested guest active. Racing with this
-> > > heuristics without mmu lock will be harmless because the correspondin=
-g
-> > > indirect shadow sptes for the GPA will either be zapped by this threa=
-d or
-> > > some other thread who has previously zapped all indirect shadow pages=
- and
-> > > makes the value to 0.
-> > >
-> > > Because of that, remove the KVM MMU write lock pair to potentially re=
-duce
-> > > the lock contension and improve the performance of nested VM. In addi=
-tion
-> > > opportunistically change the comment of 'direct mmu' to make the
-> > > description consistent with other places.
-> > >
-> > > Reported-by: Jim Mattson <jmattson@google.com>
-> > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> > > ---
-> > >  arch/x86/kvm/x86.c | 10 ++--------
-> > >  1 file changed, 2 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 5ad55ef71433..97cfa5a00ff2 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -8585,15 +8585,9 @@ static bool reexecute_instruction(struct kvm_v=
-cpu *vcpu, gpa_t cr2_or_gpa,
-> > >
-> > >         kvm_release_pfn_clean(pfn);
-> > >
-> > > -       /* The instructions are well-emulated on direct mmu. */
-> > > +       /* The instructions are well-emulated on Direct MMUs. */
->
-> Nit: Internally within Google, on older kernels, we have the "Direct
-> MMU" which was the precursor to the TDP MMU we all know and love. This
-> comment however does not refer to the Direct MMU. Direct here just
-> refers to the direct role bit being set. Since it's just descriptive,
-> direct should not be capitalized in this comment, so no reason to
-> change this line.
+> > Commit-ID:     c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
+> > Gitweb:        https://git.kernel.org/tip/c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
+> > Author:        Peter Zijlstra <peterz@infradead.org>
+> > AuthorDate:    Tue, 30 May 2023 13:20:46 +02:00
+> > Committer:     Peter Zijlstra <peterz@infradead.org>
+> > CommitterDate: Tue, 30 May 2023 22:46:27 +02:00
+> >
+> > sched/fair: Multi-LLC select_idle_sibling()
+> >
+> > Tejun reported that when he targets workqueues towards a specific LLC
+> > on his Zen2 machine with 3 cores / LLC and 4 LLCs in total, he gets
+> > significant idle time.
+> >
+> > This is, of course, because of how select_idle_sibling() will not
+> > consider anything outside of the local LLC, and since all these tasks
+> > are short running the periodic idle load balancer is ineffective.
+> >
+> > And while it is good to keep work cache local, it is better to not
+> > have significant idle time. Therefore, have select_idle_sibling() try
+> > other LLCs inside the same node when the local one comes up empty.
+> >
+> > Reported-by: Tejun Heo <tj@kernel.org>
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> This patch landed in today's linux next-20230605 as commit c5214e13ad60 
+> ("sched/fair: Multi-LLC select_idle_sibling()"). Unfortunately it causes 
+> regression on my ARM 64bit Exynos5433-based TM2e test board during the 
+> CPU hotplug tests. From time to time I get the NULL pointer dereference. 
+> Reverting $subject on top of linux-next fixes the issue. Let me know if 
+> I can help somehow debugging this issue. Here is a complete log (I've 
+> intentionally kept all the stack dumps, although they don't look very 
+> relevant...):
 
-You are right., it is incorrect to uppercase the 'direct', since that
-generates confusions with our internal MMU implementation. So, I will
-just uppercase the 'mmu' here in the next version.
+Moo... OK, since our friends from AMD need some tuning on this anyway,
+i'm going to pull the patch entirely. And we'll try again once they've
+sorted out the best way to do this.
+
+
