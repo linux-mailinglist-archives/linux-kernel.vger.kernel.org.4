@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF247221F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412F2722205
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 11:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjFEJUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 05:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S229924AbjFEJWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 05:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjFEJUS (ORCPT
+        with ESMTP id S231283AbjFEJVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 05:20:18 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DF5DB;
-        Mon,  5 Jun 2023 02:20:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685956808; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=m4uRcZTdGpY6O23Yo0XI9B+fj1vW+KPTQMgxYCjub+eUGbiVVjTDGJ5jhCz6NyCAW7
-    iQwx0rqVW/e9nHEG9RTN4onp3G3P4s8bl4YEhRg8AfYu/bPm69Y++7wYsSG8nles6Jml
-    uXQ1URGDCs49PsVQ26HG/vcifmd5W82tVZIV2P0WMfkOH/OUGW9a3ytBG66LmgrbzhfY
-    eeyrkO7XdaFTPE52MkY4Dsi0UwXSF2oLsquCl7bbdtJLrVMIPb57S6YR+3heMrLkGFVy
-    mT1GTeUG19itnHWU6BryK0Wp3Hm9wNHm0tXrmk3f4msU/yXsumy8u5GPrVU/x0ytelv3
-    zZWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685956808;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MlXEhXVts0zXguUGPAgythd13QOVvJ80llw2yo6ICys=;
-    b=CR0jKlurcILZmEpNRWFW3tcXFFxiwTCi2vEv7ozBgTl7pq6lArZlaftMoJvQotCpTK
-    80wtr3FyBZG1B1kkWYT5+aPvK6H0/9ZOTOiUyGHyvVWMySRdbMXQkPOoVGCtdI8pUxW1
-    cBPhspcnHguaopqHxg/gjVAnl7gHN4IeQaOiRfVVuk69/OcvIqLD678Z3K8/xicQbura
-    45ynJu98mpPxBmYceD2i5NkpygIOJAd+7WP1u+yCs/YlCRASus6ox3XqOKl+6vGR+2wi
-    LG9dlNhDomJqREnxkbC9IZO3kr5xtG4e8Vt/P6YzggVKyg55aE+emr8zZK41FN+X/V8p
-    dC9w==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685956808;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MlXEhXVts0zXguUGPAgythd13QOVvJ80llw2yo6ICys=;
-    b=T9kmbRniu6zkkvfB6h2cC+UgctOIBskfAN23RmW5kx2pylZv6sgBGBwYoWe9UbFiFQ
-    Wag2evxe0ScFuooQHWKTbVVRSuXBxbgjCp6NkK9HrsGg6/JFDBMJ2IUK/sE4SZKMfCjB
-    31wAHih9vJ8ZoOxwqQ/crOiCsd8I7hOZT5o65yXVGA/vywKEpNw4W+lDwRmk+5kfC1W/
-    pY5LN5iW1MfjwrmwLzCIYs32uiG7FybdDzaPFPNWZl6XZ6hHPHJMBK0XH79bmRRH74Qg
-    8DPZzFGL4rsKTyrkXPbUqK69DiHrRgax/qtvjrZGff4CHZWqM4bHM6rxR/kCADSjFvwa
-    lluA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685956808;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MlXEhXVts0zXguUGPAgythd13QOVvJ80llw2yo6ICys=;
-    b=ntCEvpxhroMHANwwBpmJz3BUQHmMwjPEo+tyBiV3N7GnNkFqNe7m4l5S8AGqjoWDJr
-    mxE7qjverPZvdaW0wkBA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z+J1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z559K89S5
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 5 Jun 2023 11:20:08 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 11:20:07 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH 06/14] dt-bindings: soc: qcom: smd-rpm: Use qcom,rpm-proc
- in example
-Message-ID: <ZH2ox9ZaGPDR-Xvt@gerhold.net>
-References: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
- <20230531-rpm-rproc-v1-6-e0a3b6de1f14@gerhold.net>
- <168595403816.208946.12766625011186229177.robh@kernel.org>
+        Mon, 5 Jun 2023 05:21:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8511A8;
+        Mon,  5 Jun 2023 02:21:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD97C611C5;
+        Mon,  5 Jun 2023 09:21:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FBDC433EF;
+        Mon,  5 Jun 2023 09:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685956870;
+        bh=VAQ7yfzQtWyNohR4wxaMprdeMTDlqPdyTw6okH1kHrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jK253SR7yhSPqefNFos3ffgdScPlfxLEgS1so3b12kxeFrCMZRgawvFm8WayBcEJg
+         gsJRpMEGttvUT3HVy8GIHc65y0zhLLrBx4d+jkyhsnS/hQIbQr5LWBz2vZgDkJqevO
+         +UIxJzVenJUyw/Uip8ZNP03sQq+Yr8qA1I9bh08IcIOmhh2JIjbopJQQXYTqJDA+gf
+         Ib8fD2IpqNgfgglvW2/JWPvjCy1i6XCYLFHWvOg0HPpz5vZx6UOnmL3FtqiwyAdfsz
+         iIun2EVvr5UICgLU5k5gsCEhuKWjokIA4YcB5nFxBvbjMNYU78+Z9LTAA6e8yLvHwk
+         VVxBZGJqVTgtA==
+Date:   Mon, 5 Jun 2023 12:20:40 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/13] mm: jit/text allocator
+Message-ID: <20230605092040.GB3460@kernel.org>
+References: <20230601101257.530867-1-rppt@kernel.org>
+ <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
+ <ZHjgIH3aX9dCvVZc@moria.home.lan>
+ <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <168595403816.208946.12766625011186229177.robh@kernel.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,33 +81,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:33:58AM -0600, Rob Herring wrote:
-> On Mon, 05 Jun 2023 09:08:22 +0200, Stephan Gerhold wrote:
-> > Use the new top-level rpm-proc node instead of having a dummy top-level
-> > /smd node that only contains the RPM but not other remote processors.
+On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
+> On Thu, Jun 01, 2023 at 02:14:56PM -0400, Kent Overstreet wrote:
+> > On Thu, Jun 01, 2023 at 05:12:03PM +0100, Mark Rutland wrote:
+> > > For a while I have wanted to give kprobes its own allocator so that it can work
+> > > even with CONFIG_MODULES=n, and so that it doesn't have to waste VA space in
+> > > the modules area.
+> > > 
+> > > Given that, I think these should have their own allocator functions that can be
+> > > provided independently, even if those happen to use common infrastructure.
 > > 
-> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> > ---
-> >  Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > How much memory can kprobes conceivably use? I think we also want to try
+> > to push back on combinatorial new allocators, if we can.
+> 
+> That depends on who's using it, and how (e.g. via BPF).
+> 
+> To be clear, I'm not necessarily asking for entirely different allocators, but
+> I do thinkg that we want wrappers that can at least pass distinct start+end
+> parameters to a common allocator, and for arm64's modules code I'd expect that
+> we'd keep the range falblack logic out of the common allcoator, and just call
+> it twice.
+> 
+> > > > Several architectures override module_alloc() because of various
+> > > > constraints where the executable memory can be located and this causes
+> > > > additional obstacles for improvements of code allocation.
+> > > > 
+> > > > This set splits code allocation from modules by introducing
+> > > > jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
+> > > > sites of module_alloc() and module_memfree() with the new APIs and
+> > > > implements core text and related allocation in a central place.
+> > > > 
+> > > > Instead of architecture specific overrides for module_alloc(), the
+> > > > architectures that require non-default behaviour for text allocation must
+> > > > fill jit_alloc_params structure and implement jit_alloc_arch_params() that
+> > > > returns a pointer to that structure. If an architecture does not implement
+> > > > jit_alloc_arch_params(), the defaults compatible with the current
+> > > > modules::module_alloc() are used.
+> > > 
+> > > As above, I suspect that each of the callsites should probably be using common
+> > > infrastructure, but I don't think that a single jit_alloc_arch_params() makes
+> > > sense, since the parameters for each case may need to be distinct.
 > > 
+> > I don't see how that follows. The whole point of function parameters is
+> > that they may be different :)
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.example.dtb: /example-0/remoteproc-rpm: failed to match any schema with compatible: ['qcom,msm8916-rpm-proc', 'qcom,rpm-proc']
-> 
+> What I mean is that jit_alloc_arch_params() tries to aggregate common
+> parameters, but they aren't actually common (e.g. the actual start+end range
+> for allocation).
 
-Huh? The schema that matches this compatible is in the previous patch. :)
-Perhaps this error is related to the dt_binding_check problem on the
-patch before (which is caused by applying the patches to the wrong base
-branch).
+jit_alloc_arch_params() tries to aggregate architecture constraints and
+requirements for allocations of executable memory and this exactly what
+the first 6 patches of this set do.
 
-Before sending this series I verified that there are no dt_binding_check
-and dtbs_check warnings or errors when applied to the correct branch.
+A while ago Thomas suggested to use a structure that parametrizes
+architecture constraints by the memory type used in modules [1] and Song
+implemented the infrastructure for it and x86 part [2].
 
-Thanks,
-Stephan
+I liked the idea of defining parameters in a single structure, but I
+thought that approaching the problem from the arch side rather than from
+modules perspective will be better starting point, hence these patches.
+
+I don't see a fundamental reason why a single structure cannot describe
+what is needed for different code allocation cases, be it modules, kprobes
+or bpf. There is of course an assumption that the core allocations will be
+the same for all the users, and it seems to me that something like 
+
+* allocate physical memory if allocator caches are empty
+* map it in vmalloc or modules address space
+* return memory from the allocator cache to the caller
+
+will work for all usecases.
+
+We might need separate caches for different cases on different
+architectures, and a way to specify what cache should be used in the
+allocator API, but that does not contradict a single structure for arch
+specific parameters, but only makes it more elaborate, e.g. something like
+
+enum jit_type {
+	JIT_MODULES_TEXT,
+	JIT_MODULES_DATA,
+	JIT_KPROBES,
+	JIT_FTRACE,
+	JIT_BPF,
+	JIT_TYPE_MAX,
+};
+
+struct jit_alloc_params {
+	struct jit_range	ranges[JIT_TYPE_MAX];
+	/* ... */
+};
+
+> > Can you give more detail on what parameters you need? If the only extra
+> > parameter is just "does this allocation need to live close to kernel
+> > text", that's not that big of a deal.
+> 
+> My thinking was that we at least need the start + end for each caller. That
+> might be it, tbh.
+
+Do you mean that modules will have something like
+
+	jit_text_alloc(size, MODULES_START, MODULES_END);
+
+and kprobes will have
+
+	jit_text_alloc(size, KPROBES_START, KPROBES_END);
+?
+
+It sill can be achieved with a single jit_alloc_arch_params(), just by
+adding enum jit_type parameter to jit_text_alloc().
+
+[1] https://lore.kernel.org/linux-mm/87v8mndy3y.ffs@tglx/ 
+[2] https://lore.kernel.org/all/20230526051529.3387103-1-song@kernel.org
+
+> Thanks,
+> Mark.
+
+-- 
+Sincerely yours,
+Mike.
