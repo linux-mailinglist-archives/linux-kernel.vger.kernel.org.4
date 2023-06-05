@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B119A722A68
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F2F722A69
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbjFEPIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S234630AbjFEPI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbjFEPIa (ORCPT
+        with ESMTP id S233932AbjFEPIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 11:08:30 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40947F1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8798FF2;
         Mon,  5 Jun 2023 08:08:29 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 15:08:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685977707;
+        s=2020; t=1685977708;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1bD6hLaUNRAo6XBj38rT/tzr/rKMzfyvrpIv8NDmkAQ=;
-        b=Qa/nnTL1rnED6pRwSjRBbbDUMxv0UABQ4OCyzjnT/s7br7h/07wVy1Lu13fKOZS5wSxH1F
-        S4eeRnQk99PCFBCAmoKf/qAInLBmo+FVhC8PBhGYzkt5LG5fK6Y2ZPWK8oLRvw+Dk8e7QV
-        9/tNalwFlyZWeXinMgCkleLMNrHpSmLj130EPPf2iilbWpmvc1/zXyU9qUOfh6wXDA49WM
-        pU+F1Jwq0dh9uJJ00TeDe01SPh6M19Q3Iw6Z63gnQWnMaXV6EAXB2qlSGM7uWwQbQYCVWv
-        8baDJNO2q02ipXvNSpscQMQhhAWfpX7CYgeoCDDrLjV84F/u2Xe0DOuM0lTl6Q==
+        bh=RoWJhGlkrPutICGc7rmHeduSzyk5VXIUCCAZUGIdmZA=;
+        b=yrqU0qkFFGzc4V6akX08luOHlQqbf/KLaqDtUCSA27p+ZZsRXsjedaFxvz+4kNQnzxdEd9
+        yJ/0acy+CIvXIjwnNMi9mAZdU5bN5fB7ZqPj9Bs0518QOIl5ycJ9m/lNComD1SPM2Bms76
+        F2OHZrR7K+PsihaeP1jWkSMYuox1JtbkEP638Il5Lm4z6TvEOVeRo6GT/kdWa0mqCciH/W
+        eXnTGc3XfxIVBJmSqPZrd08v8+DRQeVN9+k7yvAUFXoG4Mc8Cu+XJTphJ6VhA5sTYlrl53
+        lvJvl8OOjkjTbVLL58sxeNORL+6282WO1XzGmrR1Soh47OEkICvu6NRDEDCJJQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685977707;
+        s=2020e; t=1685977708;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1bD6hLaUNRAo6XBj38rT/tzr/rKMzfyvrpIv8NDmkAQ=;
-        b=APu5y6d+n+E3VUuCXXTRxfQJZekXPKqbAthBCQjRJ/HHugOfA51USnRIR6eZE5qeNqcL4P
-        yELLmGXy9wSvUZCQ==
+        bh=RoWJhGlkrPutICGc7rmHeduSzyk5VXIUCCAZUGIdmZA=;
+        b=B/QUh7fArb2UmWGkSRWf/MhK1jd8fQpPDmOeNe1kLHyHUBefnTU4l96crT16VgrhHBZjki
+        0f6NzRxpzYqBTiAQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Add proper comments in do_timer_create()
+Subject: [tip: timers/core] posix-timers: Document nanosleep() details
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.619897296@linutronix.de>
-References: <20230425183313.619897296@linutronix.de>
+In-Reply-To: <20230425183313.567072835@linutronix.de>
+References: <20230425183313.567072835@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168597770743.404.16840396422526470034.tip-bot2@tip-bot2>
+Message-ID: <168597770779.404.11242027713171629061.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,69 +67,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     2ef6cf6d46b462a1ff7fb70ad8050a2b35077e19
-Gitweb:        https://git.kernel.org/tip/2ef6cf6d46b462a1ff7fb70ad8050a2b35077e19
+Commit-ID:     13da885685d6ae339f2924d3c8a1f4fe16a904cc
+Gitweb:        https://git.kernel.org/tip/13da885685d6ae339f2924d3c8a1f4fe16a904cc
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:19 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:17 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 05 Jun 2023 17:03:38 +02:00
 
-posix-timers: Add proper comments in do_timer_create()
+posix-timers: Document nanosleep() details
 
-The comment about timer lifetime at the end of the function is misplaced
-and uncomprehensible.
-
-Make it understandable and put it at the right place. Add a new comment
-about the visibility of the new timer ID to user space.
+The descriptions for common_nsleep() is wrong and common_nsleep_timens()
+lacks any form of comment.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.619897296@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.567072835@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+ kernel/time/posix-timers.c |  9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 9ce13c9..5cfd09c 100644
+index 9d99d4b..9ce13c9 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -529,12 +529,17 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	new_timer->sigq->info.si_tid   = new_timer->it_id;
- 	new_timer->sigq->info.si_code  = SI_TIMER;
+@@ -1370,7 +1370,7 @@ SYSCALL_DEFINE2(clock_getres_time32, clockid_t, which_clock,
+ #endif
  
--	if (copy_to_user(created_timer_id,
--			 &new_timer_id, sizeof (new_timer_id))) {
-+	if (copy_to_user(created_timer_id, &new_timer_id, sizeof (new_timer_id))) {
- 		error = -EFAULT;
- 		goto out;
- 	}
--
-+	/*
-+	 * After succesful copy out, the timer ID is visible to user space
-+	 * now but not yet valid because new_timer::signal is still NULL.
-+	 *
-+	 * Complete the initialization with the clock specific create
-+	 * callback.
-+	 */
- 	error = kc->timer_create(new_timer);
- 	if (error)
- 		goto out;
-@@ -544,14 +549,11 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	WRITE_ONCE(new_timer->it_signal, current->signal);
- 	list_add(&new_timer->list, &current->signal->posix_timers);
- 	spin_unlock_irq(&current->sighand->siglock);
--
--	return 0;
- 	/*
--	 * In the case of the timer belonging to another task, after
--	 * the task is unlocked, the timer is owned by the other task
--	 * and may cease to exist at any time.  Don't use or modify
--	 * new_timer after the unlock call.
-+	 * After unlocking sighand::siglock @new_timer is subject to
-+	 * concurrent removal and cannot be touched anymore
- 	 */
-+	return 0;
- out:
- 	posix_timer_unhash_and_free(new_timer);
- 	return error;
+ /*
+- * nanosleep for monotonic and realtime clocks
++ * sys_clock_nanosleep() for CLOCK_REALTIME and CLOCK_TAI
+  */
+ static int common_nsleep(const clockid_t which_clock, int flags,
+ 			 const struct timespec64 *rqtp)
+@@ -1382,8 +1382,13 @@ static int common_nsleep(const clockid_t which_clock, int flags,
+ 				 which_clock);
+ }
+ 
++/*
++ * sys_clock_nanosleep() for CLOCK_MONOTONIC and CLOCK_BOOTTIME
++ *
++ * Absolute nanosleeps for these clocks are time-namespace adjusted.
++ */
+ static int common_nsleep_timens(const clockid_t which_clock, int flags,
+-			 const struct timespec64 *rqtp)
++				const struct timespec64 *rqtp)
+ {
+ 	ktime_t texp = timespec64_to_ktime(*rqtp);
+ 
