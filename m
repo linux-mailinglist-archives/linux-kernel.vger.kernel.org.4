@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA387229D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5367229CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 16:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbjFEOwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 10:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S234609AbjFEOwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 10:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbjFEOwn (ORCPT
+        with ESMTP id S234593AbjFEOwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 10:52:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5FAFA
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685976715;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+jSjkiDWclAj9vqdgMGMiyGqF2MyWCPc8BsnONjQCIE=;
-        b=XpqDzaoeTSFYx/jrJOvciSwIoRFK0hv0bJ82wH2zAicKfX9BsSAzRZTnkvgavQtpACI518
-        Xo1rD13TP0LrNiwvX645HuL3BqHDhNsJgyXBI2QNzmuBPG+xB7Zg2rCkVu3OO5IcisVkS7
-        PTaJdPCrdJ70FcVcHh6NtfzVjQaUj3k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-91-SdmlhM5mxTz-A4IjhQA-1; Mon, 05 Jun 2023 10:51:52 -0400
-X-MC-Unique: 91-SdmlhM5mxTz-A4IjhQA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 5 Jun 2023 10:52:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB4102
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 07:52:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F4EA381D4CA;
-        Mon,  5 Jun 2023 14:51:51 +0000 (UTC)
-Received: from [10.22.10.186] (unknown [10.22.10.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC1A748205E;
-        Mon,  5 Jun 2023 14:51:50 +0000 (UTC)
-Message-ID: <177cc1f5-3b11-cde1-5769-f18e87890083@redhat.com>
-Date:   Mon, 5 Jun 2023 10:51:50 -0400
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6AE2D21B69;
+        Mon,  5 Jun 2023 14:52:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685976728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KJ5Vvn/f/LcaLzfrsc9YEqYfn9KBb8ZzT6iAUABQLqA=;
+        b=ir/MmgDg8dXjmB0MsVdXPBkcm3ypWRUbDpVoUSEK4ekRixxn6k+WaWhyfCl/C4jrW1dXuM
+        cR1Ur6bGEEZ8PyypBvHgh2nIxVMn6Z8KVgKNXOt+UfLupNFH4Txt8Axnup0veLtQSIf2BP
+        0p8F7OP+u2miZdkWZ9pLZrxshM2dKkc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685976728;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KJ5Vvn/f/LcaLzfrsc9YEqYfn9KBb8ZzT6iAUABQLqA=;
+        b=DOsazAXrHZRVT8vAEdfE0KEG/SQ4kjCyOWKb4casDLkUx31icT/MgsXp2n9kDm6fHPNDJB
+        f8G6jeHMuvT5xlCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E7CF139C8;
+        Mon,  5 Jun 2023 14:52:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qFsIF5j2fWSfYQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 05 Jun 2023 14:52:08 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id EA639A0754; Mon,  5 Jun 2023 16:52:07 +0200 (CEST)
+Date:   Mon, 5 Jun 2023 16:52:07 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     jack@suse.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] fix two issue about quota
+Message-ID: <20230605145207.ypagyiromug2imzs@quack3>
+References: <20230605140731.2427629-1-yebin10@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] cgroup: fixed the cset refcnt leak when fork() failed
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Zou Cao <zoucaox@gmail.com>, linux-kernel@vger.kernel.org,
-        tj@kernel.org
-Cc:     cgroups@vger.kernel.org, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, brauner@kernel.org,
-        Zou Cao <zoucao@kuaishou.com>
-References: <20230605130444.1421-1-zoucao@kuaishou.com>
- <e0d1998f-c081-30e6-7646-cf6460c2d67c@redhat.com>
-In-Reply-To: <e0d1998f-c081-30e6-7646-cf6460c2d67c@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605140731.2427629-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 05-06-23 22:07:29, Ye Bin wrote:
+> Jan Kara (1):
+>   quota: Properly disable quotas when add_dquot_ref() fails
+> 
+> Ye Bin (1):
+>   quota: fix warning in dqgrab()
+> 
+>  fs/quota/dquot.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-On 6/5/23 10:12, Waiman Long wrote:
->> kernel/cgroup/cgroup.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
->> index d18c2ef..5ecd706 100644
->> --- a/kernel/cgroup/cgroup.c
->> +++ b/kernel/cgroup/cgroup.c
->> @@ -6284,6 +6284,11 @@ void cgroup_cancel_fork(struct task_struct 
->> *child,
->>           if (ss->cancel_fork)
->>               ss->cancel_fork(child, kargs->cset);
->>   +    if (!(kargs->flags & CLONE_INTO_CGROUP) &&
->> +            kargs->cset) {
->> +        put_css_set(kargs->cset);
->> +    }
->> +
-> I believe the out_revert error path of cgroup_can_fork() has a similar 
-> issue. Perhaps you may want to put the put_css_set() call in 
-> cgroup_css_set_put_fork().
+Thanks! I've queued the fixes into my tree.
 
-Sorry, it should not be done in cgroup_css_set_put_fork(). As the 
-increase in reference is properly matched in css_post_fork(). That means 
-similar change will be needed in cgroup_can_fork().
+								Honza
 
-Cheers,
-Longman
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
