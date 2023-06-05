@@ -2,139 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E126C721F98
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7D9721F8E
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjFEHbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S229926AbjFEHbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjFEHbk (ORCPT
+        with ESMTP id S230406AbjFEHao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:31:40 -0400
-Received: from mail-ot1-f67.google.com (mail-ot1-f67.google.com [209.85.210.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430AF118;
-        Mon,  5 Jun 2023 00:31:24 -0700 (PDT)
-Received: by mail-ot1-f67.google.com with SMTP id 46e09a7af769-6af81142b6dso4282034a34.2;
-        Mon, 05 Jun 2023 00:31:24 -0700 (PDT)
+        Mon, 5 Jun 2023 03:30:44 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DC09F
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 00:30:42 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30ae95c4e75so4614808f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 00:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685950241; x=1688542241;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFReZyZu2iufJZ3PDykLvhpXb6SdQ7mEv/WAkqm0RQ4=;
+        b=G02f0WmoAeY4+9XZg+1cZOAQP3nXivmQNupC0n58RdCR20l7Cklw6KwEqnY+0sZY+3
+         nX0bl1m8bjeHTwSdTKgZhuat7x8KOrzfwmPMVwFqjhNlxis5GGXB+Ew6yLMKJaRAbmBV
+         k0Ipxom2LnOuYjGjDcLAS9xREEsh+hk1vgOY6N4ogJeNyUDEj//4oicRgj2houMThQbS
+         C8Vws74jZta+oyDEO2XPoHlF1ltIEPou/MIgHVSYLkDtG9COJEetZkGSIbbYwyjq5w9d
+         w40Cq/ILqZa/JNT9qlM7h5zfy5eHKf947k7+TIUwnnZfYOyKsfXmK9bCdZMerLNnrQm9
+         cJIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685950283; x=1688542283;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JjH9eOPUMgvUuYzrotRDm7fc4vW9NrXoyCCMM1Pnj9g=;
-        b=PzoCWjDIfjBUXkIQSRxM3jQGUVhZWCaVNkL6zVdxA6TxvlpmEqkwD7Zb2dsPyGVxKi
-         jKuPWXiuIgZlVmx845eo/rSEpBOOnT7fLi6zbzwonOBUpNiMDtWWSs+K4/oKYIEXF7Je
-         Jrws/5NaoT3SKTJZlv5WJCt9aC5eLzIIi+0pSWaIgpKrii4lR0RSK2PaJ1JewFy8uTCb
-         jOQVkHBJQYLMa4OSx0WMbR+0+1g466tx4lYKqWWZP+VJztwobrDIHmFuStNNj8xhTuVJ
-         9/alDi9T4tpEmH+AgKFGKBF5xePFkjGCg0Q30KaXTYbzoEXWZhAnoQoGjHKwSF5w9/g4
-         kVRQ==
-X-Gm-Message-State: AC+VfDzSo/lx65dgEpewcYguqeAEUnSGw8WULJQpnQTxzkdAnICph/0R
-        j6BkXhDGIIOZk5O6X9jDPQ==
-X-Google-Smtp-Source: ACHHUZ7eiClij7spmG73QbIuI4ywtDluEPQnki3nFEPvmFkWEfZ8FCRSvGZySA0GRuT1y4Zl1DLl3g==
-X-Received: by 2002:a9d:7a91:0:b0:6af:7e7e:d7b with SMTP id l17-20020a9d7a91000000b006af7e7e0d7bmr9926291otn.15.1685950283566;
-        Mon, 05 Jun 2023 00:31:23 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 128-20020a630786000000b0053ba104c113sm5200419pgh.72.2023.06.05.00.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 00:31:23 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     mhiramat@kernel.org, beaub@linux.microsoft.com,
-        rostedt@goodmis.org, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com,
-        sunliming <sunliming@kylinos.cn>
-Subject: [PATCH V2 4/4] user_events: Add perf self-test for empty arguments events
-Date:   Mon,  5 Jun 2023 15:30:23 +0800
-Message-Id: <20230605073023.923316-4-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230605073023.923316-1-sunliming@kylinos.cn>
-References: <20230605073023.923316-1-sunliming@kylinos.cn>
+        d=1e100.net; s=20221208; t=1685950241; x=1688542241;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFReZyZu2iufJZ3PDykLvhpXb6SdQ7mEv/WAkqm0RQ4=;
+        b=OKcOKsoLS6rgXMPCY8mHDnKzt5yIFhKvM61WfHXXy5afqXZCQPvX+6P0XawI6X/L+m
+         czzEV2DU3k4raTiRC5+m6Am4tU4XsJcIxxiRyC4SLfSpxTk/NQ7r/s7lQKSaRhZXrWW9
+         Zd8TxHX7e5wNz8vzddstZbuaOgOJOsXalNpfhzLrxytrva2pjSyi9KXz7dE4gGQ6cyH5
+         NI4yTBMzs2VENv1mImdKBgN0JlBu2ZDbnDrt06fiLG/XAzfOT8OL+3KTd4fl7cRCD14X
+         s4eOzkArVjq8R5aEVzhs+smVRdOkYOWUVOQTlMUk1fCQHycXXm1XqkKxC9iuRt6XMKDd
+         AG2A==
+X-Gm-Message-State: AC+VfDxDIKqwSfYsycNtjHvIcd/2XNWiohPsR1A4XypIx/uT+e0nV5FG
+        rQQn2DTfDx/OykfF/Q8HtIWxGA==
+X-Google-Smtp-Source: ACHHUZ6DpZpxjDccEpr6NoOK08qI/JWn6PS5N8QU7mRlJwWTPUm7Jom2HtRWIntgSYG9nDc9HaANvg==
+X-Received: by 2002:a05:6000:10c4:b0:30e:1fc4:d0c9 with SMTP id b4-20020a05600010c400b0030e1fc4d0c9mr3668177wrx.9.1685950241092;
+        Mon, 05 Jun 2023 00:30:41 -0700 (PDT)
+Received: from [192.168.7.188] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b003079986fd71sm8921578wrx.88.2023.06.05.00.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 00:30:40 -0700 (PDT)
+Message-ID: <d7da64a8-8d49-595f-f519-9cdc2092d9e7@linaro.org>
+Date:   Mon, 5 Jun 2023 09:30:40 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH RFC 1/7] dt-bindings: connector: usb-connector: add a gpio
+ used to determine the Type-C port plug orientation
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230601-topic-sm8550-upstream-type-c-v1-0-d4d97b4d8bab@linaro.org>
+ <20230601-topic-sm8550-upstream-type-c-v1-1-d4d97b4d8bab@linaro.org>
+ <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests to ensure events that has empty arguments can input trace record
-correctly when using perf.
+On 03/06/2023 22:22, Dmitry Baryshkov wrote:
+> On 01/06/2023 17:07, Neil Armstrong wrote:
+>> On some platforms, the Type-C plug orientation is given on a GPIO line.
+>>
+>> Document this optional Type-C connector property, and take the
+>> assumption an active level represents an inverted/flipped orientation.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> index ae515651fc6b..c3884eed6ba4 100644
+>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> @@ -114,6 +114,11 @@ properties:
+>>       description: Set this property if the Type-C connector has no power delivery support.
+>>       type: boolean
+>> +  orientation-gpios:
+>> +    description: An input gpio for Type-C connector orientation, used to detect orientation
+>> +      of the Type-C connector. GPIO active level means "CC2" or Reversed/Flipped orientation.
+>> +    maxItems: 1
+> 
+> Should this be a property of the connector or of the parent device node? I mean, unlike usb-b-connector (where ID and Vbus can be simple GPIOs nearly directly connected to the pins of the connector) for the USB-C the orientation is not a connector's GPIO, but rather some additional not elementary logic.
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- .../testing/selftests/user_events/perf_test.c | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
+I don't see the issue, orientation is a property of the connector itself,
+even if it's provided by another ic.
 
-diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
-index e97f24ab6e2f..c0e7eb7fab0b 100644
---- a/tools/testing/selftests/user_events/perf_test.c
-+++ b/tools/testing/selftests/user_events/perf_test.c
-@@ -189,6 +189,59 @@ TEST_F(user, perf_write) {
- 	ASSERT_EQ(0, self->check);
- }
- 
-+TEST_F(user, perf_empty_events) {
-+	struct perf_event_attr pe = {0};
-+	struct user_reg reg = {0};
-+	struct perf_event_mmap_page *perf_page;
-+	int page_size = sysconf(_SC_PAGESIZE);
-+	int id, fd;
-+	__u32 *val;
-+
-+	reg.size = sizeof(reg);
-+	reg.name_args = (__u64)"__test_event";
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_size = sizeof(self->check);
-+
-+	/* Register should work */
-+	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
-+	ASSERT_EQ(0, reg.write_index);
-+	ASSERT_EQ(0, self->check);
-+
-+	/* Id should be there */
-+	id = get_id();
-+	ASSERT_NE(-1, id);
-+
-+	pe.type = PERF_TYPE_TRACEPOINT;
-+	pe.size = sizeof(pe);
-+	pe.config = id;
-+	pe.sample_type = PERF_SAMPLE_RAW;
-+	pe.sample_period = 1;
-+	pe.wakeup_events = 1;
-+
-+	/* Tracepoint attach should work */
-+	fd = perf_event_open(&pe, 0, -1, -1, 0);
-+	ASSERT_NE(-1, fd);
-+
-+	perf_page = mmap(NULL, page_size * 2, PROT_READ, MAP_SHARED, fd, 0);
-+	ASSERT_NE(MAP_FAILED, perf_page);
-+
-+	/* Status should be updated */
-+	ASSERT_EQ(1 << reg.enable_bit, self->check);
-+
-+	/* Ensure write shows up at correct offset */
-+	ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
-+				sizeof(reg.write_index)));
-+	val = (void *)(((char *)perf_page) + perf_page->data_offset);
-+	ASSERT_EQ(PERF_RECORD_SAMPLE, *val);
-+
-+	munmap(perf_page, page_size * 2);
-+	close(fd);
-+
-+	/* Status should be updated */
-+	ASSERT_EQ(0, self->check);
-+}
-+
- int main(int argc, char **argv)
- {
- 	return test_harness_run(argc, argv);
--- 
-2.25.1
+Neil
+
+> 
+>> +
+>>     # The following are optional properties for "usb-c-connector" with power
+>>     # delivery support.
+>>     source-pdos:
+>>
+> 
 
