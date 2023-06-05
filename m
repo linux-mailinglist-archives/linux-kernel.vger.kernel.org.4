@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987E9722F97
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A32A722F98
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbjFETRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235706AbjFETRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235452AbjFETQ0 (ORCPT
+        with ESMTP id S235462AbjFETQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 15:16:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D7C10A;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BADA7;
         Mon,  5 Jun 2023 12:16:23 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 19:16:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685992582;
+        s=2020; t=1685992581;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/dp1jLmsaN1DY1rvwMzQoKHr01XU+rlLrdjw7ZKItgw=;
-        b=BOC/uDUP3MNvvEz0Sl9zKSUioAT0ODK7mrPEh0q2Y3KTC42rwYRu0Onj5ubXEd65+d2F/d
-        rpzP4RtzfNl1yY8lDt+L0/YcW7pjkFsaRuJY1TGP6gePoKOLbAhytMp35NP8+5YhJJPCbB
-        /+rhjfrS4Z/2i83NxOxDsn5ecjw8tlXUUvnjB5flBg1b/LATLSHf6CaZ67hHzIz34H3IVk
-        nEKxTY5xEUUVrigdTx89cDUQd8QecFU90pGbXbaWyUVeqGaRdUor2sChBfXChVPGJKttYY
-        qwXMjzagxNoTF6tZJJ0tvZYMMYrvQkMuM26Rh7BFpSVE2PEl14JJ9g7uIjrVag==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=uhzLkj49YJUuRG22jBOVFdrVFrIngllWs7LukgCiquo=;
+        b=kgvE/2EOBrYEDRHP7LonBAIZK65ngOnxOB3eepYMTrkllw9H4XHh8fgRPMv77TbV/4GfnF
+        v6qMGl/X/4FtWNX2PA7g1MkmJAc9Fcpdwfy55Ce5kWYJ2/e5exAyMJWsi07J1AikyiD0ma
+        30JPn6TcoeWwUJZR+pXnazlfs12/AcH84u9LR3PgUD7o2lYwo1gOB2n5lgGRXeM7MlWq5F
+        Mmg4uU7cKkxQcQTKd0EmJ1rFx6QNqThvtwd91HNRrYaOlnkmY//nJ8tmy9YA8ktyz/+dqk
+        eF534TqtiGYRMUbH2uUmM3YmwK4Pexqc6FXRlkWq1JIFYUjGoo0fXMev7KjiCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685992582;
+        s=2020e; t=1685992581;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/dp1jLmsaN1DY1rvwMzQoKHr01XU+rlLrdjw7ZKItgw=;
-        b=OuqBxhkebCvk1yZWb2hw+adWolmUE7pwbvBrXXQtGNRqVTmPpncF5QZRYGXnUrVpEhdEge
-        doxE0rZx7wk39ZBA==
-From:   "tip-bot2 for Yicong Yang" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=uhzLkj49YJUuRG22jBOVFdrVFrIngllWs7LukgCiquo=;
+        b=ziVHrQCO95Yz/4pq/VeT1KwPnCfL/i3NgqQ14f4Ye8pYM9+sqtHT8KYjGTVIFXMX5jqnhj
+        U2Sk8Tyt1djGp5BQ==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Don't balance task to its current running CPU
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched: Unconditionally use full-fat wait_task_inactive()
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230530082507.10444-1-yangyicong@huawei.com>
-References: <20230530082507.10444-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-Message-ID: <168599258148.404.1918167188216154536.tip-bot2@tip-bot2>
+Message-ID: <168599258108.404.12910966685801669273.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,95 +60,286 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     0dd37d6dd33a9c23351e6115ae8cdac7863bc7de
-Gitweb:        https://git.kernel.org/tip/0dd37d6dd33a9c23351e6115ae8cdac7863bc7de
-Author:        Yicong Yang <yangyicong@hisilicon.com>
-AuthorDate:    Tue, 30 May 2023 16:25:07 +08:00
+Commit-ID:     d5e1586617be7093ea3419e3fa9387ed833cdbb1
+Gitweb:        https://git.kernel.org/tip/d5e1586617be7093ea3419e3fa9387ed833cdbb1
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 02 Jun 2023 10:42:53 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 05 Jun 2023 21:08:24 +02:00
+CommitterDate: Mon, 05 Jun 2023 21:11:02 +02:00
 
-sched/fair: Don't balance task to its current running CPU
+sched: Unconditionally use full-fat wait_task_inactive()
 
-We've run into the case that the balancer tries to balance a migration
-disabled task and trigger the warning in set_task_cpu() like below:
+While modifying wait_task_inactive() for PREEMPT_RT; the build robot
+noted that UP got broken. This led to audit and consideration of the
+UP implementation of wait_task_inactive().
 
- ------------[ cut here ]------------
- WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
- Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
- CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
- Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
- pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : set_task_cpu+0x188/0x240
- lr : load_balance+0x5d0/0xc60
- sp : ffff80000803bc70
- x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
- x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
- x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
- x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
- x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
- x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
- x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
- x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
- x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
- x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
- Call trace:
-  set_task_cpu+0x188/0x240
-  load_balance+0x5d0/0xc60
-  rebalance_domains+0x26c/0x380
-  _nohz_idle_balance.isra.0+0x1e0/0x370
-  run_rebalance_domains+0x6c/0x80
-  __do_softirq+0x128/0x3d8
-  ____do_softirq+0x18/0x24
-  call_on_irq_stack+0x2c/0x38
-  do_softirq_own_stack+0x24/0x3c
-  __irq_exit_rcu+0xcc/0xf4
-  irq_exit_rcu+0x18/0x24
-  el1_interrupt+0x4c/0xe4
-  el1h_64_irq_handler+0x18/0x2c
-  el1h_64_irq+0x74/0x78
-  arch_cpu_idle+0x18/0x4c
-  default_idle_call+0x58/0x194
-  do_idle+0x244/0x2b0
-  cpu_startup_entry+0x30/0x3c
-  secondary_start_kernel+0x14c/0x190
-  __secondary_switched+0xb0/0xb4
- ---[ end trace 0000000000000000 ]---
+It looks like the UP implementation is also broken for PREEMPT;
+consider task_current_syscall() getting preempted between the two
+calls to wait_task_inactive().
 
-Further investigation shows that the warning is superfluous, the migration
-disabled task is just going to be migrated to its current running CPU.
-This is because that on load balance if the dst_cpu is not allowed by the
-task, we'll re-select a new_dst_cpu as a candidate. If no task can be
-balanced to dst_cpu we'll try to balance the task to the new_dst_cpu
-instead. In this case when the migration disabled task is not on CPU it
-only allows to run on its current CPU, load balance will select its
-current CPU as new_dst_cpu and later triggers the warning above.
+Therefore move the wait_task_inactive() implementation out of
+CONFIG_SMP and unconditionally use it.
 
-The new_dst_cpu is chosen from the env->dst_grpmask. Currently it
-contains CPUs in sched_group_span() and if we have overlapped groups it's
-possible to run into this case. This patch makes env->dst_grpmask of
-group_balance_mask() which exclude any CPUs from the busiest group and
-solve the issue. For balancing in a domain with no overlapped groups
-the behaviour keeps same as before.
-
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20230530082507.10444-1-yangyicong@huawei.com
+Link: https://lkml.kernel.org/r/20230602103731.GA630648%40hirez.programming.kicks-ass.net
 ---
- kernel/sched/fair.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/sched.h |   7 +-
+ kernel/sched/core.c   | 216 ++++++++++++++++++++---------------------
+ 2 files changed, 110 insertions(+), 113 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 48b6f0c..df0ff90 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10742,7 +10742,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
- 		.sd		= sd,
- 		.dst_cpu	= this_cpu,
- 		.dst_rq		= this_rq,
--		.dst_grpmask    = sched_group_span(sd->groups),
-+		.dst_grpmask    = group_balance_mask(sd->groups),
- 		.idle		= idle,
- 		.loop_break	= SCHED_NR_MIGRATE_BREAK,
- 		.cpus		= cpus,
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index eed5d65..1292d38 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2006,15 +2006,12 @@ static __always_inline void scheduler_ipi(void)
+ 	 */
+ 	preempt_fold_need_resched();
+ }
+-extern unsigned long wait_task_inactive(struct task_struct *, unsigned int match_state);
+ #else
+ static inline void scheduler_ipi(void) { }
+-static inline unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
+-{
+-	return 1;
+-}
+ #endif
+ 
++extern unsigned long wait_task_inactive(struct task_struct *, unsigned int match_state);
++
+ /*
+  * Set thread flags in other task's structures.
+  * See asm/thread_info.h for TIF_xxxx flags available:
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 944c3ae..810cf7d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2213,6 +2213,114 @@ void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags)
+ 		rq_clock_skip_update(rq);
+ }
+ 
++/*
++ * wait_task_inactive - wait for a thread to unschedule.
++ *
++ * Wait for the thread to block in any of the states set in @match_state.
++ * If it changes, i.e. @p might have woken up, then return zero.  When we
++ * succeed in waiting for @p to be off its CPU, we return a positive number
++ * (its total switch count).  If a second call a short while later returns the
++ * same number, the caller can be sure that @p has remained unscheduled the
++ * whole time.
++ *
++ * The caller must ensure that the task *will* unschedule sometime soon,
++ * else this function might spin for a *long* time. This function can't
++ * be called with interrupts off, or it may introduce deadlock with
++ * smp_call_function() if an IPI is sent by the same process we are
++ * waiting to become inactive.
++ */
++unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
++{
++	int running, queued;
++	struct rq_flags rf;
++	unsigned long ncsw;
++	struct rq *rq;
++
++	for (;;) {
++		/*
++		 * We do the initial early heuristics without holding
++		 * any task-queue locks at all. We'll only try to get
++		 * the runqueue lock when things look like they will
++		 * work out!
++		 */
++		rq = task_rq(p);
++
++		/*
++		 * If the task is actively running on another CPU
++		 * still, just relax and busy-wait without holding
++		 * any locks.
++		 *
++		 * NOTE! Since we don't hold any locks, it's not
++		 * even sure that "rq" stays as the right runqueue!
++		 * But we don't care, since "task_on_cpu()" will
++		 * return false if the runqueue has changed and p
++		 * is actually now running somewhere else!
++		 */
++		while (task_on_cpu(rq, p)) {
++			if (!(READ_ONCE(p->__state) & match_state))
++				return 0;
++			cpu_relax();
++		}
++
++		/*
++		 * Ok, time to look more closely! We need the rq
++		 * lock now, to be *sure*. If we're wrong, we'll
++		 * just go back and repeat.
++		 */
++		rq = task_rq_lock(p, &rf);
++		trace_sched_wait_task(p);
++		running = task_on_cpu(rq, p);
++		queued = task_on_rq_queued(p);
++		ncsw = 0;
++		if (READ_ONCE(p->__state) & match_state)
++			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
++		task_rq_unlock(rq, p, &rf);
++
++		/*
++		 * If it changed from the expected state, bail out now.
++		 */
++		if (unlikely(!ncsw))
++			break;
++
++		/*
++		 * Was it really running after all now that we
++		 * checked with the proper locks actually held?
++		 *
++		 * Oops. Go back and try again..
++		 */
++		if (unlikely(running)) {
++			cpu_relax();
++			continue;
++		}
++
++		/*
++		 * It's not enough that it's not actively running,
++		 * it must be off the runqueue _entirely_, and not
++		 * preempted!
++		 *
++		 * So if it was still runnable (but just not actively
++		 * running right now), it's preempted, and we should
++		 * yield - it could be a while.
++		 */
++		if (unlikely(queued)) {
++			ktime_t to = NSEC_PER_SEC / HZ;
++
++			set_current_state(TASK_UNINTERRUPTIBLE);
++			schedule_hrtimeout(&to, HRTIMER_MODE_REL_HARD);
++			continue;
++		}
++
++		/*
++		 * Ahh, all good. It wasn't running, and it wasn't
++		 * runnable, which means that it will never become
++		 * running in the future either. We're all done!
++		 */
++		break;
++	}
++
++	return ncsw;
++}
++
+ #ifdef CONFIG_SMP
+ 
+ static void
+@@ -3341,114 +3449,6 @@ out:
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
+-/*
+- * wait_task_inactive - wait for a thread to unschedule.
+- *
+- * Wait for the thread to block in any of the states set in @match_state.
+- * If it changes, i.e. @p might have woken up, then return zero.  When we
+- * succeed in waiting for @p to be off its CPU, we return a positive number
+- * (its total switch count).  If a second call a short while later returns the
+- * same number, the caller can be sure that @p has remained unscheduled the
+- * whole time.
+- *
+- * The caller must ensure that the task *will* unschedule sometime soon,
+- * else this function might spin for a *long* time. This function can't
+- * be called with interrupts off, or it may introduce deadlock with
+- * smp_call_function() if an IPI is sent by the same process we are
+- * waiting to become inactive.
+- */
+-unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
+-{
+-	int running, queued;
+-	struct rq_flags rf;
+-	unsigned long ncsw;
+-	struct rq *rq;
+-
+-	for (;;) {
+-		/*
+-		 * We do the initial early heuristics without holding
+-		 * any task-queue locks at all. We'll only try to get
+-		 * the runqueue lock when things look like they will
+-		 * work out!
+-		 */
+-		rq = task_rq(p);
+-
+-		/*
+-		 * If the task is actively running on another CPU
+-		 * still, just relax and busy-wait without holding
+-		 * any locks.
+-		 *
+-		 * NOTE! Since we don't hold any locks, it's not
+-		 * even sure that "rq" stays as the right runqueue!
+-		 * But we don't care, since "task_on_cpu()" will
+-		 * return false if the runqueue has changed and p
+-		 * is actually now running somewhere else!
+-		 */
+-		while (task_on_cpu(rq, p)) {
+-			if (!(READ_ONCE(p->__state) & match_state))
+-				return 0;
+-			cpu_relax();
+-		}
+-
+-		/*
+-		 * Ok, time to look more closely! We need the rq
+-		 * lock now, to be *sure*. If we're wrong, we'll
+-		 * just go back and repeat.
+-		 */
+-		rq = task_rq_lock(p, &rf);
+-		trace_sched_wait_task(p);
+-		running = task_on_cpu(rq, p);
+-		queued = task_on_rq_queued(p);
+-		ncsw = 0;
+-		if (READ_ONCE(p->__state) & match_state)
+-			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
+-		task_rq_unlock(rq, p, &rf);
+-
+-		/*
+-		 * If it changed from the expected state, bail out now.
+-		 */
+-		if (unlikely(!ncsw))
+-			break;
+-
+-		/*
+-		 * Was it really running after all now that we
+-		 * checked with the proper locks actually held?
+-		 *
+-		 * Oops. Go back and try again..
+-		 */
+-		if (unlikely(running)) {
+-			cpu_relax();
+-			continue;
+-		}
+-
+-		/*
+-		 * It's not enough that it's not actively running,
+-		 * it must be off the runqueue _entirely_, and not
+-		 * preempted!
+-		 *
+-		 * So if it was still runnable (but just not actively
+-		 * running right now), it's preempted, and we should
+-		 * yield - it could be a while.
+-		 */
+-		if (unlikely(queued)) {
+-			ktime_t to = NSEC_PER_SEC / HZ;
+-
+-			set_current_state(TASK_UNINTERRUPTIBLE);
+-			schedule_hrtimeout(&to, HRTIMER_MODE_REL_HARD);
+-			continue;
+-		}
+-
+-		/*
+-		 * Ahh, all good. It wasn't running, and it wasn't
+-		 * runnable, which means that it will never become
+-		 * running in the future either. We're all done!
+-		 */
+-		break;
+-	}
+-
+-	return ncsw;
+-}
+-
+ /***
+  * kick_process - kick a running thread to enter/exit the kernel
+  * @p: the to-be-kicked thread
