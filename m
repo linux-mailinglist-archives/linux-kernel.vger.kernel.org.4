@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0D3721F33
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8838721F0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 09:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjFEHNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 03:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S231200AbjFEHKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 03:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjFEHNc (ORCPT
+        with ESMTP id S231937AbjFEHKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 03:13:32 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D950E44;
-        Mon,  5 Jun 2023 00:13:04 -0700 (PDT)
+        Mon, 5 Jun 2023 03:10:30 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3183FE6B;
+        Mon,  5 Jun 2023 00:10:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; t=1685948953; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=GtA7gO4D4tYMkUOQrXO8IA9yHKrSUYp95UpHhGV/gaiqu0kiXPMCZSlF2VG8+e11lY
-    hMhOn+pxzk60lTIOACzBB1EGl8YqNm3eUPFEQEc5jERkx7dARh/nRDLG8r2orjQI0nr+
-    3XW7sHVk1EGmUgofR2a5XjZuNKa2UQL9JH3fnKwOC0KglTCEUA1KYSLgmqqQkhjlpOCc
-    lZeHQDFSMtrSHrAoSkvzIjvoVEo3s7RF+KwKQMa1yjqUnjEpTodYGqpNnx9SxsZ6I45Q
-    6IsE1OdntpIDsMg87/be11FfKEpopMRNhRfhrADHsSC9AhYMWlsVJD2CTqOSXu2LbJ3c
-    lSbw==
+    b=LyzN4cit/ESC5mhHOfF1am1m+XQXZOlC8gQNPfSE5qsXk20/XfgAK1aJxh4s+o6BBo
+    RvfJ46sE0SQjXMfU3NoKkYLXhxxTgX0I9kxF5OSlHJSzcVyLVnqzYELRNtFVbiMGiikr
+    hUcuwSgwNt7PSIfCc5OfkQFCInv7/HgqZeDjL3sKgl00iUCXocaV7SkHcB0oZlX03ur9
+    NHIuCTnGdnkF5h4zp6L0+4JwDWkU80yaC17m0H2hlWxsAGb0Wn1Jh/eeiT2MhrgJz5f9
+    x/RFxAN29YBZujXTkl36ABWiZ+Nu8Cohzq7X2GQJFAl+u7fAEghhvYtWHfkPqQHXqT+3
+    +eGw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685948953;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=X8YC1vqHGkyxsCoLtenJvedIAaQtZG4RYK8t3f+bBn8=;
-    b=avwTFizxAtSydIpKHnPPUfZ7j7U8f020zudkRPdcSt5dGHoTHd5bt8HrQ3pw16zX9s
-    QevUZLwLr3f99ugtxHjUgv8k9WekXXRgqky2Uq8rUNyjYZP5C5+ZmXNHhUxpZJsbyPLE
-    5a2KeQWeCC7e4dCU5d2h5VQpss192SIowfpJhgKw0zTnGrUo8+1kbZJnJlYlxpEgNP8z
-    eXr5hoAbkzSysk2umuPEyviAz7jg1ixo36sUGrwCNdGaNQAjXB19IcSjE8G7oXJ4zHKo
-    7mfiHAKKlovxXeqyFZpOYr/BU33XSM9QVLw9at3nMihUZSOtk2xZbdQJOVSNzr6QPEL9
-    4moA==
+    bh=KzxZEXfP9riG5jeIPNdghbmL1RM9PKS5UHG6gZHagac=;
+    b=gtssXm+AaYYeYvfwjTYLCbgLb9G2RQB8HVtd9XVFP4Q4xt9yRAvLnlzwI03nANAUIb
+    ely6s0rSjyxSKCss4FHqANLZJ2B/5I/p+YRvCS6O6JMHTGEnuZq7uHmXGpxY++h11Dmy
+    Xevq1VSD6qTMvkJgsqxFlu6Nv2QtfoU3LEjHkMeyX2n6IajZyAIFcX7NvcAPusDWkXri
+    GJ51YyUE8fztonfEg4ZSNf5eNdhCcCzBZZz+29o7RcbH0YUtMQbRJmLJz3DsJsUt5wkn
+    JOzFv70JrmxN3Lw4C6HPHNoyDhqA4E5omOuq33MeGTdpJCnr9Th8jOiC3cSE7Xpm6trq
+    3gWA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -42,35 +42,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685948953;
     s=strato-dkim-0002; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=X8YC1vqHGkyxsCoLtenJvedIAaQtZG4RYK8t3f+bBn8=;
-    b=EHHtuy1AlSC+3q+/SaMRX2dsnUPLXCYMCrbL93sH8Rnnf8XcuXPcjC4VeI3w96gPiD
-    n8pk3fVY4+s6R1cKY5csL4DocChDd/L1eBNyfmRnyJvPh6rGajXIoyEgraMnVdKIxxoH
-    mPmLPAkPUBsE4aOEY88ZDl7ECzMJpaVyqsGqJFQlGlo2RfNU/gWwG0eU8Pfcy8zB1nsy
-    EEbV+PxsxNvGm3X1aejSH/6l3DjIkpqKZ3eiTwiVQhehOJ+Ip5cMEU++5VLSZjg1F4Oa
-    zqzzbLJyCW6S9lcvpEtpoT7MWPvbBAbm6J2eN1xdQ/BSRa1JFkx8Vp0X/txz+Akc2ZrA
-    M/ig==
+    bh=KzxZEXfP9riG5jeIPNdghbmL1RM9PKS5UHG6gZHagac=;
+    b=pT6e12j3XBct9r2CN3tTiCnk9+mM6ULwxnlMNHmLw/JOVL1KGHEZAdEyNSbKp2k0jw
+    nmUcR8Cb6uJcoUi/MNeL6fqQp+phBvad4WxINden0tYCtioUVTBOSknqDfnU8qVmkroL
+    sH3t07wJWoguTbt7eE8omOMCuI6T/MVpCe6xeVPHA2Pi1QsBCsEBCx9vNWFYNRuNYF3q
+    vkznZmAjlDQu7sPMch6Xpmq7boRHAHkOt4tyNoyxRwM4M2g9xjWjHymxoKScIOXG6gDQ
+    jaNEyzzYmmEbb6LXxejYilRkE5kMmM6Fr1CXj1AXV29DsngopTNLaTA5A/Mfgp+cKFhC
+    oZgg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685948953;
     s=strato-dkim-0003; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=X8YC1vqHGkyxsCoLtenJvedIAaQtZG4RYK8t3f+bBn8=;
-    b=5bZyGBpzhzXoD3Y/9i+TD69KNEuYGvTH7KAvHQBEMyTXTn7pIvpGLHnANjYRoQE26y
-    94ym2huRDfwwLkj4guAA==
+    bh=KzxZEXfP9riG5jeIPNdghbmL1RM9PKS5UHG6gZHagac=;
+    b=xwx/cpb5xsGzssCM75AmSI9639zVKaa3Fro7ijoNWr7DfZ73kkOXHh6i9w/E80XYbl
+    vAF2cVX8lq1XfCChsVDA==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn9VOL5nz0="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5579C8a1
+    with ESMTPSA id Z82ec2z5579D8a3
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 5 Jun 2023 09:09:12 +0200 (CEST)
+    Mon, 5 Jun 2023 09:09:13 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Mon, 05 Jun 2023 09:08:19 +0200
-Subject: [PATCH 03/14] dt-bindings: soc: qcom: smd-rpm: Add some more
- compatibles
+Date:   Mon, 05 Jun 2023 09:08:20 +0200
+Subject: [PATCH 04/14] soc: qcom: smd-rpm: Match rpmsg channel instead of
+ compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-rpm-rproc-v1-3-e0a3b6de1f14@gerhold.net>
+Message-Id: <20230531-rpm-rproc-v1-4-e0a3b6de1f14@gerhold.net>
 References: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
 In-Reply-To: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
 To:     Bjorn Andersson <andersson@kernel.org>
@@ -94,52 +94,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid several more small patches adding new RPM compatibles in the
-future, add MDM9607, MSM8610, MSM8917, MSM8937 and MSM8952 at once.
-All of these have been worked on over the time by some people and are
-definitely compatible as-is with the smd-rpm driver.
+There is an ever growing list of compatibles in the smd-rpm.c driver.
+A fallback compatible would help here but would still require keeping
+the current list around for backwards compatibility.
+
+As an alternative, let's switch the driver to match the rpmsg_device_id
+instead, which is always "rpm_requests" on all platforms. Add a check
+to ensure that there is a device tree node defined for the device since
+otherwise the of_platform_populate() call will operate on the root node (/).
+
+Similar approaches with matching rpmsg_device_id are already used in
+qcom_sysmon, qcom_glink_ssr, qrtr, and rpmsg_wwan_ctrl.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
- Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/soc/qcom/smd-rpm.c | 35 +++++++++--------------------------
+ 1 file changed, 9 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-index 78822315edeb..c6930706bfa9 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-@@ -34,10 +34,15 @@ properties:
-       - qcom,rpm-apq8084
-       - qcom,rpm-ipq6018
-       - qcom,rpm-ipq9574
-+      - qcom,rpm-mdm9607
-       - qcom,rpm-msm8226
-+      - qcom,rpm-msm8610
-       - qcom,rpm-msm8909
-       - qcom,rpm-msm8916
-+      - qcom,rpm-msm8917
-       - qcom,rpm-msm8936
-+      - qcom,rpm-msm8937
-+      - qcom,rpm-msm8952
-       - qcom,rpm-msm8953
-       - qcom,rpm-msm8974
-       - qcom,rpm-msm8976
-@@ -81,10 +86,15 @@ if:
-       contains:
-         enum:
-           - qcom,rpm-apq8084
-+          - qcom,rpm-mdm9607
-           - qcom,rpm-msm8226
-+          - qcom,rpm-msm8610
-           - qcom,rpm-msm8909
-           - qcom,rpm-msm8916
-+          - qcom,rpm-msm8917
-           - qcom,rpm-msm8936
-+          - qcom,rpm-msm8937
-+          - qcom,rpm-msm8952
-           - qcom,rpm-msm8953
-           - qcom,rpm-msm8974
-           - qcom,rpm-msm8976
+diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
+index 0c1aa809cc4e..13d8c52330d0 100644
+--- a/drivers/soc/qcom/smd-rpm.c
++++ b/drivers/soc/qcom/smd-rpm.c
+@@ -199,6 +199,9 @@ static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+ 	struct qcom_smd_rpm *rpm;
+ 	int ret;
+ 
++	if (!rpdev->dev.of_node)
++		return -EINVAL;
++
+ 	rpm = devm_kzalloc(&rpdev->dev, sizeof(*rpm), GFP_KERNEL);
+ 	if (!rpm)
+ 		return -ENOMEM;
+@@ -230,38 +233,18 @@ static void qcom_smd_rpm_remove(struct rpmsg_device *rpdev)
+ 	of_platform_depopulate(&rpdev->dev);
+ }
+ 
+-static const struct of_device_id qcom_smd_rpm_of_match[] = {
+-	{ .compatible = "qcom,rpm-apq8084" },
+-	{ .compatible = "qcom,rpm-ipq6018" },
+-	{ .compatible = "qcom,rpm-ipq9574" },
+-	{ .compatible = "qcom,rpm-msm8226" },
+-	{ .compatible = "qcom,rpm-msm8909" },
+-	{ .compatible = "qcom,rpm-msm8916" },
+-	{ .compatible = "qcom,rpm-msm8936" },
+-	{ .compatible = "qcom,rpm-msm8953" },
+-	{ .compatible = "qcom,rpm-msm8974" },
+-	{ .compatible = "qcom,rpm-msm8976" },
+-	{ .compatible = "qcom,rpm-msm8994" },
+-	{ .compatible = "qcom,rpm-msm8996" },
+-	{ .compatible = "qcom,rpm-msm8998" },
+-	{ .compatible = "qcom,rpm-sdm660" },
+-	{ .compatible = "qcom,rpm-sm6115" },
+-	{ .compatible = "qcom,rpm-sm6125" },
+-	{ .compatible = "qcom,rpm-sm6375" },
+-	{ .compatible = "qcom,rpm-qcm2290" },
+-	{ .compatible = "qcom,rpm-qcs404" },
+-	{}
++static const struct rpmsg_device_id qcom_smd_rpm_id_table[] = {
++	{ .name = "rpm_requests", },
++	{ /* sentinel */ }
+ };
+-MODULE_DEVICE_TABLE(of, qcom_smd_rpm_of_match);
++MODULE_DEVICE_TABLE(rpmsg, qcom_smd_rpm_id_table);
+ 
+ static struct rpmsg_driver qcom_smd_rpm_driver = {
+ 	.probe = qcom_smd_rpm_probe,
+ 	.remove = qcom_smd_rpm_remove,
+ 	.callback = qcom_smd_rpm_callback,
+-	.drv  = {
+-		.name  = "qcom_smd_rpm",
+-		.of_match_table = qcom_smd_rpm_of_match,
+-	},
++	.id_table = qcom_smd_rpm_id_table,
++	.drv.name = "qcom_smd_rpm",
+ };
+ 
+ static int __init qcom_smd_rpm_init(void)
 
 -- 
 2.40.1
