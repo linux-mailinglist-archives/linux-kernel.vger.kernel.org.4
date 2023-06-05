@@ -2,150 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3865722773
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F5B72277B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbjFENbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
+        id S234099AbjFENdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbjFENbf (ORCPT
+        with ESMTP id S234087AbjFENdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:31:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD8CE6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685971844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=09h7AR4TuCkDh4zJT0E+2xZhXl8jzj6eU3ZdjKoNbek=;
-        b=gmS4diiYn7Pm676p7UuGn+xWBH7IrpP9pEBE/qaXOsQf+V5KZA89Y379YFE0t1vUZt9YMS
-        naiPfy5exKaWj+EESF6tEaLXQqpvc7vDj1r/wVjfmgKG5qg3WPcRoncJ59VD0lBNckY2eS
-        cJpSC7g31RzM/Gi0fr2gnxrBtFfdt1w=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-648-RenWIlJ6M52G5LHE3yc3eA-1; Mon, 05 Jun 2023 09:30:43 -0400
-X-MC-Unique: RenWIlJ6M52G5LHE3yc3eA-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-626070979faso34248506d6.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:30:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685971843; x=1688563843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Mon, 5 Jun 2023 09:33:20 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C6FCD;
+        Mon,  5 Jun 2023 06:33:19 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1adf27823so42139591fa.2;
+        Mon, 05 Jun 2023 06:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685971997; x=1688563997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=09h7AR4TuCkDh4zJT0E+2xZhXl8jzj6eU3ZdjKoNbek=;
-        b=lg/aSERjerichL5COJOjvcrgd3ZgWRMa8h+YhBUUJdOfVyT26gTRif8Xymh3Ox3E3d
-         eGi9y5uF3ssVcLr1CjzRysOrJZpn7HQOWwgHgXgY1/3Jiy+MwUN5VLn+vA1nnPN9qEaY
-         sjKX/ne24u+fk+0jrK9l/3ToJOkWEymuhza3HaIoMhodoDtyuKCxVcqWF91AnHFdm2X0
-         L02RqJgVn5s+EhJgyxb/46DAmFb/JbRXSJRj81pXOdyC786IUC8/GmOYK73lmshbNfCm
-         hXBPtuPavCDI9pqQobJ5ZmrocEEw/Xad+DgZ8WXKwxjNPuysFtz+Rf64h5W/f/7QJDbV
-         M72w==
-X-Gm-Message-State: AC+VfDyPpApGYclc00hrcWN+bpOYu3iS1KFJ4X68CEAfmzhR7FnDDSYu
-        VlHGg8fFFejvpcbXS6iw11MdwR4Tjdyby4Mb91zGE5I5Sw0IX51rnLO9l0tbHoKrrJI2sQHSk3o
-        eawAJde92J9DJvJhBo+AFvx7r
-X-Received: by 2002:a05:6214:240b:b0:623:9a08:4edd with SMTP id fv11-20020a056214240b00b006239a084eddmr8345305qvb.25.1685971843171;
-        Mon, 05 Jun 2023 06:30:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ59eKAQLHTpxMz4/t5AgUGvFz9F83N7jM9XvbTEJ6IWLoINLpCKUzwbDeHXyzeu5z0HI4vP9w==
-X-Received: by 2002:a05:6214:240b:b0:623:9a08:4edd with SMTP id fv11-20020a056214240b00b006239a084eddmr8345276qvb.25.1685971842889;
-        Mon, 05 Jun 2023 06:30:42 -0700 (PDT)
-Received: from sgarzare-redhat ([5.77.94.106])
-        by smtp.gmail.com with ESMTPSA id ph12-20020a0562144a4c00b0061c83f00767sm4623347qvb.3.2023.06.05.06.30.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 06:30:42 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 15:30:35 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Shannon Nelson <shannon.nelson@amd.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
- <20230605084104-mutt-send-email-mst@kernel.org>
- <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
- <20230605085840-mutt-send-email-mst@kernel.org>
+        bh=yl2FRRZbqp6hkInYnbnTkh2CQSLwc6kpHyElfV11jp4=;
+        b=nJKXh53CYDqPRRUCBt0EeTg0bIzYC1Z6d+GcW4Z59Nw0iY5koUcaMsIGKf2ORLIQ24
+         ONhba79cdf4J0TnhZBXhtMf3EPPHewPbJ1IDptP77tTVEAY2snKzC8F4WE8FK/kMF01w
+         9Mf8hU/Y8IQoaa/AbJO0SBstyldrnkvB5WNgtHUgFmyDS4Upgl5EsJVLQQRj9ZJFH3lA
+         Y+v2aLiePLz5HWZMge6E7XU8OQ0xMLO74qMdGYgE4PBlDLWsY2JvCcNH9hA5u6+L3bB1
+         gGLbC5FZe/QSuC0XA/BN6xLmgLwB5IPbkuQRD2lI23/ZWXZz/OqxjdGZkSR237mNBZ08
+         8v2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685971997; x=1688563997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yl2FRRZbqp6hkInYnbnTkh2CQSLwc6kpHyElfV11jp4=;
+        b=AP0KNXSPmG2xEcJ2oJJm+BSHbVR0RZT+YS/d7Hx/wISmnz9dysaiFucraw6Uwo8WWi
+         3AurffgE/Bmf87+QrzlVzz62IJmyNxe7e4lSc+hyBMaNueix7W98tdBLY8fYyQWgrraG
+         mnotoGA+2MFaENYuyrdXSI42BzpijIcQtLEMJkYFRtXuayjQBSiEgtRsnMkC/baWf/ky
+         qsOcEeufn1h/ZpzOH23R8YuAozmWS5cyAiuLwmw34LMnXDRAW6g+1kAlE0BKSGiZ2SIt
+         o8Z9WcqN0vH24F0maZJaRf6hKLGzO7TicCCNzy7Zd/ToYjwn5B1p24qH73hVisIqYiUG
+         fV+g==
+X-Gm-Message-State: AC+VfDxXASeuyFvOVs9ojNT77f6tTIolGftYeye282qVj33mVMQyThe4
+        8XS7veWyxKtW/3JaPx+Qst5jjv20Nm75j7vthqc=
+X-Google-Smtp-Source: ACHHUZ7YKBeNxLNrxcOxiF/3NT42dU2EAVK/I4SAAk/05LVJNAoDhCsUWzWxmTgxJQA+jUdRfDPixCqQVCdxPUa8Me0=
+X-Received: by 2002:a05:651c:412:b0:2ad:99b6:1728 with SMTP id
+ 18-20020a05651c041200b002ad99b61728mr3578309lja.24.1685971997091; Mon, 05 Jun
+ 2023 06:33:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230605085840-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230602131044.3297-1-jorge.lopez2@hp.com> <20230602131044.3297-2-jorge.lopez2@hp.com>
+ <39a19a0b-610d-52bf-5050-eb870ad2e619@infradead.org>
+In-Reply-To: <39a19a0b-610d-52bf-5050-eb870ad2e619@infradead.org>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Mon, 5 Jun 2023 08:32:39 -0500
+Message-ID: <CAOOmCE9jmPpG8Do1h3uaMX9GKoioBLwak_3BeBoGPTtUj0Yj5Q@mail.gmail.com>
+Subject: Re: [PATCH v16 01/13] hp-bioscfg: Documentation
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas@t-8ch.de,
+        ilpo.jarvinen@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
->On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
->> On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
->> > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
->> > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
->> > > don't support packed virtqueue well yet, so let's filter the
->> > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
->> > >
->> > > This way, even if the device supports it, we don't risk it being
->> > > negotiated, then the VMM is unable to set the vring state properly.
->> > >
->> > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
->> > > Cc: stable@vger.kernel.org
->> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> > > ---
->> > >
->> > > Notes:
->> > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
->> > >     better PACKED support" series [1] and backported in stable branches.
->> > >
->> > >     We can revert it when we are sure that everything is working with
->> > >     packed virtqueues.
->> > >
->> > >     Thanks,
->> > >     Stefano
->> > >
->> > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
->> >
->> > I'm a bit lost here. So why am I merging "better PACKED support" then?
->>
->> To really support packed virtqueue with vhost-vdpa, at that point we would
->> also have to revert this patch.
->>
->> I wasn't sure if you wanted to queue the series for this merge window.
->> In that case do you think it is better to send this patch only for stable
->> branches?
->> > Does this patch make them a NOP?
->>
->> Yep, after applying the "better PACKED support" series and being sure 
->> that
->> the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
->> patch.
->>
->> Let me know if you prefer a different approach.
->>
->> I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
->> interprets them the right way, when it does not.
->>
->> Thanks,
->> Stefano
->>
+On Fri, Jun 2, 2023 at 5:55=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org>=
+ wrote:
 >
->If this fixes a bug can you add Fixes tags to each of them? Then it's ok
->to merge in this window. Probably easier than the elaborate
->mask/unmask dance.
+>
+>
+> On 6/2/23 06:10, Jorge Lopez wrote:
+>
+> >
+> > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+> >
+> > ---
+> > Based on the latest platform-drivers-x86.git/for-next
+> > ---
+> >  .../testing/sysfs-class-firmware-attributes   | 101 +++++++++++++++++-
+> >  1 file changed, 99 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes =
+b/Documentation/ABI/testing/sysfs-class-firmware-attributes
+> > index 4cdba3477176..df9904b9f39c 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
+> > +++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
+> > @@ -126,6 +131,21 @@ Description:
+> >                                       value will not be effective throu=
+gh sysfs until this rule is
+> >                                       met.
+> >
+> > +             HP specific class extensions
+> > +             ------------------------------
+> > +
+> > +             On HP systems the following additional attributes are ava=
+ilable:
+> > +
+> > +             "ordered-list"-type specific properties:
+> > +
+> > +             elements:
+> > +                                     A file that can be read to obtain=
+ the possible
+> > +                                     list of values of the <attr>. Val=
+ues are separated using
+> > +                                     semi-colon (``;``) and listed acc=
+ording to their priority.
+> > +                                     An element listed first has the h=
+ighest priority. Writing
+> > +                                     the list in a different order to =
+current_value alters
+> > +                                     the priority order for the partic=
+ular attribute.
+> > +
+> >  What:                /sys/class/firmware-attributes/*/authentication/
+> >  Date:                February 2021
+> >  KernelVersion:       5.11
+>
+> Why 5.11 and that date?
 
-CCing Shannon (the original author of the "better PACKED support"
-series).
+Date and Kernel values were provided by an earlier submitter.
 
-IIUC Shannon is going to send a v3 of that series to fix the
-documentation, so Shannon can you also add the Fixes tags?
+>
+> > @@ -364,3 +393,71 @@ Description:
+> >               use it to enable extra debug attributes or BIOS features =
+for testing purposes.
+> >
+> >               Note that any changes to this attribute requires a reboot=
+ for changes to take effect.
+> > +
+> > +
+> > +             HP specific class extensions - Secure Platform Manager (S=
+PM)
+> > +             --------------------------------
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/S=
+PM/kek
+> > +Date:                March 2023
+> > +KernelVersion:       5.18
+>
+> Why 5.18 and that date?
 
-Thanks,
-Stefano
+It is the minimum kernel version where firmware-attributes are
+supported and date when we expected hp-bioscfg driver support to be
+available.
+The driver, kernel versions and date changes weekly so we were placing
+those dates and versions as tentative.
+Any suggestions for Date and KernelVersion fields?
 
+>
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'kek' Key-Encryption-Key is a write-only file that can be=
+ used to configure the
+> > +             RSA public key that will be used by the BIOS to verify
+> > +             signatures when setting the signing key.  When written,
+> > +             the bytes should correspond to the KEK certificate
+> > +             (x509 .DER format containing an OU).  The size of the
+> > +             certificate must be less than or equal to 4095 bytes.
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/S=
+PM/sk
+> > +Date:                March 2023
+> > +KernelVersion:       5.18
+>
+> Why 5.18 and that date?
+
+See previous explanation.
+
+>
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'sk' Signature Key is a write-only file that can be used =
+to configure the RSA
+> > +             public key that will be used by the BIOS to verify signat=
+ures
+> > +             when configuring BIOS settings and security features.  Wh=
+en
+> > +             written, the bytes should correspond to the modulus of th=
+e
+> > +             public key.  The exponent is assumed to be 0x10001.
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/S=
+PM/status
+> > +Date:                March 2023
+> > +KernelVersion:       5.18
+>
+> Why 5.18 and that date?
+
+See previous explanation.
+
+>
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'status' is a read-only file that returns ASCII text in J=
+SON format reporting
+> > +             the status information.
+> > +
+> > +               "State": "not provisioned | provisioned | provisioning =
+in progress ",
+>
+> Drop the space after "in progress" ?
+
+Done!
+
+>
+> > +               "Version": " Major. Minor ",
+>
+> So Major. should have a space before and after it? and Minor should have =
+a space after it?
+
+Neither.  I will remove the space before and after for both Major and
+Minor.    "Major.Minor"
+
+>
+> > +               "Nonce": <16-bit unsigned number display in base 10>,
+> > +               "FeaturesInUse": <16-bit unsigned number display in bas=
+e 10>,
+> > +               "EndorsementKeyMod": "<256 bytes in base64>",
+> > +               "SigningKeyMod": "<256 bytes in base64>"
+> > +
+> > +What:                /sys/class/firmware-attributes/*/attributes/Sure_=
+Start/audit_log_entries
+> > +Date:                March 2023
+> > +KernelVersion:       5.18
+>
+> Why 5.18 and that date?
+
+It is the minimum kernel version where firmware-attributes are
+supported and date when we expected hp-bioscfg driver support to be
+available.
+The driver, kernel versions and date changes weekly so we were placing
+those dates and versions as tentative.
+Any suggestions for Date and KernelVersion fields?
+
+>
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'audit_log_entries' is a read-only file that returns the =
+events in the log.
+> > +
+> > +                     Audit log entry format
+> > +
+> > +                     Byte 0-15:   Requested Audit Log entry  (Each Aud=
+it log is 16 bytes)
+> > +                     Byte 16-127: Unused
+> > +
+> > +What:                /sys/class/firmware-attributes/*/attributes/Sure_=
+Start/audit_log_entry_count
+> > +Date:                March 2023
+> > +KernelVersion:       5.18
+>
+> Why 5.18 and that date?
+
+See earlier explanation
+
+>
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'audit_log_entry_count' is a read-only file that returns =
+the number of existing
+> > +             audit log events available to be read. Values are separat=
+ed using comma (``,``)
+>
+> End the sentence above with a '.' please.
+
+Done!
+
+>
+> > +
+> > +                     [No of entries],[log entry size],[Max number of e=
+ntries supported]
+> > +
+> > +             log entry size identifies audit log size for the current =
+BIOS version.
+> > +             The current size is 16 bytes but it can be up to 128 byte=
+s long in future BIOS
+> > +             versions.
+>
+> Thanks.
+> --
+> ~Randy
