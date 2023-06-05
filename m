@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D7B722F8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1FD722F93
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235478AbjFETQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235479AbjFETRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235384AbjFETQX (ORCPT
+        with ESMTP id S235395AbjFETQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 15:16:23 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A87F3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B2212D;
         Mon,  5 Jun 2023 12:16:21 -0700 (PDT)
 Date:   Mon, 05 Jun 2023 19:16:19 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685992579;
+        s=2020; t=1685992580;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hCTYfnfFpap/ITRxHBpO+C77CiSgkQTh0GUA+Fz24sg=;
-        b=BKbW3HxMh1s40DOkQzwd6T71jPjAFzZ1ycnM2AxSFULfLdqQb4tEKZtfVWNDKpG4v5conq
-        1YSpENPks1v53GFOJPhVrKzq981MtD6Qyzf9Ey2o+nkuSyxlXh5XYq61wehF6Lb6zLtAaP
-        rvLm+qCeASthh9VnAkBHNblEg9Aq2gJ22GCr1Cdjm4lx/aJGdnodwyhhg1XDPF0cfS7BSn
-        kXUOUwItvp2oWpiXkGKEsiV/vffsA/uw6QXRUlU/oh678zdDWUQNlqmJkvis3W630Oi387
-        PKSmM1ewRAPhnip85fJm1hOhpXS73e2OkVSzg1X1IJwVV83yZDmv/ruLCxCdcg==
+        bh=uAjdy4YUOyODKcWZ3AOAw0qX0fpe0TW3Otvb753dxbo=;
+        b=Rd6WF+8b0Cal7UibVB3V1K3ADiY/jADUDPXcQkNXDbxPAA0RY65YVTBH9PEikckdndj9c+
+        mWeJV6axX7mSJIuTtIYdEpu1GovL+HzDUlpYtpN3Cik+g9FwqtyBQh9v/8AjbiH4KCm3sm
+        e3b0LzsZvjMBSZRwWH2gechQRTVkTWLjqaD1McVpK2vKnoKpvwWLY+1mtYvN9CSP1L2Ni6
+        LzxYpLAgjtKV5MmgCa0o5apZQJYu9toJEJD2AgiohVUmVMrcAlh1gyGhweZ14UoyeuCIr6
+        VLdZuWKDzn8xBvQFr0NQQ35WjwmWYLTSA06FcPGlAoFBpDJTtQ1/5zidq+OJAQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685992579;
+        s=2020e; t=1685992580;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hCTYfnfFpap/ITRxHBpO+C77CiSgkQTh0GUA+Fz24sg=;
-        b=u+MkFapRkIK4OfDdCNQ7g5/a2nabdid3QFahJVRqAWT1TmcaN5unLXJhAj2VyvHgEGi8ID
-        AxVzU+sC08LrpcAQ==
+        bh=uAjdy4YUOyODKcWZ3AOAw0qX0fpe0TW3Otvb753dxbo=;
+        b=/zzdP4qQ0GUbENgfjsYZp5j/nMTZgqcrXzG2q1hykZYFIA5P+/STTMsYc/pBBlLRDw3OjI
+        ujCz+QnxSgm1lDAg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] arm64/io: Always inline all of __raw_{read,write}[bwlq]()
+Subject: [tip: sched/core] time/sched_clock: Provide sched_clock_noinstr()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>,
         Michael Kelley <mikelley@microsoft.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230519102715.368919762@infradead.org>
-References: <20230519102715.368919762@infradead.org>
+In-Reply-To: <20230519102715.302350330@infradead.org>
+References: <20230519102715.302350330@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168599257910.404.12784163711469772427.tip-bot2@tip-bot2>
+Message-ID: <168599257949.404.407131671587396524.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,82 +67,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     c1d26c0f0295953d35307f9ee07f3e5295741315
-Gitweb:        https://git.kernel.org/tip/c1d26c0f0295953d35307f9ee07f3e5295741315
+Commit-ID:     5949a68c73444d89b171703b67ff04fc4d6059c1
+Gitweb:        https://git.kernel.org/tip/5949a68c73444d89b171703b67ff04fc4d6059c1
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 19 May 2023 12:21:01 +02:00
+AuthorDate:    Fri, 19 May 2023 12:21:00 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 05 Jun 2023 21:11:04 +02:00
 
-arm64/io: Always inline all of __raw_{read,write}[bwlq]()
+time/sched_clock: Provide sched_clock_noinstr()
 
-The next patch will want to use __raw_readl() from a noinstr section
-and as such that needs to be marked __always_inline to avoid the
-compiler being a silly bugger.
+With the intent to provide local_clock_noinstr(), a variant of
+local_clock() that's safe to be called from noinstr code (with the
+assumption that any such code will already be non-preemptible),
+prepare for things by providing a noinstr sched_clock_noinstr() function.
 
-Turns out it already is, but its siblings are not. Finish the work
-started in commit e43f1331e2ef913b ("arm64: Ask the compiler to
-__always_inline functions used by KVM at HYP") for consistenies sake.
+Specifically, preempt_enable_*() calls out to schedule(), which upsets
+noinstr validation efforts.
+
+As such, pull out the preempt_{dis,en}able_notrace() requirements from
+the sched_clock_read() implementations by explicitly providing it in
+the sched_clock() function.
+
+This further requires said sched_clock_read() functions to be noinstr
+themselves, for ARCH_WANTS_NO_INSTR users. See the next few patches.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 Tested-by: Michael Kelley <mikelley@microsoft.com>  # Hyper-V
-Link: https://lore.kernel.org/r/20230519102715.368919762@infradead.org
+Link: https://lore.kernel.org/r/20230519102715.302350330@infradead.org
 ---
- arch/arm64/include/asm/io.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ kernel/time/sched_clock.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 877495a..51d92ab 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -22,13 +22,13 @@
-  * Generic IO read/write.  These perform native-endian accesses.
-  */
- #define __raw_writeb __raw_writeb
--static inline void __raw_writeb(u8 val, volatile void __iomem *addr)
-+static __always_inline void __raw_writeb(u8 val, volatile void __iomem *addr)
+diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
+index e8f2fb0..68d6c11 100644
+--- a/kernel/time/sched_clock.c
++++ b/kernel/time/sched_clock.c
+@@ -64,7 +64,7 @@ static struct clock_data cd ____cacheline_aligned = {
+ 	.actual_read_sched_clock = jiffy_sched_clock_read,
+ };
+ 
+-static inline u64 notrace cyc_to_ns(u64 cyc, u32 mult, u32 shift)
++static __always_inline u64 cyc_to_ns(u64 cyc, u32 mult, u32 shift)
  {
- 	asm volatile("strb %w0, [%1]" : : "rZ" (val), "r" (addr));
+ 	return (cyc * mult) >> shift;
+ }
+@@ -80,23 +80,33 @@ notrace int sched_clock_read_retry(unsigned int seq)
+ 	return raw_read_seqcount_latch_retry(&cd.seq, seq);
  }
  
- #define __raw_writew __raw_writew
--static inline void __raw_writew(u16 val, volatile void __iomem *addr)
-+static __always_inline void __raw_writew(u16 val, volatile void __iomem *addr)
+-unsigned long long notrace sched_clock(void)
++unsigned long long noinstr sched_clock_noinstr(void)
  {
- 	asm volatile("strh %w0, [%1]" : : "rZ" (val), "r" (addr));
- }
-@@ -40,13 +40,13 @@ static __always_inline void __raw_writel(u32 val, volatile void __iomem *addr)
- }
+-	u64 cyc, res;
+-	unsigned int seq;
+ 	struct clock_read_data *rd;
++	unsigned int seq;
++	u64 cyc, res;
  
- #define __raw_writeq __raw_writeq
--static inline void __raw_writeq(u64 val, volatile void __iomem *addr)
-+static __always_inline void __raw_writeq(u64 val, volatile void __iomem *addr)
- {
- 	asm volatile("str %x0, [%1]" : : "rZ" (val), "r" (addr));
- }
+ 	do {
+-		rd = sched_clock_read_begin(&seq);
++		seq = raw_read_seqcount_latch(&cd.seq);
++		rd = cd.read_data + (seq & 1);
  
- #define __raw_readb __raw_readb
--static inline u8 __raw_readb(const volatile void __iomem *addr)
-+static __always_inline u8 __raw_readb(const volatile void __iomem *addr)
- {
- 	u8 val;
- 	asm volatile(ALTERNATIVE("ldrb %w0, [%1]",
-@@ -57,7 +57,7 @@ static inline u8 __raw_readb(const volatile void __iomem *addr)
+ 		cyc = (rd->read_sched_clock() - rd->epoch_cyc) &
+ 		      rd->sched_clock_mask;
+ 		res = rd->epoch_ns + cyc_to_ns(cyc, rd->mult, rd->shift);
+-	} while (sched_clock_read_retry(seq));
++	} while (raw_read_seqcount_latch_retry(&cd.seq, seq));
+ 
+ 	return res;
  }
  
- #define __raw_readw __raw_readw
--static inline u16 __raw_readw(const volatile void __iomem *addr)
-+static __always_inline u16 __raw_readw(const volatile void __iomem *addr)
- {
- 	u16 val;
- 
-@@ -80,7 +80,7 @@ static __always_inline u32 __raw_readl(const volatile void __iomem *addr)
- }
- 
- #define __raw_readq __raw_readq
--static inline u64 __raw_readq(const volatile void __iomem *addr)
-+static __always_inline u64 __raw_readq(const volatile void __iomem *addr)
- {
- 	u64 val;
- 	asm volatile(ALTERNATIVE("ldr %0, [%1]",
++unsigned long long notrace sched_clock(void)
++{
++	unsigned long long ns;
++	preempt_disable_notrace();
++	ns = sched_clock_noinstr();
++	preempt_enable_notrace();
++	return ns;
++}
++
+ /*
+  * Updating the data required to read the clock.
+  *
