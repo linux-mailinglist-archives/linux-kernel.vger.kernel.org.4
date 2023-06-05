@@ -2,200 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB03723284
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A65723290
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 23:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbjFEVsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 17:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
+        id S230008AbjFEVzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 17:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjFEVr7 (ORCPT
+        with ESMTP id S229742AbjFEVzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 17:47:59 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B523D2;
-        Mon,  5 Jun 2023 14:47:58 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2564dc37c3eso4853663a91.0;
-        Mon, 05 Jun 2023 14:47:58 -0700 (PDT)
+        Mon, 5 Jun 2023 17:55:35 -0400
+Received: from mail-vs1-xe49.google.com (mail-vs1-xe49.google.com [IPv6:2607:f8b0:4864:20::e49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A4A102
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 14:55:33 -0700 (PDT)
+Received: by mail-vs1-xe49.google.com with SMTP id ada2fe7eead31-439756a5e99so862492137.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 14:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686001677; x=1688593677;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mRCWb92eslY3If4y48w+1ybK5UGe1Uv8OM5AIElN3xI=;
-        b=q6oYbEYemCtG/Bz9JoV4sdaQSoedE0qwwerb/Ux5axiSG+45zRQv3GEFotosT/nKlc
-         7lQpbM0BkEOaiLovbtU8eLuNtBivYxbdJBbpkNsoSFvq3tT3Gb1zXl91vKr0cumRICWr
-         PJexaUKDKRJxfh4m/X2Gqr68oJvAp9XCThXBOdTWhJcJXrpmgIzy3y/dhd+ai90WzhEe
-         ZE70unHSweoDX/4zxGfUqBsp1Sz2LWHa9T0gQ8nOx4O2xHMenJwnP3jLgquRI3nud3BN
-         1+H14v6yPgkRKzysfrrAE3fFsbqGFrCX5rRPbF0eIU939P/6Mbe6aQ59LZbe1o/7Sc5N
-         OwFw==
+        d=google.com; s=20221208; t=1686002132; x=1688594132;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hYQuGPh6MWx4TKIybC1sfuSbzmExcI9Rq3XqSW+WB34=;
+        b=OWr9O+hDja1w2sHtP8jyUvLQmyz0G5Vp+Dbfh2KrCM5SPhMo+R4T9XmV4xPZLmaKkb
+         gtjL1QgxgNGegLW5WgOBbw+9oJho7P9PDglDqo4jBeGnky+/j0VnhYs+0LnYL3vhBX+r
+         cUWGvQGddIBt2MJxX7CzqiHChMtVVyo/zOsgsVtpHk3XEVFgCUXoE/C9ZinANYjuvpsj
+         5BhVHJ5KxDOU/GCygz+jUVshJ+VAHq2WIRqERDlsNElqMX2EboPT8eLBSB2ZYaKvBmyI
+         F549Y5F29S+HqZXqh6KV1gwL+WgYnJG1QJQJYEZnevz5SjzP8QHPeja90T6I+xWzA4VQ
+         BGOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686001677; x=1688593677;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRCWb92eslY3If4y48w+1ybK5UGe1Uv8OM5AIElN3xI=;
-        b=GtlTznu5CjXkWMxCLtzwP64ymU2ef4ccqu2T5QeutOiFWaCzLMIxlMPTJinbovox5l
-         MIuI0qD8CTr8hEYxca6kcc9ShDXigCIF+WbnNas4jW6+NhWknu6uB2dHbcdv7+Ikw6Ie
-         yoph1w8Q34AsXYNGT0Reh2CKxPYsdtODgSvgp9qfUCwc5COE2XSg4SQYG2a0oDMYD3mi
-         yuuBeQIW8lP93zCYpgtT2gYXVZZYJIX4C/1TRcTdS5vN+cPmpiz4f8uThtu0Vm6gixjj
-         z7s/O5vzPpLhwJYqQrqxQFDANIOT3Z1Ot1NpvjFcfZ6MRXopLDUEPfhvKSQq47CnqASq
-         BdrA==
-X-Gm-Message-State: AC+VfDxawQaxRwg9vYvo5VAl6i+956cB+qhHe4Rhqm1tdM2yckzVDjRo
-        A/wbkONyahYzCcxrPM8FWX8=
-X-Google-Smtp-Source: ACHHUZ7qv/jqKzNzG6E3n8xBgkvo9NRVnOOkV4Tdn1fJchGNI92akceb3eW99XYRoI67ggPJBAejNg==
-X-Received: by 2002:a17:90a:de14:b0:256:2056:ee52 with SMTP id m20-20020a17090ade1400b002562056ee52mr244219pjv.17.1686001677333;
-        Mon, 05 Jun 2023 14:47:57 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:129e:90cb:29f2:26ab:44a9])
-        by smtp.gmail.com with ESMTPSA id o70-20020a17090a0a4c00b0025063e893c9sm8607253pjo.55.2023.06.05.14.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 14:47:56 -0700 (PDT)
-From:   Anup Sharma <anupnewsmail@gmail.com>
-X-Google-Original-From: Anup Sharma <AnupSharma>
-Date:   Tue, 6 Jun 2023 03:17:48 +0530
-To:     Anup Sharma <anupnewsmail@gmail.com>
-Cc:     linux-perf-users@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] Adding Support for Firefox's Gecko Profile Format
-Message-ID: <ZH5YBBWW5ANckoMp@yoga>
-References: <ZG5kjDN63HqqMuJJ@yoga>
- <CAM9d7ciUsJM1kZhGbhQUfdxq1rsvLig2C-mAki13a92EjW37kw@mail.gmail.com>
- <CAP-5=fVekEnC1s=xUG-jFeL20qM=EPNkPO8aw8bcg4cVM=m5wg@mail.gmail.com>
- <ZHENW4HOIo0F6FnN@yoga>
- <ZHkEWse0NVZhwKR7@yoga>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZHkEWse0NVZhwKR7@yoga>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686002132; x=1688594132;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hYQuGPh6MWx4TKIybC1sfuSbzmExcI9Rq3XqSW+WB34=;
+        b=B0OmtjxBxALas4pjDKgOEv47NDuxBEI9iZ8z02fSFygEZzJD1vbZqSfwlbPMUcx+Di
+         RTkz2Oco1OFGHGLiacBJuebD1LiYYZKU29PpVex+ONsUjGo8QREVNBAAj9ZerRillZQw
+         E4bUI6O9KnP+Oq5+EdfnR8WC7bMiHv1SCEOrgzscktdg8PBNWUG2K+CqEqtbI3NWG9m+
+         YAWp0pFPMQOF4PxG2sGLiWt1SJTQr2mZn9gNyb2hqTtclZr8zdY3k2balbsMvebvtqEL
+         KPl8VZvu4/ZTsjznOMeZstVdA3U6R8sqyxLObxLk470ZZa1ukcjqeQr3Bm23CyKmX+bu
+         eaKg==
+X-Gm-Message-State: AC+VfDzKf9LcTNCXCWRmqA80X8xzrbBZ0BvcE0OM82Frszup4zxMEm7E
+        FBLyK8yN962tEoaeNlV+OROypd6amgc=
+X-Google-Smtp-Source: ACHHUZ4Ku5zpLqIcM5QLnW8SY+fLX/cJpsaUtqzg9pPg5pnw/jk1QR2T/2fYhCpn1GN0iHVU2hRPqRlNNtw=
+X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
+ (user=royluo job=sendgmr) by 2002:a67:d814:0:b0:43b:36d1:f0a3 with SMTP id
+ e20-20020a67d814000000b0043b36d1f0a3mr329577vsj.3.1686002132548; Mon, 05 Jun
+ 2023 14:55:32 -0700 (PDT)
+Date:   Mon,  5 Jun 2023 21:55:28 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230605215529.195045-1-royluo@google.com>
+Subject: [PATCH v3] usb: core: add sysfs entry for usb device state
+From:   Roy Luo <royluo@google.com>
+To:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Roy Luo <royluo@google.com>,
+        kernel test robot <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 02:19:30AM +0530, Anup Sharma wrote:
-> On Sat, May 27, 2023 at 01:19:47AM +0530, Anup Sharma wrote:
-> > On Fri, May 26, 2023 at 08:17:44AM -0700, Ian Rogers wrote:
-> > > On Thu, May 25, 2023 at 1:53 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > >
-> > > > Hi Anup,
-> > > >
-> > > > On Wed, May 24, 2023 at 12:25 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
-> > > > >
-> > > > > Hello everyone,
-> > > > >
-> > > > > I'm happy to share that I'll be working on adding support for Firefox's Gecko profile format.
-> > > > > This format is utilized by the Firefox profiler, which is a powerful tool for performance analysis
-> > > > > and debugging. By enhancing the perf data command to generate perf.data files in the Gecko
-> > > > > profile format, it will allow us to leverage the capabilities of the Firefox profiler for visualizing
-> > > > > and analyzing the performance data.
-> > > > >
-> > > > > As a starter task, I have created a test for testing the perf data JSON converter command.
-> > > > > I'm also looking for a few more starter tasks related to this project. I would greatly appreciate
-> > > > > your advice and guidance.
-> > > > >
-> > > > > In my effort to identify any existing bugs, I have enabled flags like 'fsanitize=address' to detect
-> > > > > potential issues but have not found any :). Additionally, I am running perf data commands to ensure
-> > > > > that all use cases are handled properly.
-> > > >
-> > > > Great, good to know it works well with asan for the basic use cases at least.
-> > > >
-> > > > >
-> > > > > I have one question regarding the installation process. Typically, I navigate to the perf directory,
-> > > > > run 'make', and then cp 'perf' to '/usr/bin'. However, I noticed that by default, perf is installed in
-> > > > > the '~/bin/perf' directory. Could someone please clarify why this is the case? Furthermore, I would
-> > > > > like to know how all of you compile the perf tree.
-> > > >
-> > > > I guess $HOME is the default prefix unless you set it to other, then
-> > > > make install will put
-> > > > the binary there.  You can make sure if your PATH contains the ~/bin and use it.
-> > > >
-> > > > But it's also possible you can run the perf without installing.  I
-> > > > have a symlink in
-> > > > my tmp directory to point to the recent build of the binary and use it
-> > > > always. :)
-> > > > To build, you can either 'cd tools/perf; make' or 'make -C tools/perf'
-> > > > in the top
-> > > > level linux source tree.  I also pass "BUILD_BPF_SKEL=1" to enable BPF.
-> > > >
-> > > > Thanks,
-> > > > Namhyung
-> > > 
-> > > I quite often test with address sanitizer, I do this by passing to make:
-> > > DEBUG=1 EXTRA_CFLAGS="-O0 -g -fno-omit-frame- pointer
-> > > -fsanitize=address" NO_LIBTRACEEVENT=1
-> > > 
-> > > The libtraceevent exclusion is to avoid false address sanitizer
-> > > warnings in libtraceevent (it wasn't compiled with address sanitizer).
-> > > The other flags are to make the code easier to debug. A good place to
-> > > start for a description of the build flags is Makefile.perf:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/Makefile.perf?h=perf-tools-next
-> > > 
-> > > There's also some description here:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/Documentation/Build.txt?h=perf-tools-next
-> > > 
-> > > Perhaps you can suggest improvements :-)
-> > >
-> > 
-> > Thanks Namhyung and Ian for your suggestions. I'll try them out and let you know if I have any questions.
-> >
-> 
-> Hello all,
-> 
-> Thank you for participating in today's office hours and helping me clarify my doubts. 
-> One topic that emerged from our discussion is the choice of programming language 
-> for writing the converter. I am considering using Python as it offers convenient
-> libraries for JSON manipulation. However, I need to investigate whether Python is
-> enabled by default in most of the Linux distributions that ship with perf, as its
-> absence could pose a potential obstacle.
-> 
-> Additionally, two profile formats are available: Gecko profile format and Processed profile format[1].
-> Upon discussing on Firefox Profiler matrix channel, they recommended opting for the Processed format,
-> as it will be supported in future releases as well. Therefore, I intend to begin by working with the
-> Processed format and evaluate the results. If any of you have suggestions regarding the choice of 
-> format, I would greatly appreciate your input.
-> 
-> Later on, I will address concerns I have regarding the file-loading process.
-> Once again, thank you all for your time.
+Expose usb device state to userland as the information is useful in
+detecting non-compliant setups and diagnosing enumeration failures.
+For example:
+- End-to-end signal integrity issues: the device would fail port reset
+  repeatedly and thus be stuck in POWERED state.
+- Charge-only cables (missing D+/D- lines): the device would never enter
+  POWERED state as the HC would not see any pullup.
 
-I wanted to provide an update on my exploration of various tools
-and methods to generate a profiler format. In my experimentation, I 
-considered following command as a reference. 
+What's the status quo?
+We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
+to flag potential setup issues, but there's no good way to expose them to
+userspace.
 
-perf record -F 99 -g -- perf test -w noploop
+Why add a sysfs entry in struct usb_port instead of struct usb_device?
+The struct usb_device is not device_add() to the system until it's in
+ADDRESS state hence we would miss the first two states. The struct
+usb_port is a better place to keep the information because its life
+cycle is longer than the struct usb_device that is attached to the port.
 
-The command generated perf.data file has been used with three
-different tools to generate the required format and uploaded them to 
-profiler.firefox.com. Interestingly, I noticed distinct call trees in
-each of the three cases. I find myself in a state of confusion regarding
-which result to consider as a reference. Here are the outcomes:
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202306042228.e532af6e-oliver.sang@intel.com
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+This patch comes directly from RFC v2 after being reviewed by Alan Stern
+Link: https://lore.kernel.org/all/20230531010134.1092942-1-royluo@google.com/
+More discussion about implementation options is in RFC v1
+Link: https://lore.kernel.org/all/20230525173818.219633-1-royluo@google.com/
 
-    1. Result obtained using perf script: https://share.firefox.dev/3qxEt7F
-    2. Result obtained using samply:https://share.firefox.dev/3OZsha2
-    3. Result obtained using simpleperf gecko_profile_generator: https://share.firefox.dev/45Q2BTe
+Changes since v1:
+* Address Alan Stern's comment: remove redundant NULL initializers in
+  update_port_device_state().
 
-I would greatly appreciate any guidance or suggestions in this matter.
+Changes since v2:
+* Fix "BUG: sleeping function called from invalid context" caught by
+  kernel test robot. Move sleeping function sysfs_get_dirent to port
+  initiailzation and keep the kernfs_node for future reference.
+  (Reviewed-by tag is reset as this patch involves more code changes)
+---
+ Documentation/ABI/testing/sysfs-bus-usb |  9 +++++++
+ drivers/usb/core/hub.c                  | 15 ++++++++++++
+ drivers/usb/core/hub.h                  |  4 ++++
+ drivers/usb/core/port.c                 | 32 +++++++++++++++++++++----
+ 4 files changed, 56 insertions(+), 4 deletions(-)
 
-> Thanks, 
-> Anup 
-> 
-> [1] https://github.com/firefox-devtools/profiler/blob/main/docs-developer/custom-importer.md
-> 
-> > > Thanks,
-> > > Ian
-> > > 
-> > > > >
-> > > > > Thank you for your support and I'm looking forward to collaborating with you on this project!
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index cb172db41b34..155770f18f9c 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -292,6 +292,15 @@ Description:
+ 		which is marked with early_stop has failed to initialize, it will ignore
+ 		all future connections until this attribute is clear.
+ 
++What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/state
++Date:		May 2023
++Contact:	Roy Luo <royluo@google.com>
++Description:
++		Indicates current state of the USB device attached to the port. Valid
++		states are: 'not-attached', 'attached', 'powered',
++		'reconnecting', 'unauthenticated', 'default', 'addressed',
++		'configured', and 'suspended'.
++
+ What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+ Date:		May 2013
+ Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..a739403a9e45 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2018,6 +2018,19 @@ bool usb_device_is_owned(struct usb_device *udev)
+ 	return !!hub->ports[udev->portnum - 1]->port_owner;
+ }
+ 
++static void update_port_device_state(struct usb_device *udev)
++{
++	struct usb_hub *hub;
++	struct usb_port *port_dev;
++
++	if (udev->parent) {
++		hub = usb_hub_to_struct_hub(udev->parent);
++		port_dev = hub->ports[udev->portnum - 1];
++		WRITE_ONCE(port_dev->state, udev->state);
++		sysfs_notify_dirent(port_dev->state_kn);
++	}
++}
++
+ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+ {
+ 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+@@ -2030,6 +2043,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+ 	if (udev->state == USB_STATE_SUSPENDED)
+ 		udev->active_duration -= jiffies;
+ 	udev->state = USB_STATE_NOTATTACHED;
++	update_port_device_state(udev);
+ }
+ 
+ /**
+@@ -2086,6 +2100,7 @@ void usb_set_device_state(struct usb_device *udev,
+ 				udev->state != USB_STATE_SUSPENDED)
+ 			udev->active_duration += jiffies;
+ 		udev->state = new_state;
++		update_port_device_state(udev);
+ 	} else
+ 		recursively_mark_NOTATTACHED(udev);
+ 	spin_unlock_irqrestore(&device_state_lock, flags);
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index e23833562e4f..37897afd1b64 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -84,6 +84,8 @@ struct usb_hub {
+  * @peer: related usb2 and usb3 ports (share the same connector)
+  * @req: default pm qos request for hubs without port power control
+  * @connect_type: port's connect type
++ * @state: device state of the usb device attached to the port
++ * @state_kn: kernfs_node of the sysfs attribute that accesses @state
+  * @location: opaque representation of platform connector location
+  * @status_lock: synchronize port_event() vs usb_port_{suspend|resume}
+  * @portnum: port index num based one
+@@ -100,6 +102,8 @@ struct usb_port {
+ 	struct usb_port *peer;
+ 	struct dev_pm_qos_request *req;
+ 	enum usb_port_connect_type connect_type;
++	enum usb_device_state state;
++	struct kernfs_node *state_kn;
+ 	usb_port_location_t location;
+ 	struct mutex status_lock;
+ 	u32 over_current_count;
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 06a8f1f84f6f..2f906e89054e 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -160,6 +160,16 @@ static ssize_t connect_type_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RO(connect_type);
+ 
++static ssize_t state_show(struct device *dev,
++			  struct device_attribute *attr, char *buf)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	enum usb_device_state state = READ_ONCE(port_dev->state);
++
++	return sprintf(buf, "%s\n", usb_state_string(state));
++}
++static DEVICE_ATTR_RO(state);
++
+ static ssize_t over_current_count_show(struct device *dev,
+ 				       struct device_attribute *attr, char *buf)
+ {
+@@ -259,6 +269,7 @@ static DEVICE_ATTR_RW(usb3_lpm_permit);
+ 
+ static struct attribute *port_dev_attrs[] = {
+ 	&dev_attr_connect_type.attr,
++	&dev_attr_state.attr,
+ 	&dev_attr_location.attr,
+ 	&dev_attr_quirks.attr,
+ 	&dev_attr_over_current_count.attr,
+@@ -705,19 +716,24 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ 		return retval;
+ 	}
+ 
++	port_dev->state_kn = sysfs_get_dirent(port_dev->dev.kobj.sd, "state");
++	if (!port_dev->state_kn) {
++		dev_err(&port_dev->dev, "failed to sysfs_get_dirent 'state'\n");
++		retval = -ENODEV;
++		goto err_unregister;
++	}
++
+ 	/* Set default policy of port-poweroff disabled. */
+ 	retval = dev_pm_qos_add_request(&port_dev->dev, port_dev->req,
+ 			DEV_PM_QOS_FLAGS, PM_QOS_FLAG_NO_POWER_OFF);
+ 	if (retval < 0) {
+-		device_unregister(&port_dev->dev);
+-		return retval;
++		goto err_put_kn;
+ 	}
+ 
+ 	retval = component_add(&port_dev->dev, &connector_ops);
+ 	if (retval) {
+ 		dev_warn(&port_dev->dev, "failed to add component\n");
+-		device_unregister(&port_dev->dev);
+-		return retval;
++		goto err_put_kn;
+ 	}
+ 
+ 	find_and_link_peer(hub, port1);
+@@ -754,6 +770,13 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
+ 		port_dev->req = NULL;
+ 	}
+ 	return 0;
++
++err_put_kn:
++	sysfs_put(port_dev->state_kn);
++err_unregister:
++	device_unregister(&port_dev->dev);
++
++	return retval;
+ }
+ 
+ void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
+@@ -765,5 +788,6 @@ void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
+ 	if (peer)
+ 		unlink_peers(port_dev, peer);
+ 	component_del(&port_dev->dev, &connector_ops);
++	sysfs_put(port_dev->state_kn);
+ 	device_unregister(&port_dev->dev);
+ }
+
+base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
