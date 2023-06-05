@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD34722D45
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B417722D48
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbjFERGE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 13:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S235281AbjFERGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 13:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjFERF7 (ORCPT
+        with ESMTP id S235181AbjFERGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:05:59 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C571109;
-        Mon,  5 Jun 2023 10:05:52 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QZg1N2bmLz67ftX;
-        Tue,  6 Jun 2023 01:03:52 +0800 (CST)
-Received: from localhost (10.126.171.223) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 5 Jun
- 2023 18:05:48 +0100
-Date:   Mon, 5 Jun 2023 18:05:47 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "Kuninori Morimoto" <kuninori.morimoto.gx@renesas.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 5/9] iio: inkern: Add a helper to query an available
- minimum raw value
-Message-ID: <20230605180547.0000528b@Huawei.com>
-In-Reply-To: <CAHp75Vec3fXT6phqvLGSn0c09USCXXF6ZoE+X1VNJGM6jyf=aQ@mail.gmail.com>
-References: <20230523151223.109551-1-herve.codina@bootlin.com>
-        <20230523151223.109551-6-herve.codina@bootlin.com>
-        <ZHtIdTZbULl6t4RT@surfacebook>
-        <20230605094637.7615b689@bootlin.com>
-        <CAHp75Vec3fXT6phqvLGSn0c09USCXXF6ZoE+X1VNJGM6jyf=aQ@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 5 Jun 2023 13:06:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860C2CD;
+        Mon,  5 Jun 2023 10:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685984758; x=1717520758;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yNqEF3trYoU7hnGxpDpvi8nhlncENBsYKi1m/ukv08Q=;
+  b=hq4be/5W6Z8JGFSbLxh4Q45s/wDXvLzCR3v1jDywRINqCA6+eqtI4UW4
+   9xNuLmfraX1dldD2iXKD9XtV5V9zGiszQD/IdD6UEEVF/QWmRyAWFZTAz
+   fDsS0YrgbKTgU6cmhXm2l7vQ8J8M4xCRhMFn6/kbzB5vC12vhTQq+juiW
+   n3TGfkWUfCyMSYXDJjnrjgKo30mtV8tlYIwLpJHIyiuvCYQXelJUsFu6y
+   wOC8w62JQY+r1NeQ4pePG5p61iw0NvtIDuIFoG9tJK2zsLWSfQt0s6yDk
+   w+Gze3ia34R56QhkbSu/Zy0WzHoCSWKOh3QQFylsTTImC9LJ/QTBwF/Oi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="356431394"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="356431394"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 10:05:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="773807506"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="773807506"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jun 2023 10:05:49 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 86EF6204; Mon,  5 Jun 2023 20:05:56 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v3 0/3] lib/string_helpers et al.: Change return value of strreplace()
+Date:   Mon,  5 Jun 2023 20:05:50 +0300
+Message-Id: <20230605170553.7835-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.126.171.223]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Jun 2023 12:45:24 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+It's more convenient to have strreplace() to return the pointer to
+ the string itself. This will help users to make their code better.
 
-> On Mon, Jun 5, 2023 at 10:46 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> > On Sat, 3 Jun 2023 17:04:37 +0300
-> > andy.shevchenko@gmail.com wrote:  
-> > > Tue, May 23, 2023 at 05:12:19PM +0200, Herve Codina kirjoitti:  
-> 
-> ...
-> 
-> > > > +           case IIO_VAL_INT:
-> > > > +                   *val = vals[--length];  
-> > >  
-> > > > +                   while (length) {  
-> > >
-> > >                       while (length--) {
-> > >
-> > > will do the job and at the same time...
-> > >  
-> > > > +                           if (vals[--length] < *val)
-> > > > +                                   *val = vals[length];  
-> > >
-> > > ...this construction becomes less confusing (easier to parse).  
-> >
-> > Indeed, I will change in the next iteration.  
-> 
-> And looking into above line, this whole construction I would prefer to
-> have a macro in minmax.h like
-> 
-> #define min_array(array, len) \
-> {( \
->   typeof(len) __len = (len); \
->   typeof(*(array)) __element = (array)[--__len]; \
->   while (__len--) \
->     __element = min(__element, (array)[__len]); \
->   __element; \
-> )}
-> 
-> (it might need more work, but you got the idea)
-> 
-> > > > +                   }
-> > > > +                   break;  
-> 
-> ...
-> 
-> > > > +           default:
-> > > > +                   /* FIXME: learn about min for other iio values */  
-> > >
-> > > I believe in a final version this comment won't be here.  
-> >
-> > We have the same FIXME comment in the iio_channel_read_max() function I
-> > copied to create this iio_channel_read_min() and, to be honest, I
-> > don't really know how to handle these other cases.
-> >
-> > In this series, I would prefer to keep this FIXME.  
-> 
-> I see, Jonathan needs to be involved here then.
+The patch 1 kills the only user of the returned value of strreplace(),
+Patch 2 converts the return value of strreplace(). And patch 3 shows
+how it may be useful. That said, the series can be routed via fs tree,
+with or without the last patch.
 
-It's really more of a TODO when someone needs it than a FIXME.
-I'm not particularly keen to see a bunch of code supporting cases
-that no one uses, but it's useful to call out where the code would
-go if other cases were to be supported.
+In v3:
+- rebased on top of latest Linux Next
 
-Perhaps soften it to a note that doesn't have the work FIXME in it.
+In v2:
+- removed not anymore used variable (LKP)
+- added tag (Jan)
+- fixed wording (Kees)
+- actually return the pointer to the string itself
 
-Jonathan
+Andy Shevchenko (3):
+  jbd2: Avoid printing outside the boundary of the buffer
+  lib/string_helpers: Change returned value of the strreplace()
+  kobject: Use return value of strreplace()
 
+ fs/jbd2/journal.c      |  6 ++----
+ include/linux/string.h |  2 +-
+ lib/kobject.c          |  3 +--
+ lib/string_helpers.c   | 12 ++++++++----
+ 4 files changed, 12 insertions(+), 11 deletions(-)
 
-> 
-> > > > +                   return -EINVAL;  
-> 
+-- 
+2.40.0.1.gaa8946217a0b
 
