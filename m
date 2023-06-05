@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A1172275A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31FD722757
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbjFEN1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S231307AbjFEN0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjFEN12 (ORCPT
+        with ESMTP id S230029AbjFEN0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:27:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089B0D2
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685971606;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fE6eT97yzH12os5SZGHmyPIjNlvh5xRQLosLvxOHz80=;
-        b=M754T/bQLZjMJBqyLGzsiLBsIuS6hG+QcCPmjrJQTRWZ2Zs7WaLc3D3TjnBzBeUM84mCPC
-        57sUDX+BWgFzTEapkB1z9T5d4Ah9GQuZlFns65MFwVqEVm0inM1uEUOl3bXOFCGmNHxM4G
-        Xp6RWjEbFm+75xVd4Moofh6b1/8fOUw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-NUiRjT3UM7GVO2knb6Tq8Q-1; Mon, 05 Jun 2023 09:26:43 -0400
-X-MC-Unique: NUiRjT3UM7GVO2knb6Tq8Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 5 Jun 2023 09:26:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65F1A6;
+        Mon,  5 Jun 2023 06:26:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 686E91C05EAA;
-        Mon,  5 Jun 2023 13:26:42 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.144])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 1D7D81121314;
-        Mon,  5 Jun 2023 13:26:33 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon,  5 Jun 2023 15:26:20 +0200 (CEST)
-Date:   Mon, 5 Jun 2023 15:26:11 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [PATCH 1/1] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230605132611.GB32275@redhat.com>
-References: <20230601183232.8384-1-michael.christie@oracle.com>
- <20230602192254.GD555@redhat.com>
- <87wn0l2or4.fsf@email.froward.int.ebiederm.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5234D6134A;
+        Mon,  5 Jun 2023 13:26:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99161C433D2;
+        Mon,  5 Jun 2023 13:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685971588;
+        bh=7jvreSULTAW1dgm4KKjWd49Rumkiyi/ADlztxfIhpqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HSEWBQul/ibrJpxuKnHrM7PPPXULYqwQlh5aV06gtYuVUvbxKx6PdKk5az5fgPOiR
+         BVyoo7rT18zK9a6IWqdL5S7mllk2X18C5e0HKYhEa0cSzYfeuMopM0QqE0ZP6OskmM
+         SaQ1OGLILhXFBDTBOeOg367JhaCMWIXVEfj16Y0FfMeGJVJCr/0x/9WqokCPL2/SDZ
+         eSm9+SV7YKGrO2UVTxaQ4W8Hn5YMPXij2cm1dE5oOX/+8RrmfIvnd5j6agybPbasMZ
+         pq5QS+KrgPJJCDJ4eLHdMtOYs+RmNENiEPsAr8QCGwyOqMPJVGO6wHQuk427NlrTCd
+         D3/M7E2/NreIA==
+Date:   Mon, 5 Jun 2023 14:26:19 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gregkh@linuxfoundation.org,
+        linux@armlinux.org.uk, mturquette@baylibre.com, sboyd@kernel.org,
+        sre@kernel.org, broonie@kernel.org, arnd@arndb.de,
+        gregory.clement@bootlin.com, sudeep.holla@arm.com,
+        balamanikandan.gunasundar@microchip.com, mihai.sain@microchip.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, Hari.PrasathGE@microchip.com,
+        cristian.birsan@microchip.com, durai.manickamkr@microchip.com,
+        manikandan.m@microchip.com, dharma.b@microchip.com,
+        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
+Subject: Re: [PATCH 17/21] power: reset: at91-poweroff: lookup for proper pmc
+ dt node for sam9x7
+Message-ID: <20230605-sedan-gimmick-6381f121cc0a@spud>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-18-varshini.rajendran@microchip.com>
+ <2a538004-351f-487a-361c-df723d186c27@linaro.org>
+ <c3f7c08f-272a-5abb-da78-568c408f40de@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qGD4Ahe9OQYksAQU"
 Content-Disposition: inline
-In-Reply-To: <87wn0l2or4.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <c3f7c08f-272a-5abb-da78-568c408f40de@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,60 +75,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02, Eric W. Biederman wrote:
->
-> Oleg Nesterov <oleg@redhat.com> writes:
->
-> > Hi Mike,
-> >
-> > sorry, but somehow I can't understand this patch...
-> >
-> > I'll try to read it with a fresh head on Weekend, but for example,
-> >
-> > On 06/01, Mike Christie wrote:
-> >>
-> >>  static int vhost_task_fn(void *data)
-> >>  {
-> >>  	struct vhost_task *vtsk = data;
-> >> -	int ret;
-> >> +	bool dead = false;
-> >> +
-> >> +	for (;;) {
-> >> +		bool did_work;
-> >> +
-> >> +		/* mb paired w/ vhost_task_stop */
-> >> +		if (test_bit(VHOST_TASK_FLAGS_STOP, &vtsk->flags))
-> >> +			break;
-> >> +
-> >> +		if (!dead && signal_pending(current)) {
-> >> +			struct ksignal ksig;
-> >> +			/*
-> >> +			 * Calling get_signal will block in SIGSTOP,
-> >> +			 * or clear fatal_signal_pending, but remember
-> >> +			 * what was set.
-> >> +			 *
-> >> +			 * This thread won't actually exit until all
-> >> +			 * of the file descriptors are closed, and
-> >> +			 * the release function is called.
-> >> +			 */
-> >> +			dead = get_signal(&ksig);
-> >> +			if (dead)
-> >> +				clear_thread_flag(TIF_SIGPENDING);
-> >
-> > this can't be right or I am totally confused.
-> >
-> > Another signal_wake_up() can come right after clear(SIGPENDING).
->
-> Technically yes.
 
-...
+--qGD4Ahe9OQYksAQU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Beyond that clearing TIF_SIGPENDING is just an optimization so
-> the thread can sleep in schedule and not spin.
+Hey,
 
-Yes. So if another signal_wake_up() comes after clear(SIGPENDING)
-this code will spin in busy-wait loop waiting VHOST_TASK_FLAGS_STOP.
-Obviously not good and even deadlockable on UP && !PREEMPT.
+On Mon, Jun 05, 2023 at 03:04:34PM +0200, Nicolas Ferre wrote:
+> On 05/06/2023 at 08:43, Krzysztof Kozlowski wrote:
+> > On 03/06/2023 22:02, Varshini Rajendran wrote:
+> > > Use sam9x7 pmc's compatible to lookup for in the SHDWC driver
+> > >=20
+> > > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> > > ---
+> > >   drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > >=20
+> > > diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power=
+/reset/at91-sama5d2_shdwc.c
+> > > index d8ecffe72f16..d0f29b99f25e 100644
+> > > --- a/drivers/power/reset/at91-sama5d2_shdwc.c
+> > > +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+> > > @@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] =
+=3D {
+> > >        { .compatible =3D "atmel,sama5d2-pmc" },
+> > >        { .compatible =3D "microchip,sam9x60-pmc" },
+> > >        { .compatible =3D "microchip,sama7g5-pmc" },
+> > > +     { .compatible =3D "microchip,sam9x7-pmc" },
+> >=20
+> > Why do you need new entry if these are compatible?
+>=20
+> Yes, PMC is very specific to a SoC silicon. As we must look for it in the
+> shutdown controller, I think we need a new entry here.
 
-Oleg.
+Copy-pasting this for a wee bit of context as I have two questions.
 
+| static const struct of_device_id at91_shdwc_of_match[] =3D {
+| 	{
+| 		.compatible =3D "atmel,sama5d2-shdwc",
+| 		.data =3D &sama5d2_reg_config,
+| 	},
+| 	{
+| 		.compatible =3D "microchip,sam9x60-shdwc",
+| 		.data =3D &sam9x60_reg_config,
+| 	},
+| 	{
+| 		.compatible =3D "microchip,sama7g5-shdwc",
+| 		.data =3D &sama7g5_reg_config,
+| 	}, {
+| 		/*sentinel*/
+| 	}
+| };
+| MODULE_DEVICE_TABLE(of, at91_shdwc_of_match);
+|=20
+| static const struct of_device_id at91_pmc_ids[] =3D {
+| 	{ .compatible =3D "atmel,sama5d2-pmc" },
+| 	{ .compatible =3D "microchip,sam9x60-pmc" },
+| 	{ .compatible =3D "microchip,sama7g5-pmc" },
+| 	{ .compatible =3D "microchip,sam9x7-pmc" },
+| 	{ /* Sentinel. */ }
+| };
+
+If there's no changes made to the code, other than adding an entry to
+the list of pmc compatibles, then either this has the same as an
+existing SoC, or there is a bug in the patch, since the behaviour of
+the driver will not have changed.
+
+Secondly, this patch only updates the at91_pmc_ids and the dts patch
+contains:
+| shutdown_controller: shdwc@fffffe10 {
+| 	compatible =3D "microchip,sam9x60-shdwc";
+| 	reg =3D <0xfffffe10 0x10>;
+| 	clocks =3D <&clk32k 0>;
+| 	#address-cells =3D <1>;
+| 	#size-cells =3D <0>;
+| 	atmel,wakeup-rtc-timer;
+| 	atmel,wakeup-rtt-timer;
+| 	status =3D "disabled";
+| };
+
+=2E..which would mean that the there's nothing different between the
+programming models for the sam9x60 and sam9x7. If that's the case, the
+dt-binding & dts should list the sam9x60 as a fallback for the sam9x7 &
+there is no change required to the driver. If it's not the case, then
+there's a bug in this patch and the dts one :)
+
+In general, if things are the same as previous products, there's no need
+to change the drivers at all & just add fallback compatibles to the
+bindings and dts. IFF some difference pops up in the future, then the
+sam9x7 compatible will already exist in the dts, and can then be added
+to the driver.
+
+Cheers,
+Conor.
+
+
+--qGD4Ahe9OQYksAQU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH3iZQAKCRB4tDGHoIJi
+0k26AQCR+FNf+yO4bvvxn9btScRrtb3+MomV/4TeUvmr9kGqvgEAmNYYoMHrjOWk
+oCe+utfYdl8cSw8Jvst3LU6J2uVlQQI=
+=nGf/
+-----END PGP SIGNATURE-----
+
+--qGD4Ahe9OQYksAQU--
