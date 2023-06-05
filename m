@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77352722C03
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B47E722C06
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 17:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjFEP4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 11:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S232548AbjFEP7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 11:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjFEP4S (ORCPT
+        with ESMTP id S231199AbjFEP7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 11:56:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADC798;
-        Mon,  5 Jun 2023 08:56:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B630627C4;
-        Mon,  5 Jun 2023 15:56:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1D7C433EF;
-        Mon,  5 Jun 2023 15:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685980569;
-        bh=IpNtFuVuKEDwemMdS4OmFiuCWO+xommx26o3j8UmfWs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jSqX0XiK8oho4aB/cWScg8BnPfw3W9jVHW+yAsqniIg8EmYcq7uUYyAZZrr9v9NE/
-         S97rjd5OFP9KpJTapeBpC+J6IQ0l2/Cmdr9DZGCpNE/S9i/3TEpbBsHcSO+q4dnlM8
-         82VhuyaBYs+arx8abzKe0tssPSYVuO6pG0QeHmUxDW5rDDYANFd4i2ou3NDcUNZnq1
-         FVjQvir6uRbkg3H0pfRDCRkyHqm7XcdPlSv3qHZLOYPLabheChsUIqjIhsC7F5xuTT
-         lcErf3nn/mj4diPiiJBtoE2VkHSpPXGnD6U/CVtHGv3LY2vT+DeAyD0Qu22LBgvNs9
-         HS9QkmjXaBWGw==
-Date:   Mon, 5 Jun 2023 16:56:05 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        jassisinghbrar@gmail.com
-Subject: Re: [PATCH AUTOSEL 6.3] mailbox: mailbox-test: Fix potential
- double-free in mbox_test_message_write()
-Message-ID: <20230605155605.GA2357572@google.com>
-References: <20230519161348.2750641-1-sashal@kernel.org>
+        Mon, 5 Jun 2023 11:59:08 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B124B0
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 08:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685980747; x=1717516747;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0lAuoGk56JFzvUQpYQHSf87YsEVvoUcUI9dkbr4Ucg0=;
+  b=GqZ1OTUv6KWi/iFEB9ayC3AiPzjyBC4nudiAI970uvbSfldFZH1ldhBW
+   2RJL9OhvvTt+/tbbTQeIQvf2KQ4NiPdvdieAkMqp7evkQScrAQFtlinzz
+   zToB5zHmJH5ET1ZUMjMeR2D4lEuZzwdbCfRTDUZIq+Sna4ijVjQpuuBkY
+   U=;
+X-IronPort-AV: E=Sophos;i="6.00,217,1681171200"; 
+   d="scan'208";a="289729654"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 15:59:00 +0000
+Received: from EX19D014EUC004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com (Postfix) with ESMTPS id 1E548806DD;
+        Mon,  5 Jun 2023 15:58:58 +0000 (UTC)
+Received: from u5d18b891348c5b.ant.amazon.com (10.146.13.227) by
+ EX19D014EUC004.ant.amazon.com (10.252.51.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 5 Jun 2023 15:58:53 +0000
+From:   James Gowans <jgowans@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, James Gowans <jgowans@amazon.com>,
+        Liao Chang <liaochang1@huawei.com>
+Subject: [PATCH v3 1/2] genirq: Expand doc for PENDING and REPLAY flags
+Date:   Mon, 5 Jun 2023 17:57:22 +0200
+Message-ID: <20230605155723.2628097-1-jgowans@amazon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230519161348.2750641-1-sashal@kernel.org>
+Content-Type: text/plain
+X-Originating-IP: [10.146.13.227]
+X-ClientProxiedBy: EX19D046UWB003.ant.amazon.com (10.13.139.174) To
+ EX19D014EUC004.ant.amazon.com (10.252.51.182)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,92 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023, Sasha Levin wrote:
+Adding a bit more info about what the flags are used for may help future
+code readers.
 
-> From: Lee Jones <lee@kernel.org>
-> 
-> [ Upstream commit 2d1e952a2b8e5e92d8d55ac88a7cf7ca5ea591ad ]
-> 
-> If a user can make copy_from_user() fail, there is a potential for
-> UAF/DF due to a lack of locking around the allocation, use and freeing
-> of the data buffers.
-> 
-> This issue is not theoretical.  I managed to author a POC for it:
-> 
->     BUG: KASAN: double-free in kfree+0x5c/0xac
->     Free of addr ffff29280be5de00 by task poc/356
->     CPU: 1 PID: 356 Comm: poc Not tainted 6.1.0-00001-g961aa6552c04-dirty #20
->     Hardware name: linux,dummy-virt (DT)
->     Call trace:
->      dump_backtrace.part.0+0xe0/0xf0
->      show_stack+0x18/0x40
->      dump_stack_lvl+0x64/0x80
->      print_report+0x188/0x48c
->      kasan_report_invalid_free+0xa0/0xc0
->      ____kasan_slab_free+0x174/0x1b0
->      __kasan_slab_free+0x18/0x24
->      __kmem_cache_free+0x130/0x2e0
->      kfree+0x5c/0xac
->      mbox_test_message_write+0x208/0x29c
->      full_proxy_write+0x90/0xf0
->      vfs_write+0x154/0x440
->      ksys_write+0xcc/0x180
->      __arm64_sys_write+0x44/0x60
->      invoke_syscall+0x60/0x190
->      el0_svc_common.constprop.0+0x7c/0x160
->      do_el0_svc+0x40/0xf0
->      el0_svc+0x2c/0x6c
->      el0t_64_sync_handler+0xf4/0x120
->      el0t_64_sync+0x18c/0x190
-> 
->     Allocated by task 356:
->      kasan_save_stack+0x3c/0x70
->      kasan_set_track+0x2c/0x40
->      kasan_save_alloc_info+0x24/0x34
->      __kasan_kmalloc+0xb8/0xc0
->      kmalloc_trace+0x58/0x70
->      mbox_test_message_write+0x6c/0x29c
->      full_proxy_write+0x90/0xf0
->      vfs_write+0x154/0x440
->      ksys_write+0xcc/0x180
->      __arm64_sys_write+0x44/0x60
->      invoke_syscall+0x60/0x190
->      el0_svc_common.constprop.0+0x7c/0x160
->      do_el0_svc+0x40/0xf0
->      el0_svc+0x2c/0x6c
->      el0t_64_sync_handler+0xf4/0x120
->      el0t_64_sync+0x18c/0x190
-> 
->     Freed by task 357:
->      kasan_save_stack+0x3c/0x70
->      kasan_set_track+0x2c/0x40
->      kasan_save_free_info+0x38/0x5c
->      ____kasan_slab_free+0x13c/0x1b0
->      __kasan_slab_free+0x18/0x24
->      __kmem_cache_free+0x130/0x2e0
->      kfree+0x5c/0xac
->      mbox_test_message_write+0x208/0x29c
->      full_proxy_write+0x90/0xf0
->      vfs_write+0x154/0x440
->      ksys_write+0xcc/0x180
->      __arm64_sys_write+0x44/0x60
->      invoke_syscall+0x60/0x190
->      el0_svc_common.constprop.0+0x7c/0x160
->      do_el0_svc+0x40/0xf0
->      el0_svc+0x2c/0x6c
->      el0t_64_sync_handler+0xf4/0x120
->      el0t_64_sync+0x18c/0x190
-> 
-> Signed-off-by: Lee Jones <lee@kernel.org>
-> Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/mailbox/mailbox-test.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+Signed-off-by: James Gowans <jgowans@amazon.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Liao Chang <liaochang1@huawei.com>
+---
+ kernel/irq/internals.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Could you ensure the follow-up patch is also applied to all branches please?
-
-  8fe72b76db79d mailbox: mailbox-test: fix a locking issue in mbox_test_message_write()
-
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 5fdc0b557579..c443a0ddc07e 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -47,9 +47,12 @@ enum {
+  *				  detection
+  * IRQS_POLL_INPROGRESS		- polling in progress
+  * IRQS_ONESHOT			- irq is not unmasked in primary handler
+- * IRQS_REPLAY			- irq is replayed
++ * IRQS_REPLAY			- irq has been resent and will not be resent
++ * 				  again until the handler has run and cleared
++ * 				  this flag.
+  * IRQS_WAITING			- irq is waiting
+- * IRQS_PENDING			- irq is pending and replayed later
++ * IRQS_PENDING			- irq needs to be resent and should be resent
++ * 				  at the next available opportunity.
+  * IRQS_SUSPENDED		- irq is suspended
+  * IRQS_NMI			- irq line is used to deliver NMIs
+  * IRQS_SYSFS			- descriptor has been added to sysfs
 -- 
-Lee Jones [李琼斯]
+2.25.1
+
