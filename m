@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F62C721E2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D892D721E37
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjFEGfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 02:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S229690AbjFEGgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 02:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbjFEGfP (ORCPT
+        with ESMTP id S229867AbjFEGgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:35:15 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B839EA
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:35:13 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so6558687a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 23:35:13 -0700 (PDT)
+        Mon, 5 Jun 2023 02:36:33 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F68DF
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:36:31 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96fdc081cb3so656662266b.2
+        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 23:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685946912; x=1688538912;
+        d=linaro.org; s=google; t=1685946989; x=1688538989;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HAkCrvHOWXDqwj1iMGZRedd16rhqvqKQgu07G0b3u+w=;
-        b=e7E3JztSPDwCFOVrzxyEbVKg2EBeBOYgZaTU4BRpwJs1h7uHWXDo+l4Zk5OwWH3gxO
-         EqYoWrI2nluRnjKjwdlqLEnBcCpOkMVsq/NL07i8ATGoappT2Y7Iu+bHCO+sxDx/d6PF
-         m1yW2VgipEcnRLFaW68NCN+FFcFIJPbw/eYHR3Y07vtSoQ9V57ZsG/OrkuBfp0zcE7uO
-         mUMJdZb3Ktm56WuGjYfV4znaUsZVjWccpeON3w72rzjU7HO+wQmcEKdi3vZPb9spMHEO
-         MAxQO8sclY35BjwjlYS1iRkx51Kv62cQ0tFvY3zdkd4n9Jlo0VDzxWWtcb/m129XFaB6
-         19jQ==
+        bh=2DzCC5nNj9v724sBHpzIo/I7iRoYP7iyXhmHfz9Pk7Y=;
+        b=EfGxmQgBDHTK3j0dd8RNyLsGK1duhmTxBU8B3HBUvpPxlCuH5uWRWAxz7HvXZCq524
+         jwQ2hCHnyKGWaP+VcXdHo8XVXue7aJTSH7pKErryvBtVqaVmXOgsjmA61C+/XMBvyXuI
+         XpazGattWkNXMdKUK31h68OPYWLUhgNRVtpCNO6l8nTJzLZp/4Hz9cQdGYhRySi5fCh+
+         iHwasAxQMWf4whFDhyfjmRyufJ+tObicaoV78hGCqWie2UEBKUngjNKqNycneMm2GZ+a
+         esgYE7DDocfsBeYkJ/Ydl4NmbHxvGf0d08XzDVNqqdsVrXIxa4vi9P++2Uuryl2FP/lE
+         2TmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685946912; x=1688538912;
+        d=1e100.net; s=20221208; t=1685946989; x=1688538989;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HAkCrvHOWXDqwj1iMGZRedd16rhqvqKQgu07G0b3u+w=;
-        b=Jtl2q9/M5a2ZqTdosL6Z5gkdeUTl6TALjlaa7fqiEGJJIVxhA5GdqR6qry9ONqnwTv
-         +GUeTNDpcjAiV63SMwmRE6Nce/C2uM2daSSGYte7PvGhxFGpyK/uoi6dvpbFQeIlesMq
-         1G9ab65YOOj/8dXJv/iMCjVVeYlSnioPqFrlJtd0uSRCnmPOw3IyXR5Kn2gH7KxxnCKH
-         Z6fS7hHtOhP9/nqp0sGPypy3WX/7MmsIHrrkvRKbwnIH8PRv476YQLD12lIA+BSncQqz
-         GeiWC9kbVavaCd72J+u0FAY+G7DGiqsF2LJMdlYemHrwUYFCVUk3tl0q6pjNf+7IL5Sk
-         SWow==
-X-Gm-Message-State: AC+VfDy6XqSYict9lKkGkg8pkpLWObXT+tkz7RsmmpOoBYjlyQVM1vh/
-        XVXtB2Xkm4od21LlwnRirJqdUw==
-X-Google-Smtp-Source: ACHHUZ4BgooRJqWw2thRF8QqkzdRcCJ+hGa1VmZ7YEgpaG6Ikj580m9cbKbqSO9oirFRyquUlSnLew==
-X-Received: by 2002:aa7:cd10:0:b0:513:53f7:8ca2 with SMTP id b16-20020aa7cd10000000b0051353f78ca2mr6734317edw.9.1685946911857;
-        Sun, 04 Jun 2023 23:35:11 -0700 (PDT)
+        bh=2DzCC5nNj9v724sBHpzIo/I7iRoYP7iyXhmHfz9Pk7Y=;
+        b=lbtql8ljrLa6hB1YH0EiANtvUi6GbKaUro5szbuYlFrtZprF+U/fNYAW7IWbzATN1o
+         nHw9+AkDVYbwKRbItyw2P2rVAeeP0dvFs11pAx6UGy6GVaqrz0ynT9XM288izKZ6/4gy
+         VMjYewcykAfkZ+smdqIyNf/S8+Vt1zI2exug7q/HG/LNpVBoalQzFchkAMS34Rk8b/CG
+         V+Vc5EEs2VrDwMqis9knidpO7EuI3PAFqyPuPjsCieB/RF8HMZNhdJwhkLpj19KhezAq
+         50JAs/6LBzKjRPzc1PNaxnAb8u0X8TYD3kpczw40TzGk92kzIl8vbdw67o+XgObqdZL/
+         7Psg==
+X-Gm-Message-State: AC+VfDzJ/zx3uX1W/X4GnpCOTTtS2WqiTYgOd8r/N8Qfd5+5P+HNNdCq
+        QQmnlYLDGxyh5IqMGrdhwrLjnCJyjzVWlE6cq5k=
+X-Google-Smtp-Source: ACHHUZ6d00GdMTR6aAxeVElkl0mxPzjdle9Lbahv1I4pFtz6RO6KSMrZET+M4yBitY9jdcpIUHeAuA==
+X-Received: by 2002:a17:906:5d09:b0:974:1c91:a752 with SMTP id g9-20020a1709065d0900b009741c91a752mr6371767ejt.5.1685946989561;
+        Sun, 04 Jun 2023 23:36:29 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id v1-20020aa7dbc1000000b005163a0f84a1sm3636951edt.48.2023.06.04.23.35.08
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090668cb00b00977eb9957e9sm145894ejr.128.2023.06.04.23.36.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 23:35:11 -0700 (PDT)
-Message-ID: <c72f45ec-c185-8676-b31c-ec48cd46278c@linaro.org>
-Date:   Mon, 5 Jun 2023 08:35:07 +0200
+        Sun, 04 Jun 2023 23:36:29 -0700 (PDT)
+Message-ID: <3b776a90-add5-f870-b20d-0b1bf9b05bc8@linaro.org>
+Date:   Mon, 5 Jun 2023 08:36:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH 01/21] dt-bindings: microchip: atmel,at91rm9200-tcb: add
- sam9x60 compatible
+Subject: Re: [PATCH 03/21] dt-bindings: usb: generic-ehci: Document
+ clock-names property
 Content-Language: en-US
 To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
@@ -77,9 +77,9 @@ Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
         dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
         balakrishnan.s@microchip.com
 References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-2-varshini.rajendran@microchip.com>
+ <20230603200243.243878-4-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230603200243.243878-2-varshini.rajendran@microchip.com>
+In-Reply-To: <20230603200243.243878-4-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,24 +93,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 03/06/2023 22:02, Varshini Rajendran wrote:
-> Add sam9x60 compatible string support in the schema file
+> Document the property clock-names in the schema.
+> 
+> It fixes the dtbs_warning,
+> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+You cut too much from the warning. Which target/board?
+
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml  | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> index a46411149571..c70c77a5e8e5 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> @@ -20,6 +20,7 @@ properties:
->            - atmel,at91rm9200-tcb
->            - atmel,at91sam9x5-tcb
->            - atmel,sama5d2-tcb
-> +          - microchip,sam9x60-tcb
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 7e486cc6cfb8..542ac26960fc 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -102,6 +102,10 @@ properties:
+>          - if a USB DRD channel: first clock should be host and second
+>            one should be peripheral
+>  
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 4
 
-No wildcards.
+Not really, because we want them to be fixed, so you need to list the
+items. But it seems this is not needed at all... which boards and
+drivers use names?
+
 
 Best regards,
 Krzysztof
