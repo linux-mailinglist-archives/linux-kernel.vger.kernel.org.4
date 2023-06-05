@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1083722D38
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBD5722D24
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233868AbjFERDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S234688AbjFEQ7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbjFERDU (ORCPT
+        with ESMTP id S229974AbjFEQ7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:03:20 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284BAF4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:02:57 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E17AB5FD20;
-        Mon,  5 Jun 2023 20:02:55 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685984575;
-        bh=x+1qHC0v4b7AQgdBgAH1V4V1aQW5KU1oALYhRBo8Ldg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=szx0Wa+/T+P+pgW/v719qCHdQla1J6fdYiEPy8CnaFRJBfN6Y3fKTQGrfNeK9Emut
-         T0pIsV1dVy+ClkyXlrgP6FJseHwWB79w1jjkhF2UB2iLT6UecHcbcA8t7Y9AfGHUsR
-         71DM4KKQyUuJiVfsrnfJE4v9zL4yBcQGpRvw+VnZhLWYBX0tpKF71GzEY5jkZyTBtd
-         NXD/KNzwGWLCbGCePdgs54gNzIwb63POmEJNqQeEnEuLjBsg75cDNwmeUqG2auBPJ5
-         r+aqeq7WRtoAgU5Niyor+JjNCtHLx6Q511S70muXH/36ZhogpNNNoEFEKEfRfz3K5n
-         YQz/d5LnMK37A==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon,  5 Jun 2023 20:02:53 +0300 (MSK)
-Message-ID: <c316961d-6021-1cb4-9ff4-22fe9ca5a18a@sberdevices.ru>
-Date:   Mon, 5 Jun 2023 19:58:02 +0300
+        Mon, 5 Jun 2023 12:59:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A6BED
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685984344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y50p/0+oWHhhFYPgth0jR3BiuBMuj4lSU+BTc9jCgts=;
+        b=dJLL8nBS5yGKqEXH50bJv3x229EOhgdIqVjKhEBahOah8U2VABUojr/o0bXHHsjiiGSe/b
+        0htnMdYxABDJ2iSIesAU/PPsFRLSZP0ZLTCgb8Bi4GWmDj08ZVINM7PpeE9sj5noc9ZW/O
+        dL3nl8+nRKnQkI0JwzKizOhC44Sdk44=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-96--o8xIUXZNsuVdFk07MOqcw-1; Mon, 05 Jun 2023 12:59:00 -0400
+X-MC-Unique: -o8xIUXZNsuVdFk07MOqcw-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b1351b76eso672263485a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 09:59:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685984340; x=1688576340;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y50p/0+oWHhhFYPgth0jR3BiuBMuj4lSU+BTc9jCgts=;
+        b=fUjveMm6n4aBTwVwmsh+3/F/B/gHt16C08vmYUCRknMfO0MA8qExnXg8JSofsoUoWe
+         nttEzbxMEgxzlC6MVsR3KS0a+fmZsbUwl46MEYBGhIGJ0O3jP84zA7HDwezAK9hQRcGU
+         OWW3LhQfxMWKKeEpptabkzGdMrCvzKgezWjNFoeFYtPwRikyijGH/vauYYZaaNCH+pm2
+         CUzzjKq2q0SIGfVjhLmQMKhFuT+IUQUdu+ixH8PrpzGWDPyzX6NS4ycRYEkEzHE1spYC
+         0ZEL2tRnNQHf30G+HbDmGJTBBCURHBPkD3Telq8GAzwFaL3Ry2zgfCTZ++yBZI8nN0dp
+         2QWA==
+X-Gm-Message-State: AC+VfDzpdgwFYZASylb+j2LIs5dqTV3D9RnMTrgxoWO1apZ90nBpOIN7
+        YxDC3ExS5/gFbROgeACMd//aV+xAQkmI8CQ0wp9MVhjdAY6JLrmiU076jpIrY6esnWM5nPDLPWT
+        splYsUtN/gMXocL2n6tr3d7s=
+X-Received: by 2002:a05:620a:880f:b0:75e:2a27:2543 with SMTP id qj15-20020a05620a880f00b0075e2a272543mr431015qkn.15.1685984340032;
+        Mon, 05 Jun 2023 09:59:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7XKn25F/+47ap22TpytuchRa8fmxTRyMtZwMCrtzmwBQq2cuxamoKOIdEfGkOGAgCXeQ7viw==
+X-Received: by 2002:a05:620a:880f:b0:75e:2a27:2543 with SMTP id qj15-20020a05620a880f00b0075e2a272543mr431004qkn.15.1685984339796;
+        Mon, 05 Jun 2023 09:58:59 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-201.cust.vodafonedsl.it. [2.34.28.201])
+        by smtp.gmail.com with ESMTPSA id f16-20020a05620a12f000b0075ca4cd03d4sm4308552qkl.64.2023.06.05.09.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 09:58:59 -0700 (PDT)
+Message-ID: <d1ef2f9a-f416-e7d6-7481-d81c1941702e@redhat.com>
+Date:   Mon, 5 Jun 2023 18:58:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 2/6] mtd: rawnand: meson: wait for command in
- polling mode
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v6 3/4] fpga: add an initial KUnit suite for the FPGA
+ Region
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230531095405.342080-1-marpagan@redhat.com>
+ <20230531095405.342080-4-marpagan@redhat.com>
+ <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
 Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
- <20230601061850.3907800-3-AVKrasnov@sberdevices.ru>
- <20230601100751.41c3ff0b@xps-13>
- <9e106d50-2524-c999-48b1-a20760238aaf@sberdevices.ru>
- <20230605110546.6cb00a8d@xps-13>
- <2a755783-1d56-9842-2eee-b5ab41152c81@amlogic.com>
- <163e0684-caff-77d0-1eaf-9a58290c200d@amlogic.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <163e0684-caff-77d0-1eaf-9a58290c200d@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/05 13:50:00 #21435193
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,98 +87,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 05.06.2023 16:30, Liang Yang wrote:
+On 2023-06-03 21:11, Xu Yilun wrote:
+> On 2023-05-31 at 11:54:04 +0200, Marco Pagani wrote:
+>> The suite tests the programming of an FPGA Region with a Bridge
+>> and the function for finding a particular Region.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/tests/fpga-region-test.c | 186 ++++++++++++++++++++++++++
+>>  1 file changed, 186 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/fpga-region-test.c
+
+[...]
+
+ 
+> Maybe better just put all tests in one module, and have unified
+> fake_mgr_ops/mgr_stats/fake_bridge_ops/bridge_stats across all tests.
 > 
+> In previous thread, I said I'm good to the self-contained test module
+> but I didn't actually follow the idea. Sorry for that.
 > 
-> On 2023/6/5 21:19, Liang Yang wrote:
->> Hi Miquel and Arseniy,
->>
->>
->> On 2023/6/5 17:05, Miquel Raynal wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> Hi Arseniy,
->>>
->>>>>> @@ -1412,6 +1419,8 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>>>>>             return ret;
->>>>>>     }
->>>>>>
->>>>>> +  nfc->use_polling = of_property_read_bool(dev->of_node, "polling");
->>>>>
->>>>> This is a problem. You cannot add a polling property like that.
->>>>>
->>>>> There is already a nand-rb property which is supposed to carry how are
->>>>> wired the RB lines. I don't see any in-tree users of the compatibles, I
->>>>> don't know how acceptable it is to consider using soft fallback when
->>>>> this property is missing, otherwise take the values of the rb lines
->>>>> provided in the DT and user hardware control, but I would definitely
->>>>> prefer that.
->>>>
->>>> I see. So i need to implement processing of this property here? And if it
->>>> is missed -> use software waiting. I think interesting thing will be that:
->>>>
->>>> 1) Even with support of this property here, I really don't know how to pass
->>>>     RB values to this controller - I just have define for RB command and that's
->>>>     it. I found that this property is an array of u32 - IIUC each element is
->>>>     RB pin per chip. May be i need to dive into the old vendor's driver to find
->>>>     how to use RB values (although this driver uses software waiting so I'm not
->>>>     sure that I'll find something in it).
->>>
->>> Liang, can you please give use the relevant information here? How do we
->>> target RB0 and RB1? It seems like you use the CS as only information
->>> like if the RB lines where hardwired internally to a CS. Can we invert
->>> the lines with a specific configuration?
->>
->> Controllor has only one external RB pinmux (NAND_RB0). all the RB pins
->> of different CEs need to be bound into one wire and connect with
->> NAND_RB0 if want to use controller polling rb. the current operating
->> CE of NAND is decided to "chip_select", of course controller internally has different nfc commands to regconize which Ce's RB signal is polling.
->>
->> <&nand_pins> in dts/yaml should include the NAND_RB0 if hardware connects, or use software polling here.
->>
->> @Arseniy, sorry, i don't travel all the informations yet. but why don't you use the new RB_INT command with irq that i provided in another thread. the new RB_INT command doesn't depend on the physical RB wires, it also send the READ status command(0x70) and wait for the irq wake up completion.
-
-Technically no problem! I can use new RB_INT instead of 'nand_soft_waitrdy()' as software fallback, and currently
-implemented RB_INT as interrupt driven way. What do You think Miquel ?
-
+> The concern is why in this region test, the write_count and only the
+> write_count is taken care of.
 > 
-> Use "nand-rb" in dts to decide old RB_INT(physical RB wires is needed) or new RB_INT(no physical RB wires). the new RB_INT command decides the RB0 or RB1 by the previous command with ce args.
+> Although fpga_mgr_load() test covers all mgr_ops, but does that
+> means these ops are still good for more complex case like
+> fpga_region_program_fpga()? And there is no guarantee
+> fpga_region_program_fpga() would always call mgr_ops the same way
+> as fpga_mgr_load() in future.
 > 
+> Similar for fpga_bridge. Maybe a complete setup for fpga_region is
+> still necessary.
 
-So I can implement "nand-rb" in dts as boolean value - "false" or missing means use "no physical RB wires", "true" - means use "physical RB wires" ?
+I think that putting all tests in a single module (like in previous
+versions) goes against the principles of unit testing, making the
+code more similar to an integration test.
 
-Thanks, Arseniy
+Unit tests should be focused on a single behavior. The programming
+test case included in the Region's suite should test only the behavior
+of the Region itself. Specifically, that fpga_region_program_fpga() calls
+get_bridges(), to get and control bridges, and then the Manager for the
+actual programming.
 
->>
->>> Arseniy, if the answer to my above question is no, then you should
->>> expect the nand-rb and reg arrays to be identical. If they are not,
->>> then you can return -EINVAL.
->>>
->>> If the nand-rb property is missing, then fallback to software wait.
->>>
->>>> 2) I can't test RB mode - I don't have such device :(
->>>>
->>>> Also for example in arasan-nand-controller.c parsed 'nand-rb' values are used
->>>> in controller specific register for waiting (I guess Meson controller has something
->>>> like that, but I don't have doc). While in marvell_nand.c it looks like that they parse
->>>> 'nand-rb' property, but never use it.
->>>
->>> Yes, the logic around the second RB line (taking care of CS1/CS3) is
->>> slightly broken or at least badly documented, and thus should not be
->>> used.
->>>
->>>>> In any case you'll need a dt-binding update which must be acked by
->>>>> dt-binding maintainers.
->>>>
->>>> You mean to add this property desc to Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml ?
->>>
->>> Yes. In a dedicated patch. Something along the lines:
->>>
->>>          nand-rb: true
->>>
->>> inside the nand chip object should be fine. And flag the change as a
->>> fix because we should have used and parsed this property since the
->>> beginning.
->>>
->>> Thanks,
->>> Miquèl
+The programming sequence itself is outside the responsibilities of the
+Region, and its correctness is already ensured by the Manager suite.
+Similarly, the correctness of the Bridge's methods used by the Region
+for getting and controlling multiple bridges is already ensured by the
+Bridge test suite.
+
+For this reason, the Manager and Bridge fakes used in the Region suite
+implement only the minimal set of operations necessary to ensure the
+correctness of the Region's behavior. If I used a "full" Manager (and
+tested all mgr_ops), then the test case would have become an integration
+test rather than a unit test for the Region.
+> BTW: I like the way that fake drivers are removed. Looks much straight
+> forward.
+
+I appreciate that.
+ 
+> Thanks,
+> Yilun
+>
+
+Thanks,
+Marco
+
+[...]
+
