@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F377233B8
+	by mail.lfdr.de (Postfix) with ESMTP id 81E467233B9
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 01:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbjFEXjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 19:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S233541AbjFEXjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 19:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbjFEXjH (ORCPT
+        with ESMTP id S233442AbjFEXjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Jun 2023 19:39:07 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BF4EEC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56CF4EE;
         Mon,  5 Jun 2023 16:39:06 -0700 (PDT)
 Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 805D920BCFCC;
+        by linux.microsoft.com (Postfix) with ESMTPSA id BFC6720BCFD0;
         Mon,  5 Jun 2023 16:39:05 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 805D920BCFCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BFC6720BCFD0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1686008345;
-        bh=XzX7ITQkM5lWu0oiVxpi9qKnO2wt1KN1RLZR3+vQCBE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cogwOR14b8hXXIbEZpXxHcFvlr5T3j3pGMnzlfrb6PPpKbKRvSY4bmJwvaGq9HBtr
-         SRG2hymw2RwFrZEZ73P1mrVt286Niz6a8Nji9YRJe6omdCLP1ieOrx4UHUW5ngRmRZ
-         CboSKcovydaXyjYuHPQnfftQato3yM9l5gGjLrXM=
+        bh=LgcGhn17kzfhccWPtaNXHZP5pGnU21mKIjrxJNC4SUo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OiTxQnr6civO9QCUdf6WEYpmc+w/Ffs7Ci59nbZ8m6t+DzXS8IL+y0jaYqlo98hBk
+         MOjmFiFFRUnEqTGV739nkDY0GWStanfvV49m0pYm7XwzKcj/eCczG7EswUgEMIHHXO
+         5raoeOpsXnu8XExtOZdKqBptj8RyCnNlSBzTszhw=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         ast@kernel.org, dcook@linux.microsoft.com
-Subject: [PATCH v2 0/5] tracing/user_events: Add auto cleanup and a flag to persist events
-Date:   Mon,  5 Jun 2023 16:38:55 -0700
-Message-Id: <20230605233900.2838-1-beaub@linux.microsoft.com>
+Subject: [PATCH v2 1/5] tracing/user_events: Store register flags on events
+Date:   Mon,  5 Jun 2023 16:38:56 -0700
+Message-Id: <20230605233900.2838-2-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230605233900.2838-1-beaub@linux.microsoft.com>
+References: <20230605233900.2838-1-beaub@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -46,49 +48,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of the discussions for user_events aligning to be used with eBPF
-it became clear [1] we needed a way to delete events without having to rely
-upon the delete IOCTL. Steven suggested that we simply have an owner
-for the event, however, the event can be held by more than just the
-first register FD, such as perf/ftrace or additional registers. In order
-to handle all those cases, we must only delete after all references are
-gone from both user and kernel space.
+Currently we don't have any available flags for user processes to use to
+indicate options for user_events. We will soon have a flag to indicate
+the event should or should not auto-delete once it's not being used by
+anyone.
 
-This series adds a new register flag, USER_EVENT_REG_PERSIST, which
-causes the event to not delete itself upon the last put reference. We
-cannot fully drop the delete IOCTL, since we still want to enable events to
-be registered early via dynamic_events and persist. Events that do not use
-this new flag are auto-cleaned up upon no longer being used.
+Add a reg_flags field to user_events and parameters to existing
+functions to allow for this in future patches.
 
-NOTE: I'll need to merge this work once we take these [2] [3] patches
-into for-next. I'm happy to do so once they land there.
+Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+---
+ kernel/trace/trace_events_user.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-1: https://lore.kernel.org/linux-trace-kernel/20230518093600.3f119d68@rorschach.local.home/
-2: https://lore.kernel.org/linux-trace-kernel/20230529032100.286534-1-sunliming@kylinos.cn/
-3: https://lore.kernel.org/linux-trace-kernel/20230519230741.669-1-beaub@linux.microsoft.com/
-
-Change history
-
-v2:
-  Renamed series to "Add auto cleanup and a flag to persist events"
-  Changed auto-delete to be default behavior, with new flag to persist events
-
-Beau Belgrave (5):
-  tracing/user_events: Store register flags on events
-  tracing/user_events: Track refcount consistently via put/get
-  tracing/user_events: Add auto cleanup and a flag to persist events
-  tracing/user_events: Add self-test for persist flag
-  tracing/user_events: Add persist flag documentation
-
- Documentation/trace/user_events.rst           |  21 +-
- include/uapi/linux/user_events.h              |  10 +-
- kernel/trace/trace_events_user.c              | 184 ++++++++++++++----
- .../testing/selftests/user_events/abi_test.c  | 144 +++++++++++++-
- .../selftests/user_events/ftrace_test.c       |   1 +
- 5 files changed, 309 insertions(+), 51 deletions(-)
-
-
-base-commit: 3862f86c1529fa0016de6344eb974877b4cd3838
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index b1ecd7677642..34aa0a5d8e2a 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -87,6 +87,7 @@ struct user_event {
+ 	struct list_head		validators;
+ 	refcount_t			refcnt;
+ 	int				min_size;
++	int				reg_flags;
+ 	char				status;
+ };
+ 
+@@ -163,7 +164,7 @@ typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
+ 
+ static int user_event_parse(struct user_event_group *group, char *name,
+ 			    char *args, char *flags,
+-			    struct user_event **newuser);
++			    struct user_event **newuser, int reg_flags);
+ 
+ static struct user_event_mm *user_event_mm_get(struct user_event_mm *mm);
+ static struct user_event_mm *user_event_mm_get_all(struct user_event *user);
+@@ -809,7 +810,8 @@ static struct list_head *user_event_get_fields(struct trace_event_call *call)
+  * Upon success user_event has its ref count increased by 1.
+  */
+ static int user_event_parse_cmd(struct user_event_group *group,
+-				char *raw_command, struct user_event **newuser)
++				char *raw_command, struct user_event **newuser,
++				int reg_flags)
+ {
+ 	char *name = raw_command;
+ 	char *args = strpbrk(name, " ");
+@@ -823,7 +825,7 @@ static int user_event_parse_cmd(struct user_event_group *group,
+ 	if (flags)
+ 		*flags++ = '\0';
+ 
+-	return user_event_parse(group, name, args, flags, newuser);
++	return user_event_parse(group, name, args, flags, newuser, reg_flags);
+ }
+ 
+ static int user_field_array_size(const char *type)
+@@ -1587,7 +1589,7 @@ static int user_event_create(const char *raw_command)
+ 
+ 	mutex_lock(&group->reg_mutex);
+ 
+-	ret = user_event_parse_cmd(group, name, &user);
++	ret = user_event_parse_cmd(group, name, &user, 0);
+ 
+ 	if (!ret)
+ 		refcount_dec(&user->refcnt);
+@@ -1748,7 +1750,7 @@ static int user_event_trace_register(struct user_event *user)
+  */
+ static int user_event_parse(struct user_event_group *group, char *name,
+ 			    char *args, char *flags,
+-			    struct user_event **newuser)
++			    struct user_event **newuser, int reg_flags)
+ {
+ 	int ret;
+ 	u32 key;
+@@ -1819,6 +1821,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 	if (ret)
+ 		goto put_user_lock;
+ 
++	user->reg_flags = reg_flags;
++
+ 	/* Ensure we track self ref and caller ref (2) */
+ 	refcount_set(&user->refcnt, 2);
+ 
+@@ -2117,7 +2121,7 @@ static long user_events_ioctl_reg(struct user_event_file_info *info,
+ 		return ret;
+ 	}
+ 
+-	ret = user_event_parse_cmd(info->group, name, &user);
++	ret = user_event_parse_cmd(info->group, name, &user, reg.flags);
+ 
+ 	if (ret) {
+ 		kfree(name);
 -- 
 2.25.1
 
