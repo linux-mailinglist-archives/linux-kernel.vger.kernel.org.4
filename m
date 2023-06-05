@@ -2,134 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6310C722D3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD34722D45
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 19:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbjFERFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 13:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S235235AbjFERGE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 13:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjFERFP (ORCPT
+        with ESMTP id S231254AbjFERF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 13:05:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EBCA6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 10:05:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C591561E8B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 17:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB30C4339C;
-        Mon,  5 Jun 2023 17:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685984714;
-        bh=yEpxiQ3fmeL0xXU4oqZwbEUseI3GKuRgp39yNbpnCQM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BolcBbiCcHlGyYY2b6/88QhsCF7i9w0kj753eMZt5nBdvBIjsHfDAPDe0Ba9pCGRf
-         F2fUQfzLZTrKazCBgZl2t6P7GHuEqWfOtGdRZ6PJus5wvXAcRXRR0ZNw5zcmCac0mi
-         36FHvdlJ25I5MabmuIDzog2p6NX0yyMIx45lt/nfsPWbFEPB+USg3Fcxo0IoDgQFNP
-         oBaxagNngmnzHEW2jEIhHOn6EC/b5hTP9EqAz7/iOu33m5qoJqWoRp7LryvCNBwwkS
-         TGJsnratZdjA1JFs4PXsywLvk+fAForUrvT9XuUpRgnNeIwnmb7gZCl/QsBVa1sE7R
-         Upsmaghvbu2Zg==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2b1c5a6129eso22398731fa.2;
-        Mon, 05 Jun 2023 10:05:14 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyQJhDpOSBVoLotrchLF9T5lUWAY1wv3FAfXlUO6DGKujvO8KO1
-        dlbSPcWVBL5SHzEjsd1ZfCGctWGLQdRm1shEmjk=
-X-Google-Smtp-Source: ACHHUZ5a4uJgqYj6XYfDGH+cbQx//PBtbULgCbjcB59kMvuL6TUIBZNr7mZHyTg0SmBldrQE5OAx+nZDYXN+zYRkeR0=
-X-Received: by 2002:a2e:8e97:0:b0:2b0:790e:95ab with SMTP id
- z23-20020a2e8e97000000b002b0790e95abmr4837221ljk.31.1685984712145; Mon, 05
- Jun 2023 10:05:12 -0700 (PDT)
+        Mon, 5 Jun 2023 13:05:59 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C571109;
+        Mon,  5 Jun 2023 10:05:52 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QZg1N2bmLz67ftX;
+        Tue,  6 Jun 2023 01:03:52 +0800 (CST)
+Received: from localhost (10.126.171.223) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 5 Jun
+ 2023 18:05:48 +0100
+Date:   Mon, 5 Jun 2023 18:05:47 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Herve Codina <herve.codina@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Kuninori Morimoto" <kuninori.morimoto.gx@renesas.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 5/9] iio: inkern: Add a helper to query an available
+ minimum raw value
+Message-ID: <20230605180547.0000528b@Huawei.com>
+In-Reply-To: <CAHp75Vec3fXT6phqvLGSn0c09USCXXF6ZoE+X1VNJGM6jyf=aQ@mail.gmail.com>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-6-herve.codina@bootlin.com>
+        <ZHtIdTZbULl6t4RT@surfacebook>
+        <20230605094637.7615b689@bootlin.com>
+        <CAHp75Vec3fXT6phqvLGSn0c09USCXXF6ZoE+X1VNJGM6jyf=aQ@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230605074024.1055863-1-puranjay12@gmail.com> <20230605074024.1055863-4-puranjay12@gmail.com>
-In-Reply-To: <20230605074024.1055863-4-puranjay12@gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 5 Jun 2023 10:05:00 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4JVUUzMfNQwTE_uzp3bnO3EAYDikU1Nyx6x-6ROFDNOA@mail.gmail.com>
-Message-ID: <CAPhsuW4JVUUzMfNQwTE_uzp3bnO3EAYDikU1Nyx6x-6ROFDNOA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, catalin.marinas@arm.com,
-        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.126.171.223]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 12:40=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
->
-> Use bpf_jit_binary_pack_alloc for memory management of JIT binaries in
-> ARM64 BPF JIT. The bpf_jit_binary_pack_alloc creates a pair of RW and RX
-> buffers. The JIT writes the program into the RW buffer. When the JIT is
-> done, the program is copied to the final ROX buffer
-> with bpf_jit_binary_pack_finalize.
->
-> Implement bpf_arch_text_copy() and bpf_arch_text_invalidate() for ARM64
-> JIT as these functions are required by bpf_jit_binary_pack allocator.
->
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> ---
->  arch/arm64/net/bpf_jit_comp.c | 119 +++++++++++++++++++++++++++++-----
->  1 file changed, 102 insertions(+), 17 deletions(-)
->
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-> index 145b540ec34f..ee9414cadea8 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -76,6 +76,7 @@ struct jit_ctx {
->         int *offset;
->         int exentry_idx;
->         __le32 *image;
-> +       __le32 *ro_image;
+On Mon, 5 Jun 2023 12:45:24 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-We are using:
-image vs. ro_image
-rw_header vs. header
-rw_image_ptr vs. image_ptr
+> On Mon, Jun 5, 2023 at 10:46 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> > On Sat, 3 Jun 2023 17:04:37 +0300
+> > andy.shevchenko@gmail.com wrote:  
+> > > Tue, May 23, 2023 at 05:12:19PM +0200, Herve Codina kirjoitti:  
+> 
+> ...
+> 
+> > > > +           case IIO_VAL_INT:
+> > > > +                   *val = vals[--length];  
+> > >  
+> > > > +                   while (length) {  
+> > >
+> > >                       while (length--) {
+> > >
+> > > will do the job and at the same time...
+> > >  
+> > > > +                           if (vals[--length] < *val)
+> > > > +                                   *val = vals[length];  
+> > >
+> > > ...this construction becomes less confusing (easier to parse).  
+> >
+> > Indeed, I will change in the next iteration.  
+> 
+> And looking into above line, this whole construction I would prefer to
+> have a macro in minmax.h like
+> 
+> #define min_array(array, len) \
+> {( \
+>   typeof(len) __len = (len); \
+>   typeof(*(array)) __element = (array)[--__len]; \
+>   while (__len--) \
+>     __element = min(__element, (array)[__len]); \
+>   __element; \
+> )}
+> 
+> (it might need more work, but you got the idea)
+> 
+> > > > +                   }
+> > > > +                   break;  
+> 
+> ...
+> 
+> > > > +           default:
+> > > > +                   /* FIXME: learn about min for other iio values */  
+> > >
+> > > I believe in a final version this comment won't be here.  
+> >
+> > We have the same FIXME comment in the iio_channel_read_max() function I
+> > copied to create this iio_channel_read_min() and, to be honest, I
+> > don't really know how to handle these other cases.
+> >
+> > In this series, I would prefer to keep this FIXME.  
+> 
+> I see, Jonathan needs to be involved here then.
 
-Shall we be more consistent with rw_ or ro_ prefix?
+It's really more of a TODO when someone needs it than a FIXME.
+I'm not particularly keen to see a bunch of code supporting cases
+that no one uses, but it's useful to call out where the code would
+go if other cases were to be supported.
 
->         u32 stack_size;
->         int fpb_offset;
->  };
-> @@ -205,6 +206,20 @@ static void jit_fill_hole(void *area, unsigned int s=
-ize)
->                 *ptr++ =3D cpu_to_le32(AARCH64_BREAK_FAULT);
->  }
->
-> +int bpf_arch_text_invalidate(void *dst, size_t len)
-> +{
-> +       __le32 *ptr;
-> +       int ret;
-> +
-> +       for (ptr =3D dst; len >=3D sizeof(u32); len -=3D sizeof(u32)) {
-> +               ret =3D aarch64_insn_patch_text_nosync(ptr++, AARCH64_BRE=
-AK_FAULT);
+Perhaps soften it to a note that doesn't have the work FIXME in it.
 
-I think one aarch64_insn_patch_text_nosync() per 4 byte is too much overhea=
-d.
-Shall we add a helper to do this in bigger patches?
+Jonathan
 
-Thanks,
-Song
 
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
+> 
+> > > > +                   return -EINVAL;  
+> 
 
-[...]
