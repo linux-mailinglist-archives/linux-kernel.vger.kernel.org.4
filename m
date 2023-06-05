@@ -2,58 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB19722CED
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93F1722CF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234596AbjFEQt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S234977AbjFEQtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjFEQtZ (ORCPT
+        with ESMTP id S234807AbjFEQtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:49:25 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C64D9;
-        Mon,  5 Jun 2023 09:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=83NktPWyotPnIP6ctRP/lbvydHsK9DrqhUfJFfVVMCY=; b=Ix/RnCPT2/sRZIFzldq0mqWSyV
-        vdUg1T0JTIVInWRDJMfB9yqmx5rskWb8olvB+pa9YI+lYTAGYqQ+fKuVD2rSJgOlVOYyTj3PGaDHP
-        1ipA5LbMPchF5C7QrZTRp6eP9Qc5e32XuEGr8o1U8ILq+iXvDi7srxE4Eif76559b6Ac=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q6DOK-00Ev7j-OH; Mon, 05 Jun 2023 18:49:12 +0200
-Date:   Mon, 5 Jun 2023 18:49:12 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michal Smulski <michal.smulski@ooma.com>
-Cc:     "msmulski2@gmail.com" <msmulski2@gmail.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "simon.horman@corigine.com" <simon.horman@corigine.com>,
-        "kabel@kernel.org" <kabel@kernel.org>,
-        "ioana.ciornei@nxp.com" <ioana.ciornei@nxp.com>
-Subject: Re: [PATCH net-next v7 0/1] net: dsa: mv88e6xxx: implement USXGMII
- mode for mv88e6393x
-Message-ID: <87a5491e-6697-48d3-94fe-aa2c6f5ab129@lunn.ch>
-References: <20230605053954.4051-1-msmulski2@gmail.com>
- <b38bd01c-dbaa-440d-93ae-b1b772f8e8e1@lunn.ch>
- <BYAPR14MB2918D3EBDA5120130D12BAB2E34DA@BYAPR14MB2918.namprd14.prod.outlook.com>
+        Mon, 5 Jun 2023 12:49:43 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123EBE6
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 09:49:39 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6584553892cso401416b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 09:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685983779; x=1688575779;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vDRJgVE5cH04MV15lyuR8QwAmByzpL4hoF/MQxP+aCo=;
+        b=Ei/LRpe8k3OFfTc/VkSB/xDKar7hPdfukU8UV74asVwDhnlUFq6MoQI77JP70KYzqT
+         VwpJl9HpmDuXDVX1DG5iZIqF/6J0ErGIY41R19KPoHLnjeF8Gi/FH+8ghj3XB7T03WtI
+         VbLYFEUH+p2Nzqh1DTfqkDDmh9kocKybhx0WRy0HA3aWOsXcDYaCCXp4LYMtUQeiTQtK
+         orgN2Q+rMlNc3hqMCgoH+0O7l62JNW3r+LaORs4nvGiuhPO4WFjgX1qrLHxZZ1AaVx5K
+         KZzSB9g5huWomew3qr9ttRdjb7Gs9g0f0THUtsddtKNSSubwcD1aRda+VpW2odzfxL/L
+         j0IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685983779; x=1688575779;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDRJgVE5cH04MV15lyuR8QwAmByzpL4hoF/MQxP+aCo=;
+        b=fudQrGp2apQBH+LJUg41gkL+Z2WBOIsaC0XtDYX2/1lqzDUNUSU/zUkVwtv1qr7396
+         upNRRSRWgfJ3wKTlGlVwhfyQ7vT+ekw2u5wAPckNMt5EdyYzrRtl7oojF6YyH1Jc4fP8
+         QzMLuJ8ltskqbPuON20Li2tXeLIXgNIBSEsYZ4ZckL0p7HWrhCU5ryHebShclUKiGqTY
+         Km1+4N74EfsP6qX6qNd6Pgc8m405ZQM3I5rCNeW+RWzp/GH+nO3XTlxvyJ/4A59nAXi7
+         DyEibd2PNdX2o3xYCHYaOB1elmr95bo0qnhlSVSaNRBij6seETn0yLCRcy7KQhFjMDcE
+         vEBQ==
+X-Gm-Message-State: AC+VfDwp3+lS6Y3w1ZSuEt8opRltMC0vZW2tY68k7C44ry3W6FZhdLWZ
+        ECQ4LmC0qKBVn0SuQetzMer0ug==
+X-Google-Smtp-Source: ACHHUZ6VtRPk+7R/QDfHd2G8LTg/K3iK/fpK4MXqyEZASfsbZ7S8d8CBo4OHEHv2VzEDz6LQ7MPerA==
+X-Received: by 2002:a05:6a20:4425:b0:116:1cc7:ada with SMTP id ce37-20020a056a20442500b001161cc70adamr4482199pzb.6.1685983779369;
+        Mon, 05 Jun 2023 09:49:39 -0700 (PDT)
+Received: from ?IPV6:2600:380:c01c:32f0:eff8:7692:bf8a:abc6? ([2600:380:c01c:32f0:eff8:7692:bf8a:abc6])
+        by smtp.gmail.com with ESMTPSA id x24-20020aa784d8000000b0064fd8b3dd14sm5404414pfn.124.2023.06.05.09.49.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 09:49:38 -0700 (PDT)
+Message-ID: <b1b43d30-8c7c-1a71-0ead-8b967b8af0a4@kernel.dk>
+Date:   Mon, 5 Jun 2023 10:49:37 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR14MB2918D3EBDA5120130D12BAB2E34DA@BYAPR14MB2918.namprd14.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/7] block layer patches for bcachefs
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
+ <ZHEaKQH22Uxk9jPK@moria.home.lan>
+ <8e874109-db4a-82e3-4020-0596eeabbadf@kernel.dk>
+ <ZHYfGvPJFONm58dA@moria.home.lan>
+ <2a56b6d4-5f24-9738-ec83-cefb20998c8c@kernel.dk>
+ <ZH0gjyuBgYzqhZh7@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZH0gjyuBgYzqhZh7@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,25 +80,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 04:32:03PM +0000, Michal Smulski wrote:
-> Andrew,
+On 6/4/23 5:38?PM, Kent Overstreet wrote:
+> On Tue, May 30, 2023 at 10:50:55AM -0600, Jens Axboe wrote:
+>> Sorry typo, I meant text. Just checked stack and it looks identical, but
+>> things like blk-map grows ~6% more text, and bio ~3%. Didn't check all
+>> of them, but at least those two are consistent across x86-64 and
+>> aarch64. Ditto on the data front. Need to take a closer look at where
+>> exactly that is coming from, and what that looks like.
 > 
+> A good chunk of that is because I added warnings and assertions for
+> e.g. running past the end of the bvec array. These bugs are rare and
+> shouldn't happen with normal iterator usage (e.g. the bio_for_each_*
+> macros), but I'd like to keep them as a debug mode thing.
+> 
+> But we don't yet have CONFIG_BLOCK_DEBUG - perhaps we should.
 
-> I will remove this line and resend v7. This was a mistake on my
-> part. However, could you clarify on what is the best way to let
-> reviewers know what changed between different version of the same
-> patch? It seemed to me that changlist should not be part of the git
-> commit message and hence I decided to add 'cover-letter' email for
-> each new version of the patch so that it would not be part of the
-> applied patch to net-next git repo (but it would also be easy to
-> match changelist email with patch email to people reviewing latest
-> patch)
+Let's split those out then, especially as we don't have a BLOCK_DEBUG
+option right now.
 
-Some people think the history is actually useful, it shows what has
-been considered etc and the patch matured.
+> With those out, I see a code size decrease in bio.c, which makes sense -
+> gcc ought to be able to generate slightly better code when it's dealing
+> with pure values, provided everything is inlined and there's no aliasing
+> considerations.
+> 
+> Onto blk-map.c:
+> 
+> bio_copy_kern_endio_read() increases in code size, but if I change
+> memcpy_from_bvec() to take the bvec by val instead of by ref it's
+> basically the same code size. There's no disadvantage to changing
+> memcpy_from_bvec() to pass by val.
+> 
+> bio_copy_(to|from)_iter() is a wtf, though - gcc is now spilling the
+> constructed bvec to the stack; my best guess is it's a register pressure
+> thing (but we shouldn't be short registers here!).
+> 
+> So, since the fastpath stuff in bio.c gets smaller and blk-map.c is not
+> exactly fastpath stuff I'm not inclined to fight with gcc on this one -
+> let me know if that works for you.
+> 
+> Branch is updated - I split out the new assertions into a separate patch
+> that adds CONFIG_BLK_DEBUG, and another patch for mempcy_(to|from)_bio()
+> for a small code size decrease.
+> 
+> https://evilpiepirate.org/git/bcachefs.git/log/?h=block-for-bcachefs
+> or
+> git pull http://evilpiepirate.org/git/bcachefs.git block-for-bcachefs
 
-However, anything text after the --- marker in a patch will get
-discarded by git am when the patch is merged. So you can place the
-history there.
+Cn you resend just the iterator changes in their current form? The
+various re-exports are a separate discussion, I think we should focus on
+the iterator bits first.
 
-	Andrew
+-- 
+Jens Axboe
+
