@@ -2,165 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D9E722763
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B9A722767
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbjFEN2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
+        id S233291AbjFENaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbjFEN2I (ORCPT
+        with ESMTP id S230282AbjFENaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:28:08 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2127.outbound.protection.outlook.com [40.107.237.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2248812D;
-        Mon,  5 Jun 2023 06:28:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=li04Q5iHRLZuyui0KAPqEE9dkBNr1HPArD78aGrecHa42j4XQGER4BhUahx+iFijzUdRIV3Dv1pX8fAUEz9R7GJqo5l+cDmDdjGjDfleU0GznQlnMTGGXBTDU7y886vvLLopEfP96emi+R6ERmbjJtgdw5+yA7d/5pY5s/NNoHHs/aPxXTSTl7OMKiJn8gRCbj723bKPkITU/pYWOxWULHAsZQTIDzN3LglG+Iq8xvJswL/ZNYdGDEdWHhjxWoyzoUkdGEbDt44YKSpiaers60snUUgAv04qQYhxfPO+iSTFsevGsXY769M0Ofvuv/rt7nHl8MwjnemAIAn5j0lZgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jPnH+FAuA79ba/hXAMpGfrhV9frIggEEKdLSGFTqJz0=;
- b=A3iVi4LvHaRbgFSYcXwV5kbkorDBkyIbupczheoDK3JOdxfI6gJL+7RFgg04e2QHFroPpvY/OWoiC+dPmnrt8OEt7DoVn7O7USAi/iASDmP8FyiW65YhYAipaIhCn9e5Zd1wJtEQGUFUif9gqygM21u2K+yYy6Wq/VdF8OoHugf7JVfXGWVZlmMrrRiNnk2TtZr0mlF+yGTjIgbDwgh+UMvTG4jcnhgLSsdFrDPasHqR+0b3mMb7eV5ZKxfKPaY6ffIEj9cA9TxFG3Mdf9JRhEsiDF4fhIJhlqYgoQEvRT3TGTP0CXBDVlh/i/76Pmk+FCfFbnlTNR5qfTdbEOY1Ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jPnH+FAuA79ba/hXAMpGfrhV9frIggEEKdLSGFTqJz0=;
- b=XW7OmpeiTuAcZsv8Dh5ojDqf8+tN+YkUxccTRsZilziVEpQXBu4iyiHeGx6MMAm983zWDnWpw+b69tIV8REkj0kAaS7krQt1kGqknVXAl6qeqse3z1nW3b4DgWbNz13aC1po8I/5OTO+aclqjAPKSI7dhs8du6ah6tNzkpjBjP8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB5098.namprd13.prod.outlook.com (2603:10b6:610:ed::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 5 Jun
- 2023 13:27:57 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
- 13:27:57 +0000
-Date:   Mon, 5 Jun 2023 15:27:50 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-Subject: Re: [PATCH RESEND net-next 0/5] Improve the taprio qdisc's
- relationship with its children
-Message-ID: <ZH3i1hxWOuynkbxk@corigine.com>
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
- <20230605125042.lx6ng5jcsxp625ep@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605125042.lx6ng5jcsxp625ep@skbuf>
-X-ClientProxiedBy: AS4P189CA0030.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5db::17) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Mon, 5 Jun 2023 09:30:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BFDCD;
+        Mon,  5 Jun 2023 06:30:02 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355DKxjd015993;
+        Mon, 5 Jun 2023 13:30:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=h08ZUZge0V2LjuVc7Yhcn6I/LBABMkL/LoHYysfR98c=;
+ b=QJoKRDXiDTIaTEUGHszjVWr32R779Pj61+gUD7gq2bx8wVgF/BF1Va1Suon0pS0Xqc/r
+ kLs/fmtSWEd7kZ3lPvCdnWJ2qC3JCUaXtBN7JYex7/9F+7cgszyKHIWxLuNIZGXsYBMh
+ DAqAzybPgJqHblLLXIwKIw1dstrbi07cDnIbY0egqP6YrtRL72Le2CM9426pr4YFmb/E
+ 621rehEu9vAZkoNN9fLth/2xBjWYgB9/um5a/PdYxKwbcpKEPQdpscY/223/DdtVWtFL
+ ZY0ttfNvhcbUteUNq5SG6lZXCFnAmu2cksNIaPtO8rXBz+2l4Mnle+i46m7qUK5Lvxm4 NA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1ggx075h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 13:30:01 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 354GnjHr023638;
+        Mon, 5 Jun 2023 13:29:58 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qyxg2hc8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Jun 2023 13:29:58 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 355DTtCg51839330
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 5 Jun 2023 13:29:55 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 363D52004D;
+        Mon,  5 Jun 2023 13:29:55 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A69DD20043;
+        Mon,  5 Jun 2023 13:29:54 +0000 (GMT)
+Received: from [9.171.39.161] (unknown [9.171.39.161])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  5 Jun 2023 13:29:54 +0000 (GMT)
+Message-ID: <c19ee46b-4f89-172e-95d4-093145cff34d@linux.ibm.com>
+Date:   Mon, 5 Jun 2023 15:29:54 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB5098:EE_
-X-MS-Office365-Filtering-Correlation-Id: 544b0370-653d-438b-5237-08db65c8ad1b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XXGq5wxsDGglAS921gM9duQc00EvAWyScVxMc8MlAEd1andO9341ZmwLw3e9n2+ThBCrk1GBIdOUC3OucdnvCwRFu21xyaSINSyfux+S6+QlkXqkGZ1KykRLcCxzFMF3GMi4G19mPB8KzBMG5HCSSOACqTKEVfgF4ZxVXib+NYv9uMNY3r9sE7CkYrY/thZPQck27hSdkzwfLoGRJzZGd9NmZp7hMqGimRh/+m6BQPN5CEKEeuGvdHnDAYbE55qO4qtzaZo2edQ2+JsAXEKS3lR+GV24oeKsg/azvz3ADykfXYX4bNV5SnyiJHnflG5PCzworH0UDBFj+2kr4qUgpNtRqViweIHeQ90LOmLZs7mV87upJzUJbOxfx6lOSC+VkqigcB5e1lOjQVRCZ94LKpc7XXSD4dMpmFZVyqsptjHwyvD5GbR3t43nkwrD3B0VFmFec0Ikhm/IkkgmWSrZeQxmBRa4GLRV5gB7WXX8ddGrBe2bXvhTUqsVBVCYCkicS/zxCteXt/R57+oV9U+lAWX1/LMecAxS+dMFpfSKEOg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39840400004)(366004)(136003)(451199021)(54906003)(478600001)(5660300002)(8936002)(8676002)(44832011)(7416002)(36756003)(2906002)(86362001)(4326008)(6916009)(66476007)(66556008)(316002)(66946007)(38100700002)(41300700001)(83380400001)(6506007)(2616005)(6512007)(186003)(966005)(6486002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xsXJ5RrpcHwOGmQ09jPxH3iEnEy6b2KArrJtHVUERhzqHbSh6r2N3wFdqquW?=
- =?us-ascii?Q?+qLNrwabKFdegHoZf0VzgJEI63YP/4DICurIU0ZsSK6Lqkk9NTqYyl7f9ZZ4?=
- =?us-ascii?Q?mwbvtPP76/IMF+eDF0B85QXsUNkh/drZCJJnfhUtRWxqw84K3cfgaamvgw8u?=
- =?us-ascii?Q?gt/nMaGuaqA8lp0VXekpqFwZbDMJPn15f8Hs8ykxQEiPV8+Pym32W3QUlNeG?=
- =?us-ascii?Q?yyULo4pDUCrCml4ec6cSembl5zq7I4d9GsF6X69XiSGL8QGEoD+jdVwDKUbK?=
- =?us-ascii?Q?a30Vqj6zP2B7aDVc77iIVM4+UFli3sELtKyW1d2Q2gvQ9O6B54E5mqRtkZ7Q?=
- =?us-ascii?Q?X55wifohzfjDNVjDxP940ZBl26dGpVKiEOzIoHgaJINLlY3roOU4RlL8fXzB?=
- =?us-ascii?Q?YqpKzMd/cV2/k1Pb10YeD063e3e4g3XNOxT/P0KY2S0EKvJdqHFSXFQNdr5J?=
- =?us-ascii?Q?FCqLPedu3DxqIaKwfPVik/Th3BhoCe555w3096tA+EhxbaF4TeLoP6JYX+dT?=
- =?us-ascii?Q?3K7NcsgD+kPm/wvl+b+wtoFY4Uyaxr08nvGvFu5p31oB1yesoVuqlwv2RE0o?=
- =?us-ascii?Q?1opHgvwcNbLLqXXXE64SU4ZZR/MbbRg8gSXkG3S0R3nQKimvqS/WgdwaM9KF?=
- =?us-ascii?Q?S+YmQJEYmOijSW8dBFxlCwCGg9VQkNYLCWRLJIv0dCluRvxrmhLT+alV1rlc?=
- =?us-ascii?Q?YmFq7TyshBYuI+qU5b0ca29kI/SLpO+bZO9B0HQc829yjfjoDeqH5ECwh62r?=
- =?us-ascii?Q?MOD92MiE8IPQ38SWTK9z3AYpGNeXnsHcnIv/shaL9B7oOemCbQNl3PbOQ3dP?=
- =?us-ascii?Q?Sjh7XiBRQA7ENosURoOYflPdvanmmb87Ns5MXNcvNn6qsTkFLW+9aghA5hck?=
- =?us-ascii?Q?8ymu9zUQ9wOOWuKDACv6dO5vb3Xh/kKAEwAjv7aNfdo0n9l8ISIE63J7lV7G?=
- =?us-ascii?Q?HXxZqVLHW0Fxe79+9Hkw0kXlHYYJswdZ3WC8pgony2eNxrGHgNHl6ZCBJ8e3?=
- =?us-ascii?Q?83xXDb4vThTUaWk9VFBdiYNBl8xtqm/WC3a9SVw2UWcOIl3FosHDOYBQsXFg?=
- =?us-ascii?Q?rOeBZ/57K8I6NTyOfI45N7WUkmsLokvPnlfxbDwBsJfoBN1Po91amj3zW17B?=
- =?us-ascii?Q?+xlRl3JQBP9ad/ZQU4rFcYeKebBg6KHGcDRt+tnXPQASh0ivs9V96OSTi+36?=
- =?us-ascii?Q?hKAMhzvQajlws2ZaxYMWCInV/9UWnBVJyeqm0EO3t4ySyCBXyOw5ROEIIPaG?=
- =?us-ascii?Q?k/QHFWFYXlHxH6TdR7AAkFD70LE8Hhirn/MuyNDRpmDdjT6bsq3miVLSlu9j?=
- =?us-ascii?Q?2fpFst/6FMEUWoPFxKO4IHgb3eJRyVawTrG0/Rvd12K28SEIHBIpj2CrkjeM?=
- =?us-ascii?Q?Ax/urLzmheCk8ugRWTsuMRbyyhX3FOLFVmcjNLCmV4cgR/JFjPUihZU1XNqs?=
- =?us-ascii?Q?d0aYbNUvmzx95nm35nr6//TSUKE8xPeDa4Jk67dGVWpYcSvVRqPJ/fc6gGIS?=
- =?us-ascii?Q?m+rja6hPynGyzEXW3AINSYn2NDU+cjsjOk6whWnL348g4G1K7AkYq0murvsy?=
- =?us-ascii?Q?17yG+5tmfiqpaGHblIYwygvxz+vHec+l6hGbPZ6J1HyVBTBo6hd01kZqOF79?=
- =?us-ascii?Q?w+tkf0R3i0gXEoArK6arcKWb/EHAsHPLRgDVe08ATU18jKh1uQaGXxIALdvd?=
- =?us-ascii?Q?IoRg9Q=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 544b0370-653d-438b-5237-08db65c8ad1b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 13:27:57.6767
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GvyPOLxgM9/j7KYDLtgm6IYJRW56iS+Jqo6nmy6Li5c5W26KcYgTxPeSXKslkCO+hyfVb4J2Y+AY9b17OkuKwBQRID/Ag1sAtd0+qTjCt38=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB5098
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+References: <20230519093708.810957-1-seiden@linux.ibm.com>
+ <20230519093708.810957-4-seiden@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v2 3/6] s390/uvdevice: Add 'List Secrets' UVC
+In-Reply-To: <20230519093708.810957-4-seiden@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pAs3NGx-YsPr4v4MsFEln9R8pzIRRVpG
+X-Proofpoint-ORIG-GUID: pAs3NGx-YsPr4v4MsFEln9R8pzIRRVpG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-03_08,2023-06-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ adultscore=0 suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=982
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306050114
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 03:50:42PM +0300, Vladimir Oltean wrote:
-> Hi,
+On 5/19/23 11:37, Steffen Eiden wrote:
+> Userspace can call the List Secrets Ultravisor Call
+> using IOCTLs on the uvdevice.
+> During the handling of the new IOCTL nr the uvdevice will do some sanity
+> checks first. Then, perform the Ultravisor command, and copy the answer
+> to userspace.
+> If the List Secrets UV facility is not present, UV will return
+> invalid command rc. This won't be fenced in the driver and does not
+> result in a negative return value. This is also true for any other
+> possible error code the UV can return.
 > 
-> On Fri, Jun 02, 2023 at 01:37:45PM +0300, Vladimir Oltean wrote:
-> > [ Original patch set was lost due to an apparent transient problem with
-> > kernel.org's DNSBL setup. This is an identical resend. ]
-> > 
-> > Prompted by Vinicius' request to consolidate some child Qdisc
-> > dereferences in taprio:
-> > https://lore.kernel.org/netdev/87edmxv7x2.fsf@intel.com/
-> > 
-> > I remembered that I had left some unfinished work in this Qdisc, namely
-> > commit af7b29b1deaa ("Revert "net/sched: taprio: make qdisc_leaf() see
-> > the per-netdev-queue pfifo child qdiscs"").
-> > 
-> > This patch set represents another stab at, essentially, what's in the
-> > title. Not only does taprio not properly detect when it's grafted as a
-> > non-root qdisc, but it also returns incorrect per-class stats.
-> > Eventually, Vinicius' request is addressed too, although in a different
-> > form than the one he requested (which was purely cosmetic).
-> > 
-> > Review from people more experienced with Qdiscs than me would be
-> > appreciated. I tried my best to explain what I consider to be problems.
-> > I am deliberately targeting net-next because the changes are too
-> > invasive for net - they were reverted from stable once already.
-> 
-> I noticed that this patch set has "Changes Requested" in patchwork.
-> 
-> I can't completely exclude the fact that maybe someone has requested
-> some changes to be made, but there is no email in my inbox to that end,
-> and for that matter, neither did patchwork or the email archive process
-> any responses to this thread.
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> ---
+>[...]
+> +/** uvio_list_secrets() - perform a List Secret UVC
+> + *
+> + * @uv_ioctl: ioctl control block
+> + *
+> + * uvio_list_secrets() performs the List Secret Ultravisor Call.
+> + * It verifies that the given userspace argument address is valid and its size
+> + * is sane. Every other check is made by the Ultravisor (UV) and won't result
+> + * in a negative return value. It builds the request, performs the UV-call,
+> + * and copies the result to userspace.
+> + *
+> + * The argument specifies the location for the result of the UV-Call.
+> + *
+> + * If the List Secrets UV facility is not present,
+> + * UV will return invalid command rc. This won't be fenced in the driver
+> + * and does not result in a negative return value.
+> + *
+> + * Context: might sleep
+> + *
+> + * Return: 0 on success or a negative error code on error.
+> + */
+> +static int uvio_list_secrets(struct uvio_ioctl_cb *uv_ioctl)
+> +{
+> +	void __user *user_buf_arg = (void __user *)uv_ioctl->argument_addr;
+> +	struct uv_cb_guest_addr uvcb = {
+> +		.header.len = sizeof(uvcb),
+> +		.header.cmd = UVC_CMD_LIST_SECRETS,
+> +	};
+> +	void *secrets = NULL;
+> +	int ret;
 
-I concur. Let's see if this sets set it to "Under Review".
+int ret = 0;
 
--- 
-pw-bot: under-review
+> +
+> +	if (uv_ioctl->argument_len != UVIO_LIST_SECRETS_LEN)
+> +		return -EINVAL;
+
+I'd be less uneasy if you 
+s/uv_ioctl->argument_len/UVIO_LIST_SECRETS_LEN/ below. Yes, you check 
+the length above but it still feels weird to use a variable when we have 
+a perfectly fine constant just waiting to be used.
+
+> +
+> +	secrets = kvzalloc(uv_ioctl->argument_len, GFP_KERNEL);
+> +	if (!secrets)
+> +		return -ENOMEM;
+> +
+> +	uvcb.addr = (u64)secrets;
+> +	uv_call_sched(0, (u64)&uvcb);
+> +	uv_ioctl->uv_rc = uvcb.header.rc;
+> +	uv_ioctl->uv_rrc = uvcb.header.rrc;
+> +
+> +	if (copy_to_user(user_buf_arg, secrets, uv_ioctl->argument_len))
+> +		ret = -EFAULT;
+
+and remove the else
+
+> +	else
+> +		ret = 0;
+> +
+> +	kvfree(secrets);
+> +	return ret;
+> +}
+> +
+>   static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp,
+>   				     unsigned long cmd)
+>   {
+> @@ -333,6 +385,9 @@ static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>   	case UVIO_IOCTL_ADD_SECRET_NR:
+>   		ret = uvio_add_secret(&uv_ioctl);
+>   		break;
+> +	case UVIO_IOCTL_LIST_SECRETS_NR:
+> +		ret = uvio_list_secrets(&uv_ioctl);
+> +		break;
+>   	default:
+>   		ret = -ENOIOCTLCMD;
+>   		break;
 
