@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024FA721BAA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 03:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB47721BB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 03:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjFEByA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Jun 2023 21:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S232394AbjFEB5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Jun 2023 21:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjFEBx6 (ORCPT
+        with ESMTP id S229449AbjFEB5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Jun 2023 21:53:58 -0400
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE4BC;
-        Sun,  4 Jun 2023 18:53:56 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAA3PAArQH1k+HKFCw--.7797S2;
-        Mon, 05 Jun 2023 09:53:49 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     andy.shevchenko@gmail.com
-Cc:     oe-kbuild-all@lists.linux.dev, linus.walleij@linaro.org,
-        brgl@bgdev.pl, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] gpio: ath79: Add missing check for platform_get_irq
-Date:   Mon,  5 Jun 2023 09:53:45 +0800
-Message-Id: <20230605015345.12801-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 4 Jun 2023 21:57:47 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478389E;
+        Sun,  4 Jun 2023 18:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685930266; x=1717466266;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QBoebP1n4VeEjg1QFqOqDuX/jdvuOnD7tkDfTVYNhA8=;
+  b=XXXO4XikMcYE/zQGSvSZsvaAr75VTbHrsOs105MpZcvoSr5INt1LDCvq
+   Ge0n2p6v1dt6LbVFSjBa4OUHCllvENwAh/qK3II4YvbcOTlcCbPjpb+V0
+   l9z9H44lhHKzEz16WTMZty5vZk9I2QLq57E+aESEfBTB8z+IMed2J4pzs
+   4sfxuGqzgoy4pQQbdvkjbl6YhebLZjonIqtYXDq+zN92Do377Snm2Chxs
+   6VYdUu8FOmAOjo3K+VfF8HtueSvsdEb/FAU5mFm3mv+onHyqbE8CMdPaT
+   WaP96T1zqI/NnHu+fI8PzW9qtp0F9/oEoBbau5Q9vushw6y5acke8BTJ0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="340893871"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="340893871"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 18:57:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="852807827"
+X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
+   d="scan'208";a="852807827"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.1.148]) ([10.238.1.148])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2023 18:57:43 -0700
+Message-ID: <7335a53b-5b6a-f186-d3b9-99569aa2559c@linux.intel.com>
+Date:   Mon, 5 Jun 2023 09:57:40 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAA3PAArQH1k+HKFCw--.7797S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFykur1fuF13Jw45Zw15XFb_yoWDXrb_Cw
-        1kXw1UCr48Cr9Iqr17Aw1ayrWSyr9rur1fur4vga13tr98A34kur9ruw4rZrnrWr18KFyD
-        Ca4DGrWYvFs3GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb38FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
-        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
-        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
-        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
-        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUFVyIUUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v1 2/6] KVM: x86: Virtualize CR4.LASS
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <20230601142309.6307-1-guang.zeng@intel.com>
+ <20230601142309.6307-3-guang.zeng@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230601142309.6307-3-guang.zeng@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +69,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing check for platform_get_irq() and return error
-if it fails.
 
-Fixes: 2b8f89e19b6d ("gpio: ath79: Add support for the interrupt controller")
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+On 6/1/2023 10:23 PM, Zeng Guang wrote:
+> Virtualize CR4.LASS[bit 27] under KVM control instead of being guest-owned
+> as CR4.LASS generally set once for each vCPU at boot time and won't be
+> toggled at runtime. Besides, only if VM has LASS capability enumerated with
+> CPUID.(EAX=07H.ECX=1):EAX.LASS[bit 6], KVM allows guest software to be able
+> to set CR4.LASS.
+>
+> Updating cr4_fixed1 to set CR4.LASS bit in the emulated IA32_VMX_CR4_FIXED1
+> MSR for guests and allow guests to enable LASS in nested VMX operaion as well.
+s/operaion/operation
 
-v2 -> v3:
+>
+> Notes: Setting CR4.LASS to 1 enable LASS in IA-32e mode. It doesn't take
+> effect in legacy mode even if CR4.LASS is set.
+>
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
+> ---
+>   arch/x86/include/asm/kvm_host.h | 2 +-
+>   arch/x86/kvm/vmx/vmx.c          | 3 +++
+>   arch/x86/kvm/x86.h              | 2 ++
+>   3 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index fb9d1f2d6136..92d8e65fe88c 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -125,7 +125,7 @@
+>   			  | X86_CR4_PGE | X86_CR4_PCE | X86_CR4_OSFXSR | X86_CR4_PCIDE \
+>   			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
+>   			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
+> -			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP))
+> +			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP | X86_CR4_LASS))
+Suppose there is some bare-matel linux patch to define the LASS related 
+macros.
+May be better to describe the dependent patch(es) in cover letter.
 
-1. Check before assigning values.
 
-v1 -> v2:
-
-1. Return "girq->parents[0]" instead of "-ENODEV".
----
- drivers/gpio/gpio-ath79.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpio-ath79.c b/drivers/gpio/gpio-ath79.c
-index aa0a954b8392..d2d838ad33bb 100644
---- a/drivers/gpio/gpio-ath79.c
-+++ b/drivers/gpio/gpio-ath79.c
-@@ -285,7 +285,10 @@ static int ath79_gpio_probe(struct platform_device *pdev)
- 					     GFP_KERNEL);
- 		if (!girq->parents)
- 			return -ENOMEM;
--		girq->parents[0] = platform_get_irq(pdev, 0);
-+		err = platform_get_irq(pdev, 0);
-+		if (err < 0)
-+			return err;
-+		girq->parents[0] = err;
- 		girq->default_type = IRQ_TYPE_NONE;
- 		girq->handler = handle_simple_irq;
- 	}
--- 
-2.25.1
+>   
+>   #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
+>   
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 44fb619803b8..a33205ded85c 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7603,6 +7603,9 @@ static void nested_vmx_cr_fixed1_bits_update(struct kvm_vcpu *vcpu)
+>   	cr4_fixed1_update(X86_CR4_UMIP,       ecx, feature_bit(UMIP));
+>   	cr4_fixed1_update(X86_CR4_LA57,       ecx, feature_bit(LA57));
+>   
+> +	entry = kvm_find_cpuid_entry_index(vcpu, 0x7, 1);
+> +	cr4_fixed1_update(X86_CR4_LASS,       eax, feature_bit(LASS));
+> +
+>   #undef cr4_fixed1_update
+>   }
+>   
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index c544602d07a3..e1295f490308 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -529,6 +529,8 @@ bool kvm_msr_allowed(struct kvm_vcpu *vcpu, u32 index, u32 type);
+>   		__reserved_bits |= X86_CR4_VMXE;        \
+>   	if (!__cpu_has(__c, X86_FEATURE_PCID))          \
+>   		__reserved_bits |= X86_CR4_PCIDE;       \
+> +	if (!__cpu_has(__c, X86_FEATURE_LASS))          \
+> +		__reserved_bits |= X86_CR4_LASS;        \
+>   	__reserved_bits;                                \
+>   })
+>   
 
