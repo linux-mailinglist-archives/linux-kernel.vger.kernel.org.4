@@ -2,126 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B06B721E1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7997721E23
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 08:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjFEG37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 02:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S229786AbjFEGbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 02:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjFEG3v (ORCPT
+        with ESMTP id S229626AbjFEGbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 02:29:51 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDB7B1
-        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:29:49 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-777683e803bso290358939f.3
-        for <linux-kernel@vger.kernel.org>; Sun, 04 Jun 2023 23:29:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685946589; x=1688538589;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUHCYHCQGFfhYTTdvTw67xUh6Ra/HASzGHnIUUBVZvs=;
-        b=YyYqauzyfiZYyl/4b88jjvVlJZtBR3HSU58UZK+XcYVGsH7DCNFPdL1lRCijBtSgWc
-         +rcMEULIhXMnf1mPvda6MCFFxUTKUPieu0Tpi4YFmztGiAyrWmnteMDWe/sIG158ACtE
-         eL4RCfDCUmmrp10m66HxQ7QfAVLKMzxUf/c9uIYCXuzfRPh8drX31vBw6TLAQNkrMyaG
-         HrntC+qLH+SSRKN9xCO4yL/w0G6JgoJ38QkwSgX1WWzQIoUCDxcRT6sgaGIW2isFHvgl
-         2VyGomul0QA617X0rSWSNomryGrcxdMsl8s1IRl1bZAeGat7lXDFMCduYj5T0Njl3AUm
-         MkeQ==
-X-Gm-Message-State: AC+VfDzBHBuu1plID9kzCt8qSKWqFxBL3b7BGR1sUZHddoDI53TsjcRA
-        yR5Z+/wMc47MWUFfD/HkvSKOTRtYXRFSg88YxMZG7z5Xcuu9
-X-Google-Smtp-Source: ACHHUZ6CpQY6/nhpixHKSUJP4bvunSWx3RsiYuFZIR7iX/hnDnOK6q7XuRjQ13FMlGfCQy6b/y+IhedI9iGS3qWZbOXdgfTDiAmG
+        Mon, 5 Jun 2023 02:31:18 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796C0E9
+        for <linux-kernel@vger.kernel.org>; Sun,  4 Jun 2023 23:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=lQQH6nOriBLlbTU7J9bMgPN2Mir2
+        iDnU+BuOVKAXjy0=; b=qfE5nxbBktFeAPemijTKQLVC/WhI1TyzMVksR92CwnXV
+        sTR2tBiYMpNX0fZ7wuzMg1EDHigABIVIF1FDgSUsf0mNf/5dotbZyWhu1c2K7wDx
+        VaEtvsG8ePDStqc7Q+61X0GpuMhHI84aw+q7oJ4/6GhBLg5fUC9XltrWU9HPnX8=
+Received: (qmail 2911557 invoked from network); 5 Jun 2023 08:31:12 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Jun 2023 08:31:12 +0200
+X-UD-Smtp-Session: l3s3148p1@mSVEDFz98tMujnt4
+Date:   Mon, 5 Jun 2023 08:31:07 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
+Message-ID: <ZH2BKzvk/1vS/tZE@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
+ <20220329091126.4730-2-wsa+renesas@sang-engineering.com>
+ <YkRuXtTzd11R9IrY@smile.fi.intel.com>
+ <Yo5GO5RkBC3PQLTg@shikoro>
+ <ZHjAF6xg1fAaJhQV@smile.fi.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d3c7:0:b0:335:de72:23c7 with SMTP id
- c7-20020a92d3c7000000b00335de7223c7mr6895308ilh.5.1685946588865; Sun, 04 Jun
- 2023 23:29:48 -0700 (PDT)
-Date:   Sun, 04 Jun 2023 23:29:48 -0700
-In-Reply-To: <000000000000d1149605fd5b0c0d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a2bc505fd5c07a0@google.com>
-Subject: Re: [syzbot] [ext4?] WARNING: locking bug in ext4_ioctl
-From:   syzbot <syzbot+a3c8e9ac9f9d77240afd@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/4+wwdBOblFw+Mmz"
+Content-Disposition: inline
+In-Reply-To: <ZHjAF6xg1fAaJhQV@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    9561de3a55be Linux 6.4-rc5
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=146868c9280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
-dashboard link: https://syzkaller.appspot.com/bug?extid=a3c8e9ac9f9d77240afd
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ff6e93280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11824101280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7890258233e8/disk-9561de3a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/693d68681275/vmlinux-9561de3a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0f62a882fdf3/bzImage-9561de3a.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/3fc2f5d70218/mount_2.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a3c8e9ac9f9d77240afd@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-Looking for class "&ei->i_data_sem" with key init_once.__key.780, but found a different class "&ei->i_data_sem" with the same key
-WARNING: CPU: 1 PID: 5249 at kernel/locking/lockdep.c:941 look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
-Modules linked in:
-CPU: 1 PID: 5249 Comm: syz-executor251 Not tainted 6.4.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:look_up_lock_class+0xc2/0x140 kernel/locking/lockdep.c:938
-Code: 8b 16 48 c7 c0 60 91 1e 90 48 39 c2 74 46 f6 05 5d 02 92 03 01 75 3d c6 05 54 02 92 03 01 48 c7 c7 a0 ae ea 8a e8 de 8a a3 f6 <0f> 0b eb 26 e8 f5 d0 80 f9 48 c7 c7 e0 ad ea 8a 89 de e8 37 ca fd
-RSP: 0018:ffffc900041bf590 EFLAGS: 00010046
-RAX: 30aff147e011a400 RBX: ffffffff9006b360 RCX: ffff8880177bd940
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc900041bf698 R08: ffffffff81530142 R09: ffffed1017325163
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 1ffff92000837ec0 R14: ffff888075bfc888 R15: ffffffff91cac681
-FS:  0000555555be9300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc6cdfc6138 CR3: 000000002b756000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- register_lock_class+0x104/0x990 kernel/locking/lockdep.c:1290
- __lock_acquire+0xd3/0x2070 kernel/locking/lockdep.c:4965
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
- down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
- swap_inode_boot_loader fs/ext4/ioctl.c:423 [inline]
- __ext4_ioctl fs/ext4/ioctl.c:1418 [inline]
- ext4_ioctl+0x453c/0x5b60 fs/ext4/ioctl.c:1608
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc6cdf53a19
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdb4dc9718 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 69662f7375622f2e RCX: 00007fc6cdf53a19
-RDX: 0000000000000000 RSI: 0000000000006611 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffdb4dc9740 R09: 00007ffdb4dc9740
-R10: 00007ffdb4dc9190 R11: 0000000000000246 R12: 00007ffdb4dc973c
-R13: 00007ffdb4dc9770 R14: 00007ffdb4dc9750 R15: 0000000000000052
- </TASK>
+--/4+wwdBOblFw+Mmz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+> Year passed. Any news here?
+
+Well, the issue is that Steven Rostedt told me last years at Kernel
+Recipes that disabling the RCU stall detector was bad. He gave me a
+pointer where to look for a potentially better solution but I forgot to
+note it. When I asked him by mail again for that pointer, he was too
+busy to answer and since then I had other things to do. But Steve is at
+EOSS end of June as well as me. Asking him again there is big on my
+list. Nice you remembered this patch :)
+
+
+--/4+wwdBOblFw+Mmz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9gScACgkQFA3kzBSg
+KbamSw/9EuKJgRnQIB+TX2ue826riRURYNY5DIp9nNjjI1R0yUcMW+VfojMIPSo+
+bhyGyqxUqg8wOwEQWQkDn5q7cAdmiX8v+Cvqt50phQIRVrU5z3kpawio0GLv4x/b
+P3Su4iosPtZ2rhBX000Eukha/oc4Z+x+06T1iktnq3DZ/lzPrIPlC5FrU/JNDirW
+yKwwS9TYgHBL5v0AdrdGacSBEsz4q34ndqeAXU8MUsBD3U9jWAUikRUP7kF5bbWa
++FbBLLibp1Bk9McMXojPkj9KIsHng/u+o3BsW90+H8e4/EWR92uZLugzESkDxGX0
+WbGPleN8laTc1F9aFrArqRuNbKaJVFiy9uIFSTBS6QfxKScaXvvcLBQCi62Zcl8a
+SgWIltedUEEDplnvo3/Nbd1RuYLfQ4mZgsm4883cfwwZsNS/eBCjr1ztUS4YtCIK
+jF56jMxhgzoTBr4/vlJ+63OtUjggcoVENOuOFr3M7Z8xZoCodi2GguuP/2LGeN7X
+vc7j84qkVxwz5wvcqnlS8NVvWU05cdBb8R98M86vLwJtkKIpGACAhm1BMT14Beq7
+TVDkOz8XSpW3OLvWgtEy3PLmtCrKWImRZNvD14T03XsreJDusxuscPchawPdVNjS
+wKPTCzRaHGSrg5C7oU1mB8N+eTZNSfv5ZQSVEIi9nxD7een9QNE=
+=zyfx
+-----END PGP SIGNATURE-----
+
+--/4+wwdBOblFw+Mmz--
