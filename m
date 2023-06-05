@@ -2,161 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA2472310D
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B4B723114
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 22:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbjFEUUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 16:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S232867AbjFEUUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 16:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbjFEUTs (ORCPT
+        with ESMTP id S232802AbjFEUU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 16:19:48 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18594170C;
-        Mon,  5 Jun 2023 13:18:42 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b1af9ef7a9so46258891fa.1;
-        Mon, 05 Jun 2023 13:18:42 -0700 (PDT)
+        Mon, 5 Jun 2023 16:20:28 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F761E7B;
+        Mon,  5 Jun 2023 13:19:44 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1b084620dso48821321fa.0;
+        Mon, 05 Jun 2023 13:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1685996320; x=1688588320;
+        d=gmail.com; s=20221208; t=1685996382; x=1688588382;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9DmAqdFCTWcCnSv3cNxtbIKYt0BJjIXyl6B4XL9Pfx4=;
-        b=pAuJ/+en+DXnrhMOQmfLxIW5mtJj9bT2iORrZSmomltq7qrdY4y7ND8wjL+6Nbpoue
-         JmE18818aJ0/b+W0fnoSO68NXR5Ym2tBOgAR1mlL5g3UkHvj8Cn+xcpDTy9KBOm6vEBk
-         jy6EgYeukLRAGRSZb9J+i5cfBNWCwvT0dn/IqWiFUbYiST+nkMxC+IBIlfAr9Z7b1NXM
-         340Vkmw4j3hgOgdZT40piHPcAqoCpiI91PxJ5R3HWJqSmLrij2msaV21cTDwYpaCMZGI
-         0XO0HznaoKlIWKUw5GlH32p0gTPyMO4MpCwWlXPxwIB7BrDIBUK8uKtW/kS9wg+9e/cD
-         DeXg==
+        bh=W96UEYuBtjbti00Xl+zHBE3PvU7J3K5NYfzeZyJf/zQ=;
+        b=GA+HO0b52UQvj7V8Qj/QJPdkkM996YzSk7v7eMjnCk+0QGAtDD8N8RYNFwWFF52ScF
+         bweOr5uFNEJ+CWkhW0J761u6gXHoZYbjbkIYEj+N80WO46tpRTkpyWZp/kRs+m5dmXxG
+         m8jbBJmEEOlWOc7mndYgIRJ1lMGv5B9plFcfyG2/tFyqR1GWOGl7ZqjkpZ46NC8qfzVZ
+         uT5kCPszg2TDW+uRBsBsNYtBahDhGXOGFG8nyBBt5vNxlf22ItXcnuf0zmvBy35YHPTI
+         S/aeLhoAQekWsRSIwJWRRlEzvb6HMQYPP4cT5W85qu7kZiLQ2bfHDgeuqz5P1l7opVoH
+         7UjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685996320; x=1688588320;
+        d=1e100.net; s=20221208; t=1685996382; x=1688588382;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9DmAqdFCTWcCnSv3cNxtbIKYt0BJjIXyl6B4XL9Pfx4=;
-        b=BkMKWUbvQXEyqr+vafpFwWP4YLRKEBl5c22eCR/VQjXLOq+01+BHkJCp4zNzyhtV1r
-         8WqKwOpSenRbLtU6B8PRCwKUNBY3TQ8kuaQrrotFy0HiSqLyBNRsAylW9upSUFioTlME
-         YchvjASabKh3XCEbbhqQgPNhhq/WMIXJaHNB7Mw3g+lxcQDStg/Ml6xub7OBaR/nJgyf
-         pXqOFSjerb+zdkZ49t9WfZ0ux7vAisbNi8B+RkDVYQNLmuSMkHhboq1dZskBjcPNnSxO
-         iETHU9SHPU1aE+haEl/hj8uMKWi4jYkvcHL8iDQheE5HNifCvi32Zy9yCCz49srlS0SW
-         UStA==
-X-Gm-Message-State: AC+VfDz2dvfxof4dhvuEpFkozPU1HWK/pqvON9P1mNYgF3dd2vOYb9n7
-        Vvyk24qROCCklzLBzcRF1LOLuBls5n1hmA0z3TE=
-X-Google-Smtp-Source: ACHHUZ4nCyRkQvzS2d4v2PHRMh6yMoQjq2Po298dhjhuNHkip3zW6T3mYtWCy6AV+0gnVai4bxaMbvgxz0U0qN//wiU=
-X-Received: by 2002:a2e:88da:0:b0:2b0:770f:c83c with SMTP id
- a26-20020a2e88da000000b002b0770fc83cmr214990ljk.4.1685996319762; Mon, 05 Jun
- 2023 13:18:39 -0700 (PDT)
+        bh=W96UEYuBtjbti00Xl+zHBE3PvU7J3K5NYfzeZyJf/zQ=;
+        b=RQloqjeGPSYZAgyw2jTJMet7/pMqCjM9c+AWlekoj02nzBNxTn4FlzGYMJjTa6IpWs
+         SkXrP15aZlc/ajTh6pFRn8rKnn9mxrg1LK5jjApte7levhFt7rvYlRh/MnweIhUcEyuu
+         hTS7vfePEb4XEsqzNbs2gf7jJ6ON0no64c98+05jwc0oOX/HkGlY5UIBMDCy4t9X93EI
+         EgTEceFZZQqeDJWmmKuKL0CKlLgC4hyWrvTUsYJPWKM1QiLD0whpeKSrord7gwURiIt5
+         OdQSIOc6DT6Q1pIvcCzNXYLGhN/KSAcJORR01g7vry89Q8Zjn4zFAm2F364oqQ5Gpwbu
+         nljw==
+X-Gm-Message-State: AC+VfDxuGU2AXpEeTz4KEs3nz5wSJ6J0ADfvyrJHekD8PLQMa1ak1sfc
+        IZmxk3sRzPO0S61awUHQBBT1rrPKN/vvhT4QmWw=
+X-Google-Smtp-Source: ACHHUZ5JlTcwPlpw7pJ4FSQxYqZlEK45W38wyXUhhtIDRXqJXxWBJs9eHduk57NVSa4iseRQkTmhQT64hF1WAsiFW1g=
+X-Received: by 2002:a2e:958b:0:b0:2ac:78b0:8aef with SMTP id
+ w11-20020a2e958b000000b002ac78b08aefmr182117ljh.16.1685996382100; Mon, 05 Jun
+ 2023 13:19:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515210545.2100161-1-gnstark@sberdevices.ru>
- <CAFBinCCc+t7Ks6fqz38cVrufPRFdxFgC9Qp+JhcM1KfD6pupTg@mail.gmail.com>
- <a52335ea-6545-8ca6-d318-38b7ffc64368@lexina.in> <CAFBinCDmkGnD5o_rV6K73De2XmHDxRYveDwNAy3iA+Kwr5sdqg@mail.gmail.com>
- <6910550a-b025-0d97-0b39-bc89b235541e@sberdevices.ru> <CAFBinCCk6OziOxt2AY1A25C=9_pibhHsDK0wJNZ_AyHMd=z6SQ@mail.gmail.com>
- <dcb05f27-4c6d-0544-ff0d-288a6848ccaf@sberdevices.ru>
-In-Reply-To: <dcb05f27-4c6d-0544-ff0d-288a6848ccaf@sberdevices.ru>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 5 Jun 2023 22:18:28 +0200
-Message-ID: <CAFBinCCnAVveiYEOSq=KkBq0kRJti7eWgfRxqiTkQWe9i8mTzA@mail.gmail.com>
-Subject: Re: [PATCH v1] meson saradc: fix clock divider mask length
-To:     George Stark <gnstark@sberdevices.ru>
-Cc:     "jic23@kernel.org" <jic23@kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "nuno.sa@analog.com" <nuno.sa@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>, Vyacheslav <adeep@lexina.in>
+References: <20230605074024.1055863-1-puranjay12@gmail.com>
+ <20230605074024.1055863-4-puranjay12@gmail.com> <CAPhsuW4JVUUzMfNQwTE_uzp3bnO3EAYDikU1Nyx6x-6ROFDNOA@mail.gmail.com>
+ <CANk7y0jrPPW6GqPFi4SOTzgHyVPG_KY2tcrm=S0cG8P9=w0m1A@mail.gmail.com> <CAPhsuW79OdJigXU+6D8c=dKRWWeatF8+140CP-AV5xDsn2wpCg@mail.gmail.com>
+In-Reply-To: <CAPhsuW79OdJigXU+6D8c=dKRWWeatF8+140CP-AV5xDsn2wpCg@mail.gmail.com>
+From:   Puranjay Mohan <puranjay12@gmail.com>
+Date:   Mon, 5 Jun 2023 22:19:31 +0200
+Message-ID: <CANk7y0i0Ujjb=rq18bkS_hFYpdmLbbA_kP1KcajO1niUz96_Qw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
+To:     Song Liu <song@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, catalin.marinas@arm.com,
+        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi George,
+On Mon, Jun 5, 2023 at 10:13=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+>
+> On Mon, Jun 5, 2023 at 11:34=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.=
+com> wrote:
+> >
+> > Hi,
+> >
+> > On Mon, Jun 5, 2023 at 7:05=E2=80=AFPM Song Liu <song@kernel.org> wrote=
+:
+> > >
+> > > On Mon, Jun 5, 2023 at 12:40=E2=80=AFAM Puranjay Mohan <puranjay12@gm=
+ail.com> wrote:
+> > > >
+> > > > Use bpf_jit_binary_pack_alloc for memory management of JIT binaries=
+ in
+> > > > ARM64 BPF JIT. The bpf_jit_binary_pack_alloc creates a pair of RW a=
+nd RX
+> > > > buffers. The JIT writes the program into the RW buffer. When the JI=
+T is
+> > > > done, the program is copied to the final ROX buffer
+> > > > with bpf_jit_binary_pack_finalize.
+> > > >
+> > > > Implement bpf_arch_text_copy() and bpf_arch_text_invalidate() for A=
+RM64
+> > > > JIT as these functions are required by bpf_jit_binary_pack allocato=
+r.
+> > > >
+> > > > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+> > > > ---
+> > > >  arch/arm64/net/bpf_jit_comp.c | 119 +++++++++++++++++++++++++++++-=
+----
+> > > >  1 file changed, 102 insertions(+), 17 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit=
+_comp.c
+> > > > index 145b540ec34f..ee9414cadea8 100644
+> > > > --- a/arch/arm64/net/bpf_jit_comp.c
+> > > > +++ b/arch/arm64/net/bpf_jit_comp.c
+> > > > @@ -76,6 +76,7 @@ struct jit_ctx {
+> > > >         int *offset;
+> > > >         int exentry_idx;
+> > > >         __le32 *image;
+> > > > +       __le32 *ro_image;
+> > >
+> > > We are using:
+> > > image vs. ro_image
+> > > rw_header vs. header
+> > > rw_image_ptr vs. image_ptr
+> >
+> > Will use "rw_image" and "image" in the next version.
+> >
+> > >
+> > > Shall we be more consistent with rw_ or ro_ prefix?
+> > >
+> > > >         u32 stack_size;
+> > > >         int fpb_offset;
+> > > >  };
+> > > > @@ -205,6 +206,20 @@ static void jit_fill_hole(void *area, unsigned=
+ int size)
+> > > >                 *ptr++ =3D cpu_to_le32(AARCH64_BREAK_FAULT);
+> > > >  }
+> > > >
+> > > > +int bpf_arch_text_invalidate(void *dst, size_t len)
+> > > > +{
+> > > > +       __le32 *ptr;
+> > > > +       int ret;
+> > > > +
+> > > > +       for (ptr =3D dst; len >=3D sizeof(u32); len -=3D sizeof(u32=
+)) {
+> > > > +               ret =3D aarch64_insn_patch_text_nosync(ptr++, AARCH=
+64_BREAK_FAULT);
+> > >
+> > > I think one aarch64_insn_patch_text_nosync() per 4 byte is too much o=
+verhead.
+> > > Shall we add a helper to do this in bigger patches?
+> >
+> > What would be the most efficient way to build this helper? As arm64 doe=
+sn't
+> > have the __text_poke() API. Calling copy_to_kernel_nofault() in a loop =
+might
+> > not be the best way. One way would be to use __put_kernel_nofault() dir=
+ectly.
+> >
+> > Also, what should we call this helper? aarch64_insn_memset() ?
+>
+> I just found aarch64_insn_patch_text_cb() also calls
+> aarch64_insn_patch_text_nosync() in a loop. So it is probably OK as-is?
 
-On Thu, Jun 1, 2023 at 10:56=E2=80=AFPM George Stark <gnstark@sberdevices.r=
-u> wrote:
-[...]
-> Here the test I promised:
-> Question: what's the real size of clock divder field in SAR_ADC_REG3 regi=
-ster in saradc in meson8 socs?
-> The current kernel code says 5 bits
-> The datasheet says 6 bit
->
-> The parent clock of adc clock is 24Mhz
-> I can check it here by:
->
-> # cat /sys/kernel/debug/clk/clk_summary
->   xtal                                 4        4        1    24000000   =
-       0     0  50000         Y
->      c1108680.adc#adc_div              1        1        0      1142858  =
-       0     0  50000         Y
->         c1108680.adc#adc_en            1        1        0      1142858  =
-       0     0  50000         Y
->
-> for divider width 5bit min adc clock is 24Mhz / 32 =3D  750KHZ
-> for divider width 6bit min adc clock is 24Mhz / 64 =3D  375KHz
->
-> I suppose that the lower adc clock rate the higher measurement time
-> so I need to get measurement time at both clk freqs and the times differ =
-so
-> 6bit divider is really applied
->
-> I performed test at Odroid-C1, kernel 6.2-rc8
-> Two kernel patches must be applied:
->
-> the topic starter patch and the helper patch at the end of the letter
-> In the helper patch I turn on CLOCK_ALLOW_WRITE_DEBUGFS to change clock r=
-ate from she shell
-> and use ktime_get_raw_ts64 to measure measurement time
->
-> So the the test itself:
-> cat /sys/devices/platform/soc/c1100000.cbus/c1108680.adc/iio:device0/in_v=
-oltage3_raw
-> [ 1781.226309] =3D=3D=3D=3D freq: 1142858 time 42408000
->
-> # echo 750000 > /sys/kernel/debug/clk/c1108680.adc#adc_en/clk_rate
-> # cat /sys/devices/platform/soc/c1100000.cbus/c1108680.adc/iio:device0/in=
-_voltage3_raw
-> [ 1790.728656] =3D=3D=3D=3D freq: 750000 time 49173000
->
-> # echo 375000 > /sys/kernel/debug/clk/c1108680.adc#adc_en/clk_rate
-> # cat /sys/devices/platform/soc/c1100000.cbus/c1108680.adc/iio:device0/in=
-_voltage3_raw
-> [ 1816.955477] =3D=3D=3D=3D freq: 375000 time 68245000
->
-> # cat /sys/kernel/debug/clk/clk_summary
->   xtal                                 4        4        1    24000000   =
-       0     0  50000         Y
->      c1108680.adc#adc_div              1        1        0      375000   =
-       0     0  50000         Y
->         c1108680.adc#adc_en            1        1        0      375000   =
-       0     0  50000         Y
-These results looks excellent - thanks for sharing the test results!
-Could you please check one last thing:
-$ grep -i adc /sys/kernel/debug/meson-clk-msr/measure_summary
-It should confirm that the clock rate is 375kHz (or close to it, SoC
-internal clock measurement is not 100% precise)
+Okay, then we can go ahead with this.
 
-Once we have that confirmation: can you please re-send the patch with
-the description updated so it's clear which SoC generations are
-affected and by stating that the fix was tested on a Meson8b Odroid-C1
-board.
+Another thing about the consistency of rw_ and ro_ prefix.
+The ctx->image is used all over the place in the JIT, so changing it would
+require a lot of changes. Therefore the naming convention that I will follo=
+w is
+"image" and "ro_image". By this naming convention, ctx->image can be left
+untouched and only ro_image would be used at some places like:
+-       prog->bpf_func =3D (void *)ctx.image;
++       prog->bpf_func =3D (void *)ctx.ro_image;
+etc.
 
+I will use this in the next version of the patch.
 
-Thank you and best regards,
-Martin
+Thanks,
+Puranjay
