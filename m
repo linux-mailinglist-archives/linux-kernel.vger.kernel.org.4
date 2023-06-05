@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271F7722F94
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B67C722F95
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 21:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbjFETRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 15:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S235546AbjFETRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 15:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235345AbjFETQY (ORCPT
+        with ESMTP id S235314AbjFETQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 15:16:24 -0400
+        Mon, 5 Jun 2023 15:16:25 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C18131;
-        Mon,  5 Jun 2023 12:16:21 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 19:16:19 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FBB106;
+        Mon,  5 Jun 2023 12:16:22 -0700 (PDT)
+Date:   Mon, 05 Jun 2023 19:16:20 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685992580;
+        s=2020; t=1685992581;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dIi96m4QyCUQHfMrUC8WJDqLTIqs0bPtYIDfR912ZMI=;
-        b=xl2OeToJMYSCYavvN2z7aNgJ/GWRTdudvYaLbmy/F0frsyJQTBfLqYO4cd2cVTj54lNZIF
-        bXSCzWwL491eyw0654HaggQsvXFkymg8aKRzZIZa0eGkAPL/9rhv4nzztQbVq6Gqym9BCO
-        IIDBZh/SJJtmlBLgJLI6WWkieA9jrMFlFGv/6GpcMhpV1VRazCiIFShhSwfINhsvsGmv7p
-        bjnNbm7mg3q4mo4EXXnOFhzOO690t/K2KTIeOdC4tXtheAVh9VdVsNdWZT/VDFH+UKu4Y5
-        BZE2IP7eaDliyi42awfdE7MoAMftF6FtapdW9Am1d8gl3PbE9S4P3Sz2T01Hsg==
+        bh=64qXtPcj4Jdo/8zlj4PIoNJS9+khEW9797U80Cy1DQ0=;
+        b=XjHir3xp5/LyIymyml3Q7/UR5Y+nm+wlxC8buXG2Us4KgN5n2/U7jVXvkQWk7+V/9xghCt
+        SE3Senq9lC5dQ5fKiyBl7x5Ba23iP5TO8li99XW3Ek2gHsEKAj5fMmclTPQ1P+0YLkVH+J
+        y1NpwANVVzsheqJCcPNtMDl+m4/gn11AEQs2dr76RrspL89gXpnbbbCvMat0EKzH5wdLtA
+        mf6jLEOUWmz+hcu2rmWoL0kBD5dPMXIIDoiG2y6EtwKBmLvlvBm5HO4OUXQ/PmVQfcCuPg
+        J/i5hgFSBpC2OgWHsC4+PCQsbAE16a6lithllPAoXi5zD5Li4cGfXzMJAxMv+Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685992580;
+        s=2020e; t=1685992581;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dIi96m4QyCUQHfMrUC8WJDqLTIqs0bPtYIDfR912ZMI=;
-        b=/+FZRc+3P3RxC/oI6Ie0U0EHSbKiM7ZOwh8OpZbQzKZn+pfVIe7fDl5xbltD+bKku/eLj/
-        9u6qLXi+C/SEElCQ==
+        bh=64qXtPcj4Jdo/8zlj4PIoNJS9+khEW9797U80Cy1DQ0=;
+        b=WAJ+Dl2nRlgF03dEEhslF7WuHwk1z9Xel99Lr5m5kNzbkj4r9oH7Z9+q9YHe9yKsf1gy9t
+        39iAg3bRaTXqIGAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] seqlock/latch: Provide raw_read_seqcount_latch_retry()
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Michael Kelley <mikelley@microsoft.com>, x86@kernel.org,
+Subject: [tip: sched/core] sched: Consider task_struct::saved_state in
+ wait_task_inactive()
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230519102715.233598176@infradead.org>
-References: <20230519102715.233598176@infradead.org>
+In-Reply-To: <20230601091234.GW83892@hirez.programming.kicks-ass.net>
+References: <20230601091234.GW83892@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <168599257987.404.1603603912054856425.tip-bot2@tip-bot2>
+Message-ID: <168599258059.404.17087833652728912462.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,153 +68,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     d16317de9b412aa7bd3598c607112298e36b4352
-Gitweb:        https://git.kernel.org/tip/d16317de9b412aa7bd3598c607112298e36b4352
+Commit-ID:     1c06918788e8ae6e69e4381a2806617312922524
+Gitweb:        https://git.kernel.org/tip/1c06918788e8ae6e69e4381a2806617312922524
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 19 May 2023 12:20:59 +02:00
+AuthorDate:    Wed, 31 May 2023 16:39:07 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 05 Jun 2023 21:11:03 +02:00
 
-seqlock/latch: Provide raw_read_seqcount_latch_retry()
+sched: Consider task_struct::saved_state in wait_task_inactive()
 
-The read side of seqcount_latch consists of:
+With the introduction of task_struct::saved_state in commit
+5f220be21418 ("sched/wakeup: Prepare for RT sleeping spin/rwlocks")
+matching the task state has gotten more complicated. That same commit
+changed try_to_wake_up() to consider both states, but
+wait_task_inactive() has been neglected.
 
-  do {
-    seq = raw_read_seqcount_latch(&latch->seq);
-    ...
-  } while (read_seqcount_latch_retry(&latch->seq, seq));
+Sebastian noted that the wait_task_inactive() usage in
+ptrace_check_attach() can misbehave when ptrace_stop() is blocked on
+the tasklist_lock after it sets TASK_TRACED.
 
-which is asymmetric in the raw_ department, and sure enough,
-read_seqcount_latch_retry() includes (explicit) instrumentation where
-raw_read_seqcount_latch() does not.
+Therefore extract a common helper from ttwu_state_match() and use that
+to teach wait_task_inactive() about the PREEMPT_RT locks.
 
-This inconsistency becomes a problem when trying to use it from
-noinstr code. As such, fix it by renaming and re-implementing
-raw_read_seqcount_latch_retry() without the instrumentation.
-
-Specifically the instrumentation in question is kcsan_atomic_next(0)
-in do___read_seqcount_retry(). Loosing this annotation is not a
-problem because raw_read_seqcount_latch() does not pass through
-kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX).
-
+Originally-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Michael Kelley <mikelley@microsoft.com>  # Hyper-V
-Link: https://lore.kernel.org/r/20230519102715.233598176@infradead.org
+Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Link: https://lkml.kernel.org/r/20230601091234.GW83892@hirez.programming.kicks-ass.net
 ---
- include/linux/rbtree_latch.h |  2 +-
- include/linux/seqlock.h      | 15 ++++++++-------
- kernel/printk/printk.c       |  2 +-
- kernel/time/sched_clock.c    |  2 +-
- kernel/time/timekeeping.c    |  4 ++--
- 5 files changed, 13 insertions(+), 12 deletions(-)
+ kernel/sched/core.c | 59 +++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 48 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/rbtree_latch.h b/include/linux/rbtree_latch.h
-index 3d1a9e7..6a0999c 100644
---- a/include/linux/rbtree_latch.h
-+++ b/include/linux/rbtree_latch.h
-@@ -206,7 +206,7 @@ latch_tree_find(void *key, struct latch_tree_root *root,
- 	do {
- 		seq = raw_read_seqcount_latch(&root->seq);
- 		node = __lt_find(key, root, seq & 1, ops->comp);
--	} while (read_seqcount_latch_retry(&root->seq, seq));
-+	} while (raw_read_seqcount_latch_retry(&root->seq, seq));
- 
- 	return node;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 810cf7d..ac38225 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2213,6 +2213,39 @@ void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags)
+ 		rq_clock_skip_update(rq);
  }
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index 3926e90..987a59d 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -671,9 +671,9 @@ typedef struct {
+ 
++static __always_inline
++int __task_state_match(struct task_struct *p, unsigned int state)
++{
++	if (READ_ONCE(p->__state) & state)
++		return 1;
++
++#ifdef CONFIG_PREEMPT_RT
++	if (READ_ONCE(p->saved_state) & state)
++		return -1;
++#endif
++	return 0;
++}
++
++static __always_inline
++int task_state_match(struct task_struct *p, unsigned int state)
++{
++#ifdef CONFIG_PREEMPT_RT
++	int match;
++
++	/*
++	 * Serialize against current_save_and_set_rtlock_wait_state() and
++	 * current_restore_rtlock_saved_state().
++	 */
++	raw_spin_lock_irq(&p->pi_lock);
++	match = __task_state_match(p, state);
++	raw_spin_unlock_irq(&p->pi_lock);
++
++	return match;
++#else
++	return __task_state_match(p, state);
++#endif
++}
++
+ /*
+  * wait_task_inactive - wait for a thread to unschedule.
   *
-  * Return: sequence counter raw value. Use the lowest bit as an index for
-  * picking which data copy to read. The full counter must then be checked
-- * with read_seqcount_latch_retry().
-+ * with raw_read_seqcount_latch_retry().
+@@ -2231,7 +2264,7 @@ void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags)
   */
--static inline unsigned raw_read_seqcount_latch(const seqcount_latch_t *s)
-+static __always_inline unsigned raw_read_seqcount_latch(const seqcount_latch_t *s)
+ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
  {
+-	int running, queued;
++	int running, queued, match;
+ 	struct rq_flags rf;
+ 	unsigned long ncsw;
+ 	struct rq *rq;
+@@ -2257,7 +2290,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_on_cpu(rq, p)) {
+-			if (!(READ_ONCE(p->__state) & match_state))
++			if (!task_state_match(p, match_state))
+ 				return 0;
+ 			cpu_relax();
+ 		}
+@@ -2272,8 +2305,15 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		running = task_on_cpu(rq, p);
+ 		queued = task_on_rq_queued(p);
+ 		ncsw = 0;
+-		if (READ_ONCE(p->__state) & match_state)
++		if ((match = __task_state_match(p, match_state))) {
++			/*
++			 * When matching on p->saved_state, consider this task
++			 * still queued so it will wait.
++			 */
++			if (match < 0)
++				queued = 1;
+ 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
++		}
+ 		task_rq_unlock(rq, p, &rf);
+ 
+ 		/*
+@@ -4003,15 +4043,14 @@ static void ttwu_queue(struct task_struct *p, int cpu, int wake_flags)
+ static __always_inline
+ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
+ {
++	int match;
++
+ 	if (IS_ENABLED(CONFIG_DEBUG_PREEMPT)) {
+ 		WARN_ON_ONCE((state & TASK_RTLOCK_WAIT) &&
+ 			     state != TASK_RTLOCK_WAIT);
+ 	}
+ 
+-	if (READ_ONCE(p->__state) & state) {
+-		*success = 1;
+-		return true;
+-	}
++	*success = !!(match = __task_state_match(p, state));
+ 
+ #ifdef CONFIG_PREEMPT_RT
  	/*
- 	 * Pairs with the first smp_wmb() in raw_write_seqcount_latch().
-@@ -683,16 +683,17 @@ static inline unsigned raw_read_seqcount_latch(const seqcount_latch_t *s)
+@@ -4027,12 +4066,10 @@ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
+ 	 * p::saved_state to TASK_RUNNING so any further tests will
+ 	 * not result in false positives vs. @success
+ 	 */
+-	if (p->saved_state & state) {
++	if (match < 0)
+ 		p->saved_state = TASK_RUNNING;
+-		*success = 1;
+-	}
+ #endif
+-	return false;
++	return match > 0;
  }
  
- /**
-- * read_seqcount_latch_retry() - end a seqcount_latch_t read section
-+ * raw_read_seqcount_latch_retry() - end a seqcount_latch_t read section
-  * @s:		Pointer to seqcount_latch_t
-  * @start:	count, from raw_read_seqcount_latch()
-  *
-  * Return: true if a read section retry is required, else false
-  */
--static inline int
--read_seqcount_latch_retry(const seqcount_latch_t *s, unsigned start)
-+static __always_inline int
-+raw_read_seqcount_latch_retry(const seqcount_latch_t *s, unsigned start)
- {
--	return read_seqcount_retry(&s->seqcount, start);
-+	smp_rmb();
-+	return unlikely(READ_ONCE(s->seqcount.sequence) != start);
- }
- 
- /**
-@@ -752,7 +753,7 @@ read_seqcount_latch_retry(const seqcount_latch_t *s, unsigned start)
-  *			entry = data_query(latch->data[idx], ...);
-  *
-  *		// This includes needed smp_rmb()
-- *		} while (read_seqcount_latch_retry(&latch->seq, seq));
-+ *		} while (raw_read_seqcount_latch_retry(&latch->seq, seq));
-  *
-  *		return entry;
-  *	}
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 6a333ad..357a4d1 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -528,7 +528,7 @@ static u64 latched_seq_read_nolock(struct latched_seq *ls)
- 		seq = raw_read_seqcount_latch(&ls->latch);
- 		idx = seq & 0x1;
- 		val = ls->val[idx];
--	} while (read_seqcount_latch_retry(&ls->latch, seq));
-+	} while (raw_read_seqcount_latch_retry(&ls->latch, seq));
- 
- 	return val;
- }
-diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
-index 8464c5a..e8f2fb0 100644
---- a/kernel/time/sched_clock.c
-+++ b/kernel/time/sched_clock.c
-@@ -77,7 +77,7 @@ notrace struct clock_read_data *sched_clock_read_begin(unsigned int *seq)
- 
- notrace int sched_clock_read_retry(unsigned int seq)
- {
--	return read_seqcount_latch_retry(&cd.seq, seq);
-+	return raw_read_seqcount_latch_retry(&cd.seq, seq);
- }
- 
- unsigned long long notrace sched_clock(void)
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index 09d5949..266d028 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -450,7 +450,7 @@ static __always_inline u64 __ktime_get_fast_ns(struct tk_fast *tkf)
- 		tkr = tkf->base + (seq & 0x01);
- 		now = ktime_to_ns(tkr->base);
- 		now += fast_tk_get_delta_ns(tkr);
--	} while (read_seqcount_latch_retry(&tkf->seq, seq));
-+	} while (raw_read_seqcount_latch_retry(&tkf->seq, seq));
- 
- 	return now;
- }
-@@ -566,7 +566,7 @@ static __always_inline u64 __ktime_get_real_fast(struct tk_fast *tkf, u64 *mono)
- 		basem = ktime_to_ns(tkr->base);
- 		baser = ktime_to_ns(tkr->base_real);
- 		delta = fast_tk_get_delta_ns(tkr);
--	} while (read_seqcount_latch_retry(&tkf->seq, seq));
-+	} while (raw_read_seqcount_latch_retry(&tkf->seq, seq));
- 
- 	if (mono)
- 		*mono = basem + delta;
+ /*
