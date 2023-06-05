@@ -2,81 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622F37223A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9947223AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 12:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjFEKh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 06:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S231397AbjFEKho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 06:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjFEKh1 (ORCPT
+        with ESMTP id S231185AbjFEKhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 06:37:27 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8C7EC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 03:37:25 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977c72b116fso285273766b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 03:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685961444; x=1688553444;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aOcvx95y08Gz26+xoTBjezMM0R9qofVzp0SopEjZHOQ=;
-        b=rt0Rcc/eCQBeaPHqu7XDXzAGCyuRJOzkJQOyy1aX6nkGg+82+j5cbs4bVtgXqmWwII
-         3Mh3y6GijeEiUvlu2xdPSaxfgGshRlGJRxrAzKA1KgHUGk9lc12YXCD5D4xZL7tKAs4u
-         QmTxa9VKBOb8VbSZRT9i9Ci+sCZgCom+x7SYHO9kSgzq5ZJoHBzelKG2gmlIUtggDaz8
-         m5hTOkfhdxICvVpYqFa24mYzCHL3Sb+OkTWvfaTuRQ5fqJZvwZUC5dR3ku0d2X5S1PZu
-         hgKVPq/sgaJSnlTj4nFsGutvSIKoqBKb+WVR/f+nn4znyoCqsKw9Ra91e3kG4N/ALFdH
-         YCQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685961444; x=1688553444;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aOcvx95y08Gz26+xoTBjezMM0R9qofVzp0SopEjZHOQ=;
-        b=Ibp2GzHNFy/1cF+FwaflsBla/5NajDqJ6NL/uqXYMaP0BNbpfqE8Q9fyqG3IX/Vle7
-         pObtBQbE+auqyIiohrFx3Sw1xKxHhDDxyMdIRi0992lOvKZZCkYvn6O2L0fJxGenMvMo
-         CP17hBtk+f5CQRM8t6iuAI6MXPYX1+M1MY9eJI5FfUvmmlUcObsfRFfET0Mli+CWFo2Z
-         zEjNwU1tGDRB3Yf9XRmeFtJNTSehe86+MuAHYr+2fQsWY5nLJLKLruLyrK4nYFv0lE2z
-         GwR6rNHvtrafTKQPw4Px8muHywxDt39l1oooomWXnmfkMNFtzUoZDilzRse+QCrgC90e
-         fG0g==
-X-Gm-Message-State: AC+VfDwdIjnwLKwjEVfIR1IXuoOKXCjWkNRhr4yrbpEnj47Ss7Lt0gUY
-        YxoC1jho++Oez8/h+w/2Vus9Vg==
-X-Google-Smtp-Source: ACHHUZ48K2Razvdp0nA1z9juD0kw8ynNAAg6/azRFolmB6OaGaQUC8gJo44/8kdX7ZDfR6mnkTGLzQ==
-X-Received: by 2002:a17:907:36c3:b0:960:ddba:e5c6 with SMTP id bj3-20020a17090736c300b00960ddbae5c6mr5332528ejc.22.1685961444353;
-        Mon, 05 Jun 2023 03:37:24 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id kq6-20020a170906abc600b0096599bf7029sm4160816ejb.145.2023.06.05.03.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 03:37:23 -0700 (PDT)
-Message-ID: <cd71ee53-391a-90fd-27ca-c174f2b24a94@linaro.org>
-Date:   Mon, 5 Jun 2023 12:37:21 +0200
+        Mon, 5 Jun 2023 06:37:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9B5116;
+        Mon,  5 Jun 2023 03:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D53614D5;
+        Mon,  5 Jun 2023 10:37:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60829C433D2;
+        Mon,  5 Jun 2023 10:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685961454;
+        bh=hAyKurn2OOaYTMwG3H4jsrgJYf3qIZ+AJycUSJ3bmZM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=l8xpfhqSyLuvOKs9VzQFn/gG3GT3Tqvmhur5Ai5En+UWLYVB4bMyoaBGJL/bjForQ
+         TVfhhZSZdau4ICVIcQWCoRhsbdh14L073Dj71fE0DNrK5nqju1RYElC1my8cVmyZ/l
+         I3Qk59uMcti09j8vl1159n/kV5YhJHy+pf9T5K9zVfugJ2sfe6JZlxBHWm1OKm9wKz
+         I1AqvCkkn84Rt4zzNIgfHTWoyUV7h5fx059sOfltbgHPgnfVRhva6l8Kwjy3AOeC2a
+         yrwrB607tvpUoLoSKWcki3OT9FyYTTjouzHDBnp0JjLquovaz3Cz2URzFqAqV+CELY
+         wTExy5Lt6XaiA==
+Date:   Mon, 5 Jun 2023 11:37:27 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Hyunwoo Kim <imv4bel@gmail.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Thomas Voegtle <tv@lio96.de>, linux-kernel@vger.kernel.org
+Subject: Re: Sometimes DVB broken with commit 6769a0b7ee0c3b
+Message-ID: <20230605113727.69e7f309@sal.lan>
+In-Reply-To: <439d143b-1de7-6365-cf64-f1b44fd6d1cf@leemhuis.info>
+References: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+        <439d143b-1de7-6365-cf64-f1b44fd6d1cf@leemhuis.info>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: dts: qcom: Split sdm845-db845c to add headless
- support
-Content-Language: en-US
-To:     Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230605094710.2037879-1-amit.pundir@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605094710.2037879-1-amit.pundir@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,90 +59,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 11:47, Amit Pundir wrote:
-> This is a follow-up of the upstream discussion,
-> https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u,
-> around adding a reserved memory region in sdm845-db845c
-> for the framebuffer memory (the splash region set up by
-> the bootloader) but the general opinion was to avoid
-> adding that reserved memory for the headless DB845c
-> usecase.
-> 
-> So this patch splits the sdm845-db845c into a common dtsi,
-> a new sdm845-db845-headless DT, which disables the mdss
-> display subsystem, and a new sdm845-db845c DT with an
-> additional reserved-memory region for the framebuffer.
-> 
-> The default sdm845-db845c.dtb remains pretty much the same
-> (with an exception of additional reserved-memory region),
-> while others can use sdm845-db845c-headless.dtb for their
-> headless systems.
+Em Mon, 5 Jun 2023 11:38:49 +0200
+"Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info>=
+ escreveu:
 
-You should describe the hardware in commit msg. What is "headless"? If
-no HDMI plugged in, then it is a NAK because plug or unplugged HDMI
-cable is not a property of a DTS.
+> Hi, Thorsten here, the Linux kernel's regression tracker.
+>=20
+> On 30.05.23 13:12, Thomas Voegtle wrote:
+> >=20
+> > I have the problem that sometimes my DVB card does not initialize
+> > properly booting Linux 6.4-rc4.
+> > This is not always, maybe in 3 out of 4 attempts.
+> > When this happens somehow you don't see anything special in dmesg, but
+> > the card just doesn't work.
+> >=20
+> > Reverting this helps:
+> > commit 6769a0b7ee0c3b31e1b22c3fadff2bfb642de23f
+> > Author: Hyunwoo Kim <imv4bel@gmail.com>
+> > Date:=C2=A0=C2=A0 Thu Nov 17 04:59:22 2022 +0000
+> >=20
+> > =C2=A0=C2=A0=C2=A0 media: dvb-core: Fix use-after-free on race conditio=
+n at dvb_frontend
+> >=20
+> >=20
+> > I have:
+> > 03:00.0 Multimedia video controller [0400]: Conexant Systems, Inc.
+> > CX23887/8
+> > PCIe Broadcast Audio and Video Decoder with 3D Comb [14f1:8880] (rev 04)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Subsystem: Hauppauge compute=
+r works Inc. Device [0070:c138]
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Kernel driver in use: cx2388=
+5 =20
+>=20
+> Hmmm, that was posted last Tuesday and received not a single reply. :-/
+>=20
+> Hyunwoo Kim: could you please look at it, as it's a regression caused by
+> a commit of yours (one that would be good to solve before 6.4 is
+> finalized!)? And in case you are unable to do so let us know?
+>=20
+> But FWIW:
+>=20
+> Mauro: I wonder if this is something you or someone else has to look
+> into, as Hyunwoo Kim posted a few times per months to Linux lists, but
+> according  to a quick search on lore hasn't posted anything since ~two
+> months now. :-/
 
-> 
-> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> ---
-> Please pick this after the lvs regulator nodes reordering patch
-> https://lore.kernel.org/lkml/20230602161246.1855448-1-amit.pundir@linaro.org/T/#u.
-> I'll rebase and resend this patch otherwise.
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |    1 +
->  .../boot/dts/qcom/sdm845-db845c-common.dtsi   | 1178 +++++++++++++++++
->  .../boot/dts/qcom/sdm845-db845c-headless.dts  |    9 +
->  arch/arm64/boot/dts/qcom/sdm845-db845c.dts    | 1172 +---------------
+Yeah, I was slow applying this one, as I was afraid of it to cause
+troubles. The DVB frontend state machine is complex, and uses a
+semaphore to update its state. There was some past attempts of
+addressing some lifetime issues there that we ended needing to revert
+or not being applied, as the fix caused more harm than good.
 
-A lot of duplication. Are you sure you generated the patches with
-correct -M/-C/-B arguments to rename or copy?
+The way DVB tuning works is that it uses a zigzag mechanism to
+tune to a frequency. It actually tries to tune at several different
+frequencies, like:
 
->  4 files changed, 1194 insertions(+), 1166 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/qcom/sdm845-db845c-common.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/sdm845-db845c-headless.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 4f9e81253e18..22876ea2e409 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -166,6 +166,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r3.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c-headless.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c-navigation-mezzanine.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-lg-judyln.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-lg-judyp.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-db845c-common.dtsi
-> new file mode 100644
-> index 000000000000..ecc4a851e29c
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c-common.dtsi
-> @@ -0,0 +1,1178 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2019, Linaro Ltd.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +#include <dt-bindings/sound/qcom,q6afe.h>
-> +#include <dt-bindings/sound/qcom,q6asm.h>
-> +#include "sdm845.dtsi"
-> +#include "sdm845-wcd9340.dtsi"
-> +#include "pm8998.dtsi"
-> +#include "pmi8998.dtsi"
-> +
-> +/ {
-> +	model = "Thundercomm Dragonboard 845c";
-> +	compatible = "thundercomm,db845c", "qcom,sdm845";
+	f
+	f + delta
+	f - delta
+	f + 2 * delta
+	f - 2 * delta
+	...
 
-So it is the same hardware? Why compatible is in common part? I don't
-understand this change.
+the DVB core supports 3 different types of zigzag approaches:
+	- hardware-based - no need to do any special implementation;
+	- software-based - Kernel will try the above tunes in in a
+	  zig-zag way;
+	- custom-based - the hardware has some helpers to speedup
+	  and improve the tuning logic.
 
-Best regards,
-Krzysztof
+If a signal is lost, the device will re-run the zigzag logic.
 
+It is not trivial to test all possible conditions there, and some
+boards may have multiple frontend devices for different types of
+TV transmission (cable, satellite, air).
+
+As I don't have a DVB signal generator anymore, my tests were limited to=20
+devices I have it handy that are compatible with DVB/T.=20
+
+In any case, we need more details about the problem, as CX23887 is just
+the media streaming PCIe bridge device. It tells nothing about what
+frontend is attached to the bridge.
+
+Regards,
+Mauro
