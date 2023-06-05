@@ -2,156 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5AF72272B
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE37722731
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbjFENP6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Jun 2023 09:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S234045AbjFENRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbjFENPv (ORCPT
+        with ESMTP id S234040AbjFENRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:15:51 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2C0E8;
-        Mon,  5 Jun 2023 06:15:49 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-62606e67c0dso42669076d6.2;
-        Mon, 05 Jun 2023 06:15:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685970948; x=1688562948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=evDCePhMrS7Ny+TFmHSDloaESI5T/zQOM1dd67+oY2c=;
-        b=Z2f94QkcOhLJQUKjSw31y6xZbxRMpPBvGikkcKSBHkoYbXya7/B3JbcgU+x4JovXJp
-         G7wsNKiY53TcmCwYW0fTphzVm8hulAkoy7vPyo3PCcU57J2hj4BxIpJsdkE5nd+vIMcZ
-         L8+Hq0Ia9K+MQ41HrAnBvRfYi9jgeupekVWvL2XPyu0ozafvd3eW8pc0SnF+6/supsjI
-         AhoXFvo+a22Rie3EYZ88Qqql2sYHEG2eYDBdcdAwDgQLR057xFAB1KKPLaR9w2Aa4wbV
-         P9Njd+AHQVAlDPw5a4Zi0b2uGrVKRC+m3YgJPt4Jet+Gecyo+DfJSx9WKwEJgJjH6sK4
-         ibrw==
-X-Gm-Message-State: AC+VfDyJPuciJ7aSdaBvarlEz74U+3vPJ5nyfb7OcUVMzxgXe/CX56HJ
-        IaP6RJw1CSFIFPzf7GJKM9XPf1J1CMVPXg==
-X-Google-Smtp-Source: ACHHUZ43dmtEypQe0I2S0CTImw5harU0FrUV+yzWbIYKN00lpjQhg4QYsXfaxuYjydlMC0SgYMAAvA==
-X-Received: by 2002:a05:6214:130c:b0:626:2461:9f09 with SMTP id pn12-20020a056214130c00b0062624619f09mr8274707qvb.40.1685970948287;
-        Mon, 05 Jun 2023 06:15:48 -0700 (PDT)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id mn14-20020a0562145ece00b006235e8fe94esm4629206qvb.58.2023.06.05.06.15.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 06:15:47 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-62614a2ce61so42649146d6.3;
-        Mon, 05 Jun 2023 06:15:47 -0700 (PDT)
-X-Received: by 2002:a25:76cf:0:b0:ba9:89d4:b2f5 with SMTP id
- r198-20020a2576cf000000b00ba989d4b2f5mr14228253ybc.53.1685970927309; Mon, 05
- Jun 2023 06:15:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1685692810.git.geert+renesas@glider.be> <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
-In-Reply-To: <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 5 Jun 2023 15:15:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV9n3ypBG1HffvHxYke5Ym068ZK1s2QryE-rbVgFS9dzw@mail.gmail.com>
-Message-ID: <CAMuHMdV9n3ypBG1HffvHxYke5Ym068ZK1s2QryE-rbVgFS9dzw@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] soc: renesas: rmobile-sysc: Convert to readl_poll_timeout_atomic()
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 09:17:10 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F30DB
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:17:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 53D9A1FE67;
+        Mon,  5 Jun 2023 13:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685971024; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nQ/D4JXr2jkATGmTql3tYtvfsfon8UBRMwLFWJ2zmbo=;
+        b=HYgbmPXPKxG1Oh9kEW67R4NktUDQpiudtrchPD2Rnv1aEj22Ool+IwRCH0YfCgYBWu8H4f
+        2E+uF/g5bMp+v6zeN6ssEZYXCt+wpyN0trWXpgiM+j+skupm6UnkW7+IVD9FEbTgjW12Pe
+        Sqws5dXs9aRehpxjXcynwxvHmydXC4o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685971024;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nQ/D4JXr2jkATGmTql3tYtvfsfon8UBRMwLFWJ2zmbo=;
+        b=L4KoVQxMZTBs4QKvBjnzvzSRkieruEav2FMfzx0jz2k5mX0YenO2xU2yVkU2vomjR1ZzGB
+        KJTs3iPhdh2ge7Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26D38139C8;
+        Mon,  5 Jun 2023 13:17:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VG6OCFDgfWTxKwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 05 Jun 2023 13:17:04 +0000
+Date:   Mon, 05 Jun 2023 15:17:03 +0200
+Message-ID: <878rcyhwvk.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH RESEND v1 2/3] ALSA: hda: cs35l41: Fix endian conversions
+In-Reply-To: <ff8d0da4-10f7-31a7-5cf9-7a4c0e009192@opensource.cirrus.com>
+References: <20230525135955.2108140-1-sbinding@opensource.cirrus.com>
+        <20230525135955.2108140-3-sbinding@opensource.cirrus.com>
+        <87zg5eidcb.wl-tiwai@suse.de>
+        <ff8d0da4-10f7-31a7-5cf9-7a4c0e009192@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:51 AM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> Use readl_poll_timeout_atomic() instead of open-coding the same
-> operation.
->
->   1. rmobile_pd_power_down(): as typically less than 20 retries are
->      needed, PSTR_RETRIES (100) µs is a suitable timeout value.
->
->   2. __rmobile_pd_power_up(): the old method of first polling some
->      cycles with a 1 µs delay, followed by more polling cycles without
->      any delay didn't make much sense, as the latter was insignificant
->      compared to the former.  Furthermore, typically no retries are
->      needed.  Hence just retain the polling with delay.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Mon, 05 Jun 2023 14:50:54 +0200,
+Stefan Binding wrote:
+> 
+> Hi Takashi,
+> 
+> On 05/06/2023 08:21, Takashi Iwai wrote:
+> > On Thu, 25 May 2023 15:59:54 +0200,
+> > Stefan Binding wrote:
+> >> @@ -379,10 +379,10 @@ static int cs35l41_save_calibration(struct cs35l41_hda *cs35l41)
+> >>     				/* Calibration can only be applied
+> >> whilst the DSP is not running */
+> >>   				ret = cs35l41_apply_calibration(cs35l41,
+> >> -								cpu_to_be32(cl->calAmbient),
+> >> -								cpu_to_be32(cl->calR),
+> >> -								cpu_to_be32(cl->calStatus),
+> >> -								cpu_to_be32(cl->calR + 1));
+> >> +								(__be32)cpu_to_be32(cl->calAmbient),
+> >> +								(__be32)cpu_to_be32(cl->calR),
+> >> +								(__be32)cpu_to_be32(cl->calStatus),
+> >> +								(__be32)cpu_to_be32(cl->calR + 1));
+> > Do we really need those cast?  Even if yes, it must be with __force
+> > prefix for the endian cast in general.
+> 
+> These casts were added because we found some warnings when we ran the
+> static analyzer sparse locally.
+> I think these warnings are very minor, and we can drop this patch if
+> you prefer?
 
-> diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/soc/renesas/rmobile-sysc.c
-> index 728ebac98e14a5cc..5d621c35fba1116a 100644
+The warnings must be bogus, or maybe pointing to other things?
+The cpu_to_be32() macro itself must return a __be32 value, hence it
+makes no sense to add an extra cast .
 
-> @@ -74,25 +71,17 @@ static int rmobile_pd_power_down(struct generic_pm_domain *genpd)
->
->  static int __rmobile_pd_power_up(struct rmobile_pm_domain *rmobile_pd)
->  {
-> -       unsigned int mask = BIT(rmobile_pd->bit_shift);
-> -       unsigned int retry_count;
-> -       int ret = 0;
-> +       unsigned int val, mask = BIT(rmobile_pd->bit_shift);
-> +       int ret;
+If the static analysis still shows such a warning, it should be fixed
+differently -- either fix the analyzer or fix the cpu_to_be32() macro
+itself.
 
-Oops, "ret" should still be initialized to zero.
+The changes of the argument types to __be32 are fine.  I'm arguing
+only about those unnecessary cast.
 
->
->         if (readl(rmobile_pd->base + PSTR) & mask)
->                 return ret;
->
->         writel(mask, rmobile_pd->base + SWUCR);
->
-> -       for (retry_count = 2 * PSTR_RETRIES; retry_count; retry_count--) {
-> -               if (!(readl(rmobile_pd->base + SWUCR) & mask))
-> -                       break;
-> -               if (retry_count > PSTR_RETRIES)
-> -                       udelay(PSTR_DELAY_US);
-> -               else
-> -                       cpu_relax();
-> -       }
-> -       if (!retry_count)
-> -               ret = -EIO;
-> +       ret = readl_poll_timeout_atomic(rmobile_pd->base + SWUCR, val,
-> +                                       (val & mask), PSTR_DELAY_US,
-> +                                       PSTR_RETRIES * PSTR_DELAY_US);
->
->         pr_debug("%s: Power on, 0x%08x -> PSTR = 0x%08x\n",
->                  rmobile_pd->genpd.name, mask,
 
-Gr{oetje,eeting}s,
+thanks,
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Takashi
