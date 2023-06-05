@@ -2,91 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2C2722791
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE33722795
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 15:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbjFENfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 09:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S234296AbjFENff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 09:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbjFENef (ORCPT
+        with ESMTP id S234150AbjFENfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 09:34:35 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66A6EE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:34:32 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9741a0fd134so809144066b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 06:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685972071; x=1688564071;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5rq3Widh6hOEiY5YdsfneGamzIlwkE0sJ5k3vngcFSc=;
-        b=H1IHNMyQRtp1DX11ax4fGQWgXmX7bBwuCedLwUTO/0JImjrcWQ7PGrGucaNUYW9QWq
-         OUft8vP7ux3whhgItsECM02LirXUQBIyB6Ybw9GTQC2z3G1v9H7yKm7biLhmZQAmiF84
-         fxrMtDdPeYmoM9gROxzDXjylvVQydkQmK7fvG5bBtrNELPq2EFtAbWquJc67We1IWHvV
-         HBU8TNQWja6X0MwKURm6oaVdSzqmJN6qbm5yOpZarC2wmli/OIP6zZ1esJivH5vJaiA4
-         ODag4hmmTEijO9vsz5QmSXv3wxbgmkd1Lx74f0Zmt6RoBg/OR/6gQJp/fxXMXcaHcn+1
-         nWLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685972071; x=1688564071;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5rq3Widh6hOEiY5YdsfneGamzIlwkE0sJ5k3vngcFSc=;
-        b=STKzM5D8OBy4/FnnesJgYQq030KP3fHts+1ruXpRy6FgH8P1HUv4q/bP7dpiW/Nr+5
-         tUwOsDCXTzXy17HkWrqlt56TPhWmjNSzleIM2/3tqgMPfpJzBvTNlcGAQEfgIVEP+wMc
-         y3dW1mZIAFUgaUNH7rwNoZfHlOcanXOqj6/KiukyIBAVplh8PKcvbUw76Vid5wEVBEyk
-         Rj4viHG9kalTanICxHQ2KuFrWOMeUP10Rb5LTnF7/X3eucAJSYM1ralvSdlaOYrt5xXU
-         REY2UWY50EaqqJt5Z3f6sat4X0tAVwlqqBQQ+zIhGwpyoURT/CQK9jwSs7y5sLsr6mnF
-         dyNQ==
-X-Gm-Message-State: AC+VfDypALBPLwfvO6rBhyzf3iZ5HFgGjDRh8YJhwsN7GTnkQWX3p5XW
-        33Ov8nVa9s8Jdu2mNpnFLoPU1g==
-X-Google-Smtp-Source: ACHHUZ7s745giAKDDO4doxV94noEtK/FRaEwLZP9MaulFyeyXHe/0hxRLNnut3NFVjxtd4jewVlWpA==
-X-Received: by 2002:a17:907:848:b0:974:61dc:107c with SMTP id ww8-20020a170907084800b0097461dc107cmr6376623ejb.44.1685972071027;
-        Mon, 05 Jun 2023 06:34:31 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g19-20020a170906869300b0097461a7ebdcsm4251734ejx.82.2023.06.05.06.34.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 06:34:30 -0700 (PDT)
-Message-ID: <9b8a4221-beac-4394-8d71-a9060d4457f1@linaro.org>
-Date:   Mon, 5 Jun 2023 15:34:26 +0200
+        Mon, 5 Jun 2023 09:35:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2242FF4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 06:35:02 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6AME-0004wI-Qz; Mon, 05 Jun 2023 15:34:50 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6AMA-005Hnu-Sa; Mon, 05 Jun 2023 15:34:46 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6AM9-00BP7s-Mi; Mon, 05 Jun 2023 15:34:45 +0200
+Date:   Mon, 5 Jun 2023 15:34:45 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Liang He <windhl@126.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, Nicholas Piggin <npiggin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kernel@pengutronix.de, Michael Ellerman <mpe@ellerman.id.au>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v3 2/2] serial: 8250: Apply FSL workarounds also without
+ SERIAL_8250_CONSOLE
+Message-ID: <20230605133445.vi762odw2v7pkrog@pengutronix.de>
+References: <20230605130857.85543-1-u.kleine-koenig@pengutronix.de>
+ <20230605130857.85543-3-u.kleine-koenig@pengutronix.de>
+ <2d70e8b-7722-71e7-76f3-d27a2b2caa55@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 21/21] net: macb: add support for gmac to sam9x7
-Content-Language: en-US
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
-        tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, gregkh@linuxfoundation.org,
-        linux@armlinux.org.uk, mturquette@baylibre.com, sboyd@kernel.org,
-        sre@kernel.org, broonie@kernel.org, arnd@arndb.de,
-        gregory.clement@bootlin.com, sudeep.holla@arm.com,
-        balamanikandan.gunasundar@microchip.com, mihai.sain@microchip.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
-        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
-        balakrishnan.s@microchip.com
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-22-varshini.rajendran@microchip.com>
- <be3716e0-383f-e79a-b441-c606c0e049df@linaro.org>
- <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3e262485-bf5f-1a98-e399-e02add3eaa89@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="63dictzrcc4iig2j"
+Content-Disposition: inline
+In-Reply-To: <2d70e8b-7722-71e7-76f3-d27a2b2caa55@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,41 +70,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 14:07, Nicolas Ferre wrote:
-> On 05/06/2023 at 08:42, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 03/06/2023 22:02, Varshini Rajendran wrote:
->>> From: Nicolas Ferre <nicolas.ferre@microchip.com>
->>>
->>> Add support for GMAC in sam9x7 SoC family
->>>
->>> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->>> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->>> ---
->>>   drivers/net/ethernet/cadence/macb_main.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
->>> index 29a1199dad14..609c8e9305ba 100644
->>> --- a/drivers/net/ethernet/cadence/macb_main.c
->>> +++ b/drivers/net/ethernet/cadence/macb_main.c
->>> @@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
->>>        { .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
->>>        { .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
->>>        { .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
->>> +     { .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
->>
->> These are compatible, aren't they? Why do you need new entry?
-> 
-> The hardware itself is different, even if the new features are not 
-> supported yet in the macb driver.
-> The macb driver will certainly evolve in order to add these features so 
-> we decided to match a new compatible string all the way to the driver.
 
-You claim to be fully compatible with sama7g5-gem, so adding new
-features does not warrant not-reusing old match entry now.
+--63dictzrcc4iig2j
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Mon, Jun 05, 2023 at 04:22:55PM +0300, Ilpo J=E4rvinen wrote:
+> On Mon, 5 Jun 2023, Uwe Kleine-K=F6nig wrote:
+>=20
+> > The need to handle the FSL variant of 8250 in a special way is also
+> > present without console support. So soften the dependency for
+> > SERIAL_8250_FSL accordingly. Note that with the 8250 driver compiled as
+> > a module, some devices still might not make use of the needed
+> > workarounds. That affects the ports instantiated in
+> > arch/powerpc/kernel/legacy_serial.c.
+> >=20
+> > This issue was identified by Dominik Andreas Schorpp.
+> >=20
+> > To cope for CONFIG_SERIAL_8250=3Dm + CONFIG_SERIAL_8250_FSL=3Dy, 8250_f=
+sl.o
+> > must be put in the same compilation unit as 8250_port.o because the
+> > latter defines some functions needed in the former and so 8250_fsl.o
+> > must not be built-in if 8250_port.o is available in a module.
+> >=20
+> > Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+> > Link: https://lore.kernel.org/r/20230531083230.2702181-1-u.kleine-koeni=
+g@pengutronix.de
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >  drivers/tty/serial/8250/Kconfig  | 2 +-
+> >  drivers/tty/serial/8250/Makefile | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/=
+Kconfig
+> > index 5313aa31930f..10c09b19c871 100644
+> > --- a/drivers/tty/serial/8250/Kconfig
+> > +++ b/drivers/tty/serial/8250/Kconfig
+> > @@ -378,7 +378,7 @@ config SERIAL_8250_BCM2835AUX
+> > =20
+> >  config SERIAL_8250_FSL
+> >  	bool "Freescale 16550 UART support" if COMPILE_TEST && !(PPC || ARM |=
+| ARM64)
+> > -	depends on SERIAL_8250_CONSOLE
+> > +	depends on SERIAL_8250
+>=20
+> Just one additional thought: After the adding the arch side=20
+> workaround/hack, SERIAL_8250_FSL could become a tristate?
 
+I see no benefit for a module separate from 8250_base.ko. There are
+dependencies in both directions between 8250_port.o and 8250_fsl.o[1].
+So in my book a bool SERIAL_8250_FSL that modifies 8250_base.ko (with
+SERIAL_8250=3Dm) is fine.
+
+Best regards
+Uwe
+
+[1] 8250_port.o uses fsl8250_handle_irq() from 8250_fsl.o, and
+8250_fsl.o uses serial8250_modem_status from 8250_port.o.
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--63dictzrcc4iig2j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR95HQACgkQj4D7WH0S
+/k52zQgAocZvRhklmeadO7sV3zI8RBeSCtr3mtnzUj/cB7oPPaqydGQcPbZ46L5D
+eQ/YltWmfP/eoevzN0UMbFvinVEZqmjNufiFdOA8GsXCmZm2+dPlU87/2g2U3R0I
+R7Ybfg22K91NyzAmYf44gQFMEYdNq6tOyQb35UiatiLezXlo93W4pmM6nt8URrx9
+mT8Lr33fw4se+NHFyuA9E/hduMXjJa/rW2QHsU/b1dtrglahZe2HmJehYCF9Epx/
+v1qYAuOXyBUGhZHpUGezMliJVmdQypQ4N02yD7BGtDaYCZhOExcYdXogMeeLBaPR
+Z1InHIVwkU0KLENwtTPPSO/+PAK4Jg==
+=OkiW
+-----END PGP SIGNATURE-----
+
+--63dictzrcc4iig2j--
