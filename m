@@ -2,137 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55695722547
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F22872254B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 14:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbjFEMKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 08:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S233279AbjFEMMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 08:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjFEMKc (ORCPT
+        with ESMTP id S230296AbjFEMMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 08:10:32 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABA392;
-        Mon,  5 Jun 2023 05:10:30 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 355CAKPo022936;
-        Mon, 5 Jun 2023 07:10:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685967020;
-        bh=Bna0OJEO37zY8GKg8ty2AAFUPBuJk2joFarkAdMMNVo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=i7S3K7PWMO3QWBxvtxbJZgfCEcjiQRna9Ggr3+WTjQre3WcvAZxNuF9bim6w0ttJ+
-         HaUKYhUOY8b56dar5WEWdWDHgihMYan3DYGUc02Ce1IWid0gB82pQhuZfAtGJ1w4no
-         Q30f1OnB9/vl1v5ZWYdlyz+5EFI+2fwvt+CzTLjg=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 355CAK5h095221
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 5 Jun 2023 07:10:20 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
- Jun 2023 07:10:20 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 5 Jun 2023 07:10:20 -0500
-Received: from [172.24.145.152] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 355CAH5N021196;
-        Mon, 5 Jun 2023 07:10:17 -0500
-Message-ID: <e420c3dd-033b-b0db-ecfa-7165b9990270@ti.com>
-Date:   Mon, 5 Jun 2023 17:40:16 +0530
+        Mon, 5 Jun 2023 08:12:14 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F0A1;
+        Mon,  5 Jun 2023 05:12:13 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0E6735C081A;
+        Mon,  5 Jun 2023 08:12:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 05 Jun 2023 08:12:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1685967133; x=
+        1686053533; bh=DWSWu94dr1jHfiTQumad+iUNToWy83h802e4hyartao=; b=P
+        HLDE7bP1NZDGkaq7tGe8ksEh0mW7Ug/RtJz4earjCv/RfHRJpLoI/5AoQp1nPG3x
+        u4z1uiAfLK/VGOx2Dur9ZVEBKWZLkWbpAncYrOecA+mAEvdsVJKAx08ekM5qxd2l
+        683ANL5t9pgNlBdq2rOubPFPOScx8LYbH4qsFPY1tRGN5q3vvJ28ALF+5UENBW5g
+        0bfqcLCx54mcY4mYRpjyOcXEk7S0SLxOG5pjhx26F1amkKAviip6Y+rPXXFlYwaV
+        P+nrKMRCLVFDUy3kzKQlGOjNDw49t/bpSCTfFjDknulsnxN/nePOTWGOIpkvyZPI
+        5xQQf+sdP/MQzWivIIhkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685967133; x=1686053533; bh=DWSWu94dr1jHf
+        iTQumad+iUNToWy83h802e4hyartao=; b=Pl+HRVqEl9DF6SNJ+5g3QBhqpbyhf
+        TSlL+eJg7lrd09673laDHH/IhZh1O7NVk2416N8+VE4XwTJenpv3yGmLLjO7EU24
+        XloqxazyXc5Johp+nIPpK9WOEjj3eLikKDYcE1/dszqxVkAFz2BCEjPYUyzjMaNm
+        RxvaF/nQeQvVCe3/d7buN6ul20M152IgnSLKckUtbBnhi780Iq3DIwNLXhzIK0yO
+        W900DZ3DqB8sDRSvHpY+Ud3Zt/1/K2SBMrhSLlBEosHr4mVweNppl8HY1Wrqdi1y
+        SRbzPgiWdZq6bUCXXT9GxtV1dwZftFR8GgxJCFWH60HU2Gj/gXKOYQPIg==
+X-ME-Sender: <xms:HNF9ZF3LhRTiqsJmWqojTsd5Tlyx8O4j38lBcI_t3AQiHxe-t2JFiQ>
+    <xme:HNF9ZMFAX1mR5XN2A9AvUKmqZ2ycfc5z10eCEu1Gv1-AenLOFPCi4RG9f9xe4BA-c
+    4cmwgipA5ayriXSD8I>
+X-ME-Received: <xmr:HNF9ZF5QCKlmhDqFB0JTT6sCEkY6uhHvtWKlJcNmItTHEIdYAhay_JYZmlj8TL4Onfd5VQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelledggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:HNF9ZC0YSlBZVxii2_aEPdjZJRhep4INCgXVyzCKDW0dEAO9ZqAIeQ>
+    <xmx:HNF9ZIF9BE3cDR9gYYgyBYos2_oAMADKlWFHyRWEhq5NYJDy9QngYw>
+    <xmx:HNF9ZD_yfeVE53niQXJYepGAwAXsLKDmlQ79Xh4joAfoHFa7yG8SYg>
+    <xmx:HdF9ZPcYK94Xf1bhs-m1VkSw6P6kjNG-RT6Xm4N_T7DKQfI061w6qQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Jun 2023 08:12:12 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 9B12F10CB17; Mon,  5 Jun 2023 15:12:10 +0300 (+03)
+Date:   Mon, 5 Jun 2023 15:12:10 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Dexuan Cui <decui@microsoft.com>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCHv2 2/3] x86/tdx: Fix race between set_memory_encrypted()
+ and load_unaligned_zeropad()
+Message-ID: <20230605121210.gv5n7swqzuwl4jv4@box.shutemov.name>
+References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
+ <20230526120225.31936-3-kirill.shutemov@linux.intel.com>
+ <19d9977f-bf07-2948-1b45-456af9c09e2f@linux.intel.com>
+ <20230530005736.ndwza2i5n7wrki5h@box.shutemov.name>
+ <9d679d3f-8db9-80ef-292a-9ca5b860579b@amd.com>
+ <2d8ae093-dd9e-ea49-d6f9-3fdb2fb84e4d@linux.intel.com>
+ <BYAPR21MB1688EF2A57E90FCE02B82F84D748A@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <9fbc3760-7239-2323-ed90-210a0de9e286@amd.com>
+ <BYAPR21MB168826D6C870542E5BD3372BD74EA@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <d73d41cc-0578-7bf3-46a2-b47eea44bdd0@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: Change CPTS clock parent
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <kristo@kernel.org>
-References: <20230605110443.84568-1-n-francis@ti.com>
- <20230605114924.56ccpd6rvddnr463@undying>
-From:   Neha Malcom Francis <n-francis@ti.com>
-In-Reply-To: <20230605114924.56ccpd6rvddnr463@undying>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d73d41cc-0578-7bf3-46a2-b47eea44bdd0@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth
+On Fri, Jun 02, 2023 at 10:42:33AM -0700, Dave Hansen wrote:
+> On 6/2/23 09:11, Michael Kelley (LINUX) wrote:
+> > Tom -- Does the above sequence *depend* on the hypervisor doing anything
+> > to make it work?  I'm not clear on why KVM would automatically change the
+> > page over to private.  If there's a dependency on the hypervisor doing
+> > something, then it seems like we'll need to standardize that "something"
+> > across hypervisors, lest we end up with per-hypervisor code in Linux to handle
+> > this scenario.  And running SEV-SNP with multiple VMPLs probably makes it
+> > even more complicated.
+> > 
+> > Kirill -- Same question about TDX.  Does making load_unaligned_zeropad()
+> > work in a TDX VM depend on the hypervisor doing anything?  Or is the
+> > behavior seen by the guest dependent only on architected behavior of
+> > the TDX processor?
+> 
+> No, there's no active help from the hypervisor here.
+> 
+> Also, fwiw, the "architected behavior" here is really just the TDX
+> module policy and _arguably_ the hardware Secure-EPT controlled by the
+> TDX module.
 
-On 05/06/23 17:19, Nishanth Menon wrote:
-> On 16:34-20230605, Neha Malcom Francis wrote:
->> MAIN_PLL0 has a flag set in DM (Device Manager) that removes it's
->> capability to re-initialise clock frequencies. CPTS and RGMII has
->> MAIN_PLL3 as their parent which does not have this flag. While RGMII
->> needs this reinitialisation to default frequency to be able to get
->> 250MHz with its divider, CPTS can not get its required 200MHz with its
->> divider. Thus, move CPTS clock parent on J721S2 from MAIN_PLL3_HSDIV1 to
->> MAIN_PLL0_HSDIV6.
->>
->> (Note: even GTC will be moved from MAIN_PLL3 to MAIN_PLL0 in U-Boot side
->> for the same reason)
->>
->> Signed-off-by: Neha Malcom Francis <n-francis@ti.com>
->> ---
->>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi       | 2 ++
->>   arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi | 2 ++
-> 
-> 
-> Is this the only device with this change? or are we doing that across
-> the board? if so, could you please do this in a single series so that we
-> don't have a mix?
-> 
-
-Currently, this is the only device that has moved this flag in DM side. 
-None of the other devices (except for J784S4 which also made a similar 
-change both in DM and U-BOOT) have this change in flag for the upcoming 
-firmware release.
-
->>   2 files changed, 4 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->> index 2dd7865f7654..331e0c9b4db8 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->> @@ -738,6 +738,8 @@ cpts@310d0000 {
->>   			reg-names = "cpts";
->>   			clocks = <&k3_clks 226 5>;
->>   			clock-names = "cpts";
->> +			assigned-clocks = <&k3_clks 226 5>; /* NAVSS0_CPTS_0_RCLK */
->> +			assigned-clock-parents = <&k3_clks 226 7>; /* MAIN_0_HSDIVOUT6_CLK */
->>   			interrupts-extended = <&main_navss_intr 391>;
->>   			interrupt-names = "cpts";
->>   			ti,cpts-periodic-outputs = <6>;
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> index a353705a7463..b55a3e9daf85 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> @@ -333,6 +333,8 @@ cpts@3d000 {
->>   			reg = <0x0 0x3d000 0x0 0x400>;
->>   			clocks = <&k3_clks 29 3>;
->>   			clock-names = "cpts";
->> +			assigned-clocks = <&k3_clks 29 3>; /* CPTS_RFT_CLK */
->> +			assigned-clock-parents = <&k3_clks 29 5>; /* MAIN_0_HSDIVOUT6_CLK */
->>   			interrupts-extended = <&gic500 GIC_SPI 858 IRQ_TYPE_LEVEL_HIGH>;
->>   			interrupt-names = "cpts";
->>   			ti,cpts-ext-ts-inputs = <4>;
->> -- 
->> 2.34.1
->>
-> 
+Right. There's nothing VMM can do to change behaviour here. VMM can remove
+private page, but it will lead to VM termination on access to the page,
+but VMM controls VM lifecycle anyway.
 
 -- 
-Thanking You
-Neha Malcom Francis
+  Kiryl Shutsemau / Kirill A. Shutemov
