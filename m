@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D75722492
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418EA722493
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 13:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbjFEL3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 07:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S231290AbjFEL3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 07:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjFEL3p (ORCPT
+        with ESMTP id S231789AbjFEL3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 07:29:45 -0400
+        Mon, 5 Jun 2023 07:29:47 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61323E6
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:29:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18376DF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 04:29:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685964584; x=1717500584;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gx4+lmIMuKPgij1u1iO7wrD0iCQa441hN4golMffdVk=;
-  b=MXHWig3DRlD2Wcnj62S84pj78AMl4zwAmzoMsr3dBn225d6AfSIH4kEm
-   Q4NUJEx2OeqzZqLj0b48QCbr+SJqD+oHsegUMHgU9jkLTiN5AeLK8UP2K
-   CHR9HXCWCPuYgsA/wYQBURBPJDbx9yWCQf7hbWIbhknQXGTcTPpBLfbc5
-   Bh4fHMBFU0sA6L8w9IAdKbQltkzEpIYGBcchHhATE6FxnOrUdlcbP2hg9
-   Khoo3oLu5avkjuKG0KP/EvstDIAHXVHpqo2TGQJCZATU5guY/EIqqcRCo
-   4Z9EjM1Xv0JCtBI+ycFulxTc4dibmfDqhf3SVBqD3OnpjHB7c3AIjeIRg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="336699343"
+  t=1685964586; x=1717500586;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xTKbEBDDCXHkiOwFc8keR7O1v8qG4g2CVMGkrh5HwGY=;
+  b=F4qmDLinHiPUi1r4HMGClI4bzPYB+Idiyoie6zQ+StyadjzFnt507zoT
+   ByhdC/xvn6WnMPXEmBr5FHaZFR94BRmzrXd6aE2LVzSqKoxB753EQ6JFJ
+   J3araf93lCAoe39ah6s+y5QjRNp+JjvSCzgptwyUdCPfUeIKZFUR6LmwH
+   rLONSxUgBH5uF3NrCKRjdRK2H8j9WiAItQDaiMfEcK67HzsAILVu3iev0
+   YUd+BoADalqgZ6xEeWI4jk3SoavhfzWK5IF/aY4KkW/twlQhO1CxCYCHo
+   oyLu9UHYNZbN1yg8QbyPwzZaWkgVpXks/TgEb56PO5M+Fxi3b/slq7jFI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="336699349"
 X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="336699343"
+   d="scan'208";a="336699349"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 04:29:43 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 04:29:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="708626657"
+X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="708626664"
 X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="708626657"
+   d="scan'208";a="708626664"
 Received: from tower.bj.intel.com ([10.238.157.62])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 04:29:40 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 04:29:43 -0700
 From:   Yanfei Xu <yanfei.xu@intel.com>
 To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
         will@kernel.org, robin.murphy@arm.com
 Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
         yanfei.xu@intel.com
-Subject: [PATCH v3 0/2] Misc cleanup for iommu/vt-d
-Date:   Mon,  5 Jun 2023 19:26:57 +0800
-Message-Id: <20230605112659.308981-1-yanfei.xu@intel.com>
+Subject: [PATCH v3 1/2] iommu/vt-d: Handle the failure case of dmar_reenable_qi()
+Date:   Mon,  5 Jun 2023 19:26:58 +0800
+Message-Id: <20230605112659.308981-2-yanfei.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230605112659.308981-1-yanfei.xu@intel.com>
+References: <20230605112659.308981-1-yanfei.xu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -60,24 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional changes intended
+dmar_reenable_qi() may not succeed. Check and return when it fails.
 
-v1->v2:
-1.Change to use check and return for dmar_reenable_qi()
-2.Remove WARN_ON of 'table' instead of using BUG_ON
-3.Also remove useless WARN_ON of domain id
+Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+---
+ drivers/iommu/intel/iommu.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-v2->v3:
-Move check for 'ret' value to correct conditional statement.
-(For patch2. Pointed out by Robin)
-
-Yanfei Xu (2):
-  iommu/vt-d: Handle the failure case of dmar_reenable_qi()
-  iommu/vt-d: Remove two WARN_ON in domain_context_mapping_one()
-
- drivers/iommu/intel/iommu.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 8096273b034c..c13c6475b626 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -2967,10 +2967,15 @@ static int init_iommu_hw(void)
+ {
+ 	struct dmar_drhd_unit *drhd;
+ 	struct intel_iommu *iommu = NULL;
++	int ret;
+ 
+-	for_each_active_iommu(iommu, drhd)
+-		if (iommu->qi)
+-			dmar_reenable_qi(iommu);
++	for_each_active_iommu(iommu, drhd) {
++		if (iommu->qi) {
++			ret = dmar_reenable_qi(iommu);
++			if (ret)
++				return ret;
++		}
++	}
+ 
+ 	for_each_iommu(iommu, drhd) {
+ 		if (drhd->ignored) {
 -- 
 2.34.1
 
