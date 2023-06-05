@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E2A722D16
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D58722D1F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Jun 2023 18:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbjFEQ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 12:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S233729AbjFEQ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 12:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbjFEQ4D (ORCPT
+        with ESMTP id S229974AbjFEQ5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:56:03 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A46FE8;
-        Mon,  5 Jun 2023 09:56:02 -0700 (PDT)
-Received: from [172.27.2.41] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 355Gtg3v3944865
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 5 Jun 2023 09:55:42 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 355Gtg3v3944865
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023051001; t=1685984144;
-        bh=KcP52s6Jw81oN0ddZllHGZWFTWEw/h5qK+0sGBKaOvQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GdQsEfqH+ayBj0hAAn8mpzHQWafKlnObqngLYYTdkre0rsaSsmWB6UIxeTlTGLO0V
-         VNsnnBiJQ6dWpKMDr3XN4cd9XTfy1zwN4pA9T+fA1eQcAqDphst2LFrSeyrfbXkFow
-         q5MnSobQSYrLM5nyzvn+nCBDtJ75nu2sW+za7DcvdF7d1TS8RqSdrBJuFvUZNV+HWg
-         DtXi9no/UF1dauuKoKYuw7N2u8Cv9UtrLyruHK5RdPBI3XIk5oNlg7warB0ikLoCPY
-         8u4TFdjsbPQytToeL2I9Z1L3TEpuhMcOPp0awscThA2b/iC1XZE37m/MlijLazwGoT
-         YilmBo9KmoDlg==
-Message-ID: <2d069dc4-6383-57f2-819c-23b7d65f460e@zytor.com>
-Date:   Mon, 5 Jun 2023 09:55:40 -0700
+        Mon, 5 Jun 2023 12:57:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA259C;
+        Mon,  5 Jun 2023 09:57:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6271862068;
+        Mon,  5 Jun 2023 16:57:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CEB0C433EF;
+        Mon,  5 Jun 2023 16:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685984271;
+        bh=re8vMj+8xGpFUnAC2qBW/q3FgGQY32jtNqeKye4SRao=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IXhUxdRNyC6UMJxCVft4NRBnEOZTHK2wAfxyoF+tdC1yQRSLpgmvWTfuNx0aYWQG5
+         Q5hDsG3KmllDXQJC5WpbRH5mwWhOWRWGqE/mDs4RtGDEQcG0H6mOtaaT+jfQ8ti+oo
+         NXJ/IOtHaNLvzx/xQf7+U5Hc6dLAQUW81sZoSjLE=
+Date:   Mon, 5 Jun 2023 18:57:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 0/3] lib/string_helpers et al.: Change return value of
+ strreplace()
+Message-ID: <2023060537-espionage-comfort-3e56@gregkh>
+References: <20230323123704.37983-1-andriy.shevchenko@linux.intel.com>
+ <ZC1454AwRUNFTbIW@smile.fi.intel.com>
+ <2023040523-unworthy-uncured-1eab@gregkh>
+ <ZC2H8ODMwoO5hzZG@smile.fi.intel.com>
+ <47D8878A-1108-4AC3-BF7F-507F90F6970A@kernel.org>
+ <ZH3rezDApUro84HB@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v8 29/33] x86/fred: allow FRED systems to use interrupt
- vectors 0x10-0x1f
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, Xin Li <xin3.li@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
-        pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-30-xin3.li@intel.com> <87zg5e57go.ffs@tglx>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <87zg5e57go.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH3rezDApUro84HB@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/5/23 07:06, Thomas Gleixner wrote:
-> On Mon, Apr 10 2023 at 01:14, Xin Li wrote:
->> From: "H. Peter Anvin (Intel)" <hpa@zytor.com>
->>
->> FRED inherits the Intel VT-x enhancement of classified events with
->> a two-level event dispatch logic. The first-level dispatch is on
->> the event type, and the second-level is on the event vector. This
->> also means that vectors in different event types are orthogonal,
->> thus, vectors 0x10-0x1f become available as hardware interrupts.
->>
->> Enable interrupt vectors 0x10-0x1f on FRED systems (interrupt 0x80 is
->> already enabled.) Most of these changes are about removing the
->> assumption that the lowest-priority vector is hard-wired to 0x20.
+On Mon, Jun 05, 2023 at 05:04:43PM +0300, Andy Shevchenko wrote:
+> On Wed, Apr 05, 2023 at 07:58:40PM -0700, Kees Cook wrote:
+> > On April 5, 2023 7:38:40 AM PDT, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > >On Wed, Apr 05, 2023 at 04:24:42PM +0200, Greg Kroah-Hartman wrote:
+> > >> On Wed, Apr 05, 2023 at 04:34:31PM +0300, Andy Shevchenko wrote:
+> > >> > On Thu, Mar 23, 2023 at 02:37:01PM +0200, Andy Shevchenko wrote:
+> > >> > > It's more convenient to have strreplace() to return the pointer to
+> > >> > >  the string itself. This will help users to make their code better.
+> > >> > > 
+> > >> > > The patch 1 kills the only user of the returned value of strreplace(),
+> > >> > > Patch 2 converts the return value of strreplace(). And patch 3 shows
+> > >> > > how it may be useful. That said, the series can be routed via fs tree,
+> > >> > > with or without the last patch.
+> > >> > 
+> > >> > Since there are no comments, who can apply this (patches 1 and 2)?
+> > >> > Greg, are you fine with the kobject change?
+> > >> 
+> > >> Sure, want me to take them all through my driver-core tree?
+> > >
+> > >Fine by me! Dunno about others. Kees?
+> > 
+> > Yeah, that's cool by me. :)
 > 
-> I'm not really interested in this again premature optimization.
-> 
-> Can we please clarify how the final result of FRED vector layout will
-> look like?
-> 
-> I rather give up on reclaiming these 16 vectors than making _all_ system
-> vectors dynamically assignable to avoid an extra partitioning of the
-> vector space.
-> 
+> Greg, does this slip through the cracks?
 
-So this patch was meant to go *after* the FRED patch set proper.
+It did.  Can someone resend this?
 
-This patch does not change any of the system vectors except, by 
-necessity, IRQ_MOVE_CLEANUP_VECTOR, nor does it change the way they are 
-assigned to fixed vectors today.
+thanks,
 
-It does make the lowest *non*-system vector a variable, but the system 
-vectors are at the end.
-
-This is something that should be commented: the setting of bits in 
-system_vector is really misleading: those aren't "system vectors", they 
-are the vectors reserved for hardware use. On IDT, this means vectors 
-0-31 because they are used for exceptions, but on FRED interrupts and 
-exceptions are separate; however vectors 0-15 still need to be reserved 
-because the APIC doesn't support them.
-
-We *could* change that, but that is completely independent of this.
-
-	-hpa
+greg k-h
