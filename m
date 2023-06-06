@@ -2,136 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB35723C70
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CF6723C74
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237160AbjFFJBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S237385AbjFFJBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjFFJA4 (ORCPT
+        with ESMTP id S236222AbjFFJBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:00:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBEAF7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686042009;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nE77/PGW00ePiumkpu3hzk+sXBS9GQxpADNCUK4kjrY=;
-        b=ayTAmfhEKnYT/PJj5Z01tP/dT/+kImLkhc/W6Dk+VUJ2C/2WoeFnOfYN9yc7Y3y7CpgMa4
-        /GcB8fBn1fA+5IABmJjXjAQDbXjIoA+tniRnXj1wUZkM6/L3VTEIbDtb4D4IBJEG5XsY+m
-        43IosA+YJ5hHIcAT7QK1DWXG8LCl2Lc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-330-NMShvo3GPWmhrx90K9zoPA-1; Tue, 06 Jun 2023 05:00:06 -0400
-X-MC-Unique: NMShvo3GPWmhrx90K9zoPA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e6648625so2817125e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:00:05 -0700 (PDT)
+        Tue, 6 Jun 2023 05:01:20 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399FBE8
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:01:19 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-97467e06511so678544266b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686042078; x=1688634078;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qnMd6bfiED4zKR1iR5FkmLNtvDbuw3tGERhLuXjCvBQ=;
+        b=HIdIZcQCFKSHUksaNp5kqKFQs1fdAVHgMqC66xzYesJR+taDCpexBTpoNgamojfRxY
+         DIz5T8XtMO8pcl6BCOeP5v0BbzQKV0kt0co8gw7nxxBswhotqGYKdfFzlToNK3OlOp8H
+         A47TYwbuzyUMgySNNCVDzjpyqduYQOGP1wQ4sBphEM3iFFqRXI6ctlMbJhU1jorIbPZG
+         4Jan/I3cfGPq0S70UM4oQoRwgnMhDzku7qR0dlZhVgOCP78CqUcsjzBTrp/U/mQ9JHyL
+         yuMUQN7seGAuX1AW1qris3EObLx3cqDWuTHR3T9pZbf+/JhMCQ43hTRzZbhocTD1QREC
+         NZtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686042005; x=1688634005;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nE77/PGW00ePiumkpu3hzk+sXBS9GQxpADNCUK4kjrY=;
-        b=YAOC0cM2+1KxSff0+3dYOFqWZV0f29hQUCAVjV8sMf379w5402DNU5Q2Y0VnPmExPn
-         VWt6SHaIskfeezvjMuYeyUFtqQmVsBIVRFXiv0mOKXCcl7fDrASw7XbAXOAGwq4Oum+n
-         qSNdypNI0vEuzGNLAOAsCJN9Jrq5yWot7yJUQKEaSRUSQ6Qsf1PX/xvIhbs7FXFj211t
-         LWzeDixDWwsNBqHoJ1yOsnqEV97RJbDJbdSRPouF8Li1Hph34T/iy68zx8jL4nM+yfq7
-         zNt44qHA5zuwbR3Op+HbYGIAfDdfJWPN+2RegSmwNNqzddUmFMOXrNI/4UAPyBSJejJR
-         5Zqw==
-X-Gm-Message-State: AC+VfDxF/LiIdT2rIpMIbHMCxi4aFRMolD5ag5r0+4mvkSZEAzwObInH
-        QhldhzB+67qtNASVhiM/yQwVDJfqk8OLrBSjphzwBlK7/CiSHqS7xdJrmFVLtHmFfZiBjVAxKNR
-        U9ZEfgXfGzAy/DTnGhBoJvWni
-X-Received: by 2002:a05:600c:1c26:b0:3f7:3a2f:35ec with SMTP id j38-20020a05600c1c2600b003f73a2f35ecmr2121568wms.2.1686042005099;
-        Tue, 06 Jun 2023 02:00:05 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4nMW2ZxYmp2BjKFt0zgPi8AR01qUkYolCtDK0fOgYD9ytZTIMSa1sHbzT24zAhoWWsDDQWaw==
-X-Received: by 2002:a05:600c:1c26:b0:3f7:3a2f:35ec with SMTP id j38-20020a05600c1c2600b003f73a2f35ecmr2121536wms.2.1686042004812;
-        Tue, 06 Jun 2023 02:00:04 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-114-89.dyn.eolo.it. [146.241.114.89])
-        by smtp.gmail.com with ESMTPSA id f18-20020a1cc912000000b003f4e3ed98ffsm13282106wmb.35.2023.06.06.02.00.03
+        d=1e100.net; s=20221208; t=1686042078; x=1688634078;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qnMd6bfiED4zKR1iR5FkmLNtvDbuw3tGERhLuXjCvBQ=;
+        b=J0l6+qiLSiwEcdZGCcXIyMQOjdBqJbViWDoEXndl2giYb+PhzPDo4i+xIi0OvOuVWp
+         kVWcyGm+qHSdr3LkCRaGTVoZXDYdyBiiHeR3JNUNV46ZkN8gtjpbM5DJh2RRdD+iPopa
+         VyHx4hFuYET9z8fpQbIz8BUkxgEUGkZbBbZygXWWZmigS1hb4AZ0B4OV/R3/xG42tmz7
+         vQrfaUzykcv6eL6FeHtCMxDv6wPlTgwDRJQ+uMXwczt63ZsFbrh0D5TeaVih0+h4+9mT
+         cEiDQcOlJP+D6DlU0z02/PdNa8GiQ2+/n/L5q1Vfk/zVPLIK6jI7Ipa2RA/x+/OqdVET
+         XWFA==
+X-Gm-Message-State: AC+VfDw2hs+gXOzg+BD9H2p/fVkwKFZ4sqkU/tGABj+A3lmx2ARtwVG0
+        ljeBjCqBGkuqUhikTy0W3D0C5gOfwgc=
+X-Google-Smtp-Source: ACHHUZ59rso37royUEW/KsCeYswFmChzfMtAKYDSvPTvRqfq++5UqovHaWXqgye1/8LDFozfOPdU/Q==
+X-Received: by 2002:a17:907:6d27:b0:978:66bd:d771 with SMTP id sa39-20020a1709076d2700b0097866bdd771mr1998621ejc.55.1686042077499;
+        Tue, 06 Jun 2023 02:01:17 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id r4-20020a17090638c400b009584c5bcbc7sm5254907ejd.49.2023.06.06.02.01.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 02:00:04 -0700 (PDT)
-Message-ID: <9eb5ab9385ba4af322f5bb9e8c9112414ab7027b.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 01/10] Drop the netfs_ prefix from
- netfs_extract_iter_to_sg()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
+        Tue, 06 Jun 2023 02:01:17 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Tue, 6 Jun 2023 11:01:15 +0200
+To:     Baoquan He <bhe@redhat.com>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
         Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 06 Jun 2023 11:00:02 +0200
-In-Reply-To: <20230530141635.136968-2-dhowells@redhat.com>
-References: <20230530141635.136968-1-dhowells@redhat.com>
-         <20230530141635.136968-2-dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 8/9] mm: vmalloc: Offload free_vmap_area_lock global lock
+Message-ID: <ZH7128Q0MiRh6S5f@pc638.lan>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <20230522110849.2921-9-urezki@gmail.com>
+ <ZH0vuwaSddREy9dz@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH0vuwaSddREy9dz@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-30 at 15:16 +0100, David Howells wrote:
-> Rename netfs_extract_iter_to_sg() and its auxiliary functions to drop the
-> netfs_ prefix.
->=20
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Steve French <sfrench@samba.org>
-> cc: Shyam Prasad N <nspmangalore@gmail.com>
-> cc: Rohith Surabattula <rohiths.msft@gmail.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Herbert Xu <herbert@gondor.apana.org.au>
-> cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: linux-crypto@vger.kernel.org
-> cc: linux-cachefs@redhat.com
-> cc: linux-cifs@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> cc: netdev@vger.kernel.org
-> ---
->=20
-> Notes:
->     ver #2:
->      - Put the "netfs_" prefix removal first to shorten lines and avoid
->        checkpatch 80-char warnings.
->=20
->  fs/cifs/smb2ops.c     |  4 +--
->  fs/cifs/smbdirect.c   |  2 +-
+On Mon, Jun 05, 2023 at 08:43:39AM +0800, Baoquan He wrote:
+> On 05/22/23 at 01:08pm, Uladzislau Rezki (Sony) wrote:
+> ......  
+> > +static unsigned long
+> > +this_cpu_zone_alloc_fill(struct cpu_vmap_zone *z,
+> > +	unsigned long size, unsigned long align,
+> > +	gfp_t gfp_mask, int node)
+> > +{
+> > +	unsigned long addr = VMALLOC_END;
+> > +	struct vmap_area *va;
+> > +
+> > +	/*
+> > +	 * It still can race. One task sets a progress to
+> > +	 * 1 a second one gets preempted on entry, the first
+> > +	 * zeroed the progress flag and second proceed with
+> > +	 * an extra prefetch.
+> > +	 */
+> > +	if (atomic_xchg(&z->fill_in_progress, 1))
+> > +		return addr;
+> > +
+> > +	va = kmem_cache_alloc_node(vmap_area_cachep, gfp_mask, node);
+> > +	if (unlikely(!va))
+> > +		goto out;
+> > +
+> > +	spin_lock(&free_vmap_area_lock);
+> > +	addr = __alloc_vmap_area(&free_vmap_area_root, &free_vmap_area_list,
+> > +		cvz_size, 1, VMALLOC_START, VMALLOC_END);
+> > +	spin_unlock(&free_vmap_area_lock);
+> 
+> The 'z' is passed in from this_cpu_zone_alloc(), and it's got with
+> raw_cpu_ptr(&cpu_vmap_zone). Here when we try to get chunk of cvz_size
+> from free_vmap_area_root/free_vmap_area_list, how can we guarantee it
+> must belong to the 'z' zone? With my understanding, __alloc_vmap_area()
+> will get efficient address range sequentially bottom up from
+> free_vmap_area_root. Please correct me if I am wrong.
+> 
+We do not guarantee that and it does not worth it. The most important is:
 
-This patch does not apply anymore to net-next as the cifs contents have
-been moved into fs/smb/client.
+If we search a zone that exactly match a CPU-id the usage of a global
+vmap space becomes more wider, i.e. toward a high address space. This is
+not good because we can affect other users which allocate within a specific
+range. On a big system it might be a problem. Therefore a pre-fetch is done 
+sequentially on demand.
 
-You need at least to rebase the series on top of commit
-38c8a9a52082579090e34c033d439ed2cd1a462d.
+Secondly, i do not see much difference in performance if we follow
+exactly CPU-zone-id.
 
-Thanks!
+> static unsigned long
+> this_cpu_zone_alloc(unsigned long size, unsigned long align, gfp_t gfp_mask, int node)
+> {
+>         struct cpu_vmap_zone *z = raw_cpu_ptr(&cpu_vmap_zone);
+> 	......
+> 	if (addr == VMALLOC_END && left < 4 * PAGE_SIZE)
+>                 addr = this_cpu_zone_alloc_fill(z, size, align, gfp_mask, node);
+> }
+> 
+> > +
+> > +	if (addr == VMALLOC_END) {
+> > +		kmem_cache_free(vmap_area_cachep, va);
+> > +		goto out;
+> > +	}
+> > +
+> > +	va->va_start = addr;
+> > +	va->va_end = addr + cvz_size;
+> > +
+> > +	fbl_lock(z, FREE);
+> > +	va = merge_or_add_vmap_area_augment(va,
+> > +		&fbl_root(z, FREE), &fbl_head(z, FREE));
+> > +	addr = va_alloc(va, &fbl_root(z, FREE), &fbl_head(z, FREE),
+> > +		size, align, VMALLOC_START, VMALLOC_END);
+> > +	fbl_unlock(z, FREE);
+> > +
+> > +out:
+> > +	atomic_set(&z->fill_in_progress, 0);
+> > +	return addr;
+> > +}
+> > +
+> > +static unsigned long
+> > +this_cpu_zone_alloc(unsigned long size, unsigned long align, gfp_t gfp_mask, int node)
+> > +{
+> > +	struct cpu_vmap_zone *z = raw_cpu_ptr(&cpu_vmap_zone);
+> > +	unsigned long extra = align > PAGE_SIZE ? align : 0;
+> > +	unsigned long addr = VMALLOC_END, left = 0;
+> > +
+> > +	/*
+> > +	 * It is disabled, fallback to a global heap.
+> > +	 */
+> > +	if (cvz_size == ULONG_MAX)
+> > +		return addr;
+> > +
+> > +	/*
+> > +	 * Any allocation bigger/equal than one half of
+>                           ~~~~~~typo~~~~~~  bigger than/equal to
+I will rework it!
 
-Paolo
-
+--
+Uladzislau Rezki
