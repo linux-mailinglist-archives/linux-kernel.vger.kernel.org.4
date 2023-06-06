@@ -2,354 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15D77234D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483437234DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjFFBsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S232409AbjFFBu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjFFBsF (ORCPT
+        with ESMTP id S231844AbjFFBus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:48:05 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501CE10DD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:47:39 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-652a6cf1918so2652841b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686016037; x=1688608037;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N+507jsXO1BnVewAsLkwzOZpkiaji1CsapmTp9yyUaM=;
-        b=dIxbCIi0rJbSLxPR/xfTQsCM+M6jm4HaUgLS+0uDUowhc7bgpH7HzmYEH+r/3F82JE
-         Z+O3HYuNoF2wk2r9DwHjkLbLwlRLhDt+FqAxsOa7YI8yuTuFwhnDia/M0RW/UrEz/F6J
-         4G8Sdh6Fyn7qpG7+jlBs2DbK1WO3e5X/djFyNZcEXfSjPg5M84z/JXAOY+gosf0ZlzSO
-         ditxWwuhEnAQlT77aoag2kWVU7cff8H/I6VbV+AQTQkBqaLDQzZQE+2ES1eN4vZ80B36
-         MtBklXlYuEq6QxkzSfoIRdvmKuFnkis40PTVm8FiOR+8o5Mxjj3q2zYJL2L5xPFGbThz
-         0ohg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686016037; x=1688608037;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N+507jsXO1BnVewAsLkwzOZpkiaji1CsapmTp9yyUaM=;
-        b=UrnDGQMTJNEqDQTkxce0MnhHs1M3ULuwJ79Pl1uxKQg9yki4xBEr+r/qZCFrRpPpxx
-         arQd8F3i26Pl11XR0CDoY5N9btOytbn/y7jIF6WLqOliwmutDgwEy7ofH04vRb4SEnVD
-         WOH1K8T48SpBV7tUZ9zRo/atdvs8GQa0yaxf0IWKGFeH6ZTKdyab1PwihmMhiGh9ja6A
-         c56kOfjVffL6tB9jPigIkH7d92CTXqhYwEDii4Il8VFJVUuHSfauXWKgZMq0pJfLsRcZ
-         9usfMrOG/RD8zIpDiEefC7u9o2jcBGNsVZToRQtdUi7hjj3+Ksd4qkQDuuUUt8JAn53h
-         zYzQ==
-X-Gm-Message-State: AC+VfDwccJPv/L60VTI1jPL3PKXMMGXvn2Z/cAwdDlpXg16UX0yq10JY
-        RdmrhVMmNIjMuYARTj7ZsoNdNJ2cdrkoZ1J+2jGdJISu
-X-Google-Smtp-Source: ACHHUZ5wNp+vHV2+xqeEpakEuvMMeVGxroHVvlVQpo9lYy5LiPQ7V3r7CA3CKHEXyKL2AYHAW29eDA==
-X-Received: by 2002:a05:6a20:549c:b0:116:9255:88eb with SMTP id i28-20020a056a20549c00b00116925588ebmr602780pzk.46.1686016036830;
-        Mon, 05 Jun 2023 18:47:16 -0700 (PDT)
-Received: from leoy-huanghe.lan ([240e:389:8603:ad00:6600:a29f:6ab:1788])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001a64851087bsm7197805plq.272.2023.06.05.18.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 18:47:16 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ming Wang <wangming01@loongson.cn>,
-        Eric Lin <eric.lin@sifive.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 6/6] perf parse-regs: Move out arch specific header from util/perf_regs.h
-Date:   Tue,  6 Jun 2023 09:45:59 +0800
-Message-Id: <20230606014559.21783-7-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230606014559.21783-1-leo.yan@linaro.org>
-References: <20230606014559.21783-1-leo.yan@linaro.org>
+        Mon, 5 Jun 2023 21:50:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919F9E54;
+        Mon,  5 Jun 2023 18:50:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZtgs2hWWz4x1f;
+        Tue,  6 Jun 2023 11:49:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686016170;
+        bh=9XXm/QR5J7nxa7/gwe/mYjN3Je4hD6qAuS55zZUHYAU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CdNHa2ki9JcNnl7r8mitNMwcyXFXWyiAIqDWB96i/9d/FmJ11o2JVrWRh3tJa4Zzh
+         tyDmC5mueCDPHMZw/LaD5l8vqGGNjzr2BB3TnHPT//Xrki8LkDFYO8heX/J8vF/sLb
+         mkDuckw2QKTJQrEqky3FAFskE365eK9XCxyM1w8ryPr5p2l3wTClDUiQRgJDN4CKP1
+         QCts/y+YMi1QhHymSjBTwFFGfCIq7qTaBKNLtnyCavZK1BDYDV2+VSBm59F7m2VJXS
+         eSVwsWxhV44v0KrLuXvUu4meXM49G2nXDu7mdDixK5Jd5pJ3o4dhGV/+wxD6yJbX5C
+         RB26o5dtEU4rg==
+Date:   Tue, 6 Jun 2023 11:49:27 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Joey Gouly <joey.gouly@arm.com>,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20230606114927.227a66a5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/XVrtAiSNcUo33DlqVi4Wb7U";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-util/perf_regs.h includes another perf_regs.h:
+--Sig_/XVrtAiSNcUo33DlqVi4Wb7U
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-  #include <perf_regs.h>
+Hi all,
 
-Here it includes architecture specific header, for example, if we build
-arm64 target, the header tools/perf/arch/arm64/include/perf_regs.h is
-included.
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-We use this implicit way to include architecture specific header, which
-is not directive; furthermore, util/perf_regs.c is coupled with the
-architecture specific definitions.
+  arch/arm64/kernel/cpufeature.c
 
-This patch moves out arch specific header from util/perf_regs.h for
-generalizing the 'util' folder, as a result, the source files in 'arch'
-folder explicitly include architecture's perf_regs.h.
+between commits:
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/arch/arm/util/perf_regs.c          | 1 +
- tools/perf/arch/arm/util/unwind-libdw.c       | 1 +
- tools/perf/arch/arm64/util/machine.c          | 1 +
- tools/perf/arch/arm64/util/perf_regs.c        | 1 +
- tools/perf/arch/arm64/util/unwind-libdw.c     | 1 +
- tools/perf/arch/csky/util/perf_regs.c         | 1 +
- tools/perf/arch/csky/util/unwind-libdw.c      | 1 +
- tools/perf/arch/loongarch/util/perf_regs.c    | 1 +
- tools/perf/arch/loongarch/util/unwind-libdw.c | 1 +
- tools/perf/arch/mips/util/perf_regs.c         | 1 +
- tools/perf/arch/powerpc/util/perf_regs.c      | 1 +
- tools/perf/arch/powerpc/util/unwind-libdw.c   | 1 +
- tools/perf/arch/riscv/util/perf_regs.c        | 1 +
- tools/perf/arch/riscv/util/unwind-libdw.c     | 1 +
- tools/perf/arch/s390/util/perf_regs.c         | 1 +
- tools/perf/arch/s390/util/unwind-libdw.c      | 1 +
- tools/perf/arch/x86/util/perf_regs.c          | 1 +
- tools/perf/arch/x86/util/unwind-libdw.c       | 1 +
- tools/perf/util/perf_regs.h                   | 2 --
- 19 files changed, 18 insertions(+), 2 deletions(-)
+  b7564127ffcb ("arm64: mops: detect and enable FEAT_MOPS")
+  c1fa32c8f189 ("arm64: cpufeature: add TCR2 cpucap")
+  b5a8e35236ee ("arm64: cpufeature: add Permission Indirection Extension cp=
+ucap")
 
-diff --git a/tools/perf/arch/arm/util/perf_regs.c b/tools/perf/arch/arm/util/perf_regs.c
-index d9d4777bf7f9..2c56e8b56ddf 100644
---- a/tools/perf/arch/arm/util/perf_regs.c
-+++ b/tools/perf/arch/arm/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/arm/util/unwind-libdw.c b/tools/perf/arch/arm/util/unwind-libdw.c
-index 1834a0cd9ce3..4e02cef461e3 100644
---- a/tools/perf/arch/arm/util/unwind-libdw.c
-+++ b/tools/perf/arch/arm/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/arm64/util/machine.c b/tools/perf/arch/arm64/util/machine.c
-index 235a0a1e1ec7..ba1144366e85 100644
---- a/tools/perf/arch/arm64/util/machine.c
-+++ b/tools/perf/arch/arm64/util/machine.c
-@@ -6,6 +6,7 @@
- #include "debug.h"
- #include "symbol.h"
- #include "callchain.h"
-+#include "perf_regs.h"
- #include "record.h"
- #include "util/perf_regs.h"
- 
-diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm64/util/perf_regs.c
-index 76e2e30702cd..1b79d8eab22f 100644
---- a/tools/perf/arch/arm64/util/perf_regs.c
-+++ b/tools/perf/arch/arm64/util/perf_regs.c
-@@ -6,6 +6,7 @@
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../perf-sys.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-diff --git a/tools/perf/arch/arm64/util/unwind-libdw.c b/tools/perf/arch/arm64/util/unwind-libdw.c
-index 09385081bb03..e056d50ab42e 100644
---- a/tools/perf/arch/arm64/util/unwind-libdw.c
-+++ b/tools/perf/arch/arm64/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/csky/util/perf_regs.c b/tools/perf/arch/csky/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/csky/util/perf_regs.c
-+++ b/tools/perf/arch/csky/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/csky/util/unwind-libdw.c b/tools/perf/arch/csky/util/unwind-libdw.c
-index 4bb4a06776e4..79df4374ab18 100644
---- a/tools/perf/arch/csky/util/unwind-libdw.c
-+++ b/tools/perf/arch/csky/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- // Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd.
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/event.h"
-diff --git a/tools/perf/arch/loongarch/util/perf_regs.c b/tools/perf/arch/loongarch/util/perf_regs.c
-index d9d4777bf7f9..2c56e8b56ddf 100644
---- a/tools/perf/arch/loongarch/util/perf_regs.c
-+++ b/tools/perf/arch/loongarch/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/loongarch/util/unwind-libdw.c b/tools/perf/arch/loongarch/util/unwind-libdw.c
-index a9415385230a..7b3b9a4b21f8 100644
---- a/tools/perf/arch/loongarch/util/unwind-libdw.c
-+++ b/tools/perf/arch/loongarch/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2020-2023 Loongson Technology Corporation Limited */
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/sample.h"
-diff --git a/tools/perf/arch/mips/util/perf_regs.c b/tools/perf/arch/mips/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/mips/util/perf_regs.c
-+++ b/tools/perf/arch/mips/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/powerpc/util/perf_regs.c b/tools/perf/arch/powerpc/util/perf_regs.c
-index 1d264bf55955..b38aa056eea0 100644
---- a/tools/perf/arch/powerpc/util/perf_regs.c
-+++ b/tools/perf/arch/powerpc/util/perf_regs.c
-@@ -4,6 +4,7 @@
- #include <regex.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-diff --git a/tools/perf/arch/powerpc/util/unwind-libdw.c b/tools/perf/arch/powerpc/util/unwind-libdw.c
-index e616642c754c..e9a5a8bb67d9 100644
---- a/tools/perf/arch/powerpc/util/unwind-libdw.c
-+++ b/tools/perf/arch/powerpc/util/unwind-libdw.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
- #include <linux/kernel.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/riscv/util/perf_regs.c b/tools/perf/arch/riscv/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/riscv/util/perf_regs.c
-+++ b/tools/perf/arch/riscv/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/riscv/util/unwind-libdw.c b/tools/perf/arch/riscv/util/unwind-libdw.c
-index 54a198714eb8..5c98010d8b59 100644
---- a/tools/perf/arch/riscv/util/unwind-libdw.c
-+++ b/tools/perf/arch/riscv/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd. */
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/sample.h"
-diff --git a/tools/perf/arch/s390/util/perf_regs.c b/tools/perf/arch/s390/util/perf_regs.c
-index b17fc30abb29..c0877c264d49 100644
---- a/tools/perf/arch/s390/util/perf_regs.c
-+++ b/tools/perf/arch/s390/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/s390/util/unwind-libdw.c b/tools/perf/arch/s390/util/unwind-libdw.c
-index 7d92452d5287..f50fb6dbb35c 100644
---- a/tools/perf/arch/s390/util/unwind-libdw.c
-+++ b/tools/perf/arch/s390/util/unwind-libdw.c
-@@ -5,6 +5,7 @@
- #include "../../util/event.h"
- #include "../../util/sample.h"
- #include "dwarf-regs-table.h"
-+#include "perf_regs.h"
- 
- 
- bool libdw__arch_set_initial_registers(Dwfl_Thread *thread, void *arg)
-diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/util/perf_regs.c
-index 218747a8b039..b813502a2727 100644
---- a/tools/perf/arch/x86/util/perf_regs.c
-+++ b/tools/perf/arch/x86/util/perf_regs.c
-@@ -5,6 +5,7 @@
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../perf-sys.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
-diff --git a/tools/perf/arch/x86/util/unwind-libdw.c b/tools/perf/arch/x86/util/unwind-libdw.c
-index ef71e8bf80bf..edb77e20e083 100644
---- a/tools/perf/arch/x86/util/unwind-libdw.c
-+++ b/tools/perf/arch/x86/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "util/sample.h"
-diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index 8583c52572b1..4f6a3c1ba901 100644
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -30,8 +30,6 @@ uint64_t arch__user_reg_mask(void);
- #ifdef HAVE_PERF_REGS_SUPPORT
- extern const struct sample_reg sample_reg_masks[];
- 
--#include <perf_regs.h>
--
- #define DWARF_MINIMAL_REGS(arch)	\
- 	((1ULL << perf_arch_reg_ip(arch)) | (1ULL << perf_arch_reg_sp(arch)))
- 
--- 
-2.34.1
+from the arm64 tree and commit:
 
+  c876c3f182a5 ("KVM: arm64: Relax trapping of CTR_EL0 when FEAT_EVT is ava=
+ilable")
+
+from the kvm-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/kernel/cpufeature.c
+index a74f41c7280f,4a2ab3f366de..000000000000
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@@ -2662,35 -2641,17 +2662,46 @@@ static const struct arm64_cpu_capabilit
+  		.cpu_enable =3D cpu_enable_dit,
+  		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
+  	},
+ +	{
+ +		.desc =3D "Memory Copy and Memory Set instructions",
+ +		.capability =3D ARM64_HAS_MOPS,
+ +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
+ +		.matches =3D has_cpuid_feature,
+ +		.cpu_enable =3D cpu_enable_mops,
+ +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
+ +	},
+ +	{
+ +		.capability =3D ARM64_HAS_TCR2,
+ +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
+ +		.sys_reg =3D SYS_ID_AA64MMFR3_EL1,
+ +		.sign =3D FTR_UNSIGNED,
+ +		.field_pos =3D ID_AA64MMFR3_EL1_TCRX_SHIFT,
+ +		.field_width =3D 4,
+ +		.min_field_value =3D ID_AA64MMFR3_EL1_TCRX_IMP,
+ +		.matches =3D has_cpuid_feature,
+ +	},
+ +	{
+ +		.desc =3D "Stage-1 Permission Indirection Extension (S1PIE)",
+ +		.capability =3D ARM64_HAS_S1PIE,
+ +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
+ +		.sys_reg =3D SYS_ID_AA64MMFR3_EL1,
+ +		.sign =3D FTR_UNSIGNED,
+ +		.field_pos =3D ID_AA64MMFR3_EL1_S1PIE_SHIFT,
+ +		.field_width =3D 4,
+ +		.min_field_value =3D ID_AA64MMFR3_EL1_S1PIE_IMP,
+ +		.matches =3D has_cpuid_feature,
+ +	},
++ 	{
++ 		.desc =3D "Enhanced Virtualization Traps",
++ 		.capability =3D ARM64_HAS_EVT,
++ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
++ 		.sys_reg =3D SYS_ID_AA64MMFR2_EL1,
++ 		.sign =3D FTR_UNSIGNED,
++ 		.field_pos =3D ID_AA64MMFR2_EL1_EVT_SHIFT,
++ 		.field_width =3D 4,
++ 		.min_field_value =3D ID_AA64MMFR2_EL1_EVT_IMP,
++ 		.matches =3D has_cpuid_feature,
++ 	},
+  	{},
+  };
+ =20
+
+--Sig_/XVrtAiSNcUo33DlqVi4Wb7U
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR+kKgACgkQAVBC80lX
+0GwiKQf/RKdM/u5wDeJWseb42r8Jmcimgfz0r9wAk1+7DEo15PbpfEevML0j1XTW
+I7t+2lL68XKxU+3yMMQE+CmCKSH53W3tcKElcdwHN+4ldDZZzOLil9cPdG6r6k6U
+nEenIylKLzVZBJsLOE2IXg9DCX6gL8KiKTf8zhOMfDNBQKwheD2dtqhkSXgm4ITf
+D9LHrM+caPRE2CuZfGSMouZfkW3clLmC0q5U6+UrI/ExUhC1mZGC6XTtzSZTNNBu
+dmANQMAP+szei4vIeWtAAqYYTvnNEvHiveJOaYQqt73qmmJhpMu8drmp98i+dAsU
+ncn2+FjuNlP8Jdw9owxqkgjmZJCvXQ==
+=yJEb
+-----END PGP SIGNATURE-----
+
+--Sig_/XVrtAiSNcUo33DlqVi4Wb7U--
