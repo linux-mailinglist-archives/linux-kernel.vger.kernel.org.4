@@ -2,147 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F27724CEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2027F724CF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238638AbjFFTW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S238890AbjFFTXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFFTWX (ORCPT
+        with ESMTP id S238464AbjFFTXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:22:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47671E54;
-        Tue,  6 Jun 2023 12:22:22 -0700 (PDT)
+        Tue, 6 Jun 2023 15:23:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2428FE60;
+        Tue,  6 Jun 2023 12:23:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D811E60B40;
-        Tue,  6 Jun 2023 19:22:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15264C433D2;
-        Tue,  6 Jun 2023 19:22:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC698615CD;
+        Tue,  6 Jun 2023 19:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD1EC433D2;
+        Tue,  6 Jun 2023 19:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686079341;
-        bh=DBYmzHuPHkwucG5VoIBnkboHLXA2sieirXXZYE1UaM0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tMpsTmE/cCRvt2ECAvZHSxi7nrJZALDVlWhJTLSU0NrAJTY0rxuy74QrBvPD0HAom
-         h8Y1yUG+k6GmbokswUR41wuW/X7lqVNCjwgjbJz+Iw6bJ9gq66qKf7Jzj9xdcFC5tE
-         pn4EsaukqLly2hbGEuOReP0YHNLME345jfG+mXJy8riRKyFkL6eP+PLLfiK9Jynhxr
-         7+7tBGrzSlB9bm5SUVKpt2bqtN6RTp7qBPUB1hNMPFW7ci8+HLDoymP0bAIOzBhBiU
-         wJI7hWoNYg1YLiBrk7BunN2VpGaC6TkhNB2b4IOLXn4hvP1GY1uMav6TyvHudhzS0m
-         ibQ3DOb9GNcnA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4BB6740692; Tue,  6 Jun 2023 16:22:18 -0300 (-03)
-Date:   Tue, 6 Jun 2023 16:22:18 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V3 0/1] perf tools: Allow config terms with breakpoints
-Message-ID: <ZH+Havh+xRIfwa4n@kernel.org>
-References: <20230525082902.25332-1-adrian.hunter@intel.com>
- <afe1c05a-2b77-c3d8-aacf-b4c7bebb8bf8@intel.com>
- <ZH933yJMYTr0cC+N@kernel.org>
+        s=k20201202; t=1686079423;
+        bh=p8Lxm7KhOJb3okWKEtpax6TjOrAnMjaevyCE24B4Rsk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=uH3ckJHJyod97p6orOKxPw6toM0mWCflU8PdXsuaWn57L2r0+/v3GJl1S12qrYqQ/
+         58QjPK9Pe/NSrJF+UMB3lUHsq/rTDAGHyw2hn50DK8bwfgqhOr1f/9w80lk9RQMs+1
+         tBYl++W54ZaPExo5uvuKPfNnl7DWN99kCA527+fkeqnlXvpw7QDK2kca3mv07w+/pR
+         9gFVJW/0MnJnyNEgzg6cEdYXFCON+31dkvjswKkYoNTphiQYGJUYreDKLGWzgemTQv
+         A7uZ4VKdSDeWMmhJjst4OGLuaetVuxcW+/xaeJ/1Ly5E3OHDaSSNgHoeL2TWmfcAjN
+         U9wtwQ3oRctaA==
+Date:   Tue, 6 Jun 2023 14:23:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: Call _REG when saving/restoring PCI state
+Message-ID: <20230606192341.GA1130972@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZH933yJMYTr0cC+N@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230606162321.34222-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Jun 06, 2023 at 03:15:59PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Jun 06, 2023 at 08:00:33AM +0300, Adrian Hunter escreveu:
-> > On 25/05/23 11:29, Adrian Hunter wrote:
-> > > Hi
-> > > 
-> > > Here is a patch (V3) to the event parser for breakpoint events.
-> > > I am not that familiar with flex / bison, but it seemed to
-> > > need trailing context to stop the mem event colon and slash
-> > > delimiters from getting mixed up with delimiters for config
-> > > terms or event modifiers.  Please look closely at that.
-> > > 
-> > > 
-> > > Changes in V3:
-> > > 
-> > >       Add Ian's Reviewed-by
-> > >       Re-base
-> > 
-> > Still applies.  Any more comments?
+On Tue, Jun 06, 2023 at 11:23:21AM -0500, Mario Limonciello wrote:
+> ASMedia PCIe GPIO controllers fail functional tests after returning from
+> suspend (S3 or s2idle). This is because the BIOS checks whether the
+> OSPM has called the `_REG` method to determine whether it can interact with
+> the OperationRegion assigned to the device.
 > 
-> Tried it now, twice, once after removing the O= build dir:
+> As described in 6.5.4 in the APCI spec, `_REG` is used to inform the AML
+> code on the availability of an operation region.
 > 
->   CC      /tmp/build/perf-tools-next/tests/event-times.o
->   CC      /tmp/build/perf-tools-next/tests/expr.o
->   BISON   /tmp/build/perf-tools-next/util/parse-events-bison.c
-> util/parse-events.y:508.24-34: warning: unused value: $3 [-Wother]
->   508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
->       |                        ^~~~~~~~~~~
-> util/parse-events.y:508.45-55: warning: unused value: $5 [-Wother]
->   508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
->       |                                             ^~~~~~~~~~~
-> util/parse-events.y:526.24-34: warning: unused value: $3 [-Wother]
->   526 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
->       |                        ^~~~~~~~~~~
-> util/parse-events.y:543.24-34: warning: unused value: $3 [-Wother]
->   543 | PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
->       |                        ^~~~~~~~~~~
->   CC      /tmp/build/perf-tools-next/tests/backward-ring-buffer.o
+> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
+> state of PCI devices.
+> 
+> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * Handle case of no CONFIG_ACPI
+>  * Rename function
+>  * Update commit message
+>  * Move ACPI calling code into pci-acpi.c instead
+>  * Cite the ACPI spec
 
-But it doesn't _break_ the build, just warns thiis when generating the
-.c file, the next build it notices it is already generated, no warnings.
+Thanks for the spec reference (s/APCI/ACPI/ and add the revision if
+you rev this (r6.5 is the latest, AFAIK) if you rev this).
 
-- Arnaldo
- 
+I don't see text in that section that connects S3 with _REG.  If it's
+there, you might have to quote the relevant sentence or two in the
+commit log.
+
+You mentioned _REG being sort of a mutex to synchronize OSPM vs
+platform access; if there's spec language to that effect, let's cite
+it.
+
+Ideally we should have been able to read the PCI and ACPI specs and
+implement this without tripping over problem on this particular
+hardware.  I'm looking for the text that enables that "clean-room"
+implementation.  If the spec doesn't have that text, it's either a
+hole in the spec or a BIOS defect that depends on something the spec
+doesn't require.
+
+Doing this in pci_save_state() still seems wrong to me.  For example,
+e1000_probe() calls pci_save_state(), but this is not part of suspend.
+IIUC, this patch will disconnect the opregion when we probe an e1000
+NIC.  Is that what you intend?
+
+> ---
+>  drivers/pci/pci-acpi.c | 10 ++++++++++
+>  drivers/pci/pci.c      | 14 ++++++++++++++
+>  drivers/pci/pci.h      |  2 ++
+>  3 files changed, 26 insertions(+)
 > 
-> ⬢[acme@toolbox perf-tools-next]$ cat /etc/redhat-release
-> Fedora release 36 (Thirty Six)
-> 
-> ⬢[acme@toolbox perf-tools-next]$ rpm -q bison
-> bison-3.8.2-2.fc36.x86_64
-> ⬢[acme@toolbox perf-tools-next]$ rpm -q flex
-> flex-2.6.4-10.fc36.x86_64
-> ⬢[acme@toolbox perf-tools-next]$
-> 
-> 
-> - Arnaldo
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index 1698205dd73c..abc8bcfc2c71 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1209,6 +1209,16 @@ void acpi_pci_remove_bus(struct pci_bus *bus)
+>  	acpi_pci_slot_remove(bus);
+>  }
 >  
-> > > 
-> > > Changes in V2:
-> > > 
-> > >       Add comments to tools/perf/util/parse-events.l
-> > >       Add a test for 2 mem events back to back with config terms
-> > > 
-> > > 
-> > > Adrian Hunter (1):
-> > >       perf tools: Allow config terms with breakpoints
-> > > 
-> > >  tools/perf/tests/parse-events.c | 157 ++++++++++++++++++++++++++++++++++++++++
-> > >  tools/perf/util/parse-events.c  |  23 +++++-
-> > >  tools/perf/util/parse-events.h  |   6 +-
-> > >  tools/perf/util/parse-events.l  |  23 +++++-
-> > >  tools/perf/util/parse-events.y  |  42 ++++++-----
-> > >  5 files changed, 224 insertions(+), 27 deletions(-)
-> > > 
-> > > 
-> > > Regards
-> > > Adrian
-> > 
-> 
+> +void acpi_pci_set_register_access(struct pci_dev *dev, bool enable)
+> +{
+> +	int val = enable ? ACPI_REG_CONNECT : ACPI_REG_DISCONNECT;
+> +	int ret = acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
+> +				    ACPI_ADR_SPACE_PCI_CONFIG, val);
+> +	if (ret)
+> +		pci_dbg(dev, "ACPI _REG %s evaluation failed (%d)\n",
+> +			val ? "connect" : "disconnect", ret);
+> +}
+> +
+>  /* ACPI bus type */
+>  
+>  
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index e38c2f6eebd4..b2f1f603ec62 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1068,6 +1068,14 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+>  	return acpi_pci_bridge_d3(dev);
+>  }
+>  
+> +static inline void platform_set_register_access(struct pci_dev *dev, bool en)
+> +{
+> +	if (pci_use_mid_pm())
+> +		return;
+> +
+> +	acpi_pci_set_register_access(dev, en);
+> +}
+> +
+>  /**
+>   * pci_update_current_state - Read power state of given device and cache it
+>   * @dev: PCI device to handle.
+> @@ -1645,6 +1653,9 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
+>  int pci_save_state(struct pci_dev *dev)
+>  {
+>  	int i;
+> +
+> +	platform_set_register_access(dev, false);
+> +
+>  	/* XXX: 100% dword access ok here? */
+>  	for (i = 0; i < 16; i++) {
+>  		pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
+> @@ -1790,6 +1801,8 @@ void pci_restore_state(struct pci_dev *dev)
+>  	pci_enable_acs(dev);
+>  	pci_restore_iov_state(dev);
+>  
+> +	platform_set_register_access(dev, true);
+> +
+>  	dev->state_saved = false;
+>  }
+>  EXPORT_SYMBOL(pci_restore_state);
+> @@ -3203,6 +3216,7 @@ void pci_pm_init(struct pci_dev *dev)
+>  	pci_read_config_word(dev, PCI_STATUS, &status);
+>  	if (status & PCI_STATUS_IMM_READY)
+>  		dev->imm_ready = 1;
+> +	platform_set_register_access(dev, true);
+>  }
+>  
+>  static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index ffccb03933e2..78961505aae2 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -703,6 +703,7 @@ void acpi_pci_refresh_power_state(struct pci_dev *dev);
+>  int acpi_pci_wakeup(struct pci_dev *dev, bool enable);
+>  bool acpi_pci_need_resume(struct pci_dev *dev);
+>  pci_power_t acpi_pci_choose_state(struct pci_dev *pdev);
+> +void acpi_pci_set_register_access(struct pci_dev *dev, bool enable);
+>  #else
+>  static inline int pci_dev_acpi_reset(struct pci_dev *dev, bool probe)
+>  {
+> @@ -742,6 +743,7 @@ static inline pci_power_t acpi_pci_choose_state(struct pci_dev *pdev)
+>  {
+>  	return PCI_POWER_ERROR;
+>  }
+> +static inline void acpi_pci_set_register_access(struct pci_dev *dev, bool enable) {}
+>  #endif
+>  
+>  #ifdef CONFIG_PCIEASPM
 > -- 
+> 2.34.1
 > 
-> - Arnaldo
-
--- 
-
-- Arnaldo
