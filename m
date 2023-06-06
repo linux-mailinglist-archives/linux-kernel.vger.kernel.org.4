@@ -2,59 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F93724E40
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB85724E43
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbjFFUj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
+        id S235620AbjFFUlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbjFFUjX (ORCPT
+        with ESMTP id S234109AbjFFUlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6383CE7E;
-        Tue,  6 Jun 2023 13:39:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Jun 2023 16:41:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90CCE7E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 13:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686084032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P3iJUW3O9cWWP9HZBjdRT6iyvu3td7ivmZhPbatcmK0=;
+        b=aY4LQeBvgYU72D9XDPq3wPj9cEz6TwL9wU26ww4YoACxB52MLNq9nS97xUVLXPa536Iqpp
+        4aQhFc6kChp85+KjvbNm/ky9DgYOezx3/E4T87xt199Qk/mWOCrkYQqJBG5T56PybdYSPj
+        AIcZDYeN6lOrSP4mEDUC6D6rqRaOuTI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-447-LsOftGK6NhKr4A3Eit7AyA-1; Tue, 06 Jun 2023 16:40:28 -0400
+X-MC-Unique: LsOftGK6NhKr4A3Eit7AyA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB1806304B;
-        Tue,  6 Jun 2023 20:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBC7C433D2;
-        Tue,  6 Jun 2023 20:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686083961;
-        bh=4LWysxv5nCwtynK3qS1kWwwU6nmxSsvm8Ql6bGca8eQ=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=byxcVfbsphXB0kwZukntfYzhk2vydJFqH3Y59ERQtq4PmhFYbmavWBWl3XDznKbDR
-         /+f8z6oNc4z/TFsMu3CLcjwLvIIgRw6ympyvfFvxy4QdrutpubaQwq7HqkzXIMTBcG
-         w+tF3oydEGRuSJ3EbOnV1Lp+huyj0zY4vy/Ei6vNQ86e2uSEd+bJifojrXRLQfs7xl
-         4dI1JZkSKJ+GeQt4dla0K+1Kdpe3hbhU5fNgJqFPgHnuEtpm519bhXEki79sJq8Nui
-         Az1+bxiI5i1cq/Jhc2iB7wC+JGlUxQfJbFBRuTsrT4MkkAUW+2HIjdbXdbZfNTQiuY
-         6+HiwpnOTo84w==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 23:39:15 +0300
-Message-Id: <CT5UVNZYSAPZ.1PJWWUUOCHODW@suppilovahvero>
-Cc:     <ebiederm@xmission.com>, <patches@lists.linux.dev>,
-        <linux-fsdevel@vger.kernel.org>, <keyrings@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sysctl: move security keys sysctl registration to
- its own file
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Luis Chamberlain" <mcgrof@kernel.org>, <keescook@chromium.org>,
-        <yzaikin@google.com>, <dhowells@redhat.com>, <paul@paul-moore.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>, <j.granados@samsung.com>,
-        <brauner@kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230530232914.3689712-1-mcgrof@kernel.org>
- <20230530232914.3689712-3-mcgrof@kernel.org>
-In-Reply-To: <20230530232914.3689712-3-mcgrof@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 98B318032FF;
+        Tue,  6 Jun 2023 20:40:27 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.112])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 6439FC1603B;
+        Tue,  6 Jun 2023 20:40:22 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue,  6 Jun 2023 22:40:05 +0200 (CEST)
+Date:   Tue, 6 Jun 2023 22:39:59 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Brian Cain <bcain@quicinc.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: Re: [PATCH v9] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230606203958.GC18866@redhat.com>
+References: <20230516191441.34377-1-wander@redhat.com>
+ <20230517152632.GC1286@redhat.com>
+ <CAAq0SUkE_4qF5RuWE7MxnzcbchE4SHkyMvJxHAQeJ+=ZTEwdgg@mail.gmail.com>
+ <20230529122256.GA588@redhat.com>
+ <CAAq0SUkjFiN3Xap-S2awymDqDWZceCnAWBQnESVMVya7RpFFUw@mail.gmail.com>
+ <20230601181359.GA23852@redhat.com>
+ <CAAq0SUk3c5H8YCVAfRAU=pZFNLrA90mNMq=k5BohTutM7cfcvg@mail.gmail.com>
+ <20230602173302.GA32644@redhat.com>
+ <CAAq0SU=A5j2-GF80Thi2vm8W+_AUquj6t+QK7cnWLz1jKEA4zg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAq0SU=A5j2-GF80Thi2vm8W+_AUquj6t+QK7cnWLz1jKEA4zg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,33 +94,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed May 31, 2023 at 2:29 AM EEST, Luis Chamberlain wrote:
-> The security keys sysctls are already declared on its own file,
-> just move the sysctl registration to its own file to help avoid
-> merge conflicts on sysctls.c, and help with clearing up sysctl.c
-> further.
+On 06/05, Wander Lairson Costa wrote:
 >
-> This creates a small penalty of 23 bytes:
->
-> ./scripts/bloat-o-meter vmlinux.1 vmlinux.2
-> add/remove: 2/0 grow/shrink: 0/1 up/down: 49/-26 (23)
-> Function                                     old     new   delta
-> init_security_keys_sysctls                     -      33     +33
-> __pfx_init_security_keys_sysctls               -      16     +16
-> sysctl_init_bases                             85      59     -26
-> Total: Before=3D21256937, After=3D21256960, chg +0.00%
->
-> But soon we'll be saving tons of bytes anyway, as we modify the
-> sysctl registrations to use ARRAY_SIZE and so we get rid of all the
-> empty array elements so let's just clean this up now.
->
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  include/linux/key.h    | 3 ---
->  kernel/sysctl.c        | 4 ----
->  security/keys/sysctl.c | 7 +++++++
->  3 files changed, 7 insertions(+), 7 deletions(-)
+> Thanks. I found an unrelated earlier splat in the console code. That's
+> why I couldn't reproduce it in the stock kernel.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+As expected...
 
-BR, Jarkko
+So... Not sure what can I say ;) can you verify that this patch doesn't solve
+the issues with CONFIG_PROVE_RAW_LOCK_NESTING pointed out by Sebastian? Using
+stress-ng or anything else.
+
+This is not that bad, unless I am totally confused the current code (without
+your patch) has the same problem (otherwise we wouldn't need this fix).
+
+But perhaps you can make 2/2 which adds the DEFINE_WAIT_OVERRIDE_MAP() hack
+as Peter suggested?
+
+Oleg.
+
