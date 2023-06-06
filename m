@@ -2,58 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1512724DAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C004724DB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239660AbjFFUJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S239664AbjFFUKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234163AbjFFUJH (ORCPT
+        with ESMTP id S234163AbjFFUKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:09:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BBB10F3;
-        Tue,  6 Jun 2023 13:09:06 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686082144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dKfeNRDWpLHUEEC01i9Rlsx18vHA0whT8VRGD7XtedM=;
-        b=xLBE8261NbfQa21cZUhMzi4zbsJZJpSuXjRrLztVj9Eo9+RaVlRlHYAG3+Wt81IgfFP9gO
-        RjPvWQZZA/B2ZoDu5plQstMi9yqH+ZM+LdIs64WVmb2E9NFY/Q79mZ2IRvBV1iK6KuntJF
-        IteSC6RFbrrFH9lnLMKS2uXCYIJHqG1K6aj/JvbOVLZ2vvYd+JpCyBZDv0qMiPzWVN2h24
-        FoABQpRJbPNRSw7UWEZKryMgPtOLdZ9lRqTSBP7rmc5DwHkyYs+0Pbg0yNXDI3sOEXiayj
-        p1LPEb2/6jIwLYjxYbiWp3vAxu6kRgQXWiF/JYu7PS08TWeEsBCyl0BRgzzr2g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686082144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dKfeNRDWpLHUEEC01i9Rlsx18vHA0whT8VRGD7XtedM=;
-        b=ZOzeXIJdsqhx4kcEoZWhZeQ+p2mmum1y7Ixvn0vCSKKuP8V/s2NuKBC2tvxNDRRbPbW5YY
-        gS5bN76qyyKR5nAw==
-To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
-        pbonzini@redhat.com, ravi.v.shankar@intel.com,
-        jiangshanlai@gmail.com, shan.kang@intel.com
-Subject: Re: [PATCH v8 01/33] x86/traps: let common_interrupt() handle
- IRQ_MOVE_CLEANUP_VECTOR
-In-Reply-To: <70ef07f1-e3b7-7c4e-01ac-11f159a87a6b@zytor.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-2-xin3.li@intel.com> <87leh08e1h.ffs@tglx>
- <87edmp6doh.ffs@tglx> <70ef07f1-e3b7-7c4e-01ac-11f159a87a6b@zytor.com>
-Date:   Tue, 06 Jun 2023 22:09:03 +0200
-Message-ID: <877csgl5eo.ffs@tglx>
+        Tue, 6 Jun 2023 16:10:36 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD06E10F2;
+        Tue,  6 Jun 2023 13:10:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cq3BjW87gkgFm/UlKj9iKWsMONqypfyccFk40Ku8lDTD3qhnf9BfYF7SjFpQgmbG8I16trM/spdwbpk9MJWHrcfBWELz04dLZ2CDyGSSKABnEPEd9l4DYqmAs91k+3w2nwwwbBEPshCaF2PEfg0rHdmv/shnRR8/vUUI9MJRwCovi+cwCN4w14SC5XXtRaKpvz93uL6W1FO10LRqgy4Vrlo2DseWO7cnphZ6XGli3hJkR11I5tRpLrLK9Rn0Yj18VZcinNqG0QJRmTzB0EML5aIa24o1IZDEDxTrxhrfmlY39n6BGBDz3w7muU1jcGyAY03hSCKvUcRMm//7KwOakw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M33INbL8BorcBGS83Xa643i6qxn6gxPsDQ6TuvIFZqY=;
+ b=Gc9JO4maUSBH8g2lf6pdwq1Lu5NQxjZXtC1R8hqDFtjE8IPq90OKsRLaapLZlaA290G719xHPpqOlWX+47op+wfQegiO9oZS9aRE8VTeVq8XJpafSMo9+xhBGQBrVBPPBNhetRME/jGp/kKlIcDMquEffSgGZpT/Yxt5kBVbpNaOZLkKQ4gMEgYCfFyozNVXdgYHQupe86DCZVFlCEJuS7r3C6E5oqXnEJsXQgFeRIgZlgOHVr0qoCNbK0H8T8FBOOIYr+q+4YiDGbok4POOrzNAQCk4W03rkAUe0kojnW20QEk34Y/DZN1m+1ZDiw5R4jg2w30aACmQ9OK2LwWd0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M33INbL8BorcBGS83Xa643i6qxn6gxPsDQ6TuvIFZqY=;
+ b=qIi3a/s3AyHXfvl6eVAAZHJ5sGQLkQ/yo65k/cNmsqhPxzkj6fOUGN+MK7So8EoZI0qf/OOKYpqWbMn8BoAG8R0/vjrW2fRLaf1cP1L754RJyyQrLqTNEvk8lAwvn05AlHA5JELR9VCkhVveRlqDp2QuUU0e65bx3v9+3jUCdaTNZ2HJ1mKa0Z9P3+MftHQNRuFPlhlaCTqPD6okAQnZ0LeKG9lc7hv/nYjYZ14lJlgBaKmamghuyrftr72rJkiBa+dnm0bTWtzyqURC88pKnS+KGxdqOFtacO6xc6HvKn3wYY49mqmDBDk3W6uPlD3V++M+1kOfpsp8Ul7xrLOIXg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by CY5PR12MB6574.namprd12.prod.outlook.com (2603:10b6:930:42::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 20:10:30 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::e01a:d41e:80b4:7cef]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::e01a:d41e:80b4:7cef%7]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 20:10:30 +0000
+Content-Type: multipart/mixed; boundary="------------jP6YgWTrDDApUlrGwhMuU180"
+Message-ID: <14573e7e-f2ad-ff34-dfbd-3efdebee51ed@nvidia.com>
+Date:   Tue, 6 Jun 2023 13:10:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 11/11] selftests: error out if kernel header files are
+ not yet built
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
+ <20230606071637.267103-12-jhubbard@nvidia.com>
+ <8e208e0f-699c-2c34-d66e-bf6d488a7a1e@collabora.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <8e208e0f-699c-2c34-d66e-bf6d488a7a1e@collabora.com>
+X-ClientProxiedBy: SJ0PR03CA0205.namprd03.prod.outlook.com
+ (2603:10b6:a03:2ef::30) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CY5PR12MB6574:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73cc9787-2aa0-46a2-4345-08db66ca13aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qCOcreOr+su31Uffg25ipDvuzYv9NgfhbqpS9hnrRITxVquF4+4iCKOjZmn4QvHst/wlY+NWWNP3vytxb0L5QbFqL1tKmLSV92L2hzbhElevE6FxZqOEwqkiEzFk29icSApFsRPpFauvQMXZ0jiy1jbv20GcT7TfCJbi5voKW283UdwbuQGc+QwcSIFd+b5rIu8vMhkEc+haoFJKnxncmARvc5uSooxB8wzjSVPV4sOvXzJiC6mXr3FeSxdhWfRFuPhV073Ln8UAVLDHdjBweC5T9N3wfEoSosqx78OFUgPnApv86H8WepKddhGe9sDf8FI+gTRd8VuGjUm+EaFalF+GRupEfi0WaAtm2TCanE7DQqGMYBzk2rmv70aZRww8hRA9/wyDWNtF5CetxucvZLlADu5268ifDkRxqbNp/n0sXNeRca46oIrJHllSlfTfnfFQ/BudvuqZf5TJ+49ZeaBoqdCfEsBU2saii1+NFrmuy4ltVjPm39ybxfU2mFrxj+0TID/aPF0T552A/SB7mUi2X8qAOi5yJ0DI2esq9eviR2mWaBBmBfOXfLLYnU/gyI1gH/47+nhkHDDi45TnT7xOE48Yr+OKlzalWCa8dD938fceVijwyd1+d20IutSKAtdl1pg42pwYlCylz7qXFw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199021)(31696002)(186003)(83380400001)(478600001)(6666004)(53546011)(6512007)(6506007)(26005)(31686004)(2616005)(86362001)(4326008)(7416002)(316002)(66476007)(66556008)(5660300002)(235185007)(36756003)(33964004)(6486002)(66946007)(2906002)(38100700002)(41300700001)(8676002)(8936002)(54906003)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UUZuUWN3Smo3dWFFSk5JSjhoZmhVKytJWFRSSkt6Y1dmNGFnQkZYTk9BV3Ev?=
+ =?utf-8?B?TFFvVkk1a1BXdVJDTkdxOHBUODd5YU5OUmhqNENwK21SV3ZQcGd2QkhKV3py?=
+ =?utf-8?B?VHl6eHRHWmJPODV2QzVyU0l4bkdFWHFUT0dmLzVqeW0xb0ZUbTJGZXozMWV5?=
+ =?utf-8?B?TUk4OFJvT1drZzNkeFZNVHhTTDZsRmpvTXBjcEJva25CaG5oWlhIL1FKbWNI?=
+ =?utf-8?B?a0hsMGtDZG0wbjA0TG9CamhkZFA0R2FFa1NmNjVzNHNkVmVkQ0hsM1Y5aFF2?=
+ =?utf-8?B?Qi9RdC9kcW43a2Y1OXZwTDNLU2N0amhRQ0NjVXV5NXR0S0U5VjIrdzVWNW1Y?=
+ =?utf-8?B?K21GVjJ3MzlLUmlvMzhGVnQ5L0JDQTdCeDFqTnorMnlOSGR3aW9NWXdpRVpJ?=
+ =?utf-8?B?WTBpTTQraUo4bStVbWFnK1Iva2wrdHU0UXRMcC9TN3I5YzlTMFBVbnk1NW1Y?=
+ =?utf-8?B?SWcreTBmU1lJL2tuMFRxTENLVzRFS0RITVJUOWFvMnUzYWx0ZUxVcUYyY2dK?=
+ =?utf-8?B?VmFUUFJ0T1M4TnBTenovNnZzczVBT2U3cVhxdnJMYktFRHYzL1R4bk9sNERY?=
+ =?utf-8?B?c2Y2TG9KREg5UHlJSmhOaGVzY3Rmei9Ha3NCR3dPZTRYYkdTRHNmeEVGSU10?=
+ =?utf-8?B?ZGhCb3VWVWdFOTVCaCt1WkxaM3d5QkRPVCs4bXdZMTEza0xOU0hRcFV2c1g3?=
+ =?utf-8?B?NElCODB3ZG9OTllUTGdkeUtEYjQxaDI1ZzA2eVlGNG13a3QxeHdyeFZwcnNq?=
+ =?utf-8?B?M0VvSFRJcTFqY1hwZmxLNHpqbHMrS3E0Rk5JZDRxaTlmWFNrWlRSMGc2ejJT?=
+ =?utf-8?B?SUUwTHRIYTM2cHRtVzJUd010ZGhpYVEyYTlUaXNBZG1nWml4WWdYby9XWmtn?=
+ =?utf-8?B?ZjN5cHRJV2VSdXQ0dEZCUUJzRUlsbXBVSjYxWDZCMHpoNGpTMnFSNS9DbnJn?=
+ =?utf-8?B?akhlMlJsMDhKbDVLYWdvK1J6Z1VGSEpZallFUTdzcWhVQ3dnSE45clhWU1Ay?=
+ =?utf-8?B?Q3J0ZWNOb0d5Znh3QWxVV2gxZXFFVkZNb1dRSEdoQ2M0aTJVQzdaWWF4TXZ1?=
+ =?utf-8?B?WDMweUhhRG15Yi9VMEFXODV1UlVpWjlmd0VlSkdwU0JzWXFGdGViYW5Mb1hu?=
+ =?utf-8?B?enpseXUwaEtpakFScFJaUXl3SXBrd1ZyekZtL0M2Nm9mdzFneUtuYy9vUkxE?=
+ =?utf-8?B?ampqaEtObEFiYmsyVTNEWFFJdFpXUU1nd2hadkJ4ZnFzRi9Vb2FCU2grcWZq?=
+ =?utf-8?B?WUpubWE1VkFMZnhHU2ZrVVg5a3lObVoyQW1BY0JlTUliaXRuWmtKOU9wa0t4?=
+ =?utf-8?B?VmovMFRzQkhVbERvSFBuODZpck0yNWdreHFGbzZTZXcvSGxNZmNjZUg4eEdW?=
+ =?utf-8?B?SFhSZVpWWTNLTk5jTnNEeWF3RnIxZTBEb0wvWmpyK3FPdS95ZHlYUEhoSlZu?=
+ =?utf-8?B?WUFyL0h2ZjdtSnVMc2dCZkNIVmNTOEw1U1RxK0ttdGxYTEJPTUY1U1JCdDh4?=
+ =?utf-8?B?UmhrZEp2ZHZmanhzTXp0OWhXc3RoZTJ2MWIwa2xSSWdTTkdTbTcyNjJWNHVy?=
+ =?utf-8?B?Zml1TTJXek13MXpsdk9VQTdWNThXZVg1VEY0RTRjamIrbzAyOTMreUZaVHY3?=
+ =?utf-8?B?Yk1HNnNBK2lGbDJCZ1I4OFNVNmVXSlNOa3dPYkdSc1ljK2x0WlhmczJ0d2U4?=
+ =?utf-8?B?L0hNeGw3c29Mdi90ODhacHJYMmF3dGU5bUI4Nk9MT1ppdXVvSmRSUTFGNG5L?=
+ =?utf-8?B?b1MyV1NwaG9tNlg2VUJCTDYxaE05VDFaSURkY2xxOTdZb1hxdldOazhvaER3?=
+ =?utf-8?B?YTZleXBIeElza2xZUDRqY09heDJlcE9tWVF4OVc5eFVRM05xbXdQUDYzZE92?=
+ =?utf-8?B?UzVzUGYxT1g1Vy9maEZQZlFuVk5qQUVkR3dHeW53KzZpMFRGeTdpcGUyYzJh?=
+ =?utf-8?B?UFVlVDcwNG1YZXVQcWxPU3RXY3NUbWJkMldLeTN4MFhIaEtsT3ZRSE1Na1pD?=
+ =?utf-8?B?TERTdlFWNzBxQmQ1L2hMemJPbGp4UHlyODhJRHV2cGsvQ1plR2duSXZ6RzhN?=
+ =?utf-8?B?d1kxaXRrcTgvV3lxOU1PcE9TLzhuSjRTOVBNSDdZZWNmRHhMSHJ1a2tOWkJI?=
+ =?utf-8?Q?IluZx3axUdRZsk1A0fM325ii0?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73cc9787-2aa0-46a2-4345-08db66ca13aa
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 20:10:30.3500
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bSG/oRbU+b6FQpQviXXa/Kfr1dd35gvW0Kbi3hN+fIcqK5gALPztYUAa8ZE4pvLBB/NGiVEBy+mAuPqbJfyo+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6574
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,296 +133,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05 2023 at 10:09, H. Peter Anvin wrote:
-> On 6/5/23 10:07, Thomas Gleixner wrote:
->> There is zero reason for this to be an IPI. This can be delegated to a
->> worker or whatever delayed mechanism.
->> 
-> As we discussed offline, I agree that this is a better solution (and 
-> should be a separate changeset before the FRED one.)
+--------------jP6YgWTrDDApUlrGwhMuU180
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The untested below should do the trick. Wants to be split in several
-patches, but you get the idea.
+On 6/6/23 00:38, Muhammad Usama Anjum wrote:
+...
+>> +kernel_header_files:
+>> +	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
+>> +	if [ $$? -ne 0 ]; then                                                 \
+>> +            RED='\033[1;31m';                                                  \
+>> +            NOCOLOR='\033[0m';                                                 \
+>> +            echo;                                                              \
+>> +            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
+>> +            echo "Please run this and try again:";                             \
+>> +            echo;                                                              \
+>> +            echo "    cd $(top_srcdir)";                                       \
+>> +            echo "    make headers";                                           \
+>> +            echo;                                                              \
+>> +	    exit 1; \
+>> +	fi
+> Thank you for adding this. This is outputting error for every selftest
+> directory. We should try to make it even better by just aborting the
+> Make-ing process the first time headers aren't detected. We can do this now
+> or later, fine by me.
+> 
+OK, I see. Yes, this can be improved by adding the same mechanism to the 
+selftests/Makefile, that is in selftests/mm/Makefile.
 
-Thanks,
+I'd like to keep both, because as I mentioned earlier, mm folks like to
+run just that one Makefile, sometimes, and selftests/mm/Makefile is not
+invoking the top level Makefile. Rather, it includes lib.mk--which the
+top level Makefile does *not* include.
 
-        tglx
----
-Subject: x86/vector: Get rid of IRQ_MOVE_CLEANUP_VECTOR
-From: Thomas Gleixner <tglx@linutronix.de>
+Arguably, using includes instead of recursive Make, would improve this
+framework: reduce duplication such as the above. But that's a larger
+project and just food for thought at this point.
 
-No point to waste a vector for cleaning up the leftovers of a moved
-interrupt. Aside of that this must be the lowest priority of all vectors
-which makes FRED systems utilizing vectors 0x10-0x1f more complicated
-than necessary.
+Anyway, this works nicely on my system, and I'll attach it as a patch
+also in case you want to try it out. What do you think of this:
 
-Schedule a timer instead.
-
-Not-Yet-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/include/asm/hw_irq.h       |    4 -
- arch/x86/include/asm/idtentry.h     |    1 
- arch/x86/include/asm/irq_vectors.h  |    7 ---
- arch/x86/kernel/apic/vector.c       |   83 ++++++++++++++++++++++++++----------
- arch/x86/kernel/idt.c               |    1 
- arch/x86/platform/uv/uv_irq.c       |    2 
- drivers/iommu/amd/iommu.c           |    2 
- drivers/iommu/hyperv-iommu.c        |    4 -
- drivers/iommu/intel/irq_remapping.c |    2 
- 9 files changed, 68 insertions(+), 38 deletions(-)
-
---- a/arch/x86/include/asm/hw_irq.h
-+++ b/arch/x86/include/asm/hw_irq.h
-@@ -97,10 +97,10 @@ extern struct irq_cfg *irqd_cfg(struct i
- extern void lock_vector_lock(void);
- extern void unlock_vector_lock(void);
- #ifdef CONFIG_SMP
--extern void send_cleanup_vector(struct irq_cfg *);
-+extern void vector_schedule_cleanup(struct irq_cfg *);
- extern void irq_complete_move(struct irq_cfg *cfg);
- #else
--static inline void send_cleanup_vector(struct irq_cfg *c) { }
-+static inline void vector_schedule_cleanup(struct irq_cfg *c) { }
- static inline void irq_complete_move(struct irq_cfg *c) { }
- #endif
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 90a62cf75008..bdca160063d8 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -144,10 +144,12 @@ ifneq ($(KBUILD_OUTPUT),)
+   abs_objtree := $(realpath $(abs_objtree))
+   BUILD := $(abs_objtree)/kselftest
+   KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
++  KHDR_DIR := ${abs_objtree}/usr/include
+ else
+   BUILD := $(CURDIR)
+   abs_srctree := $(shell cd $(top_srcdir) && pwd)
+   KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
++  KHDR_DIR := ${abs_srctree}/usr/include
+   DEFAULT_INSTALL_HDR_PATH := 1
+ endif
  
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -648,7 +648,6 @@ DECLARE_IDTENTRY_SYSVEC(X86_PLATFORM_IPI
+@@ -161,7 +163,7 @@ export KHDR_INCLUDES
+ # all isn't the first target in the file.
+ .DEFAULT_GOAL := all
  
- #ifdef CONFIG_SMP
- DECLARE_IDTENTRY(RESCHEDULE_VECTOR,			sysvec_reschedule_ipi);
--DECLARE_IDTENTRY_SYSVEC(IRQ_MOVE_CLEANUP_VECTOR,	sysvec_irq_move_cleanup);
- DECLARE_IDTENTRY_SYSVEC(REBOOT_VECTOR,			sysvec_reboot);
- DECLARE_IDTENTRY_SYSVEC(CALL_FUNCTION_SINGLE_VECTOR,	sysvec_call_function_single);
- DECLARE_IDTENTRY_SYSVEC(CALL_FUNCTION_VECTOR,		sysvec_call_function);
---- a/arch/x86/include/asm/irq_vectors.h
-+++ b/arch/x86/include/asm/irq_vectors.h
-@@ -35,13 +35,6 @@
-  */
- #define FIRST_EXTERNAL_VECTOR		0x20
+-all:
++all: kernel_header_files
+ 	@ret=1;							\
+ 	for TARGET in $(TARGETS); do				\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;			\
+@@ -172,6 +174,23 @@ all:
+ 		ret=$$((ret * $$?));				\
+ 	done; exit $$ret;
  
--/*
-- * Reserve the lowest usable vector (and hence lowest priority)  0x20 for
-- * triggering cleanup after irq migration. 0x21-0x2f will still be used
-- * for device interrupts.
-- */
--#define IRQ_MOVE_CLEANUP_VECTOR		FIRST_EXTERNAL_VECTOR
--
- #define IA32_SYSCALL_VECTOR		0x80
- 
- /*
---- a/arch/x86/kernel/apic/vector.c
-+++ b/arch/x86/kernel/apic/vector.c
-@@ -44,7 +44,18 @@ static cpumask_var_t vector_searchmask;
- static struct irq_chip lapic_controller;
- static struct irq_matrix *vector_matrix;
- #ifdef CONFIG_SMP
--static DEFINE_PER_CPU(struct hlist_head, cleanup_list);
++kernel_header_files:
++	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                          \
++	if [ $$? -ne 0 ]; then                                                     \
++            RED='\033[1;31m';                                                  \
++            NOCOLOR='\033[0m';                                                 \
++            echo;                                                              \
++            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
++            echo "Please run this and try again:";                             \
++            echo;                                                              \
++            echo "    cd $(top_srcdir)";                                       \
++            echo "    make headers";                                           \
++            echo;                                                              \
++	    exit 1;                                                                \
++	fi
 +
-+static void vector_cleanup_callback(struct timer_list *tmr);
++.PHONY: kernel_header_files
 +
-+struct vector_cleanup {
-+	struct hlist_head	head;
-+	struct timer_list	timer;
-+};
-+
-+static DEFINE_PER_CPU(struct vector_cleanup, vector_cleanup) = {
-+	.head	= HLIST_HEAD_INIT,
-+	.timer	= __TIMER_INITIALIZER(vector_cleanup_callback, TIMER_PINNED),
-+};
- #endif
- 
- void lock_vector_lock(void)
-@@ -843,8 +854,12 @@ void lapic_online(void)
- 
- void lapic_offline(void)
- {
-+	struct vector_cleanup *cl = this_cpu_ptr(&vector_cleanup);
-+
- 	lock_vector_lock();
- 	irq_matrix_offline(vector_matrix);
-+	WARN_ON_ONCE(try_to_del_timer_sync(&cl->timer) < 0);
-+	WARN_ON_ONCE(!hlist_empty(&cl->head));
- 	unlock_vector_lock();
- }
- 
-@@ -934,62 +949,86 @@ static void free_moved_vector(struct api
- 	apicd->move_in_progress = 0;
- }
- 
--DEFINE_IDTENTRY_SYSVEC(sysvec_irq_move_cleanup)
-+static void vector_cleanup_callback(struct timer_list *tmr)
- {
--	struct hlist_head *clhead = this_cpu_ptr(&cleanup_list);
-+	struct vector_cleanup *cl = container_of(tmr, typeof(*cl), timer);
- 	struct apic_chip_data *apicd;
- 	struct hlist_node *tmp;
-+	bool rearm = false;
- 
--	ack_APIC_irq();
- 	/* Prevent vectors vanishing under us */
--	raw_spin_lock(&vector_lock);
-+	raw_spin_lock_irq(&vector_lock);
- 
--	hlist_for_each_entry_safe(apicd, tmp, clhead, clist) {
-+	hlist_for_each_entry_safe(apicd, tmp, &cl->head, clist) {
- 		unsigned int irr, vector = apicd->prev_vector;
- 
- 		/*
- 		 * Paranoia: Check if the vector that needs to be cleaned
--		 * up is registered at the APICs IRR. If so, then this is
--		 * not the best time to clean it up. Clean it up in the
--		 * next attempt by sending another IRQ_MOVE_CLEANUP_VECTOR
--		 * to this CPU. IRQ_MOVE_CLEANUP_VECTOR is the lowest
--		 * priority external vector, so on return from this
--		 * interrupt the device interrupt will happen first.
-+		 * up is registered at the APICs IRR. That's clearly a
-+		 * hardware issue if the vector arrived on the old target
-+		 * _after_ interrupts were disabled above. Keep @apicd
-+		 * on the list and schedule the timer again to give the CPU
-+		 * a chance to handle the pending interrupt.
- 		 */
- 		irr = apic_read(APIC_IRR + (vector / 32 * 0x10));
- 		if (irr & (1U << (vector % 32))) {
--			apic->send_IPI_self(IRQ_MOVE_CLEANUP_VECTOR);
-+			pr_warn_once("Moved interrupt pending in old target APIC %u\n", apicd->irq);
-+			rearm = true;
- 			continue;
- 		}
- 		free_moved_vector(apicd);
- 	}
- 
--	raw_spin_unlock(&vector_lock);
-+	/*
-+	 * Must happen under vector_lock to make the timer_pending() check
-+	 * in __vector_schedule_cleanup() race free against the rearm here.
-+	 */
-+	if (rearm)
-+		mod_timer(tmr, jiffies + 1);
-+
-+	raw_spin_unlock_irq(&vector_lock);
- }
- 
--static void __send_cleanup_vector(struct apic_chip_data *apicd)
-+static void __vector_schedule_cleanup(struct apic_chip_data *apicd)
- {
--	unsigned int cpu;
-+	unsigned int cpu = apicd->prev_cpu;
- 
- 	raw_spin_lock(&vector_lock);
- 	apicd->move_in_progress = 0;
--	cpu = apicd->prev_cpu;
- 	if (cpu_online(cpu)) {
--		hlist_add_head(&apicd->clist, per_cpu_ptr(&cleanup_list, cpu));
--		apic->send_IPI(cpu, IRQ_MOVE_CLEANUP_VECTOR);
-+		struct vector_cleanup *cl = per_cpu_ptr(&vector_cleanup, cpu);
-+
-+		/*
-+		 * The lockless timer_pending() check is safe here. If it
-+		 * returns true, then the callback will observe this new
-+		 * apic data in the hlist as everything is serialized by
-+		 * vector lock.
-+		 *
-+		 * If it returns false then the timer is either not armed
-+		 * or the other CPU executes the callback, which again
-+		 * would be blocked on vector lock. Rearming it in the
-+		 * latter case makes it fire for nothing.
-+		 *
-+		 * This is also safe against the callback rearming the timer
-+		 * because that's serialized via vector lock too.
-+		 */
-+		if (!timer_pending(&cl->timer)) {
-+			cl->timer.expires = jiffies + 1;
-+			add_timer_on(&cl->timer, cpu);
-+		}
- 	} else {
- 		apicd->prev_vector = 0;
- 	}
- 	raw_spin_unlock(&vector_lock);
- }
- 
--void send_cleanup_vector(struct irq_cfg *cfg)
-+void vector_schedule_cleanup(struct irq_cfg *cfg)
- {
- 	struct apic_chip_data *apicd;
- 
- 	apicd = container_of(cfg, struct apic_chip_data, hw_irq_cfg);
- 	if (apicd->move_in_progress)
--		__send_cleanup_vector(apicd);
-+		__vector_schedule_cleanup(apicd);
- }
- 
- void irq_complete_move(struct irq_cfg *cfg)
-@@ -1007,7 +1046,7 @@ void irq_complete_move(struct irq_cfg *c
- 	 * on the same CPU.
- 	 */
- 	if (apicd->cpu == smp_processor_id())
--		__send_cleanup_vector(apicd);
-+		__vector_schedule_cleanup(apicd);
- }
- 
- /*
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -131,7 +131,6 @@ static const __initconst struct idt_data
- 	INTG(RESCHEDULE_VECTOR,			asm_sysvec_reschedule_ipi),
- 	INTG(CALL_FUNCTION_VECTOR,		asm_sysvec_call_function),
- 	INTG(CALL_FUNCTION_SINGLE_VECTOR,	asm_sysvec_call_function_single),
--	INTG(IRQ_MOVE_CLEANUP_VECTOR,		asm_sysvec_irq_move_cleanup),
- 	INTG(REBOOT_VECTOR,			asm_sysvec_reboot),
- #endif
- 
---- a/arch/x86/platform/uv/uv_irq.c
-+++ b/arch/x86/platform/uv/uv_irq.c
-@@ -58,7 +58,7 @@ uv_set_irq_affinity(struct irq_data *dat
- 	ret = parent->chip->irq_set_affinity(parent, mask, force);
- 	if (ret >= 0) {
- 		uv_program_mmr(cfg, data->chip_data);
--		send_cleanup_vector(cfg);
-+		vector_schedule_cleanup(cfg);
- 	}
- 
- 	return ret;
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -3639,7 +3639,7 @@ static int amd_ir_set_affinity(struct ir
- 	 * at the new destination. So, time to cleanup the previous
- 	 * vector allocation.
- 	 */
--	send_cleanup_vector(cfg);
-+	vector_schedule_cleanup(cfg);
- 
- 	return IRQ_SET_MASK_OK_DONE;
- }
---- a/drivers/iommu/hyperv-iommu.c
-+++ b/drivers/iommu/hyperv-iommu.c
-@@ -51,7 +51,7 @@ static int hyperv_ir_set_affinity(struct
- 	if (ret < 0 || ret == IRQ_SET_MASK_OK_DONE)
- 		return ret;
- 
--	send_cleanup_vector(cfg);
-+	vector_schedule_cleanup(cfg);
- 
- 	return 0;
- }
-@@ -257,7 +257,7 @@ static int hyperv_root_ir_set_affinity(s
- 	if (ret < 0 || ret == IRQ_SET_MASK_OK_DONE)
- 		return ret;
- 
--	send_cleanup_vector(cfg);
-+	vector_schedule_cleanup(cfg);
- 
- 	return 0;
- }
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -1180,7 +1180,7 @@ intel_ir_set_affinity(struct irq_data *d
- 	 * at the new destination. So, time to cleanup the previous
- 	 * vector allocation.
- 	 */
--	send_cleanup_vector(cfg);
-+	vector_schedule_cleanup(cfg);
- 
- 	return IRQ_SET_MASK_OK_DONE;
- }
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+--------------jP6YgWTrDDApUlrGwhMuU180
+Content-Type: text/x-patch; charset=UTF-8; name="selftests-makefile.patch"
+Content-Disposition: attachment; filename="selftests-makefile.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL01ha2VmaWxlIGIvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvTWFrZWZpbGUKaW5kZXggOTBhNjJjZjc1MDA4Li5iZGNhMTYwMDYzZDgg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL01ha2VmaWxlCisrKyBiL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL01ha2VmaWxlCkBAIC0xNDQsMTAgKzE0NCwxMiBAQCBpZm5lcSAo
+JChLQlVJTERfT1VUUFVUKSwpCiAgIGFic19vYmp0cmVlIDo9ICQocmVhbHBhdGggJChhYnNfb2Jq
+dHJlZSkpCiAgIEJVSUxEIDo9ICQoYWJzX29ianRyZWUpL2tzZWxmdGVzdAogICBLSERSX0lOQ0xV
+REVTIDo9IC1pc3lzdGVtICR7YWJzX29ianRyZWV9L3Vzci9pbmNsdWRlCisgIEtIRFJfRElSIDo9
+ICR7YWJzX29ianRyZWV9L3Vzci9pbmNsdWRlCiBlbHNlCiAgIEJVSUxEIDo9ICQoQ1VSRElSKQog
+ICBhYnNfc3JjdHJlZSA6PSAkKHNoZWxsIGNkICQodG9wX3NyY2RpcikgJiYgcHdkKQogICBLSERS
+X0lOQ0xVREVTIDo9IC1pc3lzdGVtICR7YWJzX3NyY3RyZWV9L3Vzci9pbmNsdWRlCisgIEtIRFJf
+RElSIDo9ICR7YWJzX3NyY3RyZWV9L3Vzci9pbmNsdWRlCiAgIERFRkFVTFRfSU5TVEFMTF9IRFJf
+UEFUSCA6PSAxCiBlbmRpZgogCkBAIC0xNjEsNyArMTYzLDcgQEAgZXhwb3J0IEtIRFJfSU5DTFVE
+RVMKICMgYWxsIGlzbid0IHRoZSBmaXJzdCB0YXJnZXQgaW4gdGhlIGZpbGUuCiAuREVGQVVMVF9H
+T0FMIDo9IGFsbAogCi1hbGw6CithbGw6IGtlcm5lbF9oZWFkZXJfZmlsZXMKIAlAcmV0PTE7CQkJ
+CQkJCVwKIAlmb3IgVEFSR0VUIGluICQoVEFSR0VUUyk7IGRvCQkJCVwKIAkJQlVJTERfVEFSR0VU
+PSQkQlVJTEQvJCRUQVJHRVQ7CQkJXApAQCAtMTcyLDYgKzE3NCwyMyBAQCBhbGw6CiAJCXJldD0k
+JCgocmV0ICogJCQ/KSk7CQkJCVwKIAlkb25lOyBleGl0ICQkcmV0OwogCitrZXJuZWxfaGVhZGVy
+X2ZpbGVzOgorCUBscyAkKEtIRFJfRElSKS9saW51eC8qLmggPi9kZXYvbnVsbCAyPi9kZXYvbnVs
+bDsgICAgICAgICAgICAgICAgICAgICAgICAgIFwKKwlpZiBbICQkPyAtbmUgMCBdOyB0aGVuICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCisgICAg
+ICAgICAgICBSRUQ9J1wwMzNbMTszMW0nOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgXAorICAgICAgICAgICAgTk9DT0xPUj0nXDAzM1swbSc7ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKKyAgICAgICAgICAg
+IGVjaG87ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBcCisgICAgICAgICAgICBlY2hvIC1lICIkJHtSRUR9ZXJyb3IkJHtOT0NPTE9S
+fTogbWlzc2luZyBrZXJuZWwgaGVhZGVyIGZpbGVzLiI7ICAgXAorICAgICAgICAgICAgZWNobyAi
+UGxlYXNlIHJ1biB0aGlzIGFuZCB0cnkgYWdhaW46IjsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIFwKKyAgICAgICAgICAgIGVjaG87ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCisgICAgICAgICAgICBlY2hvICIgICAgY2Qg
+JCh0b3Bfc3JjZGlyKSI7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAor
+ICAgICAgICAgICAgZWNobyAiICAgIG1ha2UgaGVhZGVycyI7ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIFwKKyAgICAgICAgICAgIGVjaG87ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCisJICAgIGV4
+aXQgMTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgXAorCWZpCisKKy5QSE9OWToga2VybmVsX2hlYWRlcl9maWxlcworCiBydW5f
+dGVzdHM6IGFsbAogCUBmb3IgVEFSR0VUIGluICQoVEFSR0VUUyk7IGRvIFwKIAkJQlVJTERfVEFS
+R0VUPSQkQlVJTEQvJCRUQVJHRVQ7CVwK
+
+--------------jP6YgWTrDDApUlrGwhMuU180--
