@@ -2,61 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42AC723F85
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DC2723F87
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbjFFKbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
+        id S236651AbjFFKcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbjFFKbg (ORCPT
+        with ESMTP id S236962AbjFFKcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:31:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE55E42;
-        Tue,  6 Jun 2023 03:31:34 -0700 (PDT)
+        Tue, 6 Jun 2023 06:32:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1EBE42;
+        Tue,  6 Jun 2023 03:31:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7610861E17;
-        Tue,  6 Jun 2023 10:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E981C433D2;
-        Tue,  6 Jun 2023 10:31:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A87461844;
+        Tue,  6 Jun 2023 10:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D26CC433EF;
+        Tue,  6 Jun 2023 10:31:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686047493;
-        bh=EPV8QB8xKvak9x+4BKf5dw6FlILFq7gexapXHtjTEMw=;
+        s=korg; t=1686047518;
+        bh=gpDuOpx+nxrFPOdv8X2ISo414UJ+j+5QJAYnzeQ8Wsw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMKqMMXZ/uDhv0tZZbuGYuyMQ7fF4KqPOTHnJuSB+O1L+f6eECg0UsRkGLmNvzPob
-         qENu7c8ftPu1ja3nXJM3x182p1pfIdGw6dTIfTQJfrtrCxB8w/o7yE26h2el94CfqV
-         C+dfZg6pWx3DiSgTbQbvYwuLyfKZKc1TkgaBRBxw=
-Date:   Tue, 6 Jun 2023 12:31:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: Re: [PATCH] serial: 8250_mtk: Simplify clock sequencing and runtime
- PM
-Message-ID: <2023060608-bucket-footsore-9e43@gregkh>
-References: <20230606091747.2031168-1-wenst@chromium.org>
- <58949bbd-1506-90a0-7154-e6e57d8ddf70@collabora.com>
- <CAGXv+5GRBOWFMw+BmkSpczHcm_R6=mvL2GSKnWWyhpng1xw21w@mail.gmail.com>
- <61ec34d0-6cc2-951e-c990-fdfd57381d7@linux.intel.com>
+        b=LPtuI7OUy5TSzpyXlTaG6TGHJ2VFsPhBbN992kwU6q4RWcmj9Y/4dpHUI262fxQiz
+         1PZbt4q2RRbxkeb7KPYidJ33HjekMuFZHDLfCL6mdQE07zZO4wWiYtyA0hoABKZmv7
+         FsZwLvP5ndxsEqLpRvlRwC8BxaoZttHofpIr5Ifs=
+Date:   Tue, 6 Jun 2023 12:31:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+Cc:     b-liu@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: usb: musb: musb_gadget: Removed unneeded code
+Message-ID: <2023060639-thinner-moonlit-617f@gregkh>
+References: <20230606102058.1010324-1-neelchakrabortykernelwork@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <61ec34d0-6cc2-951e-c990-fdfd57381d7@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230606102058.1010324-1-neelchakrabortykernelwork@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,73 +51,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 01:21:55PM +0300, Ilpo Järvinen wrote:
-> On Tue, 6 Jun 2023, Chen-Yu Tsai wrote:
+On Tue, Jun 06, 2023 at 03:50:58PM +0530, Neel Chakraborty wrote:
+> Removed the static int musb_gadget_vbus_session function as it was
+> doing nothing.It has reduced 13 lines of code
 > 
-> > On Tue, Jun 6, 2023 at 5:36 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> > >
-> > > Il 06/06/23 11:17, Chen-Yu Tsai ha scritto:
-> > > > The 8250_mtk driver's runtime PM support has some issues:
-> > > >
-> > > > - The bus clock is enabled (through runtime PM callback) later than a
-> > > >    register write
-> > > > - runtime PM resume callback directly called in probe, but no
-> > > >    pm_runtime_set_active() call is present
-> > > > - UART PM function calls the callbacks directly, _and_ calls runtime
-> > > >    PM API
-> > > > - runtime PM callbacks try to do reference counting, adding yet another
-> > > >    count between runtime PM and clocks
-> > > >
-> > > > This fragile setup worked in a way, but broke recently with runtime PM
-> > > > support added to the serial core. The system would hang when the UART
-> > > > console was probed and brought up.
-> > > >
-> > > > Tony provided some potential fixes [1][2], though they were still a bit
-> > > > complicated. The 8250_dw driver, which the 8250_mtk driver might have
-> > > > been based on, has a similar structure but simpler runtime PM usage.
-> > > >
-> > > > Simplify clock sequencing and runtime PM support in the 8250_mtk driver.
-> > > > Specifically, the clock is acquired enabled and assumed to be active,
-> > > > unless toggled through runtime PM suspend/resume. Reference counting is
-> > > > removed and left to the runtime PM core. The serial pm function now
-> > > > only calls the runtime PM API.
-> > > >
-> > > > [1] https://lore.kernel.org/linux-serial/20230602092701.GP14287@atomide.com/
-> > > > [2] https://lore.kernel.org/linux-serial/20230605061511.GW14287@atomide.com/
-> > > >
-> > > > Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
-> > > > Suggested-by: Tony Lindgren <tony@atomide.com>
-> > > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > >
-> > > You're both cleaning this up and solving a critical issue and I 
-> > > completely agree about doing that.
-> > >
-> > > I can imagine what actually fixes the driver, but still, is it 
-> > > possible to split this commit in two?
-> > > One that solves the issue, one that performs the much needed cleanups.
-> > >
-> > > If it's not possible, then we can leave this commit as it is... and if the problem
-> > > about splitting is the Fixes tag... well, we don't forcefully need it: after all,
-> > > issues started arising after runtime PM support for 8250 landed and before that the
-> > > driver technically worked, even though it was fragile.
-> > 
-> > The pure fix would look like what Tony posted [1]. However it would add stuff
-> > that isn't strictly needed after the cleanup. Doing it in one patch results
-> > in less churn. Think of it another way: it's a nice cleanup that just so
-> > happens to fix a regression.
-> > 
-> > As for the fixes tag, it's there so other people potentially doing backports
-> > of the 8250 runtime PM work can spot this followup fix.
+> Signed-off-by: Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+> ---
+>  drivers/usb/musb/musb_gadget.c | 13 -------------
+>  1 file changed, 13 deletions(-)
 > 
-> Tony's patch is recent enough to not have progressed beyond tty-next so 
-> fixing it shouldn't really require paying that much attention to stable 
-> rules wrt. Fixes tag and minimality.
+> diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+> index 31c44325e828..3cb7fc4c84ed 100644
+> --- a/drivers/usb/musb/musb_gadget.c
+> +++ b/drivers/usb/musb/musb_gadget.c
+> @@ -1612,19 +1612,6 @@ static void musb_pullup(struct musb *musb, int is_on)
+>  	musb_writeb(musb->mregs, MUSB_POWER, power);
+>  }
+>  
+> -#if 0
+> -static int musb_gadget_vbus_session(struct usb_gadget *gadget, int is_active)
+> -{
+> -	musb_dbg(musb, "<= %s =>\n", __func__);
+> -
+> -	/*
+> -	 * FIXME iff driver's softconnect flag is set (as it is during probe,
+> -	 * though that can clear it), just musb_pullup().
+> -	 */
+> -
+> -	return -EINVAL;
+> -}
+> -#endif
+>  
+>  static int musb_gadget_vbus_draw(struct usb_gadget *gadget, unsigned mA)
+>  {
+> -- 
+> 2.40.1
 > 
-> As the target currently is tty-next, a cleanup which also happens to fix 
-> the issue seems perfectly fine.
 
-The Fixes: tag is relevant here, please don't dissuade people from using
-them.
+Hi,
 
-greg k-h
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
