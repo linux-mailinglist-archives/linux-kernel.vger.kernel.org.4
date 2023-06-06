@@ -2,147 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4887E724B8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4F8724B5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239012AbjFFSjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S238519AbjFFS0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238986AbjFFSjP (ORCPT
+        with ESMTP id S238937AbjFFS0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:39:15 -0400
-X-Greylist: delayed 737 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Jun 2023 11:39:13 PDT
-Received: from mx0c-0054df01.pphosted.com (mx0c-0054df01.pphosted.com [67.231.159.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F74710CB;
-        Tue,  6 Jun 2023 11:39:13 -0700 (PDT)
-Received: from pps.filterd (m0208999.ppops.net [127.0.0.1])
-        by mx0c-0054df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356HWEq0015275;
-        Tue, 6 Jun 2023 14:26:35 -0400
-Received: from can01-yqb-obe.outbound.protection.outlook.com (mail-yqbcan01lp2237.outbound.protection.outlook.com [104.47.75.237])
-        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3r00mvjcku-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 14:26:35 -0400
+        Tue, 6 Jun 2023 14:26:43 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A23170D;
+        Tue,  6 Jun 2023 11:26:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0Z+NhB5zdKTZIcHZG/ZHTq251R8Xxjl6Cn4MPo04ijYx/pB1PUmYkLp5BMPYaRPBpJdV5WPxFaVK/2QHwrvmxalBERk0BDxHRXw7qlbJY1NvPqQlrBgy0ELMtQEEhkGyPuj1hay/JOulLvHVg2+QePEBEivzhDlk6sY4edE22/ujp4SVOA1SZcXfO9eCLIA2XnVovRKp8yJ0dPwhSHjz4Skf+uJmM8DJbqquzuQauwJZnqnkcONopmX0pVtb5wh1z76PNgeOlpeJr+/nvszabhxLB1ELZ9qatqNdTRONa72x1l3bMauBbMdf74CBQirtSc8TlihTvlH9lc1KlvIqg==
+ b=Nny+LDiDRuqVpFYxihzDFa9zKg7IWFzlUF/+MUwE0gRON/eNl1Cwvg4VJjRGSAIxi80fyQFDfFdk4A8I0RA7JpRPZJlhjBwTHJ8phXJ1Da0xYRQp7hIvhieLS/Lp1A1kLQe28auOomiB/JrybUkPTHmUUBSBW7l8OacWnTA2y7MmmNJDaecFIirkwRescCwdmV/7F1ubDYHTzyw1IYOVFN4HMYDpd0l7eP6OXpVg2bRCy797mW83UlXNLasQJRxDBV9T0Pvt1Ga2CN6hW5mpFD6w1J11FuRShWQErDjid2dGq+V0LF2NQ6vdZTx/vTooMTAgNwx3Nk5zB/qPwFgtVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vy1i7aSpdwV49pNkWKpyrlDslQjRzhqGkYGLQuD91bg=;
- b=CqHyytnZ7FNhmvwx8GHTkHXWHfSuIUy6okogFJXE7ebkzQM/q6ydKEO+2L+nlt/MC9aX1yQjroAY2A+1h1gN0z4tvLTrLflCZSBtz4/u6/od6GxDIZ98gmJNVmFFGLAkjq2Kxwh9KNY3iON9mj19HXfBvbP/b8LhOiEZmfN1w2rdVLDtApe+nDxr+ypioewM65VrGtr50F9sHLwQB3pMzl5/MecwhEiWAAZy70ylYdwoQTGRsWY0998wruDeUj9M1CfW3VqPoK1Ah5rx6zIfvODQGw7Pf+DEom2kntNYAt30OaymijQ9p0QCeBQG2QX/nMRTECWpxX8WGcr0YQchKA==
+ bh=uvwVSgfAQs0YiV/Kbmk3qNPOdYbHnbsai1Oaf6C6kyc=;
+ b=XPROE2nQRHHKd9cF+cqoByMQ7h71NGFSI/hKgSwLUxx/WufpCmaz9vIrm1RdXxomnKBOi0wvgTgnkLYUiEPdmgTCab8smQtGgWSGgPTFZK5y4+LMzbeKvPeFrkZs4df8XEHdZ7zzMghwLFY6rG1ZSPbKxK7xK5mQ9SPFUpADyFOuKsiSrdk8idzNPiAZ/+pgUNHk2gl0kH/9a6ssuzD7YZCbuerStkj3X5unHMltXPbL7Bx6aEe1YwSkNE0hjbJ2/HxHBow6aUcLjI0M7qKidoztlXx8bilH8pkWsveWJB5ydSEU1Ys0J7NIYnx0rBt+xa0QR07E9uTiW5wDMohYmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
- dkim=pass header.d=calian.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
- s=selector1;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vy1i7aSpdwV49pNkWKpyrlDslQjRzhqGkYGLQuD91bg=;
- b=gas0RMJsmdvFJbK7Dhm1EhDBdmr23U8UfhOESBr4KEBaaoV9oYfpUJv+YKgCsPhz4Lapv6bckZaPBhAQLN/sYGwl2L6VQjNj0W4TmuNOe2kwlLh3dqxyEFSJ3Nylk+ZnDPuvVOcmj5XkoE+Ts62LdoUJPaSrFXpgJHF6h5v4gtU=
-Received: from YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b9::6)
- by YT3PR01MB6677.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:74::17) with
+ bh=uvwVSgfAQs0YiV/Kbmk3qNPOdYbHnbsai1Oaf6C6kyc=;
+ b=JXzcnitL24q8AnOrJj8gRbo+1A3OQpTg1lnfdJtdfppwaEMcCEttsmUpcUmLfn8SFYjvNF0Jy99V3QRx41bvexRTUi2DGI+Dwia7BCy1bG/8XfTY/yZ7mijeF+QV+X7EJU+lI7HyLkrccSM9syIbnPQ7tvl8V3fenfyZO9NTBK8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CY8PR12MB8268.namprd12.prod.outlook.com (2603:10b6:930:6c::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 18:26:33 +0000
-Received: from YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::c059:dcd5:ca20:4a0]) by YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::c059:dcd5:ca20:4a0%6]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 18:26:33 +0000
-From:   Robert Hancock <robert.hancock@calian.com>
-To:     Michal Simek <michal.simek@amd.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Shubhrajyoti Datta <shubhraj@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Marek Vasut <marex@denx.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH] i2c: xiic: Don't try to handle more interrupt events after error
-Date:   Tue,  6 Jun 2023 12:25:58 -0600
-Message-Id: <20230606182558.1301413-1-robert.hancock@calian.com>
-X-Mailer: git-send-email 2.40.1
+ 2023 18:26:35 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::43b2:55d7:9958:390e]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::43b2:55d7:9958:390e%5]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 18:26:35 +0000
+Message-ID: <598b2c2d-bfb2-da5d-f8cc-7aa1fac4c410@amd.com>
+Date:   Tue, 6 Jun 2023 13:26:33 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] PCI: Call _REG when saving/restoring PCI state
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+References: <20230606162321.34222-1-mario.limonciello@amd.com>
+ <CAJZ5v0gzfCXmPm7Jckt02FF_PJY8VJPPUeoE0gb8twbP+M8CxA@mail.gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <CAJZ5v0gzfCXmPm7Jckt02FF_PJY8VJPPUeoE0gb8twbP+M8CxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0307.namprd04.prod.outlook.com
- (2603:10b6:303:82::12) To YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:b9::6)
+X-ClientProxiedBy: DS7PR03CA0328.namprd03.prod.outlook.com
+ (2603:10b6:8:2b::30) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB8838:EE_|YT3PR01MB6677:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06065b16-21fe-4408-f248-08db66bb8de1
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CY8PR12MB8268:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1a24b33-a407-417a-1426-08db66bb8f5e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vpfZZX+lHYsV7tAD6wWIoft9zJzDkUx4FrTkX6hdXvlWR18xWIiiXcq2Hk6b0ugR8auZZvp2y/q+RQRcfAzbNtpSuJJ8zWIjmEDrR7YO95xoIGWoo2wSEquwe6piyhwDvr8kiI/FWTcTZwiZBY8s3Vah/TSb5FnNdpe92pu24q1jebHydZk8j7ko74xYZRV6iLD/I041mZl3qbbeOyLPQYp4cLuPk+fFMyfT6NJTMGfiM/rt7jM3vuOT+uTysu/YmJ/lxmhy/zxbfU0VniOs7AwvuxqEQ0cb5h+Af7RllZ+DVaT3r02daCFG6v+5ZW7SHS8z2jOXD5UMUpo59hGMEt0C3NHmRzOkTOp/0ItmVjAKCuZdIEqUw7VNyIUkZUUYEZkMTUmBgkxWBef6hAvHlzY/QGGBb/GVpL7xd8uI++B6faTx09h0xgDWSws26aAqq0ivYffuItUiJAWvWOCSVKX2oHyGFdaHtlbcD+8RfdPk2x15tP9uLTz23t/XYGi04Zpf0T0M+2D9JnZHjqu6M0y+t1jYxd4/40k0q7iwEmizgyEatGPzAbDebwJdZBB+/fdcfopqLFiAC79wSksKYrJZvjGF1zaIREKtsF1H6QE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(366004)(376002)(396003)(451199021)(110136005)(478600001)(66556008)(44832011)(8936002)(8676002)(2906002)(36756003)(5660300002)(86362001)(4326008)(66476007)(66946007)(316002)(38100700002)(6506007)(2616005)(1076003)(41300700001)(38350700002)(6512007)(107886003)(26005)(83380400001)(186003)(52116002)(6486002)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: fCiCU92T6EjPSaEl8AWc5CH8YXD1ESpIAH89eTJ2wngQdnV7vB9tb4BeK7NavTMUO+VI5byBdwWnJLaluJ/mtuAPUtgrFnnTWg7ZSF/VK9qsg8Kp9v644gGELkM7jSGW6QOv7IlPTqN07ne7wO7g+ORVjhsqS2jn9M6FJEy/qCNfYHjDr11fyFXTF6KR615RlRs2LhEhuNiJMmO/1fteR6Nsb5fgCarnzF+W65yCduB3LnbhSJS4aalbuU20OrdC8SwxZ2iaMe8Ul97YxAbZhGf99tytlreLW/iMaXe1yX2/cJ6qiGUddDyeipWD8AKXj7YR3ABXjWPgh8hzRB9ky1FigWf+qGy3EKk9GQObCTJlgawcm550Oj2CZCYEO49CBIwIFNw0ERmGvVk0Sy90bfgCic9M2DeW4sKezyB6zSNUlgFHIAw4FqQWJw+0aS/2Lil06ogM2OhhsbMWHOn52tDH9wla8oFBhwNHL05JcfahH4pXcUg09bCjSJ6W/Mh9jougdISaa63v3xM0E3lfblZVs6OiEWtR+zOeRrbo6Ebmwh4gmDLkCVdVVTJh3WdESHsy0KZm+BJbSNbxF+ubnUhy12vMJse7bkn2W7IlyjhsHrMz7icnP0aTCL060WTkN71OCxX+aOMlO6wIB1hE8fI2eI+2htaHIAR0w2V8DnY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(376002)(136003)(396003)(451199021)(186003)(110136005)(478600001)(316002)(8676002)(8936002)(41300700001)(66946007)(38100700002)(4326008)(66476007)(66556008)(2616005)(966005)(6486002)(83380400001)(26005)(6506007)(6512007)(53546011)(31696002)(86362001)(5660300002)(2906002)(36756003)(31686004)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7hZaYGs/Z9TXQr/GpXaRBGu5ryfdnWuEJMpl/tcmTcT3ZHlZ9LRx+JIeagOI?=
- =?us-ascii?Q?90BCfDAYq0x/QzsVZtrF0DGGkRci2cEkvjIL21XnGxkl6SDePnAIaa4I02dg?=
- =?us-ascii?Q?70BqgY9d8G+/CoORuAXi/1Z3DJZpzDKDjclqeHuu5zWcLzGbHvkq9cTjbqt9?=
- =?us-ascii?Q?jgixdzlhGCJ6cO6V8MkUp5ZS+N0r/Y1LcaYDhD+HAmBQlaktb6vSyvCRhqwh?=
- =?us-ascii?Q?Ji07oCA83X9e67nVFjxB0R+Aw4oQ1k7NgYqoPmXc7ScVPDLM4BEpZ2ir2J9A?=
- =?us-ascii?Q?wXMizS0zyVkn6xOi1mYJavdsrsjJ97Za+v05PJ175+Gpr+dtu5BoT8uMLAlo?=
- =?us-ascii?Q?oBLmikI3FQ0U8kmv4dk25teX0S9x63Nb3eCwAQv1UWPdpSwxfq2sAkw9G1rl?=
- =?us-ascii?Q?IizrLwnLYR8m+6ErOqJR9IbxBjuHJFhJsIigofvzmU8UZDx9mepkg1qjtPzX?=
- =?us-ascii?Q?wn+oY/wddyDcrDrH6MiiyEQMDggTWm+7RTU8o30Zug6YGdY35OGZKuXkKcIp?=
- =?us-ascii?Q?BsPRGi/ppy+SoHhTRTKmG4mutPCOUJkNDNvAjCq3wxm8YubU+Gm5EtRvaAbc?=
- =?us-ascii?Q?jbh35sgOsXWYMLASGoLmJk/lpbG7QbBgP2jh8s08hHvf+LJtMllMZUjS5anJ?=
- =?us-ascii?Q?p5ZOCHCrK80/nBECs+DyG8O0EgOCe76DXKJe41HMxuDn87Rc5dAveKP9SS1l?=
- =?us-ascii?Q?8o8CJpAVb6A8B0M4XzcI1YUxAs0fTe/IRHbAKnHLB01sWv++6xaMrzJXZiUx?=
- =?us-ascii?Q?aP4csxCjoWSvPGdCxrGhZU5th8Bqon7ODIYIZRpZnNKFRvDi0Qezx3x4KHbX?=
- =?us-ascii?Q?Egului5r1K7NWWbDVLWb66zHqm2saHcf4ATvWNMyc1DWyBQWWupi4Q7hl5lb?=
- =?us-ascii?Q?YRqD/wM4djKjsyBO1le+W6JbTLtfgYp6BMmI/V60XrYjR3W0mSsXC8DoSid9?=
- =?us-ascii?Q?+LHW0gjs8VewgOMe6DKBf4Q0FRJlOsWkvuVBTJa2LzHM9L/Tb6jmQeM8c9SU?=
- =?us-ascii?Q?6fWNQCRrxZYu4POxZSiRro3sLZyxd00sSbsik1VMj3oJZmJZCudemDQaRMnj?=
- =?us-ascii?Q?bjckPFZc+BG+G/J2qF3KQxMMq/8nSovgsCCC0RjSCAk0aojP7VKNHC26y5pP?=
- =?us-ascii?Q?zq2+7t6vA5Mo7GGGj4dpG0BR60EAzgeDKt2R8x/8aQQwvubq4KnTZznVZfVr?=
- =?us-ascii?Q?fFU+FjzVVBr8ed9/5TCjpFGik0BjZrJ8JLPRx3PsnbG7/gRQyvi41YyuaUbc?=
- =?us-ascii?Q?UF702A4694zWlIyunZvsllZsY5tHW+dnDSMVJgTb6mfnN/57jMh/Wd5V36r/?=
- =?us-ascii?Q?OYy0XwlilbgFoBiVXaj2TSFMYWib9yQd0vCo7Yh8RsLF3o1y3fZ94guVLRYk?=
- =?us-ascii?Q?fesQ35DNaGRQaCengCZAjwDs+xsn3nV+sgl6rW2cwLpW60ybMczs7nZCwju+?=
- =?us-ascii?Q?8PMb/mHIO1TfqHdziT4PyoRFO2VnPKwE0TN0+WIpflAtKt1iRqPIv4yO1Rwc?=
- =?us-ascii?Q?bv0s1B+OXCje21nS7dNghkK5e7J3+IZygAFfGoiFawTYxqL6qIiI02zutxzr?=
- =?us-ascii?Q?pXZr1gLRN0mJE2TxcDxFfIfsm3F6bijWC3xnYJTDtMgY+d1LjHZ1rwls1Zbg?=
- =?us-ascii?Q?QA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?VMmoPS7DDm+fIDJ2aCl80kWyBwhz5qSBx9gkvK8hKzKHNbDPlrCB8nCxEamw?=
- =?us-ascii?Q?LdGrEYoRteweNT7zJm0VBhuLPGj11Qvh/Q35AQKqltCVeuoBh+TWT+pmDucV?=
- =?us-ascii?Q?hTRLidRIIri2Yl0y4JT97eAo9FcpgbZTZHl5X3PYWJMkUfwu5kx8nGuYfPfn?=
- =?us-ascii?Q?C3y6RiqMFkS95vui8VNogOTqf/yB95XxfjWVfSUzzWkReIpK6/8sw2F3bC9P?=
- =?us-ascii?Q?pK1pFNuLlUyQCFkdkS9SOBxOpJ5EeE/+QgXvEliSgtc+feswTt4znzQYwrRG?=
- =?us-ascii?Q?gEnvooAlfpe5vrnc8e1ltAjLmZR9KinblpV+Oy4hfIee1ItnPuVwVuqtMrcZ?=
- =?us-ascii?Q?qt/UJ/dA1a/7CjYxn9l726uLXf4q41aAIWTX+w061HiNTQ6QPZDiuAE625uc?=
- =?us-ascii?Q?+XhC4EkSpzkgv73nkjsOq3v2RuakgDlJ4RpE9SDvxk4zoUzNbM6g4LrdoHQe?=
- =?us-ascii?Q?QnH+b7MeCoTD59CO92KeQAP5H0+q03DRkhf9jjOFlHGTWCPlrd4bQcNxO4YG?=
- =?us-ascii?Q?e0pDHlgeL3NnkT0HMruhKypUfUwjLED0WoN65RfMZCk3KReplOub+FACOgvX?=
- =?us-ascii?Q?oUvLuxJm6YbYVVJNLS0AI671o015ZMkT1FC8C+LHQOdTnF9WPvDymajq5YEe?=
- =?us-ascii?Q?UVZDVDlO8syHUkIkFOBfOtKzMy+6NFLYj8kurcd6cuNHTxEocbk0Bi8X5cBZ?=
- =?us-ascii?Q?rL8ntU+3iUaEZz4zNoW5PGg2PoE67vYS1krLWIxe6b3Xq4DyXfVNNfNwRSDc?=
- =?us-ascii?Q?E0h6x9Fv+JLpYREf6kXWRaySMCHmiO22lDjUWG9XJZM1K7r4fAPTy7bX0pA1?=
- =?us-ascii?Q?V4WFv/tH2H5q3MWClp5xL2encz9/jvK4c/aRPHbnW5TklcH+YJ4SgqZQeJ6k?=
- =?us-ascii?Q?vz02lMOzpDfnjQt+qToZ86KpYFlJ8DkiEUSqVfsCDFH7eoNtivSl8pu6sWW0?=
-X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06065b16-21fe-4408-f248-08db66bb8de1
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U253bGd6cXFUVC9jUnVseU9waEpwR1dENVByb0Nvc3haaGxsTDVXRXIvNFMx?=
+ =?utf-8?B?TFJEY1MxeitsaS8rQ2JDOTkxeW5ic3R6UzZGN0xkMGFsWElEVGd4aDNqN1ZR?=
+ =?utf-8?B?bFhzUkZJZmxLK0hvSVA2d2d2dDk5TTNkQVdGOHF4ekJLLzdFQThXYVFPRTJo?=
+ =?utf-8?B?S0RBRUtWZHVxaWJjdnVtNko5M0prdndlZUJ3UzVqTll2bnlWNmdBWXJGbmh6?=
+ =?utf-8?B?VEt5bnBpdzF6UHRZYnVKS2FvRjNrM3lKYWVLQ1lkWFhBSGlWWWk5VU4zdjlp?=
+ =?utf-8?B?SDlUdUMzR1p6SkdHMkEzbEpnY0VhekxVK0dHSFRkU0dtRGxJUmxTQVdaSVdm?=
+ =?utf-8?B?Z1pUYjdFajU2dmV0dmdYdmlzK254VVdVb3BQTVduMXRMNWNOZTFlYlBlTjRa?=
+ =?utf-8?B?c1Z6aVdPY2t5ZXVtVnFpS2dGUVdwZ3YzWCtRYlViNDlVMmFBOHQzR2RtSCtu?=
+ =?utf-8?B?NjRTaHRkbFNTZnpoUGlLSWdnb1JFUFZIVTM4b3pyQ2E2NEdXQ3lhQzFFaW56?=
+ =?utf-8?B?UkZCUnQzOXMvT3hkRGoxMUxEcktMQTltWHA0K1FGOFpXTlQxLzUzZXRVU3Vh?=
+ =?utf-8?B?cTRIUzBMNXhUK0RTQWsxRCtoY0hEVmNLaEJnejVqY0kwZFVUUEEvN2phRmRU?=
+ =?utf-8?B?V0xaRlJRazB2bFVzU0FzTHQ4WjBsTkJpZzBtR3g2eEpyZnlacE5ucHU0dm5O?=
+ =?utf-8?B?K1VqRkErcEo5OHZ1VEpkVWE4ZGpUdSs4dDVtZ0FxTUR6N2RIbURLWWttYkND?=
+ =?utf-8?B?ek5jRWpzbDdZS3YzMFplZVFHSGZFVS9IbTNKbXhMUXM4QnkwUTdlMkpZZ2sz?=
+ =?utf-8?B?R0lyN3o4YktLZ1RYTk1OY2lRS3lNdlVIUXVDTzBoak5KenNON2xlWWRieFVO?=
+ =?utf-8?B?YjN3ekxuQzI0R012N0p5d0lNWjJPdXFQdzBWWHBVMnJRempUM1ZicTB5azkv?=
+ =?utf-8?B?MlhqaGtuRjlFZDVjRDBqTTIzR3VjSEZoSjBnRGs3ci9PZks2K3dGL0ZuSDVM?=
+ =?utf-8?B?ZTdvZGxPa0w1NFhzcC8rc1lITEhrcG1hQTZmNWNTdTZneFIzVlJpRFU5WUsw?=
+ =?utf-8?B?d1crbC9jb202VDhhcjIrdWlXWEhuVVZUMkFQNHB1UTZsS0pmeUxRWXpKNVAz?=
+ =?utf-8?B?WEdEUDdjb25idGl3RmxMZHgzK3BQYVR4VjAvS0NxdGR2Ym93b0p3SG1lZ0hU?=
+ =?utf-8?B?ZFB6QmR1d2ZUZDdwcnRpcXpSL1FCd0ZGc05JdDZiQ3lGZmxDdmFCR2V0V1Vr?=
+ =?utf-8?B?ZWt4cWd0U1NvNDlOWkR2NWtyTmNKZjZZVmJYMm02MXdRT1hWVHRZZXFPQWhW?=
+ =?utf-8?B?cmJhWlQrejBLekorWEYzb3pCS0hWZnBEOFl4ZUZ1bG1YaUhaaFRrWkE5dEpY?=
+ =?utf-8?B?Q1B3VWREUFZoVllxeWRZcGpucGF4ZU43TlVPSnBJb3FHcm54c3VUWXc2MmUw?=
+ =?utf-8?B?a0xDZmNYSEV2TVNRZkVsVm9haUpqb0QxWUJvclVhTStncEdmTUFQZnBGWHJV?=
+ =?utf-8?B?aGF1U3VGSHR2TW54SHVXVkdVWFBkVnFpTVlhNitQNzlpSVFsYlp0VmEzSGd6?=
+ =?utf-8?B?b09WcFJVSlNjK3hzb1R5K2RaTndTSzkwSUM0SGRzM1UzYlV2aHk2Rll5YXkr?=
+ =?utf-8?B?aGZ3NkY2ZENqbWdnNThXSEplNjh0S2VMYlF2RkEzZVZYSVZBWHlzT01NdXVu?=
+ =?utf-8?B?ak13Y0ZJNW84WVZnTXhtRmppejBMSnlHdC94QlpDNUppMWtLQlNWcDdhTGxu?=
+ =?utf-8?B?WHEwNnpsRHhzYTVZYVArMTVGWUduemI4WW1LOWY1c1c2dVZwMTNXWXNEQ2to?=
+ =?utf-8?B?WWZERXRZRGZDQ1BwNjJrZ2QrNG9MTWZFQjBJazhEYTQ1TEpoa2pnL2xHSm16?=
+ =?utf-8?B?ekYxc1lLSEwxblJKTzhLeW9tVHJLN2JiYVJid1BUY2JhN1ViOGFvMHhUaXBD?=
+ =?utf-8?B?NDFzcTlwZkl1ZXFJVDEydGRablJ1Y2VmTUZOMCtPd1lzbWhQV25iNGdENUtj?=
+ =?utf-8?B?NEJwT2tuL2lxam9Qa0lqSmF6bzNRcUpXWFVWaE9CS3FFbkx1U1ZEaDNLTjlN?=
+ =?utf-8?B?eHcvV3QzWHBWU3NucVBTN1VDdnVWWit5N1JObDdzZ0hjenFZQ0ZEOTdqdWY3?=
+ =?utf-8?Q?l1peotGb/LpWVGkOAB1fln3cL?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1a24b33-a407-417a-1426-08db66bb8f5e
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 18:26:33.0277
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 18:26:35.4444
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iLyshUSazuod2vu3/c0rEB3pMwSU1J+ejcvKyfUMbbGq4lRYduGwal8Wnmco2VXpky0Een9sQHUO9lrzQSqRKe+YGxoL7aaeQlc4X0ow15Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB6677
-X-Proofpoint-GUID: EFjiZk9tNSMH3fj7TDcFsFWZ5EQqLBak
-X-Proofpoint-ORIG-GUID: EFjiZk9tNSMH3fj7TDcFsFWZ5EQqLBak
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_13,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1011
- mlxlogscore=522 mlxscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060157
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-Exchange-CrossTenant-UserPrincipalName: qlBVQidGBEUA2vFC6RN6z5+kDIDAq0W0cKEkQum1W2Sq9bRtno2Fz98oVfXo+t/LnFk6Y11/NzAZZpu5jUc64A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8268
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,51 +127,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xiic_process, it is possible that error events such as arbitration
-lost or TX error can be raised in conjunction with other interrupt flags
-such as TX FIFO empty or bus not busy. Error events result in the
-controller being reset and the error returned to the calling request,
-but the function could potentially try to keep handling the other
-events, such as by writing more messages into the TX FIFO. Since the
-transaction has already failed, this is not helpful and will just cause
-issues.
 
-This problem has been present ever since:
+On 6/6/2023 1:21 PM, Rafael J. Wysocki wrote:
+> On Tue, Jun 6, 2023 at 6:23 PM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+>> ASMedia PCIe GPIO controllers fail functional tests after returning from
+>> suspend (S3 or s2idle). This is because the BIOS checks whether the
+>> OSPM has called the `_REG` method to determine whether it can interact with
+>> the OperationRegion assigned to the device.
+>>
+>> As described in 6.5.4 in the APCI spec, `_REG` is used to inform the AML
+>> code on the availability of an operation region.
+>>
+>> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
+>> state of PCI devices.
+>>
+>> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>> v1->v2:
+>>   * Handle case of no CONFIG_ACPI
+>>   * Rename function
+>>   * Update commit message
+>>   * Move ACPI calling code into pci-acpi.c instead
+>>   * Cite the ACPI spec
+>> ---
+>>   drivers/pci/pci-acpi.c | 10 ++++++++++
+>>   drivers/pci/pci.c      | 14 ++++++++++++++
+>>   drivers/pci/pci.h      |  2 ++
+>>   3 files changed, 26 insertions(+)
+>>
+>> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+>> index 1698205dd73c..abc8bcfc2c71 100644
+>> --- a/drivers/pci/pci-acpi.c
+>> +++ b/drivers/pci/pci-acpi.c
+>> @@ -1209,6 +1209,16 @@ void acpi_pci_remove_bus(struct pci_bus *bus)
+>>          acpi_pci_slot_remove(bus);
+>>   }
+>>
+>> +void acpi_pci_set_register_access(struct pci_dev *dev, bool enable)
+>> +{
+>> +       int val = enable ? ACPI_REG_CONNECT : ACPI_REG_DISCONNECT;
+>> +       int ret = acpi_evaluate_reg(ACPI_HANDLE(&dev->dev),
+>> +                                   ACPI_ADR_SPACE_PCI_CONFIG, val);
+>> +       if (ret)
+>> +               pci_dbg(dev, "ACPI _REG %s evaluation failed (%d)\n",
+>> +                       val ? "connect" : "disconnect", ret);
+> s/val/enable/ ?
+> Then I don't have to remember that ACPI_REG_DISCONNECT is 0.
+Sure, no problem.
+>
+> <bikeshedding>
+>
+> I would call this function something like
+> acpi_pci_config_space_access(), because technically it is about
+> allowing AML to access the PCI configuration space.
+>
+> </bikeshedding>
 
-commit 7f9906bd7f72 ("i2c: xiic: Service all interrupts in isr")
+Presumably platform_pci_config_space_access() below too.
 
-which allowed non-error events to be handled after errors, but became
-more obvious after:
+That's fine by me, Bjorn?
 
-commit 743e227a8959 ("i2c: xiic: Defer xiic_wakeup() and
-__xiic_start_xfer() in xiic_process()")
-
-which reworked the code to add a WARN_ON which triggers if both the
-xfer_more and wakeup_req flags were set, since this combination is
-not supposed to happen, but was occurring in this scenario.
-
-Skip further interrupt handling after error flags are detected to avoid
-this problem.
-
-Fixes: 7f9906bd7f72 ("i2c: xiic: Service all interrupts in isr")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
----
- drivers/i2c/busses/i2c-xiic.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index 8a3d9817cb41..ee6edc963dea 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -721,6 +721,8 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
- 			wakeup_req = 1;
- 			wakeup_code = STATE_ERROR;
- 		}
-+		/* don't try to handle other events */
-+		goto out;
- 	}
- 	if (pend & XIIC_INTR_RX_FULL_MASK) {
- 		/* Receive register/FIFO is full */
--- 
-2.40.1
-
+>> +}
+>> +
+>>   /* ACPI bus type */
+>>
+>>
+>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>> index e38c2f6eebd4..b2f1f603ec62 100644
+>> --- a/drivers/pci/pci.c
+>> +++ b/drivers/pci/pci.c
+>> @@ -1068,6 +1068,14 @@ static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
+>>          return acpi_pci_bridge_d3(dev);
+>>   }
+>>
+>> +static inline void platform_set_register_access(struct pci_dev *dev, bool en)
+>> +{
+>> +       if (pci_use_mid_pm())
+>> +               return;
+>> +
+>> +       acpi_pci_set_register_access(dev, en);
+>> +}
+>> +
+>>   /**
+>>    * pci_update_current_state - Read power state of given device and cache it
+>>    * @dev: PCI device to handle.
+>> @@ -1645,6 +1653,9 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
+>>   int pci_save_state(struct pci_dev *dev)
+>>   {
+>>          int i;
+>> +
+>> +       platform_set_register_access(dev, false);
+>> +
+>>          /* XXX: 100% dword access ok here? */
+>>          for (i = 0; i < 16; i++) {
+>>                  pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
+>> @@ -1790,6 +1801,8 @@ void pci_restore_state(struct pci_dev *dev)
+>>          pci_enable_acs(dev);
+>>          pci_restore_iov_state(dev);
+>>
+>> +       platform_set_register_access(dev, true);
+>> +
+>>          dev->state_saved = false;
+>>   }
+>>   EXPORT_SYMBOL(pci_restore_state);
+>> @@ -3203,6 +3216,7 @@ void pci_pm_init(struct pci_dev *dev)
+>>          pci_read_config_word(dev, PCI_STATUS, &status);
+>>          if (status & PCI_STATUS_IMM_READY)
+>>                  dev->imm_ready = 1;
+>> +       platform_set_register_access(dev, true);
+>>   }
+>>
+>>   static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
+>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+>> index ffccb03933e2..78961505aae2 100644
+>> --- a/drivers/pci/pci.h
+>> +++ b/drivers/pci/pci.h
+>> @@ -703,6 +703,7 @@ void acpi_pci_refresh_power_state(struct pci_dev *dev);
+>>   int acpi_pci_wakeup(struct pci_dev *dev, bool enable);
+>>   bool acpi_pci_need_resume(struct pci_dev *dev);
+>>   pci_power_t acpi_pci_choose_state(struct pci_dev *pdev);
+>> +void acpi_pci_set_register_access(struct pci_dev *dev, bool enable);
+>>   #else
+>>   static inline int pci_dev_acpi_reset(struct pci_dev *dev, bool probe)
+>>   {
+>> @@ -742,6 +743,7 @@ static inline pci_power_t acpi_pci_choose_state(struct pci_dev *pdev)
+>>   {
+>>          return PCI_POWER_ERROR;
+>>   }
+>> +static inline void acpi_pci_set_register_access(struct pci_dev *dev, bool enable) {}
+>>   #endif
+>>
+>>   #ifdef CONFIG_PCIEASPM
+>> --
+>> 2.34.1
+>>
