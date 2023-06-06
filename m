@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8DA724175
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182AF724177
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236530AbjFFL6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S237362AbjFFL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237295AbjFFL6i (ORCPT
+        with ESMTP id S237299AbjFFL6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:58:38 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247910DA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:58:33 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b025d26f4fso52731055ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:58:33 -0700 (PDT)
+        Tue, 6 Jun 2023 07:58:42 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFEC10CB
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:58:37 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b00ecabdf2so55986425ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:58:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686052713; x=1688644713;
+        d=linaro.org; s=google; t=1686052717; x=1688644717;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zml7/O0Lnj0GvJyK92oFTeXRGRkWuEBPtxfKvEIaajI=;
-        b=F6U9ovca0MySfgOFXNjUiOvOBBhVdVyMtZ6fJiR23Xn//ED4/OwnPtVbJM9LXqy/VA
-         6uv3tDhGAousYkD6jHrKo07rbbo+f4JHqSWyxxl5tiBcitp+I9NyW5TJtipQWJlnCRfc
-         UFuCz4HD8H6Cqr+pe5rtrJIZ+zJg3iW1jyvc5rWg2lErYyy0AsROuPP8NUrHnE8c6FeP
-         FJQCWsDQR7MJEoaZsUkJderZv2Lv5vCJlG+Lek1H6iUnDBPICPqyLdj/DWGsnWxDWdGo
-         iB9rH8GaYqLZcjHhLla1Eh2VJ8y55LJKcHrzpuBP/5LnmdK+cpDeMhESpnQ35chFMYXg
-         H/Kg==
+        bh=2vScY3E4RObHEz5P1xKAaD36hA/8YhvR3M5FwIPwlZU=;
+        b=UyKHjYlFKGEv7V+UmkB+tBQTolnof2AaJHHca835LpFsLOW2aW9K2eR9g9sF3od/o1
+         PMMZmdydHq1chF4Zbbv3hyGMlxdIDRQoHvtRKsKMsMWcf120seebbf0Rz3OKSxqffgdZ
+         AthdX5S3+HQmu/wfmgRVyeGmRxDhjCMjbh4tFALeHnQOZnY/mVFnPWu9S7h1+xw7iHOx
+         zDaUvNbOS+ESsiUDnt5aPLvszk2a2jcCjQOG4PYMI2610sG6oCOXc531+B6R1uWRRkXZ
+         eFaIaRoSnH7PKNHGj0XFjfOI1VATCqaIqOiiDmrKVTT1rfzJlgVefIu59fXo4pdTqaB6
+         91EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686052713; x=1688644713;
+        d=1e100.net; s=20221208; t=1686052717; x=1688644717;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zml7/O0Lnj0GvJyK92oFTeXRGRkWuEBPtxfKvEIaajI=;
-        b=YM80wcMJXny9TrwRytQTUBZ2gFV6nZa0QcThtydcHcjtwPcKA8rNyT2AVQ0yHp19jT
-         vN6pZpmrIEbd2yyvAU81521uXN+uidzeVK2hLYxm0t/Pbe7+ZJFkcAy4sLbonhICIBre
-         UrB6HddnySNGJaakuYHgrGIux11i+1lKEekI5z6ZZYdjLngTdyyhKB8blH1Nk+z2Ed9V
-         /iFz+ayiTLJW2DilyhRf+4VJfX8KKtvURxYFolX6D+dHXx42PPN97XZrhhDxAVFaav47
-         K07NULvHTqLzeVkSeaPek+8SP3DoYvfNoj2djOmKH7pXDNyLCjNnUykm6U1bVWBgJutB
-         SNAA==
-X-Gm-Message-State: AC+VfDzV2b5SLxNjsK22bIbggTZWLGqVKn2dFI6+Pms9qPY2oLzF21NH
-        dymZ2TsQ27PkKHjPGN/wbelD
-X-Google-Smtp-Source: ACHHUZ7jjbioYny5tpMpiu7QQ7ABSf6+m+LQWYVPIWH0hARAsPRMUdjK+4sj/xrWRk0U8NAAofa00g==
-X-Received: by 2002:a17:902:f54d:b0:1b0:2390:3674 with SMTP id h13-20020a170902f54d00b001b023903674mr2301432plf.65.1686052713046;
-        Tue, 06 Jun 2023 04:58:33 -0700 (PDT)
+        bh=2vScY3E4RObHEz5P1xKAaD36hA/8YhvR3M5FwIPwlZU=;
+        b=guaIkBX3blhBX0aD3y2fp0dk5VCbUDBthRBubvqW0dx2GP6DQasbP/Grd+ZHD8VgXY
+         M/itAamB6NcufUKba43wjhIApGKe8BOLNMdEOBD5PTRVJg7t7+9k/LllBMSIDCLyy06N
+         +pLv9kyR31DG47tvLRd1baC0rEEAbeRfBWXmh07MhEOEC6vvDaUdiF+DqtcJoC0tqZ4p
+         YuoD86svIOTB8TCsJHSTcEhIv/2T9w15VjoVM/PkLjY8yPld8iFsr3nOdM8sgvXVTJaF
+         6CQfHv2ws6H4aw+jYiOQgCRC68bVAF42+TQC5YLKGYnoHvh0jnbRki8RB9CYTsSINhdH
+         6aJg==
+X-Gm-Message-State: AC+VfDzL8vOwg8PtRdmqnoWObZQPRPIbEPkd8EE8zKTF+9gBYqE12IfJ
+        ql+VUDee2C3dI4EjbbIrZNwRtHypXwgjTzyR+A==
+X-Google-Smtp-Source: ACHHUZ6JtzIp1MckXBk9Sidb8LFAo1Mrx14hi0OzRicqigbH0obqArdcceesM0LmEw09UeMHl+eUtg==
+X-Received: by 2002:a17:902:ecc2:b0:1b0:42d1:ecd0 with SMTP id a2-20020a170902ecc200b001b042d1ecd0mr2424521plh.66.1686052716914;
+        Tue, 06 Jun 2023 04:58:36 -0700 (PDT)
 Received: from localhost.localdomain ([117.202.186.178])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b001acaf7e22bdsm8419226plh.14.2023.06.06.04.58.29
+        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b001acaf7e22bdsm8419226plh.14.2023.06.06.04.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 04:58:32 -0700 (PDT)
+        Tue, 06 Jun 2023 04:58:36 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     lpieralisi@kernel.org, kw@linux.com
 Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 1/7] PCI: qcom-ep: Pass alignment restriction to the EPF core
-Date:   Tue,  6 Jun 2023 17:28:08 +0530
-Message-Id: <20230606115814.53319-2-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 2/7] PCI: epf-mhi: Make use of the alignment restriction from EPF core
+Date:   Tue,  6 Jun 2023 17:28:09 +0530
+Message-Id: <20230606115814.53319-3-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230606115814.53319-1-manivannan.sadhasivam@linaro.org>
 References: <20230606115814.53319-1-manivannan.sadhasivam@linaro.org>
@@ -73,27 +73,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qcom PCIe EP controllers have 4K alignment restriction for the outbound
-window address. Hence, pass this info to the EPF core so that the EPF
-drivers can make use of this info.
+Instead of hardcoding the alignment restriction in the EPF_MHI driver, make
+use of the info available from the EPF core that reflects the alignment
+restriction of the endpoint controller.
+
+For this purpose, let's introduce the get_align_offset() static function.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/endpoint/functions/pci-epf-mhi.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 1435f516d3f7..cd378ce58b22 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -706,6 +706,7 @@ static const struct pci_epc_features qcom_pcie_epc_features = {
- 	.core_init_notifier = true,
- 	.msi_capable = true,
- 	.msix_capable = false,
-+	.align = SZ_4K,
+diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+index 1227f059ea12..cef866f7d204 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
++++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
+@@ -102,6 +102,11 @@ struct pci_epf_mhi {
+ 	int irq;
  };
  
- static const struct pci_epc_features *
++static size_t get_align_offset(struct pci_epc *epc, u64 addr)
++{
++	return addr % epc->mem->window.page_size;
++}
++
+ static int __pci_epf_mhi_alloc_map(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr,
+ 				 phys_addr_t *paddr, void __iomem **vaddr,
+ 				 size_t offset, size_t size)
+@@ -134,7 +139,7 @@ static int pci_epf_mhi_alloc_map(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr,
+ {
+ 	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
+ 	struct pci_epc *epc = epf_mhi->epf->epc;
+-	size_t offset = pci_addr & (epc->mem->window.page_size - 1);
++	size_t offset = get_align_offset(epc, pci_addr);
+ 
+ 	return __pci_epf_mhi_alloc_map(mhi_cntrl, pci_addr, paddr, vaddr,
+ 				      offset, size);
+@@ -161,7 +166,7 @@ static void pci_epf_mhi_unmap_free(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr,
+ 	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
+ 	struct pci_epf *epf = epf_mhi->epf;
+ 	struct pci_epc *epc = epf->epc;
+-	size_t offset = pci_addr & (epc->mem->window.page_size - 1);
++	size_t offset = get_align_offset(epc, pci_addr);
+ 
+ 	__pci_epf_mhi_unmap_free(mhi_cntrl, pci_addr, paddr, vaddr, offset,
+ 				 size);
+@@ -185,7 +190,8 @@ static int pci_epf_mhi_read_from_host(struct mhi_ep_cntrl *mhi_cntrl, u64 from,
+ 				      void *to, size_t size)
+ {
+ 	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
+-	size_t offset = from % SZ_4K;
++	struct pci_epc *epc = epf_mhi->epf->epc;
++	size_t offset = get_align_offset(epc, from);
+ 	void __iomem *tre_buf;
+ 	phys_addr_t tre_phys;
+ 	int ret;
+@@ -213,7 +219,8 @@ static int pci_epf_mhi_write_to_host(struct mhi_ep_cntrl *mhi_cntrl,
+ 				     void *from, u64 to, size_t size)
+ {
+ 	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
+-	size_t offset = to % SZ_4K;
++	struct pci_epc *epc = epf_mhi->epf->epc;
++	size_t offset = get_align_offset(epc, to);
+ 	void __iomem *tre_buf;
+ 	phys_addr_t tre_phys;
+ 	int ret;
 -- 
 2.25.1
 
