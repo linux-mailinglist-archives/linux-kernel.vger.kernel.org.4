@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAB1723F30
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C50723F36
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235222AbjFFKTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S234881AbjFFKTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbjFFKTH (ORCPT
+        with ESMTP id S229879AbjFFKTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:19:07 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DF910C3;
-        Tue,  6 Jun 2023 03:19:04 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-650bacd6250so3281553b3a.2;
-        Tue, 06 Jun 2023 03:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686046744; x=1688638744;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bbjyBbEiwdYGerfA3UYwYsEjpwWau1SSzZ+iV7om+S0=;
-        b=C2FIxH/7xOecRMUfPhLu94PEGdzFwSi1dvb/rPjPZXRtqyLoEi0z64KkElhK8Dnv1K
-         j60BjtRpF+R2WNYILffL3sfpuDDFVuOp9mO9hE4CTLkL9nUF9npmmBw32pfWOOrb1m5m
-         TLGngTA3P7EodABzWoEz+qisUDmCrmcLik7U7fkLuW83mrVH9opIPINGWgkzE7XdnKZL
-         MLdL4DBdIavaTRNWCmttct2a9nabOjbGLv+qQNvw3HlQgJ84jwiUr+u0uuvIbc5JxrCY
-         47BN8qk11eL32RH4TsQMp6jLVQqz3aaXAS18jlXg2P/DyWEo5mYej/MOJGVYGRak1T0w
-         OMHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686046744; x=1688638744;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bbjyBbEiwdYGerfA3UYwYsEjpwWau1SSzZ+iV7om+S0=;
-        b=PzPP7iPKJ7Um2BTxw2ZePmogMq1lWMAggZFOHfEgbOI2JhQqU/26FY59g9Mzc72yyT
-         n1aJIiEkePZt31c4sNSjGK5rFmk1myeMTl8xtHo4oBF9/I1vee+JCknmiaux9Cd13HnK
-         X4lrh1KhTLf6WjTv4qP+YPmVBhJLbE296sLZo5ya93ebbxDIoJsoWdKaRWA3w0wYwC+F
-         enZfrN0UgmMjXnhlIz6cx79WxfKYOlYaM1hyZ7Ynw0kAMXu8tetM6SYG56+Vr9u2ZiJu
-         UKYr0rP11LD+5Dx9FYDQcmrrZcxMJBT7G9KyMBP+H/Vmzpu7EMidOzXgIyV36cf2aq0f
-         z8rw==
-X-Gm-Message-State: AC+VfDyY0T8B/mOKWigOB1KWtX3J2sKxILeutKYTS3O2J5sIi8tydW9F
-        eYLQGVXU5cQDZmP9usx8F/E=
-X-Google-Smtp-Source: ACHHUZ6JTJvW+Aww9T9wuEehWwqpz46AGgNXeU/HebD9bUMhmbjj+E+v+1bzWv1E6K04uTnXEa5Uiw==
-X-Received: by 2002:a05:6a00:2d06:b0:64f:7c9d:9c01 with SMTP id fa6-20020a056a002d0600b0064f7c9d9c01mr683014pfb.30.1686046743961;
-        Tue, 06 Jun 2023 03:19:03 -0700 (PDT)
-Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
-        by smtp.gmail.com with ESMTPSA id a6-20020aa78646000000b0064d4d11b8bfsm6574157pfo.59.2023.06.06.03.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 03:19:03 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 18:18:59 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org
-Subject: Re: [PATCH] gpio-sim: fix memory corruption when adding named lines
- and unnamed hogs
-Message-ID: <ZH8IE5KLI73YyXEy@sol>
-References: <20230606051323.17698-1-warthog618@gmail.com>
- <CAMRc=MfdusMAqfjnQTi_-DdjeLHQzywpk=zpKaQjahy6_gds0Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MfdusMAqfjnQTi_-DdjeLHQzywpk=zpKaQjahy6_gds0Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 06:19:40 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9F5EA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:19:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 938CB5C01A6;
+        Tue,  6 Jun 2023 06:19:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 06:19:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686046778; x=1686133178; bh=mdblDDucProdb4TCrg2Jqmy8piF8wY58xX8
+        vkEnKa8w=; b=xOq7b3qnKMXUZ4HlmZo2K+o9ys3OPm2gdXLhPZ1v50pVV2L2dhT
+        y/BMkJjqh1id5dj7HWNyI2bU/Q/WmuFqCC4RrOhia2f+QX4tPRg8D5VZvYSt8YAR
+        r2SW2OhVxvNoLDgfJgT3o4/ebjuZbjKUpQexSnVmP0Iuqic448KlbqM1+uqLDqs/
+        08GzkKcvakhYL8vIwXcsfrpeUXZqntcHOQgBhH6OI1ptN+CI/k0W0GzwlD3exGe0
+        e4hZu17eDlmqRu05nGjbjDhR7geXl5O4Z8OLmKt9YDsJpz+gg+CgzyLRcg0p+dfA
+        wlylCfNP9Yo/E9kKkKlsOxer2JXq63de7vg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1686046778; x=1686133178; bh=mdblDDucProdb4TCrg2Jqmy8piF8wY58xX8
+        vkEnKa8w=; b=nYO+gH1YbRXPiQBoXqbLtpF6p+FVvpFTgA/y49DwtmHv38Foq94
+        V2FblCl1oTExyFhIwgYTpBzgR9ZLHJDURpd+wV28AGOtNneL/1foTQWEbMoALL26
+        K0J7QgBrFvmeA0O/EuLo8eG/NPB290th6BBV5PsbTCSHiSBa86eRhSOht4B5gXJ8
+        dQDGQvCptx8M+MGg+0RKoSup47+IvSbn26sxvJHsG4/zD2UEzmexQ+EkcjZh54Xc
+        /EBsl5GxWs2Lhm7Pnpm94jpzGMXGolXNfskQUHzVg1r8nYz9iMHiIGsyiM6S9BSD
+        8AdCLNQIjBT97oRuA8KuBHeo6OgvaAC8q8A==
+X-ME-Sender: <xms:Ogh_ZFwPjnQFiVVEEjH9MHk9BckRuWvTtgrdyS67D60N3qcptyOTvA>
+    <xme:Ogh_ZFROD3sf4PsRGqvA8epy_aLk6CKjvgSxHxM0OgJyyaIhxq5oRFUn_y9X2zl4O
+    o9tzWRBTyEEq0epMz8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Ogh_ZPUptCo4sEUGFyrvamdfA-w17vmYWwrxQ3L0XjVlO9LMYVw8jQ>
+    <xmx:Ogh_ZHhnJ3Whgq-EXH4hgOpr0vtszZezk0u0Ze7WmeUT5US0m1XSug>
+    <xmx:Ogh_ZHCioPfLUfugUc5fm8Z2HnT3tNmPe09pSRAjZLxgnMkkGsYlZg>
+    <xmx:Ogh_ZOPJVnaFkOipXEvNqvY1MkHiGqX4e_iDZAbUxuLHCMiujPpgyg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E9645B60086; Tue,  6 Jun 2023 06:19:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <6c1a5f7d-36a9-46a2-9050-eff6ce6bc3a4@app.fastmail.com>
+In-Reply-To: <6f9587b0-85df-6f80-8dc5-b27fbf11645@linux.intel.com>
+References: <011578db5fc4426d7df5d8ce2cf5ac09b7080531.1686045287.git.geert+renesas@glider.be>
+ <6f9587b0-85df-6f80-8dc5-b27fbf11645@linux.intel.com>
+Date:   Tue, 06 Jun 2023 12:19:17 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>
+Cc:     "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Jacky Huang" <ychuang3@nuvoton.com>,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] reset: RESET_NUVOTON_MA35D1 should depend on ARCH_MA35
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 12:01:53PM +0200, Bartosz Golaszewski wrote:
-> On Tue, Jun 6, 2023 at 7:13 AM Kent Gibson <warthog618@gmail.com> wrote:
-> >
-> > When constructing the sim, gpio-sim constructs an array of named lines,
-> > sized based on the largest offset of any named line, and then initializes
-> > that array with the names of all lines, including unnamed hogs with higher
-> > offsets.  In doing so it writes NULLs beyond the extent of the array.
-> >
-> > Add a check that only named lines are used to initialize the array.
-> >
-> > Fixes: cb8c474e79be ("gpio: sim: new testing module")
-> > Signed-off-by: Kent Gibson <warthog618@gmail.com>
-> > ---
-> >
-> > After writing the comment above, and looking at the code again, it may be
-> > clearer to instead check that the offset is within the bounds of the
-> > array.  Or do both.  Consider that my review.
-> >
-> 
-> Like:
-> 
-> if (line->offset <= max_offset)
->     line_names[line->offset] = line->name;
-> 
-> ? If so, then I agree it makes the purpose of the check clearer.
-> 
+On Tue, Jun 6, 2023, at 11:59, Ilpo J=C3=A4rvinen wrote:
+> On Tue, 6 Jun 2023, Geert Uytterhoeven wrote:
+>
+>> The Nuvoton MA35D1 reset controller is only present on Nuvoton MA35
+>> SoCs.  Hence add a dependency on ARCH_MA35, to prevent asking the user
+>> about this driver when configuring a kernel without MA35 SoC support.
+>> Also, do not enable the driver by default when merely compile-testing.
+>>=20
+>> While at it, fix a misspelling of "Nuvoton".
+>>=20
+>> Fixes: e4bb55d6ccf0f774 ("reset: Add Nuvoton ma35d1 reset driver supp=
+ort")
+>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Using line_names_size might be even clearer.
+> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
-So, either that or 
+Applied on top of the initial patch, thanks!
 
-if (line->name && (line->offset <= max_offset))
-    line_names[line->offset] = line->name;
-
-to also not repeat the zeroing that the kcalloc() did.
-
-Too many options.  Let me know which you prefer.
-
-Cheers,
-Kent.
-
-
-
+    Arnd
