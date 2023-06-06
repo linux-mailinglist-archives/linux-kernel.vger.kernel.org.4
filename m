@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A345E72385B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1FD72385F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbjFFHG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S235817AbjFFHHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbjFFHG4 (ORCPT
+        with ESMTP id S232852AbjFFHHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:06:56 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E39EC5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:06:55 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-461da1198afso880177e0c.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 00:06:55 -0700 (PDT)
+        Tue, 6 Jun 2023 03:07:17 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AB8E54
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:07:14 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso8353694a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 00:07:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686035214; x=1688627214;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C1ozZq870KAb+6oNoYDYw8jrsSo5Jl0b6K0qLqBb3b0=;
-        b=rbXA8IfhANxbtLxUs+ybhYlcSzwfA5IggOmY5ZjCC4g7EmN6wmxl3e/k55M7e3XQK0
-         iEIzXDN3lRYbkqhfAn77UF7lWK1OAsHxoA1UAU0JNjm2zUCBzBHd3RKK0i2P9NHVRhHL
-         75BiueWX0Z5l3f4njQyUrBcEopYMF7Hgi/TmqZwQx7gFjaHoerpKfMOFiVoSakehqUwk
-         aOoaTE4G/Eca+zkIwg7kduFjJeiJuNyCOTHiub3PDofWVjm0F1n1EOYgpuGKD1RnVzxw
-         WkCI0S2XDfBZWwsF+csMt394c9QyHoULlMZMXZju6Hqj0UxvWUSRmaQqsP7bny5tbu0V
-         0BHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686035214; x=1688627214;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+        d=linaro.org; s=google; t=1686035232; x=1688627232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=C1ozZq870KAb+6oNoYDYw8jrsSo5Jl0b6K0qLqBb3b0=;
-        b=JsTID+abPWbQUdsxkvyNhiUUhreQs+vre6Ro6FHYWFM8Lg9/EDB73t04QC0ehi33ex
-         28Rd/ulwYHWXxVc0QocEtAAGViSkKE1d9pxo/3FxRu3ypETZo/2gnrVYm8KZGT/o2nrG
-         ZNlNMmhhN0kHtOgg/1rMFHGtZOVHnRQ0kzu3p4LKq1qksvo0KaSQoW5MnH7JyW0v/1ac
-         QrLZo1zgvy2xWQ3C0QYQpbTUnDWbrItGkxEH2bS8+X5rXAcI/Z0wfrG4FBqMITIae6I9
-         osVaTs6aHFolMP+roUmJzUW+GwZy+/SfAE4i6k4HXVtXLdlNVqOg1wlZqRQCKra+Bx7D
-         CmRg==
-X-Gm-Message-State: AC+VfDyqITkSo2S/lvEsJVrUE7uSmCRg+Mpb9nYM/bri4lzHLSCviIpr
-        1/qIA2tiuhuaTYp8vPTf9yWwMq3dINL5x9ZD/h64LAkEfanVYhD2TjM=
-X-Google-Smtp-Source: ACHHUZ7aPrm570/8BxX3lP0KZqPqmfsW0iBwZYyldLzeJu7wmf09RiDglmhWrihns8goe/c96xxZ+7kNyHoA5xshzb0=
-X-Received: by 2002:a1f:62c4:0:b0:43f:b997:beea with SMTP id
- w187-20020a1f62c4000000b0043fb997beeamr382368vkb.13.1686035213755; Tue, 06
- Jun 2023 00:06:53 -0700 (PDT)
+        bh=LfyrHHXs/3FEw5JUsOIXcywbYi43JeBHM9rQiciunaM=;
+        b=JqtOPZz6gEmwZSjRofN+GZ3syD8hO6vnTjcwGS7tp/iQMi0AQEcs4gh89+ZgqJCwfg
+         LkUindMIXYvzVe41WfuQy3iR0a1YcViNY/HHmXPW+/OtP+4GDuInRdOVvet04QrgNZ+z
+         58ZpqxYapCWRZTY/QKqh2OR9Bf/S5qkeAIEfgDck+dWKa7+JGTPvshWG/D+ewHIXIlK1
+         agTjB5P+ONFDH8MUyP456odMXVnjWPCmDRxplEzA7DfvGF4P+dz082ceg9bdXAttrC2S
+         j2/iZopcu9316HCt6dLyUTeUdiqWad42Q0HScPsz54kWFro+VK0Pm1r8IzSUkfInVrGp
+         9YkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686035232; x=1688627232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LfyrHHXs/3FEw5JUsOIXcywbYi43JeBHM9rQiciunaM=;
+        b=T2twW5tlo/iEee18vO6zSh0t4xW2wxPAmGtSz0SllvodYfeHtVIgis0iwhpAcJA8Rp
+         o3OYqkcscvfkGtDQpspGiHL+n4lffDxFMj0gylzm975SZW5yOCj29po7wK0xqusn3CiW
+         PmFqGaSBPDSNpTB3FSzTWbzB99RoccSW8fPlQvR1txzMS4w1tVVO8jCJ5lLZi3bqWS2e
+         VjclXdZmz/A78qYQ0VJZhNm1m4W+SC4UrvhWF7Fpl1sflQqUm2D7gizJJ4Vug6PWOE98
+         e8FzYidBn367qZxDBm1U6kiGEmRh3WxSbmGui7LAtK8QARKlsiVwlDK6Hbne86WCup++
+         hX2A==
+X-Gm-Message-State: AC+VfDwJwIVEAjl7BCcwDIWnKxRRZsWWqsx5obLdJqmz3IJ3pM4JYxz7
+        eRkvxhv86wo+8vAE9MlGdz+1Yw==
+X-Google-Smtp-Source: ACHHUZ4Vudc4edlU0LDDXrW6BYI1uics/oXG6J+ziisGwljUrIb9OXoKemrkfNCZWSUUE8Bc17JblQ==
+X-Received: by 2002:a17:907:3d88:b0:973:8198:bbfb with SMTP id he8-20020a1709073d8800b009738198bbfbmr1633982ejc.31.1686035232584;
+        Tue, 06 Jun 2023 00:07:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z8-20020a50eb48000000b00510da8aa2c6sm4718596edp.69.2023.06.06.00.07.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 00:07:12 -0700 (PDT)
+Message-ID: <fb34990c-f463-d816-8b2f-8a622b626f37@linaro.org>
+Date:   Tue, 6 Jun 2023 09:07:10 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 6 Jun 2023 12:36:42 +0530
-Message-ID: <CA+G9fYtD4+d3SJeCauPhQz_3cR=Z6dhOpBsW85mFbKf0jsvn1w@mail.gmail.com>
-Subject: drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c:
- stmmac_mdio.c:(.text+0xe74): undefined reference to `lynx_pcs_destroy'
-To:     open list <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/3] dt-bindings: add fannal vendor prefix
+Content-Language: en-US
+To:     Paulo Pavacic <pavacic.p@gmail.com>, neil.armstrong@linaro.org,
+        sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230605153539.497602-1-pavacic.p@gmail.com>
+ <20230605153539.497602-2-pavacic.p@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605153539.497602-2-pavacic.p@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build failed on Linux next arc,
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Regressions found on arc:
-
- - build/gcc-9-vdk_hs38_smp_defconfig
- - build/gcc-9-axs103_defconfig
-
-arc-elf32-ld: drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.o: in
-function `stmmac_mdio_unregister':
-stmmac_mdio.c:(.text+0xe74): undefined reference to `lynx_pcs_destroy'
-arc-elf32-ld: stmmac_mdio.c:(.text+0xe74): undefined reference to
-`lynx_pcs_destroy'
-make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:35: vmlinux] Error 1
+On 05/06/2023 17:35, Paulo Pavacic wrote:
+> Fannal is a one-stop-solution provider for touch displays in industrial
+> application, committed to delivering a variety of professional high-quality
+> products and technical services globally.
+> 
+> Website: www.fannal.com
+> 
+> Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
 
 
-Build log:
-========
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17346877/suite/build/test/gcc-9-axs103_defconfig/history/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17346877/suite/build/test/gcc-9-axs103_defconfig/log
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
---
-Linaro LKFT
-https://lkft.linaro.org
