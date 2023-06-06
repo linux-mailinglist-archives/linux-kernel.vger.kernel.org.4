@@ -2,253 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F22724672
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3700724668
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbjFFOjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S238125AbjFFOjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238122AbjFFOjH (ORCPT
+        with ESMTP id S238012AbjFFOiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:39:07 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211B41712
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:38:12 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977cc662f62so454237366b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1686062283; x=1688654283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tIeHacKUXBl3wNCe/SoZ0G9j6l2l916cMNODLOIB+Cw=;
-        b=VEr5PWCvUfJNT7Cml/NWI0Dk3piC7E1AU4e38Aheb09axj0dVMhU4478RBtGT+GNn1
-         IIOVGmZfXCCPtd+2klnyfpIKutva+P9VUHf9mh7BTVlrLiWlrJ7VJPrudRSE7EkNBWOw
-         LYbfpTHbN71p5D25slwTGKKMDMNQs0PNUS2I0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686062283; x=1688654283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tIeHacKUXBl3wNCe/SoZ0G9j6l2l916cMNODLOIB+Cw=;
-        b=CI5XMZqCTUMC6N57ViQW7Kf0GNDv5W2nVBjUazS9IziRGLAl1KwLnjXkWRhK/wbinZ
-         pVoutd/3tks2MRSmfkNEVTgFBCwYWeFsQlN0sQQUnZGRbTmZenSvyv7k59yZr2xSCUN8
-         m7yog4lojewjjvqt9yHAyLb3PChynsJ4YcB1vYqxlFFiBB3Q4g0+z6AAjyqUp22Ci369
-         i/ETJIg6OtMtNfuhCvU8BtxZ7v4n1F4QTDkEhvpjCESWQOyoJfSFzNyPz/f99VAh2l+3
-         15jRqkQycijrTL9/D5Njfj/dEHOYWBttnacM2P4i1uRyiIxY+qmKGR62YW7v/R9HREsv
-         nFwQ==
-X-Gm-Message-State: AC+VfDzIX90Gpv9NC3PRcINiPVwqL58P1cxzbfz3Cav96ToxP9SqLMY/
-        1V6iG4g4xK/GDnBkes8mYEgVJAUYi9kFn06pR65g3TYQbbGlF/+8
-X-Google-Smtp-Source: ACHHUZ4K3SMR7FO9doJR5vPa6kooUNGtkS1TgurOkU5LY+CEESPGEtSdoMX8wReEZLBB/vdccKMA4q14dA1n0lml78o=
-X-Received: by 2002:a17:906:7316:b0:973:e79c:3da8 with SMTP id
- di22-20020a170906731600b00973e79c3da8mr2653192ejc.17.1686062282939; Tue, 06
- Jun 2023 07:38:02 -0700 (PDT)
+        Tue, 6 Jun 2023 10:38:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64A110F0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:37:53 -0700 (PDT)
+Message-ID: <20230606142032.209201867@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686062272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=y+RhxJJzE8uzstkBWfAPFhTwZDjjv6jfhmmgOqvJSb0=;
+        b=gwgYgVQAUT+3KKpdi3wnvtWIKTUWUU1RrFh4glOGKxb8ztFzovqeMm1EggBrlL8G8jRujj
+        9sWrK/aqDnCG2lntLhiY9APg0B8wQBz0O6Id7xuWxfQGFCWHFvpUtMlNP1mF1qNlhpFp8s
+        EWGimSiG+2yY5aeJbSqv5ewDg3tDYOxfCKTNH+Z1pGC4juRBP5mFPGdBWqsSgilptkrNwW
+        H7bsyawQ20vNZRJNJy0x3MoAIArY6AbBVsv8M/P4/YjCXLOt/C0PW9PwHVca16uYqq9iW3
+        8A9sHCbP4Uhv85Gp68cCl25nO1tduw2Kq47p5cekTq//wf24iFKkeDeSDixRWA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686062272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=y+RhxJJzE8uzstkBWfAPFhTwZDjjv6jfhmmgOqvJSb0=;
+        b=ljl4qT+fsd3lzxkk2vZtMdZ2om0ov9TE6cQQfxnx07U26+XlAHdYyV98BPjTx6oEslQGJS
+        VdQh1J6J657GerBw==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: [patch 21/45] signal: Confine POSIX_TIMERS properly
+References: <20230606132949.068951363@linutronix.de>
 MIME-Version: 1.0
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
-In-Reply-To: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 6 Jun 2023 16:37:51 +0200
-Message-ID: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Askar Safin <safinaskar@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-Content-Type: multipart/mixed; boundary="00000000000071ca5d05fd76f736"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue,  6 Jun 2023 16:37:52 +0200 (CEST)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000071ca5d05fd76f736
-Content-Type: text/plain; charset="UTF-8"
+Move the itimer rearming out of the signal code and consolidate all posix
+timer related functions in the signal code under one ifdef.
 
-On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
->
-> Will this patch fix a long-standing fuse vs suspend bug? (
-> https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ include/linux/posix-timers.h |    5 +
+ kernel/signal.c              |  125 +++++++++++++++----------------------------
+ kernel/time/itimer.c         |   22 +++++++
+ kernel/time/posix-timers.c   |   15 ++++-
+ 4 files changed, 82 insertions(+), 85 deletions(-)
 
-No.
+--- a/include/linux/posix-timers.h
++++ b/include/linux/posix-timers.h
+@@ -162,6 +162,8 @@ static inline void posix_cputimers_rt_wa
+ {
+ 	pct->bases[CPUCLOCK_SCHED].nextevt = runtime;
+ }
++void posixtimer_rearm_itimer(struct task_struct *p);
++void posixtimer_rearm(struct kernel_siginfo *info);
+ 
+ /* Init task static initializer */
+ #define INIT_CPU_TIMERBASE(b) {						\
+@@ -185,6 +187,8 @@ struct cpu_timer { };
+ static inline void posix_cputimers_init(struct posix_cputimers *pct) { }
+ static inline void posix_cputimers_group_init(struct posix_cputimers *pct,
+ 					      u64 cpu_limit) { }
++static inline void posixtimer_rearm_itimer(struct task_struct *p) { }
++static inline void posixtimer_rearm(struct kernel_siginfo *info) { }
+ #endif
+ 
+ #ifdef CONFIG_POSIX_CPU_TIMERS_TASK_WORK
+@@ -259,5 +263,4 @@ void set_process_cpu_timer(struct task_s
+ 
+ int update_rlimit_cpu(struct task_struct *task, unsigned long rlim_new);
+ 
+-void posixtimer_rearm(struct kernel_siginfo *info);
+ #endif
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -485,42 +485,6 @@ void flush_signals(struct task_struct *t
+ }
+ EXPORT_SYMBOL(flush_signals);
+ 
+-#ifdef CONFIG_POSIX_TIMERS
+-static void __flush_itimer_signals(struct sigpending *pending)
+-{
+-	sigset_t signal, retain;
+-	struct sigqueue *q, *n;
+-
+-	signal = pending->signal;
+-	sigemptyset(&retain);
+-
+-	list_for_each_entry_safe(q, n, &pending->list, list) {
+-		int sig = q->info.si_signo;
+-
+-		if (likely(q->info.si_code != SI_TIMER)) {
+-			sigaddset(&retain, sig);
+-		} else {
+-			sigdelset(&signal, sig);
+-			list_del_init(&q->list);
+-			__sigqueue_free(q);
+-		}
+-	}
+-
+-	sigorsets(&pending->signal, &signal, &retain);
+-}
+-
+-void flush_itimer_signals(void)
+-{
+-	struct task_struct *tsk = current;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&tsk->sighand->siglock, flags);
+-	__flush_itimer_signals(&tsk->pending);
+-	__flush_itimer_signals(&tsk->signal->shared_pending);
+-	spin_unlock_irqrestore(&tsk->sighand->siglock, flags);
+-}
+-#endif
+-
+ void ignore_signals(struct task_struct *t)
+ {
+ 	int i;
+@@ -639,31 +603,9 @@ int dequeue_signal(sigset_t *mask, kerne
+ 		*type = PIDTYPE_TGID;
+ 		signr = __dequeue_signal(&tsk->signal->shared_pending,
+ 					 mask, info, &resched_timer);
+-#ifdef CONFIG_POSIX_TIMERS
+-		/*
+-		 * itimer signal ?
+-		 *
+-		 * itimers are process shared and we restart periodic
+-		 * itimers in the signal delivery path to prevent DoS
+-		 * attacks in the high resolution timer case. This is
+-		 * compliant with the old way of self-restarting
+-		 * itimers, as the SIGALRM is a legacy signal and only
+-		 * queued once. Changing the restart behaviour to
+-		 * restart the timer in the signal dequeue path is
+-		 * reducing the timer noise on heavy loaded !highres
+-		 * systems too.
+-		 */
+-		if (unlikely(signr == SIGALRM)) {
+-			struct hrtimer *tmr = &tsk->signal->real_timer;
+ 
+-			if (!hrtimer_is_queued(tmr) &&
+-			    tsk->signal->it_real_incr != 0) {
+-				hrtimer_forward(tmr, tmr->base->get_time(),
+-						tsk->signal->it_real_incr);
+-				hrtimer_restart(tmr);
+-			}
+-		}
+-#endif
++		if (unlikely(signr == SIGALRM))
++			posixtimer_rearm_itimer(tsk);
+ 	}
+ 
+ 	recalc_sigpending();
+@@ -685,22 +627,12 @@ int dequeue_signal(sigset_t *mask, kerne
+ 		 */
+ 		current->jobctl |= JOBCTL_STOP_DEQUEUED;
+ 	}
+-#ifdef CONFIG_POSIX_TIMERS
+-	if (resched_timer) {
+-		/*
+-		 * Release the siglock to ensure proper locking order
+-		 * of timer locks outside of siglocks.  Note, we leave
+-		 * irqs disabled here, since the posix-timers code is
+-		 * about to disable them again anyway.
+-		 */
+-		spin_unlock(&tsk->sighand->siglock);
+-		posixtimer_rearm(info);
+-		spin_lock(&tsk->sighand->siglock);
+ 
+-		/* Don't expose the si_sys_private value to userspace */
+-		info->si_sys_private = 0;
++	if (IS_ENABLED(CONFIG_POSIX_TIMERS)) {
++		if (unlikely(resched_timer))
++			posixtimer_rearm(info);
+ 	}
+-#endif
++
+ 	return signr;
+ }
+ EXPORT_SYMBOL_GPL(dequeue_signal);
+@@ -1916,15 +1848,45 @@ int kill_pid(struct pid *pid, int sig, i
+ }
+ EXPORT_SYMBOL(kill_pid);
+ 
++#ifdef CONFIG_POSIX_TIMERS
+ /*
+- * These functions support sending signals using preallocated sigqueue
+- * structures.  This is needed "because realtime applications cannot
+- * afford to lose notifications of asynchronous events, like timer
+- * expirations or I/O completions".  In the case of POSIX Timers
+- * we allocate the sigqueue structure from the timer_create.  If this
+- * allocation fails we are able to report the failure to the application
+- * with an EAGAIN error.
++ * These functions handle POSIX timer signals. POSIX timers use
++ * preallocated sigqueue structs for sending signals.
+  */
++static void __flush_itimer_signals(struct sigpending *pending)
++{
++	sigset_t signal, retain;
++	struct sigqueue *q, *n;
++
++	signal = pending->signal;
++	sigemptyset(&retain);
++
++	list_for_each_entry_safe(q, n, &pending->list, list) {
++		int sig = q->info.si_signo;
++
++		if (likely(q->info.si_code != SI_TIMER)) {
++			sigaddset(&retain, sig);
++		} else {
++			sigdelset(&signal, sig);
++			list_del_init(&q->list);
++			__sigqueue_free(q);
++		}
++	}
++
++	sigorsets(&pending->signal, &signal, &retain);
++}
++
++void flush_itimer_signals(void)
++{
++	struct task_struct *tsk = current;
++	unsigned long flags;
++
++	spin_lock_irqsave(&tsk->sighand->siglock, flags);
++	__flush_itimer_signals(&tsk->pending);
++	__flush_itimer_signals(&tsk->signal->shared_pending);
++	spin_unlock_irqrestore(&tsk->sighand->siglock, flags);
++}
++
+ struct sigqueue *sigqueue_alloc(void)
+ {
+ 	return __sigqueue_alloc(-1, current, GFP_KERNEL, 0, SIGQUEUE_PREALLOC);
+@@ -2021,6 +1983,7 @@ int send_sigqueue(struct sigqueue *q, st
+ 	rcu_read_unlock();
+ 	return ret;
+ }
++#endif /* CONFIG_POSIX_TIMERS */
+ 
+ static void do_notify_pidfd(struct task_struct *task)
+ {
+--- a/kernel/time/itimer.c
++++ b/kernel/time/itimer.c
+@@ -151,7 +151,27 @@ COMPAT_SYSCALL_DEFINE2(getitimer, int, w
+ #endif
+ 
+ /*
+- * The timer is automagically restarted, when interval != 0
++ * Invoked from dequeue_signal() when SIG_ALRM is delivered.
++ *
++ * Restart the ITIMER_REAL timer if it is armed as periodic timer.  Doing
++ * this in the signal delivery path instead of self rearming prevents a DoS
++ * with small increments in the high reolution timer case and reduces timer
++ * noise in general.
++ */
++void posixtimer_rearm_itimer(struct task_struct *tsk)
++{
++	struct hrtimer *tmr = &tsk->signal->real_timer;
++
++	if (!hrtimer_is_queued(tmr) && tsk->signal->it_real_incr != 0) {
++		hrtimer_forward(tmr, tmr->base->get_time(),
++				tsk->signal->it_real_incr);
++		hrtimer_restart(tmr);
++	}
++}
++
++/*
++ * Interval timers are restarted in the signal delivery path.  See
++ * posixtimer_rearm_itimer().
+  */
+ enum hrtimer_restart it_real_fn(struct hrtimer *timer)
+ {
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -251,7 +251,7 @@ static void common_hrtimer_rearm(struct
+ 
+ /*
+  * This function is called from the signal delivery code if
+- * info->si_sys_private is not zero, which indicates that the timer has to
++ * info::si_sys_private is not zero, which indicates that the timer has to
+  * be rearmed. Restart the timer and update info::si_overrun.
+  */
+ void posixtimer_rearm(struct kernel_siginfo *info)
+@@ -259,9 +259,15 @@ void posixtimer_rearm(struct kernel_sigi
+ 	struct k_itimer *timr;
+ 	unsigned long flags;
+ 
++	/*
++	 * Release siglock to ensure proper locking order versus
++	 * timr::it_lock. Keep interrupts disabled.
++	 */
++	spin_unlock(&current->sighand->siglock);
++
+ 	timr = lock_timer(info->si_tid, &flags);
+ 	if (!timr)
+-		return;
++		goto out;
+ 
+ 	if (timr->it_interval && timr->it_requeue_pending == info->si_sys_private) {
+ 		timr->kclock->timer_rearm(timr);
+@@ -275,6 +281,11 @@ void posixtimer_rearm(struct kernel_sigi
+ 	}
+ 
+ 	unlock_timer(timr, flags);
++out:
++	spin_lock(&current->sighand->siglock);
++
++	/* Don't expose the si_sys_private value to userspace */
++	info->si_sys_private = 0;
+ }
+ 
+ int posix_timer_queue_signal(struct k_itimer *timr)
 
-The solution to the fuse issue is to freeze processes that initiate
-fuse requests *before* freezing processes that serve fuse requests.
-
-The problem is finding out which is which.  This can be complicated by
-the fact that a process could be both serving requests *and*
-initiating them (even without knowing).
-
-The best idea so far is to let fuse servers set a process flag
-(PF_FREEZE_LATE) that is inherited across fork/clone.  For example the
-sshfs server would do the following before starting request processing
-or starting ssh:
-
-  echo 1 > /proc/self/freeze_late
-
-This would make the sshfs and ssh processes be frozen after processes
-that call into the sshfs mount.
-
-After normal (non-server) processes are frozen, server processes
-should not be getting new requests and can be frozen.
-
-Issues remaining:
-
- - if requests are stuck (e.g. network is down) then the requester
-process can't be frozen and suspend will still fail.
-
- - if server process is generating filesystem activity (new fuse
-requests) spontaneously, then there's nothing to differentiate between
-server processes and we are back to the original problem
-
-Solution to both these are probably non-kernel: impacted servers need
-to receive notification from systemd when suspend is starting and act
-accordingly.
-
-Attaching work-in-progress patch.  This needs to be improved to freeze
-server processes in a separate phase from kernel threads, but it
-should be able to demonstrate the idea.
-
-Thanks,
-Miklos
-
---00000000000071ca5d05fd76f736
-Content-Type: application/x-patch; 
-	name="0001_freezer_configure_user_space_process_frozen_along_with_kernel_threads.patch"
-Content-Disposition: attachment; 
-	filename="0001_freezer_configure_user_space_process_frozen_along_with_kernel_threads.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_likdcauo0>
-X-Attachment-Id: f_likdcauo0
-
-RnJvbTogTGkgRmVpIDxmZWkubGlAaW50ZWwuY29tPgpTdWJqZWN0OiBmcmVlemVyOiBjb25maWd1
-cmUgdXNlciBzcGFjZSBwcm9jZXNzIGZyb3plbiBhbG9uZyB3aXRoIGtlcm5lbCB0aHJlYWRzCkRh
-dGU6IFdlZCwgMjAgRmViIDIwMTMgMTA6MTU6MjUgKzA4MDAKClRoZXJlIGlzIHdlbGwga25vd24g
-aXNzdWUgdGhhdCBmcmVlemluZyB3aWxsIGZhaWwgaW4gY2FzZSB0aGF0IGZ1c2UKZGFlbW9uIGlz
-IGZyb3plbiBmaXJzdGx5IHdpdGggc29tZSByZXF1ZXN0cyBub3QgaGFuZGxlZCwgYXMgdGhlIGZ1
-c2UKdXNhZ2UgdGFzayBpcyB3YWl0aW5nIGZvciB0aGUgcmVzcG9uc2UgZnJvbSBmdXNlIGRhZW1v
-biBhbmQgY2FuJ3QgYmUKZnJvemVuLiBUbyBzb2x2ZSB0aGUgaXNzdWUgYXMgYWJvdmUsIG1ha2Ug
-ZnVzZSBkYWVtb24gZnJvemVuIGFmdGVyCmFsbCB1c2VyIHNwYWNlIHByb2Nlc3NlcyBmcm96ZW4g
-YW5kIGR1cmluZyB0aGUga2VybmVsIHRocmVhZHMgZnJvemVuCnBoYXNlLgoKQWZ0ZXIgZGlzY3Vz
-c2lvbiwgYXQgcHJlc2VudCBpdCdzIGdlbmVyYWxseSBhZ3JlZWQgdGhhdDoKMSkgSXQncyBvbmx5
-IHRoZSBmdXNlIGRhZW1vbiBpdHNlbGYga25vdyBkZWZpbml0ZWx5IHRoYXQgaXQgbmVlZHMKYW5k
-IGNhbiBiZSBmcm96ZW4gdG9nZXRoZXIgd2l0aCBrZXJuZWwgdGhyZWFkczsKMikgSXQncyBoZWxw
-ZnVsIHRvIGV4cG9zZSBpbnRlcmZhY2UgdGhhdCB1c2VyIHNwYWNlIHByb2Nlc3NlcyBjYW4KdXNl
-IHRvIGNvbmZpZ3VyZSB1c2VyIHNwYWNlIHByb2Nlc3NlcyB0byBiZSBmcm96ZW4gdG9nZXRoZXIg
-d2l0aAprZXJuZWwgdGhyZWFkcy4KTW9yZSBpbmZvcm1hdGlvbiBjYW4gYmUgZm91bmQgb24gaHR0
-cHM6Ly9sa21sLm9yZy9sa21sLzIwMTMvMi8xOC8xNzQuCgpUbyBzdXBwb3J0IHRoZSByZXF1aXJl
-bWVudCBhYm92ZSwgYXR0cmlidXRlIC9wcm9jLzxQSUQ+L2ZyZWV6ZV9sYXRlCmlzIGFkZGVkLCB3
-cml0aW5nIDEgdG8gaXQgd2lsbCBtYWtlIHRoZSBwcm9jZXNzIHRvIGJlIGZyb3plbiB0b2dldGhl
-cgp3aXRoIGtlcm5lbCB0aHJlYWRzLCBhbmQgd3JpdGluZyAwIHRvIGl0IHdpbGwgbWFrZSB0aGUg
-cHJvY2VzcyB0byBiZQpmcm96ZW4gdG9nZXRoZXIgd2l0aCB1c2VyIHNwYWNlIHByb2Nlc3Nlcy4K
-ClNpZ25lZC1vZmYtYnk6IExpdSBDaHVhbnNoZW5nIDxjaHVhbnNoZW5nLmxpdUBpbnRlbC5jb20+
-ClNpZ25lZC1vZmYtYnk6IFdhbmcgQmlhbyA8Ymlhby53YW5nQGludGVsLmNvbT4KU2lnbmVkLW9m
-Zi1ieTogTGkgRmVpIDxmZWkubGlAaW50ZWwuY29tPgotLS0KIGZzL3Byb2MvYmFzZS5jICAgICAg
-ICAgIHwgICA3NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysKIGluY2x1ZGUvbGludXgvZnJlZXplci5oIHwgICAgNiArKysKIGluY2x1ZGUvbGludXgvc2No
-ZWQuaCAgIHwgICAgMiAtCiBrZXJuZWwvZnJlZXplci5jICAgICAgICB8ICAgMjkgKysrKysrKysr
-KysrKysrKysrCiBrZXJuZWwvcG93ZXIvcHJvY2Vzcy5jICB8ICAgIDIgLQogNSBmaWxlcyBjaGFu
-Z2VkLCAxMTAgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCi0tLSBhL2ZzL3Byb2MvYmFz
-ZS5jCisrKyBiL2ZzL3Byb2MvYmFzZS5jCkBAIC05OCw2ICs5OCw5IEBACiAjaW5jbHVkZSA8bGlu
-dXgvY25fcHJvYy5oPgogI2luY2x1ZGUgPGxpbnV4L2tzbS5oPgogI2luY2x1ZGUgPHRyYWNlL2V2
-ZW50cy9vb20uaD4KKyNpZmRlZiBDT05GSUdfRlJFRVpFUgorI2luY2x1ZGUgPGxpbnV4L2ZyZWV6
-ZXIuaD4KKyNlbmRpZgogI2luY2x1ZGUgImludGVybmFsLmgiCiAjaW5jbHVkZSAiZmQuaCIKIApA
-QCAtMjI1Miw2ICsyMjU1LDcwIEBAIHByb2NfbWFwX2ZpbGVzX2dldF9saW5rKHN0cnVjdCBkZW50
-cnkgKmQKIAlyZXR1cm4gcHJvY19waWRfZ2V0X2xpbmsoZGVudHJ5LCBpbm9kZSwgZG9uZSk7CiB9
-CiAKKyNpZmRlZiBDT05GSUdfRlJFRVpFUgorCitzdGF0aWMgc3NpemVfdCBmcmVlemVfbGF0ZV9y
-ZWFkKHN0cnVjdCBmaWxlICpmaWxlLCBjaGFyIF9fdXNlciAqYnVmLAorCQkJCQlzaXplX3QgY291
-bnQsIGxvZmZfdCAqcHBvcykKK3sKKwlzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRhc2sgPSBnZXRfcHJv
-Y190YXNrKGZpbGUtPmZfcGF0aC5kZW50cnktPmRfaW5vZGUpOworCWNoYXIgYnVmZmVyW1BST0Nf
-TlVNQlVGXTsKKwlpbnQgZnJlZXplX2xhdGU7CisJc2l6ZV90IGxlbjsKKwlpZiAoIXRhc2spCisJ
-CXJldHVybiAtRVNSQ0g7CisJZnJlZXplX2xhdGUgPSAodGFzay0+ZmxhZ3MgJiBQRl9GUkVFWkVf
-TEFURSkgPyAxIDogMDsKKwlsZW4gPSBzbnByaW50ZihidWZmZXIsIHNpemVvZihidWZmZXIpLCAi
-JWRcbiIsIGZyZWV6ZV9sYXRlKTsKKwlyZXR1cm4gc2ltcGxlX3JlYWRfZnJvbV9idWZmZXIoYnVm
-LCBjb3VudCwgcHBvcywgYnVmZmVyLCBsZW4pOworfQorCitzdGF0aWMgc3NpemVfdCBmcmVlemVf
-bGF0ZV93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwgY29uc3QgY2hhciBfX3VzZXIgKmJ1ZiwKKwkJ
-CQkJc2l6ZV90IGNvdW50LCBsb2ZmX3QgKnBwb3MpCit7CisJc3RydWN0IHRhc2tfc3RydWN0ICp0
-YXNrOworCWNoYXIgYnVmZmVyW1BST0NfTlVNQlVGXTsKKwlpbnQgZnJlZXplX2xhdGU7CisJaW50
-IGVycjsKKworCW1lbXNldChidWZmZXIsIDAsIHNpemVvZihidWZmZXIpKTsKKwlpZiAoY291bnQg
-PiBzaXplb2YoYnVmZmVyKSAtIDEpCisJCWNvdW50ID0gc2l6ZW9mKGJ1ZmZlcikgLSAxOworCWlm
-IChjb3B5X2Zyb21fdXNlcihidWZmZXIsIGJ1ZiwgY291bnQpKSB7CisJCWVyciA9IC1FRkFVTFQ7
-CisJCWdvdG8gb3V0OworCX0KKworCWVyciA9IGtzdHJ0b2ludChzdHJzdHJpcChidWZmZXIpLCAw
-LCAmZnJlZXplX2xhdGUpOworCWlmIChlcnIpCisJCWdvdG8gb3V0OworCWlmIChmcmVlemVfbGF0
-ZSA8IEZSRUVaRV9MQVRFX01JTiB8fAorCQkJZnJlZXplX2xhdGUgPiBGUkVFWkVfTEFURV9NQVgp
-IHsKKwkJZXJyID0gLUVJTlZBTDsKKwkJZ290byBvdXQ7CisJfQorCisJdGFzayA9IGdldF9wcm9j
-X3Rhc2soZmlsZS0+Zl9wYXRoLmRlbnRyeS0+ZF9pbm9kZSk7CisJaWYgKCF0YXNrKSB7CisJCWVy
-ciA9IC1FU1JDSDsKKwkJZ290byBvdXQ7CisJfQorCisJaWYgKGZyZWV6ZV9sYXRlKQorCQlzZXRf
-ZnJlZXplX2xhdGVfZmxhZyh0YXNrKTsKKwllbHNlCisJCWNsZWFyX2ZyZWV6ZV9sYXRlX2ZsYWco
-dGFzayk7CisKK291dDoKKwlyZXR1cm4gZXJyIDwgMCA/IGVyciA6IGNvdW50OworfQorCitzdGF0
-aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBwcm9jX2ZyZWV6ZV9sYXRlX29wZXJhdGlv
-bnMgPSB7CisJLnJlYWQJCT0gZnJlZXplX2xhdGVfcmVhZCwKKwkud3JpdGUJCT0gZnJlZXplX2xh
-dGVfd3JpdGUsCisJLmxsc2VlawkJPSBnZW5lcmljX2ZpbGVfbGxzZWVrLAorfTsKKworI2VuZGlm
-CisKIC8qCiAgKiBJZGVudGljYWwgdG8gcHJvY19waWRfbGlua19pbm9kZV9vcGVyYXRpb25zIGV4
-Y2VwdCBmb3IgZ2V0X2xpbmsoKQogICovCkBAIC0zMzUxLDYgKzM0MTgsOSBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IHBpZF9lbnRyeSB0Z2lkX2Jhc2VfCiAJT05FKCJrc21fbWVyZ2luZ19wYWdlcyIs
-ICBTX0lSVVNSLCBwcm9jX3BpZF9rc21fbWVyZ2luZ19wYWdlcyksCiAJT05FKCJrc21fc3RhdCIs
-ICBTX0lSVVNSLCBwcm9jX3BpZF9rc21fc3RhdCksCiAjZW5kaWYKKyNpZmRlZiBDT05GSUdfRlJF
-RVpFUgorCVJFRygiZnJlZXplX2xhdGUiLCBTX0lSVUdPfFNfSVdVU1IsIHByb2NfZnJlZXplX2xh
-dGVfb3BlcmF0aW9ucyksCisjZW5kaWYKIH07CiAKIHN0YXRpYyBpbnQgcHJvY190Z2lkX2Jhc2Vf
-cmVhZGRpcihzdHJ1Y3QgZmlsZSAqZmlsZSwgc3RydWN0IGRpcl9jb250ZXh0ICpjdHgpCkBAIC0z
-Njg5LDYgKzM3NTksMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBwaWRfZW50cnkgdGlkX2Jhc2Vf
-cwogCU9ORSgia3NtX21lcmdpbmdfcGFnZXMiLCAgU19JUlVTUiwgcHJvY19waWRfa3NtX21lcmdp
-bmdfcGFnZXMpLAogCU9ORSgia3NtX3N0YXQiLCAgU19JUlVTUiwgcHJvY19waWRfa3NtX3N0YXQp
-LAogI2VuZGlmCisjaWZkZWYgQ09ORklHX0ZSRUVaRVIKKwlSRUcoImZyZWV6ZV9sYXRlIiwgU19J
-UlVHT3xTX0lXVVNSLCBwcm9jX2ZyZWV6ZV9sYXRlX29wZXJhdGlvbnMpLAorI2VuZGlmCisKIH07
-CiAKIHN0YXRpYyBpbnQgcHJvY190aWRfYmFzZV9yZWFkZGlyKHN0cnVjdCBmaWxlICpmaWxlLCBz
-dHJ1Y3QgZGlyX2NvbnRleHQgKmN0eCkKLS0tIGEvaW5jbHVkZS9saW51eC9mcmVlemVyLmgKKysr
-IGIvaW5jbHVkZS9saW51eC9mcmVlemVyLmgKQEAgLTYwLDYgKzYwLDEwIEBAIHN0YXRpYyBpbmxp
-bmUgYm9vbCB0cnlfdG9fZnJlZXplKHZvaWQpCiAKIGV4dGVybiBib29sIGZyZWV6ZV90YXNrKHN0
-cnVjdCB0YXNrX3N0cnVjdCAqcCk7CiBleHRlcm4gYm9vbCBzZXRfZnJlZXphYmxlKHZvaWQpOwor
-I2RlZmluZSBGUkVFWkVfTEFURV9NSU4gMAorI2RlZmluZSBGUkVFWkVfTEFURV9NQVggMQorZXh0
-ZXJuIHZvaWQgc2V0X2ZyZWV6ZV9sYXRlX2ZsYWcoc3RydWN0IHRhc2tfc3RydWN0ICpwKTsKK2V4
-dGVybiB2b2lkIGNsZWFyX2ZyZWV6ZV9sYXRlX2ZsYWcoc3RydWN0IHRhc2tfc3RydWN0ICpwKTsK
-IAogI2lmZGVmIENPTkZJR19DR1JPVVBfRlJFRVpFUgogZXh0ZXJuIGJvb2wgY2dyb3VwX2ZyZWV6
-aW5nKHN0cnVjdCB0YXNrX3N0cnVjdCAqdGFzayk7CkBAIC04NCw2ICs4OCw4IEBAIHN0YXRpYyBp
-bmxpbmUgdm9pZCB0aGF3X2tlcm5lbF90aHJlYWRzKHYKIHN0YXRpYyBpbmxpbmUgYm9vbCB0cnlf
-dG9fZnJlZXplKHZvaWQpIHsgcmV0dXJuIGZhbHNlOyB9CiAKIHN0YXRpYyBpbmxpbmUgdm9pZCBz
-ZXRfZnJlZXphYmxlKHZvaWQpIHt9CitzdGF0aWMgaW5saW5lIHZvaWQgc2V0X2ZyZWV6ZV9sYXRl
-X2ZsYWcodm9pZCkge30KK3N0YXRpYyBpbmxpbmUgdm9pZCBjbGVhcl9mcmVlemVfbGF0ZV9mbGFn
-KHZvaWQpIHt9CiAKICNlbmRpZiAvKiAhQ09ORklHX0ZSRUVaRVIgKi8KIAotLS0gYS9pbmNsdWRl
-L2xpbnV4L3NjaGVkLmgKKysrIGIvaW5jbHVkZS9saW51eC9zY2hlZC5oCkBAIC0xNzM3LDcgKzE3
-MzcsNyBAQCBleHRlcm4gc3RydWN0IHBpZCAqY2FkX3BpZDsKICNkZWZpbmUgUEZfVVNFRF9NQVRI
-CQkweDAwMDAyMDAwCS8qIElmIHVuc2V0IHRoZSBmcHUgbXVzdCBiZSBpbml0aWFsaXplZCBiZWZv
-cmUgdXNlICovCiAjZGVmaW5lIFBGX1VTRVJfV09SS0VSCQkweDAwMDA0MDAwCS8qIEtlcm5lbCB0
-aHJlYWQgY2xvbmVkIGZyb20gdXNlcnNwYWNlIHRocmVhZCAqLwogI2RlZmluZSBQRl9OT0ZSRUVa
-RQkJMHgwMDAwODAwMAkvKiBUaGlzIHRocmVhZCBzaG91bGQgbm90IGJlIGZyb3plbiAqLwotI2Rl
-ZmluZSBQRl9fSE9MRV9fMDAwMTAwMDAJMHgwMDAxMDAwMAorI2RlZmluZSBQRl9GUkVFWkVfTEFU
-RQkJMHgwMDAxMDAwMAkvKiBUaHJlYWRzIHRvIGJlIGZyb3plbiBhbG9uZyB3aXRoIGtlcm5lbCB0
-aHJlYWRzICovCiAjZGVmaW5lIFBGX0tTV0FQRAkJMHgwMDAyMDAwMAkvKiBJIGFtIGtzd2FwZCAq
-LwogI2RlZmluZSBQRl9NRU1BTExPQ19OT0ZTCTB4MDAwNDAwMDAJLyogQWxsIGFsbG9jYXRpb24g
-cmVxdWVzdHMgd2lsbCBpbmhlcml0IEdGUF9OT0ZTICovCiAjZGVmaW5lIFBGX01FTUFMTE9DX05P
-SU8JMHgwMDA4MDAwMAkvKiBBbGwgYWxsb2NhdGlvbiByZXF1ZXN0cyB3aWxsIGluaGVyaXQgR0ZQ
-X05PSU8gKi8KLS0tIGEva2VybmVsL2ZyZWV6ZXIuYworKysgYi9rZXJuZWwvZnJlZXplci5jCkBA
-IC00Niw3ICs0Niw4IEBAIGJvb2wgZnJlZXppbmdfc2xvd19wYXRoKHN0cnVjdCB0YXNrX3N0cnUK
-IAlpZiAocG1fbm9zaWdfZnJlZXppbmcgfHwgY2dyb3VwX2ZyZWV6aW5nKHApKQogCQlyZXR1cm4g
-dHJ1ZTsKIAotCWlmIChwbV9mcmVlemluZyAmJiAhKHAtPmZsYWdzICYgUEZfS1RIUkVBRCkpCisJ
-aWYgKHBtX2ZyZWV6aW5nICYmICEocC0+ZmxhZ3MgJiBQRl9LVEhSRUFEKSAmJgorCQkJCSEocC0+
-ZmxhZ3MgJiBQRl9GUkVFWkVfTEFURSkpCiAJCXJldHVybiB0cnVlOwogCiAJcmV0dXJuIGZhbHNl
-OwpAQCAtMjMzLDMgKzIzNCwyOSBAQCBib29sIHNldF9mcmVlemFibGUodm9pZCkKIAlyZXR1cm4g
-dHJ5X3RvX2ZyZWV6ZSgpOwogfQogRVhQT1JUX1NZTUJPTChzZXRfZnJlZXphYmxlKTsKKworLyoq
-CisgKiBzZXRfZnJlZXplX2xhdGVfZmxhZyAtIG1ha2UgJXAgdG8gYmUgZnJvemVuIGxhdGUKKyAq
-CisgKiBNYWtlICVwIHRvIGJlIGZyb3plbiBieSBmcmVlemVyIGFsb25nIHdpdGgga2VybmVsIHRo
-cmVhZHMKKyAqLwordm9pZCBzZXRfZnJlZXplX2xhdGVfZmxhZyhzdHJ1Y3QgdGFza19zdHJ1Y3Qg
-KnApCit7CisJc3Bpbl9sb2NrX2lycSgmZnJlZXplcl9sb2NrKTsKKwlwLT5mbGFncyB8PSBQRl9G
-UkVFWkVfTEFURTsKKwlzcGluX3VubG9ja19pcnEoJmZyZWV6ZXJfbG9jayk7Cit9CitFWFBPUlRf
-U1lNQk9MKHNldF9mcmVlemVfbGF0ZV9mbGFnKTsKKworLyoqCisgKiBjbGVhcl9mcmVlemVfbGF0
-ZV9mbGFnIC0gbWFrZSAlcCB0byBiZSBmcm96ZW4gZWFybHkKKyAqCisgKiBNYWtlICVwIHRvIGJl
-IGZyb3plbiBieSBmcmVlemVyIGFsb25nIHdpdGggdXNlciBzcGFjZSBwcm9jZXNzZXMKKyAqLwor
-dm9pZCBjbGVhcl9mcmVlemVfbGF0ZV9mbGFnKHN0cnVjdCB0YXNrX3N0cnVjdCAqcCkKK3sKKwlz
-cGluX2xvY2tfaXJxKCZmcmVlemVyX2xvY2spOworCXAtPmZsYWdzICY9IH5QRl9GUkVFWkVfTEFU
-RTsKKwlzcGluX3VubG9ja19pcnEoJmZyZWV6ZXJfbG9jayk7Cit9CitFWFBPUlRfU1lNQk9MKGNs
-ZWFyX2ZyZWV6ZV9sYXRlX2ZsYWcpOwotLS0gYS9rZXJuZWwvcG93ZXIvcHJvY2Vzcy5jCisrKyBi
-L2tlcm5lbC9wb3dlci9wcm9jZXNzLmMKQEAgLTIyNSw3ICsyMjUsNyBAQCB2b2lkIHRoYXdfa2Vy
-bmVsX3RocmVhZHModm9pZCkKIAogCXJlYWRfbG9jaygmdGFza2xpc3RfbG9jayk7CiAJZm9yX2Vh
-Y2hfcHJvY2Vzc190aHJlYWQoZywgcCkgewotCQlpZiAocC0+ZmxhZ3MgJiBQRl9LVEhSRUFEKQor
-CQlpZiAocC0+ZmxhZ3MgJiAoUEZfS1RIUkVBRCB8IFBGX0ZSRUVaRV9MQVRFKSkKIAkJCV9fdGhh
-d190YXNrKHApOwogCX0KIAlyZWFkX3VubG9jaygmdGFza2xpc3RfbG9jayk7Cg==
---00000000000071ca5d05fd76f736--
