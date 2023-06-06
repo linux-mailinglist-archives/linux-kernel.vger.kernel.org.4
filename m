@@ -2,100 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BBB724524
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175C2724526
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbjFFOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S238067AbjFFOBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237742AbjFFOBC (ORCPT
+        with ESMTP id S237487AbjFFOBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:01:02 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C8198A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:00:44 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba87bd29e9dso7153620276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686060043; x=1688652043;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=S6bABvrmsSInWb8fnuh4ITkDJEvWLg0D4R3//Td0SQE=;
-        b=kEgWoJ49N2whPXRJaq/b8YUNnuy53VuV4VogxQBdtVGh7K6G2usK2oAdAsNXkCEyVj
-         MNZF1nOPM0Zw0jMJziXYNV8bNHqxGz2Dxo990m13oURN+iYndqqrVQ/i4ZnLgPXtzhiL
-         54HwrLuHd8Wgi9mcroDbDvi7VsZop9AkynLKTIsoAChiyBp/Z/eA6/SdGJSXNyZnySV+
-         NE8oJitgXuLzbzPYX+BlJhZy4VWABtlvzYPRWiisKqLOjtRlwko27m8LgY6C09gIcMsG
-         okHpEkKiYa8ETBqpurh2HSOXb5fI7TwXwAuIbRIOx/YvixnOnYukV0YmpuFP2cAxCItP
-         LHEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686060043; x=1688652043;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6bABvrmsSInWb8fnuh4ITkDJEvWLg0D4R3//Td0SQE=;
-        b=S7lZRDSsyI//UpYMgk9xWYrk5PkQhtpqJeUubEHwVTVk/MplI3dkRpN2uMHNYjfSNz
-         y97N7SRMe90Oxf7mPOxX4xk6yDguV5nWZNOtYrUwtZf16HQ+lzOuuLdivsrhv/pRt8Fs
-         qio97HBPHW8ik18Cruz9H8fVf3wLtv5DWOErHf+ac0vPs/3A2h6hLh575B5ab2AVePKe
-         cYpdLjIGyg2aS1JJnGiDJmBt5tMr5Fgl3DA/HuquxAybOAnjXWzcCCJi8osz34UCIqZO
-         hw9065fVV528l8+5CCWlTyvGO+k5HmkfS4J9bsdDtccHuN8koGWG90T6ur1D5lB+mSIs
-         Cjeg==
-X-Gm-Message-State: AC+VfDw0LlC3wS1tqKHl9kZoSS7H9tG2Etyn59OquQmezWNBhT2c7/tO
-        cnw8jBfvgHrKYwrWrsDm0zGcDic1/vFZN51KMBnKEKgNdT5ErK7iTT6MQ0J/gkY9SwAjhVeuV7I
-        kshZHNTlRuEo7xJTq5kf+TDzgWBtNbVLiJ7yzQMfXj/765I0B+5ALLsVD6pzZ1w==
-X-Google-Smtp-Source: ACHHUZ52QT/eB8BKHEzn6E94GeOQS/r0FOgsbZh9T/CpgqQyCi2PdRDg7H6Yi8ImeRi6e7th9vZJykg=
-X-Received: from ptf16.nyc.corp.google.com ([2620:0:1003:314:f52a:f978:3766:4700])
- (user=ptf job=sendgmr) by 2002:a25:e6d6:0:b0:ba7:5d7a:b50d with SMTP id
- d205-20020a25e6d6000000b00ba75d7ab50dmr1144964ybh.10.1686060043589; Tue, 06
- Jun 2023 07:00:43 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 10:00:36 -0400
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230606140041.3244713-1-ptf@google.com>
-Subject: [PATCH] r8169: Disable multicast filter for RTL_GIGA_MAC_VER_46
-From:   Patrick Thompson <ptf@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Patrick Thompson <ptf@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        nic_swsd@realtek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 10:01:09 -0400
+Received: from out-57.mta0.migadu.com (out-57.mta0.migadu.com [IPv6:2001:41d0:1004:224b::39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46E610DF
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:01:07 -0700 (PDT)
+Message-ID: <c3173405-713d-d2eb-bd9c-af8b8c747533@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686060065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2uml8vTQA7Jk00qED6Wb0yWaRiW4bBmvkl2obmUQkoY=;
+        b=cvjjhEbuIw4XMzuXB1gNKv2SDPspUiKAG9c1qfukbOq4Vu+Xvk3hRzqZTUkoLf1h8WgeIK
+        mX4iw7SxtoUFhollyDxq/cwh3Lh7vZZIsBzxlwz6oUhiblNeM4/UDIe/0JjU4VNs7YUQW0
+        +fKrohXUbW3ugX9LtBnHc4V513usgsI=
+Date:   Tue, 6 Jun 2023 22:00:57 +0800
+MIME-Version: 1.0
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Subject: Re: [PATCH v2 09/12] ext4: Ensure ext4_mb_prefetch_fini() is called
+ for all prefetched BGs
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>, linux-ext4@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+References: <cover.1685449706.git.ojaswin@linux.ibm.com>
+ <05e648ae04ec5b754207032823e9c1de9a54f87a.1685449706.git.ojaswin@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <05e648ae04ec5b754207032823e9c1de9a54f87a.1685449706.git.ojaswin@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAC_VER_46 ethernet adapters fail to detect IPv6 multicast packets
-unless allmulti is enabled. Add exception for VER_46 in the same way
-VER_35 has an exception.
+Hello,
 
-Signed-off-by: Patrick Thompson <ptf@google.com>
----
+On 5/30/23 20:33, Ojaswin Mujoo wrote:
+> Before this patch, the call stack in ext4_run_li_request is as follows:
+>
+>    /*
+>     * nr = no. of BGs we want to fetch (=s_mb_prefetch)
+>     * prefetch_ios = no. of BGs not uptodate after
+>     * 		    ext4_read_block_bitmap_nowait()
+>     */
+>    next_group = ext4_mb_prefetch(sb, group, nr, prefetch_ios);
+>    ext4_mb_prefetch_fini(sb, next_group prefetch_ios);
+>
+> ext4_mb_prefetch_fini() will only try to initialize buddies for BGs in
+> range [next_group - prefetch_ios, next_group). This is incorrect since
+> sometimes (prefetch_ios < nr), which causes ext4_mb_prefetch_fini() to
+> incorrectly ignore some of the BGs that might need initialization. This
+> issue is more notable now with the previous patch enabling "fetching" of
+> BLOCK_UNINIT BGs which are marked buffer_uptodate by default.
+>
+> Fix this by passing nr to ext4_mb_prefetch_fini() instead of
+> prefetch_ios so that it considers the right range of groups.
 
- drivers/net/ethernet/realtek/r8169_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks for the series.
 
-diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-index 4b19803a7dd01..96245e96ee507 100644
---- a/drivers/net/ethernet/realtek/r8169_main.c
-+++ b/drivers/net/ethernet/realtek/r8169_main.c
-@@ -2583,7 +2583,8 @@ static void rtl_set_rx_mode(struct net_device *dev)
- 		rx_mode |= AcceptAllPhys;
- 	} else if (netdev_mc_count(dev) > MC_FILTER_LIMIT ||
- 		   dev->flags & IFF_ALLMULTI ||
--		   tp->mac_version == RTL_GIGA_MAC_VER_35) {
-+		   tp->mac_version == RTL_GIGA_MAC_VER_35 ||
-+		   tp->mac_version == RTL_GIGA_MAC_VER_46) {
- 		/* accept all multicasts */
- 	} else if (netdev_mc_empty(dev)) {
- 		rx_mode &= ~AcceptMulticast;
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+> Similarly, make sure we don't pass nr=0 to ext4_mb_prefetch_fini() in
+> ext4_mb_regular_allocator() since we might have prefetched BLOCK_UNINIT
+> groups that would need buddy initialization.
+
+Seems ext4_mb_prefetch_fini can't be called by ext4_mb_regular_allocator
+if nr is 0.
+
+https://elixir.bootlin.com/linux/v6.4-rc5/source/fs/ext4/mballoc.c#L2816
+
+Am I miss something?
+
+Thanks,
+Guoqing
+
+> Signed-off-by: Ojaswin Mujoo<ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM)<ritesh.list@gmail.com>
+> Reviewed-by: Jan Kara<jack@suse.cz>
+> ---
+>   fs/ext4/mballoc.c |  4 ----
+>   fs/ext4/super.c   | 11 ++++-------
+>   2 files changed, 4 insertions(+), 11 deletions(-)
+>
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 79455c7e645b..6775d73dfc68 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -2735,8 +2735,6 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+>   			if ((prefetch_grp == group) &&
+>   			    (cr > CR1 ||
+>   			     prefetch_ios < sbi->s_mb_prefetch_limit)) {
+> -				unsigned int curr_ios = prefetch_ios;
+> -
+>   				nr = sbi->s_mb_prefetch;
+>   				if (ext4_has_feature_flex_bg(sb)) {
+>   					nr = 1 << sbi->s_log_groups_per_flex;
+> @@ -2745,8 +2743,6 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+>   				}
+>   				prefetch_grp = ext4_mb_prefetch(sb, group,
+>   							nr, &prefetch_ios);
+> -				if (prefetch_ios == curr_ios)
+> -					nr = 0;
+>   			}
+>   
+>   			/* This now checks without needing the buddy page */
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 2da5476fa48b..27c1dabacd43 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -3692,16 +3692,13 @@ static int ext4_run_li_request(struct ext4_li_request *elr)
+>   	ext4_group_t group = elr->lr_next_group;
+>   	unsigned int prefetch_ios = 0;
+>   	int ret = 0;
+> +	int nr = EXT4_SB(sb)->s_mb_prefetch;
+>   	u64 start_time;
+>   
+>   	if (elr->lr_mode == EXT4_LI_MODE_PREFETCH_BBITMAP) {
+> -		elr->lr_next_group = ext4_mb_prefetch(sb, group,
+> -				EXT4_SB(sb)->s_mb_prefetch, &prefetch_ios);
+> -		if (prefetch_ios)
+> -			ext4_mb_prefetch_fini(sb, elr->lr_next_group,
+> -					      prefetch_ios);
+> -		trace_ext4_prefetch_bitmaps(sb, group, elr->lr_next_group,
+> -					    prefetch_ios);
+> +		elr->lr_next_group = ext4_mb_prefetch(sb, group, nr, &prefetch_ios);
+> +		ext4_mb_prefetch_fini(sb, elr->lr_next_group, nr);
+> +		trace_ext4_prefetch_bitmaps(sb, group, elr->lr_next_group, nr);
+>   		if (group >= elr->lr_next_group) {
+>   			ret = 1;
+>   			if (elr->lr_first_not_zeroed != ngroups &&
 
