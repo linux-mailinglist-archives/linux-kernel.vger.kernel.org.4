@@ -2,209 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7EA724D13
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7510B724D18
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239162AbjFFT3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        id S235266AbjFFTdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239373AbjFFT3Q (ORCPT
+        with ESMTP id S232063AbjFFTdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:29:16 -0400
-Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C421733
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:29:10 -0700 (PDT)
-Received: by mail-io1-xd49.google.com with SMTP id ca18e2360f4ac-777b8c9cc4aso181201539f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:29:10 -0700 (PDT)
+        Tue, 6 Jun 2023 15:33:01 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE20910CA;
+        Tue,  6 Jun 2023 12:32:59 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977fae250easo47344766b.1;
+        Tue, 06 Jun 2023 12:32:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686079749; x=1688671749;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VhTidRsQ7M0B21RWWeLYKjL/CqqK7Lwi7zT2NAAb1NY=;
-        b=xRdfPtc42t3tWbTgM9ApieV/cDRl7yttpemwXRGTQ29qIVK/7EzJsoDi1w7500YQxK
-         VkZroFYdAFjD4L8oeQoYclUdM3xt/ovyCUAsu5x/j9Pe6iUmDMSfCEArYp2QxzAQ5O6Z
-         A/hHw65k++MQ3lkHpkZeObv/86BZddej7Q6Owxqr+0GDTHWYhA8Ekyxm69emOOf0VJXJ
-         r1yUFL1fTbbmeDyUpxa5IqlBqW2Q9ZuwWKmdPrY9jzAqk7eMKbPnTCqjzQ6g6gu6Rezb
-         Qs6bqyRlTvej95KtDkRzujhhevLRfzsMlKJ3gKk5lfozadujZQAR7894f9QC/T7/hDpu
-         E4Gg==
+        d=gmail.com; s=20221208; t=1686079978; x=1688671978;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Llw+p2vlgg/1Qp0Ib93C9pJ3yXrnXuMUpa4JHx8IQg=;
+        b=pAQMVEAOsjJvF1UrbMN7QGjH5oJEX2lJg0qTdAhENKryd5cWAfcIaEAUXFbmtkCAMg
+         ZncrXjPN8rVAhk6Goc+jImvQxrPVFsFP71Qer3iWGcBUKCGRT3MscXAM2lTMJbJPqAql
+         IWYi30n3wcIUY7iPHFYSpLvys2yPSKvofvCgOZe3tjFdCWavUfxkgaMHZd9d6n38MwwV
+         JHa61tXJw6nOHcxwq2/1tq4Ny3GUO6QGMAq5bjn0UitXIdqFBSVoH2Nc72y3DINps30H
+         h6oXxgaekyUlIMp4Qg7sM683BAe/UEFvTy8zfPprbwVzxmLzJ3Coik00mJdP0U4awLMb
+         z/7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686079749; x=1688671749;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VhTidRsQ7M0B21RWWeLYKjL/CqqK7Lwi7zT2NAAb1NY=;
-        b=DZKKH8jCGJd32tBag0+WsAkpTmiCipOO0tGtnqOigFjsbN3mdet+qJ5A5d2ZrcPzPl
-         zC3TQCZL67xiQ4IROvRusi3oozEtr3z8tS1tyBDnLj4ZWO3HCTWCK5EPzdFnl6dZDIsL
-         9qceUsrroTqpsOBOgo1kgOGeX0es9rWXv+qhG0j0bdgZ4jTXnC0UiLNJoxN0eiIAeUlq
-         8X+wDKvEhjz57iK6jIWkq9ZbOTGLV/5x8+i786sIJZQSVBAAOGl1obipwVxzHR0T+6SF
-         yAuYOiopCG+SBo9NsDbuT3yQr9aTawZF91KMR5FHloDSjDbzPVgsuSyilgKF6piY7GjD
-         llzg==
-X-Gm-Message-State: AC+VfDw/oBq2pfuLn2FpbDCBzHoQFXERFeohiCYjRSpdvMnEad+IA6Kd
-        +DZjSPwnqRrs5SiOZnf312elqn2PILaV
-X-Google-Smtp-Source: ACHHUZ7QCQzpJGrZKqBh5n3es8NB7ieKOI67W6rTPhyCwNnbXcHk5AAG6ZdYbhJ9YFPUUVxtemi/vNZ/436T
-X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
- (user=rananta job=sendgmr) by 2002:a5e:8345:0:b0:777:b726:3e17 with SMTP id
- y5-20020a5e8345000000b00777b7263e17mr1513935iom.3.1686079749368; Tue, 06 Jun
- 2023 12:29:09 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:28:58 +0000
-In-Reply-To: <20230606192858.3600174-1-rananta@google.com>
-Mime-Version: 1.0
-References: <20230606192858.3600174-1-rananta@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230606192858.3600174-8-rananta@google.com>
-Subject: [PATCH v5 7/7] KVM: arm64: Use TLBI range-based intructions for unmap
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686079978; x=1688671978;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Llw+p2vlgg/1Qp0Ib93C9pJ3yXrnXuMUpa4JHx8IQg=;
+        b=kcag6OeIEkPXXLntBAN0EH0vffWYdr+pmfD1QQECUy8fX8tcSHxaATk1hV4bn8xbNo
+         5NrdsITNyIYSHQ1EWAlrn8FGa2gfVA1DGLv/HA5W/d4sGZhrqxcXfh/iyxPq9Ew0/Fhr
+         j/ZDrjZcp00dBC0ZMHR14v4fr5CNBOwMcGlcqaRyqA6IyNIvSLPLk3ZFWFoH1bfw6/tj
+         rCwIoUIHNbI999Ji5fsqgHctScjssyfvC1jxvW6py8D5gBq8SrOvaFuh3eJ1syaFKtzl
+         LCtby0T5wciW9N12AYcF5JxBs04LKsw1ovhSDs7BJYuXKrhYxsth5/PnqJ1hjP1tx5Bt
+         janA==
+X-Gm-Message-State: AC+VfDzr2CLHCq2OdX0KTZoXimftLSnGWKWKJoIBa+HWNSBAEm+V957I
+        EJEWKAwrNfuf3dHJuqTix9U=
+X-Google-Smtp-Source: ACHHUZ5jFCfr/1Qc1DnxmK7q8vJcve4bklFBOmr5gPeVPwgeqKKtld3+i0oDgTfF/JpXiwyINc/yQA==
+X-Received: by 2002:a17:906:7288:b0:974:5ec0:5246 with SMTP id b8-20020a170906728800b009745ec05246mr3147086ejl.7.1686079977850;
+        Tue, 06 Jun 2023 12:32:57 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([141.136.85.182])
+        by smtp.gmail.com with ESMTPSA id lu5-20020a170906fac500b0096f89fd4bf8sm5904401ejb.122.2023.06.06.12.32.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 12:32:57 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     perex@perex.cz, tiwai@suse.com, corbet@lwn.net, broonie@kernel.org,
+        skhan@linuxfoundation.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, alsa-devel@alsa-project.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
+        himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v4 1/3] docs: sound: add 'pcmtest' driver documentation
+Date:   Tue,  6 Jun 2023 23:32:52 +0400
+Message-Id: <20230606193254.20791-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation of the stage-2 unmap walker traverses
-the given range and, as a part of break-before-make, performs
-TLB invalidations with a DSB for every PTE. A multitude of this
-combination could cause a performance bottleneck on some systems.
+Add documentation for the new Virtual PCM Test Driver. It covers all
+possible usage cases: errors and delay injections, random and
+pattern-based data generation, playback and ioctl redefinition
+functionalities testing.
 
-Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
-invalidations until the entire walk is finished, and then
-use range-based instructions to invalidate the TLBs in one go.
-Condition deferred TLB invalidation on the system supporting FWB,
-as the optimization is entirely pointless when the unmap walker
-needs to perform CMOs.
+We have a lot of different virtual media drivers, which can be used for
+testing of the userspace applications and media subsystem middle layer.
+However, all of them are aimed at testing the video functionality and
+simulating the video devices. For audio devices we have only snd-dummy
+module, which is good in simulating the correct behavior of an ALSA device.
+I decided to write a tool, which would help to test the userspace ALSA
+programs (and the PCM middle layer as well) under unusual circumstances
+to figure out how they would behave. So I came up with this Virtual PCM
+Test Driver.
 
-Rename stage2_put_pte() to stage2_unmap_put_pte() as the function
-now serves the stage-2 unmap walker specifically, rather than
-acting generic.
+This new Virtual PCM Test Driver has several features which can be useful
+during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
+of the PCM middle layer. Not all of them can be implemented using the
+existing virtual drivers (like dummy or loopback). Here is what can this
+driver do:
 
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+- Simulate both capture and playback processes
+- Check the playback stream for containing the looped pattern
+- Generate random or pattern-based capture data
+- Inject delays into the playback and capturing processes
+- Inject errors during the PCM callbacks
+
+Also, this driver can check the playback stream for containing the
+predefined pattern, which is used in the corresponding selftest to check
+the PCM middle layer data transferring functionality. Additionally, this
+driver redefines the default RESET ioctl, and the selftest covers this PCM
+API functionality as well.
+
+The driver supports both interleaved and non-interleaved access modes, and
+have separate pattern buffers for each channel. The driver supports up to
+4 channels and up to 8 substreams.
+
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 ---
- arch/arm64/kvm/hyp/pgtable.c | 67 +++++++++++++++++++++++++++++++-----
- 1 file changed, 58 insertions(+), 9 deletions(-)
+V1 -> V2:
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 50ef7623c54db..c6e080867919d 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -789,16 +789,54 @@ static void stage2_make_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_t n
- 	smp_store_release(ctx->ptep, new);
- }
- 
--static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu,
--			   struct kvm_pgtable_mm_ops *mm_ops)
-+struct stage2_unmap_data {
-+	struct kvm_pgtable *pgt;
-+	bool defer_tlb_flush_init;
-+};
+- Rename the driver from from 'valsa' to 'pcmtest'.
+- Implement support for interleaved and non-interleaved access modes
+- Add support for 8 substreams and 4 channels
+- Extend supported formats
+- Extend and rewrite in C the selftest for the driver
+
+V2 -> V3:
+
+- Add separate pattern buffers for each channel
+- Speed up the capture data generation when using interleaved access mode
+- Extend the corresponding selftest to cover the multiple channels
+capturing and playback functionalities when using interleaved access mode.
+- Fix documentation issues
+
+V3 -> V4:
+
+- Fix issue in the selftest: there was a typo in the fscanf argument.
+
+ Documentation/sound/cards/index.rst   |   1 +
+ Documentation/sound/cards/pcmtest.rst | 120 ++++++++++++++++++++++++++
+ 2 files changed, 121 insertions(+)
+ create mode 100644 Documentation/sound/cards/pcmtest.rst
+
+diff --git a/Documentation/sound/cards/index.rst b/Documentation/sound/cards/index.rst
+index c016f8c3b88b..49c1f2f688f8 100644
+--- a/Documentation/sound/cards/index.rst
++++ b/Documentation/sound/cards/index.rst
+@@ -17,3 +17,4 @@ Card-Specific Information
+    hdspm
+    serial-u16550
+    img-spdif-in
++   pcmtest
+diff --git a/Documentation/sound/cards/pcmtest.rst b/Documentation/sound/cards/pcmtest.rst
+new file mode 100644
+index 000000000000..e163522f3205
+--- /dev/null
++++ b/Documentation/sound/cards/pcmtest.rst
+@@ -0,0 +1,120 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+static bool __stage2_unmap_defer_tlb_flush(struct kvm_pgtable *pgt)
-+{
-+	/*
-+	 * If FEAT_TLBIRANGE is implemented, defer the individual
-+	 * TLB invalidations until the entire walk is finished, and
-+	 * then use the range-based TLBI instructions to do the
-+	 * invalidations. Condition deferred TLB invalidation on the
-+	 * system supporting FWB, as the optimization is entirely
-+	 * pointless when the unmap walker needs to perform CMOs.
-+	 */
-+	return system_supports_tlb_range() && stage2_has_fwb(pgt);
-+}
++The Virtual PCM Test Driver
++===========================
 +
-+static bool stage2_unmap_defer_tlb_flush(struct stage2_unmap_data *unmap_data)
-+{
-+	bool defer_tlb_flush = __stage2_unmap_defer_tlb_flush(unmap_data->pgt);
++The Virtual PCM Test Driver emulates a generic PCM device, and can be used for
++testing/fuzzing of the userspace ALSA applications, as well as for testing/fuzzing of
++the PCM middle layer. Additionally, it can be used for simulating hard to reproduce
++problems with PCM devices.
 +
-+	/*
-+	 * Since __stage2_unmap_defer_tlb_flush() is based on alternative
-+	 * patching and the TLBIs' operations behavior depend on this,
-+	 * track if there's any change in the state during the unmap sequence.
-+	 */
-+	WARN_ON(unmap_data->defer_tlb_flush_init != defer_tlb_flush);
-+	return defer_tlb_flush;
-+}
++What can this driver do?
++~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+static void stage2_unmap_put_pte(const struct kvm_pgtable_visit_ctx *ctx,
-+				struct kvm_s2_mmu *mmu,
-+				struct kvm_pgtable_mm_ops *mm_ops)
- {
-+	struct stage2_unmap_data *unmap_data = ctx->arg;
++At this moment the driver can do the following things:
++	* Simulate both capture and playback processes
++	* Generate random or pattern-based capturing data
++	* Inject delays into the playback and capturing processes
++	* Inject errors during the PCM callbacks
 +
- 	/*
--	 * Clear the existing PTE, and perform break-before-make with
--	 * TLB maintenance if it was valid.
-+	 * Clear the existing PTE, and perform break-before-make if it was
-+	 * valid. Depending on the system support, the TLB maintenance for
-+	 * the same can be deferred until the entire unmap is completed.
- 	 */
- 	if (kvm_pte_valid(ctx->old)) {
- 		kvm_clear_pte(ctx->ptep);
--		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ctx->level);
++It supports up to 8 substreams and 4 channels. Also it supports both interleaved and
++non-interleaved access modes.
 +
-+		if (!stage2_unmap_defer_tlb_flush(unmap_data))
-+			kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu,
-+					ctx->addr, ctx->level);
- 	}
- 
- 	mm_ops->put_page(ctx->ptep);
-@@ -1005,7 +1043,8 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtable *pgt, u64 addr, u64 size,
- static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 			       enum kvm_pgtable_walk_flags visit)
- {
--	struct kvm_pgtable *pgt = ctx->arg;
-+	struct stage2_unmap_data *unmap_data = ctx->arg;
-+	struct kvm_pgtable *pgt = unmap_data->pgt;
- 	struct kvm_s2_mmu *mmu = pgt->mmu;
- 	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
- 	kvm_pte_t *childp = NULL;
-@@ -1033,7 +1072,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 	 * block entry and rely on the remaining portions being faulted
- 	 * back lazily.
- 	 */
--	stage2_put_pte(ctx, mmu, mm_ops);
-+	stage2_unmap_put_pte(ctx, mmu, mm_ops);
- 
- 	if (need_flush && mm_ops->dcache_clean_inval_poc)
- 		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, mm_ops),
-@@ -1047,13 +1086,23 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 
- int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
- {
-+	int ret;
-+	struct stage2_unmap_data unmap_data = {
-+		.pgt = pgt,
-+		.defer_tlb_flush_init = __stage2_unmap_defer_tlb_flush(pgt),
-+	};
- 	struct kvm_pgtable_walker walker = {
- 		.cb	= stage2_unmap_walker,
--		.arg	= pgt,
-+		.arg	= &unmap_data,
- 		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
- 	};
- 
--	return kvm_pgtable_walk(pgt, addr, size, &walker);
-+	ret = kvm_pgtable_walk(pgt, addr, size, &walker);
-+	if (stage2_unmap_defer_tlb_flush(&unmap_data))
-+		/* Perform the deferred TLB invalidations */
-+		kvm_tlb_flush_vmid_range(pgt->mmu, addr, size);
++Also, this driver can check the playback stream for containing the predefined pattern,
++which is used in the corresponding selftest (alsa/pcmtest-test.sh) to check the PCM middle
++layer data transferring functionality. Additionally, this driver redefines the default
++RESET ioctl, and the selftest covers this PCM API functionality as well.
 +
-+	return ret;
- }
- 
- struct stage2_attr_data {
++Configuration
++-------------
++
++The driver has several parameters besides the common ALSA module parameters:
++
++	* fill_mode (bool) - Buffer fill mode (see below)
++	* inject_delay (int)
++	* inject_hwpars_err (bool)
++	* inject_prepare_err (bool)
++	* inject_trigger_err (bool)
++
++
++Capture Data Generation
++-----------------------
++
++The driver has two modes of data generation: the first (0 in the fill_mode parameter)
++means random data generation, the second (1 in the fill_mode) - pattern-based
++data generation. Let's look at the second mode.
++
++First of all, you may want to specify the pattern for data generation. You can do it
++by writing the pattern to the debugfs file. There are pattern buffer debugfs entries
++for each channel, as well as entries which contain the pattern buffer length.
++
++	* /sys/kernel/debug/pcmtest/fill_pattern[0-3]
++	* /sys/kernel/debug/pcmtest/fill_pattern[0-3]_len
++
++To set the pattern for the channel 0 you can execute the following command:
++
++.. code-block:: bash
++
++	echo -n mycoolpattern > /sys/kernel/debug/pcmtest/fill_pattern0
++
++Then, after every capture action performed on the 'pcmtest' device the buffer for the
++channel 0 will contain 'mycoolpatternmycoolpatternmycoolpatternmy...'.
++
++The pattern itself can be up to 4096 bytes long.
++
++Delay injection
++---------------
++
++The driver has 'inject_delay' parameter, which has very self-descriptive name and
++can be used for time delay/speedup simulations. The parameter has integer type, and
++it means the delay added between module's internal timer ticks.
++
++If the 'inject_delay' value is positive, the buffer will be filled slower, if it is
++negative - faster. You can try it yourself by starting a recording in any
++audiorecording application (like Audacity) and selecting the 'pcmtest' device as a
++source.
++
++This parameter can be also used for generating a huge amount of sound data in a very
++short period of time (with the negative 'inject_delay' value).
++
++Errors injection
++----------------
++
++This module can be used for injecting errors into the PCM communication process. This
++action can help you to figure out how the userspace ALSA program behaves under unusual
++circumstances.
++
++For example, you can make all 'hw_params' PCM callback calls return EBUSY error by
++writing '1' to the 'inject_hwpars_err' module parameter:
++
++.. code-block:: bash
++
++	echo 1 > /sys/module/snd_pcmtest/parameters/inject_hwpars_err
++
++Errors can be injected into the following PCM callbacks:
++
++	* hw_params (EBUSY)
++	* prepare (EINVAL)
++	* trigger (EINVAL)
++
++Playback test
++-------------
++
++This driver can be also used for the playback functionality testing - every time you
++write the playback data to the 'pcmtest' PCM device and close it, the driver checks the
++buffer for containing the looped pattern (which is specified in the fill_pattern
++debugfs file for each channel). If the playback buffer content represents the looped
++pattern, 'pc_test' debugfs entry is set into '1'. Otherwise, the driver sets it to '0'.
++
++ioctl redefinition test
++-----------------------
++
++The driver redefines the 'reset' ioctl, which is default for all PCM devices. To test
++this functionality, we can trigger the reset ioctl and check the 'ioctl_test' debugfs
++entry:
++
++.. code-block:: bash
++
++	cat /sys/kernel/debug/pcmtest/ioctl_test
++
++If the ioctl is triggered successfully, this file will contain '1', and '0' otherwise.
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
+2.34.1
 
