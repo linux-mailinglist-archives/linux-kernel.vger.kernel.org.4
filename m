@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F647242CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A41A7242D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237715AbjFFMp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S237738AbjFFMpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237711AbjFFMoy (ORCPT
+        with ESMTP id S237721AbjFFMoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:44:54 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0C81721
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:44:17 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b15a327c20so73808831fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:44:16 -0700 (PDT)
+        Tue, 6 Jun 2023 08:44:55 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643C310D4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:44:18 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1aecef94fso53449551fa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686055453; x=1688647453;
+        d=linaro.org; s=google; t=1686055455; x=1688647455;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0edfuQZBe92SJSvcC3fCuI+rnGX/53hD+nlMiNcNnwI=;
-        b=Xjrg74NG7XaC8T/s//YcDBFvjicYTDPkLvMna0u5k6hZBIeTwp3FdRXisG8vItHrKH
-         IhrkI9svzYWYkyM6K3yi37LYVAQRLnJdW53ZDF/G593W7SOk6lxuqBvOMVBO3uZmFm7F
-         9xJb4e78Z8vmzj/fFkbmaREyQZBwPZud+gso5HPANfca5CJkH57fE+pMNA98jdduWfgQ
-         /Hluzypd/eKTC81xRjNnVRIbN+AqKYJMUD99R8Zd0pkxKehZ2UrxASPEo2WQYYbryjTh
-         Eq2Hl0zAScPWsNYa7wRiahhx1Zyq8bYG6YaXXbMWftm3mMEZCFt93c1NSvDnLgxPpqKv
-         zf/A==
+        bh=sFoSdd2Ga9xo4OLf9TgzlJW0pxuOp7Br133fCLs+4A4=;
+        b=ewzuy33YtuaRoEO4HVp+fyuSuGBUUXaysYn7UBCEdKthklZPcweRwaWrFgMyRWJVHH
+         OClFG7uE7v6+xN/vHAjg96wymyeFKx25K8nAHFUCsR8ZvWNvnhSuzsJLwMiNqzunoS0u
+         QWw3kmk8yak1QJw3R6we8JFTeWBX4TvhD2AmjTVq8BVsmQFMpYMBfyDWIvlWaltnyohI
+         C9pWCV+in2/0e0AGGfJoT2dRhOhVTAGsSjlNIyZtzAG7x2ew8BJ1bYJsk4BWFBvD6GOT
+         JfTyitQQ4a5mgfLj2zGVfrorSS+BH1/ABBGl4uGz2ruB/TLj9BCKSc8bhfNyvwbxFwJA
+         +N5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686055453; x=1688647453;
+        d=1e100.net; s=20221208; t=1686055455; x=1688647455;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0edfuQZBe92SJSvcC3fCuI+rnGX/53hD+nlMiNcNnwI=;
-        b=QCgcwTW8xfOrh6qd0cV2/UX4pP0g4isbOO1Gme87DpV9paNlPJyBDI1vSXrIbOpITv
-         So5atN+l/+v2GeYU+79WUO4FwSP3vC8rVCeOSloy4QXxhmzFREUJ01ij0nDr/ScdkETJ
-         A4LhyA1IAPbvADmeApYpFYCUF5LenpPTifmyskjnOEehYdgeHmGR0zlEC2z8d3m6x4ox
-         3pkIM7NErem4NRv/owqnLBJpAx1z1HbCQBjmrKJyCAqtHgqfaTO6GaMbeihZgYoi/Rs5
-         kUsLRY8T2RO6Vtjq4Vafw7oSKny9ar21bWw2AW3O6FFXEBTGTLctkvMaS+gW2ERzAJlf
-         DAXw==
-X-Gm-Message-State: AC+VfDwGB/etTWxFre8XEEcnHyEtJd6L05qpyAg1J5YLq+MLZLIBOz9H
-        0i4txC1DdvWarIMpcP/KG0RjmA==
-X-Google-Smtp-Source: ACHHUZ5YQJxoQYAbcPHwVUyFLDt2LqRjayvGJ1GQV2EhZXiQCnXAgy9Z6TR09421LzmQB9ve+Bg6xQ==
-X-Received: by 2002:a2e:82d0:0:b0:2b0:297c:cbdf with SMTP id n16-20020a2e82d0000000b002b0297ccbdfmr1173875ljh.1.1686055453194;
-        Tue, 06 Jun 2023 05:44:13 -0700 (PDT)
+        bh=sFoSdd2Ga9xo4OLf9TgzlJW0pxuOp7Br133fCLs+4A4=;
+        b=B4DNsdIx9G809HS+XlMSrZHcM9lbpnjAcDQlyUy2oSzQRBMkSeY6Id6O/lssi3GluQ
+         eQXxrrzwDn3L8xFZFElv5qht7NqLO9rpAM5mjfx6METgav0pfaZ0mNjcGFLa11cpXE5k
+         iuZvDIJuR+9VJLMIQ8AQ4geYj6fghpLYTORQfQjRIr5jmMUaTcTqrdq4QA3qbIAFAlFe
+         g4ZR2WfBUwi3jqDu5u+6nvECwUOuc7Ml9Rr+pJZ7yY45qW26wshApjIrX+PJGTIuaq8J
+         KnsskietkvUuedlNYE66ZMZlXX3BLttHA5DkHUF3+UDCIXSJv4DId6xCdBQxtfWo0491
+         E4gQ==
+X-Gm-Message-State: AC+VfDymnZ5QElcIC6K/jwt/eZ1tLeuQ3mAhTwqLd7dAPD6PyYRAEuGB
+        9A7gDiOLud40FtI8ax7B6EZ1pQ==
+X-Google-Smtp-Source: ACHHUZ5KgznT/7T7YvovXwVdlPLIVjVIF1CDZjMaRRLb78GoQJaNKzTja6DE+ZKaqYq/Tiu1ShLuMw==
+X-Received: by 2002:a2e:914d:0:b0:2ac:8f73:1fac with SMTP id q13-20020a2e914d000000b002ac8f731facmr1320209ljg.46.1686055454947;
+        Tue, 06 Jun 2023 05:44:14 -0700 (PDT)
 Received: from [192.168.1.101] (abyl150.neoplus.adsl.tpnet.pl. [83.9.31.150])
-        by smtp.gmail.com with ESMTPSA id u23-20020a2e9f17000000b002a9ebff8431sm1830823ljk.94.2023.06.06.05.44.11
+        by smtp.gmail.com with ESMTPSA id u23-20020a2e9f17000000b002a9ebff8431sm1830823ljk.94.2023.06.06.05.44.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 05:44:12 -0700 (PDT)
+        Tue, 06 Jun 2023 05:44:14 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 06 Jun 2023 14:43:55 +0200
-Subject: [PATCH v6 04/12] dt-bindings: display/msm: Add SM6350 MDSS
+Date:   Tue, 06 Jun 2023 14:43:56 +0200
+Subject: [PATCH v6 05/12] dt-bindings: display/msm: Add SM6375 MDSS
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-topic-straitlagoon_mdss-v6-4-dee6a882571b@linaro.org>
+Message-Id: <20230411-topic-straitlagoon_mdss-v6-5-dee6a882571b@linaro.org>
 References: <20230411-topic-straitlagoon_mdss-v6-0-dee6a882571b@linaro.org>
 In-Reply-To: <20230411-topic-straitlagoon_mdss-v6-0-dee6a882571b@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -77,67 +77,67 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686055444; l=7047;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686055444; l=7025;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=400q0ucjl23w4+vTpqJH2ZmWXnq9ZUNI06koIZBBqe4=;
- b=+0i05/U9OtyHRcL082dOVcVEdUFOF4fS7LrxyXG/vKfXeFycQw+wpYNlpket/HsUGfU+4NXwW
- QhW77ZstcABCW7chZnTMWYoYFa8jiHyw6aqBeRFAjIrsCgDU4o827i/
+ bh=v7FiZ9/eBCtDRE+yhICmMVudEQ4vN3khQbvWcoX3vmU=;
+ b=E5C/Y++7Ou1FHrGyzi5FSlm9ORMPTPxifHajsUXPfgD5d5QQXKQPU1T95UdAAkBLNs1AMqjGt
+ V3PHOq2zGSeBGHPi4c11Tw7xc22CGG9Sa72FDF268SlUM7Mwi7Zk9kT
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the SM6350 MDSS.
+Document the SM6375 MDSS.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 213 +++++++++++++++++++++
- 1 file changed, 213 insertions(+)
+ .../bindings/display/msm/qcom,sm6375-mdss.yaml     | 215 +++++++++++++++++++++
+ 1 file changed, 215 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml
+diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.yaml
 new file mode 100644
-index 000000000000..ed0ad194d4ce
+index 000000000000..76369a4f7c4d
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml
-@@ -0,0 +1,213 @@
++++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.yaml
+@@ -0,0 +1,215 @@
 +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/display/msm/qcom,sm6350-mdss.yaml#
++$id: http://devicetree.org/schemas/display/msm/qcom,sm6375-mdss.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Qualcomm SM6350 Display MDSS
++title: Qualcomm SM6375 Display MDSS
 +
 +maintainers:
-+  - Krishna Manikandan <quic_mkrishn@quicinc.com>
++  - Konrad Dybcio <konrad.dybcio@linaro.org>
 +
 +description:
-+  SM6350 MSM Mobile Display Subsystem (MDSS), which encapsulates sub-blocks
++  SM6375 MSM Mobile Display Subsystem (MDSS), which encapsulates sub-blocks
 +  like DPU display controller, DSI and DP interfaces etc.
 +
 +$ref: /schemas/display/msm/mdss-common.yaml#
 +
 +properties:
 +  compatible:
-+    const: qcom,sm6350-mdss
++    const: qcom,sm6375-mdss
 +
 +  clocks:
 +    items:
 +      - description: Display AHB clock from gcc
-+      - description: Display AXI clock from gcc
++      - description: Display AHB clock
 +      - description: Display core clock
 +
 +  clock-names:
 +    items:
 +      - const: iface
-+      - const: bus
++      - const: ahb
 +      - const: core
 +
 +  iommus:
@@ -154,81 +154,82 @@ index 000000000000..ed0ad194d4ce
 +    type: object
 +    properties:
 +      compatible:
-+        const: qcom,sm6350-dpu
++        const: qcom,sm6375-dpu
 +
 +  "^dsi@[0-9a-f]+$":
 +    type: object
 +    properties:
 +      compatible:
 +        items:
-+          - const: qcom,sm6350-dsi-ctrl
++          - const: qcom,sm6375-dsi-ctrl
 +          - const: qcom,mdss-dsi-ctrl
 +
 +  "^phy@[0-9a-f]+$":
 +    type: object
 +    properties:
 +      compatible:
-+        const: qcom,dsi-phy-10nm
++        const: qcom,sm6375-dsi-phy-7nm
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/qcom,dispcc-sm6350.h>
-+    #include <dt-bindings/clock/qcom,gcc-sm6350.h>
-+    #include <dt-bindings/clock/qcom,rpmh.h>
++    #include <dt-bindings/clock/qcom,rpmcc.h>
++    #include <dt-bindings/clock/qcom,sm6375-gcc.h>
++    #include <dt-bindings/clock/qcom,sm6375-dispcc.h>
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +    #include <dt-bindings/power/qcom-rpmpd.h>
 +
-+    display-subsystem@ae00000 {
-+        compatible = "qcom,sm6350-mdss";
-+        reg = <0x0ae00000 0x1000>;
++    display-subsystem@5e00000 {
++        compatible = "qcom,sm6375-mdss";
++        reg = <0x05e00000 0x1000>;
 +        reg-names = "mdss";
 +
 +        power-domains = <&dispcc MDSS_GDSC>;
 +
 +        clocks = <&gcc GCC_DISP_AHB_CLK>,
-+                 <&gcc GCC_DISP_AXI_CLK>,
++                 <&dispcc DISP_CC_MDSS_AHB_CLK>,
 +                 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-+        clock-names = "iface", "bus", "core";
++        clock-names = "iface", "ahb", "core";
 +
 +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
 +        interrupt-controller;
 +        #interrupt-cells = <1>;
 +
-+        iommus = <&apps_smmu 0x800 0x2>;
++        iommus = <&apps_smmu 0x820 0x2>;
 +        #address-cells = <1>;
 +        #size-cells = <1>;
 +        ranges;
 +
-+        display-controller@ae01000 {
-+            compatible = "qcom,sm6350-dpu";
-+            reg = <0x0ae01000 0x8f000>,
-+                  <0x0aeb0000 0x2008>;
++        display-controller@5e01000 {
++            compatible = "qcom,sm6375-dpu";
++            reg = <0x05e01000 0x8e030>,
++                  <0x05eb0000 0x2008>;
 +            reg-names = "mdp", "vbif";
 +
-+            clocks = <&gcc GCC_DISP_AXI_CLK>,
-+              <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+              <&dispcc DISP_CC_MDSS_ROT_CLK>,
-+              <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-+              <&dispcc DISP_CC_MDSS_MDP_CLK>,
-+              <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+            clock-names = "bus", "iface", "rot", "lut", "core",
-+                    "vsync";
++            clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
++                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
++                     <&dispcc DISP_CC_MDSS_ROT_CLK>,
++                     <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
++                     <&dispcc DISP_CC_MDSS_MDP_CLK>,
++                     <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
++                     <&gcc GCC_DISP_THROTTLE_CORE_CLK>;
++            clock-names = "bus",
++                          "iface",
++                          "rot",
++                          "lut",
++                          "core",
++                          "vsync",
++                          "throttle";
 +
-+            assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
-+                              <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
-+                              <&dispcc DISP_CC_MDSS_ROT_CLK>,
-+                              <&dispcc DISP_CC_MDSS_AHB_CLK>;
-+            assigned-clock-rates = <300000000>,
-+                                   <19200000>,
-+                                   <19200000>,
-+                                   <19200000>;
++            assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++            assigned-clock-rates = <19200000>;
++
++            operating-points-v2 = <&mdp_opp_table>;
++            power-domains = <&rpmpd SM6375_VDDCX>;
 +
 +            interrupt-parent = <&mdss>;
 +            interrupts = <0>;
-+            operating-points-v2 = <&mdp_opp_table>;
-+            power-domains = <&rpmhpd SM6350_CX>;
 +
 +            ports {
 +                #address-cells = <1>;
@@ -250,9 +251,9 @@ index 000000000000..ed0ad194d4ce
 +            };
 +        };
 +
-+        dsi@ae94000 {
-+            compatible = "qcom,sm6350-dsi-ctrl", "qcom,mdss-dsi-ctrl";
-+            reg = <0x0ae94000 0x400>;
++        dsi@5e94000 {
++            compatible = "qcom,sm6375-dsi-ctrl", "qcom,mdss-dsi-ctrl";
++            reg = <0x05e94000 0x400>;
 +            reg-names = "dsi_ctrl";
 +
 +            interrupt-parent = <&mdss>;
@@ -263,7 +264,7 @@ index 000000000000..ed0ad194d4ce
 +                     <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
 +                     <&dispcc DISP_CC_MDSS_ESC0_CLK>,
 +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+                     <&gcc GCC_DISP_AXI_CLK>;
++                     <&gcc GCC_DISP_HF_AXI_CLK>;
 +            clock-names = "byte",
 +                          "byte_intf",
 +                          "pixel",
@@ -273,12 +274,12 @@ index 000000000000..ed0ad194d4ce
 +
 +            assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
 +                              <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-+            assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
++            assigned-clock-parents = <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>;
 +
 +            operating-points-v2 = <&dsi_opp_table>;
-+            power-domains = <&rpmhpd SM6350_MX>;
++            power-domains = <&rpmpd SM6375_VDDMX>;
 +
-+            phys = <&dsi0_phy>;
++            phys = <&mdss_dsi0_phy>;
 +            phy-names = "dsi";
 +
 +            #address-cells = <1>;
@@ -303,11 +304,11 @@ index 000000000000..ed0ad194d4ce
 +            };
 +        };
 +
-+        dsi0_phy: phy@ae94400 {
-+            compatible = "qcom,dsi-phy-10nm";
-+            reg = <0x0ae94400 0x200>,
-+                  <0x0ae94600 0x280>,
-+                  <0x0ae94a00 0x1e0>;
++        mdss_dsi0_phy: phy@5e94400 {
++            compatible = "qcom,sm6375-dsi-phy-7nm";
++            reg = <0x05e94400 0x200>,
++                  <0x05e94600 0x280>,
++                  <0x05e94900 0x264>;
 +            reg-names = "dsi_phy",
 +                        "dsi_phy_lane",
 +                        "dsi_pll";
@@ -315,7 +316,8 @@ index 000000000000..ed0ad194d4ce
 +            #clock-cells = <1>;
 +            #phy-cells = <0>;
 +
-+            clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>, <&rpmhcc RPMH_CXO_CLK>;
++            clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++                     <&rpmcc RPM_SMD_XO_CLK_SRC>;
 +            clock-names = "iface", "ref";
 +        };
 +    };
