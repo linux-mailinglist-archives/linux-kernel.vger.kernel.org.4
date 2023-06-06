@@ -2,388 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640D17244F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030FB72450A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjFFNyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S237268AbjFFN6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjFFNyM (ORCPT
+        with ESMTP id S236817AbjFFN5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:54:12 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3941483;
-        Tue,  6 Jun 2023 06:54:09 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686059647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAhoSqGeAkfXPjkbbMuSr5Vpspi7VqAd/1OCMoVSMQI=;
-        b=lFDCNIwYTXXY3EsOHA8kz+XStHjjrzljUTbDoxAtgSr4GJEJYQXHeyrdjEzj457b9yKekc
-        yO8KmG7ay0HhebF7nIA1fCRk50oKmItgXzWG2OsMyLli5WDozzodqD5R8UTUAaztRe3TYv
-        JQIxBmOlQ81IBhb9zRTEisNVJ+Cq0iZFgtVp2JgUUdXFkXGLNaodXPat6py6ds//t8XpIP
-        B0ibMMPLIre1pzHE4nfLEJdOqRtwbXpRQbeaKu0WIPMem+y+ni+shghIj72ST7kI2JLIa/
-        2jz7LsM/vBTBKuLk/of+AeYR2hlGmhO8AzkLSZQQ5JPJEdNpi9+JuKqs1Sl/Jg==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 243ADC0010;
-        Tue,  6 Jun 2023 13:54:05 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 15:54:04 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     andy.shevchenko@gmail.com
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 7/9] ASoC: codecs: Add support for the generic IIO
- auxiliary devices
-Message-ID: <20230606155404.28ada064@bootlin.com>
-In-Reply-To: <ZHuFywIrTnEFpX6e@surfacebook>
-References: <20230523151223.109551-1-herve.codina@bootlin.com>
-        <20230523151223.109551-8-herve.codina@bootlin.com>
-        <ZHuFywIrTnEFpX6e@surfacebook>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Tue, 6 Jun 2023 09:57:52 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2258EA;
+        Tue,  6 Jun 2023 06:57:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 9F33260203;
+        Tue,  6 Jun 2023 15:57:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686059866; bh=abLjtdf5hSL5WbCCmX+Xip49rxyNm6zxX5OIxMHHHs4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=0F6waD0ILanyaJwu/Ei4TN3BmNVTOc+fGr4mblkw6BtWKCecgWHx7EhO1YXnLCwD7
+         aXovGu0P7SJO7bQCrkTkGhpSuTeRGf2ETjwClyD66magjalNN1m6394bohrUjZWAG+
+         Wgriq5/CshrO5cI04UYMPT4n9CSMcquA0p6yPDcfG7PUcpN4AzgNY0ZgkZPJX5W1B3
+         zI6c0W+oU3ey6YBuSDvG1sOZ1T0POZkhn+mjq1KCIMsBJGSKNwDLw91hVThx/ITKFi
+         sxbsOzPpWFrWL80UpylKZT4LCvajBNYbKCvjP0Y5X9CVJG2zdVGX4MYrjoanea2Q5f
+         pNfSC4PQvCUeg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id OzKsoe3Xj-7r; Tue,  6 Jun 2023 15:57:44 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 2D46B60210;
+        Tue,  6 Jun 2023 15:57:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686059863; bh=abLjtdf5hSL5WbCCmX+Xip49rxyNm6zxX5OIxMHHHs4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OGT42JPCNqIilKpc9c037Qayuj2X0CkHrZnURjiiUiMtE2M3rxiBZbwws4Cf4yRoq
+         l+r7Z6jDF4cDxbsnprDB03euguvCuUWboar2vjRcSH8xdkSujnz4KBY+b9bdw3d8jW
+         ksRXqro9G5t4HTbRGE4cJH4rtErDajU6sN0wXZJICyURlSd0jQeGsyoFTzMF6nFIhY
+         uPym8rlZTu7vqkfsSoWu1Efnz8kJBY5+TDPK/tWCCOQD9NkpjTqr/i4PmCZkxmF/p4
+         cEc7g0XuIr+PB1++VwGjrt1PJfDbjnjdrpzzyo+fpwFgPq8rDPN5ZiOE+Z2r4KIpxP
+         XaMzKm0ixnMJw==
+Message-ID: <60f78eaa-ace7-c27d-8e45-4777ecf3faa2@alu.unizg.hr>
+Date:   Tue, 6 Jun 2023 15:57:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
+ ns-B IPv6 LLA" test
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian> <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZH84zGEODT97TEXG@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On 6/6/23 15:46, Guillaume Nault wrote:
+> On Tue, Jun 06, 2023 at 08:24:54AM +0200, Mirsad Goran Todorovac wrote:
+>> On 5/31/23 20:11, Guillaume Nault wrote:
+>>> I believe this condition should be relaxed to allow the case where
+>>> ->sk_bound_dev_if is oif's master device (and maybe there are other
+>>> VRF cases to also consider).
+>>
+>> I've tried something like this, but something makes the kernel stuck
+>> here:
+>>
+>> TEST: ping out, blocked by route - ns-B loopback IPv6                         [ OK ]
+>> TEST: ping out, device bind, blocked by route - ns-B loopback IPv6            [ OK ]
+>> TEST: ping in, blocked by route - ns-A loopback IPv6                          [ OK ]
+>> TEST: ping out, unreachable route - ns-B loopback IPv6                        [ OK ]
+>> TEST: ping out, device bind, unreachable route - ns-B loopback IPv6           [ OK ]
+>>
+>> #################################################################
+>> With VRF
+>>
+>> [hanged process and kernel won't shutdown]
+>>
+>> The code is:
+>>
+>> ---
+>>   net/ipv6/ping.c | 12 +++++++++++-
+>>   1 file changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+>> index c4835dbdfcff..81293e902293 100644
+>> --- a/net/ipv6/ping.c
+>> +++ b/net/ipv6/ping.c
+>> @@ -73,6 +73,9 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>>          struct rt6_info *rt;
+>>          struct pingfakehdr pfh;
+>>          struct ipcm6_cookie ipc6;
+>> +       struct net *net = sock_net(sk);
+>> +       struct net_device *dev = NULL;
+>> +       struct net_device *mdev = NULL;
+>>          err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
+>>                                    sizeof(user_icmph));
+>> @@ -111,10 +114,17 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>>          else if (!oif)
+>>                  oif = np->ucast_oif;
+>> +       if (oif) {
+>> +               dev = dev_get_by_index(net, oif);
+>> +               mdev = netdev_master_upper_dev_get(dev);
+>> +       }
+>> +
+>>          addr_type = ipv6_addr_type(daddr);
+>>          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+>>              (addr_type & IPV6_ADDR_MAPPED) ||
+>> -           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
+>> +           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
+>> +                   !(mdev && sk->sk_bound_dev_if &&
+>> +                             mdev != dev_get_by_index(net, sk->sk_bound_dev_if))))
+>>                  return -EINVAL;
+>>          ipcm6_init_sk(&ipc6, np);
+>>
+>> I am obviously doing something very stupid.
+> 
+> The problem is that dev_get_by_index() holds a reference on 'dev' which
+> your code never releases. Also netdev_master_upper_dev_get() needs rtnl
+> protection. These should have generated some kernel oops.
+> 
+> You can try this instead:
+> 
+> -------- >8 --------
+> 
+> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+> index c4835dbdfcff..f804c11e2146 100644
+> --- a/net/ipv6/ping.c
+> +++ b/net/ipv6/ping.c
+> @@ -114,7 +114,8 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>   	addr_type = ipv6_addr_type(daddr);
+>   	if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+>   	    (addr_type & IPV6_ADDR_MAPPED) ||
+> -	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
+> +	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
+> +	     l3mdev_master_ifindex_by_index(sock_net(sk), oif) != sk->sk_bound_dev_if))
+>   		return -EINVAL;
+>   
+>   	ipcm6_init_sk(&ipc6, np);
 
-On Sat, 3 Jun 2023 21:26:19 +0300
-andy.shevchenko@gmail.com wrote:
+Yes, I stupidly forgot that.
 
-> Tue, May 23, 2023 at 05:12:21PM +0200, Herve Codina kirjoitti:
-> > Industrial I/O devices can be present in the audio path.
-> > These devices needs to be used as audio components in order to be fully
-> > integrated in the audio path.
-> > 
-> > This support allows to consider these Industrial I/O devices as auxliary
-> > audio devices and allows to control them using mixer controls.  
-> 
-> ...
-> 
-> > +// audio-iio-aux.c  --  ALSA SoC glue to use IIO devices as audio components  
-> 
-> Putting file name into file is not a good idea in case the file will be renamed
-> in the future.
+I came across a fixed version:
 
-Indeed, the file name will be removed in the nest iteration.
+------
+diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+index c4835dbdfcff..c1d81c49b775 100644
+--- a/net/ipv6/ping.c
++++ b/net/ipv6/ping.c
+@@ -73,6 +73,10 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+         struct rt6_info *rt;
+         struct pingfakehdr pfh;
+         struct ipcm6_cookie ipc6;
++       struct net *net = sock_net(sk);
++       struct net_device *dev = NULL;
++       struct net_device *mdev = NULL;
++       struct net_device *bdev = NULL;
 
-> 
-> ...
-> 
-> > +struct audio_iio_aux_chan {
-> > +	struct iio_channel *iio_chan;
-> > +	const char *name;
-> > +	bool is_invert_range;  
-> 
-> If you put bool after int:s it may save a few bytes in some cases.
+         err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
+                                   sizeof(user_icmph));
+@@ -111,10 +115,26 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+         else if (!oif)
+                 oif = np->ucast_oif;
 
-I will mode is_invert_range after the int members.
++       if (oif) {
++               rcu_read_lock();
++               dev = dev_get_by_index_rcu(net, oif);
++               rcu_read_unlock();
++               rtnl_lock();
++               mdev = netdev_master_upper_dev_get(dev);
++               rtnl_unlock();
++       }
++
++       if (sk->sk_bound_dev_if) {
++               rcu_read_lock();
++               bdev = dev_get_by_index_rcu(net, sk->sk_bound_dev_if);
++               rcu_read_unlock();
++       }
++
+         addr_type = ipv6_addr_type(daddr);
+         if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+             (addr_type & IPV6_ADDR_MAPPED) ||
+-           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
++           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
++                   !(mdev && sk->sk_bound_dev_if && bdev && mdev == bdev)))
+                 return -EINVAL;
 
-> 
-> > +	int max;
-> > +	int min;  
-> 
-> Wondering if there is already a data type for the ranges (like linear_range.h,
-> but not sure it's applicable here).
+         ipcm6_init_sk(&ipc6, np);
 
-Seems not applicable here.
- - IIO does not use linear_range or something similar. It just uses simple int.
- - ASoC does not use linear_range or something similar. It just uses simple long.
+However, this works by the test (888 passed) but your two liner is obviously
+better :-)
 
-So, I keep the simple int min and max.
-
-> 
-> > +};  
-> 
-> ...
-> 
-> > +	if (val < 0)
-> > +		return -EINVAL;
-> > +	if (val > max - min)  
-> 
-> Btw, who will validate that max > min?
-
-By construction,
-min = 0
-max = iio_read_max_channel_raw() - iio_read_min_channel_raw()
-
-and iio_read_max_channel_raw() returns a value greater or equal to
-iio_read_min_channel_raw().
-
-But to be sure, I will check the last asumption at probe() and swap
-the minimum and maximum values if needed.
-
-> 
-> > +		return -EINVAL;  
-> 
-> ...
-> 
-> > +	return 1; /* The value changed */  
-> 
-> Perhaps this 1 needs a definition?
-
-Yes but to be coherent, in ASoC code, many places need to be changed too
-in order to use the newly defined value.
-I don't think these modifications should be part of this series.
-
-> 
-> ...
-> 
-> > +static struct snd_soc_dapm_widget widgets[3] = {0};
-> > +static struct snd_soc_dapm_route routes[2] = {0};  
-> 
-> 0:s are not needed. Moreover, the entire assingments are redundant
-> as this is guaranteed by the C standard.
-
-Indeed, the 0 assignment will be removed in the next iteration.
-
-> 
-> ...
-> 
-> > +	char *input_name = NULL;
-> > +	char *output_name = NULL;
-> > +	char *pga_name = NULL;  
-> 
-> Redundant assignments if you properly label the freeing.
-
-I will rework the error paths (gotos) to avoid these assignement.
-
-> 
-> ...
-> 
-> > +	BUILD_BUG_ON(ARRAY_SIZE(widgets) < 3);  
-> 
-> Use static_assert() at the place where the array is defined.
-
-Will be done in next iteration.
-
-> 
-> ...
-> 
-> > +	BUILD_BUG_ON(ARRAY_SIZE(routes) < 2);  
-> 
-> Ditto.
-Will be done in next iteration.
-
-> 
-> ...
-> 
-> > +end:  
-> 
-> out_free:
-> 
-> > +	/* Allocated names are no more needed (duplicated in ASoC internals) */
-> > +	kfree(pga_name);
-> > +	kfree(output_name);
-> > +	kfree(input_name);
-> > +
-> > +	return ret;  
-> 
-> ...
-> 
-> > +	for (i = 0; i < iio_aux->num_chans; i++) {
-> > +		chan = iio_aux->chans + i;
-> > +
-> > +		ret = iio_read_max_channel_raw(chan->iio_chan, &chan->max);
-> > +		if (ret) {
-> > +			dev_err(component->dev, "chan[%d] %s: Cannot get max raw value (%d)\n",
-> > +				i, chan->name, ret);
-> > +			return ret;  
-> 
-> It sounds like a part of ->probe() flow, correct?
-> Can dev_err_probe() be used here?
-
-Will be changed in the next iteration.
-
-> 
-> > +		}
-> > +
-> > +		ret = iio_read_min_channel_raw(chan->iio_chan, &chan->min);
-> > +		if (ret) {
-> > +			dev_err(component->dev, "chan[%d] %s: Cannot get min raw value (%d)\n",
-> > +				i, chan->name, ret);
-> > +			return ret;  
-> 
-> Ditto.
-
-Will be changed in the next iteration.
-
-> 
-> > +		}
-> > +
-> > +		/* Set initial value */
-> > +		ret = iio_write_channel_raw(chan->iio_chan,
-> > +					    chan->is_invert_range ? chan->max : chan->min);
-> > +		if (ret) {
-> > +			dev_err(component->dev, "chan[%d] %s: Cannot set initial value (%d)\n",
-> > +				i, chan->name, ret);
-> > +			return ret;  
-> 
-> Ditto.
-
-Will be changed in the next iteration.
-
-> 
-> > +		}  
-> 
-> ...
-> 
-> > +		dev_dbg(component->dev, "chan[%d]: Added %s (min=%d, max=%d, invert=%s)\n",
-> > +			i, chan->name, chan->min, chan->max,
-> > +			chan->is_invert_range ? "on" : "off");  
-> 
-> str_on_off()
-
-Indeed, I didn't know str_on_off().
-Thanks for pointing.
-Will be use in next iteration.
-
-> 
-> > +	}  
-> 
-> ...
-> 
-> > +	count = of_property_count_strings(np, "io-channel-names");
-> > +	if (count < 0) {  
-> 
-> > +		dev_err(iio_aux->dev, "%pOF: failed to read io-channel-names\n", np);
-> > +		return count;  
-> 
-> 		return dev_err_probe();
-Will be changed in next iteration.
-> 
-> > +	}  
-> 
-> ...
-> 
-> > +	for (i = 0; i < iio_aux->num_chans; i++) {
-> > +		iio_aux_chan = iio_aux->chans + i;
-> > +
-> > +		ret = of_property_read_string_index(np, "io-channel-names", i,
-> > +						    &iio_aux_chan->name);
-> > +		if (ret < 0) {
-> > +			dev_err(iio_aux->dev, "%pOF: failed to read io-channel-names[%d]\n", np, i);
-> > +			return ret;  
-> 
-> Ditto.
-Will be changed in next iteration.
-> 
-> > +		}  
-> 
-> > +		tmp = 0;
-> > +		of_property_read_u32_index(np, "snd-control-invert-range", i, &tmp);  
-> 
-> > +		iio_aux_chan->is_invert_range = tmp;  
-> 
-> You can use this variable directly.
-
-Not sure, is_invert_range is a bool and tmp is a u32.
-
-In previous iteration, I wrote
-  iio_aux_chan->is_invert_range = !!tmp;
-
-> 
-> > +	}  
-> 
-> Btw, can you avoid using OF APIs? It's better to have device property/fwnode
-> API to be used from day 1.
-
-Hum, this comment was raised in the previous iteration
-  https://lore.kernel.org/linux-kernel/20230501162456.3448c494@jic23-huawei/
-
-I didn't find any equivalent to of_property_read_u32_index() in the 
-device_property_read_*() function family.
-I mean I did find anything available to get a value from an array using an index.
-
-In the previous iteration it was concluded that keeping OF APIs in this series
-seemed "reasonable".
-
-> 
-> ...
-> 
-> > +	platform_set_drvdata(pdev, iio_aux);  
-> 
-> Which callback is using this driver data?
-
-None -> I will remove platform_set_drvdata().
-
-> 
-> ...
-> 
-> > +static const struct of_device_id audio_iio_aux_ids[] = {
-> > +	{ .compatible = "audio-iio-aux", },  
-> 
-> Inner comma is not needed.
-
-Will be fixed.
-
-> 
-> > +	{ }
-> > +};  
-> 
-> ...
-> 
-> > +static struct platform_driver audio_iio_aux_driver = {
-> > +	.driver = {
-> > +		.name = "audio-iio-aux",
-> > +		.of_match_table = audio_iio_aux_ids,
-> > +	},
-> > +	.probe = audio_iio_aux_probe,
-> > +};  
-> 
-> > +  
-> 
-> Redundant blank line
-
-Will be fixed.
-
-> 
-> > +module_platform_driver(audio_iio_aux_driver);  
-> 
-
-
+Best regards,
+Mirsad
 
 -- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
